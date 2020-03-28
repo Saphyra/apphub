@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.saphyra</groupId>
+    <artifactId>apphub</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>apphub-parent</name>
+    <packaging>pom</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+        <artifact.version>0.1-SNAPSHOT</artifact.version>
+
+        <!-- Platform Versions -->
+        <versions.spring-boot>2.2.6.RELEASE</versions.spring-boot>
+        <versions.liquibase-core>3.8.6</versions.liquibase-core>
+        <versions.postgresql-connector>42.2.10</versions.postgresql-connector>
+
+        <!-- Saphyra Versions -->
+        <versions.saphyra.encryption>1.0.2</versions.saphyra.encryption>
+        <versions.saphyra.cache>1.0.8</versions.saphyra.cache>
+        <versions.saphyra.converter>1.0.0</versions.saphyra.converter>
+        <versions.saphyra.dao>1.1.1</versions.saphyra.dao>
+        <versions.saphyra.exception-handling>1.3.4</versions.saphyra.exception-handling>
+        <versions.saphyra.util>1.5.0</versions.saphyra.util>
+
+        <!-- Lib Versions -->
+        <versions.apache-commons.commons-io>2.6</versions.apache-commons.commons-io>
+        <versions.apache-commons.commons-lang3>3.9</versions.apache-commons.commons-lang3>
+        <versions.apache-commons.commons-net>3.6</versions.apache-commons.commons-net>
+        <versions.assertj-core>3.15.0</versions.assertj-core>
+        <versions.h2>1.4.200</versions.h2>
+        <versions.jackson-core>2.10.2</versions.jackson-core>
+        <versions.junit>4.13</versions.junit>
+        <versions.maven-surefire-plugin>3.0.0-M4</versions.maven-surefire-plugin>
+        <versions.mockito-core>3.2.4</versions.mockito-core>
+        <versions.rest-assured>3.0.0</versions.rest-assured>
+        <versions.selenium>4.0.0-alpha-4</versions.selenium>
+        <versions.testng>7.1.0</versions.testng>
+        <versions.thymeleaf-spring>3.0.11.RELEASE</versions.thymeleaf-spring>
+
+        <!-- Plugin Versions -->
+        <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
+        <version.lombok>1.18.12</version.lombok>
+        <version.lombok-maven>1.18.10.0</version.lombok-maven>
+    </properties>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.6.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>util</artifactId>
+            <version>${versions.saphyra.util}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${versions.spring-boot}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${version.lombok}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-maven</artifactId>
+            <version>${version.lombok-maven}</version>
+            <type>pom</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+    </build>
+
+    <modules>
+        <module>apphub-lib</module>
+        <module>apphub-api</module>
+        <module>apphub-service</module>
+    </modules>
+</project>
