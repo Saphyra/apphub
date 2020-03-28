@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: main-gateway
+  labels:
+    serviceType: spring-app
+    app: main-gateway
+    serviceRole: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: main-gateway
+  template:
+    metadata:
+      labels:
+        serviceType: spring-app
+        name: main-gateway
+    spec:
+      containers:
+        - name: main-gateway
+          image: saphyra/apphub-service-main_gateway:0.0.1-SNAPSHOT
+          ports:
+            - containerPort: 8080

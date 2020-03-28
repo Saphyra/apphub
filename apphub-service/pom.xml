@@ -26,5 +26,6 @@
     <modules>
         <module>apphub-service-user</module>
         <module>apphub-service-common</module>
+        <module>apphub-service-main_gateway</module>
     </modules>
 </project>
