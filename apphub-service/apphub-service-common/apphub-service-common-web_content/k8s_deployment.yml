@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: common-web-content
+  labels:
+    serviceType: spring-app
+    app: common-web-content
+    serviceRole: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: common-web-content
+  template:
+    metadata:
+      labels:
+        serviceType: spring-app
+        name: common-web-content
+    spec:
+      containers:
+        - name: common-web-content
+          image: saphyra/apphub-service-common-web_content:0.0.1-SNAPSHOT
+          ports:
+            - containerPort: 8080
