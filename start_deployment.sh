@@ -1,14 +1,16 @@
 DIRNAME=$PWD
 echo "Dirname: $DIRNAME"
 
-sleep 3
 
 mvn -T 16 clean package
+
+kubectl delete deployments --all
+
+kubectl apply -f infra/config.yaml
 
 while IFS= read -r LINE || [[ -n "$LINE" ]]; do
   if [[ "$LINE" =~ [^[:space:]] ]]; then
     echo ""
-    sleep 3
 
     TRIMMED="${LINE/$'\r'/}"
     IFS=' ' read -r -a LINE_SPLIT <<<"$TRIMMED"
@@ -22,7 +24,7 @@ while IFS= read -r LINE || [[ -n "$LINE" ]]; do
 
     DOCKER_COMMAND="./build_deploy.sh $TAG"
     echo "Command: $DOCKER_COMMAND"
-    $DOCKER_COMMAND
+    $DOCKER_COMMAND &
 
     cd "$DIRNAME" || exit
   fi

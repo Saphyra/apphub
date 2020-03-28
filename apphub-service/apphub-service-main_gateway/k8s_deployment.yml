@@ -22,3 +22,4 @@ spec:
           image: saphyra/apphub-service-main_gateway:0.0.1-SNAPSHOT
           ports:
             - containerPort: 8080
+          imagePullPolicy: Always

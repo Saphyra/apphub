@@ -24,6 +24,7 @@
         <!-- Platform Versions -->
         <versions.spring-boot>2.2.6.RELEASE</versions.spring-boot>
         <versions.spring-cloud>2.2.2.RELEASE</versions.spring-cloud>
+        <versions.spring-starter-kubernetes-config>1.1.2.RELEASE</versions.spring-starter-kubernetes-config>
         <versions.liquibase-core>3.8.6</versions.liquibase-core>
         <versions.postgresql-connector>42.2.10</versions.postgresql-connector>
 

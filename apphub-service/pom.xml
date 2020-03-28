@@ -18,6 +18,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-kubernetes-config</artifactId>
+            <version>${versions.spring-starter-kubernetes-config}</version>
+        </dependency>
     </dependencies>
 
     <build>

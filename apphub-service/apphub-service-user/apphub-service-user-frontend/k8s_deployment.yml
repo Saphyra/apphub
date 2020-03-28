@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: common-web-content
+  name: user-frontend
   labels:
     serviceType: spring-app
-    app: common-web-content
-    serviceRole: server
+    app: user-frontend
+    serviceRole: gateway
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: common-web-content
+      name: user-frontend
   template:
     metadata:
       labels:
         serviceType: spring-app
-        name: common-web-content
+        name: user-frontend
     spec:
       containers:
-        - name: common-web-content
-          image: saphyra/apphub-service-common-web_content:0.0.1-SNAPSHOT
+        - name: user-frontend
+          image: saphyra/apphub-service-user_frontend:0.0.1-SNAPSHOT
           ports:
             - containerPort: 8080
           imagePullPolicy: Always

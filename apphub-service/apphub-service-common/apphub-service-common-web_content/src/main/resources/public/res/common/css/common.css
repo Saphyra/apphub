@@ -1,0 +1,257 @@
+:root{
+    --footer-height: 3.1rem;
+    --header-height: 3.5rem;
+}
+
+body{
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    color: white;
+}
+
+.main-page{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+    border: 5px ridge white;
+    background-color: rgba(50,50,50,1);
+}
+
+.main-page:not(:first-child){
+    display: none;
+}
+
+header{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    border-bottom: 5px ridge white;
+    background: rgba(50,50,50,1);
+}
+
+header > h1{
+    text-align: center;
+    padding-top: 0.25rem;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+main{
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    bottom: var(--footer-height);
+    overflow: auto;
+    padding: 0.5rem 0;
+}
+
+footer{
+    background-color: rgba(50,50,50,1);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 5px ridge white;
+    white-space: nowrap;
+    height: var(--footer-height);
+}
+
+footer button, footer label{
+    font-size: 1.25rem;
+}
+
+/*================BASE TAGS==================*/
+h1{
+    font-weight: 700;
+    font-size: 2.5rem;
+}
+h2{
+    font-weight: 700;
+    font-size: 2rem;
+}
+h3{
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+/*================INPUT/NAVIGATION ELEMENTS==================*/
+a{
+    text-decoration: none;
+    color: white;
+}
+button, .button, a, select, footer label{
+    margin: 0.25rem;
+    background: rgba(50,50,50,1);
+    border: 3px outset white;
+    border-radius: 5px;
+    padding: 0.2rem;
+    cursor: pointer;
+    color: white;
+    white-space: nowrap;
+    text-align: center;
+}
+
+    .button.disabled{
+        border-color: rgb(100,100,100) !important;
+        cursor: no-drop;
+    }
+
+footer label *{
+    cursor: pointer;
+}
+
+button:hover, .button:hover, a:hover, footer label:hover{
+    border-color: red;
+}
+button:active, .button:active, a:active, footer label:active{
+    border-color: orange;
+    border-style: inset;
+    outline: none;
+}
+
+    .button.disabled:active{
+        border-color: white;
+        border-style: outset;
+        outline: default;
+    }
+
+input, textarea, div[contenteditable='true']{
+    background: rgba(50,50,50,1);
+    border: 3px outset white;
+    border-radius: 5px;
+    padding: 0.2rem;
+    margin: 0.2rem;
+    color: white;
+}
+div[contenteditable='true']{
+    padding-right: 1rem;
+}
+input:focus, textarea:focus, div[contenteditable='true']:focus{
+    border-color: red;
+    border-style: inset;
+    outline: none;
+}
+
+input[type='checkbox']:disabled{
+    opacity: 0.5;
+}
+
+input[type=range]{
+    vertical-align: middle;
+}
+
+input:disabled, button:disabled, textarea:disabled, .disabled{
+    border-color: rgb(100,100,100) !important;
+    cursor: no-drop
+}
+
+#registration-button{
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.right-button{
+    float: right;
+}
+
+/*================TABLE ELEMENTS==================*/
+.formatted-table th{
+    font-size: 1.5rem;
+}
+.formatted-table th, .formatted-table td{
+    padding: 0.25rem;
+    border: 3px inset white;
+    vertical-align: middle;
+}
+
+.formatted-table tr:nth-child(odd){
+    background-color: rgba(200,200,200,0.1);
+}
+.formatted-table tr:nth-child(even){
+    background-color: rgba(255,255,255,0.25);
+}
+.formatted-table thead tr:first-child{
+    background-color: rgba(0,75,150,0.3);
+}
+.formatted-table tbody tr:hover{
+    background-color: rgba(150,150,150,0.8);
+}
+
+/*=======NOTIFICATION=======*/
+#notification-container{
+    position: fixed;
+    left: 5px;
+    top: 5px;
+    max-width: calc(100vw - 10px);
+}
+
+    .notification-message-wrapper{
+        display: inline-block;
+    }
+
+        .notification-message{
+            font-size: 1.5rem;
+            margin: 0.25rem;
+            padding: 0.25rem;
+            white-space: nowrap;
+        }
+
+    .notification-success{
+        background: green;
+    }
+
+    .notification-error{
+        background: red;
+    }
+
+/*=======ADDITIONAL=======*/
+.notification-container{
+    color: red;
+}
+
+.centered{
+    text-align: center;
+}
+
+.relative{
+    position: relative;
+}
+
+.spinner{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("/res/common/images/spinner.gif");
+    background-position: center;
+    background-attachment: fixed;
+    background-size: 10vw 10vw;
+    background-color: rgba(0,0,0,0.5);
+    background-repeat: no-repeat;
+}
+
+/*======SCROLLBAR======*/
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(50,50,50,1);
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: darkblue;
+    border-radius: 10px;
+}

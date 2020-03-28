@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ribbon-config
+data:
+  application.yaml: |
+    common-web-content:
+      ribbon:
+        listOfServers: common-web-content:8080
+    user-frontend:
+      ribbon:
+        listOfServers: user-frontend:8080
+
+    ribbon:
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: common-config
+data:
+  application.yaml: |
+    eureka:
+      client:
+        enabled: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zuul-config
+data:
+  application.yaml: |
+    zuul:
+      prefix: /
+      routes:
+        common-resources:
+          path: /res/common/**
+          serviceId: common-web-content
+          stripPrefix: false
+        user-resources:
+          path: /res/user/**
+          serviceId: user-frontend
+          stripPrefix: false
+        index:
+          path: /web
+          serviceId: user-frontend
+          stripPrefix: false

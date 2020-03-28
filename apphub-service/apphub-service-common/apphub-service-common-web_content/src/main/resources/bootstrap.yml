@@ -1,0 +1,9 @@
+spring:
+  appliction:
+    name: common-web-content
+  cloud:
+    kubernetes:
+      config:
+        sources:
+          - name: ribbon-config
+          - name: common-config

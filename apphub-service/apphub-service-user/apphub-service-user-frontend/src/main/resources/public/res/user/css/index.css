@@ -1,0 +1,51 @@
+#login-container{
+    text-align: center;
+}
+
+#login-container input, #login-container button{
+    font-size: 1.25rem;
+}
+
+#registration-container{
+    text-align: center;
+}
+
+#registration-container h2{
+    border-bottom: 3px ridge white;
+    padding: 0.5rem;
+}
+
+#placeholder-align{
+    border: 3px ridge white;
+    border-radius: 10px;
+    display: inline-block;
+    margin: 2rem;
+}
+
+#registration-label-container{
+    text-align: right;
+    padding: 2rem;
+    padding-bottom: 1rem;
+}
+
+label{
+    position: relative;
+    display: block;
+    margin: 0.5rem;
+    font-size: 1.5rem;
+}
+
+label input{
+    margin-right: 2rem;
+    font-size: 1.25rem;
+}
+
+.invalid-input{
+    display: none;
+    border: 3px outset red;
+    position: absolute;
+    right: 0;
+    top: 0.25rem;
+    border-radius: 3px;
+    padding: 0.125rem;
+}

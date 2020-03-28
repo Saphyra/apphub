@@ -1,0 +1,7 @@
+eureka:
+  client:
+    enabled: false
+
+common-web-content:
+  ribbon:
+    listOfServers: localhost:8081
