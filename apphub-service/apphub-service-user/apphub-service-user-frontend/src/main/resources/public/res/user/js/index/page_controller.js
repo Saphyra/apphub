@@ -7,6 +7,6 @@
     });
     
     function init(){
-        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, "index"));
+        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "user", fileName: "index"}));
     }
 })();

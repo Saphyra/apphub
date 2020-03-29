@@ -26,5 +26,6 @@
     </build>
     <modules>
         <module>apphub-service-common-web_content</module>
+        <module>apphub-service-common-localization</module>
     </modules>
 </project>

@@ -1,15 +1,18 @@
-function loadLocalization(fileName, successCallback){
+function loadLocalization(module, fileName, successCallback){
     const DEFAULT_LOCALE = "hu";
 
     return createQuery(
+        module,
         fileName,
         getLocale(),
         successCallback,
         createQuery(
+            module,
             fileName,
             getBrowserLanguage(),
             successCallback,
             createQuery(
+                module,
                 fileName,
                 DEFAULT_LOCALE,
                 successCallback,
@@ -18,9 +21,9 @@ function loadLocalization(fileName, successCallback){
         )
     )();
 
-    function createQuery(fileName, locale, successCallback, errorCallback){
+    function createQuery(module, fileName, locale, successCallback, errorCallback){
         return function(){
-            const response = dao.sendRequest(HttpMethod.GET, getPath(locale, fileName));
+            const response = dao.sendRequest(HttpMethod.GET, getPath(module, locale, fileName));
             if(response.status === ResponseStatus.OK){
                 return successCallback(JSON.parse(response.body));
             }else if(errorCallback){
@@ -31,7 +34,7 @@ function loadLocalization(fileName, successCallback){
         }
     }
 
-    function getPath(locale, fileName){
-        return "/i18n/page/" + locale + "/" + fileName + ".json";
+    function getPath(module, locale, fileName){
+        return "/localization/module/" + module + "/" + locale + "/" + fileName + ".json";
     }
 }

@@ -7,6 +7,9 @@ data:
     common-web-content:
       ribbon:
         listOfServers: common-web-content:8080
+    localization:
+      ribbon:
+        listOfServers: localization:8080
     user-frontend:
       ribbon:
         listOfServers: user-frontend:8080
@@ -40,6 +43,10 @@ data:
         user-resources:
           path: /res/user/**
           serviceId: user-frontend
+          stripPrefix: false
+        localization:
+          path: /localization/**
+          serviceId: localization
           stripPrefix: false
         index:
           path: /web

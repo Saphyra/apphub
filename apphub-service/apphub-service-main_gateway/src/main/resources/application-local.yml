@@ -5,3 +5,31 @@ eureka:
 common-web-content:
   ribbon:
     listOfServers: localhost:8081
+
+localization:
+  ribbon:
+    listOfServers: localhost:8082
+
+user-frontend:
+  ribbon:
+    listOfServers: localhost:8083
+
+zuul:
+  prefix: /
+  routes:
+    common-resources:
+      path: /res/common/**
+      serviceId: common-web-content
+      stripPrefix: false
+    user-resources:
+      path: /res/user/**
+      serviceId: user-frontend
+      stripPrefix: false
+    localization:
+      path: /localization/**
+      serviceId: localization
+      stripPrefix: false
+    index:
+      path: /web
+      serviceId: user-frontend
+      stripPrefix: false

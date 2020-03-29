@@ -1,7 +1,6 @@
 DIRNAME=$PWD
 echo "Dirname: $DIRNAME"
 
-
 mvn -T 16 clean package
 
 kubectl delete deployments --all

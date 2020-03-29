@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: localization
+  labels:
+    serviceType: spring-app
+    app: localization
+    serviceRole: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: localization
+  template:
+    metadata:
+      labels:
+        serviceType: spring-app
+        name: localization
+    spec:
+      containers:
+        - name: localization
+          image: saphyra/apphub-service-common-localization:0.0.1-SNAPSHOT
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always

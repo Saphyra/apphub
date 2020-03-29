@@ -9,8 +9,9 @@
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType === events.LOAD_LOCALIZATION},
-        function(pageName){
-            loadLocalization(pageName.getPayload(), fillPageWithText);
+        function(event){
+            const payload = event.getPayload();
+            loadLocalization(payload.module, payload.fileName, fillPageWithText);
         },
         true
     ));
