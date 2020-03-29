@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-data
+  labels:
+    serviceType: spring-app
+    app: user-data
+    serviceRole: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: user-data
+  template:
+    metadata:
+      labels:
+        serviceType: spring-app
+        name: user-data
+    spec:
+      containers:
+        - name: user-data
+          image: saphyra/apphub-service-user_data:0.0.1-SNAPSHOT
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always

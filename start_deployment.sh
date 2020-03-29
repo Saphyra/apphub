@@ -29,4 +29,7 @@ while IFS= read -r LINE || [[ -n "$LINE" ]]; do
   fi
 done <infra/services
 
+kubectl apply -f infra/deployment/persistent-volume.yaml
+kubectl apply -f infra/deployment/deploy-postgres.yaml
+
 wait

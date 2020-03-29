@@ -10,12 +10,12 @@ data:
     localization:
       ribbon:
         listOfServers: localization:8080
+    user-data:
+      ribbon:
+        listOfServers: user-data:8080
     user-frontend:
       ribbon:
         listOfServers: user-frontend:8080
-
-    ribbon:
-
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -26,6 +26,27 @@ data:
     eureka:
       client:
         enabled: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: database-config
+data:
+  application.yaml: |
+    spring:
+      datasource:
+        username: postgres
+        password: postgres
+        url: jdbc:postgresql://postgres:5432/apphub
+        driverClassName: org.postgresql.Driver
+      jpa:
+        properties:
+          hibernate:
+            default_schema: public
+            jdbc:
+              lob:
+                non_contextual_creation: true
+            dialect: org.hibernate.dialect.PostgreSQLDialect
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -51,4 +72,8 @@ data:
         index:
           path: /web
           serviceId: user-frontend
+          stripPrefix: false
+        user-data:
+          path: /api/user/data/**
+          serviceId: user-data
           stripPrefix: false

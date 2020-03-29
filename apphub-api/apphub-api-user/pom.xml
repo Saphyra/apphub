@@ -2,15 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>apphub-service</artifactId>
+        <artifactId>apphub-api</artifactId>
         <groupId>com.github.saphyra</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>apphub-service-user</artifactId>
+    <artifactId>apphub-api-user</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>apphub-service-user</name>
+    <name>apphub-api-user</name>
     <packaging>pom</packaging>
 
     <properties>
@@ -24,7 +24,6 @@
 
     </build>
     <modules>
-        <module>apphub-service-user-frontend</module>
-        <module>apphub-service-user-data</module>
+        <module>apphub-api-user-data</module>
     </modules>
 </project>

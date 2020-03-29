@@ -1,17 +1,16 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>apphub-service</artifactId>
+        <artifactId>apphub-lib</artifactId>
         <groupId>com.github.saphyra</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>apphub-service-user</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>apphub-lib-common_util</artifactId>
+    <version>${versions.apphub-lib-common_util}</version>
 
-    <name>apphub-service-user</name>
-    <packaging>pom</packaging>
+    <name>apphub-lib-common_util</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,8 +22,4 @@
     <build>
 
     </build>
-    <modules>
-        <module>apphub-service-user-frontend</module>
-        <module>apphub-service-user-data</module>
-    </modules>
 </project>
