@@ -1,7 +1,7 @@
 DIRNAME=$PWD
 echo "Dirname: $DIRNAME"
 
-mvn -T 16 clean package
+./build.sh
 
 kubectl delete deployments --all
 
@@ -13,19 +13,11 @@ while IFS= read -r LINE || [[ -n "$LINE" ]]; do
 
     TRIMMED="${LINE/$'\r'/}"
     IFS=' ' read -r -a LINE_SPLIT <<<"$TRIMMED"
-    LOCATION=${LINE_SPLIT[0]}
-    TAG=${LINE_SPLIT[1]}
 
-    echo "Location: $LOCATION"
-    echo "Tag: $TAG"
+    LOCATION=${LINE_SPLIT[1]}
+    TAG=${LINE_SPLIT[2]}
 
-    cd "$LOCATION" || exit
-
-    DOCKER_COMMAND="./build_deploy.sh $TAG"
-    echo "Command: $DOCKER_COMMAND"
-    $DOCKER_COMMAND &
-
-    cd "$DIRNAME" || exit
+    ./deploy.sh "$LOCATION" "$TAG" &
   fi
 done <infra/services
 
