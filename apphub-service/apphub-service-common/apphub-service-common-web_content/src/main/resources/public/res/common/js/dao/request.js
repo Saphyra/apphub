@@ -13,9 +13,9 @@
         - processErrorResponse: will be called when xhr request fails.
         - validate: validates if the Request is valid for sending.
 */
-function Request(method, path, body){
-    this.method = method;
-    this.path = path;
+function Request(endpoint, body){
+    this.method = endpoint.getMethod();
+    this.path = endpoint.getUrl();
     this.body = processBody(body);
     this.state = {};
     

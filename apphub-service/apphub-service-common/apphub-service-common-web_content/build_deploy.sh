@@ -8,5 +8,5 @@ docker build -f Dockerfile -t "$IMAGE" .
 docker push "$IMAGE"
 
 kubectl apply -f k8s_deployment.yml
-kubectl delete service common-web-content
-kubectl expose deployment common-web-content --type=NodePort
+kubectl delete service web-content
+kubectl expose deployment web-content --type=NodePort

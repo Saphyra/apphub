@@ -1,6 +1,6 @@
 main-gateway apphub-service/apphub-service-main_gateway 0.0.1-SNAPSHOT
 
-common-localization apphub-service/apphub-service-common/apphub-service-common-localization 0.0.1-SNAPSHOT
+localization apphub-service/apphub-service-common/apphub-service-common-localization 0.0.1-SNAPSHOT
 web-content apphub-service/apphub-service-common/apphub-service-common-web_content 0.0.1-SNAPSHOT
 
 user-frontend apphub-service/apphub-service-user/apphub-service-user-frontend 0.0.1-SNAPSHOT

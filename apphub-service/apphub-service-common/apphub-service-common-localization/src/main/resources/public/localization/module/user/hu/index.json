@@ -7,10 +7,10 @@
         "message": "Kezdőlap"
       }
     ],
-    "login-username": [
+    "login-email": [
       {
         "key": "placeholder",
-        "message": "Felhasználónév"
+        "message": "E-mail"
       }
     ],
     "login-password": [
@@ -41,6 +41,18 @@
       {
         "key": "placeholder",
         "message": "Felhasználónév"
+      }
+    ],
+    "reg-email-span": [
+      {
+        "key": "innerHTML",
+        "message": "E-mail"
+      }
+    ],
+    "reg-email": [
+      {
+        "key": "placeholder",
+        "message": "E-mail"
       }
     ],
     "reg-password-span": [
@@ -76,7 +88,8 @@
   },
   "additionalContent": {
     "account-deleted": "Account törölve.",
-    "empty-credentials": "Felhasználónév és jelszó megadása kötelező!",
+    "email-invalid": "Érvénytelen e-mail cím",
+    "empty-credentials": "E-mail és jelszó megadása kötelező!",
     "incorrect-confirm-password": "A jelszavak nem egyeznek.",
     "password-too-long": "Jelszó túl hosszú (Maximum 30 karakter).",
     "password-too-short": "Jelszó túl rövid (Minimum 6 karakter).",

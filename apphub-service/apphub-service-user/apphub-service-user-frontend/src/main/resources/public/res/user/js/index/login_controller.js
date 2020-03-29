@@ -16,29 +16,29 @@
     
     function login(event){
         const credentials = new Credentials(event.getPayload());
-        $("#login-password").val("")
+        $("#login-password").val("");
         
         if(!credentials.isValid()){
             notificationService.showError(Localization.getAdditionalContent("empty-credentials"));
             return;
         }
         
-        const request = new Request(HttpMethod.POST, Mapping.LOGIN, credentials.stringify());
+        const request = new Request(Mapping.getEndpoint("LOGIN"), credentials.stringify());
             request.processValidResponse = function(){location.href = Mapping.MAIN_MENU_PAGE};
             request.handleLogout = false;
         dao.sendRequestAsync(request);
     }
     
     function Credentials(payload){
-        const userName = payload ? payload.userName : $("#login-username").val();
+        const email = payload ? payload.email : $("#login-email").val();
         const password = payload ? payload.password : $("#login-password").val();
         
         this.isValid = function(){
-            return userName !== "" && password !== "";
+            return email !== "" && password !== "";
         }
         
         this.stringify = function(){
-            return {userName: userName, password: password};
+            return {email: email, password: password};
         }
     }
 })();

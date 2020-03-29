@@ -5,6 +5,7 @@
     events.VALIDATION_ATTEMPT = "validation_attempt";
 
     const INVALID_USERNAME = "#invalid-username";
+    const INVALID_EMAIL = "#invalid-email";
     const INVALID_PASSWORD = "#invalid-password";
     const INVALID_CONFIRM_PASSWORD = "#invalid-confirm-password";
 
@@ -44,11 +45,14 @@
             }
 
             const user = {
-                userName: getUserName(),
+                username: getUsername(),
+                email: getEmail(),
                 password: getPassword()
             }
 
-            const request = new Request(HttpMethod.PUT, Mapping.REGISTER, user);
+            $(".reg-input").val("");
+
+            const request = new Request(Mapping.getEndpoint("REGISTER"), user);
                 request.processValidResponse = function(){
                     sessionStorage.successMessage = "registration-successful";
                     eventProcessor.processEvent(new Event(events.LOGIN_ATTEMPT, user));
@@ -58,14 +62,16 @@
     ));
 
     function validateInputs(){
-        const userName = getUserName();
+        const username = getUsername();
+        const email = getEmail();
         const password = getPassword();
         const confirmPassword = getConfirmPassword();
 
         const validationResults = [];
             validationResults.push(validatePassword(password));
             validationResults.push(validateConfirmPassword(password, confirmPassword));
-            validationResults.push(validateUserName(userName));
+            validationResults.push(validateUsername(username));
+            validationResults.push(validateEmail(email));
         processValidationResults(validationResults);
 
         function processValidationResults(validationResults){
@@ -109,13 +115,27 @@
             }
         }
 
-        function validateUserName(userName){
-            if(userName.length < 3){
+        function validateEmail(email){
+            if(!isEmailValid(email)){
+                return {
+                    isValid: false,
+                    process: createErrorProcess(INVALID_EMAIL, "email-invalid")
+                };
+            }else{
+                return {
+                    isValid: true,
+                    process: createSuccessProcess(INVALID_EMAIL)
+                };
+            }
+        }
+
+        function validateUsername(username){
+            if(username.length < 3){
                 return {
                     isValid: false,
                     process: createErrorProcess(INVALID_USERNAME, "username-too-short")
                 };
-            }else if(userName.length > 30){
+            }else if(username.length > 30){
                 return {
                     isValid: false,
                     process: createErrorProcess(INVALID_USERNAME, "username-too-long")
@@ -133,9 +153,13 @@
         }
     }
 
-    function getUserName(){
+    function getUsername(){
         return $("#reg-username").val();
     }
+    
+    function getEmail(){
+            return $("#reg-email").val();
+        }
 
     function getPassword(){
         return $("#reg-password").val();
