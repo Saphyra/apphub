@@ -41,6 +41,12 @@
             <artifactId>dao</artifactId>
             <version>${versions.saphyra.dao}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>encryption</artifactId>
+            <version>${versions.saphyra.encryption}</version>
+        </dependency>
     </dependencies>
 
     <build>

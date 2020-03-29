@@ -3,6 +3,7 @@ echo "Dirname: $DIRNAME"
 
 APP_NAME=$1
 echo "Deploying app by name $APP_NAME"
+echo ""
 
 ./build.sh
 

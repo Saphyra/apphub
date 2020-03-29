@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.service.user.data;
 
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.encryption.impl.PasswordService;
 import liquibase.integration.spring.SpringLiquibase;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,14 +17,24 @@ import javax.sql.DataSource;
 @Slf4j
 @EnableJpaRepositories
 @EntityScan
-public class Config {
+class Config {
     @Bean
-    public UuidConverter uuidConverter() {
+    UuidConverter uuidConverter() {
         return new UuidConverter();
     }
 
     @Bean
-    public SpringLiquibase liquibase(
+    IdGenerator idGenerator() {
+        return new IdGenerator();
+    }
+
+    @Bean
+    PasswordService passwordService() {
+        return new PasswordService();
+    }
+
+    @Bean
+    SpringLiquibase liquibase(
         DataSource dataSource,
         @Value("${liquibase.changelog.location}") String changeLogLocation
     ) {
