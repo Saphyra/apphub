@@ -1,0 +1,7 @@
+liquibase:
+  changelog:
+    location: classpath:database/changelog-master.xml
+
+accessToken:
+  cookie:
+    expirationDays: 365

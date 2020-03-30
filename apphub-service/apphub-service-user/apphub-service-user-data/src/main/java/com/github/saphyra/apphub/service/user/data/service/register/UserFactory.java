@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.user.data.service.register;
 
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.user.data.dao.User;
 import com.github.saphyra.encryption.impl.PasswordService;
+import com.github.saphyra.util.IdGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ class UserFactory {
 
     User create(String email, String username, String password) {
         return User.builder()
-            .userId(idGenerator.randomUuid())
+            .userId(idGenerator.randomUUID())
             .email(email.toLowerCase())
             .username(username)
             .password(passwordService.hashPassword(password))

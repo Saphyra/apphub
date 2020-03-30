@@ -21,9 +21,10 @@
     </dependencies>
 
     <build>
-
     </build>
+
     <modules>
         <module>apphub-api-user-data</module>
+        <module>apphub-api-user-authentication</module>
     </modules>
 </project>

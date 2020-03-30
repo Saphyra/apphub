@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service.register;
 
-import com.github.saphyra.apphub.api.user.data.request.RegistrationRequest;
+import com.github.saphyra.apphub.api.user.data.model.request.RegistrationRequest;
 import com.github.saphyra.apphub.service.user.data.dao.User;
 import com.github.saphyra.apphub.service.user.data.dao.UserDao;
 import lombok.RequiredArgsConstructor;

@@ -65,6 +65,18 @@ function createSpan(text){
     return label;
 }
 
+function setCookie(key, value, expirationDays) {
+    let cookieString = key + "=" + value;
+    if(hasValue(expirationDays)){
+        const date = new Date();
+        date.setTime(+ date + (days * 86400000))
+        cookieString += ";expires=" + date.toGMTString();
+    }
+    cookieString += "; path=/";
+
+    window.document.cookie = cookieString;
+};
+
 function getCookie(key){
     const cookies = document.cookie.split('; ');
     for(let cIndex in cookies){

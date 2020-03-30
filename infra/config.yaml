@@ -4,15 +4,18 @@ metadata:
   name: ribbon-config
 data:
   application.yaml: |
-    common-web-content:
+    web-content:
       ribbon:
-        listOfServers: common-web-content:8080
+        listOfServers: web-content:8080
     localization:
       ribbon:
         listOfServers: localization:8080
     user-data:
       ribbon:
         listOfServers: user-data:8080
+    user-authentication:
+      ribbon:
+        listOfServers: user-authentication:8080
     user-frontend:
       ribbon:
         listOfServers: user-frontend:8080
@@ -59,7 +62,7 @@ data:
       routes:
         common-resources:
           path: /res/common/**
-          serviceId: common-web-content
+          serviceId: web-content
           stripPrefix: false
         user-resources:
           path: /res/user/**
@@ -76,4 +79,8 @@ data:
         user-data:
           path: /api/user/data/**
           serviceId: user-data
+          stripPrefix: false
+        user-authentication:
+          path: /api/user/authentication/**
+          serviceId: user-authentication
           stripPrefix: false

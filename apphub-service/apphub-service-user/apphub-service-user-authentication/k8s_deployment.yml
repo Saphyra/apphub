@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-authentication
+  labels:
+    serviceType: spring-app
+    app: user-authentication
+    serviceRole: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: user-authentication
+  template:
+    metadata:
+      labels:
+        serviceType: spring-app
+        name: user-authentication
+    spec:
+      containers:
+        - name: user-authentication
+          image: saphyra/apphub-service-user_authentication:0.0.1-SNAPSHOT
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always

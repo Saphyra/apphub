@@ -24,7 +24,13 @@
         }
         
         const request = new Request(Mapping.getEndpoint("LOGIN"), credentials.stringify());
-            request.processValidResponse = function(){location.href = Mapping.MAIN_MENU_PAGE};
+            request.convertResponse = function(response){
+                return JSON.parse(response.body);
+            }
+            request.processValidResponse = function(loginResponse){
+                setCookie("access-token", loginResponse.accessTokenId, loginResponse.expirationDays);
+                location.href = Mapping.MODULES_PAGE;
+            };
             request.handleLogout = false;
         dao.sendRequestAsync(request);
     }

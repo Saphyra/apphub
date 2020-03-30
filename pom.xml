@@ -17,13 +17,9 @@
     <packaging>pom</packaging>
 
     <properties>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <artifact.version>0.1-SNAPSHOT</artifact.version>
-
-        <!-- Apphub versions -->
-        <versions.apphub-lib-common_util>0.0.1-SNAPSHOT</versions.apphub-lib-common_util>
-        <versions.apphub-api-user-data>0.0.1-SNAPSHOT</versions.apphub-api-user-data>
 
         <!-- Platform Versions -->
         <versions.spring-boot>2.2.6.RELEASE</versions.spring-boot>

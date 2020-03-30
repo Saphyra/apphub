@@ -8,7 +8,7 @@
     </parent>
 
     <artifactId>apphub-lib-common_util</artifactId>
-    <version>${versions.apphub-lib-common_util}</version>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>apphub-lib-common_util</name>
 
@@ -17,6 +17,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${versions.spring-boot}</version>
+        </dependency>
     </dependencies>
 
     <build>

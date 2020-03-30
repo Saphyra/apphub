@@ -17,5 +17,7 @@
             <column name="email" type="text"/>
             <column name="password" type="text"/>
         </createTable>
+
+        <addPrimaryKey schemaName="apphub_user" tableName="apphub_user" columnNames="user_id" constraintName="apphub_user-pk"/>
     </changeSet>
 </databaseChangeLog>

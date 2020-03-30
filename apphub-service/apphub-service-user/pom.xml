@@ -26,5 +26,6 @@
     <modules>
         <module>apphub-service-user-frontend</module>
         <module>apphub-service-user-data</module>
+        <module>apphub-service-user-authentication</module>
     </modules>
 </project>

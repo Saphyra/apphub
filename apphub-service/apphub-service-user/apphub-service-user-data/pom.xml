@@ -37,8 +37,8 @@
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-api-user-data</artifactId>
-            <version>${versions.apphub-api-user-data}</version>
+            <artifactId>apphub-api-user-data-server</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

@@ -24,6 +24,8 @@ echo "Deploying services $1"
 
 ./build.sh
 
+kubectl apply -f infra/config.yaml
+
 IFS=',' read -r -a APP_NAMES <<<"$1"
 for APP_NAME in "${APP_NAMES[@]}"; do
   deploy "$APP_NAME"
