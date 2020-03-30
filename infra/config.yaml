@@ -1,34 +1,23 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ribbon-config
-data:
-  application.yaml: |
-    web-content:
-      ribbon:
-        listOfServers: web-content:8080
-    localization:
-      ribbon:
-        listOfServers: localization:8080
-    user-data:
-      ribbon:
-        listOfServers: user-data:8080
-    user-authentication:
-      ribbon:
-        listOfServers: user-authentication:8080
-    user-frontend:
-      ribbon:
-        listOfServers: user-frontend:8080
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
   name: common-config
 data:
   application.yaml: |
     eureka:
       client:
         enabled: false
+    hytryx:
+      command:
+        default:
+          timeout:
+            enabled: true
+          isolation:
+            thread:
+              timeoutInMilliseconds: 60000
+    ribbon:
+      ConnectTimeout: 60000
+      ReadTimeout: 60000
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -54,6 +43,31 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: ribbon-config
+data:
+  application.yaml: |
+    web-content:
+      ribbon:
+        listOfServers: web-content:8080
+    localization:
+      ribbon:
+        listOfServers: localization:8080
+    user-data:
+      ribbon:
+        listOfServers: user-data:8080
+    user-authentication:
+      ribbon:
+        listOfServers: user-authentication:8080
+    user-frontend:
+      ribbon:
+        listOfServers: user-frontend:8080
+    modules-frontend:
+      ribbon:
+        listOfServers: modules-frontend:8080
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: zuul-config
 data:
   application.yaml: |
@@ -68,14 +82,25 @@ data:
           path: /res/user/**
           serviceId: user-frontend
           stripPrefix: false
+        modules-resources:
+          path: /res/modules/**
+          serviceId: modules-frontend
+          stripPrefix: false
+
         localization:
           path: /localization/**
           serviceId: localization
           stripPrefix: false
-        index:
+
+        index-page:
           path: /web
           serviceId: user-frontend
           stripPrefix: false
+        modules-page:
+          path: /web/modules
+          serviceId: modules-frontend
+          stripPrefix: false
+
         user-data:
           path: /api/user/data/**
           serviceId: user-data
@@ -84,3 +109,37 @@ data:
           path: /api/user/authentication/**
           serviceId: user-authentication
           stripPrefix: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: endpoint-whitelisting-config
+data:
+  application.yaml: |
+    endpoint:
+      whitelisting:
+        whiteListedEndpoints:
+          resources:
+            path: /res/**
+            method: GET
+            roles:
+          localization:
+            path: /localization/**
+            method: GET
+            roles:
+          root:
+            path: /
+            method: GET
+            roles:
+          indexPage:
+            path: /web
+            method: GET
+            roles:
+          login:
+            path: /api/user/authentication/login
+            method: POST
+            roles:
+          register:
+            path: /api/user/data
+            method: POST
+            roles:

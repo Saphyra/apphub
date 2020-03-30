@@ -5,4 +5,5 @@ public class Endpoint {
     public static final String REGISTER = "/api/user/data";
 
     public static final String INTERNAL_FIND_USER_BY_EMAIL = "/internal/user/data/{email}";
+    public static final String INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";
 }

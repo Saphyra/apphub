@@ -65,6 +65,18 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
             <version>${versions.spring-cloud}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-config</artifactId>
+            <version>${version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-common_domain</artifactId>
+            <version>${version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -74,5 +86,6 @@
         <module>apphub-service-user</module>
         <module>apphub-service-common</module>
         <module>apphub-service-main_gateway</module>
+        <module>apphub-service-modules</module>
     </modules>
 </project>

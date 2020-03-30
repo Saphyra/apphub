@@ -6,3 +6,5 @@ web-content apphub-service/apphub-service-common/apphub-service-common-web_conte
 user-frontend apphub-service/apphub-service-user/apphub-service-user-frontend 0.0.1-SNAPSHOT
 user-data apphub-service/apphub-service-user/apphub-service-user-data 0.0.1-SNAPSHOT
 user-authentication apphub-service/apphub-service-user/apphub-service-user-authentication 0.0.1-SNAPSHOT
+
+modules-frontend apphub-service/apphub-service-modules/apphub-service-modules-frontend 0.0.1-SNAPSHOT

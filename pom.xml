@@ -22,6 +22,7 @@
         <java.version>1.8</java.version>
 
         <!-- Platform Versions -->
+        <versions.spring>5.2.5.RELEASE</versions.spring>
         <versions.spring-boot>2.2.6.RELEASE</versions.spring-boot>
         <versions.spring-cloud>2.2.2.RELEASE</versions.spring-cloud>
         <versions.spring-starter-kubernetes-config>1.1.2.RELEASE</versions.spring-starter-kubernetes-config>

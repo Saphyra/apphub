@@ -5,3 +5,4 @@ liquibase:
 accessToken:
   cookie:
     expirationDays: 365
+  expirationMinutes: 10

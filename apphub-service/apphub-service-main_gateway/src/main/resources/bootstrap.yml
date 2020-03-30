@@ -8,3 +8,4 @@ spring:
           - name: ribbon-config
           - name: common-config
           - name: zuul-config
+          - name: endpoint-whitelisting-config

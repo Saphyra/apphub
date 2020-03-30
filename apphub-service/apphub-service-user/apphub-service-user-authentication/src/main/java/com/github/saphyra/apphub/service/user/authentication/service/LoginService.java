@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.user.data.model.response.InternalUserRespon
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.encryption.impl.PasswordService;
-import com.hithub.saphyra.apphub.api.user.authentication.model.request.LoginRequest;
+import com.github.saphyra.apphub.api.user.authentication.model.request.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

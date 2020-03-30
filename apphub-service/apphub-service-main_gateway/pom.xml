@@ -22,6 +22,12 @@
             <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
             <version>${versions.spring-cloud}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-api-user-authentication-client</artifactId>
+            <version>${version}</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -33,3 +33,11 @@ zuul:
       path: /web
       serviceId: user-frontend
       stripPrefix: false
+
+endpoint:
+  whitelisting:
+    whiteListedEndpoints:
+      root:
+        path: /
+        method: GET
+        roles:

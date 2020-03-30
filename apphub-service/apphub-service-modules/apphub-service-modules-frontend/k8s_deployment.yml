@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: modules-frontend
+  labels:
+    serviceType: spring-app
+    app: modules-frontend
+    serviceRole: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: modules-frontend
+  template:
+    metadata:
+      labels:
+        serviceType: spring-app
+        name: modules-frontend
+    spec:
+      containers:
+        - name: modules-frontend
+          image: saphyra/apphub-service-modules_frontend:0.0.1-SNAPSHOT
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always

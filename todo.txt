@@ -1,2 +1,5 @@
+TODO delete expired accessTokens
+TODO update accessToken lastAccess when accessing API
+TODO auto login
 TODO startup test for each service
 TODO set namespace for deployment
