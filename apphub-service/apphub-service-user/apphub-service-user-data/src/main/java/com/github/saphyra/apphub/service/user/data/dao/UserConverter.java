@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class UserConverter extends ConverterBase<UserEntity, User> {
     private final UuidConverter uuidConverter;
 

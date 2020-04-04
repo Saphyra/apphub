@@ -1,12 +1,13 @@
 package com.github.saphyra.apphub.service.user.authentication;
 
-import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
-import com.github.saphyra.apphub.service.user.authentication.service.LoginService;
-import com.github.saphyra.apphub.service.user.authentication.service.ValidAccessTokenQueryService;
 import com.github.saphyra.apphub.api.user.authentication.model.request.LoginRequest;
 import com.github.saphyra.apphub.api.user.authentication.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.api.user.authentication.model.response.LoginResponse;
 import com.github.saphyra.apphub.api.user.authentication.server.UserAuthenticationController;
+import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
+import com.github.saphyra.apphub.service.user.authentication.service.LoginService;
+import com.github.saphyra.apphub.service.user.authentication.service.ValidAccessTokenQueryService;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,6 @@ import java.util.UUID;
 
 @RestController
 @Slf4j
-//TODO unit test
 //TODO int test
 //TODO api test
 //TODO fe test
@@ -26,6 +26,7 @@ public class AuthenticationController implements UserAuthenticationController {
     private final LoginService loginService;
     private final ValidAccessTokenQueryService validAccessTokenQueryService;
 
+    @Builder
     public AuthenticationController(
         LoginService loginService,
         @Value("${accessToken.cookie.expirationDays}") Integer accessTokenCookieExpirationDays,

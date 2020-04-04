@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-//TODO unit test
 public class UserDao extends AbstractDao<UserEntity, User, String, UserRepository> {
     public UserDao(UserConverter converter, UserRepository repository) {
         super(converter, repository);

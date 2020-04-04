@@ -12,7 +12,9 @@
         </preConditions>
 
         <createTable schemaName="apphub_user" tableName="apphub_user">
-            <column name="user_id" type="varchar(37)"/>
+            <column name="user_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
             <column name="username" type="text"/>
             <column name="email" type="text"/>
             <column name="password" type="text"/>

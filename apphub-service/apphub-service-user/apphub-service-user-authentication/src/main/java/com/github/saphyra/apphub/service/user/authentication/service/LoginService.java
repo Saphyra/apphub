@@ -15,7 +15,6 @@ import static org.apache.commons.lang.BooleanUtils.isTrue;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 //TODO proper exception
 public class LoginService {
     private final AccessTokenDao accessTokenDao;
@@ -26,7 +25,7 @@ public class LoginService {
     public AccessToken login(LoginRequest loginRequest) {
         InternalUserResponse user = internalUserDataApi.findByEmail(loginRequest.getEmail());
         if (!passwordService.authenticate(loginRequest.getPassword(), user.getPasswordHash())) {
-            throw new RuntimeException("Invalid password");
+            throw new IllegalArgumentException("Invalid password");
         }
 
         AccessToken accessToken = accessTokenFactory.create(user.getUserId(), isTrue(loginRequest.getRememberMe()));

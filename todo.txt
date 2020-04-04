@@ -1,5 +1,6 @@
 TODO delete expired accessTokens
 TODO update accessToken lastAccess when accessing API
+TODO clear accessToken header before AuthenticationFilter
 TODO auto login
 TODO startup test for each service
 TODO set namespace for deployment

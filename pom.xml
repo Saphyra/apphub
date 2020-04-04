@@ -86,5 +86,6 @@
         <module>apphub-lib</module>
         <module>apphub-api</module>
         <module>apphub-service</module>
+        <module>apphub-test</module>
     </modules>
 </project>

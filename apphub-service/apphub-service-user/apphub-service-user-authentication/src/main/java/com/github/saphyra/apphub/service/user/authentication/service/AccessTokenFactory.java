@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class AccessTokenFactory {
     private final IdGenerator idGenerator;
     private final OffsetDateTimeProvider offsetDateTimeProvider;

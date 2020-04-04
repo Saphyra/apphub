@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class AccessTokenConverter extends ConverterBase<AccessTokenEntity, AccessToken> {
     private final UuidConverter uuidConverter;
 

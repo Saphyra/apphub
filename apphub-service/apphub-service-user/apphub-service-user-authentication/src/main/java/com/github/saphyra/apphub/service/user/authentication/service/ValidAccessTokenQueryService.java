@@ -15,7 +15,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ValidAccessTokenQueryService {
     private final AccessTokenDao accessTokenDao;
     private final AuthenticationProperties authenticationProperties;

@@ -26,13 +26,12 @@ public class UserDataControllerImpl implements UserDataController {
         log.info("Querying user by email {}", email);
         User user = userDao.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("User not found with email " + email));
-        InternalUserResponse response = InternalUserResponse.builder()
+        return InternalUserResponse.builder()
             .userId(user.getUserId())
             .email(user.getEmail())
             .username(user.getUsername())
             .passwordHash(user.getPassword())
             .build();
-        return response;
     }
 
     @Override
