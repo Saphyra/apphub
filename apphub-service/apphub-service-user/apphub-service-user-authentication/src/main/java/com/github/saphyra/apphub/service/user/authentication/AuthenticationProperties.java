@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 @Data
 public class AuthenticationProperties {
+    @Value("${accessToken.cookie.expirationDays}")
+    private Integer accessTokenCookieExpirationDays;
+
     @Value("${accessToken.expirationMinutes}")
     private Integer accessTokenExpirationMinutes;
 }

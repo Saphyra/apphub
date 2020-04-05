@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-api-user-authentication-client</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

@@ -20,7 +20,7 @@
         <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-api-platform-event_gateway-model</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

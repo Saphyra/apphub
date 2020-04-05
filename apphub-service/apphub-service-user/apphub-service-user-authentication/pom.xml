@@ -38,13 +38,20 @@
         <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-api-user-authentication-server</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-api-user-data-client</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-test-common-repository</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

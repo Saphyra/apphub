@@ -24,8 +24,8 @@ echo "Deploying services $1"
 
 ./build.sh
 rc=$?
-if [[ "$rc" -ne 0 ]] ; then
-  echo 'Build failed.';
+if [[ "$rc" -ne 0 ]]; then
+  echo 'Build failed.'
   exit 1
 fi
 

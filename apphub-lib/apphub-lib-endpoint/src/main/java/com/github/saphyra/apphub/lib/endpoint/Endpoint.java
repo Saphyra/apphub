@@ -10,4 +10,6 @@ public class Endpoint {
     public static final String REGISTER_PROCESSOR = "/internal/platform/event-gateway";
     public static final String HEARTBEAT = "/internal/platform/event-gateway/{serviceName}";
     public static final String SEND_EVENT = "/internal/platform/event-gateway";
+
+    public static final String DELETE_EXPIRED_ACCESS_TOKENS_EVENT = "/event/delete-expired-access-tokens";
 }

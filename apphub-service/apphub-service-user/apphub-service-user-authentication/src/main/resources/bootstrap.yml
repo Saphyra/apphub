@@ -1,6 +1,6 @@
 spring:
-  appliction:
-    name: user-frontend
+  application:
+    name: user-authentication
   cloud:
     kubernetes:
       config:

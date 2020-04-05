@@ -33,7 +33,7 @@
         <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-common_util</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -69,13 +69,19 @@
         <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-config</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-event</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-common_domain</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -109,7 +115,7 @@
         <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-test-common-config</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 

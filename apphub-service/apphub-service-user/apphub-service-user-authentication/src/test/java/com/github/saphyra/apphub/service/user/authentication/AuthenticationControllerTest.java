@@ -1,14 +1,17 @@
 package com.github.saphyra.apphub.service.user.authentication;
 
+import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.user.authentication.model.request.LoginRequest;
 import com.github.saphyra.apphub.api.user.authentication.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.api.user.authentication.model.response.LoginResponse;
+import com.github.saphyra.apphub.lib.event.DeleteExpiredAccessTokensEvent;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
+import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenCleanupService;
 import com.github.saphyra.apphub.service.user.authentication.service.LoginService;
 import com.github.saphyra.apphub.service.user.authentication.service.ValidAccessTokenQueryService;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AuthenticationControllerTest {
@@ -28,11 +32,18 @@ public class AuthenticationControllerTest {
     private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
+    private AccessTokenCleanupService accessTokenCleanupService;
+
+    @Mock
+    private AuthenticationProperties authenticationProperties;
+
+    @Mock
     private LoginService loginService;
 
     @Mock
     private ValidAccessTokenQueryService validAccessTokenQueryService;
 
+    @InjectMocks
     private AuthenticationController underTest;
 
     @Mock
@@ -44,17 +55,19 @@ public class AuthenticationControllerTest {
     @Mock
     private AccessToken accessToken;
 
-    @Before
-    public void setUp() {
-        underTest = AuthenticationController.builder()
-            .accessTokenCookieExpirationDays(ACCESS_TOKEN_COOKIE_EXPIRATION_DAYS)
-            .loginService(loginService)
-            .validAccessTokenQueryService(validAccessTokenQueryService)
-            .build();
+    @Mock
+    private SendEventRequest<DeleteExpiredAccessTokensEvent> sendEventRequest;
+
+    @Test
+    public void deleteExpiredAccessTokens() {
+        underTest.deleteExpiredAccessTokens(sendEventRequest);
+
+        verify(accessTokenCleanupService).deleteExpiredAccessTokens();
     }
 
     @Test
     public void login_persistent() {
+        given(authenticationProperties.getAccessTokenCookieExpirationDays()).willReturn(ACCESS_TOKEN_COOKIE_EXPIRATION_DAYS);
         given(loginService.login(loginRequest)).willReturn(accessToken);
         given(accessToken.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
         given(accessToken.isPersistent()).willReturn(true);

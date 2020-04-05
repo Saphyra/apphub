@@ -18,6 +18,10 @@ data:
     ribbon:
       ConnectTimeout: 60000
       ReadTimeout: 60000
+
+    event:
+      processor:
+        enabled: true
 ---
 apiVersion: v1
 kind: ConfigMap

@@ -2,3 +2,7 @@ spring:
   cloud:
     kubernetes:
       enabled: false
+
+event-gateway:
+  ribbon:
+    listOfServers: localhost:8083
