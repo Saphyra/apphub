@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 //TODO int test
 //TODO api test
 //TODO fe test
@@ -25,7 +24,7 @@ public class UserDataControllerImpl implements UserDataController {
     public InternalUserResponse findByEmail(String email) {
         log.info("Querying user by email {}", email);
         User user = userDao.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("User not found with email " + email));
+            .orElseThrow(() -> new IllegalStateException("User not found with email " + email));
         return InternalUserResponse.builder()
             .userId(user.getUserId())
             .email(user.getEmail())

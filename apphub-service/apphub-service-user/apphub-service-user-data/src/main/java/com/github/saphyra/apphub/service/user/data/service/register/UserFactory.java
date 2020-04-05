@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class UserFactory {
     private final IdGenerator idGenerator;
     private final PasswordService passwordService;

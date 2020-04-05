@@ -105,6 +105,20 @@
             <version>${versions.spring-boot}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-test-common-config</artifactId>
+            <version>${version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${versions.h2}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

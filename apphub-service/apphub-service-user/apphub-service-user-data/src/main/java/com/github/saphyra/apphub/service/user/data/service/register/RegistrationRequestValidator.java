@@ -12,7 +12,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 //TODO proper exceptions
-//TODO unit test
 class RegistrationRequestValidator {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
@@ -30,47 +29,47 @@ class RegistrationRequestValidator {
 
     private void validateEmail(String email) {
         if (isNull(email)) {
-            throw new RuntimeException("Email is null.");
+            throw new IllegalArgumentException("Email is null.");
         }
 
         if (!EMAIL_PATTERN.matcher(email).matches()) {
-            throw new RuntimeException("Invalid email.");
+            throw new IllegalArgumentException("Invalid email.");
         }
 
         if (userDao.findByEmail(email.toLowerCase()).isPresent()) {
-            throw new RuntimeException("Email already exists");
+            throw new IllegalArgumentException("Email already exists");
         }
     }
 
     private void validateUsername(String username) {
         if (isNull(username)) {
-            throw new RuntimeException("Username is null.");
+            throw new IllegalArgumentException("Username is null.");
         }
 
         if (username.length() < 3) {
-            throw new RuntimeException("Username too short.");
+            throw new IllegalArgumentException("Username too short.");
         }
 
         if (username.length() > 30) {
-            throw new RuntimeException("Username too long.");
+            throw new IllegalArgumentException("Username too long.");
         }
 
         if (userDao.findByUsername(username).isPresent()) {
-            throw new RuntimeException("Username already exists");
+            throw new IllegalArgumentException("Username already exists");
         }
     }
 
     private void validatePassword(String password) {
         if (isNull(password)) {
-            throw new RuntimeException("Password is null.");
+            throw new IllegalArgumentException("Password is null.");
         }
 
         if (password.length() < 6) {
-            throw new RuntimeException("Password too short.");
+            throw new IllegalArgumentException("Password too short.");
         }
 
         if (password.length() > 30) {
-            throw new RuntimeException("Password too long.");
+            throw new IllegalArgumentException("Password too long.");
         }
     }
 }

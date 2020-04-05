@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-//TODO
 public class RegistrationService {
     private final RegistrationRequestValidator registrationRequestValidator;
     private final UserDao userDao;

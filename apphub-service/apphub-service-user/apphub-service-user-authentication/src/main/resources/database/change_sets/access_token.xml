@@ -12,7 +12,9 @@
         </preConditions>
 
         <createTable schemaName="apphub_user" tableName="access_token">
-            <column name="access_token_id" type="varchar(37)"/>
+            <column name="access_token_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
             <column name="user_id" type="varchar(37)"/>
             <column name="persistent" type="boolean"/>
             <column name="last_access" type="datetime"/>
