@@ -42,5 +42,6 @@
     </build>
     <modules>
         <module>apphub-api-user</module>
+        <module>apphub-api-platform</module>
     </modules>
 </project>

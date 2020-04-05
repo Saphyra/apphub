@@ -7,7 +7,7 @@ data:
     eureka:
       client:
         enabled: false
-    hytryx:
+    hystryx:
       command:
         default:
           timeout:
@@ -49,6 +49,9 @@ data:
     web-content:
       ribbon:
         listOfServers: web-content:8080
+    event-gateway:
+      ribbon:
+        listOfServers: event-gateway:8080
     localization:
       ribbon:
         listOfServers: localization:8080

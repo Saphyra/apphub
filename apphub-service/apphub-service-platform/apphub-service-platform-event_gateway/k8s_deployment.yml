@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-gateway
+  labels:
+    serviceType: spring-app
+    app: event-gateway
+    serviceRole: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: event-gateway
+  template:
+    metadata:
+      labels:
+        serviceType: spring-app
+        name: event-gateway
+    spec:
+      containers:
+        - name: event-gateway
+          image: saphyra/apphub-service-platform-event_gateway:0.0.1-SNAPSHOT
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always

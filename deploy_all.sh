@@ -2,6 +2,11 @@ DIRNAME=$PWD
 echo "Dirname: $DIRNAME"
 
 ./build.sh
+rc=$?
+if [[ "$rc" -ne 0 ]] ; then
+  echo 'Build failed.';
+  exit 1
+fi
 
 kubectl delete deployments --all
 

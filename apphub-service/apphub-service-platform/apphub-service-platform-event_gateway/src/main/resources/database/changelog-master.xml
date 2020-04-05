@@ -1,0 +1,14 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create_schema_event" author="saphyra">
+        <sql endDelimiter=";">
+            CREATE SCHEMA IF NOT EXISTS event
+        </sql>
+
+        <rollback>
+            DROP SCHEMA IF EXIST event CASCADE
+        </rollback>
+    </changeSet>
+
+    <include file="database/change_sets/event_processor.xml"/>
+</databaseChangeLog>
