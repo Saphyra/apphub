@@ -28,6 +28,9 @@ public class UrlAssemblerTest {
 
         String result = underTest.assemble(eventProcessor);
 
-        assertThat(result).startsWith(SERVICE_NAME).endsWith(URL);
+        assertThat(result)
+            .startsWith("http://")
+            .contains(SERVICE_NAME)
+            .endsWith(URL);
     }
 }

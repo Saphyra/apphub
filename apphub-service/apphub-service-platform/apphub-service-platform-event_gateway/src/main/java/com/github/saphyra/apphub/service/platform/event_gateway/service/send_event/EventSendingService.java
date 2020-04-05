@@ -21,11 +21,13 @@ public class EventSendingService {
     private final UrlAssembler urlAssembler;
 
     public void sendEvent(SendEventRequest<?> sendEventRequest) {
-        executorServiceBean.execute(() ->
-            eventProcessorDao.getByEventName(sendEventRequest.getEventName())
-                .stream()
-                .parallel()
-                .forEach(processor -> sendEvent(processor, sendEventRequest))
+        executorServiceBean.execute(() -> {
+                eventProcessorDao.getByEventName(sendEventRequest.getEventName())
+                    .stream()
+                    .parallel()
+                    .forEach(processor -> sendEvent(processor, sendEventRequest));
+                log.info("Event with name {} is sent to the processors.", sendEventRequest.getEventName());
+            }
         );
     }
 
@@ -37,7 +39,7 @@ public class EventSendingService {
             processor.setLastAccess(offsetDateTimeProvider.getCurrentDate());
             eventProcessorDao.save(processor);
         } catch (Exception e) {
-            log.warn("Failed sending event with name {} to processor {}", sendEventRequest.getEventName(), processor);
+            log.warn("Failed sending event with name {} to processor {}", sendEventRequest.getEventName(), processor, e);
         }
     }
 }

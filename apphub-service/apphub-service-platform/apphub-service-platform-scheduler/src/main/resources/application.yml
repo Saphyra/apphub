@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    initialize: false
+
+interval:
+  user:
+    authentication:
+      accessTokenCleanup: 60000

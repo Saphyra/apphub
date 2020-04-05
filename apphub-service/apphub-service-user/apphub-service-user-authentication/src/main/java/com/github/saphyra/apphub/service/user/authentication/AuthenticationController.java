@@ -34,6 +34,7 @@ public class AuthenticationController implements UserAuthenticationController {
     public void deleteExpiredAccessTokens(SendEventRequest<DeleteExpiredAccessTokensEvent> request) {
         log.info("Deleting expired accessTokens...");
         accessTokenCleanupService.deleteExpiredAccessTokens();
+        log.info("Expired accessTokens deleted.");
     }
 
     @Override

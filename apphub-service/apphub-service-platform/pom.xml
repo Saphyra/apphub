@@ -24,5 +24,6 @@
     </build>
     <modules>
         <module>apphub-service-platform-event_gateway</module>
+        <module>apphub-service-platform-scheduler</module>
     </modules>
 </project>

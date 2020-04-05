@@ -21,6 +21,8 @@ data:
 
     event:
       processor:
+        heartbeat:
+          interval: 60000
         enabled: true
 ---
 apiVersion: v1

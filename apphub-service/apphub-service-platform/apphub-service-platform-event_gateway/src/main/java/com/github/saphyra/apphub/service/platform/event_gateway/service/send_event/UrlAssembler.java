@@ -5,7 +5,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 class UrlAssembler {
+    private static final String URI_PREFIX = "http://";
+
     String assemble(EventProcessor processor) {
-        return processor.getServiceName() + processor.getUrl();
+        return URI_PREFIX + processor.getServiceName() + processor.getUrl();
     }
 }
