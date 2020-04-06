@@ -13,6 +13,8 @@ import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_HEADER;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -33,7 +35,9 @@ public class AuthenticationFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
-        HttpServletRequest request = RequestContext.getCurrentContext()
+        RequestContext currentContext = RequestContext.getCurrentContext();
+        currentContext.addZuulRequestHeader(ACCESS_TOKEN_HEADER, "");
+        HttpServletRequest request = currentContext
             .getRequest();
         String requestUri = request
             .getRequestURI();

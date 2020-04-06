@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_HEADER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -69,6 +70,7 @@ public class AuthenticationFilterTest {
         boolean result = underTest.shouldFilter();
 
         assertThat(result).isFalse();
+        verify(requestContext).addZuulRequestHeader(ACCESS_TOKEN_HEADER, "");
     }
 
     @Test
@@ -79,6 +81,7 @@ public class AuthenticationFilterTest {
         boolean result = underTest.shouldFilter();
 
         assertThat(result).isTrue();
+        verify(requestContext).addZuulRequestHeader(ACCESS_TOKEN_HEADER, "");
     }
 
     @Test
@@ -89,6 +92,7 @@ public class AuthenticationFilterTest {
         boolean result = underTest.shouldFilter();
 
         assertThat(result).isTrue();
+        verify(requestContext).addZuulRequestHeader(ACCESS_TOKEN_HEADER, "");
     }
 
     @Test
