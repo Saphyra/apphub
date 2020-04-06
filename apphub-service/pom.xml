@@ -133,7 +133,6 @@
     <modules>
         <module>apphub-service-user</module>
         <module>apphub-service-common</module>
-        <module>apphub-service-main_gateway</module>
         <module>apphub-service-modules</module>
         <module>apphub-service-platform</module>
     </modules>

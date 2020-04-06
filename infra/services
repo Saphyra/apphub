@@ -1,7 +1,6 @@
 event-gateway apphub-service/apphub-service-platform/apphub-service-platform-event_gateway 0.0.1-SNAPSHOT
 scheduler apphub-service/apphub-service-platform/apphub-service-platform-scheduler 0.0.1-SNAPSHOT
-
-main-gateway apphub-service/apphub-service-main_gateway 0.0.1-SNAPSHOT
+main-gateway apphub-service/apphub-service-platform/apphub-service-platform-main_gateway 0.0.1-SNAPSHOT
 
 localization apphub-service/apphub-service-common/apphub-service-common-localization 0.0.1-SNAPSHOT
 web-content apphub-service/apphub-service-common/apphub-service-common-web_content 0.0.1-SNAPSHOT
