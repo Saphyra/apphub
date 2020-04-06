@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.user.authentication.model.response.Internal
 import com.github.saphyra.apphub.api.user.authentication.model.response.LoginResponse;
 import com.github.saphyra.apphub.lib.endpoint.Endpoint;
 import com.github.saphyra.apphub.lib.event.DeleteExpiredAccessTokensEvent;
+import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,10 @@ import java.util.UUID;
 
 public interface UserAuthenticationController {
     @RequestMapping(method = RequestMethod.POST, value = Endpoint.DELETE_EXPIRED_ACCESS_TOKENS_EVENT)
-    void deleteExpiredAccessTokens(SendEventRequest<DeleteExpiredAccessTokensEvent> request);
+    void deleteExpiredAccessTokens(@RequestBody SendEventRequest<DeleteExpiredAccessTokensEvent> request);
+
+    @RequestMapping(method = RequestMethod.POST, value = Endpoint.REFRESH_ACCESS_TOKEN_EXPIRATION_EVENT)
+    void refreshAccessTokenExpiration(@RequestBody SendEventRequest<RefreshAccessTokenExpirationEvent> request);
 
     @RequestMapping(method = RequestMethod.POST, value = Endpoint.LOGIN)
     LoginResponse login(@RequestBody LoginRequest loginRequest, HttpServletResponse response);

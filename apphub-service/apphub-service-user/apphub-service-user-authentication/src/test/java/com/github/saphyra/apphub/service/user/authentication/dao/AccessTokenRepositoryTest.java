@@ -80,4 +80,24 @@ public class AccessTokenRepositoryTest {
 
         assertThat(underTest.findAll()).containsExactlyInAnyOrder(entity2, entity3);
     }
+
+    @Test
+    public void updateLastAccess() {
+        AccessTokenEntity entity1 = AccessTokenEntity.builder()
+            .accessTokenId(ACCESS_TOKEN_ID_1)
+            .lastAccess(CURRENT_DATE)
+            .build();
+
+        AccessTokenEntity entity2 = AccessTokenEntity.builder()
+            .accessTokenId(ACCESS_TOKEN_ID_2)
+            .lastAccess(CURRENT_DATE)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2));
+
+        OffsetDateTime newLastAccess = CURRENT_DATE.plusHours(1);
+        underTest.updateLastAccess(ACCESS_TOKEN_ID_1, newLastAccess);
+
+        assertThat(underTest.findById(ACCESS_TOKEN_ID_1).get().getLastAccess()).isEqualTo(newLastAccess);
+        assertThat(underTest.findById(ACCESS_TOKEN_ID_2).get().getLastAccess()).isEqualTo(CURRENT_DATE);
+    }
 }

@@ -12,4 +12,5 @@ public class Endpoint {
     public static final String SEND_EVENT = "/internal/platform/event-gateway";
 
     public static final String DELETE_EXPIRED_ACCESS_TOKENS_EVENT = "/event/delete-expired-access-tokens";
+    public static final String REFRESH_ACCESS_TOKEN_EXPIRATION_EVENT = "/event/refresh-access-token-expiration";
 }

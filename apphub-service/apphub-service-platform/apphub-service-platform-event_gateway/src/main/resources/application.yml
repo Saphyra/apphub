@@ -6,3 +6,13 @@ eventProcessor:
   cleanup:
     expirationSeconds: 300
     interval: 60000
+
+logging:
+  level:
+    com:
+      github:
+        saphyra:
+          apphub:
+            service:
+              platform:
+                event_gateway: DEBUG

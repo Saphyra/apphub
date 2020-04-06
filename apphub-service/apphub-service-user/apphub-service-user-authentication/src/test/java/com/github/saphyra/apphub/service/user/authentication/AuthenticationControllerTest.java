@@ -5,8 +5,10 @@ import com.github.saphyra.apphub.api.user.authentication.model.request.LoginRequ
 import com.github.saphyra.apphub.api.user.authentication.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.api.user.authentication.model.response.LoginResponse;
 import com.github.saphyra.apphub.lib.event.DeleteExpiredAccessTokensEvent;
+import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenCleanupService;
+import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenUpdateService;
 import com.github.saphyra.apphub.service.user.authentication.service.LoginService;
 import com.github.saphyra.apphub.service.user.authentication.service.ValidAccessTokenQueryService;
 import org.junit.Test;
@@ -38,6 +40,9 @@ public class AuthenticationControllerTest {
     private AuthenticationProperties authenticationProperties;
 
     @Mock
+    private AccessTokenUpdateService accessTokenUpdateService;
+
+    @Mock
     private LoginService loginService;
 
     @Mock
@@ -64,6 +69,14 @@ public class AuthenticationControllerTest {
 
         verify(accessTokenCleanupService).deleteExpiredAccessTokens();
     }
+
+    @Test
+    public void refreshAccessTokenExpiration() {
+        underTest.refreshAccessTokenExpiration(SendEventRequest.<RefreshAccessTokenExpirationEvent>builder().payload(new RefreshAccessTokenExpirationEvent(ACCESS_TOKEN_ID)).build());
+
+        verify(accessTokenUpdateService).updateLastAccess(ACCESS_TOKEN_ID);
+    }
+
 
     @Test
     public void login_persistent() {

@@ -1,8 +1,11 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication;
 
+import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
+import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.user.authentication.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.ErrorResponseHandler;
 import com.github.saphyra.util.CookieUtil;
 import com.github.saphyra.util.ObjectMapperWrapper;
@@ -10,6 +13,8 @@ import com.netflix.zuul.context.RequestContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -19,9 +24,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_HEADER;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-
 
 @RunWith(MockitoJUnitRunner.class)
 public class AuthenticationServiceTest {
@@ -46,6 +51,9 @@ public class AuthenticationServiceTest {
     private ErrorResponseHandler errorResponseHandler;
 
     @Mock
+    private EventGatewayApiClient eventGatewayApiClient;
+
+    @Mock
     private ObjectMapperWrapper objectMapperWrapper;
 
     @InjectMocks
@@ -59,6 +67,9 @@ public class AuthenticationServiceTest {
 
     @Mock
     private InternalAccessTokenResponse accessTokenResponse;
+
+    @Captor
+    private ArgumentCaptor<SendEventRequest<RefreshAccessTokenExpirationEvent>> eventArgumentCaptor;
 
     @Before
     public void setUp() {
@@ -102,9 +113,12 @@ public class AuthenticationServiceTest {
         given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID)).willReturn(Optional.of(accessTokenResponse));
         given(objectMapperWrapper.writeValueAsString(accessTokenResponse)).willReturn(ACCESS_TOKEN);
         given(base64Encoder.encode(ACCESS_TOKEN)).willReturn(ENCODED_ACCESS_TOKEN);
+        given(accessTokenResponse.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
 
         underTest.authenticate(requestContext);
 
         verify(requestContext).addZuulRequestHeader(ACCESS_TOKEN_HEADER, ENCODED_ACCESS_TOKEN);
+        verify(eventGatewayApiClient).sendEvent(eventArgumentCaptor.capture());
+        assertThat(eventArgumentCaptor.getValue().getPayload().getAccessTokenId()).isEqualTo(ACCESS_TOKEN_ID);
     }
 }

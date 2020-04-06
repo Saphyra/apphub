@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.user.authentication.config;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
 import com.github.saphyra.apphub.lib.endpoint.Endpoint;
 import com.github.saphyra.apphub.lib.event.DeleteExpiredAccessTokensEvent;
+import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import com.github.saphyra.apphub.lib.event.processor.EventProcessorRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,11 @@ public class EventProcessorRegistryImpl implements EventProcessorRegistry {
                 .serviceName(serviceName)
                 .eventName(DeleteExpiredAccessTokensEvent.EVENT_NAME)
                 .url(Endpoint.DELETE_EXPIRED_ACCESS_TOKENS_EVENT)
+                .build(),
+            RegisterProcessorRequest.builder()
+                .serviceName(serviceName)
+                .eventName(RefreshAccessTokenExpirationEvent.EVENT_NAME)
+                .url(Endpoint.REFRESH_ACCESS_TOKEN_EXPIRATION_EVENT)
                 .build()
         );
     }

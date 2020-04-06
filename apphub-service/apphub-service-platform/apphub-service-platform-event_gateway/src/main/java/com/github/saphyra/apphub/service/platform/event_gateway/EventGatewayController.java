@@ -34,6 +34,7 @@ public class EventGatewayController implements EventGatewayApiServer {
     @Override
     public void sendEvent(SendEventRequest<?> sendEventRequest) {
         log.info("SendEventRequest arrived with eventName {}", sendEventRequest.getEventName());
+        log.debug("SendEventRequest: {}", sendEventRequest);
         eventSendingService.sendEvent(sendEventRequest);
     }
 }

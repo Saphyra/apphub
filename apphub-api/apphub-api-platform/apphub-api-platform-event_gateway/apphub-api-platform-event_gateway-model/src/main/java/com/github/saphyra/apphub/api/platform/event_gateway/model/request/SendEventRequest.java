@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Data
@@ -13,6 +14,8 @@ import java.util.Map;
 @Builder
 public class SendEventRequest<T> {
     private String eventName;
-    private Map<String, String> metadata;
+
+    @Builder.Default
+    private Map<String, String> metadata = new HashMap<>();
     private T payload;
 }

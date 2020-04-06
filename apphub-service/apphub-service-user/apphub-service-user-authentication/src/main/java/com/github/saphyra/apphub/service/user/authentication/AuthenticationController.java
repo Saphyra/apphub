@@ -6,8 +6,10 @@ import com.github.saphyra.apphub.api.user.authentication.model.response.Internal
 import com.github.saphyra.apphub.api.user.authentication.model.response.LoginResponse;
 import com.github.saphyra.apphub.api.user.authentication.server.UserAuthenticationController;
 import com.github.saphyra.apphub.lib.event.DeleteExpiredAccessTokensEvent;
+import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenCleanupService;
+import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenUpdateService;
 import com.github.saphyra.apphub.service.user.authentication.service.LoginService;
 import com.github.saphyra.apphub.service.user.authentication.service.ValidAccessTokenQueryService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ import java.util.UUID;
 //TODO fe test
 public class AuthenticationController implements UserAuthenticationController {
     private final AccessTokenCleanupService accessTokenCleanupService;
+    private final AccessTokenUpdateService accessTokenUpdateService;
     private final AuthenticationProperties authenticationProperties;
     private final LoginService loginService;
     private final ValidAccessTokenQueryService validAccessTokenQueryService;
@@ -35,6 +38,13 @@ public class AuthenticationController implements UserAuthenticationController {
         log.info("Deleting expired accessTokens...");
         accessTokenCleanupService.deleteExpiredAccessTokens();
         log.info("Expired accessTokens deleted.");
+    }
+
+    @Override
+    public void refreshAccessTokenExpiration(SendEventRequest<RefreshAccessTokenExpirationEvent> request) {
+        log.info("{}", request);
+        log.info("Updating expiration of accessToken with id {}", request.getPayload().getAccessTokenId());
+        accessTokenUpdateService.updateLastAccess(request.getPayload().getAccessTokenId());
     }
 
     @Override
