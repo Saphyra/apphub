@@ -1,2 +1,4 @@
+TODO logout
 TODO auto login
+TODO not session extending uris
 TODO set namespace for deployment

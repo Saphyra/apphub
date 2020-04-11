@@ -26,5 +26,7 @@
         <module>apphub-service-platform-main_gateway</module>
         <module>apphub-service-platform-event_gateway</module>
         <module>apphub-service-platform-scheduler</module>
+        <module>apphub-service-platform-web_content</module>
+        <module>apphub-service-platform-localization</module>
     </modules>
 </project>

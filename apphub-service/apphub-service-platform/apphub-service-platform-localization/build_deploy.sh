@@ -1,5 +1,5 @@
 TAG=$1
-IMAGE_NAME=apphub-service-common-localization
+IMAGE_NAME=apphub-service-platform-localization
 IMAGE="saphyra/$IMAGE_NAME:$TAG"
 
 echo "Image: $IMAGE"
