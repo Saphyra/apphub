@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.common.localization;
+package com.github.saphyra.apphub.service.platform.localization;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

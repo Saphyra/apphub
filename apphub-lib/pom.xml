@@ -49,5 +49,6 @@
         <module>apphub-lib-config</module>
         <module>apphub-lib-common_domain</module>
         <module>apphub-lib-event</module>
+        <module>apphub-lib-data</module>
     </modules>
 </project>

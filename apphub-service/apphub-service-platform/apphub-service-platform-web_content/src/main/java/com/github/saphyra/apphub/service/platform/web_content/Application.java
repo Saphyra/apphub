@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.common.web_content;
+package com.github.saphyra.apphub.service.platform.web_content;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
