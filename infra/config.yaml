@@ -24,6 +24,8 @@ data:
         heartbeat:
           interval: 60000
         enabled: true
+
+    defaultLocale: hu
 ---
 apiVersion: v1
 kind: ConfigMap

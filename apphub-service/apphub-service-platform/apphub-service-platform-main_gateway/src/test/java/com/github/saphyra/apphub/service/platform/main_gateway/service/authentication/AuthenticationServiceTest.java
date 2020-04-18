@@ -5,6 +5,8 @@ import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEv
 import com.github.saphyra.apphub.api.user.authentication.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.error_handler.domain.ErrorResponse;
+import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.ErrorResponseHandler;
 import com.github.saphyra.util.CookieUtil;
@@ -18,8 +20,11 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,6 +39,7 @@ public class AuthenticationServiceTest {
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
     private static final String ACCESS_TOKEN = "access-token";
     private static final String ENCODED_ACCESS_TOKEN = "encoded-access-token";
+    private static final String LOCALE = "locale";
 
     @Mock
     private AccessTokenIdConverter accessTokenIdConverter;
@@ -46,6 +52,9 @@ public class AuthenticationServiceTest {
 
     @Mock
     private CookieUtil cookieUtil;
+
+    @Mock
+    private ErrorResponseFactory errorResponseFactory;
 
     @Mock
     private ErrorResponseHandler errorResponseHandler;
@@ -68,12 +77,19 @@ public class AuthenticationServiceTest {
     @Mock
     private InternalAccessTokenResponse accessTokenResponse;
 
+    @Mock
+    private ErrorResponse errorResponse;
+
     @Captor
     private ArgumentCaptor<SendEventRequest<RefreshAccessTokenExpirationEvent>> eventArgumentCaptor;
 
     @Before
     public void setUp() {
         given(requestContext.getRequest()).willReturn(request);
+        Map<String, String> headers = new HashMap<>();
+        headers.put(Constants.LOCALE_HEADER, LOCALE);
+        given(requestContext.getZuulRequestHeaders()).willReturn(headers);
+        given(errorResponseFactory.createErrorResponse(LOCALE, HttpStatus.UNAUTHORIZED, "NO_SESSION_AVAILABLE", new HashMap<>())).willReturn(errorResponse);
     }
 
     @Test
@@ -82,7 +98,7 @@ public class AuthenticationServiceTest {
 
         underTest.authenticate(requestContext);
 
-        verify(errorResponseHandler).handleUnauthorized(requestContext, "");
+        verify(errorResponseHandler).handleUnauthorized(requestContext, errorResponse);
     }
 
     @Test
@@ -92,7 +108,7 @@ public class AuthenticationServiceTest {
 
         underTest.authenticate(requestContext);
 
-        verify(errorResponseHandler).handleBadRequest(requestContext, "");
+        verify(errorResponseHandler).handleBadRequest(requestContext, errorResponse);
     }
 
     @Test
@@ -103,7 +119,7 @@ public class AuthenticationServiceTest {
 
         underTest.authenticate(requestContext);
 
-        verify(errorResponseHandler).handleUnauthorized(requestContext, "");
+        verify(errorResponseHandler).handleUnauthorized(requestContext, errorResponse);
     }
 
     @Test

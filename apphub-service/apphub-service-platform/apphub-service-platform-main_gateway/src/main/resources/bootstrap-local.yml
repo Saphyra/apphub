@@ -2,3 +2,18 @@ spring:
   cloud:
     kubernetes:
       enabled: false
+eureka:
+  client:
+    enabled: false
+
+common-web-content:
+  ribbon:
+    listOfServers: localhost:8081
+
+localization:
+  ribbon:
+    listOfServers: localhost:8082
+
+user-frontend:
+  ribbon:
+    listOfServers: localhost:8083

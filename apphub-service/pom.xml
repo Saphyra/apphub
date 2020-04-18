@@ -38,6 +38,12 @@
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-error_handler</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
             <artifactId>dao</artifactId>
             <version>${versions.saphyra.dao}</version>
         </dependency>

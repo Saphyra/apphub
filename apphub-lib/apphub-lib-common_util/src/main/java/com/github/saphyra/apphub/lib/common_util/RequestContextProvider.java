@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 public class RequestContextProvider {
-    public static HttpServletRequest getCurrentHttpRequest() {
+    public HttpServletRequest getCurrentHttpRequest() {
         return Optional.ofNullable(RequestContextHolder.getRequestAttributes())
             .filter(requestAttributes -> ServletRequestAttributes.class.isAssignableFrom(requestAttributes.getClass()))
             .map(requestAttributes -> ((ServletRequestAttributes) requestAttributes))
