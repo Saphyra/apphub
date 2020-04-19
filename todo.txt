@@ -1,3 +1,1 @@
-TODO auto login
-TODO poll login expiration when idle
 TODO not session extending uris

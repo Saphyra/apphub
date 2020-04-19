@@ -3,10 +3,15 @@
     scriptLoader.loadScript("/res/user/js/index/registration_controller.js");
 
     $(document).ready(function(){
-        init();
-    });
-    
-    function init(){
+        checkLogin();
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "user", fileName: "index"}));
+    });
+
+    function checkLogin(){
+        const endpoint = Mapping.getEndpoint("CHECK_SESSION");
+        const response = dao.sendRequest(endpoint.getMethod(), endpoint.getUrl());
+        if(response.status == ResponseStatus.OK){
+            window.location.href = Mapping.MODULES_PAGE;
+        }
     }
 })();

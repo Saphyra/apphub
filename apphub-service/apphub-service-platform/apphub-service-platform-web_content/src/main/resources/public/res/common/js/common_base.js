@@ -20,7 +20,8 @@
     scriptLoader.loadScript("/res/common/js/localization/localization_loader.js");
     scriptLoader.loadScript("/res/common/js/localization/localization.js");
     scriptLoader.loadScript("/res/common/js/logout_service.js");
-    
+    scriptLoader.loadScript("/res/common/js/session_check.js");
+
     /*
         Loads the script given as argument.
         Arguments:

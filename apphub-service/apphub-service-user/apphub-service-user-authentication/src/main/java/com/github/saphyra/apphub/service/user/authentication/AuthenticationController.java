@@ -36,6 +36,11 @@ public class AuthenticationController implements UserAuthenticationController {
     private final ValidAccessTokenQueryService validAccessTokenQueryService;
 
     @Override
+    public void checkSession(AccessTokenHeader accessTokenHeader) {
+        log.debug("Checking session for {}", accessTokenHeader);
+    }
+
+    @Override
     public void deleteExpiredAccessTokens(SendEventRequest<DeleteExpiredAccessTokensEvent> request) {
         log.info("Deleting expired accessTokens...");
         accessTokenCleanupService.deleteExpiredAccessTokens();

@@ -5,6 +5,7 @@ window.Mapping = new function(){
     this.MODULES_PAGE = "/web/modules";
 
     const endpoints = {
+        CHECK_SESSION: new Endpoint("/api/user/authentication/session", HttpMethod.GET),
         LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),
         LOGOUT: new Endpoint("/api/user/authentication/logout", HttpMethod.POST),
         REGISTER: new Endpoint("/api/user/data", HttpMethod.POST)
