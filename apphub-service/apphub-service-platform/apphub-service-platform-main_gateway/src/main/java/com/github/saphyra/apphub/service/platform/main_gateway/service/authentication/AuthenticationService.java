@@ -1,14 +1,11 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication;
 
-import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
-import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.user.authentication.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.error_handler.domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
-import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.ErrorResponseHandler;
 import com.github.saphyra.util.CookieUtil;
 import com.github.saphyra.util.ObjectMapperWrapper;
@@ -31,6 +28,7 @@ import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_H
 public class AuthenticationService {
     private static final String NO_SESSION_AVAILABLE_ERROR_CODE = "NO_SESSION_AVAILABLE";
 
+    private final AccessTokenExpirationUpdateService accessTokenExpirationUpdateService;
     private final AccessTokenHeaderFactory accessTokenHeaderFactory;
     private final AccessTokenIdConverter accessTokenIdConverter;
     private final AccessTokenQueryService accessTokenQueryService;
@@ -38,7 +36,6 @@ public class AuthenticationService {
     private final CookieUtil cookieUtil;
     private final ErrorResponseFactory errorResponseFactory;
     private final ErrorResponseHandler errorResponseHandler;
-    private final EventGatewayApiClient eventGatewayApi;
     private final ObjectMapperWrapper objectMapperWrapper;
 
     public void authenticate(RequestContext requestContext) {
@@ -74,12 +71,7 @@ public class AuthenticationService {
 
         requestContext.addZuulRequestHeader(ACCESS_TOKEN_HEADER, encodedAccessToken);
 
-        eventGatewayApi.sendEvent(
-            SendEventRequest.builder()
-                .eventName(RefreshAccessTokenExpirationEvent.EVENT_NAME)
-                .payload(new RefreshAccessTokenExpirationEvent(accessTokenResponse.getAccessTokenId()))
-                .build()
-        );
+        accessTokenExpirationUpdateService.updateExpiration(requestContext.getRequest(), accessTokenResponse.getAccessTokenId());
     }
 
     private ErrorResponse createErrorResponse(RequestContext requestContext) {

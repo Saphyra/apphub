@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication;
 
-import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.user.authentication.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
@@ -30,7 +29,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_HEADER;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -41,6 +39,9 @@ public class AuthenticationServiceTest {
     private static final String ACCESS_TOKEN = "access-token";
     private static final String ENCODED_ACCESS_TOKEN = "encoded-access-token";
     private static final String LOCALE = "locale";
+
+    @Mock
+    private AccessTokenExpirationUpdateService accessTokenExpirationUpdateService;
 
     @Mock
     private AccessTokenHeaderFactory accessTokenHeaderFactory;
@@ -62,9 +63,6 @@ public class AuthenticationServiceTest {
 
     @Mock
     private ErrorResponseHandler errorResponseHandler;
-
-    @Mock
-    private EventGatewayApiClient eventGatewayApiClient;
 
     @Mock
     private ObjectMapperWrapper objectMapperWrapper;
@@ -142,7 +140,6 @@ public class AuthenticationServiceTest {
         underTest.authenticate(requestContext);
 
         verify(requestContext).addZuulRequestHeader(ACCESS_TOKEN_HEADER, ENCODED_ACCESS_TOKEN);
-        verify(eventGatewayApiClient).sendEvent(eventArgumentCaptor.capture());
-        assertThat(eventArgumentCaptor.getValue().getPayload().getAccessTokenId()).isEqualTo(ACCESS_TOKEN_ID);
+        verify(accessTokenExpirationUpdateService).updateExpiration(request, ACCESS_TOKEN_ID);
     }
 }

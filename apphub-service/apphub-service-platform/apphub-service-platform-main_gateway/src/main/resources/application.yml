@@ -2,3 +2,7 @@ spring:
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+nonSessionExtendingUris:
+  - uri: /api/user/authentication/session
+    method: GET
