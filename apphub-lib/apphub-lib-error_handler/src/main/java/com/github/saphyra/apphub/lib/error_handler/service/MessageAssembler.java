@@ -9,7 +9,6 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class MessageAssembler {
     String assembleMessage(String localizedMessage, Map<String, String> params) {
         String result = localizedMessage;

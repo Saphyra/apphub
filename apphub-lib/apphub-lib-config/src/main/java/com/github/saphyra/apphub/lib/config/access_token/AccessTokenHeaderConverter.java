@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class AccessTokenHeaderConverter implements Converter<String, AccessTokenHeader> {
     private final Base64Encoder base64Encoder;
     private final CustomObjectMapperWrapper objectMapperWrapper;

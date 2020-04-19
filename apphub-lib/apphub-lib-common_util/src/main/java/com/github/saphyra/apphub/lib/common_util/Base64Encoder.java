@@ -4,7 +4,6 @@ import org.apache.tomcat.util.codec.binary.Base64;
 
 import java.nio.charset.StandardCharsets;
 
-//TODO unit test
 public class Base64Encoder {
     public String encode(String in) {
         byte[] bytes = Base64.encodeBase64(in.getBytes());

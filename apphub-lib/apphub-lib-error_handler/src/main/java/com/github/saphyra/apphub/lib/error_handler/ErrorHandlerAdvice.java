@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-public class ErrorHandlerAdvice {
+class ErrorHandlerAdvice {
     private final ErrorResponseFactory errorResponseFactory;
 
     @ExceptionHandler(RestException.class)
-    public ResponseEntity<ErrorResponse> restException(RestException exception) {
+    ResponseEntity<ErrorResponse> restException(RestException exception) {
         log.warn("Error occurred with errorMessage {}:", exception.getErrorMessage(), exception);
         ErrorMessage errorMessage = exception.getErrorMessage();
 

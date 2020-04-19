@@ -8,7 +8,6 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class LocalizedMessageProvider {
     private final LocalizationApiClient localizationApi;
     private final MessageAssembler messageAssembler;

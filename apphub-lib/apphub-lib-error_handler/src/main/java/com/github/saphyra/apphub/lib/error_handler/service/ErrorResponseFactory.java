@@ -14,7 +14,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 @Component
-//TODO unit test
 public class ErrorResponseFactory {
     private static final String LOCALE_NOT_FOUND_ERROR_CODE = "LOCALE_NOT_FOUND";
 
