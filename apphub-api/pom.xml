@@ -33,7 +33,19 @@
         <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-endpoint</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-common_util</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-common_domain</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

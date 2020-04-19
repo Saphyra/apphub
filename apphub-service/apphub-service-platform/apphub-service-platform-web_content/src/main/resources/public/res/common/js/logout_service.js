@@ -7,7 +7,7 @@
         ));
     
     function logout(){
-        const request = new Request(HttpMethod.POST, Mapping.LOGOUT);
+        const request = new Request(Mapping.getEndpoint("LOGOUT"));
             request.processValidResponse = function(){
                 sessionStorage.successMessage = "successful-logout";
                 location.href = Mapping.INDEX_PAGE;

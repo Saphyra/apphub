@@ -7,9 +7,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = SchedulerApplication.class)
 @ActiveProfiles("test")
-public class ApplicationTest {
+public class SchedulerApplicationTest {
     @Test
     public void startup() {
 

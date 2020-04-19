@@ -26,7 +26,7 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
             <version>${versions.spring-boot}</version>
             <scope>provided</scope>
         </dependency>

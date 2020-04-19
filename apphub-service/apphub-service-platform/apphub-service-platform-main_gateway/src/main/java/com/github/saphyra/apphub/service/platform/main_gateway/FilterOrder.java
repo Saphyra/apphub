@@ -6,7 +6,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum FilterOrder {
     AUTHENTICATION_FILTER(0),
-    LOGGING_FILTER(Integer.MIN_VALUE);
+    LOCALE_FILTER(Integer.MIN_VALUE + 1),
+    REQUEST_LOGGING_FILTER(Integer.MIN_VALUE),
+
+    RESPONSE_LOGGING_FILTER(Integer.MAX_VALUE);
 
     @Getter
     private final int order;

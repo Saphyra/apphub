@@ -6,8 +6,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients("com.github.saphyra.apphub.api")
-public class Application {
+public class SchedulerApplication {
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(SchedulerApplication.class, args);
     }
 }

@@ -8,9 +8,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = UserDataApplication.class)
 @ActiveProfiles("test")
-public class ApplicationTest {
+public class UserDataApplicationTest {
     @Test
     public void startup() {
 

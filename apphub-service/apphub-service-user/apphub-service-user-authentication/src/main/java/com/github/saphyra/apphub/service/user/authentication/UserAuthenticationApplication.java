@@ -1,11 +1,11 @@
-package com.github.saphyra.apphub.service.user.data;
+package com.github.saphyra.apphub.service.user.authentication;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Application {
+public class UserAuthenticationApplication {
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(UserAuthenticationApplication.class, args);
     }
 }

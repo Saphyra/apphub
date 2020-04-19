@@ -2,14 +2,17 @@ package com.github.saphyra.apphub.lib.common_util;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 
-import java.util.Arrays;
+import java.nio.charset.StandardCharsets;
 
+//TODO unit test
 public class Base64Encoder {
     public String encode(String in) {
-        return Arrays.toString(Base64.encodeBase64(in.getBytes()));
+        byte[] bytes = Base64.encodeBase64(in.getBytes());
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     public String decode(String in) {
-        return Arrays.toString(Base64.decodeBase64(in.getBytes()));
+        byte[] bytes = Base64.decodeBase64(in.getBytes());
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 }

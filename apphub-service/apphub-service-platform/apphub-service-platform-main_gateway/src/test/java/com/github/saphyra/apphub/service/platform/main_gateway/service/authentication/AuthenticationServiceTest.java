@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.authenti
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.user.authentication.model.response.InternalAccessTokenResponse;
+import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.error_handler.domain.ErrorResponse;
@@ -42,6 +43,9 @@ public class AuthenticationServiceTest {
     private static final String LOCALE = "locale";
 
     @Mock
+    private AccessTokenHeaderFactory accessTokenHeaderFactory;
+
+    @Mock
     private AccessTokenIdConverter accessTokenIdConverter;
 
     @Mock
@@ -79,6 +83,9 @@ public class AuthenticationServiceTest {
 
     @Mock
     private ErrorResponse errorResponse;
+
+    @Mock
+    private AccessTokenHeader accessTokenHeader;
 
     @Captor
     private ArgumentCaptor<SendEventRequest<RefreshAccessTokenExpirationEvent>> eventArgumentCaptor;
@@ -127,7 +134,8 @@ public class AuthenticationServiceTest {
         given(cookieUtil.getCookie(request, Constants.ACCESS_TOKEN_COOKIE)).willReturn(Optional.of(ACCESS_TOKEN_ID_STRING));
         given(accessTokenIdConverter.convertAccessTokenId(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.of(ACCESS_TOKEN_ID));
         given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID)).willReturn(Optional.of(accessTokenResponse));
-        given(objectMapperWrapper.writeValueAsString(accessTokenResponse)).willReturn(ACCESS_TOKEN);
+        given(accessTokenHeaderFactory.create(accessTokenResponse)).willReturn(accessTokenHeader);
+        given(objectMapperWrapper.writeValueAsString(accessTokenHeader)).willReturn(ACCESS_TOKEN);
         given(base64Encoder.encode(ACCESS_TOKEN)).willReturn(ENCODED_ACCESS_TOKEN);
         given(accessTokenResponse.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
 

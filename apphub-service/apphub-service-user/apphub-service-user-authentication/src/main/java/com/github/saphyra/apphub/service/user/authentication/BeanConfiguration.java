@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.user.authentication;
 
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.config.access_token.AccessTokenConfiguration;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
 import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
 import com.github.saphyra.encryption.impl.PasswordService;
@@ -10,6 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
@@ -20,6 +22,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableLiquibase
 @EnableFeignClients(basePackages = "com.github.saphyra.apphub.api")
 @EnableEventProcessor
+@Import(AccessTokenConfiguration.class)
 class BeanConfiguration {
     @Bean
     UuidConverter uuidConverter() {

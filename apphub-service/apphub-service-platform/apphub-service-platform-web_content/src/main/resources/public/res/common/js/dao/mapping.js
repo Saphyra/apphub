@@ -1,10 +1,12 @@
 window.Mapping = new function(){
     scriptLoader.loadScript("/res/common/js/dao/http_method.js");
 
+    this.INDEX_PAGE = "/web";
     this.MODULES_PAGE = "/web/modules";
 
     const endpoints = {
         LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),
+        LOGOUT: new Endpoint("/api/user/authentication/logout", HttpMethod.POST),
         REGISTER: new Endpoint("/api/user/data", HttpMethod.POST)
     }
 

@@ -69,6 +69,10 @@ footer button, footer label{
     font-size: 1.25rem;
 }
 
+#logout-button{
+    float: right;
+}
+
 /*================BASE TAGS==================*/
 h1{
     font-weight: 700;

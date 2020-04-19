@@ -8,7 +8,7 @@
 
     <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
     <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
-    <SCRIPT src="/res/modules/js/index/page_controller.js"></SCRIPT>
+    <SCRIPT src="/res/modules/js/modules/page_controller.js"></SCRIPT>
 </HEAD>
 <BODY>
 <DIV class="main-page">
@@ -21,7 +21,7 @@
     </MAIN>
 
     <FOOTER>
-
+        <BUTTON id="logout-button" onclick='eventProcessor.processEvent(new Event(events.LOGOUT))'></BUTTON>
     </FOOTER>
 </DIV>
 </BODY>

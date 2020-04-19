@@ -1,6 +1,2 @@
-spring:
-  datasource:
-    username: postgres
-    password: postgres
-    url: jdbc:postgresql://localhost:5432/apphub
-    driverClassName: org.postgresql.Driver
+server:
+  port: 8081

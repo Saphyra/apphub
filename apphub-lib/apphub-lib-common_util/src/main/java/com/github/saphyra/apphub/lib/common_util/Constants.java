@@ -5,7 +5,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Constants {
     public static final String ACCESS_TOKEN_COOKIE = "access-token";
-    public static final String ACCESS_TOKEN_HEADER = "access-token";
+    public static final String ACCESS_TOKEN_HEADER = "apphub-access-token";
 
     public static final String LOCALE_HEADER = "locale";
 

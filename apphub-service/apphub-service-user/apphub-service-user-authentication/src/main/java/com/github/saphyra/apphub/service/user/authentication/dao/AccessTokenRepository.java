@@ -16,4 +16,8 @@ interface AccessTokenRepository extends CrudRepository<AccessTokenEntity, String
     @Modifying
     @Query("UPDATE AccessTokenEntity e SET e.lastAccess = :currentDate WHERE e.accessTokenId = :accessTokenId")
     void updateLastAccess(@Param("accessTokenId") String accessTokenId, @Param("currentDate") OffsetDateTime currentDate);
+
+    @Transactional
+        //TODO unit test
+    void deleteByAccessTokenIdAndUserId(String userId, String accessTokenId);
 }

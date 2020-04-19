@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class LoggingFilter extends ZuulFilter {
+public class RequestLoggingFilter extends ZuulFilter {
     @Override
     public String filterType() {
         return FilterConstants.PRE_TYPE;
@@ -17,7 +17,7 @@ public class LoggingFilter extends ZuulFilter {
 
     @Override
     public int filterOrder() {
-        return FilterOrder.LOGGING_FILTER.getOrder();
+        return FilterOrder.REQUEST_LOGGING_FILTER.getOrder();
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.authenti
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.user.authentication.model.response.InternalAccessTokenResponse;
+import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.error_handler.domain.ErrorResponse;
@@ -30,6 +31,7 @@ import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_H
 public class AuthenticationService {
     private static final String NO_SESSION_AVAILABLE_ERROR_CODE = "NO_SESSION_AVAILABLE";
 
+    private final AccessTokenHeaderFactory accessTokenHeaderFactory;
     private final AccessTokenIdConverter accessTokenIdConverter;
     private final AccessTokenQueryService accessTokenQueryService;
     private final Base64Encoder base64Encoder;
@@ -64,7 +66,8 @@ public class AuthenticationService {
         }
 
         InternalAccessTokenResponse accessTokenResponse = accessTokenResponseOptional.get();
-        String accessTokenString = objectMapperWrapper.writeValueAsString(accessTokenResponse);
+        AccessTokenHeader accessToken = accessTokenHeaderFactory.create(accessTokenResponse);
+        String accessTokenString = objectMapperWrapper.writeValueAsString(accessToken);
         log.debug("Stringified accessToken: {}", accessTokenString);
         String encodedAccessToken = base64Encoder.encode(accessTokenString);
         log.debug("Enriching request with auth header: {}", encodedAccessToken);

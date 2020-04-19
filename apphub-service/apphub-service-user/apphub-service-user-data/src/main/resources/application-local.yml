@@ -1,5 +1,2 @@
-spring:
-  datasource:
-    username: postgres
-    password: postgres
-    url: jdbc:postgresql://localhost:5432/apphub
+server:
+  port: 8086

@@ -1,0 +1,54 @@
+defaultLocale: hu
+event:
+  processor:
+    enabled: true
+
+spring:
+  cloud:
+    kubernetes:
+      enabled: false
+  datasource:
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/apphub
+    driverClassName: org.postgresql.Driver
+
+eureka:
+  client:
+    enabled: false
+
+main-gateway:
+  ribbon:
+    listOfServers: localhost:8080
+
+event-gateway:
+  ribbon:
+    listOfServers: localhost:8081
+
+scheduler:
+  ribbon:
+    listOfServers: localhost:8082
+
+web-content:
+  ribbon:
+    listOfServers: localhost:8083
+
+localization:
+  ribbon:
+    listOfServers: localhost:8084
+
+user-authentication:
+  ribbon:
+    listOfServers: localhost:8085
+
+user-data:
+  ribbon:
+    listOfServers: localhost:8086
+
+user-frontend:
+  ribbon:
+    listOfServers: localhost:8087
+
+modules-frontend:
+  ribbon:
+    listOfServers: localhost:8088

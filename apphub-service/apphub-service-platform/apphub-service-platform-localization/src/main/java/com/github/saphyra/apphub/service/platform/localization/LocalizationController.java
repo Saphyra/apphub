@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.localization;
 
-import com.github.saphyra.apphub.api.platform.localization.server.LocalizationApi;
+import com.github.saphyra.apphub.api.platform.localization.server.LocalizationApiController;
 import com.github.saphyra.apphub.service.platform.localization.error_code.ErrorCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 //TODO unit test
 //TODO int test
 //TODO api test
-public class LocalizationController implements LocalizationApi {
+public class LocalizationController implements LocalizationApiController {
     private final ErrorCodeService errorCodeService;
 
     @Override

@@ -17,6 +17,25 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${versions.spring}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-common_util</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>util</artifactId>
+            <version>${versions.saphyra.util}</version>
+        </dependency>
     </dependencies>
 
     <build>

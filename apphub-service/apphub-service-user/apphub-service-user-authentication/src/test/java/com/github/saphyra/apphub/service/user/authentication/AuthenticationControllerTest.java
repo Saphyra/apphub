@@ -19,7 +19,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -52,9 +51,6 @@ public class AuthenticationControllerTest {
     private AuthenticationController underTest;
 
     @Mock
-    private HttpServletResponse response;
-
-    @Mock
     private LoginRequest loginRequest;
 
     @Mock
@@ -85,7 +81,7 @@ public class AuthenticationControllerTest {
         given(accessToken.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
         given(accessToken.isPersistent()).willReturn(true);
 
-        LoginResponse result = underTest.login(loginRequest, response);
+        LoginResponse result = underTest.login(loginRequest);
 
         assertThat(result.getAccessTokenId()).isEqualTo(ACCESS_TOKEN_ID);
         assertThat(result.getExpirationDays()).isEqualTo(ACCESS_TOKEN_COOKIE_EXPIRATION_DAYS);
@@ -97,7 +93,7 @@ public class AuthenticationControllerTest {
         given(accessToken.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
         given(accessToken.isPersistent()).willReturn(false);
 
-        LoginResponse result = underTest.login(loginRequest, response);
+        LoginResponse result = underTest.login(loginRequest);
 
         assertThat(result.getAccessTokenId()).isEqualTo(ACCESS_TOKEN_ID);
         assertThat(result.getExpirationDays()).isNull();

@@ -1,0 +1,19 @@
+{
+  "title": "Apphub - Modulok",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Modulok"
+      }
+    ],
+    "logout-button": [
+      {
+        "key": "innerHTML",
+        "message": "Kijelentkezés"
+      }
+    ]
+  },
+  "additionalContent": {
+  }
+}

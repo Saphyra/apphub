@@ -7,9 +7,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = ModulesFrontendApplication.class)
 @ActiveProfiles("test")
-public class ApplicationTest {
+public class ModulesFrontendApplicationTest {
     @Test
     public void startup() {
 
