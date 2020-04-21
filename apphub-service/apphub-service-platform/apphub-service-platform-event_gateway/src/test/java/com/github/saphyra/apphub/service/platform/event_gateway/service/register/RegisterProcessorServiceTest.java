@@ -20,7 +20,8 @@ import static org.mockito.Mockito.verify;
 public class RegisterProcessorServiceTest {
     private static final String EVENT_NAME = "event-name";
     private static final String SERVICE_NAME = "service-name";
-    private static final String URL = "url";
+    private static final String URL_1 = "url-1";
+    private static final String URL_2 = "url-2";
     private static final OffsetDateTime CURRENT_DATE = OffsetDateTime.now();
 
     @Mock
@@ -47,17 +48,17 @@ public class RegisterProcessorServiceTest {
     @Test
     public void registerProcessor_alreadyExists() {
         given(eventProcessorDao.findByServiceNameAndEventName(SERVICE_NAME, EVENT_NAME)).willReturn(Optional.of(eventProcessor));
-        given(eventProcessor.getUrl()).willReturn(URL);
         given(offsetDateTimeProvider.getCurrentDate()).willReturn(CURRENT_DATE);
 
         RegisterProcessorRequest request = RegisterProcessorRequest.builder()
             .serviceName(SERVICE_NAME)
             .eventName(EVENT_NAME)
-            .url(URL)
+            .url(URL_1)
             .build();
 
         underTest.registerProcessor(request);
 
+        verify(registerProcessorRequestValidator).validate(request);
         verify(eventProcessor).setLastAccess(CURRENT_DATE);
         verify(eventProcessorDao).save(eventProcessor);
     }
@@ -65,21 +66,20 @@ public class RegisterProcessorServiceTest {
     @Test
     public void registerProcessor_differentUrl() {
         given(eventProcessorDao.findByServiceNameAndEventName(SERVICE_NAME, EVENT_NAME)).willReturn(Optional.of(eventProcessor));
-        given(eventProcessor.getUrl()).willReturn("asd");
         given(offsetDateTimeProvider.getCurrentDate()).willReturn(CURRENT_DATE);
 
         RegisterProcessorRequest request = RegisterProcessorRequest.builder()
             .serviceName(SERVICE_NAME)
             .eventName(EVENT_NAME)
-            .url(URL)
+            .url(URL_2)
             .build();
-
-        given(eventProcessorFactory.create(request)).willReturn(newEventProcessor);
 
         underTest.registerProcessor(request);
 
-        verify(newEventProcessor).setLastAccess(CURRENT_DATE);
-        verify(eventProcessorDao).save(newEventProcessor);
+        verify(registerProcessorRequestValidator).validate(request);
+        verify(eventProcessor).setLastAccess(CURRENT_DATE);
+        verify(eventProcessor).setUrl(URL_2);
+        verify(eventProcessorDao).save(eventProcessor);
     }
 
     @Test
@@ -90,13 +90,14 @@ public class RegisterProcessorServiceTest {
         RegisterProcessorRequest request = RegisterProcessorRequest.builder()
             .serviceName(SERVICE_NAME)
             .eventName(EVENT_NAME)
-            .url(URL)
+            .url(URL_1)
             .build();
 
         given(eventProcessorFactory.create(request)).willReturn(newEventProcessor);
 
         underTest.registerProcessor(request);
 
+        verify(registerProcessorRequestValidator).validate(request);
         verify(newEventProcessor).setLastAccess(CURRENT_DATE);
         verify(eventProcessorDao).save(newEventProcessor);
     }

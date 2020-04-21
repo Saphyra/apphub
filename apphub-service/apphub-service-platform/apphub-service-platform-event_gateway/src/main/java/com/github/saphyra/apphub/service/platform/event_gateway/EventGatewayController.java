@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO int test
 public class EventGatewayController implements EventGatewayApiServer {
     private final EventSendingService eventSendingService;
     private final HeartbeatService heartbeatService;

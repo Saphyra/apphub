@@ -6,6 +6,7 @@ eventProcessor:
   cleanup:
     expirationSeconds: 300
     interval: 60000
+  backgroundEventSendingEnabled: true
 
 logging:
   level:

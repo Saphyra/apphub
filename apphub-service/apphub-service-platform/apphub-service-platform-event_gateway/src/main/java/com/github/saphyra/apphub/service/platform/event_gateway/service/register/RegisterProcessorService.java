@@ -20,9 +20,9 @@ public class RegisterProcessorService {
     public void registerProcessor(RegisterProcessorRequest request) {
         registerProcessorRequestValidator.validate(request);
         EventProcessor eventProcessor = eventProcessorDao.findByServiceNameAndEventName(request.getServiceName(), request.getEventName())
-            .filter(processor -> processor.getUrl().equals(request.getUrl()))
             .orElseGet(() -> eventProcessorFactory.create(request));
 
+        eventProcessor.setUrl(request.getUrl());
         eventProcessor.setLastAccess(offsetDateTimeProvider.getCurrentDate());
         eventProcessorDao.save(eventProcessor);
     }

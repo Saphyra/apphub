@@ -19,7 +19,7 @@ public class EventProcessor {
     private final String serviceName;
 
     @NonNull
-    private final String url;
+    private String url;
 
     @NonNull
     private final String eventName;

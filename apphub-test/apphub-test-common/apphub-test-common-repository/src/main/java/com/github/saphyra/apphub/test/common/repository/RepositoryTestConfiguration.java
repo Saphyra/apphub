@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.test.context.TestPropertySource;
 
 import javax.sql.DataSource;
 
@@ -18,7 +17,6 @@ import javax.sql.DataSource;
 @ImportAutoConfiguration(value = HibernateJpaAutoConfiguration.class)
 @EnableJpaRepositories(basePackages = "com.github.saphyra.apphub")
 @EntityScan(basePackages = "com.github.saphyra.apphub")
-@TestPropertySource(locations = "classpath:database.properties", properties = "hibernate.hbm2ddl.auto=none")
 public class RepositoryTestConfiguration {
     @Bean
     public DataSource dataSource() {

@@ -50,12 +50,6 @@
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>exception-handling</artifactId>
-            <version>${versions.saphyra.exception-handling}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
             <artifactId>encryption</artifactId>
             <version>${versions.saphyra.encryption}</version>
         </dependency>

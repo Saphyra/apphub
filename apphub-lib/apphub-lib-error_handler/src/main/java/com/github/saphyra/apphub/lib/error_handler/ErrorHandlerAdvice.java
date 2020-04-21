@@ -11,10 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.HashMap;
+
 @ControllerAdvice
 @RequiredArgsConstructor
 @Slf4j
-class ErrorHandlerAdvice {
+public class ErrorHandlerAdvice {
+    public static final String GENERAL_ERROR_CODE = "GENERAL_ERROR";
+
     private final ErrorResponseFactory errorResponseFactory;
 
     @ExceptionHandler(RestException.class)
@@ -23,6 +27,15 @@ class ErrorHandlerAdvice {
         ErrorMessage errorMessage = exception.getErrorMessage();
 
         ErrorResponse errorResponse = errorResponseFactory.create(exception.getResponseStatus(), errorMessage.getErrorCode(), errorMessage.getParams());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getHttpStatus()));
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+        //TODO unit test
+    ResponseEntity<ErrorResponse> generalException(RuntimeException exception) {
+        log.error("Unknown exception occurred:", exception);
+        ErrorResponse errorResponse = errorResponseFactory.create(HttpStatus.INTERNAL_SERVER_ERROR, GENERAL_ERROR_CODE, new HashMap<>());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getHttpStatus()));
     }
