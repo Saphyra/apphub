@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class SendEventTaskFactory {
     private final EventProcessorDao eventProcessorDao;
     private final EventSender eventSender;

@@ -13,6 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,6 +46,17 @@ public class ErrorHandlerAdviceTest {
         ResponseEntity<ErrorResponse> result = underTest.restException(exception);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(result.getBody()).isEqualTo(errorResponse);
+    }
+
+    @Test
+    public void generalException() {
+        given(errorResponseFactory.create(HttpStatus.INTERNAL_SERVER_ERROR, "GENERAL_ERROR", new HashMap<>())).willReturn(errorResponse);
+        given(errorResponse.getHttpStatus()).willReturn(HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        ResponseEntity<ErrorResponse> result = underTest.generalException(new RuntimeException());
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
         assertThat(result.getBody()).isEqualTo(errorResponse);
     }
 }

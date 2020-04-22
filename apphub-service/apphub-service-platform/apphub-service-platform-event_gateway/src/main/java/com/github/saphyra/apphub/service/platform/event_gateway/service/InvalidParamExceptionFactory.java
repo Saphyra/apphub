@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-//TODO unit test
 public class InvalidParamExceptionFactory {
     private static final String INVALID_FIELD_MESSAGE = "Invalid parameter";
     private static final String INVALID_PARAMETER_ERROR_CODE = "INVALID_PARAM";

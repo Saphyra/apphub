@@ -8,7 +8,6 @@ import static java.util.Objects.isNull;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
 @Component
-//TODO unit test
 class SendEventRequestValidator {
     void validate(SendEventRequest<?> sendEventRequest) {
         if (isNull(sendEventRequest.getMetadata())) {

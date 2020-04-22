@@ -16,8 +16,8 @@ import java.util.HashMap;
 @ControllerAdvice
 @RequiredArgsConstructor
 @Slf4j
-public class ErrorHandlerAdvice {
-    public static final String GENERAL_ERROR_CODE = "GENERAL_ERROR";
+class ErrorHandlerAdvice {
+    private static final String GENERAL_ERROR_CODE = "GENERAL_ERROR";
 
     private final ErrorResponseFactory errorResponseFactory;
 
@@ -32,7 +32,6 @@ public class ErrorHandlerAdvice {
     }
 
     @ExceptionHandler(RuntimeException.class)
-        //TODO unit test
     ResponseEntity<ErrorResponse> generalException(RuntimeException exception) {
         log.error("Unknown exception occurred:", exception);
         ErrorResponse errorResponse = errorResponseFactory.create(HttpStatus.INTERNAL_SERVER_ERROR, GENERAL_ERROR_CODE, new HashMap<>());

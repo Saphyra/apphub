@@ -12,7 +12,6 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EventSender {
     private final EventProcessorDao eventProcessorDao;
     private final OffsetDateTimeProvider offsetDateTimeProvider;
