@@ -22,4 +22,16 @@
 
         <addPrimaryKey schemaName="apphub_user" tableName="apphub_user" columnNames="user_id" constraintName="apphub_user-pk"/>
     </changeSet>
+
+    <changeSet id="add-language-to-user" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="apphub_user" tableName="apphub_user" columnName="language"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="apphub_user" tableName="apphub_user">
+            <column name="language" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

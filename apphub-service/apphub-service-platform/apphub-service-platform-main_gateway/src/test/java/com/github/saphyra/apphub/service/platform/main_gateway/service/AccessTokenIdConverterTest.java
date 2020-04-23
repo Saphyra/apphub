@@ -1,6 +1,7 @@
-package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication;
+package com.github.saphyra.apphub.service.platform.main_gateway.service;
 
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenIdConverter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

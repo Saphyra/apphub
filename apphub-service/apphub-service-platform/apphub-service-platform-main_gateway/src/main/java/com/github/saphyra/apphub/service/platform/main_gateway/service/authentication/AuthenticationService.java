@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.error_handler.domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
+import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.ErrorResponseHandler;
 import com.github.saphyra.util.CookieUtil;
 import com.github.saphyra.util.ObjectMapperWrapper;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.UUID;
 
 import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_COOKIE;
 import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_HEADER;
@@ -30,7 +30,6 @@ public class AuthenticationService {
 
     private final AccessTokenExpirationUpdateService accessTokenExpirationUpdateService;
     private final AccessTokenHeaderFactory accessTokenHeaderFactory;
-    private final AccessTokenIdConverter accessTokenIdConverter;
     private final AccessTokenQueryService accessTokenQueryService;
     private final Base64Encoder base64Encoder;
     private final CookieUtil cookieUtil;
@@ -49,14 +48,7 @@ public class AuthenticationService {
             return;
         }
 
-        String accessTokenIdString = accessTokenIdStringOptional.get();
-        Optional<UUID> accessTokenIdOptional = accessTokenIdConverter.convertAccessTokenId(accessTokenIdString);
-        if (!accessTokenIdOptional.isPresent()) {
-            errorResponseHandler.handleBadRequest(requestContext, createErrorResponse(requestContext));
-            return;
-        }
-
-        Optional<InternalAccessTokenResponse> accessTokenResponseOptional = accessTokenQueryService.getAccessToken(accessTokenIdOptional.get());
+        Optional<InternalAccessTokenResponse> accessTokenResponseOptional = accessTokenQueryService.getAccessToken(accessTokenIdStringOptional.get());
         if (!accessTokenResponseOptional.isPresent()) {
             errorResponseHandler.handleUnauthorized(requestContext, createErrorResponse(requestContext));
             return;

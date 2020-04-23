@@ -15,10 +15,10 @@ public class RegistrationService {
     private final UserDao userDao;
     private final UserFactory userFactory;
 
-    public void register(RegistrationRequest registrationRequest) {
+    public void register(RegistrationRequest registrationRequest, String locale) {
         registrationRequestValidator.validate(registrationRequest);
 
-        User user = userFactory.create(registrationRequest.getEmail(), registrationRequest.getUsername(), registrationRequest.getPassword());
+        User user = userFactory.create(registrationRequest.getEmail(), registrationRequest.getUsername(), registrationRequest.getPassword(), locale);
         userDao.save(user);
         log.info("User successfully registered with userId {}", user.getUserId());
     }

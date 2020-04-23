@@ -1,13 +1,12 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication;
 
-import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.user.authentication.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.error_handler.domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
-import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
+import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.ErrorResponseHandler;
 import com.github.saphyra.util.CookieUtil;
 import com.github.saphyra.util.ObjectMapperWrapper;
@@ -15,8 +14,6 @@ import com.netflix.zuul.context.RequestContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -45,9 +42,6 @@ public class AuthenticationServiceTest {
 
     @Mock
     private AccessTokenHeaderFactory accessTokenHeaderFactory;
-
-    @Mock
-    private AccessTokenIdConverter accessTokenIdConverter;
 
     @Mock
     private AccessTokenQueryService accessTokenQueryService;
@@ -85,9 +79,6 @@ public class AuthenticationServiceTest {
     @Mock
     private AccessTokenHeader accessTokenHeader;
 
-    @Captor
-    private ArgumentCaptor<SendEventRequest<RefreshAccessTokenExpirationEvent>> eventArgumentCaptor;
-
     @Before
     public void setUp() {
         given(requestContext.getRequest()).willReturn(request);
@@ -107,20 +98,9 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    public void invalidAccessToken() {
-        given(cookieUtil.getCookie(request, Constants.ACCESS_TOKEN_COOKIE)).willReturn(Optional.of(ACCESS_TOKEN_ID_STRING));
-        given(accessTokenIdConverter.convertAccessTokenId(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.empty());
-
-        underTest.authenticate(requestContext);
-
-        verify(errorResponseHandler).handleBadRequest(requestContext, errorResponse);
-    }
-
-    @Test
     public void accessTokenNotFound() {
         given(cookieUtil.getCookie(request, Constants.ACCESS_TOKEN_COOKIE)).willReturn(Optional.of(ACCESS_TOKEN_ID_STRING));
-        given(accessTokenIdConverter.convertAccessTokenId(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.of(ACCESS_TOKEN_ID));
-        given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID)).willReturn(Optional.empty());
+        given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.empty());
 
         underTest.authenticate(requestContext);
 
@@ -130,8 +110,7 @@ public class AuthenticationServiceTest {
     @Test
     public void authenticationSuccessful() {
         given(cookieUtil.getCookie(request, Constants.ACCESS_TOKEN_COOKIE)).willReturn(Optional.of(ACCESS_TOKEN_ID_STRING));
-        given(accessTokenIdConverter.convertAccessTokenId(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.of(ACCESS_TOKEN_ID));
-        given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID)).willReturn(Optional.of(accessTokenResponse));
+        given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.of(accessTokenResponse));
         given(accessTokenHeaderFactory.create(accessTokenResponse)).willReturn(accessTokenHeader);
         given(objectMapperWrapper.writeValueAsString(accessTokenHeader)).willReturn(ACCESS_TOKEN);
         given(base64Encoder.encode(ACCESS_TOKEN)).willReturn(ENCODED_ACCESS_TOKEN);

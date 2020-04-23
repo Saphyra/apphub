@@ -24,6 +24,8 @@ public class UserDataControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String USERNAME = "username";
     private static final String PASSWORD_HASH = "password-hash";
+    private static final String LOCALE = "locale";
+    private static final String LANGUAGE = "language";
 
     @Mock
     private UserDao userDao;
@@ -51,6 +53,7 @@ public class UserDataControllerImplTest {
             .username(USERNAME)
             .email(EMAIL)
             .password(PASSWORD_HASH)
+            .language(LANGUAGE)
             .build();
         given(userDao.findByEmail(EMAIL)).willReturn(Optional.of(user));
 
@@ -64,8 +67,8 @@ public class UserDataControllerImplTest {
 
     @Test
     public void register() {
-        underTest.register(registrationRequest);
+        underTest.register(registrationRequest, LOCALE);
 
-        verify(registrationService).register(registrationRequest);
+        verify(registrationService).register(registrationRequest, LOCALE);
     }
 }

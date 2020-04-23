@@ -21,6 +21,7 @@ public class UserFactoryTest {
     private static final String HASHED_PASSWORD = "hashed-password";
     private static final String EMAIL = "email";
     private static final String USERNAME = "username";
+    private static final String LOCALE = "locale";
 
     @Mock
     private IdGenerator idGenerator;
@@ -36,11 +37,12 @@ public class UserFactoryTest {
         given(idGenerator.randomUUID()).willReturn(USER_ID);
         given(passwordService.hashPassword(PASSWORD)).willReturn(HASHED_PASSWORD);
 
-        User result = underTest.create(EMAIL, USERNAME, PASSWORD);
+        User result = underTest.create(EMAIL, USERNAME, PASSWORD, LOCALE);
 
         assertThat(result.getUserId()).isEqualTo(USER_ID);
         assertThat(result.getUsername()).isEqualTo(USERNAME);
         assertThat(result.getEmail()).isEqualTo(EMAIL);
         assertThat(result.getPassword()).isEqualTo(HASHED_PASSWORD);
+        assertThat(result.getLanguage()).isEqualTo(LOCALE);
     }
 }

@@ -17,6 +17,7 @@ public class RegistrationServiceTest {
     private static final String EMAIL = "email";
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
+    private static final String LOCALE = "locale";
 
     @Mock
     private RegistrationRequestValidator registrationRequestValidator;
@@ -40,9 +41,9 @@ public class RegistrationServiceTest {
             .username(USERNAME)
             .password(PASSWORD)
             .build();
-        given(userFactory.create(EMAIL, USERNAME, PASSWORD)).willReturn(user);
+        given(userFactory.create(EMAIL, USERNAME, PASSWORD, LOCALE)).willReturn(user);
 
-        underTest.register(registrationRequest);
+        underTest.register(registrationRequest, LOCALE);
 
         verify(registrationRequestValidator).validate(registrationRequest);
         verify(userDao).save(user);

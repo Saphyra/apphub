@@ -17,6 +17,7 @@ public class UserConverter extends ConverterBase<UserEntity, User> {
             .email(entity.getEmail())
             .username(entity.getUsername())
             .password(entity.getPassword())
+            .language(entity.getLanguage())
             .build();
     }
 
@@ -27,6 +28,7 @@ public class UserConverter extends ConverterBase<UserEntity, User> {
             .email(user.getEmail())
             .username(user.getUsername())
             .password(user.getPassword())
+            .language(user.getLanguage())
             .build();
     }
 }

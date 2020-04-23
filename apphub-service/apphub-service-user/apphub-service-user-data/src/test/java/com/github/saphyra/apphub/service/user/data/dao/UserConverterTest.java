@@ -19,6 +19,7 @@ public class UserConverterTest {
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final String LANGUAGE = "language";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -33,6 +34,7 @@ public class UserConverterTest {
             .username(USERNAME)
             .email(EMAIL)
             .password(PASSWORD)
+            .language(LANGUAGE)
             .build();
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
 
@@ -42,6 +44,7 @@ public class UserConverterTest {
         assertThat(result.getUsername()).isEqualTo(USERNAME);
         assertThat(result.getEmail()).isEqualTo(EMAIL);
         assertThat(result.getPassword()).isEqualTo(PASSWORD);
+        assertThat(result.getLanguage()).isEqualTo(LANGUAGE);
     }
 
     @Test
@@ -51,6 +54,7 @@ public class UserConverterTest {
             .username(USERNAME)
             .email(EMAIL)
             .password(PASSWORD)
+            .language(LANGUAGE)
             .build();
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
 
@@ -60,5 +64,6 @@ public class UserConverterTest {
         assertThat(result.getUsername()).isEqualTo(USERNAME);
         assertThat(result.getEmail()).isEqualTo(EMAIL);
         assertThat(result.getPassword()).isEqualTo(PASSWORD);
+        assertThat(result.getLanguage()).isEqualTo(LANGUAGE);
     }
 }

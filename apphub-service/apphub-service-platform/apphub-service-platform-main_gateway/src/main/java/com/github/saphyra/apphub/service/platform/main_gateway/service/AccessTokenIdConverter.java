@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication;
+package com.github.saphyra.apphub.service.platform.main_gateway.service;
 
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
 import lombok.RequiredArgsConstructor;

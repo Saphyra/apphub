@@ -12,12 +12,13 @@ class UserFactory {
     private final IdGenerator idGenerator;
     private final PasswordService passwordService;
 
-    User create(String email, String username, String password) {
+    User create(String email, String username, String password, String locale) {
         return User.builder()
             .userId(idGenerator.randomUUID())
             .email(email.toLowerCase())
             .username(username)
             .password(passwordService.hashPassword(password))
+            .language(locale)
             .build();
     }
 }
