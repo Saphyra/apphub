@@ -12,8 +12,7 @@ import java.util.List;
 @Component
 @Data
 @Validated
-//TODO unit test
-class SupportedLocalesConfiguration {
+class SupportedLocales {
     @NotNull
     private List<String> supportedLocales;
 

@@ -39,6 +39,7 @@ public class ErrorResponseFactory {
     }
 
     private ErrorResponse createLocaleNotFoundErrorResponse() {
+        log.warn("Locale not found.");
         String localizedMessage = localizedMessageProvider.getLocalizedMessage(commonConfigProperties.getDefaultLocale(), LOCALE_NOT_FOUND_ERROR_CODE, new HashMap<>());
 
         return ErrorResponse.builder()

@@ -20,6 +20,7 @@ public class AccessTokenRepositoryTest {
     private static final String ACCESS_TOKEN_ID_2 = "access-token-id-2";
     private static final String ACCESS_TOKEN_ID_3 = "access-token-id-3";
     private static final OffsetDateTime CURRENT_DATE = OffsetDateTime.now();
+    private static final String USER_ID = "user-id";
 
     @Autowired
     private AccessTokenRepository underTest;
@@ -99,5 +100,23 @@ public class AccessTokenRepositoryTest {
 
         assertThat(underTest.findById(ACCESS_TOKEN_ID_1).get().getLastAccess()).isEqualTo(newLastAccess);
         assertThat(underTest.findById(ACCESS_TOKEN_ID_2).get().getLastAccess()).isEqualTo(CURRENT_DATE);
+    }
+
+    @Test
+    public void deleteByAccessTokenIdAndUserId() {
+        AccessTokenEntity entity1 = AccessTokenEntity.builder()
+            .accessTokenId(ACCESS_TOKEN_ID_1)
+            .userId(USER_ID)
+            .build();
+
+        AccessTokenEntity entity2 = AccessTokenEntity.builder()
+            .accessTokenId(ACCESS_TOKEN_ID_2)
+            .userId(USER_ID)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2));
+
+        underTest.deleteByAccessTokenIdAndUserId(ACCESS_TOKEN_ID_2, USER_ID);
+
+        assertThat(underTest.findAll()).containsExactly(entity1);
     }
 }

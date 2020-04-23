@@ -9,19 +9,15 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
-
 @RequiredArgsConstructor
 @Slf4j
 @Component
-//TODO unit test
 class CookieLocaleResolver {
     private final CookieUtil cookieUtil;
-    private final SupportedLocalesConfiguration supportedLocalesConfiguration;
+    private final SupportedLocales supportedLocales;
 
-    Optional<String> getCookie(HttpServletRequest request) {
+    Optional<String> getLocale(HttpServletRequest request) {
         return cookieUtil.getCookie(request, Constants.LOCALE_COOKIE)
-            .filter(cookieValue -> !isBlank(cookieValue))
-            .filter(supportedLocalesConfiguration::isSupported);
+            .filter(supportedLocales::isSupported);
     }
 }

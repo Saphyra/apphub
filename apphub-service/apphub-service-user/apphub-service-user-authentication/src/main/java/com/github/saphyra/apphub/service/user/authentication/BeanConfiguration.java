@@ -1,8 +1,12 @@
 package com.github.saphyra.apphub.service.user.authentication;
 
+import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
+import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenConfiguration;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
+import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
 import com.github.saphyra.encryption.impl.PasswordService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,16 +26,27 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableLiquibase
 @EnableFeignClients(basePackages = "com.github.saphyra.apphub.api")
 @EnableEventProcessor
-@Import(AccessTokenConfiguration.class)
+@EnableErrorHandler
+@Import({CommonConfigProperties.class, AccessTokenConfiguration.class})
 class BeanConfiguration {
     @Bean
-    UuidConverter uuidConverter() {
-        return new UuidConverter();
+    LocaleProvider localeProvider(RequestContextProvider requestContextProvider) {
+        return new LocaleProvider(requestContextProvider);
     }
 
     @Bean
     PasswordService passwordService() {
         return new PasswordService();
+    }
+
+    @Bean
+    RequestContextProvider requestContextProvider() {
+        return new RequestContextProvider();
+    }
+
+    @Bean
+    UuidConverter uuidConverter() {
+        return new UuidConverter();
     }
 }
 

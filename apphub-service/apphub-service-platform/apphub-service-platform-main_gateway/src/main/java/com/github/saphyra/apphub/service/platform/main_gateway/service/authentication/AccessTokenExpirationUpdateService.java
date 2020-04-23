@@ -14,7 +14,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class AccessTokenExpirationUpdateService {
     private final AntPathMatcher antPathMatcher;
     private final EventGatewayApiClient eventGatewayApi;

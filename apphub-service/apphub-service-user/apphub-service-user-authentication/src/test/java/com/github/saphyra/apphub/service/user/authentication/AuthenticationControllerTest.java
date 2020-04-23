@@ -4,12 +4,14 @@ import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEv
 import com.github.saphyra.apphub.api.user.authentication.model.request.LoginRequest;
 import com.github.saphyra.apphub.api.user.authentication.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.api.user.authentication.model.response.LoginResponse;
+import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.event.DeleteExpiredAccessTokensEvent;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenCleanupService;
 import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenUpdateService;
 import com.github.saphyra.apphub.service.user.authentication.service.LoginService;
+import com.github.saphyra.apphub.service.user.authentication.service.LogoutService;
 import com.github.saphyra.apphub.service.user.authentication.service.ValidAccessTokenQueryService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,6 +45,9 @@ public class AuthenticationControllerTest {
 
     @Mock
     private LoginService loginService;
+
+    @Mock
+    private LogoutService logoutService;
 
     @Mock
     private ValidAccessTokenQueryService validAccessTokenQueryService;
@@ -97,6 +102,18 @@ public class AuthenticationControllerTest {
 
         assertThat(result.getAccessTokenId()).isEqualTo(ACCESS_TOKEN_ID);
         assertThat(result.getExpirationDays()).isNull();
+    }
+
+    @Test
+    public void logout() {
+        AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
+            .accessTokenId(ACCESS_TOKEN_ID)
+            .userId(USER_ID)
+            .build();
+
+        underTest.logout(accessTokenHeader);
+
+        verify(logoutService).logout(ACCESS_TOKEN_ID, USER_ID);
     }
 
     @Test

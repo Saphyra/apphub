@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import org.springframework.stereotype.Component;
 
 @Component
-//TODO unit test
 class AccessTokenHeaderFactory {
     AccessTokenHeader create(InternalAccessTokenResponse accessTokenResponse) {
         return AccessTokenHeader.builder()

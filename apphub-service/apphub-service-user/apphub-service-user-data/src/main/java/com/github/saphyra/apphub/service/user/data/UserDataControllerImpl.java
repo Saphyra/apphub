@@ -19,7 +19,6 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 //TODO int test
-//TODO api test
 //TODO fe test
 public class UserDataControllerImpl implements UserDataController {
     private final RegistrationService registrationService;
@@ -41,6 +40,7 @@ public class UserDataControllerImpl implements UserDataController {
 
     @Override
     //TODO unit test
+    //TODO api test
     public String getLanguage(UUID userId) {
         return userDao.findById(uuidConverter.convertDomain(userId))
             .map(User::getLanguage)
@@ -48,6 +48,7 @@ public class UserDataControllerImpl implements UserDataController {
     }
 
     @Override
+    //TODO api test
     public void register(RegistrationRequest registrationRequest, String locale) {
         log.info("RegistrationRequest arrived for username {} and email {}", registrationRequest.getUsername(), registrationRequest.getEmail());
         registrationService.register(registrationRequest, locale);

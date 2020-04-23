@@ -8,18 +8,14 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class BrowserLanguageLocaleResolver {
-    private final SupportedLocalesConfiguration supportedLocalesConfiguration;
+    private final SupportedLocales supportedLocales;
 
     Optional<String> getLocale(HttpServletRequest request) {
         return Optional.ofNullable(request.getHeader(Constants.BROWSER_LANGUAGE_HEADER))
-            .filter(headerValue -> !isBlank(headerValue))
-            .filter(supportedLocalesConfiguration::isSupported);
+            .filter(supportedLocales::isSupported);
     }
 }

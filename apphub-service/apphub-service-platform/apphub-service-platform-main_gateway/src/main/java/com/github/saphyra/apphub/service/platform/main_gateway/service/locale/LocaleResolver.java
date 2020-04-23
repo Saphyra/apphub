@@ -20,10 +20,10 @@ public class LocaleResolver {
     private final UserSettingLocaleResolver userSettingLocaleResolver;
 
     public String getLocale(HttpServletRequest request) {
-        Optional<String> locale = userSettingLocaleResolver.getCookie(request);
+        Optional<String> locale = userSettingLocaleResolver.getLocale(request);
 
         if (!locale.isPresent()) {
-            locale = cookieLocaleResolver.getCookie(request);
+            locale = cookieLocaleResolver.getLocale(request);
         }
 
         if (isNull(locale)) {

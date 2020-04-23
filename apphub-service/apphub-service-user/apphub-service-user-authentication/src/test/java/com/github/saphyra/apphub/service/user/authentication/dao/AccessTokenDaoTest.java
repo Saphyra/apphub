@@ -19,6 +19,8 @@ public class AccessTokenDaoTest {
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
     private static final OffsetDateTime CURRENT_DATE = OffsetDateTime.now();
     private static final String ACCESS_TOKEN_ID_STRING = "access-token-id";
+    private static final UUID USER_ID = UUID.randomUUID();
+    private static final String USER_ID_STRING = "user-id";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -46,5 +48,15 @@ public class AccessTokenDaoTest {
         underTest.updateLastAccess(ACCESS_TOKEN_ID, CURRENT_DATE);
 
         verify(repository).updateLastAccess(ACCESS_TOKEN_ID_STRING, CURRENT_DATE);
+    }
+
+    @Test
+    public void deleteByAccessTokenIdAndUserId() {
+        given(uuidConverter.convertDomain(ACCESS_TOKEN_ID)).willReturn(ACCESS_TOKEN_ID_STRING);
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+
+        underTest.deleteByAccessTokenIdAndUserId(ACCESS_TOKEN_ID, USER_ID);
+
+        verify(repository).deleteByAccessTokenIdAndUserId(ACCESS_TOKEN_ID_STRING, USER_ID_STRING);
     }
 }

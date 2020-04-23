@@ -3,6 +3,8 @@ package com.github.saphyra.apphub.service.user.authentication.service;
 import com.github.saphyra.apphub.api.user.authentication.model.request.LoginRequest;
 import com.github.saphyra.apphub.api.user.data.client.UserDataApiClient;
 import com.github.saphyra.apphub.api.user.data.model.response.InternalUserResponse;
+import com.github.saphyra.apphub.lib.common_util.ErrorCodes;
+import com.github.saphyra.apphub.lib.error_handler.exception.UnauthorizedException;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.encryption.impl.PasswordService;
@@ -15,6 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -46,7 +49,7 @@ public class LoginServiceTest {
     @Mock
     private AccessToken accessToken;
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void invalidPassword() {
         given(internalUserDataApi.findByEmail(EMAIL)).willReturn(userResponse);
         given(userResponse.getPasswordHash()).willReturn(PASSWORD_HASH);
@@ -56,7 +59,12 @@ public class LoginServiceTest {
             .email(EMAIL)
             .password(PASSWORD)
             .build();
-        underTest.login(request);
+
+        Throwable ex = catchThrowable(() -> underTest.login(request));
+
+        assertThat(ex).isInstanceOf(UnauthorizedException.class);
+        UnauthorizedException exception = (UnauthorizedException) ex;
+        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCodes.BAD_CREDENTIALS.name());
     }
 
     @Test

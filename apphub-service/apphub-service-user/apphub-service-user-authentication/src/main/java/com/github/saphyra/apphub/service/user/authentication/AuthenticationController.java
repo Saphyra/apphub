@@ -24,9 +24,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO int test
-//TODO api test
-//TODO fe test
 public class AuthenticationController implements UserAuthenticationController {
     private final AccessTokenCleanupService accessTokenCleanupService;
     private final AccessTokenUpdateService accessTokenUpdateService;
@@ -55,6 +52,7 @@ public class AuthenticationController implements UserAuthenticationController {
     }
 
     @Override
+    //TODO api test
     public LoginResponse login(LoginRequest loginRequest) {
         log.info("LoginRequest arrived: {}", loginRequest);
         AccessToken accessToken = loginService.login(loginRequest);
@@ -67,7 +65,7 @@ public class AuthenticationController implements UserAuthenticationController {
     }
 
     @Override
-    //TODO unit test
+    //TODO api test
     public void logout(AccessTokenHeader accessToken) {
         logoutService.logout(accessToken.getAccessTokenId(), accessToken.getUserId());
     }

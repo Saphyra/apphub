@@ -18,14 +18,13 @@ import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_C
 @RequiredArgsConstructor
 @Slf4j
 @Component
-//TODO unit test
 class UserSettingLocaleResolver {
     private final AccessTokenQueryService accessTokenQueryService;
     private final CommonConfigProperties commonConfigProperties;
     private final CookieUtil cookieUtil;
     private final UserDataApiClient userDataApi;
 
-    Optional<String> getCookie(HttpServletRequest request) {
+    Optional<String> getLocale(HttpServletRequest request) {
         Optional<UUID> userIdOptional = cookieUtil.getCookie(request, ACCESS_TOKEN_COOKIE)
             .flatMap(accessTokenQueryService::getAccessToken)
             .map(InternalAccessTokenResponse::getUserId);

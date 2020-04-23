@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -28,6 +30,8 @@ public class NonSessionExtendingUriProperties {
     }
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     static class NonSessionExtendingUri {
         private String uri;
         private String method;
