@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @Component
-//TODO unit test
 public class ErrorCodeService extends AbstractDataService<String, ErrorCodeLocalization> {
     private static final String ERROR_CODE_NOT_FOUND_MESSAGE = "%s could not be translated.";
 
