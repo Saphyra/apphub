@@ -1,7 +1,5 @@
-spring:
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+supportedLocales:
+  - hu
 
 nonSessionExtendingUris:
   - uri: /api/user/authentication/session
