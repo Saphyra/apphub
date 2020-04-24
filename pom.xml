@@ -82,10 +82,25 @@
     <build>
     </build>
 
-    <modules>
-        <module>apphub-api</module>
-        <module>apphub-lib</module>
-        <module>apphub-service</module>
-        <module>apphub-test</module>
-    </modules>
+    <profiles>
+        <profile>
+            <id>service</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>apphub-api</module>
+                <module>apphub-lib</module>
+                <module>apphub-test</module>
+                <module>apphub-service</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>integration</id>
+            <modules>
+                <module>apphub-test</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>

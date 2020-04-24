@@ -24,7 +24,24 @@
 
     </build>
 
-    <modules>
-        <module>apphub-test-common</module>
-    </modules>
+    <profiles>
+        <profile>
+            <id>service</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>apphub-test-common</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>integration</id>
+            <modules>
+                <module>apphub-test-common</module>
+                <module>apphub-test-backend</module>
+                <module>apphub-test-frontend</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>
