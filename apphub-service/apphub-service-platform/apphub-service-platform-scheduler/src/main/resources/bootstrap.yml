@@ -1,9 +1,0 @@
-spring:
-  appliction:
-    name: scheduler
-  cloud:
-    kubernetes:
-      config:
-        sources:
-          - name: ribbon-config
-          - name: common-config

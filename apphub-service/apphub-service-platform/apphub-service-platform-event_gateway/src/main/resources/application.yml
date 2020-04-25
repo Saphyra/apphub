@@ -1,3 +1,7 @@
+spring:
+  appliction:
+    name: event-gateway
+
 liquibase:
   changelog:
     location: classpath:database/changelog-master.xml

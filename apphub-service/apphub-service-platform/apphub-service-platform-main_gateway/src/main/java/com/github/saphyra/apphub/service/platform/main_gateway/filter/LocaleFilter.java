@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway.filter;
 
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.service.platform.main_gateway.FilterOrder;
-import com.github.saphyra.apphub.service.platform.main_gateway.service.locale.LocaleResolver;
+import com.github.saphyra.apphub.service.platform.main_gateway.service.locale.ApphubLocaleResolver;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class LocaleFilter extends ZuulFilter {
     private static final String RESOURCE_PATH_MATCHER = "res/**";
 
     private final AntPathMatcher antPathMatcher;
-    private final LocaleResolver localeResolver;
+    private final ApphubLocaleResolver apphubLocaleResolver;
 
     @Override
     public String filterType() {
@@ -43,7 +43,7 @@ public class LocaleFilter extends ZuulFilter {
         RequestContext requestContext = RequestContext.getCurrentContext();
         HttpServletRequest request = requestContext.getRequest();
 
-        String locale = localeResolver.getLocale(request);
+        String locale = apphubLocaleResolver.getLocale(request);
 
         requestContext.addZuulRequestHeader(Constants.LOCALE_HEADER, locale);
         return null;

@@ -1,3 +1,7 @@
+spring:
+  application:
+    name: user-authentication
+
 liquibase:
   changelog:
     location: classpath:database/changelog-master.xml

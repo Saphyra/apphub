@@ -34,4 +34,4 @@ spec:
   ports:
     - port: 8080
   selector:
-    app: user-data
+    name: user-data

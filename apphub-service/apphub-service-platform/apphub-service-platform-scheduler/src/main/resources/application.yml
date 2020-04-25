@@ -1,4 +1,6 @@
 spring:
+  appliction:
+    name: scheduler
   datasource:
     initialize: false
 

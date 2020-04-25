@@ -1,5 +1,51 @@
+spring:
+  appliction:
+    name: main-gateway
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
 supportedLocales:
   - hu
+
+zuul:
+  prefix: /
+  routes:
+    common-resources:
+      path: /res/common/**
+      serviceId: web-content
+      stripPrefix: false
+    user-resources:
+      path: /res/user/**
+      serviceId: user-frontend
+      stripPrefix: false
+    modules-resources:
+      path: /res/modules/**
+      serviceId: modules-frontend
+      stripPrefix: false
+
+    localization:
+      path: /localization/**
+      serviceId: localization
+      stripPrefix: false
+
+    index-page:
+      path: /web
+      serviceId: user-frontend
+      stripPrefix: false
+    modules-page:
+      path: /web/modules
+      serviceId: modules-frontend
+      stripPrefix: false
+
+    user-data:
+      path: /api/user/data/**
+      serviceId: user-data
+      stripPrefix: false
+    user-authentication:
+      path: /api/user/authentication/**
+      serviceId: user-authentication
+      stripPrefix: false
 
 nonSessionExtendingUris:
   - uri: /api/user/authentication/session

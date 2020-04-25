@@ -30,8 +30,8 @@ metadata:
   labels:
     app: event-gateway
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 8080
   selector:
-    app: event-gateway
+    name: event-gateway

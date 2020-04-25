@@ -13,7 +13,7 @@ import static java.util.Objects.isNull;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class LocaleResolver {
+public class ApphubLocaleResolver {
     private final BrowserLanguageLocaleResolver browserLanguageLocaleResolver;
     private final CommonConfigProperties commonConfigProperties;
     private final CookieLocaleResolver cookieLocaleResolver;

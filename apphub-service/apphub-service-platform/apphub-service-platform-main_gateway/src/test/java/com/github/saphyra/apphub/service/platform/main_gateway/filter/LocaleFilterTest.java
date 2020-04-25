@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.filter;
 
 import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.service.platform.main_gateway.service.locale.LocaleResolver;
+import com.github.saphyra.apphub.service.platform.main_gateway.service.locale.ApphubLocaleResolver;
 import com.netflix.zuul.context.RequestContext;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public class LocaleFilterTest {
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Mock
-    private LocaleResolver localeResolver;
+    private ApphubLocaleResolver apphubLocaleResolver;
 
     private LocaleFilter underTest;
 
@@ -38,7 +38,7 @@ public class LocaleFilterTest {
         RequestContext.testSetCurrentContext(requestContext);
         given(requestContext.getRequest()).willReturn(request);
 
-        underTest = new LocaleFilter(antPathMatcher, localeResolver);
+        underTest = new LocaleFilter(antPathMatcher, apphubLocaleResolver);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class LocaleFilterTest {
 
     @Test
     public void run() {
-        given(localeResolver.getLocale(request)).willReturn(LOCALE);
+        given(apphubLocaleResolver.getLocale(request)).willReturn(LOCALE);
 
         underTest.run();
 

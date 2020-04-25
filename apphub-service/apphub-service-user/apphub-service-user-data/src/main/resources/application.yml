@@ -1,3 +1,7 @@
+spring:
+  appliction:
+    name: user-frontend
+
 liquibase:
   changelog:
     location: classpath:database/changelog-master.xml

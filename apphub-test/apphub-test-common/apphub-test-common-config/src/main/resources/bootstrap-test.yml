@@ -1,4 +1,7 @@
 defaultLocale: hu
+event:
+  processor:
+    enabled: false
 
 spring:
   cloud:

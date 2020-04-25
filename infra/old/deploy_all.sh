@@ -12,6 +12,4 @@ while IFS= read -r LINE || [[ -n "$LINE" ]]; do
   fi
 done <infra/services
 
-
-
 wait
