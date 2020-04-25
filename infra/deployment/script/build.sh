@@ -1,4 +1,4 @@
-mvn -T 6 clean package
+mvn -T 16 clean install
 rc=$?
 if [[ "$rc" -ne 0 ]]; then
   exit 1

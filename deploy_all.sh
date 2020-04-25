@@ -1,32 +1,23 @@
 DIRNAME=$PWD
 echo "Dirname: $DIRNAME"
 
-./build.sh
-rc=$?
-if [[ "$rc" -ne 0 ]]; then
-  echo 'Build failed.'
-  exit 1
-fi
+#./infra/deployment/script/build.sh
+#rc=$?
+#if [[ "$rc" -ne 0 ]]; then
+#  echo 'Build failed.'
+#  exit 1
+#fi
 
-kubectl delete deployments --all
+#NAMESPACE_NAME="test-"$RANDOM
+NAMESPACE_NAME="test-0"
+#NAMESPACE_NAME="default"
+echo ""
+kubectl create namespace $NAMESPACE_NAME
+echo ""
+./infra/deployment/script/setup_namespace.sh "$NAMESPACE_NAME"
 
-kubectl apply -f infra/config.yaml
-
-while IFS= read -r LINE || [[ -n "$LINE" ]]; do
-  if [[ "$LINE" =~ [^[:space:]] ]]; then
-    echo ""
-
-    TRIMMED="${LINE/$'\r'/}"
-    IFS=' ' read -r -a LINE_SPLIT <<<"$TRIMMED"
-
-    LOCATION=${LINE_SPLIT[1]}
-    TAG=${LINE_SPLIT[2]}
-
-    ./deploy.sh "$LOCATION" "$TAG" &
-  fi
-done <infra/services
-
-kubectl apply -f infra/deployment/persistent-volume.yaml
-kubectl apply -f infra/deployment/deploy-postgres.yaml
-
-wait
+for file in ./infra/deployment/service/*; do
+  kubectl -n "$NAMESPACE_NAME" delete deployment "$(basename "$file" .yml)"
+  kubectl -n "$NAMESPACE_NAME" delete service "$(basename "$file" .yml)"
+  kubectl apply -n "$NAMESPACE_NAME" -f "$file"
+done

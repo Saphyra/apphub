@@ -34,3 +34,16 @@ spec:
         - name: postgredb
           persistentVolumeClaim:
             claimName: data-disk
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  type: NodePort
+  ports:
+    - port: 5432
+  selector:
+    app: postgres

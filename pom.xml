@@ -28,6 +28,7 @@
         <versions.spring-starter-kubernetes-config>1.1.2.RELEASE</versions.spring-starter-kubernetes-config>
         <versions.liquibase-core>3.8.6</versions.liquibase-core>
         <versions.postgresql-connector>42.2.10</versions.postgresql-connector>
+        <versions.exec-maven-plugin>1.6.0</versions.exec-maven-plugin>
 
         <!-- Saphyra Versions -->
         <versions.saphyra.encryption>1.0.2</versions.saphyra.encryption>

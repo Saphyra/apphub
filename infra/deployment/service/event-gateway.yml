@@ -3,9 +3,8 @@ kind: Deployment
 metadata:
   name: event-gateway
   labels:
-    serviceType: spring-app
     app: event-gateway
-    serviceRole: gateway
+    type: spring-app
 spec:
   replicas: 1
   selector:
@@ -23,3 +22,16 @@ spec:
           ports:
             - containerPort: 8080
           imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-gateway
+  labels:
+    app: event-gateway
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+  selector:
+    app: event-gateway

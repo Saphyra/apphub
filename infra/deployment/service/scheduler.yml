@@ -3,9 +3,8 @@ kind: Deployment
 metadata:
   name: scheduler
   labels:
-    serviceType: spring-app
     app: scheduler
-    serviceRole: gateway
+    type: spring-app
 spec:
   replicas: 1
   selector:
@@ -23,3 +22,16 @@ spec:
           ports:
             - containerPort: 8080
           imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-content
+  labels:
+    app: web-content
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+  selector:
+    app: web-content
