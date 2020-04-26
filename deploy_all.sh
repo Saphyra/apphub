@@ -1,26 +1,40 @@
 DIRNAME=$PWD
 echo "Dirname: $DIRNAME"
 
-./infra/deployment/script/build.sh
-rc=$?
-if [[ "$rc" -ne 0 ]]; then
-  echo 'Build failed.'
-  exit 1
+if [ "$1" != "skipBuild" ]; then
+  mvn -T 16 clean install
+  BUILD_RESULT=$?
+  if [[ "$BUILD_RESULT" -ne 0 ]]; then
+    echo "Build failed."
+    exit 1
+  fi
 fi
 
 NAMESPACE_NAME="a-test-"$RANDOM
-#NAMESPACE_NAME="test-0"
-#NAMESPACE_NAME="default"
-echo ""
-kubectl create namespace $NAMESPACE_NAME
-echo ""
-./infra/deployment/script/setup_namespace.sh "$NAMESPACE_NAME"
+./deploy.sh "$NAMESPACE_NAME"
 
-for file in ./infra/deployment/service/*; do
-  echo ""
-  SERVICE_NAME="$(basename "$file" .yml)"
+PORT=$RANDOM
 
-  kubectl -n "$NAMESPACE_NAME" delete deployment "$SERVICE_NAME"
-  kubectl -n "$NAMESPACE_NAME" delete service "$SERVICE_NAME"
-  kubectl apply -n "$NAMESPACE_NAME" -f "$file"
-done
+./infra/deployment/script/wait_for_pods_ready.sh $NAMESPACE_NAME 60 10
+STARTUP_RESULT=$?
+if  [[ "$STARTUP_RESULT" -ne 0 ]] ; then
+  echo "Services failed to start."
+  kubectl delete namespace $NAMESPACE_NAME
+  exit 1;
+fi
+
+trap "exit" INT TERM ERR
+trap "kill 0" EXIT
+
+kubectl port-forward deployment/main-gateway $PORT:8080 -n $NAMESPACE_NAME &
+
+mvn -T 16 clean test --activate-profiles integration
+TEST_RESULT=$?
+if  [[ "$TEST_RESULT" -ne 0 ]] ; then
+  echo "Tests failed"
+  kubectl delete namespace $NAMESPACE_NAME
+  exit 1;
+else
+  echo "Tests passed successfully"
+fi
+kubectl delete namespace $NAMESPACE_NAME

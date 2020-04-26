@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.user.data;
 
 import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
 import com.github.saphyra.encryption.impl.PasswordService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan
 @ComponentScan(basePackages = "com.github.saphyra.util")
 @EnableLiquibase
+@EnableHealthCheck
 class BeanConfiguration {
     @Bean
     UuidConverter uuidConverter() {

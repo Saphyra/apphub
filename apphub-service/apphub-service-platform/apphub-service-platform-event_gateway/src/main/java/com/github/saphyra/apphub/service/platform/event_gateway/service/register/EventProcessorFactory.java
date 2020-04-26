@@ -16,7 +16,7 @@ class EventProcessorFactory {
     private final OffsetDateTimeProvider offsetDateTimeProvider;
 
     EventProcessor create(RegisterProcessorRequest request) {
-        log.info("Creating new eventProcessor...");
+        log.info("Creating new eventProcessor... {}", request);
         return EventProcessor.builder()
             .eventProcessorId(idGenerator.randomUUID())
             .serviceName(request.getServiceName())

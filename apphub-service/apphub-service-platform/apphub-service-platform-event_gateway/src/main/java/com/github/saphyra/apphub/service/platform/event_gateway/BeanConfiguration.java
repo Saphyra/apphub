@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
 import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -25,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableErrorHandler
 @Import(CommonConfigProperties.class)
 @EnableFeignClients(basePackages = "com.github.saphyra.apphub.api")
+@EnableHealthCheck
 public class BeanConfiguration {
     @Bean
     public ExecutorServiceBean executorServiceBean() {

@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
 import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenConfiguration;
+import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
@@ -28,6 +29,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableEventProcessor
 @EnableErrorHandler
 @Import({CommonConfigProperties.class, AccessTokenConfiguration.class})
+@EnableHealthCheck
 class BeanConfiguration {
     @Bean
     LocaleProvider localeProvider(RequestContextProvider requestContextProvider) {

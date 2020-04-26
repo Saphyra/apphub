@@ -18,10 +18,16 @@ spec:
     spec:
       containers:
         - name: web-content
-          image: saphyra/apphub-service-common-web_content:0.0.1-SNAPSHOT
+          image: saphyra/apphub-service-platform-web_content:0.0.1-SNAPSHOT
           ports:
             - containerPort: 8080
           imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /internal/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service

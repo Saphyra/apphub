@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.lib.endpoint;
 
 public class Endpoint {
+    public static final String HEALTH = "/internal/health";
+
     public static final String LOGIN = "/api/user/authentication/login";
     public static final String LOGOUT = "/api/user/authentication/logout";
     public static final String CHECK_SESSION = "/api/user/authentication/session";

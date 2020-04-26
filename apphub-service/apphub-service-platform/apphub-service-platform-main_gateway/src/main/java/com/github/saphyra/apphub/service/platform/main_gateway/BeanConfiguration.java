@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
 import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.whielist.EnableWhiteListedEndpointProperties;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
@@ -22,6 +23,7 @@ import org.springframework.util.AntPathMatcher;
 @EnableFeignClients(basePackages = "com.github.saphyra.apphub.api")
 @EnableErrorHandler
 @Import(CommonConfigProperties.class)
+@EnableHealthCheck
 public class BeanConfiguration {
     @Bean
     public AntPathMatcher antPathMatcher() {
