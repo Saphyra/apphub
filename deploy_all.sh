@@ -10,6 +10,8 @@ if [ "$1" != "skipBuild" ]; then
   fi
 fi
 
+#Deploying to test
+
 NAMESPACE_NAME="a-test-"$RANDOM
 ./deploy.sh "$NAMESPACE_NAME"
 
@@ -17,10 +19,10 @@ PORT=$RANDOM
 
 ./infra/deployment/script/wait_for_pods_ready.sh $NAMESPACE_NAME 60 10
 STARTUP_RESULT=$?
-if  [[ "$STARTUP_RESULT" -ne 0 ]] ; then
+if [[ "$STARTUP_RESULT" -ne 0 ]]; then
   echo "Services failed to start."
   kubectl delete namespace $NAMESPACE_NAME
-  exit 1;
+  exit 1
 fi
 
 trap "exit" INT TERM ERR
@@ -28,13 +30,40 @@ trap "kill 0" EXIT
 
 kubectl port-forward deployment/main-gateway $PORT:8080 -n $NAMESPACE_NAME &
 
-mvn -T 16 clean test --activate-profiles integration
+mvn -DargLine="-DserverPort=$PORT" -T 2 clean test -P integration
 TEST_RESULT=$?
-if  [[ "$TEST_RESULT" -ne 0 ]] ; then
+if [[ "$TEST_RESULT" -ne 0 ]]; then
   echo "Tests failed"
   kubectl delete namespace $NAMESPACE_NAME
-  exit 1;
+  exit 1
 else
   echo "Tests passed successfully"
 fi
 kubectl delete namespace $NAMESPACE_NAME
+
+#Deploying to default
+NAMESPACE_NAME="default"
+./deploy.sh "$NAMESPACE_NAME"
+
+PORT=$RANDOM
+
+./infra/deployment/script/wait_for_pods_ready.sh $NAMESPACE_NAME 60 10
+STARTUP_RESULT=$?
+if [[ "$STARTUP_RESULT" -ne 0 ]]; then
+  echo "Services failed to start."
+  kubectl delete namespace $NAMESPACE_NAME
+  exit 1
+fi
+
+kubectl port-forward deployment/main-gateway $PORT:8080 -n $NAMESPACE_NAME &
+
+mvn -DargLine="-DserverPort=$PORT" -T 2 clean test -P integration
+TEST_RESULT=$?
+if [[ "$TEST_RESULT" -ne 0 ]]; then
+  echo "Tests failed"
+  exit 1
+else
+  echo "Tests passed successfully"
+fi
+
+echo "Deployment finished."

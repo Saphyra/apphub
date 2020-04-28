@@ -35,6 +35,13 @@
                 <module>apphub-test-common-api</module>
             </modules>
         </profile>
+
+        <profile>
+            <id>integration</id>
+            <modules>
+                <module>apphub-test-common-integration</module>
+            </modules>
+        </profile>
     </profiles>
 
     <modules>

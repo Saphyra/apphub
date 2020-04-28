@@ -52,6 +52,7 @@
         <versions.selenium>4.0.0-alpha-4</versions.selenium>
         <versions.testng>7.1.0</versions.testng>
         <versions.thymeleaf-spring>3.0.11.RELEASE</versions.thymeleaf-spring>
+        <versions.logback>1.2.3</versions.logback>
 
         <!-- Plugin Versions -->
         <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
@@ -71,6 +72,12 @@
             <artifactId>lombok-maven</artifactId>
             <version>${version.lombok-maven}</version>
             <type>pom</type>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${versions.logback}</version>
         </dependency>
 
         <dependency>
@@ -104,4 +111,5 @@
             </modules>
         </profile>
     </profiles>
+
 </project>
