@@ -1,7 +1,8 @@
 {
+  "EMAIL_ALREADY_EXISTS": "Az email foglalt.",
   "GENERAL_ERROR": "Ismeretlen hiba.",
   "INVALID_PARAM": "Érvénytelen paraméter.",
   "LOCALE_NOT_FOUND": "A locale header nem található.",
   "NO_SESSION_AVAILABLE": "Jelentkezz be újra!",
-  "USER_NOT_FOUND": "Felhasználó nem található"
+  "USER_NOT_FOUND": "Felhasználó nem található."
 }

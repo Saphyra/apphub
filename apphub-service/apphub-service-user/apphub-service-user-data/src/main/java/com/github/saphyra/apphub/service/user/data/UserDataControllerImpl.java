@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.user.data;
 import com.github.saphyra.apphub.api.user.data.model.request.RegistrationRequest;
 import com.github.saphyra.apphub.api.user.data.model.response.InternalUserResponse;
 import com.github.saphyra.apphub.api.user.data.server.UserDataController;
+import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
 import com.github.saphyra.apphub.lib.error_handler.domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.error_handler.exception.NotFoundException;
@@ -18,7 +19,6 @@ import java.util.UUID;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-//TODO int test
 //TODO fe test
 public class UserDataControllerImpl implements UserDataController {
     private final RegistrationService registrationService;
@@ -29,7 +29,7 @@ public class UserDataControllerImpl implements UserDataController {
     public InternalUserResponse findByEmail(String email) {
         log.info("Querying user by email {}", email);
         User user = userDao.findByEmail(email)
-            .orElseThrow(() -> new IllegalStateException("User not found with email " + email));
+            .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.USER_NOT_FOUND.name()), "User not found with email " + email));
         return InternalUserResponse.builder()
             .userId(user.getUserId())
             .email(user.getEmail())
@@ -39,12 +39,11 @@ public class UserDataControllerImpl implements UserDataController {
     }
 
     @Override
-    //TODO unit test
     //TODO api test
     public String getLanguage(UUID userId) {
         return userDao.findById(uuidConverter.convertDomain(userId))
             .map(User::getLanguage)
-            .orElseThrow(() -> new NotFoundException(new ErrorMessage("USER_NOT_FOUND"), String.format("User not found with id %s", userId)));
+            .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.USER_NOT_FOUND.name()), String.format("User not found with id %s", userId)));
     }
 
     @Override

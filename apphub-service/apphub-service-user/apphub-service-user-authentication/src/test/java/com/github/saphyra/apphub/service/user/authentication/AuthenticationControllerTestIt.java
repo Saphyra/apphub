@@ -12,7 +12,7 @@ import com.github.saphyra.apphub.api.user.data.model.response.InternalUserRespon
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.lib.common_util.ErrorCodes;
+import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.endpoint.Endpoint;
 import com.github.saphyra.apphub.lib.error_handler.domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.event.DeleteExpiredAccessTokensEvent;
@@ -160,7 +160,7 @@ public class AuthenticationControllerTestIt {
             .passwordHash(passwordService.hashPassword(PASSWORD))
             .build();
         given(userDataApi.findByEmail(EMAIL)).willReturn(internalUserResponse);
-        given(localizationApi.translate(ErrorCodes.BAD_CREDENTIALS.name(), LOCALE)).willReturn(LOCALIZED_MESSAGE);
+        given(localizationApi.translate(ErrorCode.BAD_CREDENTIALS.name(), LOCALE)).willReturn(LOCALIZED_MESSAGE);
 
         LoginRequest loginRequest = LoginRequest.builder()
             .email(EMAIL)
@@ -171,7 +171,7 @@ public class AuthenticationControllerTestIt {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
 
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCodes.BAD_CREDENTIALS.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
         assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
         assertThat(errorResponse.getParams()).isEqualTo(new HashMap<>());
     }
@@ -183,7 +183,7 @@ public class AuthenticationControllerTestIt {
             .passwordHash(passwordService.hashPassword(PASSWORD))
             .build();
         given(userDataApi.findByEmail(EMAIL)).willReturn(internalUserResponse);
-        given(localizationApi.translate(ErrorCodes.BAD_CREDENTIALS.name(), LOCALE)).willReturn(LOCALIZED_MESSAGE);
+        given(localizationApi.translate(ErrorCode.BAD_CREDENTIALS.name(), LOCALE)).willReturn(LOCALIZED_MESSAGE);
 
         LoginRequest loginRequest = LoginRequest.builder()
             .email(EMAIL)
@@ -210,7 +210,7 @@ public class AuthenticationControllerTestIt {
             .passwordHash(passwordService.hashPassword(PASSWORD))
             .build();
         given(userDataApi.findByEmail(EMAIL)).willReturn(internalUserResponse);
-        given(localizationApi.translate(ErrorCodes.BAD_CREDENTIALS.name(), LOCALE)).willReturn(LOCALIZED_MESSAGE);
+        given(localizationApi.translate(ErrorCode.BAD_CREDENTIALS.name(), LOCALE)).willReturn(LOCALIZED_MESSAGE);
 
         LoginRequest loginRequest = LoginRequest.builder()
             .email(EMAIL)
@@ -265,7 +265,7 @@ public class AuthenticationControllerTestIt {
 
     @Test
     public void getAccessTokenById_accessTokenNotFound() {
-        Response response = getAccessTokenByIdResponse(ACCESS_TOKEN_ID_1);
+        Response response = getAccessTokenByIdResponse();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
@@ -282,7 +282,7 @@ public class AuthenticationControllerTestIt {
             .build();
         accessTokenDao.save(accessToken);
 
-        Response response = getAccessTokenByIdResponse(ACCESS_TOKEN_ID_1);
+        Response response = getAccessTokenByIdResponse();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
@@ -299,7 +299,7 @@ public class AuthenticationControllerTestIt {
             .build();
         accessTokenDao.save(accessToken);
 
-        Response response = getAccessTokenByIdResponse(ACCESS_TOKEN_ID_1);
+        Response response = getAccessTokenByIdResponse();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -308,9 +308,9 @@ public class AuthenticationControllerTestIt {
         assertThat(internalAccessTokenResponse.getUserId()).isEqualTo(USER_ID);
     }
 
-    private Response getAccessTokenByIdResponse(UUID accessTokenId) {
-        Map<String, String> uriParams = new HashMap<>();
-        uriParams.put("accessTokenId", accessTokenId.toString());
+    private Response getAccessTokenByIdResponse() {
+        Map<String, Object> uriParams = new HashMap<>();
+        uriParams.put("accessTokenId", ACCESS_TOKEN_ID_1.toString());
         return RequestFactory.createRequest()
             .get(UrlFactory.create(serverPort, Endpoint.INTERNAL_GET_ACCESS_TOKEN_BY_ID, uriParams));
     }

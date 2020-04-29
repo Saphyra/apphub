@@ -1,6 +1,9 @@
 package com.github.saphyra.apphub.service.user.data.service.register;
 
 import com.github.saphyra.apphub.api.user.data.model.request.RegistrationRequest;
+import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.error_handler.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.error_handler.exception.ConflictException;
 import com.github.saphyra.apphub.service.user.data.dao.User;
 import com.github.saphyra.apphub.service.user.data.dao.UserDao;
 import org.junit.Before;
@@ -14,6 +17,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -52,59 +57,103 @@ public class RegistrationRequestValidatorTest {
             .password(VALID_PASSWORD);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void nullEmail() {
-        underTest.validate(builder.email(null).build());
+        Throwable ex = catchThrowable(() -> underTest.validate(builder.email(null).build()));
+
+        assertThat(ex).isInstanceOf(BadRequestException.class);
+        BadRequestException exception = (BadRequestException) ex;
+        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(exception.getErrorMessage().getParams().get("email")).isEqualTo("must not be null");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void invalidEmail() {
-        underTest.validate(builder.email(INVALID_EMAIL).build());
+        Throwable ex = catchThrowable(() -> underTest.validate(builder.email(INVALID_EMAIL).build()));
+
+        assertThat(ex).isInstanceOf(BadRequestException.class);
+        BadRequestException exception = (BadRequestException) ex;
+        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(exception.getErrorMessage().getParams().get("email")).isEqualTo("invalid format");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void emailAlreadyExists() {
         given(userDao.findByEmail(VALID_EMAIL)).willReturn(Optional.of(user));
 
-        underTest.validate(builder.build());
+        Throwable ex = catchThrowable(() -> underTest.validate(builder.build()));
+
+        assertThat(ex).isInstanceOf(ConflictException.class);
+        ConflictException exception = (ConflictException) ex;
+        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.EMAIL_ALREADY_EXISTS.name());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void nullUsername() {
-        underTest.validate(builder.username(null).build());
+        Throwable ex = catchThrowable(() -> underTest.validate(builder.username(null).build()));
+
+        assertThat(ex).isInstanceOf(BadRequestException.class);
+        BadRequestException exception = (BadRequestException) ex;
+        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(exception.getErrorMessage().getParams().get("username")).isEqualTo("must not be null");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void tooShortUsername() {
-        underTest.validate(builder.username(TOO_SHORT_USERNAME).build());
+        Throwable ex = catchThrowable(() -> underTest.validate(builder.username(TOO_SHORT_USERNAME).build()));
+
+        assertThat(ex).isInstanceOf(BadRequestException.class);
+        BadRequestException exception = (BadRequestException) ex;
+        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.USERNAME_TOO_SHORT.name());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void tooLongUsername() {
-        underTest.validate(builder.username(TOO_LONG_USERNAME).build());
+        Throwable ex = catchThrowable(() -> underTest.validate(builder.username(TOO_LONG_USERNAME).build()));
+
+        assertThat(ex).isInstanceOf(BadRequestException.class);
+        BadRequestException exception = (BadRequestException) ex;
+        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.USERNAME_TOO_LONG.name());
 
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void usernameAlreadyExists() {
         given(userDao.findByUsername(VALID_USERNAME)).willReturn(Optional.of(user));
 
-        underTest.validate(builder.build());
+        Throwable ex = catchThrowable(() -> underTest.validate(builder.build()));
+
+        assertThat(ex).isInstanceOf(ConflictException.class);
+        ConflictException exception = (ConflictException) ex;
+        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.USERNAME_ALREADY_EXISTS.name());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void nullPassword() {
-        underTest.validate(builder.password(null).build());
+        Throwable ex = catchThrowable(() -> underTest.validate(builder.password(null).build()));
+
+        assertThat(ex).isInstanceOf(BadRequestException.class);
+        BadRequestException exception = (BadRequestException) ex;
+        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(exception.getErrorMessage().getParams().get("password")).isEqualTo("must not be null");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void tooShortPassword() {
-        underTest.validate(builder.password("aaaaa").build());
+        Throwable ex = catchThrowable(() -> underTest.validate(builder.password("aaaaa").build()));
+
+        assertThat(ex).isInstanceOf(BadRequestException.class);
+        BadRequestException exception = (BadRequestException) ex;
+        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_SHORT.name());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void tooLongPassword() {
-        underTest.validate(builder.password(TOO_LONG_PASSWORD).build());
+        Throwable ex = catchThrowable(() -> underTest.validate(builder.password(TOO_LONG_PASSWORD).build()));
+
+        assertThat(ex).isInstanceOf(BadRequestException.class);
+        BadRequestException exception = (BadRequestException) ex;
+        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_LONG.name());
     }
 
     @Test

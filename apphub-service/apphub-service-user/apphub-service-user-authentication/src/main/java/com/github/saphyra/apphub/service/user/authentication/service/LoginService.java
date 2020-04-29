@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.user.authentication.service;
 import com.github.saphyra.apphub.api.user.authentication.model.request.LoginRequest;
 import com.github.saphyra.apphub.api.user.data.client.UserDataApiClient;
 import com.github.saphyra.apphub.api.user.data.model.response.InternalUserResponse;
-import com.github.saphyra.apphub.lib.common_util.ErrorCodes;
+import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.error_handler.domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.error_handler.exception.UnauthorizedException;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
@@ -27,7 +27,7 @@ public class LoginService {
     public AccessToken login(LoginRequest loginRequest) {
         InternalUserResponse user = internalUserDataApi.findByEmail(loginRequest.getEmail());
         if (!passwordService.authenticate(loginRequest.getPassword(), user.getPasswordHash())) {
-            throw new UnauthorizedException(new ErrorMessage(ErrorCodes.BAD_CREDENTIALS.name()), "Invalid password");
+            throw new UnauthorizedException(new ErrorMessage(ErrorCode.BAD_CREDENTIALS.name()), "Invalid password");
         }
 
         AccessToken accessToken = accessTokenFactory.create(user.getUserId(), isTrue(loginRequest.getRememberMe()));

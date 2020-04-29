@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.user.authentication.service;
 import com.github.saphyra.apphub.api.user.authentication.model.request.LoginRequest;
 import com.github.saphyra.apphub.api.user.data.client.UserDataApiClient;
 import com.github.saphyra.apphub.api.user.data.model.response.InternalUserResponse;
-import com.github.saphyra.apphub.lib.common_util.ErrorCodes;
+import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.error_handler.exception.UnauthorizedException;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
@@ -64,7 +64,7 @@ public class LoginServiceTest {
 
         assertThat(ex).isInstanceOf(UnauthorizedException.class);
         UnauthorizedException exception = (UnauthorizedException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCodes.BAD_CREDENTIALS.name());
+        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
     }
 
     @Test
