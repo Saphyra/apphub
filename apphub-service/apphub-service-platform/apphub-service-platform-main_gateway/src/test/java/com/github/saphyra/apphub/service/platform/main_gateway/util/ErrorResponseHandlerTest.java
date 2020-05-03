@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,6 +58,7 @@ public class ErrorResponseHandlerTest {
         verify(requestContext).setResponseStatusCode(HttpStatus.UNAUTHORIZED.value());
         verify(requestContext).setResponseBody(STRINGIFIED_RESPONSE_BODY);
         verify(requestContext).setSendZuulResponse(false);
+        verify(requestContext).addZuulResponseHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
     }
 
     @Test
@@ -71,6 +73,7 @@ public class ErrorResponseHandlerTest {
         verify(requestContext).setResponseStatusCode(HttpStatus.BAD_REQUEST.value());
         verify(requestContext).setResponseBody(STRINGIFIED_RESPONSE_BODY);
         verify(requestContext).setSendZuulResponse(false);
+        verify(requestContext).addZuulResponseHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
     }
 
     @Test

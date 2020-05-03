@@ -1,10 +1,11 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication;
 
+import com.github.saphyra.aphub.lib.model.ErrorResponse;
 import com.github.saphyra.apphub.api.user.authentication.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.lib.error_handler.domain.ErrorResponse;
+import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.ErrorResponseHandler;
@@ -72,7 +73,7 @@ public class AuthenticationService {
         return errorResponseFactory.createErrorResponse(
             locale,
             HttpStatus.UNAUTHORIZED,
-            NO_SESSION_AVAILABLE_ERROR_CODE,
+            ErrorCode.NO_SESSION_AVAILABLE.name(),
             new HashMap<>()
         );
     }

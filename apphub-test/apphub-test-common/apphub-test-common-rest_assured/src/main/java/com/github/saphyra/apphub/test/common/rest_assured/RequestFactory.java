@@ -6,6 +6,8 @@ import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
+import java.util.UUID;
+
 import static io.restassured.RestAssured.given;
 
 public class RequestFactory {
@@ -16,5 +18,10 @@ public class RequestFactory {
             //.log().all()
             .contentType(ContentType.JSON)
             .header(Constants.LOCALE_COOKIE, "hu");
+    }
+
+    public static RequestSpecification createAuthorizedRequest(UUID accessTokenId) {
+        return createRequest()
+            .cookie(Constants.ACCESS_TOKEN_COOKIE, accessTokenId);
     }
 }

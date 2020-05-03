@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.error_handler.domain;
+package com.github.saphyra.aphub.lib.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -19,7 +19,6 @@ import static java.util.Objects.requireNonNull;
 
 @Component
 @RequiredArgsConstructor
-//TODO proper exceptions
 class RegistrationRequestValidator {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 

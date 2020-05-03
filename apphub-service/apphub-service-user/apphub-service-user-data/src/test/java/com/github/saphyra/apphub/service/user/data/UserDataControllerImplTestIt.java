@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.service.user.data;
 
 
+import com.github.saphyra.aphub.lib.model.ErrorResponse;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.api.user.data.model.request.RegistrationRequest;
 import com.github.saphyra.apphub.api.user.data.model.response.InternalUserResponse;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.endpoint.Endpoint;
-import com.github.saphyra.apphub.lib.error_handler.domain.ErrorResponse;
 import com.github.saphyra.apphub.service.user.data.dao.User;
 import com.github.saphyra.apphub.service.user.data.dao.UserDao;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;

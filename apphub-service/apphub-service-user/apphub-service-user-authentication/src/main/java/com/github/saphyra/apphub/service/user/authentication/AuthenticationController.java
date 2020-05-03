@@ -52,7 +52,7 @@ public class AuthenticationController implements UserAuthenticationController {
     }
 
     @Override
-    //TODO api test
+    //TODO fe test
     public LoginResponse login(LoginRequest loginRequest) {
         log.info("LoginRequest arrived: {}", loginRequest);
         AccessToken accessToken = loginService.login(loginRequest);
@@ -65,7 +65,7 @@ public class AuthenticationController implements UserAuthenticationController {
     }
 
     @Override
-    //TODO api test
+    //TODO fe test
     public void logout(AccessTokenHeader accessToken) {
         logoutService.logout(accessToken.getAccessTokenId(), accessToken.getUserId());
     }

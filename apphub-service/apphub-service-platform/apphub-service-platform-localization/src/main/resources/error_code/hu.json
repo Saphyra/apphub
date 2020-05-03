@@ -1,8 +1,14 @@
 {
+  "BAD_CREDENTIALS": "Az email cím és jelszó kombinációja ismeretlen.",
   "EMAIL_ALREADY_EXISTS": "Az email foglalt.",
   "GENERAL_ERROR": "Ismeretlen hiba.",
   "INVALID_PARAM": "Érvénytelen paraméter.",
   "LOCALE_NOT_FOUND": "A locale header nem található.",
   "NO_SESSION_AVAILABLE": "Jelentkezz be újra!",
-  "USER_NOT_FOUND": "Felhasználó nem található."
+  "PASSWORD_TOO_LONG": "A jelszó túl hosszú. (Maximum 30 karakter)",
+  "PASSWORD_TOO_SHORT": "A jelszó túl rövid. (Minimum 6 karakter)",
+  "USER_NOT_FOUND": "Felhasználó nem található.",
+  "USERNAME_ALREADY_EXISTS": "A felhasználónév foglalt.",
+  "USERNAME_TOO_LONG": "A felhasználónév túl hosszú. (Maximum 30 karakter)",
+  "USERNAME_TOO_SHORT": "A felhasználónév túl rövid. (Minimum 3 karakter)"
 }

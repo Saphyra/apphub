@@ -2,11 +2,11 @@ package com.github.saphyra.apphub.service.platform.event_gateway;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.saphyra.aphub.lib.model.ErrorResponse;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.lib.endpoint.Endpoint;
-import com.github.saphyra.apphub.lib.error_handler.domain.ErrorResponse;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;

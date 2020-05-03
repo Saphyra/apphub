@@ -44,6 +44,7 @@
 
     </build>
     <modules>
+        <module>apphub-lib-model</module>
         <module>apphub-lib-common_util</module>
         <module>apphub-lib-endpoint</module>
         <module>apphub-lib-config</module>

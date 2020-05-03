@@ -30,7 +30,6 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
-                <module>apphub-test-common-config</module>
                 <module>apphub-test-common-repository</module>
                 <module>apphub-test-common-api</module>
             </modules>
@@ -45,6 +44,7 @@
     </profiles>
 
     <modules>
+        <module>apphub-test-common-config</module>
         <module>apphub-test-common-rest_assured</module>
     </modules>
 </project>

@@ -30,7 +30,7 @@ trap "kill 0" EXIT
 
 kubectl port-forward deployment/main-gateway $PORT:8080 -n $NAMESPACE_NAME &
 
-mvn -DargLine="-DserverPort=$PORT" -T 2 clean test -P integration
+mvn -DargLine="-DserverPort=$PORT" -T 16 clean test -P integration
 TEST_RESULT=$?
 if [[ "$TEST_RESULT" -ne 0 ]]; then
   echo "Tests failed"
@@ -57,7 +57,7 @@ fi
 
 kubectl port-forward deployment/main-gateway $PORT:8080 -n $NAMESPACE_NAME &
 
-mvn -DargLine="-DserverPort=$PORT" -T 2 clean test -P integration
+mvn -DargLine="-DserverPort=$PORT" -T 16 clean test -P integration
 TEST_RESULT=$?
 if [[ "$TEST_RESULT" -ne 0 ]]; then
   echo "Tests failed"

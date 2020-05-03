@@ -25,13 +25,24 @@ public class LoginService {
     private final PasswordService passwordService;
 
     public AccessToken login(LoginRequest loginRequest) {
-        InternalUserResponse user = internalUserDataApi.findByEmail(loginRequest.getEmail());
+        InternalUserResponse user;
+        try {
+            user = internalUserDataApi.findByEmail(loginRequest.getEmail());
+        } catch (Exception e) {
+            log.info("User not found:", e);
+            throw unauthorizedException(e.getMessage());
+        }
+
         if (!passwordService.authenticate(loginRequest.getPassword(), user.getPasswordHash())) {
-            throw new UnauthorizedException(new ErrorMessage(ErrorCode.BAD_CREDENTIALS.name()), "Invalid password");
+            throw unauthorizedException("Invalid password");
         }
 
         AccessToken accessToken = accessTokenFactory.create(user.getUserId(), isTrue(loginRequest.getRememberMe()));
         accessTokenDao.save(accessToken);
         return accessToken;
+    }
+
+    private UnauthorizedException unauthorizedException(String logMessage) {
+        return new UnauthorizedException(new ErrorMessage(ErrorCode.BAD_CREDENTIALS.name()), logMessage);
     }
 }

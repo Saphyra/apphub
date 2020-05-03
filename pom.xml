@@ -107,6 +107,8 @@
         <profile>
             <id>integration</id>
             <modules>
+                <module>apphub-api</module>
+                <module>apphub-lib</module>
                 <module>apphub-test</module>
             </modules>
         </profile>

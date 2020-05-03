@@ -50,6 +50,22 @@ public class LoginServiceTest {
     private AccessToken accessToken;
 
     @Test
+    public void userNotFound() {
+        given(internalUserDataApi.findByEmail(EMAIL)).willThrow(new RuntimeException());
+
+        LoginRequest request = LoginRequest.builder()
+            .email(EMAIL)
+            .password(PASSWORD)
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.login(request));
+
+        assertThat(ex).isInstanceOf(UnauthorizedException.class);
+        UnauthorizedException exception = (UnauthorizedException) ex;
+        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
+    }
+
+    @Test
     public void invalidPassword() {
         given(internalUserDataApi.findByEmail(EMAIL)).willReturn(userResponse);
         given(userResponse.getPasswordHash()).willReturn(PASSWORD_HASH);

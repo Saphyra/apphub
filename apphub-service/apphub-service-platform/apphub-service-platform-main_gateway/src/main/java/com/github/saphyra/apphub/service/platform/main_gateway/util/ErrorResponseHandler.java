@@ -4,6 +4,7 @@ import com.github.saphyra.util.ObjectMapperWrapper;
 import com.netflix.zuul.context.RequestContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
@@ -40,6 +41,7 @@ public class ErrorResponseHandler {
     }
 
     private void sendRestErrorResponse(RequestContext requestContext, HttpStatus status, Object responseBody) {
+        requestContext.addZuulResponseHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
         requestContext.setResponseStatusCode(status.value());
         requestContext.setResponseBody(objectMapperWrapper.writeValueAsString(responseBody));
         requestContext.setSendZuulResponse(false);

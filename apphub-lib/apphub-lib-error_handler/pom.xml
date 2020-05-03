@@ -42,6 +42,12 @@
             <version>${versions.spring-boot}</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
