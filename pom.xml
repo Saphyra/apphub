@@ -90,28 +90,11 @@
     <build>
     </build>
 
-    <profiles>
-        <profile>
-            <id>service</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>apphub-api</module>
-                <module>apphub-lib</module>
-                <module>apphub-test</module>
-                <module>apphub-service</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>integration</id>
-            <modules>
-                <module>apphub-api</module>
-                <module>apphub-lib</module>
-                <module>apphub-test</module>
-            </modules>
-        </profile>
-    </profiles>
+    <modules>
+        <module>apphub-api</module>
+        <module>apphub-lib</module>
+        <module>apphub-test</module>
+        <module>apphub-service</module>
+    </modules>
 
 </project>

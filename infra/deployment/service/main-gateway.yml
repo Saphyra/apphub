@@ -28,8 +28,16 @@ spec:
               port: 8080
             initialDelaySeconds: 60
             periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /internal/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
           resources:
-
+            limits:
+              memory: 250Mi
 ---
 apiVersion: v1
 kind: Service

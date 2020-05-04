@@ -23,28 +23,10 @@
     <build>
     </build>
 
-    <profiles>
-        <profile>
-            <id>service</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>apphub-test-common-repository</module>
-                <module>apphub-test-common-api</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>integration</id>
-            <modules>
-                <module>apphub-test-common-integration</module>
-            </modules>
-        </profile>
-    </profiles>
-
     <modules>
         <module>apphub-test-common-config</module>
         <module>apphub-test-common-rest_assured</module>
+        <module>apphub-test-common-repository</module>
+        <module>apphub-test-common-api</module>
     </modules>
 </project>
