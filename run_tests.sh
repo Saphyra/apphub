@@ -6,7 +6,7 @@ NAMESPACE_NAME="default"
 
 kubectl port-forward deployment/main-gateway $PORT:8080 -n $NAMESPACE_NAME &
 cd apphub-integration || exit
-mvn -DargLine="-DserverPort=$PORT" -T 16 clean test
+mvn -DargLine="-DserverPort=$PORT" clean test
 TEST_RESULT=$?
 if [[ "$TEST_RESULT" -ne 0 ]]; then
   echo "Tests failed"
