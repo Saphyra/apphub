@@ -71,7 +71,6 @@ public class SeleniumTest extends TestBase {
             .orElseThrow(() -> new RuntimeException("WebDriver has not been initialized."));
     }
 
-
     private void extractLogs(WebDriver driver) {
         log.info("Extracting logs...");
         driver.findElements(By.cssSelector("#logcontainermessages > div"))

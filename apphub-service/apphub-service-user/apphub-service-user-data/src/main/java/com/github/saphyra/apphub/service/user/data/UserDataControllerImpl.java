@@ -45,7 +45,6 @@ public class UserDataControllerImpl implements UserDataController {
     }
 
     @Override
-    //TODO fe test
     public void register(RegistrationRequest registrationRequest, String locale) {
         log.info("RegistrationRequest arrived for username {} and email {}", registrationRequest.getUsername(), registrationRequest.getEmail());
         registrationService.register(registrationRequest, locale);

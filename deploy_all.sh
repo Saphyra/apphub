@@ -31,7 +31,7 @@ trap "kill 0" EXIT
 kubectl port-forward deployment/main-gateway $PORT:8080 -n $NAMESPACE_NAME &
 
 cd apphub-integration || exit
-mvn -DargLine="-DserverPort=$PORT" -T 16 clean test
+mvn -DargLine="-DserverPort=$PORT -Dheadless=true" -T 16 clean test
 cd ../ || exit
 TEST_RESULT=$?
 if [[ "$TEST_RESULT" -ne 0 ]]; then
@@ -41,7 +41,7 @@ if [[ "$TEST_RESULT" -ne 0 ]]; then
 else
   echo "Tests passed successfully"
 fi
-kubectl delete namespace $NAMESPACE_NAME
+kubectl delete namespace $NAMESPACE_NAME &
 
 #Deploying to default
 NAMESPACE_NAME="default"
@@ -60,7 +60,7 @@ fi
 kubectl port-forward deployment/main-gateway $PORT:8080 -n $NAMESPACE_NAME &
 
 cd apphub-integration || exit
-mvn -DargLine="-DserverPort=$PORT" -T 16 clean test
+mvn -DargLine="-DserverPort=$PORT -Dheadless=true" -T 16 clean test
 cd ../ || exit
 TEST_RESULT=$?
 if [[ "$TEST_RESULT" -ne 0 ]]; then

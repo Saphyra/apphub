@@ -36,6 +36,13 @@
             <artifactId>guava</artifactId>
             <version>29.0-jre</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>${versions.awaitility}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -46,7 +53,7 @@
                 <version>${versions.maven-surefire-plugin}</version>
                 <configuration>
                     <parallel>methods</parallel>
-                    <threadCount>4</threadCount>
+                    <threadCount>8</threadCount>
                 </configuration>
             </plugin>
         </plugins>

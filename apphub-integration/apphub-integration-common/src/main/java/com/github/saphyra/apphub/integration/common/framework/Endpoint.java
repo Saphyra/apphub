@@ -21,4 +21,9 @@ public class Endpoint {
     public static final String REFRESH_ACCESS_TOKEN_EXPIRATION_EVENT = "/event/refresh-access-token-expiration";
 
     public static final String TRANSLATE_ERROR_CODE = "/localization/error-code";
+
+
+    public static final String MODULES_PAGE = "/web/modules";
+    public static final String WEB_ROOT = "/web";
+    public static final String ROOT = "/";
 }

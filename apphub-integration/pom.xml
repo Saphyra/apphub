@@ -35,6 +35,7 @@
         <versions.selenium>4.0.0-alpha-4</versions.selenium>
         <versions.testng>7.1.0</versions.testng>
         <versions.logback>1.2.3</versions.logback>
+        <versions.awaitility>4.0.2</versions.awaitility>
 
         <!-- Plugin Versions -->
         <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>

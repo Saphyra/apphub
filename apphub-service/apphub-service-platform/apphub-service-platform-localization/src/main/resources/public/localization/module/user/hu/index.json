@@ -88,7 +88,7 @@
   },
   "additionalContent": {
     "account-deleted": "Account törölve.",
-    "email-invalid": "Érvénytelen e-mail cím",
+    "email-invalid": "Érvénytelen e-mail cím.",
     "empty-credentials": "E-mail és jelszó megadása kötelező!",
     "incorrect-confirm-password": "A jelszavak nem egyeznek.",
     "password-too-long": "Jelszó túl hosszú (Maximum 30 karakter).",
