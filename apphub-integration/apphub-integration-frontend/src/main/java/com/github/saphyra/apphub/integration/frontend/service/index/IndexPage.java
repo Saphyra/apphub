@@ -16,6 +16,9 @@ class IndexPage {
     private static final By REGISTRATION_SUBMIT_BUTTON = By.id("registration-button");
     private static final By EMAIL_INPUT = By.id("reg-email");
     private static final By EMAIL_VALID = By.id("invalid-email");
+    private static final By LOGIN_EMAIL = By.id("login-email");
+    private static final By LOGIN_PASSWORD = By.id("login-password");
+    private static final By LOGIN_BUTTON = By.id("login-button");
 
     public static WebElement emailInput(WebDriver driver) {
         return driver.findElement(EMAIL_INPUT);
@@ -51,5 +54,17 @@ class IndexPage {
 
     static WebElement registrationSubmitButton(WebDriver driver) {
         return driver.findElement(REGISTRATION_SUBMIT_BUTTON);
+    }
+
+    public static WebElement loginEmail(WebDriver driver) {
+        return driver.findElement(LOGIN_EMAIL);
+    }
+
+    public static WebElement loginPassword(WebDriver driver) {
+        return driver.findElement(LOGIN_PASSWORD);
+    }
+
+    public static WebElement loginButton(WebDriver driver) {
+        return driver.findElement(LOGIN_BUTTON);
     }
 }

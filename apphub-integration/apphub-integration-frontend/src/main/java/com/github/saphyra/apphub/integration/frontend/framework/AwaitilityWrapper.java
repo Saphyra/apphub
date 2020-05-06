@@ -34,7 +34,7 @@ public class AwaitilityWrapper {
             conditionFactory.until(callable);
             return true;
         } catch (ConditionTimeoutException e) {
-            log.info(e.getMessage());
+            log.info("Condition failed.", e);
             return false;
         }
     }

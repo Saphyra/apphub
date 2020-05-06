@@ -7,11 +7,13 @@ import com.github.saphyra.apphub.integration.frontend.SeleniumTest;
 import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.framework.Navigation;
 import com.github.saphyra.apphub.integration.frontend.service.index.IndexPageActions;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class RedirectionTest extends SeleniumTest {
     @Test
     public void redirectToIndexWhenNoAccessToken() {
@@ -44,8 +46,10 @@ public class RedirectionTest extends SeleniumTest {
         Navigation.toIndexPage(driver);
         IndexPageActions.registerUser(driver, RegistrationParameters.validParameters());
 
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(driver, false);
 
-        assertThat(AwaitilityWrapper.createDefault().until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoint.MODULES_PAGE)))).isTrue();
+        boolean isUrlCorrect = AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoint.MODULES_PAGE)));
+        assertThat(isUrlCorrect).isTrue();
     }
 }

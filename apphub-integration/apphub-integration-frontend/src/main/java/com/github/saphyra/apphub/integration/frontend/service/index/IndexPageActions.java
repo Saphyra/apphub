@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.common.framework.Endpoint;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.frontend.model.login.LoginParameters;
 import com.github.saphyra.apphub.integration.frontend.model.registration.EmailValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.registration.PasswordValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.registration.RegistrationValidationResult;
@@ -81,5 +82,12 @@ public class IndexPageActions {
         AwaitilityWrapper.createDefault()
             .until(submitButton::isEnabled);
         submitButton.click();
+    }
+
+    public static void submitLogin(WebDriver driver, LoginParameters loginParameters) {
+        clearAndFill(IndexPage.loginEmail(driver), loginParameters.getEmail());
+        clearAndFill(IndexPage.loginPassword(driver), loginParameters.getPassword());
+
+        IndexPage.loginButton(driver).click();
     }
 }
