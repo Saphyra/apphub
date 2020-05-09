@@ -18,7 +18,7 @@ import java.util.UUID;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class UserDataControllerImpl implements UserDataController {
+class UserDataControllerImpl implements UserDataController {
     private final RegistrationService registrationService;
     private final UserDao userDao;
     private final UuidConverter uuidConverter;

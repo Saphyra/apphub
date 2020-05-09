@@ -77,22 +77,6 @@ public class UserDataControllerImplTestIt {
     }
 
     @Test
-    public void findByEmail_notFound() {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("email", EMAIL);
-        Response response = RequestFactory.createRequest()
-            .get(UrlFactory.create(serverPort, Endpoints.INTERNAL_FIND_USER_BY_EMAIL, paramMap));
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
-        ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USER_NOT_FOUND.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-
-        verify(localizationApiClient).translate(ErrorCode.USER_NOT_FOUND.name(), "hu");
-    }
-
-    @Test
     public void getLanguage_userNotFound() {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userId", USER_ID);
