@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.error_handler.service;
 
-import com.github.saphyra.aphub.lib.model.ErrorResponse;
+import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
 import lombok.RequiredArgsConstructor;

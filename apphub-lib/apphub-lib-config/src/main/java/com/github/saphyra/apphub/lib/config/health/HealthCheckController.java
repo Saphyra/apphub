@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.config.health;
 
-import com.github.saphyra.apphub.lib.endpoint.Endpoint;
+import com.github.saphyra.apphub.lib.config.Endpoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

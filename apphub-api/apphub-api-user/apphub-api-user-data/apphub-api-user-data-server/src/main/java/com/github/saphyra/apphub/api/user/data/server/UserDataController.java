@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.api.user.data.server;
 import com.github.saphyra.apphub.api.user.data.model.request.RegistrationRequest;
 import com.github.saphyra.apphub.api.user.data.model.response.InternalUserResponse;
 import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.lib.endpoint.Endpoint;
+import com.github.saphyra.apphub.lib.config.Endpoint;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;

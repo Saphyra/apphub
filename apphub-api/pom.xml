@@ -32,12 +32,6 @@
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-endpoint</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-common_util</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -45,6 +39,12 @@
         <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-common_domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-config</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.api.platform.event_gateway.client;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.endpoint.Endpoint;
+import com.github.saphyra.apphub.lib.config.Endpoint;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,5 +18,5 @@ public interface EventGatewayApiClient {
     void heartbeat(@PathVariable("serviceName") String serviceName);
 
     @RequestMapping(method = RequestMethod.POST, path = Endpoint.SEND_EVENT)
-    void sendEvent(@RequestBody SendEventRequest sendEventRequest);
+    void sendEvent(@RequestBody SendEventRequest<?> sendEventRequest);
 }

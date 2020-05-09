@@ -1,4 +1,4 @@
-package com.github.saphyra.aphub.lib.model;
+package com.github.saphyra.apphub.lib.common_domain;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.api.platform.localization.server;
 
 import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.lib.endpoint.Endpoint;
+import com.github.saphyra.apphub.lib.config.Endpoint;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.error_handler;
 
-import com.github.saphyra.aphub.lib.model.ErrorResponse;
+import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.error_handler.domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.error_handler.exception.RestException;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;

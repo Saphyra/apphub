@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.endpoint;
+package com.github.saphyra.apphub.lib.config;
 
 public class Endpoint {
     public static final String HEALTH = "/internal/health";

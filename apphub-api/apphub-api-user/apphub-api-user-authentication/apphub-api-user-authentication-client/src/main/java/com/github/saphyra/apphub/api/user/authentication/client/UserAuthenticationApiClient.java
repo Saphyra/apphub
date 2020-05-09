@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.api.user.authentication.client;
 
-import com.github.saphyra.apphub.lib.endpoint.Endpoint;
 import com.github.saphyra.apphub.api.user.authentication.model.request.LoginRequest;
 import com.github.saphyra.apphub.api.user.authentication.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.api.user.authentication.model.response.LoginResponse;
+import com.github.saphyra.apphub.lib.config.Endpoint;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
