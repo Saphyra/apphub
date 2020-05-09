@@ -40,18 +40,20 @@ event-gateway:
 localization:
   ribbon:
     listOfServers: localization:8080
-user-data:
-  ribbon:
-    listOfServers: user-data:8080
+
 user-authentication:
   ribbon:
-    listOfServers: user-authentication:8080
-user-frontend:
+    listOfServers: user:8080
+user-data:
   ribbon:
-    listOfServers: user-frontend:8080
-modules-frontend:
+    listOfServers: user:8080
+user:
   ribbon:
-    listOfServers: modules-frontend:8080
+    listOfServers: user:8080
+
+modules:
+  ribbon:
+    listOfServers: modules:8080
 
 event:
   processor:

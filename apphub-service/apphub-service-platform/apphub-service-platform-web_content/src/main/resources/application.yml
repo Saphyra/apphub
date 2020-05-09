@@ -1,6 +1,6 @@
 spring:
   appliction:
-    name: common-web-content
+    name: web-content
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration

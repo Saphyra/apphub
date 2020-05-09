@@ -2,7 +2,7 @@ DIRNAME=$PWD
 echo "Dirname: $DIRNAME"
 
 if [ "$1" != "skipBuild" ]; then
-  mvn -T 16 clean install
+  mvn -T 4 clean install
   BUILD_RESULT=$?
   if [[ "$BUILD_RESULT" -ne 0 ]]; then
     echo "Build failed."

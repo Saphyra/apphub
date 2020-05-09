@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.locale;
 
-import com.github.saphyra.apphub.api.user.authentication.model.response.InternalAccessTokenResponse;
-import com.github.saphyra.apphub.api.user.data.client.UserDataApiClient;
+import com.github.saphyra.apphub.api.user.client.UserDataApiClient;
+import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
 import com.github.saphyra.util.CookieUtil;

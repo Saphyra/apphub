@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.platform.event_gateway.model.request.Regist
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.apphub.lib.config.Endpoint;
+import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
@@ -151,7 +151,7 @@ public class EventGatewayControllerTestIt {
         EventProcessor processor = registerProcessor();
 
         Response response = RequestFactory.createRequest()
-            .get(UrlFactory.create(serverPort, Endpoint.HEARTBEAT), SERVICE_NAME)
+            .get(UrlFactory.create(serverPort, Endpoints.HEARTBEAT), SERVICE_NAME)
             .andReturn();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
@@ -221,7 +221,7 @@ public class EventGatewayControllerTestIt {
     private Response sendRegisterProcessorRequest(RegisterProcessorRequest request) throws Exception {
         return RequestFactory.createRequest()
             .body(objectMapper.writeValueAsString(request))
-            .put(UrlFactory.create(serverPort, Endpoint.REGISTER_PROCESSOR))
+            .put(UrlFactory.create(serverPort, Endpoints.REGISTER_PROCESSOR))
             .thenReturn();
     }
 
@@ -255,7 +255,7 @@ public class EventGatewayControllerTestIt {
     private Response getSendEventResponse(SendEventRequest<TestEvent> request) throws JsonProcessingException {
         return RequestFactory.createRequest()
             .body(objectMapper.writeValueAsString(request))
-            .post(UrlFactory.create(serverPort, Endpoint.SEND_EVENT));
+            .post(UrlFactory.create(serverPort, Endpoints.SEND_EVENT));
     }
 
     @Data

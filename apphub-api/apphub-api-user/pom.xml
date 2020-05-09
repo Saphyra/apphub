@@ -24,7 +24,8 @@
     </build>
 
     <modules>
-        <module>apphub-api-user-data</module>
-        <module>apphub-api-user-authentication</module>
+        <module>apphub-api-user-model</module>
+        <module>apphub-api-user-client</module>
+        <module>apphub-api-user-server</module>
     </modules>
 </project>

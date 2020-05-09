@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service;
 
-import com.github.saphyra.apphub.api.user.authentication.client.UserAuthenticationApiClient;
-import com.github.saphyra.apphub.api.user.authentication.model.response.InternalAccessTokenResponse;
+import com.github.saphyra.apphub.api.user.client.UserAuthenticationApiClient;
+import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

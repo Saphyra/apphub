@@ -11,40 +11,44 @@ supportedLocales:
 zuul:
   prefix: /
   routes:
+    #RESOURCES
     common-resources:
       path: /res/common/**
       serviceId: web-content
       stripPrefix: false
     user-resources:
       path: /res/user/**
-      serviceId: user-frontend
+      serviceId: user
       stripPrefix: false
     modules-resources:
       path: /res/modules/**
-      serviceId: modules-frontend
+      serviceId: modules
       stripPrefix: false
 
-    localization:
-      path: /localization/**
-      serviceId: localization
-      stripPrefix: false
-
+    #PAGES
     index-page:
       path: /web
-      serviceId: user-frontend
+      serviceId: user
       stripPrefix: false
     modules-page:
       path: /web/modules
-      serviceId: modules-frontend
+      serviceId: modules
       stripPrefix: false
 
+    #MODULES
     user-data:
       path: /api/user/data/**
-      serviceId: user-data
+      serviceId: user
       stripPrefix: false
     user-authentication:
       path: /api/user/authentication/**
-      serviceId: user-authentication
+      serviceId: user
+      stripPrefix: false
+
+    #PLATFORM
+    localization:
+      path: /localization/**
+      serviceId: localization
       stripPrefix: false
 
 nonSessionExtendingUris:

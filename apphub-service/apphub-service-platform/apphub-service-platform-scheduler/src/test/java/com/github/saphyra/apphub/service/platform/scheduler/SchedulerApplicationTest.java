@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.scheduler;
 
-import com.github.saphyra.apphub.lib.config.Endpoint;
+import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public class SchedulerApplicationTest {
     @Test
     public void startup() {
         int statusCode = RequestFactory.createRequest()
-            .get(UrlFactory.create(serverPort, Endpoint.HEALTH))
+            .get(UrlFactory.create(serverPort, Endpoints.HEALTH))
             .getStatusCode();
 
         assertThat(statusCode).isEqualTo(HttpStatus.OK.value());

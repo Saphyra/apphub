@@ -1,6 +1,0 @@
-spring:
-  appliction:
-    name: user-frontend
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration

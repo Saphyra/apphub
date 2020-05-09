@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.localization;
 
 import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.lib.config.Endpoint;
+import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
@@ -41,7 +41,7 @@ public class LocalizationControllerTestIt {
     private String getTranslateResponse(String locale, String errorCode) {
         return RequestFactory.createRequest()
             .header(Constants.LOCALE_HEADER, locale)
-            .get(UrlFactory.create(serverPort, Endpoint.TRANSLATE_ERROR_CODE.concat("?error_code=").concat(errorCode)))
+            .get(UrlFactory.create(serverPort, Endpoints.TRANSLATE_ERROR_CODE.concat("?error_code=").concat(errorCode)))
             .getBody()
             .asString();
     }

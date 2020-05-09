@@ -37,18 +37,10 @@ localization:
   ribbon:
     listOfServers: localhost:8084
 
-user-authentication:
+user:
   ribbon:
     listOfServers: localhost:8085
 
-user-data:
-  ribbon:
-    listOfServers: localhost:8086
-
-user-frontend:
-  ribbon:
-    listOfServers: localhost:8087
-
-modules-frontend:
+modules:
   ribbon:
     listOfServers: localhost:8088
