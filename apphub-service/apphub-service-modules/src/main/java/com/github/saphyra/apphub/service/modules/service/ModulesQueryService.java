@@ -2,12 +2,13 @@ package com.github.saphyra.apphub.service.modules.service;
 
 import com.github.saphyra.apphub.api.modules.model.response.ModuleResponse;
 import com.github.saphyra.apphub.service.modules.ModulesProperties;
+import com.github.saphyra.apphub.service.modules.dao.favorite.Favorite;
+import com.github.saphyra.apphub.service.modules.dao.favorite.FavoriteService;
 import com.github.saphyra.apphub.service.modules.domain.Module;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,10 +20,15 @@ import java.util.stream.Collectors;
 @Component
 //TODO unit test
 public class ModulesQueryService {
+    private final FavoriteService favoriteService;
     private final ModulesProperties modulesProperties;
 
     public Map<String, List<ModuleResponse>> getModules(UUID userId) {
-        List<String> favoriteModules = new ArrayList<>(); //TODO query user's data
+        List<String> favoriteModules = favoriteService.getByUserId(userId)
+            .stream()
+            .filter(Favorite::isFavorite)
+            .map(Favorite::getModule)
+            .collect(Collectors.toList());
         Map<String, List<ModuleResponse>> result = new HashMap<>();
 
         for (Map.Entry<String, List<Module>> category : modulesProperties.getModules().entrySet()) {

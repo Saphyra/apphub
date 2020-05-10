@@ -23,21 +23,23 @@
 
     function displayModules(){
         const request = new Request(Mapping.getEndpoint("GET_MODULES"));
-            request.convertResponse = function(response){
-                return new MapStream(JSON.parse(response.body))
-                    .sorted(function(a, b){return categoryNames.get(a.getKey()).localeCompare(categoryNames.get(b.getKey()))})
-                    .map(function(category, modules){
-                        return new Stream(modules)
-                            .sorted(function(a, b){return moduleNames.get(a.name).localeCompare(moduleNames.get(b.name))})
-                            .toList();
-                    })
-                    .toMap();
-            }
+            request.convertResponse = responseConverter;
             request.processValidResponse = function(categories){
                 displayAll(categories);
                 displayFavorites(categories);
             }
         dao.sendRequestAsync(request);
+    }
+
+    function responseConverter(response){
+        return new MapStream(JSON.parse(response.body))
+            .sorted(function(a, b){return categoryNames.get(a.getKey()).localeCompare(categoryNames.get(b.getKey()))})
+            .map(function(category, modules){
+                return new Stream(modules)
+                    .sorted(function(a, b){return moduleNames.get(a.name).localeCompare(moduleNames.get(b.name))})
+                    .toList();
+            })
+            .toMap();
     }
 
     function displayAll(categories){
@@ -61,22 +63,17 @@
         new MapStream(categoriesToDisplay)
             .map(function(category, modules){
                 const categoryNode = document.createElement("div");
+                    categoryNode.classList.add("category");
 
                     const categoryNameLabel = document.createElement("div");
+                        categoryNameLabel.classList.add("category-name");
                         categoryNameLabel.innerHTML = categoryNames.get(category);
                 categoryNode.appendChild(categoryNameLabel);
 
-                    const modulesContainer = document.createElement("ul");
+                    const modulesContainer = document.createElement("div");
                         new Stream(modules)
                             .map(function(module){
-                                const moduleNode = document.createElement("li");
-                                    const moduleLink = document.createElement("a");
-                                        moduleLink.innerHTML = moduleNames.get(module.name);
-                                        moduleLink.href = module.url;
-                                        moduleLink.target = "_blank";
-                                moduleNode.appendChild(moduleLink);
-                                //TODO add mark as favorite button
-                                return moduleNode;
+                                return createModuleNode(module, createMarkFavoriteFunction(module, !module.favorite));
                             })
                             .forEach(function(node){modulesContainer.appendChild(node)});
                 categoryNode.appendChild(modulesContainer);
@@ -102,22 +99,17 @@
         new MapStream(categoriesToDisplay)
             .map(function(category, modules){
                 const categoryNode = document.createElement("div");
+                    categoryNode.classList.add("category");
 
                     const categoryNameLabel = document.createElement("div");
+                        categoryNameLabel.classList.add("category-name");
                         categoryNameLabel.innerHTML = categoryNames.get(category);
                 categoryNode.appendChild(categoryNameLabel);
 
-                    const modulesContainer = document.createElement("ul");
+                    const modulesContainer = document.createElement("div");
                         new Stream(modules)
                             .map(function(module){
-                                const moduleNode = document.createElement("li");
-                                    const moduleLink = document.createElement("a");
-                                        moduleLink.innerHTML = moduleNames.get(module.name);
-                                        moduleLink.href = module.url;
-                                        moduleLink.target = "_blank";
-                                moduleNode.appendChild(moduleLink);
-                                //TODO add unmark as favorite button
-                                return moduleNode;
+                                return createModuleNode(module, createMarkFavoriteFunction(module, false));
                             })
                             .forEach(function(node){modulesContainer.appendChild(node)});
                 categoryNode.appendChild(modulesContainer);
@@ -125,5 +117,36 @@
             })
             .toListStream()
             .forEach(function(node){listContainer.appendChild(node)});
+    }
+
+    function createModuleNode(module, callback){
+        const moduleNode = document.createElement("div");
+            moduleNode.classList.add("module");
+            const favoriteButton = document.createElement("div");
+                favoriteButton.classList.add("favorite-button");
+                favoriteButton.classList.add("button");
+                favoriteButton.onclick = callback;
+                favoriteButton.classList.add(module.favorite ? "favorite" : "non-favorite");
+        moduleNode.appendChild(favoriteButton);
+
+            const moduleLink = document.createElement("a");
+                moduleLink.classList.add("module-link");
+                moduleLink.innerHTML = moduleNames.get(module.name);
+                moduleLink.href = module.url;
+                moduleLink.target = "_blank";
+        moduleNode.appendChild(moduleLink);
+        return moduleNode;
+    }
+
+    function createMarkFavoriteFunction(module, value){
+        return function(){
+            const request = new Request(Mapping.getEndpoint("MARK_AS_FAVORITE", {module: module.name}), {value: value});
+                request.convertResponse = responseConverter;
+                request.processValidResponse = function(categories){
+                    displayAll(categories);
+                    displayFavorites(categories);
+                }
+            dao.sendRequestAsync(request);
+        }
     }
 })();

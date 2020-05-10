@@ -1,5 +1,5 @@
 spring:
-  appliction:
+  application:
     name: scheduler
   datasource:
     initialize: false

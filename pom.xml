@@ -17,7 +17,6 @@
     <packaging>pom</packaging>
 
     <properties>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
 
@@ -31,7 +30,7 @@
         <versions.exec-maven-plugin>1.6.0</versions.exec-maven-plugin>
 
         <!-- Saphyra Versions -->
-        <versions.saphyra.encryption>1.0.2</versions.saphyra.encryption>
+        <versions.saphyra.encryption>1.0.3</versions.saphyra.encryption>
         <versions.saphyra.cache>1.0.8</versions.saphyra.cache>
         <versions.saphyra.converter>1.0.0</versions.saphyra.converter>
         <versions.saphyra.dao>1.1.2</versions.saphyra.dao>

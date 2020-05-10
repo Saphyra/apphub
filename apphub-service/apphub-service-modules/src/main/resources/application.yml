@@ -1,9 +1,6 @@
 spring:
-  appliction:
+  application:
     name: modules
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 
 modules:
   modules:

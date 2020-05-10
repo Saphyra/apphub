@@ -9,6 +9,7 @@ window.Mapping = new function(){
         GET_MODULES: new Endpoint("/api/modules", HttpMethod.GET),
         LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),
         LOGOUT: new Endpoint("/api/user/authentication/logout", HttpMethod.POST),
+        MARK_AS_FAVORITE: new Endpoint("/api/modules/{module}/favorite", HttpMethod.POST),
         REGISTER: new Endpoint("/api/user/data", HttpMethod.POST)
     }
 

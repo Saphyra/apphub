@@ -22,4 +22,5 @@ public class Endpoints {
     public static final String TRANSLATE_ERROR_CODE = "/internal/localization/error-code";
 
     public static final String GET_MODULES_OF_USER = "/api/modules";
+    public static final String SET_FAVORITE = "/api/modules/{module}/favorite";
 }

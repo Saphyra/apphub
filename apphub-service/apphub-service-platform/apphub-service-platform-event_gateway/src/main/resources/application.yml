@@ -1,10 +1,6 @@
 spring:
-  appliction:
+  application:
     name: event-gateway
-
-liquibase:
-  changelog:
-    location: classpath:database/changelog-master.xml
 
 eventProcessor:
   cleanup:
