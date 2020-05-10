@@ -4,3 +4,13 @@ spring:
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+modules:
+  modules:
+    accounts:
+      - name: account
+        url: /web/account
+        allowedByDefault: true
+      - name: admin-panel
+        url: /web/admin-panel
+        allowedByDefault: false

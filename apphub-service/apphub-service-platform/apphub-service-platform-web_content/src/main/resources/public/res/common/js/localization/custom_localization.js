@@ -1,5 +1,5 @@
-function CustomLocalization(fileName){
-    const localization = loadLocalization(fileName, function(localization){return localization});
+function CustomLocalization(module, fileName){
+    const localization = loadLocalization(module, fileName, function(localization){return localization});
 
     this.getKeys = function(){
         return Object.keys(localization);

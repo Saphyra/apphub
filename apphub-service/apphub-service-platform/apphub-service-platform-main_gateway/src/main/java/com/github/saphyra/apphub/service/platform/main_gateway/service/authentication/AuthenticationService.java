@@ -27,8 +27,6 @@ import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_H
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticationService {
-    private static final String NO_SESSION_AVAILABLE_ERROR_CODE = "NO_SESSION_AVAILABLE";
-
     private final AccessTokenExpirationUpdateService accessTokenExpirationUpdateService;
     private final AccessTokenHeaderFactory accessTokenHeaderFactory;
     private final AccessTokenQueryService accessTokenQueryService;

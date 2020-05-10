@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.modules.frontend;
+package com.github.saphyra.apphub.service.modules;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

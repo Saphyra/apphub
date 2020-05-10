@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
 import com.github.saphyra.apphub.lib.config.thymeleaf.EnableThymeLeaf;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
+import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
 import com.github.saphyra.encryption.impl.PasswordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -33,6 +34,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 })
 @EnableFeignClients(basePackages = "com.github.saphyra.apphub.api")
 @EnableThymeLeaf
+@EnableEventProcessor
 class BeanConfiguration {
     @Bean
     LocaleProvider localeProvider(RequestContextProvider requestContextProvider) {

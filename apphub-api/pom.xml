@@ -55,5 +55,6 @@
     <modules>
         <module>apphub-api-user</module>
         <module>apphub-api-platform</module>
-    </modules>
+      <module>apphub-api-modules</module>
+  </modules>
 </project>

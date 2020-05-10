@@ -106,6 +106,16 @@ function MapStream(i){
         return this;
     }
 
+    this.filter = function(predicate){
+        const values = {};
+        this.forEach(function(key, value){
+            if(predicate(key, value)){
+                values[key] = value;
+            }
+        })
+        return new MapStream(values);
+    }
+
     this.forEach = function(consumer){
         for(let key in items){
             consumer(key, items[key]);

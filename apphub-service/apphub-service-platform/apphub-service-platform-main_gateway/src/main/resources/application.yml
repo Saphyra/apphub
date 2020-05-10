@@ -45,6 +45,11 @@ zuul:
       serviceId: user
       stripPrefix: false
 
+    modules:
+      path: /api/modules/**
+      serviceId: modules
+      stripPrefix: false
+
     #PLATFORM
     localization:
       path: /localization/**

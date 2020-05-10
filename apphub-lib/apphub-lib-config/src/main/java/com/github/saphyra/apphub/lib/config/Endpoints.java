@@ -19,5 +19,7 @@ public class Endpoints {
     public static final String DELETE_EXPIRED_ACCESS_TOKENS_EVENT = "/event/delete-expired-access-tokens";
     public static final String REFRESH_ACCESS_TOKEN_EXPIRATION_EVENT = "/event/refresh-access-token-expiration";
 
-    public static final String TRANSLATE_ERROR_CODE = "/localization/error-code";
+    public static final String TRANSLATE_ERROR_CODE = "/internal/localization/error-code";
+
+    public static final String GET_MODULES_OF_USER = "/api/modules";
 }

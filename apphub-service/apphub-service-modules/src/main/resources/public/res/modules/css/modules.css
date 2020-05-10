@@ -1,0 +1,63 @@
+:root{
+    --bar-title-height: 2.5rem;
+    --search-field-height: 2.5rem;
+}
+
+#left-bar{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 33%;
+    border-right: 3px ridge white;
+}
+
+#right-bar{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 67%;
+}
+
+    .bar-title{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--bar-title-height);
+        border-bottom: 2px ridge white;
+        text-align: center;
+        padding: 0.2rem;
+    }
+
+    #favorites-list{
+        position: absolute;
+        top: var(--bar-title-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    #search-field-wrapper{
+        position: absolute;
+        top: var(--bar-title-height);
+        left: 0;
+        right: 0;
+        height: var(--search-field-height);
+        border-bottom: 1px ridge white;
+        text-align: center;
+        padding: 0.2rem;
+    }
+
+        #search-field{
+            width: 95%;
+        }
+
+    #all-modules-list{
+        position: absolute;
+        top: calc(var(--bar-title-height) + var(--search-field-height));
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }

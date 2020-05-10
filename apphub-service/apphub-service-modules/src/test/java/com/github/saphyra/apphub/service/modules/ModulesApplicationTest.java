@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.modules.frontend;
+package com.github.saphyra.apphub.service.modules;
 
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
