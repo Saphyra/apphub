@@ -20,4 +20,9 @@ class FavoriteDao extends AbstractDao<FavoriteEntity, Favorite, FavoriteEntityKe
     public List<Favorite> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
+
+    //TODO unit test
+    public void deleteByUserId(UUID userId) {
+        repository.deleteByUserId(uuidConverter.convertDomain(userId));
+    }
 }

@@ -19,4 +19,8 @@ interface AccessTokenRepository extends CrudRepository<AccessTokenEntity, String
 
     @Transactional
     void deleteByAccessTokenIdAndUserId(String accessTokenId, String userId);
+
+    //TODO unit test
+    @Transactional
+    void deleteByUserId(String userId);
 }

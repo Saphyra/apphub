@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.config.access_token.AccessTokenConfiguratio
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
 import com.github.saphyra.apphub.lib.config.thymeleaf.EnableThymeLeaf;
+import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import com.github.saphyra.encryption.EnableEncryption;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Import;
     AccessTokenFilterConfiguration.class
 })
 @EnableEncryption
+@EnableEventProcessor
 class BeanConfiguration {
     @Bean
     UuidConverter uuidConverter() {

@@ -5,9 +5,6 @@ spring:
     exclude:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 
-supportedLocales:
-  - hu
-
 zuul:
   prefix: /
   routes:

@@ -34,4 +34,9 @@ public class FavoriteService {
     public void save(Favorite favorite) {
         favoriteDao.save(favorite);
     }
+
+    //TODO unit test
+    public void deleteByUserId(UUID userId) {
+        favoriteDao.deleteByUserId(userId);
+    }
 }

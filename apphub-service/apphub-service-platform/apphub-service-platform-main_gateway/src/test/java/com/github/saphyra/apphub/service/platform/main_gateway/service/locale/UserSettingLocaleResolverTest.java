@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UserSettingApphubLocaleResolverTest {
+public class UserSettingLocaleResolverTest {
     private static final String ACCESS_TOKEN_ID = "access-token-id";
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String DEFAULT_LOCALE = "default-locale";

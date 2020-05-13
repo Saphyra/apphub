@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.lib.common_util;
 
 public enum ErrorCode {
     BAD_CREDENTIALS,
+    BAD_PASSWORD,
     EMAIL_ALREADY_EXISTS,
     INVALID_PARAM,
     NO_SESSION_AVAILABLE,

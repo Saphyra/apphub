@@ -1,17 +1,25 @@
 package com.github.saphyra.apphub.lib.config;
 
+import lombok.Data;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Configuration
 @Getter
+@EnableConfigurationProperties
+@ConfigurationProperties
+@Data
+@Validated
 public class CommonConfigProperties {
-    private final String defaultLocale;
+    @NotNull
+    private String defaultLocale;
 
-    public CommonConfigProperties(
-        @Value("${defaultLocale}") String defaultLocale
-    ) {
-        this.defaultLocale = defaultLocale;
-    }
+    @NotNull
+    private List<String> supportedLocales;
 }

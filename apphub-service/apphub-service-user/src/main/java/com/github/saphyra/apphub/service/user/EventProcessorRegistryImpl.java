@@ -1,7 +1,8 @@
-package com.github.saphyra.apphub.service.user.authentication.config;
+package com.github.saphyra.apphub.service.user;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
 import com.github.saphyra.apphub.lib.config.Endpoints;
+import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.event.DeleteExpiredAccessTokensEvent;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import com.github.saphyra.apphub.lib.event.processor.EventProcessorRegistry;
@@ -33,6 +34,11 @@ public class EventProcessorRegistryImpl implements EventProcessorRegistry {
                 .serviceName(serviceName)
                 .eventName(RefreshAccessTokenExpirationEvent.EVENT_NAME)
                 .url(Endpoints.REFRESH_ACCESS_TOKEN_EXPIRATION_EVENT)
+                .build(),
+            RegisterProcessorRequest.builder()
+                .serviceName(serviceName)
+                .eventName(DeleteAccountEvent.EVENT_NAME)
+                .url(Endpoints.DELETE_ACCOUNT_EVENT)
                 .build()
         );
     }

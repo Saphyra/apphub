@@ -2,8 +2,11 @@ package com.github.saphyra.apphub.service.modules;
 
 import com.github.saphyra.apphub.api.modules.model.response.ModuleResponse;
 import com.github.saphyra.apphub.api.modules.server.ModulesController;
+import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
+import com.github.saphyra.apphub.service.modules.dao.favorite.FavoriteService;
 import com.github.saphyra.apphub.service.modules.service.FavoriteUpdateService;
 import com.github.saphyra.apphub.service.modules.service.ModulesQueryService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +24,15 @@ import java.util.Map;
 //TODO int test
 //TODO fe test
 public class ModulesControllerImpl implements ModulesController {
+    private final FavoriteService favoriteService;
     private final FavoriteUpdateService favoriteUpdateService;
     private final ModulesQueryService modulesQueryService;
+
+    @Override
+    public void deleteAccountEvent(SendEventRequest<DeleteAccountEvent> request) {
+        log.info("Processing event {}", request.getPayload());
+        favoriteService.deleteByUserId(request.getPayload().getUserId());
+    }
 
     @Override
     public Map<String, List<ModuleResponse>> getModules(AccessTokenHeader accessToken) {

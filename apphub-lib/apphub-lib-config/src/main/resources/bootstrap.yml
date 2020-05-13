@@ -64,6 +64,8 @@ event:
       interval: 60000
     enabled: true
 
+supportedLocales:
+  - hu
 defaultLocale: hu
 
 endpoint:
