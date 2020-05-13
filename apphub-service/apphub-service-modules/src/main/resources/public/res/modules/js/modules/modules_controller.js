@@ -133,7 +133,6 @@
                 moduleLink.classList.add("module-link");
                 moduleLink.innerHTML = moduleNames.get(module.name);
                 moduleLink.href = module.url;
-                moduleLink.target = "_blank";
         moduleNode.appendChild(moduleLink);
         return moduleNode;
     }

@@ -1,0 +1,181 @@
+{
+  "title": "Apphub - Fiókbeállítások",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Fiókbeállítások"
+      }
+    ],
+    "change-language-title": [
+      {
+        "key": "innerHTML",
+        "message": "Nyelv beállítása"
+      }
+    ],
+    "ch-language-language": [
+      {
+        "key": "innerHTML",
+        "message": "Nyelvek:"
+      }
+    ],
+    "change-language-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
+    ],
+    "change-email-title": [
+      {
+        "key": "innerHTML",
+        "message": "E-mail cím megváltoztatása"
+      }
+    ],
+    "ch-email-new-email": [
+      {
+        "key": "innerHTML",
+        "message": "Új e-mail cím:"
+      }
+    ],
+    "ch-email-new-email-input": [
+      {
+        "key": "placeholder",
+        "message": "Új e-mail cím"
+      }
+    ],
+    "ch-email-password": [
+      {
+        "key": "innerHTML",
+        "message": "Jelszó:"
+      }
+    ],
+    "ch-email-password-input": [
+      {
+        "key": "placeholder",
+        "message": "Jelszó"
+      }
+    ],
+    "change-email-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
+    ],
+    "change-username-title": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználónév megváltoztatása"
+      }
+    ],
+    "ch-username-new-username": [
+      {
+        "key": "innerHTML",
+        "message": "Új felhasználónév:"
+      }
+    ],
+    "ch-username-new-username-input": [
+      {
+        "key": "placeholder",
+        "message": "Új felhasználónév"
+      }
+    ],
+    "ch-username-password": [
+      {
+        "key": "innerHTML",
+        "message": "Jelszó:"
+      }
+    ],
+    "ch-username-password-input": [
+      {
+        "key": "placeholder",
+        "message": "Jelszó"
+      }
+    ],
+    "change-username-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
+    ],
+    "change-password-title": [
+      {
+        "key": "innerHTML",
+        "message": "Jelszó megváltoztatása"
+      }
+    ],
+    "ch-password-new-password": [
+      {
+        "key": "innerHTML",
+        "message": "Új jelszó:"
+      }
+    ],
+    "ch-password-new-password-input": [
+      {
+        "key": "placeholder",
+        "message": "Új jelszó"
+      }
+    ],
+    "ch-password-confirm-password": [
+      {
+        "key": "innerHTML",
+        "message": "Új jelszó megerősítése:"
+      }
+    ],
+    "ch-password-confirm-password-input": [
+      {
+        "key": "placeholder",
+        "message": "Új jelszó megerősítése"
+      }
+    ],
+    "ch-password-password": [
+      {
+        "key": "innerHTML",
+        "message": "Jelenlegi jelszó:"
+      }
+    ],
+    "ch-password-password-input": [
+      {
+        "key": "placeholder",
+        "message": "Jelenlegi jelszó"
+      }
+    ],
+    "change-password-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
+    ],
+    "delete-account-title": [
+      {
+        "key": "innerHTML",
+        "message": "Fiók törlése"
+      }
+    ],
+    "delete-account-password": [
+      {
+        "key": "innerHTML",
+        "message": "Jelszó:"
+      }
+    ],
+    "delete-account-password-input": [
+      {
+        "key": "placeholder",
+        "message": "Jelszó"
+      }
+    ],
+    "delete-account-button": [
+      {
+        "key": "innerHTML",
+        "message": "Fiók törlése"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Vissza"
+      }
+    ]
+  },
+  "additionalContent": {
+  }
+}

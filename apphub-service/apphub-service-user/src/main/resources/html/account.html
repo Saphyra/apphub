@@ -1,0 +1,121 @@
+<HTML>
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/user/css/account.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT src="/res/user/js/account/page_controller.js"></SCRIPT>
+</HEAD>
+<BODY>
+<DIV class="main-page">
+    <HEADER>
+        <H1 id="main-title"></H1>
+    </HEADER>
+
+    <MAIN>
+        <section>
+            <div class="module-wrapper">
+                <h2 id="change-language-title"></h2>
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <span id="ch-language-language"></span>
+                        <select id="ch-language-input"></select>
+                    </div>
+                </div>
+                <button id="change-language-button" class="submit-button"></button>
+            </div>
+        </section>
+
+        <section>
+            <div class="module-wrapper">
+                <h2 id="change-email-title"></h2>
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <span id="ch-email-new-email"></span>
+                        <input type="text" id="ch-email-new-email-input" class="change-email-input">
+                        <div id="ch-email-invalid-new-email" class="invalid-input">X</div>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <span id="ch-email-password"></span>
+                        <input type="password" id="ch-email-password-input" class="change-email-input">
+                        <div id="ch-email-invalid-password" class="invalid-input">X</div>
+                    </div>
+                </div>
+                <button id="change-email-button" class="submit-button"></button>
+            </div>
+        </section>
+
+        <section>
+            <div class="module-wrapper">
+                <h2 id="change-username-title"></h2>
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <span id="ch-username-new-username"></span>
+                        <input type="text" id="ch-username-new-username-input" class="change-username-input">
+                        <div id="ch-username-invalid-new-username" class="invalid-input">X</div>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <span id="ch-username-password"></span>
+                        <input type="password" id="ch-username-password-input" class="change-username-input">
+                        <div id="ch-username-invalid-password" class="invalid-input">X</div>
+                    </div>
+                </div>
+                <button id="change-username-button" class="submit-button"></button>
+            </div>
+        </section>
+
+        <section>
+            <div class="module-wrapper">
+                <h2 id="change-password-title"></h2>
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <span id="ch-password-new-password"></span>
+                        <input type="password" id="ch-password-new-password-input" class="change-password-input">
+                        <div id="ch-password-invalid-new-password" class="invalid-input">X</div>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <span id="ch-password-confirm-password"></span>
+                        <input type="password" id="ch-password-confirm-password-input" class="change-password-input">
+                        <div id="ch-password-invalid-confirm-password" class="invalid-input">X</div>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <span id="ch-password-password"></span>
+                        <input type="password" id="ch-password-password-input" class="change-password-input">
+                        <div id="ch-new-username-invalid-password" class="invalid-input">X</div>
+                    </div>
+                </div>
+                <button id="change-password-button" class="submit-button"></button>
+            </div>
+        </section>
+
+        <section>
+            <div class="module-wrapper">
+                <h2 id="delete-account-title"></h2>
+
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <span id="delete-account-password"></span>
+                        <input type="password" id="delete-account-password-input" class="delete-account-input">
+                        <div id="delete-account-invalid-password" class="invalid-input">X</div>
+                    </div>
+                </div>
+
+                <button id="delete-account-button" class="submit-button"></button>
+            </div>
+        </section>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="back-button" onclick='window.location = "/web/modules"'></BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

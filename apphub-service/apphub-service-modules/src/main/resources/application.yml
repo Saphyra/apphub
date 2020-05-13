@@ -6,7 +6,7 @@ modules:
   modules:
     accounts:
       - name: account
-        url: /web/account
+        url: /web/user/account
         allowedByDefault: true
       - name: admin-panel
         url: /web/admin-panel
