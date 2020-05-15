@@ -1,7 +1,7 @@
 package com.github.saphyra.integration.backend.login;
 
 import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
-import com.github.saphyra.apphub.integration.backend.actions.MainMenuPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.ModulesPageActions;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
@@ -96,9 +96,9 @@ public class LoginTest extends TestBase {
             .build();
         UUID accessTokenId = IndexPageActions.login(loginRequest);
 
-        MainMenuPageActions.logout(accessTokenId);
+        ModulesPageActions.logout(accessTokenId);
 
-        Response response = MainMenuPageActions.getLogoutResponse(accessTokenId);
+        Response response = ModulesPageActions.getLogoutResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(401);
 

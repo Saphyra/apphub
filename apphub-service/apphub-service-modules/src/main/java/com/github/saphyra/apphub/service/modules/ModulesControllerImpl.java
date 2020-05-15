@@ -19,7 +19,6 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO int test
 //TODO fe test
 public class ModulesControllerImpl implements ModulesController {
     private final FavoriteService favoriteService;

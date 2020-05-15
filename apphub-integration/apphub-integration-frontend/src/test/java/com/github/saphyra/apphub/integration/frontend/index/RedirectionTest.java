@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.index;
 
-import com.github.saphyra.apphub.integration.common.framework.Endpoint;
+import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.frontend.SeleniumTest;
@@ -21,10 +21,10 @@ public class RedirectionTest extends SeleniumTest {
         WebDriver driver = extractDriver();
 
         //WHEN
-        driver.navigate().to(UrlFactory.create(SERVER_PORT, Endpoint.MODULES_PAGE));
+        driver.navigate().to(UrlFactory.create(SERVER_PORT, Endpoints.MODULES_PAGE));
 
         //THEN
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(SERVER_PORT, Endpoint.WEB_ROOT));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(SERVER_PORT, Endpoints.WEB_ROOT));
     }
 
     @Test
@@ -33,10 +33,10 @@ public class RedirectionTest extends SeleniumTest {
         WebDriver driver = extractDriver();
 
         //WHEN
-        driver.navigate().to(UrlFactory.create(SERVER_PORT, Endpoint.ROOT));
+        driver.navigate().to(UrlFactory.create(SERVER_PORT, Endpoints.ROOT));
 
 
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(SERVER_PORT, Endpoint.WEB_ROOT));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(SERVER_PORT, Endpoints.WEB_ROOT));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class RedirectionTest extends SeleniumTest {
         Navigation.toIndexPage(driver, false);
 
         boolean isUrlCorrect = AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoint.MODULES_PAGE)));
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)));
         assertThat(isUrlCorrect).isTrue();
     }
 }

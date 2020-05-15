@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.backend.actions;
 
 import com.github.saphyra.apphub.integration.common.TestBase;
-import com.github.saphyra.apphub.integration.common.framework.Endpoint;
+import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.model.LoginRequest;
@@ -23,7 +23,7 @@ public class IndexPageActions {
     public static Response getRegistrationResponse(RegistrationRequest registrationRequest) {
         return RequestFactory.createRequest()
             .body(registrationRequest)
-            .post(UrlFactory.create(TestBase.SERVER_PORT, Endpoint.REGISTER));
+            .post(UrlFactory.create(TestBase.SERVER_PORT, Endpoints.REGISTER));
     }
 
     public static UUID login(LoginRequest loginRequest) {
@@ -48,6 +48,6 @@ public class IndexPageActions {
     public static Response getLoginResponse(LoginRequest loginRequest) {
         return RequestFactory.createRequest()
             .body(loginRequest)
-            .post(UrlFactory.create(TestBase.SERVER_PORT, Endpoint.LOGIN));
+            .post(UrlFactory.create(TestBase.SERVER_PORT, Endpoints.LOGIN));
     }
 }

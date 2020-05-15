@@ -9,6 +9,10 @@ public class UrlFactory {
         return create(TestBase.SERVER_PORT, url);
     }
 
+    public static String create(String url, Map<String, Object> uriParams) {
+        return create(TestBase.SERVER_PORT, url, uriParams);
+    }
+
     public static String create(int serverPort, String url) {
         return String.format("http://localhost:%s%s", serverPort, url);
     }

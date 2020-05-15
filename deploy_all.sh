@@ -17,7 +17,7 @@ NAMESPACE_NAME="a-test-"$RANDOM
 
 PORT=$RANDOM
 
-./infra/deployment/script/wait_for_pods_ready.sh $NAMESPACE_NAME 60 10
+./infra/deployment/script/wait_for_pods_ready.sh $NAMESPACE_NAME 12 10
 STARTUP_RESULT=$?
 if [[ "$STARTUP_RESULT" -ne 0 ]]; then
   echo "Services failed to start."
@@ -49,7 +49,7 @@ NAMESPACE_NAME="default"
 
 PORT=$RANDOM
 
-./infra/deployment/script/wait_for_pods_ready.sh $NAMESPACE_NAME 60 10
+./infra/deployment/script/wait_for_pods_ready.sh $NAMESPACE_NAME 12 10
 STARTUP_RESULT=$?
 if [[ "$STARTUP_RESULT" -ne 0 ]]; then
   echo "Services failed to start."

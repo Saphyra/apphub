@@ -1,4 +1,4 @@
-NAMESPACE_NAME=$1
+NAMESPACE_NAME=${1:-default}
 
 echo ""
 kubectl create namespace "$NAMESPACE_NAME"

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.index;
 
-import com.github.saphyra.apphub.integration.common.framework.Endpoint;
+import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.frontend.SeleniumTest;
@@ -38,7 +38,7 @@ public class LoginTest extends SeleniumTest {
 
         NotificationUtil.verifyErrorNotification(driver, errorMessage);
 
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoint.WEB_ROOT));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.WEB_ROOT));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class LoginTest extends SeleniumTest {
 
         NotificationUtil.verifyErrorNotification(driver, BAD_CREDENTIALS_MESSAGE);
 
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoint.WEB_ROOT));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.WEB_ROOT));
     }
 
     private LoginParameters emptyEmail() {

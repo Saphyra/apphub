@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.service.index;
 
-import com.github.saphyra.apphub.integration.common.framework.Endpoint;
+import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class IndexPageActions {
     public static void fillRegistrationForm(WebDriver driver, RegistrationParameters parameters) {
-        assertThat(driver.getCurrentUrl()).endsWith(Endpoint.WEB_ROOT);
+        assertThat(driver.getCurrentUrl()).endsWith(Endpoints.WEB_ROOT);
 
         log.info("Filling registrationForm with {}", parameters);
         clearAndFill(IndexPage.emailInput(driver), parameters.getEmail());
@@ -29,7 +29,7 @@ public class IndexPageActions {
     }
 
     public static void verifyRegistrationForm(WebDriver driver, RegistrationValidationResult validationResult) {
-        assertThat(driver.getCurrentUrl()).endsWith(Endpoint.WEB_ROOT);
+        assertThat(driver.getCurrentUrl()).endsWith(Endpoints.WEB_ROOT);
 
         verifyState(
             IndexPage.emailValid(driver),
@@ -72,11 +72,11 @@ public class IndexPageActions {
         submitRegistration(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoint.MODULES_PAGE)));
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)));
     }
 
     public static void submitRegistration(WebDriver driver) {
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoint.WEB_ROOT));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.WEB_ROOT));
         WebElement submitButton = IndexPage.registrationSubmitButton(driver);
 
         AwaitilityWrapper.createDefault()
