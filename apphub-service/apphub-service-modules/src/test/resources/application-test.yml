@@ -1,0 +1,27 @@
+modules:
+  modules:
+    default:
+      - name: allowed-by-default
+        url: url
+        allowedByDefault: true
+      - name: not-allowed-by-default
+        url: url
+        allowedByDefault: false
+        role: role
+      - name: user-has-no-role
+        url: url
+        allowedByDefault: false
+        role: unknown-role
+    favorite:
+      - name: favorite
+        url: url
+        allowedByDefault: true
+      - name: not-favorite
+        url: url
+        allowedByDefault: true
+        role: role
+    empty:
+      - name: not-allowed
+        url: url
+        allowedByDefault: false
+        role: unknown-role

@@ -14,7 +14,7 @@ public class AccessTokenFilterConfiguration {
 
     @Bean
     public FilterRegistrationBean<AccessTokenFilter> accessTokenFilterFilterRegistrationBean(AccessTokenFilter contextFilter) {
-        log.info("ContextFilter order: {}", FILTER_ORDER);
+        log.info("AccessTokenFilterOrder order: {}", FILTER_ORDER);
         FilterRegistrationBean<AccessTokenFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(contextFilter);
         filterRegistrationBean.setOrder(FILTER_ORDER);

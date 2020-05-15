@@ -19,8 +19,6 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-//TODO api test
 //TODO int test
 //TODO fe test
 public class ModulesControllerImpl implements ModulesController {
@@ -30,8 +28,9 @@ public class ModulesControllerImpl implements ModulesController {
 
     @Override
     public void deleteAccountEvent(SendEventRequest<DeleteAccountEvent> request) {
-        log.info("Processing event {}", request.getPayload());
-        favoriteService.deleteByUserId(request.getPayload().getUserId());
+        DeleteAccountEvent event = request.getPayload();
+        log.info("Processing event {}", event);
+        favoriteService.deleteByUserId(event.getUserId());
     }
 
     @Override

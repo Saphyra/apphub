@@ -20,7 +20,7 @@ import java.util.Map;
 @FeignClient("modules")
 public interface ModulesController {
     @RequestMapping(method = RequestMethod.POST, path = Endpoints.DELETE_ACCOUNT_EVENT)
-    void deleteAccountEvent(SendEventRequest<DeleteAccountEvent> request);
+    void deleteAccountEvent(@RequestBody SendEventRequest<DeleteAccountEvent> request);
 
     @RequestMapping(method = RequestMethod.GET, path = Endpoints.GET_MODULES_OF_USER)
     Map<String, List<ModuleResponse>> getModules(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessToken);

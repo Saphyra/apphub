@@ -70,6 +70,7 @@ defaultLocale: hu
 
 endpoint:
   whitelisting:
+    #TODO remove roles field
     whiteListedEndpoints:
       resources:
         path: /res/**

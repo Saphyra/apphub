@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-class FavoriteDao extends AbstractDao<FavoriteEntity, Favorite, FavoriteEntityKey, FavoriteRepository> {
+public class FavoriteDao extends AbstractDao<FavoriteEntity, Favorite, FavoriteEntityKey, FavoriteRepository> {
     private final UuidConverter uuidConverter;
 
     public FavoriteDao(FavoriteConverter converter, FavoriteRepository repository, UuidConverter uuidConverter) {
