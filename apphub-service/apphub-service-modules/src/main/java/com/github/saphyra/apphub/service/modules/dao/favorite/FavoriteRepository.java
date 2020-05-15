@@ -10,7 +10,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-//TODO unit test
 interface FavoriteRepository extends CrudRepository<FavoriteEntity, FavoriteEntityKey> {
     @Query("SELECT f FROM FavoriteEntity f WHERE f.key.userId = :userId")
     List<FavoriteEntity> getByUserId(@Param("userId") String userId);
@@ -18,6 +17,5 @@ interface FavoriteRepository extends CrudRepository<FavoriteEntity, FavoriteEnti
     @Query("DELETE FavoriteEntity f WHERE f.key.userId = :userId")
     @Modifying
     @Transactional
-    //TODO unit test
     void deleteByUserId(@Param("userId") String userId);
 }

@@ -9,7 +9,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class FavoriteService {
     private final FavoriteDao favoriteDao;
     private final UuidConverter uuidConverter;
@@ -35,7 +34,6 @@ public class FavoriteService {
         favoriteDao.save(favorite);
     }
 
-    //TODO unit test
     public void deleteByUserId(UUID userId) {
         favoriteDao.deleteByUserId(userId);
     }

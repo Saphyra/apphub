@@ -21,4 +21,6 @@ public class Module {
     private String url;
 
     private boolean allowedByDefault;
+
+    private String role;
 }

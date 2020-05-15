@@ -18,18 +18,17 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class FavoriteUpdateService {
     private final FavoriteService favoriteService;
     private final ModulesProperties modulesProperties;
 
     public void updateFavorite(UUID userId, String module, Boolean favoriteValue) {
         if (!isValidModule(module)) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "module", "Does not exists"), String.format("Module does not exist with name %s", module));
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "module", "does not exist"), String.format("Module does not exist with name %s", module));
         }
 
         if (isNull(favoriteValue)){
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "value", "Value must not be null"), "favoriteValue is null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "value", "must not be null"), "favoriteValue is null.");
         }
 
         Favorite favorite = favoriteService.getOrDefault(userId, module);

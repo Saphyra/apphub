@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-//TODO unit test
 class FavoriteConverter extends ConverterBase<FavoriteEntity, Favorite> {
     private final AccessTokenProvider accessTokenProvider;
     private final BooleanEncryptor booleanEncryptor;

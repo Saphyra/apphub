@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @Component
-//TODO unit test
 public class ModulesQueryService {
     private final FavoriteService favoriteService;
     private final ModulesProperties modulesProperties;

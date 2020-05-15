@@ -18,7 +18,6 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class AccessTokenFilter extends OncePerRequestFilter {
     private final AccessTokenProvider accessTokenProvider;
     private final AccessTokenHeaderConverter accessTokenHeaderConverter;
