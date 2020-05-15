@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.user.data.dao;
+package com.github.saphyra.apphub.service.user.data.dao.user;
 
 import lombok.Builder;
 import lombok.Data;

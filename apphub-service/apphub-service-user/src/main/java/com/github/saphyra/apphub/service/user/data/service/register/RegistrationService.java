@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.user.data.service.register;
 
 import com.github.saphyra.apphub.api.user.model.request.RegistrationRequest;
-import com.github.saphyra.apphub.service.user.data.dao.User;
-import com.github.saphyra.apphub.service.user.data.dao.UserDao;
+import com.github.saphyra.apphub.service.user.data.dao.user.User;
+import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

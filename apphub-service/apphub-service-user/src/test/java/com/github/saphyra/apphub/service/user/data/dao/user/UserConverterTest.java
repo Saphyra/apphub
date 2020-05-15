@@ -1,6 +1,9 @@
-package com.github.saphyra.apphub.service.user.data.dao;
+package com.github.saphyra.apphub.service.user.data.dao.user;
 
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.service.user.data.dao.user.User;
+import com.github.saphyra.apphub.service.user.data.dao.user.UserConverter;
+import com.github.saphyra.apphub.service.user.data.dao.user.UserEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

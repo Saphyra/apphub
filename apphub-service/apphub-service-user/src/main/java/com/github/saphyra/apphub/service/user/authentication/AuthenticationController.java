@@ -14,12 +14,16 @@ import com.github.saphyra.apphub.service.user.authentication.service.AccessToken
 import com.github.saphyra.apphub.service.user.authentication.service.LoginService;
 import com.github.saphyra.apphub.service.user.authentication.service.LogoutService;
 import com.github.saphyra.apphub.service.user.authentication.service.ValidAccessTokenQueryService;
+import com.github.saphyra.apphub.service.user.data.dao.role.Role;
+import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +34,7 @@ public class AuthenticationController implements UserAuthenticationController {
     private final AuthenticationProperties authenticationProperties;
     private final LoginService loginService;
     private final LogoutService logoutService;
+    private final RoleDao roleDao;
     private final ValidAccessTokenQueryService validAccessTokenQueryService;
 
     @Override
@@ -79,6 +84,14 @@ public class AuthenticationController implements UserAuthenticationController {
         return InternalAccessTokenResponse.builder()
             .accessTokenId(accessToken.getAccessTokenId())
             .userId(accessToken.getUserId())
+            .roles(getRoles(accessToken.getUserId())) //TODO unit test
             .build();
+    }
+
+    private List<String> getRoles(UUID userId) {
+        return roleDao.getByUserId(userId)
+            .stream()
+            .map(Role::getRole)
+            .collect(Collectors.toList());
     }
 }

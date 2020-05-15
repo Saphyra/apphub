@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.user.data.dao;
+package com.github.saphyra.apphub.service.user.data.dao.user;
 
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;

@@ -13,6 +13,8 @@ import com.github.saphyra.apphub.service.user.authentication.service.AccessToken
 import com.github.saphyra.apphub.service.user.authentication.service.LoginService;
 import com.github.saphyra.apphub.service.user.authentication.service.LogoutService;
 import com.github.saphyra.apphub.service.user.authentication.service.ValidAccessTokenQueryService;
+import com.github.saphyra.apphub.service.user.data.dao.role.Role;
+import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -21,6 +23,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,6 +36,8 @@ public class AuthenticationControllerTest {
     private static final Integer ACCESS_TOKEN_COOKIE_EXPIRATION_DAYS = 134;
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final String ROLE_VALUE = "role";
+    private static final Role ROLE = Role.builder().roleId(UUID.randomUUID()).userId(USER_ID).role(ROLE_VALUE).build();
 
     @Mock
     private AccessTokenCleanupService accessTokenCleanupService;
@@ -48,6 +53,9 @@ public class AuthenticationControllerTest {
 
     @Mock
     private LogoutService logoutService;
+
+    @Mock
+    private RoleDao roleDao;
 
     @Mock
     private ValidAccessTokenQueryService validAccessTokenQueryService;
@@ -121,6 +129,7 @@ public class AuthenticationControllerTest {
         given(validAccessTokenQueryService.findByAccessTokenId(ACCESS_TOKEN_ID)).willReturn(Optional.of(accessToken));
         given(accessToken.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
         given(accessToken.getUserId()).willReturn(USER_ID);
+        given(roleDao.getByUserId(USER_ID)).willReturn(Arrays.asList(ROLE));
 
         ResponseEntity<InternalAccessTokenResponse> result = underTest.getAccessTokenById(ACCESS_TOKEN_ID);
 
@@ -128,6 +137,7 @@ public class AuthenticationControllerTest {
         //noinspection ConstantConditions
         assertThat(result.getBody().getAccessTokenId()).isEqualTo(ACCESS_TOKEN_ID);
         assertThat(result.getBody().getUserId()).isEqualTo(USER_ID);
+        assertThat(result.getBody().getRoles()).isEqualTo(Arrays.asList(ROLE_VALUE));
     }
 
     @Test

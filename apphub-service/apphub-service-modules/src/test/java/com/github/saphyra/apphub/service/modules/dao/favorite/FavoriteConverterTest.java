@@ -21,9 +21,6 @@ public class FavoriteConverterTest {
     private static final String MODULE = "module";
     private static final String USER_ID_STRING = "user-id";
     private static final UUID ACCESS_TOKEN_USER_ID = UUID.randomUUID();
-    private static final AccessTokenHeader ACCESS_TOKEN_HEADER = AccessTokenHeader.builder()
-        .userId(ACCESS_TOKEN_USER_ID)
-        .build();
     private static final String ACCESS_TOKEN_USER_ID_STRING = "access-token-user-id";
     private static final String ENCRYPTED_FAVORITE = "encrypted-favorite";
 
@@ -39,10 +36,14 @@ public class FavoriteConverterTest {
     @InjectMocks
     private FavoriteConverter underTest;
 
+    @Mock
+    private  AccessTokenHeader accessTokenHeader;
+
     @Test
     public void convertEntity() {
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
-        given(accessTokenProvider.get()).willReturn(ACCESS_TOKEN_HEADER);
+        given(accessTokenProvider.get()).willReturn(accessTokenHeader);
+        given(accessTokenHeader.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
         given(uuidConverter.convertDomain(ACCESS_TOKEN_USER_ID)).willReturn(ACCESS_TOKEN_USER_ID_STRING);
         given(booleanEncryptor.decryptEntity(ENCRYPTED_FAVORITE, ACCESS_TOKEN_USER_ID_STRING)).willReturn(true);
 
@@ -66,7 +67,8 @@ public class FavoriteConverterTest {
     @Test
     public void convertDomain() {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(accessTokenProvider.get()).willReturn(ACCESS_TOKEN_HEADER);
+        given(accessTokenProvider.get()).willReturn(accessTokenHeader);
+        given(accessTokenHeader.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
         given(uuidConverter.convertDomain(ACCESS_TOKEN_USER_ID)).willReturn(ACCESS_TOKEN_USER_ID_STRING);
         given(booleanEncryptor.encryptEntity(true, ACCESS_TOKEN_USER_ID_STRING)).willReturn(ENCRYPTED_FAVORITE);
 

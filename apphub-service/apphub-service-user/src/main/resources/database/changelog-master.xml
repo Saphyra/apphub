@@ -11,5 +11,6 @@
     </changeSet>
 
     <include file="database/change_sets/access_token.xml"/>
+    <include file="database/change_sets/role.xml"/>
     <include file="database/change_sets/user.xml"/>
 </databaseChangeLog>

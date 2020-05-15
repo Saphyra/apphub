@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.service.modules.service;
 
 import com.github.saphyra.apphub.api.modules.model.response.ModuleResponse;
+import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.modules.ModulesProperties;
 import com.github.saphyra.apphub.service.modules.dao.favorite.Favorite;
 import com.github.saphyra.apphub.service.modules.dao.favorite.FavoriteService;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class ModulesQueryService {
+    private final AccessTokenProvider accessTokenProvider;
     private final FavoriteService favoriteService;
     private final ModulesProperties modulesProperties;
 
@@ -45,9 +48,15 @@ public class ModulesQueryService {
     }
 
     private boolean isAvailable(UUID userId, Module module) {
-        //TODO check user's roles
-        boolean result = module.isAllowedByDefault();
+        boolean result = module.isAllowedByDefault() || userHasRole(module.getRole());
         log.debug("Module {} is allowed for user {}: {}", module, userId, result);
+        return result;
+    }
+
+    private boolean userHasRole(String role) {
+        AccessTokenHeader accessTokenHeader = accessTokenProvider.get();
+        boolean result = accessTokenHeader.getRoles().contains(role);
+        log.info("User {} has role {}: {}. (Granted roles are: {})", accessTokenHeader.getUserId(), role, result, accessTokenHeader.getRoles());
         return result;
     }
 
