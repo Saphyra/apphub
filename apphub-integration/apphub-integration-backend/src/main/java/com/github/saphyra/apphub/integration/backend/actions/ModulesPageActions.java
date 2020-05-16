@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.backend.model.ModulesResponse;
 import com.github.saphyra.apphub.integration.backend.model.OneParamRequest;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
+import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import io.restassured.response.Response;
@@ -18,19 +19,19 @@ import static com.github.saphyra.apphub.integration.common.TestBase.OBJECT_MAPPE
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ModulesPageActions {
-    public static void logout(UUID accessTokenId) {
-        Response response = getLogoutResponse(accessTokenId);
+    public static void logout(Language locale, UUID accessTokenId) {
+        Response response = getLogoutResponse(locale, accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getLogoutResponse(UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getLogoutResponse(Language locale, UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
             .post(UrlFactory.create(TestBase.SERVER_PORT, Endpoints.LOGOUT));
     }
 
-    public static Map<String, List<ModulesResponse>> getModules(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Map<String, List<ModulesResponse>> getModules(Language locale, UUID accessTokenId) {
+        Response response = RequestFactory.createAuthorizedRequest(locale, accessTokenId)
             .get(UrlFactory.create(Endpoints.GET_MODULES_OF_USER));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
@@ -40,8 +41,8 @@ public class ModulesPageActions {
         return OBJECT_MAPPER_WRAPPER.readValue(response.getBody().asString(), ref);
     }
 
-    public static Map<String, List<ModulesResponse>> setAsFavorite(UUID accessTokenId, String module, Boolean favorite) {
-        Response response = getSetAsFavoriteResponse(accessTokenId, module, favorite);
+    public static Map<String, List<ModulesResponse>> setAsFavorite(Language locale, UUID accessTokenId, String module, Boolean favorite) {
+        Response response = getSetAsFavoriteResponse(locale, accessTokenId, module, favorite);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -50,11 +51,11 @@ public class ModulesPageActions {
         return OBJECT_MAPPER_WRAPPER.readValue(response.getBody().asString(), ref);
     }
 
-    public static Response getSetAsFavoriteResponse(UUID accessTokenId, String module, Boolean favorite) {
+    public static Response getSetAsFavoriteResponse(Language locale, UUID accessTokenId, String module, Boolean favorite) {
         Map<String, Object> pathVariables = new HashMap<>();
         pathVariables.put("module", module);
 
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+        return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
             .body(new OneParamRequest<>(favorite))
             .post(UrlFactory.create(Endpoints.SET_FAVORITE, pathVariables));
     }
