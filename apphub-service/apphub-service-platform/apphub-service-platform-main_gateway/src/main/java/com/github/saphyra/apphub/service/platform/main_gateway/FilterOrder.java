@@ -9,6 +9,7 @@ public enum FilterOrder {
     LOCALE_FILTER(Integer.MIN_VALUE + 1),
     REQUEST_LOGGING_FILTER(Integer.MIN_VALUE),
 
+    LOCALE_COOKIE_FILTER(0),
     RESPONSE_LOGGING_FILTER(Integer.MAX_VALUE);
 
     @Getter

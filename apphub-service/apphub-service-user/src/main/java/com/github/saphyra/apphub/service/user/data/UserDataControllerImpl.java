@@ -4,25 +4,21 @@ import com.github.saphyra.apphub.api.user.model.request.ChangeEmailRequest;
 import com.github.saphyra.apphub.api.user.model.request.ChangePasswordRequest;
 import com.github.saphyra.apphub.api.user.model.request.ChangeUsernameRequest;
 import com.github.saphyra.apphub.api.user.model.request.RegistrationRequest;
+import com.github.saphyra.apphub.api.user.model.response.LanguageResponse;
 import com.github.saphyra.apphub.api.user.server.UserDataController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
-import com.github.saphyra.apphub.lib.error_handler.domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.error_handler.exception.NotFoundException;
-import com.github.saphyra.apphub.service.user.data.dao.user.User;
-import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangeEmailService;
-import com.github.saphyra.apphub.service.user.data.service.account.ChangeLanguageService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangePasswordService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangeUsernameService;
 import com.github.saphyra.apphub.service.user.data.service.account.DeleteAccountService;
+import com.github.saphyra.apphub.service.user.data.service.account.LanguageService;
 import com.github.saphyra.apphub.service.user.data.service.register.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -30,13 +26,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 class UserDataControllerImpl implements UserDataController {
     private final ChangeEmailService changeEmailService;
-    private final ChangeLanguageService changeLanguageService;
+    private final LanguageService languageService;
     private final ChangePasswordService changePasswordService;
     private final ChangeUsernameService changeUsernameService;
     private final DeleteAccountService deleteAccountService;
     private final RegistrationService registrationService;
-    private final UserDao userDao;
-    private final UuidConverter uuidConverter;
 
     @Override
     //TODO unit test
@@ -46,7 +40,7 @@ class UserDataControllerImpl implements UserDataController {
     public void changeLanguage(AccessTokenHeader accessTokenHeader, OneParamRequest<String> language) {
         log.info("{} wants to change his language", accessTokenHeader.getUserId());
         log.debug("Request payload: {}", language);
-        changeLanguageService.changeLanguage(accessTokenHeader.getUserId(), language.getValue());
+        languageService.changeLanguage(accessTokenHeader.getUserId(), language.getValue());
     }
 
     @Override
@@ -91,9 +85,17 @@ class UserDataControllerImpl implements UserDataController {
 
     @Override
     public String getLanguage(UUID userId) {
-        return userDao.findById(uuidConverter.convertDomain(userId))
-            .map(User::getLanguage)
-            .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.USER_NOT_FOUND.name()), String.format("User not found with id %s", userId)));
+        return languageService.getLanguage(userId);
+    }
+
+    @Override
+    //TODO unit test
+    //TODO int test
+    //TODO api test
+    //TODO fe test
+    public List<LanguageResponse> getLanguages(AccessTokenHeader accessTokenHeader) {
+        log.info("Querying available languages for user {}", accessTokenHeader.getUserId());
+        return languageService.getLanguages(accessTokenHeader.getUserId());
     }
 
     @Override

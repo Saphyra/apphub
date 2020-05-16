@@ -13,11 +13,12 @@ import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.github.saphyra.apphub.lib.common_util.Constants.RESOURCE_PATH_PATTERN;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class LocaleFilter extends ZuulFilter {
-    private static final String RESOURCE_PATH_MATCHER = "res/**";
 
     private final AntPathMatcher antPathMatcher;
     private final ApphubLocaleResolver apphubLocaleResolver;
@@ -35,7 +36,7 @@ public class LocaleFilter extends ZuulFilter {
     @Override
     public boolean shouldFilter() {
         String requestUri = RequestContext.getCurrentContext().getRequest().getRequestURI();
-        return !antPathMatcher.match(RESOURCE_PATH_MATCHER, requestUri);
+        return !antPathMatcher.match(RESOURCE_PATH_PATTERN, requestUri);
     }
 
     @Override

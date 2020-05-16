@@ -1,16 +1,21 @@
 package com.github.saphyra.apphub.service.user.data.service.account;
 
+import com.github.saphyra.apphub.api.user.model.response.LanguageResponse;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.UuidConverter;
 import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.error_handler.domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.error_handler.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.error_handler.exception.NotFoundException;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -18,9 +23,10 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-public class ChangeLanguageService {
+public class LanguageService {
     private final CommonConfigProperties commonConfigProperties;
     private final UserDao userDao;
+    private final UuidConverter uuidConverter;
 
     public void changeLanguage(UUID userId, String language) {
         if (isNull(language)) {
@@ -33,5 +39,24 @@ public class ChangeLanguageService {
         User user = userDao.findById(userId);
         user.setLanguage(language);
         userDao.save(user);
+    }
+
+    public List<LanguageResponse> getLanguages(UUID userId) {
+        String currentLocale = getLanguage(userId);
+        return commonConfigProperties.getSupportedLocales()
+            .stream()
+            .map(
+                language -> LanguageResponse.builder()
+                    .language(language)
+                    .actual(language.equals(currentLocale))
+                    .build()
+            )
+            .collect(Collectors.toList());
+    }
+
+    public String getLanguage(UUID userId) {
+        return userDao.findById(uuidConverter.convertDomain(userId))
+            .map(User::getLanguage)
+            .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.USER_NOT_FOUND.name()), String.format("User not found with id %s", userId)));
     }
 }

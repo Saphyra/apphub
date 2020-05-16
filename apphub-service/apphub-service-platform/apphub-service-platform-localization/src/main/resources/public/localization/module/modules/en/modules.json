@@ -1,0 +1,37 @@
+{
+  "title": "Apphub - Modules",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Modules"
+      }
+    ],
+    "favorites-title": [
+      {
+        "key": "innerHTML",
+        "message": "Favorites"
+      }
+    ],
+    "all-modules-title": [
+      {
+        "key": "innerHTML",
+        "message": "All modules"
+      }
+    ],
+    "search-field": [
+      {
+        "key": "placeholder",
+        "message": "Search"
+      }
+    ],
+    "logout-button": [
+      {
+        "key": "innerHTML",
+        "message": "Logout"
+      }
+    ]
+  },
+  "additionalContent": {
+  }
+}

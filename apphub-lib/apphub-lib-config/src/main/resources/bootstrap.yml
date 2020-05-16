@@ -66,6 +66,7 @@ event:
 
 supportedLocales:
   - hu
+  - en
 defaultLocale: hu
 
 endpoint:

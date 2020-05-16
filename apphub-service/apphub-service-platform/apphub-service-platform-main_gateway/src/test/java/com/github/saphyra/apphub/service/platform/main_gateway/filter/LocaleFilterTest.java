@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 public class LocaleFilterTest {
     private static final String LOCALE = "locale";
 
-    private AntPathMatcher antPathMatcher = new AntPathMatcher();
+    private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Mock
     private ApphubLocaleResolver apphubLocaleResolver;
@@ -43,7 +43,7 @@ public class LocaleFilterTest {
 
     @Test
     public void shouldFilter_resourcePath() {
-        given(request.getRequestURI()).willReturn("res/asd");
+        given(request.getRequestURI()).willReturn("/res/asd");
 
         boolean result = underTest.shouldFilter();
 
@@ -66,6 +66,5 @@ public class LocaleFilterTest {
         underTest.run();
 
         verify(requestContext).addZuulRequestHeader(Constants.LOCALE_HEADER, LOCALE);
-        ;
     }
 }

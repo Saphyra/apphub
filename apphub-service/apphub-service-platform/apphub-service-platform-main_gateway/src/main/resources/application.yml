@@ -37,6 +37,10 @@ zuul:
       stripPrefix: false
 
     #MODULES
+    user-account:
+      path: /api/user/account/**
+      serviceId: user
+      stripPrefix: false
     user-data:
       path: /api/user/data/**
       serviceId: user

@@ -14,6 +14,7 @@ import org.springframework.util.AntPathMatcher;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_HEADER;
+import static com.github.saphyra.apphub.lib.common_util.Constants.RESOURCE_PATH_PATTERN;
 
 @Component
 @Slf4j
@@ -42,6 +43,9 @@ public class AuthenticationFilter extends ZuulFilter {
         String requestUri = request
             .getRequestURI();
         String requestMethod = request.getMethod();
+        if (antPathMatcher.match(RESOURCE_PATH_PATTERN, requestUri)) {
+            return false;
+        }
         boolean isWhiteListedUrl = endpointProperties.getWhiteListedEndpoints()
             .values()
             .stream()

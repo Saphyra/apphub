@@ -13,6 +13,7 @@ public class Endpoints {
     public static final String CHANGE_USERNAME = "/api/user/account/username";
     public static final String CHANGE_PASSWORD = "/api/user/account/password";
     public static final String DELETE_ACCOUNT = "/api/user/account";
+    public static final String GET_LANGUAGES = "/api/user/data/languages";
 
     public static final String INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";
     public static final String INTERNAL_GET_USER_LANGUAGE = "/internal/user/{userId}/data/language";

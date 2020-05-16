@@ -26,6 +26,10 @@ main{
         text-align: right;
     }
 
+        #ch-language-input-wrapper{
+            text-align: center;
+        }
+
         .input-wrapper input{
             font-size: 1rem;
         }

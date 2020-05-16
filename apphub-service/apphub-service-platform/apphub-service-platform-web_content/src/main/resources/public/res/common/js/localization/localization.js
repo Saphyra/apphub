@@ -12,7 +12,6 @@
         function(event){
             const payload = event.getPayload();
             loadLocalization(payload.module, payload.fileName, fillPageWithText);
-
         },
         true
     ));

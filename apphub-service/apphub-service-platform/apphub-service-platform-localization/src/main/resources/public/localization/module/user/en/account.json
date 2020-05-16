@@ -1,182 +1,182 @@
 {
-  "title": "Apphub - Fiókbeállítások",
+  "title": "Apphub - Manage account",
   "staticText": {
     "main-title": [
       {
         "key": "innerHTML",
-        "message": "Fiókbeállítások"
+        "message": "Manage account"
       }
     ],
     "change-language-title": [
       {
         "key": "innerHTML",
-        "message": "Nyelv beállítása"
+        "message": "Language"
       }
     ],
     "ch-language-language": [
       {
         "key": "innerHTML",
-        "message": "Nyelvek:"
+        "message": "Available languages:"
       }
     ],
     "change-language-button": [
       {
         "key": "innerHTML",
-        "message": "Mentés"
+        "message": "Save"
       }
     ],
     "change-email-title": [
       {
         "key": "innerHTML",
-        "message": "E-mail cím megváltoztatása"
+        "message": "Change e-mail address"
       }
     ],
     "ch-email-new-email": [
       {
         "key": "innerHTML",
-        "message": "Új e-mail cím:"
+        "message": "New e-mail address:"
       }
     ],
     "ch-email-new-email-input": [
       {
         "key": "placeholder",
-        "message": "Új e-mail cím"
+        "message": "New e-mail address"
       }
     ],
     "ch-email-password": [
       {
         "key": "innerHTML",
-        "message": "Jelszó:"
+        "message": "Password:"
       }
     ],
     "ch-email-password-input": [
       {
         "key": "placeholder",
-        "message": "Jelszó"
+        "message": "Password"
       }
     ],
     "change-email-button": [
       {
         "key": "innerHTML",
-        "message": "Mentés"
+        "message": "Save"
       }
     ],
     "change-username-title": [
       {
         "key": "innerHTML",
-        "message": "Felhasználónév megváltoztatása"
+        "message": "Change username"
       }
     ],
     "ch-username-new-username": [
       {
         "key": "innerHTML",
-        "message": "Új felhasználónév:"
+        "message": "New username:"
       }
     ],
     "ch-username-new-username-input": [
       {
         "key": "placeholder",
-        "message": "Új felhasználónév"
+        "message": "New username"
       }
     ],
     "ch-username-password": [
       {
         "key": "innerHTML",
-        "message": "Jelszó:"
+        "message": "Password:"
       }
     ],
     "ch-username-password-input": [
       {
         "key": "placeholder",
-        "message": "Jelszó"
+        "message": "Password"
       }
     ],
     "change-username-button": [
       {
         "key": "innerHTML",
-        "message": "Mentés"
+        "message": "Save"
       }
     ],
     "change-password-title": [
       {
         "key": "innerHTML",
-        "message": "Jelszó megváltoztatása"
+        "message": "Change password"
       }
     ],
     "ch-password-new-password": [
       {
         "key": "innerHTML",
-        "message": "Új jelszó:"
+        "message": "New password:"
       }
     ],
     "ch-password-new-password-input": [
       {
         "key": "placeholder",
-        "message": "Új jelszó"
+        "message": "New password"
       }
     ],
     "ch-password-confirm-password": [
       {
         "key": "innerHTML",
-        "message": "Új jelszó megerősítése:"
+        "message": "Confirm password:"
       }
     ],
     "ch-password-confirm-password-input": [
       {
         "key": "placeholder",
-        "message": "Új jelszó megerősítése"
+        "message": "Confirm password"
       }
     ],
     "ch-password-password": [
       {
         "key": "innerHTML",
-        "message": "Jelenlegi jelszó:"
+        "message": "Actual password:"
       }
     ],
     "ch-password-password-input": [
       {
         "key": "placeholder",
-        "message": "Jelenlegi jelszó"
+        "message": "Actual password"
       }
     ],
     "change-password-button": [
       {
         "key": "innerHTML",
-        "message": "Mentés"
+        "message": "Save"
       }
     ],
     "delete-account-title": [
       {
         "key": "innerHTML",
-        "message": "Fiók törlése"
+        "message": "Delete account"
       }
     ],
     "delete-account-password": [
       {
         "key": "innerHTML",
-        "message": "Jelszó:"
+        "message": "Password:"
       }
     ],
     "delete-account-password-input": [
       {
         "key": "placeholder",
-        "message": "Jelszó"
+        "message": "Password"
       }
     ],
     "delete-account-button": [
       {
         "key": "innerHTML",
-        "message": "Fiók törlése"
+        "message": "Delete account"
       }
     ],
     "back-button": [
       {
         "key": "innerHTML",
-        "message": "Vissza"
+        "message": "Back"
       }
     ]
   },
   "additionalContent": {
-    "language-changed": "Nyelv megváltoztatva."
+    "language-changed": "Language changed."
   }
 }
