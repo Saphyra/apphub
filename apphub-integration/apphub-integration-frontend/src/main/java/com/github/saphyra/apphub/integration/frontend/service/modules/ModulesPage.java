@@ -6,30 +6,30 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class ModulesPage {
+class ModulesPage {
     private static final By LOGOUT_BUTTON = By.id("logout-button");
-    private static final By GAME_NAME_INPUT = By.id("new-game-name");
-    private static final By INVALID_GAME_NAME = By.id("invalid-new-game-name");
-    private static final By CREATE_GAME_BUTTON = By.id("new-game-button");
-    private static final By GET_GAMES = By.cssSelector("#games tr");
+    private static final By GET_MODULES = By.cssSelector("#all-modules-list .module");
+    private static final By GET_FAVORITES = By.cssSelector("#favorites-list .module");
+    private static final By SEARCH_INPUT = By.id("search-field");
+    private static final By CATEGORIES = By.cssSelector("#all-modules-list .category");
 
-    public static WebElement logoutButton(WebDriver driver) {
+    static WebElement logoutButton(WebDriver driver) {
         return driver.findElement(LOGOUT_BUTTON);
     }
 
-    public static WebElement gameNameInput(WebDriver driver) {
-        return driver.findElement(GAME_NAME_INPUT);
+    static List<WebElement> getModules(WebDriver driver) {
+        return driver.findElements(GET_MODULES);
     }
 
-    public static WebElement invalidGameName(WebDriver driver) {
-        return driver.findElement(INVALID_GAME_NAME);
+    static List<WebElement> getFavorites(WebDriver driver) {
+        return driver.findElements(GET_FAVORITES);
     }
 
-    public static WebElement createGameButton(WebDriver driver) {
-        return driver.findElement(CREATE_GAME_BUTTON);
+    public static WebElement searchInput(WebDriver driver) {
+        return driver.findElement(SEARCH_INPUT);
     }
 
-    public static List<WebElement> getGames(WebDriver driver) {
-        return driver.findElements(GET_GAMES);
+    public static List<WebElement> getCategories(WebDriver driver) {
+        return driver.findElements(CATEGORIES);
     }
 }

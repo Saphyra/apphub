@@ -7,8 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.awaitility.core.ConditionFactory;
 import org.awaitility.core.ConditionTimeoutException;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static org.awaitility.Awaitility.await;
 
@@ -29,6 +35,23 @@ public class AwaitilityWrapper {
         return new AwaitilityWrapper(conditionFactory);
     }
 
+    public static <T> Optional<T> getWithWait(Supplier<T> supplier, Predicate<T> predicate) {
+        GetWithWaitHelper<T> helper = new GetWithWaitHelper<>(supplier, predicate);
+        createDefault()
+            .until(helper::get);
+
+        return helper.getResult(Optional::ofNullable);
+    }
+    
+    public static <T>List<T> getListWithWait(Supplier<List<T>> supplier, Predicate<List<T>> predicate){
+        GetWithWaitHelper<List<T>> helper = new GetWithWaitHelper<>(supplier, predicate);
+        
+        createDefault()
+            .until(helper::get);
+        
+        return helper.getResult(result -> Optional.ofNullable(result).orElse(Collections.emptyList()));
+    }
+
     public boolean until(Callable<Boolean> callable) {
         try {
             conditionFactory.until(callable);
@@ -36,6 +59,28 @@ public class AwaitilityWrapper {
         } catch (ConditionTimeoutException e) {
             log.info("Condition failed.", e);
             return false;
+        }
+    }
+
+    @RequiredArgsConstructor
+    private static class GetWithWaitHelper<T> {
+        private final Supplier<T> supplier;
+        private final Predicate<T> predicate;
+
+        private T result;
+
+        public boolean get() {
+            T result = supplier.get();
+            boolean positive = predicate.test(result);
+            log.info("Is test positive: {}", positive);
+            if (positive) {
+                this.result = result;
+            }
+            return positive;
+        }
+
+        public <R> R getResult(Function<T, R> mapper) {
+            return mapper.apply(result);
         }
     }
 }

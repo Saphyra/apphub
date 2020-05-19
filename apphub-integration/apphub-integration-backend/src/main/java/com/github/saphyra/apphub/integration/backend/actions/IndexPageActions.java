@@ -2,9 +2,9 @@ package com.github.saphyra.apphub.integration.backend.actions;
 
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
-import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.model.LoginRequest;
 import com.github.saphyra.apphub.integration.common.model.LoginResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationRequest;

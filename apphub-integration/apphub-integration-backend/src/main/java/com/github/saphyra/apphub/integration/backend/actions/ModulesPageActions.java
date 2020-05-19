@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.integration.backend.model.ModulesResponse;
 import com.github.saphyra.apphub.integration.backend.model.OneParamRequest;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
-import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import io.restassured.response.Response;
 
 import java.util.HashMap;

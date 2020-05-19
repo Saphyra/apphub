@@ -46,14 +46,14 @@
     </dependencies>
 
     <build>
-        <plugins>
+        <plugins>W
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${versions.maven-surefire-plugin}</version>
                 <configuration>
                     <parallel>methods</parallel>
-                    <threadCount>8</threadCount>
+                    <threadCount>12</threadCount>
                 </configuration>
             </plugin>
         </plugins>
