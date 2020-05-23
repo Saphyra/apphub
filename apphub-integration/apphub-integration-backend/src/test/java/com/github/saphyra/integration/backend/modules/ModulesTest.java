@@ -75,7 +75,6 @@ public class ModulesTest extends TestBase {
         assertThat(response.getStatusCode()).isEqualTo(400);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(400);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_INVALID_PARAM));
         assertThat(errorResponse.getParams().get("module")).isEqualTo("does not exist");
@@ -104,7 +103,6 @@ public class ModulesTest extends TestBase {
         assertThat(response.getStatusCode()).isEqualTo(400);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(400);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_INVALID_PARAM));
         assertThat(errorResponse.getParams().get("value")).isEqualTo("must not be null");

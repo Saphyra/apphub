@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.lib.error_handler.service;
 
-import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
 import org.junit.Test;
@@ -44,12 +43,12 @@ public class ErrorResponseFactoryTest {
         given(localeProvider.getLocale()).willReturn(Optional.of(LOCALE));
         given(localizedMessageProvider.getLocalizedMessage(LOCALE, ERROR_CODE, params)).willReturn(LOCALIZED_MESSAGE);
 
-        ErrorResponse result = underTest.create(HttpStatus.BAD_REQUEST, ERROR_CODE, params);
+        ErrorResponseWrapper result = underTest.create(HttpStatus.BAD_REQUEST, ERROR_CODE, params);
 
-        assertThat(result.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-        assertThat(result.getErrorCode()).isEqualTo(ERROR_CODE);
-        assertThat(result.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-        assertThat(result.getParams()).isEqualTo(params);
+        assertThat(result.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(result.getErrorResponse().getErrorCode()).isEqualTo(ERROR_CODE);
+        assertThat(result.getErrorResponse().getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
+        assertThat(result.getErrorResponse().getParams()).isEqualTo(params);
     }
 
     @Test
@@ -58,11 +57,11 @@ public class ErrorResponseFactoryTest {
         given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
         given(localizedMessageProvider.getLocalizedMessage(LOCALE, LOCALE_NOT_FOUND_ERROR_CODE, new HashMap<>())).willReturn(LOCALIZED_MESSAGE);
 
-        ErrorResponse result = underTest.create(HttpStatus.UNAUTHORIZED, ERROR_CODE, params);
+        ErrorResponseWrapper result = underTest.create(HttpStatus.UNAUTHORIZED, ERROR_CODE, params);
 
-        assertThat(result.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-        assertThat(result.getErrorCode()).isEqualTo(LOCALE_NOT_FOUND_ERROR_CODE);
-        assertThat(result.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-        assertThat(result.getParams()).isEqualTo(new HashMap<>());
+        assertThat(result.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(result.getErrorResponse().getErrorCode()).isEqualTo(LOCALE_NOT_FOUND_ERROR_CODE);
+        assertThat(result.getErrorResponse().getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
+        assertThat(result.getErrorResponse().getParams()).isEqualTo(new HashMap<>());
     }
 }

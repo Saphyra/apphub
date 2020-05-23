@@ -17,6 +17,8 @@ import com.github.saphyra.apphub.lib.event.DeleteExpiredAccessTokensEvent;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
+import com.github.saphyra.apphub.service.user.data.dao.role.Role;
+import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
@@ -68,6 +70,7 @@ public class AuthenticationControllerTestIt {
         .password(new PasswordService().hashPassword(PASSWORD))
         .language(LOCALE)
         .build();
+    private static final String ROLE = "role";
 
     @LocalServerPort
     private int serverPort;
@@ -77,6 +80,9 @@ public class AuthenticationControllerTestIt {
 
     @Autowired
     private Base64Encoder base64Encoder;
+
+    @Autowired
+    private RoleDao roleDao;
 
     @Autowired
     private UserDao userDao;
@@ -89,6 +95,7 @@ public class AuthenticationControllerTestIt {
     @After
     public void clear() {
         accessTokenDao.deleteAll();
+        roleDao.deleteAll();
         userDao.deleteAll();
     }
 
@@ -174,7 +181,6 @@ public class AuthenticationControllerTestIt {
 
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
         assertThat(errorResponse.getParams()).isEqualTo(new HashMap<>());
     }
 
@@ -293,6 +299,13 @@ public class AuthenticationControllerTestIt {
             .build();
         accessTokenDao.save(accessToken);
 
+        Role role = Role.builder()
+            .roleId(UUID.randomUUID())
+            .userId(USER_ID)
+            .role(ROLE)
+            .build();
+        roleDao.save(role);
+
         Response response = getAccessTokenByIdResponse();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
@@ -300,6 +313,7 @@ public class AuthenticationControllerTestIt {
         InternalAccessTokenResponse internalAccessTokenResponse = objectMapperWrapper.readValue(response.getBody().asString(), InternalAccessTokenResponse.class);
         assertThat(internalAccessTokenResponse.getAccessTokenId()).isEqualTo(ACCESS_TOKEN_ID_1);
         assertThat(internalAccessTokenResponse.getUserId()).isEqualTo(USER_ID);
+        assertThat(internalAccessTokenResponse.getRoles()).containsExactly(ROLE);
     }
 
     private Response getAccessTokenByIdResponse() {

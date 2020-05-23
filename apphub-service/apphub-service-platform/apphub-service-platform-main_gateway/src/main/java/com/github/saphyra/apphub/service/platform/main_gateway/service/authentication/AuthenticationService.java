@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication;
 
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
-import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
+import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.ErrorResponseHandler;
 import com.github.saphyra.util.CookieUtil;
@@ -43,13 +43,13 @@ public class AuthenticationService {
         );
 
         if (!accessTokenIdStringOptional.isPresent()) {
-            errorResponseHandler.handleUnauthorized(requestContext, createErrorResponse(requestContext));
+            errorResponseHandler.sendErrorResponse(requestContext, createErrorResponse(requestContext));
             return;
         }
 
         Optional<InternalAccessTokenResponse> accessTokenResponseOptional = accessTokenQueryService.getAccessToken(accessTokenIdStringOptional.get());
         if (!accessTokenResponseOptional.isPresent()) {
-            errorResponseHandler.handleUnauthorized(requestContext, createErrorResponse(requestContext));
+            errorResponseHandler.sendErrorResponse(requestContext, createErrorResponse(requestContext));
             return;
         }
 
@@ -65,7 +65,7 @@ public class AuthenticationService {
         accessTokenExpirationUpdateService.updateExpiration(requestContext.getRequest(), accessTokenResponse.getAccessTokenId());
     }
 
-    private ErrorResponse createErrorResponse(RequestContext requestContext) {
+    private ErrorResponseWrapper createErrorResponse(RequestContext requestContext) {
         String locale = requestContext.getZuulRequestHeaders()
             .get(Constants.LOCALE_HEADER);
         return errorResponseFactory.createErrorResponse(

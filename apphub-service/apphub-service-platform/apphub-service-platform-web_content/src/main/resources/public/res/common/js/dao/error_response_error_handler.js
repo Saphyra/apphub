@@ -16,8 +16,7 @@
         }
 
         function isErrorResponse(errorResponse){
-            return errorResponse.httpStatus
-                && errorResponse.errorCode
+            return errorResponse.errorCode
                 && errorResponse.localizedMessage
                 && errorResponse.params;
         }
@@ -30,9 +29,6 @@
         switch(errorResponse.errorCode){
             case "SESSION_EXPIRED":
                 sessionStorage.errorMessage = "session-expired";
-                eventProcessor.processEvent(new Event(events.LOGOUT));
-            break;
-            case "INVALID_REQUEST_CONTEXT":
                 eventProcessor.processEvent(new Event(events.LOGOUT));
             break;
             default:

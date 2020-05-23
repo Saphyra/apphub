@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.platform.main_gateway.filter;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.service.platform.main_gateway.FilterOrder;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.locale.ApphubLocaleResolver;
-import com.github.saphyra.util.CookieUtil;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +16,8 @@ import static org.springframework.cloud.netflix.zuul.filters.support.FilterConst
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class LocaleCookieFilter extends ZuulFilter {
     private final ApphubLocaleResolver localeResolver;
-    private final CookieUtil cookieUtil;
 
     @Override
     public String filterType() {

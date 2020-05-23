@@ -36,7 +36,6 @@ public class RegistrationTest extends TestBase {
         assertThat(response.getStatusCode()).isEqualTo(400);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(400);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.ERROR_CODE_INVALID_PARAM));
         assertThat(errorResponse.getParams().get("email")).isEqualTo("invalid format");
@@ -59,7 +58,6 @@ public class RegistrationTest extends TestBase {
         assertThat(response.getStatusCode()).isEqualTo(409);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(409);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.ERROR_CODE_EMAIL_ALREADY_IN_USE));
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.EMAIL_ALREADY_EXISTS.name());
     }
@@ -74,7 +72,6 @@ public class RegistrationTest extends TestBase {
         assertThat(response.getStatusCode()).isEqualTo(400);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(400);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USERNAME_TOO_SHORT.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_USERNAME_TOO_SHORT));
     }
@@ -89,7 +86,6 @@ public class RegistrationTest extends TestBase {
         assertThat(response.getStatusCode()).isEqualTo(400);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(400);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USERNAME_TOO_LONG.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_USERNAME_TOO_LONG));
     }
@@ -111,7 +107,6 @@ public class RegistrationTest extends TestBase {
         assertThat(response.getStatusCode()).isEqualTo(409);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(409);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_USERNAME_ALREADY_EXISTS));
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USERNAME_ALREADY_EXISTS.name());
     }
@@ -126,7 +121,6 @@ public class RegistrationTest extends TestBase {
         assertThat(response.getStatusCode()).isEqualTo(400);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(400);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_SHORT.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_PASSWORD_TOO_SHORT));
     }
@@ -141,7 +135,6 @@ public class RegistrationTest extends TestBase {
         assertThat(response.getStatusCode()).isEqualTo(400);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(400);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_LONG.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_PASSWORD_TOO_LONG));
     }

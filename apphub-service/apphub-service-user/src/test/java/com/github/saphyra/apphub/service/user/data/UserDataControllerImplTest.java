@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.service.user.data;
 
 import com.github.saphyra.apphub.api.user.model.request.RegistrationRequest;
+import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.user.data.service.account.LanguageService;
 import com.github.saphyra.apphub.service.user.data.service.register.RegistrationService;
 import org.junit.Test;
@@ -31,6 +33,18 @@ public class UserDataControllerImplTest {
 
     @Mock
     private RegistrationRequest registrationRequest;
+
+    @Mock
+    private AccessTokenHeader accessTokenHeader;
+
+    @Test
+    public void changeLanguage() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
+        underTest.changeLanguage(accessTokenHeader, new OneParamRequest<>(LOCALE));
+
+        verify(languageService).changeLanguage(USER_ID, LOCALE);
+    }
 
     @Test
     public void getLanguage() {

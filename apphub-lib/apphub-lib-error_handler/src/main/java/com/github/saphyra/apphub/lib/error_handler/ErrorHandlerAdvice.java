@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.error_handler.domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.error_handler.exception.RestException;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
+import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,16 +27,16 @@ class ErrorHandlerAdvice {
         log.warn("Error occurred with errorMessage {}:", exception.getErrorMessage(), exception);
         ErrorMessage errorMessage = exception.getErrorMessage();
 
-        ErrorResponse errorResponse = errorResponseFactory.create(exception.getResponseStatus(), errorMessage.getErrorCode(), errorMessage.getParams());
+        ErrorResponseWrapper errorResponse = errorResponseFactory.create(exception.getResponseStatus(), errorMessage.getErrorCode(), errorMessage.getParams());
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getHttpStatus()));
+        return new ResponseEntity<>(errorResponse.getErrorResponse(), errorResponse.getStatus());
     }
 
     @ExceptionHandler(RuntimeException.class)
     ResponseEntity<ErrorResponse> generalException(RuntimeException exception) {
         log.error("Unknown exception occurred:", exception);
-        ErrorResponse errorResponse = errorResponseFactory.create(HttpStatus.INTERNAL_SERVER_ERROR, GENERAL_ERROR_CODE, new HashMap<>());
+        ErrorResponseWrapper errorResponse = errorResponseFactory.create(HttpStatus.INTERNAL_SERVER_ERROR, GENERAL_ERROR_CODE, new HashMap<>());
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getHttpStatus()));
+        return new ResponseEntity<>(errorResponse.getErrorResponse(), errorResponse.getStatus());
     }
 }

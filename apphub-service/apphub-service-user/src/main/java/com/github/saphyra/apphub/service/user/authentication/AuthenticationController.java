@@ -84,7 +84,7 @@ public class AuthenticationController implements UserAuthenticationController {
         return InternalAccessTokenResponse.builder()
             .accessTokenId(accessToken.getAccessTokenId())
             .userId(accessToken.getUserId())
-            .roles(getRoles(accessToken.getUserId())) //TODO unit test
+            .roles(getRoles(accessToken.getUserId()))
             .build();
     }
 

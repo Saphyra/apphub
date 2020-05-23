@@ -33,9 +33,6 @@ class UserDataControllerImpl implements UserDataController {
     private final RegistrationService registrationService;
 
     @Override
-    //TODO unit test
-    //TODO int test
-    //TODO api test
     //TODO fe test
     public void changeLanguage(AccessTokenHeader accessTokenHeader, OneParamRequest<String> language) {
         log.info("{} wants to change his language", accessTokenHeader.getUserId());

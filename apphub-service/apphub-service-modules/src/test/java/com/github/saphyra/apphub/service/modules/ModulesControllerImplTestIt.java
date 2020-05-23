@@ -177,7 +177,6 @@ public class ModulesControllerImplTestIt {
         ErrorResponse errorResponse = response.getBody()
             .as(ErrorResponse.class);
 
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("module")).isEqualTo("does not exist");
@@ -204,7 +203,6 @@ public class ModulesControllerImplTestIt {
         ErrorResponse errorResponse = response.getBody()
             .as(ErrorResponse.class);
 
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("value")).isEqualTo("must not be null");

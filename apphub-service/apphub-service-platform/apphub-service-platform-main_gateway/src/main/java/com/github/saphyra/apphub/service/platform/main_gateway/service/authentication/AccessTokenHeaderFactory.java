@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 class AccessTokenHeaderFactory {
-    //TODO unit test - roles added
     AccessTokenHeader create(InternalAccessTokenResponse accessTokenResponse) {
         return AccessTokenHeader.builder()
             .accessTokenId(accessTokenResponse.getAccessTokenId())

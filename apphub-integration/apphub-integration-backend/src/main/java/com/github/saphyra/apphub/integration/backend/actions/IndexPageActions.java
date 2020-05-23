@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.model.LoginRequest;
 import com.github.saphyra.apphub.integration.common.model.LoginResponse;
+import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.common.model.RegistrationRequest;
 import io.restassured.response.Response;
 
@@ -15,6 +16,11 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndexPageActions {
+    public static UUID registerAndLogin(Language locale, RegistrationParameters userData) {
+        registerUser(locale, userData.toRegistrationRequest());
+        return login(locale, userData.toLoginRequest());
+    }
+    
     public static void registerUser(Language locale, RegistrationRequest registrationRequest) {
         Response response = getRegistrationResponse(locale, registrationRequest);
 

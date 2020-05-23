@@ -21,32 +21,32 @@ public class ErrorResponseFactory {
     private final LocaleProvider localeProvider;
     private final LocalizedMessageProvider localizedMessageProvider;
 
-    public ErrorResponse create(HttpStatus httpStatus, String errorCode, Map<String, String> params) {
+    public ErrorResponseWrapper create(HttpStatus httpStatus, String errorCode, Map<String, String> params) {
         return localeProvider.getLocale()
             .map(locale -> createErrorResponse(locale, httpStatus, errorCode, params))
             .orElseGet(this::createLocaleNotFoundErrorResponse);
     }
 
-    public ErrorResponse createErrorResponse(String locale, HttpStatus httpStatus, String errorCode, Map<String, String> params) {
+    public ErrorResponseWrapper createErrorResponse(String locale, HttpStatus httpStatus, String errorCode, Map<String, String> params) {
         String localizedMessage = localizedMessageProvider.getLocalizedMessage(locale, errorCode, params);
 
-        return ErrorResponse.builder()
-            .httpStatus(httpStatus.value())
+        ErrorResponse errorResponse = ErrorResponse.builder()
             .errorCode(errorCode)
             .localizedMessage(localizedMessage)
             .params(params)
             .build();
+        return new ErrorResponseWrapper(errorResponse, httpStatus);
     }
 
-    private ErrorResponse createLocaleNotFoundErrorResponse() {
+    private ErrorResponseWrapper createLocaleNotFoundErrorResponse() {
         log.warn("Locale not found.");
         String localizedMessage = localizedMessageProvider.getLocalizedMessage(commonConfigProperties.getDefaultLocale(), LOCALE_NOT_FOUND_ERROR_CODE, new HashMap<>());
 
-        return ErrorResponse.builder()
-            .httpStatus(HttpStatus.BAD_REQUEST.value())
+        ErrorResponse errorResponse = ErrorResponse.builder()
             .errorCode(LOCALE_NOT_FOUND_ERROR_CODE)
             .localizedMessage(localizedMessage)
             .params(new HashMap<>())
             .build();
+        return new ErrorResponseWrapper(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

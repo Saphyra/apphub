@@ -32,6 +32,14 @@ public class RegistrationParameters {
             .build();
     }
 
+    public LoginRequest toLoginRequest() {
+        return LoginRequest.builder()
+            .email(email)
+            .password(password)
+            .rememberMe(false)
+            .build();
+    }
+    
     public static RegistrationParameters validParameters() {
         return validParameters(VALID_PASSWORD);
     }

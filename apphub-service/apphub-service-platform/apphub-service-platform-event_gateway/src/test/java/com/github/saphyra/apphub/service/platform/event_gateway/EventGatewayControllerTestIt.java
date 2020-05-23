@@ -94,7 +94,6 @@ public class EventGatewayControllerTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(INVALID_PARAM_ERROR_CODE);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(INVALID_PARAM_LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("serviceName")).isEqualTo("Invalid parameter");
@@ -106,7 +105,6 @@ public class EventGatewayControllerTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(INVALID_PARAM_ERROR_CODE);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(INVALID_PARAM_LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("eventName")).isEqualTo("Invalid parameter");
@@ -118,7 +116,6 @@ public class EventGatewayControllerTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(INVALID_PARAM_ERROR_CODE);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(INVALID_PARAM_LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("url")).isEqualTo("Invalid parameter");
@@ -171,7 +168,6 @@ public class EventGatewayControllerTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(INVALID_PARAM_ERROR_CODE);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(INVALID_PARAM_LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("metadata")).isEqualTo("Invalid parameter");
@@ -192,7 +188,6 @@ public class EventGatewayControllerTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(INVALID_PARAM_ERROR_CODE);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(INVALID_PARAM_LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("eventName")).isEqualTo("Invalid parameter");

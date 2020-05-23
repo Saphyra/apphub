@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.error_handler.domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.error_handler.exception.BadRequestException;
 import com.github.saphyra.apphub.lib.error_handler.exception.RestException;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
+import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -39,9 +40,9 @@ public class ErrorHandlerAdviceTest {
     public void restException() {
         ErrorMessage errorMessage = new ErrorMessage(ERROR_CODE, params);
         RestException exception = new BadRequestException(errorMessage, "");
+        ErrorResponseWrapper wrapper = new ErrorResponseWrapper(errorResponse, HttpStatus.UNAUTHORIZED);
 
-        given(errorResponseFactory.create(HttpStatus.BAD_REQUEST, ERROR_CODE, params)).willReturn(errorResponse);
-        given(errorResponse.getHttpStatus()).willReturn(HttpStatus.UNAUTHORIZED.value());
+        given(errorResponseFactory.create(HttpStatus.BAD_REQUEST, ERROR_CODE, params)).willReturn(wrapper);
 
         ResponseEntity<ErrorResponse> result = underTest.restException(exception);
 
@@ -51,8 +52,8 @@ public class ErrorHandlerAdviceTest {
 
     @Test
     public void generalException() {
-        given(errorResponseFactory.create(HttpStatus.INTERNAL_SERVER_ERROR, "GENERAL_ERROR", new HashMap<>())).willReturn(errorResponse);
-        given(errorResponse.getHttpStatus()).willReturn(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        ErrorResponseWrapper wrapper = new ErrorResponseWrapper(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        given(errorResponseFactory.create(HttpStatus.INTERNAL_SERVER_ERROR, "GENERAL_ERROR", new HashMap<>())).willReturn(wrapper);
 
         ResponseEntity<ErrorResponse> result = underTest.generalException(new RuntimeException());
 

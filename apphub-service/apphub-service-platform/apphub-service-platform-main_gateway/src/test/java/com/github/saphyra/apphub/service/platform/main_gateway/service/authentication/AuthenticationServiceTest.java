@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
+import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.ErrorResponseHandler;
 import com.github.saphyra.util.CookieUtil;
@@ -85,7 +86,7 @@ public class AuthenticationServiceTest {
         Map<String, String> headers = new HashMap<>();
         headers.put(Constants.LOCALE_HEADER, LOCALE);
         given(requestContext.getZuulRequestHeaders()).willReturn(headers);
-        given(errorResponseFactory.createErrorResponse(LOCALE, HttpStatus.UNAUTHORIZED, "NO_SESSION_AVAILABLE", new HashMap<>())).willReturn(errorResponse);
+        given(errorResponseFactory.createErrorResponse(LOCALE, HttpStatus.UNAUTHORIZED, "NO_SESSION_AVAILABLE", new HashMap<>())).willReturn(new ErrorResponseWrapper(errorResponse, HttpStatus.UNAUTHORIZED));
     }
 
     @Test
@@ -94,7 +95,7 @@ public class AuthenticationServiceTest {
 
         underTest.authenticate(requestContext);
 
-        verify(errorResponseHandler).handleUnauthorized(requestContext, errorResponse);
+        verify(errorResponseHandler).sendErrorResponse(requestContext, new ErrorResponseWrapper(errorResponse, HttpStatus.UNAUTHORIZED));
     }
 
     @Test
@@ -104,7 +105,7 @@ public class AuthenticationServiceTest {
 
         underTest.authenticate(requestContext);
 
-        verify(errorResponseHandler).handleUnauthorized(requestContext, errorResponse);
+        verify(errorResponseHandler).sendErrorResponse(requestContext, new ErrorResponseWrapper(errorResponse, HttpStatus.UNAUTHORIZED));
     }
 
     @Test

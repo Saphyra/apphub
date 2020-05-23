@@ -38,7 +38,6 @@ public class LoginTest extends TestBase {
         assertThat(response.getStatusCode()).isEqualTo(401);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(401);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.ERROR_CODE_BAD_CREDENTIALS));
     }
@@ -58,7 +57,6 @@ public class LoginTest extends TestBase {
         assertThat(response.getStatusCode()).isEqualTo(401);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(401);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.ERROR_CODE_BAD_CREDENTIALS));
     }
@@ -112,7 +110,6 @@ public class LoginTest extends TestBase {
         assertThat(response.getStatusCode()).isEqualTo(401);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(401);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.NO_SESSION_AVAILABLE.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale,LocalizationKey.ERROR_CODE_SESSION_EXPIRED));
     }

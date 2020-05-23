@@ -20,7 +20,8 @@ public class AccessTokenRepositoryTest {
     private static final String ACCESS_TOKEN_ID_2 = "access-token-id-2";
     private static final String ACCESS_TOKEN_ID_3 = "access-token-id-3";
     private static final OffsetDateTime CURRENT_DATE = OffsetDateTime.now();
-    private static final String USER_ID = "user-id";
+    private static final String USER_ID_1 = "user-id-1";
+    private static final String USER_ID_2 = "user-id-2";
 
     @Autowired
     private AccessTokenRepository underTest;
@@ -106,17 +107,40 @@ public class AccessTokenRepositoryTest {
     public void deleteByAccessTokenIdAndUserId() {
         AccessTokenEntity entity1 = AccessTokenEntity.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)
-            .userId(USER_ID)
+            .userId(USER_ID_1)
             .build();
 
         AccessTokenEntity entity2 = AccessTokenEntity.builder()
             .accessTokenId(ACCESS_TOKEN_ID_2)
-            .userId(USER_ID)
+            .userId(USER_ID_1)
             .build();
         underTest.saveAll(Arrays.asList(entity1, entity2));
 
-        underTest.deleteByAccessTokenIdAndUserId(ACCESS_TOKEN_ID_2, USER_ID);
+        underTest.deleteByAccessTokenIdAndUserId(ACCESS_TOKEN_ID_2, USER_ID_1);
 
         assertThat(underTest.findAll()).containsExactly(entity1);
+    }
+
+    @Test
+    public void deleteByUserId() {
+        AccessTokenEntity entity1 = AccessTokenEntity.builder()
+            .accessTokenId(ACCESS_TOKEN_ID_1)
+            .userId(USER_ID_1)
+            .build();
+
+        AccessTokenEntity entity2 = AccessTokenEntity.builder()
+            .accessTokenId(ACCESS_TOKEN_ID_2)
+            .userId(USER_ID_1)
+            .build();
+
+        AccessTokenEntity entity3 = AccessTokenEntity.builder()
+            .accessTokenId(ACCESS_TOKEN_ID_3)
+            .userId(USER_ID_2)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2, entity3));
+
+        underTest.deleteByUserId(USER_ID_1);
+
+        assertThat(underTest.findAll()).containsExactly(entity3);
     }
 }

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.util;
 
+import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
 import com.github.saphyra.util.ObjectMapperWrapper;
 import com.netflix.zuul.context.RequestContext;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,8 @@ public class ErrorResponseHandler {
     private final AntPathMatcher antPathMatcher;
     private final ObjectMapperWrapper objectMapperWrapper;
 
-    public void handleUnauthorized(RequestContext requestContext, Object responseBody) {
-        handleRequest(requestContext, HttpStatus.UNAUTHORIZED, responseBody);
-    }
-
-    public void handleBadRequest(RequestContext requestContext, Object responseBody) {
-        handleRequest(requestContext, HttpStatus.BAD_REQUEST, responseBody);
+    public void sendErrorResponse(RequestContext requestContext, ErrorResponseWrapper errorResponseWrapper) {
+        handleRequest(requestContext, errorResponseWrapper.getStatus(), errorResponseWrapper.getErrorResponse());
     }
 
     private void handleRequest(RequestContext requestContext, HttpStatus status, Object responseBody) {

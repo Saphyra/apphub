@@ -59,4 +59,13 @@ public class AccessTokenDaoTest {
 
         verify(repository).deleteByAccessTokenIdAndUserId(ACCESS_TOKEN_ID_STRING, USER_ID_STRING);
     }
+
+    @Test
+    public void deleteByUserId() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+
+        underTest.deleteByUserId(USER_ID);
+
+        verify(repository).deleteByUserId(USER_ID_STRING);
+    }
 }

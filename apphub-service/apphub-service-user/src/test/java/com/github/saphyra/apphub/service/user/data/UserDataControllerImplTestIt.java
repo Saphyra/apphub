@@ -2,9 +2,13 @@ package com.github.saphyra.apphub.service.user.data;
 
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.api.user.model.request.RegistrationRequest;
+import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.config.Endpoints;
+import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
@@ -58,6 +62,9 @@ public class UserDataControllerImplTestIt {
     private int serverPort;
 
     @Autowired
+    private AccessTokenHeaderConverter accessTokenHeaderConverter;
+
+    @Autowired
     private ObjectMapperWrapper objectMapperWrapper;
 
     @Autowired
@@ -77,6 +84,76 @@ public class UserDataControllerImplTestIt {
     }
 
     @Test
+    public void changeLanguage_null(){
+        AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
+            .accessTokenId(UUID.randomUUID())
+            .userId(USER_ID)
+            .build();
+
+        Response response = RequestFactory.createRequest()
+            .header(Constants.ACCESS_TOKEN_HEADER, accessTokenHeaderConverter.convertDomain(accessTokenHeader))
+            .body(new OneParamRequest<>())
+            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_LANGUAGE));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
+        assertThat(errorResponse.getParams().get("value")).isEqualTo("language is null");
+
+        verify(localizationApiClient).translate(ErrorCode.INVALID_PARAM.name(), "hu");
+    }
+
+    @Test
+    public void changeLanguage_notSupported(){
+        AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
+            .accessTokenId(UUID.randomUUID())
+            .userId(USER_ID)
+            .build();
+
+        Response response = RequestFactory.createRequest()
+            .header(Constants.ACCESS_TOKEN_HEADER, accessTokenHeaderConverter.convertDomain(accessTokenHeader))
+            .body(new OneParamRequest<>("asd"))
+            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_LANGUAGE));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
+        assertThat(errorResponse.getParams().get("value")).isEqualTo("language not supported");
+
+        verify(localizationApiClient).translate(ErrorCode.INVALID_PARAM.name(), "hu");
+    }
+
+    @Test
+    public void changeLanguage(){
+        User user = User.builder()
+            .userId(USER_ID)
+            .email(EMAIL)
+            .username(USERNAME)
+            .password(PASSWORD)
+            .language(LOCALE)
+            .build();
+        userDao.save(user);
+
+        AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
+            .accessTokenId(UUID.randomUUID())
+            .userId(USER_ID)
+            .build();
+
+        Response response = RequestFactory.createRequest()
+            .header(Constants.ACCESS_TOKEN_HEADER, accessTokenHeaderConverter.convertDomain(accessTokenHeader))
+            .body(new OneParamRequest<>("hu"))
+            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_LANGUAGE));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+
+        assertThat(userDao.findById(USER_ID).getLanguage()).isEqualTo("hu");
+    }
+
+    @Test
     public void getLanguage_userNotFound() {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userId", USER_ID);
@@ -86,7 +163,6 @@ public class UserDataControllerImplTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USER_NOT_FOUND.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
 
@@ -122,7 +198,6 @@ public class UserDataControllerImplTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("email")).isEqualTo("must not be null");
@@ -138,7 +213,6 @@ public class UserDataControllerImplTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("email")).isEqualTo("invalid format");
@@ -163,7 +237,6 @@ public class UserDataControllerImplTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.CONFLICT.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.EMAIL_ALREADY_EXISTS.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
 
@@ -178,7 +251,6 @@ public class UserDataControllerImplTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("username")).isEqualTo("must not be null");
@@ -194,7 +266,6 @@ public class UserDataControllerImplTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USERNAME_TOO_SHORT.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
 
@@ -209,7 +280,6 @@ public class UserDataControllerImplTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USERNAME_TOO_LONG.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
 
@@ -233,7 +303,6 @@ public class UserDataControllerImplTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.CONFLICT.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USERNAME_ALREADY_EXISTS.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
 
@@ -248,7 +317,6 @@ public class UserDataControllerImplTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("password")).isEqualTo("must not be null");
@@ -264,7 +332,6 @@ public class UserDataControllerImplTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_SHORT.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
 
@@ -279,7 +346,6 @@ public class UserDataControllerImplTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_LONG.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
 
