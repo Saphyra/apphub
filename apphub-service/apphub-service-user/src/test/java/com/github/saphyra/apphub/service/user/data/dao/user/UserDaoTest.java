@@ -1,10 +1,8 @@
 package com.github.saphyra.apphub.service.user.data.dao.user;
 
-import com.github.saphyra.apphub.service.user.data.dao.user.User;
-import com.github.saphyra.apphub.service.user.data.dao.user.UserConverter;
-import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
-import com.github.saphyra.apphub.service.user.data.dao.user.UserEntity;
-import com.github.saphyra.apphub.service.user.data.dao.user.UserRepository;
+import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.error_handler.exception.NotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -12,20 +10,28 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserDaoTest {
     private static final String EMAIL = "email";
     private static final String USERNAME = "username";
+    private static final UUID USER_ID = UUID.randomUUID();
+    private static final String USER_ID_STRING = "user-id";
 
     @Mock
     private UserRepository repository;
 
     @Mock
     private UserConverter converter;
+
+    @Mock
+    private UuidConverter uuidConverter;
 
     @InjectMocks
     private UserDao underTest;
@@ -54,5 +60,37 @@ public class UserDaoTest {
         Optional<User> result = underTest.findByUsername(USERNAME);
 
         assertThat(result).contains(user);
+    }
+
+    @Test
+    public void findById_notFound() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(repository.findById(USER_ID_STRING)).willReturn(Optional.empty());
+
+        Throwable ex = catchThrowable(() -> underTest.findById(USER_ID));
+
+        assertThat(ex).isInstanceOf(NotFoundException.class);
+        NotFoundException exception = (NotFoundException) ex;
+        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.USER_NOT_FOUND.name());
+    }
+
+    @Test
+    public void findById() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(repository.findById(USER_ID_STRING)).willReturn(Optional.of(entity));
+        given(converter.convertEntity(entity)).willReturn(user);
+
+        User result = underTest.findById(USER_ID);
+
+        assertThat(result).isEqualTo(user);
+    }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+
+        underTest.deleteById(USER_ID);
+
+        verify(repository).deleteById(USER_ID_STRING);
     }
 }

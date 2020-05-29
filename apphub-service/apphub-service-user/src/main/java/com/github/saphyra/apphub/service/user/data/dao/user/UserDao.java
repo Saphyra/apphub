@@ -27,13 +27,11 @@ public class UserDao extends AbstractDao<UserEntity, User, String, UserRepositor
         return converter.convertEntity(repository.findByUsername(username));
     }
 
-    //TODO unit test
     public User findById(UUID userId) {
         return findById(uuidConverter.convertDomain(userId))
             .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.USER_NOT_FOUND.name()), String.format("User not found with userId %s", userId)));
     }
 
-    //TODO unit test
     public void deleteById(UUID userId) {
         deleteById(uuidConverter.convertDomain(userId));
     }

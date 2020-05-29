@@ -19,7 +19,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ChangeUsernameService {
     private final PasswordService passwordService;
     private final UserDao userDao;

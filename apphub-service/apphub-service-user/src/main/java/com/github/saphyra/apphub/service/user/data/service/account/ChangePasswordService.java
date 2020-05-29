@@ -19,16 +19,15 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ChangePasswordService {
     private final PasswordService passwordService;
     private final PasswordValidator passwordValidator;
     private final UserDao userDao;
 
     public void changePassword(UUID userId, ChangePasswordRequest request) {
-        passwordValidator.validatePassword(request.getPassword());
+        passwordValidator.validatePassword(request.getNewPassword());
 
-        if (isNull(request.getNewPassword())) {
+        if (isNull(request.getPassword())) {
             throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "password", "must not be null"), "Password must not be null.");
         }
 

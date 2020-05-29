@@ -19,7 +19,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ChangeEmailService {
     private final EmailValidator emailValidator;
     private final PasswordService passwordService;
