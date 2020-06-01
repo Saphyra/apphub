@@ -14,7 +14,6 @@ import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class EmailValidator {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 

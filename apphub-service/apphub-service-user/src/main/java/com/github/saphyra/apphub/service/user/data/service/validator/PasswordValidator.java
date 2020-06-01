@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import static java.util.Objects.isNull;
 
 @Component
-//TODO unit test
 public class PasswordValidator {
     public void validatePassword(String password) {
         if (isNull(password)) {

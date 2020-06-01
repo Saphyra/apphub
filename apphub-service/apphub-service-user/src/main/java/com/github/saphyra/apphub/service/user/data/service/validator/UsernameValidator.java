@@ -12,7 +12,6 @@ import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class UsernameValidator {
     private final UserDao userDao;
 
