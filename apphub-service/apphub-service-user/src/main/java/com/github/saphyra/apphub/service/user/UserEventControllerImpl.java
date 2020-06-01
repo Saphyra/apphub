@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.user;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.api.user.server.UserController;
+import com.github.saphyra.apphub.api.user.server.UserEventController;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @Slf4j
 //TODO unit test
 //TODO int test
-public class UserControllerImpl implements UserController {
+public class UserEventControllerImpl implements UserEventController {
     private final AccessTokenDao accessTokenDao;
     private final UserDao userDao;
 

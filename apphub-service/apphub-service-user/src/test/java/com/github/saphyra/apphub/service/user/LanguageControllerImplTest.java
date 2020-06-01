@@ -1,16 +1,18 @@
-package com.github.saphyra.apphub.service.user.data;
+package com.github.saphyra.apphub.service.user;
 
-import com.github.saphyra.apphub.api.user.model.request.RegistrationRequest;
+import com.github.saphyra.apphub.api.user.model.response.LanguageResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.user.data.service.account.LanguageService;
-import com.github.saphyra.apphub.service.user.data.service.register.RegistrationService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,29 +20,29 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UserDataControllerImplTest {
+public class LanguageControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String LOCALE = "locale";
 
     @Mock
     private LanguageService languageService;
 
-    @Mock
-    private RegistrationService registrationService;
-
     @InjectMocks
-    private UserDataControllerImpl underTest;
-
-    @Mock
-    private RegistrationRequest registrationRequest;
+    private LanguageControllerImpl underTest;
 
     @Mock
     private AccessTokenHeader accessTokenHeader;
 
+    @Mock
+    private LanguageResponse languageResponse;
+
+    @Before
+    public void setUp(){
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+    }
+
     @Test
     public void changeLanguage() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-
         underTest.changeLanguage(accessTokenHeader, new OneParamRequest<>(LOCALE));
 
         verify(languageService).changeLanguage(USER_ID, LOCALE);
@@ -56,9 +58,11 @@ public class UserDataControllerImplTest {
     }
 
     @Test
-    public void register() {
-        underTest.register(registrationRequest, LOCALE);
+    public void getLanguages() {
+        given(languageService.getLanguages(USER_ID)).willReturn(Arrays.asList(languageResponse));
 
-        verify(registrationService).register(registrationRequest, LOCALE);
+        List<LanguageResponse> result = underTest.getLanguages(accessTokenHeader);
+
+        assertThat(result).containsExactly(languageResponse);
     }
 }
