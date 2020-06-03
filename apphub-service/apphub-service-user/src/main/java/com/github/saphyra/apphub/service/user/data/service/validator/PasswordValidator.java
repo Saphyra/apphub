@@ -9,8 +9,12 @@ import static java.util.Objects.isNull;
 @Component
 public class PasswordValidator {
     public void validatePassword(String password) {
+        validatePassword(password, "password");
+    }
+
+    public void validatePassword(String password, String fieldName) {
         if (isNull(password)) {
-            throw ExceptionUtil.wrongPayloadException("password");
+            throw ExceptionUtil.wrongPayloadException(fieldName);
         }
 
         if (password.length() < 6) {

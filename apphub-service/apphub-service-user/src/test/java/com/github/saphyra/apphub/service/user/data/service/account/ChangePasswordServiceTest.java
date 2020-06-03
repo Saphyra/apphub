@@ -46,7 +46,7 @@ public class ChangePasswordServiceTest {
 
     @After
     public void check() {
-        verify(passwordValidator).validatePassword(NEW_PASSWORD);
+        verify(passwordValidator).validatePassword(NEW_PASSWORD, "newPassword");
     }
 
     @Test

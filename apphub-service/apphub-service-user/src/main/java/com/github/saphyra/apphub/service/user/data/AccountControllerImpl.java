@@ -26,9 +26,7 @@ class AccountControllerImpl implements AccountController {
     private final DeleteAccountService deleteAccountService;
     private final RegistrationService registrationService;
 
-
     @Override
-    //TODO int test
     //TODO api test
     //TODO fe test
     public void changeEmail(AccessTokenHeader accessTokenHeader, ChangeEmailRequest request) {
@@ -37,7 +35,6 @@ class AccountControllerImpl implements AccountController {
     }
 
     @Override
-    //TODO int test
     //TODO api test
     //TODO fe test
     public void changeUsername(AccessTokenHeader accessTokenHeader, ChangeUsernameRequest request) {
@@ -46,7 +43,6 @@ class AccountControllerImpl implements AccountController {
     }
 
     @Override
-    //TODO int test
     //TODO api test
     //TODO fe test
     public void changePassword(AccessTokenHeader accessTokenHeader, ChangePasswordRequest request) {
@@ -55,7 +51,6 @@ class AccountControllerImpl implements AccountController {
     }
 
     @Override
-    //TODO int test
     //TODO api test
     //TODO fe test
     public void deleteAccount(AccessTokenHeader accessTokenHeader, OneParamRequest<String> password) {
@@ -68,5 +63,4 @@ class AccountControllerImpl implements AccountController {
         log.info("RegistrationRequest arrived for username {} and email {}", registrationRequest.getUsername(), registrationRequest.getEmail());
         registrationService.register(registrationRequest, locale);
     }
-
 }

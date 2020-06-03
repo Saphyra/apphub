@@ -1,17 +1,16 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>apphub</artifactId>
+        <artifactId>apphub-test</artifactId>
         <groupId>com.github.saphyra</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>apphub-test</artifactId>
+    <artifactId>apphub-test-common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>apphub-test</name>
-    <packaging>pom</packaging>
+    <name>apphub-test-common</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,14 +20,5 @@
     </dependencies>
 
     <build>
-
     </build>
-
-    <modules>
-        <module>apphub-test-api</module>
-        <module>apphub-test-config</module>
-        <module>apphub-test-repository</module>
-        <module>apphub-test-rest_assured</module>
-        <module>apphub-test-common</module>
-    </modules>
 </project>

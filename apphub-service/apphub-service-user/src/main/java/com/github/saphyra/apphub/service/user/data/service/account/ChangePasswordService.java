@@ -25,7 +25,7 @@ public class ChangePasswordService {
     private final UserDao userDao;
 
     public void changePassword(UUID userId, ChangePasswordRequest request) {
-        passwordValidator.validatePassword(request.getNewPassword());
+        passwordValidator.validatePassword(request.getNewPassword(), "newPassword");
 
         if (isNull(request.getPassword())) {
             throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "password", "must not be null"), "Password must not be null.");

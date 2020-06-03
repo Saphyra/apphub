@@ -39,7 +39,7 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
-public class AccountControllerImplTestIt {
+public class AccountControllerImplTestIt_Register {
     private static final String LOCALIZED_MESSAGE = "localized-message";
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String EMAIL = "email@mail.hu";
