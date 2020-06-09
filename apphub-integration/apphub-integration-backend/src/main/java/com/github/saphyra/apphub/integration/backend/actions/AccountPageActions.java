@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.backend.actions;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.saphyra.apphub.integration.backend.model.ChangeEmailRequest;
 import com.github.saphyra.apphub.integration.backend.model.LanguageResponse;
 import com.github.saphyra.apphub.integration.backend.model.OneParamRequest;
 import com.github.saphyra.apphub.integration.common.TestBase;
@@ -34,5 +35,11 @@ public class AccountPageActions {
         TypeReference<List<LanguageResponse>> ref = new TypeReference<List<LanguageResponse>>() {
         };
         return TestBase.OBJECT_MAPPER_WRAPPER.readValue(response.getBody().asString(), ref);
+    }
+
+    public static Response getChangeEmailResponse(Language language, UUID accessTokenId, ChangeEmailRequest request) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(request)
+            .post(UrlFactory.create(Endpoints.CHANGE_EMAIL));
     }
 }

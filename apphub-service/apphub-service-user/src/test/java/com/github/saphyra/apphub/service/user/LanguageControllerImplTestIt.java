@@ -88,7 +88,7 @@ public class LanguageControllerImplTestIt {
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getParams().get("value")).isEqualTo("language is null");
+        assertThat(errorResponse.getParams().get("value")).isEqualTo("language must not be null");
 
         verify(localizationApiClient).translate(ErrorCode.INVALID_PARAM.name(), "hu");
     }

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.integration.common.framework.localization;
 
 public enum LocalizationKey {
     ERROR_CODE_BAD_CREDENTIALS,
+    ERROR_CODE_BAD_PASSWORD,
     ERROR_CODE_EMAIL_ALREADY_IN_USE,
     ERROR_CODE_INVALID_PARAM,
     ERROR_CODE_PASSWORD_TOO_LONG,
@@ -9,5 +10,5 @@ public enum LocalizationKey {
     ERROR_CODE_SESSION_EXPIRED,
     ERROR_CODE_USERNAME_ALREADY_EXISTS,
     ERROR_CODE_USERNAME_TOO_LONG,
-    ERROR_CODE_USERNAME_TOO_SHORT
+    ERROR_CODE_USERNAME_TOO_SHORT;
 }

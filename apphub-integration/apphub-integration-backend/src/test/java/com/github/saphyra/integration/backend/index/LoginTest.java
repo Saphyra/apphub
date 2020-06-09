@@ -1,4 +1,4 @@
-package com.github.saphyra.integration.backend.login;
+package com.github.saphyra.integration.backend.index;
 
 import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.ModulesPageActions;

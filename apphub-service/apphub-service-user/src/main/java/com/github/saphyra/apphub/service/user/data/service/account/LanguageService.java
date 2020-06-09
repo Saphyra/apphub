@@ -26,7 +26,7 @@ public class LanguageService {
 
     public void changeLanguage(UUID userId, String language) {
         if (isNull(language)) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "value", "language is null"), "Language must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "value", "language must not be null"), "Language must not be null.");
         }
         if (!commonConfigProperties.getSupportedLocales().contains(language)) {
             throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "value", "language not supported"), String.format("Language %s is not supported.", language));

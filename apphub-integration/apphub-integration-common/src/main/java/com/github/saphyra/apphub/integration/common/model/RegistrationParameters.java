@@ -50,11 +50,15 @@ public class RegistrationParameters {
             .limit(30)
             .collect(Collectors.joining());
         return RegistrationParameters.builder()
-            .email("email-" + ID_GENERATOR.generateRandomId() + "@test.com")
+            .email(generateEmail())
             .username(userName)
             .password(password)
             .confirmPassword(password)
             .build();
+    }
+
+    public static String generateEmail() {
+        return "email-" + ID_GENERATOR.generateRandomId() + "@test.com";
     }
 
     public static RegistrationParameters invalidEmailParameters() {

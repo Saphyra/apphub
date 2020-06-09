@@ -45,7 +45,7 @@ public class ChangeLanguageTest extends TestBase {
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.ERROR_CODE_INVALID_PARAM));
-        assertThat(errorResponse.getParams().get("value")).isEqualTo("language is null");
+        assertThat(errorResponse.getParams().get("value")).isEqualTo("language must not be null");
     }
 
     @Test(dataProvider = "localeDataProvider")

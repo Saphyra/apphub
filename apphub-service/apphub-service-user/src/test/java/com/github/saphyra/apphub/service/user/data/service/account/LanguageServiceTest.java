@@ -51,7 +51,7 @@ public class LanguageServiceTest {
         assertThat(ex).isInstanceOf(BadRequestException.class);
         BadRequestException exception = (BadRequestException) ex;
         assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams().get("value")).isEqualTo("language is null");
+        assertThat(exception.getErrorMessage().getParams().get("value")).isEqualTo("language must not be null");
     }
 
     @Test
