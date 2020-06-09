@@ -43,6 +43,11 @@
             <version>${versions.awaitility}</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>4.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -52,8 +57,20 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${versions.maven-surefire-plugin}</version>
                 <configuration>
-                    <parallel>methods</parallel>
-                    <threadCount>12</threadCount>
+                    <properties>
+                        <property>
+                            <name>parallel</name>
+                            <value>methods</value>
+                        </property>
+                        <property>
+                            <name>threadcount</name>
+                            <value>8</value>
+                        </property>
+                        <property>
+                            <name>dataproviderthreadcount</name>
+                            <value>3</value>
+                        </property>
+                    </properties>
                 </configuration>
             </plugin>
         </plugins>

@@ -1,5 +1,6 @@
 {
   "BAD_CREDENTIALS": "Unknown combination of e-mail address and password.",
+  "BAD_PASSWORD": "Incorrect password.",
   "EMAIL_ALREADY_EXISTS": "E-mail address is already in use.",
   "GENERAL_ERROR": "Unknown error.",
   "INVALID_PARAM": "Invalid parameter.",

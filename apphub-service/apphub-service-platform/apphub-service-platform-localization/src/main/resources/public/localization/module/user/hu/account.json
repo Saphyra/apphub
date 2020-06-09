@@ -177,6 +177,14 @@
     ]
   },
   "additionalContent": {
-    "language-changed": "Nyelv megváltoztatva."
+    "email-changed": "Email cím megváltoztatva.",
+    "email-invalid": "Érvénytelen e-mail cím.",
+    "incorrect-confirm-password": "A jelszavak nem egyeznek.",
+    "language-changed": "Nyelv megváltoztatva.",
+    "password-empty": "A jelszó megadása kötelező.",
+    "password-too-long": "Jelszó túl hosszú (Maximum 30 karakter).",
+    "password-too-short": "Jelszó túl rövid (Minimum 6 karakter).",
+    "username-too-long": "Felhasználónév túl hosszú (Maximum 30 karakter).",
+    "username-too-short": "Felhasználónév túl rövid (Minimum 3 karakter)."
   }
 }

@@ -1,3 +1,8 @@
+CI
+    use local docker images
+    set up Jenkins as build tool (https://www.blazemeter.com/blog/how-to-setup-scalable-jenkins-on-top-of-a-kubernetes-cluster)
+    Set up artifactory
+
 Validate read roles
     role is mandatory if not enabled by default
 

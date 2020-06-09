@@ -5,6 +5,7 @@ window.Mapping = new function(){
     this.MODULES_PAGE = "/web/modules";
 
     const endpoints = {
+        CHANGE_EMAIL: new Endpoint("/api/user/account/email", HttpMethod.POST),
         CHANGE_LANGUAGE: new Endpoint("/api/user/account/language", HttpMethod.POST),
         CHECK_SESSION: new Endpoint("/api/user/authentication/session", HttpMethod.GET),
         GET_LANGUAGES: new Endpoint("/api/user/data/languages", HttpMethod.GET),

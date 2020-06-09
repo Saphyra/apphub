@@ -12,7 +12,7 @@ fi
 
 #Deploying to test
 
-NAMESPACE_NAME="a-test-"$RANDOM
+NAMESPACE_NAME="a"$RANDOM
 ./deploy.sh "$NAMESPACE_NAME"
 
 PORT=$RANDOM
@@ -31,7 +31,7 @@ trap "kill 0" EXIT
 kubectl port-forward deployment/main-gateway $PORT:8080 -n $NAMESPACE_NAME &
 
 cd apphub-integration || exit
-mvn -DargLine="-DserverPort=$PORT -Dheadless=true" -T 16 clean test
+mvn -DargLine="-DserverPort=$PORT -Dheadless=true" clean test
 cd ../ || exit
 TEST_RESULT=$?
 if [[ "$TEST_RESULT" -ne 0 ]]; then
@@ -60,7 +60,7 @@ fi
 kubectl port-forward deployment/main-gateway $PORT:8080 -n $NAMESPACE_NAME &
 
 cd apphub-integration || exit
-mvn -DargLine="-DserverPort=$PORT -Dheadless=true" -T 16 clean test
+mvn -DargLine="-DserverPort=$PORT -Dheadless=true" clean test
 cd ../ || exit
 TEST_RESULT=$?
 if [[ "$TEST_RESULT" -ne 0 ]]; then

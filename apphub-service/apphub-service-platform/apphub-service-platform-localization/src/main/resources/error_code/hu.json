@@ -1,5 +1,6 @@
 {
   "BAD_CREDENTIALS": "Az email cím és jelszó kombinációja ismeretlen.",
+  "BAD_PASSWORD": "Hibás jelszó.",
   "EMAIL_ALREADY_EXISTS": "Az email foglalt.",
   "GENERAL_ERROR": "Ismeretlen hiba.",
   "INVALID_PARAM": "Érvénytelen paraméter.",

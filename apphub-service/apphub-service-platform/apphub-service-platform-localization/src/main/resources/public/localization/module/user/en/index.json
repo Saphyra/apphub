@@ -95,7 +95,6 @@
     "password-too-short": "Password too short (6 characters min.).",
     "session-expired": "Session expired.",
     "successful-logout": "Successful logout.",
-    "username-already-exists": "Username already in use.",
     "username-too-long": "Username too long (30 characters max.).",
     "username-too-short": "Username too short (3 character min.)."
   }

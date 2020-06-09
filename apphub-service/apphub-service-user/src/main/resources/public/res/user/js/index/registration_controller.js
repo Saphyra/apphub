@@ -1,5 +1,5 @@
 (function RegistrationController(){
-    scriptLoader.loadScript("/res/common/js/validation_util.js");
+    scriptLoader.loadScript("/res/user/js/common/validation_service.js");
 
     events.REGISTER_ATTEMPT = "register_attempt";
     events.VALIDATION_ATTEMPT = "validation_attempt";
@@ -67,11 +67,12 @@
         const password = getPassword();
         const confirmPassword = getConfirmPassword();
 
-        const validationResults = [];
-            validationResults.push(validatePassword(password));
-            validationResults.push(validateConfirmPassword(password, confirmPassword));
-            validationResults.push(validateUsername(username));
-            validationResults.push(validateEmail(email));
+        const validationResults = validationService.bulkValidation([
+            function(){return validationService.validatePassword(INVALID_PASSWORD, password)},
+            function(){return validationService.validateConfirmPassword(INVALID_CONFIRM_PASSWORD, password, confirmPassword)},
+            function(){return validationService.validateUsername(INVALID_USERNAME, username)},
+            function(){return validationService.validateEmail(INVALID_EMAIL, email)}
+        ]);
         processValidationResults(validationResults);
 
         function processValidationResults(validationResults){
@@ -80,72 +81,6 @@
                 .allMatch(function(validationResult){return validationResult.isValid});
 
             setRegistrationButtonState();
-        }
-
-        function validatePassword(password){
-            if(password.length < 6){
-                return {
-                    isValid: false,
-                    process: createErrorProcess(INVALID_PASSWORD, "password-too-short")
-                };
-            }else if(password.length > 30){
-                return {
-                    isValid: false,
-                    process: createErrorProcess(INVALID_PASSWORD, "password-too-long")
-                };
-            }else{
-                return{
-                    isValid: true,
-                    process: createSuccessProcess(INVALID_PASSWORD)
-                };
-            }
-        }
-
-        function validateConfirmPassword(password, confirmPassword){
-            if(password !== confirmPassword){
-                return {
-                    isValid: false,
-                    process: createErrorProcess(INVALID_CONFIRM_PASSWORD, "incorrect-confirm-password")
-                };
-            }else{
-                return{
-                    isValid: true,
-                    process: createSuccessProcess(INVALID_CONFIRM_PASSWORD)
-                };
-            }
-        }
-
-        function validateEmail(email){
-            if(!isEmailValid(email)){
-                return {
-                    isValid: false,
-                    process: createErrorProcess(INVALID_EMAIL, "email-invalid")
-                };
-            }else{
-                return {
-                    isValid: true,
-                    process: createSuccessProcess(INVALID_EMAIL)
-                };
-            }
-        }
-
-        function validateUsername(username){
-            if(username.length < 3){
-                return {
-                    isValid: false,
-                    process: createErrorProcess(INVALID_USERNAME, "username-too-short")
-                };
-            }else if(username.length > 30){
-                return {
-                    isValid: false,
-                    process: createErrorProcess(INVALID_USERNAME, "username-too-long")
-                };
-            }else{
-                return {
-                    isValid: true,
-                    process: createSuccessProcess(INVALID_USERNAME)
-                };
-            }
         }
 
         function getConfirmPassword(){

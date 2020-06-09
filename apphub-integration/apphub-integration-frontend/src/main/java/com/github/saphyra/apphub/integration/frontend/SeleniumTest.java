@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.integration.frontend;
 
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -20,27 +21,29 @@ import static java.util.Objects.isNull;
 
 @Slf4j
 public class SeleniumTest extends TestBase {
-    private static final String CHROME_DRIVER_PROPERTY_NAME = "webdriver.chrome.driver";
-    private static final String CHROME_DRIVER_EXE_LOCATION = "chromedriver.exe";
     private static final boolean HEADLESS_MODE = false;
 
     private final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
     @BeforeMethod(alwaysRun = true)
     public void startDriver() {
-        String chromeDriverLocation = getClass()
-            .getClassLoader()
-            .getResource(CHROME_DRIVER_EXE_LOCATION)
-            .getPath();
-        System.setProperty(CHROME_DRIVER_PROPERTY_NAME, chromeDriverLocation);
-        ChromeOptions options = new ChromeOptions();
-        options.setHeadless(isHeadless());
-        options.addArguments("window-size=1920,1080");
+        ChromeDriver driver = null;
+        for (int tryCount = 0; tryCount < 3 && isNull(driver); tryCount++) {
+            try {
+                WebDriverManager.chromedriver().setup();
 
-        ChromeDriver driver = new ChromeDriver(options);
-        driver.manage().window().maximize();
-        log.info("Driver created: {}", driver);
-        this.driver.set(driver);
+                ChromeOptions options = new ChromeOptions();
+                options.setHeadless(isHeadless());
+                options.addArguments("window-size=1920,1080");
+
+                driver = new ChromeDriver(options);
+                driver.manage().window().maximize();
+                log.info("Driver created: {}", driver);
+                this.driver.set(driver);
+            } catch (Exception e) {
+                log.error("Could not create driver", e);
+            }
+        }
     }
 
     private boolean isHeadless() {
@@ -54,15 +57,22 @@ public class SeleniumTest extends TestBase {
 
     @AfterMethod(alwaysRun = true)
     public void stopDriver(ITestResult testResult) {
-        WebDriver driver = this.driver.get();
+        WebDriver driver = extractDriver();
         if (ITestResult.FAILURE == testResult.getStatus() && !HEADLESS_MODE) {
             extractLogs(driver);
             SleepUtil.sleep(20000);
         }
         if (!isNull(driver)) {
             log.info("Closing driver {}", driver);
-            driver.close();
-            driver.quit();
+            for (int tryCount = 0; tryCount < 3; tryCount++) {
+                try {
+                    driver.close();
+                    driver.quit();
+                    break;
+                } catch (Exception e) {
+                    log.error("Could not stop driver", e);
+                }
+            }
         }
     }
 
