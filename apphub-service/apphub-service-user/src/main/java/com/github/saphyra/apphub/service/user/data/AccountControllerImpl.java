@@ -33,7 +33,6 @@ class AccountControllerImpl implements AccountController {
     }
 
     @Override
-    //TODO api test
     //TODO fe test
     public void changeUsername(AccessTokenHeader accessTokenHeader, ChangeUsernameRequest request) {
         log.info("{} wants to change his username", accessTokenHeader.getUserId());

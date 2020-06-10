@@ -5,7 +5,6 @@
         this.bulkValidation = function(validationCalls){
             return new Stream(validationCalls)
                 .map(function(validationCall){return validationCall()})
-                .filter(function(validationResult){return !validationResult.isValid})
                 .toList();
         }
 

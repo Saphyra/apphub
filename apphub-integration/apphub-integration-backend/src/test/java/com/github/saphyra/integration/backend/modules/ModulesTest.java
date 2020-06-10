@@ -23,7 +23,7 @@ import static com.github.saphyra.apphub.integration.common.framework.localizatio
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ModulesTest extends TestBase {
-    @DataProvider(name = "localeDataProvider")
+    @DataProvider(name = "localeDataProvider", parallel = true)
     public Object[] localeDataProvider() {
         return Language.values();
     }

@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder(toBuilder = true)
 @AllArgsConstructor
-public class ChangeEmailRequest {
-    private String email;
+public class ChangeUsernameRequest {
+    private String username;
     private String password;
 }

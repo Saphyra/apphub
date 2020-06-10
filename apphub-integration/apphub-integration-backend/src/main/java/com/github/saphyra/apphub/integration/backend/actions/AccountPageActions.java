@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.integration.backend.actions;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.saphyra.apphub.integration.backend.model.ChangeEmailRequest;
+import com.github.saphyra.apphub.integration.backend.model.ChangeUsernameRequest;
 import com.github.saphyra.apphub.integration.backend.model.LanguageResponse;
 import com.github.saphyra.apphub.integration.backend.model.OneParamRequest;
 import com.github.saphyra.apphub.integration.common.TestBase;
@@ -21,7 +22,7 @@ public class AccountPageActions {
         Response response = getChangeLanguageResponse(language, accessTokenId, locale);
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
-    
+
     public static Response getChangeLanguageResponse(Language locale, UUID accessTokenId, String newLocale) {
         return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
             .body(new OneParamRequest<>(newLocale))
@@ -41,5 +42,11 @@ public class AccountPageActions {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(request)
             .post(UrlFactory.create(Endpoints.CHANGE_EMAIL));
+    }
+
+    public static Response getChangeUsernameResponse(Language locale, UUID accessTokenId, ChangeUsernameRequest request) {
+        return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
+            .body(request)
+            .post(UrlFactory.create(Endpoints.CHANGE_USERNAME));
     }
 }

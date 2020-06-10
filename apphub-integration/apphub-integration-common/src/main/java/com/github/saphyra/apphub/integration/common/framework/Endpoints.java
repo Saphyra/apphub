@@ -18,4 +18,5 @@ public class Endpoints {
     public static final String CHANGE_LANGUAGE = "/api/user/account/language";
     public static final String GET_LANGUAGES = "/api/user/data/languages";
     public static final String CHANGE_EMAIL = "/api/user/account/email";;
+    public static final String CHANGE_USERNAME = "/api/user/account/username";
 }

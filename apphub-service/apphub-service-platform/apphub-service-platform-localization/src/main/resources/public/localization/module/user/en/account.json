@@ -184,6 +184,7 @@
     "password-empty": "Password is empty.",
     "password-too-long": "Password too long (30 characters max.).",
     "password-too-short": "Password too short (6 characters min.).",
+    "username-changed": "Username changed successfully.",
     "username-too-long": "Username too long (30 characters max.).",
     "username-too-short": "Username too short (3 character min.)."
   }

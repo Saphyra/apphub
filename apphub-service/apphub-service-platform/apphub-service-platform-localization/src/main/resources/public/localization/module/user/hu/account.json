@@ -184,6 +184,7 @@
     "password-empty": "A jelszó megadása kötelező.",
     "password-too-long": "Jelszó túl hosszú (Maximum 30 karakter).",
     "password-too-short": "Jelszó túl rövid (Minimum 6 karakter).",
+    "username-changed": "Felhasználónév megváltoztatva.",
     "username-too-long": "Felhasználónév túl hosszú (Maximum 30 karakter).",
     "username-too-short": "Felhasználónév túl rövid (Minimum 3 karakter)."
   }
