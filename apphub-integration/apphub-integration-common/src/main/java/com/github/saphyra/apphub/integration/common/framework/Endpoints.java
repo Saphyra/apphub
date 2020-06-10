@@ -10,11 +10,12 @@ public class Endpoints {
     public static final String GET_MODULES_OF_USER = "/api/modules";
     public static final String SET_FAVORITE = "/api/modules/{module}/favorite";
 
+    public static final String ACCOUNT_PAGE = "/web/user/account";
     public static final String MODULES_PAGE = "/web/modules";
     public static final String WEB_ROOT = "/web";
     public static final String ROOT = "/";
 
     public static final String CHANGE_LANGUAGE = "/api/user/account/language";
     public static final String GET_LANGUAGES = "/api/user/data/languages";
-    public static final String CHANGE_EMAIL = "/api/user/account/email";
+    public static final String CHANGE_EMAIL = "/api/user/account/email";;
 }

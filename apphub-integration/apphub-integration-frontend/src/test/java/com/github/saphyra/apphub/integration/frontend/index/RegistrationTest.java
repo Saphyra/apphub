@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.common.model.RegistrationParameters
 import com.github.saphyra.apphub.integration.frontend.SeleniumTest;
 import com.github.saphyra.apphub.integration.frontend.framework.Navigation;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
+import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.frontend.model.registration.EmailValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.registration.PasswordValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.registration.RegistrationValidationResult;
@@ -33,13 +34,13 @@ public class RegistrationTest extends SeleniumTest {
     }
 
     @Test(dataProvider = "registrationParameters")
-    public void verifyValidation(RegistrationParameters parameters, RegistrationValidationResult validationResult) throws InterruptedException {
+    public void verifyValidation(RegistrationParameters parameters, RegistrationValidationResult validationResult) {
         //GIVEN
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         //WHEN
         IndexPageActions.fillRegistrationForm(driver, parameters);
-        Thread.sleep(2000);
+        SleepUtil.sleep(2000);
         //THEN
         IndexPageActions.verifyRegistrationForm(driver, validationResult);
     }

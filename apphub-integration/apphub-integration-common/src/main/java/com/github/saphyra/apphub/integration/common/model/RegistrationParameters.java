@@ -1,24 +1,20 @@
 package com.github.saphyra.apphub.integration.common.model;
 
-import com.github.saphyra.util.IdGenerator;
+import com.github.saphyra.apphub.integration.common.framework.RandomDataProvider;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import static com.github.saphyra.apphub.integration.common.framework.DataConstants.INVALID_CONFIRM_PASSWORD;
+import static com.github.saphyra.apphub.integration.common.framework.DataConstants.INVALID_EMAIL;
+import static com.github.saphyra.apphub.integration.common.framework.DataConstants.TOO_LONG_PASSWORD;
+import static com.github.saphyra.apphub.integration.common.framework.DataConstants.TOO_LONG_USERNAME;
+import static com.github.saphyra.apphub.integration.common.framework.DataConstants.TOO_SHORT_PASSWORD;
+import static com.github.saphyra.apphub.integration.common.framework.DataConstants.TOO_SHORT_USERNAME;
+import static com.github.saphyra.apphub.integration.common.framework.DataConstants.VALID_PASSWORD;
 
 @Data
 @Builder(toBuilder = true)
 public class RegistrationParameters {
-    private static final IdGenerator ID_GENERATOR = new IdGenerator();
-
-    private static final String VALID_PASSWORD = "valid-password";
-    private static final String TOO_SHORT_USERNAME = "to";
-    private static final String TOO_SHORT_PASSWORD = "passw";
-    private static final String INVALID_CONFIRM_PASSWORD = "invalid-confirm-password";
-    private static final String INVALID_EMAIL = "asd";
-
     private final String username;
     private final String password;
     private final String email;
@@ -45,21 +41,15 @@ public class RegistrationParameters {
     }
 
     private static RegistrationParameters validParameters(String password) {
-        String[] userNameCharacters = ("user-" + ID_GENERATOR.generateRandomId()).split("");
-        String userName = Arrays.stream(userNameCharacters)
-            .limit(30)
-            .collect(Collectors.joining());
         return RegistrationParameters.builder()
-            .email(generateEmail())
-            .username(userName)
+            .email(RandomDataProvider.generateEmail())
+            .username(RandomDataProvider.generateUsername())
             .password(password)
             .confirmPassword(password)
             .build();
     }
 
-    public static String generateEmail() {
-        return "email-" + ID_GENERATOR.generateRandomId() + "@test.com";
-    }
+
 
     public static RegistrationParameters invalidEmailParameters() {
         return validParameters().toBuilder()
@@ -74,11 +64,8 @@ public class RegistrationParameters {
     }
 
     public static RegistrationParameters tooLongUsernameParameters() {
-        String userName = Stream.generate(() -> "a")
-            .limit(31)
-            .collect(Collectors.joining());
         return validParameters().toBuilder()
-            .username(userName)
+            .username(TOO_LONG_USERNAME)
             .build();
     }
 
@@ -90,12 +77,9 @@ public class RegistrationParameters {
     }
 
     public static RegistrationParameters tooLongPasswordParameters() {
-        String password = Stream.generate(() -> "a")
-            .limit(31)
-            .collect(Collectors.joining());
         return validParameters().toBuilder()
-            .password(password)
-            .confirmPassword(password)
+            .password(TOO_LONG_PASSWORD)
+            .confirmPassword(TOO_LONG_PASSWORD)
             .build();
     }
 

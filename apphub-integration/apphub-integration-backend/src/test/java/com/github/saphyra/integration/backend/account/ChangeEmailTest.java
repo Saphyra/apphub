@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.model.ChangeEmailRequest;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.common.framework.RandomDataProvider;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
@@ -87,7 +88,7 @@ public class ChangeEmailTest extends TestBase {
         UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
 
         ChangeEmailRequest request = ChangeEmailRequest.builder()
-            .email(RegistrationParameters.generateEmail())
+            .email(RandomDataProvider.generateEmail())
             .password(null)
             .build();
 
@@ -106,7 +107,7 @@ public class ChangeEmailTest extends TestBase {
         UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
 
         ChangeEmailRequest request = ChangeEmailRequest.builder()
-            .email(RegistrationParameters.generateEmail())
+            .email(RandomDataProvider.generateEmail())
             .password("incorrect-password")
             .build();
 
@@ -124,7 +125,7 @@ public class ChangeEmailTest extends TestBase {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
 
-        String newEmail = RegistrationParameters.generateEmail();
+        String newEmail = RandomDataProvider.generateEmail();
         ChangeEmailRequest request = ChangeEmailRequest.builder()
             .email(newEmail)
             .password(userData.getPassword())

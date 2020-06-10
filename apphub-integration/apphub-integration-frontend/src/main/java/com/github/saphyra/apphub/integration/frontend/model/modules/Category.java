@@ -18,4 +18,8 @@ public class Category {
             .map(Module::new)
             .collect(Collectors.toList());
     }
+
+    public String getCategoryId() {
+        return element.getAttribute("id");
+    }
 }

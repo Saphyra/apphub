@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil
 import com.github.saphyra.apphub.integration.frontend.model.modules.Category;
 import com.github.saphyra.apphub.integration.frontend.model.modules.Favorite;
 import com.github.saphyra.apphub.integration.frontend.model.modules.Module;
+import com.github.saphyra.apphub.integration.frontend.model.modules.ModuleLocation;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -21,7 +22,8 @@ public class ModulesPageActions {
 
         ModulesPage.logoutButton(driver).click();
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.WEB_ROOT)));
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.WEB_ROOT)))
+            .assertTrue();
 
         NotificationUtil.verifySuccessNotification(driver, "Sikeres kijelentkezés.");
     }
@@ -49,5 +51,27 @@ public class ModulesPageActions {
             .stream()
             .map(Category::new)
             .collect(Collectors.toList());
+    }
+
+    public static void openModule(WebDriver driver, ModuleLocation moduleLocation) {
+        String modulesPageUrl = UrlFactory.create(Endpoints.MODULES_PAGE);
+        assertThat(driver.getCurrentUrl()).isEqualTo(modulesPageUrl);
+
+        AwaitilityWrapper.getListWithWait(() -> getCategories(driver), categories -> !categories.isEmpty())
+            .stream()
+            .filter(category -> category.getCategoryId().endsWith(moduleLocation.getCategoryId()))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Category not found for moduleLocation " + moduleLocation))
+            .getModules()
+            .stream()
+            .filter(module -> module.getModuleId().endsWith(moduleLocation.getModuleId()))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Module not found for moduleLocation " + moduleLocation))
+            .open();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> !driver.getCurrentUrl().equals(modulesPageUrl))
+            .assertTrue();
+
     }
 }

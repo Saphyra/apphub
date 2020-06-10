@@ -16,6 +16,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -52,13 +53,22 @@ public class AwaitilityWrapper {
         return helper.getResult(result -> Optional.ofNullable(result).orElse(Collections.emptyList()));
     }
 
-    public boolean until(Callable<Boolean> callable) {
+    public AwaitResult until(Callable<Boolean> callable) {
         try {
             conditionFactory.until(callable);
-            return true;
+            return new AwaitResult(true);
         } catch (ConditionTimeoutException e) {
             log.info("Condition failed.", e);
-            return false;
+            return new AwaitResult(false);
+        }
+    }
+
+    @RequiredArgsConstructor
+    public static class AwaitResult{
+        private final boolean result;
+
+        public void assertTrue() {
+            assertThat(result).isTrue();
         }
     }
 

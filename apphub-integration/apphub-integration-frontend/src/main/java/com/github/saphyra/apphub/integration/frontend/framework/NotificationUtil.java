@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @Slf4j
 public class NotificationUtil {
     private static final By NOTIFICATIONS_LOCATOR = By.cssSelector("#notification-container > DIV");
@@ -32,6 +34,10 @@ public class NotificationUtil {
         if (!backgroundColor.equals("rgba(0, 128, 0, 1)")) {
             throw new AssertionError("Notification's background color is not green. It is " + backgroundColor);
         }
+    }
+
+    public static void verifyZeroNotifications(WebDriver driver) {
+        assertThat(driver.findElements(NOTIFICATIONS_LOCATOR)).isEmpty();
     }
 
     private static void waitUntilNotificationVisible(WebDriver driver, String notificationMessage) {

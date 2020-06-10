@@ -48,8 +48,8 @@ public class RedirectionTest extends SeleniumTest {
 
         Navigation.toIndexPage(driver, false);
 
-        boolean isUrlCorrect = AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)));
-        assertThat(isUrlCorrect).isTrue();
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
+            .assertTrue();
     }
 }

@@ -27,8 +27,6 @@ class AccountControllerImpl implements AccountController {
     private final RegistrationService registrationService;
 
     @Override
-    //TODO api test
-    //TODO fe test
     public void changeEmail(AccessTokenHeader accessTokenHeader, ChangeEmailRequest request) {
         log.info("{} wants to change his email", accessTokenHeader.getUserId());
         changeEmailService.changeEmail(accessTokenHeader.getUserId(), request);

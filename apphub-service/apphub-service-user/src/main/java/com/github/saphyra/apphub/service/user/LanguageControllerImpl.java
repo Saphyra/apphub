@@ -39,5 +39,4 @@ public class LanguageControllerImpl implements LanguageController {
     public String getLanguage(UUID userId) {
         return languageService.getLanguage(userId);
     }
-
 }

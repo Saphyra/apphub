@@ -33,4 +33,12 @@ public class Module {
         String[] classes = element.findElement(FAVORITE_BUTTON).getAttribute("class").split(" ");
         return Arrays.asList(classes).contains("favorite");
     }
+
+    public String getModuleId() {
+        return element.getAttribute("id");
+    }
+
+    public void open() {
+        element.findElement(LINK).click();
+    }
 }

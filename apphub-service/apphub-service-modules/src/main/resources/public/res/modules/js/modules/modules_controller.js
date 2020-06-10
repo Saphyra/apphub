@@ -62,18 +62,15 @@
 
         new MapStream(categoriesToDisplay)
             .map(function(category, modules){
-                const categoryNode = document.createElement("div");
-                    categoryNode.classList.add("category");
-
-                    const categoryNameLabel = document.createElement("div");
-                        categoryNameLabel.classList.add("category-name");
-                        categoryNameLabel.innerHTML = categoryNames.get(category);
-                categoryNode.appendChild(categoryNameLabel);
+                const categoryNode = createCategoryNode(category);
+                    categoryNode.id="category-" + category;
 
                     const modulesContainer = document.createElement("div");
                         new Stream(modules)
                             .map(function(module){
-                                return createModuleNode(module, createMarkFavoriteFunction(module, !module.favorite));
+                                const moduleNode = createModuleNode(module, createMarkFavoriteFunction(module, !module.favorite));
+                                    moduleNode.id = "module-" + module.name;
+                                return moduleNode;
                             })
                             .forEach(function(node){modulesContainer.appendChild(node)});
                 categoryNode.appendChild(modulesContainer);
@@ -98,13 +95,7 @@
 
         new MapStream(categoriesToDisplay)
             .map(function(category, modules){
-                const categoryNode = document.createElement("div");
-                    categoryNode.classList.add("category");
-
-                    const categoryNameLabel = document.createElement("div");
-                        categoryNameLabel.classList.add("category-name");
-                        categoryNameLabel.innerHTML = categoryNames.get(category);
-                categoryNode.appendChild(categoryNameLabel);
+                const categoryNode = createCategoryNode(category);
 
                     const modulesContainer = document.createElement("div");
                         new Stream(modules)
@@ -117,6 +108,17 @@
             })
             .toListStream()
             .forEach(function(node){listContainer.appendChild(node)});
+    }
+
+    function createCategoryNode(category){
+        const categoryNode = document.createElement("div");
+            categoryNode.classList.add("category");
+
+            const categoryNameLabel = document.createElement("div");
+                categoryNameLabel.classList.add("category-name");
+                categoryNameLabel.innerHTML = categoryNames.get(category);
+        categoryNode.appendChild(categoryNameLabel);
+        return categoryNode
     }
 
     function createModuleNode(module, callback){

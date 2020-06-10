@@ -14,6 +14,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
+import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.verifyInvalidFieldState;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
@@ -31,40 +32,31 @@ public class IndexPageActions {
     public static void verifyRegistrationForm(WebDriver driver, RegistrationValidationResult validationResult) {
         assertThat(driver.getCurrentUrl()).endsWith(Endpoints.WEB_ROOT);
 
-        verifyState(
+        verifyInvalidFieldState(
             IndexPage.emailValid(driver),
             validationResult.getEmail() != EmailValidationResult.VALID,
             validationResult.getEmail().getErrorMessage()
         );
 
-        verifyState(
+        verifyInvalidFieldState(
             IndexPage.usernameValid(driver),
             validationResult.getUsername() != UsernameValidationResult.VALID,
             validationResult.getUsername().getErrorMessage()
         );
 
-        verifyState(
+        verifyInvalidFieldState(
             IndexPage.passwordValid(driver),
             validationResult.getPassword() != PasswordValidationResult.VALID,
             validationResult.getPassword().getErrorMessage()
         );
 
-        verifyState(
+        verifyInvalidFieldState(
             IndexPage.confirmPasswordValid(driver),
             validationResult.getConfirmPassword() != PasswordValidationResult.VALID,
             validationResult.getConfirmPassword().getErrorMessage()
         );
 
         assertThat(IndexPage.registrationSubmitButton(driver).isEnabled()).isEqualTo(validationResult.allValid());
-    }
-
-    private static void verifyState(WebElement inputValid, boolean shouldBeVisible, String errorMessage) {
-        if (shouldBeVisible) {
-            assertThat(inputValid.isDisplayed()).isTrue();
-            assertThat(inputValid.getAttribute("title")).isEqualTo(errorMessage);
-        } else {
-            assertThat(inputValid.isDisplayed()).isFalse();
-        }
     }
 
     public static void registerUser(WebDriver driver, RegistrationParameters registrationParameters) {

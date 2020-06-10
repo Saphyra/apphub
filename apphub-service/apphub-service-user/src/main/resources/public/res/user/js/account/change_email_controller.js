@@ -1,8 +1,8 @@
 (function ChangeEmailController(){
     scriptLoader.loadScript("/res/user/js/common/validation_service.js");
 
-    const INVALID_EMAIL = "ch-email-invalid-new-email";
-    const INVALID_PASSWORD = "ch-email-invalid-password";
+    const INVALID_EMAIL = "#ch-email-invalid-new-email";
+    const INVALID_PASSWORD = "#ch-email-invalid-password";
 
     events.CHANGE_EMAIL_ATTEMPT = "change_email_attempt";
     events.CHANGE_EMAIL_VALIDATION_ATTEMPT = "change_email_validation_attempt";
@@ -51,7 +51,7 @@
 
             const request = new Request(Mapping.getEndpoint("CHANGE_EMAIL"), payload);
                 request.processValidResponse = function(){
-                    notificationService.showSuccess(Localization.getAdditionalContent("email-changed"))
+                    notificationService.showSuccess(Localization.getAdditionalContent("email-changed"));
                 }
             dao.sendRequestAsync(request);
             blockSubmission();
