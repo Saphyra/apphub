@@ -89,10 +89,10 @@
                     <div class="input-wrapper">
                         <span id="ch-password-password"></span>
                         <input type="password" id="ch-password-password-input" class="change-password-input">
-                        <div id="ch-new-username-invalid-password" class="invalid-input">X</div>
+                        <div id="ch-password-invalid-password" class="invalid-input">X</div>
                     </div>
                 </div>
-                <button id="change-password-button" class="submit-button"></button>
+                <button id="change-password-button" class="submit-button" onclick="eventProcessor.processEvent(new Event(events.CHANGE_PASSWORD_ATTEMPT))"></button>
             </div>
         </section>
 

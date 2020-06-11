@@ -16,6 +16,13 @@ class AccountPage {
     private static final By CHANGE_USERNAME_INVALID_NEW_USERNAME = By.id("ch-username-invalid-new-username");
     private static final By CHANGE_USERNAME_INVALID_PASSWORD = By.id("ch-username-invalid-password");
     private static final By CHANGE_USERNAME_SUBMIT_BUTTON = By.id("change-username-button");
+    private static final By CHANGE_PASSWORD_NEW_PASSWORD_INPUT = By.id("ch-password-new-password-input");
+    private static final By CHANGE_PASSWORD_CONFIRM_PASSWORD_INPUT = By.id("ch-password-confirm-password-input");
+    private static final By CHANGE_PASSWORD_PASSWORD_INPUT = By.id("ch-password-password-input");
+    private static final By CHANGE_PASSWORD_INVALID_NEW_PASSWORD = By.id("ch-password-invalid-new-password");
+    private static final By CHANGE_PASSWORD_INVALID_CONFIRM_PASSWORD = By.id("ch-password-invalid-confirm-password");
+    private static final By CHANGE_PASSWORD_INVALID_PASSWORD = By.id("ch-password-invalid-password");
+    private static final By CHANGE_PASSWORD_SUBMIT_BUTTON = By.id("change-password-button");
 
     public static WebElement changeEmailNewEmailInput(WebDriver driver) {
         return driver.findElement(CHANGE_EMAIL_NEW_EMAIL_INPUT);
@@ -59,5 +66,33 @@ class AccountPage {
 
     public static WebElement changeUsernameSubmitButton(WebDriver driver) {
         return driver.findElement(CHANGE_USERNAME_SUBMIT_BUTTON);
+    }
+
+    public static WebElement changePasswordNewPasswordInput(WebDriver driver) {
+        return driver.findElement(CHANGE_PASSWORD_NEW_PASSWORD_INPUT);
+    }
+
+    public static WebElement changePasswordConfirmPasswordInput(WebDriver driver) {
+        return driver.findElement(CHANGE_PASSWORD_CONFIRM_PASSWORD_INPUT);
+    }
+
+    public static WebElement changePasswordPasswordInput(WebDriver driver) {
+        return driver.findElement(CHANGE_PASSWORD_PASSWORD_INPUT);
+    }
+
+    public static WebElement changePasswordInvalidNewPassword(WebDriver driver) {
+        return driver.findElement(CHANGE_PASSWORD_INVALID_NEW_PASSWORD);
+    }
+
+    public static WebElement changePasswordInvalidConfirmPassword(WebDriver driver) {
+        return driver.findElement(CHANGE_PASSWORD_INVALID_CONFIRM_PASSWORD);
+    }
+
+    public static WebElement changePasswordInvalidPassword(WebDriver driver) {
+        return driver.findElement(CHANGE_PASSWORD_INVALID_PASSWORD);
+    }
+
+    public static WebElement changePasswordSubmitButton(WebDriver driver) {
+        return driver.findElement(CHANGE_PASSWORD_SUBMIT_BUTTON);
     }
 }

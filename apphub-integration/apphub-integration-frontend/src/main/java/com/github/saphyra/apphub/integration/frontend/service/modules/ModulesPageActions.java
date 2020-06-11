@@ -9,7 +9,10 @@ import com.github.saphyra.apphub.integration.frontend.model.modules.Favorite;
 import com.github.saphyra.apphub.integration.frontend.model.modules.Module;
 import com.github.saphyra.apphub.integration.frontend.model.modules.ModuleLocation;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +46,7 @@ public class ModulesPageActions {
     }
 
     public static void search(WebDriver driver, String search) {
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.presenceOfElementLocated(ModulesPage.SEARCH_INPUT));
         clearAndFill(ModulesPage.searchInput(driver), search);
     }
 

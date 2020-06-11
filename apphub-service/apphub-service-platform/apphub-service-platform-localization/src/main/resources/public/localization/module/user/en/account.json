@@ -181,6 +181,7 @@
     "email-invalid": "Invalid e-mail address.",
     "incorrect-confirm-password": "Incorrect confirm password.",
     "language-changed": "Language changed.",
+    "password-changed": "Password Changed.",
     "password-empty": "Password is empty.",
     "password-too-long": "Password too long (30 characters max.).",
     "password-too-short": "Password too short (6 characters min.).",

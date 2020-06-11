@@ -10,7 +10,7 @@ class ModulesPage {
     private static final By LOGOUT_BUTTON = By.id("logout-button");
     private static final By GET_MODULES = By.cssSelector("#all-modules-list .module");
     private static final By GET_FAVORITES = By.cssSelector("#favorites-list .module");
-    private static final By SEARCH_INPUT = By.id("search-field");
+    static final By SEARCH_INPUT = By.id("search-field");
     private static final By CATEGORIES = By.cssSelector("#all-modules-list .category");
 
     static WebElement logoutButton(WebDriver driver) {

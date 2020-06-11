@@ -9,10 +9,11 @@ import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrappe
 import com.github.saphyra.apphub.integration.frontend.framework.Navigation;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
-import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChEmailPasswordValidationResult;
-import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChangeEmailParameters;
-import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChangeEmailValidationResult;
-import com.github.saphyra.apphub.integration.frontend.model.account.change_email.EmailValidationResult;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_password.ChPasswordPasswordValidationResult;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_password.ChangePasswordParameters;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_password.ChangePasswordValidationResult;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_password.ConfirmPasswordValidationResult;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_password.NewPasswordValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.login.LoginParameters;
 import com.github.saphyra.apphub.integration.frontend.model.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.frontend.service.account.AccountPageActions;
@@ -22,18 +23,20 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-public class ChangeEmailTest extends SeleniumTest {
+public class ChangePasswordTest extends SeleniumTest {
     @DataProvider(name = "invalidParameters", parallel = true)
     public Object[][] invalidParametersProvider() {
         return new Object[][]{
-            new Object[]{ChangeEmailParameters.valid(), valid()},
-            new Object[]{ChangeEmailParameters.invalidEmail(), invalidEmail()},
-            new Object[]{ChangeEmailParameters.emptyPassword(), emptyPassword()}
+            new Object[]{ChangePasswordParameters.valid(), valid()},
+            new Object[]{ChangePasswordParameters.tooShortPassword(), tooShortPassword()},
+            new Object[]{ChangePasswordParameters.tooLongPassword(), tooLongPassword()},
+            new Object[]{ChangePasswordParameters.invalidConfirmPassword(), invalidConfirmPassword()},
+            new Object[]{ChangePasswordParameters.emptyPassword(), emptyPassword()},
         };
     }
 
     @Test(dataProvider = "invalidParameters")
-    public void invalidParameters(ChangeEmailParameters parameters, ChangeEmailValidationResult validationResult) {
+    public void invalidParameters(ChangePasswordParameters parameters, ChangePasswordValidationResult validationResult){
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -41,36 +44,14 @@ public class ChangeEmailTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
-        AccountPageActions.fillChangeEmailForm(driver, parameters);
+        AccountPageActions.fillChangePasswordForm(driver, parameters);
         SleepUtil.sleep(2000);
 
-        AccountPageActions.verifyChangeEmailForm(driver, validationResult);
+        AccountPageActions.verifyChangePasswordForm(driver, validationResult);
     }
 
     @Test
-    public void emailAlreadyExists() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters existingUserData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, existingUserData);
-        ModulesPageActions.logout(driver);
-
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
-
-        ChangeEmailParameters parameters = ChangeEmailParameters.valid()
-            .toBuilder()
-            .email(existingUserData.getEmail())
-            .build();
-        AccountPageActions.changeEmail(driver, parameters);
-
-        NotificationUtil.verifyErrorNotification(driver, "Az email foglalt.");
-    }
-
-    @Test
-    public void incorrectPassword() {
+    public void invalidPassword(){
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -78,17 +59,18 @@ public class ChangeEmailTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
-        ChangeEmailParameters parameters = ChangeEmailParameters.valid()
+        ChangePasswordParameters parameters = ChangePasswordParameters.valid()
             .toBuilder()
             .password(DataConstants.INVALID_PASSWORD)
             .build();
-        AccountPageActions.changeEmail(driver, parameters);
+
+        AccountPageActions.changePassword(driver, parameters);
 
         NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
     }
 
     @Test
-    public void successfulEmailChange() {
+    public void successfulPasswordChange(){
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -96,40 +78,55 @@ public class ChangeEmailTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
-        ChangeEmailParameters parameters = ChangeEmailParameters.valid();
-        AccountPageActions.changeEmail(driver, parameters);
+        ChangePasswordParameters parameters = ChangePasswordParameters.valid();
+        AccountPageActions.changePassword(driver, parameters);
 
-        NotificationUtil.verifySuccessNotification(driver, "Email cím megváltoztatva.");
+        NotificationUtil.verifySuccessNotification(driver, "Jelszó megváltoztatva.");
         AccountPageActions.back(driver);
 
         ModulesPageActions.logout(driver);
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
         NotificationUtil.verifyErrorNotification(driver, "Az email cím és jelszó kombinációja ismeretlen.");
 
-        IndexPageActions.submitLogin(driver, LoginParameters.builder().email(parameters.getEmail()).password(userData.getPassword()).build());
+        IndexPageActions.submitLogin(driver, LoginParameters.builder().email(userData.getEmail()).password(parameters.getNewPassword()).build());
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
             .assertTrue();
     }
 
-    private ChangeEmailValidationResult valid() {
-        return ChangeEmailValidationResult.builder()
-            .email(EmailValidationResult.VALID)
-            .password(ChEmailPasswordValidationResult.VALID)
+    private ChangePasswordValidationResult valid() {
+        return ChangePasswordValidationResult.builder()
+            .newPassword(NewPasswordValidationResult.VALID)
+            .confirmPassword(ConfirmPasswordValidationResult.VALID)
+            .password(ChPasswordPasswordValidationResult.VALID)
             .build();
     }
 
-    private ChangeEmailValidationResult invalidEmail() {
+    private ChangePasswordValidationResult tooShortPassword() {
         return valid()
             .toBuilder()
-            .email(EmailValidationResult.INVALID)
+            .newPassword(NewPasswordValidationResult.TOO_SHORT)
             .build();
     }
 
-    private ChangeEmailValidationResult emptyPassword() {
+    private ChangePasswordValidationResult tooLongPassword() {
         return valid()
             .toBuilder()
-            .password(ChEmailPasswordValidationResult.EMPTY_PASSWORD)
+            .newPassword(NewPasswordValidationResult.TOO_LONG)
+            .build();
+    }
+
+    private ChangePasswordValidationResult invalidConfirmPassword() {
+        return valid()
+            .toBuilder()
+            .confirmPassword(ConfirmPasswordValidationResult.INVALID_CONFIRM_PASSWORD)
+            .build();
+    }
+
+    private ChangePasswordValidationResult emptyPassword() {
+        return valid()
+            .toBuilder()
+            .password(ChPasswordPasswordValidationResult.EMPTY_PASSWORD)
             .build();
     }
 }

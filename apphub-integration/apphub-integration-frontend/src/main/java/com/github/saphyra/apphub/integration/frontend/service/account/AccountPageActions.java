@@ -8,6 +8,11 @@ import com.github.saphyra.apphub.integration.frontend.model.account.change_email
 import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChangeEmailParameters;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChangeEmailValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_email.EmailValidationResult;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_password.ChPasswordPasswordValidationResult;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_password.ChangePasswordParameters;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_password.ChangePasswordValidationResult;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_password.ConfirmPasswordValidationResult;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_password.NewPasswordValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_username.ChUsernamePasswordValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_username.ChangeUsernameParameters;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_username.ChangeUsernameValidationResult;
@@ -90,5 +95,45 @@ public class AccountPageActions {
         );
 
         assertThat(AccountPage.changeUsernameSubmitButton(driver).isEnabled()).isEqualTo(validationResult.allValid());
+    }
+
+    public static void changePassword(WebDriver driver, ChangePasswordParameters parameters) {
+        fillChangePasswordForm(driver, parameters);
+        AwaitilityWrapper.createDefault()
+            .until(() -> AccountPage.changePasswordSubmitButton(driver).isEnabled())
+            .assertTrue();
+        AccountPage.changePasswordSubmitButton(driver).click();
+    }
+
+    public static void fillChangePasswordForm(WebDriver driver, ChangePasswordParameters parameters) {
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.ACCOUNT_PAGE));
+
+        clearAndFill(AccountPage.changePasswordNewPasswordInput(driver), parameters.getNewPassword());
+        clearAndFill(AccountPage.changePasswordConfirmPasswordInput(driver), parameters.getConfirmPassword());
+        clearAndFill(AccountPage.changePasswordPasswordInput(driver), parameters.getPassword());
+    }
+
+    public static void verifyChangePasswordForm(WebDriver driver, ChangePasswordValidationResult validationResult) {
+        NotificationUtil.verifyZeroNotifications(driver);
+
+        verifyInvalidFieldState(
+            AccountPage.changePasswordInvalidNewPassword(driver),
+            validationResult.getNewPassword() != NewPasswordValidationResult.VALID,
+            validationResult.getNewPassword().getErrorMessage()
+        );
+
+        verifyInvalidFieldState(
+            AccountPage.changePasswordInvalidConfirmPassword(driver),
+            validationResult.getConfirmPassword() != ConfirmPasswordValidationResult.VALID,
+            validationResult.getConfirmPassword().getErrorMessage()
+        );
+
+        verifyInvalidFieldState(
+            AccountPage.changePasswordInvalidPassword(driver),
+            validationResult.getPassword() != ChPasswordPasswordValidationResult.VALID,
+            validationResult.getPassword().getErrorMessage()
+        );
+
+        assertThat(AccountPage.changePasswordSubmitButton(driver).isEnabled()).isEqualTo(validationResult.allValid());
     }
 }
