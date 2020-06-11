@@ -77,13 +77,19 @@
     */
     function printStoredMessages(){
         if(hasValue(sessionStorage.errorMessage)){
-            showError(Localization.getAdditionalContent(sessionStorage.errorMessage));
-            delete sessionStorage.errorMessage;
+            try{
+                showError(Localization.getAdditionalContent(sessionStorage.errorMessage));
+            } finally{
+                delete sessionStorage.errorMessage;
+            }
         }
         
         if(hasValue(sessionStorage.successMessage)){
-            showSuccess(Localization.getAdditionalContent(sessionStorage.successMessage));
-            delete sessionStorage.successMessage;
+            try{
+                showSuccess(Localization.getAdditionalContent(sessionStorage.successMessage));
+            }finally{
+                delete sessionStorage.successMessage;
+            }
         }
     }
 })();

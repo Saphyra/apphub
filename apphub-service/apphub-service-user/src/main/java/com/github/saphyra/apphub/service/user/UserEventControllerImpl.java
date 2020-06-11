@@ -23,6 +23,7 @@ public class UserEventControllerImpl implements UserEventController {
     @Override
     public void deleteAccountEvent(SendEventRequest<DeleteAccountEvent> request) {
         log.info("Processing event {}", request.getPayload());
+        log.debug("Request: {}", request);
         UUID userId = request.getPayload().getUserId();
         accessTokenDao.deleteByUserId(userId);
         userDao.deleteById(userId);

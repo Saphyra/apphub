@@ -23,6 +23,9 @@ class AccountPage {
     private static final By CHANGE_PASSWORD_INVALID_CONFIRM_PASSWORD = By.id("ch-password-invalid-confirm-password");
     private static final By CHANGE_PASSWORD_INVALID_PASSWORD = By.id("ch-password-invalid-password");
     private static final By CHANGE_PASSWORD_SUBMIT_BUTTON = By.id("change-password-button");
+    private static final By DELETE_ACCOUNT_PASSWORD_INPUT = By.id("delete-account-password-input");
+    private static final By DELETE_ACCOUNT_INVALID_PASSWORD = By.id("delete-account-invalid-password");
+    private static final By DELETE_ACCOUNT_SUBMIT_BUTTON = By.id("delete-account-button");
 
     public static WebElement changeEmailNewEmailInput(WebDriver driver) {
         return driver.findElement(CHANGE_EMAIL_NEW_EMAIL_INPUT);
@@ -94,5 +97,17 @@ class AccountPage {
 
     public static WebElement changePasswordSubmitButton(WebDriver driver) {
         return driver.findElement(CHANGE_PASSWORD_SUBMIT_BUTTON);
+    }
+
+    public static WebElement deleteAccountPasswordInput(WebDriver driver) {
+        return driver.findElement(DELETE_ACCOUNT_PASSWORD_INPUT);
+    }
+
+    public static WebElement deleteAccountInvalidPassword(WebDriver driver) {
+        return driver.findElement(DELETE_ACCOUNT_INVALID_PASSWORD);
+    }
+
+    public static WebElement deleteAccountSubmitButton(WebDriver driver) {
+        return driver.findElement(DELETE_ACCOUNT_SUBMIT_BUTTON);
     }
 }

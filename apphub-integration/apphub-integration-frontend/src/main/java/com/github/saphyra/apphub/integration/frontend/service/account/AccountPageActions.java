@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.integration.frontend.service.account;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChEmailPasswordValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChangeEmailParameters;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChangeEmailValidationResult;
@@ -17,6 +16,7 @@ import com.github.saphyra.apphub.integration.frontend.model.account.change_usern
 import com.github.saphyra.apphub.integration.frontend.model.account.change_username.ChangeUsernameParameters;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_username.ChangeUsernameValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_username.UsernameValidationResult;
+import com.github.saphyra.apphub.integration.frontend.model.account.delete_account.DeleteAccountPasswordValidationResult;
 import org.openqa.selenium.WebDriver;
 
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
@@ -40,8 +40,6 @@ public class AccountPageActions {
     }
 
     public static void verifyChangeEmailForm(WebDriver driver, ChangeEmailValidationResult validationResult) {
-        NotificationUtil.verifyZeroNotifications(driver);
-
         verifyInvalidFieldState(
             AccountPage.changeEmailInvalidNewEmail(driver),
             validationResult.getEmail() != EmailValidationResult.VALID,
@@ -80,8 +78,6 @@ public class AccountPageActions {
     }
 
     public static void verifyChangeUsernameForm(WebDriver driver, ChangeUsernameValidationResult validationResult) {
-        NotificationUtil.verifyZeroNotifications(driver);
-
         verifyInvalidFieldState(
             AccountPage.changeUsernameInvalidNewUsername(driver),
             validationResult.getUsername() != UsernameValidationResult.VALID,
@@ -114,8 +110,6 @@ public class AccountPageActions {
     }
 
     public static void verifyChangePasswordForm(WebDriver driver, ChangePasswordValidationResult validationResult) {
-        NotificationUtil.verifyZeroNotifications(driver);
-
         verifyInvalidFieldState(
             AccountPage.changePasswordInvalidNewPassword(driver),
             validationResult.getNewPassword() != NewPasswordValidationResult.VALID,
@@ -135,5 +129,29 @@ public class AccountPageActions {
         );
 
         assertThat(AccountPage.changePasswordSubmitButton(driver).isEnabled()).isEqualTo(validationResult.allValid());
+    }
+
+    public static void deleteAccount(WebDriver driver, String password) {
+        fillDeleteAccountForm(driver, password);
+        AwaitilityWrapper.createDefault()
+            .until(() -> AccountPage.deleteAccountSubmitButton(driver).isEnabled())
+            .assertTrue();
+        AccountPage.deleteAccountSubmitButton(driver).click();
+    }
+    
+    public static void fillDeleteAccountForm(WebDriver driver, String password) {
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.ACCOUNT_PAGE));
+
+        clearAndFill(AccountPage.deleteAccountPasswordInput(driver), password);
+    }
+
+    public static void verifyDeleteAccountForm(WebDriver driver, DeleteAccountPasswordValidationResult validationResult) {
+        verifyInvalidFieldState(
+            AccountPage.deleteAccountInvalidPassword(driver),
+            validationResult != DeleteAccountPasswordValidationResult.VALID,
+            validationResult.getErrorMessage()
+        );
+
+        assertThat(AccountPage.deleteAccountSubmitButton(driver).isEnabled()).isEqualTo(validationResult == DeleteAccountPasswordValidationResult.VALID);
     }
 }

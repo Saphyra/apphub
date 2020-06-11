@@ -83,8 +83,8 @@
     }
 
     function getPassword(){
-            return $("#ch-email-password-input").val();
-        }
+        return $("#ch-email-password-input").val();
+    }
 
     function blockSubmission(){
         submissionAllowed = false;

@@ -56,4 +56,10 @@ public class AccountPageActions {
             .body(request)
             .post(UrlFactory.create(Endpoints.CHANGE_PASSWORD));
     }
+
+    public static Response getDeleteAccountResponse(Language locale, UUID accessTokenId, OneParamRequest<String> request) {
+        return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
+            .body(request)
+            .delete(UrlFactory.create(Endpoints.DELETE_ACCOUNT));
+    }
 }

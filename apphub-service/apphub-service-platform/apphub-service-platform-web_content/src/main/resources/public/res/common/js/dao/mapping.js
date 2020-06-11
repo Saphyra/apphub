@@ -10,6 +10,7 @@ window.Mapping = new function(){
         CHANGE_PASSWORD: new Endpoint("/api/user/account/password", HttpMethod.POST),
         CHANGE_USERNAME: new Endpoint("/api/user/account/username", HttpMethod.POST),
         CHECK_SESSION: new Endpoint("/api/user/authentication/session", HttpMethod.GET),
+        DELETE_ACCOUNT: new Endpoint("/api/user/account", HttpMethod.DELETE),
         GET_LANGUAGES: new Endpoint("/api/user/data/languages", HttpMethod.GET),
         GET_MODULES: new Endpoint("/api/modules", HttpMethod.GET),
         LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),

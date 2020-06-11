@@ -1,2 +1,11 @@
 server:
   port: 8085
+
+logging:
+  level:
+    com:
+      github:
+        saphyra:
+          apphub:
+            service:
+              user: DEBUG

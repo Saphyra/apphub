@@ -89,6 +89,17 @@ public class RegistrationTest extends SeleniumTest {
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.WEB_ROOT));
     }
 
+    @Test
+    public void successfulRegistration() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+
+        RegistrationParameters existingUser = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, existingUser);
+
+        NotificationUtil.verifySuccessNotification(driver, "Sikeres regisztráció.");
+    }
+
     private RegistrationValidationResult valid() {
         return RegistrationValidationResult.builder()
             .email(EmailValidationResult.VALID)

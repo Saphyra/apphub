@@ -45,8 +45,6 @@ class AccountControllerImpl implements AccountController {
     }
 
     @Override
-    //TODO api test
-    //TODO fe test
     public void deleteAccount(AccessTokenHeader accessTokenHeader, OneParamRequest<String> password) {
         log.info("{} wants to delete his account", accessTokenHeader.getUserId());
         deleteAccountService.deleteAccount(accessTokenHeader.getUserId(), password.getValue());

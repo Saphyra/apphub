@@ -7,3 +7,13 @@ eventProcessor:
     expirationSeconds: 300
     interval: 60000
   backgroundEventSendingEnabled: true
+
+logging:
+  level:
+    com:
+      github:
+        saphyra:
+          apphub:
+            service:
+              platform:
+                event_gateway: INFO

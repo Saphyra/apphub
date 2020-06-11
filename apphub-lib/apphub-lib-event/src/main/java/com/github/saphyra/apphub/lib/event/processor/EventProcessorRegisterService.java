@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.lib.event.processor;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
+import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -20,7 +21,12 @@ class EventProcessorRegisterService {
         registry.getRequests()
             .stream()
             .parallel()
-            .forEach(eventGatewayApi::registerProcessor);
+            .forEach(this::register);
         log.info("EventProcessors registered.");
+    }
+
+    private void register(RegisterProcessorRequest registerProcessorRequest) {
+        log.info("Registering eventProcessor {}", registerProcessorRequest);
+        eventGatewayApi.registerProcessor(registerProcessorRequest);
     }
 }

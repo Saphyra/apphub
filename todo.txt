@@ -3,6 +3,12 @@ CI
     set up Jenkins as build tool (https://www.blazemeter.com/blog/how-to-setup-scalable-jenkins-on-top-of-a-kubernetes-cluster)
     Set up artifactory
 
+Platform
+    Error monitoring
+
+Common FE
+    Custom confirm dialog
+
 Index page
     Switch language
 
