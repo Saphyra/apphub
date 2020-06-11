@@ -4,10 +4,14 @@ import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChEmailPasswordValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChangeEmailParameters;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChangeEmailValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_email.EmailValidationResult;
-import com.github.saphyra.apphub.integration.frontend.model.account.change_email.PasswordValidationResult;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_username.ChUsernamePasswordValidationResult;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_username.ChangeUsernameParameters;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_username.ChangeUsernameValidationResult;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_username.UsernameValidationResult;
 import org.openqa.selenium.WebDriver;
 
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
@@ -41,7 +45,7 @@ public class AccountPageActions {
 
         verifyInvalidFieldState(
             AccountPage.changeEmailInvalidPassword(driver),
-            validationResult.getPassword() != PasswordValidationResult.VALID,
+            validationResult.getPassword() != ChEmailPasswordValidationResult.VALID,
             validationResult.getPassword().getErrorMessage()
         );
 
@@ -53,5 +57,38 @@ public class AccountPageActions {
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
             .assertTrue();
+    }
+
+    public static void changeUsername(WebDriver driver, ChangeUsernameParameters parameters) {
+        fillChangeUsernameForm(driver, parameters);
+        AwaitilityWrapper.createDefault()
+            .until(() -> AccountPage.changeUsernameSubmitButton(driver).isEnabled())
+            .assertTrue();
+        AccountPage.changeUsernameSubmitButton(driver).click();
+    }
+
+    public static void fillChangeUsernameForm(WebDriver driver, ChangeUsernameParameters parameters) {
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.ACCOUNT_PAGE));
+
+        clearAndFill(AccountPage.changeUsernameNewUsernameInput(driver), parameters.getUsername());
+        clearAndFill(AccountPage.changeUsernamePasswordInput(driver), parameters.getPassword());
+    }
+
+    public static void verifyChangeUsernameForm(WebDriver driver, ChangeUsernameValidationResult validationResult) {
+        NotificationUtil.verifyZeroNotifications(driver);
+
+        verifyInvalidFieldState(
+            AccountPage.changeUsernameInvalidNewUsername(driver),
+            validationResult.getUsername() != UsernameValidationResult.VALID,
+            validationResult.getUsername().getErrorMessage()
+        );
+
+        verifyInvalidFieldState(
+            AccountPage.changeUsernameInvalidPassword(driver),
+            validationResult.getPassword() != ChUsernamePasswordValidationResult.VALID,
+            validationResult.getPassword().getErrorMessage()
+        );
+
+        assertThat(AccountPage.changeUsernameSubmitButton(driver).isEnabled()).isEqualTo(validationResult.allValid());
     }
 }

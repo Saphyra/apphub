@@ -11,6 +11,11 @@ class AccountPage {
     private static final By CHANGE_EMAIL_INVALID_PASSWORD = By.id("ch-email-invalid-password");
     private static final By CHANGE_EMAIL_SUBMIT_BUTTON = By.id("change-email-button");
     private static final By BACK_BUTTON = By.id("back-button");
+    private static final By CHANGE_USERNAME_NEW_USERNAME_INPUT = By.id("ch-username-new-username-input");
+    private static final By CHANGE_USERNAME_PASSWORD_INPUT = By.id("ch-username-password-input");
+    private static final By CHANGE_USERNAME_INVALID_NEW_USERNAME = By.id("ch-username-invalid-new-username");
+    private static final By CHANGE_USERNAME_INVALID_PASSWORD = By.id("ch-username-invalid-password");
+    private static final By CHANGE_USERNAME_SUBMIT_BUTTON = By.id("change-username-button");
 
     public static WebElement changeEmailNewEmailInput(WebDriver driver) {
         return driver.findElement(CHANGE_EMAIL_NEW_EMAIL_INPUT);
@@ -34,5 +39,25 @@ class AccountPage {
 
     public static WebElement backButton(WebDriver driver) {
         return driver.findElement(BACK_BUTTON);
+    }
+
+    public static WebElement changeUsernameNewUsernameInput(WebDriver driver) {
+        return driver.findElement(CHANGE_USERNAME_NEW_USERNAME_INPUT);
+    }
+
+    public static WebElement changeUsernamePasswordInput(WebDriver driver) {
+        return driver.findElement(CHANGE_USERNAME_PASSWORD_INPUT);
+    }
+
+    public static WebElement changeUsernameInvalidNewUsername(WebDriver driver) {
+        return driver.findElement(CHANGE_USERNAME_INVALID_NEW_USERNAME);
+    }
+
+    public static WebElement changeUsernameInvalidPassword(WebDriver driver) {
+        return driver.findElement(CHANGE_USERNAME_INVALID_PASSWORD);
+    }
+
+    public static WebElement changeUsernameSubmitButton(WebDriver driver) {
+        return driver.findElement(CHANGE_USERNAME_SUBMIT_BUTTON);
     }
 }

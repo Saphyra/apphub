@@ -1,19 +1,15 @@
 package com.github.saphyra.apphub.integration.frontend.account;
 
 import com.github.saphyra.apphub.integration.common.framework.DataConstants;
-import com.github.saphyra.apphub.integration.common.framework.Endpoints;
-import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.frontend.SeleniumTest;
-import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.framework.Navigation;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
-import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChangeEmailParameters;
-import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChangeEmailValidationResult;
-import com.github.saphyra.apphub.integration.frontend.model.account.change_email.EmailValidationResult;
-import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChEmailPasswordValidationResult;
-import com.github.saphyra.apphub.integration.frontend.model.login.LoginParameters;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_username.ChUsernamePasswordValidationResult;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_username.ChangeUsernameParameters;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_username.ChangeUsernameValidationResult;
+import com.github.saphyra.apphub.integration.frontend.model.account.change_username.UsernameValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.frontend.service.account.AccountPageActions;
 import com.github.saphyra.apphub.integration.frontend.service.index.IndexPageActions;
@@ -22,18 +18,19 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-public class ChangeEmailTest extends SeleniumTest {
+public class ChangeUsernameTest extends SeleniumTest {
     @DataProvider(name = "invalidParameters", parallel = true)
     public Object[][] invalidParametersProvider() {
         return new Object[][]{
-            new Object[]{ChangeEmailParameters.valid(), valid()},
-            new Object[]{ChangeEmailParameters.invalidEmail(), invalidEmail()},
-            new Object[]{ChangeEmailParameters.emptyPassword(), emptyPassword()}
+            new Object[]{ChangeUsernameParameters.valid(), valid()},
+            new Object[]{ChangeUsernameParameters.tooShortUsername(), tooShortUsername()},
+            new Object[]{ChangeUsernameParameters.tooLongUsername(), tooLongUsername()},
+            new Object[]{ChangeUsernameParameters.emptyPassword(), emptyPassword()}
         };
     }
 
     @Test(dataProvider = "invalidParameters")
-    public void invalidParameters(ChangeEmailParameters parameters, ChangeEmailValidationResult validationResult) {
+    public void invalidParameters(ChangeUsernameParameters parameters, ChangeUsernameValidationResult validationResult) {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -41,14 +38,14 @@ public class ChangeEmailTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
-        AccountPageActions.fillChangeEmailForm(driver, parameters);
+        AccountPageActions.fillChangeUsernameForm(driver, parameters);
         SleepUtil.sleep(2000);
 
-        AccountPageActions.verifyChangeEmailForm(driver, validationResult);
+        AccountPageActions.verifyChangeUsernameForm(driver, validationResult);
     }
 
     @Test
-    public void emailAlreadyExists() {
+    public void usernameAlreadyExists(){
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters existingUserData = RegistrationParameters.validParameters();
@@ -60,13 +57,13 @@ public class ChangeEmailTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
-        ChangeEmailParameters parameters = ChangeEmailParameters.valid()
+        ChangeUsernameParameters parameters = ChangeUsernameParameters.valid()
             .toBuilder()
-            .email(existingUserData.getEmail())
+            .username(existingUserData.getUsername())
             .build();
-        AccountPageActions.changeEmail(driver, parameters);
+        AccountPageActions.changeUsername(driver, parameters);
 
-        NotificationUtil.verifyErrorNotification(driver, "Az email foglalt.");
+        NotificationUtil.verifyErrorNotification(driver, "A felhasználónév foglalt.");
     }
 
     @Test
@@ -78,17 +75,17 @@ public class ChangeEmailTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
-        ChangeEmailParameters parameters = ChangeEmailParameters.valid()
+        ChangeUsernameParameters parameters = ChangeUsernameParameters.valid()
             .toBuilder()
             .password(DataConstants.INVALID_PASSWORD)
             .build();
-        AccountPageActions.changeEmail(driver, parameters);
+        AccountPageActions.changeUsername(driver, parameters);
 
         NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
     }
 
     @Test
-    public void successfulEmailChange() {
+    public void successfulUsernameChange(){
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -96,40 +93,37 @@ public class ChangeEmailTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
-        ChangeEmailParameters parameters = ChangeEmailParameters.valid();
-        AccountPageActions.changeEmail(driver, parameters);
+        ChangeUsernameParameters parameters = ChangeUsernameParameters.valid();
+        AccountPageActions.changeUsername(driver, parameters);
 
-        NotificationUtil.verifySuccessNotification(driver, "Email cím megváltoztatva.");
-        AccountPageActions.back(driver);
-
-        ModulesPageActions.logout(driver);
-        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
-        NotificationUtil.verifyErrorNotification(driver, "Az email cím és jelszó kombinációja ismeretlen.");
-
-        IndexPageActions.submitLogin(driver, LoginParameters.builder().email(parameters.getEmail()).password(userData.getPassword()).build());
-        AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
-            .assertTrue();
+        NotificationUtil.verifySuccessNotification(driver, "Felhasználónév megváltoztatva.");
     }
 
-    private ChangeEmailValidationResult valid() {
-        return ChangeEmailValidationResult.builder()
-            .email(EmailValidationResult.VALID)
-            .password(ChEmailPasswordValidationResult.VALID)
+    private ChangeUsernameValidationResult valid() {
+        return ChangeUsernameValidationResult.builder()
+            .username(UsernameValidationResult.VALID)
+            .password(ChUsernamePasswordValidationResult.VALID)
             .build();
     }
 
-    private ChangeEmailValidationResult invalidEmail() {
+    private ChangeUsernameValidationResult tooShortUsername() {
         return valid()
             .toBuilder()
-            .email(EmailValidationResult.INVALID)
+            .username(UsernameValidationResult.TOO_SHORT)
             .build();
     }
 
-    private ChangeEmailValidationResult emptyPassword() {
+    private ChangeUsernameValidationResult tooLongUsername() {
         return valid()
             .toBuilder()
-            .password(ChEmailPasswordValidationResult.EMPTY_PASSWORD)
+            .username(UsernameValidationResult.TOO_LONG)
+            .build();
+    }
+
+    private ChangeUsernameValidationResult emptyPassword() {
+        return valid()
+            .toBuilder()
+            .password(ChUsernamePasswordValidationResult.EMPTY_PASSWORD)
             .build();
     }
 }

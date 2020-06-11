@@ -7,10 +7,10 @@ import lombok.Data;
 @Builder(toBuilder = true)
 public class ChangeEmailValidationResult {
     private final EmailValidationResult email;
-    private final PasswordValidationResult password;
+    private final ChEmailPasswordValidationResult password;
 
     public boolean allValid() {
         return email == EmailValidationResult.VALID
-            && password == PasswordValidationResult.VALID;
+            && password == ChEmailPasswordValidationResult.VALID;
     }
 }

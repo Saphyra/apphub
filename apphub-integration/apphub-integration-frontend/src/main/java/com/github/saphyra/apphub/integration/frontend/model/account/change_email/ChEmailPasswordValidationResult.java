@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum PasswordValidationResult {
+public enum ChEmailPasswordValidationResult {
     VALID(null),
     EMPTY_PASSWORD("A jelszó megadása kötelező.");
 
