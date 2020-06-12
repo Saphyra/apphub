@@ -177,6 +177,10 @@
     ]
   },
   "additionalContent": {
+    "account-deletion-confirmation-dialog-title": "Törlés megerősítése",
+    "account-deletion-confirmation-dialog-detail": "Biztosan törölni szeretné a fiókját? A törölt adatokat már nem lehet vissza állítani.",
+    "account-deletion-confirmation-dialog-confirm-button": "Törlöm a fiókom.",
+    "account-deletion-confirmation-dialog-decline-button": "Mégse",
     "email-changed": "Email cím megváltoztatva.",
     "email-invalid": "Érvénytelen e-mail cím.",
     "incorrect-confirm-password": "A jelszavak nem egyeznek.",

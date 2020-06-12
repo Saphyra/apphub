@@ -177,6 +177,10 @@
     ]
   },
   "additionalContent": {
+    "account-deletion-confirmation-dialog-title": "Confirm account deletion",
+    "account-deletion-confirmation-dialog-detail": "Are you sure you want to delete your account? Deleted data cannot be restored.",
+    "account-deletion-confirmation-dialog-confirm-button": "Delete my account.",
+    "account-deletion-confirmation-dialog-decline-button": "Cancel",
     "email-changed": "Email changed successfully.",
     "email-invalid": "Invalid e-mail address.",
     "incorrect-confirm-password": "Incorrect confirm password.",

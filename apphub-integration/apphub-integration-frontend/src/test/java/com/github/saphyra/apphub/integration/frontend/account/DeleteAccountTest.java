@@ -51,6 +51,27 @@ public class DeleteAccountTest extends SeleniumTest {
     }
 
     @Test
+    public void cancelDeletion(){
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
+
+        AccountPageActions.fillDeleteAccountForm(driver, DataConstants.VALID_PASSWORD);
+        AccountPageActions.submitDeleteAccountForm(driver);
+        AccountPageActions.cancelAccountDeletion(driver);
+
+        NotificationUtil.verifyZeroNotifications(driver);
+
+        AccountPageActions.back(driver);
+        ModulesPageActions.logout(driver);
+
+        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
+    }
+    
+    @Test
     public void successfulDeletion() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

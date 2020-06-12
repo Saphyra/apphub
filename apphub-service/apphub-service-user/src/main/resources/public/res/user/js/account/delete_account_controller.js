@@ -1,7 +1,9 @@
 (function DeleteAccountController(){
     scriptLoader.loadScript("/res/user/js/common/validation_service.js");
+    scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
     const INVALID_PASSWORD = "#delete-account-invalid-password";
+    const ACCOUNT_DELETION_CONFIRMATION_DIALOG_ID = "account-deletion-confirmation-dialog";
 
     events.DELETE_ACCOUNT_ATTEMPT = "delete_account_attempt";
     events.DELETE_ACCOUNT_VALIDATION_ATTEMPT = "delete_account_validation_attempt";
@@ -41,19 +43,35 @@
                 return;
             }
 
-            const payload = {
-                value: getPassword()
-            }
+            const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+                .withTitle(Localization.getAdditionalContent("account-deletion-confirmation-dialog-title"))
+                .withDetail(Localization.getAdditionalContent("account-deletion-confirmation-dialog-detail"))
+                .withConfirmButton(Localization.getAdditionalContent("account-deletion-confirmation-dialog-confirm-button"))
+                .withDeclineButton(Localization.getAdditionalContent("account-deletion-confirmation-dialog-decline-button"));
 
-            $("#delete-account-password-input").val("");
+            confirmationService.openDialog(
+                ACCOUNT_DELETION_CONFIRMATION_DIALOG_ID,
+                confirmationDialogLocalization,
+                function(){
+                    const payload = {
+                        value: getPassword()
+                    }
 
-            const request = new Request(Mapping.getEndpoint("DELETE_ACCOUNT"), payload);
-                request.processValidResponse = function(){
-                    sessionStorage.successMessage = "account-deleted";
-                    window.location.href = Mapping.INDEX_PAGE;
+                    $("#delete-account-password-input").val("");
+
+                    const request = new Request(Mapping.getEndpoint("DELETE_ACCOUNT"), payload);
+                        request.processValidResponse = function(){
+                            sessionStorage.successMessage = "account-deleted";
+                            window.location.href = Mapping.INDEX_PAGE;
+                        }
+                    dao.sendRequestAsync(request);
+                    blockSubmission();
+                },
+                function(){
+                    $("#delete-account-password-input").val("");
+                    blockSubmission();
                 }
-            dao.sendRequestAsync(request);
-            blockSubmission();
+            );
         }
     ));
 

@@ -138,12 +138,21 @@ public class AccountPageActions {
             .until(() -> AccountPage.deleteAccountSubmitButton(driver).isEnabled())
             .assertTrue();
         AccountPage.deleteAccountSubmitButton(driver).click();
+
+        AccountPage.deleteAccountConfirmationDialogConfirmButton(driver).click();
     }
     
     public static void fillDeleteAccountForm(WebDriver driver, String password) {
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.ACCOUNT_PAGE));
 
         clearAndFill(AccountPage.deleteAccountPasswordInput(driver), password);
+    }
+
+    public static void submitDeleteAccountForm(WebDriver driver) {
+        AwaitilityWrapper.createDefault()
+            .until(() -> AccountPage.deleteAccountSubmitButton(driver).isEnabled())
+            .assertTrue();
+        AccountPage.deleteAccountSubmitButton(driver).click();
     }
 
     public static void verifyDeleteAccountForm(WebDriver driver, DeleteAccountPasswordValidationResult validationResult) {
@@ -169,5 +178,9 @@ public class AccountPageActions {
 
     public static void verifyLanguageSelected(WebDriver driver, Language language) {
         assertThat(AccountPage.changeLanguageInput(driver).getAttribute("value")).isEqualTo(language.getLocale());
+    }
+
+    public static void cancelAccountDeletion(WebDriver driver) {
+        AccountPage.deleteAccountConfirmationDialogDeclineButton(driver).click();
     }
 }

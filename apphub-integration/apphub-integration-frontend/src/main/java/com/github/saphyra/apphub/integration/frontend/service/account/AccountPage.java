@@ -31,6 +31,8 @@ class AccountPage {
     private static final By CHANGE_LANGUAGE_INPUT = By.id("ch-language-input");
     private static final By LANGUAGE_OPTIONS = By.cssSelector("#ch-language-input option");
     private static final By CHANGE_LANGUAGE_BUTTON = By.id("change-language-button");
+    private static final By DELETE_ACCOUNT_CONFIRMATION_DIALOG_CONFIRM_BUTTON = By.cssSelector("#account-deletion-confirmation-dialog .confirmation-dialog-confirm-button");
+    private static final By DELETE_ACCOUNT_CONFIRMATION_DIALOG_DECLINE_BUTTON = By.cssSelector("#account-deletion-confirmation-dialog .confirmation-dialog-decline-button");
 
     public static WebElement changeEmailNewEmailInput(WebDriver driver) {
         return driver.findElement(CHANGE_EMAIL_NEW_EMAIL_INPUT);
@@ -126,5 +128,13 @@ class AccountPage {
 
     public static WebElement changeLanguageButton(WebDriver driver) {
         return driver.findElement(CHANGE_LANGUAGE_BUTTON);
+    }
+
+    public static WebElement deleteAccountConfirmationDialogConfirmButton(WebDriver driver) {
+        return driver.findElement(DELETE_ACCOUNT_CONFIRMATION_DIALOG_CONFIRM_BUTTON);
+    }
+
+    public static WebElement deleteAccountConfirmationDialogDeclineButton(WebDriver driver) {
+        return driver.findElement(DELETE_ACCOUNT_CONFIRMATION_DIALOG_DECLINE_BUTTON);
     }
 }
