@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.integration.frontend.service.account;
 
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChEmailPasswordValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChangeEmailParameters;
@@ -153,5 +154,20 @@ public class AccountPageActions {
         );
 
         assertThat(AccountPage.deleteAccountSubmitButton(driver).isEnabled()).isEqualTo(validationResult == DeleteAccountPasswordValidationResult.VALID);
+    }
+
+    public static void selectLanguage(WebDriver driver, Language language) {
+        AccountPage.changeLanguageInput(driver).click();
+        AccountPage.languageOptions(driver)
+            .stream()
+            .filter(element -> element.getAttribute("value").equals(language.getLocale()))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Option not found for language " + language))
+            .click();
+        AccountPage.changeLanguageButton(driver).click();
+    }
+
+    public static void verifyLanguageSelected(WebDriver driver, Language language) {
+        assertThat(AccountPage.changeLanguageInput(driver).getAttribute("value")).isEqualTo(language.getLocale());
     }
 }

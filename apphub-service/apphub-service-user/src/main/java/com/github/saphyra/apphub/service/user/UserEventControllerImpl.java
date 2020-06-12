@@ -14,8 +14,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-//TODO int test
 public class UserEventControllerImpl implements UserEventController {
     private final AccessTokenDao accessTokenDao;
     private final UserDao userDao;

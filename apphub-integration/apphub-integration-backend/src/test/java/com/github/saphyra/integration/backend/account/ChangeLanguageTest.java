@@ -70,7 +70,12 @@ public class ChangeLanguageTest extends TestBase {
         AccountPageActions.changeLanguage(registerLanguage, accessTokenId, changeLanguage.getLocale());
 
         List<LanguageResponse> languageResponses = AccountPageActions.getLanguages(registerLanguage, accessTokenId);
-        
-        assertThat(languageResponses.stream().filter(LanguageResponse::isActual).map(LanguageResponse::getLanguage).collect(Collectors.toList())).containsExactly(changeLanguage.getLocale());
+
+        assertThat(
+            languageResponses.stream()
+                .filter(LanguageResponse::isActual)
+                .map(LanguageResponse::getLanguage)
+                .collect(Collectors.toList())
+        ).containsExactly(changeLanguage.getLocale());
     }
 }

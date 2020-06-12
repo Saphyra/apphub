@@ -4,6 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+
 class AccountPage {
     private static final By CHANGE_EMAIL_NEW_EMAIL_INPUT = By.id("ch-email-new-email-input");
     private static final By CHANGE_EMAIL_PASSWORD_INPUT = By.id("ch-email-password-input");
@@ -26,6 +28,9 @@ class AccountPage {
     private static final By DELETE_ACCOUNT_PASSWORD_INPUT = By.id("delete-account-password-input");
     private static final By DELETE_ACCOUNT_INVALID_PASSWORD = By.id("delete-account-invalid-password");
     private static final By DELETE_ACCOUNT_SUBMIT_BUTTON = By.id("delete-account-button");
+    private static final By CHANGE_LANGUAGE_INPUT = By.id("ch-language-input");
+    private static final By LANGUAGE_OPTIONS = By.cssSelector("#ch-language-input option");
+    private static final By CHANGE_LANGUAGE_BUTTON = By.id("change-language-button");
 
     public static WebElement changeEmailNewEmailInput(WebDriver driver) {
         return driver.findElement(CHANGE_EMAIL_NEW_EMAIL_INPUT);
@@ -109,5 +114,17 @@ class AccountPage {
 
     public static WebElement deleteAccountSubmitButton(WebDriver driver) {
         return driver.findElement(DELETE_ACCOUNT_SUBMIT_BUTTON);
+    }
+
+    public static WebElement changeLanguageInput(WebDriver driver) {
+        return driver.findElement(CHANGE_LANGUAGE_INPUT);
+    }
+
+    public static List<WebElement> languageOptions(WebDriver driver) {
+        return driver.findElements(LANGUAGE_OPTIONS);
+    }
+
+    public static WebElement changeLanguageButton(WebDriver driver) {
+        return driver.findElement(CHANGE_LANGUAGE_BUTTON);
     }
 }

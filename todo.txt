@@ -5,6 +5,7 @@ CI
 
 Platform
     Error monitoring
+    Forward locale header for events
 
 Common FE
     Custom confirm dialog

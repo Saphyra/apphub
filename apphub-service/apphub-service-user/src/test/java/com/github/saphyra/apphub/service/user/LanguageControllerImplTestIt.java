@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.user;
 
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
+import com.github.saphyra.apphub.api.user.model.response.LanguageResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
@@ -28,10 +29,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static com.github.saphyra.apphub.test.common.TestConstants.DEFAULT_LOCALE;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -176,5 +179,34 @@ public class LanguageControllerImplTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getBody().asString()).isEqualTo(LOCALE);
+    }
+
+    @Test
+    public void getLanguages(){
+        AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
+            .accessTokenId(UUID.randomUUID())
+            .userId(USER_ID)
+            .build();
+
+        User user = User.builder()
+            .userId(USER_ID)
+            .email(EMAIL)
+            .username(USERNAME)
+            .password(PASSWORD)
+            .language(DEFAULT_LOCALE)
+            .build();
+        userDao.save(user);
+
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(accessTokenHeader))
+            .get(UrlFactory.create(serverPort, Endpoints.GET_LANGUAGES));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+
+        List<LanguageResponse> responses = response.getBody()
+            .jsonPath()
+            .getList(".", LanguageResponse.class);
+
+        assertThat(responses).contains(LanguageResponse.builder().language(DEFAULT_LOCALE).actual(true).build());
+        assertThat(responses).contains(LanguageResponse.builder().language("en").actual(false).build());
     }
 }

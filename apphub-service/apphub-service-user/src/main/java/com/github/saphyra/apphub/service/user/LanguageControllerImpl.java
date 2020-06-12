@@ -19,7 +19,6 @@ public class LanguageControllerImpl implements LanguageController {
     private final LanguageService languageService;
 
     @Override
-    //TODO fe test
     public void changeLanguage(AccessTokenHeader accessTokenHeader, OneParamRequest<String> language) {
         log.info("{} wants to change his language", accessTokenHeader.getUserId());
         log.debug("Request payload: {}", language);
@@ -27,9 +26,6 @@ public class LanguageControllerImpl implements LanguageController {
     }
 
     @Override
-    //TODO int test
-    //TODO api test
-    //TODO fe test
     public List<LanguageResponse> getLanguages(AccessTokenHeader accessTokenHeader) {
         log.info("Querying available languages for user {}", accessTokenHeader.getUserId());
         return languageService.getLanguages(accessTokenHeader.getUserId());
