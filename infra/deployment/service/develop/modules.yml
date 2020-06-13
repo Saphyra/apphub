@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: event-gateway
+  name: modules
   labels:
-    app: event-gateway
+    app: modules
     type: spring-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: event-gateway
+      name: modules
   template:
     metadata:
       labels:
         serviceType: spring-app
-        name: event-gateway
+        name: modules
     spec:
       containers:
-        - name: event-gateway
-          image: saphyra/apphub-service-platform-event_gateway:0.0.1-SNAPSHOT
+        - name: modules
+          image: saphyra/apphub-service-modules:latest
           ports:
             - containerPort: 8080
-          imagePullPolicy: Always
+          imagePullPolicy: Never
           livenessProbe:
             httpGet:
               path: /internal/health
@@ -32,7 +32,7 @@ spec:
             httpGet:
               path: /internal/health
               port: 8080
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
             periodSeconds: 10
             failureThreshold: 3
           resources:
@@ -42,12 +42,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: event-gateway
+  name: modules
   labels:
-    app: event-gateway
+    app: modules
 spec:
   type: ClusterIP
   ports:
     - port: 8080
   selector:
-    name: event-gateway
+    name: modules

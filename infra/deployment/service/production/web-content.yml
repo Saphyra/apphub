@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scheduler
+  name: web-content
   labels:
-    app: scheduler
+    app: web-content
     type: spring-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: scheduler
+      name: web-content
   template:
     metadata:
       labels:
         serviceType: spring-app
-        name: scheduler
+        name: web-content
     spec:
       containers:
-        - name: scheduler
-          image: saphyra/apphub-service-platform-scheduler:0.0.1-SNAPSHOT
+        - name: web-content
+          image: saphyra/apphub-service-platform-web_content:release
           ports:
             - containerPort: 8080
           imagePullPolicy: Always

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: main-gateway
+  labels:
+    app: main-gateway
+    type: spring-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: main-gateway
+  template:
+    metadata:
+      labels:
+        serviceType: spring-app
+        name: main-gateway
+    spec:
+      containers:
+        - name: main-gateway
+          image: saphyra/apphub-service-platform-main_gateway:latest
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Never
+          livenessProbe:
+            httpGet:
+              path: /internal/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /internal/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+          resources:
+            limits:
+              memory: 500Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: main-gateway
+  labels:
+    app: main-gateway
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+  selector:
+    name: main-gateway

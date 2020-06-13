@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: modules
+  name: localization
   labels:
-    app: modules
+    app: localization
     type: spring-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: modules
+      name: localization
   template:
     metadata:
       labels:
         serviceType: spring-app
-        name: modules
+        name: localization
     spec:
       containers:
-        - name: modules
-          image: saphyra/apphub-service-modules:0.0.1-SNAPSHOT
+        - name: localization
+          image: saphyra/apphub-service-platform-localization:release
           ports:
             - containerPort: 8080
           imagePullPolicy: Always
@@ -42,12 +42,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: modules
+  name: localization
   labels:
-    app: modules
+    app: localization
 spec:
   type: ClusterIP
   ports:
     - port: 8080
   selector:
-    name: modules
+    name: localization

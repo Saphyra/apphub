@@ -18,10 +18,10 @@ spec:
     spec:
       containers:
         - name: user
-          image: saphyra/apphub-service-user:0.0.1-SNAPSHOT
+          image: saphyra/apphub-service-user:latest
           ports:
             - containerPort: 8080
-          imagePullPolicy: Always
+          imagePullPolicy: Never
           livenessProbe:
             httpGet:
               path: /internal/health

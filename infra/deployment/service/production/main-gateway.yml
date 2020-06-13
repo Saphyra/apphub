@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: main-gateway
-          image: saphyra/apphub-service-platform-main_gateway:0.0.1-SNAPSHOT
+          image: saphyra/apphub-service-platform-main_gateway:release
           ports:
             - containerPort: 8080
           imagePullPolicy: Always

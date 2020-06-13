@@ -2,7 +2,7 @@ trap "exit" INT TERM ERR
 trap "kill 0" EXIT
 
 PORT=$RANDOM
-NAMESPACE_NAME=${1:-default}
+NAMESPACE_NAME=${1:-develop}
 
 kubectl port-forward deployment/main-gateway $PORT:8080 -n "$NAMESPACE_NAME" &
 cd apphub-integration || exit
