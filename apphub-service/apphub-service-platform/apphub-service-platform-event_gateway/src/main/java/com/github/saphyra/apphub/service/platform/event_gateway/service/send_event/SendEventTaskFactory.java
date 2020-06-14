@@ -11,11 +11,12 @@ class SendEventTaskFactory {
     private final EventProcessorDao eventProcessorDao;
     private final EventSender eventSender;
 
-    SendEventTask create(SendEventRequest<?> sendEventRequest) {
+    SendEventTask create(SendEventRequest<?> sendEventRequest, String locale) {
         return SendEventTask.builder()
             .eventProcessorDao(eventProcessorDao)
             .eventSender(eventSender)
             .sendEventRequest(sendEventRequest)
+            .locale(locale)
             .build();
     }
 }

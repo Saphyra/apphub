@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service.send_event;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.error_handler.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

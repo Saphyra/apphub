@@ -91,6 +91,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-request_validation</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
             <version>${versions.jackson-core}</version>

@@ -71,29 +71,22 @@ defaultLocale: hu
 
 endpoint:
   whitelisting:
-    #TODO remove roles field
     whiteListedEndpoints:
       resources:
         path: /res/**
         method: GET
-        roles:
       localization:
         path: /localization/**
         method: GET
-        roles:
       root:
         path: /
         method: GET
-        roles:
       indexPage:
         path: /web
         method: GET
-        roles:
       login:
         path: /api/user/authentication/login
         method: POST
-        roles:
       register:
         path: /api/user/data
         method: POST
-        roles:

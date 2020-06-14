@@ -3,8 +3,9 @@ package com.github.saphyra.apphub.service.user.data.service.account;
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.error_handler.domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.error_handler.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
+import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -22,6 +23,7 @@ import static java.util.Objects.isNull;
 @Slf4j
 public class DeleteAccountService {
     private final EventGatewayApiClient eventGatewayApi;
+    private final LocaleProvider localeProvider;
     private final PasswordService passwordService;
     private final UserDao userDao;
 
@@ -40,6 +42,6 @@ public class DeleteAccountService {
             .payload(new DeleteAccountEvent(userId))
             .build();
 
-        eventGatewayApi.sendEvent(event);
+        eventGatewayApi.sendEvent(event, localeProvider.getLocaleValidated());
     }
 }

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.filter;
 
-import com.github.saphyra.apphub.lib.config.whielist.WhiteListedEndpointProperties;
+import com.github.saphyra.apphub.lib.config.whitelist.WhiteListedEndpointProperties;
 import com.github.saphyra.apphub.service.platform.main_gateway.FilterOrder;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.authentication.AuthenticationService;
 import com.netflix.zuul.ZuulFilter;

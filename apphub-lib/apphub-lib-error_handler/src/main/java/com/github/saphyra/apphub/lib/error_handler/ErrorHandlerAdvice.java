@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.lib.error_handler;
 
+import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.apphub.lib.error_handler.domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.error_handler.exception.RestException;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
+import com.github.saphyra.apphub.lib.exception.RestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

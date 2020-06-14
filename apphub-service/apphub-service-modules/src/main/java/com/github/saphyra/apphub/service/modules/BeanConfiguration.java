@@ -10,16 +10,16 @@ import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
 import com.github.saphyra.apphub.lib.config.thymeleaf.EnableThymeLeaf;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
+import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocalMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import com.github.saphyra.encryption.EnableEncryption;
-import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
 @EnableThymeLeaf
-@EnableHealthCheck
 @EnableLiquibase
 @Import({
     AccessTokenConfiguration.class,
@@ -29,16 +29,17 @@ import org.springframework.context.annotation.Import;
 @EnableEncryption
 @EnableEventProcessor
 @EnableErrorHandler
-@EnableFeignClients(basePackages = {
-    "com.github.saphyra.apphub.api"
-})
+@EnableLocalMandatoryRequestValidation
+@EnableHealthCheck
 class BeanConfiguration {
     @Bean
+    @ConditionalOnMissingBean(LocaleProvider.class)
     LocaleProvider localeProvider(RequestContextProvider requestContextProvider){
         return new LocaleProvider(requestContextProvider);
     }
 
     @Bean
+    @ConditionalOnMissingBean(RequestContextProvider.class)
     RequestContextProvider requestContextProvider(){
         return new RequestContextProvider();
     }

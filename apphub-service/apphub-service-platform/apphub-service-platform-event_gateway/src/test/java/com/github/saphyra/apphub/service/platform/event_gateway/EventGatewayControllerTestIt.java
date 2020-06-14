@@ -6,9 +6,11 @@ import com.github.saphyra.apphub.api.platform.event_gateway.model.request.Regist
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
+import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
+import com.github.saphyra.apphub.test.common.TestConstants;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
@@ -21,10 +23,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -77,6 +81,9 @@ public class EventGatewayControllerTestIt {
 
     @LocalServerPort
     private int serverPort;
+
+    @Captor
+    ArgumentCaptor<HttpEntity<SendEventRequest<?>>> argumentCaptor;
 
     @Before
     public void setUp() {
@@ -242,9 +249,9 @@ public class EventGatewayControllerTestIt {
         assertThat(eventProcessor).isNotEmpty();
         assertThat(eventProcessor.get().getLastAccess()).isAfter(registerTime);
 
-        ArgumentCaptor<SendEventRequest> argumentCaptor = ArgumentCaptor.forClass(SendEventRequest.class);
         verify(restTemplate).postForEntity(eq(ASSEMBLED_EVENT_URL), argumentCaptor.capture(), eq(Void.class));
-        assertThat(objectMapper.writeValueAsString(argumentCaptor.getValue())).isEqualTo(objectMapper.writeValueAsString(request));
+        assertThat(argumentCaptor.getValue().getHeaders().get(Constants.LOCALE_HEADER)).containsExactly(TestConstants.DEFAULT_LOCALE);
+        assertThat(objectMapper.writeValueAsString(argumentCaptor.getValue().getBody())).isEqualTo(objectMapper.writeValueAsString(request));
     }
 
     private Response getSendEventResponse(SendEventRequest<TestEvent> request) throws JsonProcessingException {

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.filter;
 
 import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
-import com.github.saphyra.apphub.lib.config.whielist.WhiteListedEndpointProperties;
+import com.github.saphyra.apphub.lib.config.whitelist.WhiteListedEndpointProperties;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.authentication.AuthenticationService;
 import com.netflix.zuul.context.RequestContext;
 import org.junit.Before;

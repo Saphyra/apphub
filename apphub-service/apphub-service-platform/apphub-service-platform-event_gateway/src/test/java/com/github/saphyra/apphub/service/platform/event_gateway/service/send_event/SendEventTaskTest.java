@@ -3,9 +3,10 @@ package com.github.saphyra.apphub.service.platform.event_gateway.service.send_ev
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
+import com.github.saphyra.apphub.test.common.TestConstants;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -27,8 +28,17 @@ public class SendEventTaskTest {
     @Mock
     private SendEventRequest<String> sendEventRequest;
 
-    @InjectMocks
     private SendEventTask underTest;
+
+    @Before
+    public void setUp(){
+        underTest = SendEventTask.builder()
+            .eventProcessorDao(eventProcessorDao)
+            .eventSender(eventSender)
+            .sendEventRequest(sendEventRequest)
+            .locale(TestConstants.DEFAULT_LOCALE)
+            .build();
+    }
 
     @Mock
     private EventProcessor eventProcessor;
@@ -40,7 +50,6 @@ public class SendEventTaskTest {
 
         underTest.run();
 
-        verify(eventSender).sendEvent(eventProcessor, sendEventRequest);
+        verify(eventSender).sendEvent(eventProcessor, sendEventRequest, TestConstants.DEFAULT_LOCALE);
     }
-
 }

@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service;
 
-import com.github.saphyra.apphub.lib.error_handler.domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.error_handler.exception.BadRequestException;
-import com.github.saphyra.apphub.lib.error_handler.exception.RestException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.RestException;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

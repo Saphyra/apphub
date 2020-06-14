@@ -29,6 +29,12 @@
             <artifactId>util</artifactId>
             <version>${versions.saphyra.util}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-exception</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

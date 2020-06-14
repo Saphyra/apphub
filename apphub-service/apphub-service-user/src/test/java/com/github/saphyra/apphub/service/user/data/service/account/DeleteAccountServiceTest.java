@@ -3,10 +3,12 @@ package com.github.saphyra.apphub.service.user.data.service.account;
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.error_handler.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
+import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
+import com.github.saphyra.apphub.test.common.TestConstants;
 import com.github.saphyra.encryption.impl.PasswordService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +22,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -31,6 +34,9 @@ public class DeleteAccountServiceTest {
 
     @Mock
     private EventGatewayApiClient eventGatewayApi;
+
+    @Mock
+    private LocaleProvider localeProvider;
 
     @Mock
     private PasswordService passwordService;
@@ -72,13 +78,14 @@ public class DeleteAccountServiceTest {
 
     @Test
     public void deleteAccount() {
+        given(localeProvider.getLocaleValidated()).willReturn(TestConstants.DEFAULT_LOCALE);
         given(userDao.findById(USER_ID)).willReturn(user);
         given(user.getPassword()).willReturn(PASSWORD_HASH);
         given(passwordService.authenticate(PASSWORD, PASSWORD_HASH)).willReturn(true);
 
         underTest.deleteAccount(USER_ID, PASSWORD);
 
-        verify(eventGatewayApi).sendEvent(argumentCaptor.capture());
+        verify(eventGatewayApi).sendEvent(argumentCaptor.capture(), eq(TestConstants.DEFAULT_LOCALE));
         assertThat(argumentCaptor.getValue().getEventName()).isEqualTo(DeleteAccountEvent.EVENT_NAME);
         assertThat(argumentCaptor.getValue().getPayload().getUserId()).isEqualTo(USER_ID);
     }

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.authenti
 
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
+import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Slf4j
 class AccessTokenExpirationUpdateService {
     private final AntPathMatcher antPathMatcher;
+    private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;
     private final NonSessionExtendingUriProperties nonSessionExtendingUriProperties;
 
@@ -36,7 +38,8 @@ class AccessTokenExpirationUpdateService {
             SendEventRequest.builder()
                 .eventName(RefreshAccessTokenExpirationEvent.EVENT_NAME)
                 .payload(new RefreshAccessTokenExpirationEvent(accessTokenId))
-                .build()
+                .build(),
+            commonConfigProperties.getDefaultLocale()
         );
     }
 }

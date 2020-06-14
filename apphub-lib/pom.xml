@@ -50,6 +50,8 @@
         <module>apphub-lib-event</module>
         <module>apphub-lib-data</module>
         <module>apphub-lib-error_handler</module>
-      <module>apphub-lib-security</module>
-  </modules>
+        <module>apphub-lib-security</module>
+        <module>apphub-lib-request_validation</module>
+        <module>apphub-lib-exception</module>
+    </modules>
 </project>

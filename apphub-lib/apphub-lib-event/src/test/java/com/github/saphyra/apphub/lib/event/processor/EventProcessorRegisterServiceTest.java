@@ -10,7 +10,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -34,5 +38,19 @@ public class EventProcessorRegisterServiceTest {
         underTest.registerProcessors();
 
         verify(eventGatewayApi).registerProcessor(request);
+    }
+
+    @Test
+    public void retry(){
+        given(registry.getRequests()).willReturn(Arrays.asList(request));
+        RuntimeException e = new RuntimeException("Asd");
+        doThrow(e).when(eventGatewayApi).registerProcessor(request);
+
+        Throwable ex = catchThrowable(() -> underTest.registerProcessors());
+
+        assertThat(ex).isEqualTo(e);
+        verify(eventGatewayApi, times(3)).registerProcessor(request);
+
+
     }
 }

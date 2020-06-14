@@ -140,7 +140,7 @@ public class AccountControllerImplTestIt_DeleteAccount {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        verify(eventGatewayApiClient).sendEvent(argumentCaptor.capture());
+        verify(eventGatewayApiClient).sendEvent(argumentCaptor.capture(), eq(DEFAULT_LOCALE));
         assertThat(argumentCaptor.getValue().getEventName()).isEqualTo(DeleteAccountEvent.EVENT_NAME);
         assertThat(argumentCaptor.getValue().getPayload().getUserId()).isEqualTo(USER_ID);
     }

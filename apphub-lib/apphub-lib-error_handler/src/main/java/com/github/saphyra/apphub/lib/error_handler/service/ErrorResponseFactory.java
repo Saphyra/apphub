@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.lib.error_handler.service;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
+import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,6 @@ import java.util.Map;
 @Slf4j
 @Component
 public class ErrorResponseFactory {
-    private static final String LOCALE_NOT_FOUND_ERROR_CODE = "LOCALE_NOT_FOUND";
-
     private final CommonConfigProperties commonConfigProperties;
     private final LocaleProvider localeProvider;
     private final LocalizedMessageProvider localizedMessageProvider;
@@ -25,6 +24,10 @@ public class ErrorResponseFactory {
         return localeProvider.getLocale()
             .map(locale -> createErrorResponse(locale, httpStatus, errorCode, params))
             .orElseGet(this::createLocaleNotFoundErrorResponse);
+    }
+
+    public ErrorResponseWrapper createErrorResponse(String locale, HttpStatus status, String errorCode) {
+        return createErrorResponse(locale, status, errorCode, new HashMap<>());
     }
 
     public ErrorResponseWrapper createErrorResponse(String locale, HttpStatus httpStatus, String errorCode, Map<String, String> params) {
@@ -40,10 +43,10 @@ public class ErrorResponseFactory {
 
     private ErrorResponseWrapper createLocaleNotFoundErrorResponse() {
         log.warn("Locale not found.");
-        String localizedMessage = localizedMessageProvider.getLocalizedMessage(commonConfigProperties.getDefaultLocale(), LOCALE_NOT_FOUND_ERROR_CODE, new HashMap<>());
+        String localizedMessage = localizedMessageProvider.getLocalizedMessage(commonConfigProperties.getDefaultLocale(), ErrorCode.LOCALE_NOT_FOUND.name(), new HashMap<>());
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-            .errorCode(LOCALE_NOT_FOUND_ERROR_CODE)
+            .errorCode(ErrorCode.LOCALE_NOT_FOUND.name())
             .localizedMessage(localizedMessage)
             .params(new HashMap<>())
             .build();

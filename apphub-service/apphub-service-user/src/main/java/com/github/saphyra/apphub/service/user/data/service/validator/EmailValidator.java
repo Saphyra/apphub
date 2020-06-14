@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.user.data.service.validator;
 
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.error_handler.domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.error_handler.exception.ConflictException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.exception.ConflictException;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.service.user.data.service.ExceptionUtil;
 import lombok.RequiredArgsConstructor;

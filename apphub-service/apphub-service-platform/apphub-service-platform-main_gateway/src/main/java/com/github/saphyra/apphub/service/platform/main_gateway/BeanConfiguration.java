@@ -6,10 +6,10 @@ import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
 import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
-import com.github.saphyra.apphub.lib.config.whielist.EnableWhiteListedEndpointProperties;
-import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
+import com.github.saphyra.apphub.lib.config.whitelist.EnableWhiteListedEndpointProperties;
+import com.github.saphyra.apphub.lib.error_handler.EnableErrorTranslation;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -20,8 +20,7 @@ import org.springframework.util.AntPathMatcher;
 @ComponentScan(basePackages = "com.github.saphyra.util")
 @EnableZuulProxy
 @EnableWhiteListedEndpointProperties
-@EnableFeignClients(basePackages = "com.github.saphyra.apphub.api")
-@EnableErrorHandler
+@EnableErrorTranslation
 @Import(CommonConfigProperties.class)
 @EnableHealthCheck
 public class BeanConfiguration {
@@ -36,11 +35,13 @@ public class BeanConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(LocaleProvider.class)
     public LocaleProvider localeProvider(RequestContextProvider requestContextProvider) {
         return new LocaleProvider(requestContextProvider);
     }
 
     @Bean
+    @ConditionalOnMissingBean(RequestContextProvider.class)
     public RequestContextProvider requestContextProvider() {
         return new RequestContextProvider();
     }

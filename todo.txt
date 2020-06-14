@@ -1,7 +1,5 @@
 Platform
-    Retry connecting to event-gateway when connection timed out
     Error monitoring
-    Forward locale header for events
 
 Index page
     Switch language

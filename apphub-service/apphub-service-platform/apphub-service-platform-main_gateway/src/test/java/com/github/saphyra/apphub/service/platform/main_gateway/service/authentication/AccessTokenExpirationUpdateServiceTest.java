@@ -2,7 +2,9 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.authenti
 
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
+import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
+import com.github.saphyra.apphub.test.common.TestConstants;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -19,6 +21,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -34,6 +37,9 @@ public class AccessTokenExpirationUpdateServiceTest {
 
     @Mock
     private EventGatewayApiClient eventGatewayApi;
+
+    @Mock
+    private CommonConfigProperties commonConfigProperties;
 
     @Mock
     private NonSessionExtendingUriProperties nonSessionExtendingUriProperties;
@@ -66,6 +72,7 @@ public class AccessTokenExpirationUpdateServiceTest {
     public void updateExpiration() {
         given(request.getRequestURI()).willReturn(REQUEST_URI);
         given(request.getMethod()).willReturn(RequestMethod.GET.name());
+        given(commonConfigProperties.getDefaultLocale()).willReturn(TestConstants.DEFAULT_LOCALE);
 
         NonSessionExtendingUriProperties.NonSessionExtendingUri nonSessionExtendingUri = new NonSessionExtendingUriProperties.NonSessionExtendingUri(NON_SESSION_EXTENDING_URI, RequestMethod.GET.name());
         given(nonSessionExtendingUriProperties.getNonSessionExtendingUris()).willReturn(Arrays.asList(nonSessionExtendingUri));
@@ -74,7 +81,7 @@ public class AccessTokenExpirationUpdateServiceTest {
 
         underTest.updateExpiration(request, ACCESS_TOKEN_ID);
 
-        verify(eventGatewayApi).sendEvent(argumentCaptor.capture());
+        verify(eventGatewayApi).sendEvent(argumentCaptor.capture(), eq(TestConstants.DEFAULT_LOCALE));
         assertThat(argumentCaptor.getValue().getEventName()).isEqualTo(RefreshAccessTokenExpirationEvent.EVENT_NAME);
         assertThat(argumentCaptor.getValue().getPayload().getAccessTokenId()).isEqualTo(ACCESS_TOKEN_ID);
     }

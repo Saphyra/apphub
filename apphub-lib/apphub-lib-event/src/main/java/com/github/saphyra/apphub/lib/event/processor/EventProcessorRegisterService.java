@@ -26,7 +26,18 @@ class EventProcessorRegisterService {
     }
 
     private void register(RegisterProcessorRequest registerProcessorRequest) {
+        int tryCount = 0;
         log.info("Registering eventProcessor {}", registerProcessorRequest);
-        eventGatewayApi.registerProcessor(registerProcessorRequest);
+        RuntimeException ex = null;
+        for (int i = 1; i <= 3; i++) {
+            try {
+                eventGatewayApi.registerProcessor(registerProcessorRequest);
+                return;
+            } catch (RuntimeException e) {
+                log.warn("Registering eventProcessor {} failed for tryCount {}.", registerProcessorRequest, tryCount, e);
+                ex = e;
+            }
+        }
+        throw ex;
     }
 }

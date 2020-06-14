@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.modules.service;
 
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.error_handler.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.service.modules.ModulesProperties;
 import com.github.saphyra.apphub.service.modules.dao.favorite.Favorite;
 import com.github.saphyra.apphub.service.modules.dao.favorite.FavoriteService;

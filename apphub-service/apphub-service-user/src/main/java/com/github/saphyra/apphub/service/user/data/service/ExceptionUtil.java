@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.user.data.service;
 
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.error_handler.domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.error_handler.exception.BadRequestException;
-import com.github.saphyra.apphub.lib.error_handler.exception.RestException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.RestException;
 import lombok.experimental.UtilityClass;
 
 import java.util.HashMap;

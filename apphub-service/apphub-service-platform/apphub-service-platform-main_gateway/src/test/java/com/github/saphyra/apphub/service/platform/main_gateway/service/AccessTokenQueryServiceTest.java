@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service;
 
 import com.github.saphyra.apphub.api.user.client.UserAuthenticationApiClient;
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
+import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
+import com.github.saphyra.apphub.test.common.TestConstants;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +26,9 @@ public class AccessTokenQueryServiceTest {
     private AccessTokenIdConverter accessTokenIdConverter;
 
     @Mock
+    private CommonConfigProperties commonConfigProperties;
+
+    @Mock
     private UserAuthenticationApiClient authenticationApi;
 
     @InjectMocks
@@ -35,6 +40,7 @@ public class AccessTokenQueryServiceTest {
     @Before
     public void setUp() {
         given(accessTokenIdConverter.convertAccessTokenId(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.of(ACCESS_TOKEN_ID));
+        given(commonConfigProperties.getDefaultLocale()).willReturn(TestConstants.DEFAULT_LOCALE);
     }
 
     @Test
@@ -48,7 +54,7 @@ public class AccessTokenQueryServiceTest {
 
     @Test
     public void getAccessToken() {
-        given(authenticationApi.getAccessTokenById(ACCESS_TOKEN_ID)).willReturn(accessTokenResponse);
+        given(authenticationApi.getAccessTokenById(ACCESS_TOKEN_ID, TestConstants.DEFAULT_LOCALE)).willReturn(accessTokenResponse);
 
         Optional<InternalAccessTokenResponse> result = underTest.getAccessToken(ACCESS_TOKEN_ID_STRING);
 
@@ -57,7 +63,7 @@ public class AccessTokenQueryServiceTest {
 
     @Test
     public void getAccessToken_notFound() {
-        given(authenticationApi.getAccessTokenById(ACCESS_TOKEN_ID)).willThrow(new RuntimeException());
+        given(authenticationApi.getAccessTokenById(ACCESS_TOKEN_ID, TestConstants.DEFAULT_LOCALE)).willThrow(new RuntimeException());
 
         Optional<InternalAccessTokenResponse> result = underTest.getAccessToken(ACCESS_TOKEN_ID_STRING);
 

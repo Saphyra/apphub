@@ -23,12 +23,15 @@ public class SendEventTask implements Runnable {
     @NonNull
     private final SendEventRequest<?> sendEventRequest;
 
+    @NonNull
+    private final String locale;
+
     @Override
     public void run() {
         eventProcessorDao.getByEventName(sendEventRequest.getEventName())
             .stream()
             .parallel()
-            .forEach(processor -> eventSender.sendEvent(processor, sendEventRequest));
+            .forEach(processor -> eventSender.sendEvent(processor, sendEventRequest, locale));
         log.info("Event with name {} is sent to the processors.", sendEventRequest.getEventName());
     }
 }
