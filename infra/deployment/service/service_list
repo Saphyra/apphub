@@ -2,6 +2,7 @@ apphub-service-user
 apphub-service-platform-localization
 apphub-service-platform-main_gateway
 apphub-service-platform-event_gateway
+apphub-service-platform-admin_panel
 apphub-service-modules
 apphub-service-platform-scheduler
 apphub-service-platform-web_content

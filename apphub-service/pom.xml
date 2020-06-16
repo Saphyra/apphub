@@ -159,5 +159,6 @@
         <module>apphub-service-user</module>
         <module>apphub-service-modules</module>
         <module>apphub-service-platform</module>
+        <module>apphub-service-admin_panel</module>
     </modules>
 </project>

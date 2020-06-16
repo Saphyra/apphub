@@ -50,3 +50,7 @@ user:
 modules:
   ribbon:
     listOfServers: localhost:8088
+
+admin-panel:
+  ribbon:
+    listOfServers: localhost:8089

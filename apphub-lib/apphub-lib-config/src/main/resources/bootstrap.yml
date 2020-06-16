@@ -58,6 +58,10 @@ modules:
   ribbon:
     listOfServers: modules:8080
 
+admin-panel:
+  ribbon:
+    listOfServers: admin-panel:8080
+
 event:
   processor:
     heartbeat:
