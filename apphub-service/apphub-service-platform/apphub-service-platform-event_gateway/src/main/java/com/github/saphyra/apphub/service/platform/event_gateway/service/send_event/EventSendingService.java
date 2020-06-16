@@ -20,7 +20,8 @@ public class EventSendingService {
     @Builder
     public EventSendingService(
         ExecutorServiceBean executorServiceBean,
-        LocaleProvider localeProvider, SendEventRequestValidator sendEventRequestValidator,
+        LocaleProvider localeProvider,
+        SendEventRequestValidator sendEventRequestValidator,
         SendEventTaskFactory sendEventTaskFactory,
         @Value("${eventProcessor.backgroundEventSendingEnabled}") boolean backgroundEventSendingEnabled
     ) {
@@ -34,7 +35,7 @@ public class EventSendingService {
     public void sendEvent(SendEventRequest<?> sendEventRequest) {
         sendEventRequestValidator.validate(sendEventRequest);
         Runnable task = sendEventTaskFactory.create(sendEventRequest, localeProvider.getLocaleValidated());
-        if (backgroundEventSendingEnabled) {
+        if (backgroundEventSendingEnabled && !sendEventRequest.isBlockingRequest()) {
             executorServiceBean.execute(task);
         } else {
             task.run();

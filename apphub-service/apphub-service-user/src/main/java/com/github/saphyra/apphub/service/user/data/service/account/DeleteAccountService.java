@@ -40,7 +40,8 @@ public class DeleteAccountService {
         SendEventRequest<DeleteAccountEvent> event = SendEventRequest.<DeleteAccountEvent>builder()
             .eventName(DeleteAccountEvent.EVENT_NAME)
             .payload(new DeleteAccountEvent(userId))
-            .build();
+            .build()
+            .blockingRequest(true);
 
         eventGatewayApi.sendEvent(event, localeProvider.getLocaleValidated());
     }

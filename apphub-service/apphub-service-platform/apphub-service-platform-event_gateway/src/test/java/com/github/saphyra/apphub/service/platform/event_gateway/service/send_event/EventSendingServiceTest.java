@@ -52,6 +52,8 @@ public class EventSendingServiceTest {
             .localeProvider(localeProvider)
             .build();
 
+        given(sendEventRequest.isBlockingRequest()).willReturn(false);
+
         underTest.sendEvent(sendEventRequest);
 
         verify(sendEventRequestValidator).validate(sendEventRequest);
@@ -68,6 +70,25 @@ public class EventSendingServiceTest {
             .backgroundEventSendingEnabled(false)
             .localeProvider(localeProvider)
             .build();
+
+        underTest.sendEvent(sendEventRequest);
+
+        verify(sendEventRequestValidator).validate(sendEventRequest);
+        verify(executorServiceBean, times(0)).execute(task);
+        verify(task).run();
+    }
+
+    @Test
+    public void sendEvent_blockingRequest() {
+        underTest = EventSendingService.builder()
+            .executorServiceBean(executorServiceBean)
+            .sendEventRequestValidator(sendEventRequestValidator)
+            .sendEventTaskFactory(sendEventTaskFactory)
+            .backgroundEventSendingEnabled(true)
+            .localeProvider(localeProvider)
+            .build();
+
+        given(sendEventRequest.isBlockingRequest()).willReturn(true);
 
         underTest.sendEvent(sendEventRequest);
 

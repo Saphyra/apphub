@@ -1,6 +1,5 @@
 Platform
     Error monitoring
-    Synchronous event handling
 
 Index page
     Switch language

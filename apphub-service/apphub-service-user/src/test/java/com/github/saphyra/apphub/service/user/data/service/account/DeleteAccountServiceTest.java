@@ -88,5 +88,6 @@ public class DeleteAccountServiceTest {
         verify(eventGatewayApi).sendEvent(argumentCaptor.capture(), eq(TestConstants.DEFAULT_LOCALE));
         assertThat(argumentCaptor.getValue().getEventName()).isEqualTo(DeleteAccountEvent.EVENT_NAME);
         assertThat(argumentCaptor.getValue().getPayload().getUserId()).isEqualTo(USER_ID);
+        assertThat(argumentCaptor.getValue().isBlockingRequest()).isTrue();
     }
 }
