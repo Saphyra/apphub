@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.lib.request_validation.locale;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.config.FilterOrder;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorTranslation;
 import com.github.saphyra.util.ObjectMapperWrapper;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,6 @@ import org.springframework.context.annotation.Import;
 @Import(CommonConfigProperties.class)
 @EnableErrorTranslation
 class LocaleMandatoryFilterConfiguration {
-    private static final int FILTER_ORDER = Integer.MIN_VALUE;
 
     @Bean
     @ConditionalOnMissingBean(ObjectMapperWrapper.class)
@@ -28,10 +28,10 @@ class LocaleMandatoryFilterConfiguration {
 
     @Bean
     public FilterRegistrationBean<LocaleMandatoryFilter> localeMandatoryFilterFilterRegistrationBean(LocaleMandatoryFilter contextFilter) {
-        log.info("AccessTokenFilterOrder order: {}", FILTER_ORDER);
+        log.info("AccessTokenFilterOrder order: {}", FilterOrder.LOCALE_MANDATORY_FILTER);
         FilterRegistrationBean<LocaleMandatoryFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(contextFilter);
-        filterRegistrationBean.setOrder(FILTER_ORDER);
+        filterRegistrationBean.setOrder(FilterOrder.LOCALE_MANDATORY_FILTER.getFilterOrder());
         filterRegistrationBean.addUrlPatterns(
             "/api/*",
             "/internal/*",

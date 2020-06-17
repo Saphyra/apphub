@@ -4,8 +4,5 @@ Platform
 Index page
     Switch language
 
-Validate read roles
-    role is mandatory if not enabled by default
-
 Admin panel
     Set up user roles

@@ -1,0 +1,19 @@
+{
+  "title": "Apphub - Error",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Error occurred."
+      }
+    ],
+    "home-button": [
+      {
+        "key": "innerHTML",
+        "message": "Home"
+      }
+    ]
+  },
+  "additionalContent": {
+  }
+}

@@ -21,8 +21,16 @@ zuul:
       path: /res/modules/**
       serviceId: modules
       stripPrefix: false
+    admin-page-resources:
+      path: /res/admin-page/**
+      serviceId: admin-page
+      stripPrefix: false
 
     #PAGES
+    error-page:
+      path: /web/error
+      serviceId: web-content
+      stripPrefix: false
     index-page:
       path: /web
       serviceId: user
@@ -35,21 +43,20 @@ zuul:
       path: /web/modules
       serviceId: modules
       stripPrefix: false
+    admin-panel-page:
+      path: /web/admin-panel
+      serviceId: admin-panel
+      stripPrefix: false
 
     #MODULES
-    user-account:
-      path: /api/user/account/**
+    user:
+      path: /api/user/**
       serviceId: user
       stripPrefix: false
-    user-data:
-      path: /api/user/data/**
-      serviceId: user
+    admin-panel:
+      path: /api/admin-panel/**
+      serviceId: admin-panel
       stripPrefix: false
-    user-authentication:
-      path: /api/user/authentication/**
-      serviceId: user
-      stripPrefix: false
-
     modules:
       path: /api/modules/**
       serviceId: modules

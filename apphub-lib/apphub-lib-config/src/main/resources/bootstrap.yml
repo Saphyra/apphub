@@ -94,3 +94,6 @@ endpoint:
       register:
         path: /api/user/data
         method: POST
+      errorPage:
+        path: /web/error
+        method: GET

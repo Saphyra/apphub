@@ -86,7 +86,7 @@ public class AuthenticationServiceTest {
         Map<String, String> headers = new HashMap<>();
         headers.put(Constants.LOCALE_HEADER, LOCALE);
         given(requestContext.getZuulRequestHeaders()).willReturn(headers);
-        given(errorResponseFactory.createErrorResponse(LOCALE, HttpStatus.UNAUTHORIZED, "NO_SESSION_AVAILABLE", new HashMap<>())).willReturn(new ErrorResponseWrapper(errorResponse, HttpStatus.UNAUTHORIZED));
+        given(errorResponseFactory.create(LOCALE, HttpStatus.UNAUTHORIZED, "NO_SESSION_AVAILABLE", new HashMap<>())).willReturn(new ErrorResponseWrapper(errorResponse, HttpStatus.UNAUTHORIZED));
     }
 
     @Test

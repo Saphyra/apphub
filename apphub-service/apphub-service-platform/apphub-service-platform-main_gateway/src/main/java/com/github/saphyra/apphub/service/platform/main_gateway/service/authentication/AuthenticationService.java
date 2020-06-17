@@ -68,7 +68,7 @@ public class AuthenticationService {
     private ErrorResponseWrapper createErrorResponse(RequestContext requestContext) {
         String locale = requestContext.getZuulRequestHeaders()
             .get(Constants.LOCALE_HEADER);
-        return errorResponseFactory.createErrorResponse(
+        return errorResponseFactory.create(
             locale,
             HttpStatus.UNAUTHORIZED,
             ErrorCode.NO_SESSION_AVAILABLE.name(),

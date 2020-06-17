@@ -9,28 +9,40 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
 @Slf4j
 @Component
+//TODO unit test  - many overloads
 public class ErrorResponseFactory {
     private final CommonConfigProperties commonConfigProperties;
     private final LocaleProvider localeProvider;
     private final LocalizedMessageProvider localizedMessageProvider;
 
+    public ErrorResponseWrapper create(HttpStatus httpStatus, String errorCode) {
+        return create(httpStatus, errorCode, new HashMap<>());
+    }
+
     public ErrorResponseWrapper create(HttpStatus httpStatus, String errorCode, Map<String, String> params) {
         return localeProvider.getLocale()
-            .map(locale -> createErrorResponse(locale, httpStatus, errorCode, params))
+            .map(locale -> create(locale, httpStatus, errorCode, params))
             .orElseGet(this::createLocaleNotFoundErrorResponse);
     }
 
-    public ErrorResponseWrapper createErrorResponse(String locale, HttpStatus status, String errorCode) {
-        return createErrorResponse(locale, status, errorCode, new HashMap<>());
+    public ErrorResponseWrapper create(HttpServletRequest request, HttpStatus httpStatus, String errorCode) {
+        return localeProvider.getLocale(request)
+            .map(locale -> create(locale, httpStatus, errorCode, new HashMap<>()))
+            .orElseGet(this::createLocaleNotFoundErrorResponse);
     }
 
-    public ErrorResponseWrapper createErrorResponse(String locale, HttpStatus httpStatus, String errorCode, Map<String, String> params) {
+    public ErrorResponseWrapper create(String locale, HttpStatus status, String errorCode) {
+        return create(locale, status, errorCode, new HashMap<>());
+    }
+
+    public ErrorResponseWrapper create(String locale, HttpStatus httpStatus, String errorCode, Map<String, String> params) {
         String localizedMessage = localizedMessageProvider.getLocalizedMessage(locale, errorCode, params);
 
         ErrorResponse errorResponse = ErrorResponse.builder()

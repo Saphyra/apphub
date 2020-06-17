@@ -79,7 +79,7 @@ public class LocaleMandatoryFilterTest {
         given(localeProvider.getLocale(request)).willReturn(Optional.empty());
         given(response.getWriter()).willReturn(printWriter);
         given(commonConfigProperties.getDefaultLocale()).willReturn(TestConstants.DEFAULT_LOCALE);
-        given(errorResponseFactory.createErrorResponse(TestConstants.DEFAULT_LOCALE, HttpStatus.BAD_REQUEST, ErrorCode.LOCALE_NOT_FOUND.name())).willReturn(errorResponseWrapper);
+        given(errorResponseFactory.create(TestConstants.DEFAULT_LOCALE, HttpStatus.BAD_REQUEST, ErrorCode.LOCALE_NOT_FOUND.name())).willReturn(errorResponseWrapper);
         given(errorResponseWrapper.getStatus()).willReturn(HttpStatus.BAD_REQUEST);
         given(errorResponseWrapper.getErrorResponse()).willReturn(errorResponse);
         given(objectMapperWrapper.writeValueAsString(errorResponse)).willReturn(RESPONSE_BODY);

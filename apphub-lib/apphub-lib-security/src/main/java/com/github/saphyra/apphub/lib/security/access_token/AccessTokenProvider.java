@@ -13,9 +13,12 @@ public class AccessTokenProvider {
         STORAGE.set(accessTokenHeader);
     }
 
+    public Optional<AccessTokenHeader> getOptional() {
+        return Optional.ofNullable(STORAGE.get());
+    }
+
     public AccessTokenHeader get() {
-        return Optional.ofNullable(STORAGE.get())
-            .orElseThrow(() -> new IllegalStateException("AccessTokenHeader is not available for the current thread."));
+        return getOptional().orElseThrow(() -> new IllegalStateException("AccessTokenHeader is not available for the current thread."));
     }
 
     public void clear() {

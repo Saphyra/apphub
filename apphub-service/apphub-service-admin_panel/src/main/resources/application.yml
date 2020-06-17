@@ -1,3 +1,11 @@
 spring:
   application:
     name: admin-panel
+
+role:
+  settings:
+    - pattern: /web/admin-panel
+      methods:
+        - GET
+      requiredRoles:
+        - ADMIN

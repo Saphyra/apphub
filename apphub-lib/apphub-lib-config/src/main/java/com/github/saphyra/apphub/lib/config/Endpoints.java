@@ -30,4 +30,10 @@ public class Endpoints {
 
     public static final String GET_MODULES_OF_USER = "/api/modules";
     public static final String SET_FAVORITE = "/api/modules/{module}/favorite";
+
+    public static final String INDEX_PAGE = "/web";
+    public static final String ACCOUNT_PAGE = "/web/user/account";
+    public static final String MODULES_PAGE = "/web/modules";
+    public static final String ADMIN_PANEL_INDEX_PAGE = "/web/admin-panel";
+    public static final String ERROR_PAGE = "/web/error";
 }
