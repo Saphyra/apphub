@@ -7,11 +7,13 @@ modules:
       - name: not-allowed-by-default
         url: url
         allowedByDefault: false
-        role: role
+        roles:
+          - role
       - name: user-has-no-role
         url: url
         allowedByDefault: false
-        role: unknown-role
+        roles:
+          - unknown-role
     favorite:
       - name: favorite
         url: url
@@ -19,9 +21,11 @@ modules:
       - name: not-favorite
         url: url
         allowedByDefault: true
-        role: role
+        roles:
+          - role
     empty:
       - name: not-allowed
         url: url
         allowedByDefault: false
-        role: unknown-role
+        roles:
+          - unknown-role

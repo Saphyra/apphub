@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @Builder
@@ -22,5 +23,5 @@ public class Module {
 
     private boolean allowedByDefault;
 
-    private String role;
+    private List<String> roles;
 }

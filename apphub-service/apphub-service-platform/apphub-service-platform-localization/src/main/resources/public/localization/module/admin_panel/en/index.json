@@ -1,0 +1,19 @@
+{
+  "title": "Apphub - Administration",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Administration"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Back"
+      }
+    ]
+  },
+  "additionalContent": {
+  }
+}

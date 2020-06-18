@@ -36,6 +36,11 @@ class EventProcessorRegisterService {
             } catch (RuntimeException e) {
                 log.warn("Registering eventProcessor {} failed for tryCount {}.", registerProcessorRequest, tryCount, e);
                 ex = e;
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException interruptedException) {
+                    throw new RuntimeException(interruptedException);
+                }
             }
         }
         throw ex;

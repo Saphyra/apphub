@@ -90,7 +90,7 @@ public class ModulesQueryServiceTest {
         return Module.builder()
             .name(moduleName)
             .allowedByDefault(allowedByDefault)
-            .role(role)
+            .roles(Arrays.asList(role))
             .build();
     }
 }

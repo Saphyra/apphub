@@ -21,9 +21,9 @@ zuul:
       path: /res/modules/**
       serviceId: modules
       stripPrefix: false
-    admin-page-resources:
-      path: /res/admin-page/**
-      serviceId: admin-page
+    admin-panel-resources:
+      path: /res/admin-panel/**
+      serviceId: admin-panel
       stripPrefix: false
 
     #PAGES

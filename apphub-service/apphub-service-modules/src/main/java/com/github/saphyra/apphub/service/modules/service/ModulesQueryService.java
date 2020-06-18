@@ -48,15 +48,15 @@ public class ModulesQueryService {
     }
 
     private boolean isAvailable(UUID userId, Module module) {
-        boolean result = module.isAllowedByDefault() || userHasRole(module.getRole());
+        boolean result = module.isAllowedByDefault() || userHasRole(module.getRoles());
         log.debug("Module {} is allowed for user {}: {}", module, userId, result);
         return result;
     }
 
-    private boolean userHasRole(String role) {
+    private boolean userHasRole(List<String> roles) {
         AccessTokenHeader accessTokenHeader = accessTokenProvider.get();
-        boolean result = accessTokenHeader.getRoles().contains(role);
-        log.info("User {} has role {}: {}. (Granted roles are: {})", accessTokenHeader.getUserId(), role, result, accessTokenHeader.getRoles());
+        boolean result = accessTokenHeader.getRoles().containsAll(roles);
+        log.info("User {} has all the roles {}: {}. (Granted roles are: {})", accessTokenHeader.getUserId(), roles, result, accessTokenHeader.getRoles());
         return result;
     }
 

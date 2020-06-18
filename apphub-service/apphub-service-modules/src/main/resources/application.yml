@@ -11,3 +11,5 @@ modules:
       - name: admin-panel
         url: /web/admin-panel
         allowedByDefault: false
+        roles:
+          - ADMIN

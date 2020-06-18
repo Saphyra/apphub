@@ -5,6 +5,7 @@ window.Mapping = new function(){
     this.MODULES_PAGE = "/web/modules";
 
     const endpoints = {
+        ADMIN_PANEL_MENU: new Endpoint("/res/admin-panel/json/index_menu.json", HttpMethod.GET),
         CHANGE_EMAIL: new Endpoint("/api/user/account/email", HttpMethod.POST),
         CHANGE_LANGUAGE: new Endpoint("/api/user/account/language", HttpMethod.POST),
         CHANGE_PASSWORD: new Endpoint("/api/user/account/password", HttpMethod.POST),
