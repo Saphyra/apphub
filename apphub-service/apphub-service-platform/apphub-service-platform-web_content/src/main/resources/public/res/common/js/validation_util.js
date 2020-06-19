@@ -12,8 +12,3 @@ function createErrorProcess(id, code){
             .fadeIn();
     }
 }
-
-function getValidationTimeout(){
-    const presetTimeout = getCookie("validation-timeout");
-    return presetTimeout == null ? 1000 : Number(presetTimeout);
-}

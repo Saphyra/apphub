@@ -118,3 +118,8 @@ function selectElementText(el, win) {
 function clearSelection() {
     document.execCommand('selectAll', false, null);
 }
+
+function getValidationTimeout(){
+    const presetTimeout = getCookie("validation-timeout");
+    return presetTimeout == null ? 1000 : Number(presetTimeout);
+}

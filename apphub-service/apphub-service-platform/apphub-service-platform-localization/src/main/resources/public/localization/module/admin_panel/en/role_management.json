@@ -1,0 +1,26 @@
+{
+  "title": "Apphub - Role management",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Role management"
+      }
+    ],
+    "search-input": [
+      {
+        "key": "placeholder",
+        "message": "Search"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Back"
+      }
+    ]
+  },
+  "additionalContent": {
+    "too-short-search-text": "Please type the username or email to search! (Minimum 3 characters)"
+  }
+}

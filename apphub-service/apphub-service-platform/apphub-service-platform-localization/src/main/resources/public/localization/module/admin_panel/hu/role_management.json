@@ -1,0 +1,26 @@
+{
+  "title": "Apphub - Jogosultságok kezelése",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Jogosultságok kezelése"
+      }
+    ],
+    "search-input": [
+      {
+        "key": "placeholder",
+        "message": "Keresés"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Vissza"
+      }
+    ]
+  },
+  "additionalContent": {
+    "too-short-search-text": "Írja be a keresndő nevet vagy e-mail címet! (Minimum 3 karakter)"
+  }
+}

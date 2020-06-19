@@ -41,7 +41,7 @@ header{
 
 header > h1{
     text-align: center;
-    padding-top: 0.25rem;
+    padding: 0.25rem;
     white-space: nowrap;
     overflow-x: auto;
     overflow-y: hidden;

@@ -1,0 +1,33 @@
+:root{
+    --search-field-height: 2.5rem;
+}
+
+#search-field{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--search-field-height);
+
+    border-bottom: 3px ridge white;
+    text-align: center;
+}
+
+    #search-input{
+        width: 90%;
+        margin: 0.3rem;
+    }
+
+#users{
+    position: absolute;
+    top: var(--search-field-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+    #too-short-search-text{
+        text-align: center;
+        font-size: 2rem;
+        margin: 20vh 20vw;
+    }

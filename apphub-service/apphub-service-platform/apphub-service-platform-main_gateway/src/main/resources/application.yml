@@ -44,7 +44,7 @@ zuul:
       serviceId: modules
       stripPrefix: false
     admin-panel-page:
-      path: /web/admin-panel
+      path: /web/admin-panel/**
       serviceId: admin-panel
       stripPrefix: false
 
