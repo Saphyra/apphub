@@ -1,8 +1,9 @@
-package com.github.saphyra.apphub.service.user;
+package com.github.saphyra.apphub.service.user.controller;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
+import com.github.saphyra.apphub.service.user.controller.UserEventControllerImpl;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -9,6 +9,8 @@
   "NO_SESSION_AVAILABLE": "Log in again!",
   "PASSWORD_TOO_LONG": "Password is too long. (30 characters max.)",
   "PASSWORD_TOO_SHORT": "Password is too short. (6 characters min.)",
+  "ROLE_ALREADY_EXISTS": "The user already has the selected role.",
+  "ROLE_NOT_FOUND": "The user does not have the selected role.",
   "UNKNOWN_ERROR": "Unknown error.",
   "USER_NOT_FOUND": "User not found.",
   "USERNAME_ALREADY_EXISTS": "Username already in use.",

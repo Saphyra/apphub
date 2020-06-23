@@ -43,12 +43,14 @@ public class AuthenticationService {
         );
 
         if (!accessTokenIdStringOptional.isPresent()) {
+            log.info("accessTokenCookie is not present. Sending error...");
             errorResponseHandler.sendErrorResponse(requestContext, createErrorResponse(requestContext));
             return;
         }
 
         Optional<InternalAccessTokenResponse> accessTokenResponseOptional = accessTokenQueryService.getAccessToken(accessTokenIdStringOptional.get());
         if (!accessTokenResponseOptional.isPresent()) {
+            log.info("AccessToken not found. Sending error...");
             errorResponseHandler.sendErrorResponse(requestContext, createErrorResponse(requestContext));
             return;
         }

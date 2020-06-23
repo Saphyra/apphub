@@ -9,6 +9,8 @@
   "NO_SESSION_AVAILABLE": "Jelentkezz be újra!",
   "PASSWORD_TOO_LONG": "A jelszó túl hosszú. (Maximum 30 karakter)",
   "PASSWORD_TOO_SHORT": "A jelszó túl rövid. (Minimum 6 karakter)",
+  "ROLE_ALREADY_EXISTS": "A felhasználó már rendelkezik a kiválasztott jogosultsággal.",
+  "ROLE_NOT_FOUND": "A felhasználó nem rendelkezik a kiválasztott jogosultsággal.",
   "UNKNOWN_ERROR": "Ismeretlen hiba.",
   "USER_NOT_FOUND": "Felhasználó nem található.",
   "USERNAME_ALREADY_EXISTS": "A felhasználónév foglalt.",

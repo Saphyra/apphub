@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.user.authentication;
+package com.github.saphyra.apphub.service.user.controller;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.user.model.request.LoginRequest;
@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.api.user.server.UserAuthenticationController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.event.DeleteExpiredAccessTokensEvent;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
+import com.github.saphyra.apphub.service.user.authentication.AuthenticationProperties;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenCleanupService;
 import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenUpdateService;

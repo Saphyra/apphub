@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.user;
+package com.github.saphyra.apphub.service.user.config;
 
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
@@ -11,6 +11,9 @@ import com.github.saphyra.apphub.lib.config.thymeleaf.EnableThymeLeaf;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocalMandatoryRequestValidation;
+import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
+import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
+import com.github.saphyra.apphub.service.user.UserApplication;
 import com.github.saphyra.encryption.impl.PasswordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -23,14 +26,16 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @Slf4j
-@EnableJpaRepositories
-@EntityScan
+@EnableJpaRepositories(basePackageClasses = UserApplication.class)
+@EntityScan(basePackageClasses = UserApplication.class)
 @ComponentScan(basePackages = "com.github.saphyra.util")
 @EnableLiquibase
 @EnableErrorHandler
 @Import({
     CommonConfigProperties.class,
-    AccessTokenConfiguration.class
+    AccessTokenConfiguration.class,
+    AccessTokenFilterConfiguration.class,
+    RoleFilterConfiguration.class
 })
 @EnableThymeLeaf
 @EnableEventProcessor

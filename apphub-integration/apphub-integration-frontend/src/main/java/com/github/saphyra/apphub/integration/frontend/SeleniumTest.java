@@ -21,7 +21,18 @@ import static java.util.Objects.isNull;
 
 @Slf4j
 public class SeleniumTest extends TestBase {
-    private static final boolean HEADLESS_MODE = false;
+    private static final boolean HEADLESS_MODE;
+
+    static {
+        String arg = System.getProperty("headless");
+        boolean headless;
+        if (isNull(arg)) {
+            headless = false;
+        } else {
+            headless = Boolean.parseBoolean(arg);
+        }
+        HEADLESS_MODE = headless;
+    }
 
     private final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
@@ -33,7 +44,7 @@ public class SeleniumTest extends TestBase {
                 WebDriverManager.chromedriver().setup();
 
                 ChromeOptions options = new ChromeOptions();
-                options.setHeadless(isHeadless());
+                options.setHeadless(HEADLESS_MODE);
                 options.addArguments("window-size=1920,1080");
 
                 driver = new ChromeDriver(options);
@@ -43,15 +54,6 @@ public class SeleniumTest extends TestBase {
             } catch (Exception e) {
                 log.error("Could not create driver", e);
             }
-        }
-    }
-
-    private boolean isHeadless() {
-        String arg = System.getProperty("headless");
-        if (isNull(arg)) {
-            return HEADLESS_MODE;
-        } else {
-            return Boolean.parseBoolean(arg);
         }
     }
 

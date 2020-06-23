@@ -21,6 +21,13 @@
     ]
   },
   "additionalContent": {
-    "too-short-search-text": "Írja be a keresndő nevet vagy e-mail címet! (Minimum 3 karakter)"
+    "actual-roles": "Aktuális jogosultságok",
+    "available-roles": "Elérhető jogosultságok",
+    "email": "Email cím",
+    "no-users-found": "Nem található felhasználó a megadott paraméterek alapján.",
+    "role-added": "Jogosultság hozzáadva.",
+    "role-removed": "Jogosultság eltávolítva.",
+    "too-short-search-text": "Írja be a keresndő nevet vagy e-mail címet! (Minimum 3 karakter)",
+    "username": "Felhasználónév"
   }
 }

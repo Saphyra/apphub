@@ -5,6 +5,7 @@ import com.github.saphyra.dao.AbstractDao;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -18,5 +19,10 @@ public class RoleDao extends AbstractDao<RoleEntity, Role, String, RoleRepositor
 
     public List<Role> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
+    }
+
+    //TODO unit test
+    public Optional<Role> findByUserIdAndRole(UUID userId, String role) {
+        return converter.convertEntity(repository.findByUserIdAndRole(uuidConverter.convertDomain(userId), role));
     }
 }

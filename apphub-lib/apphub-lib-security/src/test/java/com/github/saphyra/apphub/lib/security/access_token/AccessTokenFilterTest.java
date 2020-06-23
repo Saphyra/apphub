@@ -60,6 +60,17 @@ public class AccessTokenFilterTest {
     }
 
     @Test
+    public void accessTokenHeaderBlank() throws ServletException, IOException {
+        given(request.getHeader(Constants.ACCESS_TOKEN_HEADER)).willReturn(" ");
+
+        underTest.doFilterInternal(request, response, filterChain);
+
+        verify(accessTokenProvider, times(0)).set(any());
+        verify(filterChain).doFilter(request, response);
+        verify(accessTokenProvider).clear();
+    }
+
+    @Test
     public void accessTokenHeaderIsSet() throws ServletException, IOException {
         given(request.getHeader(Constants.ACCESS_TOKEN_HEADER)).willReturn(ACCESS_TOKEN_HEADER);
         given(accessTokenHeaderConverter.convert(ACCESS_TOKEN_HEADER)).willReturn(accessTokenHeader);

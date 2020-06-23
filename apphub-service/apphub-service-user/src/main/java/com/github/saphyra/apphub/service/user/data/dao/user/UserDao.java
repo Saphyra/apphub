@@ -1,12 +1,13 @@
 package com.github.saphyra.apphub.service.user.data.dao.user;
 
+import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.dao.AbstractDao;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,5 +35,10 @@ public class UserDao extends AbstractDao<UserEntity, User, String, UserRepositor
 
     public void deleteById(UUID userId) {
         deleteById(uuidConverter.convertDomain(userId));
+    }
+
+    //TODO unit test
+    public List<User> getByUsernameOrEmailContainingIgnoreCase(String queryString) {
+        return converter.convertEntity(repository.getByUsernameOrEmailContainingIgnoreCase(queryString));
     }
 }

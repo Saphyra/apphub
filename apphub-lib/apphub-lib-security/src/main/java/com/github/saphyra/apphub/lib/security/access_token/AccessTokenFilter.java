@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+import static org.apache.commons.lang.StringUtils.isBlank;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -34,6 +36,7 @@ public class AccessTokenFilter extends OncePerRequestFilter {
 
     private Optional<AccessTokenHeader> getHeader(HttpServletRequest request) {
         return Optional.ofNullable(request.getHeader(Constants.ACCESS_TOKEN_HEADER))
+            .filter(maybeAccessToken -> !isBlank(maybeAccessToken))
             .map(accessTokenHeaderConverter::convert);
     }
 }

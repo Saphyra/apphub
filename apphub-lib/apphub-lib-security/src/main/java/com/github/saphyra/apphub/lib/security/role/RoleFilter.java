@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 //TODO unit test
-public class RoleFilter extends OncePerRequestFilter {
+class RoleFilter extends OncePerRequestFilter {
     private final AccessTokenProvider accessTokenProvider;
     private final AntPathMatcher antPathMatcher;
     private final ErrorResponseFactory errorResponseFactory;

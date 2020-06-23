@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.user.data;
+package com.github.saphyra.apphub.service.user.controller;
 
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.api.user.model.request.ChangeUsernameRequest;

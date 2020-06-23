@@ -31,3 +31,22 @@
         font-size: 2rem;
         margin: 20vh 20vw;
     }
+
+    #users-table{
+        margin: 1rem auto;
+        border-collapse: collapse;
+    }
+
+        .no-users{
+            text-align: center;
+            font-size: 1.25rem;
+            padding: 0.5rem;
+        }
+
+        .id-cell{
+            text-align: right;
+        }
+
+        .role-cell{
+            text-align: center;
+        }

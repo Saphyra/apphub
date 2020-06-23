@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.user.authentication;
+package com.github.saphyra.apphub.service.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

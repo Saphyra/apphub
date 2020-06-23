@@ -3,7 +3,11 @@ package com.github.saphyra.apphub.service.user.data.dao.role;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface RoleRepository extends CrudRepository<RoleEntity, String> {
+interface RoleRepository extends CrudRepository<RoleEntity, String> {
+    //TODO unit test
+    Optional<RoleEntity> findByUserIdAndRole(String userId, String role);
+
     List<RoleEntity> getByUserId(String userId);
 }

@@ -6,3 +6,13 @@ accessToken:
   cookie:
     expirationDays: 365
   expirationMinutes: 10
+
+role:
+  settings:
+    - pattern: /api/user/data/roles
+      methods:
+        - POST
+        - PUT
+        - DELETE
+      requiredRoles:
+        - ADMIN

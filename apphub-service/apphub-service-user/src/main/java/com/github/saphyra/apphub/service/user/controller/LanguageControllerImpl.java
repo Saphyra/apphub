@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.user;
+package com.github.saphyra.apphub.service.user.controller;
 
 import com.github.saphyra.apphub.api.user.model.response.LanguageResponse;
 import com.github.saphyra.apphub.api.user.server.LanguageController;

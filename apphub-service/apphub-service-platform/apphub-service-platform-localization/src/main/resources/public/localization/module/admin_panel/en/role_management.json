@@ -21,6 +21,13 @@
     ]
   },
   "additionalContent": {
-    "too-short-search-text": "Please type the username or email to search! (Minimum 3 characters)"
+    "actual-roles": "Actual roles",
+    "available-roles": "Available roles",
+    "email": "Email",
+    "no-users-found": "No user found by the given parameters.",
+    "role-added": "Role added.",
+    "role-removed": "Role removed.",
+    "too-short-search-text": "Please type the username or email to search! (Minimum 3 characters)",
+    "username": "Username"
   }
 }

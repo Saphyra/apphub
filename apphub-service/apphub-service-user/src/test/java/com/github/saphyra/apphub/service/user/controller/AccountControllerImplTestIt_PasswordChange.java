@@ -1,7 +1,7 @@
-package com.github.saphyra.apphub.service.user.data;
+package com.github.saphyra.apphub.service.user.controller;
 
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
-import com.github.saphyra.apphub.api.user.model.request.ChangeEmailRequest;
+import com.github.saphyra.apphub.api.user.model.request.ChangePasswordRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
 import com.github.saphyra.encryption.impl.PasswordService;
 import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +28,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.github.saphyra.apphub.test.common.TestConstants.DEFAULT_LOCALE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,12 +44,13 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
-public class AccountControllerImplTestIt_EmailChange {
-    private static final String EMAIL = "asd@asd.asd";
-    private static final String PASSWORD = "password";
-    private static final ChangeEmailRequest REQUEST = ChangeEmailRequest.builder()
-        .email(EMAIL)
-        .password(PASSWORD)
+@Slf4j
+public class AccountControllerImplTestIt_PasswordChange {
+    private static final String OLD_PASSWORD = "old-password";
+    private static final String NEW_PASSWORD = new String("new-password".getBytes(), StandardCharsets.UTF_8);
+    private static final ChangePasswordRequest REQUEST = ChangePasswordRequest.builder()
+        .newPassword(NEW_PASSWORD)
+        .password(OLD_PASSWORD)
         .build();
     private static final String LOCALIZED_MESSAGE = "localized-message";
     private static final UUID USER_ID = UUID.randomUUID();
@@ -80,63 +85,53 @@ public class AccountControllerImplTestIt_EmailChange {
     }
 
     @Test
-    public void nullEmail() {
+    public void nullNewPassword() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(REQUEST.toBuilder().email(null).build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_EMAIL));
+            .body(REQUEST.toBuilder().newPassword(null).build())
+            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_PASSWORD));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getParams().get("email")).isEqualTo("must not be null");
+        assertThat(errorResponse.getParams().get("newPassword")).isEqualTo("must not be null");
 
         verify(localizationApiClient).translate(ErrorCode.INVALID_PARAM.name(), DEFAULT_LOCALE);
     }
 
     @Test
-    public void invalidEmail() {
+    public void passwordTooShort() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(REQUEST.toBuilder().email("asd").build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_EMAIL));
+            .body(REQUEST.toBuilder().newPassword("asasa").build())
+            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_PASSWORD));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_SHORT.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getParams().get("email")).isEqualTo("invalid format");
 
-        verify(localizationApiClient).translate(ErrorCode.INVALID_PARAM.name(), DEFAULT_LOCALE);
+        verify(localizationApiClient).translate(ErrorCode.PASSWORD_TOO_SHORT.name(), DEFAULT_LOCALE);
     }
 
     @Test
-    public void emailAlreadyExists() {
-        User user = User.builder()
-            .userId(UUID.randomUUID())
-            .username("asd")
-            .email(EMAIL)
-            .password("asdasd")
-            .language(DEFAULT_LOCALE)
-            .build();
-        userDao.save(user);
-
+    public void passwordTooLong() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(REQUEST.toBuilder().email(EMAIL).build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_EMAIL));
+            .body(REQUEST.toBuilder().newPassword(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())).build())
+            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_PASSWORD));
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT.value());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.EMAIL_ALREADY_EXISTS.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_LONG.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
 
-        verify(localizationApiClient).translate(ErrorCode.EMAIL_ALREADY_EXISTS.name(), DEFAULT_LOCALE);
+        verify(localizationApiClient).translate(ErrorCode.PASSWORD_TOO_LONG.name(), DEFAULT_LOCALE);
     }
 
     @Test
     public void nullPassword() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST.toBuilder().password(null).build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_EMAIL));
+            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_PASSWORD));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -151,16 +146,16 @@ public class AccountControllerImplTestIt_EmailChange {
     public void invalidPassword() {
         User user = User.builder()
             .userId(USER_ID)
-            .username("asd")
+            .username("asda")
             .email("asd@asd.asda")
-            .password(passwordService.hashPassword(PASSWORD + "a"))
+            .password(passwordService.hashPassword(OLD_PASSWORD + "a"))
             .language(DEFAULT_LOCALE)
             .build();
         userDao.save(user);
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST)
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_EMAIL));
+            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_PASSWORD));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -171,22 +166,22 @@ public class AccountControllerImplTestIt_EmailChange {
     }
 
     @Test
-    public void changeEmail() {
+    public void changePassword() {
         User user = User.builder()
             .userId(USER_ID)
-            .username("asd")
+            .username("asda")
             .email("asd@asd.asda")
-            .password(passwordService.hashPassword(PASSWORD))
+            .password(passwordService.hashPassword(OLD_PASSWORD))
             .language(DEFAULT_LOCALE)
             .build();
         userDao.save(user);
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST)
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_EMAIL));
+            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_PASSWORD));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        assertThat(userDao.findById(USER_ID).getEmail()).isEqualTo(EMAIL);
+        assertThat(passwordService.authenticate(NEW_PASSWORD, userDao.findById(USER_ID).getPassword())).isTrue();
     }
 }

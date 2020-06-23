@@ -48,6 +48,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-security</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf-spring5</artifactId>
             <version>${versions.thymeleaf-spring}</version>

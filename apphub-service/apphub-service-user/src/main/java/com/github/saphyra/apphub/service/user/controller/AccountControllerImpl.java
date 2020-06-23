@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.user.data;
+package com.github.saphyra.apphub.service.user.controller;
 
 import com.github.saphyra.apphub.api.user.model.request.ChangeEmailRequest;
 import com.github.saphyra.apphub.api.user.model.request.ChangePasswordRequest;
