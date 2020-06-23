@@ -2,6 +2,10 @@ defaultLocale: hu
 event:
   processor:
     enabled: false
+    registration:
+      failure:
+        delay:
+          milliseconds: 1
 
 spring:
   cloud:

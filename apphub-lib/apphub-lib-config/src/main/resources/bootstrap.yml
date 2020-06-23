@@ -67,7 +67,10 @@ event:
     heartbeat:
       interval: 60000
     enabled: true
-
+    registration:
+      failure:
+        delay:
+          milliseconds: 5000
 supportedLocales:
   - hu
   - en

@@ -16,7 +16,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 @Component
-//TODO unit test  - many overloads
 public class ErrorResponseFactory {
     private final CommonConfigProperties commonConfigProperties;
     private final LocaleProvider localeProvider;

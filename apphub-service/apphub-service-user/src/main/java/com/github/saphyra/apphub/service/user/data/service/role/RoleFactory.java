@@ -9,7 +9,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//todo unit test
  class RoleFactory {
     private final IdGenerator idGenerator;
 

@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,6 +29,25 @@ public class RoleRepositoryTest {
     @After
     public void clear() {
         underTest.deleteAll();
+    }
+
+    @Test
+    public void findByUserIdAndRole() {
+        RoleEntity entity1 = RoleEntity.builder()
+            .roleId(ROLE_ID_1)
+            .userId(USER_ID_1)
+            .role(ROLE)
+            .build();
+        RoleEntity entity2 = RoleEntity.builder()
+            .roleId(ROLE_ID_2)
+            .userId(USER_ID_2)
+            .role(ROLE)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2));
+
+        Optional<RoleEntity> result = underTest.findByUserIdAndRole(USER_ID_1, ROLE);
+
+        assertThat(result).contains(entity1);
     }
 
     @Test

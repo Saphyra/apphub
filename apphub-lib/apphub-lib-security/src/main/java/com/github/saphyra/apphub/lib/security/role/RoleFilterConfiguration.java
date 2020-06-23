@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.lib.security.role;
 
+import com.github.saphyra.apphub.lib.common_util.RequestHelper;
 import com.github.saphyra.apphub.lib.config.FilterOrder;
+import com.github.saphyra.util.ObjectMapperWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -31,5 +33,11 @@ public class RoleFilterConfiguration {
     @ConditionalOnMissingBean(AntPathMatcher.class)
     AntPathMatcher antPathMatcher() {
         return new AntPathMatcher();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(RequestHelper.class)
+    RequestHelper requestHelper(ObjectMapperWrapper objectMapperWrapper) {
+        return new RequestHelper(objectMapperWrapper);
     }
 }

@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,6 +25,7 @@ public class UserDaoTest {
     private static final String USERNAME = "username";
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String USER_ID_STRING = "user-id";
+    private static final String QUERY_STRING = "query-string";
 
     @Mock
     private UserRepository repository;
@@ -92,5 +95,15 @@ public class UserDaoTest {
         underTest.deleteById(USER_ID);
 
         verify(repository).deleteById(USER_ID_STRING);
+    }
+
+    @Test
+    public void getByUsernameOrEmailContainingIgnoreCase() {
+        given(repository.getByUsernameOrEmailContainingIgnoreCase(QUERY_STRING)).willReturn(Arrays.asList(entity));
+        given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(user));
+
+        List<User> result = underTest.getByUsernameOrEmailContainingIgnoreCase(QUERY_STRING);
+
+        assertThat(result).containsExactly(user);
     }
 }

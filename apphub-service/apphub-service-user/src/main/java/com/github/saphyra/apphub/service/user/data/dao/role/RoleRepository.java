@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 interface RoleRepository extends CrudRepository<RoleEntity, String> {
-    //TODO unit test
     Optional<RoleEntity> findByUserIdAndRole(String userId, String role);
 
     List<RoleEntity> getByUserId(String userId);

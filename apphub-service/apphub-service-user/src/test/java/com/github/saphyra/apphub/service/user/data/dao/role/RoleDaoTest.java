@@ -10,6 +10,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,6 +20,7 @@ import static org.mockito.BDDMockito.given;
 public class RoleDaoTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String USER_ID_STRING = "user-id";
+    private static final String ROLE = "role";
 
     @Mock
     private RoleConverter converter;
@@ -37,6 +39,17 @@ public class RoleDaoTest {
 
     @Mock
     private Role role;
+
+    @Test
+    public void findByUserIdAndRole() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(roleRepository.findByUserIdAndRole(USER_ID_STRING, ROLE)).willReturn(Optional.of(entity));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(role));
+
+        Optional<Role> result = underTest.findByUserIdAndRole(USER_ID, ROLE);
+
+        assertThat(result).contains(role);
+    }
 
     @Test
     public void getByUserId() {

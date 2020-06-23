@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 class EventProcessorRegisterService {
+    private final EventProcessorProperties eventProcessorProperties;
     private final EventProcessorRegistry registry;
     private final EventGatewayApiClient eventGatewayApi;
 
@@ -37,7 +38,7 @@ class EventProcessorRegisterService {
                 log.warn("Registering eventProcessor {} failed for tryCount {}.", registerProcessorRequest, tryCount, e);
                 ex = e;
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(eventProcessorProperties.getRegistrationFailureRetryDelay());
                 } catch (InterruptedException interruptedException) {
                     throw new RuntimeException(interruptedException);
                 }

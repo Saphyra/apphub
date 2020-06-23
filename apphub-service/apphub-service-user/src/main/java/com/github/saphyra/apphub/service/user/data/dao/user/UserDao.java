@@ -20,6 +20,10 @@ public class UserDao extends AbstractDao<UserEntity, User, String, UserRepositor
         this.uuidConverter = uuidConverter;
     }
 
+    public void deleteById(UUID userId) {
+        deleteById(uuidConverter.convertDomain(userId));
+    }
+
     public Optional<User> findByEmail(String email) {
         return converter.convertEntity(repository.findByEmail(email));
     }
@@ -33,11 +37,6 @@ public class UserDao extends AbstractDao<UserEntity, User, String, UserRepositor
             .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.USER_NOT_FOUND.name()), String.format("User not found with userId %s", userId)));
     }
 
-    public void deleteById(UUID userId) {
-        deleteById(uuidConverter.convertDomain(userId));
-    }
-
-    //TODO unit test
     public List<User> getByUsernameOrEmailContainingIgnoreCase(String queryString) {
         return converter.convertEntity(repository.getByUsernameOrEmailContainingIgnoreCase(queryString));
     }

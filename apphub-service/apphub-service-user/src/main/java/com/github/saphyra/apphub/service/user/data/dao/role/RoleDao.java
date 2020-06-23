@@ -17,12 +17,11 @@ public class RoleDao extends AbstractDao<RoleEntity, Role, String, RoleRepositor
         this.uuidConverter = uuidConverter;
     }
 
-    public List<Role> getByUserId(UUID userId) {
-        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
-    }
-
-    //TODO unit test
     public Optional<Role> findByUserIdAndRole(UUID userId, String role) {
         return converter.convertEntity(repository.findByUserIdAndRole(uuidConverter.convertDomain(userId), role));
+    }
+
+    public List<Role> getByUserId(UUID userId) {
+        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
 }

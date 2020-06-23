@@ -16,7 +16,6 @@ import java.util.Optional;
 @Controller
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 //TODO FE test
 public class ErrorController {
     private final LocaleProvider localeProvider;

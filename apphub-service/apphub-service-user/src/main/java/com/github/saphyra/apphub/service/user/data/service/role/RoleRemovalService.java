@@ -15,7 +15,6 @@ import java.util.Optional;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 public class RoleRemovalService {
     private final RoleDao roleDao;
 

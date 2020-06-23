@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -38,6 +39,9 @@ public class ErrorResponseFactoryTest {
     @Mock
     private Map<String, String> params;
 
+    @Mock
+    private HttpServletRequest request;
+
     @Test
     public void createErrorResponse() {
         given(localeProvider.getLocale()).willReturn(Optional.of(LOCALE));
@@ -63,5 +67,30 @@ public class ErrorResponseFactoryTest {
         assertThat(result.getErrorResponse().getErrorCode()).isEqualTo(LOCALE_NOT_FOUND_ERROR_CODE);
         assertThat(result.getErrorResponse().getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(result.getErrorResponse().getParams()).isEqualTo(new HashMap<>());
+    }
+
+    @Test
+    public void withoutLocale_localeFound(){
+        given(localeProvider.getLocale(request)).willReturn(Optional.of(LOCALE));
+        given(localizedMessageProvider.getLocalizedMessage(LOCALE, ERROR_CODE, new HashMap<>())).willReturn(LOCALIZED_MESSAGE);
+
+        ErrorResponseWrapper result = underTest.create(request, HttpStatus.UNAUTHORIZED, ERROR_CODE);
+        assertThat(result.getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(result.getErrorResponse().getErrorCode()).isEqualTo(ERROR_CODE);
+        assertThat(result.getErrorResponse().getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
+        assertThat(result.getErrorResponse().getParams()).isEmpty();
+    }
+
+    @Test
+    public void withoutLocale_localeNotFound(){
+        given(localeProvider.getLocale(request)).willReturn(Optional.empty());
+        given(localizedMessageProvider.getLocalizedMessage(LOCALE, LOCALE_NOT_FOUND_ERROR_CODE, new HashMap<>())).willReturn(LOCALIZED_MESSAGE);
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
+
+        ErrorResponseWrapper result = underTest.create(request, HttpStatus.UNAUTHORIZED, ERROR_CODE);
+        assertThat(result.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(result.getErrorResponse().getErrorCode()).isEqualTo(LOCALE_NOT_FOUND_ERROR_CODE);
+        assertThat(result.getErrorResponse().getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
+        assertThat(result.getErrorResponse().getParams()).isEmpty();
     }
 }

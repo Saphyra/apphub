@@ -20,6 +20,9 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class EventProcessorRegisterServiceTest {
     @Mock
+    private EventProcessorProperties eventProcessorProperties;
+
+    @Mock
     private EventProcessorRegistry registry;
 
     @Mock
@@ -45,12 +48,11 @@ public class EventProcessorRegisterServiceTest {
         given(registry.getRequests()).willReturn(Arrays.asList(request));
         RuntimeException e = new RuntimeException("Asd");
         doThrow(e).when(eventGatewayApi).registerProcessor(request);
+        given(eventProcessorProperties.getRegistrationFailureRetryDelay()).willReturn(1);
 
         Throwable ex = catchThrowable(() -> underTest.registerProcessors());
 
         assertThat(ex).isEqualTo(e);
         verify(eventGatewayApi, times(3)).registerProcessor(request);
-
-
     }
 }
