@@ -16,8 +16,11 @@ import org.springframework.stereotype.Service;
 public class RoleAdditionService {
     private final RoleDao roleDao;
     private final RoleFactory roleFactory;
+    private final RoleRequestValidator roleRequestValidator;
 
     public void addRole(RoleRequest roleRequest) {
+        roleRequestValidator.validate(roleRequest);
+
         if(roleDao.findByUserIdAndRole(roleRequest.getUserId(), roleRequest.getRole()).isPresent()){
             throw new ConflictException(new ErrorMessage(ErrorCode.ROLE_ALREADY_EXISTS.name()), String.format("Role %s already exists for user %s", roleRequest.getRole(), roleRequest.getUserId()));
         }

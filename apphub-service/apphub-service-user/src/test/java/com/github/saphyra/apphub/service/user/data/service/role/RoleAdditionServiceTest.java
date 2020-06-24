@@ -30,6 +30,9 @@ public class RoleAdditionServiceTest {
     @Mock
     private RoleFactory roleFactory;
 
+    @Mock
+    private RoleRequestValidator roleRequestValidator;
+
     @InjectMocks
     private RoleAdditionService underTest;
 
@@ -39,21 +42,27 @@ public class RoleAdditionServiceTest {
     @Test
     public void addRole_alreadyExists() {
         given(roleDao.findByUserIdAndRole(USER_ID, ROLE)).willReturn(Optional.of(role));
+        RoleRequest roleRequest = RoleRequest.builder().userId(USER_ID).role(ROLE).build();
 
-        Throwable ex = catchThrowable(() -> underTest.addRole(RoleRequest.builder().userId(USER_ID).role(ROLE).build()));
+        Throwable ex = catchThrowable(() -> underTest.addRole(roleRequest));
 
         assertThat(ex).isInstanceOf(ConflictException.class);
         ConflictException exception = (ConflictException) ex;
         assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.ROLE_ALREADY_EXISTS.name());
+
+        verify(roleRequestValidator).validate(roleRequest);
     }
 
     @Test
     public void addRole() {
         given(roleDao.findByUserIdAndRole(USER_ID, ROLE)).willReturn(Optional.empty());
         given(roleFactory.create(USER_ID, ROLE)).willReturn(role);
+        RoleRequest roleRequest = RoleRequest.builder().userId(USER_ID).role(ROLE).build();
 
         underTest.addRole(RoleRequest.builder().userId(USER_ID).role(ROLE).build());
 
         verify(roleDao).save(role);
+
+        verify(roleRequestValidator).validate(roleRequest);
     }
 }

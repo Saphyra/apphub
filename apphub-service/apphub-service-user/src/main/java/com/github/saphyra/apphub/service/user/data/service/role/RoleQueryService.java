@@ -20,7 +20,6 @@ import static java.util.Objects.isNull;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 public class RoleQueryService {
     private final RoleDao roleDao;
     private final UserDao userDao;

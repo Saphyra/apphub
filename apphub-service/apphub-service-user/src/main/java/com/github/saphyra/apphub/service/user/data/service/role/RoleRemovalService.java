@@ -17,8 +17,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RoleRemovalService {
     private final RoleDao roleDao;
+    private final RoleRequestValidator roleRequestValidator;
 
     public void removeRole(RoleRequest roleRequest) {
+        roleRequestValidator.validate(roleRequest);
+
         Optional<Role> role = roleDao.findByUserIdAndRole(roleRequest.getUserId(), roleRequest.getRole());
         if (role.isPresent()) {
             roleDao.delete(role.get());

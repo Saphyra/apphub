@@ -23,8 +23,12 @@ import static org.mockito.Mockito.verify;
 public class RoleRemovalServiceTest {
     private static final String ROLE = "role";
     private static final UUID USER_ID = UUID.randomUUID();
+
     @Mock
     private RoleDao roleDao;
+
+    @Mock
+    private RoleRequestValidator roleRequestValidator;
 
     @InjectMocks
     private RoleRemovalService underTest;
@@ -35,20 +39,26 @@ public class RoleRemovalServiceTest {
     @Test
     public void roleNotFound() {
         given(roleDao.findByUserIdAndRole(USER_ID, ROLE)).willReturn(Optional.empty());
+        RoleRequest request = RoleRequest.builder().userId(USER_ID).role(ROLE).build();
 
-        Throwable ex = catchThrowable(() -> underTest.removeRole(RoleRequest.builder().userId(USER_ID).role(ROLE).build()));
+        Throwable ex = catchThrowable(() -> underTest.removeRole(request));
 
         assertThat(ex).isInstanceOf(NotFoundException.class);
         NotFoundException exception = (NotFoundException) ex;
         assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.ROLE_NOT_FOUND.name());
+
+        verify(roleRequestValidator).validate(request);
     }
 
     @Test
     public void removeRole() {
         given(roleDao.findByUserIdAndRole(USER_ID, ROLE)).willReturn(Optional.of(role));
+        RoleRequest request = RoleRequest.builder().userId(USER_ID).role(ROLE).build();
 
-        underTest.removeRole(RoleRequest.builder().userId(USER_ID).role(ROLE).build());
+        underTest.removeRole(request);
 
         verify(roleDao).delete(role);
+
+        verify(roleRequestValidator).validate(request);
     }
 }
