@@ -19,4 +19,10 @@ public class Navigation {
                 .until(() -> driver.getCurrentUrl().equals(url));
         }
     }
+
+    public static void toAdminPanel(WebDriver driver) {
+        String url = UrlFactory.create(Endpoints.ADMIN_PANEL_PAGE);
+
+        driver.navigate().to(url);
+    }
 }

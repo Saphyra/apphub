@@ -14,6 +14,8 @@ public class Endpoints {
     public static final String MODULES_PAGE = "/web/modules";
     public static final String WEB_ROOT = "/web";
     public static final String ROOT = "/";
+    public static final String ADMIN_PANEL_PAGE = "/web/admin-panel";
+    public static final String ERROR_PAGE = "/web/error";
 
     public static final String CHANGE_LANGUAGE = "/api/user/account/language";
     public static final String GET_LANGUAGES = "/api/user/data/languages";

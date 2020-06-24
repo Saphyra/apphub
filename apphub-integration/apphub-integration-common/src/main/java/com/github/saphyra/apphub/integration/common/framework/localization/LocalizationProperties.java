@@ -1,44 +1,42 @@
 package com.github.saphyra.apphub.integration.common.framework.localization;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.saphyra.apphub.integration.common.TestBase;
 import lombok.experimental.UtilityClass;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
 
 @UtilityClass
 public class LocalizationProperties {
-    private final Map<String, Properties> PROPERTIES_MAP = new HashMap<>();
+    private final Map<String, Map<String, String>> PROPERTIES_MAP = new HashMap<>();
 
     static {
         Stream.of(Language.values())
             .map(Language::getLocale)
             .forEach(locale -> {
-                Properties properties = new Properties();
-                String fileName = String.format("localization/%s.properties", locale);
+                String fileName = String.format("localization/%s.json", locale);
                 InputStream inputStream = LocalizationProperties.class.getClassLoader().getResourceAsStream(fileName);
                 if (isNull(inputStream)) {
                     throw new IllegalStateException(String.format("File not found: %s", fileName));
                 }
 
-                try {
-                    properties.load(inputStream);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                PROPERTIES_MAP.put(locale, properties);
+                TypeReference<Map<String, String >> ref = new TypeReference<Map<String, String>>() {
+                };
+                Map<String, String > propertyMap = TestBase.OBJECT_MAPPER_WRAPPER.readValue(inputStream, ref);
+                
+                PROPERTIES_MAP.put(locale, propertyMap);
             });
     }
 
     public String getProperty(Language locale, LocalizationKey key) {
         return Optional.ofNullable(PROPERTIES_MAP.get(locale.getLocale()))
-            .flatMap(properties -> Optional.ofNullable(properties.getProperty(key.name())))
+            .flatMap(properties -> Optional.ofNullable(properties.get(key.name())))
             .orElseThrow(() -> new IllegalStateException(String.format("Localization not found for locale %s and key %s", locale, key)));
     }
 }
