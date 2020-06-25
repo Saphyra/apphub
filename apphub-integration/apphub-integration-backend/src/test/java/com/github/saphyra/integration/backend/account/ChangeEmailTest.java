@@ -21,7 +21,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangeEmailTest extends TestBase {
-    @DataProvider(name = "localeDataProvider")
+    @DataProvider(name = "localeDataProvider", parallel = true)
     public Object[] localeDataProvider() {
         return Language.values();
     }

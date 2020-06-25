@@ -24,6 +24,12 @@
             <artifactId>testng</artifactId>
             <version>${versions.testng}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${versions.postgresql-connector}</version>
+        </dependency>
     </dependencies>
 
     <build>

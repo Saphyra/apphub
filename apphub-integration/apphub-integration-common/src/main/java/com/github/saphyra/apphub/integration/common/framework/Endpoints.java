@@ -19,8 +19,14 @@ public class Endpoints {
 
     public static final String CHANGE_LANGUAGE = "/api/user/account/language";
     public static final String GET_LANGUAGES = "/api/user/data/languages";
-    public static final String CHANGE_EMAIL = "/api/user/account/email";;
+    public static final String CHANGE_EMAIL = "/api/user/account/email";
+
     public static final String CHANGE_USERNAME = "/api/user/account/username";
     public static final String CHANGE_PASSWORD = "/api/user/account/password";
     public static final String DELETE_ACCOUNT = "/api/user/account";
+
+    public static final String GET_ROLES = "/api/user/data/roles";
+    public static final String ADD_ROLE = "/api/user/data/roles";
+    public static final String REMOVE_ROLE = "/api/user/data/roles";
+
 }

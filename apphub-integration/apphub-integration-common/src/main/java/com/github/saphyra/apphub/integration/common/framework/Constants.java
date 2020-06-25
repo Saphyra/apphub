@@ -7,4 +7,6 @@ public class Constants {
     public final String ACCESS_TOKEN_COOKIE = "access-token";
 
     public final String LOCALE_COOKIE = "language";
+
+    public final String ROLE_ADMIN = "ADMIN";
 }
