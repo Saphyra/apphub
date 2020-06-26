@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
@@ -61,15 +62,7 @@ public class ModulesPageActions {
         String modulesPageUrl = UrlFactory.create(Endpoints.MODULES_PAGE);
         assertThat(driver.getCurrentUrl()).isEqualTo(modulesPageUrl);
 
-        AwaitilityWrapper.getListWithWait(() -> getCategories(driver), categories -> !categories.isEmpty())
-            .stream()
-            .filter(category -> category.getCategoryId().endsWith(moduleLocation.getCategoryId()))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Category not found for moduleLocation " + moduleLocation))
-            .getModules()
-            .stream()
-            .filter(module -> module.getModuleId().endsWith(moduleLocation.getModuleId()))
-            .findFirst()
+        getModule(driver, moduleLocation)
             .orElseThrow(() -> new RuntimeException("Module not found for moduleLocation " + moduleLocation))
             .open();
 
@@ -77,5 +70,17 @@ public class ModulesPageActions {
             .until(() -> !driver.getCurrentUrl().equals(modulesPageUrl))
             .assertTrue();
 
+    }
+
+    public static Optional<Module> getModule(WebDriver driver, ModuleLocation moduleLocation) {
+        return AwaitilityWrapper.getListWithWait(() -> getCategories(driver), categories -> !categories.isEmpty())
+            .stream()
+            .filter(category -> category.getCategoryId().endsWith(moduleLocation.getCategoryId()))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Category not found for moduleLocation " + moduleLocation))
+            .getModules()
+            .stream()
+            .filter(module -> module.getModuleId().endsWith(moduleLocation.getModuleId()))
+            .findFirst();
     }
 }

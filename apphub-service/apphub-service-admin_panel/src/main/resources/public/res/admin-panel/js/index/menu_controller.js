@@ -22,6 +22,7 @@
 
     function createMenuNode(menuItem){
         const link = document.createElement("a");
+            link.id = menuItem.id;
             link.classList.add("menu-item");
             link.innerHTML = menuLocalization.get(menuItem.id);
             link.href = menuItem.url;

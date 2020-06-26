@@ -130,6 +130,7 @@
                         .map(function(role){
                             const roleNode = document.createElement("button");
                                 roleNode.classList.add("role");
+                                roleNode.id = role;
                                 roleNode.innerHTML = roleLocalization.get(role);
                                 roleNode.onclick = function(){
                                     removeRole(roleNode, role, user, actualRolesCell, availableRolesCell);
@@ -143,6 +144,7 @@
                         .map(function(role){
                             const roleNode = document.createElement("button");
                                 roleNode.classList.add("role");
+                                roleNode.id = role;
                                 roleNode.innerHTML = roleLocalization.get(role);
                                 roleNode.onclick = function(){
                                     addRole(roleNode, role, user, actualRolesCell, availableRolesCell);

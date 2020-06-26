@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ModuleLocation {
+    ADMIN_PANEL("accounts", "admin-panel"),
     MANAGE_ACCOUNT("accounts", "account");
 
     private final String categoryId;
