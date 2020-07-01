@@ -1,0 +1,19 @@
+{
+  "title": "Apphub - Jegyzetfüzet",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Jegyzetfüzet"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Vissza"
+      }
+    ]
+  },
+  "additionalContent": {
+  }
+}

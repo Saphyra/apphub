@@ -41,4 +41,5 @@ public class Endpoints {
     public static final String ADMIN_PANEL_INDEX_PAGE = "/web/admin-panel";
     public static final String ADMIN_PANEL_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/role-management";
     public static final String ERROR_PAGE = "/web/error";
+    public static final String NOTEBOOK_PAGE = "/web/notebook";
 }

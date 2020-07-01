@@ -39,6 +39,10 @@ zuul:
       path: /web
       serviceId: user
       stripPrefix: false
+    notebook-page:
+      path: /web/notebook
+      serviceId: notebook
+      stripPrefix: false
     account-page:
       path: /web/user/account
       serviceId: user

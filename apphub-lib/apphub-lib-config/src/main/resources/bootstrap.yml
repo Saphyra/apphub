@@ -50,9 +50,9 @@ user-authentication:
 user-data:
   ribbon:
     listOfServers: user:8080
-notification-data:
+notebook:
   ribbon:
-    listOfServers: notification:8080
+    listOfServers: notebook:8080
 user:
   ribbon:
     listOfServers: user:8080

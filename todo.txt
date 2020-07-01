@@ -3,6 +3,3 @@ Platform
 
 Index page
     Switch language
-
-Admin panel
-    Set up user roles

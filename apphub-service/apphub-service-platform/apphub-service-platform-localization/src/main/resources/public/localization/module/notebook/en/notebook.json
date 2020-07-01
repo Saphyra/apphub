@@ -1,0 +1,19 @@
+{
+  "title": "Apphub - Notebook",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Notebook"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Back"
+      }
+    ]
+  },
+  "additionalContent": {
+  }
+}

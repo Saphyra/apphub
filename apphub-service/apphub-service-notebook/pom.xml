@@ -18,9 +18,27 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-security</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${versions.postgresql-connector}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring5</artifactId>
+            <version>${versions.thymeleaf-spring}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${versions.liquibase-core}</version>
         </dependency>
     </dependencies>
 
