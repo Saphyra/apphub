@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -21,11 +23,15 @@ public class RoleAdditionService {
     public void addRole(RoleRequest roleRequest) {
         roleRequestValidator.validate(roleRequest);
 
-        if(roleDao.findByUserIdAndRole(roleRequest.getUserId(), roleRequest.getRole()).isPresent()){
-            throw new ConflictException(new ErrorMessage(ErrorCode.ROLE_ALREADY_EXISTS.name()), String.format("Role %s already exists for user %s", roleRequest.getRole(), roleRequest.getUserId()));
+        addRole(roleRequest.getUserId(), roleRequest.getRole());
+    }
+
+    public void addRole(UUID userId, String roleString) {
+        if (roleDao.findByUserIdAndRole(userId, roleString).isPresent()) {
+            throw new ConflictException(new ErrorMessage(ErrorCode.ROLE_ALREADY_EXISTS.name()), String.format("Role %s already exists for user %s", roleString, userId));
         }
 
-        Role role = roleFactory.create(roleRequest.getUserId(), roleRequest.getRole());
+        Role role = roleFactory.create(userId, roleString);
         roleDao.save(role);
     }
 }

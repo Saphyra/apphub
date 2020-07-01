@@ -158,6 +158,6 @@ public class AddRoleTest extends TestBase {
         RoleManagementPageActions.addRole(language, accessTokenId, roleRequest);
 
         List<UserRoleResponse> responses = RoleManagementPageActions.getRoles(language, accessTokenId, testUser.getUsername());
-        assertThat(responses.get(0).getRoles()).containsExactly(Constants.ROLE_ADMIN);
+        assertThat(responses.get(0).getRoles()).containsExactlyInAnyOrder(Constants.ROLE_ADMIN, Constants.ROLE_NOTEBOOK);
     }
 }

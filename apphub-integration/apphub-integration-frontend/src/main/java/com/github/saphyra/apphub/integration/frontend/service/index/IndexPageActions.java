@@ -10,12 +10,16 @@ import com.github.saphyra.apphub.integration.frontend.model.registration.Passwor
 import com.github.saphyra.apphub.integration.frontend.model.registration.RegistrationValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.registration.UsernameValidationResult;
 import lombok.extern.slf4j.Slf4j;
+import org.awaitility.core.ConditionFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import java.util.concurrent.TimeUnit;
 
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.verifyInvalidFieldState;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 
 @Slf4j
 public class IndexPageActions {
@@ -63,7 +67,10 @@ public class IndexPageActions {
         fillRegistrationForm(driver, registrationParameters);
         submitRegistration(driver);
 
-        AwaitilityWrapper.createDefault()
+        ConditionFactory conditionFactory = await()
+            .atMost(15, TimeUnit.SECONDS)
+            .pollInterval(1, TimeUnit.SECONDS);
+        AwaitilityWrapper.wrap(conditionFactory)
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)));
     }
 

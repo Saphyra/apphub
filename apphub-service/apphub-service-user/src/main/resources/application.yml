@@ -7,6 +7,10 @@ accessToken:
     expirationDays: 365
   expirationMinutes: 10
 
+registration:
+  defaultRoles:
+    - NOTEBOOK
+
 role:
   settings:
     - pattern: /api/user/data/roles

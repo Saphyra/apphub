@@ -158,6 +158,6 @@ public class RemoveRoleTest extends TestBase {
         RoleManagementPageActions.removeRole(language, accessTokenId, roleRequest);
 
         List<UserRoleResponse> responses = RoleManagementPageActions.getRoles(language, accessTokenId, testUser.getUsername());
-        assertThat(responses.get(0).getRoles()).isEmpty();
+        assertThat(responses.get(0).getRoles()).doesNotContain(Constants.ROLE_ADMIN);
     }
 }

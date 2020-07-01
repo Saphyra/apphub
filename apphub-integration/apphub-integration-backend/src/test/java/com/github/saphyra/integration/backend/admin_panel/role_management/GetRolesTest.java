@@ -73,6 +73,6 @@ public class GetRolesTest extends TestBase {
         UserRoleResponse userRoleResponse = response.get(0);
         assertThat(userRoleResponse.getEmail()).isEqualTo(userData.getEmail());
         assertThat(userRoleResponse.getUsername()).isEqualTo(userData.getUsername());
-        assertThat(userRoleResponse.getRoles()).containsExactly(Constants.ROLE_ADMIN);
+        assertThat(userRoleResponse.getRoles()).containsExactlyInAnyOrder(Constants.ROLE_ADMIN, Constants.ROLE_NOTEBOOK);
     }
 }

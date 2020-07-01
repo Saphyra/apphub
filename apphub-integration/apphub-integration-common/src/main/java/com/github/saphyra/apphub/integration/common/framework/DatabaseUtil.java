@@ -8,6 +8,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
@@ -19,6 +21,7 @@ public class DatabaseUtil {
 
     private static final String ADD_ROLE_BY_EMAIL_QUERY = "INSERT INTO apphub_user.apphub_role (role_id, user_id, apphub_role) VALUES('%s', (SELECT user_id FROM apphub_user.apphub_user WHERE email='%s'), '%s')";
     private static final String GET_USER_ID_BY_EMAIL_QUERY = "SELECT user_id FROM apphub_user.apphub_user WHERE email='%s'";
+    private static final String GET_ROLES_BY_USER_ID = "SELECT apphub_role FROM apphub_user.apphub_role WHERE user_id='%s'";
 
     public static volatile Connection CONNECTION;
 
@@ -47,6 +50,23 @@ public class DatabaseUtil {
             ResultSet resultSet = statement.executeQuery(sql);
             resultSet.next();
             return UUID.fromString(resultSet.getString(1));
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static List<String> getRolesByUserId(UUID userId) {
+        try {
+            Statement statement = getStatement();
+            String sql = String.format(GET_ROLES_BY_USER_ID, userId);
+            log.info("GetRolesByUserId SQL: {}", sql);
+
+            ResultSet resultSet = statement.executeQuery(sql);
+            List<String> result = new ArrayList<>();
+            while (resultSet.next()){
+                result.add(resultSet.getString("apphub_role"));
+            }
+            return result;
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

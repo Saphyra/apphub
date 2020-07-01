@@ -54,3 +54,7 @@ modules:
 admin-panel:
   ribbon:
     listOfServers: localhost:8089
+
+notebook:
+  ribbon:
+    listOfServers: localhost:8090

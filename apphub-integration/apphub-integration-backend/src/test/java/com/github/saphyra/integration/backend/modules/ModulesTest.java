@@ -43,7 +43,7 @@ public class ModulesTest extends TestBase {
 
         Map<String, List<ModulesResponse>> result = ModulesPageActions.getModules(locale, accessTokenId);
 
-        assertThat(result).containsOnlyKeys("accounts");
+        assertThat(result).containsOnlyKeys("accounts", "office");
         ModulesResponse expectedModule = ModulesResponse.builder()
             .name("account")
             .url("/web/user/account")
@@ -128,7 +128,7 @@ public class ModulesTest extends TestBase {
             true
         );
 
-        assertThat(result).containsOnlyKeys("accounts");
+        assertThat(result).containsOnlyKeys("accounts", "office");
         ModulesResponse expectedModule = ModulesResponse.builder()
             .name("account")
             .url("/web/user/account")

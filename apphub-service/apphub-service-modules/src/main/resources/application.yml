@@ -13,3 +13,9 @@ modules:
         allowedByDefault: false
         roles:
           - ADMIN
+    office:
+      - name: notebook
+        url: /web/notebook
+        allowedByDefault: false
+        roles:
+          - NOTEBOOK

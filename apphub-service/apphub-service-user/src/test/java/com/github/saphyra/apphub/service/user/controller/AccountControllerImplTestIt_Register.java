@@ -5,6 +5,8 @@ import com.github.saphyra.apphub.api.user.model.request.RegistrationRequest;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.config.Endpoints;
+import com.github.saphyra.apphub.service.user.data.dao.role.Role;
+import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
@@ -25,6 +27,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -59,6 +63,9 @@ public class AccountControllerImplTestIt_Register {
     private ObjectMapperWrapper objectMapperWrapper;
 
     @Autowired
+    private RoleDao roleDao;
+
+    @Autowired
     private UserDao userDao;
 
     @MockBean
@@ -72,6 +79,7 @@ public class AccountControllerImplTestIt_Register {
     @After
     public void clear() {
         userDao.deleteAll();
+        roleDao.deleteAll();
     }
 
     @Test
@@ -234,5 +242,20 @@ public class AccountControllerImplTestIt_Register {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
 
         verify(localizationApiClient).translate(ErrorCode.PASSWORD_TOO_LONG.name(), "hu");
+    }
+
+    @Test
+    public void successfulRegistration(){
+        Response response = RequestFactory.createRequest()
+            .body(objectMapperWrapper.writeValueAsString(REGISTRATION_REQUEST))
+            .post(UrlFactory.create(serverPort, Endpoints.REGISTER));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+
+        Optional<User> userOptional = userDao.findByUsername(USERNAME);
+        assertThat(userOptional).isNotEmpty();
+        List<Role> roles = roleDao.getByUserId(userOptional.get().getUserId());
+        assertThat(roles).hasSize(1);
+        assertThat(roles.get(0).getRole()).isEqualTo("ROLE");
     }
 }

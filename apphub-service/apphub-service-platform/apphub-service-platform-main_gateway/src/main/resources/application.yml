@@ -17,6 +17,10 @@ zuul:
       path: /res/user/**
       serviceId: user
       stripPrefix: false
+    notebook-resources:
+      path: /res/notebook/**
+      serviceId: notebook
+      stripPrefix: false
     modules-resources:
       path: /res/modules/**
       serviceId: modules
@@ -52,6 +56,10 @@ zuul:
     user:
       path: /api/user/**
       serviceId: user
+      stripPrefix: false
+    notebook:
+      path: /api/notebook/**
+      serviceId: notebook
       stripPrefix: false
     admin-panel:
       path: /api/admin-panel/**

@@ -9,7 +9,7 @@ kubectl port-forward deployment/main-gateway $SERVER_PORT:8080 -n "$NAMESPACE_NA
 kubectl port-forward deployment/postgres $DATABASE_PORT:5432 -n "$NAMESPACE_NAME" &
 
 cd apphub-integration || exit
-mvn -DargLine="-DserverPort=$SERVER_PORT -DdatabasePort=$DATABASE_PORT" clean test
+mvn -DargLine="-DserverPort=$SERVER_PORT -DdatabasePort=$DATABASE_PORT -Dheadless=true" clean test
 TEST_RESULT=$?
 if [[ "$TEST_RESULT" -ne 0 ]]; then
   echo "Tests failed"

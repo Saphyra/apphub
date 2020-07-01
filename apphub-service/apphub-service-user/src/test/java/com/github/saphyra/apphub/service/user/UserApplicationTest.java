@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.user.authentication;
+package com.github.saphyra.apphub.service.user;
 
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;

@@ -2,6 +2,8 @@ package com.github.saphyra.integration.backend.index;
 
 import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.common.framework.Constants;
+import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
@@ -12,6 +14,8 @@ import com.github.saphyra.apphub.integration.common.model.RegistrationRequest;
 import io.restassured.response.Response;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_PASSWORD_TOO_LONG;
 import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_PASSWORD_TOO_SHORT;
@@ -137,5 +141,19 @@ public class RegistrationTest extends TestBase {
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_LONG.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_PASSWORD_TOO_LONG));
+    }
+
+    @Test
+    public void successfulRegistration(){
+        Language locale = Language.HUNGARIAN;
+
+        RegistrationRequest registrationRequest = RegistrationParameters.validParameters()
+            .toRegistrationRequest();
+        Response response = IndexPageActions.getRegistrationResponse(locale, registrationRequest);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        List<String> roles = DatabaseUtil.getRolesByUserId(DatabaseUtil.getUserIdByEmail(registrationRequest.getEmail()));
+        assertThat(roles).containsExactlyInAnyOrder(Constants.ROLE_NOTEBOOK);
     }
 }
