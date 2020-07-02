@@ -18,6 +18,42 @@
         "key": "innerHTML",
         "message": "Vissza"
       }
+    ],
+    "new-button": [
+      {
+        "key": "innerHTML",
+        "message": "Új"
+      }
+    ],
+    "new-category-button": [
+      {
+        "key": "innerHTML",
+        "message": "Kategória"
+      }
+    ],
+    "create-category-title": [
+      {
+        "key": "innerHTML",
+        "message": "Új kategória"
+      }
+    ],
+    "new-category-title": [
+      {
+        "key": "placeholder",
+        "message": "Az új kategória címe"
+      }
+    ],
+    "create-category-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Fel"
+      }
+    ],
+    "create-category-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
     ]
   },
   "additionalContent": {

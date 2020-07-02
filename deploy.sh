@@ -16,4 +16,4 @@ for file in $SCRIPT_DIRECTORY_NAME; do
   kubectl apply -n "$NAMESPACE_NAME" -f "$file"
 done
 
-sleep 10
+sleep 20

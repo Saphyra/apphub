@@ -1,12 +1,21 @@
 :root{
     --category-list-width: 30vw;
     --search-container-min-height: 2.5rem;
+    --create-category-input-height: 3.25rem;
 }
 
 .category{
     border-color: springgreen;
 }
 
+.dialog-close-button{
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 1.5rem;
+}
+
+/*=== CATEGORY TREE VIEW ===*/
 #category-list{
     position: absolute;
     top: 0;
@@ -95,3 +104,73 @@
             width: 100%;
             height: 100%;
         }
+
+/*=== FOOTER BUTTONS ===*/
+#new-button-wrapper{
+    position: relative;
+    display: inline-block;
+}
+
+    #new-buttons{
+        display: none;
+        background: black;
+        position: absolute;
+        bottom: 100%;
+    }
+
+    #new-button-wrapper:hover #new-buttons{
+        display: block;
+    }
+
+
+/*=== CREATE CATEGORY DIALOG ===*/
+.create-category-category{
+    font-size: 1.5rem;
+}
+
+#create-category-input-wrapper{
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--create-category-input-height);
+    border-bottom: 3px ridge white;
+    padding: 0.25rem;
+}
+
+    #new-category-title{
+        width: 80%;
+        font-size: 1.25rem;
+    }
+
+#create-category-parent-selection-wrapper{
+    position: absolute;
+    top: var(--create-category-input-height);
+    left: 10%;
+    right: 10%;
+    bottom: 0;
+}
+
+    #create-category-parent-selection-parent-button{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin: 0.5rem auto;
+        width: 80%
+    }
+
+    #create-category-parent-selection-category-list{
+        position: absolute;
+        top: 2.75rem;
+        left: 0;
+        bottom: 0;
+        right: 0;
+    }
+
+#create-category-button{
+    display: block;
+    margin: 0.25rem auto;
+    width: 50%;
+}

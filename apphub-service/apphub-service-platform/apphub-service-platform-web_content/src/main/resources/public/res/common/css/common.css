@@ -68,8 +68,9 @@ footer{
     height: var(--footer-height);
 }
 
-footer button, footer label{
+footer button, footer label, footer .button{
     font-size: 1.25rem;
+    display: inline-block
 }
 
 #logout-button{

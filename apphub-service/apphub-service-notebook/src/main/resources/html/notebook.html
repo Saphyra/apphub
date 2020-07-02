@@ -11,7 +11,7 @@
     <SCRIPT src="/res/notebook/js/page_controller.js"></SCRIPT>
 </HEAD>
 <BODY>
-<DIV class="main-page">
+<DIV id="main" class="main-page">
     <HEADER>
         <H1 id="main-title"></H1>
     </HEADER>
@@ -37,6 +37,35 @@
 
     <FOOTER>
         <BUTTON id="back-button" onclick='window.location = "/web/modules"'></BUTTON>
+        <DIV id="new-button-wrapper">
+            <DIV id="new-buttons">
+                <DIV id="new-category-button" class="button" onclick="pageController.openCreateCategoryDialog()"></DIV>
+            </DIV>
+
+            <DIV id="new-button" class="button"></DIV>
+        </DIV>
+    </FOOTER>
+</DIV>
+
+<DIV id="create-category" class="main-page">
+    <HEADER>
+        <H1 id="create-category-title"></H1>
+        <BUTTON id="create-category-close-button" class="dialog-close-button" onclick="pageController.openMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN>
+        <DIV id="create-category-input-wrapper">
+            <INPUT type="text" id="new-category-title">
+        </DIV>
+
+        <DIV id="create-category-parent-selection-wrapper">
+            <DIV id="create-category-parent-selection-parent-button" class="button create-category-category"></DIV>
+            <DIV id="create-category-parent-selection-category-list"></DIV>
+        </DIV>
+    </MAIN>
+
+    <FOOTER>
+        <DIV id="create-category-button" class="button dialog-button"></DIV>
     </FOOTER>
 </DIV>
 </BODY>

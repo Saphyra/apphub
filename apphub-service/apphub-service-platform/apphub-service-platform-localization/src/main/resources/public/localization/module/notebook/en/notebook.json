@@ -18,6 +18,42 @@
         "key": "innerHTML",
         "message": "Back"
       }
+    ],
+    "new-button": [
+      {
+        "key": "innerHTML",
+        "message": "New"
+      }
+    ],
+    "new-category-button": [
+      {
+        "key": "innerHTML",
+        "message": "Category"
+      }
+    ],
+    "create-category-title": [
+      {
+        "key": "innerHTML",
+        "message": "Create category"
+      }
+    ],
+    "new-category-title": [
+      {
+        "key": "placeholder",
+        "message": "Title of the category"
+      }
+    ],
+    "create-category-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Up"
+      }
+    ],
+    "create-category-button": [
+      {
+        "key": "innerHTML",
+        "message": "Save"
+      }
     ]
   },
   "additionalContent": {
