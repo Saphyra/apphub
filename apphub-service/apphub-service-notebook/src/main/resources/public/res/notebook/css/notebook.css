@@ -1,0 +1,97 @@
+:root{
+    --category-list-width: 30vw;
+    --search-container-min-height: 2.5rem;
+}
+
+.category{
+    border-color: springgreen;
+}
+
+#category-list{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--category-list-width);
+    border-right: 3px ridge white;
+}
+
+    .category-wrapper{
+        position: relative;
+        left: 2rem;
+        width: calc(100% - 2rem);
+    }
+
+    .root-wrapper{
+        left: 0;
+        width: initial;
+    }
+
+        .category-view-button{
+            text-align: left;
+            display: inline-block;
+            height: 2.75rem;
+        }
+
+            .category-view-toggle-button{
+                margin: 0;
+                margin-right: 0.5rem;
+                padding: 0 0.1rem;
+                display: inline-block;
+                width: 1.5rem;
+                height: 2rem;
+                font-size: 1.65rem;
+            }
+
+            .category-view-button-title{
+                text-align: left;
+                padding: 0.5rem 0.25rem;
+                margin: 0.1rem;
+                font-weight: 700;
+                font-size: 1.55rem;
+            }
+
+        .category-children-container{
+            display: none;
+        }
+
+#detailed-list{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: calc(100% - var(--category-list-width));
+}
+
+    #search-container{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        min-height: var(--search-container-min-height);
+
+        border-bottom: 3px ridge white;
+    }
+
+        #search-container-title{
+            text-align: center;
+        }
+
+        #search-container-close-button{
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+    #detailed-frame-container{
+        position: absolute;
+        top: var(--search-container-min-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+        #detailed-list-frame{
+            width: 100%;
+            height: 100%;
+        }

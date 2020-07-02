@@ -15,3 +15,5 @@ for file in $SCRIPT_DIRECTORY_NAME; do
   kubectl -n "$NAMESPACE_NAME" delete service "$SERVICE_NAME"
   kubectl apply -n "$NAMESPACE_NAME" -f "$file"
 done
+
+sleep 10

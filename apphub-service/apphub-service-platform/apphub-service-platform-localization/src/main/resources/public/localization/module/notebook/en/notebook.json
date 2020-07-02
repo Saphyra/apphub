@@ -7,6 +7,12 @@
         "message": "Notebook"
       }
     ],
+    "search-container-title": [
+      {
+        "key": "innerHTML",
+        "message": "Search"
+      }
+    ],
     "back-button": [
       {
         "key": "innerHTML",
@@ -15,5 +21,6 @@
     ]
   },
   "additionalContent": {
+    "root-title": "Root"
   }
 }

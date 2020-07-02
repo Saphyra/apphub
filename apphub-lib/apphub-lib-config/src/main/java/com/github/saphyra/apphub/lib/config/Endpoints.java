@@ -35,6 +35,9 @@ public class Endpoints {
     public static final String GET_MODULES_OF_USER = "/api/modules";
     public static final String SET_FAVORITE = "/api/modules/{module}/favorite";
 
+    public static final String GET_NOTEBOOK_CATEGORY_VIEWS = "/api/notebook/category";
+    public static final String CREATE_NOTEBOOK_CATEGORY = "/api/notebook/category";
+
     public static final String INDEX_PAGE = "/web";
     public static final String ACCOUNT_PAGE = "/web/user/account";
     public static final String MODULES_PAGE = "/web/modules";

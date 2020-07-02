@@ -233,6 +233,10 @@ input:disabled, button:disabled, textarea:disabled, .disabled{
     position: relative;
 }
 
+.invisible{
+    visibility: hidden;
+}
+
 .spinner{
     position: fixed;
     top: 0;

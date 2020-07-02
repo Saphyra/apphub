@@ -3,8 +3,10 @@ package com.github.saphyra.apphub.lib.common_util;
 public enum ErrorCode {
     BAD_CREDENTIALS,
     BAD_PASSWORD,
+    CATEGORY_NOT_FOUND, //TODO add localization
     EMAIL_ALREADY_EXISTS,
     INVALID_PARAM,
+    INVALID_TYPE, //TODO add localization
     LOCALE_NOT_FOUND,
     MISSING_ROLE,
     NO_SESSION_AVAILABLE,
