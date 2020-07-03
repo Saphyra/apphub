@@ -1,6 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item;
 
+import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.converter.Converter;
 import com.github.saphyra.dao.AbstractDao;
 import org.springframework.stereotype.Component;
@@ -25,5 +28,21 @@ public class ListItemDao extends AbstractDao<ListItemEntity, ListItem, String, L
 
     public Optional<ListItem> findById(UUID listItemId) {
         return findById(uuidConverter.convertDomain(listItemId));
+    }
+
+    public ListItem findByIdValidated(UUID listItemId) {
+        return findById(listItemId)
+            .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.UNKNOWN_ERROR.name()), "ListItem not found with id " + listItemId)); //TODO proper errorCode
+    }
+
+    public List<ListItem> getByUserIdAndParent(UUID userId, UUID categoryId) {
+        return converter.convertEntity(repository.getByUserIdAndParent(
+            uuidConverter.convertDomain(userId),
+            uuidConverter.convertDomain(categoryId)
+        ));
+    }
+
+    public List<ListItem> getByUserIdAndParentIsNull(UUID userId) {
+        return converter.convertEntity(repository.getByUserIdAndParentIsNull(uuidConverter.convertDomain(userId)));
     }
 }

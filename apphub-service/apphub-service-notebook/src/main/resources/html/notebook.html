@@ -39,7 +39,7 @@
         <BUTTON id="back-button" onclick='window.location = "/web/modules"'></BUTTON>
         <DIV id="new-button-wrapper">
             <DIV id="new-buttons">
-                <DIV id="new-category-button" class="button" onclick="pageController.openCreateCategoryDialog()"></DIV>
+                <DIV id="new-category-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_CATEGORY_DIALOG))"></DIV>
             </DIV>
 
             <DIV id="new-button" class="button"></DIV>
@@ -65,7 +65,7 @@
     </MAIN>
 
     <FOOTER>
-        <DIV id="create-category-button" class="button dialog-button"></DIV>
+        <DIV id="create-category-button" class="button dialog-button" onclick="eventProcessor.processEvent(new Event(events.SAVE_CATEGORY))"></DIV>
     </FOOTER>
 </DIV>
 </BODY>

@@ -57,6 +57,8 @@
     ]
   },
   "additionalContent": {
+    "category-created": "Category saved.",
+    "new-category-title-empty": "Title must not be empty.",
     "root-title": "Root"
   }
 }

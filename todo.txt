@@ -3,3 +3,6 @@ Platform
 
 Index page
     Switch language
+
+TODO FE test - View category tree
+TODO FE test - Create category

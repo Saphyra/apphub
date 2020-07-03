@@ -13,7 +13,9 @@ window.Mapping = new function(){
         CHANGE_PASSWORD: new Endpoint("/api/user/account/password", HttpMethod.POST),
         CHANGE_USERNAME: new Endpoint("/api/user/account/username", HttpMethod.POST),
         CHECK_SESSION: new Endpoint("/api/user/authentication/session", HttpMethod.GET),
+        CREATE_NOTEBOOK_CATEGORY: new Endpoint("/api/notebook/category", HttpMethod.PUT),
         DELETE_ACCOUNT: new Endpoint("/api/user/account", HttpMethod.DELETE),
+        GET_CHILDREN_OF_NOTEBOOK_CATEGORY: new Endpoint("/api/notebook/category/children", HttpMethod.GET),
         GET_LANGUAGES: new Endpoint("/api/user/data/languages", HttpMethod.GET),
         GET_MODULES: new Endpoint("/api/modules", HttpMethod.GET),
         GET_NOTEBOOK_CATEGORIES: new Endpoint("/api/notebook/category", HttpMethod.GET),
@@ -25,25 +27,39 @@ window.Mapping = new function(){
         REMOVE_ROLE: new Endpoint("/api/user/data/roles", HttpMethod.DELETE),
     }
 
-    this.getEndpoint = function(endpointName, pathVariables){
+    this.getEndpoint = function(endpointName, pathVariables, queryParams){
         const ep = endpoints[endpointName] || throwException("IllegalArgument", "Endpoint not found with endpointName " + endpointName);
         return new Endpoint(
-            replace(ep.getUrl(), pathVariables),
+            replace(ep.getUrl(), pathVariables, queryParams),
             ep.getMethod()
         )
     }
 
-     function replace (path, pathVariables){
-        if(!pathVariables){
-            return path;
-        }
+     function replace (path, pathVariables, queryParams){
         let result = path;
-        for(let index in pathVariables){
-            const key = createKey(index);
-            result = result.replace(key, pathVariables[index]);
+
+        if(pathVariables){
+            for(let index in pathVariables){
+                if(pathVariables[index] != null){
+                    const key = createKey(index);
+                    result = result.replace(key, pathVariables[index]);
+                }
+            }
+        }
+
+        if(queryParams){
+            result += "?";
+            const paramParts = [];
+            for (let index in queryParams){
+                if(queryParams[index] != null){
+                    paramParts.push(index + "=" + queryParams[index]);
+                }
+            }
+            result += paramParts.join("&");
         }
 
         return result;
+
         function createKey(index){
             return "{" + index + "}";
         }

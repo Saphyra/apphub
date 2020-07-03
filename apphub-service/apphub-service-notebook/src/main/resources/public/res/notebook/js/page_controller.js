@@ -2,6 +2,8 @@
     scriptLoader.loadScript("/res/notebook/js/category_list_controller.js");
     scriptLoader.loadScript("/res/notebook/js/creation_controller.js");
 
+    events.OPEN_CREATE_CATEGORY_DIALOG = "OPEN_CREATE_CATEGORY_DIALOG";
+
     $(document).ready(function(){
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "notebook", fileName: "notebook"}));
     });
@@ -15,4 +17,14 @@
             switchTab("main-page", "main");
         }
     }
+
+    eventProcessor.registerProcessor(new EventProcessor(
+        function(eventType){return eventType == events.CATEGORY_SAVED},
+        pageController.openMainPage
+    ));
+
+    eventProcessor.registerProcessor(new EventProcessor(
+        function(eventType){return eventType == events.OPEN_CREATE_CATEGORY_DIALOG},
+        pageController.openCreateCategoryDialog
+    ));
 })();
