@@ -3,7 +3,7 @@
 
     window.Localization = new function(){
         this.getAdditionalContent = function(contentId){
-            return additionalContent[contentId] || throwException("IllegalArgument", "No additionalContent found with id " + contentId);
+            return additionalContent[contentId] || throwException("IllegalArgument", "No additionalContent found with id " + contentId + ". Available keys: " + Object.keys(additionalContent));
         }
     }
 
@@ -11,7 +11,15 @@
         function(eventType){return eventType === events.LOAD_LOCALIZATION},
         function(event){
             const payload = event.getPayload();
-            loadLocalization(payload.module, payload.fileName, fillPageWithText);
+            const shouldFillPageWithText = payload.shouldFillPageWithText != false;
+            const callback = shouldFillPageWithText ?
+                fillPageWithText
+                : function(content){
+                    additionalContent = content.additionalContent;
+                    eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));
+                }
+
+            loadLocalization(payload.module, payload.fileName, callback);
         },
         true
     ));

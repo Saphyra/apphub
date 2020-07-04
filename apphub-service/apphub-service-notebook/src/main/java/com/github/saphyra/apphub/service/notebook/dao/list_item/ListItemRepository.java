@@ -8,6 +8,4 @@ interface ListItemRepository extends CrudRepository<ListItemEntity, String> {
     List<ListItemEntity> getByUserIdAndType(String userId, ListItemType type);
 
     List<ListItemEntity> getByUserIdAndParent(String userId, String parent);
-
-    List<ListItemEntity> getByUserIdAndParentIsNull(String userId);
 }

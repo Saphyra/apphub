@@ -1,4 +1,4 @@
-(function CreationController(){
+(function CategoryCreationController(){
     events.SAVE_CATEGORY = "save-category";
     events.CATEGORY_SAVED = "CATEGORY_SAVED";
 
@@ -42,6 +42,13 @@
 
         const container = document.getElementById("create-category-parent-selection-category-list");
             container.innerHTML = "";
+
+            if(!categories.length){
+                const noContentText = document.createElement("DIV");
+                    noContentText.classList.add("no-content");
+                    noContentText.innerHTML = Localization.getAdditionalContent("category-empty");
+                container.appendChild(noContentText);
+            }
 
             new Stream(categories)
                 .sorted(function(a, b){return a.title.localeCompare(b.title)})

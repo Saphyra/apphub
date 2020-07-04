@@ -2,10 +2,17 @@
     --category-list-width: 30vw;
     --search-container-min-height: 2.5rem;
     --create-category-input-height: 3.25rem;
+    --detailed-container-title-height: 3rem;
 }
 
 .category{
     border-color: springgreen;
+}
+
+.no-content{
+    text-align: center;
+    padding: 1rem;
+    font-size: 2rem;
 }
 
 .dialog-close-button{
@@ -92,7 +99,7 @@
             top: 0;
         }
 
-    #detailed-frame-container{
+    #detailed-page-container{
         position: absolute;
         top: var(--search-container-min-height);
         left: 0;
@@ -100,10 +107,43 @@
         bottom: 0;
     }
 
-        #detailed-list-frame{
-            width: 100%;
-            height: 100%;
+        .detailed-container{
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255,255,255,0.15);
         }
+
+            .detailed-container-title{
+                text-align: center;
+                padding: 0.5rem;
+                border-bottom: 2px ridge white;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: var(--detailed-container-title-height);
+            }
+
+            .detailed-container-content{
+                position: absolute;
+                top: var(--detailed-container-title-height);
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+
+                #category-content-parent-selection-parent-button{
+                    text-align: center;
+                }
+
+                .category-details-item{
+                    font-size: 1.25rem;
+                    margin: 0.5rem;
+                    text-align: left;
+                }
 
 /*=== FOOTER BUTTONS ===*/
 #new-button-wrapper{

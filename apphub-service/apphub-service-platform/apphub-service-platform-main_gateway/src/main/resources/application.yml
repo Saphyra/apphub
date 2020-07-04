@@ -40,7 +40,7 @@ zuul:
       serviceId: user
       stripPrefix: false
     notebook-page:
-      path: /web/notebook
+      path: /web/notebook/**
       serviceId: notebook
       stripPrefix: false
     account-page:

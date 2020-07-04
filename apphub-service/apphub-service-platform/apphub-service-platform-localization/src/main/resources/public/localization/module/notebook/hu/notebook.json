@@ -13,6 +13,12 @@
         "message": "Keresés"
       }
     ],
+    "category-content-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Fel"
+      }
+    ],
     "back-button": [
       {
         "key": "innerHTML",
@@ -58,6 +64,7 @@
   },
   "additionalContent": {
     "category-created": "Kategória elmentve.",
+    "category-empty": "A kategória üres.",
     "new-category-title-empty": "A cím nem lehet üres.",
     "root-title": "Gyökér"
   }

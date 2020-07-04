@@ -39,7 +39,7 @@ header{
     background: var(--background-color);
 }
 
-header > h1{
+header > h1, header > h2{
     text-align: center;
     padding: 0.25rem;
     white-space: nowrap;

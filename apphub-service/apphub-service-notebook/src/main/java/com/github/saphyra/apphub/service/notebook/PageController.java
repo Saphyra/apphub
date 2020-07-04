@@ -1,16 +1,25 @@
 package com.github.saphyra.apphub.service.notebook;
 
 import com.github.saphyra.apphub.lib.config.Endpoints;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
+@RequiredArgsConstructor
 @Slf4j
-public class PageController {
+class PageController {
+
     @GetMapping(Endpoints.NOTEBOOK_PAGE)
-    public String notebookPage(){
+    String notebookPage() {
         log.info("Notebook page called.");
         return "notebook";
+    }
+
+    @GetMapping(Endpoints.NOTEBOOK_CATEGORY_CONTENT_VIEW)
+    String getCategoryContentView() {
+        log.info("getCategoryContentView called.");
+        return "content/category";
     }
 }

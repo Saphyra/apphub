@@ -13,12 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import static java.util.Objects.isNull;
 
 @Component
 @Slf4j
@@ -32,20 +31,21 @@ public class CategoryChildrenQueryService {
         List<NotebookView> children = listItemDao.getByUserIdAndParent(userId, categoryId)
             .stream()
             .filter(listItem -> query.contains(listItem.getType()))
+            .sorted(Comparator.comparing(ListItem::getTitle))
             .map(listItem -> NotebookView.builder()
                 .id(listItem.getListItemId())
                 .title(listItem.getTitle())
                 .type(listItem.getType().name())
                 .build())
             .collect(Collectors.toList());
+
+        Optional<ListItem> category = Optional.ofNullable(categoryId)
+            .flatMap(listItemDao::findById);
         return ChildrenOfCategoryResponse.builder()
-            .parent(getParent(categoryId))
+            .parent(category.map(ListItem::getParent).orElse(null))
+            .title(category.map(ListItem::getTitle).orElse(null))
             .children(children)
             .build();
-    }
-
-    private UUID getParent(UUID categoryId) {
-        return isNull(categoryId) ? null : listItemDao.findByIdValidated(categoryId).getParent();
     }
 
     private List<ListItemType> parseTypes(String type) {
@@ -57,12 +57,5 @@ public class CategoryChildrenQueryService {
         } catch (IllegalArgumentException e) {
             throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "type", "contains invalid argument"), type + "could not be converted to ListItemTypes");
         }
-    }
-
-    //TODO remove
-    public List<ListItem> getItemsOfCategory(UUID userId, UUID categoryId) {
-        return isNull(categoryId) ?
-            listItemDao.getByUserIdAndParentIsNull(userId) :
-            listItemDao.getByUserIdAndParent(userId, categoryId);
     }
 }

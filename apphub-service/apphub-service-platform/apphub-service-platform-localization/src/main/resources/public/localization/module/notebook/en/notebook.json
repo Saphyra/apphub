@@ -13,6 +13,12 @@
         "message": "Search"
       }
     ],
+    "category-content-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Up"
+      }
+    ],
     "back-button": [
       {
         "key": "innerHTML",
@@ -58,6 +64,7 @@
   },
   "additionalContent": {
     "category-created": "Category saved.",
+    "category-empty": "Category is empty.",
     "new-category-title-empty": "Title must not be empty.",
     "root-title": "Root"
   }

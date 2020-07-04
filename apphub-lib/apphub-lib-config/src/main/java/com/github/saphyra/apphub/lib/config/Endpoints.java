@@ -38,6 +38,7 @@ public class Endpoints {
     public static final String GET_NOTEBOOK_CATEGORY_VIEWS = "/api/notebook/category";
     public static final String CREATE_NOTEBOOK_CATEGORY = "/api/notebook/category";
     public static final String GET_CHILDREN_OF_NOTEBOOK_CATEGORY = "/api/notebook/category/children";
+    public static final String NOTEBOOK_CATEGORY_CONTENT_VIEW = "/web/notebook/content/category";
 
     public static final String INDEX_PAGE = "/web";
     public static final String ACCOUNT_PAGE = "/web/user/account";

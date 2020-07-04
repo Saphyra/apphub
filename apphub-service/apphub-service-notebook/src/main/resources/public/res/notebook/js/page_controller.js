@@ -1,6 +1,7 @@
 (function PageController(){
     scriptLoader.loadScript("/res/notebook/js/category_list_controller.js");
-    scriptLoader.loadScript("/res/notebook/js/creation_controller.js");
+    scriptLoader.loadScript("/res/notebook/js/category_creation_controller.js");
+    scriptLoader.loadScript("/res/notebook/js/content/category_view_controller.js");
 
     events.OPEN_CREATE_CATEGORY_DIALOG = "OPEN_CREATE_CATEGORY_DIALOG";
 

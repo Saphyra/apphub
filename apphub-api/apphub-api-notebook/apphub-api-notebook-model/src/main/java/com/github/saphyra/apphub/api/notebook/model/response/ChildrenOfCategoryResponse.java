@@ -12,6 +12,8 @@ import java.util.UUID;
 public class ChildrenOfCategoryResponse {
     private final UUID parent;
 
+    private final String title;
+
     @NonNull
     private final List<NotebookView> children;
 }
