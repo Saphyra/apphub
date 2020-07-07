@@ -4,6 +4,7 @@
     scriptLoader.loadScript("/res/notebook/js/content/category_view_controller.js");
 
     events.OPEN_CREATE_CATEGORY_DIALOG = "OPEN_CREATE_CATEGORY_DIALOG";
+    events.CATEGORY_DELETED = "CATEGORY_DELETED";
 
     $(document).ready(function(){
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "notebook", fileName: "notebook"}));

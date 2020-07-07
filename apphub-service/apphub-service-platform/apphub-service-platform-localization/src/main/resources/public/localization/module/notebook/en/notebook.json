@@ -64,7 +64,14 @@
   },
   "additionalContent": {
     "category-created": "Category saved.",
+    "category-deleted": "Category deleted.",
+    "category-deletion-confirmation-dialog-title": "Confirm deletion",
+    "category-deletion-confirmation-dialog-detail": "Are you sure you want to delete the category with all of its content? Deleted data cannot be restored..",
+    "category-deletion-confirmation-dialog-confirm-button": "Delete the category.",
+    "category-deletion-confirmation-dialog-decline-button": "Cancel",
     "category-empty": "Category is empty.",
+    "delete-button": "Delete",
+    "list-item-options-button": "Options",
     "new-category-title-empty": "Title must not be empty.",
     "root-title": "Root"
   }

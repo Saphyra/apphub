@@ -5,6 +5,13 @@
         true
     ));
 
+    eventProcessor.registerProcessor(new EventProcessor(
+        function(eventType){return eventType == events.CATEGORY_DELETED},
+        function(event){
+            document.getElementById(createWrapperId(event.getPayload())).remove();
+        },
+    ));
+
     function loadCategories(){
         const request = new Request(Mapping.getEndpoint("GET_NOTEBOOK_CATEGORIES"));
             request.convertResponse = function(response){
@@ -33,6 +40,8 @@
                 wrapper.classList.add("category-wrapper");
                 if(category.categoryId == null){
                     wrapper.classList.add("root-wrapper");
+                }else{
+                    wrapper.id = createWrapperId(category.categoryId);
                 }
 
                 const button = document.createElement("DIV");
@@ -56,6 +65,9 @@
                         toggleButton.classList.add("invisible");
                     }else{
                         const childrenContainer = document.createElement("DIV");
+                            if(category.categoryId == null){
+                                childrenContainer.style.display = "block";
+                            }
                             childrenContainer.classList.add("category-children-container");
                     wrapper.appendChild(childrenContainer);
 
@@ -78,5 +90,9 @@
 
             return wrapper;
         }
+    }
+
+    function createWrapperId(categoryId){
+        return "category-wrapper-" + categoryId;
     }
 })();

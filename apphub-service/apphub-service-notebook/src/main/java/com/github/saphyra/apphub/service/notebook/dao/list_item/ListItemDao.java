@@ -27,10 +27,15 @@ public class ListItemDao extends AbstractDao<ListItemEntity, ListItem, String, L
         return findById(uuidConverter.convertDomain(listItemId));
     }
 
-    public List<ListItem> getByUserIdAndParent(UUID userId, UUID categoryId) {
+    public ListItem findByIdValidated(UUID listItemId) {
+        return findById(listItemId)
+            .orElseThrow(() -> new RuntimeException("ListItem not found with id " + listItemId)); //TODO proper exception
+    }
+
+    public List<ListItem> getByUserIdAndParent(UUID userId, UUID parent) {
         return converter.convertEntity(repository.getByUserIdAndParent(
             uuidConverter.convertDomain(userId),
-            uuidConverter.convertDomain(categoryId)
+            uuidConverter.convertDomain(parent)
         ));
     }
 }

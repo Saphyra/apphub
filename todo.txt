@@ -4,5 +4,9 @@ Platform
 Index page
     Switch language
 
+Notebook
+    Refresh page when something was saved.
+
 TODO FE test - View category tree
 TODO FE test - Create category
+TODO FE test - Delete category

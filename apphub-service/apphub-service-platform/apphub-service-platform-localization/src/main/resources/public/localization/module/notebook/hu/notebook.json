@@ -64,7 +64,14 @@
   },
   "additionalContent": {
     "category-created": "Kategória elmentve.",
+    "category-deleted": "Kategória törölve.",
+    "category-deletion-confirmation-dialog-title": "Törlés megerősítése",
+    "category-deletion-confirmation-dialog-detail": "Biztosan törölni szeretné a kiválasztott kategóriát és teljes tartalmát? A törölt adatokat már nem lehet vissza állítani.",
+    "category-deletion-confirmation-dialog-confirm-button": "Törlöm a kategóriát.",
+    "category-deletion-confirmation-dialog-decline-button": "Mégse",
     "category-empty": "A kategória üres.",
+    "delete-button": "Törlés",
+    "list-item-options-button": "Opciók",
     "new-category-title-empty": "A cím nem lehet üres.",
     "root-title": "Gyökér"
   }

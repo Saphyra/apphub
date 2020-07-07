@@ -139,11 +139,36 @@
                     text-align: center;
                 }
 
-                .category-details-item{
+                .list-item-details-item{
                     font-size: 1.25rem;
                     margin: 0.5rem;
                     text-align: left;
+                    position: relative;
                 }
+
+                    .list-item-options-container{
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                    }
+
+                        .list-item-option-button{
+                            margin: 0.125rem;
+                            padding: 0.125rem;
+                            border-width: 1px;
+                        }
+
+                        .list-item-options-button-list-wrapper{
+                            display: none;
+                        }
+
+                    .list-item-options-container:hover .list-item-options-button-list-wrapper{
+                        display: block;
+                    }
+
+                    .list-item-options-container:hover .list-item-options-button{
+                        display: none;
+                    }
 
 /*=== FOOTER BUTTONS ===*/
 #new-button-wrapper{

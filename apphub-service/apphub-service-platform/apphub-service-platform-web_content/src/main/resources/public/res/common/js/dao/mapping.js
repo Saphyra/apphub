@@ -15,6 +15,7 @@ window.Mapping = new function(){
         CHECK_SESSION: new Endpoint("/api/user/authentication/session", HttpMethod.GET),
         CREATE_NOTEBOOK_CATEGORY: new Endpoint("/api/notebook/category", HttpMethod.PUT),
         DELETE_ACCOUNT: new Endpoint("/api/user/account", HttpMethod.DELETE),
+        DELETE_NOTEBOOK_LIST_ITEM: new Endpoint("/api/notebook/item/{listItemId}", HttpMethod.DELETE),
         GET_CHILDREN_OF_NOTEBOOK_CATEGORY: new Endpoint("/api/notebook/category/children", HttpMethod.GET),
         GET_LANGUAGES: new Endpoint("/api/user/data/languages", HttpMethod.GET),
         GET_MODULES: new Endpoint("/api/modules", HttpMethod.GET),
@@ -39,14 +40,19 @@ window.Mapping = new function(){
         let result = path;
 
         if(pathVariables){
+            console.log(pathVariables);
             for(let index in pathVariables){
+                console.log("Replacing path " + result + " for index " + index + " with value " + pathVariables[index]);
                 if(pathVariables[index] != null){
                     const key = createKey(index);
+                    console.log("Key: " + key);
                     result = result.replace(key, pathVariables[index]);
+
+                    console.log("Replaced path: " + result);
                 }
             }
         }
-
+        console.log("Result after pathVariable injection: " + result);
         if(queryParams){
             result += "?";
             const paramParts = [];
@@ -57,6 +63,8 @@ window.Mapping = new function(){
             }
             result += paramParts.join("&");
         }
+
+        console.log("Assembled uri: " + result);
 
         return result;
 

@@ -275,6 +275,7 @@ input:disabled, button:disabled, textarea:disabled, .disabled{
             left: 0;
             right: 0;
             height: var(--confirmation-dialog-header-height);
+            padding: 0 0.25rem;
         }
 
         .confirmation-dialog-detail-container{

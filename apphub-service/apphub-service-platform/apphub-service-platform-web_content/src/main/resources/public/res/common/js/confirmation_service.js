@@ -2,6 +2,7 @@
     window.confirmationService = new function(){
         this.openDialog = function(id, localization, confirmCallback, declineCallback, options){
             options = options || new ConfirmationDialogOptions();
+            declineCallback = declineCallback || function(){};
 
             if(document.getElementById(id) != undefined){
                 throwException("IllegalState", "Element already exists with id " + id);
