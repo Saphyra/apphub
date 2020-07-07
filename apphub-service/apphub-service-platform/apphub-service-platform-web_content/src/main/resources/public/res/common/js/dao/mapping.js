@@ -40,19 +40,14 @@ window.Mapping = new function(){
         let result = path;
 
         if(pathVariables){
-            console.log(pathVariables);
             for(let index in pathVariables){
-                console.log("Replacing path " + result + " for index " + index + " with value " + pathVariables[index]);
                 if(pathVariables[index] != null){
                     const key = createKey(index);
                     console.log("Key: " + key);
                     result = result.replace(key, pathVariables[index]);
-
-                    console.log("Replaced path: " + result);
                 }
             }
         }
-        console.log("Result after pathVariable injection: " + result);
         if(queryParams){
             result += "?";
             const paramParts = [];
@@ -63,8 +58,6 @@ window.Mapping = new function(){
             }
             result += paramParts.join("&");
         }
-
-        console.log("Assembled uri: " + result);
 
         return result;
 

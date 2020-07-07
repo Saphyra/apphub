@@ -42,7 +42,7 @@ function Stream(a){
     }
 
     this.forEach = function(consumer){
-        for(let i in array){
+        for(let i = 0; i < array.length; i++){
             consumer(array[i]);
         }
     }

@@ -1,4 +1,6 @@
 (function CategoryListController(){
+    let openedCategories = [];
+
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.LOCALIZATION_LOADED},
         loadCategories,
@@ -10,6 +12,21 @@
         function(event){
             document.getElementById(createWrapperId(event.getPayload())).remove();
         },
+    ));
+
+    eventProcessor.registerProcessor(new EventProcessor(
+        function(eventType){return eventType == events.CATEGORY_SAVED},
+        function(){
+            openedCategories = new Stream(document.getElementsByClassName("category-children-container"))
+                .filter(function(node){
+                    console.log(node);
+                    return node.style.display != "none"
+                })
+                .map(function(node){return node.parentElement})
+                .map(function(node){return node.id})
+                .toList();
+            loadCategories();
+        }
     ));
 
     function loadCategories(){
@@ -24,6 +41,7 @@
     }
 
     function displayCategories(categories){
+        console.log("Opened categories:", openedCategories);
         const container = document.getElementById("category-list");
             container.innerHTML = "";
 
@@ -40,14 +58,17 @@
                 wrapper.classList.add("category-wrapper");
                 if(category.categoryId == null){
                     wrapper.classList.add("root-wrapper");
-                }else{
-                    wrapper.id = createWrapperId(category.categoryId);
                 }
+
+                wrapper.id = createWrapperId(category.categoryId);
 
                 const button = document.createElement("DIV");
                     button.classList.add("button");
                     button.classList.add("category");
                     button.classList.add("category-view-button");
+                    button.onclick = function(){
+                        categoryViewController.loadContent(category.categoryId);
+                    }
 
                     const titleLabel = document.createElement("SPAN");
                         titleLabel.classList.add("category-view-button-title")
@@ -57,7 +78,15 @@
                     const toggleButton = document.createElement("SPAN");
                         toggleButton.classList.add("button");
                         toggleButton.classList.add("category-view-toggle-button");
-                        toggleButton.innerHTML = "v";
+
+                        const isOpened = openedCategories.indexOf(createWrapperId(category.categoryId)) > -1;
+
+                        if(isOpened){
+                            toggleButton.innerHTML = "^";
+                        }else{
+                            toggleButton.innerHTML = "v";
+                        }
+
                 button.appendChild(toggleButton);
                 button.appendChild(titleLabel);
 
@@ -65,7 +94,7 @@
                         toggleButton.classList.add("invisible");
                     }else{
                         const childrenContainer = document.createElement("DIV");
-                            if(category.categoryId == null){
+                            if(category.categoryId == null || isOpened){
                                 childrenContainer.style.display = "block";
                             }
                             childrenContainer.classList.add("category-children-container");

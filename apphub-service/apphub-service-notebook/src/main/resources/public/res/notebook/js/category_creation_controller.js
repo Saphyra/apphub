@@ -1,7 +1,4 @@
 (function CategoryCreationController(){
-    events.SAVE_CATEGORY = "save-category";
-    events.CATEGORY_SAVED = "CATEGORY_SAVED";
-
     let currentCategoryId = null;
 
     eventProcessor.registerProcessor(new EventProcessor(
@@ -12,9 +9,9 @@
     ));
 
     eventProcessor.registerProcessor(new EventProcessor(
-            function(eventType){return eventType == events.SAVE_CATEGORY},
-            saveCategory
-        ));
+        function(eventType){return eventType == events.SAVE_CATEGORY},
+        saveCategory
+    ));
 
     function loadChildrenOfCategory(categoryId){
         currentCategoryId = categoryId;

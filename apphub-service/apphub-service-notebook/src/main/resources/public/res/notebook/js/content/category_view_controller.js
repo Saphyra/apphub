@@ -3,13 +3,22 @@
 
     const DELETION_CONFIRMATION_DIALOG_ID = "deletion-confirmation-dialog";
 
+    let currentCategoryId = null;
+
     const nodeFactories = {
         CATEGORY: categoryNodeFactory
     }
 
+    window.categoryViewController = new function(){
+        this.loadContent = loadContent;
+    }
+
     eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.LOCALIZATION_LOADED},
-        function(){loadContent(null)},
+        function(eventType){
+            return eventType == events.LOCALIZATION_LOADED
+                || eventType == events.CATEGORY_SAVED
+        },
+        function(){loadContent(currentCategoryId)},
         true
     ));
 
