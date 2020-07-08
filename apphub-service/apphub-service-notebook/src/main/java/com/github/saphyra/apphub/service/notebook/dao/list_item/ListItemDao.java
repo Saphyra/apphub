@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item;
 
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
-import com.github.saphyra.converter.Converter;
+import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.dao.AbstractDao;
 import org.springframework.stereotype.Component;
 
@@ -10,11 +10,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class ListItemDao extends AbstractDao<ListItemEntity, ListItem, String, ListItemRepository> {
     private final UuidConverter uuidConverter;
 
-    public ListItemDao(Converter<ListItemEntity, ListItem> converter, ListItemRepository repository, UuidConverter uuidConverter) {
+    public ListItemDao(ListItemConverter converter, ListItemRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
     }
@@ -29,7 +28,7 @@ public class ListItemDao extends AbstractDao<ListItemEntity, ListItem, String, L
 
     public ListItem findByIdValidated(UUID listItemId) {
         return findById(listItemId)
-            .orElseThrow(() -> new RuntimeException("ListItem not found with id " + listItemId)); //TODO proper exception
+            .orElseThrow(() -> new NotFoundException("ListItem not found with id " + listItemId));
     }
 
     public List<ListItem> getByUserIdAndParent(UUID userId, UUID parent) {

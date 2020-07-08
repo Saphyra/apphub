@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-//TODO unit test
 class ListItemConverter extends ConverterBase<ListItemEntity, ListItem> {
     private final AccessTokenProvider accessTokenProvider;
     private final UuidConverter uuidConverter;

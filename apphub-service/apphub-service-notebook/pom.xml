@@ -46,6 +46,12 @@
             <artifactId>liquibase-core</artifactId>
             <version>${versions.liquibase-core}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-test-repository</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

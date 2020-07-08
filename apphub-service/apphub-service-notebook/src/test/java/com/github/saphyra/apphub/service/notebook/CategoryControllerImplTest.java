@@ -1,0 +1,84 @@
+package com.github.saphyra.apphub.service.notebook;
+
+import com.github.saphyra.apphub.api.notebook.model.request.CreateCategoryRequest;
+import com.github.saphyra.apphub.api.notebook.model.response.CategoryTreeView;
+import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryResponse;
+import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.service.notebook.service.category.CategoryChildrenQueryService;
+import com.github.saphyra.apphub.service.notebook.service.category.CategoryViewQueryService;
+import com.github.saphyra.apphub.service.notebook.service.category.creation.CategoryCreationService;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+
+@RunWith(MockitoJUnitRunner.class)
+public class CategoryControllerImplTest {
+    private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID CATEGORY_ID = UUID.randomUUID();
+    private static final String TYPE = "type";
+
+    @Mock
+    private CategoryChildrenQueryService categoryChildrenQueryService;
+
+    @Mock
+    private CategoryCreationService categoryCreationService;
+
+    @Mock
+    private CategoryViewQueryService categoryViewQueryService;
+
+    @InjectMocks
+    private CategoryControllerImpl underTest;
+
+    @Mock
+    private AccessTokenHeader accessTokenHeader;
+
+    @Mock
+    private CreateCategoryRequest createCategoryRequest;
+
+    @Mock
+    private CategoryTreeView categoryTreeView;
+
+    @Mock
+    private ChildrenOfCategoryResponse childrenOfCategoryResponse;
+
+    @Before
+    public void setUp() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+    }
+
+    @Test
+    public void createCategory() {
+        underTest.createCategory(createCategoryRequest, accessTokenHeader);
+
+        verify(categoryCreationService).createCategory(USER_ID, createCategoryRequest);
+    }
+
+    @Test
+    public void getCategoryTree() {
+        given(categoryViewQueryService.getCategoryTree(USER_ID)).willReturn(Arrays.asList(categoryTreeView));
+
+        List<CategoryTreeView> result = underTest.getCategoryTree(accessTokenHeader);
+
+        assertThat(result).containsExactly(categoryTreeView);
+    }
+
+    @Test
+    public void getChildrenOfCategory() {
+        given(categoryChildrenQueryService.getChildrenOfCategory(USER_ID, CATEGORY_ID, TYPE)).willReturn(childrenOfCategoryResponse);
+
+        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(accessTokenHeader, CATEGORY_ID, TYPE);
+
+        assertThat(result).isEqualTo(childrenOfCategoryResponse);
+    }
+}

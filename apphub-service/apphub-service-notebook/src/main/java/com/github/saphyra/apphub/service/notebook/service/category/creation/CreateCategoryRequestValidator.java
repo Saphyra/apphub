@@ -21,7 +21,6 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CreateCategoryRequestValidator {
     private final ListItemDao listItemDao;
 

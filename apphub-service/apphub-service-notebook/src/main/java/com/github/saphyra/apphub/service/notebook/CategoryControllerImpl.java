@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook;
 
 import com.github.saphyra.apphub.api.notebook.model.request.CreateCategoryRequest;
-import com.github.saphyra.apphub.api.notebook.model.response.CategoryListView;
+import com.github.saphyra.apphub.api.notebook.model.response.CategoryTreeView;
 import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.api.notebook.server.CategoryController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
@@ -24,7 +24,6 @@ public class CategoryControllerImpl implements CategoryController {
     private final CategoryViewQueryService categoryViewQueryService;
 
     @Override
-    //TODO unit test
     //TODO int test
     //TODO API test
     public void createCategory(CreateCategoryRequest request, AccessTokenHeader accessTokenHeader) {
@@ -33,16 +32,14 @@ public class CategoryControllerImpl implements CategoryController {
     }
 
     @Override
-    //TODO unit test
     //TODO int test
     //TODO API test
-    public List<CategoryListView> getCategoryViews(AccessTokenHeader accessTokenHeader) {
+    public List<CategoryTreeView> getCategoryTree(AccessTokenHeader accessTokenHeader) {
         log.info("Querying category list for userId {}", accessTokenHeader.getUserId());
-        return categoryViewQueryService.getCategoryViews(accessTokenHeader.getUserId());
+        return categoryViewQueryService.getCategoryTree(accessTokenHeader.getUserId());
     }
 
     @Override
-    //TODO unit test
     //TODO int test
     //TODO API test
     public ChildrenOfCategoryResponse getChildrenOfCategory(AccessTokenHeader accessTokenHeader, UUID categoryId, String type) {

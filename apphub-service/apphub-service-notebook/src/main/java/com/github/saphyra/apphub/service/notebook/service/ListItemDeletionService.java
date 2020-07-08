@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 public class ListItemDeletionService {
     private final ListItemDao listItemDao;
 
@@ -35,8 +34,6 @@ public class ListItemDeletionService {
 
     private void deleteChildren(ListItem category, UUID userId) {
         listItemDao.getByUserIdAndParent(userId, category.getListItemId())
-            .stream()
-            .peek(listItem -> deleteChild(listItem, userId))
             .forEach(listItem -> deleteChild(listItem, userId));
     }
 }

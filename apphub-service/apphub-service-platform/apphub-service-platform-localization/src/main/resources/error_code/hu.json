@@ -1,9 +1,11 @@
 {
   "BAD_CREDENTIALS": "Az email cím és jelszó kombinációja ismeretlen.",
   "BAD_PASSWORD": "Hibás jelszó.",
+  "CATEGORY_NOT_FOUND": "Kategória nem található.",
   "EMAIL_ALREADY_EXISTS": "Az email foglalt.",
   "GENERAL_ERROR": "Ismeretlen hiba.",
   "INVALID_PARAM": "Érvénytelen paraméter.",
+  "INVALID_TYPE": "Érvénytelen típus.",
   "LOCALE_NOT_FOUND": "A locale header nem található.",
   "MISSING_ROLE": "Ehhez a művelethez nincs jogosultságod.",
   "NO_SESSION_AVAILABLE": "Jelentkezz be újra!",

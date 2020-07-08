@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.user.data.dao.user;
 
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,11 @@ public class UserRepositoryTest {
 
     @Autowired
     private UserRepository underTest;
+
+    @After
+    public void clear(){
+        underTest.deleteAll();
+    }
 
     @Test
     public void findByEmail() {

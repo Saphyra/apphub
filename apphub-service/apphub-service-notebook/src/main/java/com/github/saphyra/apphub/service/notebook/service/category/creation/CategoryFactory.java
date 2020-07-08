@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class CategoryFactory {
     private final IdGenerator idGenerator;
 

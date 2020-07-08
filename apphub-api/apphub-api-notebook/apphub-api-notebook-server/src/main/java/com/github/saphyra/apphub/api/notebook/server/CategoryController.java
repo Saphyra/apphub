@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.api.notebook.server;
 
 import com.github.saphyra.apphub.api.notebook.model.request.CreateCategoryRequest;
-import com.github.saphyra.apphub.api.notebook.model.response.CategoryListView;
+import com.github.saphyra.apphub.api.notebook.model.response.CategoryTreeView;
 import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Constants;
@@ -22,7 +22,7 @@ public interface CategoryController {
     void createCategory(@RequestBody CreateCategoryRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @RequestMapping(method = RequestMethod.GET, path = Endpoints.GET_NOTEBOOK_CATEGORY_VIEWS)
-    List<CategoryListView> getCategoryViews(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<CategoryTreeView> getCategoryTree(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @RequestMapping(method = RequestMethod.GET, path = Endpoints.GET_CHILDREN_OF_NOTEBOOK_CATEGORY)
     ChildrenOfCategoryResponse getChildrenOfCategory(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestParam(name = "categoryId", required = false) UUID categoryId, @RequestParam(name = "type", required = false) String type);

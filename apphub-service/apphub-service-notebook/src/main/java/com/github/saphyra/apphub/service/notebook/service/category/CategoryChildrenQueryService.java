@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,7 +21,6 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 public class CategoryChildrenQueryService {
     private final ListItemDao listItemDao;
 
@@ -31,7 +29,6 @@ public class CategoryChildrenQueryService {
         List<NotebookView> children = listItemDao.getByUserIdAndParent(userId, categoryId)
             .stream()
             .filter(listItem -> query.contains(listItem.getType()))
-            .sorted(Comparator.comparing(ListItem::getTitle))
             .map(listItem -> NotebookView.builder()
                 .id(listItem.getListItemId())
                 .title(listItem.getTitle())

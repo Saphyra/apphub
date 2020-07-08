@@ -1,9 +1,11 @@
 {
   "BAD_CREDENTIALS": "Unknown combination of e-mail address and password.",
   "BAD_PASSWORD": "Incorrect password.",
+  "CATEGORY_NOT_FOUND": "Category not found.",
   "EMAIL_ALREADY_EXISTS": "E-mail address is already in use.",
   "GENERAL_ERROR": "Unknown error.",
   "INVALID_PARAM": "Invalid parameter.",
+  "INVALID_TYPE": "Invalid type.",
   "LOCALE_NOT_FOUND": "Locale header not found.",
   "MISSING_ROLE": "You are not allowed to perform this operation.",
   "NO_SESSION_AVAILABLE": "Log in again!",

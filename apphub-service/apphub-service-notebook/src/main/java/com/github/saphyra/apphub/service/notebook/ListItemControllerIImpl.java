@@ -16,7 +16,6 @@ public class ListItemControllerIImpl implements ListItemController {
     private final ListItemDeletionService listItemDeletionService;
 
     @Override
-    //TODO unit test
     //TODO int test
     //TODO API test
     public void deleteListItem(UUID listItemId, AccessTokenHeader accessTokenHeader) {

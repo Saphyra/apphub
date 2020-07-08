@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @Builder
-public class CategoryListView {
+public class CategoryTreeView {
     @NonNull
     private final UUID categoryId;
 
@@ -19,5 +19,5 @@ public class CategoryListView {
     private final String title;
 
     @NonNull
-    private final List<CategoryListView> children;
+    private final List<CategoryTreeView> children;
 }
