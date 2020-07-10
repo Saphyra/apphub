@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CategoryViewQueryServiceTest {
+public class CategoryTreeQueryServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID LIST_ITEM_ID_1 = UUID.randomUUID();
     private static final UUID LIST_ITEM_ID_2 = UUID.randomUUID();
@@ -29,7 +29,7 @@ public class CategoryViewQueryServiceTest {
     private ListItemDao listItemDao;
 
     @InjectMocks
-    private CategoryViewQueryService underTest;
+    private CategoryTreeQueryService underTest;
 
     @Test
     public void getCategoryTree() {

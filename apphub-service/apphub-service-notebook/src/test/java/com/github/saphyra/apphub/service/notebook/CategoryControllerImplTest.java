@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.notebook.model.response.CategoryTreeView;
 import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.notebook.service.category.CategoryChildrenQueryService;
-import com.github.saphyra.apphub.service.notebook.service.category.CategoryViewQueryService;
+import com.github.saphyra.apphub.service.notebook.service.category.CategoryTreeQueryService;
 import com.github.saphyra.apphub.service.notebook.service.category.creation.CategoryCreationService;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class CategoryControllerImplTest {
     private CategoryCreationService categoryCreationService;
 
     @Mock
-    private CategoryViewQueryService categoryViewQueryService;
+    private CategoryTreeQueryService categoryTreeQueryService;
 
     @InjectMocks
     private CategoryControllerImpl underTest;
@@ -66,7 +66,7 @@ public class CategoryControllerImplTest {
 
     @Test
     public void getCategoryTree() {
-        given(categoryViewQueryService.getCategoryTree(USER_ID)).willReturn(Arrays.asList(categoryTreeView));
+        given(categoryTreeQueryService.getCategoryTree(USER_ID)).willReturn(Arrays.asList(categoryTreeView));
 
         List<CategoryTreeView> result = underTest.getCategoryTree(accessTokenHeader);
 

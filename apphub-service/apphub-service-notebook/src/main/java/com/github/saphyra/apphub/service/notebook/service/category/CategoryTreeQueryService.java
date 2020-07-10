@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class CategoryViewQueryService {
+public class CategoryTreeQueryService {
     private final ListItemDao listItemDao;
 
     public List<CategoryTreeView> getCategoryTree(UUID userId) {

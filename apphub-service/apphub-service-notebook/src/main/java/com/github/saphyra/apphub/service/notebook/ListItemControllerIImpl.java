@@ -16,7 +16,6 @@ public class ListItemControllerIImpl implements ListItemController {
     private final ListItemDeletionService listItemDeletionService;
 
     @Override
-    //TODO int test
     //TODO API test
     public void deleteListItem(UUID listItemId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to delete listItem with id {}", accessTokenHeader.getUserId(), listItemId);

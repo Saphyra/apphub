@@ -21,7 +21,7 @@ public interface CategoryController {
     @RequestMapping(method = RequestMethod.PUT, path = Endpoints.CREATE_NOTEBOOK_CATEGORY)
     void createCategory(@RequestBody CreateCategoryRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @RequestMapping(method = RequestMethod.GET, path = Endpoints.GET_NOTEBOOK_CATEGORY_VIEWS)
+    @RequestMapping(method = RequestMethod.GET, path = Endpoints.GET_NOTEBOOK_CATEGORY_TREE)
     List<CategoryTreeView> getCategoryTree(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @RequestMapping(method = RequestMethod.GET, path = Endpoints.GET_CHILDREN_OF_NOTEBOOK_CATEGORY)
