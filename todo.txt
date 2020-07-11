@@ -5,6 +5,8 @@ Platform
 Index page
     Switch language
 
+Favorite modules can be accessed from anywhere
+
 Notebook
     Edit category
     Create text item
@@ -15,7 +17,6 @@ Notebook
     Filtering
     Archive
 
-TODO FE test - View category tree
 TODO FE test - Create category
 TODO FE test - Delete category
 TODO FE test - View Details
