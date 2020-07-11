@@ -2,7 +2,7 @@ package com.github.saphyra.integration.backend.account;
 
 import com.github.saphyra.apphub.integration.backend.actions.AccountPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
-import com.github.saphyra.apphub.integration.backend.model.ChangeEmailRequest;
+import com.github.saphyra.apphub.integration.backend.model.account.ChangeEmailRequest;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.RandomDataProvider;

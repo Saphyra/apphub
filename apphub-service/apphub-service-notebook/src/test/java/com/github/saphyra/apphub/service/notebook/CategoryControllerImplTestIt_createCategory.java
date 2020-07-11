@@ -30,7 +30,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -141,13 +141,13 @@ public class CategoryControllerImplTestIt_createCategory {
             .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
-
-        assertThat(query(() -> listItemDao.findAll())).hasSize(2);
-        List<ListItem> saved = query(() -> listItemDao.getByUserIdAndParent(USER_ID, PARENT_ID));
-        assertThat(saved).hasSize(1);
-        ListItem savedItem = saved.get(0);
-        assertThat(savedItem.getType()).isEqualTo(ListItemType.CATEGORY);
-        assertThat(savedItem.getTitle()).isEqualTo(TITLE_1);
+        String categoryIdString = response.getBody().jsonPath().getString("value");
+        UUID categoryId = UUID.fromString(categoryIdString);
+        Optional<ListItem> listItemOptional = query(() -> listItemDao.findById(categoryId));
+        assertThat(listItemOptional).isPresent();
+        assertThat(listItemOptional.get().getParent()).isEqualTo(PARENT_ID);
+        assertThat(listItemOptional.get().getTitle()).isEqualTo(TITLE_1);
+        assertThat(listItemOptional.get().getType()).isEqualTo(ListItemType.CATEGORY);
     }
 
     @Test
@@ -158,12 +158,13 @@ public class CategoryControllerImplTestIt_createCategory {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        assertThat(query(() -> listItemDao.findAll())).hasSize(1);
-        List<ListItem> saved = query(() -> listItemDao.getByUserIdAndParent(USER_ID, null));
-        assertThat(saved).hasSize(1);
-        ListItem savedItem = saved.get(0);
-        assertThat(savedItem.getType()).isEqualTo(ListItemType.CATEGORY);
-        assertThat(savedItem.getTitle()).isEqualTo(TITLE_1);
+        String categoryIdString = response.getBody().jsonPath().getString("value");
+        UUID categoryId = UUID.fromString(categoryIdString);
+        Optional<ListItem> listItemOptional = query(() -> listItemDao.findById(categoryId));
+        assertThat(listItemOptional).isPresent();
+        assertThat(listItemOptional.get().getParent()).isNull();
+        assertThat(listItemOptional.get().getTitle()).isEqualTo(TITLE_1);
+        assertThat(listItemOptional.get().getType()).isEqualTo(ListItemType.CATEGORY);
     }
 
     private void saveListItem(ListItem listItem) {

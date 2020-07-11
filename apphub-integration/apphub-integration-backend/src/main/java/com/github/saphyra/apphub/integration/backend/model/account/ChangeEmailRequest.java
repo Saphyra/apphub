@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.backend.model;
+package com.github.saphyra.apphub.integration.backend.model.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

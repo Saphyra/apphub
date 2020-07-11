@@ -1,13 +1,10 @@
 package com.github.saphyra.apphub.integration.common.framework;
 
 import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.common.model.ListItemType;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +19,7 @@ public class DatabaseUtil {
     private static final String ADD_ROLE_BY_EMAIL_QUERY = "INSERT INTO apphub_user.apphub_role (role_id, user_id, apphub_role) VALUES('%s', (SELECT user_id FROM apphub_user.apphub_user WHERE email='%s'), '%s')";
     private static final String GET_USER_ID_BY_EMAIL_QUERY = "SELECT user_id FROM apphub_user.apphub_user WHERE email='%s'";
     private static final String GET_ROLES_BY_USER_ID = "SELECT apphub_role FROM apphub_user.apphub_role WHERE user_id='%s'";
+    private static final String CHANGE_LIST_ITEM_TYPE = "UPDATE notebook.list_item SET type='%s' WHERE list_item_id='%s'";
 
     public static volatile Connection CONNECTION;
 
@@ -49,7 +47,9 @@ public class DatabaseUtil {
 
             ResultSet resultSet = statement.executeQuery(sql);
             resultSet.next();
-            return UUID.fromString(resultSet.getString(1));
+            UUID result = UUID.fromString(resultSet.getString(1));
+            statement.close();
+            return result;
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -66,7 +66,21 @@ public class DatabaseUtil {
             while (resultSet.next()){
                 result.add(resultSet.getString("apphub_role"));
             }
+            statement.close();
             return result;
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void setListItemTypeById(UUID listItemId, ListItemType type) {
+        try{
+            log.info("Changing type of listItem {} to {}", listItemId, type);
+            Statement statement = getStatement();
+            String sql = String.format(CHANGE_LIST_ITEM_TYPE, type, listItemId);
+            log.info("setListItemTypeById SQL: {}", sql);
+            statement.execute(sql);
+            statement.close();
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

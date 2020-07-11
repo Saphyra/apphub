@@ -12,16 +12,18 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class CategoryCreationService {
     private final CategoryFactory categoryFactory;
     private final CreateCategoryRequestValidator createCategoryRequestValidator;
     private final ListItemDao listItemDao;
 
 
-    public void createCategory(UUID userId, CreateCategoryRequest request) {
+    public UUID createCategory(UUID userId, CreateCategoryRequest request) {
         createCategoryRequestValidator.validate(request);
 
         ListItem listItem = categoryFactory.create(userId, request.getTitle(), request.getParent());
         listItemDao.save(listItem);
+        return listItem.getListItemId();
     }
 }

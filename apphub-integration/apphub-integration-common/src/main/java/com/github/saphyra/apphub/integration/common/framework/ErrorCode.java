@@ -3,8 +3,10 @@ package com.github.saphyra.apphub.integration.common.framework;
 public enum ErrorCode {
     BAD_CREDENTIALS,
     BAD_PASSWORD,
+    CATEGORY_NOT_FOUND,
     EMAIL_ALREADY_EXISTS,
     INVALID_PARAM,
+    INVALID_TYPE,
     MISSING_ROLE,
     NO_SESSION_AVAILABLE,
     PASSWORD_TOO_LONG,

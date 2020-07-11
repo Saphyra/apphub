@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.notebook.model.response.CategoryTreeView;
 import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.api.notebook.server.CategoryController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.category.CategoryChildrenQueryService;
 import com.github.saphyra.apphub.service.notebook.service.category.CategoryTreeQueryService;
 import com.github.saphyra.apphub.service.notebook.service.category.creation.CategoryCreationService;
@@ -24,10 +25,10 @@ public class CategoryControllerImpl implements CategoryController {
     private final CategoryTreeQueryService categoryTreeQueryService;
 
     @Override
-    //TODO API test
-    public void createCategory(CreateCategoryRequest request, AccessTokenHeader accessTokenHeader) {
+    public OneParamResponse<UUID> createCategory(CreateCategoryRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a new category with parentId {}", accessTokenHeader.getUserId(), request.getParent());
-        categoryCreationService.createCategory(accessTokenHeader.getUserId(), request);
+        UUID categoryId = categoryCreationService.createCategory(accessTokenHeader.getUserId(), request);
+        return new OneParamResponse<>(categoryId);
     }
 
     @Override

@@ -38,7 +38,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
     RoleFilterConfiguration.class
 })
 public class BeanConfiguration {
-
     @Bean
     UuidConverter uuidConverter() {
         return new UuidConverter();

@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.notebook.model.request.CreateCategoryReques
 import com.github.saphyra.apphub.api.notebook.model.response.CategoryTreeView;
 import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.category.CategoryChildrenQueryService;
 import com.github.saphyra.apphub.service.notebook.service.category.CategoryTreeQueryService;
 import com.github.saphyra.apphub.service.notebook.service.category.creation.CategoryCreationService;
@@ -20,7 +21,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CategoryControllerImplTest {
@@ -59,9 +59,11 @@ public class CategoryControllerImplTest {
 
     @Test
     public void createCategory() {
-        underTest.createCategory(createCategoryRequest, accessTokenHeader);
+        given(categoryCreationService.createCategory(USER_ID, createCategoryRequest)).willReturn(CATEGORY_ID);
 
-        verify(categoryCreationService).createCategory(USER_ID, createCategoryRequest);
+        OneParamResponse<UUID> response = underTest.createCategory(createCategoryRequest, accessTokenHeader);
+
+        assertThat(response.getValue()).isEqualTo(CATEGORY_ID);
     }
 
     @Test

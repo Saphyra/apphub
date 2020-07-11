@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.integration.backend.actions;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.saphyra.apphub.integration.backend.model.ChangeEmailRequest;
-import com.github.saphyra.apphub.integration.backend.model.ChangePasswordRequest;
-import com.github.saphyra.apphub.integration.backend.model.ChangeUsernameRequest;
+import com.github.saphyra.apphub.integration.backend.model.account.ChangeEmailRequest;
+import com.github.saphyra.apphub.integration.backend.model.account.ChangePasswordRequest;
+import com.github.saphyra.apphub.integration.backend.model.account.ChangeUsernameRequest;
 import com.github.saphyra.apphub.integration.backend.model.LanguageResponse;
 import com.github.saphyra.apphub.integration.backend.model.OneParamRequest;
 import com.github.saphyra.apphub.integration.common.TestBase;

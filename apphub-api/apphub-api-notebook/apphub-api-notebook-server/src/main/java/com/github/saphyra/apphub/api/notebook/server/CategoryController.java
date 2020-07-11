@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.notebook.model.request.CreateCategoryReques
 import com.github.saphyra.apphub.api.notebook.model.response.CategoryTreeView;
 import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @FeignClient("notebook")
 public interface CategoryController {
     @RequestMapping(method = RequestMethod.PUT, path = Endpoints.CREATE_NOTEBOOK_CATEGORY)
-    void createCategory(@RequestBody CreateCategoryRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OneParamResponse<UUID> createCategory(@RequestBody CreateCategoryRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @RequestMapping(method = RequestMethod.GET, path = Endpoints.GET_NOTEBOOK_CATEGORY_TREE)
     List<CategoryTreeView> getCategoryTree(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
