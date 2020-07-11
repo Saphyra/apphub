@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.integration.common.framework;
 
 import com.github.saphyra.apphub.integration.common.TestBase;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,12 @@ public class UrlFactory {
 
     public static String create(int serverPort, String url) {
         return String.format("http://localhost:%s%s", serverPort, url);
+    }
+
+    public static String create(String url, String key, Object value) {
+        Map<String, Object> pathVariables = new HashMap<>();
+        pathVariables.put(key, value);
+        return create(url, pathVariables);
     }
 
     public static String create(String url, Map<String, ?> uriParams, Map<String, ?> queryParams) {

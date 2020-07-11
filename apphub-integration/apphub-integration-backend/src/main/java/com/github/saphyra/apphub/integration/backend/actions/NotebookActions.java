@@ -54,4 +54,15 @@ public class NotebookActions {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .get(UrlFactory.create(Endpoints.GET_CHILDREN_OF_NOTEBOOK_CATEGORY, new HashMap<>(), queryParams));
     }
+
+    public static void deleteListItem(Language language, UUID accessTokenId, UUID listItemId) {
+        Response response = getDeleteListItemResponse(language, accessTokenId, listItemId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getDeleteListItemResponse(Language language, UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .delete(UrlFactory.create(Endpoints.DELETE_NOTEBOOK_LIST_ITEM, "listItemId", listItemId));
+    }
 }
