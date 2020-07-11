@@ -32,14 +32,12 @@ public class CategoryControllerImpl implements CategoryController {
     }
 
     @Override
-    //TODO API test
     public List<CategoryTreeView> getCategoryTree(AccessTokenHeader accessTokenHeader) {
         log.info("Querying category list for userId {}", accessTokenHeader.getUserId());
         return categoryTreeQueryService.getCategoryTree(accessTokenHeader.getUserId());
     }
 
     @Override
-    //TODO API test
     public ChildrenOfCategoryResponse getChildrenOfCategory(AccessTokenHeader accessTokenHeader, UUID categoryId, String type) {
         log.info("Querying children of category {} with type {} for user {}", categoryId, type, accessTokenHeader.getUserId());
         return categoryChildrenQueryService.getChildrenOfCategory(accessTokenHeader.getUserId(), categoryId, type);

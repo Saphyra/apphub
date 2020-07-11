@@ -1,8 +1,19 @@
 Platform
     Error monitoring
+    Separate liquibase schema for each service
 
 Index page
     Switch language
+
+Notebook
+    Edit category
+    Create text item
+    Edit text item
+    Create checklist item
+    Create table item
+    Create checklist table item
+    Filtering
+    Archive
 
 TODO FE test - View category tree
 TODO FE test - Create category

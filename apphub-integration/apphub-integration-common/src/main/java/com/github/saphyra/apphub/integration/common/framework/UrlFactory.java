@@ -3,13 +3,16 @@ package com.github.saphyra.apphub.integration.common.framework;
 import com.github.saphyra.apphub.integration.common.TestBase;
 
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
 
 public class UrlFactory {
     public static String create(String url) {
         return create(TestBase.SERVER_PORT, url);
     }
 
-    public static String create(String url, Map<String, Object> uriParams) {
+    public static String create(String url, Map<String, ?> uriParams) {
         return create(TestBase.SERVER_PORT, url, uriParams);
     }
 
@@ -17,9 +20,23 @@ public class UrlFactory {
         return String.format("http://localhost:%s%s", serverPort, url);
     }
 
-    public static String create(int serverPort, String uri, Map<String, Object> uriParams) {
+    public static String create(String url, Map<String, ?> uriParams, Map<String, ?> queryParams) {
+        String uri = create(url, uriParams);
+        if (!queryParams.isEmpty()) {
+            uri += "?";
+        }
+        uri += queryParams.entrySet()
+            .stream()
+            .filter(entry -> !isNull(entry.getValue()))
+            .map(entry -> String.join("=", entry.getKey(), entry.getValue().toString()))
+            .collect(Collectors.joining("&"));
+
+        return uri;
+    }
+
+    public static String create(int serverPort, String uri, Map<String, ?> uriParams) {
         String urlBase = create(serverPort, uri);
-        for (Map.Entry<String, Object> entry : uriParams.entrySet()) {
+        for (Map.Entry<String, ?> entry : uriParams.entrySet()) {
             String key = String.format("{%s}", entry.getKey());
             urlBase = urlBase.replace(key, entry.getValue().toString());
         }

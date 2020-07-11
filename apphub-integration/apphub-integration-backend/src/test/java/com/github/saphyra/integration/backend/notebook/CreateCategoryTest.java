@@ -52,7 +52,21 @@ public class CreateCategoryTest extends TestBase {
 
     @Test
     public void addToRoot() {
+        Language language = Language.HUNGARIAN;
 
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+
+        CreateCategoryRequest parentRequest = CreateCategoryRequest.builder()
+            .title(TITLE_1)
+            .build();
+        UUID categoryId = NotebookActions.createCategory(language, accessTokenId, parentRequest);
+
+        List<CategoryTreeView> categories = NotebookActions.getCategoryTree(language, accessTokenId);
+        assertThat(categories).hasSize(1);
+        assertThat(categories.get(0).getCategoryId()).isEqualTo(categoryId);
+        assertThat(categories.get(0).getTitle()).isEqualTo(TITLE_1);
+        assertThat(categories.get(0).getChildren()).isEmpty();
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -83,7 +97,7 @@ public class CreateCategoryTest extends TestBase {
             .title(TITLE_1)
             .build();
         UUID parentId = NotebookActions.createCategory(language, accessTokenId, parentRequest);
-        DatabaseUtil.setListItemTypeById(parentId, ListItemType.TEXT);
+        DatabaseUtil.setListItemTypeById(parentId, ListItemType.TEXT); //TODO use API to create different type of listItems
 
         CreateCategoryRequest request = CreateCategoryRequest.builder()
             .title(TITLE_1)

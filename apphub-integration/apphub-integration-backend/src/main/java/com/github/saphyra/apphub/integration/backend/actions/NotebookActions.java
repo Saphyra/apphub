@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.backend.actions;
 
 import com.github.saphyra.apphub.integration.backend.model.notebook.CategoryTreeView;
+import com.github.saphyra.apphub.integration.backend.model.notebook.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateCategoryRequest;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.RequestFactory;
@@ -8,9 +9,7 @@ import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import io.restassured.response.Response;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,5 +37,21 @@ public class NotebookActions {
                 .as(CategoryTreeView[].class)
         )
             .collect(Collectors.toList());
+    }
+
+    public static ChildrenOfCategoryResponse getChildrenOfCategory(Language language, UUID accessTokenId, UUID categoryId, String type) {
+        Response response = getChildrenOfCategoryResponse(language, accessTokenId, categoryId, type);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        return response.getBody().as(ChildrenOfCategoryResponse.class);
+    }
+
+    public static Response getChildrenOfCategoryResponse(Language language, UUID accessTokenId, UUID categoryId, String type) {
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("categoryId", categoryId);
+        queryParams.put("type", type);
+
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .get(UrlFactory.create(Endpoints.GET_CHILDREN_OF_NOTEBOOK_CATEGORY, new HashMap<>(), queryParams));
     }
 }
