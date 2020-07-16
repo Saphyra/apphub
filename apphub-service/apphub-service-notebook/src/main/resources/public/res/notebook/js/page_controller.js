@@ -1,10 +1,11 @@
 (function PageController(){
     scriptLoader.loadScript("/res/notebook/js/category_list_controller.js");
     scriptLoader.loadScript("/res/notebook/js/category_creation_controller.js");
-    scriptLoader.loadScript("/res/notebook/js/content/category_view_controller.js");
+    scriptLoader.loadScript("/res/notebook/js/content/content_controller.js");
 
     events.OPEN_CREATE_CATEGORY_DIALOG = "OPEN_CREATE_CATEGORY_DIALOG";
     events.CATEGORY_DELETED = "CATEGORY_DELETED";
+    events.ITEM_DELETED = "ITEM_DELETED";
     events.SAVE_CATEGORY = "save-category";
     events.CATEGORY_SAVED = "CATEGORY_SAVED";
 

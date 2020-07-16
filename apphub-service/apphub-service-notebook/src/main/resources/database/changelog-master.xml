@@ -11,4 +11,5 @@
     </changeSet>
 
     <include file="database/change_sets/list_item.xml"/>
+    <include file="database/change_sets/text.xml"/>
 </databaseChangeLog>

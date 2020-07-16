@@ -67,7 +67,7 @@
                     button.classList.add("category");
                     button.classList.add("category-view-button");
                     button.onclick = function(){
-                        categoryViewController.loadContent(category.categoryId);
+                        categoryContentController.loadCategoryContent(category.categoryId);
                     }
 
                     const titleLabel = document.createElement("SPAN");
