@@ -56,7 +56,7 @@
             const node = document.createElement("DIV");
                 node.classList.add("category");
                 node.classList.add("button");
-                node.classList.add("create-category-category");
+                node.classList.add("create-item-category");
 
                 node.innerHTML = category.title;
 

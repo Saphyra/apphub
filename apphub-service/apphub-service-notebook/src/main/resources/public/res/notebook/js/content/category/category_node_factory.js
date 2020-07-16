@@ -41,7 +41,7 @@ function categoryNodeFactory(itemDetails){
 
     function deleteCategory(categoryId){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("category-deletion-confirmation-dialog-title"))
+            .withTitle(Localization.getAdditionalContent("deletion-confirmation-dialog-title"))
             .withDetail(Localization.getAdditionalContent("category-deletion-confirmation-dialog-detail"))
             .withConfirmButton(Localization.getAdditionalContent("category-deletion-confirmation-dialog-confirm-button"))
             .withDeclineButton(Localization.getAdditionalContent("category-deletion-confirmation-dialog-decline-button"));

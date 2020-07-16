@@ -37,6 +37,12 @@
         "message": "Category"
       }
     ],
+    "new-text-button": [
+      {
+        "key": "innerHTML",
+        "message": "Text"
+      }
+    ],
     "create-category-title": [
       {
         "key": "innerHTML",
@@ -56,6 +62,42 @@
       }
     ],
     "create-category-button": [
+      {
+        "key": "innerHTML",
+        "message": "Save"
+      }
+    ],
+    "create-text-title": [
+      {
+        "key": "innerHTML",
+        "message": "Create text"
+      }
+    ],
+    "new-text-title": [
+      {
+        "key": "placeholder",
+        "message": "Title of the text"
+      }
+    ],
+    "create-text-selected-category": [
+      {
+        "key": "innerHTML",
+        "message": "Selected category"
+      }
+    ],
+    "create-text-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Up"
+      }
+    ],
+    "new-text-content": [
+      {
+        "key": "placeholder",
+        "message": "Content"
+      }
+    ],
+    "create-text-button": [
       {
         "key": "innerHTML",
         "message": "Save"

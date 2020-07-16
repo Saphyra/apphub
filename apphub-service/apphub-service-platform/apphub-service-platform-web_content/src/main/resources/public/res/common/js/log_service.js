@@ -78,7 +78,7 @@
                     mainContainer.style.overflow = "auto";
                     mainContainer.style.border = "5px ridge white";
                     mainContainer.style.background = "black";
-
+                    mainContainer.style.zIndex = 100;
 
                     mainContainer.id = "logcontainermain";
 
