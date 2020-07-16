@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook;
+package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.notebook.server.ListItemController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
@@ -12,7 +12,7 @@ import java.util.UUID;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class ListItemControllerIImpl implements ListItemController {
+class ListItemControllerIImpl implements ListItemController {
     private final ListItemDeletionService listItemDeletionService;
 
     @Override

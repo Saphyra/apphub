@@ -37,6 +37,7 @@ public class Endpoints {
 
     public static final String GET_NOTEBOOK_CATEGORY_TREE = "/api/notebook/category";
     public static final String CREATE_NOTEBOOK_CATEGORY = "/api/notebook/category";
+    public static final String CREATE_NOTEBOOK_TEXT = "/api/notebook/text";
     public static final String GET_CHILDREN_OF_NOTEBOOK_CATEGORY = "/api/notebook/category/children";
     public static final String NOTEBOOK_CATEGORY_CONTENT_VIEW = "/web/notebook/content/category";
     public static final String DELETE_NOTEBOOK_LIST_ITEM = "/api/notebook/item/{listItemId}";

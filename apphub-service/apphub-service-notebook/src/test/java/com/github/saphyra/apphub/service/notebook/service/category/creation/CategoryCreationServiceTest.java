@@ -3,6 +3,8 @@ package com.github.saphyra.apphub.service.notebook.service.category.creation;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateCategoryRequest;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
+import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -23,7 +25,7 @@ public class CategoryCreationServiceTest {
     private static final UUID CATEGORY_ID = UUID.randomUUID();
 
     @Mock
-    private CategoryFactory categoryFactory;
+    private ListItemFactory listItemFactory;
 
     @Mock
     private CreateCategoryRequestValidator createCategoryRequestValidator;
@@ -39,7 +41,7 @@ public class CategoryCreationServiceTest {
 
     @Test
     public void createCategory() {
-        given(categoryFactory.create(USER_ID, TITLE, PARENT_ID)).willReturn(listItem);
+        given(listItemFactory.create(USER_ID, TITLE, PARENT_ID, ListItemType.CATEGORY)).willReturn(listItem);
         given(listItem.getListItemId()).willReturn(CATEGORY_ID);
 
         CreateCategoryRequest request = CreateCategoryRequest.builder().title(TITLE).parent(PARENT_ID).build();

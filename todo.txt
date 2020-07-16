@@ -16,6 +16,7 @@ Notebook
     Create checklist table item
     Filtering
     Archive
+    Delete notebook items with the user
 
 TODO FE test - Create category
 TODO FE test - Delete category

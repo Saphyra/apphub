@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook;
+package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.notebook.model.request.CreateCategoryRequest;
 import com.github.saphyra.apphub.api.notebook.model.response.CategoryTreeView;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class CategoryControllerImpl implements CategoryController {
+class CategoryControllerImpl implements CategoryController {
     private final CategoryChildrenQueryService categoryChildrenQueryService;
     private final CategoryCreationService categoryCreationService;
     private final CategoryTreeQueryService categoryTreeQueryService;

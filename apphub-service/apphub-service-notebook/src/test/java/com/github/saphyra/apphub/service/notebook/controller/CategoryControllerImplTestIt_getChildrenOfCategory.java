@@ -1,6 +1,6 @@
-package com.github.saphyra.apphub.service.notebook;
+package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateCategoryRequest;
+import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
@@ -30,9 +30,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -43,7 +43,7 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
-public class CategoryControllerImplTestIt_createCategory {
+public class CategoryControllerImplTestIt_getChildrenOfCategory {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final AccessTokenHeader ACCESS_TOKEN_HEADER = AccessTokenHeader.builder()
         .accessTokenId(UUID.randomUUID())
@@ -52,8 +52,10 @@ public class CategoryControllerImplTestIt_createCategory {
         .build();
     private static final String LOCALIZED_MESSAGE = "localized-message";
     private static final String TITLE_1 = "title-1";
-    private static final UUID PARENT_ID = UUID.randomUUID();
     private static final String TITLE_2 = "title-2";
+    private static final UUID LIST_ITEM_ID_1 = UUID.randomUUID();
+    private static final UUID LIST_ITEM_ID_2 = UUID.randomUUID();
+    private static final UUID PARENT_ID = UUID.randomUUID();
 
     @LocalServerPort
     private int serverPort;
@@ -81,105 +83,69 @@ public class CategoryControllerImplTestIt_createCategory {
     }
 
     @Test
-    public void blankTitle() {
+    public void invalidType() {
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("type", "asd,fwr");
+
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(CreateCategoryRequest.builder().title(" ").build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY));
+            .get(UrlFactory.create(serverPort, Endpoints.GET_CHILDREN_OF_NOTEBOOK_CATEGORY, new HashMap<>(), queryParams));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getParams().get("title")).isEqualTo("must not be null or blank");
+        assertThat(errorResponse.getParams().get("type")).isEqualTo("contains invalid argument");
     }
 
     @Test
-    public void parentNotFound() {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(CreateCategoryRequest.builder().title(TITLE_1).parent(PARENT_ID).build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY));
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CATEGORY_NOT_FOUND.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-    }
-
-    @Test
-    public void parentIsNotCategory() {
-        ListItem listItem = ListItem.builder()
-            .listItemId(PARENT_ID)
-            .userId(USER_ID)
-            .type(ListItemType.CHECKLIST)
-            .title(TITLE_2)
-            .build();
-        saveListItem(listItem);
-
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(CreateCategoryRequest.builder().title(TITLE_1).parent(PARENT_ID).build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY));
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value());
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_TYPE.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-    }
-
-    @Test
-    public void successfullyCreated() {
-        ListItem listItem = ListItem.builder()
+    public void getChildrenOfCategory() {
+        ListItem parent = ListItem.builder()
             .listItemId(PARENT_ID)
             .userId(USER_ID)
             .type(ListItemType.CATEGORY)
-            .title(TITLE_2)
+            .title(TITLE_1)
             .build();
-        saveListItem(listItem);
+        saveListItem(parent);
+        ListItem category = ListItem.builder()
+            .listItemId(LIST_ITEM_ID_1)
+            .userId(USER_ID)
+            .type(ListItemType.CATEGORY)
+            .title(TITLE_2)
+            .parent(PARENT_ID)
+            .build();
+        saveListItem(category);
+        ListItem text = ListItem.builder()
+            .listItemId(LIST_ITEM_ID_2)
+            .userId(USER_ID)
+            .type(ListItemType.TEXT)
+            .title(TITLE_2)
+            .parent(PARENT_ID)
+            .build();
+        saveListItem(text);
+
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("type", ListItemType.CATEGORY.name());
+        queryParams.put("categoryId", PARENT_ID.toString());
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(CreateCategoryRequest.builder().title(TITLE_1).parent(PARENT_ID).build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY));
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
-        String categoryIdString = response.getBody().jsonPath().getString("value");
-        UUID categoryId = UUID.fromString(categoryIdString);
-        Optional<ListItem> listItemOptional = query(() -> listItemDao.findById(categoryId));
-        assertThat(listItemOptional).isPresent();
-        assertThat(listItemOptional.get().getParent()).isEqualTo(PARENT_ID);
-        assertThat(listItemOptional.get().getTitle()).isEqualTo(TITLE_1);
-        assertThat(listItemOptional.get().getType()).isEqualTo(ListItemType.CATEGORY);
-    }
-
-    @Test
-    public void successfullyCreated_noParent() {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(CreateCategoryRequest.builder().title(TITLE_1).parent(null).build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY));
+            .get(UrlFactory.create(serverPort, Endpoints.GET_CHILDREN_OF_NOTEBOOK_CATEGORY, new HashMap<>(), queryParams));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        String categoryIdString = response.getBody().jsonPath().getString("value");
-        UUID categoryId = UUID.fromString(categoryIdString);
-        Optional<ListItem> listItemOptional = query(() -> listItemDao.findById(categoryId));
-        assertThat(listItemOptional).isPresent();
-        assertThat(listItemOptional.get().getParent()).isNull();
-        assertThat(listItemOptional.get().getTitle()).isEqualTo(TITLE_1);
-        assertThat(listItemOptional.get().getType()).isEqualTo(ListItemType.CATEGORY);
+        ChildrenOfCategoryResponse result = response.getBody().as(ChildrenOfCategoryResponse.class);
+        assertThat(result.getTitle()).isEqualTo(TITLE_1);
+        assertThat(result.getParent()).isNull();
+        assertThat(result.getChildren()).hasSize(1);
+        assertThat(result.getChildren().get(0).getId()).isEqualTo(LIST_ITEM_ID_1);
+        assertThat(result.getChildren().get(0).getTitle()).isEqualTo(TITLE_2);
+        assertThat(result.getChildren().get(0).getType()).isEqualTo(ListItemType.CATEGORY.name());
     }
 
     private void saveListItem(ListItem listItem) {
         try {
             accessTokenProvider.set(ACCESS_TOKEN_HEADER);
             listItemDao.save(listItem);
-        } finally {
-            accessTokenProvider.clear();
-        }
-    }
-
-    private <T> T query(Supplier<T> supplier) {
-        try {
-            accessTokenProvider.set(ACCESS_TOKEN_HEADER);
-            return supplier.get();
         } finally {
             accessTokenProvider.clear();
         }

@@ -1,10 +1,11 @@
-package com.github.saphyra.apphub.service.notebook;
+package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.notebook.model.request.CreateCategoryRequest;
 import com.github.saphyra.apphub.api.notebook.model.response.CategoryTreeView;
 import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
+import com.github.saphyra.apphub.service.notebook.controller.CategoryControllerImpl;
 import com.github.saphyra.apphub.service.notebook.service.category.CategoryChildrenQueryService;
 import com.github.saphyra.apphub.service.notebook.service.category.CategoryTreeQueryService;
 import com.github.saphyra.apphub.service.notebook.service.category.creation.CategoryCreationService;
