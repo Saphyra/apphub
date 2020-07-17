@@ -18,7 +18,6 @@
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){
             return eventType == events.LOCALIZATION_LOADED
-                || eventType == events.CATEGORY_SAVED
         },
         function(){
             categoryContentController.loadCategoryContent(null)

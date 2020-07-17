@@ -1,9 +1,22 @@
 (function CategoryContentController(){
+    let currentCategoryId = null;
+
     window.categoryContentController = new function(){
         this.loadCategoryContent = loadCategoryContent;
     }
 
+    eventProcessor.registerProcessor(new EventProcessor(
+        function(eventType){
+            return eventType == events.CATEGORY_SAVED
+                || eventType == events.LIST_ITEM_SAVED
+            },
+            function(){
+                loadCategoryContent(currentCategoryId);
+            }
+    ));
+
     function loadCategoryContent(categoryId){
+        currentCategoryId = categoryId;
         const request = new Request(Mapping.getEndpoint("GET_CHILDREN_OF_NOTEBOOK_CATEGORY", null, {categoryId: categoryId}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body)

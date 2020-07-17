@@ -117,7 +117,8 @@
     "delete-button": "Delete",
     "item-deleted": "Item is deleted.",
     "list-item-options-button": "Options",
-    "new-category-title-empty": "Title must not be empty.",
-    "root-title": "Root"
+    "new-item-title-empty": "Title must not be empty.",
+    "root-title": "Root",
+    "text-created": "Text saved."
   }
 }

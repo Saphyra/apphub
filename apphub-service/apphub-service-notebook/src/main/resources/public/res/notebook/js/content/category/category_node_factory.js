@@ -44,7 +44,7 @@ function categoryNodeFactory(itemDetails){
             .withTitle(Localization.getAdditionalContent("deletion-confirmation-dialog-title"))
             .withDetail(Localization.getAdditionalContent("category-deletion-confirmation-dialog-detail"))
             .withConfirmButton(Localization.getAdditionalContent("category-deletion-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("category-deletion-confirmation-dialog-decline-button"));
+            .withDeclineButton(Localization.getAdditionalContent("deletion-confirmation-dialog-decline-button"));
 
         confirmationService.openDialog(
             "deletion-confirmation-dialog",

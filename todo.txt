@@ -9,7 +9,6 @@ Favorite modules can be accessed from anywhere
 
 Notebook
     Edit category
-    Create text item
     Edit text item
     Create checklist item
     Create table item

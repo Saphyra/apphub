@@ -117,7 +117,8 @@
     "delete-button": "Törlés",
     "item-deleted": "Elem törölve.",
     "list-item-options-button": "Opciók",
-    "new-category-title-empty": "A cím nem lehet üres.",
-    "root-title": "Gyökér"
+    "new-item-title-empty": "A cím nem lehet üres.",
+    "root-title": "Gyökér",
+    "text-created": "Szöveg elmentve."
   }
 }

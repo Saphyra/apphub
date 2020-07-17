@@ -1,6 +1,7 @@
 (function PageController(){
     scriptLoader.loadScript("/res/notebook/js/category_list_controller.js");
-    scriptLoader.loadScript("/res/notebook/js/category_creation_controller.js");
+    scriptLoader.loadScript("/res/notebook/js/creation/category_creation_controller.js");
+    scriptLoader.loadScript("/res/notebook/js/creation/text_creation_controller.js");
     scriptLoader.loadScript("/res/notebook/js/content/content_controller.js");
 
     events.OPEN_CREATE_CATEGORY_DIALOG = "OPEN_CREATE_CATEGORY_DIALOG";
@@ -9,6 +10,7 @@
     events.ITEM_DELETED = "ITEM_DELETED";
     events.SAVE_CATEGORY = "save-category";
     events.CATEGORY_SAVED = "CATEGORY_SAVED";
+    events.LIST_ITEM_SAVED = "LIST_ITEM_SAVED";
 
     $(document).ready(function(){
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "notebook", fileName: "notebook"}));
@@ -21,9 +23,7 @@
         }
 
         this.openCreateTextDialog = function(){
-            document.getElementById("create-text-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
-            document.getElementById("new-text-title").innerHTML = "";
-            document.getElementById("new-text-content").innerHTML = "";
+            textCreationController.init();
             switchTab("main-page", "create-text");
         }
 
@@ -33,7 +33,10 @@
     }
 
     eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.CATEGORY_SAVED},
+        function(eventType){
+            return eventType == events.CATEGORY_SAVED
+            || eventType == events.LIST_ITEM_SAVED
+        },
         pageController.openMainPage
     ));
 

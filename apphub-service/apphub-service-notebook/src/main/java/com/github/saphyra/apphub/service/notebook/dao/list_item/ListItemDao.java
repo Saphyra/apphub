@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item;
 
+import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.dao.AbstractDao;
@@ -28,7 +30,7 @@ public class ListItemDao extends AbstractDao<ListItemEntity, ListItem, String, L
 
     public ListItem findByIdValidated(UUID listItemId) {
         return findById(listItemId)
-            .orElseThrow(() -> new NotFoundException("ListItem not found with id " + listItemId));
+            .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.LIST_ITEM_NOT_FOUND.name()), "ListItem not found with id " + listItemId));
     }
 
     public List<ListItem> getByUserIdAndParent(UUID userId, UUID parent) {

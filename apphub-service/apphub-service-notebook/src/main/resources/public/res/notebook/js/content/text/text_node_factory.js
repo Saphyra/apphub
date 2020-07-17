@@ -53,7 +53,7 @@ function textNodeFactory(itemDetails){
                 const request = new Request(Mapping.getEndpoint("DELETE_NOTEBOOK_LIST_ITEM", {listItemId: listItemId}))
                     request.processValidResponse = function(){
                         notificationService.showSuccess(Localization.getAdditionalContent("item-deleted"));
-                        eventProcessor.processEvent(new Event(events.ITEM_DELETED, parent));
+                        eventProcessor.processEvent(new Event(events.ITEM_DELETED, listItemId));
                     }
                 dao.sendRequestAsync(request);
             }
