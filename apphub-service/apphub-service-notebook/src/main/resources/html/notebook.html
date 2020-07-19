@@ -111,5 +111,26 @@
         <DIV id="create-text-button" class="button dialog-button" onclick="textCreationController.save()"></DIV>
     </FOOTER>
 </DIV>
+
+<DIV id="view-text" class="main-page">
+    <HEADER>
+        <H1><SPAN id="view-text-title"></SPAN> </H1>
+        <BUTTON id="view-text-close-button" class="dialog-close-button" onclick="pageController.openMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN id="view-text-content-wrapper">
+        <TEXTAREA id="view-text-content"></TEXTAREA>
+    </MAIN>
+
+    <FOOTER>
+        <DIV id="view-text-edit-button-wrapper" class="view-text-button-wrapper">
+            <DIV id="view-text-edit-button" class="button dialog-button" onclick="textViewController.enableEditing()"></DIV>
+        </DIV>
+        <DIV id="view-text-editing-operations-button-wrapper" class="view-text-button-wrapper">
+            <DIV id="view-text-edit-save-button" class="button dialog-button" onclick="textViewController.saveChanges()"></DIV>
+            <DIV id="view-text-edit-cancel-button" class="button dialog-button" onclick="textViewController.discardChanges()"></DIV>
+        </DIV>
+    </FOOTER>
+</DIV>
 </BODY>
 </HTML>

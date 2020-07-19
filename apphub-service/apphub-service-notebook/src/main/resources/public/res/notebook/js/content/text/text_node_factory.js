@@ -1,11 +1,13 @@
 function textNodeFactory(itemDetails){
+    scriptLoader.loadScript("/res/notebook/js/view/text_view_controller.js");
+
     const node = document.createElement("DIV");
         node.classList.add("list-item-details-item");
         node.classList.add("button");
         node.classList.add("text");
 
         node.onclick = function(){
-            openText(itemDetails.id);
+            textViewController.viewText(itemDetails.id);
         }
 
         const title = document.createElement("SPAN");

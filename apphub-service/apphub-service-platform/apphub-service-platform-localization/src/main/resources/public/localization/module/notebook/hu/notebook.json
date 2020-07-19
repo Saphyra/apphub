@@ -102,6 +102,24 @@
         "key": "innerHTML",
         "message": "Mentés"
       }
+    ],
+    "view-text-edit-button": [
+      {
+        "key": "innerHTML",
+        "message": "Szerkesztés"
+      }
+    ],
+    "view-text-edit-save-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
+    ],
+    "view-text-edit-cancel-button": [
+      {
+        "key": "innerHTML",
+        "message": "Elvetés"
+      }
     ]
   },
   "additionalContent": {

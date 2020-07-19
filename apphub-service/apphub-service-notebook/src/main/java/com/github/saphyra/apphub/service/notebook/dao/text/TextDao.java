@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.dao.text;
 
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.dao.AbstractDao;
 import org.springframework.stereotype.Component;
 
@@ -18,5 +19,10 @@ public class TextDao extends AbstractDao<TextEntity, Text, String, TextRepositor
 
     public void deleteByParent(UUID parent) {
         repository.deleteByParent(uuidConverter.convertDomain(parent));
+    }
+
+    public Text findByParentValidated(UUID textId) {
+        return converter.convertEntity(repository.findByParent(uuidConverter.convertDomain(textId)))
+            .orElseThrow(() -> new NotFoundException("Text not found by parent " + textId));
     }
 }

@@ -102,6 +102,24 @@
         "key": "innerHTML",
         "message": "Save"
       }
+    ],
+    "view-text-edit-button": [
+      {
+        "key": "innerHTML",
+        "message": "Edit"
+      }
+    ],
+    "view-text-edit-save-button": [
+      {
+        "key": "innerHTML",
+        "message": "Save"
+      }
+    ],
+    "view-text-edit-cancel-button": [
+      {
+        "key": "innerHTML",
+        "message": "Discard"
+      }
     ]
   },
   "additionalContent": {

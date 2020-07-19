@@ -21,6 +21,7 @@ window.Mapping = new function(){
         GET_LANGUAGES: new Endpoint("/api/user/data/languages", HttpMethod.GET),
         GET_MODULES: new Endpoint("/api/modules", HttpMethod.GET),
         GET_NOTEBOOK_CATEGORIES: new Endpoint("/api/notebook/category", HttpMethod.GET),
+        GET_NOTEBOOK_TEXT: new Endpoint("/api/notebook/text/{textId}", HttpMethod.GET),
         GET_USER_ROLES: new Endpoint("/api/user/data/roles", HttpMethod.POST),
         LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),
         LOGOUT: new Endpoint("/api/user/authentication/logout", HttpMethod.POST),
@@ -44,7 +45,6 @@ window.Mapping = new function(){
             for(let index in pathVariables){
                 if(pathVariables[index] != null){
                     const key = createKey(index);
-                    console.log("Key: " + key);
                     result = result.replace(key, pathVariables[index]);
                 }
             }
