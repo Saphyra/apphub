@@ -21,8 +21,8 @@ public class TextDao extends AbstractDao<TextEntity, Text, String, TextRepositor
         repository.deleteByParent(uuidConverter.convertDomain(parent));
     }
 
-    public Text findByParentValidated(UUID textId) {
-        return converter.convertEntity(repository.findByParent(uuidConverter.convertDomain(textId)))
-            .orElseThrow(() -> new NotFoundException("Text not found by parent " + textId));
+    public Text findByParentValidated(UUID parent) {
+        return converter.convertEntity(repository.findByParent(uuidConverter.convertDomain(parent)))
+            .orElseThrow(() -> new NotFoundException("Text not found by parent " + parent));
     }
 }

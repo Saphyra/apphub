@@ -37,10 +37,23 @@
     }
 
     function saveChanges(){
-        //TODO implement
+        const title = document.getElementById("view-text-title").innerHTML;
+        const content = document.getElementById("view-text-content").value;
+
+        if(!title.length){
+            notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
+            return;
+        }
+
+        const request = new Request(Mapping.getEndpoint("EDIT_NOTEBOOK_TEXT", {textId: openedTextId}), {title: title, content: content});
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("text-saved"));
+                viewText(openedTextId);
+            }
+        dao.sendRequestAsync(request);
     }
 
     function discardChanges(){
-        textViewController.viewText(openedTextId);
+        viewText(openedTextId);
     }
 })();

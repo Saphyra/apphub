@@ -80,7 +80,7 @@
 
         const request = new Request(Mapping.getEndpoint("CREATE_NOTEBOOK_TEXT"), {parent: currentCategoryId, title: title, content: content});
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("text-created"));
+                notificationService.showSuccess(Localization.getAdditionalContent("text-saved"));
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
             }
         dao.sendRequestAsync(request);

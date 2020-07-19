@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.apphub.lib.exception.UnprocessableEntityException;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
@@ -16,7 +15,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
-import static org.apache.commons.lang.StringUtils.isBlank;
 
 @Component
 @RequiredArgsConstructor
@@ -24,11 +22,10 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 //TODO unit test
 public class ListItemRequestValidator {
     private final ListItemDao listItemDao;
+    private final TitleValidator titleValidator;
 
     public void validate(String title, UUID parent) {
-        if (isBlank(title)) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "title", "must not be null or blank"), "Title must not be null or blank");
-        }
+        titleValidator.validate(title);
 
         if (!isNull(parent)) {
             Optional<ListItem> listItem = listItemDao.findById(parent);

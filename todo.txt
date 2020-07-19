@@ -24,3 +24,4 @@ TODO FE test - View Details
 TODO FE test - Create text
 TODO FE test - Delete text
 TODO FE test - View text
+TODO FE test - Edit text
