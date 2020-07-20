@@ -8,7 +8,8 @@ import com.github.saphyra.apphub.integration.frontend.model.modules.ModuleLocati
 import com.github.saphyra.apphub.integration.frontend.model.notebook.CategoryTreeElement;
 import com.github.saphyra.apphub.integration.frontend.service.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.frontend.service.modules.ModulesPageActions;
-import com.github.saphyra.apphub.integration.frontend.service.notebook.NotebookPageActions;
+import com.github.saphyra.apphub.integration.frontend.service.notebook.CategoryActions;
+import com.github.saphyra.apphub.integration.frontend.service.notebook.DetailedListActions;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -29,10 +30,10 @@ public class CategoryTreeTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
 
-        NotebookPageActions.createCategory(driver, PARENT_TITLE);
-        NotebookPageActions.createCategory(driver, CHILD_TITLE, PARENT_TITLE);
+        CategoryActions.createCategory(driver, PARENT_TITLE);
+        CategoryActions.createCategory(driver, CHILD_TITLE, PARENT_TITLE);
 
-        CategoryTreeElement root = NotebookPageActions.getCategoryTreeRoot(driver);
+        CategoryTreeElement root = CategoryActions.getCategoryTreeRoot(driver);
         List<CategoryTreeElement> rootsChildren = root.getChildren();
 
         assertThat(rootsChildren).hasSize(1);
@@ -40,11 +41,11 @@ public class CategoryTreeTest extends SeleniumTest {
         rootsChild.openInMainWindow();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> NotebookPageActions.getTitleOfOpenedCategory(driver).equals(PARENT_TITLE))
+            .until(() -> DetailedListActions.getTitleOfOpenedCategory(driver).equals(PARENT_TITLE))
             .assertTrue();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> NotebookPageActions.getDetailedListItems(driver).stream().anyMatch(listItemDetailsItem -> listItemDetailsItem.getTitle().equals(CHILD_TITLE)))
+            .until(() -> DetailedListActions.getDetailedListItems(driver).stream().anyMatch(listItemDetailsItem -> listItemDetailsItem.getTitle().equals(CHILD_TITLE)))
             .assertTrue();
 
         rootsChild.openChildrenList();
@@ -54,11 +55,11 @@ public class CategoryTreeTest extends SeleniumTest {
         youngestChild.openInMainWindow();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> NotebookPageActions.getTitleOfOpenedCategory(driver).equals(CHILD_TITLE))
+            .until(() -> DetailedListActions.getTitleOfOpenedCategory(driver).equals(CHILD_TITLE))
             .assertTrue();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> NotebookPageActions.getDetailedListItems(driver).isEmpty())
+            .until(() -> DetailedListActions.getDetailedListItems(driver).isEmpty())
             .assertTrue();
     }
 }

@@ -16,6 +16,7 @@ class NotebookPage {
     private static final By CATEGORY_TREE_ROOT = By.cssSelector("#category-list > .category-wrapper");
     private static final By TITLE_OF_OPENED_CATEGORY = By.id("category-details-title");
     private static final By DETAILED_LIST_ITEMS = By.cssSelector("#category-content-list .list-item-details-item");
+    private static final By DELETION_CONFIRMATION_DIALOG = By.id("deletion-confirmation-dialog");
 
     public static WebElement createCategoryWindow(WebDriver driver) {
         return driver.findElement(CREATE_CATEGORY_WINDOW);
@@ -51,5 +52,9 @@ class NotebookPage {
 
     public static List<WebElement> detailedListItems(WebDriver driver) {
         return driver.findElements(DETAILED_LIST_ITEMS);
+    }
+
+    public static WebElement deletionConfirmationDialog(WebDriver driver) {
+        return driver.findElement(DELETION_CONFIRMATION_DIALOG);
     }
 }

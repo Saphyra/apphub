@@ -14,6 +14,7 @@ public class CategoryTreeElement {
     private static final By CATEGORY_BUTTON = By.cssSelector(":scope > .category-view-button");
     private static final By CHILDREN_CONTAINER = By.cssSelector(":scope > .category-children-container");
     private static final By OPEN_CHILDREN_LIST_BUTTON = By.cssSelector(":scope > .category-view-button .category-view-toggle-button");
+    private static final By TITLE = By.cssSelector(":scope > .category-view-button .category-view-button-title");
 
     private final WebElement webElement;
 
@@ -39,5 +40,9 @@ public class CategoryTreeElement {
         AwaitilityWrapper.createDefault()
             .until(childrenContainer::isDisplayed)
             .assertTrue();
+    }
+
+    public String getTitle() {
+        return webElement.findElement(TITLE).getText();
     }
 }

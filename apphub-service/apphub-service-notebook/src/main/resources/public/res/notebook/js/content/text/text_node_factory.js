@@ -31,6 +31,7 @@ function textNodeFactory(itemDetails){
 
                 const deleteButton = document.createElement("BUTTON");
                     deleteButton.classList.add("list-item-option-button");
+                    deleteButton.classList.add("delete-button");
                     deleteButton.innerHTML = Localization.getAdditionalContent("delete-button");
                     deleteButton.onclick = function(e){
                         e.stopPropagation();
