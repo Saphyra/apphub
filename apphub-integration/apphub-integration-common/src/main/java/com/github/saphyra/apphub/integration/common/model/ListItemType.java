@@ -1,9 +1,16 @@
 package com.github.saphyra.apphub.integration.common.model;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Getter
 public enum ListItemType {
-    CATEGORY,
-    TABLE,
-    TEXT,
-    CHECKLIST,
-    CHECKLIST_TABLE
+    CATEGORY("category"),
+    TABLE("table"),
+    TEXT("text"),
+    CHECKLIST("checklist"),
+    CHECKLIST_TABLE("checklist-table");
+
+    private final String cssClass;
 }

@@ -11,11 +11,11 @@
                 || eventType == events.LIST_ITEM_SAVED
             },
             function(){
-                loadCategoryContent(currentCategoryId);
+                loadCategoryContent(currentCategoryId, false);
             }
     ));
 
-    function loadCategoryContent(categoryId){
+    function loadCategoryContent(categoryId, shouldSwitchTab){
         currentCategoryId = categoryId;
         const request = new Request(Mapping.getEndpoint("GET_CHILDREN_OF_NOTEBOOK_CATEGORY", null, {categoryId: categoryId}));
             request.convertResponse = function(response){
@@ -23,7 +23,9 @@
             }
             request.processValidResponse = function(categoryResponse){
                 displayCategoryDetails(categoryId, categoryResponse);
-                switchTab("content-container", "category-content-container");
+                if(shouldSwitchTab){
+                    switchTab("content-container", "category-content-container");
+                }
             }
         dao.sendRequestAsync(request);
     }
@@ -36,7 +38,7 @@
             }else{
                 parentButton.classList.remove("disabled");
                 parentButton.onclick = function(){
-                    loadCategoryContent(categoryDetails.parent);
+                    loadCategoryContent(categoryDetails.parent, false);
                 }
             }
 

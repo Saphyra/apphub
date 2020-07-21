@@ -75,7 +75,7 @@ public class CategoryCrudTest extends SeleniumTest {
         CategoryActions.createCategory(driver, TITLE_2, TITLE_1);
         CategoryActions.createCategory(driver, TITLE_3, TITLE_1, TITLE_2);
 
-        DetailedListActions.findDetailedItem(driver, TITLE_1).open(driver);
+        CategoryActions.openCategory(driver, TITLE_1);
         CategoryActions.deleteCategory(driver, TITLE_2);
 
         NotificationUtil.verifySuccessNotification(driver, "Kategória törölve.");

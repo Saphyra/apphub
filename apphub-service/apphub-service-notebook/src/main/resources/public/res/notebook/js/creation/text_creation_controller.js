@@ -82,6 +82,7 @@
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("text-saved"));
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
+                pageController.openMainPage();
             }
         dao.sendRequestAsync(request);
     }

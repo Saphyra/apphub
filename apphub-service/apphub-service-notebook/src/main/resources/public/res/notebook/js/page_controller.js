@@ -35,7 +35,6 @@
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){
             return eventType == events.CATEGORY_SAVED
-            || eventType == events.LIST_ITEM_SAVED
         },
         pageController.openMainPage
     ));

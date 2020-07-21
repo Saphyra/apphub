@@ -1,13 +1,16 @@
 package com.github.saphyra.apphub.integration.frontend.model.notebook;
 
-import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.frontend.service.notebook.DetailedListActions;
+import com.github.saphyra.apphub.integration.common.model.ListItemType;
 import com.github.saphyra.apphub.integration.frontend.service.notebook.NotebookPageActions;
 import lombok.AllArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,11 +42,17 @@ public class ListItemDetailsItem {
         NotebookPageActions.confirmDeletionDialog(driver);
     }
 
-    public void open(WebDriver driver) {
-        String title = getTitle();
+    public void open() {
         getTitleElement().click();
-        AwaitilityWrapper.createDefault()
-            .until(() -> DetailedListActions.getTitleOfOpenedCategory(driver).equals(title))
-            .assertTrue();
+    }
+
+    public ListItemType getType() {
+        List<String> classList = Arrays.stream(webElement.getAttribute("class")
+            .split(" "))
+            .collect(Collectors.toList());
+        return Arrays.stream(ListItemType.values())
+            .filter(type -> classList.contains(type.getCssClass()))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Type not recognizable. ClassList: " + classList));
     }
 }

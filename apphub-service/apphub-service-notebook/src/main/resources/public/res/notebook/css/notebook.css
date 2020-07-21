@@ -182,7 +182,7 @@
 
     #new-buttons{
         display: none;
-        background: black;
+        background: var(--background-color);
         position: absolute;
         bottom: 100%;
     }

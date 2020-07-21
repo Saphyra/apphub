@@ -48,7 +48,7 @@ public class SeleniumTest extends TestBase {
                 options.addArguments("window-size=1920,1080");
 
                 driver = new ChromeDriver(options);
-                driver.manage().window().maximize();
+                //driver.manage().window().maximize();
                 log.info("Driver created: {}", driver);
                 this.driver.set(driver);
             } catch (Exception e) {

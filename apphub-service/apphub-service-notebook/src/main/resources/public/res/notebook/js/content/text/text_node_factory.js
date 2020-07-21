@@ -1,6 +1,6 @@
-function textNodeFactory(itemDetails){
-    scriptLoader.loadScript("/res/notebook/js/view/text_view_controller.js");
+scriptLoader.loadScript("/res/notebook/js/view/text_view_controller.js");
 
+function textNodeFactory(itemDetails){
     const node = document.createElement("DIV");
         node.classList.add("list-item-details-item");
         node.classList.add("button");

@@ -5,7 +5,7 @@ function categoryNodeFactory(itemDetails){
         node.classList.add("category");
 
         node.onclick = function(){
-            categoryContentController.loadCategoryContent(itemDetails.id);
+            categoryContentController.loadCategoryContent(itemDetails.id, false);
         }
 
         const title = document.createElement("SPAN");

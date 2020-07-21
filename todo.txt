@@ -17,8 +17,3 @@ Notebook
     Archive
     Delete notebook items with the user
     Icons for list items
-
-TODO FE test - Create text
-TODO FE test - Delete text
-TODO FE test - View text
-TODO FE test - Edit text

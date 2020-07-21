@@ -20,7 +20,7 @@
             return eventType == events.LOCALIZATION_LOADED
         },
         function(){
-            categoryContentController.loadCategoryContent(null)
+            categoryContentController.loadCategoryContent(null, false);
         },
         true
     ));

@@ -19,7 +19,7 @@ public class CategoryActions {
 
         for (String parentTitle : parentTitles) {
             AwaitilityWrapper.getWithWait(
-                () -> NotebookPage.getAvailableParents(driver).stream()
+                () -> NotebookPage.getAvailableParentsForNewCategory(driver).stream()
                     .filter(webElement -> webElement.getText().equals(parentTitle))
                     .findFirst()
                     .orElse(null),
@@ -64,5 +64,13 @@ public class CategoryActions {
         ListItemDetailsItem categoryToDelete = DetailedListActions.findDetailedItem(driver, title);
 
         categoryToDelete.delete(driver);
+    }
+
+    public static void openCategory(WebDriver driver, String title){
+        DetailedListActions.findDetailedItem(driver, title).open();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> DetailedListActions.getTitleOfOpenedCategory(driver).equals(title))
+            .assertTrue();
     }
 }
