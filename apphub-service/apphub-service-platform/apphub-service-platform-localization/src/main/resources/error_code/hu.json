@@ -6,6 +6,7 @@
   "GENERAL_ERROR": "Ismeretlen hiba.",
   "INVALID_PARAM": "Érvénytelen paraméter.",
   "INVALID_TYPE": "Érvénytelen típus.",
+  "LIST_ITEM_NOT_FOUND": "Elem nem található.",
   "LOCALE_NOT_FOUND": "A locale header nem található.",
   "MISSING_ROLE": "Ehhez a művelethez nincs jogosultságod.",
   "NO_SESSION_AVAILABLE": "Jelentkezz be újra!",

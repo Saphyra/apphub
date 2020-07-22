@@ -19,5 +19,5 @@ public interface TextController {
     TextResponse getText(@PathVariable("textId") UUID textId);
 
     @RequestMapping(method = RequestMethod.POST, path = Endpoints.EDIT_NOTEBOOK_TEXT)
-    void editTextContent(@RequestBody EditTextRequest request, @PathVariable("textId") UUID textId);
+    void editText(@RequestBody EditTextRequest request, @PathVariable("textId") UUID textId);
 }

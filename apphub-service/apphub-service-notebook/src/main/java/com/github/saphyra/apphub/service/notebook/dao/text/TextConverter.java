@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class TextConverter extends ConverterBase<TextEntity, Text> {
     private final AccessTokenProvider accessTokenProvider;
     private final StringEncryptor stringEncryptor;

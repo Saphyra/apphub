@@ -24,7 +24,6 @@ class TextControllerImpl implements TextController {
     private final TextQueryService textQueryService;
 
     @Override
-    //TODO unit test
     //TODO int test
     //TODO api test
     public OneParamResponse<UUID> createText(CreateTextRequest request, AccessTokenHeader accessTokenHeader) {
@@ -33,7 +32,6 @@ class TextControllerImpl implements TextController {
     }
 
     @Override
-    //TODO unit test
     //TODO int test
     //TODO api test
     public TextResponse getText(UUID textId) {
@@ -42,7 +40,9 @@ class TextControllerImpl implements TextController {
     }
 
     @Override
-    public void editTextContent(EditTextRequest request, UUID textId) {
+    //TODO int test
+    //TODO api test
+    public void editText(EditTextRequest request, UUID textId) {
         log.info("Editing text with id {}", textId);
         editTextService.editText(textId, request);
     }

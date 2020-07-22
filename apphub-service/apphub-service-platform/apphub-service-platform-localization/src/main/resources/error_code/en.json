@@ -6,6 +6,7 @@
   "GENERAL_ERROR": "Unknown error.",
   "INVALID_PARAM": "Invalid parameter.",
   "INVALID_TYPE": "Invalid type.",
+  "LIST_ITEM_NOT_FOUND": "Item not found.",
   "LOCALE_NOT_FOUND": "Locale header not found.",
   "MISSING_ROLE": "You are not allowed to perform this operation.",
   "NO_SESSION_AVAILABLE": "Log in again!",
