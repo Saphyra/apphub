@@ -1,6 +1,9 @@
-./develop_deployment.sh
+./develop_deployment.sh skipTrap
 
 eval "$(minikube docker-env)"
+
+echo "Logging in to docker with username $1..."
+docker login -u "$1" -p "$2"
 
 while IFS="" read -r image_name || [ -n "$image_name" ]
 do
