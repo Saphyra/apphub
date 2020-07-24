@@ -16,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class EditTextService {
     private final ContentValidator contentValidator;
     private final TitleValidator titleValidator;

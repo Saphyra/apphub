@@ -17,7 +17,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class TextCreationService {
     private final CreateTextRequestValidator createTextRequestValidator;
     private final ListItemDao listItemDao;

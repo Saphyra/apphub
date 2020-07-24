@@ -19,7 +19,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ListItemRequestValidator {
     private final ListItemDao listItemDao;
     private final TitleValidator titleValidator;

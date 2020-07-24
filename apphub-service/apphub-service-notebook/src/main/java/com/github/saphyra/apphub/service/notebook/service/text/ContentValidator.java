@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import static java.util.Objects.isNull;
 
 @Component
-//TODO unit test
 public class ContentValidator {
     public void validate(String content) {
         if (isNull(content)) {

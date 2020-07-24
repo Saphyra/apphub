@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
+import com.github.saphyra.apphub.service.notebook.dao.text.TextDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -23,6 +24,9 @@ public class ListItemDeletionServiceTest {
 
     @Mock
     private ListItemDao listItemDao;
+
+    @Mock
+    private TextDao textDao;
 
     @InjectMocks
     private ListItemDeletionService underTest;
@@ -49,5 +53,17 @@ public class ListItemDeletionServiceTest {
         verify(listItemDao).delete(child);
         verify(listItemDao).getByUserIdAndParent(USER_ID, LIST_ITEM_ID_1);
         verify(listItemDao).getByUserIdAndParent(USER_ID, LIST_ITEM_ID_2);
+    }
+
+    @Test
+    public void deleteText() {
+        given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
+        given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
+        given(deleted.getType()).willReturn(ListItemType.TEXT);
+
+        underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
+
+        verify(listItemDao).delete(deleted);
+        verify(textDao).deleteByParent(LIST_ITEM_ID_1);
     }
 }

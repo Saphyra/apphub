@@ -29,7 +29,7 @@ public class ListItemDeletionService {
             case CATEGORY:
                 deleteChildren(listItem, userId);
                 break;
-            case TEXT: //TODO unit test
+            case TEXT:
                 textDao.deleteByParent(listItem.getListItemId());
                 break;
             default:
