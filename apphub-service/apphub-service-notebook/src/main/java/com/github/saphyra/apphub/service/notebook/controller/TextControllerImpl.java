@@ -24,21 +24,18 @@ class TextControllerImpl implements TextController {
     private final TextQueryService textQueryService;
 
     @Override
-    //TODO api test
     public OneParamResponse<UUID> createText(CreateTextRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a new text item with parentId {}", accessTokenHeader.getUserId(), request.getParent());
         return new OneParamResponse<>(textCreationService.create(request, accessTokenHeader.getUserId()));
     }
 
     @Override
-    //TODO api test
     public TextResponse getText(UUID textId) {
         log.info("Querying text with id {}", textId);
         return textQueryService.getTextResponse(textId);
     }
 
     @Override
-    //TODO api test
     public void editText(EditTextRequest request, UUID textId) {
         log.info("Editing text with id {}", textId);
         editTextService.editText(textId, request);

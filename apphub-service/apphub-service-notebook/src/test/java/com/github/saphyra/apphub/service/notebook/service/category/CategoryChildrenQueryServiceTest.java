@@ -47,6 +47,26 @@ public class CategoryChildrenQueryServiceTest {
     }
 
     @Test
+    public void emptyType() {
+        ListItem listItem = ListItem.builder()
+            .listItemId(LIST_ITEM_ID)
+            .userId(USER_ID)
+            .type(ListItemType.CATEGORY)
+            .title(TITLE_1)
+            .build();
+        given(listItemDao.getByUserIdAndParent(USER_ID, CATEGORY_ID)).willReturn(Arrays.asList(listItem));
+
+        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(USER_ID, CATEGORY_ID, "");
+
+        assertThat(result.getParent()).isNull();
+        assertThat(result.getTitle()).isNull();
+        assertThat(result.getChildren()).hasSize(1);
+        assertThat(result.getChildren().get(0).getId()).isEqualTo(LIST_ITEM_ID);
+        assertThat(result.getChildren().get(0).getTitle()).isEqualTo(TITLE_1);
+        assertThat(result.getChildren().get(0).getType()).isEqualTo(ListItemType.CATEGORY.name());
+    }
+
+    @Test
     public void getRoot() {
         ListItem listItem1 = ListItem.builder()
             .listItemId(LIST_ITEM_ID)

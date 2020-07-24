@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateCategoryRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.NotebookView;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
@@ -64,12 +65,12 @@ public class GetChildrenOfCategoryTest extends TestBase {
             .build();
         UUID childCategoryId = NotebookActions.createCategory(language, accessTokenId, childCategoryRequest);
 
-        CreateCategoryRequest childTextRequest = CreateCategoryRequest.builder()
+        CreateTextRequest childTextRequest = CreateTextRequest.builder()
             .title(TITLE_3)
+            .content("content")
             .parent(parentId)
             .build();
-        UUID childTextId = NotebookActions.createCategory(language, accessTokenId, childTextRequest);
-        DatabaseUtil.setListItemTypeById(childTextId, ListItemType.TEXT);
+        UUID childTextId = NotebookActions.createText(language, accessTokenId, childTextRequest);
 
         CreateCategoryRequest childChecklistRequest = CreateCategoryRequest.builder()
             .title(TITLE_4)

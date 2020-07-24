@@ -63,7 +63,7 @@ public class DatabaseUtil {
 
             ResultSet resultSet = statement.executeQuery(sql);
             List<String> result = new ArrayList<>();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 result.add(resultSet.getString("apphub_role"));
             }
             statement.close();
@@ -73,8 +73,9 @@ public class DatabaseUtil {
         }
     }
 
+    @Deprecated
     public static void setListItemTypeById(UUID listItemId, ListItemType type) {
-        try{
+        try {
             log.info("Changing type of listItem {} to {}", listItemId, type);
             Statement statement = getStatement();
             String sql = String.format(CHANGE_LIST_ITEM_TYPE, type, listItemId);

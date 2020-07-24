@@ -1,3 +1,5 @@
+./develop_deployment.sh
+
 eval "$(minikube docker-env)"
 
 while IFS="" read -r image_name || [ -n "$image_name" ]

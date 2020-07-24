@@ -48,6 +48,7 @@ public class CategoryChildrenQueryService {
     private List<ListItemType> parseTypes(String type) {
         try {
             return Optional.ofNullable(type)
+                .filter(s -> !s.isEmpty())
                 .map(s -> Arrays.stream(s.split(",")).map(ListItemType::valueOf).collect(Collectors.toList()))
                 .orElseGet(() -> Arrays.stream(ListItemType.values())
                     .collect(Collectors.toList()));
