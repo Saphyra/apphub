@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.service.text;
 
 import com.github.saphyra.apphub.api.notebook.model.request.EditTextRequest;
+import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.text.Text;
-import com.github.saphyra.apphub.service.notebook.dao.text.TextDao;
+import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.service.TitleValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +33,7 @@ public class EditTextServiceTest {
     private ListItemDao listItemDao;
 
     @Mock
-    private TextDao textDao;
+    private ContentDao contentDao;
 
     @InjectMocks
     private EditTextService underTest;
@@ -42,7 +42,7 @@ public class EditTextServiceTest {
     private ListItem listItem;
 
     @Mock
-    private Text text;
+    private Content content;
 
     @Test
     public void editText() {
@@ -52,13 +52,13 @@ public class EditTextServiceTest {
             .build();
 
         given(listItemDao.findByIdValidated(TEXT_ID)).willReturn(listItem);
-        given(textDao.findByParentValidated(TEXT_ID)).willReturn(text);
+        given(contentDao.findByParentValidated(TEXT_ID)).willReturn(content);
 
         underTest.editText(TEXT_ID, request);
 
         verify(listItem).setTitle(TITLE);
-        verify(text).setContent(CONTENT);
+        verify(content).setContent(CONTENT);
         verify(listItemDao).save(listItem);
-        verify(textDao).save(text);
+        verify(contentDao).save(content);
     }
 }

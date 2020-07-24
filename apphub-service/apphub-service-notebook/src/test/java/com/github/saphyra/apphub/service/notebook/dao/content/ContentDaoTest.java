@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.dao.text;
+package com.github.saphyra.apphub.service.notebook.dao.content;
 
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
@@ -17,7 +17,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TextDaoTest {
+public class ContentDaoTest {
     private static final UUID PARENT = UUID.randomUUID();
     private static final String PARENT_STRING = "parent";
 
@@ -25,19 +25,19 @@ public class TextDaoTest {
     private UuidConverter uuidConverter;
 
     @Mock
-    private TextConverter textConverter;
+    private ContentConverter contentConverter;
 
     @Mock
-    private TextRepository textRepository;
+    private ContentRepository contentRepository;
 
     @InjectMocks
-    private TextDao underTest;
+    private ContentDao underTest;
 
     @Mock
-    private Text text;
+    private Content content;
 
     @Mock
-    private TextEntity entity;
+    private ContentEntity entity;
 
     @Test
     public void deleteByParent() {
@@ -45,13 +45,13 @@ public class TextDaoTest {
 
         underTest.deleteByParent(PARENT);
 
-        verify(textRepository).deleteByParent(PARENT_STRING);
+        verify(contentRepository).deleteByParent(PARENT_STRING);
     }
 
     @Test
     public void findByParentValidated_notFound() {
         given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
-        given(textRepository.findByParent(PARENT_STRING)).willReturn(Optional.empty());
+        given(contentRepository.findByParent(PARENT_STRING)).willReturn(Optional.empty());
 
         Throwable ex = catchThrowable(() -> underTest.findByParentValidated(PARENT));
 
@@ -63,11 +63,11 @@ public class TextDaoTest {
     @Test
     public void findByParentValidated() {
         given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
-        given(textRepository.findByParent(PARENT_STRING)).willReturn(Optional.of(entity));
-        given(textConverter.convertEntity(Optional.of(entity))).willReturn(Optional.of(text));
+        given(contentRepository.findByParent(PARENT_STRING)).willReturn(Optional.of(entity));
+        given(contentConverter.convertEntity(Optional.of(entity))).willReturn(Optional.of(content));
 
-        Text result = underTest.findByParentValidated(PARENT);
+        Content result = underTest.findByParentValidated(PARENT);
 
-        assertThat(result).isEqualTo(text);
+        assertThat(result).isEqualTo(content);
     }
 }

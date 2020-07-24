@@ -22,7 +22,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TextControllerImplTest {
+public class ContentControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
 

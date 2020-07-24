@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.api.notebook.model.request.CreateTextRequest;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
-import com.github.saphyra.apphub.service.notebook.dao.text.Text;
-import com.github.saphyra.apphub.service.notebook.dao.text.TextDao;
+import com.github.saphyra.apphub.service.notebook.dao.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +37,7 @@ public class TextCreationServiceTest {
     private ListItemFactory listItemFactory;
 
     @Mock
-    private TextDao textDao;
+    private ContentDao contentDao;
 
     @Mock
     private TextFactory textFactory;
@@ -49,7 +49,7 @@ public class TextCreationServiceTest {
     private ListItem listItem;
 
     @Mock
-    private Text text;
+    private Content content;
 
     @Test
     public void create() {
@@ -60,7 +60,7 @@ public class TextCreationServiceTest {
             .build();
 
         given(listItemFactory.create(USER_ID, TITLE, PARENT, ListItemType.TEXT)).willReturn(listItem);
-        given(textFactory.create(listItem, CONTENT)).willReturn(text);
+        given(textFactory.create(listItem, CONTENT)).willReturn(content);
         given(listItem.getListItemId()).willReturn(LIST_ITEM_ID);
 
         UUID result = underTest.create(request, USER_ID);
@@ -69,6 +69,6 @@ public class TextCreationServiceTest {
 
         verify(createTextRequestValidator).validate(request);
         verify(listItemDao).save(listItem);
-        verify(textDao).save(text);
+        verify(contentDao).save(content);
     }
 }

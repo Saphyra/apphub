@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.dao.text;
+package com.github.saphyra.apphub.service.notebook.dao.content;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,9 +10,9 @@ import java.util.UUID;
 @Builder
 @Data
 @AllArgsConstructor
-public class Text {
+public class Content {
     @NonNull
-    private final UUID textId;
+    private final UUID contentId;
 
     @NonNull
     private final UUID userId;

@@ -10,7 +10,7 @@ import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.text.TextDao;
+import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.test.common.TestConstants;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
@@ -41,7 +41,7 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
-public class TextControllerImplTestIt_editText {
+public class TextControllerImplTestIt_editContent {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final AccessTokenHeader ACCESS_TOKEN_HEADER = AccessTokenHeader.builder()
         .accessTokenId(UUID.randomUUID())
@@ -67,7 +67,7 @@ public class TextControllerImplTestIt_editText {
     private ListItemDao listItemDao;
 
     @Autowired
-    private TextDao textDao;
+    private ContentDao contentDao;
 
     @Before
     public void setUp() {
@@ -77,7 +77,7 @@ public class TextControllerImplTestIt_editText {
     @After
     public void clear() {
         listItemDao.deleteAll();
-        textDao.deleteAll();
+        contentDao.deleteAll();
     }
 
     @Test

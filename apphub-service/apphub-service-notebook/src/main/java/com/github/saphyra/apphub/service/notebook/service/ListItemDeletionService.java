@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service;
 import com.github.saphyra.apphub.lib.exception.NotImplementedException;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.text.TextDao;
+import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ListItemDeletionService {
     private final ListItemDao listItemDao;
-    private final TextDao textDao;
+    private final ContentDao contentDao;
 
     @Transactional
     public void deleteListItem(UUID listItemId, UUID userId) {
@@ -30,7 +30,7 @@ public class ListItemDeletionService {
                 deleteChildren(listItem, userId);
                 break;
             case TEXT:
-                textDao.deleteByParent(listItem.getListItemId());
+                contentDao.deleteByParent(listItem.getListItemId());
                 break;
             default:
                 throw new NotImplementedException("Unhandled listItemType: " + listItem.getType());

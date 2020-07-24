@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.dao.text;
+package com.github.saphyra.apphub.service.notebook.dao.content;
 
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TextConverterTest {
+public class ContentConverterTest {
     private static final String TEXT_ID_STRING = "text-id";
     private static final String USER_ID_STRING = "user-id";
     private static final String PARENT_STRING = "parent";
@@ -39,7 +39,7 @@ public class TextConverterTest {
     private UuidConverter uuidConverter;
 
     @InjectMocks
-    private TextConverter underTest;
+    private ContentConverter underTest;
 
     @Mock
     private AccessTokenHeader accessTokenHeader;
@@ -53,8 +53,8 @@ public class TextConverterTest {
 
     @Test
     public void convertEntity() {
-        TextEntity entity = TextEntity.builder()
-            .textId(TEXT_ID_STRING)
+        ContentEntity entity = ContentEntity.builder()
+            .contentId(TEXT_ID_STRING)
             .userId(USER_ID_STRING)
             .parent(PARENT_STRING)
             .content(ENCRYPTED_CONTENT)
@@ -65,9 +65,9 @@ public class TextConverterTest {
         given(stringEncryptor.decryptEntity(ENCRYPTED_CONTENT, ACCESS_TOKEN_USER_ID_STRING)).willReturn(DECRYPTED_CONTENT);
 
 
-        Text result = underTest.convertEntity(entity);
+        Content result = underTest.convertEntity(entity);
 
-        assertThat(result.getTextId()).isEqualTo(TEXT_ID);
+        assertThat(result.getContentId()).isEqualTo(TEXT_ID);
         assertThat(result.getUserId()).isEqualTo(USER_ID);
         assertThat(result.getParent()).isEqualTo(PARENT);
         assertThat(result.getContent()).isEqualTo(DECRYPTED_CONTENT);
@@ -75,8 +75,8 @@ public class TextConverterTest {
 
     @Test
     public void convertDomain() {
-        Text entity = Text.builder()
-            .textId(TEXT_ID)
+        Content entity = Content.builder()
+            .contentId(TEXT_ID)
             .userId(USER_ID)
             .parent(PARENT)
             .content(DECRYPTED_CONTENT)
@@ -87,9 +87,9 @@ public class TextConverterTest {
         given(stringEncryptor.encryptEntity(DECRYPTED_CONTENT, ACCESS_TOKEN_USER_ID_STRING)).willReturn(ENCRYPTED_CONTENT);
 
 
-        TextEntity result = underTest.convertDomain(entity);
+        ContentEntity result = underTest.convertDomain(entity);
 
-        assertThat(result.getTextId()).isEqualTo(TEXT_ID_STRING);
+        assertThat(result.getContentId()).isEqualTo(TEXT_ID_STRING);
         assertThat(result.getUserId()).isEqualTo(USER_ID_STRING);
         assertThat(result.getParent()).isEqualTo(PARENT_STRING);
         assertThat(result.getContent()).isEqualTo(ENCRYPTED_CONTENT);

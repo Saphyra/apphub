@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.dao.text;
+package com.github.saphyra.apphub.service.notebook.dao.content;
 
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
 import lombok.extern.slf4j.Slf4j;
@@ -17,14 +17,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
 @Slf4j
-public class TextRepositoryTest {
+public class ContentRepositoryTest {
     private static final String TEXT_ID_1 = "text-id-1";
     private static final String TEXT_ID_2 = "text-id-2";
     private static final String PARENT_1 = "parent-1";
     private static final String PARENT_2 = "parent-2";
 
     @Autowired
-    private TextRepository underTest;
+    private ContentRepository underTest;
 
     @After
     public void clear() {
@@ -34,13 +34,13 @@ public class TextRepositoryTest {
     @Test
     @Transactional
     public void deleteByParent() {
-        TextEntity entity1 = TextEntity.builder()
-            .textId(TEXT_ID_1)
+        ContentEntity entity1 = ContentEntity.builder()
+            .contentId(TEXT_ID_1)
             .parent(PARENT_1)
             .build();
         underTest.save(entity1);
-        TextEntity entity2 = TextEntity.builder()
-            .textId(TEXT_ID_2)
+        ContentEntity entity2 = ContentEntity.builder()
+            .contentId(TEXT_ID_2)
             .parent(PARENT_2)
             .build();
         underTest.save(entity2);
@@ -52,18 +52,18 @@ public class TextRepositoryTest {
 
     @Test
     public void findByParent() {
-        TextEntity entity1 = TextEntity.builder()
-            .textId(TEXT_ID_1)
+        ContentEntity entity1 = ContentEntity.builder()
+            .contentId(TEXT_ID_1)
             .parent(PARENT_1)
             .build();
         underTest.save(entity1);
-        TextEntity entity2 = TextEntity.builder()
-            .textId(TEXT_ID_2)
+        ContentEntity entity2 = ContentEntity.builder()
+            .contentId(TEXT_ID_2)
             .parent(PARENT_2)
             .build();
         underTest.save(entity2);
 
-        Optional<TextEntity> result = underTest.findByParent(PARENT_2);
+        Optional<ContentEntity> result = underTest.findByParent(PARENT_2);
 
         assertThat(result).contains(entity2);
     }

@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.service.text;
 
 import com.github.saphyra.apphub.api.notebook.model.request.EditTextRequest;
+import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.text.Text;
-import com.github.saphyra.apphub.service.notebook.dao.text.TextDao;
+import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.service.TitleValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class EditTextService {
     private final ContentValidator contentValidator;
     private final TitleValidator titleValidator;
     private final ListItemDao listItemDao;
-    private final TextDao textDao;
+    private final ContentDao contentDao;
 
     @Transactional
     public void editText(UUID textId, EditTextRequest request) {
@@ -28,12 +28,12 @@ public class EditTextService {
         contentValidator.validate(request.getContent());
 
         ListItem listItem = listItemDao.findByIdValidated(textId);
-        Text text = textDao.findByParentValidated(textId);
+        Content content = contentDao.findByParentValidated(textId);
 
         listItem.setTitle(request.getTitle());
-        text.setContent(request.getContent());
+        content.setContent(request.getContent());
 
         listItemDao.save(listItem);
-        textDao.save(text);
+        contentDao.save(content);
     }
 }

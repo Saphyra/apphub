@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.service.text;
 
 import com.github.saphyra.apphub.api.notebook.model.response.TextResponse;
+import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.text.Text;
-import com.github.saphyra.apphub.service.notebook.dao.text.TextDao;
+import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TextQueryServiceTest {
+public class TestQueryServiceTest {
     private static final UUID TEXT_ID = UUID.randomUUID();
     private static final String TITLE = "title";
     private static final String CONTENT = "content";
@@ -26,7 +26,7 @@ public class TextQueryServiceTest {
     private ListItemDao listItemDao;
 
     @Mock
-    private TextDao textDao;
+    private ContentDao contentDao;
 
     @InjectMocks
     private TextQueryService underTest;
@@ -35,14 +35,14 @@ public class TextQueryServiceTest {
     private ListItem listItem;
 
     @Mock
-    private Text text;
+    private Content content;
 
     @Test
     public void getTextResponse() {
         given(listItemDao.findByIdValidated(TEXT_ID)).willReturn(listItem);
-        given(textDao.findByParentValidated(TEXT_ID)).willReturn(text);
+        given(contentDao.findByParentValidated(TEXT_ID)).willReturn(content);
         given(listItem.getTitle()).willReturn(TITLE);
-        given(text.getContent()).willReturn(CONTENT);
+        given(content.getContent()).willReturn(CONTENT);
 
         TextResponse result = underTest.getTextResponse(TEXT_ID);
 

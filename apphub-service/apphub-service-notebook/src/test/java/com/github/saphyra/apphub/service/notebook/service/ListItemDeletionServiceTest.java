@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
-import com.github.saphyra.apphub.service.notebook.dao.text.TextDao;
+import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -26,7 +26,7 @@ public class ListItemDeletionServiceTest {
     private ListItemDao listItemDao;
 
     @Mock
-    private TextDao textDao;
+    private ContentDao contentDao;
 
     @InjectMocks
     private ListItemDeletionService underTest;
@@ -64,6 +64,6 @@ public class ListItemDeletionServiceTest {
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
         verify(listItemDao).delete(deleted);
-        verify(textDao).deleteByParent(LIST_ITEM_ID_1);
+        verify(contentDao).deleteByParent(LIST_ITEM_ID_1);
     }
 }

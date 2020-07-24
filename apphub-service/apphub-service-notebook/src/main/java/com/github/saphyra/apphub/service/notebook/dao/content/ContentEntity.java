@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.dao.text;
+package com.github.saphyra.apphub.service.notebook.dao.content;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,14 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(schema = "notebook", name = "text")
+@Table(schema = "notebook", name = "content")
 @Data
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class TextEntity {
+public class ContentEntity {
     @Id
-    private String textId;
+    private String contentId;
     private String userId;
     private String parent;
     private String content;

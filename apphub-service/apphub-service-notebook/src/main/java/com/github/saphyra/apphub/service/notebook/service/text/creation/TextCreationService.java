@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.api.notebook.model.request.CreateTextRequest;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
-import com.github.saphyra.apphub.service.notebook.dao.text.Text;
-import com.github.saphyra.apphub.service.notebook.dao.text.TextDao;
+import com.github.saphyra.apphub.service.notebook.dao.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class TextCreationService {
     private final CreateTextRequestValidator createTextRequestValidator;
     private final ListItemDao listItemDao;
     private final ListItemFactory listItemFactory;
-    private final TextDao textDao;
+    private final ContentDao contentDao;
     private final TextFactory textFactory;
 
     @Transactional
@@ -29,11 +29,11 @@ public class TextCreationService {
         createTextRequestValidator.validate(request);
 
         ListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), ListItemType.TEXT);
-        Text text = textFactory.create(listItem, request.getContent());
+        Content content = textFactory.create(listItem, request.getContent());
 
 
         listItemDao.save(listItem);
-        textDao.save(text);
+        contentDao.save(content);
         return listItem.getListItemId();
     }
 }

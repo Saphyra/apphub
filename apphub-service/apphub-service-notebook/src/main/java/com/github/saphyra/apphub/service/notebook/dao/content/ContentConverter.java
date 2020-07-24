@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.dao.text;
+package com.github.saphyra.apphub.service.notebook.dao.content;
 
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
@@ -9,15 +9,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class TextConverter extends ConverterBase<TextEntity, Text> {
+public class ContentConverter extends ConverterBase<ContentEntity, Content> {
     private final AccessTokenProvider accessTokenProvider;
     private final StringEncryptor stringEncryptor;
     private final UuidConverter uuidConverter;
 
     @Override
-    protected Text processEntityConversion(TextEntity entity) {
-        return Text.builder()
-            .textId(uuidConverter.convertEntity(entity.getTextId()))
+    protected Content processEntityConversion(ContentEntity entity) {
+        return Content.builder()
+            .contentId(uuidConverter.convertEntity(entity.getContentId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
             .parent(uuidConverter.convertEntity(entity.getParent()))
             .content(stringEncryptor.decryptEntity(entity.getContent(), uuidConverter.convertDomain(accessTokenProvider.get().getUserId())))
@@ -25,12 +25,12 @@ public class TextConverter extends ConverterBase<TextEntity, Text> {
     }
 
     @Override
-    protected TextEntity processDomainConversion(Text text) {
-        return TextEntity.builder()
-            .textId(uuidConverter.convertDomain(text.getTextId()))
-            .userId(uuidConverter.convertDomain(text.getUserId()))
-            .parent(uuidConverter.convertDomain(text.getParent()))
-            .content(stringEncryptor.encryptEntity(text.getContent(), uuidConverter.convertDomain(accessTokenProvider.get().getUserId())))
+    protected ContentEntity processDomainConversion(Content content) {
+        return ContentEntity.builder()
+            .contentId(uuidConverter.convertDomain(content.getContentId()))
+            .userId(uuidConverter.convertDomain(content.getUserId()))
+            .parent(uuidConverter.convertDomain(content.getParent()))
+            .content(stringEncryptor.encryptEntity(content.getContent(), uuidConverter.convertDomain(accessTokenProvider.get().getUserId())))
             .build();
     }
 }
