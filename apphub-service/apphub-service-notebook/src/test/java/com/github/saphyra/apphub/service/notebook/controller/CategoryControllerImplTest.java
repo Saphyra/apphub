@@ -1,11 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateCategoryRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CategoryRequest;
 import com.github.saphyra.apphub.api.notebook.model.response.CategoryTreeView;
 import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.service.notebook.controller.CategoryControllerImpl;
 import com.github.saphyra.apphub.service.notebook.service.category.CategoryChildrenQueryService;
 import com.github.saphyra.apphub.service.notebook.service.category.CategoryTreeQueryService;
 import com.github.saphyra.apphub.service.notebook.service.category.creation.CategoryCreationService;
@@ -45,7 +44,7 @@ public class CategoryControllerImplTest {
     private AccessTokenHeader accessTokenHeader;
 
     @Mock
-    private CreateCategoryRequest createCategoryRequest;
+    private CategoryRequest categoryRequest;
 
     @Mock
     private CategoryTreeView categoryTreeView;
@@ -60,9 +59,9 @@ public class CategoryControllerImplTest {
 
     @Test
     public void createCategory() {
-        given(categoryCreationService.createCategory(USER_ID, createCategoryRequest)).willReturn(CATEGORY_ID);
+        given(categoryCreationService.createCategory(USER_ID, categoryRequest)).willReturn(CATEGORY_ID);
 
-        OneParamResponse<UUID> response = underTest.createCategory(createCategoryRequest, accessTokenHeader);
+        OneParamResponse<UUID> response = underTest.createCategory(categoryRequest, accessTokenHeader);
 
         assertThat(response.getValue()).isEqualTo(CATEGORY_ID);
     }

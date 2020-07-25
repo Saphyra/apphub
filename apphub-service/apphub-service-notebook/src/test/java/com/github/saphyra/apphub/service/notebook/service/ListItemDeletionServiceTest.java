@@ -66,4 +66,16 @@ public class ListItemDeletionServiceTest {
         verify(listItemDao).delete(deleted);
         verify(contentDao).deleteByParent(LIST_ITEM_ID_1);
     }
+
+    @Test
+    public void deleteLink() {
+        given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
+        given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
+        given(deleted.getType()).willReturn(ListItemType.LINK);
+
+        underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
+
+        verify(listItemDao).delete(deleted);
+        verify(contentDao).deleteByParent(LIST_ITEM_ID_1);
+    }
 }

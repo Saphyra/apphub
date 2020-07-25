@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.category;
 
 import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryResponse;
+import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
@@ -32,8 +33,14 @@ public class CategoryChildrenQueryServiceTest {
     @Mock
     private ListItemDao listItemDao;
 
+    @Mock
+    private NotebookViewFactory notebookViewFactory;
+
     @InjectMocks
     private CategoryChildrenQueryService underTest;
+
+    @Mock
+    private NotebookView notebookView;
 
     @Test
     public void invalidType() {
@@ -55,15 +62,14 @@ public class CategoryChildrenQueryServiceTest {
             .title(TITLE_1)
             .build();
         given(listItemDao.getByUserIdAndParent(USER_ID, CATEGORY_ID)).willReturn(Arrays.asList(listItem));
+        given(notebookViewFactory.create(listItem)).willReturn(notebookView);
 
         ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(USER_ID, CATEGORY_ID, "");
 
         assertThat(result.getParent()).isNull();
         assertThat(result.getTitle()).isNull();
         assertThat(result.getChildren()).hasSize(1);
-        assertThat(result.getChildren().get(0).getId()).isEqualTo(LIST_ITEM_ID);
-        assertThat(result.getChildren().get(0).getTitle()).isEqualTo(TITLE_1);
-        assertThat(result.getChildren().get(0).getType()).isEqualTo(ListItemType.CATEGORY.name());
+        assertThat(result.getChildren().get(0)).isEqualTo(notebookView);
     }
 
     @Test
@@ -81,15 +87,14 @@ public class CategoryChildrenQueryServiceTest {
             .title(TITLE_1)
             .build();
         given(listItemDao.getByUserIdAndParent(USER_ID, null)).willReturn(Arrays.asList(listItem1, listItem2));
+        given(notebookViewFactory.create(listItem2)).willReturn(notebookView);
 
         ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(USER_ID, null, ListItemType.CATEGORY.name());
 
         assertThat(result.getParent()).isNull();
         assertThat(result.getTitle()).isNull();
         assertThat(result.getChildren()).hasSize(1);
-        assertThat(result.getChildren().get(0).getId()).isEqualTo(LIST_ITEM_ID);
-        assertThat(result.getChildren().get(0).getTitle()).isEqualTo(TITLE_1);
-        assertThat(result.getChildren().get(0).getType()).isEqualTo(ListItemType.CATEGORY.name());
+        assertThat(result.getChildren().get(0)).isEqualTo(notebookView);
     }
 
     @Test
@@ -116,6 +121,7 @@ public class CategoryChildrenQueryServiceTest {
             .title(TITLE_2)
             .build();
         given(listItemDao.findById(CATEGORY_ID)).willReturn(Optional.of(parent));
+        given(notebookViewFactory.create(listItem2)).willReturn(notebookView);
 
 
         ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(USER_ID, CATEGORY_ID, ListItemType.CATEGORY.name());
@@ -123,8 +129,6 @@ public class CategoryChildrenQueryServiceTest {
         assertThat(result.getParent()).isEqualTo(PARENT);
         assertThat(result.getTitle()).isEqualTo(TITLE_2);
         assertThat(result.getChildren()).hasSize(1);
-        assertThat(result.getChildren().get(0).getId()).isEqualTo(LIST_ITEM_ID);
-        assertThat(result.getChildren().get(0).getTitle()).isEqualTo(TITLE_1);
-        assertThat(result.getChildren().get(0).getType()).isEqualTo(ListItemType.CATEGORY.name());
+        assertThat(result.getChildren().get(0)).isEqualTo(notebookView);
     }
 }

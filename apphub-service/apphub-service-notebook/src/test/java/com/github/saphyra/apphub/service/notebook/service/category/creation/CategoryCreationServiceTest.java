@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.category.creation;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateCategoryRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CategoryRequest;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
@@ -44,7 +44,7 @@ public class CategoryCreationServiceTest {
         given(listItemFactory.create(USER_ID, TITLE, PARENT_ID, ListItemType.CATEGORY)).willReturn(listItem);
         given(listItem.getListItemId()).willReturn(CATEGORY_ID);
 
-        CreateCategoryRequest request = CreateCategoryRequest.builder().title(TITLE).parent(PARENT_ID).build();
+        CategoryRequest request = CategoryRequest.builder().title(TITLE).parent(PARENT_ID).build();
 
         UUID result = underTest.createCategory(USER_ID, request);
 

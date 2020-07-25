@@ -13,6 +13,10 @@
     border-color: white;
 }
 
+.link{
+    border-color: rgb(40,40,255);
+}
+
 .no-content{
     text-align: center;
     padding: 1rem;
@@ -26,153 +30,7 @@
     font-size: 1.5rem;
 }
 
-/*=== CATEGORY TREE VIEW ===*/
-#category-list{
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: var(--category-list-width);
-    border-right: 3px ridge white;
-}
 
-    .category-wrapper{
-        position: relative;
-        left: 2rem;
-        width: calc(100% - 2rem);
-    }
-
-    .root-wrapper{
-        left: 0;
-        width: initial;
-    }
-
-        .category-view-button{
-            text-align: left;
-            display: inline-block;
-            height: 2.75rem;
-        }
-
-            .category-view-toggle-button{
-                margin: 0;
-                margin-right: 0.5rem;
-                padding: 0 0.1rem;
-                display: inline-block;
-                width: 1.5rem;
-                height: 2rem;
-                font-size: 1.65rem;
-            }
-
-            .category-view-button-title{
-                text-align: left;
-                padding: 0.5rem 0.25rem;
-                margin: 0.1rem;
-                font-weight: 700;
-                font-size: 1.55rem;
-            }
-
-        .category-children-container{
-            display: none;
-        }
-
-#content-container{
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    width: calc(100% - var(--category-list-width));
-}
-
-    #search-container{
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        min-height: var(--search-container-min-height);
-
-        border-bottom: 3px ridge white;
-    }
-
-        #search-container-title{
-            text-align: center;
-        }
-
-        #search-container-close-button{
-            position: absolute;
-            right: 0;
-            top: 0;
-        }
-
-    #detailed-page-container{
-        position: absolute;
-        top: var(--search-container-min-height);
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-
-        .detailed-container{
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255,255,255,0.15);
-        }
-
-            .detailed-container-title{
-                text-align: center;
-                padding: 0.5rem;
-                border-bottom: 2px ridge white;
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: var(--detailed-container-title-height);
-            }
-
-            .detailed-container-content{
-                position: absolute;
-                top: var(--detailed-container-title-height);
-                left: 0;
-                right: 0;
-                bottom: 0;
-            }
-
-                #category-content-parent-selection-parent-button{
-                    text-align: center;
-                }
-
-                .list-item-details-item{
-                    font-size: 1.25rem;
-                    margin: 0.5rem;
-                    text-align: left;
-                    position: relative;
-                }
-
-                    .list-item-options-container{
-                        position: absolute;
-                        top: 0;
-                        right: 0;
-                    }
-
-                        .list-item-option-button{
-                            margin: 0.125rem;
-                            padding: 0.125rem;
-                            border-width: 1px;
-                        }
-
-                        .list-item-options-button-list-wrapper{
-                            display: none;
-                        }
-
-                    .list-item-options-container:hover .list-item-options-button-list-wrapper{
-                        display: block;
-                    }
-
-                    .list-item-options-container:hover .list-item-options-button{
-                        display: none;
-                    }
 
 /*=== FOOTER BUTTONS ===*/
 #new-button-wrapper{
@@ -216,112 +74,10 @@
     font-size: 1.5rem;
 }
 
-/*=== CREATE CATEGORY DIALOG ===*/
-
-#create-category-parent-selection-wrapper{
+.parent-selection-wrapper{
     position: absolute;
     top: var(--create-item-input-height);
     left: 10%;
     right: 10%;
     bottom: 0;
 }
-
-    #create-category-parent-selection-parent-button{
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        margin: 0.5rem auto;
-        width: 80%
-    }
-
-    #create-category-parent-selection-category-list{
-        position: absolute;
-        top: 2.75rem;
-        left: 0;
-        bottom: 0;
-        right: 0;
-    }
-
-#create-category-button{
-    display: block;
-    margin: 0.25rem auto;
-    width: 50%;
-}
-
-/*=== CREATE TEXT DIALOG ===*/
-
-#create-text-parent-selection-wrapper{
-    background: var(--background-color);
-    position: absolute;
-    top: var(--create-item-input-height);
-    left: 10%;
-    right: 10%;
-    z-index: 1;
-}
-
-    #create-text-parent-selection-wrapper:hover{
-        border: 3px ridge white;
-        border-top: none;
-    }
-
-    #create-text-selected-category-wrapper{
-        text-align: center;
-        font-size: 1.5rem;
-        padding: 0.25rem;
-    }
-
-    #create-text-parent-selection-list-wrapper{
-        display: none;
-    }
-
-        #create-text-parent-selection-wrapper:hover #create-text-parent-selection-list-wrapper{
-            display: block;
-        }
-
-    #new-text-content-wrapper{
-        position: absolute;
-        top: 5.5rem;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        text-align: center;
-    }
-
-        #new-text-content{
-            width: 90%;
-            height: 90%;
-            resize: none;
-            font-size: 1.25rem;
-            padding: 0.5rem;
-        }
-
-/*=== View DIALOG ===*/
-#view-text-title[contenteditable=true]{
-    border: 3px outset white;
-    padding: 0.25rem;
-    display: inline-block;
-    border-radius: 10px;
-    font-size: 1.75rem;
-}
-
-    #view-text-title[contenteditable=true]:focus{
-        border: 3px inset red;
-    }
-
-#view-text-content-wrapper{
-    text-align: center;
-    padding: 5%;
-}
-
-    #view-text-content{
-        width: 99%;
-        height: 99%;
-        resize: none;
-        font-size: 1.25rem;
-        padding: 0.5rem;
-    }
-
-    .view-text-button-wrapper{
-        display: inline;
-    }

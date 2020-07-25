@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateCategoryRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CategoryRequest;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
@@ -83,7 +83,7 @@ public class CategoryControllerImplTestIt_createCategory {
     @Test
     public void blankTitle() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(CreateCategoryRequest.builder().title(" ").build())
+            .body(CategoryRequest.builder().title(" ").build())
             .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -97,7 +97,7 @@ public class CategoryControllerImplTestIt_createCategory {
     @Test
     public void parentNotFound() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(CreateCategoryRequest.builder().title(TITLE_1).parent(PARENT_ID).build())
+            .body(CategoryRequest.builder().title(TITLE_1).parent(PARENT_ID).build())
             .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
@@ -117,7 +117,7 @@ public class CategoryControllerImplTestIt_createCategory {
         saveListItem(listItem);
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(CreateCategoryRequest.builder().title(TITLE_1).parent(PARENT_ID).build())
+            .body(CategoryRequest.builder().title(TITLE_1).parent(PARENT_ID).build())
             .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value());
@@ -137,7 +137,7 @@ public class CategoryControllerImplTestIt_createCategory {
         saveListItem(listItem);
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(CreateCategoryRequest.builder().title(TITLE_1).parent(PARENT_ID).build())
+            .body(CategoryRequest.builder().title(TITLE_1).parent(PARENT_ID).build())
             .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
@@ -153,7 +153,7 @@ public class CategoryControllerImplTestIt_createCategory {
     @Test
     public void successfullyCreated_noParent() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(CreateCategoryRequest.builder().title(TITLE_1).parent(null).build())
+            .body(CategoryRequest.builder().title(TITLE_1).parent(null).build())
             .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());

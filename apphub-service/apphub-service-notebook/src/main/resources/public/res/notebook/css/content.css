@@ -1,0 +1,98 @@
+#content-container{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: calc(100% - var(--category-list-width));
+}
+
+    #search-container{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        min-height: var(--search-container-min-height);
+
+        border-bottom: 3px ridge white;
+    }
+
+        #search-container-title{
+            text-align: center;
+        }
+
+        #search-container-close-button{
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+    #detailed-page-container{
+        position: absolute;
+        top: var(--search-container-min-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+        .detailed-container{
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255,255,255,0.15);
+        }
+
+            .detailed-container-title{
+                text-align: center;
+                padding: 0.5rem;
+                border-bottom: 2px ridge white;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: var(--detailed-container-title-height);
+            }
+
+            .detailed-container-content{
+                position: absolute;
+                top: var(--detailed-container-title-height);
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+
+                #category-content-parent-selection-parent-button{
+                    text-align: center;
+                }
+
+                .list-item-details-item{
+                    font-size: 1.25rem;
+                    margin: 0.5rem;
+                    text-align: left;
+                    position: relative;
+                }
+
+                    .list-item-options-container{
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                    }
+
+                        .list-item-option-button{
+                            margin: 0.125rem;
+                            padding: 0.125rem;
+                            border-width: 1px;
+                        }
+
+                        .list-item-options-button-list-wrapper{
+                            display: none;
+                        }
+
+                    .list-item-options-container:hover .list-item-options-button-list-wrapper{
+                        display: block;
+                    }
+
+                    .list-item-options-container:hover .list-item-options-button{
+                        display: none;
+                    }

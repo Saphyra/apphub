@@ -38,7 +38,7 @@ public class CreateTextRequestValidatorTest {
 
         underTest.validate(request);
 
-        verify(contentValidator).validate(CONTENT);
+        verify(contentValidator).validate(CONTENT, "content");
         listItemRequestValidator.validate(TITLE, PARENT);
     }
 }

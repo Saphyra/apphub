@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.service.text.creation;
+package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-class TextFactory {
+public class ContentFactory {
     private final IdGenerator idGenerator;
 
-    Content create(ListItem listItem, String content){
+    public Content create(ListItem listItem, String content){
         return  Content.builder()
             .contentId(idGenerator.randomUUID())
             .userId(listItem.getUserId())

@@ -9,9 +9,9 @@ import static java.util.Objects.isNull;
 
 @Component
 public class ContentValidator {
-    public void validate(String content) {
+    public void validate(String content, String fieldName) {
         if (isNull(content)) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "content", "must not be null"), "Content must not be null");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), fieldName, "must not be null"), fieldName + " must not be null");
         }
     }
 }

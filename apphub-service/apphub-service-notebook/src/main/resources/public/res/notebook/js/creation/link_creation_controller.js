@@ -1,25 +1,21 @@
-(function TextCreationController(){
+(function LinkCreationController(){
     let currentCategoryId = null;
 
     eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.OPEN_CREATE_TEXT_DIALOG},
-        init
+        function(eventType){return eventType == events.OPEN_CREATE_LINK_DIALOG},
+        function(){
+            document.getElementById("new-link-title").value = "";
+            document.getElementById("new-link-url").value = "";
+            loadChildrenOfCategory(null);
+        }
     ));
 
-    window.textCreationController = new function(){
-        this.save = save;
-    }
-
-    function init(){
-        document.getElementById("create-text-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
-        document.getElementById("new-text-title").value = "";
-        document.getElementById("new-text-content").value = "";
-        loadChildrenOfCategory(null);
+    window.linkCreationController = new function(){
+        this.saveLink = saveLink;
     }
 
     function loadChildrenOfCategory(categoryId){
         currentCategoryId = categoryId;
-
         const request = new Request(Mapping.getEndpoint("GET_CHILDREN_OF_NOTEBOOK_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY"}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body)
@@ -31,7 +27,7 @@
     }
 
     function displayChildrenOfCategory(categoryId, parent, categories){
-        const parentButton = document.getElementById("create-text-parent-selection-parent-button");
+        const parentButton = document.getElementById("create-link-parent-selection-parent-button");
             if(categoryId == null){
                 parentButton.classList.add("disabled");
                 parentButton.onclick = null;
@@ -42,7 +38,7 @@
                 }
             }
 
-        const container = document.getElementById("create-text-parent-selection-category-list");
+        const container = document.getElementById("create-link-parent-selection-category-list");
             container.innerHTML = "";
 
             if(!categories.length){
@@ -73,18 +69,21 @@
         }
     }
 
-    function save(){
-        const title = document.getElementById("new-text-title").value;
-        const content = document.getElementById("new-text-content").value;
-
+    function saveLink(){
+        const title = document.getElementById("new-link-title").value;
+        const url = document.getElementById("new-link-url").value;
         if(!title.length){
             notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
             return;
         }
+        if(!url.length){
+            notificationService.showError(Localization.getAdditionalContent("link-url-empty"));
+            return;
+        }
 
-        const request = new Request(Mapping.getEndpoint("CREATE_NOTEBOOK_TEXT"), {parent: currentCategoryId, title: title, content: content});
+        const request = new Request(Mapping.getEndpoint("CREATE_NOTEBOOK_LINK"), {parent: currentCategoryId, title: title, url: url});
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("text-saved"));
+                notificationService.showSuccess(Localization.getAdditionalContent("link-created"));
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
                 pageController.openMainPage();
             }

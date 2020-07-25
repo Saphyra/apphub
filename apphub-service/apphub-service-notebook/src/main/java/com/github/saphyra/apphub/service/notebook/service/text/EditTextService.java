@@ -25,7 +25,7 @@ public class EditTextService {
     @Transactional
     public void editText(UUID textId, EditTextRequest request) {
         titleValidator.validate(request.getTitle());
-        contentValidator.validate(request.getContent());
+        contentValidator.validate(request.getContent(), "content");
 
         ListItem listItem = listItemDao.findByIdValidated(textId);
         Content content = contentDao.findByParentValidated(textId);

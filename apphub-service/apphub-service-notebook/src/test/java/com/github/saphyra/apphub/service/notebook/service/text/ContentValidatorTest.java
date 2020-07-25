@@ -17,14 +17,14 @@ public class ContentValidatorTest {
 
     @Test
     public void validate_valid() {
-        underTest.validate("content");
+        underTest.validate("content", "c");
 
         //No exception thrown
     }
 
     @Test
     public void validate_invalid() {
-        Throwable ex = catchThrowable(() -> underTest.validate(null));
+        Throwable ex = catchThrowable(() -> underTest.validate(null, "content"));
 
         assertThat(ex).isInstanceOf(BadRequestException.class);
         BadRequestException exception = (BadRequestException) ex;

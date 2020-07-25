@@ -2,10 +2,12 @@
     scriptLoader.loadScript("/res/notebook/js/category_list_controller.js");
     scriptLoader.loadScript("/res/notebook/js/creation/category_creation_controller.js");
     scriptLoader.loadScript("/res/notebook/js/creation/text_creation_controller.js");
+    scriptLoader.loadScript("/res/notebook/js/creation/link_creation_controller.js");
     scriptLoader.loadScript("/res/notebook/js/content/content_controller.js");
 
     events.OPEN_CREATE_CATEGORY_DIALOG = "OPEN_CREATE_CATEGORY_DIALOG";
     events.OPEN_CREATE_TEXT_DIALOG = "OPEN_CREATE_TEXT_DIALOG";
+    events.OPEN_CREATE_LINK_DIALOG = "OPEN_CREATE_LINK_DIALOG";
     events.CATEGORY_DELETED = "CATEGORY_DELETED";
     events.ITEM_DELETED = "ITEM_DELETED";
     events.SAVE_CATEGORY = "save-category";
@@ -23,8 +25,11 @@
         }
 
         this.openCreateTextDialog = function(){
-            textCreationController.init();
             switchTab("main-page", "create-text");
+        }
+
+        this.openCreateLinkDialog = function(){
+            switchTab("main-page", "create-link");
         }
 
         this.openMainPage = function(){
@@ -47,5 +52,10 @@
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.OPEN_CREATE_TEXT_DIALOG},
         pageController.openCreateTextDialog
+    ));
+
+    eventProcessor.registerProcessor(new EventProcessor(
+        function(eventType){return eventType == events.OPEN_CREATE_LINK_DIALOG},
+        pageController.openCreateLinkDialog
     ));
 })();

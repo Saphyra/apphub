@@ -1,13 +1,16 @@
 (function ContentController(){
     scriptLoader.loadScript("/res/common/js/confirmation_service.js");
     scriptLoader.loadScript("/res/notebook/js/content/category/category_content_controller.js");
-    scriptLoader.loadScript("/res/notebook/js/content/category/category_node_factory.js");
-    scriptLoader.loadScript("/res/notebook/js/content/text/text_content_controller.js");
+    scriptLoader.loadScript("/res/notebook/js/content/category/category_node_factory.js")
+
+    scriptLoader.loadScript("/res/notebook/js/content/link/link_node_factory.js");
+
     scriptLoader.loadScript("/res/notebook/js/content/text/text_node_factory.js");
 
     const nodeFactories = {
         CATEGORY: categoryNodeFactory,
-        TEXT: textNodeFactory
+        TEXT: textNodeFactory,
+        LINK: linkNodeFactory
     }
 
     window.contentController = new function(){

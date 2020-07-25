@@ -43,6 +43,7 @@ public class Endpoints {
     public static final String DELETE_NOTEBOOK_LIST_ITEM = "/api/notebook/item/{listItemId}";
     public static final String GET_NOTEBOOK_TEXT = "/api/notebook/text/{textId}";
     public static final String EDIT_NOTEBOOK_TEXT = "/api/notebook/text/{textId}";
+    public static final String CREATE_NOTEBOOK_LINK = "/api/notebook/link";
 
     public static final String INDEX_PAGE = "/web";
     public static final String ACCOUNT_PAGE = "/web/user/account";

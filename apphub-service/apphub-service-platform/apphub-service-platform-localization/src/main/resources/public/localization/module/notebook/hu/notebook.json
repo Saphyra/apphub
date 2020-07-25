@@ -43,6 +43,12 @@
         "message": "Szöveg"
       }
     ],
+    "new-link-button": [
+      {
+        "key": "innerHTML",
+        "message": "Hivatkozás"
+      }
+    ],
     "create-category-title": [
       {
         "key": "innerHTML",
@@ -103,6 +109,36 @@
         "message": "Mentés"
       }
     ],
+    "create-link-title": [
+      {
+        "key": "innerHTML",
+        "message": "Új hivatkozás"
+      }
+    ],
+    "new-link-title": [
+      {
+        "key": "placeholder",
+        "message": "Új hivatkozás címe"
+      }
+    ],
+    "new-link-url": [
+      {
+        "key": "placeholder",
+        "message": "URL"
+      }
+    ],
+    "create-link-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Fel"
+      }
+    ],
+    "create-link-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
+    ],
     "view-text-edit-button": [
       {
         "key": "innerHTML",
@@ -134,6 +170,8 @@
     "category-empty": "A kategória üres.",
     "delete-button": "Törlés",
     "item-deleted": "Elem törölve.",
+    "link-created": "Hivatkozás elmentve.",
+    "link-url-empty": "URL nem lehet üres.",
     "list-item-options-button": "Opciók",
     "new-item-title-empty": "A cím nem lehet üres.",
     "root-title": "Gyökér",

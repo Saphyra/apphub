@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +41,7 @@ public class TextCreationServiceTest {
     private ContentDao contentDao;
 
     @Mock
-    private TextFactory textFactory;
+    private ContentFactory contentFactory;
 
     @InjectMocks
     private TextCreationService underTest;
@@ -60,7 +61,7 @@ public class TextCreationServiceTest {
             .build();
 
         given(listItemFactory.create(USER_ID, TITLE, PARENT, ListItemType.TEXT)).willReturn(listItem);
-        given(textFactory.create(listItem, CONTENT)).willReturn(content);
+        given(contentFactory.create(listItem, CONTENT)).willReturn(content);
         given(listItem.getListItemId()).willReturn(LIST_ITEM_ID);
 
         UUID result = underTest.create(request, USER_ID);

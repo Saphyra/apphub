@@ -17,4 +17,6 @@ public class NotebookView {
 
     @NonNull
     private final String type;
+
+    private final String value;
 }

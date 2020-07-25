@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.backend.model.notebook;
+package com.github.saphyra.apphub.api.notebook.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,13 +7,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NotebookView {
-    private UUID id;
+@Data
+@Builder
+public class CategoryRequest {
+    private UUID parent;
     private String title;
-    private String type;
-    private String value;
 }

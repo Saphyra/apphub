@@ -1,0 +1,15 @@
+:root{
+    --create-link-input-wrapper-height: 6rem;
+}
+
+#create-link .new-item-title{
+    margin: 0.25rem;
+}
+
+#create-link .create-item-input-wrapper{
+    height: var(--create-link-input-wrapper-height);
+}
+
+#create-link-parent-selection-wrapper{
+    top: var(--create-link-input-wrapper-height);
+}

@@ -11,7 +11,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Builder
-public class CreateCategoryRequest {
+public class LinkRequest {
     private UUID parent;
     private String title;
+    private String url;
 }

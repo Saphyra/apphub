@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.category.creation;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateCategoryRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CategoryRequest;
 import com.github.saphyra.apphub.service.notebook.service.ListItemRequestValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +13,7 @@ import java.util.UUID;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CreateCategoryRequestValidatorTest {
+public class CategoryRequestValidatorTest {
     private static final String TITLE = "title";
     private static final UUID PARENT = UUID.randomUUID();
 
@@ -25,7 +25,7 @@ public class CreateCategoryRequestValidatorTest {
 
     @Test
     public void validate() {
-        CreateCategoryRequest request = CreateCategoryRequest.builder()
+        CategoryRequest request = CategoryRequest.builder()
             .title(TITLE)
             .parent(PARENT)
             .build();

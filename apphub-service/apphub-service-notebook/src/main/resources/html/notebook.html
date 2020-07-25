@@ -5,6 +5,12 @@
     <LINK rel="stylesheet" href="/res/common/css/reset.css">
     <LINK rel="stylesheet" href="/res/common/css/common.css">
     <LINK rel="stylesheet" href="/res/notebook/css/notebook.css">
+    <LINK rel="stylesheet" href="/res/notebook/css/category_tree_view.css">
+    <LINK rel="stylesheet" href="/res/notebook/css/content.css">
+    <LINK rel="stylesheet" href="/res/notebook/css/create_category_dialog.css">
+    <LINK rel="stylesheet" href="/res/notebook/css/create_text_dialog.css">
+    <LINK rel="stylesheet" href="/res/notebook/css/create_link_dialog.css">
+    <LINK rel="stylesheet" href="/res/notebook/css/view_text_dialog.css">
 
     <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
     <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
@@ -52,6 +58,7 @@
             <DIV id="new-buttons">
                 <DIV id="new-text-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_TEXT_DIALOG))"></DIV>
                 <DIV id="new-category-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_CATEGORY_DIALOG))"></DIV>
+                <DIV id="new-link-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_LINK_DIALOG))"></DIV>
             </DIV>
 
             <DIV id="new-button" class="button"></DIV>
@@ -70,7 +77,7 @@
             <INPUT type="text" id="new-category-title" class="new-item-title">
         </DIV>
 
-        <DIV id="create-category-parent-selection-wrapper">
+        <DIV id="create-category-parent-selection-wrapper" class="parent-selection-wrapper">
             <DIV id="create-category-parent-selection-parent-button" class="button create-item-category"></DIV>
             <DIV id="create-category-parent-selection-category-list"></DIV>
         </DIV>
@@ -109,6 +116,29 @@
 
     <FOOTER>
         <DIV id="create-text-button" class="button dialog-button" onclick="textCreationController.save()"></DIV>
+    </FOOTER>
+</DIV>
+
+<DIV id="create-link" class="main-page">
+    <HEADER>
+        <H1 id="create-link-title"></H1>
+        <BUTTON id="create-link-close-button" class="dialog-close-button" onclick="pageController.openMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN>
+        <DIV class="create-item-input-wrapper">
+            <INPUT type="text" id="new-link-title" class="new-item-title">
+            <INPUT type="text" id="new-link-url" class="new-item-title">
+        </DIV>
+
+        <DIV id="create-link-parent-selection-wrapper" class="parent-selection-wrapper">
+            <DIV id="create-link-parent-selection-parent-button" class="button create-item-category"></DIV>
+            <DIV id="create-link-parent-selection-category-list"></DIV>
+        </DIV>
+    </MAIN>
+
+    <FOOTER>
+        <DIV id="create-link-button" class="button dialog-button" onclick="linkCreationController.saveLink()"></DIV>
     </FOOTER>
 </DIV>
 

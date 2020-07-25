@@ -43,6 +43,12 @@
         "message": "Text"
       }
     ],
+    "new-link-button": [
+      {
+        "key": "innerHTML",
+        "message": "Link"
+      }
+    ],
     "create-category-title": [
       {
         "key": "innerHTML",
@@ -103,6 +109,36 @@
         "message": "Save"
       }
     ],
+    "create-link-title": [
+      {
+        "key": "innerHTML",
+        "message": "New Link"
+      }
+    ],
+    "new-link-title": [
+      {
+        "key": "placeholder",
+        "message": "Title of the new Link"
+      }
+    ],
+    "new-link-url": [
+      {
+        "key": "placeholder",
+        "message": "URL"
+      }
+    ],
+    "create-link-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Up"
+      }
+    ],
+    "create-link-button": [
+      {
+        "key": "innerHTML",
+        "message": "Save"
+      }
+    ],
     "view-text-edit-button": [
       {
         "key": "innerHTML",
@@ -134,6 +170,8 @@
     "category-empty": "Category is empty.",
     "delete-button": "Delete",
     "item-deleted": "Item is deleted.",
+    "link-created": "Link saved.",
+    "link-url-empty": "URL must not be empty.",
     "list-item-options-button": "Options",
     "new-item-title-empty": "Title must not be empty.",
     "root-title": "Root",

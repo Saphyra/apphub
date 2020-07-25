@@ -23,17 +23,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryChildrenQueryService {
     private final ListItemDao listItemDao;
+    private final NotebookViewFactory notebookViewFactory;
 
     public ChildrenOfCategoryResponse getChildrenOfCategory(UUID userId, UUID categoryId, String type) {
         List<ListItemType> query = parseTypes(type);
         List<NotebookView> children = listItemDao.getByUserIdAndParent(userId, categoryId)
             .stream()
             .filter(listItem -> query.contains(listItem.getType()))
-            .map(listItem -> NotebookView.builder()
-                .id(listItem.getListItemId())
-                .title(listItem.getTitle())
-                .type(listItem.getType().name())
-                .build())
+            .map(notebookViewFactory::create)
             .collect(Collectors.toList());
 
         Optional<ListItem> category = Optional.ofNullable(categoryId)

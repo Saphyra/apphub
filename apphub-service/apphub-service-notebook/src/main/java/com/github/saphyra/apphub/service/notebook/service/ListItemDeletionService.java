@@ -30,6 +30,7 @@ public class ListItemDeletionService {
                 deleteChildren(listItem, userId);
                 break;
             case TEXT:
+            case LINK:
                 contentDao.deleteByParent(listItem.getListItemId());
                 break;
             default:

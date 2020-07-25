@@ -1,0 +1,44 @@
+#create-text-parent-selection-wrapper{
+    background: var(--background-color);
+    position: absolute;
+    top: var(--create-item-input-height);
+    left: 10%;
+    right: 10%;
+    z-index: 1;
+}
+
+    #create-text-parent-selection-wrapper:hover{
+        border: 3px ridge white;
+        border-top: none;
+    }
+
+    #create-text-selected-category-wrapper{
+        text-align: center;
+        font-size: 1.5rem;
+        padding: 0.25rem;
+    }
+
+    #create-text-parent-selection-list-wrapper{
+        display: none;
+    }
+
+        #create-text-parent-selection-wrapper:hover #create-text-parent-selection-list-wrapper{
+            display: block;
+        }
+
+    #new-text-content-wrapper{
+        position: absolute;
+        top: 5.5rem;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        text-align: center;
+    }
+
+        #new-text-content{
+            width: 90%;
+            height: 90%;
+            resize: none;
+            font-size: 1.25rem;
+            padding: 0.5rem;
+        }
