@@ -18,9 +18,6 @@ public class LinkControllerImpl implements LinkController {
     private final LinkCreationService linkCreationService;
 
     @Override
-    //TODO unit test
-    //TODO int test
-    //TODO API test
     public OneParamResponse<UUID> createLink(LinkRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("Creating new link for user {}", accessTokenHeader.getUserId());
         return new OneParamResponse<>(linkCreationService.create(request, accessTokenHeader.getUserId()));

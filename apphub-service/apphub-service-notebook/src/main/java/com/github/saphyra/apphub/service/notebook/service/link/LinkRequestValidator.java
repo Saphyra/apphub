@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class LinkRequestValidator {
     private final ContentValidator contentValidator;
     private final ListItemRequestValidator listItemRequestValidator;

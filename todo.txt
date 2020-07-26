@@ -10,6 +10,12 @@ Index page
 
 Favorite modules can be accessed from anywhere
 
+Jira
+    Implement
+
+Training
+    Migrate
+
 Notebook
     Edit category
     Edit text item

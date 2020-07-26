@@ -10,7 +10,8 @@ public enum ListItemType {
     TABLE("table"),
     TEXT("text"),
     CHECKLIST("checklist"),
-    CHECKLIST_TABLE("checklist-table");
+    CHECKLIST_TABLE("checklist-table"),
+    LINK("link");
 
     private final String cssClass;
 }

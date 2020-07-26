@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateTextRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.LinkRequest;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
@@ -9,10 +9,10 @@ import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.test.common.TestConstants;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
@@ -44,8 +44,7 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
-public class TextControllerImplTestIt_createContent {
-    private static final String CONTENT = "content";
+public class LinkControllerImplTestIt_createLink {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final AccessTokenHeader ACCESS_TOKEN_HEADER = AccessTokenHeader.builder()
         .accessTokenId(UUID.randomUUID())
@@ -54,6 +53,7 @@ public class TextControllerImplTestIt_createContent {
         .build();
     private static final String LOCALIZED_MESSAGE = "localized-message";
     private static final String TITLE = "title";
+    private static final String URL = "url";
     private static final UUID PARENT = UUID.randomUUID();
 
     @LocalServerPort
@@ -63,16 +63,16 @@ public class TextControllerImplTestIt_createContent {
     private LocalizationApiClient localizationApiClient;
 
     @Autowired
-    private AccessTokenProvider accessTokenProvider;
-
-    @Autowired
-    private AccessTokenHeaderConverter accessTokenHeaderConverter;
-
-    @Autowired
     private ListItemDao listItemDao;
 
     @Autowired
     private ContentDao contentDao;
+
+    @Autowired
+    private AccessTokenProvider accessTokenProvider;
+
+    @Autowired
+    private AccessTokenHeaderConverter accessTokenHeaderConverter;
 
     @Before
     public void setUp() {
@@ -87,15 +87,15 @@ public class TextControllerImplTestIt_createContent {
 
     @Test
     public void blankTitle() {
-        CreateTextRequest request = CreateTextRequest.builder()
+        LinkRequest linkRequest = LinkRequest.builder()
             .title(" ")
-            .content(CONTENT)
+            .url(URL)
             .parent(null)
             .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TEXT));
+            .body(linkRequest)
+            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_LINK));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -106,15 +106,15 @@ public class TextControllerImplTestIt_createContent {
 
     @Test
     public void parentNotFound() {
-        CreateTextRequest request = CreateTextRequest.builder()
+        LinkRequest linkRequest = LinkRequest.builder()
             .title(TITLE)
-            .content(CONTENT)
+            .url(URL)
             .parent(UUID.randomUUID())
             .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TEXT));
+            .body(linkRequest)
+            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_LINK));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -132,15 +132,15 @@ public class TextControllerImplTestIt_createContent {
             .build();
         saveListItem(listItem);
 
-        CreateTextRequest request = CreateTextRequest.builder()
+        LinkRequest linkRequest = LinkRequest.builder()
             .title(TITLE)
-            .content(CONTENT)
+            .url(URL)
             .parent(PARENT)
             .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TEXT));
+            .body(linkRequest)
+            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_LINK));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -150,24 +150,24 @@ public class TextControllerImplTestIt_createContent {
 
     @Test
     public void nullContent() {
-        CreateTextRequest request = CreateTextRequest.builder()
+        LinkRequest linkRequest = LinkRequest.builder()
             .title(TITLE)
-            .content(null)
+            .url(null)
             .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TEXT));
+            .body(linkRequest)
+            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_LINK));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getParams().get("content")).isEqualTo("must not be null");
+        assertThat(errorResponse.getParams().get("url")).isEqualTo("must not be null");
     }
 
     @Test
-    public void createText() {
+    public void createLink() {
         ListItem listItem = ListItem.builder()
             .userId(USER_ID)
             .listItemId(PARENT)
@@ -176,15 +176,15 @@ public class TextControllerImplTestIt_createContent {
             .build();
         saveListItem(listItem);
 
-        CreateTextRequest request = CreateTextRequest.builder()
+        LinkRequest linkRequest = LinkRequest.builder()
             .title(TITLE)
-            .content(CONTENT)
+            .url(URL)
             .parent(PARENT)
             .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TEXT));
+            .body(linkRequest)
+            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_LINK));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -192,12 +192,12 @@ public class TextControllerImplTestIt_createContent {
 
         ListItem textItem = query(() -> listItemDao.findById(textId))
             .orElseThrow(() -> new RuntimeException("List item not created for new text item"));
-        assertThat(textItem.getType()).isEqualTo(ListItemType.TEXT);
+        assertThat(textItem.getType()).isEqualTo(ListItemType.LINK);
         assertThat(textItem.getTitle()).isEqualTo(TITLE);
         assertThat(textItem.getParent()).isEqualTo(PARENT);
 
         Content content = query(() -> contentDao.findByParentValidated(textId));
-        assertThat(content.getContent()).isEqualTo(CONTENT);
+        assertThat(content.getContent()).isEqualTo(URL);
     }
 
     private void saveListItem(ListItem listItem) {

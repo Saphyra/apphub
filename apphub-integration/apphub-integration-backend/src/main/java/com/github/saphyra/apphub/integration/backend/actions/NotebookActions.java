@@ -93,4 +93,17 @@ public class NotebookActions {
             .body(editTextRequest)
             .post(UrlFactory.create(Endpoints.EDIT_NOTEBOOK_TEXT, "textId", textId));
     }
+
+    public static UUID createLink(Language language, UUID accessTokenId, LinkRequest request) {
+        Response response = getCreateLinkResponse(language, accessTokenId, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        return response.getBody().jsonPath().getUUID("value");
+    }
+
+    public static Response getCreateLinkResponse(Language language, UUID accessTokenId, LinkRequest request) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(request)
+            .put(UrlFactory.create(Endpoints.CREATE_NOTEBOOK_LINK));
+    }
 }

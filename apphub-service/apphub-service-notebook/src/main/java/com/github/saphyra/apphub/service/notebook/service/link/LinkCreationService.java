@@ -17,7 +17,6 @@ import java.util.UUID;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 public class LinkCreationService {
     private final ContentDao contentDao;
     private final ContentFactory contentFactory;
