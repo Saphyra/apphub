@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.service.notebook;
 
+import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.model.notebook.ListItemDetailsItem;
 import org.openqa.selenium.WebDriver;
 
@@ -19,10 +20,10 @@ public class DetailedListActions {
     }
 
     public static ListItemDetailsItem findDetailedItem(WebDriver driver, String title) {
-        return getDetailedListItems(driver)
-                .stream()
-                .filter(listItemDetailsItem -> listItemDetailsItem.getTitle().equals(title))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("listItem not found with title " + title));
+        return AwaitilityWrapper.getListWithWait(() -> getDetailedListItems(driver), listItemDetailsItems -> !listItemDetailsItems.isEmpty())
+            .stream()
+            .filter(listItemDetailsItem -> listItemDetailsItem.getTitle().equals(title))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("listItem not found with title " + title));
     }
 }

@@ -19,7 +19,7 @@ public class CategoryActions {
 
         for (String parentTitle : parentTitles) {
             AwaitilityWrapper.getWithWait(
-                () -> NotebookPage.getAvailableParentsForNewCategory(driver).stream()
+                () -> NotebookPage.availableParentsForNewCategory(driver).stream()
                     .filter(webElement -> webElement.getText().equals(parentTitle))
                     .findFirst()
                     .orElse(null),

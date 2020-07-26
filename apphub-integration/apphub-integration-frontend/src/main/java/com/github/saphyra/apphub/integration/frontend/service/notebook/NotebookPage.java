@@ -31,6 +31,12 @@ class NotebookPage {
     private static final By VIEW_TEXT_CONTENT = By.id("view-text-content");
     private static final By DISCARD_EDIT_TEXT_BUTTON = By.id("view-text-edit-cancel-button");
     private static final By VIEW_TEXT_CLOSE_BUTTON = By.id("view-text-close-button");
+    private static final By OPEN_CREATE_LINK_WINDOW_BUTTON = By.id("new-link-button");
+    private static final By CREATE_LINK_WINDOW = By.id("create-link");
+    private static final By CREATE_LINK_TITLE_INPUT = By.id("new-link-title");
+    private static final By CREATE_LINK_URL_INPUT = By.id("new-link-url");
+    private static final By AVAILABLE_PARENTS_FOR_NEW_LINK = By.cssSelector("#create-link-parent-selection-category-list .category");
+    private static final By SAVE_NEW_LINK_BUTTON = By.id("create-link-button");
 
     public static WebElement createCategoryWindow(WebDriver driver) {
         return driver.findElement(CREATE_CATEGORY_WINDOW);
@@ -48,7 +54,7 @@ class NotebookPage {
         return driver.findElement(NEW_CATEGORY_TITLE_INPUT);
     }
 
-    public static List<WebElement> getAvailableParentsForNewCategory(WebDriver driver) {
+    public static List<WebElement> availableParentsForNewCategory(WebDriver driver) {
         return driver.findElements(AVAILABLE_PARENTS_FOR_NEW_CATEGORY);
     }
 
@@ -126,5 +132,29 @@ class NotebookPage {
 
     public static WebElement viewTextCloseButton(WebDriver driver) {
         return driver.findElement(VIEW_TEXT_CLOSE_BUTTON);
+    }
+
+    public static WebElement openCreateLinkWindowButton(WebDriver driver) {
+        return driver.findElement(OPEN_CREATE_LINK_WINDOW_BUTTON);
+    }
+
+    public static WebElement createLinkWindow(WebDriver driver) {
+        return driver.findElement(CREATE_LINK_WINDOW);
+    }
+
+    public static WebElement createLinkTitleInput(WebDriver driver) {
+        return driver.findElement(CREATE_LINK_TITLE_INPUT);
+    }
+
+    public static WebElement createLinkUrlInput(WebDriver driver) {
+        return driver.findElement(CREATE_LINK_URL_INPUT);
+    }
+
+    public static List<WebElement> availableParentsForNewLink(WebDriver driver) {
+        return driver.findElements(AVAILABLE_PARENTS_FOR_NEW_LINK);
+    }
+
+    public static WebElement saveNewLinkButton(WebDriver driver) {
+        return driver.findElement(SAVE_NEW_LINK_BUTTON);
     }
 }
