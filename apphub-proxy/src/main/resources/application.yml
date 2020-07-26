@@ -1,0 +1,17 @@
+server:
+  port: 9000
+
+FORWARDED_PORT: ${forwarded_port:9001}
+
+zuul:
+  prefix: /
+  routes:
+    proxy:
+      path: /**
+      serviceId: proxy
+      stripPrefix: false
+      sensitiveHeaders:
+
+proxy:
+  ribbon:
+    listOfServers: localhost:${FORWARDED_PORT}

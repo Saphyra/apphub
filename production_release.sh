@@ -47,3 +47,7 @@ else
 fi
 
 echo "Deployment finished."
+
+taskkill //F //IM chromedriver.exe //T
+
+start ./production_proxy.sh

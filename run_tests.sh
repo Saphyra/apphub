@@ -17,3 +17,5 @@ if [[ "$TEST_RESULT" -ne 0 ]]; then
 else
   echo "Tests passed successfully"
 fi
+
+taskkill //F //IM chromedriver.exe //T

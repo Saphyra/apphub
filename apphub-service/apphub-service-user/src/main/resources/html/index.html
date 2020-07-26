@@ -21,7 +21,7 @@
 
     <MAIN>
         <SECTION id="login-container">
-            <INPUT type="text" id="login-email" class="login-input" required autofocus>
+            <INPUT type="email" id="login-email" class="login-input" required autofocus>
             <INPUT type="password" id="login-password" class="login-input" required>
             <BUTTON id="login-button" onclick="eventProcessor.processEvent(new Event(events.LOGIN_ATTEMPT))"></BUTTON>
         </SECTION>
@@ -39,7 +39,7 @@
 
                     <LABEL>
                         <SPAN id="reg-email-span"></SPAN>:
-                        <INPUT type="text" id="reg-email" class="reg-input">
+                        <INPUT type="email" id="reg-email" class="reg-input">
                         <DIV id="invalid-email" class="invalid-input">X</DIV>
                     </LABEL>
 

@@ -42,3 +42,5 @@ else
 fi
 
 echo "Deployment finished."
+
+taskkill //F //IM chromedriver.exe //T
