@@ -1,6 +1,6 @@
 package com.github.saphyra.integration.backend.notebook;
 
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
+import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.TextResponse;

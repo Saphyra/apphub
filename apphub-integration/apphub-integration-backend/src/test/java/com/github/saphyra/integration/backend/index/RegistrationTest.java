@@ -1,6 +1,6 @@
 package com.github.saphyra.integration.backend.index;
 
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
+import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.integration.backend.actions;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.saphyra.apphub.integration.backend.model.ModulesResponse;
-import com.github.saphyra.apphub.integration.backend.model.OneParamRequest;
+import com.github.saphyra.apphub.integration.common.model.OneParamRequest;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.RequestFactory;

@@ -1,9 +1,6 @@
-package com.github.saphyra.apphub.integration.backend.actions;
+package com.github.saphyra.apphub.integration.common.framework;
 
 import com.github.saphyra.apphub.integration.common.TestBase;
-import com.github.saphyra.apphub.integration.common.framework.Endpoints;
-import com.github.saphyra.apphub.integration.common.framework.RequestFactory;
-import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.model.LoginRequest;
 import com.github.saphyra.apphub.integration.common.model.LoginResponse;
@@ -20,7 +17,7 @@ public class IndexPageActions {
         registerUser(locale, userData.toRegistrationRequest());
         return login(locale, userData.toLoginRequest());
     }
-    
+
     public static void registerUser(Language locale, RegistrationRequest registrationRequest) {
         Response response = getRegistrationResponse(locale, registrationRequest);
 
@@ -31,6 +28,10 @@ public class IndexPageActions {
         return RequestFactory.createRequest(locale)
             .body(registrationRequest)
             .post(UrlFactory.create(TestBase.SERVER_PORT, Endpoints.REGISTER));
+    }
+
+    public static UUID login(Language locale, String email, String password) {
+        return login(locale, LoginRequest.builder().email(email).password(password).build());
     }
 
     public static UUID login(Language locale, LoginRequest loginRequest) {

@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.backend.actions;
 
-import com.github.saphyra.apphub.integration.backend.model.OneParamRequest;
+import com.github.saphyra.apphub.integration.common.model.OneParamRequest;
 import com.github.saphyra.apphub.integration.backend.model.RoleRequest;
-import com.github.saphyra.apphub.integration.backend.model.UserRoleResponse;
+import com.github.saphyra.apphub.integration.common.model.UserRoleResponse;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;

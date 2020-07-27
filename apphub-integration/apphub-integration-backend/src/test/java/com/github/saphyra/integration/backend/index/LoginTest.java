@@ -1,6 +1,6 @@
 package com.github.saphyra.integration.backend.index;
 
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
+import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.ModulesPageActions;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
@@ -61,10 +61,11 @@ public class LoginTest extends TestBase {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.ERROR_CODE_BAD_CREDENTIALS));
     }
 
-    @Test(dataProvider = "localeDataProvider")
-    public void successfulLogin_rememberMe(Language locale) {
+    @Test
+    public void successfulLogin_rememberMe() {
+        Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(locale, userData.toRegistrationRequest());
+        IndexPageActions.registerUser(language, userData.toRegistrationRequest());
 
         LoginRequest loginRequest = LoginRequest.builder()
             .email(userData.getEmail())
@@ -72,14 +73,15 @@ public class LoginTest extends TestBase {
             .rememberMe(true)
             .build();
 
-        LoginResponse response = IndexPageActions.getSuccessfulLoginResponse(locale, loginRequest);
+        LoginResponse response = IndexPageActions.getSuccessfulLoginResponse(language, loginRequest);
         assertThat(response.getExpirationDays()).isEqualTo(365);
     }
 
-    @Test(dataProvider = "localeDataProvider")
-    public void successfulLogin_oneTimeLogin(Language locale) {
+    @Test
+    public void successfulLogin_oneTimeLogin() {
+        Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(locale, userData.toRegistrationRequest());
+        IndexPageActions.registerUser(language, userData.toRegistrationRequest());
 
         LoginRequest loginRequest = LoginRequest.builder()
             .email(userData.getEmail())
@@ -87,7 +89,7 @@ public class LoginTest extends TestBase {
             .rememberMe(false)
             .build();
 
-        LoginResponse response = IndexPageActions.getSuccessfulLoginResponse(locale, loginRequest);
+        LoginResponse response = IndexPageActions.getSuccessfulLoginResponse(language, loginRequest);
         assertThat(response.getExpirationDays()).isNull();
     }
 

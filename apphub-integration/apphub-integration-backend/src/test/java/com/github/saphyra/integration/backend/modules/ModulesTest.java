@@ -1,6 +1,6 @@
 package com.github.saphyra.integration.backend.modules;
 
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
+import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.ModulesPageActions;
 import com.github.saphyra.apphub.integration.backend.model.ModulesResponse;
 import com.github.saphyra.apphub.integration.common.TestBase;

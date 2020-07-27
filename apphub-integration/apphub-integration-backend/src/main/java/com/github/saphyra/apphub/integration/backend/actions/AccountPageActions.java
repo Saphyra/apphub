@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.backend.model.account.ChangeEmailRe
 import com.github.saphyra.apphub.integration.backend.model.account.ChangePasswordRequest;
 import com.github.saphyra.apphub.integration.backend.model.account.ChangeUsernameRequest;
 import com.github.saphyra.apphub.integration.backend.model.LanguageResponse;
-import com.github.saphyra.apphub.integration.backend.model.OneParamRequest;
+import com.github.saphyra.apphub.integration.common.model.OneParamRequest;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.RequestFactory;

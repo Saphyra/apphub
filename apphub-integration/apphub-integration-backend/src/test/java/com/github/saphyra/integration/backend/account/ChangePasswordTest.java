@@ -1,7 +1,7 @@
 package com.github.saphyra.integration.backend.account;
 
 import com.github.saphyra.apphub.integration.backend.actions.AccountPageActions;
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
+import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.model.account.ChangePasswordRequest;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.DataConstants;
