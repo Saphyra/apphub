@@ -55,16 +55,17 @@ public class TestBase {
         IndexPageActions.registerUser(language, registrationParameters.toRegistrationRequest());
         DatabaseUtil.addRoleByEmail(registrationParameters.getEmail(), "ADMIN");
 
-        deleteUsersWithPassword(language, registrationParameters, VALID_PASSWORD);
-        deleteUsersWithPassword(language, registrationParameters, VALID_PASSWORD2);
+        UUID accessTokenId = IndexPageActions.login(language, registrationParameters.getEmail(), registrationParameters.getPassword());
+        deleteUsersWithPassword(language, registrationParameters, VALID_PASSWORD, accessTokenId);
+        deleteUsersWithPassword(language, registrationParameters, VALID_PASSWORD2, accessTokenId);
 
         deleteUser(registrationParameters.getEmail(), registrationParameters.getPassword());
     }
 
-    private void deleteUsersWithPassword(Language language, RegistrationParameters registrationParameters, String password) {
-        UUID accessTokenId = IndexPageActions.login(language, registrationParameters.getEmail(), registrationParameters.getPassword());
+    private void deleteUsersWithPassword(Language language, RegistrationParameters registrationParameters, String password, UUID accessTokenId) {
         UserRoleResponse[] userResponses = getCandidates(language, accessTokenId);
         log.info("Deleting {} number of test accounts", userResponses.length);
+
         Arrays.stream(userResponses)
             .filter(userRoleResponse -> !userRoleResponse.getEmail().equals(registrationParameters.getEmail()))
             .forEach(userRoleResponse -> deleteUser(userRoleResponse.getEmail(), password));

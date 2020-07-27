@@ -102,6 +102,7 @@
         
         request.setRequestHeader("Request-Type", "rest");
         request.setRequestHeader("Cache-Control", "no-cache");
+        request.setRequestHeader("Connection", "close");
         request.setRequestHeader(HEADER_BROWSER_LANGUAGE, getBrowserLanguage());
     }
 })();
