@@ -1,31 +1,25 @@
 Platform
     Error monitoring
-    Separate liquibase schema for each service
-
-Testing
 
 Index page
     Switch language
 
 Favorite modules can be accessed from anywhere
 
-Jira
-    Implement
+Modules
+    Jira
+        Implement
 
-Training
-    Migrate
+    Training
+        Migrate
 
-Notebook
-    Edit category
-    Edit text item
-    Link item
-    Create checklist item
-    Create table item
-    Create checklist table item
-    Filtering
-    Archive
-    Delete notebook items with the user
-    Icons for list items
-    Labels
-
-Delete Roles with the user
+    Notebook
+        Edit category
+        Edit text item
+        Create checklist item
+        Create table item
+        Create checklist table item
+        Filtering
+        Archive
+        Icons for list items
+        Labels

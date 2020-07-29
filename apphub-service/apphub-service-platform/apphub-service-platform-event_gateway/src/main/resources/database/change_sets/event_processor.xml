@@ -3,11 +3,11 @@
     <changeSet id="create-table-event_processor" author="saphyra">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists schemaName="event" tableName="event_processor"/>
+                <tableExists schemaName="event_gateway" tableName="event_processor"/>
             </not>
         </preConditions>
 
-        <createTable schemaName="event" tableName="event_processor">
+        <createTable schemaName="event_gateway" tableName="event_processor">
             <column name="event_processor_id" type="varchar(37)">
                 <constraints nullable="false"/>
             </column>
@@ -17,6 +17,6 @@
             <column name="last_access" type="datetime"/>
         </createTable>
 
-        <addPrimaryKey schemaName="event" tableName="event_processor" columnNames="event_processor_id" constraintName="event_processor-pk"/>
+        <addPrimaryKey schemaName="event_gateway" tableName="event_processor" columnNames="event_processor_id" constraintName="event_processor-pk"/>
     </changeSet>
 </databaseChangeLog>

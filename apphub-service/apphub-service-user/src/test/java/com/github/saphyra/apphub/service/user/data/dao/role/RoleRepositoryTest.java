@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -67,5 +68,25 @@ public class RoleRepositoryTest {
         List<RoleEntity> result = underTest.getByUserId(USER_ID_1);
 
         assertThat(result).containsExactly(entity1);
+    }
+
+    @Test
+    @Transactional
+    public void deleteByUserId() {
+        RoleEntity entity1 = RoleEntity.builder()
+            .roleId(ROLE_ID_1)
+            .userId(USER_ID_1)
+            .role(ROLE)
+            .build();
+        RoleEntity entity2 = RoleEntity.builder()
+            .roleId(ROLE_ID_2)
+            .userId(USER_ID_2)
+            .role(ROLE)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2));
+
+        underTest.deleteByUserId(USER_ID_2);
+
+        assertThat(underTest.findAll()).containsExactly(entity1);
     }
 }

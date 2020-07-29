@@ -24,4 +24,8 @@ public class RoleDao extends AbstractDao<RoleEntity, Role, String, RoleRepositor
     public List<Role> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
+
+    public void deleteByUserId(UUID userId) {
+        repository.deleteByUserId(uuidConverter.convertDomain(userId));
+    }
 }

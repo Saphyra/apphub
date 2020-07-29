@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Data
 @NoArgsConstructor
@@ -26,6 +27,8 @@ public class SendEventRequest<T> {
     }
 
     public boolean isBlockingRequest() {
-        return Boolean.parseBoolean(metadata.getOrDefault(Constants.SEND_EVENT_REQUEST_METADATA_KEY_BLOCKING_REQUEST, "false"));
+        return Optional.ofNullable(metadata)
+            .map(met -> Boolean.parseBoolean(met.getOrDefault(Constants.SEND_EVENT_REQUEST_METADATA_KEY_BLOCKING_REQUEST, "false")))
+            .orElse(false);
     }
 }

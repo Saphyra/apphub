@@ -14,7 +14,7 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "event_processor", schema = "event")
+@Table(name = "event_processor", schema = "event_gateway")
 @Entity
 class EventProcessorEntity {
     @Id

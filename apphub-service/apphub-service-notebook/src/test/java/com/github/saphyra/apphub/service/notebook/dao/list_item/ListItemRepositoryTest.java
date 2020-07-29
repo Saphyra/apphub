@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 
@@ -80,5 +81,25 @@ public class ListItemRepositoryTest {
         List<ListItemEntity> result = underTest.getByUserIdAndParent(USER_ID_1, PARENT_1);
 
         assertThat(result).containsExactly(entity1);
+    }
+
+    @Test
+    @Transactional
+    public void deleteByUserId() {
+        ListItemEntity entity1 = ListItemEntity.builder()
+            .listItemId(LIST_ITEM_ID_1)
+            .userId(USER_ID_1)
+            .parent(PARENT_1)
+            .build();
+        ListItemEntity entity2 = ListItemEntity.builder()
+            .listItemId(LIST_ITEM_ID_2)
+            .userId(USER_ID_2)
+            .parent(PARENT_1)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2));
+
+        underTest.deleteByUserId(USER_ID_2);
+
+        assertThat(underTest.findAll()).containsExactly(entity1);
     }
 }

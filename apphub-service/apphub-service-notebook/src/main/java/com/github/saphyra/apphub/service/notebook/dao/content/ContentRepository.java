@@ -8,4 +8,6 @@ interface ContentRepository extends CrudRepository<ContentEntity, String> {
     void deleteByParent(String parent);
 
     Optional<ContentEntity> findByParent(String parent);
+
+    void deleteByUserId(String userId);
 }

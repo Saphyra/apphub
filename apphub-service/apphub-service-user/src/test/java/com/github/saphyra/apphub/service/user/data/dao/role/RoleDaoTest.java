@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RoleDaoTest {
@@ -60,5 +61,14 @@ public class RoleDaoTest {
         List<Role> result = underTest.getByUserId(USER_ID);
 
         assertThat(result).containsExactly(role);
+    }
+
+    @Test
+    public void deleteByUserId() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+
+        underTest.deleteByUserId(USER_ID);
+
+        verify(roleRepository).deleteByUserId(USER_ID_STRING);
     }
 }

@@ -20,6 +20,8 @@ import static org.mockito.Mockito.verify;
 public class ContentDaoTest {
     private static final UUID PARENT = UUID.randomUUID();
     private static final String PARENT_STRING = "parent";
+    private static final UUID USER_ID = UUID.randomUUID();
+    private static final String USER_ID_STRING = "user-id";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -69,5 +71,14 @@ public class ContentDaoTest {
         Content result = underTest.findByParentValidated(PARENT);
 
         assertThat(result).isEqualTo(content);
+    }
+
+    @Test
+    public void deleteByUserId() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+
+        underTest.deleteByUserId(USER_ID);
+
+        verify(contentRepository).deleteByUserId(USER_ID_STRING);
     }
 }

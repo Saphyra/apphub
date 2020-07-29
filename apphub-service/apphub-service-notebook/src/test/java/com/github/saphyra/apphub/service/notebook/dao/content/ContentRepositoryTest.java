@@ -22,6 +22,8 @@ public class ContentRepositoryTest {
     private static final String TEXT_ID_2 = "text-id-2";
     private static final String PARENT_1 = "parent-1";
     private static final String PARENT_2 = "parent-2";
+    private static final String USER_ID_1 = "user-id-1";
+    private static final String USER_ID_2 = "user-id-2";
 
     @Autowired
     private ContentRepository underTest;
@@ -66,5 +68,24 @@ public class ContentRepositoryTest {
         Optional<ContentEntity> result = underTest.findByParent(PARENT_2);
 
         assertThat(result).contains(entity2);
+    }
+
+    @Test
+    @Transactional
+    public void deleteByUserId() {
+        ContentEntity entity1 = ContentEntity.builder()
+            .contentId(TEXT_ID_1)
+            .userId(USER_ID_1)
+            .build();
+        underTest.save(entity1);
+        ContentEntity entity2 = ContentEntity.builder()
+            .contentId(TEXT_ID_2)
+            .userId(USER_ID_2)
+            .build();
+        underTest.save(entity2);
+
+        underTest.deleteByUserId(USER_ID_2);
+
+        assertThat(underTest.findAll()).containsExactly(entity1);
     }
 }

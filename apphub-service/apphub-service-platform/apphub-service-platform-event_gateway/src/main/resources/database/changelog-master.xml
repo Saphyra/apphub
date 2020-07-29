@@ -2,11 +2,11 @@
 
     <changeSet id="create_schema_event" author="saphyra">
         <sql endDelimiter=";">
-            CREATE SCHEMA IF NOT EXISTS event
+            CREATE SCHEMA IF NOT EXISTS event_gateway
         </sql>
 
         <rollback>
-            DROP SCHEMA IF EXIST event CASCADE
+            DROP SCHEMA IF EXIST event_gateway CASCADE
         </rollback>
     </changeSet>
 

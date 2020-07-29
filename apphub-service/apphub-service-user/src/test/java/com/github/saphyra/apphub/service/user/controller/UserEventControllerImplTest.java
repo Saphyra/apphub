@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.user.controller;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
-import com.github.saphyra.apphub.service.user.controller.UserEventControllerImpl;
+import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +23,9 @@ public class UserEventControllerImplTest {
     private AccessTokenDao accessTokenDao;
 
     @Mock
+    private RoleDao roleDao;
+
+    @Mock
     private UserDao userDao;
 
     @InjectMocks
@@ -39,5 +42,6 @@ public class UserEventControllerImplTest {
 
         verify(accessTokenDao).deleteByUserId(USER_ID);
         verify(userDao).deleteById(USER_ID);
+        verify(roleDao).deleteByUserId(USER_ID);
     }
 }

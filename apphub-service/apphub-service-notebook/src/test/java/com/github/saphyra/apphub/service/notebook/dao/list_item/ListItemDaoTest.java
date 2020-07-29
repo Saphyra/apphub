@@ -17,6 +17,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ListItemDaoTest {
@@ -89,5 +90,14 @@ public class ListItemDaoTest {
         List<ListItem> result = underTest.getByUserIdAndParent(USER_ID, PARENT);
 
         assertThat(result).containsExactly(domain);
+    }
+
+    @Test
+    public void deleteByUserId() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+
+        underTest.deleteByUserId(USER_ID);
+
+        verify(repository).deleteByUserId(USER_ID_STRING);
     }
 }

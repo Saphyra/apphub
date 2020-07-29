@@ -9,4 +9,6 @@ interface RoleRepository extends CrudRepository<RoleEntity, String> {
     Optional<RoleEntity> findByUserIdAndRole(String userId, String role);
 
     List<RoleEntity> getByUserId(String userId);
+
+    void deleteByUserId(String userId);
 }

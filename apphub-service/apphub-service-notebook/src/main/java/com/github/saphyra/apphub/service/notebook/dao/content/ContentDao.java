@@ -26,4 +26,8 @@ public class ContentDao extends AbstractDao<ContentEntity, Content, String, Cont
         return converter.convertEntity(repository.findByParent(uuidConverter.convertDomain(parent)))
             .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.LIST_ITEM_NOT_FOUND.name()), "Text not found by parent " + parent));
     }
+
+    public void deleteByUserId(UUID userId) {
+        repository.deleteByUserId(uuidConverter.convertDomain(userId));
+    }
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 
@@ -122,6 +123,7 @@ public class AccessTokenRepositoryTest {
     }
 
     @Test
+    @Transactional
     public void deleteByUserId() {
         AccessTokenEntity entity1 = AccessTokenEntity.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)

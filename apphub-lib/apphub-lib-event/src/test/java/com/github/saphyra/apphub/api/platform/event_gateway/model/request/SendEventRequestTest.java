@@ -26,6 +26,17 @@ public class SendEventRequestTest {
     }
 
     @Test
+    public void isBlockingRequest_metadataNull() {
+        underTest = SendEventRequest.builder()
+            .metadata(null)
+            .build();
+
+        Boolean result = underTest.isBlockingRequest();
+
+        assertThat(result).isFalse();
+    }
+
+    @Test
     public void isBlockingRequest_flagNull() {
         HashMap<String, String> metadata = new HashMap<>();
         metadata.put(Constants.SEND_EVENT_REQUEST_METADATA_KEY_BLOCKING_REQUEST, null);
