@@ -5,6 +5,8 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
+import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
+import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
@@ -52,6 +54,9 @@ public class NotebookEventControllerImplTestIt {
     private ContentDao contentDao;
 
     @Autowired
+    private ChecklistItemDao checklistItemDao;
+
+    @Autowired
     private AccessTokenProvider accessTokenProvider;
 
     @After
@@ -78,6 +83,15 @@ public class NotebookEventControllerImplTestIt {
             .build();
         save(() -> contentDao.save(content));
 
+        ChecklistItem checklistItem = ChecklistItem.builder()
+            .checklistItemId(UUID.randomUUID())
+            .parent(UUID.randomUUID())
+            .userId(USER_ID)
+            .order(1)
+            .checked(true)
+            .build();
+        save(() -> checklistItemDao.save(checklistItem));
+
         SendEventRequest<DeleteAccountEvent> eventRequest = SendEventRequest.<DeleteAccountEvent>builder().payload(new DeleteAccountEvent(USER_ID)).build();
         Response response = RequestFactory.createRequest()
             .body(eventRequest)
@@ -87,6 +101,7 @@ public class NotebookEventControllerImplTestIt {
 
         assertThat(query(() -> listItemDao.findAll())).isEmpty();
         assertThat(query(() -> contentDao.findAll())).isEmpty();
+        assertThat(query(() -> checklistItemDao.findAll())).isEmpty();
     }
 
     private void save(Runnable runnable) {

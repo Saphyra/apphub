@@ -60,25 +60,18 @@ public class ListItemRepositoryTest {
     }
 
     @Test
-    public void getByUserIdAndParent() {
+    public void getByParent() {
         ListItemEntity entity1 = ListItemEntity.builder()
             .listItemId(LIST_ITEM_ID_1)
-            .userId(USER_ID_1)
             .parent(PARENT_1)
             .build();
         ListItemEntity entity2 = ListItemEntity.builder()
-            .listItemId(LIST_ITEM_ID_2)
-            .userId(USER_ID_2)
-            .parent(PARENT_1)
-            .build();
-        ListItemEntity entity3 = ListItemEntity.builder()
             .listItemId(LIST_ITEM_ID_3)
-            .userId(USER_ID_1)
             .parent(PARENT_2)
             .build();
-        underTest.saveAll(Arrays.asList(entity1, entity2, entity3));
+        underTest.saveAll(Arrays.asList(entity1, entity2));
 
-        List<ListItemEntity> result = underTest.getByUserIdAndParent(USER_ID_1, PARENT_1);
+        List<ListItemEntity> result = underTest.getByParent(PARENT_1);
 
         assertThat(result).containsExactly(entity1);
     }

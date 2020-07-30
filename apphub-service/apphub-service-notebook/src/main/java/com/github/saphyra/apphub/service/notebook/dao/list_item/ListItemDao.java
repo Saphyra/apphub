@@ -33,11 +33,8 @@ public class ListItemDao extends AbstractDao<ListItemEntity, ListItem, String, L
             .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.LIST_ITEM_NOT_FOUND.name()), "ListItem not found with id " + listItemId));
     }
 
-    public List<ListItem> getByUserIdAndParent(UUID userId, UUID parent) {
-        return converter.convertEntity(repository.getByUserIdAndParent(
-            uuidConverter.convertDomain(userId),
-            uuidConverter.convertDomain(parent)
-        ));
+    public List<ListItem> getByParent(UUID parent) {
+        return converter.convertEntity(repository.getByParent(uuidConverter.convertDomain(parent)));
     }
 
     public void deleteByUserId(UUID userId) {

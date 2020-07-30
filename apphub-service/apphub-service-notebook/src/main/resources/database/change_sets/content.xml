@@ -33,4 +33,13 @@
 
         <renameColumn schemaName="notebook" tableName="content" oldColumnName="text_id" newColumnName="content_id"/>
     </changeSet>
+
+    <changeSet id="rename-constraint-text_pk-to-content_pk" author="Bernat Bonda">
+        <preConditions onFail="MARK_RAN">
+            <primaryKeyExists schemaName="notebook" primaryKeyName="text_pk"/>
+        </preConditions>
+
+        <dropPrimaryKey schemaName="notebook" tableName="content"/>
+        <addPrimaryKey schemaName="notebook" tableName="content" columnNames="content_id" constraintName="content_pk"/>
+    </changeSet>
 </databaseChangeLog>

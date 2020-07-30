@@ -100,7 +100,7 @@ public class TextControllerImplTestIt_editText {
 
         Response editResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TEXT, "textId", textId));
+            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TEXT, "listItemId", textId));
 
         assertThat(editResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = editResponse.getBody().as(ErrorResponse.class);
@@ -129,7 +129,7 @@ public class TextControllerImplTestIt_editText {
 
         Response editResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TEXT, "textId", textId));
+            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TEXT, "listItemId", textId));
 
         assertThat(editResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = editResponse.getBody().as(ErrorResponse.class);
@@ -158,12 +158,12 @@ public class TextControllerImplTestIt_editText {
 
         Response editResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TEXT, "textId", textId));
+            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TEXT, "listItemId", textId));
 
         assertThat(editResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
         Response queryResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.GET_NOTEBOOK_TEXT, "textId", textId));
+            .get(UrlFactory.create(serverPort, Endpoints.GET_NOTEBOOK_TEXT, "listItemId", textId));
 
         TextResponse textResponse = queryResponse.getBody().as(TextResponse.class);
         assertThat(textResponse.getTitle()).isEqualTo(NEW_TITLE);

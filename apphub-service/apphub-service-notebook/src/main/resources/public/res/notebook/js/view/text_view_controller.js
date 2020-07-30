@@ -10,7 +10,7 @@
 
     function viewText(textId){
         openedTextId = textId;
-        const request = new Request(Mapping.getEndpoint("GET_NOTEBOOK_TEXT", {textId: textId}));
+        const request = new Request(Mapping.getEndpoint("GET_NOTEBOOK_TEXT", {listItemId: textId}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body);
             }
@@ -45,7 +45,7 @@
             return;
         }
 
-        const request = new Request(Mapping.getEndpoint("EDIT_NOTEBOOK_TEXT", {textId: openedTextId}), {title: title, content: content});
+        const request = new Request(Mapping.getEndpoint("EDIT_NOTEBOOK_TEXT", {listItemId: openedTextId}), {title: title, content: content});
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("text-saved"));
                 viewText(openedTextId);

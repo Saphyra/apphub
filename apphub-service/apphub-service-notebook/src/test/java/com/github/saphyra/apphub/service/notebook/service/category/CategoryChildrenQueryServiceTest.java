@@ -44,7 +44,7 @@ public class CategoryChildrenQueryServiceTest {
 
     @Test
     public void invalidType() {
-        Throwable ex = catchThrowable(() -> underTest.getChildrenOfCategory(USER_ID, CATEGORY_ID, "a"));
+        Throwable ex = catchThrowable(() -> underTest.getChildrenOfCategory(CATEGORY_ID, "a"));
 
         assertThat(ex).isInstanceOf(BadRequestException.class);
 
@@ -61,10 +61,10 @@ public class CategoryChildrenQueryServiceTest {
             .type(ListItemType.CATEGORY)
             .title(TITLE_1)
             .build();
-        given(listItemDao.getByUserIdAndParent(USER_ID, CATEGORY_ID)).willReturn(Arrays.asList(listItem));
+        given(listItemDao.getByParent(CATEGORY_ID)).willReturn(Arrays.asList(listItem));
         given(notebookViewFactory.create(listItem)).willReturn(notebookView);
 
-        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(USER_ID, CATEGORY_ID, "");
+        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(CATEGORY_ID, "");
 
         assertThat(result.getParent()).isNull();
         assertThat(result.getTitle()).isNull();
@@ -86,10 +86,10 @@ public class CategoryChildrenQueryServiceTest {
             .type(ListItemType.CATEGORY)
             .title(TITLE_1)
             .build();
-        given(listItemDao.getByUserIdAndParent(USER_ID, null)).willReturn(Arrays.asList(listItem1, listItem2));
+        given(listItemDao.getByParent(null)).willReturn(Arrays.asList(listItem1, listItem2));
         given(notebookViewFactory.create(listItem2)).willReturn(notebookView);
 
-        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(USER_ID, null, ListItemType.CATEGORY.name());
+        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(null, ListItemType.CATEGORY.name());
 
         assertThat(result.getParent()).isNull();
         assertThat(result.getTitle()).isNull();
@@ -111,7 +111,7 @@ public class CategoryChildrenQueryServiceTest {
             .type(ListItemType.CATEGORY)
             .title(TITLE_1)
             .build();
-        given(listItemDao.getByUserIdAndParent(USER_ID, CATEGORY_ID)).willReturn(Arrays.asList(listItem1, listItem2));
+        given(listItemDao.getByParent(CATEGORY_ID)).willReturn(Arrays.asList(listItem1, listItem2));
 
         ListItem parent = ListItem.builder()
             .listItemId(CATEGORY_ID)
@@ -124,7 +124,7 @@ public class CategoryChildrenQueryServiceTest {
         given(notebookViewFactory.create(listItem2)).willReturn(notebookView);
 
 
-        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(USER_ID, CATEGORY_ID, ListItemType.CATEGORY.name());
+        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(CATEGORY_ID, ListItemType.CATEGORY.name());
 
         assertThat(result.getParent()).isEqualTo(PARENT);
         assertThat(result.getTitle()).isEqualTo(TITLE_2);

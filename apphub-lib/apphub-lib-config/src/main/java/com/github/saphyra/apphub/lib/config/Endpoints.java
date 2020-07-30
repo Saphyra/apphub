@@ -41,9 +41,12 @@ public class Endpoints {
     public static final String GET_CHILDREN_OF_NOTEBOOK_CATEGORY = "/api/notebook/category/children";
     public static final String NOTEBOOK_CATEGORY_CONTENT_VIEW = "/web/notebook/content/category";
     public static final String DELETE_NOTEBOOK_LIST_ITEM = "/api/notebook/item/{listItemId}";
-    public static final String GET_NOTEBOOK_TEXT = "/api/notebook/text/{textId}";
-    public static final String EDIT_NOTEBOOK_TEXT = "/api/notebook/text/{textId}";
+    public static final String EDIT_NOTEBOOK_LIST_ITEM = "/api/notebook/item/{listItemId}";
+    public static final String GET_NOTEBOOK_TEXT = "/api/notebook/text/{listItemId}";
+    public static final String EDIT_NOTEBOOK_TEXT = "/api/notebook/text/{listItemId}";
     public static final String CREATE_NOTEBOOK_LINK = "/api/notebook/link";
+    public static final String CREATE_NOTEBOOK_CHECKLIST_ITEM = "/api/notebook/checklist";
+    public static final String EDIT_NOTEBOOK_CHECKLIST_ITEM = "/api/notebook/checklist/{listItemId}";
 
     public static final String INDEX_PAGE = "/web";
     public static final String ACCOUNT_PAGE = "/web/user/account";

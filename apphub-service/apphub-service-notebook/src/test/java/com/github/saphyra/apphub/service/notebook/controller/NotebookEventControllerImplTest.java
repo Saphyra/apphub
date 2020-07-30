@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
+import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import org.junit.Test;
@@ -24,6 +25,9 @@ public class NotebookEventControllerImplTest {
     @Mock
     private ContentDao contentDao;
 
+    @Mock
+    private ChecklistItemDao checklistItemDao;
+
     @InjectMocks
     private NotebookEventControllerImpl underTest;
 
@@ -35,5 +39,6 @@ public class NotebookEventControllerImplTest {
 
         verify(listItemDao).deleteByUserId(USER_ID);
         verify(contentDao).deleteByUserId(USER_ID);
+        verify(checklistItemDao).deleteByUserId(USER_ID);
     }
 }

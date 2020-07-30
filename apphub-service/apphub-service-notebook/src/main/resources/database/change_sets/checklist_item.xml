@@ -1,0 +1,21 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-checklist_item" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="notebook" tableName="checklist_item"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="notebook" tableName="checklist_item">
+            <column name="checklist_item_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(37)"/>
+            <column name="parent" type="varchar(37)"/>
+            <column name="item_order" type="text"/>
+            <column name="checked" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="notebook" tableName="checklist_item" columnNames="checklist_item_id" constraintName="checklist_item_pk"/>
+    </changeSet>
+</databaseChangeLog>

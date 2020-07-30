@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CategoryRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CreateCategoryRequest;
 import com.github.saphyra.apphub.api.notebook.model.response.CategoryTreeView;
 import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
@@ -44,7 +44,7 @@ public class CategoryControllerImplTest {
     private AccessTokenHeader accessTokenHeader;
 
     @Mock
-    private CategoryRequest categoryRequest;
+    private CreateCategoryRequest createCategoryRequest;
 
     @Mock
     private CategoryTreeView categoryTreeView;
@@ -59,9 +59,9 @@ public class CategoryControllerImplTest {
 
     @Test
     public void createCategory() {
-        given(categoryCreationService.createCategory(USER_ID, categoryRequest)).willReturn(CATEGORY_ID);
+        given(categoryCreationService.createCategory(USER_ID, createCategoryRequest)).willReturn(CATEGORY_ID);
 
-        OneParamResponse<UUID> response = underTest.createCategory(categoryRequest, accessTokenHeader);
+        OneParamResponse<UUID> response = underTest.createCategory(createCategoryRequest, accessTokenHeader);
 
         assertThat(response.getValue()).isEqualTo(CATEGORY_ID);
     }
@@ -77,9 +77,9 @@ public class CategoryControllerImplTest {
 
     @Test
     public void getChildrenOfCategory() {
-        given(categoryChildrenQueryService.getChildrenOfCategory(USER_ID, CATEGORY_ID, TYPE)).willReturn(childrenOfCategoryResponse);
+        given(categoryChildrenQueryService.getChildrenOfCategory(CATEGORY_ID, TYPE)).willReturn(childrenOfCategoryResponse);
 
-        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(accessTokenHeader, CATEGORY_ID, TYPE);
+        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(CATEGORY_ID, TYPE);
 
         assertThat(result).isEqualTo(childrenOfCategoryResponse);
     }
