@@ -1,5 +1,6 @@
 if [ "$1" != "skipBuild" ]; then
   eval "$(minikube docker-env)"
+  ./clean_up_space.sh
   mvn -T 4 clean install
   BUILD_RESULT=$?
   if [[ "$BUILD_RESULT" -ne 0 ]]; then

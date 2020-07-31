@@ -49,7 +49,7 @@ public class ListItemDeletionService {
     }
 
     private void deleteChildren(ListItem category, UUID userId) {
-        listItemDao.getByParent(category.getListItemId())
+        listItemDao.getByUserIdAndParent(userId, category.getListItemId())
             .forEach(listItem -> deleteChild(listItem, userId));
     }
 }

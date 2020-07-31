@@ -20,5 +20,10 @@ public interface CategoryController {
     List<CategoryTreeView> getCategoryTree(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @RequestMapping(method = RequestMethod.GET, path = Endpoints.GET_CHILDREN_OF_NOTEBOOK_CATEGORY)
-    ChildrenOfCategoryResponse getChildrenOfCategory(@RequestParam(name = "categoryId", required = false) UUID categoryId, @RequestParam(name = "type", required = false) String type, @RequestParam(name = "exclude", required = false) UUID exclude);
+    ChildrenOfCategoryResponse getChildrenOfCategory(
+        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader,
+        @RequestParam(name = "categoryId", required = false) UUID categoryId,
+        @RequestParam(name = "type", required = false) String type,
+        @RequestParam(name = "exclude", required = false) UUID exclude
+    );
 }

@@ -40,7 +40,7 @@ public class ListItemDeletionServiceTest {
     @Test
     public void deleteCategory() {
         given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
-        given(listItemDao.getByParent(LIST_ITEM_ID_1)).willReturn(Arrays.asList(child));
+        given(listItemDao.getByUserIdAndParent(USER_ID, LIST_ITEM_ID_1)).willReturn(Arrays.asList(child));
 
         given(deleted.getType()).willReturn(ListItemType.CATEGORY);
         given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
@@ -51,8 +51,8 @@ public class ListItemDeletionServiceTest {
 
         verify(listItemDao).delete(deleted);
         verify(listItemDao).delete(child);
-        verify(listItemDao).getByParent(LIST_ITEM_ID_1);
-        verify(listItemDao).getByParent(LIST_ITEM_ID_2);
+        verify(listItemDao).getByUserIdAndParent(USER_ID, LIST_ITEM_ID_1);
+        verify(listItemDao).getByUserIdAndParent(USER_ID, LIST_ITEM_ID_2);
     }
 
     @Test

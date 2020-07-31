@@ -77,7 +77,7 @@ public class NotebookActions {
 
     public static TextResponse getText(Language language, UUID accessTokenId, UUID textId) {
         Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
-            .get(UrlFactory.create(Endpoints.GET_NOTEBOOK_TEXT, "textId", textId));
+            .get(UrlFactory.create(Endpoints.GET_NOTEBOOK_TEXT, "listItemId", textId));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().as(TextResponse.class);
@@ -91,7 +91,7 @@ public class NotebookActions {
     public static Response getEditTextResponse(Language language, UUID accessTokenId, UUID textId, EditTextRequest editTextRequest) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(editTextRequest)
-            .post(UrlFactory.create(Endpoints.EDIT_NOTEBOOK_TEXT, "textId", textId));
+            .post(UrlFactory.create(Endpoints.EDIT_NOTEBOOK_TEXT, "listItemId", textId));
     }
 
     public static UUID createLink(Language language, UUID accessTokenId, LinkRequest request) {

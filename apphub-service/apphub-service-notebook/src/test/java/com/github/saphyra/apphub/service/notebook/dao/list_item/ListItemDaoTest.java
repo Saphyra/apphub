@@ -84,10 +84,10 @@ public class ListItemDaoTest {
 
     @Test
     public void getByUserIdAndParent() {
-        given(repository.getByParent(PARENT_STRING)).willReturn(Arrays.asList(entity));
+        given(repository.getByUserIdAndParent(USER_ID_STRING, PARENT_STRING)).willReturn(Arrays.asList(entity));
         given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(domain));
 
-        List<ListItem> result = underTest.getByParent(PARENT);
+        List<ListItem> result = underTest.getByUserIdAndParent(USER_ID, PARENT);
 
         assertThat(result).containsExactly(domain);
     }

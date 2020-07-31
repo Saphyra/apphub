@@ -7,7 +7,7 @@ import java.util.List;
 interface ListItemRepository extends CrudRepository<ListItemEntity, String> {
     List<ListItemEntity> getByUserIdAndType(String userId, ListItemType type);
 
-    List<ListItemEntity> getByParent(String parent);
+    List<ListItemEntity> getByUserIdAndParent(String userId, String parent);
 
     void deleteByUserId(String userID);
 }

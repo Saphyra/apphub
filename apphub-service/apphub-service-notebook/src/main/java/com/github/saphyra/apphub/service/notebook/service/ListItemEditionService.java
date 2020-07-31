@@ -37,7 +37,7 @@ public class ListItemEditionService {
                 content.setContent(request.getValue());
                 contentDao.save(content);
             case CATEGORY:
-                validateNotOwnChild(listItemId, request.getParent());
+                validateNotOwnChild(listItemId, request.getParent(), listItem.getUserId());
             default:
                 listItem.setTitle(request.getTitle());
                 listItem.setParent(request.getParent());
@@ -45,13 +45,13 @@ public class ListItemEditionService {
         }
     }
 
-    private void validateNotOwnChild(UUID listItemId, UUID newParent) {
-        List<ListItem> children = listItemDao.getByParent(listItemId);
+    private void validateNotOwnChild(UUID listItemId, UUID newParent, UUID userId) {
+        List<ListItem> children = listItemDao.getByUserIdAndParent(userId, listItemId);
         boolean childMatchesNewParent = children.stream()
             .anyMatch(listItem -> listItem.getListItemId().equals(newParent));
         if (listItemId.equals(newParent) || childMatchesNewParent) {
             throw new UnprocessableEntityException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "parent", "must not be own child"), "Category cannot be its own child.");
         }
-        children.forEach(listItem -> validateNotOwnChild(listItem.getListItemId(), newParent));
+        children.forEach(listItem -> validateNotOwnChild(listItem.getListItemId(), newParent, userId));
     }
 }

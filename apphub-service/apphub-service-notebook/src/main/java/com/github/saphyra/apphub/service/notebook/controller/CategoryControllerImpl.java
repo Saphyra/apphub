@@ -38,8 +38,8 @@ class CategoryControllerImpl implements CategoryController {
     }
 
     @Override
-    public ChildrenOfCategoryResponse getChildrenOfCategory(UUID categoryId, String type, UUID exclude) {
-        log.info("Querying children of category {} with type {} and exclusion {}", categoryId, type, exclude);
-        return categoryChildrenQueryService.getChildrenOfCategory(categoryId, type, exclude);
+    public ChildrenOfCategoryResponse getChildrenOfCategory(AccessTokenHeader accessTokenHeader, UUID categoryId, String type, UUID exclude) {
+        log.info("Querying children of category {} with type {} and exclusion {} for user {}", categoryId, type, exclude, accessTokenHeader.getUserId());
+        return categoryChildrenQueryService.getChildrenOfCategory(accessTokenHeader.getUserId(), categoryId, type, exclude);
     }
 }

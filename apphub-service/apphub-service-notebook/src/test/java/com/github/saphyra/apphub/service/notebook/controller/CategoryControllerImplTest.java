@@ -78,9 +78,9 @@ public class CategoryControllerImplTest {
 
     @Test
     public void getChildrenOfCategory() {
-        given(categoryChildrenQueryService.getChildrenOfCategory(CATEGORY_ID, TYPE, EXCLUSION)).willReturn(childrenOfCategoryResponse);
+        given(categoryChildrenQueryService.getChildrenOfCategory(USER_ID, CATEGORY_ID, TYPE, EXCLUSION)).willReturn(childrenOfCategoryResponse);
 
-        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(CATEGORY_ID, TYPE, EXCLUSION);
+        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(accessTokenHeader, CATEGORY_ID, TYPE, EXCLUSION);
 
         assertThat(result).isEqualTo(childrenOfCategoryResponse);
     }
