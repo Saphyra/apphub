@@ -1,4 +1,4 @@
-function linkNodeFactory(itemDetails){
+function linkNodeFactory(parent, itemDetails){
     const node = document.createElement("DIV");
         node.classList.add("list-item-details-item");
         node.classList.add("button");
@@ -37,6 +37,15 @@ function linkNodeFactory(itemDetails){
                         deleteLink(itemDetails.id, itemDetails.parent);
                     }
             buttonListWrapper.appendChild(deleteButton);
+                const editButton = document.createElement("BUTTON");
+                    editButton.classList.add("list-item-option-button");
+                    editButton.classList.add("edit-button");
+                    editButton.innerHTML = Localization.getAdditionalContent("edit-button");
+                    editButton.onclick = function(e){
+                        e.stopPropagation();
+                        listItemEditionService.openEditListItemWindow(parent, itemDetails);
+                    }
+            buttonListWrapper.appendChild(editButton);
         optionsContainer.appendChild(buttonListWrapper);
     node.appendChild(optionsContainer);
     return node;

@@ -27,14 +27,14 @@ spec:
               path: /platform/health
               port: 8080
             initialDelaySeconds: 60
-            periodSeconds: 10
+            periodSeconds: 5
           readinessProbe:
             httpGet:
               path: /platform/health
               port: 8080
             initialDelaySeconds: 10
-            periodSeconds: 10
-            failureThreshold: 3
+            periodSeconds: 5
+            failureThreshold: 4
           resources:
             limits:
               memory: 500Mi

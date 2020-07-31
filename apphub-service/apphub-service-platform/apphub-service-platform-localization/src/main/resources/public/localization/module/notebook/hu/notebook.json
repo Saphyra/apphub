@@ -156,6 +156,36 @@
         "key": "innerHTML",
         "message": "Elvetés"
       }
+    ],
+    "edit-list-item-title": [
+      {
+        "key": "innerHTML",
+        "message": "Szerkesztés"
+      }
+    ],
+    "edit-list-item-title-input": [
+      {
+        "key": "placeholder",
+        "message": "Az elem címe"
+      }
+    ],
+    "edit-list-item-value-input": [
+      {
+        "key": "placeholder",
+        "message": "URL"
+      }
+    ],
+    "edit-list-item-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Fel"
+      }
+    ],
+    "edit-list-item-save-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
     ]
   },
   "additionalContent": {
@@ -169,6 +199,7 @@
     "deletion-confirmation-dialog-decline-button": "Mégse",
     "category-empty": "A kategória üres.",
     "delete-button": "Törlés",
+    "edit-button": "Szerkesztés",
     "item-deleted": "Elem törölve.",
     "link-created": "Hivatkozás elmentve.",
     "link-url-empty": "URL nem lehet üres.",

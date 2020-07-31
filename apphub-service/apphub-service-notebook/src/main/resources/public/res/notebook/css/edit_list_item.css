@@ -1,0 +1,7 @@
+#edit-list-item .create-item-input-wrapper{
+    height: var(--create-link-input-wrapper-height);
+}
+
+#edit-list-item-parent-selection-wrapper{
+    top: var(--create-link-input-wrapper-height);
+}

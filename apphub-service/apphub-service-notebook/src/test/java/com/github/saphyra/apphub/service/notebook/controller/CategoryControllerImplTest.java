@@ -27,6 +27,7 @@ public class CategoryControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID CATEGORY_ID = UUID.randomUUID();
     private static final String TYPE = "type";
+    private static final UUID EXCLUSION = UUID.randomUUID();
 
     @Mock
     private CategoryChildrenQueryService categoryChildrenQueryService;
@@ -77,9 +78,9 @@ public class CategoryControllerImplTest {
 
     @Test
     public void getChildrenOfCategory() {
-        given(categoryChildrenQueryService.getChildrenOfCategory(CATEGORY_ID, TYPE)).willReturn(childrenOfCategoryResponse);
+        given(categoryChildrenQueryService.getChildrenOfCategory(CATEGORY_ID, TYPE, EXCLUSION)).willReturn(childrenOfCategoryResponse);
 
-        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(CATEGORY_ID, TYPE);
+        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(CATEGORY_ID, TYPE, EXCLUSION);
 
         assertThat(result).isEqualTo(childrenOfCategoryResponse);
     }

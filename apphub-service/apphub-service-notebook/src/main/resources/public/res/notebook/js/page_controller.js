@@ -4,6 +4,7 @@
     scriptLoader.loadScript("/res/notebook/js/creation/text_creation_controller.js");
     scriptLoader.loadScript("/res/notebook/js/creation/link_creation_controller.js");
     scriptLoader.loadScript("/res/notebook/js/content/content_controller.js");
+    scriptLoader.loadScript("/res/notebook/js/list_item_edition_service.js");
 
     events.OPEN_CREATE_CATEGORY_DIALOG = "OPEN_CREATE_CATEGORY_DIALOG";
     events.OPEN_CREATE_TEXT_DIALOG = "OPEN_CREATE_TEXT_DIALOG";

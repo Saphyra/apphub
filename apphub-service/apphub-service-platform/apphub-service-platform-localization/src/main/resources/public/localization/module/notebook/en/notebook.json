@@ -156,6 +156,36 @@
         "key": "innerHTML",
         "message": "Discard"
       }
+    ],
+    "edit-list-item-title": [
+      {
+        "key": "innerHTML",
+        "message": "Edit item"
+      }
+    ],
+    "edit-list-item-title-input": [
+      {
+        "key": "placeholder",
+        "message": "Title of the item"
+      }
+    ],
+    "edit-list-item-value-input": [
+      {
+        "key": "placeholder",
+        "message": "URL"
+      }
+    ],
+    "edit-list-item-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Up"
+      }
+    ],
+    "edit-list-item-save-button": [
+      {
+        "key": "innerHTML",
+        "message": "Save"
+      }
     ]
   },
   "additionalContent": {
@@ -169,6 +199,7 @@
     "deletion-confirmation-dialog-decline-button": "Cancel",
     "category-empty": "Category is empty.",
     "delete-button": "Delete",
+    "edit-button": "Edit",
     "item-deleted": "Item is deleted.",
     "link-created": "Link saved.",
     "link-url-empty": "URL must not be empty.",

@@ -59,16 +59,16 @@
 
                 return a.title.localeCompare(b.title);
             })
-            .map(createNode)
+            .map(function(itemDetails){return createNode(categoryId, itemDetails)})
             .forEach(function(node){container.appendChild(node)});
 
-        function createNode(itemDetails){
+        function createNode(categoryId, itemDetails){
             const factory = contentController.nodeFactories[itemDetails.type];
             if(!factory){
                 throwException("IllegalArgument", "NodeFactory not present for type " + itemDetails.type);
             }
 
-            const node = factory(itemDetails);
+            const node = factory(categoryId, itemDetails);
                 node.id = contentController.createListItemId(itemDetails.id);
             return node;
         }

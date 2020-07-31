@@ -1,6 +1,6 @@
 scriptLoader.loadScript("/res/notebook/js/view/text_view_controller.js");
 
-function textNodeFactory(itemDetails){
+function textNodeFactory(parent, itemDetails){
     const node = document.createElement("DIV");
         node.classList.add("list-item-details-item");
         node.classList.add("button");
@@ -35,14 +35,23 @@ function textNodeFactory(itemDetails){
                     deleteButton.innerHTML = Localization.getAdditionalContent("delete-button");
                     deleteButton.onclick = function(e){
                         e.stopPropagation();
-                        deleteText(itemDetails.id, itemDetails.parent);
+                        deleteText(itemDetails.id);
                     }
             buttonListWrapper.appendChild(deleteButton);
+                const editButton = document.createElement("BUTTON");
+                    editButton.classList.add("list-item-option-button");
+                    editButton.classList.add("edit-button");
+                    editButton.innerHTML = Localization.getAdditionalContent("edit-button");
+                    editButton.onclick = function(e){
+                        e.stopPropagation();
+                        listItemEditionService.openEditListItemWindow(parent, itemDetails);
+                    }
+            buttonListWrapper.appendChild(editButton);
         optionsContainer.appendChild(buttonListWrapper);
     node.appendChild(optionsContainer);
     return node;
 
-    function deleteText(listItemId, parent){
+    function deleteText(listItemId){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
             .withTitle(Localization.getAdditionalContent("deletion-confirmation-dialog-title"))
             .withDetail(Localization.getAdditionalContent("deletion-confirmation-dialog-detail"))

@@ -25,11 +25,12 @@ public class CategoryChildrenQueryService {
     private final ListItemDao listItemDao;
     private final NotebookViewFactory notebookViewFactory;
 
-    public ChildrenOfCategoryResponse getChildrenOfCategory(UUID categoryId, String type) {
+    public ChildrenOfCategoryResponse getChildrenOfCategory(UUID categoryId, String type, UUID exclude) {
         List<ListItemType> query = parseTypes(type);
         List<NotebookView> children = listItemDao.getByParent(categoryId)
             .stream()
             .filter(listItem -> query.contains(listItem.getType()))
+            .filter(listItem -> !listItem.getListItemId().equals(exclude)) //TODO api and int test
             .map(notebookViewFactory::create)
             .collect(Collectors.toList());
 
