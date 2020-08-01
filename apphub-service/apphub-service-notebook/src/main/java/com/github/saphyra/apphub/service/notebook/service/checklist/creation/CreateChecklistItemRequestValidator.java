@@ -21,7 +21,7 @@ class CreateChecklistItemRequestValidator {
     void validate(CreateChecklistItemRequest request) {
         listItemRequestValidator.validate(request.getTitle(), request.getParent());
         if (isNull(request.getNodes())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "nodes", "must not be empty"), "Nodes must not be empty.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "nodes", "must not be null"), "Nodes must not be empty.");
         }
 
         request.getNodes()

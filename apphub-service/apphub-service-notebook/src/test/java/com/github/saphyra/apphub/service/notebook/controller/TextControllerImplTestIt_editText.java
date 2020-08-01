@@ -139,6 +139,11 @@ public class TextControllerImplTestIt_editText {
     }
 
     @Test
+    public void listItemNotFound(){
+        //TODO implement
+    }
+
+    @Test
     public void editText() {
         CreateTextRequest createRequest = CreateTextRequest.builder()
             .title(ORIGINAL_TITLE)

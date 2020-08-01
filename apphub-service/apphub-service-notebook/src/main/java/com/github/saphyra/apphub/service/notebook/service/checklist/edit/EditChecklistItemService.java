@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemFactory;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemNodeRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.checklist.NodeContentWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,20 +30,24 @@ import static java.util.Objects.isNull;
 //TODO refactor - split
 public class EditChecklistItemService {
     private final ChecklistItemFactory checklistItemFactory;
-
+    private final ChecklistItemNodeRequestValidator checklistItemNodeRequestValidator;
     private final ListItemDao listItemDao;
     private final ChecklistItemDao checklistItemDao;
     private final ContentDao contentDao;
 
     @Transactional
     public void edit(List<ChecklistItemNodeRequest> requests, UUID listItemId) {
+        requests.forEach(checklistItemNodeRequestValidator::validate);
+
+        ListItem listItem = listItemDao.findByIdValidated(listItemId);
+
         Map<UUID, NodeContentWrapper> actualItems = checklistItemDao.getByParent(listItemId)
             .stream()
             .map(this::assembleNodeContentWrapper)
             .collect(Collectors.toMap(nodeContentWrapper -> nodeContentWrapper.getChecklistItem().getChecklistItemId(), Function.identity()));
         deleteItems(requests, actualItems);
         updateItems(requests, actualItems);
-        saveNewItems(listItemDao.findByIdValidated(listItemId), requests);
+        saveNewItems(listItem, requests);
     }
 
     private NodeContentWrapper assembleNodeContentWrapper(ChecklistItem checklistItem) {

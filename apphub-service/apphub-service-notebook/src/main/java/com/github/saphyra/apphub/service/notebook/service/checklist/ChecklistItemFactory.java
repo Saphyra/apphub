@@ -27,7 +27,7 @@ public class ChecklistItemFactory {
             .order(nodeRequest.getOrder())
             .checked(nodeRequest.getChecked())
             .build();
-        Content content = contentFactory.create(listItem, nodeRequest.getContent());
+        Content content = contentFactory.create(checklistItemId, listItem.getUserId(), nodeRequest.getContent());
 
         return NodeContentWrapper.builder()
             .checklistItem(checklistItem)
