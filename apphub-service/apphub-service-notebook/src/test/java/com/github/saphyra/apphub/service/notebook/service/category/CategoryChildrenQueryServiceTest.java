@@ -30,6 +30,7 @@ public class CategoryChildrenQueryServiceTest {
     private static final String TITLE_1 = "title-1";
     private static final String TITLE_2 = "title-2";
     private static final UUID PARENT = UUID.randomUUID();
+    private static final UUID LIST_ITEM_ID_3 = UUID.randomUUID();
 
     @Mock
     private ListItemDao listItemDao;
@@ -107,13 +108,13 @@ public class CategoryChildrenQueryServiceTest {
             .title(TITLE_1)
             .build();
         ListItem listItem2 = ListItem.builder()
-            .listItemId(LIST_ITEM_ID_1)
+            .listItemId(LIST_ITEM_ID_2)
             .userId(USER_ID)
             .type(ListItemType.CATEGORY)
             .title(TITLE_1)
             .build();
         ListItem listItem3 = ListItem.builder()
-            .listItemId(LIST_ITEM_ID_2)
+            .listItemId(LIST_ITEM_ID_3)
             .userId(USER_ID)
             .type(ListItemType.CATEGORY)
             .title(TITLE_1)
@@ -130,8 +131,7 @@ public class CategoryChildrenQueryServiceTest {
         given(listItemDao.findById(CATEGORY_ID)).willReturn(Optional.of(parent));
         given(notebookViewFactory.create(listItem2)).willReturn(notebookView);
 
-
-        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(USER_ID, CATEGORY_ID, ListItemType.CATEGORY.name(), LIST_ITEM_ID_2);
+        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(USER_ID, CATEGORY_ID, ListItemType.CATEGORY.name(), LIST_ITEM_ID_3);
 
         assertThat(result.getParent()).isEqualTo(PARENT);
         assertThat(result.getTitle()).isEqualTo(TITLE_2);

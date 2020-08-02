@@ -13,7 +13,6 @@ import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class CreateChecklistItemRequestValidator {
     private final ListItemRequestValidator listItemRequestValidator;
     private final ChecklistItemNodeRequestValidator checklistItemNodeRequestValidator;

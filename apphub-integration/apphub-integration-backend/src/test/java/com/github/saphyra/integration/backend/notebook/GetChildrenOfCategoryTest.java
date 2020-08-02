@@ -1,14 +1,10 @@
 package com.github.saphyra.integration.backend.notebook;
 
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
-import com.github.saphyra.apphub.integration.backend.model.notebook.ChildrenOfCategoryResponse;
-import com.github.saphyra.apphub.integration.backend.model.notebook.CreateCategoryRequest;
-import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTextRequest;
-import com.github.saphyra.apphub.integration.backend.model.notebook.NotebookView;
+import com.github.saphyra.apphub.integration.backend.model.notebook.*;
 import com.github.saphyra.apphub.integration.common.TestBase;
-import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
 import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
@@ -18,6 +14,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_INVALID_PARAM;
@@ -28,6 +25,7 @@ public class GetChildrenOfCategoryTest extends TestBase {
     private static final String TITLE_2 = "title-2";
     private static final String TITLE_3 = "title-3";
     private static final String TITLE_4 = "title-4";
+    private static final String TITLE_5 = "title-5";
 
     @DataProvider(name = "localeDataProvider", parallel = true)
     public Object[] localeDataProvider() {
@@ -39,7 +37,7 @@ public class GetChildrenOfCategoryTest extends TestBase {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
-        Response response = NotebookActions.getChildrenOfCategoryResponse(language, accessTokenId, null, String.join(",", ListItemType.CATEGORY.name(), "asd"));
+        Response response = NotebookActions.getChildrenOfCategoryResponse(language, accessTokenId, null, Arrays.asList(ListItemType.CATEGORY.name(), "asd"));
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -65,6 +63,12 @@ public class GetChildrenOfCategoryTest extends TestBase {
             .build();
         UUID childCategoryId = NotebookActions.createCategory(language, accessTokenId, childCategoryRequest);
 
+        CreateCategoryRequest excludedCategoryRequest = CreateCategoryRequest.builder()
+            .title(TITLE_5)
+            .parent(parentId)
+            .build();
+        UUID excludedCategoryId = NotebookActions.createCategory(language, accessTokenId, excludedCategoryRequest);
+
         CreateTextRequest childTextRequest = CreateTextRequest.builder()
             .title(TITLE_3)
             .content("content")
@@ -72,14 +76,14 @@ public class GetChildrenOfCategoryTest extends TestBase {
             .build();
         UUID childTextId = NotebookActions.createText(language, accessTokenId, childTextRequest);
 
-        CreateCategoryRequest childChecklistRequest = CreateCategoryRequest.builder()
+        CreateLinkRequest createLinkRequest = CreateLinkRequest.builder()
             .title(TITLE_4)
             .parent(parentId)
+            .url("asd")
             .build();
-        UUID childChecklistId = NotebookActions.createCategory(language, accessTokenId, childChecklistRequest);
-        DatabaseUtil.setListItemTypeById(childChecklistId, ListItemType.CHECKLIST);
+        NotebookActions.createLink(language, accessTokenId, createLinkRequest);
 
-        ChildrenOfCategoryResponse result = NotebookActions.getChildrenOfCategory(language, accessTokenId, parentId, String.join(",", ListItemType.CATEGORY.name(), ListItemType.TEXT.name()));
+        ChildrenOfCategoryResponse result = NotebookActions.getChildrenOfCategory(language, accessTokenId, parentId, Arrays.asList(ListItemType.CATEGORY.name(), ListItemType.TEXT.name()), excludedCategoryId);
 
         NotebookView categoryView = NotebookView.builder()
             .id(childCategoryId)

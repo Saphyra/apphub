@@ -36,17 +36,26 @@ public class NotebookActions {
             .collect(Collectors.toList());
     }
 
-    public static ChildrenOfCategoryResponse getChildrenOfCategory(Language language, UUID accessTokenId, UUID categoryId, String... type) {
-        Response response = getChildrenOfCategoryResponse(language, accessTokenId, categoryId, type);
+    public static ChildrenOfCategoryResponse getChildrenOfCategory(Language language, UUID accessTokenId, UUID categoryId) {
+        return getChildrenOfCategory(language, accessTokenId, categoryId, Collections.emptyList(), null);
+    }
+
+    public static ChildrenOfCategoryResponse getChildrenOfCategory(Language language, UUID accessTokenId, UUID categoryId, List<String> types, UUID exclude) {
+        Response response = getChildrenOfCategoryResponse(language, accessTokenId, categoryId, types, exclude);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().as(ChildrenOfCategoryResponse.class);
     }
 
-    public static Response getChildrenOfCategoryResponse(Language language, UUID accessTokenId, UUID categoryId, String... type) {
+    public static Response getChildrenOfCategoryResponse(Language language, UUID accessTokenId, UUID categoryId, List<String> types) {
+        return getChildrenOfCategoryResponse(language, accessTokenId, categoryId, types, null);
+    }
+
+    public static Response getChildrenOfCategoryResponse(Language language, UUID accessTokenId, UUID categoryId, List<String> types, UUID exclude) {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("categoryId", categoryId);
-        queryParams.put("type", String.join(",", type));
+        queryParams.put("type", String.join(",", types));
+        queryParams.put("exclude", exclude);
 
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .get(UrlFactory.create(Endpoints.GET_CHILDREN_OF_NOTEBOOK_CATEGORY, new HashMap<>(), queryParams));

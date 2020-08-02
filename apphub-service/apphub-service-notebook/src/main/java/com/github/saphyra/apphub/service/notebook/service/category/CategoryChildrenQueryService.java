@@ -30,7 +30,7 @@ public class CategoryChildrenQueryService {
         List<NotebookView> children = listItemDao.getByUserIdAndParent(userId, categoryId)
             .stream()
             .filter(listItem -> query.contains(listItem.getType()))
-            .filter(listItem -> !listItem.getListItemId().equals(exclude)) //TODO api and int test
+            .filter(listItem -> !listItem.getListItemId().equals(exclude))
             .map(notebookViewFactory::create)
             .collect(Collectors.toList());
 

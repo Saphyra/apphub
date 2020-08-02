@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class ChecklistItemConverter extends ConverterBase<ChecklistItemEntity, ChecklistItem> {
     private final UuidConverter uuidConverter;
     private final AccessTokenProvider accessTokenProvider;
