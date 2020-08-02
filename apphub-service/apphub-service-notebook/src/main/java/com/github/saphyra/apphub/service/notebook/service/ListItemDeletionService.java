@@ -31,10 +31,10 @@ public class ListItemDeletionService {
             case CATEGORY:
                 deleteChildren(listItem, userId);
                 break;
-            case CHECKLIST: //TODO unit test
+            case CHECKLIST:
                 checklistItemDao.getByParent(listItem.getListItemId())
                     .stream()
-                    .peek(checklistItem -> contentDao.deleteByParent(checklistItem.getParent()))
+                    .peek(checklistItem -> contentDao.deleteByParent(checklistItem.getChecklistItemId()))
                     .forEach(checklistItemDao::delete);
                 break;
             case TEXT:

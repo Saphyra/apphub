@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
+import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
+import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
@@ -21,12 +23,16 @@ public class ListItemDeletionServiceTest {
     private static final UUID LIST_ITEM_ID_1 = UUID.randomUUID();
     private static final UUID LIST_ITEM_ID_2 = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID CHECKLIST_ITEM_ID = UUID.randomUUID();
 
     @Mock
     private ListItemDao listItemDao;
 
     @Mock
     private ContentDao contentDao;
+
+    @Mock
+    private ChecklistItemDao checklistItemDao;
 
     @InjectMocks
     private ListItemDeletionService underTest;
@@ -36,6 +42,9 @@ public class ListItemDeletionServiceTest {
 
     @Mock
     private ListItem child;
+
+    @Mock
+    private ChecklistItem checklistItem;
 
     @Test
     public void deleteCategory() {
@@ -77,5 +86,20 @@ public class ListItemDeletionServiceTest {
 
         verify(listItemDao).delete(deleted);
         verify(contentDao).deleteByParent(LIST_ITEM_ID_1);
+    }
+
+    @Test
+    public void deleteChecklistItem() {
+        given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
+        given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
+        given(deleted.getType()).willReturn(ListItemType.CHECKLIST);
+        given(checklistItemDao.getByParent(LIST_ITEM_ID_1)).willReturn(Arrays.asList(checklistItem));
+        given(checklistItem.getChecklistItemId()).willReturn(CHECKLIST_ITEM_ID);
+
+        underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
+
+        verify(listItemDao).delete(deleted);
+        verify(contentDao).deleteByParent(CHECKLIST_ITEM_ID);
+        verify(checklistItemDao).delete(checklistItem);
     }
 }

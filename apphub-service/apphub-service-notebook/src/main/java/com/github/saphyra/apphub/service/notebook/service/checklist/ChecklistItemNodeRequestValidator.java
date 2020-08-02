@@ -15,7 +15,6 @@ import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class ChecklistItemNodeRequestValidator {
     private final ChecklistItemDao checklistItemDao;
     private final ContentValidator contentValidator;

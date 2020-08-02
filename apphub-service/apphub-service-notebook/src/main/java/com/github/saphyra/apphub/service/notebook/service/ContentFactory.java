@@ -17,7 +17,6 @@ public class ContentFactory {
         return create(listItem.getListItemId(), listItem.getUserId(), content);
     }
 
-    //TODO unit test
     public Content create(UUID parent, UUID userId, String content) {
         return Content.builder()
             .contentId(idGenerator.randomUUID())
