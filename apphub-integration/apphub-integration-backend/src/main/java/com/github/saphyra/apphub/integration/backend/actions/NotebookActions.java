@@ -94,16 +94,40 @@ public class NotebookActions {
             .post(UrlFactory.create(Endpoints.EDIT_NOTEBOOK_TEXT, "listItemId", textId));
     }
 
-    public static UUID createLink(Language language, UUID accessTokenId, LinkRequest request) {
+    public static UUID createLink(Language language, UUID accessTokenId, CreateLinkRequest request) {
         Response response = getCreateLinkResponse(language, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().jsonPath().getUUID("value");
     }
 
-    public static Response getCreateLinkResponse(Language language, UUID accessTokenId, LinkRequest request) {
+    public static Response getCreateLinkResponse(Language language, UUID accessTokenId, CreateLinkRequest request) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(request)
             .put(UrlFactory.create(Endpoints.CREATE_NOTEBOOK_LINK));
+    }
+
+    public static UUID createChecklistItem(Language language, UUID accessTokenId, CreateChecklistItemRequest request) {
+        Response response = getCreateChecklistItemResponse(language, accessTokenId, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        return response.getBody().jsonPath().getUUID("value");
+    }
+
+    public static Response getCreateChecklistItemResponse(Language language, UUID accessTokenId, CreateChecklistItemRequest request) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(request)
+            .put(UrlFactory.create(Endpoints.CREATE_NOTEBOOK_CHECKLIST_ITEM));
+    }
+
+    public static void editListItem(Language language, UUID accessTokenId, EditListItemRequest editListItemRequest, UUID listItemId) {
+        Response response = getEditListItemResponse(language, accessTokenId, editListItemRequest, listItemId);
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getEditListItemResponse(Language language, UUID accessTokenId, EditListItemRequest editListItemRequest, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(editListItemRequest)
+            .post(UrlFactory.create(Endpoints.EDIT_NOTEBOOK_LIST_ITEM, "listItemId", listItemId));
     }
 }

@@ -25,9 +25,6 @@ class ListItemControllerIImpl implements ListItemController {
     }
 
     @Override
-    //TODO unit test
-    //TODO int test
-    //TODO api test
     public void editListItem(EditListItemRequest request, UUID listItemId) {
         log.info("Editing listItem {}", listItemId);
         listItemEditionService.edit(listItemId, request);

@@ -34,7 +34,7 @@ public class CreateLinkTest extends TestBase {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
-        LinkRequest request = LinkRequest.builder()
+        CreateLinkRequest request = CreateLinkRequest.builder()
             .title(" ")
             .url(URL)
             .build();
@@ -53,7 +53,7 @@ public class CreateLinkTest extends TestBase {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
-        LinkRequest request = LinkRequest.builder()
+        CreateLinkRequest request = CreateLinkRequest.builder()
             .title(TITLE)
             .url(URL)
             .parent(UUID.randomUUID())
@@ -78,7 +78,7 @@ public class CreateLinkTest extends TestBase {
             .build();
         UUID parentId = NotebookActions.createText(language, accessTokenId, parentRequest);
 
-        LinkRequest request = LinkRequest.builder()
+        CreateLinkRequest request = CreateLinkRequest.builder()
             .title(TITLE)
             .url(URL)
             .parent(parentId)
@@ -96,7 +96,7 @@ public class CreateLinkTest extends TestBase {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
-        LinkRequest request = LinkRequest.builder()
+        CreateLinkRequest request = CreateLinkRequest.builder()
             .title(TITLE)
             .url(null)
             .build();
@@ -122,7 +122,7 @@ public class CreateLinkTest extends TestBase {
             .build();
         UUID parentId = NotebookActions.createCategory(language, accessTokenId, createCategoryRequest);
 
-        LinkRequest request = LinkRequest.builder()
+        CreateLinkRequest request = CreateLinkRequest.builder()
             .title(TITLE)
             .url(URL)
             .parent(parentId)

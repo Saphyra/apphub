@@ -11,8 +11,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Builder
-public class LinkRequest {
-    private UUID parent;
-    private String title;
-    private String url;
+public class ChecklistItemNodeRequest {
+    private UUID checklistItemId;
+    private Integer order;
+    private Boolean checked;
+    private String content;
 }

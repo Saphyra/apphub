@@ -139,8 +139,19 @@ public class TextControllerImplTestIt_editText {
     }
 
     @Test
-    public void listItemNotFound(){
-        //TODO implement
+    public void listItemNotFound() {
+        EditTextRequest editRequest = EditTextRequest.builder()
+            .title(NEW_TITLE)
+            .content(NEW_CONTENT)
+            .build();
+
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
+            .body(editRequest)
+            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TEXT, "listItemId", UUID.randomUUID()));
+
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
     }
 
     @Test

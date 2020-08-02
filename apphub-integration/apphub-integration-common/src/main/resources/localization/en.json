@@ -5,6 +5,7 @@
   "ERROR_CODE_EMAIL_ALREADY_IN_USE": "E-mail address is already in use.",
   "ERROR_CODE_INVALID_PARAM": "Invalid parameter.",
   "ERROR_CODE_INVALID_TYPE": "Invalid type.",
+  "ERROR_CODE_LIST_ITEM_NOT_FOUND": "Item not found.",
   "ERROR_CODE_MISSING_ROLE": "You are not allowed to perform this operation.",
   "ERROR_CODE_PASSWORD_TOO_LONG": "Password is too long. (30 characters max.)",
   "ERROR_CODE_PASSWORD_TOO_SHORT": "Password is too short. (6 characters min.)",

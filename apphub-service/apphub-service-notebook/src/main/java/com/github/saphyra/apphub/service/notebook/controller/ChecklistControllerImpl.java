@@ -22,14 +22,12 @@ public class ChecklistControllerImpl implements ChecklistController {
     private final EditChecklistItemService editChecklistItemService;
 
     @Override
-    //TODO api test
     public OneParamResponse<UUID> createChecklistItem(CreateChecklistItemRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("Creating new checklist for user {}", accessTokenHeader.getUserId());
         return new OneParamResponse<>(checklistCreationService.create(request, accessTokenHeader.getUserId()));
     }
 
     @Override
-    //TODO api test
     public void editChecklistItem(List<ChecklistItemNodeRequest> request, UUID listItemId) {
         log.info("Editing checklistItem with listItemId {}", listItemId);
         editChecklistItemService.edit(request, listItemId);

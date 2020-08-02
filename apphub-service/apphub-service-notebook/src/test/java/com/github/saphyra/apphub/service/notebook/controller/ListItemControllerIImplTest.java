@@ -1,8 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
+import com.github.saphyra.apphub.api.notebook.model.request.EditListItemRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.service.notebook.controller.ListItemControllerIImpl;
 import com.github.saphyra.apphub.service.notebook.service.ListItemDeletionService;
+import com.github.saphyra.apphub.service.notebook.service.ListItemEditionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -22,11 +23,17 @@ public class ListItemControllerIImplTest {
     @Mock
     private ListItemDeletionService listItemDeletionService;
 
+    @Mock
+    private ListItemEditionService listItemEditionService;
+
     @InjectMocks
     private ListItemControllerIImpl underTest;
 
     @Mock
     private AccessTokenHeader accessTokenHeader;
+
+    @Mock
+    private EditListItemRequest editListItemRequest;
 
     @Test
     public void deleteListItem() {
@@ -35,5 +42,12 @@ public class ListItemControllerIImplTest {
         underTest.deleteListItem(LIST_ITEM_ID, accessTokenHeader);
 
         verify(listItemDeletionService).deleteListItem(LIST_ITEM_ID, USER_ID);
+    }
+
+    @Test
+    public void editListItem() {
+        underTest.editListItem(editListItemRequest, LIST_ITEM_ID);
+
+        verify(listItemEditionService).edit(LIST_ITEM_ID, editListItemRequest);
     }
 }
