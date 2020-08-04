@@ -42,7 +42,7 @@ function categoryNodeFactory(parent, itemDetails){
                     editButton.innerHTML = Localization.getAdditionalContent("edit-button");
                     editButton.onclick = function(e){
                         e.stopPropagation();
-                        listItemEditionService.openEditListItemWindow(itemDetails.parent, itemDetails);
+                        listItemEditionService.openEditListItemWindow(parent, itemDetails);
                     }
             buttonListWrapper.appendChild(editButton);
 

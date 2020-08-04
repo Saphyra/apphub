@@ -1,15 +1,16 @@
 package com.github.saphyra.apphub.integration.frontend.service.notebook;
 
-import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
+import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
+import static java.util.Objects.isNull;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Optional;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.Optional;
-
-import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
-import static java.util.Objects.isNull;
-import static org.assertj.core.api.Assertions.assertThat;
+import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
 
 public class NotebookPageActions {
     public static void confirmDeletionDialog(WebDriver driver) {
@@ -23,12 +24,16 @@ public class NotebookPageActions {
         assertThat(NotebookPage.editListItemDialog(driver).isDisplayed()).isTrue();
     }
 
-    public static void fillEditListItemDialog(WebDriver driver, String title, String value, String... parents) {
+    public static void fillEditListItemDialog(WebDriver driver, String title, String value, int up, String... parents) {
         verifyEditListItemDialogOpened(driver);
 
         clearAndFill(NotebookPage.editListItemTitleInput(driver), title);
         Optional.ofNullable(value)
             .ifPresent(s -> clearAndFill(NotebookPage.editListItemValueInput(driver), s));
+
+        for (int i = up; i > 0; i--) {
+            NotebookPage.editListItemUpButton(driver).click();
+        }
 
         for (String parentTitle : parents) {
             AwaitilityWrapper.getWithWait(

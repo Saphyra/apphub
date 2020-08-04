@@ -43,6 +43,7 @@ class NotebookPage {
     private static final By AVAILABLE_PARENTS_FOR_EDIT_LIST_ITEM = By.cssSelector("#edit-list-item-parent-selection-category-list .category");
     private static final By SAVE_EDITED_LIST_ITEM_BUTTON = By.id("edit-list-item-save-button");
     private static final By DETAILED_LIST_UP_BUTTON = By.id("category-content-parent-selection-parent-button");
+    private static final By EDIT_LIST_ITEM_UP_BUTTON = By.id("edit-list-item-parent-selection-parent-button");
 
     public static WebElement createCategoryWindow(WebDriver driver) {
         return driver.findElement(CREATE_CATEGORY_WINDOW);
@@ -186,5 +187,9 @@ class NotebookPage {
 
     public static WebElement detailedListUpButton(WebDriver driver) {
         return driver.findElement(DETAILED_LIST_UP_BUTTON);
+    }
+
+    public static WebElement editListItemUpButton(WebDriver driver) {
+        return driver.findElement(EDIT_LIST_ITEM_UP_BUTTON);
     }
 }

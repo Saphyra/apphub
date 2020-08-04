@@ -108,7 +108,7 @@ public class CategoryCrudTest extends SeleniumTest {
         ListItemDetailsItem detailsItem = DetailedListActions.findDetailedItem(driver, TITLE_3);
         detailsItem.edit(driver);
 
-        NotebookPageActions.fillEditListItemDialog(driver, "", null);
+        NotebookPageActions.fillEditListItemDialog(driver, "", null, 0);
         NotebookPageActions.submitEditListItemDialog(driver);
 
         NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
@@ -132,7 +132,7 @@ public class CategoryCrudTest extends SeleniumTest {
         ListItemDetailsItem detailsItem = DetailedListActions.findDetailedItem(driver, TITLE_3);
         detailsItem.edit(driver);
 
-        NotebookPageActions.fillEditListItemDialog(driver, TITLE_4, null, TITLE_2);
+        NotebookPageActions.fillEditListItemDialog(driver, TITLE_4, null, 1, TITLE_2);
         NotebookPageActions.submitEditListItemDialog(driver);
 
         NotificationUtil.verifySuccessNotification(driver, "Elem elmentve.");

@@ -7,9 +7,9 @@ import org.openqa.selenium.interactions.Actions;
 import static java.util.Objects.isNull;
 
 public class LinkActions {
-    public static void createLink(WebDriver driver, String title, String url) {
+    public static void createLink(WebDriver driver, String title, String url, String... parents) {
         openCreateLinkWindow(driver);
-        fillCreateLinkForm(driver, title, url);
+        fillCreateLinkForm(driver, title, url, parents);
         submitCreateLinkForm(driver);
     }
 
