@@ -24,6 +24,5 @@ Modules
         Icons for list items
         Labels
 
-TODO fe test - Edit category
 TODO fe test - Edit link
 TODO fe test - Edit text

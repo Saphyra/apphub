@@ -201,6 +201,7 @@
     "delete-button": "Delete",
     "edit-button": "Edit",
     "item-deleted": "Item is deleted.",
+    "item-saved": "Item is saved.",
     "link-created": "Link saved.",
     "link-url-empty": "URL must not be empty.",
     "list-item-options-button": "Options",

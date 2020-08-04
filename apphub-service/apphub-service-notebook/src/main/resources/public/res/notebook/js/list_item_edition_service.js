@@ -1,6 +1,6 @@
 (function ListItemEditionService(){
     let editedItemDetails = null;
-    let currentCategoryId = null;
+    let selectedCategoryId = null;
 
     window.listItemEditionService = new function(){
         this.openEditListItemWindow = openEditListItemWindow;
@@ -24,7 +24,7 @@
     }
 
     function loadChildrenOfCategory(originalListItemId, categoryId){
-        currentCategoryId = categoryId;
+        selectedCategoryId = categoryId;
         const request = new Request(Mapping.getEndpoint("GET_CHILDREN_OF_NOTEBOOK_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY", exclude: originalListItemId}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body)
@@ -79,6 +79,30 @@
     }
 
     function editListItem(){
+        const title = document.getElementById("edit-list-item-title-input").value;
+        const value = document.getElementById("edit-list-item-value-input").value;
+        if(!title.length){
+            notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
+            return;
+        }
+        
+        const isLink = editedItemDetails.type == "LINK";
+        if(isLink && !value.length){
+            notificationService.showError(Localization.getAdditionalContent("link-url-empty"));
+            return;
+        }
+        
+        const body = {
+            title: title,
+            value: isLink ? value : null,
+            parent: selectedCategoryId
+        }
 
+        const request = new Request(Mapping.getEndpoint("EDIT_NOTEBOOK_LIST_ITEM", {listItemId: editedItemDetails.id}), body);
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("item-saved"));
+                eventProcessor.processEvent(new Event(events.CATEGORY_SAVED));
+            }
+        dao.sendRequestAsync(request);
     }
 })();

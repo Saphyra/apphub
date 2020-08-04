@@ -62,7 +62,7 @@ public class LinkCrudTest extends SeleniumTest {
     }
 
     @Test
-    public void createText(){
+    public void createLink(){
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();

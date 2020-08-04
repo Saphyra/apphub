@@ -7,10 +7,12 @@ import com.github.saphyra.apphub.integration.frontend.framework.Navigation;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.frontend.model.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.frontend.model.notebook.CategoryTreeElement;
+import com.github.saphyra.apphub.integration.frontend.model.notebook.ListItemDetailsItem;
 import com.github.saphyra.apphub.integration.frontend.service.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.frontend.service.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.frontend.service.notebook.CategoryActions;
 import com.github.saphyra.apphub.integration.frontend.service.notebook.DetailedListActions;
+import com.github.saphyra.apphub.integration.frontend.service.notebook.NotebookPageActions;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -20,6 +22,7 @@ public class CategoryCrudTest extends SeleniumTest {
     private static final String TITLE_1 = "title-1";
     private static final String TITLE_2 = "title-2";
     private static final String TITLE_3 = "title-3";
+    private static final String TITLE_4 = "title-4";
 
     @Test
     public void createCategory_emptyTitle() {
@@ -63,7 +66,7 @@ public class CategoryCrudTest extends SeleniumTest {
     }
 
     @Test
-    public void deleteCategory(){
+    public void deleteCategory() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -85,5 +88,61 @@ public class CategoryCrudTest extends SeleniumTest {
         CategoryTreeElement root = CategoryActions.getCategoryTreeRoot(driver);
         assertThat(root.getChildren()).hasSize(1);
         assertThat(root.getChildren().get(0).getChildren()).isEmpty();
+    }
+
+    @Test
+    public void editCategory_emptyTitle() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+
+        CategoryActions.createCategory(driver, TITLE_1);
+        CategoryActions.createCategory(driver, TITLE_2);
+        CategoryActions.createCategory(driver, TITLE_3, TITLE_1);
+
+        CategoryActions.openCategory(driver, TITLE_1);
+
+        ListItemDetailsItem detailsItem = DetailedListActions.findDetailedItem(driver, TITLE_3);
+        detailsItem.edit(driver);
+
+        NotebookPageActions.fillEditListItemDialog(driver, "", null);
+        NotebookPageActions.submitEditListItemDialog(driver);
+
+        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
+    }
+
+    @Test
+    public void editCategory() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+
+        CategoryActions.createCategory(driver, TITLE_1);
+        CategoryActions.createCategory(driver, TITLE_2);
+        CategoryActions.createCategory(driver, TITLE_3, TITLE_1);
+
+        CategoryActions.openCategory(driver, TITLE_1);
+
+        ListItemDetailsItem detailsItem = DetailedListActions.findDetailedItem(driver, TITLE_3);
+        detailsItem.edit(driver);
+
+        NotebookPageActions.fillEditListItemDialog(driver, TITLE_4, null, TITLE_2);
+        NotebookPageActions.submitEditListItemDialog(driver);
+
+        NotificationUtil.verifySuccessNotification(driver, "Elem elmentve.");
+        NotebookPageActions.verifyEditListItemDialogClosed(driver);
+
+        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
+
+        DetailedListActions.up(driver);
+        CategoryActions.openCategory(driver, TITLE_2);
+
+        DetailedListActions.findDetailedItem(driver, TITLE_4);
     }
 }

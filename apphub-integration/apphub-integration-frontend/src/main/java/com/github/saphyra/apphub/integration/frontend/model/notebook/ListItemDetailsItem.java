@@ -19,6 +19,7 @@ public class ListItemDetailsItem {
     private static final By TITLE = By.cssSelector(":scope > span");
     private static final By OPTIONS_BUTTON = By.cssSelector(":scope .list-item-options-button");
     private static final By DELETE_BUTTON = By.cssSelector(":scope .list-item-options-button-list-wrapper .delete-button");
+    private static final By EDIT_BUTTON = By.cssSelector(":scope .list-item-options-button-list-wrapper .edit-button");
 
     private final WebElement webElement;
 
@@ -30,16 +31,30 @@ public class ListItemDetailsItem {
         return webElement.findElement(TITLE);
     }
 
+    public void edit(WebDriver driver) {
+        openOptionsMenu(driver);
+
+        WebElement editButton = webElement.findElement(EDIT_BUTTON);
+        assertThat(editButton.isDisplayed()).isTrue();
+        editButton.click();
+
+        NotebookPageActions.verifyEditListItemDialogOpened(driver);
+    }
+
     public void delete(WebDriver driver) {
-        new Actions(driver)
-            .moveToElement(webElement.findElement(OPTIONS_BUTTON))
-            .perform();
+        openOptionsMenu(driver);
 
         WebElement deleteButton = webElement.findElement(DELETE_BUTTON);
         assertThat(deleteButton.isDisplayed()).isTrue();
         deleteButton.click();
 
         NotebookPageActions.confirmDeletionDialog(driver);
+    }
+
+    private void openOptionsMenu(WebDriver driver) {
+        new Actions(driver)
+            .moveToElement(webElement.findElement(OPTIONS_BUTTON))
+            .perform();
     }
 
     public void open() {

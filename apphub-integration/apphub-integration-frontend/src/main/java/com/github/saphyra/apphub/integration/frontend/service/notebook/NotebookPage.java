@@ -37,6 +37,12 @@ class NotebookPage {
     private static final By CREATE_LINK_URL_INPUT = By.id("new-link-url");
     private static final By AVAILABLE_PARENTS_FOR_NEW_LINK = By.cssSelector("#create-link-parent-selection-category-list .category");
     private static final By SAVE_NEW_LINK_BUTTON = By.id("create-link-button");
+    private static final By EDIT_LIST_ITEM_DIALOG = By.id("edit-list-item");
+    private static final By EDIT_LIST_ITEM_TITLE_INPUT = By.id("edit-list-item-title-input");
+    private static final By EDIT_LIST_ITEM_VALUE_INPUT = By.id("edit-list-item-value-input");
+    private static final By AVAILABLE_PARENTS_FOR_EDIT_LIST_ITEM = By.cssSelector("#edit-list-item-parent-selection-category-list .category");
+    private static final By SAVE_EDITED_LIST_ITEM_BUTTON = By.id("edit-list-item-save-button");
+    private static final By DETAILED_LIST_UP_BUTTON = By.id("category-content-parent-selection-parent-button");
 
     public static WebElement createCategoryWindow(WebDriver driver) {
         return driver.findElement(CREATE_CATEGORY_WINDOW);
@@ -156,5 +162,29 @@ class NotebookPage {
 
     public static WebElement saveNewLinkButton(WebDriver driver) {
         return driver.findElement(SAVE_NEW_LINK_BUTTON);
+    }
+
+    public static WebElement editListItemDialog(WebDriver driver) {
+        return driver.findElement(EDIT_LIST_ITEM_DIALOG);
+    }
+
+    public static WebElement editListItemTitleInput(WebDriver driver) {
+        return driver.findElement(EDIT_LIST_ITEM_TITLE_INPUT);
+    }
+
+    public static WebElement editListItemValueInput(WebDriver driver) {
+        return driver.findElement(EDIT_LIST_ITEM_VALUE_INPUT);
+    }
+
+    public static List<WebElement> availableParentsForEditListItem(WebDriver driver) {
+        return driver.findElements(AVAILABLE_PARENTS_FOR_EDIT_LIST_ITEM);
+    }
+
+    public static WebElement saveEditedListItemButton(WebDriver driver) {
+        return driver.findElement(SAVE_EDITED_LIST_ITEM_BUTTON);
+    }
+
+    public static WebElement detailedListUpButton(WebDriver driver) {
+        return driver.findElement(DETAILED_LIST_UP_BUTTON);
     }
 }
