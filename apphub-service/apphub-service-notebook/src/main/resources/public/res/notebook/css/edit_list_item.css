@@ -5,3 +5,8 @@
 #edit-list-item-parent-selection-wrapper{
     top: var(--create-link-input-wrapper-height);
 }
+
+#edit-list-item-parent-selection-category-list .category{
+    font-size: 1.25rem;
+    margin: 0.5rem;
+}

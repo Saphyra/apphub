@@ -1,5 +1,6 @@
 Platform
     Error monitoring
+    Reuse Chrome tabs for FE testing
 
 Index page
     Switch language

@@ -10,9 +10,7 @@ import com.github.saphyra.apphub.integration.frontend.model.modules.ModuleLocati
 import com.github.saphyra.apphub.integration.frontend.model.notebook.ListItemDetailsItem;
 import com.github.saphyra.apphub.integration.frontend.service.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.frontend.service.modules.ModulesPageActions;
-import com.github.saphyra.apphub.integration.frontend.service.notebook.CategoryActions;
-import com.github.saphyra.apphub.integration.frontend.service.notebook.DetailedListActions;
-import com.github.saphyra.apphub.integration.frontend.service.notebook.TextActions;
+import com.github.saphyra.apphub.integration.frontend.service.notebook.*;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -21,7 +19,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TextCrudTest extends SeleniumTest {
-    private static final String CATEGORY_TITLE = "category-title";
+    private static final String CATEGORY_TITLE_1 = "category-title-1";
+    private static final String CATEGORY_TITLE_2 = "category-title-2";
     private static final String TEXT_TITLE = "text-title";
     private static final String TEXT_CONTENT = "text-content";
     private static final String NEW_TEXT_TITLE = "new-text-title";
@@ -52,17 +51,17 @@ public class TextCrudTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
 
-        CategoryActions.createCategory(driver, CATEGORY_TITLE);
+        CategoryActions.createCategory(driver, CATEGORY_TITLE_1);
 
         TextActions.openCreateTextWindow(driver);
         TextActions.fillNewTextTitle(driver, TEXT_TITLE);
         TextActions.fillNewTextContent(driver, TEXT_CONTENT);
-        TextActions.selectCategoryForNewText(driver, CATEGORY_TITLE);
+        TextActions.selectCategoryForNewText(driver, CATEGORY_TITLE_1);
         TextActions.submitCreateTextForm(driver);
 
         NotificationUtil.verifySuccessNotification(driver, "Szöveg elmentve.");
 
-        CategoryActions.openCategory(driver, CATEGORY_TITLE);
+        CategoryActions.openCategory(driver, CATEGORY_TITLE_1);
 
         List<ListItemDetailsItem> detailedListItems = DetailedListActions.getDetailedListItems(driver);
         assertThat(detailedListItems).hasSize(1);
@@ -163,5 +162,59 @@ public class TextCrudTest extends SeleniumTest {
 
         NotificationUtil.verifySuccessNotification(driver, "Elem törölve.");
         assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
+    }
+
+    @Test
+    public void editTextListItem_emptyTitle() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+
+        TextActions.createText(driver, TEXT_TITLE, TEXT_CONTENT);
+
+        DetailedListActions.findDetailedItem(driver, TEXT_TITLE)
+            .edit(driver);
+
+        NotebookPageActions.fillEditListItemDialog(driver, "", null, 0);
+        NotebookPageActions.submitEditListItemDialog(driver);
+
+        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
+    }
+
+    @Test
+    public void editLink() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+
+        CategoryActions.createCategory(driver, CATEGORY_TITLE_1);
+        CategoryActions.createCategory(driver, CATEGORY_TITLE_2);
+
+        TextActions.createText(driver, TEXT_TITLE, TEXT_CONTENT, CATEGORY_TITLE_1);
+
+        CategoryActions.openCategory(driver, CATEGORY_TITLE_1);
+
+        DetailedListActions.findDetailedItem(driver, TEXT_TITLE)
+            .edit(driver);
+
+        NotebookPageActions.fillEditListItemDialog(driver, NEW_TEXT_TITLE, null, 1, CATEGORY_TITLE_2);
+        NotebookPageActions.submitEditListItemDialog(driver);
+
+        NotificationUtil.verifySuccessNotification(driver, "Elem elmentve.");
+        NotebookPageActions.verifyEditListItemDialogClosed(driver);
+
+        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
+
+        DetailedListActions.up(driver);
+
+        CategoryActions.openCategory(driver, CATEGORY_TITLE_2);
+
+        DetailedListActions.findDetailedItem(driver, NEW_TEXT_TITLE);
     }
 }
