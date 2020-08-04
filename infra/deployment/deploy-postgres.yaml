@@ -30,6 +30,9 @@ spec:
               value: postgres
             - name: POSTGRES_PASSWORD
               value: postgres
+          args:
+            - "-c"
+            - max_connections=1000
       volumes:
         - name: postgredb
           persistentVolumeClaim:

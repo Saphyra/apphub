@@ -1,5 +1,6 @@
 Platform
     Error monitoring
+    No banner Spring startup
 
 Index page
     Switch language

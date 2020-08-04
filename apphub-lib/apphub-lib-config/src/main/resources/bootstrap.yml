@@ -7,6 +7,8 @@ spring:
     password: postgres
     url: jdbc:postgresql://postgres:5432/postgres
     driverClassName: org.postgresql.Driver
+    hikari:
+      maximumPoolSize: 50
   jpa:
     properties:
       hibernate:

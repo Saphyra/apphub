@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.common.framework;
 
+import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.util.IdGenerator;
 import lombok.experimental.UtilityClass;
 
@@ -11,7 +12,7 @@ public class RandomDataProvider {
     public final IdGenerator ID_GENERATOR = new IdGenerator();
 
     public String generateEmail() {
-        return "email-" + ID_GENERATOR.generateRandomId() + "@test.com";
+        return "email-" + ID_GENERATOR.generateRandomId() + "@" + TestBase.getEmailDomain() + ".com";
     }
 
     public String generateUsername() {

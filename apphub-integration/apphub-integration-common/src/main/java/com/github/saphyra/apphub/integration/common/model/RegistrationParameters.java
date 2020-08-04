@@ -35,7 +35,7 @@ public class RegistrationParameters {
             .rememberMe(false)
             .build();
     }
-    
+
     public static RegistrationParameters validParameters() {
         return validParameters(VALID_PASSWORD);
     }
@@ -48,8 +48,6 @@ public class RegistrationParameters {
             .confirmPassword(password)
             .build();
     }
-
-
 
     public static RegistrationParameters invalidEmailParameters() {
         return validParameters().toBuilder()

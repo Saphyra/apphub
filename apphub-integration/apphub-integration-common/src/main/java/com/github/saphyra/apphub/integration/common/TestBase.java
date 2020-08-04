@@ -10,17 +10,17 @@ import com.github.saphyra.apphub.integration.common.model.UserRoleResponse;
 import com.github.saphyra.util.ObjectMapperWrapper;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
 
 import static com.github.saphyra.apphub.integration.common.framework.DataConstants.VALID_PASSWORD;
 import static com.github.saphyra.apphub.integration.common.framework.DataConstants.VALID_PASSWORD2;
-import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
@@ -30,6 +30,14 @@ public class TestBase {
     public static int SERVER_PORT;
     public static int DATABASE_PORT;
 
+    private static final ThreadLocal<String> EMAIL_DOMAIN = new ThreadLocal<>();
+    private static volatile RegistrationParameters superUser;
+    private static volatile UUID accessTokenId;
+
+    public static String getEmailDomain() {
+        return EMAIL_DOMAIN.get();
+    }
+
     @BeforeSuite(alwaysRun = true)
     public void setUpSuite() {
         SERVER_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("serverPort"), "serverPort is null"));
@@ -37,43 +45,56 @@ public class TestBase {
 
         DATABASE_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("databasePort"), "serverPort is null"));
         log.info("DatabasePort: {}", DATABASE_PORT);
+
+        registerSuperuser();
     }
 
     @AfterSuite(alwaysRun = true)
-    public void tearDownSuite() throws SQLException {
+    public void tearDownSuite() {
+        deleteUser(superUser.getEmail(), superUser.getPassword());
+    }
+
+    @BeforeMethod(alwaysRun = true)
+    public void setUpMethod() {
+        EMAIL_DOMAIN.set(UUID.randomUUID().toString());
+    }
+
+    @AfterMethod(alwaysRun = true)
+    public void tearDownMethod() {
         deleteTestUsers();
 
-        if (!isNull(DatabaseUtil.CONNECTION)) {
-            DatabaseUtil.CONNECTION.close();
-        }
+        EMAIL_DOMAIN.remove();
     }
 
     private void deleteTestUsers() {
         log.info("Deleting testUsers...");
         Language language = Language.HUNGARIAN;
+
+        deleteUsersWithPassword(language, VALID_PASSWORD, accessTokenId);
+        deleteUsersWithPassword(language, VALID_PASSWORD2, accessTokenId);
+    }
+
+    private void registerSuperuser() {
+        Language language = Language.HUNGARIAN;
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(language, registrationParameters.toRegistrationRequest());
         DatabaseUtil.addRoleByEmail(registrationParameters.getEmail(), "ADMIN");
-
-        UUID accessTokenId = IndexPageActions.login(language, registrationParameters.getEmail(), registrationParameters.getPassword());
-        deleteUsersWithPassword(language, registrationParameters, VALID_PASSWORD, accessTokenId);
-        deleteUsersWithPassword(language, registrationParameters, VALID_PASSWORD2, accessTokenId);
-
-        deleteUser(registrationParameters.getEmail(), registrationParameters.getPassword());
+        superUser = registrationParameters;
+        accessTokenId = IndexPageActions.login(language, superUser.getEmail(), superUser.getPassword());
+        log.info("AccessTokenId of superUser: {}", accessTokenId);
     }
 
-    private void deleteUsersWithPassword(Language language, RegistrationParameters registrationParameters, String password, UUID accessTokenId) {
+    private void deleteUsersWithPassword(Language language, String password, UUID accessTokenId) {
         UserRoleResponse[] userResponses = getCandidates(language, accessTokenId);
         log.info("Deleting {} number of test accounts", userResponses.length);
 
         Arrays.stream(userResponses)
-            .filter(userRoleResponse -> !userRoleResponse.getEmail().equals(registrationParameters.getEmail()))
             .forEach(userRoleResponse -> deleteUser(userRoleResponse.getEmail(), password));
     }
 
     private UserRoleResponse[] getCandidates(Language language, UUID accessTokenId) {
         Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
-            .body(new OneParamRequest<>("@test.com"))
+            .body(new OneParamRequest<>("@" + getEmailDomain() + ".com"))
             .post(UrlFactory.create(Endpoints.GET_ROLES));
 
         return response.getBody().as(UserRoleResponse[].class);
@@ -96,7 +117,7 @@ public class TestBase {
             assertThat(response.getStatusCode()).isEqualTo(200);
             log.info("User deleted: {}", email);
         } catch (Throwable e) {
-            log.warn("Failed deleting user {}", email, e);
+            //
         }
     }
 }
