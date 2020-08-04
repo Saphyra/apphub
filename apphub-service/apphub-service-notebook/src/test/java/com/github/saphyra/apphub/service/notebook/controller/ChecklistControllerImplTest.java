@@ -2,8 +2,10 @@ package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.api.notebook.model.response.ChecklistResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemQueryService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.creation.ChecklistCreationService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.edit.EditChecklistItemService;
 import org.junit.Test;
@@ -30,6 +32,9 @@ public class ChecklistControllerImplTest {
     @Mock
     private EditChecklistItemService editChecklistItemService;
 
+    @Mock
+    private ChecklistItemQueryService checklistItemQueryService;
+
     @InjectMocks
     private ChecklistControllerImpl underTest;
 
@@ -41,6 +46,9 @@ public class ChecklistControllerImplTest {
 
     @Mock
     private ChecklistItemNodeRequest checklistItemNodeRequest;
+
+    @Mock
+    private ChecklistResponse checklistResponse;
 
     @Test
     public void createChecklistItem() {
@@ -57,5 +65,14 @@ public class ChecklistControllerImplTest {
         underTest.editChecklistItem(Arrays.asList(checklistItemNodeRequest), LIST_ITEM_ID);
 
         verify(editChecklistItemService).edit(Arrays.asList(checklistItemNodeRequest), LIST_ITEM_ID);
+    }
+
+    @Test
+    public void getChecklistItem() {
+        given(checklistItemQueryService.query(LIST_ITEM_ID)).willReturn(checklistResponse);
+
+        ChecklistResponse result = underTest.getChecklistItem(LIST_ITEM_ID);
+
+        assertThat(result).isEqualTo(checklistResponse);
     }
 }

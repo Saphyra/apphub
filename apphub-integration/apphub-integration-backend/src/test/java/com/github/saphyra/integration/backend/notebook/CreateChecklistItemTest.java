@@ -2,6 +2,7 @@ package com.github.saphyra.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistItemNodeRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistResponse;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateChecklistItemRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.common.TestBase;
@@ -211,6 +212,13 @@ public class CreateChecklistItemTest extends TestBase {
 
         UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
 
-        //TODO Verify after creating Query checklistItem endpoint
+        ChecklistResponse response = NotebookActions.getChecklist(language, accessTokenId, listItemId);
+
+        assertThat(response.getTitle()).isEqualTo(TITLE);
+        assertThat(response.getNodes()).hasSize(1);
+        assertThat(response.getNodes().get(0).getChecklistItemId()).isNotNull();
+        assertThat(response.getNodes().get(0).getContent()).isEqualTo(CONTENT);
+        assertThat(response.getNodes().get(0).getChecked()).isTrue();
+        assertThat(response.getNodes().get(0).getOrder()).isEqualTo(ORDER);
     }
 }

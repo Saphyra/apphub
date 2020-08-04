@@ -1,12 +1,36 @@
 package com.github.saphyra.integration.backend.notebook;
 
+import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
+import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistItemNodeRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistResponse;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateCategoryRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateChecklistItemRequest;
 import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
+import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
+import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
+import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
+import io.restassured.response.Response;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-//TODO implement TCas after Query checklistItem endpoint is done
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.UUID;
+
+import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_INVALID_PARAM;
+import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_LIST_ITEM_NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class EditChecklistItemTest extends TestBase {
+    private static final String ORIGINAL_TITLE = "original-title";
+    private static final Integer ORIGINAL_ORDER = 432523;
+    private static final String ORIGINAL_CONTENT = "original-content";
+    private static final Integer NEW_ORDER = 456324;
+    private static final String NEW_CONTENT = "new-content";
+
     @DataProvider(name = "localeDataProvider", parallel = true)
     public Object[] localeDataProvider() {
         return Language.values();
@@ -14,41 +38,293 @@ public class EditChecklistItemTest extends TestBase {
 
     @Test(dataProvider = "localeDataProvider")
     public void nullContent(Language language) {
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
+        CreateCategoryRequest createCategoryRequest = CreateCategoryRequest.builder()
+            .title("asfd")
+            .build();
+        UUID parent = NotebookActions.createCategory(language, accessTokenId, createCategoryRequest);
+
+        CreateChecklistItemRequest request = CreateChecklistItemRequest.builder()
+            .parent(parent)
+            .title(ORIGINAL_TITLE)
+            .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
+                .order(ORIGINAL_ORDER)
+                .checked(false)
+                .content(ORIGINAL_CONTENT)
+                .build()))
+            .build();
+
+        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+
+        ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
+        UUID checklistItemId = checklistResponse.getNodes()
+            .get(0)
+            .getChecklistItemId();
+
+        ChecklistItemNodeRequest editRequest = ChecklistItemNodeRequest.builder()
+            .checklistItemId(checklistItemId)
+            .order(NEW_ORDER)
+            .checked(true)
+            .content(null)
+            .build();
+
+        Response response = NotebookActions.getEditChecklistResponse(language, accessTokenId, Arrays.asList(editRequest), listItemId);
+
+        assertThat(response.getStatusCode()).isEqualTo(400);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getParams().get("node.content")).isEqualTo("must not be null");
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, ERROR_CODE_INVALID_PARAM));
     }
 
     @Test(dataProvider = "localeDataProvider")
     public void nullChecked(Language language) {
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
+        CreateCategoryRequest createCategoryRequest = CreateCategoryRequest.builder()
+            .title("asfd")
+            .build();
+        UUID parent = NotebookActions.createCategory(language, accessTokenId, createCategoryRequest);
+
+        CreateChecklistItemRequest request = CreateChecklistItemRequest.builder()
+            .parent(parent)
+            .title(ORIGINAL_TITLE)
+            .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
+                .order(ORIGINAL_ORDER)
+                .checked(false)
+                .content(ORIGINAL_CONTENT)
+                .build()))
+            .build();
+
+        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+
+        ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
+        UUID checklistItemId = checklistResponse.getNodes()
+            .get(0)
+            .getChecklistItemId();
+
+        ChecklistItemNodeRequest editRequest = ChecklistItemNodeRequest.builder()
+            .checklistItemId(checklistItemId)
+            .order(NEW_ORDER)
+            .checked(null)
+            .content(NEW_CONTENT)
+            .build();
+
+        Response response = NotebookActions.getEditChecklistResponse(language, accessTokenId, Arrays.asList(editRequest), listItemId);
+
+        assertThat(response.getStatusCode()).isEqualTo(400);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getParams().get("node.checked")).isEqualTo("must not be null");
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, ERROR_CODE_INVALID_PARAM));
     }
 
     @Test(dataProvider = "localeDataProvider")
     public void nullOrder(Language language) {
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
+        CreateCategoryRequest createCategoryRequest = CreateCategoryRequest.builder()
+            .title("asfd")
+            .build();
+        UUID parent = NotebookActions.createCategory(language, accessTokenId, createCategoryRequest);
+
+        CreateChecklistItemRequest request = CreateChecklistItemRequest.builder()
+            .parent(parent)
+            .title(ORIGINAL_TITLE)
+            .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
+                .order(ORIGINAL_ORDER)
+                .checked(false)
+                .content(ORIGINAL_CONTENT)
+                .build()))
+            .build();
+
+        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+
+        ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
+        UUID checklistItemId = checklistResponse.getNodes()
+            .get(0)
+            .getChecklistItemId();
+
+        ChecklistItemNodeRequest editRequest = ChecklistItemNodeRequest.builder()
+            .checklistItemId(checklistItemId)
+            .order(null)
+            .checked(true)
+            .content(NEW_CONTENT)
+            .build();
+
+        Response response = NotebookActions.getEditChecklistResponse(language, accessTokenId, Arrays.asList(editRequest), listItemId);
+
+        assertThat(response.getStatusCode()).isEqualTo(400);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getParams().get("node.order")).isEqualTo("must not be null");
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, ERROR_CODE_INVALID_PARAM));
     }
 
     @Test(dataProvider = "localeDataProvider")
     public void listItemNotFound(Language language) {
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
+        ChecklistItemNodeRequest editRequest = ChecklistItemNodeRequest.builder()
+            .order(NEW_ORDER)
+            .checked(true)
+            .content(NEW_CONTENT)
+            .build();
+
+        Response response = NotebookActions.getEditChecklistResponse(language, accessTokenId, Arrays.asList(editRequest), UUID.randomUUID());
+
+        assertThat(response.getStatusCode()).isEqualTo(404);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, ERROR_CODE_LIST_ITEM_NOT_FOUND));
     }
 
     @Test(dataProvider = "localeDataProvider")
     public void checklistItemNotFound(Language language) {
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
+        CreateCategoryRequest createCategoryRequest = CreateCategoryRequest.builder()
+            .title("asfd")
+            .build();
+        UUID parent = NotebookActions.createCategory(language, accessTokenId, createCategoryRequest);
+
+        CreateChecklistItemRequest request = CreateChecklistItemRequest.builder()
+            .parent(parent)
+            .title(ORIGINAL_TITLE)
+            .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
+                .order(ORIGINAL_ORDER)
+                .checked(false)
+                .content(ORIGINAL_CONTENT)
+                .build()))
+            .build();
+
+        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+
+        ChecklistItemNodeRequest editRequest = ChecklistItemNodeRequest.builder()
+            .checklistItemId(UUID.randomUUID())
+            .order(NEW_ORDER)
+            .checked(true)
+            .content(NEW_CONTENT)
+            .build();
+
+        Response response = NotebookActions.getEditChecklistResponse(language, accessTokenId, Arrays.asList(editRequest), listItemId);
+
+        assertThat(response.getStatusCode()).isEqualTo(404);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, ERROR_CODE_LIST_ITEM_NOT_FOUND));
     }
 
-    @Test(dataProvider = "localeDataProvider")
-    public void checklistItemDeleted(Language language) {
+    @Test
+    public void checklistItemDeleted() {
+        Language language = Language.HUNGARIAN;
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
+        CreateCategoryRequest createCategoryRequest = CreateCategoryRequest.builder()
+            .title("asfd")
+            .build();
+        UUID parent = NotebookActions.createCategory(language, accessTokenId, createCategoryRequest);
+
+        CreateChecklistItemRequest request = CreateChecklistItemRequest.builder()
+            .parent(parent)
+            .title(ORIGINAL_TITLE)
+            .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
+                .order(ORIGINAL_ORDER)
+                .checked(false)
+                .content(ORIGINAL_CONTENT)
+                .build()))
+            .build();
+
+        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+
+        NotebookActions.editChecklistItem(language, accessTokenId, Collections.emptyList(), listItemId);
+
+        ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
+
+        assertThat(checklistResponse.getNodes()).isEmpty();
     }
 
-    @Test(dataProvider = "localeDataProvider")
-    public void checklistItemAdded(Language language) {
+    @Test
+    public void checklistItemAdded() {
+        Language language = Language.HUNGARIAN;
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
+        CreateCategoryRequest createCategoryRequest = CreateCategoryRequest.builder()
+            .title("asfd")
+            .build();
+        UUID parent = NotebookActions.createCategory(language, accessTokenId, createCategoryRequest);
+
+        CreateChecklistItemRequest request = CreateChecklistItemRequest.builder()
+            .parent(parent)
+            .title(ORIGINAL_TITLE)
+            .nodes(Collections.emptyList())
+            .build();
+
+        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+
+        ChecklistItemNodeRequest editRequest = ChecklistItemNodeRequest.builder()
+            .order(NEW_ORDER)
+            .checked(true)
+            .content(NEW_CONTENT)
+            .build();
+        NotebookActions.editChecklistItem(language, accessTokenId, Arrays.asList(editRequest), listItemId);
+
+        ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
+
+        assertThat(checklistResponse.getNodes()).hasSize(1);
+        assertThat(checklistResponse.getNodes().get(0).getOrder()).isEqualTo(NEW_ORDER);
+        assertThat(checklistResponse.getNodes().get(0).getContent()).isEqualTo(NEW_CONTENT);
+        assertThat(checklistResponse.getNodes().get(0).getChecked()).isTrue();
     }
 
-    @Test(dataProvider = "localeDataProvider")
-    public void checklistItemModified(Language language) {
+    @Test
+    public void checklistItemModified() {
+        Language language = Language.HUNGARIAN;
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
+        CreateCategoryRequest createCategoryRequest = CreateCategoryRequest.builder()
+            .title("asfd")
+            .build();
+        UUID parent = NotebookActions.createCategory(language, accessTokenId, createCategoryRequest);
+
+        CreateChecklistItemRequest request = CreateChecklistItemRequest.builder()
+            .parent(parent)
+            .title(ORIGINAL_TITLE)
+            .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
+                .order(ORIGINAL_ORDER)
+                .checked(false)
+                .content(ORIGINAL_CONTENT)
+                .build()))
+            .build();
+        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+
+        UUID checklistItemId = NotebookActions.getChecklist(language, accessTokenId, listItemId)
+            .getNodes()
+            .get(0)
+            .getChecklistItemId();
+
+        ChecklistItemNodeRequest editRequest = ChecklistItemNodeRequest.builder()
+            .checklistItemId(checklistItemId)
+            .order(NEW_ORDER)
+            .checked(true)
+            .content(NEW_CONTENT)
+            .build();
+        NotebookActions.editChecklistItem(language, accessTokenId, Arrays.asList(editRequest), listItemId);
+
+        ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
+
+        assertThat(checklistResponse.getNodes()).hasSize(1);
+        assertThat(checklistResponse.getNodes().get(0).getOrder()).isEqualTo(NEW_ORDER);
+        assertThat(checklistResponse.getNodes().get(0).getContent()).isEqualTo(NEW_CONTENT);
+        assertThat(checklistResponse.getNodes().get(0).getChecked()).isTrue();
     }
 }

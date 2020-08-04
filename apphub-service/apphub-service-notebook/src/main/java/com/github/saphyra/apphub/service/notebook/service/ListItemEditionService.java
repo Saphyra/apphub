@@ -19,7 +19,6 @@ import java.util.UUID;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 public class ListItemEditionService {
     private final ContentDao contentDao;
     private final ContentValidator contentValidator;
@@ -48,7 +47,10 @@ public class ListItemEditionService {
     private void validateNotOwnChild(UUID listItemId, UUID newParent, UUID userId) {
         List<ListItem> children = listItemDao.getByUserIdAndParent(userId, listItemId);
         boolean childMatchesNewParent = children.stream()
-            .anyMatch(listItem -> listItem.getListItemId().equals(newParent));
+            .anyMatch(listItem -> {
+                UUID currentItemIs = listItem.getListItemId();
+                return currentItemIs.equals(newParent);
+            });
         if (listItemId.equals(newParent) || childMatchesNewParent) {
             throw new UnprocessableEntityException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "parent", "must not be own child"), "Category cannot be its own child.");
         }

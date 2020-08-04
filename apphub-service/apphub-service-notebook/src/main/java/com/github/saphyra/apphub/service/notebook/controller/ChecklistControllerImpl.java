@@ -2,9 +2,11 @@ package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.api.notebook.model.response.ChecklistResponse;
 import com.github.saphyra.apphub.api.notebook.server.ChecklistController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemQueryService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.creation.ChecklistCreationService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.edit.EditChecklistItemService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ChecklistControllerImpl implements ChecklistController {
     private final ChecklistCreationService checklistCreationService;
+    private final ChecklistItemQueryService checklistItemQueryService;
     private final EditChecklistItemService editChecklistItemService;
 
     @Override
@@ -31,5 +34,11 @@ public class ChecklistControllerImpl implements ChecklistController {
     public void editChecklistItem(List<ChecklistItemNodeRequest> request, UUID listItemId) {
         log.info("Editing checklistItem with listItemId {}", listItemId);
         editChecklistItemService.edit(request, listItemId);
+    }
+
+    @Override
+    public ChecklistResponse getChecklistItem(UUID listItemId) {
+        log.info("Querying checklist item with id {}", listItemId);
+        return checklistItemQueryService.query(listItemId);
     }
 }
