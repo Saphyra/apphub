@@ -185,7 +185,7 @@ public class TextCrudTest extends SeleniumTest {
     }
 
     @Test
-    public void editLink() {
+    public void editTextListItem() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();

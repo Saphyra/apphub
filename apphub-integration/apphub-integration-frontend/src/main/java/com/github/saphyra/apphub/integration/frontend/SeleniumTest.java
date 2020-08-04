@@ -2,26 +2,23 @@ package com.github.saphyra.apphub.integration.frontend;
 
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.AfterSuite;
 
-import java.util.Optional;
+import java.util.concurrent.Future;
 
 import static java.util.Objects.isNull;
 
 @Slf4j
 public class SeleniumTest extends TestBase {
-    private static final boolean HEADLESS_MODE;
+    static final boolean HEADLESS_MODE;
 
     static {
         String arg = System.getProperty("headless");
@@ -34,53 +31,44 @@ public class SeleniumTest extends TestBase {
         HEADLESS_MODE = headless;
     }
 
-    private final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
-
-    @BeforeMethod(alwaysRun = true)
-    public void startDriver() {
-        ChromeDriver driver = null;
-        for (int tryCount = 0; tryCount < 3 && isNull(driver); tryCount++) {
-            try {
-                WebDriverManager.chromedriver().setup();
-
-                ChromeOptions options = new ChromeOptions();
-                options.setHeadless(HEADLESS_MODE);
-                options.addArguments("window-size=1920,1080");
-
-                driver = new ChromeDriver(options);
-                //driver.manage().window().maximize();
-                log.info("Driver created: {}", driver);
-                this.driver.set(driver);
-            } catch (Exception e) {
-                log.error("Could not create driver", e);
-            }
-        }
-    }
+    private final ThreadLocal<WebDriverWrapper> driverWrapper = new ThreadLocal<>();
 
     @AfterMethod(alwaysRun = true)
-    public void stopDriver(ITestResult testResult) {
-        WebDriver driver = extractDriver();
+    public void afterMethod(ITestResult testResult) {
+        WebDriverWrapper webDriverWrapper = driverWrapper.get();
+        WebDriver driver = webDriverWrapper.getDriver();
         if (ITestResult.FAILURE == testResult.getStatus() && !HEADLESS_MODE) {
             extractLogs(driver);
             SleepUtil.sleep(20000);
         }
-        if (!isNull(driver)) {
-            log.info("Closing driver {}", driver);
-            for (int tryCount = 0; tryCount < 3; tryCount++) {
-                try {
-                    driver.close();
-                    driver.quit();
-                    break;
-                } catch (Exception e) {
-                    log.error("Could not stop driver", e);
-                }
-            }
-        }
+        WebDriverFactory.release(webDriverWrapper.getId());
+    }
+
+    @AfterSuite
+    public void stopDrivers() {
+        WebDriverFactory.stopDrivers();
     }
 
     protected WebDriver extractDriver() {
-        return Optional.ofNullable(driver.get())
-            .orElseThrow(() -> new RuntimeException("WebDriver has not been initialized."));
+        Future<WebDriverWrapper> webDriverWrapperFuture = WebDriverFactory.getDriver();
+
+        while (!webDriverWrapperFuture.isDone()) {
+            SleepUtil.sleep(1000);
+        }
+
+        WebDriverWrapper webDriverWrapper;
+        try {
+            webDriverWrapper = webDriverWrapperFuture.get();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        driverWrapper.set(webDriverWrapper);
+
+        WebDriver driver = webDriverWrapper.getDriver();
+        driver.manage().deleteAllCookies();
+
+        return driver;
     }
 
     private void extractLogs(WebDriver driver) {
