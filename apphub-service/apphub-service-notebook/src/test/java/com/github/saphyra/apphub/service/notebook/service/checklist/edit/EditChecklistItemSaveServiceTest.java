@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist.edit;
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemFactory;
-import com.github.saphyra.apphub.service.notebook.service.checklist.NodeContentWrapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -56,10 +56,7 @@ public class EditChecklistItemSaveServiceTest {
             nodeRequest
         );
 
-        NodeContentWrapper nodeContentWrapper = NodeContentWrapper.builder()
-            .content(content)
-            .checklistItem(checklistItem)
-            .build();
+        BiWrapper<ChecklistItem, Content> nodeContentWrapper = new BiWrapper<>(checklistItem, content);
 
         given(checklistItemFactory.create(listItem, nodeRequest)).willReturn(nodeContentWrapper);
 

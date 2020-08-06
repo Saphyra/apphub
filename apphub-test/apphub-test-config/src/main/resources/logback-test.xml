@@ -3,5 +3,6 @@
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
     <logger name="org.hibernate" level="off"/>
     <logger name="liquibase" level="off"/>
-    <logger name="root" level="off"/>
+    <logger name="org.springframework" level="off"/>
+    <logger name="root" level="error"/>
 </configuration>

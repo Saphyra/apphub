@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.content;
 
+import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-public class ContentDao extends AbstractDao<ContentEntity, Content, String, ContentRepository> {
+public class ContentDao extends AbstractDao<ContentEntity, Content, String, ContentRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
     public ContentDao(ContentConverter converter, ContentRepository repository, UuidConverter uuidConverter) {
@@ -27,6 +28,7 @@ public class ContentDao extends AbstractDao<ContentEntity, Content, String, Cont
             .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.LIST_ITEM_NOT_FOUND.name()), "Text not found by parent " + parent));
     }
 
+    @Override
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }

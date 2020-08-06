@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item;
 
+import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
@@ -12,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class ListItemDao extends AbstractDao<ListItemEntity, ListItem, String, ListItemRepository> {
+public class ListItemDao extends AbstractDao<ListItemEntity, ListItem, String, ListItemRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
     public ListItemDao(ListItemConverter converter, ListItemRepository repository, UuidConverter uuidConverter) {
@@ -41,6 +42,7 @@ public class ListItemDao extends AbstractDao<ListItemEntity, ListItem, String, L
         ));
     }
 
+     @Override
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }

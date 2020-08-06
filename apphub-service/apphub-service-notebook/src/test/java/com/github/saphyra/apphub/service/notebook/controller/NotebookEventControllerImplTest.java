@@ -1,16 +1,15 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
+import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
-import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import static org.mockito.Mockito.verify;
@@ -20,16 +19,14 @@ public class NotebookEventControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeleteByUserIdDao dao;
 
-    @Mock
-    private ContentDao contentDao;
-
-    @Mock
-    private ChecklistItemDao checklistItemDao;
-
-    @InjectMocks
     private NotebookEventControllerImpl underTest;
+
+    @Before
+    public void setUp(){
+        underTest = new NotebookEventControllerImpl(Arrays.asList(dao));
+    }
 
     @Test
     public void deleteAccountEvent() {
@@ -37,8 +34,6 @@ public class NotebookEventControllerImplTest {
 
         underTest.deleteAccountEvent(eventRequest);
 
-        verify(listItemDao).deleteByUserId(USER_ID);
-        verify(contentDao).deleteByUserId(USER_ID);
-        verify(checklistItemDao).deleteByUserId(USER_ID);
+        verify(dao).deleteByUserId(USER_ID);
     }
 }

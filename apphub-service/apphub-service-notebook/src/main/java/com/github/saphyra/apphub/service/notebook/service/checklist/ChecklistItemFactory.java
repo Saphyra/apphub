@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist;
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
@@ -17,7 +18,7 @@ public class ChecklistItemFactory {
     private final ContentFactory contentFactory;
     private final IdGenerator idGenerator;
 
-    public NodeContentWrapper create(ListItem listItem, ChecklistItemNodeRequest nodeRequest) {
+    public BiWrapper<ChecklistItem, Content> create(ListItem listItem, ChecklistItemNodeRequest nodeRequest) {
         UUID checklistItemId = idGenerator.randomUUID();
         ChecklistItem checklistItem = ChecklistItem.builder()
             .checklistItemId(checklistItemId)
@@ -28,9 +29,6 @@ public class ChecklistItemFactory {
             .build();
         Content content = contentFactory.create(checklistItemId, listItem.getUserId(), nodeRequest.getContent());
 
-        return NodeContentWrapper.builder()
-            .checklistItem(checklistItem)
-            .content(content)
-            .build();
+        return new BiWrapper<>(checklistItem, content);
     }
 }

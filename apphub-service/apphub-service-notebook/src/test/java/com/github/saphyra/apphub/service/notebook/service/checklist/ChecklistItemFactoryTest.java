@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist;
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
@@ -52,13 +54,13 @@ public class ChecklistItemFactoryTest {
             .content(CONTENT)
             .build();
 
-        NodeContentWrapper result = underTest.create(listItem, nodeRequest);
+        BiWrapper<ChecklistItem, Content> result = underTest.create(listItem, nodeRequest);
 
-        assertThat(result.getChecklistItem().getChecklistItemId()).isEqualTo(CHECKLIST_ITEM_ID);
-        assertThat(result.getChecklistItem().getUserId()).isEqualTo(USER_ID);
-        assertThat(result.getChecklistItem().getParent()).isEqualTo(LIST_ITEM_ID);
-        assertThat(result.getChecklistItem().getOrder()).isEqualTo(ORDER);
-        assertThat(result.getChecklistItem().getChecked()).isEqualTo(true);
-        assertThat(result.getContent()).isEqualTo(content);
+        assertThat(result.getEntity1().getChecklistItemId()).isEqualTo(CHECKLIST_ITEM_ID);
+        assertThat(result.getEntity1().getUserId()).isEqualTo(USER_ID);
+        assertThat(result.getEntity1().getParent()).isEqualTo(LIST_ITEM_ID);
+        assertThat(result.getEntity1().getOrder()).isEqualTo(ORDER);
+        assertThat(result.getEntity1().getChecked()).isEqualTo(true);
+        assertThat(result.getEntity2()).isEqualTo(content);
     }
 }

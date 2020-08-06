@@ -38,8 +38,8 @@ public class ChecklistCreationService {
             .stream()
             .map(nodeRequest -> checklistItemFactory.create(listItem, nodeRequest))
             .forEach(nodeContentWrapper -> {
-                contentDao.save(nodeContentWrapper.getContent());
-                checklistItemDao.save(nodeContentWrapper.getChecklistItem());
+                contentDao.save(nodeContentWrapper.getEntity2());
+                checklistItemDao.save(nodeContentWrapper.getEntity1());
             });
 
 

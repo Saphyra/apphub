@@ -1,18 +1,19 @@
-package com.github.saphyra.apphub.service.notebook.dao.checklist_item;
+package com.github.saphyra.apphub.service.notebook.dao.table.join;
 
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.converter.Converter;
 import com.github.saphyra.dao.AbstractDao;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.UUID;
 
 @Component
-public class ChecklistItemDao extends AbstractDao<ChecklistItemEntity, ChecklistItem, String, ChecklistItemRepository> implements DeleteByUserIdDao {
+//TODO unit test
+public class TableJoinDao extends AbstractDao<TableJoinEntity, TableJoin, String, TableJoinRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
-    public ChecklistItemDao(ChecklistItemConverter converter, ChecklistItemRepository repository, UuidConverter uuidConverter) {
+    public TableJoinDao(Converter<TableJoinEntity, TableJoin> converter, TableJoinRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
     }
@@ -20,9 +21,5 @@ public class ChecklistItemDao extends AbstractDao<ChecklistItemEntity, Checklist
     @Override
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
-    }
-
-    public List<ChecklistItem> getByParent(UUID parent) {
-        return converter.convertEntity(repository.getByParent(uuidConverter.convertDomain(parent)));
     }
 }

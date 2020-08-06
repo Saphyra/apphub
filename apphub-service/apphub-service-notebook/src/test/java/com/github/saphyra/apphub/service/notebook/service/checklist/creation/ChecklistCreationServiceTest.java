@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.checklist.creation;
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
@@ -11,7 +12,6 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemFactory;
-import com.github.saphyra.apphub.service.notebook.service.checklist.NodeContentWrapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -80,10 +80,7 @@ public class ChecklistCreationServiceTest {
         given(listItemFactory.create(USER_ID, TITLE, PARENT, ListItemType.CHECKLIST)).willReturn(listItem);
         given(listItem.getListItemId()).willReturn(LIST_ITEM_ID);
 
-        NodeContentWrapper nodeContentWrapper = NodeContentWrapper.builder()
-            .checklistItem(checklistItem)
-            .content(content)
-            .build();
+        BiWrapper<ChecklistItem, Content> nodeContentWrapper = new BiWrapper<>(checklistItem, content);
         given(checklistItemFactory.create(listItem, nodeRequest)).willReturn(nodeContentWrapper);
 
         UUID result = underTest.create(request, USER_ID);

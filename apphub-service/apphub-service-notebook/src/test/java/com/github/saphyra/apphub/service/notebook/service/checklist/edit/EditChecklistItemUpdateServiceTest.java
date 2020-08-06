@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist.edit;
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.service.checklist.NodeContentWrapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -39,8 +39,8 @@ public class EditChecklistItemUpdateServiceTest {
 
     @Test
     public void updateItems() {
-        Map<UUID, NodeContentWrapper> actualItems = new HashMap<UUID, NodeContentWrapper>() {{
-            put(CHECKLIST_ITEM_ID, NodeContentWrapper.builder().content(content).checklistItem(checklistItem).build());
+        Map<UUID, BiWrapper<ChecklistItem, Content>> actualItems = new HashMap<UUID, BiWrapper<ChecklistItem, Content>>() {{
+            put(CHECKLIST_ITEM_ID, new BiWrapper<>(checklistItem, content));
         }};
 
         List<ChecklistItemNodeRequest> requests = Arrays.asList(

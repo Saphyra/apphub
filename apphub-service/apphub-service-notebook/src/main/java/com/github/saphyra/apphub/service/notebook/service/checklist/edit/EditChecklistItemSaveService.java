@@ -26,8 +26,8 @@ class EditChecklistItemSaveService {
             .filter(request -> isNull(request.getChecklistItemId()))
             .map(request -> checklistItemFactory.create(listItem, request))
             .forEach(wrapper -> {
-                checklistItemDao.save(wrapper.getChecklistItem());
-                contentDao.save(wrapper.getContent());
+                checklistItemDao.save(wrapper.getEntity1());
+                contentDao.save(wrapper.getEntity2());
             });
     }
 }

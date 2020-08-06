@@ -13,4 +13,6 @@
     <include file="database/change_sets/list_item.xml"/>
     <include file="database/change_sets/content.xml"/>
     <include file="database/change_sets/checklist_item.xml"/>
+    <include file="database/change_sets/table_head.xml"/>
+    <include file="database/change_sets/table_join.xml"/>
 </databaseChangeLog>

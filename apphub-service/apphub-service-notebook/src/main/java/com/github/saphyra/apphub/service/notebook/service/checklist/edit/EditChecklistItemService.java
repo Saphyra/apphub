@@ -1,13 +1,14 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist.edit;
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemNodeRequestValidator;
-import com.github.saphyra.apphub.service.notebook.service.checklist.NodeContentWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -37,19 +38,19 @@ public class EditChecklistItemService {
 
         ListItem listItem = listItemDao.findByIdValidated(listItemId);
 
-        Map<UUID, NodeContentWrapper> actualItems = checklistItemDao.getByParent(listItemId)
+        Map<UUID, BiWrapper<ChecklistItem, Content>> actualItems = checklistItemDao.getByParent(listItemId)
             .stream()
             .map(this::assembleNodeContentWrapper)
-            .collect(Collectors.toMap(nodeContentWrapper -> nodeContentWrapper.getChecklistItem().getChecklistItemId(), Function.identity()));
+            .collect(Collectors.toMap(nodeContentWrapper -> nodeContentWrapper.getEntity1().getChecklistItemId(), Function.identity()));
         editChecklistItemDeletionService.deleteItems(requests, actualItems);
         editChecklistItemUpdateService.updateItems(requests, actualItems);
         editChecklistItemSaveService.saveNewItems(requests, listItem);
     }
 
-    private NodeContentWrapper assembleNodeContentWrapper(ChecklistItem checklistItem) {
-        return NodeContentWrapper.builder()
-            .checklistItem(checklistItem)
-            .content(contentDao.findByParentValidated(checklistItem.getChecklistItemId()))
-            .build();
+    private BiWrapper<ChecklistItem, Content> assembleNodeContentWrapper(ChecklistItem checklistItem) {
+        return new BiWrapper<>(
+            checklistItem,
+            contentDao.findByParentValidated(checklistItem.getChecklistItemId())
+        );
     }
 }

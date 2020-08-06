@@ -1,0 +1,21 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-table_join" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="notebook" tableName="table_join"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="notebook" tableName="table_join">
+            <column name="table_join_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(37)"/>
+            <column name="parent" type="varchar(37)"/>
+            <column name="row_index" type="number"/>
+            <column name="column_index" type="number"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="notebook" tableName="table_join" columnNames="table_join_id" constraintName="table_join_pk"/>
+    </changeSet>
+</databaseChangeLog>

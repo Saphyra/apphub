@@ -1,9 +1,11 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist.edit;
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.service.checklist.NodeContentWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +24,7 @@ class EditChecklistItemDeletionService {
     private final ChecklistItemDao checklistItemDao;
     private final ContentDao contentDao;
 
-    void deleteItems(List<ChecklistItemNodeRequest> requests, Map<UUID, NodeContentWrapper> actualItems) {
+    void deleteItems(List<ChecklistItemNodeRequest> requests, Map<UUID, BiWrapper<ChecklistItem, Content>> actualItems) {
         List<UUID> newIds = requests.stream()
             .filter(request -> !isNull(request.getChecklistItemId()))
             .map(ChecklistItemNodeRequest::getChecklistItemId)
@@ -33,8 +35,8 @@ class EditChecklistItemDeletionService {
             .forEach(entry -> deleteItem(entry.getValue()));
     }
 
-    private void deleteItem(NodeContentWrapper wrapper) {
-        checklistItemDao.delete(wrapper.getChecklistItem());
-        contentDao.delete(wrapper.getContent());
+    private void deleteItem(BiWrapper<ChecklistItem, Content> wrapper) {
+        checklistItemDao.delete(wrapper.getEntity1());
+        contentDao.delete(wrapper.getEntity2());
     }
 }
