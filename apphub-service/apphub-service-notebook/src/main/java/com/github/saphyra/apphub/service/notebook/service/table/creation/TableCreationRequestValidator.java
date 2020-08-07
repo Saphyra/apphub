@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.service.notebook.service.table.creation;
 
 import com.github.saphyra.apphub.api.notebook.model.request.CreateTableRequest;
 import com.github.saphyra.apphub.service.notebook.service.ListItemRequestValidator;
+import com.github.saphyra.apphub.service.notebook.service.table.ColumnNameValidator;
+import com.github.saphyra.apphub.service.notebook.service.table.RowValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +22,6 @@ class TableCreationRequestValidator {
             .forEach(columnNameValidator::validate);
 
         request.getColumns()
-            .forEach(columnValues ->rowValidator.validate(columnValues, request.getColumnNames().size()));
+            .forEach(columnValues -> rowValidator.validate(columnValues, request.getColumnNames().size()));
     }
 }

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.service.checklist.edit;
+package com.github.saphyra.apphub.service.notebook.service.checklist.edition;
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;

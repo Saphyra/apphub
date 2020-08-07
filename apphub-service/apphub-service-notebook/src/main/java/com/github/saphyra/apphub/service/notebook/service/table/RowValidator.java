@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.service.table.creation;
+package com.github.saphyra.apphub.service.notebook.service.table;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;

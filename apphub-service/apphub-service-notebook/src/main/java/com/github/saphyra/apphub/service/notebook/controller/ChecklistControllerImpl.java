@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemQueryService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.creation.ChecklistCreationService;
-import com.github.saphyra.apphub.service.notebook.service.checklist.edit.EditChecklistItemService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.edition.EditChecklistItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;

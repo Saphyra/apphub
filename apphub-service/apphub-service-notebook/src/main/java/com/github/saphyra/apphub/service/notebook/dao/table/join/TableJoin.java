@@ -21,8 +21,8 @@ public class TableJoin {
     private final UUID parent;
 
     @NonNull
-    private final Integer rowIndex;
+    private Integer rowIndex;
 
     @NonNull
-    private final Integer columnIndex;
+    private Integer columnIndex;
 }

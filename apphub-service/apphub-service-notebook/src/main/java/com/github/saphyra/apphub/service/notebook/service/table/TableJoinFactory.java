@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.service.table.creation;
+package com.github.saphyra.apphub.service.notebook.service.table;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
@@ -16,11 +16,11 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 //TODO unit test
-class TableJoinFactory {
+public class TableJoinFactory {
     private final IdGenerator idGenerator;
     private final ContentFactory contentFactory;
 
-    List<BiWrapper<TableJoin, Content>> create(ListItem listItem, List<List<String>> columns, UUID userId) {
+    public List<BiWrapper<TableJoin, Content>> create(ListItem listItem, List<List<String>> columns, UUID userId) {
         List<BiWrapper<TableJoin, Content>> result = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < columns.size(); rowIndex++) {
             List<String> columnValues = columns.get(rowIndex);
@@ -32,7 +32,7 @@ class TableJoinFactory {
         return result;
     }
 
-    private BiWrapper<TableJoin, Content> create(UUID listItemId, String columnContent, int rowIndex, int columnIndex, UUID userId) {
+    public BiWrapper<TableJoin, Content> create(UUID listItemId, String columnContent, int rowIndex, int columnIndex, UUID userId) {
         TableJoin tableJoin = TableJoin.builder()
             .tableJoinId(idGenerator.randomUUID())
             .userId(userId)

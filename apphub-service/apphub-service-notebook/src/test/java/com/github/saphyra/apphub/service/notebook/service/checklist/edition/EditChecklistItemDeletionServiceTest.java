@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.service.checklist.edit;
+package com.github.saphyra.apphub.service.notebook.service.checklist.edition;
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
@@ -17,10 +17,8 @@ import java.util.*;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class EditChecklistItemUpdateServiceTest {
+public class EditChecklistItemDeletionServiceTest {
     private static final UUID CHECKLIST_ITEM_ID = UUID.randomUUID();
-    private static final Integer NEW_ORDER = 8769876;
-    private static final String NEW_CONTENT = "new-content";
 
     @Mock
     private ChecklistItemDao checklistItemDao;
@@ -29,31 +27,35 @@ public class EditChecklistItemUpdateServiceTest {
     private ContentDao contentDao;
 
     @InjectMocks
-    private EditChecklistItemUpdateService underTest;
+    private EditChecklistItemDeletionService underTest;
 
     @Mock
-    private Content content;
+    private ChecklistItem checklistItem1;
 
     @Mock
-    private ChecklistItem checklistItem;
+    private ChecklistItem checklistItem2;
+
+    @Mock
+    private Content content1;
+
+    @Mock
+    private Content content2;
 
     @Test
-    public void updateItems() {
-        Map<UUID, BiWrapper<ChecklistItem, Content>> actualItems = new HashMap<UUID, BiWrapper<ChecklistItem, Content>>() {{
-            put(CHECKLIST_ITEM_ID, new BiWrapper<>(checklistItem, content));
-        }};
-
+    public void deleteItems() {
         List<ChecklistItemNodeRequest> requests = Arrays.asList(
             new ChecklistItemNodeRequest(),
-            ChecklistItemNodeRequest.builder().checklistItemId(CHECKLIST_ITEM_ID).order(NEW_ORDER).checked(true).content(NEW_CONTENT).build()
+            ChecklistItemNodeRequest.builder().checklistItemId(CHECKLIST_ITEM_ID).build()
         );
 
-        underTest.updateItems(requests, actualItems);
+        Map<UUID, BiWrapper<ChecklistItem, Content>> actualItems = new HashMap<UUID, BiWrapper<ChecklistItem, Content>>() {{
+            put(CHECKLIST_ITEM_ID, new BiWrapper<>(checklistItem1, content1));
+            put(UUID.randomUUID(), new BiWrapper<>(checklistItem2, content2));
+        }};
 
-        verify(checklistItem).setOrder(NEW_ORDER);
-        verify(checklistItem).setChecked(true);
-        verify(content).setContent(NEW_CONTENT);
-        verify(checklistItemDao).save(checklistItem);
-        verify(contentDao).save(content);
+        underTest.deleteItems(requests, actualItems);
+
+        verify(checklistItemDao).delete(checklistItem2);
+        verify(contentDao).delete(content2);
     }
 }

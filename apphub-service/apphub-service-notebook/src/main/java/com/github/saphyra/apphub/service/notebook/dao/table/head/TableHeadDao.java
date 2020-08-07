@@ -6,6 +6,7 @@ import com.github.saphyra.converter.Converter;
 import com.github.saphyra.dao.AbstractDao;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -21,5 +22,13 @@ public class TableHeadDao extends AbstractDao<TableHeadEntity, TableHead, String
     @Override
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
+    }
+
+    public boolean exists(UUID key) {
+        return repository.existsById(uuidConverter.convertDomain(key));
+    }
+
+    public List<TableHead> getByParent(UUID parent) {
+        return converter.convertEntity(repository.getByParent(uuidConverter.convertDomain(parent)));
     }
 }
