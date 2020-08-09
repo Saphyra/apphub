@@ -1,0 +1,65 @@
+#create-checklist-parent-selection-wrapper{
+    background: var(--background-color);
+    position: absolute;
+    top: var(--create-item-input-height);
+    left: 10%;
+    right: 10%;
+    z-index: 1;
+}
+
+    #create-checklist-parent-selection-wrapper:hover{
+        border: 3px ridge white;
+        border-top: none;
+    }
+
+    #create-checklist-selected-category-wrapper{
+        text-align: center;
+        font-size: 1.5rem;
+        padding: 0.25rem;
+    }
+
+    #create-checklist-parent-selection-list-wrapper{
+        display: none;
+    }
+
+        #create-checklist-parent-selection-wrapper:hover #create-checklist-parent-selection-list-wrapper{
+            display: block;
+        }
+
+    #new-checklist-content-wrapper{
+        position: absolute;
+        top: 5.5rem;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        text-align: center;
+    }
+
+        .checklist-item{
+            border: 3px ridge white;
+            border-radius: 10px;
+            margin: 1rem;
+            position: relative;
+        }
+
+            .checklist-item-reorder-button-wrapper{
+                position: absolute;
+                top: 0.25rem;
+                left: 0;
+            }
+
+            .checklist-item-content{
+                text-align: left;
+                margin: 0.5rem 4rem 0.5rem 3.75rem !important;
+            }
+
+            .checklist-item-options-button-wrapper{
+                position: absolute;
+                top: 0.25rem;
+                right: 0;
+            }
+
+                .checklist-item-options-checked{
+                    transform: scale(2);
+                    margin: 0.5rem;
+                }

@@ -11,7 +11,6 @@
     }
 
     function init(){
-        document.getElementById("create-text-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
         document.getElementById("new-text-title").value = "";
         document.getElementById("new-text-content").value = "";
         loadChildrenOfCategory(null);
@@ -25,12 +24,15 @@
                 return JSON.parse(response.body)
             }
             request.processValidResponse = function(categoryResponse){
-                displayChildrenOfCategory(categoryId, categoryResponse.parent, categoryResponse.children);
+                const title = categoryResponse.title || Localization.getAdditionalContent("root-title");
+                displayChildrenOfCategory(categoryId, categoryResponse.parent, categoryResponse.children, title);
             }
         dao.sendRequestAsync(request);
     }
 
-    function displayChildrenOfCategory(categoryId, parent, categories){
+    function displayChildrenOfCategory(categoryId, parent, categories, title){
+        document.getElementById("create-text-selected-category-title").innerHTML = title;
+
         const parentButton = document.getElementById("create-text-parent-selection-parent-button");
             if(categoryId == null){
                 parentButton.classList.add("disabled");

@@ -49,6 +49,12 @@
         "message": "Hivatkozás"
       }
     ],
+    "new-checklist-button": [
+      {
+        "key": "innerHTML",
+        "message": "Lista"
+      }
+    ],
     "create-category-title": [
       {
         "key": "innerHTML",
@@ -139,6 +145,42 @@
         "message": "Mentés"
       }
     ],
+    "create-checklist-title": [
+      {
+        "key": "innerHTML",
+        "message": "Új lista"
+      }
+    ],
+    "new-checklist-title": [
+      {
+        "key": "placeholder",
+        "message": "Új lista címe"
+      }
+    ],
+    "create-checklist-selected-category": [
+      {
+        "key": "innerHTML",
+        "message": "Kiválasztott kategória"
+      }
+    ],
+    "create-checklist-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Fel"
+      }
+    ],
+    "create-checklist-new-item-button": [
+      {
+        "key": "innerHTML",
+        "message": "Új lista elem"
+      }
+    ],
+    "create-checklist-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
+    ],
     "view-text-edit-button": [
       {
         "key": "innerHTML",
@@ -207,6 +249,7 @@
     "list-item-options-button": "Opciók",
     "new-item-title-empty": "A cím nem lehet üres.",
     "root-title": "Gyökér",
-    "text-saved": "Szöveg elmentve."
+    "text-saved": "Szöveg elmentve.",
+    "checklist-saved": "Lista elmentve."
   }
 }

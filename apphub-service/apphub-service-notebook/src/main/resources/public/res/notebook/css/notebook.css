@@ -17,6 +17,10 @@
     border-color: rgb(40,40,255);
 }
 
+.checklist{
+    border-color: orange;
+}
+
 .no-content{
     text-align: center;
     padding: 1rem;

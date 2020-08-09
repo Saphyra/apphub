@@ -3,6 +3,7 @@
     scriptLoader.loadScript("/res/notebook/js/creation/category_creation_controller.js");
     scriptLoader.loadScript("/res/notebook/js/creation/text_creation_controller.js");
     scriptLoader.loadScript("/res/notebook/js/creation/link_creation_controller.js");
+    scriptLoader.loadScript("/res/notebook/js/creation/checklist_creation_controller.js");
     scriptLoader.loadScript("/res/notebook/js/content/content_controller.js");
     scriptLoader.loadScript("/res/notebook/js/list_item_edition_service.js");
 
@@ -14,6 +15,7 @@
     events.SAVE_CATEGORY = "save-category";
     events.CATEGORY_SAVED = "CATEGORY_SAVED";
     events.LIST_ITEM_SAVED = "LIST_ITEM_SAVED";
+    events.OPEN_CREATE_CHECKLIST_DIALOG = "OPEN_CREATE_CHECKLIST_DIALOG";
 
     $(document).ready(function(){
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "notebook", fileName: "notebook"}));
@@ -31,6 +33,10 @@
 
         this.openCreateLinkDialog = function(){
             switchTab("main-page", "create-link");
+        }
+
+        this.openCreateChecklistDialog = function(){
+            switchTab("main-page", "create-checklist");
         }
 
         this.openMainPage = function(){
@@ -58,5 +64,10 @@
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.OPEN_CREATE_LINK_DIALOG},
         pageController.openCreateLinkDialog
+    ));
+
+    eventProcessor.registerProcessor(new EventProcessor(
+        function(eventType){return eventType == events.OPEN_CREATE_CHECKLIST_DIALOG},
+        pageController.openCreateChecklistDialog
     ));
 })();

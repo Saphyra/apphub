@@ -2,6 +2,7 @@
     scriptLoader.loadScript("/res/common/js/confirmation_service.js");
     scriptLoader.loadScript("/res/notebook/js/content/category/category_content_controller.js");
     scriptLoader.loadScript("/res/notebook/js/content/category/category_node_factory.js")
+    scriptLoader.loadScript("/res/notebook/js/content/checklist/checklist_node_factory.js")
 
     scriptLoader.loadScript("/res/notebook/js/content/link/link_node_factory.js");
 
@@ -10,7 +11,8 @@
     const nodeFactories = {
         CATEGORY: categoryNodeFactory,
         TEXT: textNodeFactory,
-        LINK: linkNodeFactory
+        LINK: linkNodeFactory,
+        CHECKLIST: checklistNodeFactory
     }
 
     window.contentController = new function(){
