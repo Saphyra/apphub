@@ -46,7 +46,7 @@
         <versions.jackson-core>2.10.2</versions.jackson-core>
         <versions.junit>4.13</versions.junit>
         <versions.maven-surefire-plugin>3.0.0-M4</versions.maven-surefire-plugin>
-        <versions.mockito-core>3.2.4</versions.mockito-core>
+        <versions.mockito-core>3.4.6</versions.mockito-core>
         <versions.rest-assured>3.0.0</versions.rest-assured>
         <versions.selenium>4.0.0-alpha-4</versions.selenium>
         <versions.testng>7.1.0</versions.testng>

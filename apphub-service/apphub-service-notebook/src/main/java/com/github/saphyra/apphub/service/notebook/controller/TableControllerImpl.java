@@ -21,17 +21,14 @@ public class TableControllerImpl implements TableController {
     private final TableEditionService tableEditionService;
 
     @Override
-    //TODO unit test
     //TODO int test
     //TODO api test
-    //TODO test user deletion
     public OneParamResponse<UUID> createTable(CreateTableRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a table.", accessTokenHeader.getUserId());
         return new OneParamResponse<>(tableCreationService.create(request, accessTokenHeader.getUserId()));
     }
 
     @Override
-    //TODO unit test
     //TODO int test
     //TODO api test
     public void editTable(EditTableRequest request, UUID listItemId) {

@@ -4,13 +4,15 @@ import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
 import com.github.saphyra.converter.Converter;
 import com.github.saphyra.dao.AbstractDao;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
+@Slf4j
 public class TableHeadDao extends AbstractDao<TableHeadEntity, TableHead, String, TableHeadRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
@@ -24,8 +26,8 @@ public class TableHeadDao extends AbstractDao<TableHeadEntity, TableHead, String
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }
 
-    public boolean exists(UUID key) {
-        return repository.existsById(uuidConverter.convertDomain(key));
+    public boolean exists(UUID tableHeadId) {
+        return repository.existsById(uuidConverter.convertDomain(tableHeadId));
     }
 
     public List<TableHead> getByParent(UUID parent) {
