@@ -1,10 +1,9 @@
-package com.github.saphyra.apphub.service.notebook.dao.table.head;
-
+package com.github.saphyra.apphub.service.notebook.dao.table.join;
 
 import com.github.saphyra.apphub.lib.common_util.UuidConverter;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -17,11 +16,11 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TableHeadDaoTest {
+public class TableJoinDaoTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String USER_ID_STRING = "user-id";
-    private static final UUID TABLE_HEAD_ID = UUID.randomUUID();
-    private static final String TABLE_HEAD_ID_STRING = "table-head-id";
+    private static final UUID TABLE_JOIN_ID = UUID.randomUUID();
+    private static final String TABLE_JOIN_ID_STRING = "table-join-id";
     private static final UUID PARENT = UUID.randomUUID();
     private static final String PARENT_STRING = "parent";
 
@@ -29,23 +28,19 @@ public class TableHeadDaoTest {
     private UuidConverter uuidConverter;
 
     @Mock
-    private TableHeadConverter converter;
+    private TableJoinConverter converter;
 
     @Mock
-    private TableHeadRepository repository;
+    private TableJoinRepository repository;
 
-    private TableHeadDao underTest;
-
-    @Mock
-    private TableHeadEntity entity;
+    @InjectMocks
+    private TableJoinDao underTest;
 
     @Mock
-    private TableHead domain;
+    private TableJoinEntity entity;
 
-    @Before
-    public void setUp(){
-        underTest = new TableHeadDao(converter, repository, uuidConverter);
-    }
+    @Mock
+    private TableJoin domain;
 
     @Test
     public void deleteByUserId() {
@@ -58,10 +53,10 @@ public class TableHeadDaoTest {
 
     @Test
     public void exists() {
-        given(uuidConverter.convertDomain(TABLE_HEAD_ID)).willReturn(TABLE_HEAD_ID_STRING);
-        given(repository.existsById(TABLE_HEAD_ID_STRING)).willReturn(true);
+        given(uuidConverter.convertDomain(TABLE_JOIN_ID)).willReturn(TABLE_JOIN_ID_STRING);
+        given(repository.existsById(TABLE_JOIN_ID_STRING)).willReturn(true);
 
-        boolean result = underTest.exists(TABLE_HEAD_ID);
+        boolean result = underTest.exists(TABLE_JOIN_ID);
 
         assertThat(result).isTrue();
     }
@@ -72,7 +67,7 @@ public class TableHeadDaoTest {
         given(repository.getByParent(PARENT_STRING)).willReturn(Arrays.asList(entity));
         given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(domain));
 
-        List<TableHead> result = underTest.getByParent(PARENT);
+        List<TableJoin> result = underTest.getByParent(PARENT);
 
         assertThat(result).containsExactly(domain);
     }
