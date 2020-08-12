@@ -25,7 +25,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class TableCreationService {
     private final ListItemFactory listItemFactory;
     private final TableCreationRequestValidator tableCreationRequestValidator;
@@ -43,8 +42,8 @@ public class TableCreationService {
 
         ListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), ListItemType.TABLE);
 
-        List<BiWrapper<TableHead, Content>> tableHeads = tableHeadFactory.create(listItem, request.getColumnNames(), userId);
-        List<BiWrapper<TableJoin, Content>> tableColumns = tableJoinFactory.create(listItem, request.getColumns(), userId);
+        List<BiWrapper<TableHead, Content>> tableHeads = tableHeadFactory.create(listItem.getListItemId(), request.getColumnNames(), userId);
+        List<BiWrapper<TableJoin, Content>> tableColumns = tableJoinFactory.create(listItem.getListItemId(), request.getColumns(), userId);
 
         listItemDao.save(listItem);
         tableHeads.forEach(biWrapper -> {

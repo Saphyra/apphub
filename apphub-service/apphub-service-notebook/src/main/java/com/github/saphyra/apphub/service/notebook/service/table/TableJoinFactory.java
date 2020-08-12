@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.notebook.service.table;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoin;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
 import com.github.saphyra.util.IdGenerator;
@@ -20,12 +19,12 @@ public class TableJoinFactory {
     private final IdGenerator idGenerator;
     private final ContentFactory contentFactory;
 
-    public List<BiWrapper<TableJoin, Content>> create(ListItem listItem, List<List<String>> columns, UUID userId) {
+    public List<BiWrapper<TableJoin, Content>> create(UUID listItemId, List<List<String>> columns, UUID userId) {
         List<BiWrapper<TableJoin, Content>> result = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < columns.size(); rowIndex++) {
             List<String> columnValues = columns.get(rowIndex);
             for (int columnIndex = 0; columnIndex < columnValues.size(); columnIndex++) {
-                result.add(create(listItem.getListItemId(), columnValues.get(columnIndex), rowIndex, columnIndex, userId));
+                result.add(create(listItemId, columnValues.get(columnIndex), rowIndex, columnIndex, userId));
             }
         }
 

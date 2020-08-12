@@ -19,13 +19,12 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-public class EditTableTableHeadCreationService {
+class EditTableTableHeadCreationService {
     private final ContentDao contentDao;
     private final TableHeadDao tableHeadDao;
     private final TableHeadFactory tableHeadFactory;
 
-    public void process(List<KeyValuePair<String>> columnNames, ListItem listItem) {
+    void process(List<KeyValuePair<String>> columnNames, ListItem listItem) {
         for (int index = 0; index < columnNames.size(); index++) {
             KeyValuePair<String> request = columnNames.get(index);
             if (isNull(request.getKey())) {

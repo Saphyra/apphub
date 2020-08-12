@@ -19,7 +19,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EditTableTableJoinCreationService {
     private final ContentDao contentDao;
     private final TableJoinDao tableJoinDao;
@@ -33,6 +32,7 @@ class EditTableTableJoinCreationService {
 
                 if (isNull(column.getKey())) {
                     BiWrapper<TableJoin, Content> tableJoin = tableJoinFactory.create(listItem.getListItemId(), column.getValue(), rowIndex, columnIndex, listItem.getUserId());
+                    tableJoinDao.save(tableJoin.getEntity1());
                     contentDao.save(tableJoin.getEntity2());
                 }
             }

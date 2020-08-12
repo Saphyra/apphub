@@ -17,7 +17,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EditTableTableJoinDeletionService {
     private final ContentDao contentDao;
     private final TableJoinDao tableJoinDao;
@@ -33,7 +32,7 @@ class EditTableTableJoinDeletionService {
             .stream()
             .filter(tableJoin -> !columnIds.contains(tableJoin.getTableJoinId()))
             .forEach(tableJoin -> {
-                contentDao.deleteByParent(tableJoin.getParent());
+                contentDao.deleteByParent(tableJoin.getTableJoinId());
                 tableJoinDao.delete(tableJoin);
             });
     }

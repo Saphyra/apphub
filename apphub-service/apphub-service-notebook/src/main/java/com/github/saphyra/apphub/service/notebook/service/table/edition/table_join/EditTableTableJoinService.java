@@ -11,15 +11,14 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class EditTableTableJoinService {
     private final EditTableTableJoinDeletionService editTableTableJoinDeletionService;
-    private final EditTableTableJoinEditionService editTableTableJoinEditionService;
+    private final EditTableTableJoinUpdateService editTableTableJoinUpdateService;
     private final EditTableTableJoinCreationService editTableTableJoinCreationService;
 
     public void processEditions(List<List<KeyValuePair<String>>> columns, ListItem listItem) {
         editTableTableJoinDeletionService.process(columns, listItem.getListItemId());
-        editTableTableJoinEditionService.process(columns, listItem.getListItemId());
+        editTableTableJoinUpdateService.process(columns, listItem.getListItemId());
         editTableTableJoinCreationService.process(columns, listItem);
     }
 }

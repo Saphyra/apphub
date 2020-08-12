@@ -20,8 +20,7 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-class EditTableTableJoinEditionService {
+class EditTableTableJoinUpdateService {
     private final ContentDao contentDao;
     private final TableJoinDao tableJoinDao;
 

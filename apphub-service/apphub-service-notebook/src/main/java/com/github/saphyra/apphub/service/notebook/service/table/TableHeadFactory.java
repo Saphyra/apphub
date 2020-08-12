@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.notebook.service.table;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHead;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
 import com.github.saphyra.util.IdGenerator;
@@ -20,10 +19,10 @@ public class TableHeadFactory {
     private final ContentFactory contentFactory;
     private final IdGenerator idGenerator;
 
-    public List<BiWrapper<TableHead, Content>> create(ListItem listItem, List<String> columnNames, UUID userId) {
+    public List<BiWrapper<TableHead, Content>> create(UUID listItemId, List<String> columnNames, UUID userId) {
         List<BiWrapper<TableHead, Content>> result = new ArrayList<>();
         for (int columnIndex = 0; columnIndex < columnNames.size(); columnIndex++) {
-            result.add(create(listItem.getListItemId(), columnNames.get(columnIndex), columnIndex, userId));
+            result.add(create(listItemId, columnNames.get(columnIndex), columnIndex, userId));
         }
         return result;
     }

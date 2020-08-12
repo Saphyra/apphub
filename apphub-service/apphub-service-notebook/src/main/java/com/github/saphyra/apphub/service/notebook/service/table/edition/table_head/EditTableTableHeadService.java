@@ -11,7 +11,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class EditTableTableHeadService {
     private final EditTableTableHeadDeletionService editTableTableHeadDeletionService;
     private final EditTableTableHeadUpdateService editTableTableHeadUpdateService;
