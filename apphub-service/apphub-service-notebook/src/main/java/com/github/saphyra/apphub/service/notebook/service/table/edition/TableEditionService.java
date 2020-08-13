@@ -15,7 +15,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-//TODO unit test
 public class TableEditionService {
     private final EditTableRequestValidator editTableRequestValidator;
     private final EditTableTableHeadService editTableTableHeadService;

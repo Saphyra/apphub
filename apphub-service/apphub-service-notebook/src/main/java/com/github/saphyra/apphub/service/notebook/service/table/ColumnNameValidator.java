@@ -9,7 +9,6 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 
 
 @Component
-//TODO unit test
 public class ColumnNameValidator {
     public void validate(String columnName) {
         if (isBlank(columnName)) {

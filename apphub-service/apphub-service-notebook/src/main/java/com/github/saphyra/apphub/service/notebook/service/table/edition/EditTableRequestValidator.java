@@ -19,7 +19,6 @@ import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class EditTableRequestValidator {
     private final ColumnNameValidator columnNameValidator;
     private final RowValidator rowValidator;

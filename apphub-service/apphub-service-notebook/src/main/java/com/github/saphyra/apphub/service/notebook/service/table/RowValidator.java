@@ -11,7 +11,6 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class RowValidator {
     private final ContentValidator contentValidator;
 

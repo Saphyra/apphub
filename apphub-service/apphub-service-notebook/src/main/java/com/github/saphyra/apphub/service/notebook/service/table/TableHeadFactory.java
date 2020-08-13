@@ -14,7 +14,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class TableHeadFactory {
     private final ContentFactory contentFactory;
     private final IdGenerator idGenerator;
