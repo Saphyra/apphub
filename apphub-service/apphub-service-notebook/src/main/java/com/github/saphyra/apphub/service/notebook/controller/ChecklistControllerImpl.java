@@ -5,8 +5,10 @@ import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemR
 import com.github.saphyra.apphub.api.notebook.model.response.ChecklistResponse;
 import com.github.saphyra.apphub.api.notebook.server.ChecklistController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemQueryService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.creation.ChecklistCreationService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.edition.EditChecklistItemService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class ChecklistControllerImpl implements ChecklistController {
     private final ChecklistCreationService checklistCreationService;
     private final ChecklistItemQueryService checklistItemQueryService;
     private final EditChecklistItemService editChecklistItemService;
+    private final ChecklistItemStatusUpdateService checklistItemStatusUpdateService;
 
     @Override
     public OneParamResponse<UUID> createChecklistItem(CreateChecklistItemRequest request, AccessTokenHeader accessTokenHeader) {
@@ -40,5 +43,14 @@ public class ChecklistControllerImpl implements ChecklistController {
     public ChecklistResponse getChecklistItem(UUID listItemId) {
         log.info("Querying checklist item with id {}", listItemId);
         return checklistItemQueryService.query(listItemId);
+    }
+
+    @Override
+    //TODO unit test
+    //TODO api test
+    //TODO unt test
+    public void updateStatus(OneParamRequest<Boolean> request, UUID checklistItemId) {
+        log.info("Updating status of {}", checklistItemId);
+        checklistItemStatusUpdateService.update(checklistItemId, request.getValue());
     }
 }

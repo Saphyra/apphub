@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeReq
 import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
 import com.github.saphyra.apphub.api.notebook.model.response.ChecklistResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.config.Endpoints;
@@ -21,4 +22,7 @@ public interface ChecklistController {
 
     @RequestMapping(method = RequestMethod.GET, path = Endpoints.GET_NOTEBOOK_CHECKLIST_ITEM)
     ChecklistResponse getChecklistItem(@PathVariable("listItemId") UUID listItemId);
+
+    @RequestMapping(method = RequestMethod.POST, path = Endpoints.UPDATE_CHECKLIST_ITEM_STATUS)
+    void updateStatus(@RequestBody OneParamRequest<Boolean> request, @PathVariable("checklistItemId") UUID checklistItemId);
 }
