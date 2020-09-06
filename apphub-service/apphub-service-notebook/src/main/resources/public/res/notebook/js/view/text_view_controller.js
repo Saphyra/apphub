@@ -20,8 +20,8 @@
 
     function displayText(textData){
         const titleNode = document.getElementById("view-text-title");
-        titleNode.innerHTML = textData.title;
-        titleNode.contentEditable = false;
+            titleNode.innerHTML = textData.title;
+            titleNode.contentEditable = false;
 
         const contentArea = document.getElementById("view-text-content");
         contentArea.value = textData.content;

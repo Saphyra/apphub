@@ -12,6 +12,7 @@
     <LINK rel="stylesheet" href="/res/notebook/css/create_link_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/create_checklist_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/view_text_dialog.css">
+    <LINK rel="stylesheet" href="/res/notebook/css/view_checklist_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/edit_list_item.css">
 
     <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
@@ -217,6 +218,27 @@
 
     <FOOTER>
         <DIV id="edit-list-item-save-button" class="button dialog-button" onclick="listItemEditionService.editListItem()"></DIV>
+    </FOOTER>
+</DIV>
+
+<DIV id="view-checklist" class="main-page">
+    <HEADER>
+        <H1><SPAN id="view-checklist-title"></SPAN> </H1>
+        <BUTTON id="view-checklist-close-button" class="dialog-close-button" onclick="pageController.openMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN id="view-checklist-content">
+    </MAIN>
+
+    <FOOTER>
+        <DIV id="view-checklist-edit-button-wrapper" class="view-checklist-button-wrapper">
+            <DIV id="view-checklist-edit-button" class="button dialog-button" onclick="checklistViewController.enableEditing()"></DIV>
+        </DIV>
+        <DIV id="view-checklist-editing-operations-button-wrapper" class="view-checklist-button-wrapper">
+            <DIV id="view-checklist-edit-save-button" class="button dialog-button" onclick="checklistViewController.saveChanges()"></DIV>
+            <DIV id="view-checklist-edit-cancel-button" class="button dialog-button" onclick="checklistViewController.discardChanges()"></DIV>
+            <DIV id="view-checklist-edit-add-item-button" class="button dialog-button" onclick="checklistViewController.addItem()"></DIV>
+        </DIV>
     </FOOTER>
 </DIV>
 </BODY>

@@ -228,6 +228,30 @@
         "key": "innerHTML",
         "message": "Save"
       }
+    ],
+    "view-checklist-edit-button": [
+      {
+        "key": "innerHTML",
+        "message": "Edit"
+      }
+    ],
+    "view-checklist-edit-save-button": [
+      {
+        "key": "innerHTML",
+        "message": "Save"
+      }
+    ],
+    "view-checklist-edit-cancel-button": [
+      {
+        "key": "innerHTML",
+        "message": "Discard"
+      }
+    ],
+    "view-checklist-edit-add-item-button": [
+      {
+        "key": "innerHTML",
+        "message": "New list item"
+      }
     ]
   },
   "additionalContent": {

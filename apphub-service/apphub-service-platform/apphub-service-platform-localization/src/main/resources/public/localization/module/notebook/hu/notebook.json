@@ -228,6 +228,30 @@
         "key": "innerHTML",
         "message": "Mentés"
       }
+    ],
+    "view-checklist-edit-button": [
+      {
+        "key": "innerHTML",
+        "message": "Szerkesztés"
+      }
+    ],
+    "view-checklist-edit-save-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
+    ],
+    "view-checklist-edit-cancel-button": [
+      {
+        "key": "innerHTML",
+        "message": "Elvetés"
+      }
+    ],
+    "view-checklist-edit-add-item-button": [
+      {
+        "key": "innerHTML",
+        "message": "Új lista elem"
+      }
     ]
   },
   "additionalContent": {

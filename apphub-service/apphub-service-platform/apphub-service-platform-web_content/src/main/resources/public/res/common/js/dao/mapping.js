@@ -21,6 +21,7 @@ window.Mapping = new function(){
         DELETE_NOTEBOOK_LIST_ITEM: new Endpoint("/api/notebook/item/{listItemId}", HttpMethod.DELETE),
         EDIT_NOTEBOOK_LIST_ITEM: new Endpoint("/api/notebook/item/{listItemId}", HttpMethod.POST),
         EDIT_NOTEBOOK_TEXT: new Endpoint("/api/notebook/text/{listItemId}", HttpMethod.POST),
+        GET_CHECKLIST_ITEM: new Endpoint("/api/notebook/checklist/{listItemId}", HttpMethod.GET),
         GET_CHILDREN_OF_NOTEBOOK_CATEGORY: new Endpoint("/api/notebook/category/children", HttpMethod.GET),
         GET_LANGUAGES: new Endpoint("/api/user/data/languages", HttpMethod.GET),
         GET_MODULES: new Endpoint("/api/modules", HttpMethod.GET),
@@ -32,6 +33,7 @@ window.Mapping = new function(){
         MARK_AS_FAVORITE: new Endpoint("/api/modules/{module}/favorite", HttpMethod.POST),
         REGISTER: new Endpoint("/api/user/data", HttpMethod.POST),
         REMOVE_ROLE: new Endpoint("/api/user/data/roles", HttpMethod.DELETE),
+        UPDATE_CHECKLIST_ITEM_STATUS: new Endpoint("/api/notebook/checklist/item/{checklistItemId}/status", HttpMethod.POST),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){
