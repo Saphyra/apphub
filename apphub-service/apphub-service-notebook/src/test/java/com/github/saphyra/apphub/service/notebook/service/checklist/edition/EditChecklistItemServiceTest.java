@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.checklist.edition;
 
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.EditChecklistItemRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
@@ -9,6 +10,7 @@ import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.service.TitleValidator;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemNodeRequestValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +33,7 @@ import static org.mockito.Mockito.verify;
 public class EditChecklistItemServiceTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final UUID CHECKLIST_ITEM_ID = UUID.randomUUID();
+    private static final String TITLE = "title";
 
     @Mock
     private ChecklistItemNodeRequestValidator checklistItemNodeRequestValidator;
@@ -53,11 +56,14 @@ public class EditChecklistItemServiceTest {
     @Mock
     private EditChecklistItemSaveService editChecklistItemSaveService;
 
+    @Mock
+    private TitleValidator titleValidator;
+
     @InjectMocks
     private EditChecklistItemService underTest;
 
     @Mock
-    private ChecklistItemNodeRequest request;
+    private ChecklistItemNodeRequest node;
 
     @Mock
     private ListItem listItem;
@@ -81,18 +87,27 @@ public class EditChecklistItemServiceTest {
         given(checklistItemDao.getByParent(LIST_ITEM_ID)).willReturn(Arrays.asList(checklistItem));
         given(contentDao.findByParentValidated(CHECKLIST_ITEM_ID)).willReturn(content);
 
-        underTest.edit(Arrays.asList(request), LIST_ITEM_ID);
+        EditChecklistItemRequest request = EditChecklistItemRequest.builder()
+            .title(TITLE)
+            .nodes(Arrays.asList(node))
+            .build();
 
-        verify(checklistItemNodeRequestValidator).validate(request);
+        underTest.edit(request, LIST_ITEM_ID);
 
-        verify(editChecklistItemDeletionService).deleteItems(eq(Arrays.asList(request)), captor1.capture());
+        verify(titleValidator).validate(TITLE);
+        verify(checklistItemNodeRequestValidator).validate(node);
+
+        verify(listItem).setTitle(TITLE);
+        verify(listItemDao).save(listItem);
+
+        verify(editChecklistItemDeletionService).deleteItems(eq(Arrays.asList(node)), captor1.capture());
         assertThat(captor1.getValue().get(CHECKLIST_ITEM_ID).getEntity2()).isEqualTo(content);
         assertThat(captor1.getValue().get(CHECKLIST_ITEM_ID).getEntity1()).isEqualTo(checklistItem);
 
-        verify(editChecklistItemUpdateService).updateItems(eq(Arrays.asList(request)), captor2.capture());
+        verify(editChecklistItemUpdateService).updateItems(eq(Arrays.asList(node)), captor2.capture());
         assertThat(captor2.getValue().get(CHECKLIST_ITEM_ID).getEntity2()).isEqualTo(content);
         assertThat(captor2.getValue().get(CHECKLIST_ITEM_ID).getEntity1()).isEqualTo(checklistItem);
 
-        verify(editChecklistItemSaveService).saveNewItems(Arrays.asList(request), listItem);
+        verify(editChecklistItemSaveService).saveNewItems(Arrays.asList(node), listItem);
     }
 }

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.EditChecklistItemRequest;
 import com.github.saphyra.apphub.api.notebook.model.response.ChecklistResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
@@ -14,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,6 +50,9 @@ public class ChecklistControllerImplTest {
     @Mock
     private ChecklistResponse checklistResponse;
 
+    @Mock
+    private EditChecklistItemRequest editChecklistItemRequest;
+
     @Test
     public void createChecklistItem() {
         given(checklistCreationService.create(createChecklistItemRequest, USER_ID)).willReturn(LIST_ITEM_ID);
@@ -62,9 +65,9 @@ public class ChecklistControllerImplTest {
 
     @Test
     public void editChecklistItem() {
-        underTest.editChecklistItem(Arrays.asList(checklistItemNodeRequest), LIST_ITEM_ID);
+        underTest.editChecklistItem(editChecklistItemRequest, LIST_ITEM_ID);
 
-        verify(editChecklistItemService).edit(Arrays.asList(checklistItemNodeRequest), LIST_ITEM_ID);
+        verify(editChecklistItemService).edit(editChecklistItemRequest, LIST_ITEM_ID);
     }
 
     @Test

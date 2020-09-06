@@ -6,6 +6,7 @@
         this.enableEditing = enableEditing;
         this.discardChanges = discardChanges;
         this.addItem = addItem;
+        this.saveChanges = saveChanges;
     }
 
     function viewChecklist(listItemId){
@@ -46,13 +47,14 @@
                 checkedCell.classList.add("view-checklist-item-checked-cell");
 
                 const checkedBox = document.createElement("INPUT");
+                    checkedBox.classList.add("view-checklist-item-checked-input");
                     checkedBox.type = "checkbox";
                     checkedBox.checked = itemData.checked;
             checkedCell.appendChild(checkedBox);
         nodeRow.appendChild(checkedCell);
 
             const contentCell = document.createElement("DIV");
-                contentCell.classList.add("view-checklist-item-content-cell");
+                contentCell.classList.add("view-checklist-item-content");
                 contentCell.innerHTML = itemData.content;
                 contentCell.contentEditable = editingEnabled;
                 setContentDecoration(contentCell, itemData.checked);
@@ -109,7 +111,7 @@
     }
 
     function updateStatus(checklistItemId, checked){
-        const request = new Request(Mapping.getEndpoint("UPDATE_CHECKLIST_ITEM_STATUS", {checklistItemId: checklistItemId}), {value: checked});
+        const request = new Request(Mapping.getEndpoint("UPDATE_NOTEBOOK_CHECKLIST_ITEM_STATUS", {checklistItemId: checklistItemId}), {value: checked});
             request.processValidResponse = function(){
             }
         dao.sendRequestAsync(request);
@@ -118,7 +120,7 @@
     function enableEditing(){
         document.getElementById("view-checklist-title").contentEditable = true;
         $(".view-checklist-item-edit-button").prop("disabled", false);
-        $(".view-checklist-item-content-cell").attr("contenteditable", true);
+        $(".view-checklist-item-content").attr("contenteditable", true);
         switchTab("view-checklist-button-wrapper", "view-checklist-editing-operations-button-wrapper");
     }
 
@@ -134,5 +136,36 @@
         }
 
         document.getElementById("view-checklist-content").appendChild(createChecklistItem(itemData, true));
+    }
+
+    function saveChanges(){
+        const title = document.getElementById("view-checklist-title").innerHTML;
+
+        if(!title.length){
+            notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
+            return;
+        }
+
+        const items = document.getElementsByClassName("view-checklist-item");
+        const nodes = [];
+
+        for(let i = 0; i < items.length; i++){
+            const item = items[i];
+            const nodeData = {
+                checklistItemId: $(item).attr("checklist-item-id"),
+                order: i,
+                checked: item.querySelector(".view-checklist-item-checked-input").checked,
+                content: item.querySelector(".view-checklist-item-content").innerHTML
+            }
+            nodes.push(nodeData);
+        }
+
+        const request = new Request(Mapping.getEndpoint("EDIT_NOTEBOOK_CHECKLIST_ITEM", {listItemId: openedChecklistId}), {title: title, nodes: nodes});
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("checklist-saved"));
+                viewChecklist(openedChecklistId);
+                eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
+            }
+        dao.sendRequestAsync(request);
     }
 })();

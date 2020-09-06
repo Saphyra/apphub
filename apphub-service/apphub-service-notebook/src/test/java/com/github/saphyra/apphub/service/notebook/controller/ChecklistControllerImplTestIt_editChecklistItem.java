@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.EditChecklistItemRequest;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
@@ -55,10 +56,11 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
         .roles(Arrays.asList("NOTEBOOK"))
         .build();
     private static final String LOCALIZED_MESSAGE = "localized-message";
-    private static final String TITLE = "title";
+    private static final String ORIGINAL_TITLE = "original-title";
     private static final Integer ORIGINAL_ORDER = 324;
     private static final String NEW_CONTENT = "new-content";
     private static final Integer NEW_ORDER = 234;
+    private static final String NEW_TITLE = "new-title";
 
     @LocalServerPort
     private int serverPort;
@@ -94,9 +96,14 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
     }
 
     @Test
+    public void blankTitle(){
+        //TODO
+    }
+
+    @Test
     public void nullContent() {
         CreateChecklistItemRequest createChecklistItemRequest = CreateChecklistItemRequest.builder()
-            .title(TITLE)
+            .title(ORIGINAL_TITLE)
             .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
                 .order(ORIGINAL_ORDER)
                 .checked(true)
@@ -113,13 +120,17 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
             .get(0)
             .getChecklistItemId();
 
-
-        List<ChecklistItemNodeRequest> request = Arrays.asList(ChecklistItemNodeRequest.builder()
+        List<ChecklistItemNodeRequest> nodes = Arrays.asList(ChecklistItemNodeRequest.builder()
             .checklistItemId(checklistItemId)
             .order(NEW_ORDER)
             .checked(false)
             .content(null)
             .build());
+
+        EditChecklistItemRequest request = EditChecklistItemRequest.builder()
+            .title(NEW_TITLE)
+            .nodes(nodes)
+            .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
@@ -135,7 +146,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
     @Test
     public void nullChecked() {
         CreateChecklistItemRequest createChecklistItemRequest = CreateChecklistItemRequest.builder()
-            .title(TITLE)
+            .title(ORIGINAL_TITLE)
             .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
                 .order(ORIGINAL_ORDER)
                 .checked(true)
@@ -153,12 +164,17 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
             .getChecklistItemId();
 
 
-        List<ChecklistItemNodeRequest> request = Arrays.asList(ChecklistItemNodeRequest.builder()
+        List<ChecklistItemNodeRequest> nodes = Arrays.asList(ChecklistItemNodeRequest.builder()
             .checklistItemId(checklistItemId)
             .order(NEW_ORDER)
             .checked(null)
             .content(NEW_CONTENT)
             .build());
+
+        EditChecklistItemRequest request = EditChecklistItemRequest.builder()
+            .title(NEW_TITLE)
+            .nodes(nodes)
+            .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
@@ -174,7 +190,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
     @Test
     public void nullOrder() {
         CreateChecklistItemRequest createChecklistItemRequest = CreateChecklistItemRequest.builder()
-            .title(TITLE)
+            .title(ORIGINAL_TITLE)
             .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
                 .order(ORIGINAL_ORDER)
                 .checked(true)
@@ -192,12 +208,17 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
             .getChecklistItemId();
 
 
-        List<ChecklistItemNodeRequest> request = Arrays.asList(ChecklistItemNodeRequest.builder()
+        List<ChecklistItemNodeRequest> nodes = Arrays.asList(ChecklistItemNodeRequest.builder()
             .checklistItemId(checklistItemId)
             .order(null)
             .checked(false)
             .content(NEW_CONTENT)
             .build());
+
+        EditChecklistItemRequest request = EditChecklistItemRequest.builder()
+            .title(NEW_TITLE)
+            .nodes(nodes)
+            .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
@@ -213,7 +234,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
     @Test
     public void listItemNotFound() {
         CreateChecklistItemRequest createChecklistItemRequest = CreateChecklistItemRequest.builder()
-            .title(TITLE)
+            .title(ORIGINAL_TITLE)
             .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
                 .order(ORIGINAL_ORDER)
                 .checked(true)
@@ -231,12 +252,16 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
             .getChecklistItemId();
 
 
-        List<ChecklistItemNodeRequest> request = Arrays.asList(ChecklistItemNodeRequest.builder()
+        List<ChecklistItemNodeRequest> nodes = Arrays.asList(ChecklistItemNodeRequest.builder()
             .checklistItemId(checklistItemId)
             .order(NEW_ORDER)
             .checked(false)
             .content(NEW_CONTENT)
             .build());
+        EditChecklistItemRequest request = EditChecklistItemRequest.builder()
+            .title(NEW_TITLE)
+            .nodes(nodes)
+            .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
@@ -251,7 +276,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
     @Test
     public void checklistItemNotFound() {
         CreateChecklistItemRequest createChecklistItemRequest = CreateChecklistItemRequest.builder()
-            .title(TITLE)
+            .title(ORIGINAL_TITLE)
             .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
                 .order(ORIGINAL_ORDER)
                 .checked(true)
@@ -265,12 +290,16 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
 
         UUID listItemId = createResponse.getBody().jsonPath().getUUID("value");
 
-        List<ChecklistItemNodeRequest> request = Arrays.asList(ChecklistItemNodeRequest.builder()
+        List<ChecklistItemNodeRequest> nodes = Arrays.asList(ChecklistItemNodeRequest.builder()
             .checklistItemId(UUID.randomUUID())
             .order(NEW_ORDER)
             .checked(false)
             .content(NEW_CONTENT)
             .build());
+        EditChecklistItemRequest request = EditChecklistItemRequest.builder()
+            .title(NEW_TITLE)
+            .nodes(nodes)
+            .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
@@ -285,7 +314,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
     @Test
     public void checklistItemDeleted() {
         CreateChecklistItemRequest createChecklistItemRequest = CreateChecklistItemRequest.builder()
-            .title(TITLE)
+            .title(ORIGINAL_TITLE)
             .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
                 .order(ORIGINAL_ORDER)
                 .checked(true)
@@ -299,12 +328,18 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
 
         UUID listItemId = createResponse.getBody().jsonPath().getUUID("value");
 
+        EditChecklistItemRequest request = EditChecklistItemRequest.builder()
+            .title(NEW_TITLE)
+            .nodes(Collections.emptyList())
+            .build();
+
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(Collections.emptyList())
+            .body(request)
             .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_ITEM, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
+        assertThat(query(() -> listItemDao.findByIdValidated(listItemId)).getTitle()).isEqualTo(NEW_TITLE);
         assertThat(query(() -> checklistItemDao.findAll())).isEmpty();
         assertThat(query(() -> contentDao.findAll())).isEmpty();
     }
@@ -312,7 +347,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
     @Test
     public void checklistItemAdded() {
         CreateChecklistItemRequest createChecklistItemRequest = CreateChecklistItemRequest.builder()
-            .title(TITLE)
+            .title(ORIGINAL_TITLE)
             .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
                 .order(ORIGINAL_ORDER)
                 .checked(true)
@@ -329,12 +364,16 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
             .get(0)
             .getChecklistItemId();
 
-        List<ChecklistItemNodeRequest> request = Arrays.asList(ChecklistItemNodeRequest.builder()
+        List<ChecklistItemNodeRequest> nodes = Arrays.asList(ChecklistItemNodeRequest.builder()
             .checklistItemId(null)
             .order(NEW_ORDER)
             .checked(false)
             .content(NEW_CONTENT)
             .build());
+        EditChecklistItemRequest request = EditChecklistItemRequest.builder()
+            .title(NEW_TITLE)
+            .nodes(nodes)
+            .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
@@ -348,6 +387,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("New checklistItem was not created"));
 
+        assertThat(query(() -> listItemDao.findByIdValidated(listItemId)).getTitle()).isEqualTo(NEW_TITLE);
         assertThat(newItem.getOrder()).isEqualTo(NEW_ORDER);
         assertThat(newItem.getChecked()).isFalse();
 
@@ -357,7 +397,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
     @Test
     public void checklistItemModified() {
         CreateChecklistItemRequest createChecklistItemRequest = CreateChecklistItemRequest.builder()
-            .title(TITLE)
+            .title(ORIGINAL_TITLE)
             .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
                 .order(ORIGINAL_ORDER)
                 .checked(true)
@@ -374,17 +414,22 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
             .get(0)
             .getChecklistItemId();
 
-        List<ChecklistItemNodeRequest> request = Arrays.asList(ChecklistItemNodeRequest.builder()
+        List<ChecklistItemNodeRequest> nodes = Arrays.asList(ChecklistItemNodeRequest.builder()
             .checklistItemId(checklistItemId)
             .order(NEW_ORDER)
             .checked(false)
             .content(NEW_CONTENT)
             .build());
+        EditChecklistItemRequest request = EditChecklistItemRequest.builder()
+            .title(NEW_TITLE)
+            .nodes(nodes)
+            .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
             .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_ITEM, "listItemId", listItemId));
 
+        assertThat(query(() -> listItemDao.findByIdValidated(listItemId)).getTitle()).isEqualTo(NEW_TITLE);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
         ChecklistItem editedItem = query(() -> checklistItemDao.findById(checklistItemId.toString())).get();

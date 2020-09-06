@@ -152,13 +152,13 @@ public class NotebookActions {
             .get(UrlFactory.create(Endpoints.GET_NOTEBOOK_CHECKLIST, "listItemId", listItemId));
     }
 
-    public static void editChecklistItem(Language language, UUID accessTokenId, List<ChecklistItemNodeRequest> editRequest, UUID listItemId) {
+    public static void editChecklistItem(Language language, UUID accessTokenId, EditChecklistItemRequest editRequest, UUID listItemId) {
         Response response = getEditChecklistResponse(language, accessTokenId, editRequest, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getEditChecklistResponse(Language language, UUID accessTokenId, List<ChecklistItemNodeRequest> editRequest, UUID listItemId) {
+    public static Response getEditChecklistResponse(Language language, UUID accessTokenId, EditChecklistItemRequest editRequest, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(editRequest)
             .post(UrlFactory.create(Endpoints.EDIT_NOTEBOOK_CHECKLIST_ITEM, "listItemId", listItemId));

@@ -1,10 +1,7 @@
 package com.github.saphyra.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
-import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistItemNodeRequest;
-import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistResponse;
-import com.github.saphyra.apphub.integration.backend.model.notebook.CreateCategoryRequest;
-import com.github.saphyra.apphub.integration.backend.model.notebook.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.*;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
@@ -30,10 +27,16 @@ public class EditChecklistItemTest extends TestBase {
     private static final String ORIGINAL_CONTENT = "original-content";
     private static final Integer NEW_ORDER = 456324;
     private static final String NEW_CONTENT = "new-content";
+    private static final String NEW_TITLE = "new-title";
 
     @DataProvider(name = "localeDataProvider", parallel = true)
     public Object[] localeDataProvider() {
         return Language.values();
+    }
+
+    @Test(dataProvider = "localeDataProvider")
+    public void blankTitle(Language language) {
+        //TODO
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -63,14 +66,19 @@ public class EditChecklistItemTest extends TestBase {
             .get(0)
             .getChecklistItemId();
 
-        ChecklistItemNodeRequest editRequest = ChecklistItemNodeRequest.builder()
+        ChecklistItemNodeRequest node = ChecklistItemNodeRequest.builder()
             .checklistItemId(checklistItemId)
             .order(NEW_ORDER)
             .checked(true)
             .content(null)
             .build();
 
-        Response response = NotebookActions.getEditChecklistResponse(language, accessTokenId, Arrays.asList(editRequest), listItemId);
+        EditChecklistItemRequest editRequest = EditChecklistItemRequest.builder()
+            .title(NEW_TITLE)
+            .nodes(Arrays.asList(node))
+            .build();
+
+        Response response = NotebookActions.getEditChecklistResponse(language, accessTokenId, editRequest, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -106,14 +114,19 @@ public class EditChecklistItemTest extends TestBase {
             .get(0)
             .getChecklistItemId();
 
-        ChecklistItemNodeRequest editRequest = ChecklistItemNodeRequest.builder()
+        ChecklistItemNodeRequest node = ChecklistItemNodeRequest.builder()
             .checklistItemId(checklistItemId)
             .order(NEW_ORDER)
             .checked(null)
             .content(NEW_CONTENT)
             .build();
 
-        Response response = NotebookActions.getEditChecklistResponse(language, accessTokenId, Arrays.asList(editRequest), listItemId);
+        EditChecklistItemRequest editRequest = EditChecklistItemRequest.builder()
+            .title(NEW_TITLE)
+            .nodes(Arrays.asList(node))
+            .build();
+
+        Response response = NotebookActions.getEditChecklistResponse(language, accessTokenId, editRequest, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -149,14 +162,19 @@ public class EditChecklistItemTest extends TestBase {
             .get(0)
             .getChecklistItemId();
 
-        ChecklistItemNodeRequest editRequest = ChecklistItemNodeRequest.builder()
+        ChecklistItemNodeRequest node = ChecklistItemNodeRequest.builder()
             .checklistItemId(checklistItemId)
             .order(null)
             .checked(true)
             .content(NEW_CONTENT)
             .build();
 
-        Response response = NotebookActions.getEditChecklistResponse(language, accessTokenId, Arrays.asList(editRequest), listItemId);
+        EditChecklistItemRequest editRequest = EditChecklistItemRequest.builder()
+            .title(NEW_TITLE)
+            .nodes(Arrays.asList(node))
+            .build();
+
+        Response response = NotebookActions.getEditChecklistResponse(language, accessTokenId, editRequest, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -170,13 +188,18 @@ public class EditChecklistItemTest extends TestBase {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
-        ChecklistItemNodeRequest editRequest = ChecklistItemNodeRequest.builder()
+        ChecklistItemNodeRequest node = ChecklistItemNodeRequest.builder()
             .order(NEW_ORDER)
             .checked(true)
             .content(NEW_CONTENT)
             .build();
 
-        Response response = NotebookActions.getEditChecklistResponse(language, accessTokenId, Arrays.asList(editRequest), UUID.randomUUID());
+        EditChecklistItemRequest editRequest = EditChecklistItemRequest.builder()
+            .title(NEW_TITLE)
+            .nodes(Arrays.asList(node))
+            .build();
+
+        Response response = NotebookActions.getEditChecklistResponse(language, accessTokenId, editRequest, UUID.randomUUID());
 
         assertThat(response.getStatusCode()).isEqualTo(404);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -206,14 +229,19 @@ public class EditChecklistItemTest extends TestBase {
 
         UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
 
-        ChecklistItemNodeRequest editRequest = ChecklistItemNodeRequest.builder()
+        ChecklistItemNodeRequest node = ChecklistItemNodeRequest.builder()
             .checklistItemId(UUID.randomUUID())
             .order(NEW_ORDER)
             .checked(true)
             .content(NEW_CONTENT)
             .build();
 
-        Response response = NotebookActions.getEditChecklistResponse(language, accessTokenId, Arrays.asList(editRequest), listItemId);
+        EditChecklistItemRequest editRequest = EditChecklistItemRequest.builder()
+            .title(NEW_TITLE)
+            .nodes(Arrays.asList(node))
+            .build();
+
+        Response response = NotebookActions.getEditChecklistResponse(language, accessTokenId, editRequest, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(404);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -244,11 +272,17 @@ public class EditChecklistItemTest extends TestBase {
 
         UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
 
-        NotebookActions.editChecklistItem(language, accessTokenId, Collections.emptyList(), listItemId);
+        EditChecklistItemRequest editRequest = EditChecklistItemRequest.builder()
+            .title(NEW_TITLE)
+            .nodes(Collections.emptyList())
+            .build();
+
+        NotebookActions.editChecklistItem(language, accessTokenId, editRequest, listItemId);
 
         ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
 
         assertThat(checklistResponse.getNodes()).isEmpty();
+        assertThat(checklistResponse.getTitle()).isEqualTo(NEW_TITLE);
     }
 
     @Test
@@ -270,15 +304,21 @@ public class EditChecklistItemTest extends TestBase {
 
         UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
 
-        ChecklistItemNodeRequest editRequest = ChecklistItemNodeRequest.builder()
+        ChecklistItemNodeRequest node = ChecklistItemNodeRequest.builder()
             .order(NEW_ORDER)
             .checked(true)
             .content(NEW_CONTENT)
             .build();
-        NotebookActions.editChecklistItem(language, accessTokenId, Arrays.asList(editRequest), listItemId);
+        EditChecklistItemRequest editRequest = EditChecklistItemRequest.builder()
+            .title(NEW_TITLE)
+            .nodes(Arrays.asList(node))
+            .build();
+
+        NotebookActions.editChecklistItem(language, accessTokenId, editRequest, listItemId);
 
         ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
 
+        assertThat(checklistResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(checklistResponse.getNodes()).hasSize(1);
         assertThat(checklistResponse.getNodes().get(0).getOrder()).isEqualTo(NEW_ORDER);
         assertThat(checklistResponse.getNodes().get(0).getContent()).isEqualTo(NEW_CONTENT);
@@ -312,16 +352,22 @@ public class EditChecklistItemTest extends TestBase {
             .get(0)
             .getChecklistItemId();
 
-        ChecklistItemNodeRequest editRequest = ChecklistItemNodeRequest.builder()
+        ChecklistItemNodeRequest node = ChecklistItemNodeRequest.builder()
             .checklistItemId(checklistItemId)
             .order(NEW_ORDER)
             .checked(true)
             .content(NEW_CONTENT)
             .build();
-        NotebookActions.editChecklistItem(language, accessTokenId, Arrays.asList(editRequest), listItemId);
+        EditChecklistItemRequest editRequest = EditChecklistItemRequest.builder()
+            .title(NEW_TITLE)
+            .nodes(Arrays.asList(node))
+            .build();
+
+        NotebookActions.editChecklistItem(language, accessTokenId, editRequest, listItemId);
 
         ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
 
+        assertThat(checklistResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(checklistResponse.getNodes()).hasSize(1);
         assertThat(checklistResponse.getNodes().get(0).getOrder()).isEqualTo(NEW_ORDER);
         assertThat(checklistResponse.getNodes().get(0).getContent()).isEqualTo(NEW_CONTENT);

@@ -19,6 +19,7 @@ window.Mapping = new function(){
         CREATE_NOTEBOOK_CHECKLIST: new Endpoint("/api/notebook/checklist", HttpMethod.PUT),
         DELETE_ACCOUNT: new Endpoint("/api/user/account", HttpMethod.DELETE),
         DELETE_NOTEBOOK_LIST_ITEM: new Endpoint("/api/notebook/item/{listItemId}", HttpMethod.DELETE),
+        EDIT_NOTEBOOK_CHECKLIST_ITEM: new Endpoint("/api/notebook/checklist/{listItemId}", HttpMethod.POST),
         EDIT_NOTEBOOK_LIST_ITEM: new Endpoint("/api/notebook/item/{listItemId}", HttpMethod.POST),
         EDIT_NOTEBOOK_TEXT: new Endpoint("/api/notebook/text/{listItemId}", HttpMethod.POST),
         GET_CHECKLIST_ITEM: new Endpoint("/api/notebook/checklist/{listItemId}", HttpMethod.GET),
@@ -33,7 +34,7 @@ window.Mapping = new function(){
         MARK_AS_FAVORITE: new Endpoint("/api/modules/{module}/favorite", HttpMethod.POST),
         REGISTER: new Endpoint("/api/user/data", HttpMethod.POST),
         REMOVE_ROLE: new Endpoint("/api/user/data/roles", HttpMethod.DELETE),
-        UPDATE_CHECKLIST_ITEM_STATUS: new Endpoint("/api/notebook/checklist/item/{checklistItemId}/status", HttpMethod.POST),
+        UPDATE_NOTEBOOK_CHECKLIST_ITEM_STATUS: new Endpoint("/api/notebook/checklist/item/{checklistItemId}/status", HttpMethod.POST),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

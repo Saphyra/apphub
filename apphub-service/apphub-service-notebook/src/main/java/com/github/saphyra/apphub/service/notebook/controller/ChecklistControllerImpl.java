@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.EditChecklistItemRequest;
 import com.github.saphyra.apphub.api.notebook.model.response.ChecklistResponse;
 import com.github.saphyra.apphub.api.notebook.server.ChecklistController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -34,7 +33,7 @@ public class ChecklistControllerImpl implements ChecklistController {
     }
 
     @Override
-    public void editChecklistItem(List<ChecklistItemNodeRequest> request, UUID listItemId) {
+    public void editChecklistItem(EditChecklistItemRequest request, UUID listItemId) {
         log.info("Editing checklistItem with listItemId {}", listItemId);
         editChecklistItemService.edit(request, listItemId);
     }
