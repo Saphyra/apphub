@@ -1,12 +1,13 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.EditChecklistItemRequest;
 import com.github.saphyra.apphub.api.notebook.model.response.ChecklistResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemQueryService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.creation.ChecklistCreationService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.edition.EditChecklistItemService;
 import org.junit.Test;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.verify;
 public class ChecklistControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
+    private static final UUID CHECKLIST_ITEM_ID = UUID.randomUUID();
 
     @Mock
     private ChecklistCreationService checklistCreationService;
@@ -35,6 +37,9 @@ public class ChecklistControllerImplTest {
     @Mock
     private ChecklistItemQueryService checklistItemQueryService;
 
+    @Mock
+    private ChecklistItemStatusUpdateService checklistItemStatusUpdateService;
+
     @InjectMocks
     private ChecklistControllerImpl underTest;
 
@@ -43,9 +48,6 @@ public class ChecklistControllerImplTest {
 
     @Mock
     private CreateChecklistItemRequest createChecklistItemRequest;
-
-    @Mock
-    private ChecklistItemNodeRequest checklistItemNodeRequest;
 
     @Mock
     private ChecklistResponse checklistResponse;
@@ -77,5 +79,12 @@ public class ChecklistControllerImplTest {
         ChecklistResponse result = underTest.getChecklistItem(LIST_ITEM_ID);
 
         assertThat(result).isEqualTo(checklistResponse);
+    }
+
+    @Test
+    public void updateStatus(){
+        underTest.updateStatus(new OneParamRequest<>(true), CHECKLIST_ITEM_ID);
+
+        verify(checklistItemStatusUpdateService).update(CHECKLIST_ITEM_ID, true);
     }
 }

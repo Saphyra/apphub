@@ -97,7 +97,45 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
 
     @Test
     public void blankTitle(){
-        //TODO
+        CreateChecklistItemRequest createChecklistItemRequest = CreateChecklistItemRequest.builder()
+            .title(ORIGINAL_TITLE)
+            .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
+                .order(ORIGINAL_ORDER)
+                .checked(true)
+                .content(ORIGINAL_CONTENT)
+                .build()))
+            .build();
+        Response createResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
+            .body(createChecklistItemRequest)
+            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CHECKLIST_ITEM));
+        assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+
+        UUID listItemId = createResponse.getBody().jsonPath().getUUID("value");
+        UUID checklistItemId = query(() -> checklistItemDao.getByParent(listItemId))
+            .get(0)
+            .getChecklistItemId();
+
+        List<ChecklistItemNodeRequest> nodes = Arrays.asList(ChecklistItemNodeRequest.builder()
+            .checklistItemId(checklistItemId)
+            .order(NEW_ORDER)
+            .checked(false)
+            .content(null)
+            .build());
+
+        EditChecklistItemRequest request = EditChecklistItemRequest.builder()
+            .title(" ")
+            .nodes(nodes)
+            .build();
+
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
+            .body(request)
+            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_ITEM, "listItemId", listItemId));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
+        assertThat(errorResponse.getParams().get("title")).isEqualTo("must not be null or blank");
     }
 
     @Test
