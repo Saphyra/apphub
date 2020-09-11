@@ -148,3 +148,9 @@ To decrease the load on your machine, you can:
   
   For apphub-integration-frontend it can be found in class com.github.saphyra.apphub.integration.frontend.WebDriverFactory.
   Constant BROWSER_STARTUP_LIMIT sets the limit of how many browsers can be in opening phase parallel, and MAX_DRIVER_COUNT sets how many browser window can be opened maximum.
+  
+## Testing
+* Since apphub-integration is not a child of the apphub project, IntelliJ will not recognize it as a module automatically. If you dont want to see compile errors, add it manually at File -> Project Structure -> Modules -> + -> Import module -> Select apphub-integration directory -> Import module from external model -> Maven -> Finish
+* Automated tests require access to the application's endpoints and database. So tests can only be run after port_forward.sh exposed the application.
+* Test framework must know the ports to use, so you have to add "-DserverPort=9001 -DdatabasePort=9002" as VM option to the TestNG template at Run -> Edit configurations -> Templates -> TestNG -> VM options -> Paste value here -> Apply -> Ok
+* Run TestNG tests parallel in IntelliJ: Add "-parallel methods -threadcount <threadCount> -dataproviderthreadcount <dpThreadCount>" as Test Runner Param below the VM options
