@@ -36,6 +36,7 @@ The app's purpose is to provide an easy-to extend frame for multiple application
 * RAM: 16 GB
 * Minikube running with at least 6GB RAM, and the most possible CPU cores available
 * System Administrator access
+* Kubectl installed
 
 The system is configured to work with AMD Ryzen R7 2700X and 32GB RAM. The configurations can be changed to work with less resources.
 
