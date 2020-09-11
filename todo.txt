@@ -30,8 +30,4 @@ Modules
         Labels
         Display selected category on create/edit dialogs
 
-TODO FE test create Checklist Item
-TODO FE test delete Checklist Item
-TODO FE test view Checklist Item
-TODO FE test edit Checklist Item
 TODO FE test Check/Uncheck Checklist Item

@@ -44,6 +44,23 @@ class NotebookPage {
     private static final By SAVE_EDITED_LIST_ITEM_BUTTON = By.id("edit-list-item-save-button");
     private static final By DETAILED_LIST_UP_BUTTON = By.id("category-content-parent-selection-parent-button");
     private static final By EDIT_LIST_ITEM_UP_BUTTON = By.id("edit-list-item-parent-selection-parent-button");
+    private static final By OPEN_CREATE_CHECKLIST_WINDOW_BUTTON = By.id("new-checklist-button");
+    private static final By CREATE_CHECKLIST_WINDOW = By.id("create-checklist");
+    private static final By SAVE_NEW_CHECKLIST_BUTTON = By.id("create-checklist-button");
+    private static final By NEW_CHECKLIST_TITLE_INPUT = By.id("new-checklist-title");
+    private static final By CREATE_CHECKLIST_SELECTED_CATEGORY_WRAPPER = By.id("create-checklist-selected-category-wrapper");
+    private static final By AVAILABLE_PARENTS_FOR_NEW_CHECKLIST = By.cssSelector("#create-checklist-parent-selection-category-list .category");
+    private static final By CREATE_CHECKLIST_ADD_ITEM_BUTTON = By.id("create-checklist-new-item-button");
+    private static final By CREATE_CHECKLIST_LAST_CHECKLIST_ITEM = By.cssSelector("#new-checklist-content-wrapper .checklist-item:last-child");
+    private static final By VIEW_CHECKLIST_WINDOW = By.id("view-checklist-content");
+    private static final By EDIT_CHECKLIST_BUTTON = By.id("view-checklist-edit-button");
+    private static final By VIEW_CHECKLIST_TITLE = By.id("view-checklist-title");
+    private static final By SAVE_EDITED_CHECKLIST_BUTTON = By.id("view-checklist-edit-save-button");
+    private static final By CIEW_CHECKLIST_ITEMS = By.cssSelector("#view-checklist-content .view-checklist-item");
+    private static final By EDIT_CHECKLIST_DISCARD_BUTTON = By.id("view-checklist-edit-cancel-button");
+    private static final By EDIT_CHECKLIST_ADD_ITEM_BUTTON = By.id("view-checklist-edit-add-item-button");
+    private static final By EDIT_CHECKLIST_LAST_CHECKLIST_ITEM = By.cssSelector("#view-checklist-content .view-checklist-item:last-child");
+    private static final By VIEW_CHECKLIST_CLOSE_WINDOW_BUTTON = By.id("view-checklist-close-button");
 
     public static WebElement createCategoryWindow(WebDriver driver) {
         return driver.findElement(CREATE_CATEGORY_WINDOW);
@@ -191,5 +208,73 @@ class NotebookPage {
 
     public static WebElement editListItemUpButton(WebDriver driver) {
         return driver.findElement(EDIT_LIST_ITEM_UP_BUTTON);
+    }
+
+    public static WebElement openCreateChecklistWindowButton(WebDriver driver) {
+        return driver.findElement(OPEN_CREATE_CHECKLIST_WINDOW_BUTTON);
+    }
+
+    public static WebElement createChecklistWindow(WebDriver driver) {
+        return driver.findElement(CREATE_CHECKLIST_WINDOW);
+    }
+
+    public static WebElement saveNewChecklistButton(WebDriver driver) {
+        return driver.findElement(SAVE_NEW_CHECKLIST_BUTTON);
+    }
+
+    public static WebElement newChecklistTitleInput(WebDriver driver) {
+        return driver.findElement(NEW_CHECKLIST_TITLE_INPUT);
+    }
+
+    public static WebElement createChecklistSelectedCategoryWrapper(WebDriver driver) {
+        return driver.findElement(CREATE_CHECKLIST_SELECTED_CATEGORY_WRAPPER);
+    }
+
+    public static List<WebElement> getAvailableParentsForNewChecklist(WebDriver driver) {
+        return driver.findElements(AVAILABLE_PARENTS_FOR_NEW_CHECKLIST);
+    }
+
+    public static WebElement createChecklistAddItemButton(WebDriver driver) {
+        return driver.findElement(CREATE_CHECKLIST_ADD_ITEM_BUTTON);
+    }
+
+    public static WebElement createChecklistLastChecklistItem(WebDriver driver) {
+        return driver.findElement(CREATE_CHECKLIST_LAST_CHECKLIST_ITEM);
+    }
+
+    public static WebElement viewChecklistWindow(WebDriver driver) {
+        return driver.findElement(VIEW_CHECKLIST_WINDOW);
+    }
+
+    public static WebElement editChecklistButton(WebDriver driver) {
+        return driver.findElement(EDIT_CHECKLIST_BUTTON);
+    }
+
+    public static WebElement viewChecklistTitle(WebDriver driver) {
+        return driver.findElement(VIEW_CHECKLIST_TITLE);
+    }
+
+    public static WebElement saveEditedChecklistButton(WebDriver driver) {
+        return driver.findElement(SAVE_EDITED_CHECKLIST_BUTTON);
+    }
+
+    public static List<WebElement> viewChecklistItems(WebDriver driver) {
+        return driver.findElements(CIEW_CHECKLIST_ITEMS);
+    }
+
+    public static WebElement editChecklistDiscardButton(WebDriver driver) {
+        return driver.findElement(EDIT_CHECKLIST_DISCARD_BUTTON);
+    }
+
+    public static WebElement editChecklistAddItemButton(WebDriver driver) {
+        return driver.findElement(EDIT_CHECKLIST_ADD_ITEM_BUTTON);
+    }
+
+    public static WebElement editChecklistLastChecklistItem(WebDriver driver) {
+        return driver.findElement(EDIT_CHECKLIST_LAST_CHECKLIST_ITEM);
+    }
+
+    public static WebElement viewChecklistCloseWindowButton(WebDriver driver) {
+        return driver.findElement(VIEW_CHECKLIST_CLOSE_WINDOW_BUTTON);
     }
 }

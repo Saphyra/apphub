@@ -36,6 +36,9 @@ public class SeleniumTest extends TestBase {
     @AfterMethod(alwaysRun = true)
     public void afterMethod(ITestResult testResult) {
         WebDriverWrapper webDriverWrapper = driverWrapper.get();
+        if (isNull(webDriverWrapper)) {
+            return;
+        }
         WebDriver driver = webDriverWrapper.getDriver();
         if (ITestResult.FAILURE == testResult.getStatus() && !HEADLESS_MODE) {
             extractLogs(driver);

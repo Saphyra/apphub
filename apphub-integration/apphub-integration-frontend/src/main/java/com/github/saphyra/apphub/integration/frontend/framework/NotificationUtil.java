@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,20 +35,22 @@ public class NotificationUtil {
         if (!backgroundColor.equals("rgba(0, 128, 0, 1)")) {
             throw new AssertionError("Notification's background color is not green. It is " + backgroundColor);
         }
+
+        getNotifications(driver).forEach(WebElement::click);
     }
 
     public static void verifyZeroNotifications(WebDriver driver) {
-        assertThat(driver.findElements(NOTIFICATIONS_LOCATOR)).isEmpty();
+        assertThat(getNotifications(driver)).isEmpty();
     }
 
     private static void waitUntilNotificationVisible(WebDriver driver, String notificationMessage) {
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.findElements(NOTIFICATIONS_LOCATOR).stream()
+            .until(() -> getNotifications(driver).stream()
                 .anyMatch(webElement -> webElement.findElement(NOTIFICATION_TEXT_LOCATOR).getText().equals(notificationMessage)));
     }
 
     private static Optional<WebElement> getMatchingNotification(WebDriver driver, String notificationMessage) {
-        Optional<WebElement> matchingNotification = driver.findElements(NOTIFICATIONS_LOCATOR).stream()
+        Optional<WebElement> matchingNotification = getNotifications(driver).stream()
             .peek(webElement -> log.info("Notification found with message {}", webElement.findElement(NOTIFICATION_TEXT_LOCATOR).getText()))
             .filter(webElement -> webElement.findElement(NOTIFICATION_TEXT_LOCATOR).getText().equals(notificationMessage))
             .findAny();
@@ -55,5 +58,9 @@ public class NotificationUtil {
             throw new AssertionError("No notification matches notificationMessage " + notificationMessage);
         }
         return matchingNotification;
+    }
+
+    private static List<WebElement> getNotifications(WebDriver driver) {
+        return driver.findElements(NOTIFICATIONS_LOCATOR);
     }
 }
