@@ -51,6 +51,7 @@ public class Endpoints {
     public static final String UPDATE_CHECKLIST_ITEM_STATUS = "/api/notebook/checklist/item/{checklistItemId}/status";
     public static final String CREATE_NOTEBOOK_TABLE = "/api/notebook/table";
     public static final String EDIT_NOTEBOOK_TABLE = "/api/notebook/table/{listItemId}";
+    public static final String GET_NOTEBOOK_TABLE = "/api/notebook/table/{listItemId}";
 
     public static final String INDEX_PAGE = "/web";
     public static final String ACCOUNT_PAGE = "/web/user/account";

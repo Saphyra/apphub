@@ -2,9 +2,11 @@ package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.notebook.model.request.CreateTableRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.EditTableRequest;
+import com.github.saphyra.apphub.api.notebook.model.response.TableResponse;
 import com.github.saphyra.apphub.api.notebook.server.TableController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
+import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
 import com.github.saphyra.apphub.service.notebook.service.table.creation.TableCreationService;
 import com.github.saphyra.apphub.service.notebook.service.table.edition.TableEditionService;
 import lombok.RequiredArgsConstructor;
@@ -19,18 +21,23 @@ import java.util.UUID;
 public class TableControllerImpl implements TableController {
     private final TableCreationService tableCreationService;
     private final TableEditionService tableEditionService;
+    private final TableQueryService tableQueryService;
 
     @Override
-    //TODO api test
     public OneParamResponse<UUID> createTable(CreateTableRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a table.", accessTokenHeader.getUserId());
         return new OneParamResponse<>(tableCreationService.create(request, accessTokenHeader.getUserId()));
     }
 
     @Override
-    //TODO api test
     public void editTable(EditTableRequest request, UUID listItemId) {
         log.info("Editing table {}", listItemId);
         tableEditionService.edit(listItemId, request);
+    }
+
+    @Override
+    public TableResponse getTable(UUID listItemId) {
+        log.info("Querying table with listItemId {}", listItemId);
+        return tableQueryService.getTable(listItemId);
     }
 }

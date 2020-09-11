@@ -1,23 +1,24 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-
-import java.util.UUID;
-
+import com.github.saphyra.apphub.api.notebook.model.request.CreateTableRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.EditTableRequest;
+import com.github.saphyra.apphub.api.notebook.model.response.TableResponse;
+import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
+import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
+import com.github.saphyra.apphub.service.notebook.service.table.creation.TableCreationService;
+import com.github.saphyra.apphub.service.notebook.service.table.edition.TableEditionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateTableRequest;
-import com.github.saphyra.apphub.api.notebook.model.request.EditTableRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.service.notebook.service.table.creation.TableCreationService;
-import com.github.saphyra.apphub.service.notebook.service.table.edition.TableEditionService;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TableControllerImplTest {
@@ -30,6 +31,9 @@ public class TableControllerImplTest {
     @Mock
     private TableEditionService tableEditionService;
 
+    @Mock
+    private TableQueryService tableQueryService;
+
     @InjectMocks
     private TableControllerImpl underTest;
 
@@ -41,6 +45,9 @@ public class TableControllerImplTest {
 
     @Mock
     private EditTableRequest editTableRequest;
+
+    @Mock
+    private TableResponse tableResponse;
 
     @Test
     public void createTable() {
@@ -57,5 +64,14 @@ public class TableControllerImplTest {
         underTest.editTable(editTableRequest, LIST_ITEM_ID);
 
         verify(tableEditionService).edit(LIST_ITEM_ID, editTableRequest);
+    }
+
+    @Test
+    public void getTable() {
+        given(tableQueryService.getTable(LIST_ITEM_ID)).willReturn(tableResponse);
+
+        TableResponse result = underTest.getTable(LIST_ITEM_ID);
+
+        assertThat(result).isEqualTo(tableResponse);
     }
 }

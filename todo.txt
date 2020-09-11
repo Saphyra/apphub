@@ -8,6 +8,12 @@ Index page
 Favorite modules can be accessed from anywhere
 
 Modules
+    Balance
+        Implement
+
+    SkyXplore
+        Migrate
+
     Jira
         Implement
 
@@ -15,10 +21,8 @@ Modules
         Migrate
 
     Notebook
-        Edit category
-        Edit text item
-        Create checklist item
         Create table item
+            - FE implementation
         Create checklist table item
         Filtering
         Archive

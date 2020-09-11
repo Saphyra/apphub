@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
+import com.github.saphyra.apphub.integration.common.model.OneParamRequest;
 import io.restassured.response.Response;
 
 import java.util.*;
@@ -162,5 +163,55 @@ public class NotebookActions {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(editRequest)
             .post(UrlFactory.create(Endpoints.EDIT_NOTEBOOK_CHECKLIST_ITEM, "listItemId", listItemId));
+    }
+
+    public static void updateChecklistItemStatus(Language language, UUID accessTokenId, UUID checklistItemId, boolean status) {
+        Response response = getUpdateChecklistItemStatusResponse(language, accessTokenId, checklistItemId, status);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getUpdateChecklistItemStatusResponse(Language language, UUID accessTokenId, UUID checklistItemId, boolean status) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(new OneParamRequest<>(status))
+            .post(UrlFactory.create(Endpoints.UPDATE_CHECKLIST_ITEM_STATUS, "checklistItemId", checklistItemId));
+    }
+
+    public static UUID createTable(Language language, UUID accessTokenId, CreateTableRequest request) {
+        Response response = getCreateTableResponse(language, accessTokenId, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().jsonPath().getUUID("value");
+    }
+
+    public static Response getCreateTableResponse(Language language, UUID accessTokenId, CreateTableRequest request) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(request)
+            .put(UrlFactory.create(Endpoints.CREATE_NOTEBOOK_TABLE));
+    }
+
+    public static void editTable(Language language, UUID accessTokenId, UUID listItemId, EditTableRequest editTableRequest) {
+        Response response = getEditTableResponse(language, accessTokenId, listItemId, editTableRequest);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getEditTableResponse(Language language, UUID accessTokenId, UUID listItemId, EditTableRequest editTableRequest) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(editTableRequest)
+            .post(UrlFactory.create(Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+    }
+
+    public static TableResponse getTable(Language language, UUID accessTokenId, UUID listItemId) {
+        Response response = getTableResponse(language, accessTokenId, listItemId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        return response.getBody().as(TableResponse.class);
+    }
+
+    public static Response getTableResponse(Language language, UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .get(UrlFactory.create(Endpoints.GET_NOTEBOOK_TABLE, "listItemId", listItemId));
     }
 }

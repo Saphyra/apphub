@@ -45,7 +45,6 @@ public class ChecklistControllerImpl implements ChecklistController {
     }
 
     @Override
-    //TODO api test
     public void updateStatus(OneParamRequest<Boolean> request, UUID checklistItemId) {
         log.info("Updating status of {}", checklistItemId);
         checklistItemStatusUpdateService.update(checklistItemId, request.getValue());

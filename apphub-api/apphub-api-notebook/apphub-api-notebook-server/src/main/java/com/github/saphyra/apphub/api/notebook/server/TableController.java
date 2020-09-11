@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.api.notebook.server;
 
 import com.github.saphyra.apphub.api.notebook.model.request.CreateTableRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.EditTableRequest;
+import com.github.saphyra.apphub.api.notebook.model.response.TableResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.common_util.Constants;
@@ -16,4 +17,7 @@ public interface TableController {
 
     @RequestMapping(method = RequestMethod.POST, path = Endpoints.EDIT_NOTEBOOK_TABLE)
     void editTable(@RequestBody EditTableRequest request, @PathVariable(name = "listItemId") UUID listItemId);
+
+    @RequestMapping(method = RequestMethod.GET, path = Endpoints.GET_NOTEBOOK_TABLE)
+    TableResponse getTable(@PathVariable("listItemId") UUID listItemId);
 }
