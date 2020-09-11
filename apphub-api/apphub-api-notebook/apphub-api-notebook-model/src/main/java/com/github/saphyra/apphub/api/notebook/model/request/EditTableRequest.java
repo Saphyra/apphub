@@ -13,6 +13,7 @@ import java.util.List;
 @Builder
 @Data
 public class EditTableRequest {
+    private String title;
     private List<KeyValuePair<String>> columnNames;
     private List<List<KeyValuePair<String>>> columns;
 }

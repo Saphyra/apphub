@@ -36,7 +36,50 @@ public class EditChecklistItemTest extends TestBase {
 
     @Test(dataProvider = "localeDataProvider")
     public void blankTitle(Language language) {
-        //TODO
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+
+        CreateCategoryRequest createCategoryRequest = CreateCategoryRequest.builder()
+            .title("asfd")
+            .build();
+        UUID parent = NotebookActions.createCategory(language, accessTokenId, createCategoryRequest);
+
+        CreateChecklistItemRequest request = CreateChecklistItemRequest.builder()
+            .parent(parent)
+            .title(ORIGINAL_TITLE)
+            .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
+                .order(ORIGINAL_ORDER)
+                .checked(false)
+                .content(ORIGINAL_CONTENT)
+                .build()))
+            .build();
+
+        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+
+        ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
+        UUID checklistItemId = checklistResponse.getNodes()
+            .get(0)
+            .getChecklistItemId();
+
+        ChecklistItemNodeRequest node = ChecklistItemNodeRequest.builder()
+            .checklistItemId(checklistItemId)
+            .order(NEW_ORDER)
+            .checked(true)
+            .content(NEW_CONTENT)
+            .build();
+
+        EditChecklistItemRequest editRequest = EditChecklistItemRequest.builder()
+            .title(" ")
+            .nodes(Arrays.asList(node))
+            .build();
+
+        Response response = NotebookActions.getEditChecklistResponse(language, accessTokenId, editRequest, listItemId);
+
+        assertThat(response.getStatusCode()).isEqualTo(400);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getParams().get("title")).isEqualTo("must not be null or blank");
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, ERROR_CODE_INVALID_PARAM));
     }
 
     @Test(dataProvider = "localeDataProvider")

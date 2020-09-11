@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoinDao;
+import com.github.saphyra.apphub.service.notebook.service.TitleValidator;
 import com.github.saphyra.apphub.service.notebook.service.table.ColumnNameValidator;
 import com.github.saphyra.apphub.service.notebook.service.table.RowValidator;
 import org.junit.After;
@@ -29,6 +30,10 @@ public class EditTableRequestValidatorTest {
     private static final String NEW_TABLE_HEAD = "new-table-head";
     private static final UUID TABLE_JOIN_ID = UUID.randomUUID();
     private static final String NEW_VALUE = "new-value";
+    private static final String NEW_TITLE = "new-title";
+
+    @Mock
+    private TitleValidator titleValidator;
 
     @Mock
     private ColumnNameValidator columnNameValidator;
@@ -49,6 +54,7 @@ public class EditTableRequestValidatorTest {
     public void v() {
         verify(columnNameValidator).validate(NEW_TABLE_HEAD);
         verify(rowValidator).validate(Arrays.asList(NEW_VALUE), 1);
+        verify(titleValidator).validate(NEW_TITLE);
     }
 
     @Test
@@ -56,6 +62,7 @@ public class EditTableRequestValidatorTest {
         given(tableHeadDao.exists(TABLE_HEAD_ID)).willReturn(false);
 
         EditTableRequest request = EditTableRequest.builder()
+            .title(NEW_TITLE)
             .columnNames(Arrays.asList(new KeyValuePair<>(TABLE_HEAD_ID, NEW_TABLE_HEAD)))
             .columns(Arrays.asList(Arrays.asList(new KeyValuePair<>(TABLE_JOIN_ID, NEW_VALUE))))
             .build();
@@ -73,6 +80,7 @@ public class EditTableRequestValidatorTest {
         given(tableJoinDao.exists(TABLE_JOIN_ID)).willReturn(false);
 
         EditTableRequest request = EditTableRequest.builder()
+            .title(NEW_TITLE)
             .columnNames(Arrays.asList(new KeyValuePair<>(TABLE_HEAD_ID, NEW_TABLE_HEAD)))
             .columns(Arrays.asList(Arrays.asList(new KeyValuePair<>(TABLE_JOIN_ID, NEW_VALUE))))
             .build();
@@ -90,6 +98,7 @@ public class EditTableRequestValidatorTest {
         given(tableJoinDao.exists(TABLE_JOIN_ID)).willReturn(true);
 
         EditTableRequest request = EditTableRequest.builder()
+            .title(NEW_TITLE)
             .columnNames(Arrays.asList(new KeyValuePair<>(TABLE_HEAD_ID, NEW_TABLE_HEAD)))
             .columns(Arrays.asList(Arrays.asList(new KeyValuePair<>(TABLE_JOIN_ID, NEW_VALUE))))
             .build();

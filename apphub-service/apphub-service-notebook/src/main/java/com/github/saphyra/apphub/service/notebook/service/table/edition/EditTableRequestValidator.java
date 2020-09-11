@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoinDao;
+import com.github.saphyra.apphub.service.notebook.service.TitleValidator;
 import com.github.saphyra.apphub.service.notebook.service.table.ColumnNameValidator;
 import com.github.saphyra.apphub.service.notebook.service.table.RowValidator;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,15 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 class EditTableRequestValidator {
+    private final TitleValidator titleValidator;
     private final ColumnNameValidator columnNameValidator;
     private final RowValidator rowValidator;
     private final TableHeadDao tableHeadDao;
     private final TableJoinDao tableJoinDao;
 
     public void validate(EditTableRequest request) {
+        titleValidator.validate(request.getTitle());
+
         request.getColumnNames()
             .stream()
             .map(KeyValuePair::getValue)

@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.dao.AbstractDao;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -24,12 +25,17 @@ public class ContentDao extends AbstractDao<ContentEntity, Content, String, Cont
     }
 
     public Content findByParentValidated(UUID parent) {
-        return converter.convertEntity(repository.findByParent(uuidConverter.convertDomain(parent)))
+        return findByParent(parent)
             .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.LIST_ITEM_NOT_FOUND.name()), "Text not found by parent " + parent));
+    }
+
+    public Optional<Content> findByParent(UUID parent) {
+        return converter.convertEntity(repository.findByParent(uuidConverter.convertDomain(parent)));
     }
 
     @Override
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }
+
 }

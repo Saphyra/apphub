@@ -27,6 +27,8 @@ public class TableEditionService {
         editTableRequestValidator.validate(request);
 
         ListItem listItem = listItemDao.findByIdValidated(listItemId);
+        listItem.setTitle(request.getTitle());
+        listItemDao.save(listItem);
 
         editTableTableHeadService.processEditions(request.getColumnNames(), listItem);
         editTableTableJoinService.processEditions(request.getColumns(), listItem);

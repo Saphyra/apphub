@@ -22,6 +22,7 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class TableEditionServiceTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
+    private static final String NEW_TITLE = "new-title";
 
     @Mock
     private  EditTableRequestValidator editTableRequestValidator;
@@ -48,10 +49,12 @@ public class TableEditionServiceTest {
         List<KeyValuePair<String>> columnNames = Arrays.asList(new KeyValuePair<>(UUID.randomUUID(), "ads"));
         List<List<KeyValuePair<String>>> columns = Arrays.asList(Arrays.asList(new KeyValuePair<>(UUID.randomUUID(), "afda")));
 
-        EditTableRequest request = new EditTableRequest(columnNames, columns);
+        EditTableRequest request = new EditTableRequest(NEW_TITLE, columnNames, columns);
 
         underTest.edit(LIST_ITEM_ID, request);
 
+        verify(listItem).setTitle(NEW_TITLE);
+        verify(listItemDao).save(listItem);
         verify(editTableRequestValidator).validate(request);
         verify(editTableTableHeadService).processEditions(columnNames, listItem);
         verify(editTableTableJoinService).processEditions(columns, listItem);
