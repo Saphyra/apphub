@@ -22,9 +22,10 @@ import static java.util.Objects.isNull;
 
 @Slf4j
 class WebDriverFactory {
-    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(3);
-
+    public static final int BROWSER_STARTUP_LIMIT = 3;
     private static final int MAX_DRIVER_COUNT = 15;
+
+    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(BROWSER_STARTUP_LIMIT);
 
     private static final Map<UUID, WebDriverWrapper> DRIVER_CACHE = new ConcurrentHashMap<>();
 
