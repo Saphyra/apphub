@@ -34,7 +34,9 @@ The app's purpose is to provide an easy-to extend frame for multiple application
 ### System requirements:
 * CPU: AMD Ryzen R5 2600
 * RAM: 16 GB
-* Minikube running with at least 6GB RAM, and the most possible CPU cores available
+* Minikube running with at least 6GB RAM, and the most possible CPU cores available.
+  (Note: with 6GB of RAM only one namespace (develop/production) is available at once.
+  To use both namespace in parallel the recommended RAM amount is 16 GB.)
 * System Administrator access
 * Kubectl installed
 
