@@ -271,4 +271,52 @@ public class ChecklistCrudTest extends SeleniumTest {
 
         DetailedListActions.findDetailedItem(driver, NEW_CHECKLIST_TITLE);
     }
+
+    @Test
+    public void checkChecklistItem(){
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+
+        ChecklistActions.createChecklist(
+            driver,
+            CHECKLIST_TITLE,
+            Arrays.asList(NewChecklistItemData.builder().content(CHECKLIST_ITEM_1).checked(false).build())
+        );
+
+        ChecklistActions.openChecklist(driver, CHECKLIST_TITLE);
+
+        ChecklistActions.getChecklistItem(driver, CHECKLIST_ITEM_1).setStatus(true);
+
+        ChecklistActions.closeWindow(driver);
+        ChecklistActions.openChecklist(driver, CHECKLIST_TITLE);
+        assertThat(ChecklistActions.getChecklistItem(driver, CHECKLIST_ITEM_1).isChecked()).isTrue();
+    }
+
+    @Test
+    public void uncheckChecklistItem(){
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+
+        ChecklistActions.createChecklist(
+            driver,
+            CHECKLIST_TITLE,
+            Arrays.asList(NewChecklistItemData.builder().content(CHECKLIST_ITEM_1).checked(true).build())
+        );
+
+        ChecklistActions.openChecklist(driver, CHECKLIST_TITLE);
+
+        ChecklistActions.getChecklistItem(driver, CHECKLIST_ITEM_1).setStatus(false);
+
+        ChecklistActions.closeWindow(driver);
+        ChecklistActions.openChecklist(driver, CHECKLIST_TITLE);
+        assertThat(ChecklistActions.getChecklistItem(driver, CHECKLIST_ITEM_1).isChecked()).isFalse();
+    }
 }

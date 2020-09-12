@@ -113,14 +113,18 @@ public class ChecklistActions {
     }
 
     public static void editChecklistItemContent(WebDriver driver, String originalContent, NewChecklistItemData newChecklistItemData) {
-        ViewChecklistItem item = getChecklistItems(driver)
-            .stream()
-            .filter(newChecklistItem -> newChecklistItem.getContent().equals(originalContent))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("EditableChecklistItem not found with content" + originalContent));
+        ViewChecklistItem item = getChecklistItem(driver, originalContent);
 
         item.setContent(newChecklistItemData.getContent());
         item.setStatus(newChecklistItemData.isChecked());
+    }
+
+    public static ViewChecklistItem getChecklistItem(WebDriver driver, String originalContent) {
+        return getChecklistItems(driver)
+            .stream()
+            .filter(newChecklistItem -> newChecklistItem.getContent().equals(originalContent))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("ViewChecklistItem not found with content" + originalContent));
     }
 
     public static void discardChanges(WebDriver driver) {
