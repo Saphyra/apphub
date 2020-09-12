@@ -35,8 +35,6 @@ public class NotificationUtil {
         if (!backgroundColor.equals("rgba(0, 128, 0, 1)")) {
             throw new AssertionError("Notification's background color is not green. It is " + backgroundColor);
         }
-
-        getNotifications(driver).forEach(WebElement::click);
     }
 
     public static void verifyZeroNotifications(WebDriver driver) {

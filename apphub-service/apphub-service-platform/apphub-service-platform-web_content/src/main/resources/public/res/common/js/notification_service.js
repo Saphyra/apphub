@@ -49,7 +49,7 @@
                 })
             )
             .then(() => animationFacade.rollOutHorizontal(messageElement, container, 300))
-            .then(() => container.removeChild(messageElement));
+            .then(() => setTimeout(function(){container.removeChild(messageElement)}, 10000));
 
         function createContainer(){
             const container = document.createElement("DIV");
