@@ -1,9 +1,8 @@
 package com.github.saphyra.integration.backend.index;
 
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
+import com.github.saphyra.apphub.integration.common.framework.*;
 import com.github.saphyra.apphub.integration.backend.actions.ModulesPageActions;
 import com.github.saphyra.apphub.integration.common.TestBase;
-import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
@@ -93,6 +92,28 @@ public class LoginTest extends TestBase {
         assertThat(response.getExpirationDays()).isNull();
     }
 
+    @Test
+    public void callEndpointWithAuthHeader() {
+        Language language = Language.HUNGARIAN;
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(language, userData.toRegistrationRequest());
+
+        LoginRequest loginRequest = LoginRequest.builder()
+            .email(userData.getEmail())
+            .password(userData.getPassword())
+            .rememberMe(false)
+            .build();
+
+        LoginResponse loginResponse = IndexPageActions.getSuccessfulLoginResponse(language, loginRequest);
+
+        Response response = RequestFactory.createRequest(language)
+            .header(Constants.AUTHORIZATION_HEADER, loginResponse.getAccessTokenId())
+            .get(UrlFactory.create(Endpoints.GET_MODULES_OF_USER));
+
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
     @Test(dataProvider = "localeDataProvider")
     public void successfulLogout(Language locale) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -113,6 +134,6 @@ public class LoginTest extends TestBase {
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.NO_SESSION_AVAILABLE.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale,LocalizationKey.ERROR_CODE_SESSION_EXPIRED));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.ERROR_CODE_SESSION_EXPIRED));
     }
 }

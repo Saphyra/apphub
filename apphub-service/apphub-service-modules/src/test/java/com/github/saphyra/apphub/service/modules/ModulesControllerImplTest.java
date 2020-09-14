@@ -61,10 +61,10 @@ public class ModulesControllerImplTest {
     public void getModules() {
         Map<String, List<ModuleResponse>> responseMap = new HashMap<>();
         responseMap.put(CATEGORY, Arrays.asList(new ModuleResponse()));
-        given(modulesQueryService.getModules(USER_ID)).willReturn(responseMap);
+        given(modulesQueryService.getModules(USER_ID, true)).willReturn(responseMap);
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
 
-        Map<String, List<ModuleResponse>> result = underTest.getModules(accessTokenHeader);
+        Map<String, List<ModuleResponse>> result = underTest.getModules(accessTokenHeader, true);
 
         assertThat(result).isEqualTo(responseMap);
     }
@@ -73,7 +73,7 @@ public class ModulesControllerImplTest {
     public void setFavorite() {
         Map<String, List<ModuleResponse>> responseMap = new HashMap<>();
         responseMap.put(CATEGORY, Arrays.asList(new ModuleResponse()));
-        given(modulesQueryService.getModules(USER_ID)).willReturn(responseMap);
+        given(modulesQueryService.getModules(USER_ID, false)).willReturn(responseMap);
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
 
         Map<String, List<ModuleResponse>> result = underTest.setFavorite(accessTokenHeader, MODULE, new OneParamRequest<>(true));

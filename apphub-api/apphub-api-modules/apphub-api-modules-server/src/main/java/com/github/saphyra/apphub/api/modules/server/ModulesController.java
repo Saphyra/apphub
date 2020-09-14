@@ -8,11 +8,7 @@ import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -23,7 +19,7 @@ public interface ModulesController {
     void deleteAccountEvent(@RequestBody SendEventRequest<DeleteAccountEvent> request);
 
     @RequestMapping(method = RequestMethod.GET, path = Endpoints.GET_MODULES_OF_USER)
-    Map<String, List<ModuleResponse>> getModules(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessToken);
+    Map<String, List<ModuleResponse>> getModules(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessToken, @RequestParam(name = "mobile", required = false, defaultValue = "false") boolean mobileClient);
 
     @RequestMapping(method = RequestMethod.POST, path = Endpoints.SET_FAVORITE)
     Map<String, List<ModuleResponse>> setFavorite(

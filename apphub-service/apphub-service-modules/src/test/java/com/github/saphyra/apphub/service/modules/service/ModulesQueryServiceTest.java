@@ -62,7 +62,8 @@ public class ModulesQueryServiceTest {
             createModule(MODULE_2, true)
         ));
         modules.put(CATEGORY_2, Arrays.asList(
-            createModule(MODULE_1, false)
+            createModule(MODULE_1, false),
+            createModule(MODULE_1, true).toBuilder().mobileAllowed(false).build()
         ));
         modules.put(CATEGORY_3, Arrays.asList(
             createModule(MODULE_3, false, ROLE_1),
@@ -70,7 +71,7 @@ public class ModulesQueryServiceTest {
         ));
         given(modulesProperties.getModules()).willReturn(modules);
 
-        Map<String, List<ModuleResponse>> result = underTest.getModules(USER_ID);
+        Map<String, List<ModuleResponse>> result = underTest.getModules(USER_ID, true);
 
         assertThat(result).containsOnlyKeys(CATEGORY_1, CATEGORY_3);
         assertThat(result.get(CATEGORY_1)).contains(
@@ -90,6 +91,7 @@ public class ModulesQueryServiceTest {
         return Module.builder()
             .name(moduleName)
             .allowedByDefault(allowedByDefault)
+            .mobileAllowed(true)
             .roles(Arrays.asList(role))
             .build();
     }

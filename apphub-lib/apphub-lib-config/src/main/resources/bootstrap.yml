@@ -100,7 +100,7 @@ endpoint:
         path: /api/user/authentication/login
         method: POST
       register:
-        path: /api/user/data
+        path: /api/user
         method: POST
       errorPage:
         path: /web/error

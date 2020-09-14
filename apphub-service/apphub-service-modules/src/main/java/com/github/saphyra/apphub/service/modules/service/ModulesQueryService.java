@@ -25,7 +25,7 @@ public class ModulesQueryService {
     private final FavoriteService favoriteService;
     private final ModulesProperties modulesProperties;
 
-    public Map<String, List<ModuleResponse>> getModules(UUID userId) {
+    public Map<String, List<ModuleResponse>> getModules(UUID userId, boolean mobileClient) {
         List<String> favoriteModules = favoriteService.getByUserId(userId)
             .stream()
             .filter(Favorite::isFavorite)
@@ -36,7 +36,8 @@ public class ModulesQueryService {
         for (Map.Entry<String, List<Module>> category : modulesProperties.getModules().entrySet()) {
             List<ModuleResponse> availableModules = category.getValue()
                 .stream()
-                .filter(module -> isAvailable(userId, module))
+                .filter(module -> isAvailableForClient(module, mobileClient))
+                .filter(module -> isAvailableForUser(userId, module))
                 .map(module -> convert(isFavorite(favoriteModules, module), module))
                 .collect(Collectors.toList());
 
@@ -47,7 +48,15 @@ public class ModulesQueryService {
         return result;
     }
 
-    private boolean isAvailable(UUID userId, Module module) {
+    private boolean isAvailableForClient(Module module, boolean mobileClient) {
+        if (mobileClient) {
+            return module.isMobileAllowed();
+        }
+
+        return true;
+    }
+
+    private boolean isAvailableForUser(UUID userId, Module module) {
         boolean result = module.isAllowedByDefault() || userHasRole(module.getRoles());
         log.debug("Module {} is allowed for user {}: {}", module, userId, result);
         return result;

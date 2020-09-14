@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Validated
@@ -22,6 +22,7 @@ public class Module {
     private String url;
 
     private boolean allowedByDefault;
+    private boolean mobileAllowed;
 
     private List<String> roles;
 }

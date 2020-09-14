@@ -90,8 +90,9 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    public void cookieNotFound() {
+    public void accessTokenNotPresentInRequest() {
         given(cookieUtil.getCookie(request, Constants.ACCESS_TOKEN_COOKIE)).willReturn(Optional.empty());
+        given(request.getHeader(Constants.AUTHORIZATION_HEADER)).willReturn(null);
 
         underTest.authenticate(requestContext);
 
@@ -109,8 +110,25 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    public void authenticationSuccessful() {
+    public void authenticationSuccessful_cookie() {
         given(cookieUtil.getCookie(request, Constants.ACCESS_TOKEN_COOKIE)).willReturn(Optional.of(ACCESS_TOKEN_ID_STRING));
+        given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.of(accessTokenResponse));
+        given(accessTokenHeaderFactory.create(accessTokenResponse)).willReturn(accessTokenHeader);
+        given(objectMapperWrapper.writeValueAsString(accessTokenHeader)).willReturn(ACCESS_TOKEN);
+        given(base64Encoder.encode(ACCESS_TOKEN)).willReturn(ENCODED_ACCESS_TOKEN);
+        given(accessTokenResponse.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
+
+        underTest.authenticate(requestContext);
+
+        verify(requestContext).addZuulRequestHeader(ACCESS_TOKEN_HEADER, ENCODED_ACCESS_TOKEN);
+        verify(accessTokenExpirationUpdateService).updateExpiration(request, ACCESS_TOKEN_ID);
+    }
+
+    @Test
+    public void authenticationSuccessful_header() {
+        given(cookieUtil.getCookie(request, Constants.ACCESS_TOKEN_COOKIE)).willReturn(Optional.empty());
+        given(request.getHeader(Constants.AUTHORIZATION_HEADER)).willReturn(ACCESS_TOKEN_ID_STRING);
+
         given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.of(accessTokenResponse));
         given(accessTokenHeaderFactory.create(accessTokenResponse)).willReturn(accessTokenHeader);
         given(objectMapperWrapper.writeValueAsString(accessTokenHeader)).willReturn(ACCESS_TOKEN);

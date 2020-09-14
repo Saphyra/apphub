@@ -32,7 +32,7 @@ window.Mapping = new function(){
         LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),
         LOGOUT: new Endpoint("/api/user/authentication/logout", HttpMethod.POST),
         MARK_AS_FAVORITE: new Endpoint("/api/modules/{module}/favorite", HttpMethod.POST),
-        REGISTER: new Endpoint("/api/user/data", HttpMethod.POST),
+        REGISTER: new Endpoint("/api/user", HttpMethod.POST),
         REMOVE_ROLE: new Endpoint("/api/user/data/roles", HttpMethod.DELETE),
         UPDATE_NOTEBOOK_CHECKLIST_ITEM_STATUS: new Endpoint("/api/notebook/checklist/item/{checklistItemId}/status", HttpMethod.POST),
     }

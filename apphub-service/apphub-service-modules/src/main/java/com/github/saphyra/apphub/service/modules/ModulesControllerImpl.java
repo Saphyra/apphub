@@ -32,9 +32,9 @@ public class ModulesControllerImpl implements ModulesController {
     }
 
     @Override
-    public Map<String, List<ModuleResponse>> getModules(AccessTokenHeader accessToken) {
-        log.info("Querying available modules for user {}", accessToken.getUserId());
-        Map<String, List<ModuleResponse>> result = modulesQueryService.getModules(accessToken.getUserId());
+    public Map<String, List<ModuleResponse>> getModules(AccessTokenHeader accessToken, boolean mobileClient) {
+        log.info("Querying available modules for user {}, mobileClient: {}", accessToken.getUserId(), mobileClient);
+        Map<String, List<ModuleResponse>> result = modulesQueryService.getModules(accessToken.getUserId(), mobileClient);
         log.info("Available modules for user {}: {}", accessToken.getUserId(), result);
         return result;
     }
@@ -43,6 +43,6 @@ public class ModulesControllerImpl implements ModulesController {
     public Map<String, List<ModuleResponse>> setFavorite(AccessTokenHeader accessToken, String module, OneParamRequest<Boolean> favorite) {
         log.info("Setting favorite status of module {} for user {}", module, accessToken.getUserId());
         favoriteUpdateService.updateFavorite(accessToken.getUserId(), module, favorite.getValue());
-        return modulesQueryService.getModules(accessToken.getUserId());
+        return modulesQueryService.getModules(accessToken.getUserId(), false);
     }
 }

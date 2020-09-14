@@ -7,7 +7,7 @@ public class Endpoints {
     public static final String LOGOUT = "/api/user/authentication/logout";
     public static final String CHECK_SESSION = "/api/user/authentication/session";
 
-    public static final String REGISTER = "/api/user/data";
+    public static final String REGISTER = "/api/user";
     public static final String CHANGE_LANGUAGE = "/api/user/account/language";
     public static final String CHANGE_EMAIL = "/api/user/account/email";
     public static final String CHANGE_USERNAME = "/api/user/account/username";
