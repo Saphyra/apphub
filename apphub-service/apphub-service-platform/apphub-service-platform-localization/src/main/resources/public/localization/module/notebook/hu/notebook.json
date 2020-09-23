@@ -55,6 +55,12 @@
         "message": "Lista"
       }
     ],
+    "new-table-button": [
+      {
+        "key": "innerHTML",
+        "message": "Táblázat"
+      }
+    ],
     "create-category-title": [
       {
         "key": "innerHTML",
@@ -252,6 +258,48 @@
         "key": "innerHTML",
         "message": "Új lista elem"
       }
+    ],
+    "create-table-title": [
+      {
+        "key": "innerHTML",
+        "message": "Új táblázat"
+      }
+    ],
+    "new-table-title": [
+      {
+        "key": "placeholder",
+        "message": "Új táblázat címe"
+      }
+    ],
+    "create-table-selected-category": [
+      {
+        "key": "innerHTML",
+        "message": "Kiválasztott kategória"
+      }
+    ],
+    "create-table-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Fel"
+      }
+    ],
+    "create-table-new-column-button": [
+      {
+        "key": "innerHTML",
+        "message": "Új oszlop"
+      }
+    ],
+    "create-table-new-row-button": [
+      {
+        "key": "innerHTML",
+        "message": "Új sor"
+      }
+    ],
+    "create-table-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
     ]
   },
   "additionalContent": {
@@ -274,6 +322,7 @@
     "new-item-title-empty": "A cím nem lehet üres.",
     "root-title": "Gyökér",
     "text-saved": "Szöveg elmentve.",
-    "checklist-saved": "Lista elmentve."
+    "checklist-saved": "Lista elmentve.",
+    "column-name-title": "Oszlop neve"
   }
 }

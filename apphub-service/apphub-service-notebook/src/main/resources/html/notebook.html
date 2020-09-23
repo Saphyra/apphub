@@ -11,6 +11,7 @@
     <LINK rel="stylesheet" href="/res/notebook/css/create_text_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/create_link_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/create_checklist_dialog.css">
+    <LINK rel="stylesheet" href="/res/notebook/css/create_table_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/view_text_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/view_checklist_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/edit_list_item.css">
@@ -63,6 +64,7 @@
                 <DIV id="new-category-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_CATEGORY_DIALOG))"></DIV>
                 <DIV id="new-link-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_LINK_DIALOG))"></DIV>
                 <DIV id="new-checklist-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_CHECKLIST_DIALOG))"></DIV>
+                <DIV id="new-table-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_TABLE_DIALOG))"></DIV>
             </DIV>
 
             <DIV id="new-button" class="button"></DIV>
@@ -151,6 +153,44 @@
     <FOOTER>
         <DIV id="create-checklist-new-item-button" class="button dialog-button" onclick="checklistCreationController.newItem()"></DIV>
         <DIV id="create-checklist-button" class="button dialog-button" onclick="checklistCreationController.save()"></DIV>
+    </FOOTER>
+</DIV>
+
+<DIV id="create-table" class="main-page">
+    <HEADER>
+        <H1 id="create-table-title"></H1>
+        <BUTTON id="create-table-close-button" class="dialog-close-button" onclick="pageController.openMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN>
+        <DIV class="create-item-input-wrapper">
+            <INPUT type="text" id="new-table-title" class="new-item-title">
+        </DIV>
+
+        <DIV id="create-table-parent-selection-wrapper">
+            <DIV id="create-table-selected-category-wrapper">
+                <SPAN id="create-table-selected-category"></SPAN>: <SPAN id="create-table-selected-category-title"></SPAN>
+            </DIV>
+            <DIV id="create-table-parent-selection-list-wrapper">
+                <DIV id="create-table-parent-selection-parent-button" class="button create-item-category"></DIV>
+                <DIV id="create-table-parent-selection-category-list"></DIV>
+            </DIV>
+        </DIV>
+
+        <DIV id="new-table-content-wrapper">
+            <TABLE id="new-table-content-table" class="formatted-table">
+                <thead>
+                    <tr id="table-head-row"></tr>
+                </thead>
+                <tbody id="new-table-content"></tbody>
+            </TABLE>
+        </DIV>
+    </MAIN>
+
+    <FOOTER>
+        <DIV id="create-table-new-column-button" class="button dialog-button" onclick="tableCreationController.newColumn()"></DIV>
+        <DIV id="create-table-new-row-button" class="button dialog-button" onclick="tableCreationController.newRow()"></DIV>
+        <DIV id="create-table-button" class="button dialog-button" onclick="tableCreationController.save()"></DIV>
     </FOOTER>
 </DIV>
 

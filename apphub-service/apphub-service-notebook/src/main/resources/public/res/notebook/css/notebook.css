@@ -85,3 +85,21 @@
     right: 10%;
     bottom: 0;
 }
+
+/*=== TABLE ===*/
+.column-title{
+    width: calc(100% - 6rem);
+    min-width: 7rem;
+}
+
+.table-head-button-wrapper{
+    white-space: nowrap;
+}
+
+.table-column{
+    height: 1px;
+}
+
+    .table-column-content{
+        height: 100%;
+    }

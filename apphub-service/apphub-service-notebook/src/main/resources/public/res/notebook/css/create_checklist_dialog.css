@@ -5,12 +5,9 @@
     left: 10%;
     right: 10%;
     z-index: 1;
+    border: 3px ridge white;
+    border-top: none;
 }
-
-    #create-checklist-parent-selection-wrapper:hover{
-        border: 3px ridge white;
-        border-top: none;
-    }
 
     #create-checklist-selected-category-wrapper{
         text-align: center;

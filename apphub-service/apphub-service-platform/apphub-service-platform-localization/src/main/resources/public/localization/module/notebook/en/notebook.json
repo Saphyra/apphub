@@ -55,6 +55,12 @@
         "message": "Checklist"
       }
     ],
+    "new-table-button": [
+      {
+        "key": "innerHTML",
+        "message": "Table"
+      }
+    ],
     "create-category-title": [
       {
         "key": "innerHTML",
@@ -252,6 +258,48 @@
         "key": "innerHTML",
         "message": "New list item"
       }
+    ],
+    "create-table-title": [
+      {
+        "key": "innerHTML",
+        "message": "New table"
+      }
+    ],
+    "new-table-title": [
+      {
+        "key": "placeholder",
+        "message": "Title of the new table"
+      }
+    ],
+    "create-table-selected-category": [
+      {
+        "key": "innerHTML",
+        "message": "Selected category"
+      }
+    ],
+    "create-table-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Up"
+      }
+    ],
+    "create-table-new-column-button": [
+      {
+        "key": "innerHTML",
+        "message": "New column"
+      }
+    ],
+    "create-table-new-row-button": [
+      {
+        "key": "innerHTML",
+        "message": "New row"
+      }
+    ],
+    "create-table-button": [
+      {
+        "key": "innerHTML",
+        "message": "Save"
+      }
     ]
   },
   "additionalContent": {
@@ -274,6 +322,7 @@
     "new-item-title-empty": "Title must not be empty.",
     "root-title": "Root",
     "text-saved": "Text saved.",
-    "checklist-saved": "Checklist saved."
+    "checklist-saved": "Checklist saved.",
+    "column-name-title": "Name of the column"
   }
 }
