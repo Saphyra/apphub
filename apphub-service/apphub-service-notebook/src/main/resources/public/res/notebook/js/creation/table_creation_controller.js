@@ -21,6 +21,7 @@
         columnNames = [];
         rows = [];
         newColumn();
+        newRow();
     }
 
     function loadChildrenOfCategory(categoryId){
@@ -148,6 +149,27 @@
         new Stream(rows)
             .forEach(function(row){
                 const rowNode = document.createElement("TR");
+
+                    const buttonCell = document.createElement("TD");
+                        const moveUpButton = document.createElement("BUTTON");
+                            moveUpButton.innerHTML = "^";
+                            moveUpButton.onclick = function(){
+                                //TODO implement
+                            }
+                    buttonCell.appendChild(moveUpButton);
+                        const moveDownButton = document.createElement("BUTTON");
+                            moveDownButton.innerHTML = "v";
+                            moveDownButton.onclick = function(){
+                                //TODO implement
+                            }
+                    buttonCell.appendChild(moveDownButton);
+                        const deleteRowButton = document.createElement("BUTTON");
+                            deleteRowButton.innerHTML = "X";
+                            deleteRowButton.onclick = function(){
+                                //TODO implement
+                            }
+                    buttonCell.appendChild(deleteRowButton);
+                    rowNode.appendChild(buttonCell);
 
                     new Stream(row)
                         .forEach(function(cellNode){rowNode.appendChild(cellNode)});
