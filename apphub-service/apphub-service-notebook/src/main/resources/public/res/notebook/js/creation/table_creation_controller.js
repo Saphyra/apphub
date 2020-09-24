@@ -90,15 +90,15 @@
     function newColumn(){
         const tableHeadElement = createTableHead();
         columnNames.push(tableHeadElement);
-        document.getElementById("table-head-row").appendChild(tableHeadElement);
 
         new Stream(rows)
-            .forEach(function(row){row.push(createColumn(""))})
-        displayRows();
+            .forEach(function(row){row.columns.push(createColumn(""))})
+        displayData();
        
 
         function createTableHead(){
             const node = document.createElement("TH");
+                node.id = generateRandomId();
                 const inputField = document.createElement("INPUT");
                     inputField.classList.add("column-title");
                     inputField.type = "text";
@@ -111,19 +111,19 @@
                 const moveLeftButton = document.createElement("BUTTON");
                     moveLeftButton.innerHTML = "<";
                     moveLeftButton.onclick = function(){
-                        //TODO implement
+                        moveColumnLeft(node.id);
                     }
             buttonWrapper.appendChild(moveLeftButton);
                 const moveRightButton = document.createElement("BUTTON");
                     moveRightButton.innerHTML = ">";
                     moveRightButton.onclick = function(){
-                        //TODO implement
+                        moveColumnRight(node.id);
                     }
             buttonWrapper.appendChild(moveRightButton);
                 const deleteColumnButton = document.createElement("BUTTON");
                     deleteColumnButton.innerHTML = "X";
                     deleteColumnButton.onclick = function(){
-                        //TODO implement
+                        removeColumn(node.id);
                     }
             buttonWrapper.appendChild(deleteColumnButton);
 
@@ -133,13 +133,35 @@
     }
 
     function newRow(){
-        const row = [];
+        const columns = [];
 
         new Stream(columnNames)
-            .forEach(function(){row.push(createColumn(""))});
+            .forEach(function(){columns.push(createColumn(""))});
 
-        rows.push(row);
+        const rowNode = document.createElement("TR");
+            rowNode.id = generateRandomId();
+
+        const record = {
+            rowNode: rowNode,
+            columns: columns
+        }
+        rows.push(record);
+        displayData();
+    }
+
+    function displayData(){
+        displayColumnNames();
         displayRows();
+    }
+
+    function displayColumnNames(){
+        const row = document.getElementById("table-head-row");
+            row.innerHTML = "";
+
+            row.appendChild(document.createElement("TH"));
+
+            new Stream(columnNames)
+                .forEach(function(column){row.appendChild(column)});
     }
 
     function displayRows(){
@@ -148,31 +170,32 @@
 
         new Stream(rows)
             .forEach(function(row){
-                const rowNode = document.createElement("TR");
+                const rowNode = row.rowNode;
+                    rowNode.innerHTML = "";
 
                     const buttonCell = document.createElement("TD");
                         const moveUpButton = document.createElement("BUTTON");
                             moveUpButton.innerHTML = "^";
                             moveUpButton.onclick = function(){
-                                //TODO implement
+                                moveRowUp(rowNode.id);
                             }
                     buttonCell.appendChild(moveUpButton);
                         const moveDownButton = document.createElement("BUTTON");
                             moveDownButton.innerHTML = "v";
                             moveDownButton.onclick = function(){
-                                //TODO implement
+                                moveRowDown(rowNode.id);
                             }
                     buttonCell.appendChild(moveDownButton);
                         const deleteRowButton = document.createElement("BUTTON");
                             deleteRowButton.innerHTML = "X";
                             deleteRowButton.onclick = function(){
-                                //TODO implement
+                                removeRow(rowNode.id);
                             }
                     buttonCell.appendChild(deleteRowButton);
                     rowNode.appendChild(buttonCell);
 
-                    new Stream(row)
-                        .forEach(function(cellNode){rowNode.appendChild(cellNode)});
+                    new Stream(row.columns)
+                        .forEach(function(column){rowNode.appendChild(column.columnNode)});
 
                 contentNode.appendChild(rowNode);
             });
@@ -180,6 +203,7 @@
 
     function createColumn(content){
         const cell = document.createElement("TD");
+            cell.id = generateRandomId();
             cell.classList.add("table-column");
 
             const contentNode = document.createElement("DIV");
@@ -187,6 +211,105 @@
                 contentNode.contentEditable = true;
         cell.appendChild(contentNode);
 
-        return cell;
+        return {
+            columnNode: cell,
+            inputField: contentNode
+        };
+    }
+
+    function removeColumn(columnId){
+        const columnIndex = search(columnNames, function(node){return node.id === columnId});
+
+        columnNames.splice(columnIndex, 1);
+        
+        new Stream(rows)
+            .map(function(row){return row.columns})
+            .forEach(function(columns){columns.splice(columnIndex, 1)});
+
+        displayData();
+    }
+
+    function moveColumnLeft(columnId){
+        const columnIndex = search(columnNames, function(node){return node.id === columnId});
+
+        const column = columnNames[columnIndex];
+
+        if(columnIndex == 0){
+            return;
+        }
+
+        const newIndex = columnIndex - 1;
+
+        [columnNames[columnIndex], columnNames[newIndex]] = [columnNames[newIndex], columnNames[columnIndex]];
+
+        new Stream(rows)
+            .map(function(row){return row.columns})
+            .forEach(function(columns){[columns[columnIndex], columns[newIndex]] = [columns[newIndex], columns[columnIndex]]});
+
+        displayData();
+    }
+
+    function moveColumnRight(columnId){
+        const columnIndex = search(columnNames, function(node){return node.id === columnId});
+
+        if(columnIndex == columnNames.length - 1){
+            return;
+        }
+
+        const newIndex = columnIndex + 1;
+
+        [columnNames[columnIndex], columnNames[newIndex]] = [columnNames[newIndex], columnNames[columnIndex]];
+
+        new Stream(rows)
+            .map(function(row){return row.columns})
+            .forEach(function(columns){[columns[columnIndex], columns[newIndex]] = [columns[newIndex], columns[columnIndex]]});
+
+        displayData();
+    }
+
+    function removeRow(rowId){
+        const rowIndex = search(rows, function(row){return row.rowNode.id === rowId});
+
+        rows.splice(rowIndex, 1);
+
+        displayRows();
+    }
+
+    function moveRowUp(rowId){
+        const rowIndex = search(rows, function(row){return row.rowNode.id === rowId});
+
+        if(rowIndex == 0){
+            return;
+        }
+
+        const newIndex = rowIndex - 1;
+
+        [rows[rowIndex], rows[newIndex]] = [rows[newIndex], rows[rowIndex]];
+
+        displayRows();
+    }
+
+    function moveRowDown(rowId){
+        const rowIndex = search(rows, function(row){return row.rowNode.id === rowId});
+
+        if(rowIndex == rows.length - 1){
+            return;
+        }
+
+        const newIndex = rowIndex + 1;
+
+        [rows[rowIndex], rows[newIndex]] = [rows[newIndex], rows[rowIndex]];
+
+        displayRows();
+    }
+
+    function search(arr, predicate){
+        for(let i = 0; i < arr.length; i++){
+            if(predicate(arr[i])){
+                return i;
+            }
+        }
+
+        return null;
     }
 })();
