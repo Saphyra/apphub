@@ -3,6 +3,7 @@
     scriptLoader.loadScript("/res/notebook/js/content/category/category_content_controller.js");
     scriptLoader.loadScript("/res/notebook/js/content/category/category_node_factory.js")
     scriptLoader.loadScript("/res/notebook/js/content/checklist/checklist_node_factory.js")
+    scriptLoader.loadScript("/res/notebook/js/content/table/table_node_factory.js")
 
     scriptLoader.loadScript("/res/notebook/js/content/link/link_node_factory.js");
 
@@ -12,7 +13,8 @@
         CATEGORY: categoryNodeFactory,
         TEXT: textNodeFactory,
         LINK: linkNodeFactory,
-        CHECKLIST: checklistNodeFactory
+        CHECKLIST: checklistNodeFactory,
+        TABLE: tableNodeFactory
     }
 
     window.contentController = new function(){

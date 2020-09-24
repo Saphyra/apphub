@@ -21,6 +21,10 @@
     border-color: orange;
 }
 
+.table{
+    border-color: hotpink;
+}
+
 .no-content{
     text-align: center;
     padding: 1rem;
