@@ -323,6 +323,8 @@
     "root-title": "Gyökér",
     "text-saved": "Szöveg elmentve.",
     "checklist-saved": "Lista elmentve.",
-    "column-name-title": "Oszlop neve"
+    "table-saved": "Táblázat elmentve.",
+    "column-name-title": "Oszlop neve",
+    "empty-column-name": "Az oszlop neve nem lehet üres"
   }
 }

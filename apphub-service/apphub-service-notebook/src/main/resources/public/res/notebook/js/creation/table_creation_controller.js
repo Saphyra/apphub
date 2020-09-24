@@ -84,17 +84,58 @@
     }
 
     function save(){
-        //TODO implement
+        const title = document.getElementById("new-table-title").value;
+
+        if(!title.length){
+            notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
+            return;
+        }
+
+        const columnNameValues = new Stream(columnNames)
+            .map(function(column){return column.inputField})
+            .map(function(inputField){return inputField.value})
+            .toList();
+
+        if(new Stream(columnNameValues).anyMatch(function(columnName){return columnName.length == 0})){
+            notificationService.showError(Localization.getAdditionalContent("empty-column-name"));
+            return;
+        }
+
+        const rowValues = new Stream(rows)
+            .map(function(row){return row.columns})
+            .map(function(columns){return extractValues(columns)})
+            .toList();
+
+        const body = {
+            title: title,
+            parent: currentCategoryId,
+            columnNames: columnNameValues,
+            columns: rowValues
+        }
+
+        const request = new Request(Mapping.getEndpoint("CREATE_NOTEBOOK_TABLE"), body);
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("table-saved"));
+                eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
+                pageController.openMainPage();
+            }
+        dao.sendRequestAsync(request);
+
+        function extractValues(columnNodes){
+            return new Stream(columnNodes)
+                .map(function(columnNode){return columnNode.inputField})
+                .map(function(inputField){return inputField.innerHTML})
+                .toList();
+        }
     }
 
     function newColumn(){
-        const tableHeadElement = createTableHead();
-        columnNames.push(tableHeadElement);
+        const columnHead = createTableHead();
+        columnNames.push(columnHead);
 
         new Stream(rows)
             .forEach(function(row){row.columns.push(createColumn(""))})
         displayData();
-       
 
         function createTableHead(){
             const node = document.createElement("TH");
@@ -128,7 +169,10 @@
             buttonWrapper.appendChild(deleteColumnButton);
 
             node.appendChild(buttonWrapper);
-            return node;
+            return {
+                columnNode: node,
+                inputField: inputField
+            };
         }
     }
 
@@ -161,7 +205,7 @@
             row.appendChild(document.createElement("TH"));
 
             new Stream(columnNames)
-                .forEach(function(column){row.appendChild(column)});
+                .forEach(function(column){row.appendChild(column.columnNode)});
     }
 
     function displayRows(){
@@ -218,7 +262,7 @@
     }
 
     function removeColumn(columnId){
-        const columnIndex = search(columnNames, function(node){return node.id === columnId});
+        const columnIndex = search(columnNames, function(column){return column.columnNode.id === columnId});
 
         columnNames.splice(columnIndex, 1);
         
@@ -230,9 +274,7 @@
     }
 
     function moveColumnLeft(columnId){
-        const columnIndex = search(columnNames, function(node){return node.id === columnId});
-
-        const column = columnNames[columnIndex];
+        const columnIndex = search(columnNames, function(column){return column.columnNode.id === columnId});
 
         if(columnIndex == 0){
             return;
@@ -250,7 +292,7 @@
     }
 
     function moveColumnRight(columnId){
-        const columnIndex = search(columnNames, function(node){return node.id === columnId});
+        const columnIndex = search(columnNames, function(column){return column.columnNode.id === columnId});
 
         if(columnIndex == columnNames.length - 1){
             return;

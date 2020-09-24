@@ -16,6 +16,7 @@ window.Mapping = new function(){
         CREATE_NOTEBOOK_CATEGORY: new Endpoint("/api/notebook/category", HttpMethod.PUT),
         CREATE_NOTEBOOK_LINK: new Endpoint("/api/notebook/link", HttpMethod.PUT),
         CREATE_NOTEBOOK_TEXT: new Endpoint("/api/notebook/text", HttpMethod.PUT),
+        CREATE_NOTEBOOK_TABLE: new Endpoint("/api/notebook/table", HttpMethod.PUT),
         CREATE_NOTEBOOK_CHECKLIST: new Endpoint("/api/notebook/checklist", HttpMethod.PUT),
         DELETE_ACCOUNT: new Endpoint("/api/user/account", HttpMethod.DELETE),
         DELETE_NOTEBOOK_LIST_ITEM: new Endpoint("/api/notebook/item/{listItemId}", HttpMethod.DELETE),

@@ -56,6 +56,16 @@ function Stream(a){
         return new Stream(buff);
     }
 
+    this.anyMatch = function(predicate){
+        for(let i in array){
+            if(predicate(array[i])){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     this.noneMatch = function(predicate){
         for(let i in array){
             if(predicate(array[i])){
