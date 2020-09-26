@@ -1,7 +1,7 @@
 (function TableCreationController(){
     let currentCategoryId = null;
-    let columnNames = [];
-    let rows = [];
+    let columnNames = null;
+    let rows = null;
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.OPEN_CREATE_TABLE_DIALOG},
@@ -177,10 +177,9 @@
     }
 
     function newRow(){
-        const columns = [];
-
-        new Stream(columnNames)
-            .forEach(function(){columns.push(createColumn(""))});
+        const columns = new Stream(columnNames)
+            .map(function(){return createColumn("")})
+            .toList();
 
         const rowNode = document.createElement("TR");
             rowNode.id = generateRandomId();
@@ -199,7 +198,7 @@
     }
 
     function displayColumnNames(){
-        const row = document.getElementById("table-head-row");
+        const row = document.getElementById("new-table-head-row");
             row.innerHTML = "";
 
             row.appendChild(document.createElement("TH"));
@@ -343,15 +342,5 @@
         [rows[rowIndex], rows[newIndex]] = [rows[newIndex], rows[rowIndex]];
 
         displayRows();
-    }
-
-    function search(arr, predicate){
-        for(let i = 0; i < arr.length; i++){
-            if(predicate(arr[i])){
-                return i;
-            }
-        }
-
-        return null;
     }
 })();

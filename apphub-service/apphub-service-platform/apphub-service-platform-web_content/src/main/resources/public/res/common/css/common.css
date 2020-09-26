@@ -132,7 +132,7 @@ button:active, .button:active, a:active, footer label:active{
         outline: default;
     }
 
-input, textarea, div[contenteditable='true']{
+input, textarea, [contenteditable='true']{
     background: var(--background-color);
     border: 3px outset white;
     border-radius: 5px;

@@ -19,7 +19,6 @@
         function(){
             openedCategories = new Stream(document.getElementsByClassName("category-children-container"))
                 .filter(function(node){
-                    console.log(node);
                     return node.style.display != "none"
                 })
                 .map(function(node){return node.parentElement})
@@ -41,7 +40,6 @@
     }
 
     function displayCategories(categories){
-        console.log("Opened categories:", openedCategories);
         const container = document.getElementById("category-list");
             container.innerHTML = "";
 

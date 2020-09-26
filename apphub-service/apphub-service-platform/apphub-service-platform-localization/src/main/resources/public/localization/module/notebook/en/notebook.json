@@ -300,6 +300,36 @@
         "key": "innerHTML",
         "message": "Save"
       }
+    ],
+    "view-table-edit-button": [
+      {
+        "key": "innerHTML",
+        "message": "Edit"
+      }
+    ],
+    "view-table-edit-save-button": [
+      {
+        "key": "innerHTML",
+        "message": "Save"
+      }
+    ],
+    "view-table-edit-cancel-button": [
+      {
+        "key": "innerHTML",
+        "message": "Discard"
+      }
+    ],
+    "view-table-edit-add-column-button": [
+      {
+        "key": "innerHTML",
+        "message": "Add column"
+      }
+    ],
+    "view-table-edit-add-row-button": [
+      {
+        "key": "innerHTML",
+        "message": "Add row"
+      }
     ]
   },
   "additionalContent": {

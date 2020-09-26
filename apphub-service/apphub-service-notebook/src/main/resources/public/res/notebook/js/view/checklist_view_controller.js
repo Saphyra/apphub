@@ -11,7 +11,7 @@
 
     function viewChecklist(listItemId){
         openedChecklistId = listItemId;
-        const request = new Request(Mapping.getEndpoint("GET_CHECKLIST_ITEM", {listItemId: listItemId}));
+        const request = new Request(Mapping.getEndpoint("GET_NOTEBOOK_CHECKLIST_ITEM", {listItemId: listItemId}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body);
             }

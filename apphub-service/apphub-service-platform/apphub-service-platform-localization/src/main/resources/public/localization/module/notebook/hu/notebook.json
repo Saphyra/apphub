@@ -300,6 +300,36 @@
         "key": "innerHTML",
         "message": "Mentés"
       }
+    ],
+    "view-table-edit-button": [
+      {
+        "key": "innerHTML",
+        "message": "Szerkesztés"
+      }
+    ],
+    "view-table-edit-save-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
+    ],
+    "view-table-edit-cancel-button": [
+      {
+        "key": "innerHTML",
+        "message": "Elvetés"
+      }
+    ],
+    "view-table-edit-add-column-button": [
+      {
+        "key": "innerHTML",
+        "message": "Új oszlop"
+      }
+    ],
+    "view-table-edit-add-row-button": [
+      {
+        "key": "innerHTML",
+        "message": "Új sor"
+      }
     ]
   },
   "additionalContent": {

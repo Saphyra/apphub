@@ -47,6 +47,20 @@ function Stream(a){
         }
     }
 
+    this.groupBy = function(keyMapper){
+        const result = {};
+
+        this.forEach(function(item){
+            const key = keyMapper(item);
+            if(!result[key]){
+                result[key] = [];
+            }
+            result[key].push(item);
+        });
+
+        return new MapStream(result);
+    }
+
     this.map = function(mapper){
         const buff = [];
 

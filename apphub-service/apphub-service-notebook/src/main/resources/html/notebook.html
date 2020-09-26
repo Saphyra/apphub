@@ -15,6 +15,7 @@
     <LINK rel="stylesheet" href="/res/notebook/css/view_text_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/view_checklist_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/edit_list_item.css">
+    <LINK rel="stylesheet" href="/res/notebook/css/view_table.css">
 
     <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
     <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
@@ -180,7 +181,7 @@
         <DIV id="new-table-content-wrapper">
             <TABLE id="new-table-content-table" class="formatted-table">
                 <thead>
-                    <tr id="table-head-row">
+                    <tr id="new-table-head-row">
                         <th></th>
                     </tr>
                 </thead>
@@ -280,6 +281,36 @@
             <DIV id="view-checklist-edit-save-button" class="button dialog-button" onclick="checklistViewController.saveChanges()"></DIV>
             <DIV id="view-checklist-edit-cancel-button" class="button dialog-button" onclick="checklistViewController.discardChanges()"></DIV>
             <DIV id="view-checklist-edit-add-item-button" class="button dialog-button" onclick="checklistViewController.addItem()"></DIV>
+        </DIV>
+    </FOOTER>
+</DIV>
+
+<DIV id="view-table" class="main-page">
+    <HEADER>
+        <H1><SPAN id="view-table-title"></SPAN> </H1>
+        <BUTTON id="view-table-close-button" class="dialog-close-button" onclick="pageController.openMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN id="view-table-content-wrapper">
+        <TABLE id="view-table-content-table" class="formatted-table">
+            <thead>
+            <tr id="view-table-head-row">
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="view-table-content"></tbody>
+        </TABLE>
+    </MAIN>
+
+    <FOOTER>
+        <DIV id="view-table-edit-button-wrapper" class="view-table-button-wrapper">
+            <DIV id="view-table-edit-button" class="button dialog-button" onclick="tableViewController.enableEditing()"></DIV>
+        </DIV>
+        <DIV id="view-table-editing-operations-button-wrapper" class="view-table-button-wrapper">
+            <DIV id="view-table-edit-save-button" class="button dialog-button" onclick="tableViewController.saveChanges()"></DIV>
+            <DIV id="view-table-edit-cancel-button" class="button dialog-button" onclick="tableViewController.discardChanges()"></DIV>
+            <DIV id="view-table-edit-add-column-button" class="button dialog-button" onclick="tableViewController.addColumn()"></DIV>
+            <DIV id="view-table-edit-add-row-button" class="button dialog-button" onclick="tableViewController.addRow()"></DIV>
         </DIV>
     </FOOTER>
 </DIV>

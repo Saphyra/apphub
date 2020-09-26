@@ -38,31 +38,9 @@ function switchTab(clazz, id, duration){
     $("#" + id).show(duration);
 }
 
-function displayNotificationNum(containerId, notificationNum){
-    const container = document.getElementById(containerId);
-        container.innerHTML = notificationNum;
-
-    if(notificationNum == 0){
-        container.parentNode.classList.remove("notification-container");
-    }else{
-        if(!container.parentNode.classList.contains("notification-container")){
-            container.parentNode.classList.add("notification-container");
-        }
-    }
-}
-
 function setIntervalImmediate(callBack, interval){
     callBack();
     return setInterval(callBack, interval);
-}
-
-function createSpan(text){
-    if(text == null || text == undefined){
-        text = "";
-    }
-    const label = document.createElement("SPAN");
-        label.innerHTML = text;
-    return label;
 }
 
 function setCookie(key, value, expirationDays) {
@@ -126,4 +104,14 @@ function getValidationTimeout(){
 
 function getQueryParam(paramName){
     return new URLSearchParams(window.location.search).get(paramName);
+}
+
+function search(arr, predicate){
+    for(let i = 0; i < arr.length; i++){
+        if(predicate(arr[i])){
+            return i;
+        }
+    }
+
+    return null;
 }
