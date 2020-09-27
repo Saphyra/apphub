@@ -56,6 +56,7 @@
 
     function createTableHead(tableHead){
          const node = document.createElement("TH");
+            node.classList.add("column-head")
             node.id = generateRandomId();
             const inputField = document.createElement("INPUT");
                 if(tableHead.tableHeadId) inputField.id = tableHead.tableHeadId;

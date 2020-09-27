@@ -355,6 +355,6 @@
     "checklist-saved": "Checklist saved.",
     "table-saved": "Table saved.",
     "column-name-title": "Name of the column",
-    "empty-column-name": "Column name must not be empty"
+    "empty-column-name": "Column name must not be empty."
   }
 }

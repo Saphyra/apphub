@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistIt
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.service.table.TableDeletionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ public class ListItemDeletionService {
     private final ListItemDao listItemDao;
     private final ContentDao contentDao;
     private final ChecklistItemDao checklistItemDao;
+    private final TableDeletionService tableDeletionService;
 
     @Transactional
     public void deleteListItem(UUID listItemId, UUID userId) {
@@ -40,6 +42,10 @@ public class ListItemDeletionService {
             case TEXT:
             case LINK:
                 contentDao.deleteByParent(listItem.getListItemId());
+                break;
+            case TABLE:
+                //TODO unit test
+                tableDeletionService.deleteByListItemId(listItem.getListItemId());
                 break;
             default:
                 throw new NotImplementedException("Unhandled listItemType: " + listItem.getType());

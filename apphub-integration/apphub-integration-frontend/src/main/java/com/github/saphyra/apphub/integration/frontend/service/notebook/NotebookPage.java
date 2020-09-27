@@ -61,6 +61,26 @@ class NotebookPage {
     private static final By EDIT_CHECKLIST_ADD_ITEM_BUTTON = By.id("view-checklist-edit-add-item-button");
     private static final By EDIT_CHECKLIST_LAST_CHECKLIST_ITEM = By.cssSelector("#view-checklist-content .view-checklist-item:last-child");
     private static final By VIEW_CHECKLIST_CLOSE_WINDOW_BUTTON = By.id("view-checklist-close-button");
+    private static final By OPEN_CREATE_TABLE_WINDOW_BUTTON = By.id("new-table-button");
+    private static final By CREATE_TABLE_WINDOW = By.id("create-table");
+    private static final By SAVE_NEW_TABLE_BUTTON = By.id("create-table-button");
+    private static final By NEW_TABLE_TITLE_INPUT = By.id("new-table-title");
+    private static final By ADD_COLUMN_TO_NEW_TABLE_BUTTON = By.id("create-table-new-column-button");
+    private static final By COLUMN_NAMES_FOR_NEW_TABLE = By.cssSelector("#create-table input.column-title");
+    private static final By CREATE_TABLE_SELECTED_CATEGORY_WRAPPER = By.id("create-table-selected-category-wrapper");
+    private static final By AVAILABLE_PARENTS_FOR_NEW_TABLE = By.cssSelector("#create-table-parent-selection-category-list .create-item-category");
+    private static final By ROWS_FOR_NEW_TABLE = By.cssSelector("#new-table-content tr");
+    private static final By ADD_ROW_TO_NEW_TABLE_BUTTON = By.id("create-table-new-row-button");
+    private static final By VIEW_TABLE_WINDOW = By.id("view-table");
+    private static final By EDIT_TABLE_BUTTON = By.id("view-table-edit-button");
+    private static final By VIEW_TABLE_TITLE = By.id("view-table-title");
+    private static final By SAVE_EDITED_TABLE_BUTTON = By.id("view-table-edit-save-button");
+    private static final By COLUMN_NAMES_FOR_VIEW_TABLE = By.cssSelector("#view-table-head-row .column-title");
+    private static final By ROWS_FOR_VIEW_TABLE = By.cssSelector("#view-table-content tr");
+    private static final By DISCARD_EDIT_TABLE_BUTTON = By.id("view-table-edit-cancel-button");
+    private static final By ADD_COLUMN_TO_EDIT_TABLE_BUTTON = By.id("view-table-edit-add-column-button");
+    private static final By ADD_ROW_TO_EDIT_TABLE_BUTTON = By.id("view-table-edit-add-row-button");
+    private static final By COLUMN_HEADS_FOR_EDIT_TABLE = By.cssSelector("#view-table-head-row .column-head");
 
     public static WebElement createCategoryWindow(WebDriver driver) {
         return driver.findElement(CREATE_CATEGORY_WINDOW);
@@ -276,5 +296,85 @@ class NotebookPage {
 
     public static WebElement viewChecklistCloseWindowButton(WebDriver driver) {
         return driver.findElement(VIEW_CHECKLIST_CLOSE_WINDOW_BUTTON);
+    }
+
+    public static WebElement openCreateTableWindowButton(WebDriver driver) {
+        return driver.findElement(OPEN_CREATE_TABLE_WINDOW_BUTTON);
+    }
+
+    public static WebElement createTableWindow(WebDriver driver) {
+        return driver.findElement(CREATE_TABLE_WINDOW);
+    }
+
+    public static WebElement saveNewTableButton(WebDriver driver) {
+        return driver.findElement(SAVE_NEW_TABLE_BUTTON);
+    }
+
+    public static WebElement newTableTitleInput(WebDriver driver) {
+        return driver.findElement(NEW_TABLE_TITLE_INPUT);
+    }
+
+    public static WebElement addColumnToNewTableButton(WebDriver driver) {
+        return driver.findElement(ADD_COLUMN_TO_NEW_TABLE_BUTTON);
+    }
+
+    public static List<WebElement> columnNamesForNewTable(WebDriver driver) {
+        return driver.findElements(COLUMN_NAMES_FOR_NEW_TABLE);
+    }
+
+    public static WebElement createTableSelectedCategoryWrapper(WebDriver driver) {
+        return driver.findElement(CREATE_TABLE_SELECTED_CATEGORY_WRAPPER);
+    }
+
+    public static List<WebElement> availableParentsForNewTable(WebDriver driver) {
+        return driver.findElements(AVAILABLE_PARENTS_FOR_NEW_TABLE);
+    }
+
+    public static List<WebElement> rowsForNewTable(WebDriver driver) {
+        return driver.findElements(ROWS_FOR_NEW_TABLE);
+    }
+
+    public static WebElement addRowToNewTableButton(WebDriver driver) {
+        return driver.findElement(ADD_ROW_TO_NEW_TABLE_BUTTON);
+    }
+
+    public static WebElement viewTableWindow(WebDriver driver) {
+        return driver.findElement(VIEW_TABLE_WINDOW);
+    }
+
+    public static WebElement editTableButton(WebDriver driver) {
+        return driver.findElement(EDIT_TABLE_BUTTON);
+    }
+
+    public static WebElement viewTableTitle(WebDriver driver) {
+        return driver.findElement(VIEW_TABLE_TITLE);
+    }
+
+    public static WebElement saveEditedTableButton(WebDriver driver) {
+        return driver.findElement(SAVE_EDITED_TABLE_BUTTON);
+    }
+
+    public static List<WebElement> columnNamesForViewTable(WebDriver driver) {
+        return driver.findElements(COLUMN_NAMES_FOR_VIEW_TABLE);
+    }
+
+    public static List<WebElement> rowsForViewTable(WebDriver driver) {
+        return driver.findElements(ROWS_FOR_VIEW_TABLE);
+    }
+
+    public static WebElement discardEditTableButton(WebDriver driver) {
+        return driver.findElement(DISCARD_EDIT_TABLE_BUTTON);
+    }
+
+    public static WebElement addColumnToEditTableButton(WebDriver driver) {
+        return driver.findElement(ADD_COLUMN_TO_EDIT_TABLE_BUTTON);
+    }
+
+    public static WebElement addRowToEditTableButton(WebDriver driver) {
+        return driver.findElement(ADD_ROW_TO_EDIT_TABLE_BUTTON);
+    }
+
+    public static List<WebElement> columnHeadsForEditTable(WebDriver driver) {
+        return driver.findElements(COLUMN_HEADS_FOR_EDIT_TABLE);
     }
 }
