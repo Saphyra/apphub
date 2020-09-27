@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class TableDeletionService {
     private final TableHeadDao tableHeadDao;
     private final TableJoinDao tableJoinDao;

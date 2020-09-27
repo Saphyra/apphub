@@ -29,11 +29,3 @@ Modules
         Icons for list items
         Labels
         Display selected category on create/edit dialogs
-
-TODO Table FE test
-    create row and column
-TODO FE test
-    view table
-    edit table
-TODO FE test
-    delete table

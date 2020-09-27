@@ -44,7 +44,6 @@ public class ListItemDeletionService {
                 contentDao.deleteByParent(listItem.getListItemId());
                 break;
             case TABLE:
-                //TODO unit test
                 tableDeletionService.deleteByListItemId(listItem.getListItemId());
                 break;
             default:

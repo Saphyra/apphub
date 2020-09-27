@@ -8,11 +8,11 @@ The app's purpose is to provide an easy-to extend frame for multiple application
 * User account management (create / delete accounts, modify user data)
 * Modules management (list available modules, mark them as favorite)
 * Admin panel (Modify user's roles, to allow/block functionalities available for their account)
-* Notebook (Store notes, links, checklists grouped into categories)
+* Notebook (Store notes, links, checklists, tables grouped into categories)
 * Locale handling (Supported locales: EN, HU)
 
 ### Upcoming features:
-* Extend Notebook module with tables and checklist-tables
+* Extend Notebook module with checklist-tables
 * Extend Notebook module with Search functionality
 * Extend Notebook module with archiving functionality
 * Add Language management to Index page
