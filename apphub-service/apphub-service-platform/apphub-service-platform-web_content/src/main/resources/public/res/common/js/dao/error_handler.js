@@ -14,7 +14,6 @@
             }
 
             handlers.push(errorHandler);
-            logService.logToConsole("ErrorHandler registered: " + errorHandler.canHandle);
         }
 
         this.handleError = function(request, response){

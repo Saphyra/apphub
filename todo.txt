@@ -21,8 +21,8 @@ Modules
         Migrate
 
     Notebook
-        Create table item
-            - FE implementation
+        Adding item -> Select current category automatically
+        Clone item
         Create checklist table item
         Filtering
         Archive
