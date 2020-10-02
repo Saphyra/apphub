@@ -2,6 +2,10 @@
     text-align: center;
 }
 
+    #login-container label{
+        display: inline;
+    }
+
 #login-container input, #login-container button{
     font-size: 1.25rem;
 }
@@ -48,4 +52,8 @@ label input{
     top: 0.25rem;
     border-radius: 3px;
     padding: 0.125rem;
+}
+
+#remember-me{
+    transform: scale(2);
 }

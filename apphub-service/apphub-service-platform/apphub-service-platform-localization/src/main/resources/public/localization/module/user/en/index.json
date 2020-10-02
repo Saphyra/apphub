@@ -19,6 +19,12 @@
         "message": "Password"
       }
     ],
+    "remember-me*label": [
+      {
+        "key": "innerHTML",
+        "message": "Remember me"
+      }
+    ],
     "login-button": [
       {
         "key": "innerHTML",

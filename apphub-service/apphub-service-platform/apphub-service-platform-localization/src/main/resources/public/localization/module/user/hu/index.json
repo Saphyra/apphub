@@ -19,6 +19,12 @@
         "message": "Jelszó"
       }
     ],
+    "remember-me-label": [
+      {
+        "key": "innerHTML",
+        "message": "Bejelentkezve maradok"
+      }
+    ],
     "login-button": [
       {
         "key": "innerHTML",

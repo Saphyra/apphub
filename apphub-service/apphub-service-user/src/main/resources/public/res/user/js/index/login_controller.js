@@ -7,7 +7,7 @@
                 eventProcessor.processEvent(new Event(events.LOGIN_ATTEMPT));
             }
         });
-    })
+    });
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.LOGIN_ATTEMPT},
@@ -38,13 +38,14 @@
     function Credentials(payload){
         const email = payload ? payload.email : $("#login-email").val();
         const password = payload ? payload.password : $("#login-password").val();
-        
+        const rememberMe = payload ? false : document.getElementById("remember-me").checked
+
         this.isValid = function(){
             return email !== "" && password !== "";
         }
         
         this.stringify = function(){
-            return {email: email, password: password};
+            return {email: email, password: password, rememberMe: rememberMe};
         }
     }
 })();
