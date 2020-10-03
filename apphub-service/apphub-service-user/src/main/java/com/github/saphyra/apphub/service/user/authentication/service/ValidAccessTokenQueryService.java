@@ -27,8 +27,12 @@ public class ValidAccessTokenQueryService {
     }
 
     private boolean isValid(AccessToken accessToken) {
-        return accessToken.isPersistent() || accessToken.getLastAccess()
+        boolean isPersistent = accessToken.isPersistent();
+        boolean notExpired = accessToken.getLastAccess()
             .plusMinutes(authenticationProperties.getAccessTokenExpirationMinutes())
             .isAfter(offsetDateTimeProvider.getCurrentDate());
+        boolean result = isPersistent || notExpired;
+        log.info("Checking if accessToken {} valid: isPersistent: {}, notExpired: {}. Result: {}", accessToken.getAccessTokenId(), isPersistent, notExpired, result);
+        return result;
     }
 }

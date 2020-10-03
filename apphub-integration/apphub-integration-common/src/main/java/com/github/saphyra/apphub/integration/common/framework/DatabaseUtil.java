@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.common.TestBase;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +17,7 @@ public class DatabaseUtil {
     private static final String ADD_ROLE_BY_EMAIL_QUERY = "INSERT INTO apphub_user.apphub_role (role_id, user_id, apphub_role) VALUES('%s', (SELECT user_id FROM apphub_user.apphub_user WHERE email='%s'), '%s')";
     private static final String GET_USER_ID_BY_EMAIL_QUERY = "SELECT user_id FROM apphub_user.apphub_user WHERE email='%s'";
     private static final String GET_ROLES_BY_USER_ID = "SELECT apphub_role FROM apphub_user.apphub_role WHERE user_id='%s'";
+    private static final String UPDATE_ACCESS_TOKEN_LAST_ACCESS = "UPDATE apphub_user.access_token SET last_access='%s' WHERE access_token_id='%s'";
 
     private static <T> T query(String sql, Mapper<T> mapper) throws ClassNotFoundException, SQLException {
         Class.forName(JDBC_DRIVER);
@@ -89,6 +91,17 @@ public class DatabaseUtil {
             );
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void updateAccessTokenLastAccess(UUID accessTokenId, OffsetDateTime newLastAccess) {
+        String sql = String.format(UPDATE_ACCESS_TOKEN_LAST_ACCESS, newLastAccess, accessTokenId);
+        log.info("updateAccessTokenLastAccess sql: {}", sql);
+
+        try {
+            execute(sql);
+        } catch (ClassNotFoundException | SQLException e) {
+            throw new RuntimeException("Failed updating accessToken lastAccess", e);
         }
     }
 

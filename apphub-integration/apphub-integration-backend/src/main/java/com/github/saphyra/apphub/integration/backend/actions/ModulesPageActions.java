@@ -31,14 +31,18 @@ public class ModulesPageActions {
     }
 
     public static Map<String, List<ModulesResponse>> getModules(Language locale, UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(locale, accessTokenId)
-            .get(UrlFactory.create(Endpoints.GET_MODULES_OF_USER));
+        Response response = getModulesResponse(locale, accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         TypeReference<Map<String, List<ModulesResponse>>> ref = new TypeReference<Map<String, List<ModulesResponse>>>() {
         };
         return OBJECT_MAPPER_WRAPPER.readValue(response.getBody().asString(), ref);
+    }
+
+    public static Response getModulesResponse(Language locale, UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
+            .get(UrlFactory.create(Endpoints.GET_MODULES_OF_USER));
     }
 
     public static Map<String, List<ModulesResponse>> setAsFavorite(Language locale, UUID accessTokenId, String module, Boolean favorite) {
