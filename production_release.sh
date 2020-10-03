@@ -1,3 +1,6 @@
+git checkout master
+git pull
+
 ./develop_deployment.sh skipTrap
 
 eval "$(minikube docker-env)"
