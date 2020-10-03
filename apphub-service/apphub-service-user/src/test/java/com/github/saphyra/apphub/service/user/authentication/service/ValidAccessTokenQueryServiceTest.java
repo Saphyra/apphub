@@ -71,6 +71,17 @@ public class ValidAccessTokenQueryServiceTest {
     }
 
     @Test
+    public void persistent() {
+        given(accessTokenDao.findById(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.of(accessToken));
+        given(accessToken.isPersistent()).willReturn(true);
+        given(accessToken.getLastAccess()).willReturn(CURRENT_DATE.minusMinutes(EXPIRATION_MINUTES).minusMinutes(1));
+
+        Optional<AccessToken> result = underTest.findByAccessTokenId(ACCESS_TOKEN_ID);
+
+        assertThat(result).contains(accessToken);
+    }
+
+    @Test
     public void findByAccessTokenId() {
         given(accessTokenDao.findById(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.of(accessToken));
         given(accessToken.getLastAccess()).willReturn(CURRENT_DATE.minusMinutes(EXPIRATION_MINUTES).plusMinutes(1));

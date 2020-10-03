@@ -27,7 +27,7 @@ public class ValidAccessTokenQueryService {
     }
 
     private boolean isValid(AccessToken accessToken) {
-        return accessToken.getLastAccess()
+        return accessToken.isPersistent() || accessToken.getLastAccess()
             .plusMinutes(authenticationProperties.getAccessTokenExpirationMinutes())
             .isAfter(offsetDateTimeProvider.getCurrentDate());
     }
