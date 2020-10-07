@@ -5,6 +5,7 @@
     bottom: 0;
     width: var(--category-list-width);
     border-right: 3px ridge white;
+    overflow: auto;
 }
 
     .category-wrapper{
@@ -21,7 +22,7 @@
         .category-view-button{
             text-align: left;
             display: inline-block;
-            height: 2.75rem;
+            heighdt: 2.75rem;
         }
 
             .category-view-toggle-button{

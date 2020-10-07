@@ -50,7 +50,7 @@ function Request(endpoint, body){
     }
     
     this.processErrorResponse = function(response){
-        logService.log(response.toString(), "error", "Invalid response from BackEnd: ");
+        notificationService.showError("Invalid response from BackEnd: " + response.toString());
     }
     
     this.validate = function(){
