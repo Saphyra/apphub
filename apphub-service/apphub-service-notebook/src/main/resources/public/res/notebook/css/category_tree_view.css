@@ -5,6 +5,7 @@
     bottom: 0;
     width: var(--category-list-width);
     border-right: 3px ridge white;
+    overflow: auto;
 }
 
     .category-wrapper{

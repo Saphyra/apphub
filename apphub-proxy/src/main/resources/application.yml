@@ -1,5 +1,5 @@
 server:
-  port: 9000
+  port: ${server_port:9000}
 
 FORWARDED_PORT: ${forwarded_port:9001}
 

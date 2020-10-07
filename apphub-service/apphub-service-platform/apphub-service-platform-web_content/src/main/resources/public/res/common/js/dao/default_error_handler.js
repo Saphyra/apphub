@@ -1,7 +1,7 @@
 (function DefaultErrorHandler(){
     window.defaultErrorHandler = new function(){
         this.handle = function(request, response){
-            logService.log(response.toString(), "error", "No errorHandler found for ErrorResponse: ");
+            notificationService.showError("No errorHandler found for ErrorResponse: " + response.toString);
             if(typeof spinner !== "undefined"){
                 spinner.close();
             }
