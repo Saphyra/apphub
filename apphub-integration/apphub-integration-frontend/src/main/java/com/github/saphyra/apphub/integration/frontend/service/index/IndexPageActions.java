@@ -71,7 +71,8 @@ public class IndexPageActions {
             .atMost(15, TimeUnit.SECONDS)
             .pollInterval(1, TimeUnit.SECONDS);
         AwaitilityWrapper.wrap(conditionFactory)
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)));
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
+            .assertTrue("Registration failed.");
     }
 
     public static void submitRegistration(WebDriver driver) {
@@ -79,7 +80,8 @@ public class IndexPageActions {
         WebElement submitButton = IndexPage.registrationSubmitButton(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(submitButton::isEnabled);
+            .until(submitButton::isEnabled)
+            .assertTrue("Registration form is not valid.");
         submitButton.click();
     }
 

@@ -20,6 +20,9 @@
         <versions.spring-boot>2.2.6.RELEASE</versions.spring-boot>
 
         <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
+
+        <version.lombok>1.18.12</version.lombok>
+        <version.lombok-maven>1.18.12.0</version.lombok-maven>
     </properties>
 
     <dependencies>
@@ -34,10 +37,39 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${versions.spring-boot}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${version.lombok}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-maven</artifactId>
+            <version>${version.lombok-maven}</version>
+            <type>pom</type>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${version.maven-compiler-plugin}</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

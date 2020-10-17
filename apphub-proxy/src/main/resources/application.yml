@@ -1,7 +1,7 @@
 server:
   port: ${server_port:9000}
 
-FORWARDED_PORT: ${forwarded_port:9001}
+forwardedPort: ${forwarded_port:9001}
 
 zuul:
   prefix: /
@@ -14,4 +14,4 @@ zuul:
 
 proxy:
   ribbon:
-    listOfServers: localhost:${FORWARDED_PORT}
+    listOfServers: localhost:${forwardedPort}

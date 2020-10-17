@@ -30,8 +30,8 @@
                     return key;
                 }
             }
-            
-            throwException("KeyNotFound", "No key found for status code " + statusCode);
+
+            return "Unknown statusCode: " + statusCode;
         }catch(err){
             const message = arguments.callee.name + " - " + err.name + ": " + err.message;
             logService.log(message, "error");
@@ -57,5 +57,6 @@ window.ResponseStatus = new function(){
     this.TOO_MANY_REQUESTS = 429
     this.INTERNAL_SERVER_ERROR = 500;
     this.NOT_IMPLEMENTED = 501;
+    this.GATEWAY_TIMEOUT = 504;
     this.CONNECTION_REFUSED = 0;
 }

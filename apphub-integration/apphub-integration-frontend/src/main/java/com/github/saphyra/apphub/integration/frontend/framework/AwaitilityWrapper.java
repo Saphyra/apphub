@@ -70,6 +70,12 @@ public class AwaitilityWrapper {
         public void assertTrue() {
             assertThat(result).isTrue();
         }
+
+        public void assertTrue(String message){
+            if(!result){
+                throw new IllegalStateException(message);
+            }
+        }
     }
 
     @RequiredArgsConstructor

@@ -4,7 +4,7 @@ trap "kill 0" EXIT
 SERVER_PORT=$RANDOM
 NAMESPACE_NAME=production
 
-./infra/deployment/script/wait_for_pods_ready.sh $NAMESPACE_NAME 12 10
+./infra/deployment/script/wait_for_pods_ready.sh $NAMESPACE_NAME 120 2
 
 kubectl port-forward deployment/main-gateway $SERVER_PORT:8080 -n $NAMESPACE_NAME &
 
