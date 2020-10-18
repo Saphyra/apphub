@@ -6,6 +6,7 @@
     scriptLoader.loadScript("/res/notebook/js/creation/checklist_creation_controller.js");
     scriptLoader.loadScript("/res/notebook/js/creation/table_creation_controller.js");
     scriptLoader.loadScript("/res/notebook/js/content/content_controller.js");
+    scriptLoader.loadScript("/res/notebook/js/content/list_item_clone_service.js");
     scriptLoader.loadScript("/res/notebook/js/list_item_edition_service.js");
 
     events.OPEN_CREATE_CATEGORY_DIALOG = "OPEN_CREATE_CATEGORY_DIALOG";

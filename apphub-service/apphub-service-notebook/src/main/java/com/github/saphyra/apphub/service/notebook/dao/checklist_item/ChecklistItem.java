@@ -8,7 +8,7 @@ import lombok.NonNull;
 import java.util.UUID;
 
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @Data
 public class ChecklistItem {
     @NonNull

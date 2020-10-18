@@ -21,8 +21,6 @@ Modules
         Migrate
 
     Notebook
-        Adding item -> Select current category automatically
-        Clone item
         Create checklist table item
         Filtering
         Archive

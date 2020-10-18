@@ -13,7 +13,7 @@
     function init(){
         document.getElementById("new-text-title").value = "";
         document.getElementById("new-text-content").value = "";
-        loadChildrenOfCategory(null);
+        loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
     }
 
     function loadChildrenOfCategory(categoryId){

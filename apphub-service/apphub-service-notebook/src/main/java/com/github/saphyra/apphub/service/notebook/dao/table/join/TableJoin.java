@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Data
-@Builder
+@Builder(toBuilder = true)
 public class TableJoin {
     @NonNull
     private final UUID tableJoinId;

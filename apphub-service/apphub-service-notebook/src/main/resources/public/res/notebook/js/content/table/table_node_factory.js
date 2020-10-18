@@ -37,6 +37,17 @@ function tableNodeFactory(parent, itemDetails){
                         e.stopPropagation();
                         deleteTable(itemDetails.id);
                     }
+
+                const cloneButton = document.createElement("BUTTON");
+                    cloneButton.classList.add("list-item-option-button");
+                    cloneButton.classList.add("clone-button");
+                    cloneButton.innerHTML = Localization.getAdditionalContent("clone-button");
+                    cloneButton.onclick = function(e){
+                        e.stopPropagation();
+                        listItemCloneService.clone(itemDetails.id);
+                    }
+            buttonListWrapper.appendChild(cloneButton);
+
             buttonListWrapper.appendChild(deleteButton);
                 const editButton = document.createElement("BUTTON");
                     editButton.classList.add("list-item-option-button");

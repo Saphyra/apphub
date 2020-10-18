@@ -3,6 +3,9 @@
 
     window.categoryContentController = new function(){
         this.loadCategoryContent = loadCategoryContent;
+        this.getCurrentCategoryId = function(){
+            return currentCategoryId;
+        }
     }
 
     eventProcessor.registerProcessor(new EventProcessor(

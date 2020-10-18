@@ -17,7 +17,7 @@
     function init(){
         document.getElementById("create-table-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
         document.getElementById("new-table-title").value = "";
-        loadChildrenOfCategory(null);
+        loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
         columnNames = [];
         rows = [];
         newColumn();
