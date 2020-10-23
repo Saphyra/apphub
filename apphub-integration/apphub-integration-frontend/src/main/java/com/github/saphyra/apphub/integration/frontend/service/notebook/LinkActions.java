@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.frontend.service.notebook;
 
 import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.frontend.model.notebook.ListItemDetailsItem;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 
@@ -47,5 +48,10 @@ public class LinkActions {
 
     public static boolean isCreateLinkWindowDisplayed(WebDriver driver) {
         return NotebookPage.createLinkWindow(driver).isDisplayed();
+    }
+
+    public static String extractUrl(ListItemDetailsItem item) {
+
+        return null;
     }
 }

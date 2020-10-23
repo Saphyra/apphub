@@ -43,13 +43,13 @@ public class AwaitilityWrapper {
 
         return helper.getResult(Optional::ofNullable);
     }
-    
-    public static <T>List<T> getListWithWait(Supplier<List<T>> supplier, Predicate<List<T>> predicate){
+
+    public static <T> List<T> getListWithWait(Supplier<List<T>> supplier, Predicate<List<T>> predicate) {
         GetWithWaitHelper<List<T>> helper = new GetWithWaitHelper<>(supplier, predicate);
-        
+
         createDefault()
             .until(helper::get);
-        
+
         return helper.getResult(result -> Optional.ofNullable(result).orElse(Collections.emptyList()));
     }
 
@@ -64,15 +64,15 @@ public class AwaitilityWrapper {
     }
 
     @RequiredArgsConstructor
-    public static class AwaitResult{
+    public static class AwaitResult {
         private final boolean result;
 
         public void assertTrue() {
             assertThat(result).isTrue();
         }
 
-        public void assertTrue(String message){
-            if(!result){
+        public void assertTrue(String message) {
+            if (!result) {
                 throw new IllegalStateException(message);
             }
         }
@@ -88,7 +88,7 @@ public class AwaitilityWrapper {
         public boolean get() {
             T result = supplier.get();
             boolean positive = predicate.test(result);
-            log.info("Is test positive: {}", positive);
+            log.debug("Is test positive: {}", positive);
             if (positive) {
                 this.result = result;
             }

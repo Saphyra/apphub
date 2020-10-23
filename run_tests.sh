@@ -14,6 +14,8 @@ else
   echo "Tests passed successfully"
 fi
 
+cd .. || exit
+
 ./release_port.sh $SERVER_PORT
 ./release_port.sh $DATABASE_PORT
 
