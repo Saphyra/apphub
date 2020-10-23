@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.notebook.model.request.EditListItemRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.notebook.service.ListItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemEditionService;
+import com.github.saphyra.apphub.service.notebook.service.clone.ListItemCloneService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -25,6 +26,9 @@ public class ListItemControllerIImplTest {
 
     @Mock
     private ListItemEditionService listItemEditionService;
+
+    @Mock
+    private ListItemCloneService listItemCloneService;
 
     @InjectMocks
     private ListItemControllerIImpl underTest;
@@ -49,5 +53,12 @@ public class ListItemControllerIImplTest {
         underTest.editListItem(editListItemRequest, LIST_ITEM_ID);
 
         verify(listItemEditionService).edit(LIST_ITEM_ID, editListItemRequest);
+    }
+
+    @Test
+    public void cloneListItem() {
+        underTest.cloneListItem(LIST_ITEM_ID);
+
+        verify(listItemCloneService).clone(LIST_ITEM_ID);
     }
 }

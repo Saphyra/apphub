@@ -1,4 +1,5 @@
 (function ScriptLoader(){
+    const date = getDate();
     const loadedScripts = [];
 
     window.scriptLoader = new function(){
@@ -46,10 +47,15 @@
         }
         $.ajax({
             async: false,
-            url: src,
+            url: src + "?" + date,
             dataType: "script",
             cache: true
         });
         loadedScripts.push(src);
+    }
+
+    function getDate(){
+        const date = new Date();
+        return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + "/" + date.getHours() + date.getMinutes();
     }
 })();

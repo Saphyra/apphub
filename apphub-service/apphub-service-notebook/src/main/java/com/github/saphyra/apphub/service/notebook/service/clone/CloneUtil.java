@@ -13,7 +13,6 @@ import java.util.UUID;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 class CloneUtil {
     private final IdGenerator idGenerator;
 

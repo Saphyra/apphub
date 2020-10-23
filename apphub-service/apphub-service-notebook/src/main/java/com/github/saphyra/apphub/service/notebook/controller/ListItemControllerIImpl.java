@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.notebook.controller;
 import com.github.saphyra.apphub.api.notebook.model.request.EditListItemRequest;
 import com.github.saphyra.apphub.api.notebook.server.ListItemController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.ListItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemEditionService;
 import com.github.saphyra.apphub.service.notebook.service.clone.ListItemCloneService;
@@ -34,7 +33,6 @@ class ListItemControllerIImpl implements ListItemController {
     }
 
     @Override
-    //TODO unit test
     //TODO BE test
     //TODO api test
     //TODO int test
