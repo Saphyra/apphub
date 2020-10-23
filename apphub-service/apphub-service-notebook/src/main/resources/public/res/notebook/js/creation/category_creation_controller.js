@@ -4,7 +4,7 @@
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.OPEN_CREATE_CATEGORY_DIALOG},
         function(){
-            loadChildrenOfCategory(null);
+            loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
         }
     ));
 

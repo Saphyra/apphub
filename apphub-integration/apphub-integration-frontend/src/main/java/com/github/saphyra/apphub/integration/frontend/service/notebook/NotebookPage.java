@@ -81,6 +81,7 @@ class NotebookPage {
     private static final By ADD_COLUMN_TO_EDIT_TABLE_BUTTON = By.id("view-table-edit-add-column-button");
     private static final By ADD_ROW_TO_EDIT_TABLE_BUTTON = By.id("view-table-edit-add-row-button");
     private static final By COLUMN_HEADS_FOR_EDIT_TABLE = By.cssSelector("#view-table-head-row .column-head");
+    private static final By CREATE_CATEGORY_PARENT_SELECTION_PARENT_BUTTON = By.id("create-category-parent-selection-parent-button");
 
     public static WebElement createCategoryWindow(WebDriver driver) {
         return driver.findElement(CREATE_CATEGORY_WINDOW);
@@ -376,5 +377,9 @@ class NotebookPage {
 
     public static List<WebElement> columnHeadsForEditTable(WebDriver driver) {
         return driver.findElements(COLUMN_HEADS_FOR_EDIT_TABLE);
+    }
+
+    public static WebElement createCategoryParentSelectionParentButton(WebDriver driver) {
+        return driver.findElement(CREATE_CATEGORY_PARENT_SELECTION_PARENT_BUTTON);
     }
 }

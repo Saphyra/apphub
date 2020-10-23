@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Data
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 public class TableHead {
     @NonNull
     private final UUID tableHeadId;

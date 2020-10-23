@@ -335,6 +335,8 @@
   "additionalContent": {
     "category-created": "Kategória elmentve.",
     "category-deleted": "Kategória törölve.",
+    "clone-button": "Duplikálás",
+    "list-item-cloned": "Duplikálás sikeres.",
     "deletion-confirmation-dialog-title": "Törlés megerősítése",
     "category-deletion-confirmation-dialog-detail": "Biztosan törölni szeretné a kiválasztott kategóriát és teljes tartalmát? A törölt adatokat már nem lehet vissza állítani.",
     "deletion-confirmation-dialog-detail": "Biztosan törölni szeretné a kiválasztott elemet?",

@@ -15,7 +15,7 @@
         document.getElementById("create-checklist-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
         document.getElementById("new-checklist-title").value = "";
         document.getElementById("new-checklist-content-wrapper").innerHTML = "";
-        loadChildrenOfCategory(null);
+        loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
     }
 
     function loadChildrenOfCategory(categoryId){

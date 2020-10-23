@@ -66,7 +66,7 @@ public class CategoryActions {
         categoryToDelete.delete(driver);
     }
 
-    public static void openCategory(WebDriver driver, String title){
+    public static void openCategory(WebDriver driver, String title) {
         DetailedListActions.findDetailedItem(driver, title).open();
 
         AwaitilityWrapper.createDefault()

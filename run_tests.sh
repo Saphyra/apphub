@@ -1,6 +1,3 @@
-trap "exit" INT TERM ERR
-trap "kill 0" EXIT
-
 NAMESPACE_NAME=${1:-develop}
 HEADLESS=${2:-true}
 
@@ -11,12 +8,15 @@ kubectl port-forward deployment/postgres $DATABASE_PORT:5432 -n "$NAMESPACE_NAME
 
 cd apphub-integration || exit
 mvn -DargLine="-DserverPort=$SERVER_PORT -DdatabasePort=$DATABASE_PORT -Dheadless=$HEADLESS" clean test
-TEST_RESULT=$?
 if [[ "$TEST_RESULT" -ne 0 ]]; then
   echo "Tests failed"
-  exit 1
 else
   echo "Tests passed successfully"
 fi
+
+cd .. || exit
+
+./release_port.sh $SERVER_PORT
+./release_port.sh $DATABASE_PORT
 
 taskkill //F //IM chromedriver.exe //T

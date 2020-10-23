@@ -38,6 +38,17 @@ function textNodeFactory(parent, itemDetails){
                         deleteText(itemDetails.id);
                     }
             buttonListWrapper.appendChild(deleteButton);
+
+                const cloneButton = document.createElement("BUTTON");
+                    cloneButton.classList.add("list-item-option-button");
+                    cloneButton.classList.add("clone-button");
+                    cloneButton.innerHTML = Localization.getAdditionalContent("clone-button");
+                    cloneButton.onclick = function(e){
+                        e.stopPropagation();
+                        listItemCloneService.clone(itemDetails.id);
+                    }
+            buttonListWrapper.appendChild(cloneButton);
+
                 const editButton = document.createElement("BUTTON");
                     editButton.classList.add("list-item-option-button");
                     editButton.classList.add("edit-button");

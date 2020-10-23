@@ -20,6 +20,7 @@ public class ListItemDetailsItem {
     private static final By OPTIONS_BUTTON = By.cssSelector(":scope .list-item-options-button");
     private static final By DELETE_BUTTON = By.cssSelector(":scope .list-item-options-button-list-wrapper .delete-button");
     private static final By EDIT_BUTTON = By.cssSelector(":scope .list-item-options-button-list-wrapper .edit-button");
+    private static final By CLONE_BUTTON = By.cssSelector(":scope .list-item-options-button-list-wrapper .clone-button");
 
     private final WebElement webElement;
 
@@ -51,6 +52,14 @@ public class ListItemDetailsItem {
         NotebookPageActions.confirmDeletionDialog(driver);
     }
 
+    public void cloneItem(WebDriver driver) {
+        openOptionsMenu(driver);
+
+        WebElement cloneButton = webElement.findElement(CLONE_BUTTON);
+        assertThat(cloneButton.isDisplayed()).isTrue();
+        cloneButton.click();
+    }
+
     private void openOptionsMenu(WebDriver driver) {
         new Actions(driver)
             .moveToElement(webElement.findElement(OPTIONS_BUTTON))
@@ -69,5 +78,9 @@ public class ListItemDetailsItem {
             .filter(type -> classList.contains(type.getCssClass()))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Type not recognizable. ClassList: " + classList));
+    }
+
+    public String getId() {
+        return webElement.getAttribute("id");
     }
 }

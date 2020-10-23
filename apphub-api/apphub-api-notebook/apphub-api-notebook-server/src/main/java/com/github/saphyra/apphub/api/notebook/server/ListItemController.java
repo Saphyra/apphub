@@ -14,4 +14,7 @@ public interface ListItemController {
 
     @RequestMapping(method = RequestMethod.POST, path = Endpoints.EDIT_NOTEBOOK_LIST_ITEM)
     void editListItem(@RequestBody EditListItemRequest request, @PathVariable("listItemId") UUID listItemId);
+
+    @RequestMapping(method = RequestMethod.POST, path = Endpoints.CLONE_NOTEBOOK_LIST_ITEM)
+    void cloneListItem(@PathVariable("listItemId") UUID listItemId);
 }

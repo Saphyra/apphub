@@ -335,6 +335,8 @@
   "additionalContent": {
     "category-created": "Category saved.",
     "category-deleted": "Category deleted.",
+    "clone-button": "Clone",
+    "list-item-cloned": "Successfully cloned.",
     "deletion-confirmation-dialog-title": "Confirm deletion",
     "category-deletion-confirmation-dialog-detail": "Are you sure you want to delete the category with all of its content? Deleted data cannot be restored.",
     "deletion-confirmation-dialog-detail": "Are you sure you want to delete the item?",

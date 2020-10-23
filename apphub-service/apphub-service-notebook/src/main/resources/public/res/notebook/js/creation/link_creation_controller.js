@@ -6,7 +6,7 @@
         function(){
             document.getElementById("new-link-title").value = "";
             document.getElementById("new-link-url").value = "";
-            loadChildrenOfCategory(null);
+            loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
         }
     ));
 

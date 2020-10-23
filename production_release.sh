@@ -1,7 +1,7 @@
 git checkout master
 git pull
 
-./develop_deployment.sh skipTrap
+./develop_deployment.sh
 
 eval "$(minikube docker-env)"
 
@@ -29,8 +29,6 @@ if [[ "$STARTUP_RESULT" -ne 0 ]]; then
   exit 1
 fi
 
-trap "exit" INT TERM ERR
-trap "kill 0" EXIT
 
 SERVER_PORT=$RANDOM
 DATABASE_PORT=$RANDOM
@@ -48,6 +46,9 @@ if [[ "$TEST_RESULT" -ne 0 ]]; then
 else
   echo "Tests passed successfully"
 fi
+
+./release_port.sh $SERVER_PORT
+./release_port.sh $DATABASE_PORT
 
 echo "Deployment finished."
 

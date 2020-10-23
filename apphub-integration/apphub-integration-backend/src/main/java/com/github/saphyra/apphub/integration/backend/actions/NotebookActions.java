@@ -214,4 +214,9 @@ public class NotebookActions {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .get(UrlFactory.create(Endpoints.GET_NOTEBOOK_TABLE, "listItemId", listItemId));
     }
+
+    public static Response getCloneListItemResponse(Language language, UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .post(UrlFactory.create(Endpoints.CLONE_NOTEBOOK_LIST_ITEM, "listItemId", listItemId));
+    }
 }
