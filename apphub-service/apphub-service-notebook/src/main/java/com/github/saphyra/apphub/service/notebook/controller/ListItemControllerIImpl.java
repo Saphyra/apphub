@@ -35,7 +35,6 @@ class ListItemControllerIImpl implements ListItemController {
     @Override
     //TODO BE test
     //TODO api test
-    //TODO int test
     public void cloneListItem(UUID listItemId) {
         log.info("Cloning listItem {}", listItemId);
         listItemCloneService.clone(listItemId);

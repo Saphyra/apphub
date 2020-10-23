@@ -24,3 +24,5 @@ if [[ "$STARTUP_RESULT" -ne 0 ]]; then
   echo "Services failed to start."
   exit 1
 fi
+
+./port_forward.sh $NAMESPACE_NAME
