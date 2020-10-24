@@ -27,23 +27,22 @@ public class ChecklistTableControllerImpl implements ChecklistTableController {
     private final ChecklistTableStatusUpdateService checklistTableStatusUpdateService;
 
     @Override
-    //TODO int test
     //TODO API test
     public OneParamResponse<UUID> createChecklistTable(CreateChecklistTableRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a checklistTable", accessTokenHeader.getUserId());
+        log.debug("CreateChecklistTableRequest: {}", request);
         return new OneParamResponse<>(checklistTableCreationService.create(accessTokenHeader.getUserId(), request));
     }
 
     @Override
-    //TODO int test
     //TODO API test
     public void editChecklistTable(EditChecklistTableRequest request, UUID listItemId) {
         log.info("Editing checklistTable {}", listItemId);
+        log.debug("EditChecklistTableRequest: {}", request);
         checklistTableEditionService.edit(listItemId, request);
     }
 
     @Override
-    //TODO int test
     //TODO API test
     public ChecklistTableResponse getChecklistTable(UUID listItemId) {
         log.info("Querying checklistTable {}", listItemId);
@@ -51,7 +50,6 @@ public class ChecklistTableControllerImpl implements ChecklistTableController {
     }
 
     @Override
-    //TODO int test
     //TODO API test
     public void setChecklistTableRowStatus(UUID listItemId, Integer rowIndex, OneParamRequest<Boolean> status) {
         log.info("Setting checklistTable row status for table {}", listItemId);

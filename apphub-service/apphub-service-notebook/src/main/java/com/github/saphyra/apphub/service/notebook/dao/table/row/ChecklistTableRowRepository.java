@@ -11,4 +11,6 @@ interface ChecklistTableRowRepository extends CrudRepository<ChecklistTableRowEn
     Optional<ChecklistTableRowEntity> findByParentAndRowIndex(String parent, int rowIndex);
 
     List<ChecklistTableRowEntity> getByParent(String parent);
+
+    void deleteByParentAndRowIndexGreaterThanEqual(String parent, int rowIndex);
 }

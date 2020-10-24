@@ -1,7 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateTableRequest;
-import com.github.saphyra.apphub.api.notebook.model.request.EditTableRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.ChecklistTableRowRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistTableRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.EditChecklistTableRequest;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
@@ -16,6 +17,8 @@ import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHead;
 import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoin;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoinDao;
+import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
+import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRowDao;
 import com.github.saphyra.apphub.test.common.TestConstants;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
@@ -34,10 +37,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -50,7 +50,7 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
-public class TableControllerImplTestIt_editTable {
+public class ChecklistTableControllerImplTestIt_editChecklistTable {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final AccessTokenHeader ACCESS_TOKEN_HEADER = AccessTokenHeader.builder()
         .accessTokenId(UUID.randomUUID())
@@ -62,7 +62,7 @@ public class TableControllerImplTestIt_editTable {
     private static final String ORIGINAL_COLUMN_VALUE = "original-column-value";
     private static final String NEW_COLUMN_NAME = "new-column-name";
     private static final String NEW_COLUMN_VALUE = "new-column-value";
-    private static final String NEW_TITLE = "new-title";
+    private static final String NEW_TITLE = "nw-title";
     private static final String ORIGINAL_TITLE = "original-title";
 
     @LocalServerPort
@@ -89,22 +89,25 @@ public class TableControllerImplTestIt_editTable {
     @Autowired
     private TableJoinDao tableJoinDao;
 
+    @Autowired
+    private ChecklistTableRowDao checklistTableRowDao;
+
     private UUID listItemId;
 
     @Before
     public void setUp() {
         given(localizationApiClient.translate(anyString(), eq(TestConstants.DEFAULT_LOCALE))).willReturn(LOCALIZED_MESSAGE);
 
-        CreateTableRequest request = CreateTableRequest.builder()
+        CreateChecklistTableRequest request = CreateChecklistTableRequest.builder()
             .title(ORIGINAL_TITLE)
             .parent(null)
             .columnNames(Arrays.asList(ORIGINAL_COLUMN_NAME))
-            .columns(Arrays.asList(Arrays.asList(ORIGINAL_COLUMN_VALUE)))
+            .rows(Arrays.asList(ChecklistTableRowRequest.<String>builder().checked(false).columns(Arrays.asList(ORIGINAL_COLUMN_VALUE)).build()))
             .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TABLE));
+            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CHECKLIST_TABLE));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         listItemId = response.getBody().jsonPath().getUUID("value");
@@ -116,25 +119,32 @@ public class TableControllerImplTestIt_editTable {
         contentDao.deleteAll();
         tableHeadDao.deleteAll();
         tableJoinDao.deleteAll();
+        checklistTableRowDao.deleteAll();
     }
 
     @Test
     public void blankTitle() {
-        EditTableRequest editTableRequest = EditTableRequest.builder()
+        EditChecklistTableRequest editTableRequest = EditChecklistTableRequest.builder()
             .title(" ")
             .columnNames(Arrays.asList(new KeyValuePair<>(
                 getTableHeadIds(listItemId).get(0),
                 NEW_COLUMN_NAME
             )))
-            .columns(Arrays.asList(Arrays.asList(new KeyValuePair<>(
-                getTableJoinIds(listItemId).get(0),
-                NEW_COLUMN_VALUE
-            ))))
+            .rows(Arrays.asList(ChecklistTableRowRequest.<KeyValuePair<String>>builder()
+                .checked(true)
+                .columns(Arrays.asList(
+                    new KeyValuePair<>(
+                        getTableJoinIds(listItemId).get(0),
+                        NEW_COLUMN_VALUE
+                    )
+                ))
+                .build()
+            ))
             .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
@@ -146,21 +156,27 @@ public class TableControllerImplTestIt_editTable {
 
     @Test
     public void blankColumnName() {
-        EditTableRequest editTableRequest = EditTableRequest.builder()
+        EditChecklistTableRequest editTableRequest = EditChecklistTableRequest.builder()
             .title(NEW_TITLE)
             .columnNames(Arrays.asList(new KeyValuePair<>(
                 getTableHeadIds(listItemId).get(0),
                 " "
             )))
-            .columns(Arrays.asList(Arrays.asList(new KeyValuePair<>(
-                getTableJoinIds(listItemId).get(0),
-                NEW_COLUMN_VALUE
-            ))))
+            .rows(Arrays.asList(ChecklistTableRowRequest.<KeyValuePair<String>>builder()
+                .checked(true)
+                .columns(Arrays.asList(
+                    new KeyValuePair<>(
+                        getTableJoinIds(listItemId).get(0),
+                        NEW_COLUMN_VALUE
+                    )
+                ))
+                .build()
+            ))
             .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
@@ -172,22 +188,31 @@ public class TableControllerImplTestIt_editTable {
 
     @Test
     public void differentColumnAmount() {
-        EditTableRequest editTableRequest = EditTableRequest.builder()
+        EditChecklistTableRequest editTableRequest = EditChecklistTableRequest.builder()
             .title(NEW_TITLE)
             .columnNames(Arrays.asList(new KeyValuePair<>(
                 getTableHeadIds(listItemId).get(0),
                 NEW_COLUMN_NAME
             )))
-            .columns(Arrays.asList(Arrays.asList(
-                new KeyValuePair<>(
-                    getTableJoinIds(listItemId).get(0),
-                    NEW_COLUMN_VALUE
-                ), new KeyValuePair<>())))
+            .rows(Arrays.asList(ChecklistTableRowRequest.<KeyValuePair<String>>builder()
+                .checked(true)
+                .columns(Arrays.asList(
+                    new KeyValuePair<>(
+                        getTableJoinIds(listItemId).get(0),
+                        NEW_COLUMN_VALUE
+                    ),
+                    new KeyValuePair<>(
+                        getTableJoinIds(listItemId).get(0),
+                        NEW_COLUMN_VALUE
+                    )
+                ))
+                .build()
+            ))
             .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
@@ -199,22 +224,27 @@ public class TableControllerImplTestIt_editTable {
 
     @Test
     public void nullContent() {
-        EditTableRequest editTableRequest = EditTableRequest.builder()
+        EditChecklistTableRequest editTableRequest = EditChecklistTableRequest.builder()
             .title(NEW_TITLE)
             .columnNames(Arrays.asList(new KeyValuePair<>(
                 getTableHeadIds(listItemId).get(0),
                 NEW_COLUMN_NAME
             )))
-            .columns(Arrays.asList(Arrays.asList(
-                new KeyValuePair<>(
-                    getTableJoinIds(listItemId).get(0),
-                    null
-                ))))
+            .rows(Arrays.asList(ChecklistTableRowRequest.<KeyValuePair<String>>builder()
+                .checked(true)
+                .columns(Arrays.asList(
+                    new KeyValuePair<>(
+                        getTableJoinIds(listItemId).get(0),
+                        null
+                    )
+                ))
+                .build()
+            ))
             .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
@@ -226,22 +256,27 @@ public class TableControllerImplTestIt_editTable {
 
     @Test
     public void tableHeadDoesNotExist() {
-        EditTableRequest editTableRequest = EditTableRequest.builder()
+        EditChecklistTableRequest editTableRequest = EditChecklistTableRequest.builder()
             .title(NEW_TITLE)
             .columnNames(Arrays.asList(new KeyValuePair<>(
                 UUID.randomUUID(),
                 NEW_COLUMN_NAME
             )))
-            .columns(Arrays.asList(Arrays.asList(
-                new KeyValuePair<>(
-                    getTableJoinIds(listItemId).get(0),
-                    NEW_COLUMN_VALUE
-                ))))
+            .rows(Arrays.asList(ChecklistTableRowRequest.<KeyValuePair<String>>builder()
+                .checked(true)
+                .columns(Arrays.asList(
+                    new KeyValuePair<>(
+                        getTableJoinIds(listItemId).get(0),
+                        NEW_COLUMN_VALUE
+                    )
+                ))
+                .build()
+            ))
             .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
 
@@ -252,22 +287,27 @@ public class TableControllerImplTestIt_editTable {
 
     @Test
     public void tableJoinDoesNotExist() {
-        EditTableRequest editTableRequest = EditTableRequest.builder()
+        EditChecklistTableRequest editTableRequest = EditChecklistTableRequest.builder()
             .title(NEW_TITLE)
             .columnNames(Arrays.asList(new KeyValuePair<>(
                 getTableHeadIds(listItemId).get(0),
                 NEW_COLUMN_NAME
             )))
-            .columns(Arrays.asList(Arrays.asList(
-                new KeyValuePair<>(
-                    UUID.randomUUID(),
-                    NEW_COLUMN_VALUE
-                ))))
+            .rows(Arrays.asList(ChecklistTableRowRequest.<KeyValuePair<String>>builder()
+                .checked(true)
+                .columns(Arrays.asList(
+                    new KeyValuePair<>(
+                        UUID.randomUUID(),
+                        NEW_COLUMN_VALUE
+                    )
+                ))
+                .build()
+            ))
             .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
 
@@ -278,22 +318,27 @@ public class TableControllerImplTestIt_editTable {
 
     @Test
     public void listItemNotFound() {
-        EditTableRequest editTableRequest = EditTableRequest.builder()
+        EditChecklistTableRequest editTableRequest = EditChecklistTableRequest.builder()
             .title(NEW_TITLE)
             .columnNames(Arrays.asList(new KeyValuePair<>(
                 getTableHeadIds(listItemId).get(0),
                 NEW_COLUMN_NAME
             )))
-            .columns(Arrays.asList(Arrays.asList(
-                new KeyValuePair<>(
-                    getTableJoinIds(listItemId).get(0),
-                    NEW_COLUMN_VALUE
-                ))))
+            .rows(Arrays.asList(ChecklistTableRowRequest.<KeyValuePair<String>>builder()
+                .checked(true)
+                .columns(Arrays.asList(
+                    new KeyValuePair<>(
+                        getTableJoinIds(listItemId).get(0),
+                        NEW_COLUMN_VALUE
+                    )
+                ))
+                .build()
+            ))
             .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", UUID.randomUUID()));
+            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_TABLE, "listItemId", UUID.randomUUID()));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
 
@@ -306,15 +351,15 @@ public class TableControllerImplTestIt_editTable {
     public void columnDeleted() {
         UUID tableJoinId = getTableJoinIds(listItemId).get(0);
         UUID tableHeadId = getTableHeadIds(listItemId).get(0);
-        EditTableRequest editTableRequest = EditTableRequest.builder()
+        EditChecklistTableRequest editTableRequest = EditChecklistTableRequest.builder()
             .title(NEW_TITLE)
             .columnNames(Collections.emptyList())
-            .columns(Collections.emptyList())
+            .rows(Collections.emptyList())
             .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -322,88 +367,98 @@ public class TableControllerImplTestIt_editTable {
         assertThat(query(() -> tableJoinDao.getByParent(listItemId))).isEmpty();
         assertThat(query(() -> contentDao.findByParent(tableJoinId))).isEmpty();
         assertThat(query(() -> contentDao.findByParent(tableHeadId))).isEmpty();
+        assertThat(query(() -> checklistTableRowDao.getByParent(listItemId))).isEmpty();
     }
 
     @Test
     public void columnNameAndValueEdited() {
         UUID tableJoinId = getTableJoinIds(listItemId).get(0);
         UUID tableHeadId = getTableHeadIds(listItemId).get(0);
-        EditTableRequest editTableRequest = EditTableRequest.builder()
+        EditChecklistTableRequest editTableRequest = EditChecklistTableRequest.builder()
             .title(NEW_TITLE)
             .columnNames(Arrays.asList(new KeyValuePair<>(
                 getTableHeadIds(listItemId).get(0),
                 NEW_COLUMN_NAME
             )))
-            .columns(Arrays.asList(Arrays.asList(
-                new KeyValuePair<>(
-                    getTableJoinIds(listItemId).get(0),
-                    NEW_COLUMN_VALUE
-                ))))
+            .rows(Arrays.asList(ChecklistTableRowRequest.<KeyValuePair<String>>builder()
+                .checked(true)
+                .columns(Arrays.asList(
+                    new KeyValuePair<>(
+                        getTableJoinIds(listItemId).get(0),
+                        NEW_COLUMN_VALUE
+                    )
+                ))
+                .build()
+            ))
             .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
         assertThat(query(() -> contentDao.findByParentValidated(tableHeadId)).getContent()).isEqualTo(NEW_COLUMN_NAME);
         assertThat(query(() -> contentDao.findByParentValidated(tableJoinId)).getContent()).isEqualTo(NEW_COLUMN_VALUE);
+        assertThat(query(() -> checklistTableRowDao.findByParentAndRowIndex(listItemId, 0).get().isChecked())).isTrue();
     }
 
     @Test
-    public void columnCreated() {
+    public void rowAdded() {
         UUID tableJoinId = getTableJoinIds(listItemId).get(0);
         UUID tableHeadId = getTableHeadIds(listItemId).get(0);
-        EditTableRequest editTableRequest = EditTableRequest.builder()
+        EditChecklistTableRequest editTableRequest = EditChecklistTableRequest.builder()
             .title(NEW_TITLE)
             .columnNames(Arrays.asList(
                 new KeyValuePair<>(
                     getTableHeadIds(listItemId).get(0),
                     ORIGINAL_COLUMN_NAME
-                ),
-                new KeyValuePair<>(
-                    null,
-                    NEW_COLUMN_NAME
                 )
             ))
-            .columns(Arrays.asList(Arrays.asList(
-                new KeyValuePair<>(
-                    getTableJoinIds(listItemId).get(0),
-                    ORIGINAL_COLUMN_VALUE
-                ),
-                new KeyValuePair<>(
-                    null,
-                    NEW_COLUMN_VALUE
-                )
-            )))
+            .rows(Arrays.asList(
+                ChecklistTableRowRequest.<KeyValuePair<String>>builder()
+                    .checked(true)
+                    .columns(Arrays.asList(
+                        new KeyValuePair<>(
+                            getTableJoinIds(listItemId).get(0),
+                            ORIGINAL_COLUMN_VALUE
+                        )
+                    ))
+                    .build(),
+                ChecklistTableRowRequest.<KeyValuePair<String>>builder()
+                    .checked(true)
+                    .columns(Arrays.asList(
+                        new KeyValuePair<>(
+                            null,
+                            NEW_COLUMN_VALUE
+                        )
+                    ))
+                    .build()
+            ))
             .build();
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
         assertThat(query(() -> contentDao.findByParentValidated(tableHeadId)).getContent()).isEqualTo(ORIGINAL_COLUMN_NAME);
         assertThat(query(() -> contentDao.findByParentValidated(tableJoinId)).getContent()).isEqualTo(ORIGINAL_COLUMN_VALUE);
 
-        TableHead newTableHead = query(() -> tableHeadDao.getByParent(listItemId))
-            .stream()
-            .filter(tableHead -> !tableHead.getTableHeadId().equals(tableHeadId))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Additional tableHead was not created."));
-        assertThat(newTableHead.getColumnIndex()).isEqualTo(1);
-        assertThat(query(() -> contentDao.findByParentValidated(newTableHead.getTableHeadId())).getContent()).isEqualTo(NEW_COLUMN_NAME);
-
         TableJoin newTableJoin = query(() -> tableJoinDao.getByParent(listItemId))
             .stream()
             .filter(tableHead -> !tableHead.getTableJoinId().equals(tableJoinId))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Additional tableJoin was not created."));
-        assertThat(newTableJoin.getColumnIndex()).isEqualTo(1);
-        assertThat(newTableJoin.getRowIndex()).isEqualTo(0);
+        assertThat(newTableJoin.getColumnIndex()).isEqualTo(0);
+        assertThat(newTableJoin.getRowIndex()).isEqualTo(1);
         assertThat(query(() -> contentDao.findByParentValidated(newTableJoin.getTableJoinId())).getContent()).isEqualTo(NEW_COLUMN_VALUE);
+
+        assertThat(query(() -> checklistTableRowDao.findByParentAndRowIndex(listItemId, 0)).get().isChecked()).isTrue();
+        Optional<ChecklistTableRow> newChecklistTableRow = query(() -> checklistTableRowDao.findByParentAndRowIndex(listItemId, 1));
+        assertThat(newChecklistTableRow).isNotEmpty();
+        assertThat(newChecklistTableRow.get().isChecked()).isTrue();
     }
 
     private List<UUID> getTableHeadIds(UUID listItemId) {

@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ChecklistTableRowRepositoryTest {
     private static final String ROW_ID_1 = "row-id-1";
     private static final String ROW_ID_2 = "row-id-2";
+    private static final String ROW_ID_3 = "row-id-3";
     private static final String USER_ID_1 = "user-id-1";
     private static final String USER_ID_2 = "user-id-2";
     private static final String PARENT_1 = "parent-1";
@@ -85,5 +86,32 @@ public class ChecklistTableRowRepositoryTest {
         List<ChecklistTableRowEntity> result = underTest.getByParent(PARENT_1);
 
         assertThat(result).containsExactly(entity1);
+    }
+
+    @Test
+    @Transactional
+    public void deleteByParentAndRowIndexGreaterThanEqual(){
+        ChecklistTableRowEntity entity1 = ChecklistTableRowEntity.builder()
+            .rowId(ROW_ID_1)
+            .parent(PARENT_1)
+            .rowIndex(0)
+            .build();
+
+        ChecklistTableRowEntity entity2 = ChecklistTableRowEntity.builder()
+            .rowId(ROW_ID_2)
+            .parent(PARENT_2)
+            .rowIndex(1)
+            .build();
+
+        ChecklistTableRowEntity entity3 = ChecklistTableRowEntity.builder()
+            .rowId(ROW_ID_3)
+            .parent(PARENT_1)
+            .rowIndex(1)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2, entity3));
+
+        underTest.deleteByParentAndRowIndexGreaterThanEqual(PARENT_1, 1);
+
+        assertThat(underTest.findAll()).containsExactlyInAnyOrder(entity1, entity2);
     }
 }

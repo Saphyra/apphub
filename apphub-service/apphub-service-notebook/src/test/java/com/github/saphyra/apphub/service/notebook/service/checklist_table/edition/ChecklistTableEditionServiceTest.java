@@ -65,6 +65,7 @@ public class ChecklistTableEditionServiceTest {
 
         verify(checklistTableRow).setChecked(true);
         verify(checklistTableRowDao).save(checklistTableRow);
+        verify(checklistTableRowDao).deleteByParentAndRowIndexGreaterThanEqual(LIST_ITEM_ID, 1);
     }
 
     @Test
@@ -79,5 +80,6 @@ public class ChecklistTableEditionServiceTest {
         underTest.edit(LIST_ITEM_ID, editChecklistTableRequest);
 
         verify(checklistTableRowDao).save(checklistTableRow);
+        verify(checklistTableRowDao).deleteByParentAndRowIndexGreaterThanEqual(LIST_ITEM_ID, 1);
     }
 }
