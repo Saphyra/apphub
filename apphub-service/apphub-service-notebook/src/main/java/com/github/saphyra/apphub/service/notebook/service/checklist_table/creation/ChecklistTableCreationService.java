@@ -16,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ChecklistTableCreationService {
     private final TableCreationService tableCreationService;
     private final CreateTableRequestConverter createTableRequestConverter;

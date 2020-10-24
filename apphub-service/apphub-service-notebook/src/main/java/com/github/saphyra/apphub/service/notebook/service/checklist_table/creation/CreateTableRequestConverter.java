@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-//TODO unit test
 class CreateTableRequestConverter {
     CreateTableRequest convert(CreateChecklistTableRequest request) {
         return CreateTableRequest.builder()

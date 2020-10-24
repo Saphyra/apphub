@@ -5,7 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-//TODO unit test
 interface ChecklistTableRowRepository extends CrudRepository<ChecklistTableRowEntity, String> {
     void deleteByUserId(String userId);
 

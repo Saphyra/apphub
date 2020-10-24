@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 class EditTableRequestConverter {
     public EditTableRequest convert(EditChecklistTableRequest request) {
         return EditTableRequest.builder()

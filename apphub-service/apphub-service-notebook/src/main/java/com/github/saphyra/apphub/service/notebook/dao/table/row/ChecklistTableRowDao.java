@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO unit test
 public class ChecklistTableRowDao extends AbstractDao<ChecklistTableRowEntity, ChecklistTableRow, String, ChecklistTableRowRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 

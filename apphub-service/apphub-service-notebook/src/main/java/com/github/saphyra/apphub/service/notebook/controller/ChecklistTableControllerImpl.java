@@ -27,7 +27,6 @@ public class ChecklistTableControllerImpl implements ChecklistTableController {
     private final ChecklistTableStatusUpdateService checklistTableStatusUpdateService;
 
     @Override
-    //TODO unit test
     //TODO int test
     //TODO API test
     public OneParamResponse<UUID> createChecklistTable(CreateChecklistTableRequest request, AccessTokenHeader accessTokenHeader) {
@@ -36,7 +35,6 @@ public class ChecklistTableControllerImpl implements ChecklistTableController {
     }
 
     @Override
-    //TODO unit test
     //TODO int test
     //TODO API test
     public void editChecklistTable(EditChecklistTableRequest request, UUID listItemId) {
@@ -45,7 +43,6 @@ public class ChecklistTableControllerImpl implements ChecklistTableController {
     }
 
     @Override
-    //TODO unit test
     //TODO int test
     //TODO API test
     public ChecklistTableResponse getChecklistTable(UUID listItemId) {
@@ -54,7 +51,6 @@ public class ChecklistTableControllerImpl implements ChecklistTableController {
     }
 
     @Override
-    //TODO unit test
     //TODO int test
     //TODO API test
     public void setChecklistTableRowStatus(UUID listItemId, Integer rowIndex, OneParamRequest<Boolean> status) {
