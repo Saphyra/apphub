@@ -28,7 +28,7 @@ public class ChecklistTableEditionService {
         EditTableRequest editTableRequest = editTableRequestConverter.convert(request);
         ListItem checklistTable = tableEditionService.edit(listItemId, editTableRequest);
 
-        int rowIndex ;
+        int rowIndex;
         for (rowIndex = 0; rowIndex < request.getRows().size(); rowIndex++) {
             int ri = rowIndex;
             boolean checked = request.getRows()

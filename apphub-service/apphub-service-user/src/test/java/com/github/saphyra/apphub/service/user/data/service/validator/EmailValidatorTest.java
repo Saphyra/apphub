@@ -35,7 +35,7 @@ public class EmailValidatorTest {
         Throwable ex = catchThrowable(() -> underTest.validateEmail(null));
 
         assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException)ex;
+        BadRequestException exception = (BadRequestException) ex;
         assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(exception.getErrorMessage().getParams().get("email")).isEqualTo("must not be null");
     }
@@ -45,7 +45,7 @@ public class EmailValidatorTest {
         Throwable ex = catchThrowable(() -> underTest.validateEmail("asd"));
 
         assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException)ex;
+        BadRequestException exception = (BadRequestException) ex;
         assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(exception.getErrorMessage().getParams().get("email")).isEqualTo("invalid format");
     }
@@ -57,7 +57,7 @@ public class EmailValidatorTest {
         Throwable ex = catchThrowable(() -> underTest.validateEmail(EMAIL));
 
         assertThat(ex).isInstanceOf(ConflictException.class);
-        ConflictException exception = (ConflictException)ex;
+        ConflictException exception = (ConflictException) ex;
         assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.EMAIL_ALREADY_EXISTS.name());
     }
 

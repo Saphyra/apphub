@@ -82,7 +82,7 @@ public class ChecklistControllerImplTest {
     }
 
     @Test
-    public void updateStatus(){
+    public void updateStatus() {
         underTest.updateStatus(new OneParamRequest<>(true), CHECKLIST_ITEM_ID);
 
         verify(checklistItemStatusUpdateService).update(CHECKLIST_ITEM_ID, true);

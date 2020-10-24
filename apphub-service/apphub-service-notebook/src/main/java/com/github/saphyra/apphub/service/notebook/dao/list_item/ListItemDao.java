@@ -42,7 +42,7 @@ public class ListItemDao extends AbstractDao<ListItemEntity, ListItem, String, L
         ));
     }
 
-     @Override
+    @Override
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }

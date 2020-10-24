@@ -16,8 +16,8 @@ public class Endpoints {
     public static final String GET_LANGUAGES = "/api/user/data/languages";
 
     public static final String GET_USER_ROLES = "/api/user/data/roles";
-    public static final String ADD_ROLE =  "/api/user/data/roles";
-    public static final String REMOVE_ROLE =  "/api/user/data/roles";
+    public static final String ADD_ROLE = "/api/user/data/roles";
+    public static final String REMOVE_ROLE = "/api/user/data/roles";
 
     public static final String INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";
     public static final String INTERNAL_GET_USER_LANGUAGE = "/internal/user/{userId}/data/language";

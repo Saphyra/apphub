@@ -33,16 +33,16 @@ public class LocaleMandatoryFilterTest {
     private static final String RESPONSE_BODY = "response-body";
 
     @Mock
-    private  CommonConfigProperties commonConfigProperties;
+    private CommonConfigProperties commonConfigProperties;
 
     @Mock
-    private  ErrorResponseFactory errorResponseFactory;
+    private ErrorResponseFactory errorResponseFactory;
 
     @Mock
-    private  LocaleProvider localeProvider;
+    private LocaleProvider localeProvider;
 
     @Mock
-    private  ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapperWrapper objectMapperWrapper;
 
     @InjectMocks
     private LocaleMandatoryFilter underTest;

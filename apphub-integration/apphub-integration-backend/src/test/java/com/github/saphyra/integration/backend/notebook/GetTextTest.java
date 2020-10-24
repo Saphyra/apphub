@@ -18,7 +18,7 @@ public class GetTextTest extends TestBase {
     private static final String TITLE = "title";
 
     @Test
-    public void getText(){
+    public void getText() {
         Language language = Language.HUNGARIAN;
 
         RegistrationParameters userData = RegistrationParameters.validParameters();

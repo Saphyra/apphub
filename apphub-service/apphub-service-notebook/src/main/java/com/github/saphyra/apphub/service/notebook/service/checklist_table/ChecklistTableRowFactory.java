@@ -14,7 +14,7 @@ import java.util.UUID;
 public class ChecklistTableRowFactory {
     private final IdGenerator idGenerator;
 
-    public ChecklistTableRow create(UUID userId, UUID parent, int rowIndex, boolean checked){
+    public ChecklistTableRow create(UUID userId, UUID parent, int rowIndex, boolean checked) {
         return ChecklistTableRow.builder()
             .rowId(idGenerator.randomUUID())
             .userId(userId)

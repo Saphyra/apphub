@@ -31,7 +31,7 @@ public class UserRepositoryTest {
     private UserRepository underTest;
 
     @After
-    public void clear(){
+    public void clear() {
         underTest.deleteAll();
     }
 

@@ -19,16 +19,16 @@ public class ErrorControllerTest {
     private static final String LOCALIZED_MESSAGE = "localized-message";
 
     @Mock
-    private  LocaleProvider localeProvider;
+    private LocaleProvider localeProvider;
 
     @Mock
-    private  LocalizedMessageProvider localizedMessageProvider;
+    private LocalizedMessageProvider localizedMessageProvider;
 
     @InjectMocks
     private ErrorController underTest;
 
     @Test
-    public void errorPage(){
+    public void errorPage() {
         given(localeProvider.getLocaleValidated()).willReturn(TestConstants.DEFAULT_LOCALE);
         given(localizedMessageProvider.getLocalizedMessage(TestConstants.DEFAULT_LOCALE, ErrorCode.MISSING_ROLE.name())).willReturn(LOCALIZED_MESSAGE);
 
@@ -40,7 +40,7 @@ public class ErrorControllerTest {
     }
 
     @Test
-    public void errorPage_noErrorCode(){
+    public void errorPage_noErrorCode() {
         given(localeProvider.getLocaleValidated()).willReturn(TestConstants.DEFAULT_LOCALE);
         given(localizedMessageProvider.getLocalizedMessage(TestConstants.DEFAULT_LOCALE, ErrorCode.UNKNOWN_ERROR.name())).willReturn(LOCALIZED_MESSAGE);
 

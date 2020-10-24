@@ -90,7 +90,7 @@ public class ChecklistTableRowRepositoryTest {
 
     @Test
     @Transactional
-    public void deleteByParentAndRowIndexGreaterThanEqual(){
+    public void deleteByParentAndRowIndexGreaterThanEqual() {
         ChecklistTableRowEntity entity1 = ChecklistTableRowEntity.builder()
             .rowId(ROW_ID_1)
             .parent(PARENT_1)

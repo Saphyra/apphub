@@ -38,7 +38,7 @@ public class LanguageControllerImplTest {
     private LanguageResponse languageResponse;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
     }
 

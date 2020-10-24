@@ -29,10 +29,10 @@ public class RegistrationServiceTest {
     private RegistrationRequestValidator registrationRequestValidator;
 
     @Mock
-    private  RoleAdditionService roleAdditionService;
+    private RoleAdditionService roleAdditionService;
 
     @Mock
-    private  RegistrationProperties registrationProperties;
+    private RegistrationProperties registrationProperties;
 
     @Mock
     private UserDao userDao;

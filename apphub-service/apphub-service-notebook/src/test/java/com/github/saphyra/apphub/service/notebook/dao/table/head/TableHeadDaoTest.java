@@ -43,7 +43,7 @@ public class TableHeadDaoTest {
     private TableHead domain;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         underTest = new TableHeadDao(converter, repository, uuidConverter);
     }
 

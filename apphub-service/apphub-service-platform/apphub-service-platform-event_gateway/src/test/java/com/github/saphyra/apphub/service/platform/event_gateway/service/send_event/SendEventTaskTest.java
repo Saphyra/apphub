@@ -31,7 +31,7 @@ public class SendEventTaskTest {
     private SendEventTask underTest;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         underTest = SendEventTask.builder()
             .eventProcessorDao(eventProcessorDao)
             .eventSender(eventSender)

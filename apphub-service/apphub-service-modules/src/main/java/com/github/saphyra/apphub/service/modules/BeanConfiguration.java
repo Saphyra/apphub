@@ -34,13 +34,13 @@ import org.springframework.context.annotation.Import;
 class BeanConfiguration {
     @Bean
     @ConditionalOnMissingBean(LocaleProvider.class)
-    LocaleProvider localeProvider(RequestContextProvider requestContextProvider){
+    LocaleProvider localeProvider(RequestContextProvider requestContextProvider) {
         return new LocaleProvider(requestContextProvider);
     }
 
     @Bean
     @ConditionalOnMissingBean(RequestContextProvider.class)
-    RequestContextProvider requestContextProvider(){
+    RequestContextProvider requestContextProvider() {
         return new RequestContextProvider();
     }
 

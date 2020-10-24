@@ -60,7 +60,7 @@ public class UserEventControllerImplTestIt {
     }
 
     @Test
-    public void deleteAccountEvent(){
+    public void deleteAccountEvent() {
         User user1 = User.builder()
             .userId(USER_ID_1)
             .email(EMAIL_1)
