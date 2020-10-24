@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -25,13 +26,13 @@ public class TableEditionServiceTest {
     private static final String NEW_TITLE = "new-title";
 
     @Mock
-    private  EditTableRequestValidator editTableRequestValidator;
+    private EditTableRequestValidator editTableRequestValidator;
 
     @Mock
-    private  EditTableTableHeadService editTableTableHeadService;
+    private EditTableTableHeadService editTableTableHeadService;
 
     @Mock
-    private  EditTableTableJoinService editTableTableJoinService;
+    private EditTableTableJoinService editTableTableJoinService;
 
     @Mock
     private ListItemDao listItemDao;
@@ -43,7 +44,7 @@ public class TableEditionServiceTest {
     private ListItem listItem;
 
     @Test
-    public void edit(){
+    public void edit() {
         given(listItemDao.findByIdValidated(LIST_ITEM_ID)).willReturn(listItem);
 
         List<KeyValuePair<String>> columnNames = Arrays.asList(new KeyValuePair<>(UUID.randomUUID(), "ads"));
@@ -51,7 +52,9 @@ public class TableEditionServiceTest {
 
         EditTableRequest request = new EditTableRequest(NEW_TITLE, columnNames, columns);
 
-        underTest.edit(LIST_ITEM_ID, request);
+        ListItem result = underTest.edit(LIST_ITEM_ID, request);
+
+        assertThat(result).isEqualTo(listItem);
 
         verify(listItem).setTitle(NEW_TITLE);
         verify(listItemDao).save(listItem);

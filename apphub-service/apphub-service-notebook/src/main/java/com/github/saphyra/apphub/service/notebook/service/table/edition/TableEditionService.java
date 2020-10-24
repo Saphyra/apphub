@@ -23,7 +23,7 @@ public class TableEditionService {
     private final ListItemDao listItemDao;
 
     @Transactional
-    public void edit(UUID listItemId, EditTableRequest request) {
+    public ListItem edit(UUID listItemId, EditTableRequest request) {
         editTableRequestValidator.validate(request);
 
         ListItem listItem = listItemDao.findByIdValidated(listItemId);
@@ -32,5 +32,7 @@ public class TableEditionService {
 
         editTableTableHeadService.processEditions(request.getColumnNames(), listItem);
         editTableTableJoinService.processEditions(request.getColumns(), listItem);
+
+        return listItem;
     }
 }
