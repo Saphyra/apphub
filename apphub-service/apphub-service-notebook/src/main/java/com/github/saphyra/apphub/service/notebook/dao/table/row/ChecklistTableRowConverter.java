@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.dao.table.row;
 
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
-import com.github.saphyra.converter.ConverterBase;
-import com.github.saphyra.encryption.impl.BooleanEncryptor;
+import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

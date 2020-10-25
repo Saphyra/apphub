@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist_table;
 
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
-import com.github.saphyra.util.IdGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

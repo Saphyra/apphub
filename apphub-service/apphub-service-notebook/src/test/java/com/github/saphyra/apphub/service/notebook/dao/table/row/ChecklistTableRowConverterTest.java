@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.dao.table.row;
 
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
-import com.github.saphyra.encryption.impl.BooleanEncryptor;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

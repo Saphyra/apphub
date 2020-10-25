@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.dao.table.row;
 
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
-import com.github.saphyra.dao.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
