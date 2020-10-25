@@ -1,9 +1,12 @@
 package com.github.saphyra.apphub.service.platform.main_gateway;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
+import com.github.saphyra.apphub.lib.common_util.CookieUtil;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.whitelist.EnableWhiteListedEndpointProperties;
@@ -23,31 +26,41 @@ import org.springframework.util.AntPathMatcher;
 @EnableErrorTranslation
 @Import(CommonConfigProperties.class)
 @EnableHealthCheck
-public class BeanConfiguration {
+class BeanConfiguration {
     @Bean
-    public AntPathMatcher antPathMatcher() {
+    AntPathMatcher antPathMatcher() {
         return new AntPathMatcher();
     }
 
     @Bean
-    public Base64Encoder base64Encoder() {
+    Base64Encoder base64Encoder() {
         return new Base64Encoder();
     }
 
     @Bean
     @ConditionalOnMissingBean(LocaleProvider.class)
-    public LocaleProvider localeProvider(RequestContextProvider requestContextProvider) {
+    LocaleProvider localeProvider(RequestContextProvider requestContextProvider) {
         return new LocaleProvider(requestContextProvider);
     }
 
     @Bean
     @ConditionalOnMissingBean(RequestContextProvider.class)
-    public RequestContextProvider requestContextProvider() {
+    RequestContextProvider requestContextProvider() {
         return new RequestContextProvider();
     }
 
     @Bean
-    public UuidConverter uuidConverter() {
+    UuidConverter uuidConverter() {
         return new UuidConverter();
+    }
+
+    @Bean
+    CookieUtil cookieUtil() {
+        return new CookieUtil();
+    }
+
+    @Bean
+    ObjectMapperWrapper objectMapperWrapper(ObjectMapper objectMapper) {
+        return new ObjectMapperWrapper(objectMapper);
     }
 }

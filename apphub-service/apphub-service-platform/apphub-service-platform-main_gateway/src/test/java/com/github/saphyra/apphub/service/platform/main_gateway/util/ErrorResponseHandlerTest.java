@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.util;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
-import com.github.saphyra.util.ObjectMapperWrapper;
 import com.netflix.zuul.context.RequestContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;

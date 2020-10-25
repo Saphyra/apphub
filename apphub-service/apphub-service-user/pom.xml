@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-api-user-server</artifactId>
+            <artifactId>apphub-lib-encryption</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -69,13 +69,6 @@
         <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-test-api</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-test-rest_assured</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.user.authentication.service;
 
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.OffsetDateTimeProvider;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.user.authentication.AuthenticationProperties;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
-import com.github.saphyra.util.OffsetDateTimeProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

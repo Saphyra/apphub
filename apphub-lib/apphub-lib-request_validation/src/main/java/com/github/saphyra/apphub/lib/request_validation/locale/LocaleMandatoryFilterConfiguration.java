@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.lib.request_validation.locale;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.FilterOrder;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorTranslation;
-import com.github.saphyra.util.ObjectMapperWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

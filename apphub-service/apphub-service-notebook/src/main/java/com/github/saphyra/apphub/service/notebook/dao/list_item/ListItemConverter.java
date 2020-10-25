@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item;
 
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.converter.ConverterBase;
-import com.github.saphyra.encryption.impl.StringEncryptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -14,7 +14,6 @@ import com.github.saphyra.apphub.service.user.authentication.service.AccessToken
 import com.github.saphyra.apphub.service.user.authentication.service.LoginService;
 import com.github.saphyra.apphub.service.user.authentication.service.LogoutService;
 import com.github.saphyra.apphub.service.user.authentication.service.ValidAccessTokenQueryService;
-import com.github.saphyra.apphub.service.user.controller.AuthenticationController;
 import com.github.saphyra.apphub.service.user.data.dao.role.Role;
 import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import org.junit.Test;

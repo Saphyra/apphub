@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.lib.config.access_token;
 
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
-import com.github.saphyra.apphub.lib.common_util.CustomObjectMapperWrapper;
-import com.github.saphyra.converter.ConverterBase;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class AccessTokenHeaderConverter extends ConverterBase<String, AccessTokenHeader> implements Converter<String, AccessTokenHeader> {
     private final Base64Encoder base64Encoder;
-    private final CustomObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapperWrapper objectMapperWrapper;
 
     @Override
     public AccessTokenHeader convert(String header) {

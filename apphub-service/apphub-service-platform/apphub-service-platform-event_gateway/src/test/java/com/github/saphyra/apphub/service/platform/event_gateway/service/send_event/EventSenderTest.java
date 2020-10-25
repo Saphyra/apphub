@@ -2,10 +2,10 @@ package com.github.saphyra.apphub.service.platform.event_gateway.service.send_ev
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_util.OffsetDateTimeProvider;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
 import com.github.saphyra.apphub.test.common.TestConstants;
-import com.github.saphyra.util.OffsetDateTimeProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;

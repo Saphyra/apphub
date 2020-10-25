@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service;
 
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

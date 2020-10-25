@@ -33,7 +33,7 @@ public class EventGatewayControllerTest {
     private RegisterProcessorRequest registerProcessorRequest;
 
     @Mock
-    private SendEventRequest sendEventRequest;
+    private SendEventRequest<?> sendEventRequest;
 
     @Test
     public void registerProcessor() {

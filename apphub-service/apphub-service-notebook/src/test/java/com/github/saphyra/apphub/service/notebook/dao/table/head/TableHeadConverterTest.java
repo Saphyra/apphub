@@ -1,17 +1,16 @@
 package com.github.saphyra.apphub.service.notebook.dao.table.head;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-
-import java.util.UUID;
-
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TableHeadConverterTest {

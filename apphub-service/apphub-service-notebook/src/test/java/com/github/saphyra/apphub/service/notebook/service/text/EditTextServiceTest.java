@@ -56,6 +56,8 @@ public class EditTextServiceTest {
 
         underTest.editText(TEXT_ID, request);
 
+        verify(contentValidator).validate(CONTENT, "content");
+        verify(titleValidator).validate(TITLE);
         verify(listItem).setTitle(TITLE);
         verify(content).setContent(CONTENT);
         verify(listItemDao).save(listItem);

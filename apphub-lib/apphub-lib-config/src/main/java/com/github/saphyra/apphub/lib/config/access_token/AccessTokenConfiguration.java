@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.lib.config.access_token;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
-import com.github.saphyra.apphub.lib.common_util.CustomObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,9 +12,9 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan
 public class AccessTokenConfiguration {
     @Bean
-    @ConditionalOnMissingBean(CustomObjectMapperWrapper.class)
-    public CustomObjectMapperWrapper customObjectMapperWrapper(ObjectMapper objectMapper) {
-        return new CustomObjectMapperWrapper(objectMapper);
+    @ConditionalOnMissingBean(ObjectMapperWrapper.class)
+    public ObjectMapperWrapper customObjectMapperWrapper(ObjectMapper objectMapper) {
+        return new ObjectMapperWrapper(objectMapper);
     }
 
     @Bean

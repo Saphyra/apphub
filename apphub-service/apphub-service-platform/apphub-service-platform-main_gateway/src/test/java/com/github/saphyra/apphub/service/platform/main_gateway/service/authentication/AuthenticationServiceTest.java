@@ -1,16 +1,16 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication;
 
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
-import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_util.CookieUtil;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.ErrorResponseHandler;
-import com.github.saphyra.util.CookieUtil;
-import com.github.saphyra.util.ObjectMapperWrapper;
 import com.netflix.zuul.context.RequestContext;
 import org.junit.Before;
 import org.junit.Test;

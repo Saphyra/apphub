@@ -14,7 +14,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -23,7 +22,6 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class RoleControllerImplTest {
     private static final String QUERY_STRING = "query-string";
-    private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
     private RoleAdditionService roleAdditionService;

@@ -53,5 +53,6 @@
         <module>apphub-lib-security</module>
         <module>apphub-lib-request_validation</module>
         <module>apphub-lib-exception</module>
-    </modules>
+      <module>apphub-lib-encryption</module>
+  </modules>
 </project>

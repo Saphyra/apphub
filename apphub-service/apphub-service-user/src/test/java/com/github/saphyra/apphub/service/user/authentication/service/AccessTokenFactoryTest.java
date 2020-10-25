@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.user.authentication.service;
 
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.lib.common_util.OffsetDateTimeProvider;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
-import com.github.saphyra.util.IdGenerator;
-import com.github.saphyra.util.OffsetDateTimeProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

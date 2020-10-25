@@ -1,11 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.dao.table.head;
 
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
-import com.github.saphyra.converter.Converter;
-import com.github.saphyra.dao.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,7 +14,7 @@ import java.util.UUID;
 public class TableHeadDao extends AbstractDao<TableHeadEntity, TableHead, String, TableHeadRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
-    public TableHeadDao(Converter<TableHeadEntity, TableHead> converter, TableHeadRepository repository, UuidConverter uuidConverter) {
+    public TableHeadDao(TableHeadConverter converter, TableHeadRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
     }

@@ -1,6 +1,4 @@
-package com.github.saphyra.apphub.lib.common_util;
-
-import com.github.saphyra.converter.ConverterBase;
+package com.github.saphyra.apphub.lib.common_util.converter;
 
 import java.util.UUID;
 

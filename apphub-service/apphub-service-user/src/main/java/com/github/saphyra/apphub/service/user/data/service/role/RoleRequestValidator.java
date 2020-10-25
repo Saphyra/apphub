@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.user.data.service.role;
 import com.github.saphyra.apphub.api.user.model.request.RoleRequest;
 import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
