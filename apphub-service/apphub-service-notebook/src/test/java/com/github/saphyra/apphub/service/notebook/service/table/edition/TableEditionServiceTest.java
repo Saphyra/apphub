@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -51,7 +52,9 @@ public class TableEditionServiceTest {
 
         EditTableRequest request = new EditTableRequest(NEW_TITLE, columnNames, columns);
 
-        underTest.edit(LIST_ITEM_ID, request);
+        ListItem result = underTest.edit(LIST_ITEM_ID, request);
+
+        assertThat(result).isEqualTo(listItem);
 
         verify(listItem).setTitle(NEW_TITLE);
         verify(listItemDao).save(listItem);

@@ -62,7 +62,8 @@ public class TableControllerImplTestIt_editTable {
     private static final String ORIGINAL_COLUMN_VALUE = "original-column-value";
     private static final String NEW_COLUMN_NAME = "new-column-name";
     private static final String NEW_COLUMN_VALUE = "new-column-value";
-    private static final String NEW_TITLE = "nw-title";
+    private static final String NEW_TITLE = "new-title";
+    private static final String ORIGINAL_TITLE = "original-title";
 
     @LocalServerPort
     private int serverPort;
@@ -95,7 +96,7 @@ public class TableControllerImplTestIt_editTable {
         given(localizationApiClient.translate(anyString(), eq(TestConstants.DEFAULT_LOCALE))).willReturn(LOCALIZED_MESSAGE);
 
         CreateTableRequest request = CreateTableRequest.builder()
-            .title(ORIGINAL_COLUMN_NAME)
+            .title(ORIGINAL_TITLE)
             .parent(null)
             .columnNames(Arrays.asList(ORIGINAL_COLUMN_NAME))
             .columns(Arrays.asList(Arrays.asList(ORIGINAL_COLUMN_VALUE)))
@@ -142,7 +143,6 @@ public class TableControllerImplTestIt_editTable {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("title")).isEqualTo("must not be null or blank");
     }
-
 
     @Test
     public void blankColumnName() {

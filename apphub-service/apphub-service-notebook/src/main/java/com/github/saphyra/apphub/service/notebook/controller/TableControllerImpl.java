@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.notebook.model.response.TableResponse;
 import com.github.saphyra.apphub.api.notebook.server.TableController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
 import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
 import com.github.saphyra.apphub.service.notebook.service.table.creation.TableCreationService;
 import com.github.saphyra.apphub.service.notebook.service.table.edition.TableEditionService;
@@ -26,7 +27,7 @@ public class TableControllerImpl implements TableController {
     @Override
     public OneParamResponse<UUID> createTable(CreateTableRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a table.", accessTokenHeader.getUserId());
-        return new OneParamResponse<>(tableCreationService.create(request, accessTokenHeader.getUserId()));
+        return new OneParamResponse<>(tableCreationService.create(request, accessTokenHeader.getUserId(), ListItemType.TABLE));
     }
 
     @Override
