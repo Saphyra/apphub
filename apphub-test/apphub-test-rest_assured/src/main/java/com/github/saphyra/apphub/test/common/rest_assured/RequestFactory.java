@@ -15,7 +15,7 @@ public class RequestFactory {
             .header(Constants.ACCESS_TOKEN_HEADER, headerValue);
     }
 
-    public static RequestSpecification createRequest(String locale){
+    public static RequestSpecification createRequest(String locale) {
         return given()
             .config(RestAssuredConfig.config().decoderConfig(DecoderConfig.decoderConfig().contentDecoders(DecoderConfig.ContentDecoder.DEFLATE)))
             //.filter(new ResponseLoggingFilter())

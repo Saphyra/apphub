@@ -42,7 +42,7 @@ public class AuthenticationService {
             ACCESS_TOKEN_COOKIE
         );
 
-        if(!accessTokenIdStringOptional.isPresent()){
+        if (!accessTokenIdStringOptional.isPresent()) {
             log.info("AccessToken cookie not present. Checking Auth header...");
             accessTokenIdStringOptional = Optional.ofNullable(requestContext.getRequest().getHeader(Constants.AUTHORIZATION_HEADER));
         }

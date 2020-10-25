@@ -51,7 +51,7 @@ public class DeleteAccountTest extends SeleniumTest {
     }
 
     @Test
-    public void cancelDeletion(){
+    public void cancelDeletion() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -70,7 +70,7 @@ public class DeleteAccountTest extends SeleniumTest {
 
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
     }
-    
+
     @Test
     public void successfulDeletion() {
         WebDriver driver = extractDriver();

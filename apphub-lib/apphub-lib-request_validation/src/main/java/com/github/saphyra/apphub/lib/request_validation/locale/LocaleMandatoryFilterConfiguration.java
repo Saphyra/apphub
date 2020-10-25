@@ -22,7 +22,7 @@ class LocaleMandatoryFilterConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(ObjectMapperWrapper.class)
-    public ObjectMapperWrapper objectMapperWrapper(ObjectMapper objectMapper){
+    public ObjectMapperWrapper objectMapperWrapper(ObjectMapper objectMapper) {
         return new ObjectMapperWrapper(objectMapper);
     }
 

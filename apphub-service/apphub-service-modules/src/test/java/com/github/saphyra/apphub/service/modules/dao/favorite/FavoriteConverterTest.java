@@ -37,7 +37,7 @@ public class FavoriteConverterTest {
     private FavoriteConverter underTest;
 
     @Mock
-    private  AccessTokenHeader accessTokenHeader;
+    private AccessTokenHeader accessTokenHeader;
 
     @Test
     public void convertEntity() {

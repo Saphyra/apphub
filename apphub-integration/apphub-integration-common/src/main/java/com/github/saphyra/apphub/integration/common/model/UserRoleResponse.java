@@ -13,8 +13,8 @@ import java.util.UUID;
 @Data
 @Builder
 public class UserRoleResponse {
-    private  UUID userId;
-    private  String email;
-    private  String username;
-    private  List<String> roles;
+    private UUID userId;
+    private String email;
+    private String username;
+    private List<String> roles;
 }

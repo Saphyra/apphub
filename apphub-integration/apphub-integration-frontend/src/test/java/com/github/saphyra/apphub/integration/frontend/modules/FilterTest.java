@@ -29,7 +29,7 @@ public class FilterTest extends SeleniumTest {
             .stream()
             .findFirst()
             .orElseThrow(() -> new IllegalStateException("There is not only one category."));
-        
+
         assertThat(category.getModules()).hasSize(1);
     }
 

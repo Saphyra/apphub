@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 
 public class ChangeLanguageTest extends SeleniumTest {
     @DataProvider(name = "languages", parallel = true)
-    public Object[] languages(){
+    public Object[] languages() {
         return new Object[]{
             Language.ENGLISH,
             Language.HUNGARIAN
@@ -25,7 +25,7 @@ public class ChangeLanguageTest extends SeleniumTest {
     }
 
     @Test(dataProvider = "languages")
-    public void changeLanguage(Language language){
+    public void changeLanguage(Language language) {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();

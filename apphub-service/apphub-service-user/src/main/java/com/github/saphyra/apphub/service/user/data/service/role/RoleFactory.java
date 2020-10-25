@@ -9,10 +9,10 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
- class RoleFactory {
+class RoleFactory {
     private final IdGenerator idGenerator;
 
-    Role create(UUID userId, String role){
+    Role create(UUID userId, String role) {
         return Role.builder()
             .roleId(idGenerator.randomUUID())
             .userId(userId)

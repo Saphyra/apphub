@@ -44,7 +44,7 @@ public class EventProcessorRegisterServiceTest {
     }
 
     @Test
-    public void retry(){
+    public void retry() {
         given(registry.getRequests()).willReturn(Arrays.asList(request));
         RuntimeException e = new RuntimeException("Asd");
         doThrow(e).when(eventGatewayApi).registerProcessor(request);

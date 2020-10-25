@@ -245,7 +245,7 @@ public class AccountControllerImplTestIt_Register {
     }
 
     @Test
-    public void successfulRegistration(){
+    public void successfulRegistration() {
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(REGISTRATION_REQUEST))
             .post(UrlFactory.create(serverPort, Endpoints.REGISTER));

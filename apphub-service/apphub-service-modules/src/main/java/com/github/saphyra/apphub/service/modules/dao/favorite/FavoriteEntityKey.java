@@ -13,7 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Data
 @Builder
-class FavoriteEntityKey  implements Serializable {
+class FavoriteEntityKey implements Serializable {
     private String userId;
     private String module;
 }

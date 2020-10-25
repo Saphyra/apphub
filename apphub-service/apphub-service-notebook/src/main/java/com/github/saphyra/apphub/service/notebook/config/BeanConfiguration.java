@@ -46,7 +46,7 @@ class BeanConfiguration {
     }
 
     @Bean
-    IdGenerator idGenerator(){
+    IdGenerator idGenerator() {
         return new IdGenerator();
     }
 }

@@ -27,7 +27,7 @@ public class DeleteAccountService {
     private final PasswordService passwordService;
     private final UserDao userDao;
 
-    public void deleteAccount(UUID userId, String password){
+    public void deleteAccount(UUID userId, String password) {
         if (isNull(password)) {
             throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "password", "must not be null"), "Password must not be null.");
         }

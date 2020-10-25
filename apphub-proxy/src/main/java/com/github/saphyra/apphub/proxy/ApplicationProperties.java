@@ -15,7 +15,7 @@ public class ApplicationProperties {
     private String forwardedPort;
 
     @PostConstruct
-    public void logConfig(){
+    public void logConfig() {
         log.info("AppConfig: {}", this);
     }
 }
