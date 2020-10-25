@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.StopWatch;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,6 +14,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.Objects.isNull;
 
@@ -53,11 +55,15 @@ public class SeleniumTest extends TestBase {
     }
 
     protected WebDriver extractDriver() {
+        StopWatch stopWatch = StopWatch.createStarted();
         Future<WebDriverWrapper> webDriverWrapperFuture = WebDriverFactory.getDriver();
 
         while (!webDriverWrapperFuture.isDone()) {
             SleepUtil.sleep(1000);
         }
+
+        stopWatch.stop();
+        log.info("WebDriver allocated in {} seconds", stopWatch.getTime(TimeUnit.SECONDS));
 
         WebDriverWrapper webDriverWrapper;
         try {

@@ -114,4 +114,23 @@ public class ChecklistTableRowRepositoryTest {
 
         assertThat(underTest.findAll()).containsExactlyInAnyOrder(entity1, entity2);
     }
+
+    @Test
+    @Transactional
+    public void deleteByParent() {
+        ChecklistTableRowEntity entity1 = ChecklistTableRowEntity.builder()
+            .rowId(ROW_ID_1)
+            .parent(PARENT_1)
+            .build();
+
+        ChecklistTableRowEntity entity2 = ChecklistTableRowEntity.builder()
+            .rowId(ROW_ID_2)
+            .parent(PARENT_2)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2));
+
+        underTest.deleteByParent(PARENT_1);
+
+        assertThat(underTest.findAll()).containsExactly(entity2);
+    }
 }

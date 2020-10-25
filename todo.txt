@@ -33,3 +33,4 @@ TODO FE test Delete ChecklistTable
 TODO FE test Clone ChecklistTable
 TODO FE test Edit ChecklistTable
 TODO FE test Set ChecklistTable row status
+TODO Extend clone FE test with checklistTable

@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service.clone;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHead;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoin;
+import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
 import com.github.saphyra.util.IdGenerator;
 import org.junit.Before;
 import org.junit.Test;
@@ -90,5 +91,24 @@ public class CloneUtilTest {
         assertThat(result.getParent()).isEqualTo(NEW_PARENT);
         assertThat(result.getRowIndex()).isEqualTo(ROW_INDEX);
         assertThat(result.getColumnIndex()).isEqualTo(COLUMN_INDEX);
+    }
+
+    @Test
+    public void cloneChecklistTableRow() {
+        ChecklistTableRow checklistTableRow = ChecklistTableRow.builder()
+            .rowId(ORIGINAL_ID)
+            .userId(USER_ID)
+            .parent(ORIGINAL_PARENT)
+            .rowIndex(ROW_INDEX)
+            .checked(true)
+            .build();
+
+        ChecklistTableRow result = underTest.clone(NEW_PARENT, checklistTableRow);
+
+        assertThat(result.getRowId()).isEqualTo(NEW_ID);
+        assertThat(result.getUserId()).isEqualTo(USER_ID);
+        assertThat(result.getParent()).isEqualTo(NEW_PARENT);
+        assertThat(result.getRowIndex()).isEqualTo(ROW_INDEX);
+        assertThat(result.isChecked()).isTrue();
     }
 }

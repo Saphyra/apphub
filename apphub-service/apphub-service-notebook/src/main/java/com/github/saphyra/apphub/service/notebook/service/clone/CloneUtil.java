@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service.clone;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHead;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoin;
+import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
 import com.github.saphyra.util.IdGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,13 @@ class CloneUtil {
     TableJoin clone(UUID parent, TableJoin toClone) {
         return toClone.toBuilder()
             .tableJoinId(idGenerator.randomUUID())
+            .parent(parent)
+            .build();
+    }
+
+    ChecklistTableRow clone(UUID parent, ChecklistTableRow toClone) {
+        return toClone.toBuilder()
+            .rowId(idGenerator.randomUUID())
             .parent(parent)
             .build();
     }

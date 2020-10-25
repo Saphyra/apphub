@@ -20,6 +20,7 @@ public class ListItemCloneService {
     private final TableCloneService tableCloneService;
     private final TextAndLinkCloneService textAndLinkCloneService;
     private final ChecklistCloneService checklistCloneService;
+    private final ChecklistTableCloneService checklistTableCloneService;
 
     @Transactional
     public void clone(UUID listItemId) {
@@ -47,6 +48,8 @@ public class ListItemCloneService {
                 tableCloneService.clone(toClone, listItemClone);
                 break;
             case CHECKLIST_TABLE:
+                checklistTableCloneService.clone(toClone, listItemClone);
+                break;
             default:
                 throw new NotImplementedException(toClone.getType() + " cannot be cloned.");
         }

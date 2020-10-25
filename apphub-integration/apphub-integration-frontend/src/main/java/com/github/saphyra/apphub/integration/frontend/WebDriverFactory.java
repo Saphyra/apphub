@@ -52,7 +52,7 @@ class WebDriverFactory {
                 });
             }
 
-            log.info("No available webDriver found and limit is reached. Waiting for releasing for {} seconds", i);
+            log.debug("No available webDriver found and limit is reached. Waiting for releasing for {} seconds", i);
             SleepUtil.sleep(1000);
         }
     }

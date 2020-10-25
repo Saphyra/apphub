@@ -103,31 +103,31 @@ public class AuthenticationControllerTestIt {
     public void deleteExpiredAccessTokens() {
         OffsetDateTime referenceDate = OffsetDateTime.now();
 
-        AccessToken accessToken1 = AccessToken.builder()
+        AccessToken expiredNonPersistentAccessToken = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)
             .userId(USER_ID)
             .persistent(false)
             .lastAccess(referenceDate.minusDays(1))
             .build();
-        AccessToken accessToken2 = AccessToken.builder()
+        AccessToken validNonPersistentAccessToken = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_2)
             .userId(USER_ID)
             .persistent(false)
             .lastAccess(referenceDate.plusHours(1))
             .build();
-        AccessToken accessToken3 = AccessToken.builder()
+        AccessToken expiredPersistentAccessToken = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_3)
             .userId(USER_ID)
             .persistent(true)
             .lastAccess(referenceDate.minusYears(3))
             .build();
-        AccessToken accessToken4 = AccessToken.builder()
+        AccessToken validPersistentAccessToken = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_4)
             .userId(USER_ID)
             .persistent(true)
-            .lastAccess(referenceDate.plusHours(2))
+            .lastAccess(referenceDate.minusMonths(2))
             .build();
-        accessTokenDao.saveAll(Arrays.asList(accessToken1, accessToken2, accessToken3, accessToken4));
+        accessTokenDao.saveAll(Arrays.asList(expiredNonPersistentAccessToken, validNonPersistentAccessToken, expiredPersistentAccessToken, validPersistentAccessToken));
 
         SendEventRequest<DeleteExpiredAccessTokensEvent> request = new SendEventRequest<>();
         request.setEventName(DeleteExpiredAccessTokensEvent.EVENT_NAME);
@@ -139,7 +139,7 @@ public class AuthenticationControllerTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        assertThat(accessTokenDao.findAll()).containsExactlyInAnyOrder(accessToken2, accessToken4);
+        assertThat(accessTokenDao.findAll()).containsExactlyInAnyOrder(validNonPersistentAccessToken, validPersistentAccessToken);
     }
 
     @Test

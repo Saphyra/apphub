@@ -139,4 +139,9 @@ public class DeleteListItemTest extends TestBase {
         List<CategoryTreeView> categoryTreeViews = NotebookActions.getCategoryTree(language, accessTokenId);
         assertThat(categoryTreeViews).isEmpty();
     }
+
+    @Test
+    public void deleteChecklistTable(){
+        //TODO implement
+    }
 }

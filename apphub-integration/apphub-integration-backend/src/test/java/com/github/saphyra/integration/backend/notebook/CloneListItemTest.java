@@ -54,6 +54,7 @@ public class CloneListItemTest extends TestBase {
     }
 
     @Test
+    //TODO add checklistTable
     public void cloneListItem() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

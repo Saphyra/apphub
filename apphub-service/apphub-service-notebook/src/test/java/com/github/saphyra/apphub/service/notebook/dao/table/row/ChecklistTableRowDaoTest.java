@@ -81,4 +81,13 @@ public class ChecklistTableRowDaoTest {
 
         verify(repository).deleteByParentAndRowIndexGreaterThanEqual(PARENT_STRING, ROW_INDEX);
     }
+
+    @Test
+    public void deleteByParent() {
+        given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
+
+        underTest.deleteByParent(PARENT);
+
+        verify(repository).deleteByParent(PARENT_STRING);
+    }
 }
