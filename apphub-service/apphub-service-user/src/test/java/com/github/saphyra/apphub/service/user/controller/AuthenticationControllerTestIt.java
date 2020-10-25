@@ -40,6 +40,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -101,7 +102,7 @@ public class AuthenticationControllerTestIt {
 
     @Test
     public void deleteExpiredAccessTokens() {
-        OffsetDateTime referenceDate = OffsetDateTime.now();
+        OffsetDateTime referenceDate = OffsetDateTime.now(ZoneOffset.UTC);
 
         AccessToken expiredNonPersistentAccessToken = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)

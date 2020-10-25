@@ -92,7 +92,7 @@ public class TableCreationServiceTest {
             .columns(Arrays.asList(Arrays.asList(COLUMN_VALUE)))
             .build();
 
-        UUID result = underTest.create(request, USER_ID);
+        UUID result = underTest.create(request, USER_ID, ListItemType.TABLE);
 
         verify(tableCreationRequestValidator).validate(request);
         verify(listItemDao).save(listItem);

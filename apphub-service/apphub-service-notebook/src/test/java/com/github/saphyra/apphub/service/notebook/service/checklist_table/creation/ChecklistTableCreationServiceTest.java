@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service.checklist_table.creat
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistTableRowRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistTableRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateTableRequest;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRowDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist_table.ChecklistTableRowFactory;
@@ -57,7 +58,7 @@ public class ChecklistTableCreationServiceTest {
         given(createChecklistTableRequest.getRows()).willReturn(Arrays.asList(row));
 
         given(createTableRequestConverter.convert(createChecklistTableRequest)).willReturn(createTableRequest);
-        given(tableCreationService.create(createTableRequest, USER_ID)).willReturn(LIST_ITEM_ID);
+        given(tableCreationService.create(createTableRequest, USER_ID, ListItemType.CHECKLIST_TABLE)).willReturn(LIST_ITEM_ID);
         given(rowFactory.create(USER_ID, LIST_ITEM_ID, 0, true)).willReturn(checklistTableRow);
 
         UUID result = underTest.create(USER_ID, createChecklistTableRequest);

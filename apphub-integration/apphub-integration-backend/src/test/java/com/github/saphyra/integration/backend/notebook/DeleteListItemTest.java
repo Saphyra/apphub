@@ -141,7 +141,22 @@ public class DeleteListItemTest extends TestBase {
     }
 
     @Test
-    public void deleteChecklistTable(){
-        //TODO implement
+    public void deleteChecklistTable() {
+        Language language = Language.HUNGARIAN;
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+
+        CreateChecklistTableRequest request = CreateChecklistTableRequest.builder()
+            .title(TITLE)
+            .columnNames(Arrays.asList(COLUMN_NAME))
+            .rows(Arrays.asList(ChecklistTableRowRequest.<String>builder().checked(true).columns(Arrays.asList(CONTENT)).build()))
+            .build();
+
+        UUID listItemId = NotebookActions.createChecklistTable(language, accessTokenId, request);
+
+        NotebookActions.deleteListItem(language, accessTokenId, listItemId);
+
+        List<CategoryTreeView> categoryTreeViews = NotebookActions.getCategoryTree(language, accessTokenId);
+        assertThat(categoryTreeViews).isEmpty();
     }
 }

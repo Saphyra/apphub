@@ -1,6 +1,7 @@
 Platform
     Error monitoring
     No banner Spring startup
+    Migrate saphyra libs
 
 Index page
     Switch language

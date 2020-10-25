@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.checklist_table.creat
 
 import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistTableRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateTableRequest;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRowDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist_table.ChecklistTableRowFactory;
@@ -25,7 +26,7 @@ public class ChecklistTableCreationService {
     @Transactional
     public UUID create(UUID userId, CreateChecklistTableRequest request) {
         CreateTableRequest createTableRequest = createTableRequestConverter.convert(request);
-        UUID listItemId = tableCreationService.create(createTableRequest, userId);
+        UUID listItemId = tableCreationService.create(createTableRequest, userId, ListItemType.CHECKLIST_TABLE);
 
         for (int rowIndex = 0; rowIndex < request.getRows().size(); rowIndex++) {
             boolean rowChecked = request.getRows()
