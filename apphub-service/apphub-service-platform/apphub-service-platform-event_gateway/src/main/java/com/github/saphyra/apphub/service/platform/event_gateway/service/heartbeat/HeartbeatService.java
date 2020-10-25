@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service.heartbeat;
 
+import com.github.saphyra.apphub.lib.common_util.OffsetDateTimeProvider;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
-import com.github.saphyra.util.OffsetDateTimeProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

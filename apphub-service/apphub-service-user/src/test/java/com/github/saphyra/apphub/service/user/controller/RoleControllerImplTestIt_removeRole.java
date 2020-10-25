@@ -45,13 +45,9 @@ public class RoleControllerImplTestIt_removeRole {
     private static final String LOCALIZED_MESSAGE = "localized-message";
     private static final String ADMIN_ROLE = "ADMIN";
     private static final UUID USER_ID_1 = UUID.randomUUID();
-    private static final UUID USER_ID_2 = UUID.randomUUID();
     private static final String EMAIL_1 = "email-1";
-    private static final String EMAIL_2 = "email-2";
     private static final String USERNAME_1 = "username-1";
-    private static final String USERNAME_2 = "username-2";
     private static final String ROLE_1 = "role-1";
-    private static final String ROLE_2 = "role-2";
 
     @LocalServerPort
     private int serverPort;

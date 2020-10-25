@@ -1,7 +1,8 @@
 Platform
     Error monitoring
     No banner Spring startup
-    Migrate saphyra libs
+    OffsetDateTime -> LocalDateTime
+    Check test coverage
 
 Index page
     Switch language

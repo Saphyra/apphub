@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.user.data.dao.user;
 
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;

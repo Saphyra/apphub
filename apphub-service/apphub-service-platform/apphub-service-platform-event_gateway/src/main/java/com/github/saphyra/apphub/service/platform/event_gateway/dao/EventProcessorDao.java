@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.dao;
 
-import com.github.saphyra.dao.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;

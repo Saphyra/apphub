@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.common_util;
 
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

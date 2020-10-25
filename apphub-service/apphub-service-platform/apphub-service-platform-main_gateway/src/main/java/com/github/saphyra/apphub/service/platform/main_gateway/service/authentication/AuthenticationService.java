@@ -4,13 +4,13 @@ import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResp
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_util.CookieUtil;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.ErrorResponseHandler;
-import com.github.saphyra.util.CookieUtil;
-import com.github.saphyra.util.ObjectMapperWrapper;
 import com.netflix.zuul.context.RequestContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

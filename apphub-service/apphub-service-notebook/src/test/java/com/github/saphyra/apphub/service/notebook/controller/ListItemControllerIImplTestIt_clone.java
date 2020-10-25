@@ -1,6 +1,11 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.*;
+import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CreateCategoryRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CreateTableRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CreateTextRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.LinkRequest;
 import com.github.saphyra.apphub.api.notebook.model.response.ChecklistResponse;
 import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
@@ -8,6 +13,7 @@ import com.github.saphyra.apphub.api.notebook.model.response.TableResponse;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
+import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
@@ -16,7 +22,6 @@ import com.github.saphyra.apphub.test.common.TestConstants;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
-import com.github.saphyra.dao.AbstractDao;
 import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
@@ -31,7 +36,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;

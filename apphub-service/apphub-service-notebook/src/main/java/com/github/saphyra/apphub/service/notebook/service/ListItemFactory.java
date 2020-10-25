@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
-import com.github.saphyra.util.IdGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.dao.checklist_item;
 
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
+import com.github.saphyra.apphub.lib.encryption.impl.IntegerEncryptor;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.encryption.impl.BooleanEncryptor;
-import com.github.saphyra.encryption.impl.IntegerEncryptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

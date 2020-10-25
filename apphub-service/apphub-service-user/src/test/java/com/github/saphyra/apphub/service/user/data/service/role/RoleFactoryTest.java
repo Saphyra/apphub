@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.user.data.service.role;
 
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.user.data.dao.role.Role;
-import com.github.saphyra.util.IdGenerator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

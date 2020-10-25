@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.user.controller;
 import com.github.saphyra.apphub.api.user.model.response.LanguageResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.service.user.controller.LanguageControllerImpl;
 import com.github.saphyra.apphub.service.user.data.service.account.LanguageService;
 import org.junit.Before;
 import org.junit.Test;

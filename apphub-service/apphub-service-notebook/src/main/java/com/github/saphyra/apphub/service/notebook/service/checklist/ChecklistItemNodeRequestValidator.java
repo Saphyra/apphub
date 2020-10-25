@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service.checklist;
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
 import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;

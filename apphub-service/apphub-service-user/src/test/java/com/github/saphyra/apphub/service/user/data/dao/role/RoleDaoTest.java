@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.user.data.dao.role;
 
 
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

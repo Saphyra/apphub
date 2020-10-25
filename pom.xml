@@ -29,14 +29,6 @@
         <versions.postgresql-connector>42.2.10</versions.postgresql-connector>
         <versions.exec-maven-plugin>1.6.0</versions.exec-maven-plugin>
 
-        <!-- Saphyra Versions -->
-        <versions.saphyra.encryption>1.0.3</versions.saphyra.encryption>
-        <versions.saphyra.cache>1.0.8</versions.saphyra.cache>
-        <versions.saphyra.converter>1.0.0</versions.saphyra.converter>
-        <versions.saphyra.dao>1.1.2</versions.saphyra.dao>
-        <versions.saphyra.exception-handling>1.3.4</versions.saphyra.exception-handling>
-        <versions.saphyra.util>1.5.1</versions.saphyra.util>
-
         <!-- Lib Versions -->
         <versions.apache-commons.commons-io>2.6</versions.apache-commons.commons-io>
         <versions.apache-commons.commons-lang3>3.9</versions.apache-commons.commons-lang3>
@@ -52,6 +44,7 @@
         <versions.testng>7.1.0</versions.testng>
         <versions.thymeleaf-spring>3.0.11.RELEASE</versions.thymeleaf-spring>
         <versions.logback>1.2.3</versions.logback>
+        <versions.tomcat-util>8.5.23</versions.tomcat-util>
 
         <!-- Plugin Versions -->
         <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
@@ -77,12 +70,6 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${versions.logback}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>converter</artifactId>
-            <version>${versions.saphyra.converter}</version>
         </dependency>
     </dependencies>
 

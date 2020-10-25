@@ -35,6 +35,13 @@
             <artifactId>apphub-lib-error_handler</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${versions.jackson-core}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
