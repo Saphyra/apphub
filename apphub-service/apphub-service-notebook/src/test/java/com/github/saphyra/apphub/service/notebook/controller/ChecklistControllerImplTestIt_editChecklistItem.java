@@ -96,7 +96,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
     }
 
     @Test
-    public void blankTitle(){
+    public void blankTitle() {
         CreateChecklistItemRequest createChecklistItemRequest = CreateChecklistItemRequest.builder()
             .title(ORIGINAL_TITLE)
             .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()

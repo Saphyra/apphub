@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.localization;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.saphyra.apphub.lib.common_util.CustomObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.data.CommonDataConfiguration;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocalMandatoryRequestValidation;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Import;
 @EnableLocalMandatoryRequestValidation
 public class BeanConfiguration {
     @Bean
-    public CustomObjectMapperWrapper customObjectMapperWrapper(ObjectMapper objectMapper) {
-        return new CustomObjectMapperWrapper(objectMapper);
+    public ObjectMapperWrapper customObjectMapperWrapper(ObjectMapper objectMapper) {
+        return new ObjectMapperWrapper(objectMapper);
     }
 }

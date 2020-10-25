@@ -3,11 +3,11 @@ package com.github.saphyra.apphub.lib.request_validation.locale;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
 import com.github.saphyra.apphub.test.common.TestConstants;
-import com.github.saphyra.util.ObjectMapperWrapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -33,16 +33,16 @@ public class LocaleMandatoryFilterTest {
     private static final String RESPONSE_BODY = "response-body";
 
     @Mock
-    private  CommonConfigProperties commonConfigProperties;
+    private CommonConfigProperties commonConfigProperties;
 
     @Mock
-    private  ErrorResponseFactory errorResponseFactory;
+    private ErrorResponseFactory errorResponseFactory;
 
     @Mock
-    private  LocaleProvider localeProvider;
+    private LocaleProvider localeProvider;
 
     @Mock
-    private  ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapperWrapper objectMapperWrapper;
 
     @InjectMocks
     private LocaleMandatoryFilter underTest;

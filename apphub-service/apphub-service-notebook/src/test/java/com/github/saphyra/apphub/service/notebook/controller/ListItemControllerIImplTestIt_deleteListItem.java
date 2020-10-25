@@ -80,7 +80,7 @@ public class ListItemControllerIImplTestIt_deleteListItem {
     }
 
     @Test
-    public void listItemNotFound(){
+    public void listItemNotFound() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .delete(UrlFactory.create(serverPort, Endpoints.DELETE_NOTEBOOK_LIST_ITEM, "listItemId", UUID.randomUUID()));
 

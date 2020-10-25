@@ -36,7 +36,7 @@ public class ChangePasswordTest extends SeleniumTest {
     }
 
     @Test(dataProvider = "invalidParameters")
-    public void invalidParameters(ChangePasswordParameters parameters, ChangePasswordValidationResult validationResult){
+    public void invalidParameters(ChangePasswordParameters parameters, ChangePasswordValidationResult validationResult) {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -51,7 +51,7 @@ public class ChangePasswordTest extends SeleniumTest {
     }
 
     @Test
-    public void invalidPassword(){
+    public void invalidPassword() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -70,7 +70,7 @@ public class ChangePasswordTest extends SeleniumTest {
     }
 
     @Test
-    public void successfulPasswordChange(){
+    public void successfulPasswordChange() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();

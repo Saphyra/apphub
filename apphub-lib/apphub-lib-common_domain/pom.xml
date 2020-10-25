@@ -23,12 +23,6 @@
             <version>${versions.spring}</version>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>util</artifactId>
-            <version>${versions.saphyra.util}</version>
-        </dependency>
     </dependencies>
 
     <build>

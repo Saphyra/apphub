@@ -31,7 +31,7 @@ public class CategoryTreeElement {
 
     public void openChildrenList() {
         WebElement childrenContainer = webElement.findElement(CHILDREN_CONTAINER);
-        if(childrenContainer.isDisplayed()){
+        if (childrenContainer.isDisplayed()) {
             return;
         }
         WebElement childListButton = webElement.findElement(OPEN_CHILDREN_LIST_BUTTON);

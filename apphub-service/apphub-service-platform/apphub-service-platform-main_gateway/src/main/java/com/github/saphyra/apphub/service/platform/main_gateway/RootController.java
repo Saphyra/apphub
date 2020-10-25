@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class RootController {
     @GetMapping("/api")
     @ResponseBody
-    public void availabilityCheck(){
+    public void availabilityCheck() {
         log.info("Availability check was executed by a mobile device.");
     }
 

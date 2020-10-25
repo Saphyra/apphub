@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.user.data.dao.role;
 
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
-import com.github.saphyra.dao.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

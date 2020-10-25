@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service.register;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.lib.common_util.OffsetDateTimeProvider;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
-import com.github.saphyra.util.IdGenerator;
-import com.github.saphyra.util.OffsetDateTimeProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

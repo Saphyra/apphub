@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.util;
 
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
-import com.github.saphyra.util.ObjectMapperWrapper;
 import com.netflix.zuul.context.RequestContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.platform.localization.client.LocalizationAp
 import com.github.saphyra.apphub.api.user.model.request.RegistrationRequest;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.service.user.data.dao.role.Role;
 import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
@@ -12,7 +13,6 @@ import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
-import com.github.saphyra.util.ObjectMapperWrapper;
 import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
@@ -245,7 +245,7 @@ public class AccountControllerImplTestIt_Register {
     }
 
     @Test
-    public void successfulRegistration(){
+    public void successfulRegistration() {
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(REGISTRATION_REQUEST))
             .post(UrlFactory.create(serverPort, Endpoints.REGISTER));

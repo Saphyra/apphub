@@ -25,13 +25,13 @@ public class TableEditionServiceTest {
     private static final String NEW_TITLE = "new-title";
 
     @Mock
-    private  EditTableRequestValidator editTableRequestValidator;
+    private EditTableRequestValidator editTableRequestValidator;
 
     @Mock
-    private  EditTableTableHeadService editTableTableHeadService;
+    private EditTableTableHeadService editTableTableHeadService;
 
     @Mock
-    private  EditTableTableJoinService editTableTableJoinService;
+    private EditTableTableJoinService editTableTableJoinService;
 
     @Mock
     private ListItemDao listItemDao;
@@ -43,7 +43,7 @@ public class TableEditionServiceTest {
     private ListItem listItem;
 
     @Test
-    public void edit(){
+    public void edit() {
         given(listItemDao.findByIdValidated(LIST_ITEM_ID)).willReturn(listItem);
 
         List<KeyValuePair<String>> columnNames = Arrays.asList(new KeyValuePair<>(UUID.randomUUID(), "ads"));

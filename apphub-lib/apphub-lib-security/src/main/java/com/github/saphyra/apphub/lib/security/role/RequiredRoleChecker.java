@@ -12,10 +12,10 @@ import java.util.Optional;
 @Component
 @Slf4j
 @RequiredArgsConstructor
- class RequiredRoleChecker {
+class RequiredRoleChecker {
     private final AccessTokenProvider accessTokenProvider;
 
-     boolean hasRequiredRoles(List<RoleSetting> roleSettings) {
+    boolean hasRequiredRoles(List<RoleSetting> roleSettings) {
         Optional<AccessTokenHeader> accessTokenHeaderOptional = accessTokenProvider.getOptional();
         if (accessTokenHeaderOptional.isPresent()) {
             AccessTokenHeader accessTokenHeader = accessTokenHeaderOptional.get();

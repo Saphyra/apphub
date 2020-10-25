@@ -24,7 +24,7 @@ public class NotebookEventControllerImplTest {
     private NotebookEventControllerImpl underTest;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         underTest = new NotebookEventControllerImpl(Arrays.asList(dao));
     }
 

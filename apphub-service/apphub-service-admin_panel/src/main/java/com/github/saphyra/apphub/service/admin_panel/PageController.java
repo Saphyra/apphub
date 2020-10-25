@@ -11,13 +11,13 @@ import static com.github.saphyra.apphub.lib.config.Endpoints.ADMIN_PANEL_ROLE_MA
 @Slf4j
 public class PageController {
     @GetMapping(ADMIN_PANEL_ROLE_MANAGEMENT_PAGE)
-    public String roleManagementPage(){
+    public String roleManagementPage() {
         log.info("RoleManagement page called.");
         return "role_management";
     }
 
     @GetMapping(Endpoints.ADMIN_PANEL_INDEX_PAGE)
-    public String adminPanelIndexPage(){
+    public String adminPanelIndexPage() {
         log.info("Admin panel index page called.");
         return "index";
     }

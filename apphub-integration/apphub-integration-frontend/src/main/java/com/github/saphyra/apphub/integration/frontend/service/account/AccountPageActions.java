@@ -141,7 +141,7 @@ public class AccountPageActions {
 
         AccountPage.deleteAccountConfirmationDialogConfirmButton(driver).click();
     }
-    
+
     public static void fillDeleteAccountForm(WebDriver driver, String password) {
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.ACCOUNT_PAGE));
 
