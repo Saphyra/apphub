@@ -18,6 +18,7 @@ window.Mapping = new function(){
         CREATE_NOTEBOOK_LINK: new Endpoint("/api/notebook/link", HttpMethod.PUT),
         CREATE_NOTEBOOK_TEXT: new Endpoint("/api/notebook/text", HttpMethod.PUT),
         CREATE_NOTEBOOK_TABLE: new Endpoint("/api/notebook/table", HttpMethod.PUT),
+        CREATE_NOTEBOOK_CHECKLIST_TABLE: new Endpoint("/api/notebook/checklist-table", HttpMethod.PUT),
         CREATE_NOTEBOOK_CHECKLIST: new Endpoint("/api/notebook/checklist", HttpMethod.PUT),
         DELETE_ACCOUNT: new Endpoint("/api/user/account", HttpMethod.DELETE),
         DELETE_NOTEBOOK_LIST_ITEM: new Endpoint("/api/notebook/item/{listItemId}", HttpMethod.DELETE),
@@ -25,6 +26,7 @@ window.Mapping = new function(){
         EDIT_NOTEBOOK_LIST_ITEM: new Endpoint("/api/notebook/item/{listItemId}", HttpMethod.POST),
         EDIT_NOTEBOOK_TEXT: new Endpoint("/api/notebook/text/{listItemId}", HttpMethod.POST),
         EDIT_NOTEBOOK_TABLE: new Endpoint("/api/notebook/table/{listItemId}", HttpMethod.POST),
+        EDIT_NOTEBOOK_CHECKLIST_TABLE: new Endpoint("/api/notebook/checklist-table/{listItemId}", HttpMethod.POST),
         GET_NOTEBOOK_CHECKLIST_ITEM: new Endpoint("/api/notebook/checklist/{listItemId}", HttpMethod.GET),
         GET_CHILDREN_OF_NOTEBOOK_CATEGORY: new Endpoint("/api/notebook/category/children", HttpMethod.GET),
         GET_LANGUAGES: new Endpoint("/api/user/data/languages", HttpMethod.GET),
@@ -32,6 +34,7 @@ window.Mapping = new function(){
         GET_NOTEBOOK_CATEGORIES: new Endpoint("/api/notebook/category", HttpMethod.GET),
         GET_NOTEBOOK_TEXT: new Endpoint("/api/notebook/text/{listItemId}", HttpMethod.GET),
         GET_NOTEBOOK_TABLE: new Endpoint("/api/notebook/table/{listItemId}", HttpMethod.GET),
+        GET_NOTEBOOK_CHECKLIST_TABLE: new Endpoint("/api/notebook/checklist-table/{listItemId}", HttpMethod.GET),
         GET_USER_ROLES: new Endpoint("/api/user/data/roles", HttpMethod.POST),
         LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),
         LOGOUT: new Endpoint("/api/user/authentication/logout", HttpMethod.POST),
@@ -39,6 +42,7 @@ window.Mapping = new function(){
         REGISTER: new Endpoint("/api/user", HttpMethod.POST),
         REMOVE_ROLE: new Endpoint("/api/user/data/roles", HttpMethod.DELETE),
         UPDATE_NOTEBOOK_CHECKLIST_ITEM_STATUS: new Endpoint("/api/notebook/checklist/item/{checklistItemId}/status", HttpMethod.POST),
+        UPDATE_NOTEBOOK_CHECKLIST_TABLE_ROW_STATUS: new Endpoint("/api/notebook/checklist-table/{listItemId}/{rowIndex}", HttpMethod.POST),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

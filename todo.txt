@@ -8,6 +8,7 @@ Index page
     Switch language
 
 Favorite modules can be accessed from anywhere
+AccessTokenManagement
 
 Modules
     Balance
