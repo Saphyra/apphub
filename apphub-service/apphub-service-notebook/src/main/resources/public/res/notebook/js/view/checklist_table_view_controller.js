@@ -200,7 +200,9 @@
                             checkedInput.onchange = function(){
                                 row.checked = checkedInput.checked;
                                 setContentDecoration(row.columns, row.checked);
-                                updateStatus(openedTableId, row.rowIndex, row.checked);
+                                if(!editingEnabled){
+                                    updateStatus(openedTableId, row.rowIndex, row.checked);
+                                }
                             }
                     checkedCell.appendChild(checkedInput);
                 rowNode.appendChild(checkedCell);

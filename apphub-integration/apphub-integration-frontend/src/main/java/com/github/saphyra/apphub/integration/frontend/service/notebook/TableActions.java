@@ -239,4 +239,8 @@ public class TableActions {
         WebElement row = NotebookPage.rowsForViewTable(driver).get(rowIndex);
         row.findElement(MOVE_ROW_UP).click();
     }
+
+    public static void closeViewTableWindow(WebDriver driver) {
+        NotebookPage.closeViewTableWindowButton(driver).click();
+    }
 }
