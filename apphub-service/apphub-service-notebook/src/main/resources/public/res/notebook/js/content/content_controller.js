@@ -4,6 +4,7 @@
     scriptLoader.loadScript("/res/notebook/js/content/category/category_node_factory.js")
     scriptLoader.loadScript("/res/notebook/js/content/checklist/checklist_node_factory.js")
     scriptLoader.loadScript("/res/notebook/js/content/table/table_node_factory.js")
+    scriptLoader.loadScript("/res/notebook/js/content/checklist_table/checklist_table_node_factory.js")
 
     scriptLoader.loadScript("/res/notebook/js/content/link/link_node_factory.js");
 
@@ -14,7 +15,8 @@
         TEXT: textNodeFactory,
         LINK: linkNodeFactory,
         CHECKLIST: checklistNodeFactory,
-        TABLE: tableNodeFactory
+        TABLE: tableNodeFactory,
+        CHECKLIST_TABLE: checklistTableNodeFactory
     }
 
     window.contentController = new function(){
