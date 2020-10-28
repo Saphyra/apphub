@@ -14,6 +14,7 @@ window.Mapping = new function(){
         CHANGE_USERNAME: new Endpoint("/api/user/account/username", HttpMethod.POST),
         CHECK_SESSION: new Endpoint("/api/user/authentication/session", HttpMethod.GET),
         CLONE_NOTEBOOK_LIST_ITEM: new Endpoint("/api/notebook/{listItemId}/clone", HttpMethod.POST),
+        CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE: new Endpoint("/api/notebook/table/{listItemId}/convert-to-checklist-table", HttpMethod.POST),
         CREATE_NOTEBOOK_CATEGORY: new Endpoint("/api/notebook/category", HttpMethod.PUT),
         CREATE_NOTEBOOK_LINK: new Endpoint("/api/notebook/link", HttpMethod.PUT),
         CREATE_NOTEBOOK_TEXT: new Endpoint("/api/notebook/text", HttpMethod.PUT),

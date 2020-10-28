@@ -355,6 +355,12 @@
         "message": "Edit"
       }
     ],
+    "convert-table-to-checklist-table-button": [
+      {
+        "key": "innerHTML",
+        "message": "Convert to checklist table"
+      }
+    ],
     "view-table-edit-save-button": [
       {
         "key": "innerHTML",
@@ -437,6 +443,7 @@
     "checklist-table-saved": "Checklist-table saved.",
     "column-name-title": "Name of the column",
     "empty-column-name": "Column name must not be empty.",
-    "table-head-checked-column": "Checked"
+    "table-head-checked-column": "Checked",
+    "table-conversion-successful": "Conversion successful."
   }
 }

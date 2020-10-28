@@ -20,4 +20,7 @@ public interface TableController {
 
     @RequestMapping(method = RequestMethod.GET, path = Endpoints.GET_NOTEBOOK_TABLE)
     TableResponse getTable(@PathVariable("listItemId") UUID listItemId);
+
+    @RequestMapping(method = RequestMethod.POST, path = Endpoints.CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE)
+    void convertToChecklistTable(@PathVariable("listItemId") UUID listItemId);
 }

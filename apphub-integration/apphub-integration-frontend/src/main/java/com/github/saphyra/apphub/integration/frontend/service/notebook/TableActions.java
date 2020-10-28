@@ -243,4 +243,11 @@ public class TableActions {
     public static void closeViewTableWindow(WebDriver driver) {
         NotebookPage.closeViewTableWindowButton(driver).click();
     }
+
+    public static void convertToChecklistTable(WebDriver driver) {
+        NotebookPage.convertTableToChecklistTableButton(driver).click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> !isCreateTableWindowDisplayed(driver));
+    }
 }

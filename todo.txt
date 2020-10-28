@@ -24,7 +24,6 @@ Modules
         Migrate
 
     Notebook
-        Convert table to checklistTable
         Filtering
         Archive
         Icons for list items

@@ -20,7 +20,7 @@ public class ListItem {
     private UUID parent;
 
     @NonNull
-    private final ListItemType type;
+    private ListItemType type;
 
     @NonNull
     private String title;
