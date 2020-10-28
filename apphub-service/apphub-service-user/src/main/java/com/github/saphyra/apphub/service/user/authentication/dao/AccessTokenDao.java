@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
@@ -16,11 +16,11 @@ public class AccessTokenDao extends AbstractDao<AccessTokenEntity, AccessToken, 
         this.uuidConverter = uuidConverter;
     }
 
-    public void deleteByPersistentAndLastAccessBefore(boolean persistent, OffsetDateTime expiration) {
+    public void deleteByPersistentAndLastAccessBefore(boolean persistent, LocalDateTime expiration) {
         repository.deleteByPersistentAndLastAccessBefore(persistent, expiration);
     }
 
-    public void updateLastAccess(UUID accessTokenId, OffsetDateTime currentDate) {
+    public void updateLastAccess(UUID accessTokenId, LocalDateTime currentDate) {
         repository.updateLastAccess(
             uuidConverter.convertDomain(accessTokenId),
             currentDate

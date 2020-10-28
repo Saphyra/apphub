@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service.register;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
-import com.github.saphyra.apphub.lib.common_util.OffsetDateTimeProvider;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class RegisterProcessorService {
     private final EventProcessorDao eventProcessorDao;
     private final EventProcessorFactory eventProcessorFactory;
-    private final OffsetDateTimeProvider offsetDateTimeProvider;
+    private final DateTimeUtil dateTimeUtil;
     private final RegisterProcessorRequestValidator registerProcessorRequestValidator;
 
     public void registerProcessor(RegisterProcessorRequest request) {
@@ -23,7 +23,7 @@ public class RegisterProcessorService {
             .orElseGet(() -> eventProcessorFactory.create(request));
 
         eventProcessor.setUrl(request.getUrl());
-        eventProcessor.setLastAccess(offsetDateTimeProvider.getCurrentDate());
+        eventProcessor.setLastAccess(dateTimeUtil.getCurrentDate());
         eventProcessorDao.save(eventProcessor);
     }
 }

@@ -23,7 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -80,12 +80,12 @@ public class UserEventControllerImplTestIt {
         AccessToken accessToken1 = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)
             .userId(USER_ID_1)
-            .lastAccess(OffsetDateTime.now())
+            .lastAccess(LocalDateTime.now())
             .build();
         AccessToken accessToken2 = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_2)
             .userId(USER_ID_2)
-            .lastAccess(OffsetDateTime.now())
+            .lastAccess(LocalDateTime.now())
             .build();
         accessTokenDao.saveAll(Arrays.asList(accessToken1, accessToken2));
 

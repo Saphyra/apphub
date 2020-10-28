@@ -2,7 +2,13 @@ package com.github.saphyra.integration.backend.index;
 
 import com.github.saphyra.apphub.integration.backend.actions.ModulesPageActions;
 import com.github.saphyra.apphub.integration.common.TestBase;
-import com.github.saphyra.apphub.integration.common.framework.*;
+import com.github.saphyra.apphub.integration.common.framework.Constants;
+import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.common.framework.Endpoints;
+import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
+import com.github.saphyra.apphub.integration.common.framework.RequestFactory;
+import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
@@ -14,7 +20,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -76,7 +82,7 @@ public class LoginTest extends TestBase {
         LoginResponse response = IndexPageActions.getSuccessfulLoginResponse(language, loginRequest);
         assertThat(response.getExpirationDays()).isEqualTo(365);
 
-        OffsetDateTime newLastAccess = OffsetDateTime.now().minusDays(100);
+        LocalDateTime newLastAccess = LocalDateTime.now().minusDays(100);
         DatabaseUtil.updateAccessTokenLastAccess(response.getAccessTokenId(), newLastAccess);
 
         Response modulesResponse = ModulesPageActions.getModulesResponse(language, response.getAccessTokenId());

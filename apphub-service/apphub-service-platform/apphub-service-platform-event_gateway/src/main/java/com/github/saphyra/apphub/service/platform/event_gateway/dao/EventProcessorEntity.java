@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -22,5 +22,5 @@ class EventProcessorEntity {
     private String serviceName;
     private String url;
     private String eventName;
-    private OffsetDateTime lastAccess;
+    private LocalDateTime lastAccess;
 }

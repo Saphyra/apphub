@@ -1,7 +1,6 @@
 Platform
     Error monitoring
     No banner Spring startup
-    OffsetDateTime -> LocalDateTime
     Check test coverage
 
 Index page

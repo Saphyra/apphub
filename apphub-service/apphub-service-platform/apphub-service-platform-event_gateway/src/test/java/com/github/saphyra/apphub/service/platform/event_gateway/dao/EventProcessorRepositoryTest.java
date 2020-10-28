@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -24,9 +24,9 @@ public class EventProcessorRepositoryTest {
     private static final String SERVICE_NAME_2 = "service-name-2";
     private static final String EVENT_NAME_1 = "event-name-1";
     private static final String EVENT_NAME_2 = "event-name-2";
-    private static final OffsetDateTime CURRENT_DATE = OffsetDateTime.now();
-    private static final OffsetDateTime BEFORE_DATE = CURRENT_DATE.minusSeconds(1);
-    private static final OffsetDateTime AFTER_DATE = CURRENT_DATE.plusSeconds(1);
+    private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
+    private static final LocalDateTime BEFORE_DATE = CURRENT_DATE.minusSeconds(1);
+    private static final LocalDateTime AFTER_DATE = CURRENT_DATE.plusSeconds(1);
 
     @Autowired
     private EventProcessorRepository underTest;

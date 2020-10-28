@@ -6,7 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +18,7 @@ import static org.mockito.BDDMockito.given;
 public class EventProcessorDaoTest {
     private static final String SERVICE_NAME = "service-name";
     private static final String EVENT_NAME = "event-name";
-    private static final OffsetDateTime LAST_ACCESS = OffsetDateTime.now();
+    private static final LocalDateTime LAST_ACCESS = LocalDateTime.now();
 
     @Mock
     private EventProcessorConverter converter;

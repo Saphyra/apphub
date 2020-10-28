@@ -6,16 +6,16 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 interface AccessTokenRepository extends CrudRepository<AccessTokenEntity, String> {
     @Transactional
-    void deleteByPersistentAndLastAccessBefore(boolean persistent, OffsetDateTime expiration);
+    void deleteByPersistentAndLastAccessBefore(boolean persistent, LocalDateTime expiration);
 
     @Transactional
     @Modifying
     @Query("UPDATE AccessTokenEntity e SET e.lastAccess = :currentDate WHERE e.accessTokenId = :accessTokenId")
-    void updateLastAccess(@Param("accessTokenId") String accessTokenId, @Param("currentDate") OffsetDateTime currentDate);
+    void updateLastAccess(@Param("accessTokenId") String accessTokenId, @Param("currentDate") LocalDateTime currentDate);
 
     @Transactional
     void deleteByAccessTokenIdAndUserId(String accessTokenId, String userId);
