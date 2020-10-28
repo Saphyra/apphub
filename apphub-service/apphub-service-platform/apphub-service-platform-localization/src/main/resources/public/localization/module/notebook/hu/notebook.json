@@ -349,6 +349,12 @@
         "message": "Szerkesztés"
       }
     ],
+    "convert-table-to-checklist-table-button": [
+      {
+        "key": "innerHTML",
+        "message": "Lista-táblázattá alakítás"
+      }
+    ],
     "view-table-edit-save-button": [
       {
         "key": "innerHTML",
@@ -431,6 +437,7 @@
     "checklist-table-saved": "Lista-táblázat elmentve.",
     "column-name-title": "Oszlop neve",
     "empty-column-name": "Az oszlop neve nem lehet üres.",
-    "table-head-checked-column": "Jelölés"
+    "table-head-checked-column": "Jelölés",
+    "table-conversion-successful": "Átalakítás sikeres."
   }
 }

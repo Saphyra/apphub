@@ -103,6 +103,7 @@ class NotebookPage {
     private static final By ADD_COLUMN_TO_EDIT_CHECKLIST_TABLE_BUTTON = By.id("view-checklist-table-edit-add-column-button");
     private static final By VIEW_CHECKLIST_TABLE_CLOSE_BUTTON = By.id("view-checklist-table-close-button");
     private static final By CLOSE_VIEW_TABLE_WINDOW_BUTTON = By.id("view-table-close-button");
+    private static final By CONVERT_TABLE_TO_CHECKLIST_TABLE_BUTTON = By.id("convert-table-to-checklist-table-button");
 
     public static WebElement createCategoryWindow(WebDriver driver) {
         return driver.findElement(CREATE_CATEGORY_WINDOW);
@@ -486,5 +487,9 @@ class NotebookPage {
 
     public static WebElement closeViewTableWindowButton(WebDriver driver) {
         return driver.findElement(CLOSE_VIEW_TABLE_WINDOW_BUTTON);
+    }
+
+    public static WebElement convertTableToChecklistTableButton(WebDriver driver) {
+        return driver.findElement(CONVERT_TABLE_TO_CHECKLIST_TABLE_BUTTON);
     }
 }

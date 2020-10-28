@@ -277,4 +277,9 @@ public class NotebookActions {
             .body(new OneParamRequest<>(status))
             .post(UrlFactory.create(Endpoints.UPDATE_CHECKLIST_TABLE_ROW_STATUS, pathVariables));
     }
+
+    public static Response getConvertTableToChecklistTableResponse(Language language, UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .post(UrlFactory.create(Endpoints.CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE, "listItemId", listItemId));
+    }
 }

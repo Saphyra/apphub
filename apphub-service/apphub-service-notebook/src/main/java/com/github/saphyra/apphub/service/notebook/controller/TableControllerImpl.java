@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.api.notebook.server.TableController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
+import com.github.saphyra.apphub.service.notebook.service.ConvertTableToChecklistTableService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
 import com.github.saphyra.apphub.service.notebook.service.table.creation.TableCreationService;
 import com.github.saphyra.apphub.service.notebook.service.table.edition.TableEditionService;
@@ -23,6 +24,7 @@ public class TableControllerImpl implements TableController {
     private final TableCreationService tableCreationService;
     private final TableEditionService tableEditionService;
     private final TableQueryService tableQueryService;
+    private final ConvertTableToChecklistTableService convertTableToChecklistTableService;
 
     @Override
     public OneParamResponse<UUID> createTable(CreateTableRequest request, AccessTokenHeader accessTokenHeader) {
@@ -40,5 +42,11 @@ public class TableControllerImpl implements TableController {
     public TableResponse getTable(UUID listItemId) {
         log.info("Querying table with listItemId {}", listItemId);
         return tableQueryService.getTable(listItemId);
+    }
+
+    @Override
+    public void convertToChecklistTable(UUID listItemId) {
+        log.info("Converting table {} to checklistTable", listItemId);
+        convertTableToChecklistTableService.convert(listItemId);
     }
 }

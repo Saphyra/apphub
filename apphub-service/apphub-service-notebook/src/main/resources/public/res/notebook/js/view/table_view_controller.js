@@ -11,6 +11,7 @@
         this.addColumn = addColumn;
         this.addRow = addRow;
         this.saveChanges = saveChanges;
+        this.convertToChecklistTable = convertToChecklistTable;
     }
 
     function viewTable(listItemId){
@@ -362,5 +363,15 @@
 
     function visibility(){
         return editingEnabled ? "visible" : "hidden";
+    }
+
+    function convertToChecklistTable(){
+        const request = new Request(Mapping.getEndpoint("CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE", {listItemId: openedTableId}));
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("table-conversion-successful"));
+                checklistTableViewController.viewChecklistTable(openedTableId);
+                eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
+            }
+        dao.sendRequestAsync(request);
     }
 })();
