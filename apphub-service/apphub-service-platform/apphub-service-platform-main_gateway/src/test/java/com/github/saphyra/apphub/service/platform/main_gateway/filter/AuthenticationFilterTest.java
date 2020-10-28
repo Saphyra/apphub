@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_HEADER;
+import static com.github.saphyra.apphub.lib.common_util.Constants.RESOURCE_PATH_PATTERN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -60,6 +61,16 @@ public class AuthenticationFilterTest {
         given(whiteListedEndpoint.getPath()).willReturn(WHITE_LIST_PATTERN);
 
         given(requestContext.getRequest()).willReturn(request);
+    }
+
+    @Test
+    public void shouldFilter_resourcePath(){
+        given(request.getRequestURI()).willReturn(WHITE_LISTED_ENDPOINT);
+        given(antPathMatcher.match(RESOURCE_PATH_PATTERN, WHITE_LISTED_ENDPOINT)).willReturn(true);
+
+        boolean result = underTest.shouldFilter();
+
+        assertThat(result).isFalse();
     }
 
     @Test

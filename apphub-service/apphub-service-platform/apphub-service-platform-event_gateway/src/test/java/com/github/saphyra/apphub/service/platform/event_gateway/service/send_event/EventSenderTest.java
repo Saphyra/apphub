@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EventSenderTest {
@@ -64,5 +65,14 @@ public class EventSenderTest {
         assertThat(argumentCaptor.getValue().getBody()).isEqualTo(sendEventRequest);
         verify(eventProcessor).setLastAccess(CURRENT_DATE);
         verify(eventProcessorDao).save(eventProcessor);
+    }
+
+    @Test
+    public void sendEvent_errorHandled() {
+        given(urlAssembler.assemble(eventProcessor)).willThrow(new RuntimeException());
+
+        underTest.sendEvent(eventProcessor, sendEventRequest, TestConstants.DEFAULT_LOCALE);
+
+        verifyNoInteractions(restTemplate, eventProcessorDao, dateTimeUtil);
     }
 }

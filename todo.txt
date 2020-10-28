@@ -1,7 +1,6 @@
 Platform
     Error monitoring
     No banner Spring startup
-    Check test coverage
 
 Index page
     Switch language
