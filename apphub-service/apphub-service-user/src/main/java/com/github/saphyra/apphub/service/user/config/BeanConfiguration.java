@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.user.config;
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
-import com.github.saphyra.apphub.lib.common_util.OffsetDateTimeProvider;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
@@ -67,8 +67,8 @@ class BeanConfiguration {
     }
 
     @Bean
-    OffsetDateTimeProvider offsetDateTimeProvider() {
-        return new OffsetDateTimeProvider();
+    DateTimeUtil dateTimeUtil() {
+        return new DateTimeUtil();
     }
 
     @Bean

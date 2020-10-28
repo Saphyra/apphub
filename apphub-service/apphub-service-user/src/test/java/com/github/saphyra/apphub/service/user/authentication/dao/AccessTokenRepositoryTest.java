@@ -9,7 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,7 +20,7 @@ public class AccessTokenRepositoryTest {
     private static final String ACCESS_TOKEN_ID_1 = "access-token-id-1";
     private static final String ACCESS_TOKEN_ID_2 = "access-token-id-2";
     private static final String ACCESS_TOKEN_ID_3 = "access-token-id-3";
-    private static final OffsetDateTime CURRENT_DATE = OffsetDateTime.now();
+    private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
     private static final String USER_ID_1 = "user-id-1";
     private static final String USER_ID_2 = "user-id-2";
 
@@ -97,7 +97,7 @@ public class AccessTokenRepositoryTest {
             .build();
         underTest.saveAll(Arrays.asList(entity1, entity2));
 
-        OffsetDateTime newLastAccess = CURRENT_DATE.plusHours(1);
+        LocalDateTime newLastAccess = CURRENT_DATE.plusHours(1);
         underTest.updateLastAccess(ACCESS_TOKEN_ID_1, newLastAccess);
 
         assertThat(underTest.findById(ACCESS_TOKEN_ID_1).get().getLastAccess()).isEqualTo(newLastAccess);

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.event_gateway.service.send_ev
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.lib.common_util.OffsetDateTimeProvider;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
 import com.github.saphyra.apphub.test.common.TestConstants;
@@ -16,7 +16,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -26,13 +26,13 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class EventSenderTest {
     private static final String URL = "url";
-    private static final OffsetDateTime CURRENT_DATE = OffsetDateTime.now();
+    private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
 
     @Mock
     private EventProcessorDao eventProcessorDao;
 
     @Mock
-    private OffsetDateTimeProvider offsetDateTimeProvider;
+    private DateTimeUtil dateTimeUtil;
 
     @Mock
     private RestTemplate restTemplate;
@@ -55,7 +55,7 @@ public class EventSenderTest {
     @Test
     public void sendEvent() {
         given(urlAssembler.assemble(eventProcessor)).willReturn(URL);
-        given(offsetDateTimeProvider.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
 
         underTest.sendEvent(eventProcessor, sendEventRequest, TestConstants.DEFAULT_LOCALE);
 

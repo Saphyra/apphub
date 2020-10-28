@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(schema = "apphub_user", name = "access_token")
@@ -21,5 +21,5 @@ class AccessTokenEntity {
     private String accessTokenId;
     private String userId;
     private boolean persistent;
-    private OffsetDateTime lastAccess;
+    private LocalDateTime lastAccess;
 }

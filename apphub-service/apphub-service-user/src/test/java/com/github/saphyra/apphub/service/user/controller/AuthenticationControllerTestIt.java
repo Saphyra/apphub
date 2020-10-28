@@ -28,7 +28,6 @@ import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
 import io.restassured.response.Response;
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -102,9 +101,8 @@ public class AuthenticationControllerTestIt {
     }
 
     @Test
-    @Ignore //TODO restore after switching to LocalDateTime
     public void deleteExpiredAccessTokens() {
-        OffsetDateTime referenceDate = OffsetDateTime.now(ZoneOffset.UTC);
+        LocalDateTime referenceDate = LocalDateTime.now(ZoneOffset.UTC);
 
         AccessToken expiredNonPersistentAccessToken = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)
@@ -147,7 +145,7 @@ public class AuthenticationControllerTestIt {
 
     @Test
     public void updateLastAccess() {
-        OffsetDateTime referenceDate = OffsetDateTime.now();
+        LocalDateTime referenceDate = LocalDateTime.now(ZoneOffset.UTC);
 
         AccessToken accessToken = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)
@@ -242,7 +240,7 @@ public class AuthenticationControllerTestIt {
 
     @Test
     public void logout() {
-        OffsetDateTime referenceDate = OffsetDateTime.now();
+        LocalDateTime referenceDate = LocalDateTime.now();
 
         AccessToken accessToken = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)
@@ -275,7 +273,7 @@ public class AuthenticationControllerTestIt {
 
     @Test
     public void getAccessTokenById_accessTokenExpired() {
-        OffsetDateTime referenceDate = OffsetDateTime.now();
+        LocalDateTime referenceDate = LocalDateTime.now();
 
         AccessToken accessToken = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)
@@ -292,7 +290,7 @@ public class AuthenticationControllerTestIt {
 
     @Test
     public void getAccessTokenById() {
-        OffsetDateTime referenceDate = OffsetDateTime.now();
+        LocalDateTime referenceDate = LocalDateTime.now();
 
         AccessToken accessToken = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)

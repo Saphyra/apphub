@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,7 +17,7 @@ import static org.mockito.BDDMockito.given;
 public class AccessTokenConverterTest {
     private static final String ACCESS_TOKEN_ID_STRING = "access-token-id";
     private static final String USER_ID_STRING = "user-id";
-    private static final OffsetDateTime LAST_ACCESS = OffsetDateTime.now();
+    private static final LocalDateTime LAST_ACCESS = LocalDateTime.now();
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
 
