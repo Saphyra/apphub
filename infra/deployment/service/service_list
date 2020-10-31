@@ -7,3 +7,6 @@ apphub-service-user
 apphub-service-notebook
 apphub-service-admin_panel
 apphub-service-modules
+apphub-service-skyxplore-data
+apphub-service-skyxplore-facade
+apphub-service-skyxplore-lobby

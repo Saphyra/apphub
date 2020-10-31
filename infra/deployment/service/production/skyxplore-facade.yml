@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skyxplore-facade
+  labels:
+    app: skyxplore-facade
+    type: spring-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: skyxplore-facade
+  template:
+    metadata:
+      labels:
+        serviceType: spring-app
+        name: skyxplore-facade
+    spec:
+      containers:
+        - name: skyxplore-facade
+          image: saphyra/apphub-service-skyxplore-facade:release
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+          resources:
+            limits:
+              memory: 500Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: skyxplore-facade
+  labels:
+    app: skyxplore-facade
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+  selector:
+    name: skyxplore-facade

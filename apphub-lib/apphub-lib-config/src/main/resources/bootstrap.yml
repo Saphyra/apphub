@@ -67,6 +67,18 @@ admin-panel:
   ribbon:
     listOfServers: admin-panel:8080
 
+skyxplore-data:
+  ribbon:
+    listOfServers: skyxplore-data:8080
+
+skyxplore-facade:
+  ribbon:
+    listOfServers: skyxplore-facade:8080
+
+skyxplore-lobby:
+  ribbon:
+    listOfServers: skyxplore-lobby:8080
+
 event:
   processor:
     heartbeat:
