@@ -1,6 +1,5 @@
-package com.github.saphyra.apphub.lib.common_util;
+package com.github.saphyra.apphub.lib.common_util.map;
 
-import com.github.saphyra.util.OptionalMap;
 import lombok.NoArgsConstructor;
 
 import java.util.HashMap;

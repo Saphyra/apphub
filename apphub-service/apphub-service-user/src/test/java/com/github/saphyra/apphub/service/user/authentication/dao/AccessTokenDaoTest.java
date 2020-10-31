@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.service.user.authentication.dao;
 
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
@@ -15,9 +15,9 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AccessTokenDaoTest {
-    private static final OffsetDateTime EXPIRATION = OffsetDateTime.now();
+    private static final LocalDateTime EXPIRATION = LocalDateTime.now();
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
-    private static final OffsetDateTime CURRENT_DATE = OffsetDateTime.now();
+    private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
     private static final String ACCESS_TOKEN_ID_STRING = "access-token-id";
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String USER_ID_STRING = "user-id";

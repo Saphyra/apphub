@@ -27,7 +27,7 @@ public class FavoriteUpdateService {
             throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "module", "does not exist"), String.format("Module does not exist with name %s", module));
         }
 
-        if (isNull(favoriteValue)){
+        if (isNull(favoriteValue)) {
             throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "value", "must not be null"), "favoriteValue is null.");
         }
 

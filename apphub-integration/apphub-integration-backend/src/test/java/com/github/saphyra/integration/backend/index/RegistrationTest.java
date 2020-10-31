@@ -144,7 +144,7 @@ public class RegistrationTest extends TestBase {
     }
 
     @Test
-    public void successfulRegistration(){
+    public void successfulRegistration() {
         Language locale = Language.HUNGARIAN;
 
         RegistrationRequest registrationRequest = RegistrationParameters.validParameters()

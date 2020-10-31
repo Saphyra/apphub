@@ -27,7 +27,7 @@ public class ChangePasswordTest extends TestBase {
     }
 
     @Test(dataProvider = "localeDataProvider")
-    public void nullNewPassword(Language locale){
+    public void nullNewPassword(Language locale) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
 
@@ -46,7 +46,7 @@ public class ChangePasswordTest extends TestBase {
     }
 
     @Test(dataProvider = "localeDataProvider")
-    public void tooShortNewPassword(Language locale){
+    public void tooShortNewPassword(Language locale) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
 
@@ -64,7 +64,7 @@ public class ChangePasswordTest extends TestBase {
     }
 
     @Test(dataProvider = "localeDataProvider")
-    public void tooLongNewPassword(Language locale){
+    public void tooLongNewPassword(Language locale) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
 
@@ -82,7 +82,7 @@ public class ChangePasswordTest extends TestBase {
     }
 
     @Test(dataProvider = "localeDataProvider")
-    public void nullPassword(Language locale){
+    public void nullPassword(Language locale) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
 
@@ -101,7 +101,7 @@ public class ChangePasswordTest extends TestBase {
     }
 
     @Test(dataProvider = "localeDataProvider")
-    public void incorrectPassword(Language locale){
+    public void incorrectPassword(Language locale) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
 
@@ -119,7 +119,7 @@ public class ChangePasswordTest extends TestBase {
     }
 
     @Test
-    public void successfulChange(){
+    public void successfulChange() {
         Language locale = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);

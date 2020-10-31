@@ -25,6 +25,10 @@
     border-color: hotpink;
 }
 
+.checklist-table{
+    border-color: purple;
+}
+
 .no-content{
     text-align: center;
     padding: 1rem;

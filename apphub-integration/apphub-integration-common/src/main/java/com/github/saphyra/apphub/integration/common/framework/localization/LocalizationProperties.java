@@ -26,10 +26,10 @@ public class LocalizationProperties {
                     throw new IllegalStateException(String.format("File not found: %s", fileName));
                 }
 
-                TypeReference<Map<String, String >> ref = new TypeReference<Map<String, String>>() {
+                TypeReference<Map<String, String>> ref = new TypeReference<Map<String, String>>() {
                 };
-                Map<String, String > propertyMap = TestBase.OBJECT_MAPPER_WRAPPER.readValue(inputStream, ref);
-                
+                Map<String, String> propertyMap = TestBase.OBJECT_MAPPER_WRAPPER.readValue(inputStream, ref);
+
                 PROPERTIES_MAP.put(locale, propertyMap);
             });
     }

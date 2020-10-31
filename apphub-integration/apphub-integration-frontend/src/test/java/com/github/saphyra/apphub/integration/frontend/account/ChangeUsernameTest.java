@@ -45,7 +45,7 @@ public class ChangeUsernameTest extends SeleniumTest {
     }
 
     @Test
-    public void usernameAlreadyExists(){
+    public void usernameAlreadyExists() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters existingUserData = RegistrationParameters.validParameters();
@@ -85,7 +85,7 @@ public class ChangeUsernameTest extends SeleniumTest {
     }
 
     @Test
-    public void successfulUsernameChange(){
+    public void successfulUsernameChange() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();

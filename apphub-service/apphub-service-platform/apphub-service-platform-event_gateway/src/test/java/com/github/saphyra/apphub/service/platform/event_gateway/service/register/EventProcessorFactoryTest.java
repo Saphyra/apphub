@@ -1,16 +1,16 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service.register;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
-import com.github.saphyra.util.IdGenerator;
-import com.github.saphyra.util.OffsetDateTimeProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,13 +22,13 @@ public class EventProcessorFactoryTest {
     private static final String EVENT_NAME = "event-name";
     private static final String URL = "url";
     private static final UUID EVENT_PROCESSOR_ID = UUID.randomUUID();
-    private static final OffsetDateTime CURRENT_DATE = OffsetDateTime.now();
+    private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
 
     @Mock
     private IdGenerator idGenerator;
 
     @Mock
-    private OffsetDateTimeProvider offsetDateTimeProvider;
+    private DateTimeUtil dateTimeUtil;
 
     @InjectMocks
     private EventProcessorFactory underTest;
@@ -41,7 +41,7 @@ public class EventProcessorFactoryTest {
             .url(URL)
             .build();
         given(idGenerator.randomUUID()).willReturn(EVENT_PROCESSOR_ID);
-        given(offsetDateTimeProvider.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
 
         EventProcessor result = underTest.create(request);
 

@@ -75,7 +75,7 @@ public class LanguageControllerImplTestIt {
     }
 
     @Test
-    public void changeLanguage_null(){
+    public void changeLanguage_null() {
         AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
             .accessTokenId(UUID.randomUUID())
             .userId(USER_ID)
@@ -97,7 +97,7 @@ public class LanguageControllerImplTestIt {
     }
 
     @Test
-    public void changeLanguage_notSupported(){
+    public void changeLanguage_notSupported() {
         AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
             .accessTokenId(UUID.randomUUID())
             .userId(USER_ID)
@@ -119,7 +119,7 @@ public class LanguageControllerImplTestIt {
     }
 
     @Test
-    public void changeLanguage(){
+    public void changeLanguage() {
         User user = User.builder()
             .userId(USER_ID)
             .email(EMAIL)
@@ -182,7 +182,7 @@ public class LanguageControllerImplTestIt {
     }
 
     @Test
-    public void getLanguages(){
+    public void getLanguages() {
         AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
             .accessTokenId(UUID.randomUUID())
             .userId(USER_ID)

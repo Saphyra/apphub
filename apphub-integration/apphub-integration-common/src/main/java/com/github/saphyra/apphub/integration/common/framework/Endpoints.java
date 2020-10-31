@@ -47,4 +47,9 @@ public class Endpoints {
     public static final String GET_NOTEBOOK_TABLE = "/api/notebook/table/{listItemId}";
     public static final String EDIT_NOTEBOOK_TABLE = "/api/notebook/table/{listItemId}";
     public static final String CLONE_NOTEBOOK_LIST_ITEM = "/api/notebook/{listItemId}/clone";
+    public static final String CREATE_NOTEBOOK_CHECKLIST_TABLE = "/api/notebook/checklist-table";
+    public static final String EDIT_NOTEBOOK_CHECKLIST_TABLE = "/api/notebook/checklist-table/{listItemId}";
+    public static final String GET_NOTEBOOK_CHECKLIST_TABLE = "/api/notebook/checklist-table/{listItemId}";
+    public static final String UPDATE_CHECKLIST_TABLE_ROW_STATUS = "/api/notebook/checklist-table/{listItemId}/{rowIndex}";
+    public static final String CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE = "/api/notebook/table/{listItemId}/convert-to-checklist-table";
 }

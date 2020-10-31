@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.lib.config.access_token;
 
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
-import com.github.saphyra.apphub.lib.common_util.CustomObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ public class AccessTokenHeaderConverterTest {
     private Base64Encoder base64Encoder;
 
     @Mock
-    private CustomObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapperWrapper objectMapperWrapper;
 
     @InjectMocks
     private AccessTokenHeaderConverter underTest;

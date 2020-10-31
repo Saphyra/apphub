@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.dao;
 
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +19,7 @@ public class EventProcessorConverterTest {
     private static final String SERVICE_NAME = "service-name";
     private static final String URL = "url";
     private static final String EVENT_NAME = "event-name";
-    private static final OffsetDateTime LAST_ACCESS = OffsetDateTime.now();
+    private static final LocalDateTime LAST_ACCESS = LocalDateTime.now();
     private static final UUID EVENT_PROCESSOR_ID = UUID.randomUUID();
 
     @Mock

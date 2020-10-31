@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.data.loader;
 
-import com.github.saphyra.apphub.lib.common_util.CustomObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.data.AbstractDataService;
 import com.github.saphyra.apphub.lib.data.ContentLoader;
 import lombok.Builder;
@@ -15,7 +15,7 @@ import java.io.IOException;
 @Builder
 @Slf4j
 class ClassPathLoader<K, V> implements ContentLoader {
-    private final CustomObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapperWrapper objectMapperWrapper;
     private final PathMatchingResourcePatternResolver patternResolver;
 
     private final AbstractDataService<K, V> dataService;

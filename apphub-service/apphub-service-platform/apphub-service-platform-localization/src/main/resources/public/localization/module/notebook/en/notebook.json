@@ -61,6 +61,12 @@
         "message": "Table"
       }
     ],
+    "new-checklist-table-button": [
+      {
+        "key": "innerHTML",
+        "message": "Checklist-table"
+      }
+    ],
     "create-category-title": [
       {
         "key": "innerHTML",
@@ -301,10 +307,58 @@
         "message": "Save"
       }
     ],
+    "create-checklist-table-title": [
+      {
+        "key": "innerHTML",
+        "message": "New checklist table"
+      }
+    ],
+    "new-checklist-table-title": [
+      {
+        "key": "placeholder",
+        "message": "Title of the new checklist table"
+      }
+    ],
+    "create-checklist-table-selected-category": [
+      {
+        "key": "innerHTML",
+        "message": "Selected category"
+      }
+    ],
+    "create-checklist-table-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Up"
+      }
+    ],
+    "create-checklist-table-new-column-button": [
+      {
+        "key": "innerHTML",
+        "message": "New column"
+      }
+    ],
+    "create-checklist-table-new-row-button": [
+      {
+        "key": "innerHTML",
+        "message": "New row"
+      }
+    ],
+    "create-checklist-table-button": [
+      {
+        "key": "innerHTML",
+        "message": "Save"
+      }
+    ],
     "view-table-edit-button": [
       {
         "key": "innerHTML",
         "message": "Edit"
+      }
+    ],
+    "convert-table-to-checklist-table-button": [
+      {
+        "key": "innerHTML",
+        "message": "Convert to checklist table"
       }
     ],
     "view-table-edit-save-button": [
@@ -326,6 +380,36 @@
       }
     ],
     "view-table-edit-add-row-button": [
+      {
+        "key": "innerHTML",
+        "message": "Add row"
+      }
+    ],
+    "view-checklist-table-edit-button": [
+      {
+        "key": "innerHTML",
+        "message": "Edit"
+      }
+    ],
+    "view-checklist-table-edit-save-button": [
+      {
+        "key": "innerHTML",
+        "message": "Save"
+      }
+    ],
+    "view-checklist-table-edit-cancel-button": [
+      {
+        "key": "innerHTML",
+        "message": "Discard"
+      }
+    ],
+    "view-checklist-table-edit-add-column-button": [
+      {
+        "key": "innerHTML",
+        "message": "Add column"
+      }
+    ],
+    "view-checklist-table-edit-add-row-button": [
       {
         "key": "innerHTML",
         "message": "Add row"
@@ -356,7 +440,10 @@
     "text-saved": "Text saved.",
     "checklist-saved": "Checklist saved.",
     "table-saved": "Table saved.",
+    "checklist-table-saved": "Checklist-table saved.",
     "column-name-title": "Name of the column",
-    "empty-column-name": "Column name must not be empty."
+    "empty-column-name": "Column name must not be empty.",
+    "table-head-checked-column": "Checked",
+    "table-conversion-successful": "Conversion successful."
   }
 }

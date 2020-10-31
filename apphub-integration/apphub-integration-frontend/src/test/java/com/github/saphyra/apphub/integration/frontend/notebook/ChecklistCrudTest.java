@@ -273,7 +273,7 @@ public class ChecklistCrudTest extends SeleniumTest {
     }
 
     @Test
-    public void checkChecklistItem(){
+    public void checkChecklistItem() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -297,7 +297,7 @@ public class ChecklistCrudTest extends SeleniumTest {
     }
 
     @Test
-    public void uncheckChecklistItem(){
+    public void uncheckChecklistItem() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();

@@ -5,6 +5,8 @@ import com.github.saphyra.apphub.api.notebook.model.request.EditTableRequest;
 import com.github.saphyra.apphub.api.notebook.model.response.TableResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
+import com.github.saphyra.apphub.service.notebook.service.ConvertTableToChecklistTableService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
 import com.github.saphyra.apphub.service.notebook.service.table.creation.TableCreationService;
 import com.github.saphyra.apphub.service.notebook.service.table.edition.TableEditionService;
@@ -34,6 +36,9 @@ public class TableControllerImplTest {
     @Mock
     private TableQueryService tableQueryService;
 
+    @Mock
+    private ConvertTableToChecklistTableService convertTableToChecklistTableService;
+
     @InjectMocks
     private TableControllerImpl underTest;
 
@@ -52,7 +57,7 @@ public class TableControllerImplTest {
     @Test
     public void createTable() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(tableCreationService.create(createTableRequest, USER_ID)).willReturn(LIST_ITEM_ID);
+        given(tableCreationService.create(createTableRequest, USER_ID, ListItemType.TABLE)).willReturn(LIST_ITEM_ID);
 
         OneParamResponse<UUID> result = underTest.createTable(createTableRequest, accessTokenHeader);
 
@@ -73,5 +78,12 @@ public class TableControllerImplTest {
         TableResponse result = underTest.getTable(LIST_ITEM_ID);
 
         assertThat(result).isEqualTo(tableResponse);
+    }
+
+    @Test
+    public void convertToChecklistTable() {
+        underTest.convertToChecklistTable(LIST_ITEM_ID);
+
+        verify(convertTableToChecklistTableService).convert(LIST_ITEM_ID);
     }
 }

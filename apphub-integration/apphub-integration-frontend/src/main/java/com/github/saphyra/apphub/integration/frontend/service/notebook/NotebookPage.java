@@ -56,7 +56,7 @@ class NotebookPage {
     private static final By EDIT_CHECKLIST_BUTTON = By.id("view-checklist-edit-button");
     private static final By VIEW_CHECKLIST_TITLE = By.id("view-checklist-title");
     private static final By SAVE_EDITED_CHECKLIST_BUTTON = By.id("view-checklist-edit-save-button");
-    private static final By CIEW_CHECKLIST_ITEMS = By.cssSelector("#view-checklist-content .view-checklist-item");
+    private static final By VIEW_CHECKLIST_ITEMS = By.cssSelector("#view-checklist-content .view-checklist-item");
     private static final By EDIT_CHECKLIST_DISCARD_BUTTON = By.id("view-checklist-edit-cancel-button");
     private static final By EDIT_CHECKLIST_ADD_ITEM_BUTTON = By.id("view-checklist-edit-add-item-button");
     private static final By EDIT_CHECKLIST_LAST_CHECKLIST_ITEM = By.cssSelector("#view-checklist-content .view-checklist-item:last-child");
@@ -81,7 +81,29 @@ class NotebookPage {
     private static final By ADD_COLUMN_TO_EDIT_TABLE_BUTTON = By.id("view-table-edit-add-column-button");
     private static final By ADD_ROW_TO_EDIT_TABLE_BUTTON = By.id("view-table-edit-add-row-button");
     private static final By COLUMN_HEADS_FOR_EDIT_TABLE = By.cssSelector("#view-table-head-row .column-head");
-    private static final By CREATE_CATEGORY_PARENT_SELECTION_PARENT_BUTTON = By.id("create-category-parent-selection-parent-button");
+    private static final By OPEN_CREATE_CHECKLIST_TABLE_WINDOW_BUTTON = By.id("new-checklist-table-button");
+    private static final By CREATE_CHECKLIST_TABLE_WINDOW = By.id("create-checklist-table");
+    private static final By SAVE_NEW_CHECKLIST_TABLE_BUTTON = By.id("create-checklist-table-button");
+    private static final By NEW_CHECKLIST_TABLE_INPUT = By.id("new-checklist-table-title");
+    private static final By ADD_COLUMN_TO_NEW_CHECKLIST_TABLE_BUTTON = By.id("create-checklist-table-new-column-button");
+    private static final By COLUMN_NAMES_FOR_NEW_CHECKLIST_TABLE = By.cssSelector("#create-checklist-table input.column-title");
+    private static final By CREATE_CHECKLIST_TABLE_SELECTED_CATEGORY_WRAPPER = By.id("create-checklist-table-selected-category-wrapper");
+    private static final By AVAILABLE_PARENTS_FOR_NEW_CHECKLIST_TABLE = By.cssSelector("#create-checklist-table-parent-selection-category-list .create-item-category");
+    private static final By ADD_ROW_TO_NEW_CHECKLIST_TABLE_BUTTON = By.id("create-checklist-table-new-row-button");
+    private static final By VIEW_CHECKLIST_TABLE_WINDOW = By.id("view-checklist-table");
+    private static final By EDIT_CHECKLIST_TABLE_BUTTON = By.id("view-checklist-table-edit-button");
+    private static final By VIEW_CHECKLIST_TABLE_TITLE = By.id("view-checklist-table-title");
+    private static final By SAVE_EDITED_CHECKLIST_TABLE_BUTTON = By.id("view-checklist-table-edit-save-button");
+    private static final By ROWS_FOR_NEW_CHECKLIST_TABLE = By.cssSelector("#new-checklist-table-content tr");
+    private static final By COLUMN_NAMES_FOR_VIEW_CHECKLIST_TABLE = By.cssSelector("#view-checklist-table input.column-title");
+    private static final By DISCARD_EDIT_CHECKLIST_TABLE_BUTTON = By.id("view-checklist-table-edit-cancel-button");
+    private static final By ROWS_FOR_VIEW_CHECKLIST_TABLE =  By.cssSelector("#view-checklist-table-content tr");
+    private static final By ADD_ROW_TO_EDIT_CHECKLIST_TABLE_BUTTON = By.id("view-checklist-table-edit-add-row-button");
+    private static final By COLUMN_HEADS_FOR_EDIT_CHECKLIST_TABLE = By.cssSelector("#view-checklist-table-head-row .column-head");
+    private static final By ADD_COLUMN_TO_EDIT_CHECKLIST_TABLE_BUTTON = By.id("view-checklist-table-edit-add-column-button");
+    private static final By VIEW_CHECKLIST_TABLE_CLOSE_BUTTON = By.id("view-checklist-table-close-button");
+    private static final By CLOSE_VIEW_TABLE_WINDOW_BUTTON = By.id("view-table-close-button");
+    private static final By CONVERT_TABLE_TO_CHECKLIST_TABLE_BUTTON = By.id("convert-table-to-checklist-table-button");
 
     public static WebElement createCategoryWindow(WebDriver driver) {
         return driver.findElement(CREATE_CATEGORY_WINDOW);
@@ -280,7 +302,7 @@ class NotebookPage {
     }
 
     public static List<WebElement> viewChecklistItems(WebDriver driver) {
-        return driver.findElements(CIEW_CHECKLIST_ITEMS);
+        return driver.findElements(VIEW_CHECKLIST_ITEMS);
     }
 
     public static WebElement editChecklistDiscardButton(WebDriver driver) {
@@ -379,7 +401,95 @@ class NotebookPage {
         return driver.findElements(COLUMN_HEADS_FOR_EDIT_TABLE);
     }
 
-    public static WebElement createCategoryParentSelectionParentButton(WebDriver driver) {
-        return driver.findElement(CREATE_CATEGORY_PARENT_SELECTION_PARENT_BUTTON);
+    public static WebElement openCreateChecklistTableWindowButton(WebDriver driver) {
+        return driver.findElement(OPEN_CREATE_CHECKLIST_TABLE_WINDOW_BUTTON);
+    }
+
+    public static WebElement createChecklistTableWindow(WebDriver driver) {
+        return driver.findElement(CREATE_CHECKLIST_TABLE_WINDOW);
+    }
+
+    public static WebElement saveNewChecklistTableButton(WebDriver driver) {
+        return driver.findElement(SAVE_NEW_CHECKLIST_TABLE_BUTTON);
+    }
+
+    public static WebElement newChecklistTableTitleInput(WebDriver driver) {
+        return driver.findElement(NEW_CHECKLIST_TABLE_INPUT);
+    }
+
+    public static WebElement addColumnToNewChecklistTableButton(WebDriver driver) {
+        return driver.findElement(ADD_COLUMN_TO_NEW_CHECKLIST_TABLE_BUTTON);
+    }
+
+    public static List<WebElement> columnNamesForNewChecklistTable(WebDriver driver) {
+        return driver.findElements(COLUMN_NAMES_FOR_NEW_CHECKLIST_TABLE);
+    }
+
+    public static WebElement createChecklistTableSelectedCategoryWrapper(WebDriver driver) {
+        return driver.findElement(CREATE_CHECKLIST_TABLE_SELECTED_CATEGORY_WRAPPER);
+    }
+
+    public static List<WebElement> availableParentsForNewChecklistTable(WebDriver driver) {
+        return driver.findElements(AVAILABLE_PARENTS_FOR_NEW_CHECKLIST_TABLE);
+    }
+
+    public static WebElement addRowToNewChecklistTableButton(WebDriver driver) {
+        return driver.findElement(ADD_ROW_TO_NEW_CHECKLIST_TABLE_BUTTON);
+    }
+
+    public static WebElement viewChecklistTableWindow(WebDriver driver) {
+        return driver.findElement(VIEW_CHECKLIST_TABLE_WINDOW);
+    }
+
+    public static WebElement editChecklistTableButton(WebDriver driver) {
+        return driver.findElement(EDIT_CHECKLIST_TABLE_BUTTON);
+    }
+
+    public static WebElement viewChecklistTableTitle(WebDriver driver) {
+        return driver.findElement(VIEW_CHECKLIST_TABLE_TITLE);
+    }
+
+    public static WebElement saveEditedChecklistTableButton(WebDriver driver) {
+        return driver.findElement(SAVE_EDITED_CHECKLIST_TABLE_BUTTON);
+    }
+
+    public static List<WebElement> rowsForNewChecklistTable(WebDriver driver) {
+        return driver.findElements(ROWS_FOR_NEW_CHECKLIST_TABLE);
+    }
+
+    public static List<WebElement> columnNamesForViewChecklistTable(WebDriver driver) {
+        return driver.findElements(COLUMN_NAMES_FOR_VIEW_CHECKLIST_TABLE);
+    }
+
+    public static WebElement discardEditChecklistTableButton(WebDriver driver) {
+        return driver.findElement(DISCARD_EDIT_CHECKLIST_TABLE_BUTTON);
+    }
+
+    public static List<WebElement> rowsForViewChecklistTable(WebDriver driver) {
+        return driver.findElements(ROWS_FOR_VIEW_CHECKLIST_TABLE);
+    }
+
+    public static WebElement addRowToEditChecklistTableButton(WebDriver driver) {
+        return driver.findElement(ADD_ROW_TO_EDIT_CHECKLIST_TABLE_BUTTON);
+    }
+
+    public static List<WebElement> columnHeadsForEditChecklistTable(WebDriver driver) {
+        return driver.findElements(COLUMN_HEADS_FOR_EDIT_CHECKLIST_TABLE);
+    }
+
+    public static WebElement addColumnToEditChecklistTableButton(WebDriver driver) {
+        return driver.findElement(ADD_COLUMN_TO_EDIT_CHECKLIST_TABLE_BUTTON);
+    }
+
+    public static WebElement viewChecklistTableCloseButton(WebDriver driver) {
+        return driver.findElement(VIEW_CHECKLIST_TABLE_CLOSE_BUTTON);
+    }
+
+    public static WebElement closeViewTableWindowButton(WebDriver driver) {
+        return driver.findElement(CLOSE_VIEW_TABLE_WINDOW_BUTTON);
+    }
+
+    public static WebElement convertTableToChecklistTableButton(WebDriver driver) {
+        return driver.findElement(CONVERT_TABLE_TO_CHECKLIST_TABLE_BUTTON);
     }
 }

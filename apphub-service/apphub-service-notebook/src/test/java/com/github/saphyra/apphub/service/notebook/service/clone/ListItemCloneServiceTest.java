@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.notebook.service.clone;
 
-import com.github.saphyra.apphub.lib.exception.NotImplementedException;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
@@ -53,6 +52,9 @@ public class ListItemCloneServiceTest {
     @Mock
     private ChecklistCloneService checklistCloneService;
 
+    @Mock
+    private ChecklistTableCloneService checklistTableCloneService;
+
     @InjectMocks
     private ListItemCloneService underTest;
 
@@ -88,6 +90,9 @@ public class ListItemCloneServiceTest {
 
     private final ListItem checklistTableListItem = createListItem(CHECKLIST_TABLE_LIST_ITEM_ID, CHECKLIST_TABLE_ITEM_TITLE, ListItemType.CHECKLIST_TABLE, PARENT_OF_PARENT);
 
+    @Mock
+    private ListItem checklistTableListItemClone;
+
     @Test
     public void cloneTest() {
         given(parentListItemClone.getListItemId()).willReturn(PARENT_LIST_ITEM_CLONE_ID);
@@ -95,7 +100,7 @@ public class ListItemCloneServiceTest {
         given(listItemDao.findByIdValidated(PARENT_LIST_ITEM_ID)).willReturn(parentListItem);
         given(listItemFactory.create(USER_ID, PARENT_LIST_ITEM_TITLE, PARENT_OF_PARENT, ListItemType.CATEGORY)).willReturn(parentListItemClone);
 
-        given(listItemDao.getByUserIdAndParent(USER_ID, PARENT_LIST_ITEM_ID)).willReturn(Arrays.asList(categoryListItem, linkListItem, textListItem, checklistListItem, tableListItem));
+        given(listItemDao.getByUserIdAndParent(USER_ID, PARENT_LIST_ITEM_ID)).willReturn(Arrays.asList(categoryListItem, linkListItem, textListItem, checklistListItem, tableListItem, checklistTableListItem));
 
         given(listItemFactory.create(USER_ID, CATEGORY_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.CATEGORY)).willReturn(categoryListItemClone);
         given(listItemDao.getByUserIdAndParent(USER_ID, CATEGORY_LIST_ITEM_ID)).willReturn(Collections.emptyList());
@@ -104,6 +109,7 @@ public class ListItemCloneServiceTest {
         given(listItemFactory.create(USER_ID, TEXT_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.TEXT)).willReturn(textListItemClone);
         given(listItemFactory.create(USER_ID, CHECKLIST_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.CHECKLIST)).willReturn(checklistListItemClone);
         given(listItemFactory.create(USER_ID, TABLE_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.TABLE)).willReturn(tableListItemClone);
+        given(listItemFactory.create(USER_ID, CHECKLIST_TABLE_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.CHECKLIST_TABLE)).willReturn(checklistTableListItemClone);
 
         underTest.clone(PARENT_LIST_ITEM_ID);
 
@@ -117,13 +123,8 @@ public class ListItemCloneServiceTest {
         verify(checklistCloneService).clone(checklistListItem, checklistListItemClone);
         verify(listItemDao).save(tableListItemClone);
         verify(tableCloneService).clone(tableListItem, tableListItemClone);
-    }
-
-    @Test(expected = NotImplementedException.class)
-    public void cloneChecklistTable() {
-        given(listItemDao.findByIdValidated(CHECKLIST_TABLE_LIST_ITEM_ID)).willReturn(checklistTableListItem);
-
-        underTest.clone(CHECKLIST_TABLE_LIST_ITEM_ID);
+        verify(listItemDao).save(checklistTableListItemClone);
+        verify(checklistTableCloneService).clone(checklistTableListItem, checklistTableListItemClone);
     }
 
     private ListItem createListItem(UUID listItemId, String title, ListItemType type, UUID parent) {

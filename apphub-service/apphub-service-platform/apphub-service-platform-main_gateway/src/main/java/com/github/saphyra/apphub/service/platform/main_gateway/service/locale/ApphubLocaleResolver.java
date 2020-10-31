@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
-import static java.util.Objects.isNull;
-
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -26,7 +24,7 @@ public class ApphubLocaleResolver {
             locale = cookieLocaleResolver.getLocale(request);
         }
 
-        if (isNull(locale)) {
+        if (!locale.isPresent()) {
             locale = browserLanguageLocaleResolver.getLocale(request);
         }
 

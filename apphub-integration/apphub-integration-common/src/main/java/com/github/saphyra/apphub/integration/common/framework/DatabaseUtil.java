@@ -3,8 +3,12 @@ package com.github.saphyra.apphub.integration.common.framework;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.*;
-import java.time.OffsetDateTime;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -94,7 +98,7 @@ public class DatabaseUtil {
         }
     }
 
-    public static void updateAccessTokenLastAccess(UUID accessTokenId, OffsetDateTime newLastAccess) {
+    public static void updateAccessTokenLastAccess(UUID accessTokenId, LocalDateTime newLastAccess) {
         String sql = String.format(UPDATE_ACCESS_TOKEN_LAST_ACCESS, newLastAccess, accessTokenId);
         log.info("updateAccessTokenLastAccess sql: {}", sql);
 

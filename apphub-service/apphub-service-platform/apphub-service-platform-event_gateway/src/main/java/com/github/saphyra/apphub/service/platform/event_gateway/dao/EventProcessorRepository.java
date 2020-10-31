@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.event_gateway.dao;
 
 import org.springframework.data.repository.CrudRepository;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,5 +13,5 @@ interface EventProcessorRepository extends CrudRepository<EventProcessorEntity, 
 
     List<EventProcessorEntity> getByServiceName(String serviceName);
 
-    List<EventProcessorEntity> getByLastAccessBefore(OffsetDateTime expiration);
+    List<EventProcessorEntity> getByLastAccessBefore(LocalDateTime expiration);
 }

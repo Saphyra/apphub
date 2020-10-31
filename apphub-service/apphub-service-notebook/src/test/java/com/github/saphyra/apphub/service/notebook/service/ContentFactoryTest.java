@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.util.IdGenerator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -20,6 +20,7 @@ public class ContentFactoryTest {
     private static final UUID CONTENT_ID = UUID.randomUUID();
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
+
     @Mock
     private IdGenerator idGenerator;
 

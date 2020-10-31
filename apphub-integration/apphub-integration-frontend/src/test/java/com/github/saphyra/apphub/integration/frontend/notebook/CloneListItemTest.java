@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrappe
 import com.github.saphyra.apphub.integration.frontend.framework.Navigation;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.frontend.model.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.frontend.model.notebook.ChecklistTableRow;
 import com.github.saphyra.apphub.integration.frontend.model.notebook.ListItemDetailsItem;
 import com.github.saphyra.apphub.integration.frontend.model.notebook.NewChecklistItemData;
 import com.github.saphyra.apphub.integration.frontend.model.notebook.ViewChecklistItem;
@@ -35,6 +36,9 @@ public class CloneListItemTest extends SeleniumTest {
     private static final String TEXT_TITLE = "text-title";
     private static final String CHECKLIST_TITLE = "checklist-title";
     private static final String TABLE_TITLE = "table-title";
+    private static final String CHECKLIST_TABLE_TITLE = "checklist-table-title";
+    private static final String CHECKLIST_TABLE_COLUMN_NAME = "checklist-table-column-name";
+    private static final String CHECKLIST_TABLE_COLUMN_VALUE = "checklist-table-column-value";
 
     @Test
     public void cloneListItem() {
@@ -52,6 +56,7 @@ public class CloneListItemTest extends SeleniumTest {
         TextActions.createText(driver, TEXT_TITLE, TEXT_CONTENT, ROOT_TITLE, PARENT_TITLE);
         ChecklistActions.createChecklist(driver, CHECKLIST_TITLE, Arrays.asList(new NewChecklistItemData(CHECKLIST_ITEM_CONTENT, true)), ROOT_TITLE, PARENT_TITLE);
         TableActions.createTable(driver, TABLE_TITLE, Arrays.asList(TABLE_COLUMN_NAME), Arrays.asList(Arrays.asList(TABLE_COLUMN_VALUE)), ROOT_TITLE, PARENT_TITLE);
+        ChecklistTableActions.createChecklistTable(driver, CHECKLIST_TABLE_TITLE, Arrays.asList(CHECKLIST_TABLE_COLUMN_NAME), Arrays.asList(new ChecklistTableRow(true, Arrays.asList(CHECKLIST_TABLE_COLUMN_VALUE))), ROOT_TITLE, PARENT_TITLE);
 
         DetailedListActions.findDetailedItem(driver, ROOT_TITLE)
             .open();
@@ -98,5 +103,9 @@ public class CloneListItemTest extends SeleniumTest {
 
         TableActions.openTable(driver, TABLE_TITLE);
         TableActions.verifyViewTable(driver, TABLE_TITLE, Arrays.asList(TABLE_COLUMN_NAME), Arrays.asList(Arrays.asList(TABLE_COLUMN_VALUE)));
+        TableActions.closeViewTableWindow(driver);
+
+        ChecklistTableActions.openChecklistTable(driver, CHECKLIST_TABLE_TITLE);
+        ChecklistTableActions.verifyViewChecklistTable(driver, CHECKLIST_TABLE_TITLE, Arrays.asList(CHECKLIST_TABLE_COLUMN_NAME), Arrays.asList(new ChecklistTableRow(true, Arrays.asList(CHECKLIST_TABLE_COLUMN_VALUE))));
     }
 }

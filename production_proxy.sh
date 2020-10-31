@@ -1,8 +1,7 @@
-trap "exit" INT TERM ERR
-trap "kill 0" EXIT
-
 SERVER_PORT=$RANDOM
 NAMESPACE_NAME=production
+
+./release_port.sh 9000
 
 ./infra/deployment/script/wait_for_pods_ready.sh $NAMESPACE_NAME 120 2
 

@@ -239,4 +239,15 @@ public class TableActions {
         WebElement row = NotebookPage.rowsForViewTable(driver).get(rowIndex);
         row.findElement(MOVE_ROW_UP).click();
     }
+
+    public static void closeViewTableWindow(WebDriver driver) {
+        NotebookPage.closeViewTableWindowButton(driver).click();
+    }
+
+    public static void convertToChecklistTable(WebDriver driver) {
+        NotebookPage.convertTableToChecklistTableButton(driver).click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> !isCreateTableWindowDisplayed(driver));
+    }
 }

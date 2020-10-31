@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.dao.table.head;
 
 
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,7 +43,7 @@ public class TableHeadDaoTest {
     private TableHead domain;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         underTest = new TableHeadDao(converter, repository, uuidConverter);
     }
 

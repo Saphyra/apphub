@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.service.checklist_table.ChecklistTableDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableDeletionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,6 +38,9 @@ public class ListItemDeletionServiceTest {
 
     @Mock
     private TableDeletionService tableDeletionService;
+
+    @Mock
+    private ChecklistTableDeletionService checklistTableDeletionService;
 
     @InjectMocks
     private ListItemDeletionService underTest;
@@ -117,5 +121,17 @@ public class ListItemDeletionServiceTest {
 
         verify(listItemDao).delete(deleted);
         verify(tableDeletionService).deleteByListItemId(LIST_ITEM_ID_1);
+    }
+
+    @Test
+    public void deleteChecklistTable(){
+        given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
+        given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
+        given(deleted.getType()).willReturn(ListItemType.CHECKLIST_TABLE);
+
+        underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
+
+        verify(listItemDao).delete(deleted);
+        verify(checklistTableDeletionService).deleteByListItemId(LIST_ITEM_ID_1);
     }
 }

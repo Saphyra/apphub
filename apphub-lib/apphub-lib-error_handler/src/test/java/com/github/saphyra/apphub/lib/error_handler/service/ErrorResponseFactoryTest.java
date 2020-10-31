@@ -70,7 +70,7 @@ public class ErrorResponseFactoryTest {
     }
 
     @Test
-    public void withoutLocale_localeFound(){
+    public void withoutLocale_localeFound() {
         given(localeProvider.getLocale(request)).willReturn(Optional.of(LOCALE));
         given(localizedMessageProvider.getLocalizedMessage(LOCALE, ERROR_CODE, new HashMap<>())).willReturn(LOCALIZED_MESSAGE);
 
@@ -82,7 +82,7 @@ public class ErrorResponseFactoryTest {
     }
 
     @Test
-    public void withoutLocale_localeNotFound(){
+    public void withoutLocale_localeNotFound() {
         given(localeProvider.getLocale(request)).willReturn(Optional.empty());
         given(localizedMessageProvider.getLocalizedMessage(LOCALE, LOCALE_NOT_FOUND_ERROR_CODE, new HashMap<>())).willReturn(LOCALIZED_MESSAGE);
         given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);

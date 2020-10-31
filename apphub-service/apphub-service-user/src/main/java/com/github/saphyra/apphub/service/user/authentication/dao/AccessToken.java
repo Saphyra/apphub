@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -20,5 +20,5 @@ public class AccessToken {
     private final boolean persistent;
 
     @NonNull
-    private OffsetDateTime lastAccess;
+    private LocalDateTime lastAccess;
 }

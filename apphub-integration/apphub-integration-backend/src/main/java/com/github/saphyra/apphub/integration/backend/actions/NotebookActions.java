@@ -219,4 +219,67 @@ public class NotebookActions {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .post(UrlFactory.create(Endpoints.CLONE_NOTEBOOK_LIST_ITEM, "listItemId", listItemId));
     }
+
+    public static UUID createChecklistTable(Language language, UUID accessTokenId, CreateChecklistTableRequest request) {
+        Response response = getCreateChecklistTableResponse(language, accessTokenId, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody()
+            .jsonPath()
+            .getUUID("value");
+    }
+
+    public static Response getCreateChecklistTableResponse(Language language, UUID accessTokenId, CreateChecklistTableRequest request) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(request)
+            .put(UrlFactory.create(Endpoints.CREATE_NOTEBOOK_CHECKLIST_TABLE));
+    }
+
+    public static ChecklistTableResponse getChecklistTable(Language language, UUID accessTokenId, UUID listItemId) {
+        Response response = getChecklistTableResponse(language, accessTokenId, listItemId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody()
+            .as(ChecklistTableResponse.class);
+    }
+
+    public static Response getChecklistTableResponse(Language language, UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .get(UrlFactory.create(Endpoints.GET_NOTEBOOK_CHECKLIST_TABLE, "listItemId", listItemId));
+    }
+
+    public static void editChecklistTable(Language language, UUID accessTokenId, UUID listItemId, EditChecklistTableRequest request) {
+        Response response = getEditChecklistTableResponse(language, accessTokenId, listItemId, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getEditChecklistTableResponse(Language language, UUID accessTokenId, UUID listItemId, EditChecklistTableRequest request) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(request)
+            .post(UrlFactory.create(Endpoints.EDIT_NOTEBOOK_CHECKLIST_TABLE, "listItemId", listItemId));
+    }
+
+    public static void updateChecklistTableRowStatus(Language language, UUID accessTokenId, UUID listItemId, int rowIndex, boolean status) {
+        Response response = getUpdateChecklistTableRowStatusResponse(language, accessTokenId, listItemId, rowIndex, status);
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getUpdateChecklistTableRowStatusResponse(Language language, UUID accessTokenId, UUID listItemId, int rowIndex, boolean status) {
+        Map<String, Object> pathVariables = new HashMap<String, Object>() {{
+            put("listItemId", listItemId);
+            put("rowIndex", rowIndex);
+        }};
+
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(new OneParamRequest<>(status))
+            .post(UrlFactory.create(Endpoints.UPDATE_CHECKLIST_TABLE_ROW_STATUS, pathVariables));
+    }
+
+    public static Response getConvertTableToChecklistTableResponse(Language language, UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .post(UrlFactory.create(Endpoints.CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE, "listItemId", listItemId));
+    }
 }

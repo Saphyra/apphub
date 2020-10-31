@@ -37,10 +37,10 @@ public class TableCreationService {
     private final TableJoinDao tableJoinDao;
 
     @Transactional
-    public UUID create(CreateTableRequest request, UUID userId) {
+    public UUID create(CreateTableRequest request, UUID userId, ListItemType type) {
         tableCreationRequestValidator.validate(request);
 
-        ListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), ListItemType.TABLE);
+        ListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), type);
 
         List<BiWrapper<TableHead, Content>> tableHeads = tableHeadFactory.create(listItem.getListItemId(), request.getColumnNames(), userId);
         List<BiWrapper<TableJoin, Content>> tableColumns = tableJoinFactory.create(listItem.getListItemId(), request.getColumns(), userId);

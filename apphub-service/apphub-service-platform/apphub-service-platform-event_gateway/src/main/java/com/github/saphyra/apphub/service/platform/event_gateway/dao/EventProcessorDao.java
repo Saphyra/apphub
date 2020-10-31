@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.dao;
 
-import com.github.saphyra.dao.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import org.springframework.stereotype.Component;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +21,7 @@ public class EventProcessorDao extends AbstractDao<EventProcessorEntity, EventPr
         return converter.convertEntity(repository.getByEventName(eventName));
     }
 
-    public List<EventProcessor> getByLastAccessBefore(OffsetDateTime expiration) {
+    public List<EventProcessor> getByLastAccessBefore(LocalDateTime expiration) {
         return converter.convertEntity(repository.getByLastAccessBefore(expiration));
     }
 

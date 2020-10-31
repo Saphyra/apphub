@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.modules.dao.favorite;
 
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

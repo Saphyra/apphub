@@ -4,12 +4,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
-@Repository
 interface FavoriteRepository extends CrudRepository<FavoriteEntity, FavoriteEntityKey> {
     @Query("SELECT f FROM FavoriteEntity f WHERE f.key.userId = :userId")
     List<FavoriteEntity> getByUserId(@Param("userId") String userId);

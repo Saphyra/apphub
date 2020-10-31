@@ -2,9 +2,9 @@ package com.github.saphyra.apphub.service.platform.event_gateway.service.send_ev
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
-import com.github.saphyra.util.OffsetDateTimeProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 class EventSender {
     private final EventProcessorDao eventProcessorDao;
-    private final OffsetDateTimeProvider offsetDateTimeProvider;
+    private final DateTimeUtil dateTimeUtil;
     private final RestTemplate restTemplate;
     private final UrlAssembler urlAssembler;
 
@@ -32,7 +32,7 @@ class EventSender {
             HttpEntity<SendEventRequest<?>> entity = new HttpEntity<>(sendEventRequest, headers);
             restTemplate.postForEntity(url, entity, Void.class);
 
-            processor.setLastAccess(offsetDateTimeProvider.getCurrentDate());
+            processor.setLastAccess(dateTimeUtil.getCurrentDate());
             eventProcessorDao.save(processor);
         } catch (Exception e) {
             log.warn("Failed sending event with name {} to processor {}", sendEventRequest.getEventName(), processor, e);

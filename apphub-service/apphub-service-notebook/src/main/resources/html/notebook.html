@@ -12,10 +12,12 @@
     <LINK rel="stylesheet" href="/res/notebook/css/create_link_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/create_checklist_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/create_table_dialog.css">
+    <LINK rel="stylesheet" href="/res/notebook/css/create_checklist_table_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/view_text_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/view_checklist_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/edit_list_item.css">
     <LINK rel="stylesheet" href="/res/notebook/css/view_table.css">
+    <LINK rel="stylesheet" href="/res/notebook/css/view_checklist_table.css">
 
     <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
     <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
@@ -66,6 +68,7 @@
                 <DIV id="new-link-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_LINK_DIALOG))"></DIV>
                 <DIV id="new-checklist-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_CHECKLIST_DIALOG))"></DIV>
                 <DIV id="new-table-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_TABLE_DIALOG))"></DIV>
+                <DIV id="new-checklist-table-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_CHECKLIST_TABLE_DIALOG))"></DIV>
             </DIV>
 
             <DIV id="new-button" class="button"></DIV>
@@ -197,6 +200,46 @@
     </FOOTER>
 </DIV>
 
+<DIV id="create-checklist-table" class="main-page">
+    <HEADER>
+        <H1 id="create-checklist-table-title"></H1>
+        <BUTTON id="create-checklist-table-close-button" class="dialog-close-button" onclick="pageController.openMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN>
+        <DIV class="create-item-input-wrapper">
+            <INPUT type="text" id="new-checklist-table-title" class="new-item-title">
+        </DIV>
+
+        <DIV id="create-checklist-table-parent-selection-wrapper">
+            <DIV id="create-checklist-table-selected-category-wrapper">
+                <SPAN id="create-checklist-table-selected-category"></SPAN>: <SPAN id="create-checklist-table-selected-category-title"></SPAN>
+            </DIV>
+            <DIV id="create-checklist-table-parent-selection-list-wrapper">
+                <DIV id="create-checklist-table-parent-selection-parent-button" class="button create-item-category"></DIV>
+                <DIV id="create-checklist-table-parent-selection-category-list"></DIV>
+            </DIV>
+        </DIV>
+
+        <DIV id="new-checklist-table-content-wrapper">
+            <TABLE id="new-checklist-table-content-table" class="formatted-table">
+                <thead>
+                <tr id="new-checklist-table-head-row">
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody id="new-checklist-table-content"></tbody>
+            </TABLE>
+        </DIV>
+    </MAIN>
+
+    <FOOTER>
+        <DIV id="create-checklist-table-new-column-button" class="button dialog-button" onclick="checklistTableCreationController.newColumn()"></DIV>
+        <DIV id="create-checklist-table-new-row-button" class="button dialog-button" onclick="checklistTableCreationController.newRow()"></DIV>
+        <DIV id="create-checklist-table-button" class="button dialog-button" onclick="checklistTableCreationController.save()"></DIV>
+    </FOOTER>
+</DIV>
+
 <DIV id="create-link" class="main-page">
     <HEADER>
         <H1 id="create-link-title"></H1>
@@ -305,12 +348,43 @@
     <FOOTER>
         <DIV id="view-table-edit-button-wrapper" class="view-table-button-wrapper">
             <DIV id="view-table-edit-button" class="button dialog-button" onclick="tableViewController.enableEditing()"></DIV>
+            <DIV id="convert-table-to-checklist-table-button" class="button dialog-button" onclick="tableViewController.convertToChecklistTable()"></DIV>
         </DIV>
         <DIV id="view-table-editing-operations-button-wrapper" class="view-table-button-wrapper">
             <DIV id="view-table-edit-save-button" class="button dialog-button" onclick="tableViewController.saveChanges()"></DIV>
             <DIV id="view-table-edit-cancel-button" class="button dialog-button" onclick="tableViewController.discardChanges()"></DIV>
             <DIV id="view-table-edit-add-column-button" class="button dialog-button" onclick="tableViewController.addColumn()"></DIV>
             <DIV id="view-table-edit-add-row-button" class="button dialog-button" onclick="tableViewController.addRow()"></DIV>
+        </DIV>
+    </FOOTER>
+</DIV>
+
+<DIV id="view-checklist-table" class="main-page">
+    <HEADER>
+        <H1><SPAN id="view-checklist-table-title"></SPAN> </H1>
+        <BUTTON id="view-checklist-table-close-button" class="dialog-close-button" onclick="pageController.openMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN id="view-checklist-table-content-wrapper">
+        <TABLE id="view-checklist-table-content-table" class="formatted-table">
+            <thead>
+            <tr id="view-checklist-table-head-row">
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="view-checklist-table-content"></tbody>
+        </TABLE>
+    </MAIN>
+
+    <FOOTER>
+        <DIV id="view-checklist-table-edit-button-wrapper" class="view-checklist-table-button-wrapper">
+            <DIV id="view-checklist-table-edit-button" class="button dialog-button" onclick="checklistTableViewController.enableEditing()"></DIV>
+        </DIV>
+        <DIV id="view-checklist-table-editing-operations-button-wrapper" class="view-checklist-table-button-wrapper">
+            <DIV id="view-checklist-table-edit-save-button" class="button dialog-button" onclick="checklistTableViewController.saveChanges()"></DIV>
+            <DIV id="view-checklist-table-edit-cancel-button" class="button dialog-button" onclick="checklistTableViewController.discardChanges()"></DIV>
+            <DIV id="view-checklist-table-edit-add-column-button" class="button dialog-button" onclick="checklistTableViewController.addColumn()"></DIV>
+            <DIV id="view-checklist-table-edit-add-row-button" class="button dialog-button" onclick="checklistTableViewController.addRow()"></DIV>
         </DIV>
     </FOOTER>
 </DIV>

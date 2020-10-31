@@ -1,9 +1,11 @@
 package com.github.saphyra.apphub.service.platform.event_gateway;
 
 import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
@@ -28,33 +30,43 @@ import org.springframework.web.client.RestTemplate;
 @Import(CommonConfigProperties.class)
 @EnableHealthCheck
 @EnableLocalMandatoryRequestValidation
-public class BeanConfiguration {
+class BeanConfiguration {
     @Bean
     @ConditionalOnMissingBean(ExecutorServiceBean.class)
-    public ExecutorServiceBean executorServiceBean() {
+    ExecutorServiceBean executorServiceBean() {
         return new ExecutorServiceBean();
     }
 
     @Bean
     @ConditionalOnMissingBean(LocaleProvider.class)
-    public LocaleProvider localeProvider(RequestContextProvider requestContextProvider) {
+    LocaleProvider localeProvider(RequestContextProvider requestContextProvider) {
         return new LocaleProvider(requestContextProvider);
     }
 
     @Bean
     @ConditionalOnMissingBean(RequestContextProvider.class)
-    public RequestContextProvider requestContextProvider() {
+    RequestContextProvider requestContextProvider() {
         return new RequestContextProvider();
     }
 
     @Bean
     @LoadBalanced
-    public RestTemplate restTemplate() {
+    RestTemplate restTemplate() {
         return new RestTemplate();
     }
 
     @Bean
-    public UuidConverter uuidConverter() {
+    UuidConverter uuidConverter() {
         return new UuidConverter();
+    }
+
+    @Bean
+    DateTimeUtil dateTimeUtil() {
+        return new DateTimeUtil();
+    }
+
+    @Bean
+    IdGenerator idGenerator() {
+        return new IdGenerator();
     }
 }

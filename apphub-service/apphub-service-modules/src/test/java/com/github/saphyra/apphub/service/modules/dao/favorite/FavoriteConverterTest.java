@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.modules.dao.favorite;
 
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_util.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.encryption.impl.BooleanEncryptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -37,7 +37,7 @@ public class FavoriteConverterTest {
     private FavoriteConverter underTest;
 
     @Mock
-    private  AccessTokenHeader accessTokenHeader;
+    private AccessTokenHeader accessTokenHeader;
 
     @Test
     public void convertEntity() {

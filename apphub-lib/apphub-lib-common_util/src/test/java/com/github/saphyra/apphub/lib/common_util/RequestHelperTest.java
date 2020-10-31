@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.lib.common_util;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.util.ObjectMapperWrapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

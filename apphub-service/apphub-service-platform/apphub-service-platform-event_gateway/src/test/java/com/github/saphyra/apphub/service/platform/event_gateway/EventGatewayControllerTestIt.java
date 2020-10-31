@@ -35,7 +35,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -202,7 +202,7 @@ public class EventGatewayControllerTestIt {
 
     @Test
     public void sendEvent() throws Exception {
-        OffsetDateTime registerTime = registerProcessor().getLastAccess();
+        LocalDateTime registerTime = registerProcessor().getLastAccess();
         sendEvent(registerTime);
     }
 
@@ -227,7 +227,7 @@ public class EventGatewayControllerTestIt {
             .thenReturn();
     }
 
-    private void sendEvent(OffsetDateTime registerTime) throws Exception {
+    private void sendEvent(LocalDateTime registerTime) throws Exception {
         Map<String, String> metadata = new HashMap<>();
         metadata.put(KEY, VALUE);
         TestEvent payload = new TestEvent(TEST_VALUE);
@@ -240,7 +240,7 @@ public class EventGatewayControllerTestIt {
         sendEvent(registerTime, request);
     }
 
-    private void sendEvent(OffsetDateTime registerTime, SendEventRequest<TestEvent> request) throws com.fasterxml.jackson.core.JsonProcessingException {
+    private void sendEvent(LocalDateTime registerTime, SendEventRequest<TestEvent> request) throws com.fasterxml.jackson.core.JsonProcessingException {
         Response result = getSendEventResponse(request);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK.value());
