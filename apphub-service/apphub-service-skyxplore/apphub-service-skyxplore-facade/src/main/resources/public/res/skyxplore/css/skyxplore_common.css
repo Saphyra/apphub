@@ -1,0 +1,7 @@
+body{
+    background-image: url("/res/skyxplore/images/background.jpg");
+}
+
+    .main-page{
+        background-color: rgba(0,0,0,0.5);
+    }

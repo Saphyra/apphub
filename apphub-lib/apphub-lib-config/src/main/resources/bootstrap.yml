@@ -67,7 +67,7 @@ admin-panel:
   ribbon:
     listOfServers: admin-panel:8080
 
-skyxplore-data:
+skyxplore-character:
   ribbon:
     listOfServers: skyxplore-data:8080
 

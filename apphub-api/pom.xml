@@ -57,5 +57,6 @@
         <module>apphub-api-platform</module>
       <module>apphub-api-modules</module>
     <module>apphub-api-notebook</module>
+    <module>apphub-api-skyxplore</module>
   </modules>
 </project>

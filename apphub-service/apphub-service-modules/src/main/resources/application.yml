@@ -24,3 +24,10 @@ modules:
         mobileAllowed: true
         roles:
           - NOTEBOOK
+    game:
+      - name: skyxplore
+        url: /web/skyxplore
+        allowedByDefault: false
+        mobileAllowed: false
+        roles:
+          - SKYXPLORE

@@ -1,1 +1,1 @@
-mvn -pl :"$1" -am "$2"
+mvn -pl :"$1" -am clean package

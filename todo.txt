@@ -27,3 +27,7 @@ Modules
         Icons for list items
         Labels
         Display selected category on create/edit dialogs
+
+TODO FE test: Redirect to SkyXplore character page when not created
+
+TODO add role SKYXPLORE for existing users

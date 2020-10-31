@@ -18,6 +18,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-security</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
     </build>
