@@ -28,6 +28,12 @@
             <artifactId>thymeleaf-spring5</artifactId>
             <version>${versions.thymeleaf-spring}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-api-skyxplore-facade-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

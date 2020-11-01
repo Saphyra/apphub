@@ -1,0 +1,20 @@
+{
+  "title": "SkyXplore - Main Menu",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Main Menu"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Back"
+      }
+    ]
+  },
+  "additionalContent": {
+    "character-saved": "Character saved."
+  }
+}

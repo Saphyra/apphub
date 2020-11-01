@@ -9,6 +9,7 @@ public class Endpoints {
     public static final String ERROR_PAGE = "/web/error";
     public static final String NOTEBOOK_PAGE = "/web/notebook";
     public static final String SKYXPLORE_START_PAGE = "/web/skyxplore";
+    public static final String SKYXPLORE_CHARACTER_PAGE = "/web/skyxplore/character";
 
     public static final String HEALTH = "/platform/health";
 
@@ -69,4 +70,8 @@ public class Endpoints {
     public static final String CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE = "/api/notebook/table/{listItemId}/convert-to-checklist-table";
 
     public static final String IS_SKYXPLORE_CHARACTER_EXISTS = "/internal/skyxplore/character/exists";
+    public static final String SKYXPLORE_INTERNAL_CREATE_OR_UPDATE_CHARACTER = "/internal/skyxplore/character";
+    public static final String SKYXPLORE_CREATE_OR_UPDATE_CHARACTER = "/api/skyxplore/character";
+    public static final String SKYXPLORE_INTERNAL_GET_CHARACTER = "/api/skyxplore/character";
+    public static final String SKYXPLORE_GET_CHARACTER = "/api/skyxplore/character";
 }

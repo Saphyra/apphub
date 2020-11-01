@@ -1,6 +1,10 @@
 Platform
     Error monitoring
     No banner Spring startup
+    Config consolidation
+        Common roleSetting file in lib
+        Common config for services
+    Refactor JS dao layer
 
 Index page
     Switch language
@@ -29,5 +33,6 @@ Modules
         Display selected category on create/edit dialogs
 
 TODO FE test: Redirect to SkyXplore character page when not created
+TODO FE test: Create character
 
 TODO add role SKYXPLORE for existing users

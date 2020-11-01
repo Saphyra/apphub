@@ -1,13 +1,15 @@
-<HTML>
+<HTML xmlns:th="http://www.thymeleaf.org">
 <HEAD>
     <META charset="UTF-8">
 
     <LINK rel="stylesheet" href="/res/common/css/reset.css">
     <LINK rel="stylesheet" href="/res/common/css/common.css">
     <LINK rel="stylesheet" href="/res/skyxplore/css/skyxplore_common.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/character.css">
 
     <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
     <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT src="/res/skyxplore/js/character/page_controller.js"></SCRIPT>
 </HEAD>
 <BODY>
 <DIV class="main-page">
@@ -16,12 +18,22 @@
     </HEADER>
 
     <MAIN>
+        <DIV id="main-container">
+            <H2 id="character-tab-title"></H2>
+            <DIV id="input-container">
+                <LABEL>
+                    <SPAN id="character-name-span"></SPAN>:
+                    <INPUT type="text" id="character-name" class="input-field">
+                    <DIV id="invalid-character-name" class="invalid-input">X</DIV>
+                </LABEL>
+            </DIV>
 
+            <BUTTON id="save-character" onclick="characterController.save()" disabled></BUTTON>
+        </DIV>
     </MAIN>
 
     <FOOTER>
-        <BUTTON id="back-button" onclick='window.location = "/web/modules"'></BUTTON>
-        <!-- TODO back location depends on where the user came from -->
+        <A class="button" id="back-button" th:href="${backUrl}"></A>
     </FOOTER>
 </DIV>
 </BODY>

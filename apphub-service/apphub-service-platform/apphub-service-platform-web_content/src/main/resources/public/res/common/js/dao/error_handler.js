@@ -1,45 +1,84 @@
-(function ErrorHandlerRegister(){
-    scriptLoader.loadScript("/res/common/js/dao/default_error_handler.js");
-
+function ErrorHandlerRegistry(){
     const handlers = [];
 
-    window.errorHandler = new function(){
-        this.registerHandler = function(errorHandler){
-            if(!errorHandler){
-                throwException("IllegalArgument", "errorHandler is null.");
+    const defaultErrorHandler = new ErrorHandler(
+        function(){return true},
+        function(request, response){
+            if(isErrorResponse(response.body)){
+                logService.logToConsole("Handling errorResponse: " + response.toString());
+                const errorResponse = JSON.parse(response.body);
+
+                switch(errorResponse.errorCode){
+                    case "SESSION_EXPIRED":
+                        sessionStorage.errorMessage = "session-expired";
+                        eventProcessor.processEvent(new Event(events.LOGOUT));
+                    break;
+                    default:
+                        notificationService.showError(errorResponse.localizedMessage);
+                }
+            }else{
+                notificationService.showError("Error response from BackEnd: " + response.toString());
             }
 
-            if(!errorHandler instanceof ErrorHandler){
-                throwException("IllegalArgument", "errorHandler is not a type of ErrorHandler");
+            if(typeof spinner !== "undefined"){
+                spinner.close();
             }
 
-            handlers.push(errorHandler);
-        }
+            function isErrorResponse(responseBody){
+                try{
+                    if(body.length == 0){
+                        return false;
+                    }
 
-        this.handleError = function(request, response){
-            if(!response){
-                throwException("IllegalArgument", "response is null.");
-            }
+                    const errorResponse = JSON.parse(responseBody);
 
-            if(!response instanceof Response){
-                throwException("IllegalArgument", "response is not a type of Response");
-            }
-
-            let foundProcessor = false;
-            for(let hIndex in handlers){
-                const handler = handlers[hIndex];
-                if(handler.canHandle(request, response)){
-                    setTimeout(function(){handler.handle(request, response), 0});
-                    foundProcessor = true;
+                    return errorResponse.errorCode
+                        && errorResponse.localizedMessage
+                        && errorResponse.params;
+                }catch(e){
+                    return false;
                 }
             }
+        }
+    );
 
-            if(!foundProcessor){
-                defaultErrorHandler.handle(request, response);
+    this.addErrorHandler = function(errorHandler){
+        if(!errorHandler){
+            throwException("IllegalArgument", "errorHandler is null.");
+        }
+
+        if(!errorHandler instanceof ErrorHandler){
+            throwException("IllegalArgument", "errorHandler is not a type of ErrorHandler");
+        }
+
+        handlers.push(errorHandler);
+
+        return this;
+    }
+
+    this.handleError = function(request, response){
+        if(!response){
+            throwException("IllegalArgument", "response is null.");
+        }
+
+        if(!response instanceof Response){
+            throwException("IllegalArgument", "response is not a type of Response");
+        }
+
+        let foundProcessor = false;
+        for(let hIndex in handlers){
+            const handler = handlers[hIndex];
+            if(handler.canHandle(request, response)){
+                setTimeout(function(){handler.handle(request, response), 0});
+                foundProcessor = true;
             }
         }
+
+        if(!foundProcessor){
+            defaultErrorHandler.handle(request, response);
+        }
     }
-})();
+};
 
 function ErrorHandler(canHandle, handle){
     this.canHandle = canHandle;

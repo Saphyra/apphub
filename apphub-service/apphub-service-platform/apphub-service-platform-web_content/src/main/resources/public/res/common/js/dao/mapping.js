@@ -3,6 +3,7 @@ window.Mapping = new function(){
 
     this.INDEX_PAGE = "/web";
     this.MODULES_PAGE = "/web/modules";
+    this.SKYXPLORE_PAGE = "/web/skyxplore";
 
     const endpoints = {
         ADD_ROLE: new Endpoint("/api/user/data/roles", HttpMethod.PUT),
@@ -44,6 +45,9 @@ window.Mapping = new function(){
         REMOVE_ROLE: new Endpoint("/api/user/data/roles", HttpMethod.DELETE),
         UPDATE_NOTEBOOK_CHECKLIST_ITEM_STATUS: new Endpoint("/api/notebook/checklist/item/{checklistItemId}/status", HttpMethod.POST),
         UPDATE_NOTEBOOK_CHECKLIST_TABLE_ROW_STATUS: new Endpoint("/api/notebook/checklist-table/{listItemId}/{rowIndex}", HttpMethod.POST),
+
+        SKYXPLORE_GET_CHARACTER: new Endpoint("/api/skyxplore/character", HttpMethod.GET),
+        SKYXPLORE_CREATE_OR_UPDATE_CHARACTER: new Endpoint("/api/skyxplore/character", HttpMethod.POST),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

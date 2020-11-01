@@ -3,7 +3,6 @@
     scriptLoader.loadScript("/res/common/js/dao/request.js");
     scriptLoader.loadScript("/res/common/js/dao/response.js");
     scriptLoader.loadScript("/res/common/js/dao/response_status.js");
-    scriptLoader.loadScript("/res/common/js/dao/error_response_error_handler.js");
 
     window.dao = new function(){
         this.sendRequest = sendRequest;
@@ -38,7 +37,7 @@
                 request.processResponse(response);
             };
             xhr.onerror = function(){
-                request.processErrorResponse(new Response(xhr));
+                request.processResponse(new Response(xhr));
             };
             
             
