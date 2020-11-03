@@ -26,16 +26,19 @@ function ErrorHandlerRegistry(){
 
             function isErrorResponse(responseBody){
                 try{
-                    if(body.length == 0){
+                    if(responseBody.length == 0){
+                        logService.logToConsole("Empty response body");
                         return false;
                     }
 
                     const errorResponse = JSON.parse(responseBody);
+                    console.log("ErrorResponse", errorResponse);
 
                     return errorResponse.errorCode
                         && errorResponse.localizedMessage
                         && errorResponse.params;
                 }catch(e){
+                    console.log(e);
                     return false;
                 }
             }
@@ -57,6 +60,7 @@ function ErrorHandlerRegistry(){
     }
 
     this.handleError = function(request, response){
+        console.log("Processing error...");
         if(!response){
             throwException("IllegalArgument", "response is null.");
         }
@@ -69,12 +73,14 @@ function ErrorHandlerRegistry(){
         for(let hIndex in handlers){
             const handler = handlers[hIndex];
             if(handler.canHandle(request, response)){
+                console.log("ErrorHandler found");
                 setTimeout(function(){handler.handle(request, response), 0});
                 foundProcessor = true;
             }
         }
 
         if(!foundProcessor){
+            console.log("No errorHandler found, using default one...");
             defaultErrorHandler.handle(request, response);
         }
     }

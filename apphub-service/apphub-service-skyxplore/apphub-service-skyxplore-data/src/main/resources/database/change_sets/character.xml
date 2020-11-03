@@ -1,0 +1,18 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-character" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="skyxplore" tableName="character"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="skyxplore" tableName="character">
+            <column name="user_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="skyxplore" tableName="character" columnNames="user_id" constraintName="character_pk"/>
+    </changeSet>
+</databaseChangeLog>

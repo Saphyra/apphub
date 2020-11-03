@@ -1,3 +1,7 @@
+spring:
+  application:
+    name: skyxplore-facade
+
 role:
   settings:
     - pattern: /web/skyxplore/**

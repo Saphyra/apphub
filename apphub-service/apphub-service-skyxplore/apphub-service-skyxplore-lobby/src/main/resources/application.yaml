@@ -1,3 +1,7 @@
+spring:
+  application:
+    name: skyxplore-lobby
+
 role:
   settings:
     - pattern: /api/skyxplore/**
