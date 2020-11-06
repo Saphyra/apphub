@@ -19,7 +19,7 @@
         "message": "Password"
       }
     ],
-    "remember-me*label": [
+    "remember-me-label": [
       {
         "key": "innerHTML",
         "message": "Remember me"
