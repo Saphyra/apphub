@@ -1,6 +1,10 @@
 Platform
     Error monitoring
     No banner Spring startup
+    Contact/support
+
+Login/Change user data
+    Mistyped password failure counter
 
 Index page
     Switch language
