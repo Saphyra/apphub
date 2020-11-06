@@ -25,4 +25,4 @@ if [[ "$STARTUP_RESULT" -ne 0 ]]; then
   exit 1
 fi
 
-./port_forward.sh $NAMESPACE_NAME
+start ./port_forward.sh $NAMESPACE_NAME

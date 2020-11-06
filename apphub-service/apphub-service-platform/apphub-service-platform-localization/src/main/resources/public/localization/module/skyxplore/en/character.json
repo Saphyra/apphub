@@ -33,7 +33,7 @@
     ]
   },
   "additionalContent": {
-    "create-character": "Create character",
+    "create-character-title": "Create character",
     "edit-character-title": "Edit character",
     "character-name-too-short": "Character name is too short (minimum 3 characters).",
     "character-name-too-long": "Character name is too long (maximum 30 characters).",

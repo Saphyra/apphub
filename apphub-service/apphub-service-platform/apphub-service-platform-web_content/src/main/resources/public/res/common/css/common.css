@@ -57,6 +57,10 @@ main{
     padding: 0.5rem 0;
 }
 
+    main.footerless{
+        bottom: 0;
+    }
+
 footer{
     background-color: var(--background-color);
     position: absolute;

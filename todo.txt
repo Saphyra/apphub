@@ -34,5 +34,8 @@ Modules
 
 TODO FE test: Redirect to SkyXplore character page when not created
 TODO FE test: Create character
+TODO FE test: Search for friend
+TODO FE test: Add friend
+TODO FE test: Decline friend request
 
 TODO add role SKYXPLORE for existing users

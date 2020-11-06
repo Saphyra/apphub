@@ -7,14 +7,63 @@
         "message": "Main Menu"
       }
     ],
+    "new-game-button": [
+      {
+        "key": "innerHTML",
+        "message": "New game"
+      }
+    ],
+    "load-game-button": [
+      {
+        "key": "innerHTML",
+        "message": "Load game"
+      }
+    ],
+    "edit-character-button": [
+      {
+        "key": "innerHTML",
+        "message": "Edit character"
+      }
+    ],
     "back-button": [
       {
         "key": "innerHTML",
         "message": "Back"
       }
+    ],
+    "friends-title": [
+      {
+        "key": "innerHTML",
+        "message": "Friends"
+      }
+    ],
+    "new-friend-name": [
+      {
+        "key": "placeholder",
+        "message": "Search for friends"
+      }
+    ],
+    "no-character-found": [
+      {
+        "key": "innerHTML",
+        "message": "Character not found with the given name"
+      }
+    ],
+    "query-string-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "Please enter at least 3 characters"
+      }
+    ],
+    "new-game-title": [
+      {
+        "key": "innerHTML",
+        "message": "New game"
+      }
     ]
   },
   "additionalContent": {
-    "character-saved": "Character saved."
+    "character-saved": "Character saved.",
+    "friend-request-sent": "Friend request sent."
   }
 }

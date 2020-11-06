@@ -5,14 +5,53 @@
     <LINK rel="stylesheet" href="/res/common/css/reset.css">
     <LINK rel="stylesheet" href="/res/common/css/common.css">
     <LINK rel="stylesheet" href="/res/skyxplore/css/skyxplore_common.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/main_menu.css">
 
     <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
     <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT src="/res/skyxplore/js/main_menu/page_controller.js"></SCRIPT>
 </HEAD>
 <BODY>
-<DIV class="main-page">
+<DIV id="main-menu" class="main-page">
     <HEADER>
         <H1 id="main-title"></H1>
+    </HEADER>
+
+    <MAIN id="main-menu-main" class="footerless">
+        <DIV id="main-menu-button-wrapper">
+            <DIV id="new-game-button" class="button" onclick="pageController.openNewGameWindow()"></DIV>
+            <DIV id="load-game-button" class="button" onclick="pageController.openLoadGameWindow()"></DIV>
+            <DIV id="edit-character-button" class="button"
+                 onclick="window.location.href='/web/skyxplore/character'"></DIV>
+            <DIV id="back-button" class="button" onclick="window.location.href='/web/modules'"></DIV>
+        </DIV>
+
+        <DIV id="friends">
+            <H2 id="friends-title"></H2>
+            <DIV id="add-friend-container">
+                <INPUT type="text" id="new-friend-name">
+                <DIV id="new-friend-search-result-wrapper">
+                    <DIV id="no-character-found"></DIV>
+                    <DIV id="query-string-too-short"></DIV>
+                    <DIV id="new-friend-search-result"></DIV>
+                </DIV>
+            </DIV>
+            <DIV id="friends-container">
+                <DIV id="incoming-friend-request-list"></DIV>
+                <DIV id="friend-list"></DIV>
+                <DIV id="outgoing-friend-request-list"></DIV>
+            </DIV>
+        </DIV>
+    </MAIN>
+
+</DIV>
+
+<DIV id="new-game" class="main-page">
+    <HEADER>
+        <H1 id="new-game-title"></H1>
+        <BUTTON id="new-game-window-close-button" class="window-close-button" onclick="pageController.openMainMenu()">
+            X
+        </BUTTON>
     </HEADER>
 
     <MAIN>
@@ -20,8 +59,7 @@
     </MAIN>
 
     <FOOTER>
-        <BUTTON id="back-button" onclick='window.location = "/web/modules"'></BUTTON>
-        <BUTTON id="character-button" onclick='window.location = "/web/skyxplore/character"'></BUTTON>
+        <BUTTON id="create-new-game-button" onclick="gameCreationService.createNewGame()"></BUTTON>
     </FOOTER>
 </DIV>
 </BODY>

@@ -7,14 +7,63 @@
         "message": "Főmenü"
       }
     ],
+    "new-game-button": [
+      {
+        "key": "innerHTML",
+        "message": "Új játék"
+      }
+    ],
+    "load-game-button": [
+      {
+        "key": "innerHTML",
+        "message": "Játék betöltése"
+      }
+    ],
+    "edit-character-button": [
+      {
+        "key": "innerHTML",
+        "message": "Karakter szerkesztése"
+      }
+    ],
     "back-button": [
       {
         "key": "innerHTML",
         "message": "Vissza"
       }
+    ],
+    "friends-title": [
+      {
+        "key": "innerHTML",
+        "message": "Barátok"
+      }
+    ],
+    "new-friend-name": [
+      {
+        "key": "placeholder",
+        "message": "Barátok keresése"
+      }
+    ],
+    "no-character-found": [
+      {
+        "key": "innerHTML",
+        "message": "Nem található karakter a megadott névvel"
+      }
+    ],
+    "query-string-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "Legalább 3 karaktert írj be"
+      }
+    ],
+    "new-game-title": [
+      {
+        "key": "innerHTML",
+        "message": "Új játék"
+      }
     ]
   },
   "additionalContent": {
-    "character-saved": "Karakter elmentve."
+    "character-saved": "Karakter elmentve.",
+    "friend-request-sent": "Barátkérelem elküldve."
   }
 }

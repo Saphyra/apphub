@@ -43,3 +43,9 @@ main{
                     margin-right: 2rem;
                     font-size: 1.25rem;
                 }
+
+            #save-character{
+                min-width: 10rem;
+                margin-bottom: 1rem;
+                font-size: 1.5rem;
+            }
