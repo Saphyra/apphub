@@ -10,5 +10,6 @@ public class Constants {
 
     public final String ROLE_ADMIN = "ADMIN";
     public final String ROLE_NOTEBOOK = "NOTEBOOK";
+    public final String ROLE_SKYXPLORE = "SKYXPLORE";
     public final String AUTHORIZATION_HEADER = "auth";
 }

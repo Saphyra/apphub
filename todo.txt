@@ -11,13 +11,19 @@ Index page
 
 Favorite modules can be accessed from anywhere
 AccessTokenManagement
+    Invalidate AccessTokens
+    Display expiration
+    Display device info
+
+Admin panel
+    Add / remove roles for all users NEXT_RELEASE
 
 Modules
     Balance
         Implement
 
     SkyXplore
-        Migrate
+        Migrate NEXT_RELEASE
 
     Jira
         Implement
@@ -38,4 +44,4 @@ TODO FE test: Search for friend
 TODO FE test: Add friend
 TODO FE test: Decline friend request
 
-TODO add role SKYXPLORE for existing users
+TODO add role SKYXPLORE for existing users NEXT_RELEASE

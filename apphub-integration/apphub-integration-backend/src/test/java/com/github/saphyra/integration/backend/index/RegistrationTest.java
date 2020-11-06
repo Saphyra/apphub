@@ -154,6 +154,6 @@ public class RegistrationTest extends TestBase {
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         List<String> roles = DatabaseUtil.getRolesByUserId(DatabaseUtil.getUserIdByEmail(registrationRequest.getEmail()));
-        assertThat(roles).containsExactlyInAnyOrder(Constants.ROLE_NOTEBOOK);
+        assertThat(roles).containsExactlyInAnyOrder(Constants.ROLE_NOTEBOOK, Constants.ROLE_SKYXPLORE);
     }
 }
