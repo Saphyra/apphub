@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SkyXplorePageController {
     private final AccessTokenHeaderConverter accessTokenHeaderConverter;
     private final LocaleProvider localeProvider;

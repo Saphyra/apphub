@@ -1,5 +1,12 @@
 package com.github.saphyra.apphub.lib.error_handler;
 
+import java.util.HashMap;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
 import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
@@ -8,12 +15,6 @@ import com.github.saphyra.apphub.lib.exception.RestException;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import java.util.HashMap;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -24,7 +25,6 @@ class ErrorHandlerAdvice {
     private final ErrorResponseFactory errorResponseFactory;
 
     @ExceptionHandler(FeignException.class)
-        //TODO unit test
     ResponseEntity<?> feignException(FeignException exception) {
         String content = exception.contentUTF8();
         HttpStatus status = HttpStatus.valueOf(exception.status());

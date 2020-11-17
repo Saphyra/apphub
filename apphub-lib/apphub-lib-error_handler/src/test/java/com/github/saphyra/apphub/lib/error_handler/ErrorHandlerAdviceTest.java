@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.lib.error_handler;
 
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
-import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
-import com.github.saphyra.apphub.lib.exception.RestException;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -14,15 +14,18 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
+import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
+import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
+import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
+import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.RestException;
+import feign.FeignException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ErrorHandlerAdviceTest {
     private static final String ERROR_CODE = "error-code";
+    private static final String CONTENT = "content";
 
     @Mock
     private ErrorResponseFactory errorResponseFactory;
@@ -35,6 +38,20 @@ public class ErrorHandlerAdviceTest {
 
     @Mock
     private ErrorResponse errorResponse;
+
+    @Mock
+    private FeignException feignException;
+
+    @Test
+    public void feignException() {
+        given(feignException.contentUTF8()).willReturn(CONTENT);
+        given(feignException.status()).willReturn(400);
+
+        ResponseEntity<?> result = underTest.feignException(feignException);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(result.getBody()).isEqualTo(CONTENT);
+    }
 
     @Test
     public void restException() {
