@@ -17,12 +17,12 @@ import java.util.UUID;
 //TODO unit test
 //TODO int test
 public class SkyXploreDataEventControllerImpl implements SkyXploreDataEventController {
-    private final List<DeleteByUserIdDao> daos;
+    private final List<DeleteByUserIdDao> deleteByUserIdDaos;
 
     @Override
     public void deleteAccountEvent(SendEventRequest<DeleteAccountEvent> request) {
         UUID userId = request.getPayload().getUserId();
         log.info("Processing DeleteAccountEvent for uid {}", userId);
-        daos.forEach(deleteByUserIdDao -> deleteByUserIdDao.deleteByUserId(userId));
+        deleteByUserIdDaos.forEach(deleteByUserIdDao -> deleteByUserIdDao.deleteByUserId(userId));
     }
 }

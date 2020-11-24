@@ -48,7 +48,7 @@ window.Mapping = new function(){
 
         SKYXPLORE_GET_CHARACTER: new Endpoint("/api/skyxplore/character", HttpMethod.GET),
         SKYXPLORE_CREATE_OR_UPDATE_CHARACTER: new Endpoint("/api/skyxplore/character", HttpMethod.POST),
-        SKYXPLORE_SEARCH_FOR_FRIENDS: new Endpoint("/api/skyxplore/friend/search", HttpMethod.POST),
+        SKYXPLORE_SEARCH_FOR_FRIENDS: new Endpoint("/api/skyxplore/friend/candidate", HttpMethod.POST),
         SKYXPLORE_ADD_FRIEND: new Endpoint("/api/skyxplore/friend", HttpMethod.PUT),
     }
 

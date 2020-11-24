@@ -4,10 +4,10 @@ import com.github.saphyra.apphub.api.skyxplore.data.server.SkyXploreFriendDataCo
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.lib.exception.NotImplementedException;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreCharacter;
 import com.github.saphyra.apphub.service.skyxplore.data.common.SkyXploreCharacterModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.data.friend.request.service.FriendRequestCreationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,17 +22,21 @@ import java.util.stream.Collectors;
 public class FriendDataControllerImpl implements SkyXploreFriendDataController {
     private final CharacterDao characterDao;
     private final SkyXploreCharacterModelConverter characterModelConverter;
+    private final FriendRequestCreationService friendRequestCreationService;
 
     @Override
     //TODO unit test
     //TODO int test
-    public List<SkyXploreCharacterModel> getFriends(OneParamRequest<String> queryString, AccessTokenHeader accessTokenHeader) {
+    //TODO API test
+    public List<SkyXploreCharacterModel> getFriendCandidates(OneParamRequest<String> queryString, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to get the characters with name {}", accessTokenHeader.getUserId(), queryString.getValue());
         SkyXploreCharacter ownCharacter = characterDao.findByIdValidated(accessTokenHeader.getUserId());
 
         return characterDao.getByNameLike(queryString.getValue())
             .stream()
             .filter(skyXploreCharacter -> !skyXploreCharacter.getUserId().equals(ownCharacter.getUserId()))
+            //TODO filter friends
+            //TODO filter friend requests
             .map(characterModelConverter::convertEntity)
             .collect(Collectors.toList());
     }
@@ -40,8 +44,9 @@ public class FriendDataControllerImpl implements SkyXploreFriendDataController {
     @Override
     //TODO unit test
     //TODO int test
-    public void addFriend(OneParamRequest<UUID> characterId, AccessTokenHeader accessTokenHeader) {
+    //TODO API test
+    public void createFriendRequest(OneParamRequest<UUID> characterId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to add {} as friend", accessTokenHeader.getUserId(), characterId.getValue());
-        throw new NotImplementedException(); //TODO implement
+        friendRequestCreationService.createFriendRequest(accessTokenHeader.getUserId(), characterId.getValue());
     }
 }

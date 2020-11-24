@@ -34,6 +34,12 @@
             <artifactId>apphub-api-skyxplore-facade-server</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+            <version>${versions.spring-cloud}</version>
+        </dependency>
     </dependencies>
 
     <build>

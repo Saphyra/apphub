@@ -53,10 +53,12 @@
 
                     #no-character-found{
                         display: none;
+                        font-size: 1.5rem;
                     }
 
                     #query-string-too-short{
                         display: none;
+                        font-size: 1.5rem;
                     }
 
                     #new-friend-search-result{

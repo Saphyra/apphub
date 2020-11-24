@@ -66,6 +66,7 @@
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_ADD_FRIEND"), {value: characterId});
             request.processValidResponse = function(){
                 document.getElementById(ids.searchFriendInput).value = "";
+                $("#" + ids.friendSearchResultWrapper).fadeOut();
                 notificationService.showSuccess(Localization.getAdditionalContent("friend-request-sent"));
             }
         dao.sendRequestAsync(request);

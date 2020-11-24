@@ -34,9 +34,9 @@ function ErrorHandlerRegistry(){
                     const errorResponse = JSON.parse(responseBody);
                     console.log("ErrorResponse", errorResponse);
 
-                    return errorResponse.errorCode
-                        && errorResponse.localizedMessage
-                        && errorResponse.params;
+                    return errorResponse.errorCode !== undefined
+                        && errorResponse.localizedMessage !== undefined
+                        && errorResponse.params !== undefined;
                 }catch(e){
                     console.log(e);
                     return false;

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+//TODO only delegates - Move to zuul
 public class SkyXploreCharacterFacadeControllerImpl implements SkyXploreCharacterFacadeController {
     private final AccessTokenHeaderConverter accessTokenHeaderConverter;
     private final LocaleProvider localeProvider;

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.config;
 
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
@@ -23,6 +24,10 @@ import org.springframework.context.annotation.Import;
 @EnableLiquibase
 @EnableEventProcessor
 public class SkyxploreDataBeanConfiguration {
+    @Bean
+    IdGenerator idGenerator() {
+        return new IdGenerator();
+    }
 
     @Bean
     UuidConverter uuidConverter() {

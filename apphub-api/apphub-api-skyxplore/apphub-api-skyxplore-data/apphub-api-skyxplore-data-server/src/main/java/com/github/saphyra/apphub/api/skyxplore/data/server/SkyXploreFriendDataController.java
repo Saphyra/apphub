@@ -15,8 +15,8 @@ import java.util.UUID;
 
 public interface SkyXploreFriendDataController {
     @PostMapping(Endpoints.SKYXPLORE_SEARCH_FOR_FRIENDS)
-    List<SkyXploreCharacterModel> getFriends(@RequestBody OneParamRequest<String> queryString, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<SkyXploreCharacterModel> getFriendCandidates(@RequestBody OneParamRequest<String> queryString, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PutMapping(Endpoints.SKYXPLORE_ADD_FRIEND)
-    void addFriend(@RequestBody OneParamRequest<UUID> characterId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void createFriendRequest(@RequestBody OneParamRequest<UUID> characterId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

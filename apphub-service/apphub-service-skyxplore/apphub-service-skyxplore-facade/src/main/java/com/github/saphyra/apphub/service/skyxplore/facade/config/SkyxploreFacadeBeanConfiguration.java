@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocalMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -18,5 +19,6 @@ import org.springframework.context.annotation.Import;
 })
 @EnableLocalMandatoryRequestValidation
 @EnableErrorHandler
+@EnableZuulProxy
 public class SkyxploreFacadeBeanConfiguration {
 }
