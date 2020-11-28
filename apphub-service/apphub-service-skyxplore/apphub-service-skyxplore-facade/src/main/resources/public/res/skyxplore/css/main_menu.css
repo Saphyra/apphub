@@ -73,6 +73,28 @@
             bottom: 0;
         }
 
+            .friend-list-title{
+                text-align: center;
+                font-size: 1.5rem;
+            }
+
+            .friend-list-item{
+                border: 1px solid white;
+                margin: 0.5rem;
+                padding: 0.25rem;
+                position: relative;
+                font-size: 1.25rem;
+            }
+
+                .friend-list-button{
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    border-width: 1px;
+                    padding: 0.15rem;
+                    font-size: 0.75rem;
+                }
+
             #incoming-friend-request-list{
 
             }

@@ -60,10 +60,30 @@
         "key": "innerHTML",
         "message": "New game"
       }
+    ],
+    "incoming-friend-request-list-title": [
+      {
+        "key": "innerHTML",
+        "message": "Friend requests"
+      }
+    ],
+    "friend-list-title": [
+      {
+        "key": "innerHTML",
+        "message": "Friends"
+      }
+    ],
+    "outgoing-friend-request-list-title": [
+      {
+        "key": "innerHTML",
+        "message": "Sent friend requests"
+      }
     ]
   },
   "additionalContent": {
     "character-saved": "Character saved.",
-    "friend-request-sent": "Friend request sent."
+    "friend-request-sent": "Friend request sent.",
+    "cancel-friend-request": "Cancel",
+    "friend-request-canceled": "Friend request is cancelled"
   }
 }

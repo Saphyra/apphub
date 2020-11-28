@@ -2,6 +2,26 @@ spring:
   application:
     name: skyxplore-facade
 
+zuul:
+  prefix: /
+  routes:
+    get-friend-candidates:
+      path: /api/skyxplore/friend/candidate
+      serviceId: skyxplore-data
+      stripPrefix: false
+    create-friend-request:
+      path: /api/skyxplore/friend
+      serviceId: skyxplore-data
+      stripPrefix: false
+    get-sent-friend-requests:
+      path: /api/skyxplore/friend/request/sent
+      serviceId: skyxplore-data
+      stripPrefix: false
+    cancel-friend-request:
+      path: /api/skyxplore/friend/request/*
+      serviceId: skyxplore-data
+      stripPrefix: false
+
 role:
   settings:
     - pattern: /web/skyxplore/**

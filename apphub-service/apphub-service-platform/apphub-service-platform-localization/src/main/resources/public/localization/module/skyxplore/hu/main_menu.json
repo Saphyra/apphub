@@ -60,10 +60,30 @@
         "key": "innerHTML",
         "message": "Új játék"
       }
+    ],
+    "incoming-friend-request-list-title": [
+      {
+        "key": "innerHTML",
+        "message": "Barátkérelmek"
+      }
+    ],
+    "friend-list-title": [
+      {
+        "key": "innerHTML",
+        "message": "Barátok"
+      }
+    ],
+    "outgoing-friend-request-list-title": [
+      {
+        "key": "innerHTML",
+        "message": "Elküldött barátkérelmek"
+      }
     ]
   },
   "additionalContent": {
     "character-saved": "Karakter elmentve.",
-    "friend-request-sent": "Barátkérelem elküldve."
+    "friend-request-sent": "Barátkérelem elküldve.",
+    "cancel-friend-request": "Visszavon",
+    "friend-request-canceled": "Barátkérelem visszavonva"
   }
 }

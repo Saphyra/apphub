@@ -6,7 +6,8 @@ scriptLoader.loadScript("/res/skyxplore/js/main_menu/friend_controller.js");
         friendSearchResultWrapper: "new-friend-search-result-wrapper",
         queryStringTooShort: "query-string-too-short",
         characterNotFound: "no-character-found",
-        friendSearchResult: "new-friend-search-result"
+        friendSearchResult: "new-friend-search-result",
+        sentFriendRequestsContainer: "outgoing-friend-request-list"
     }
 
     $(document).ready(function(){
