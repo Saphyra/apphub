@@ -10,7 +10,7 @@
     "back-button": [
       {
         "key": "innerHTML",
-        "message": "Back"
+        "message": "Exit"
       }
     ],
     "chat-title": [
@@ -39,6 +39,7 @@
     ]
   },
   "additionalContent": {
-    "no-active-friends": "No active friends"
+    "no-active-friends": "No active friends",
+    "friend-invited": "Friend is invited."
   }
 }

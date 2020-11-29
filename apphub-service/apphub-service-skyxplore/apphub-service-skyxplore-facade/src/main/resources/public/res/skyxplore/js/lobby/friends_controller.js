@@ -50,7 +50,11 @@
     }
 
     function inviteFriend(friendId){
-        //TODO implement
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_INVITE_TO_LOBBY", {friendId: friendId}));
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("friend-invited"));
+            }
+        dao.sendRequestAsync(request);
     }
 
     function init(){

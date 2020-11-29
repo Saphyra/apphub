@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient("skyxplore-data-character")
 public interface SkyXploreCharacterDataApiClient {
-    @GetMapping(Endpoints.IS_SKYXPLORE_CHARACTER_EXISTS)
+    @GetMapping(Endpoints.SKYXPLORE_IS_CHARACTER_EXISTS)
     boolean isCharacterExistsForUser(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
     @GetMapping(Endpoints.SKYXPLORE_INTERNAL_GET_CHARACTER)

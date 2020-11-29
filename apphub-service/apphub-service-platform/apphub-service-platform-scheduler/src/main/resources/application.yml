@@ -8,3 +8,6 @@ interval:
   user:
     authentication:
       accessTokenCleanup: 60000
+  skyxplore:
+    lobby:
+      lobbyCleanup: 300000

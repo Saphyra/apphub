@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 public interface SkyXploreCharacterDataController {
-    @GetMapping(Endpoints.IS_SKYXPLORE_CHARACTER_EXISTS)
+    @GetMapping(Endpoints.SKYXPLORE_IS_CHARACTER_EXISTS)
     boolean isCharacterExistsForUser(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(Endpoints.SKYXPLORE_INTERNAL_GET_CHARACTER)

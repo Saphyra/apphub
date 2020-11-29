@@ -29,6 +29,14 @@ zuul:
       path: /api/skyxplore/friend/request/*
       serviceId: skyxplore-data
       stripPrefix: false
+    exit-from-lobby:
+      path: /api/skyxplore/lobby
+      serviceId: skyxplore-lobby
+      stripPrefix: false
+    invite-to-lobby:
+      path: /api/skyxplore/lobby/invite/*
+      serviceId: skyxplore-lobby
+      stripPrefix: false
 
 role:
   settings:

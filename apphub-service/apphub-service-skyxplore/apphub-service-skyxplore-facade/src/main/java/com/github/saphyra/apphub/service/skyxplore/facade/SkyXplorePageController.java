@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.facade;
 
 import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreCharacterDataApiClient;
+import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
@@ -20,6 +21,7 @@ public class SkyXplorePageController {
     private final AccessTokenHeaderConverter accessTokenHeaderConverter;
     private final LocaleProvider localeProvider;
     private final SkyXploreCharacterDataApiClient characterClient;
+    private final SkyXploreLobbyApiClient lobbyClient;
 
     @GetMapping(Endpoints.SKYXPLORE_START_PAGE)
     public ModelAndView mainMenu(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
@@ -43,7 +45,8 @@ public class SkyXplorePageController {
     }
 
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_PAGE)
-    public String lobby() {
+    public String lobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
+        lobbyClient.createLobbyIfNotExists(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated());
         return "lobby";
     }
 }

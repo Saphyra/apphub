@@ -35,8 +35,10 @@ public class ActiveFriendsQueryService {
         return friendshipDao.getByFriendId(userId)
             .stream()
             .filter(friendship -> isActive(userId, friendship))
+            //TODO filter friends already in lobby
             .map(friendship -> ActiveFriendResponse.builder()
                 .friendName(friendNameQueryService.getFriendName(friendship, userId))
+                .friendId(friendIdExtractor.getFriendId(friendship, userId))
                 .build())
             .collect(Collectors.toList());
     }

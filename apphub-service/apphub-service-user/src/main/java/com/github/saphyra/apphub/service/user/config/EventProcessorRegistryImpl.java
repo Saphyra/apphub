@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.user;
+package com.github.saphyra.apphub.service.user.config;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
 import com.github.saphyra.apphub.lib.config.Endpoints;

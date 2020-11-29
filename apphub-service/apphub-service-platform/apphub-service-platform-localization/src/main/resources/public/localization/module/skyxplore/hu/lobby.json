@@ -10,7 +10,7 @@
     "back-button": [
       {
         "key": "innerHTML",
-        "message": "Vissza"
+        "message": "Kilépés"
       }
     ],
     "chat-title": [
@@ -39,6 +39,7 @@
     ]
   },
   "additionalContent": {
-    "no-active-friends": "Nincs aktív barát"
+    "no-active-friends": "Nincs aktív barát",
+    "friend-invited": "Barát meghívva."
   }
 }

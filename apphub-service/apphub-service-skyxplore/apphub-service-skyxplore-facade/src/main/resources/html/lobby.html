@@ -31,7 +31,9 @@
         <DIV id="settings">
             <H2 id="settings-title"></H2>
 
-            <DIV id="settings-container"></DIV>
+            <DIV id="settings-container">
+                <DIV id="players-list"></DIV>
+            </DIV>
         </DIV>
 
         <DIV id="friends">
@@ -42,7 +44,7 @@
     </MAIN>
 
     <FOOTER>
-        <BUTTON id="back-button" onclick='window.location = "/web/skyxplore"'></BUTTON>
+        <BUTTON id="back-button" onclick='pageController.exitLobby()'></BUTTON>
     </FOOTER>
 </DIV>
 </BODY>
