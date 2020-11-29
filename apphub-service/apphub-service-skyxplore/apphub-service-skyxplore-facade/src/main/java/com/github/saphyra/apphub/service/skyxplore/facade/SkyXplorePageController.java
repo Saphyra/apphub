@@ -41,4 +41,9 @@ public class SkyXplorePageController {
         mav.addObject("backUrl", Endpoints.SKYXPLORE_START_PAGE);
         return mav;
     }
+
+    @GetMapping(Endpoints.SKYXPLORE_LOBBY_PAGE)
+    public String lobby() {
+        return "lobby";
+    }
 }

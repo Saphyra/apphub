@@ -1,0 +1,44 @@
+{
+  "title": "SkyXplore - Lobby",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Lobby"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Back"
+      }
+    ],
+    "chat-title": [
+      {
+        "key": "innerHTML",
+        "message": "Chat"
+      }
+    ],
+    "settings-title": [
+      {
+        "key": "innerHTML",
+        "message": "Settings"
+      }
+    ],
+    "friends-title": [
+      {
+        "key": "innerHTML",
+        "message": "Friends"
+      }
+    ],
+    "message-input": [
+      {
+        "key": "placeholder",
+        "message": "Message"
+      }
+    ]
+  },
+  "additionalContent": {
+    "no-active-friends": "No active friends"
+  }
+}

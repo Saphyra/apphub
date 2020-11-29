@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+//TODO unit test - lastVisitedPage added
 public class AccessTokenConverter extends ConverterBase<AccessTokenEntity, AccessToken> {
     private final UuidConverter uuidConverter;
 
@@ -17,6 +18,7 @@ public class AccessTokenConverter extends ConverterBase<AccessTokenEntity, Acces
             .userId(uuidConverter.convertEntity(entity.getUserId()))
             .persistent(entity.isPersistent())
             .lastAccess(entity.getLastAccess())
+            .lastVisitedPage(entity.getLastVisitedPage())
             .build();
     }
 
@@ -27,6 +29,7 @@ public class AccessTokenConverter extends ConverterBase<AccessTokenEntity, Acces
             .userId(uuidConverter.convertDomain(domain.getUserId()))
             .persistent(domain.isPersistent())
             .lastAccess(domain.getLastAccess())
+            .lastVisitedPage(domain.getLastVisitedPage())
             .build();
     }
 }

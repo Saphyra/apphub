@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.config;
 
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
@@ -32,5 +33,10 @@ public class SkyxploreDataBeanConfiguration {
     @Bean
     UuidConverter uuidConverter() {
         return new UuidConverter();
+    }
+
+    @Bean
+    DateTimeUtil dateTimeUtil() {
+        return new DateTimeUtil();
     }
 }

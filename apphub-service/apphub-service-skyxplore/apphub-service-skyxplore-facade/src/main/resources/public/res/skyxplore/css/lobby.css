@@ -1,0 +1,86 @@
+:root{
+    --tab-width: 30%;
+    --tab-title-height: 2rem;
+    --message-input-height: 2.5rem;
+}
+
+#chat{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--tab-width);
+    border-right: 3px ridge white;
+}
+
+    #messages{
+        position: absolute;
+        top: var(--tab-title-height);
+        left: 0;
+        right: 0;
+        bottom: var(--message-input-height);
+    }
+
+    #message-input-container{
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: var(--message-input-height);
+        border-top: 2px ridge white;
+        text-align: center;
+    }
+
+        #message-input{
+            width: 90%;
+        }
+
+#settings{
+    position: absolute;
+    top: 0;
+    right: var(--tab-width);
+    left: var(--tab-width);
+    bottom: 0;
+}
+
+    #settings-container{
+        position: absolute;
+        top: var(--tab-title-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+#friends{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: var(--tab-width);
+    border-left: 3px ridge white;
+}
+
+    #friends-list{
+        position: absolute;
+        top: var(--tab-title-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+        .friend{
+            text-align: center;
+            margin: 0.5rem;
+            padding: 0.25rem;
+            font-size: 1.25rem;
+        }
+
+#chat-title, #settings-title, #friends-title{
+    text-align: center;
+    border-bottom: 2px ridge white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--tab-title-height);
+}

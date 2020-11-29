@@ -10,6 +10,7 @@ public class Endpoints {
     public static final String NOTEBOOK_PAGE = "/web/notebook";
     public static final String SKYXPLORE_START_PAGE = "/web/skyxplore";
     public static final String SKYXPLORE_CHARACTER_PAGE = "/web/skyxplore/character";
+    public static final String SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
 
     public static final String HEALTH = "/platform/health";
 
@@ -31,6 +32,7 @@ public class Endpoints {
 
     public static final String INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";
     public static final String INTERNAL_GET_USER_LANGUAGE = "/internal/user/{userId}/data/language";
+    public static final String INTERNAL_GET_LAST_VISITED_PAGE = "/internal/user/authentication/last-visited-page/{userId}";
 
     public static final String REGISTER_PROCESSOR = "/platform/event-gateway";
     public static final String HEARTBEAT = "/platform/event-gateway/{serviceName}";
@@ -39,6 +41,7 @@ public class Endpoints {
     public static final String DELETE_EXPIRED_ACCESS_TOKENS_EVENT = "/event/delete-expired-access-tokens";
     public static final String REFRESH_ACCESS_TOKEN_EXPIRATION_EVENT = "/event/refresh-access-token-expiration";
     public static final String DELETE_ACCOUNT_EVENT = "/event/delete-account";
+    public static final String PAGE_VISITED_EVENT = "/event/page-visited";
 
     public static final String TRANSLATE_ERROR_CODE = "/internal/localization/error-code";
 
@@ -82,4 +85,5 @@ public class Endpoints {
     public static final String SKYXPLORE_ACCEPT_FRIEND_REQUEST = "/api/skyxplore/friend/request/{friendRequestId}";
     public static final String SKYXPLORE_GET_FRIENDS = "/api/skyxplore/friend";
     public static final String SKYXPLORE_REMOVE_FRIEND = "/api/skyxplore/friend/{friendshipId}";
+    public static final String SKYXPLORE_GET_ACTIVE_FRIENDS = "/api/skyxplore/friend/active";
 }

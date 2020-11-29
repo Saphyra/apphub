@@ -55,12 +55,6 @@
         "message": "Please enter at least 3 characters"
       }
     ],
-    "new-game-title": [
-      {
-        "key": "innerHTML",
-        "message": "New game"
-      }
-    ],
     "incoming-friend-request-list-title": [
       {
         "key": "innerHTML",

@@ -79,6 +79,10 @@
                 font-size: 1.5rem;
             }
 
+            #friend-list .friend-list-item{
+                border-color: green;
+            }
+
             .friend-list-item{
                 border: 1px solid white;
                 margin: 0.5rem;

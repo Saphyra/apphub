@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao;
 
+import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.Converter;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -11,7 +12,7 @@ import java.util.UUID;
 
 @Component
 //TODO unit test
-public class FriendshipDao extends AbstractDao<FriendshipEntity, Friendship, String, FriendshipRepository> {
+public class FriendshipDao extends AbstractDao<FriendshipEntity, Friendship, String, FriendshipRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
     public FriendshipDao(Converter<FriendshipEntity, Friendship> converter, FriendshipRepository repository, UuidConverter uuidConverter) {
@@ -25,5 +26,10 @@ public class FriendshipDao extends AbstractDao<FriendshipEntity, Friendship, Str
 
     public Optional<Friendship> findById(UUID userId) {
         return converter.convertEntity(repository.findById(uuidConverter.convertDomain(userId)));
+    }
+
+    @Override
+    public void deleteByUserId(UUID userId) {
+        repository.deleteByFriendId(uuidConverter.convertDomain(userId));
     }
 }

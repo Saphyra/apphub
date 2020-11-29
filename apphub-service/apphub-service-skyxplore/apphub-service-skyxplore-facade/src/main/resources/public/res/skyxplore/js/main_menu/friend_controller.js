@@ -1,8 +1,8 @@
 (function FriendController(){
-    $(document).ready(init);
-
     let searchForFriendTimeout = null;
     let refreshInterval = null;
+
+    $(document).ready(init);
 
     function setRefreshInterval(){
         if(refreshInterval){

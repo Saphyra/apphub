@@ -1,0 +1,44 @@
+{
+  "title": "SkyXplore - Előszoba",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Előszoba"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Vissza"
+      }
+    ],
+    "chat-title": [
+      {
+        "key": "innerHTML",
+        "message": "Chat"
+      }
+    ],
+    "settings-title": [
+      {
+        "key": "innerHTML",
+        "message": "Beállítások"
+      }
+    ],
+    "friends-title": [
+      {
+        "key": "innerHTML",
+        "message": "Barátok"
+      }
+    ],
+    "message-input": [
+      {
+        "key": "placeholder",
+        "message": "Üzenet"
+      }
+    ]
+  },
+  "additionalContent": {
+    "no-active-friends": "Nincs aktív barát"
+  }
+}

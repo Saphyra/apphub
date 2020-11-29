@@ -3,6 +3,9 @@ package com.github.saphyra.apphub.service.user.controller;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.user.server.UserEventController;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
+import com.github.saphyra.apphub.lib.event.PageVisitedEvent;
+import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -30,5 +33,16 @@ public class UserEventControllerImpl implements UserEventController {
         accessTokenDao.deleteByUserId(userId);
         roleDao.deleteByUserId(userId);
         userDao.deleteById(userId);
+    }
+
+    @Override
+    //TODO unit test
+    public void pageVisitedEvent(SendEventRequest<PageVisitedEvent> request) {
+        PageVisitedEvent event = request.getPayload();
+        AccessToken accessToken = accessTokenDao.findById(event.getAccessTokenId())
+            .orElseThrow(() -> new NotFoundException("AccessToken not found with id " + event.getAccessTokenId()));
+
+        accessToken.setLastVisitedPage(event.getPageUrl());
+        accessTokenDao.save(accessToken);
     }
 }

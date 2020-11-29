@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.api.skyxplore.data.server;
 
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.api.skyxplore.response.ActiveFriendResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.FriendshipResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.IncomingFriendRequestResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.SentFriendRequestResponse;
@@ -43,4 +44,7 @@ public interface SkyXploreFriendDataController {
 
     @DeleteMapping(Endpoints.SKYXPLORE_REMOVE_FRIEND)
     void removeFriend(@PathVariable("friendshipId") UUID friendshipId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @GetMapping(Endpoints.SKYXPLORE_GET_ACTIVE_FRIENDS)
+    List<ActiveFriendResponse> getActiveFriends(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

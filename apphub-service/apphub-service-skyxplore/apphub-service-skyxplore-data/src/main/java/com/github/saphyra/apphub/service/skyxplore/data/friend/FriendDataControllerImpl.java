@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.friend;
 
 import com.github.saphyra.apphub.api.skyxplore.data.server.SkyXploreFriendDataController;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.api.skyxplore.response.ActiveFriendResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.FriendshipResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.IncomingFriendRequestResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.SentFriendRequestResponse;
@@ -10,6 +11,7 @@ import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreCharacter;
 import com.github.saphyra.apphub.service.skyxplore.data.common.SkyXploreCharacterModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service.ActiveFriendsQueryService;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service.FriendshipDeletionService;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service.FriendshipQueryService;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.service.FriendRequestAcceptService;
@@ -36,6 +38,7 @@ public class FriendDataControllerImpl implements SkyXploreFriendDataController {
     private final FriendRequestAcceptService friendRequestAcceptService;
     private final FriendshipQueryService friendshipQueryService;
     private final FriendshipDeletionService friendshipDeletionService;
+    private final ActiveFriendsQueryService activeFriendsQueryService;
 
     @Override
     //TODO unit test
@@ -111,5 +114,14 @@ public class FriendDataControllerImpl implements SkyXploreFriendDataController {
     public void removeFriend(UUID friendshipId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to remove friendship {}", accessTokenHeader.getUserId(), friendshipId);
         friendshipDeletionService.removeFriendship(friendshipId, accessTokenHeader.getUserId());
+    }
+
+    @Override
+    //TODO unit test
+    //TODO int test
+    //TODO API test
+    public List<ActiveFriendResponse> getActiveFriends(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to know his active friends", accessTokenHeader.getUserId());
+        return activeFriendsQueryService.getActiveFriends(accessTokenHeader.getUserId());
     }
 }

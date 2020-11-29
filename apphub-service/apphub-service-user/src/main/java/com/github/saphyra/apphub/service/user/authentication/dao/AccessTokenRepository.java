@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 interface AccessTokenRepository extends CrudRepository<AccessTokenEntity, String> {
     @Transactional
@@ -21,4 +22,7 @@ interface AccessTokenRepository extends CrudRepository<AccessTokenEntity, String
     void deleteByAccessTokenIdAndUserId(String accessTokenId, String userId);
 
     void deleteByUserId(String userId);
+
+    //TODO unit test
+    List<AccessTokenEntity> getByUserId(String userId);
 }

@@ -19,10 +19,9 @@
 
     <MAIN id="main-menu-main" class="footerless">
         <DIV id="main-menu-button-wrapper">
-            <DIV id="new-game-button" class="button" onclick="pageController.openNewGameWindow()"></DIV>
-            <DIV id="load-game-button" class="button" onclick="pageController.openLoadGameWindow()"></DIV>
-            <DIV id="edit-character-button" class="button"
-                 onclick="window.location.href='/web/skyxplore/character'"></DIV>
+            <DIV id="new-game-button" class="button" onclick="window.location.href='/web/skyxplore/lobby'"></DIV>
+            <DIV id="load-game-button" class="button"></DIV>
+            <DIV id="edit-character-button" class="button" onclick="window.location.href='/web/skyxplore/character'"></DIV>
             <DIV id="back-button" class="button" onclick="window.location.href='/web/modules'"></DIV>
         </DIV>
 
@@ -48,22 +47,6 @@
             </DIV>
         </DIV>
     </MAIN>
-
-</DIV>
-
-<DIV id="new-game" class="main-page">
-    <HEADER>
-        <H1 id="new-game-title"></H1>
-        <BUTTON id="new-game-window-close-button" class="window-close-button" onclick="pageController.openMainMenu()">X</BUTTON>
-    </HEADER>
-
-    <MAIN>
-
-    </MAIN>
-
-    <FOOTER>
-        <BUTTON id="create-new-game-button" onclick="gameCreationService.createNewGame()"></BUTTON>
-    </FOOTER>
 </DIV>
 </BODY>
 </HTML>

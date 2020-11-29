@@ -5,6 +5,8 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -36,5 +38,15 @@ public class AccessTokenDao extends AbstractDao<AccessTokenEntity, AccessToken, 
 
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
+    }
+
+    //TODO unit test
+    public List<AccessToken> getByUserId(UUID userId) {
+        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
+    }
+
+    //TODO unit test
+    public Optional<AccessToken> findById(UUID accessTokenId) {
+        return findById(uuidConverter.convertDomain(accessTokenId));
     }
 }
