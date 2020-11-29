@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.api.skyxplore.data.server;
 
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.api.skyxplore.response.FriendshipResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.IncomingFriendRequestResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.SentFriendRequestResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
@@ -27,6 +29,18 @@ public interface SkyXploreFriendDataController {
     @GetMapping(Endpoints.SKYXPLORE_GET_SENT_FRIEND_REQUEST)
     List<SentFriendRequestResponse> getSentFriendRequests(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    @GetMapping(Endpoints.SKYXPLORE_GET_INCOMING_FRIEND_REQUEST)
+    List<IncomingFriendRequestResponse> getIncomingFriendRequests(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
     @DeleteMapping(Endpoints.SKYXPLORE_CANCEL_FRIEND_REQUEST)
     void cancelFriendRequest(@PathVariable("friendRequestId") UUID friendRequestId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.SKYXPLORE_ACCEPT_FRIEND_REQUEST)
+    void acceptFriendRequest(@PathVariable("friendRequestId") UUID friendRequestId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @GetMapping(Endpoints.SKYXPLORE_GET_FRIENDS)
+    List<FriendshipResponse> getFriends(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @DeleteMapping(Endpoints.SKYXPLORE_REMOVE_FRIEND)
+    void removeFriend(@PathVariable("friendshipId") UUID friendshipId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

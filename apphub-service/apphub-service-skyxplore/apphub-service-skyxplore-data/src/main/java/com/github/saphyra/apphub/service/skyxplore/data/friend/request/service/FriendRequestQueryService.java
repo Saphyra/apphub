@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.request.service;
 
+import com.github.saphyra.apphub.api.skyxplore.response.IncomingFriendRequestResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.SentFriendRequestResponse;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequestDao;
@@ -25,6 +26,16 @@ public class FriendRequestQueryService {
             .map(friendRequest -> SentFriendRequestResponse.builder()
                 .friendRequestId(friendRequest.getFriendRequestId())
                 .friendName(characterDao.findByIdValidated(friendRequest.getFriendId()).getName())
+                .build())
+            .collect(Collectors.toList());
+    }
+
+    public List<IncomingFriendRequestResponse> getIncomingFriendRequests(UUID userId) {
+        return friendRequestDao.getByFriendId(userId)
+            .stream()
+            .map(friendRequest -> IncomingFriendRequestResponse.builder()
+                .friendRequestId(friendRequest.getFriendRequestId())
+                .senderName(characterDao.findByIdValidated(friendRequest.getSenderId()).getName())
                 .build())
             .collect(Collectors.toList());
     }

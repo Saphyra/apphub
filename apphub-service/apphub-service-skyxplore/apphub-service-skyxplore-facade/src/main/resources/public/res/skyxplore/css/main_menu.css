@@ -49,6 +49,7 @@
 
                 #new-friend-search-result-wrapper{
                     display: none;
+                    background-color: black;
                 }
 
                     #no-character-found{
@@ -90,6 +91,15 @@
                     position: absolute;
                     right: 0;
                     top: 0;
+                }
+
+                button.friend-list-button{
+                    border-width: 1px;
+                    padding: 0.15rem;
+                    font-size: 0.75rem;
+                }
+
+                .friend-list-button button{
                     border-width: 1px;
                     padding: 0.15rem;
                     font-size: 0.75rem;

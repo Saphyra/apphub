@@ -84,6 +84,11 @@
     "character-saved": "Karakter elmentve.",
     "friend-request-sent": "Barátkérelem elküldve.",
     "cancel-friend-request": "Visszavon",
-    "friend-request-canceled": "Barátkérelem visszavonva"
+    "friend-request-canceled": "Barátkérelem visszavonva.",
+    "accept-friend-request": "Elfogad",
+    "friend-request-accepted": "Barátkérelem elfogadva.",
+    "remove-friend": "Eltávolít",
+    "friend-removed": "Barát eltávolítva.",
+    "empty-result": "Üres"
   }
 }

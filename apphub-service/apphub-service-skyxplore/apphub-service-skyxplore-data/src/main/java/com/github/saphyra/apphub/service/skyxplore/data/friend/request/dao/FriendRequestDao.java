@@ -42,4 +42,8 @@ public class FriendRequestDao extends AbstractDao<FriendRequestEntity, FriendReq
     public Optional<FriendRequest> findById(UUID friendRequestId) {
         return converter.convertEntity(repository.findById(uuidConverter.convertDomain(friendRequestId)));
     }
+
+    public List<FriendRequest> getByFriendId(UUID userId) {
+        return converter.convertEntity(repository.getByFriendId(uuidConverter.convertDomain(userId)));
+    }
 }

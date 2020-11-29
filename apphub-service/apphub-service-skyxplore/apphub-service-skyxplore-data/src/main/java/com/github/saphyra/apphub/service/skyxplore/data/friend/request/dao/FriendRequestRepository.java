@@ -18,4 +18,6 @@ interface FriendRequestRepository extends CrudRepository<FriendRequestEntity, St
     Optional<FriendRequestEntity> findBySenderIdAndFriendId(@Param("senderId") String senderId, @Param("friendId") String friendId);
 
     List<FriendRequestEntity> getBySenderId(String userId);
+
+    List<FriendRequestEntity> getByFriendId(String userId);
 }

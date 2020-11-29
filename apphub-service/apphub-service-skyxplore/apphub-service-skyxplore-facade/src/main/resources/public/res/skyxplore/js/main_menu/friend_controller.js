@@ -2,6 +2,15 @@
     $(document).ready(init);
 
     let searchForFriendTimeout = null;
+    let refreshInterval = null;
+
+    function setRefreshInterval(){
+        if(refreshInterval){
+            clearInterval(refreshInterval);
+        }
+
+        refreshInterval = setInterval(loadFriendData, 5000);
+    }
 
     function searchFriendAttempt(){
         if(searchForFriendTimeout){
@@ -80,11 +89,99 @@
     }
 
     function loadIncomingFriendRequests(){
-        //TODO implement
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_INCOMING_FRIEND_REQUEST"));
+            request.convertResponse = function(response){
+                return JSON.parse(response.body);
+            }
+            request.processValidResponse = displayIncomingFriendRequests
+        dao.sendRequestAsync(request);
+
+        function displayIncomingFriendRequests(friendRequests){
+            const container = document.getElementById(ids.incomingFriendRequestsContainer);
+                container.innerHTML = "";
+
+                if(friendRequests.length == 0){
+                    const noResult = document.createElement("DIV");
+                        noResult.classList.add("friend-list-item");
+                        noResult.innerHTML = Localization.getAdditionalContent("empty-result");
+                    container.appendChild(noResult);
+                }
+
+            new Stream(friendRequests)
+                .map(createNode)
+                .forEach(function(node){container.appendChild(node)});
+
+            function createNode(friendRequest){
+                const node = document.createElement("DIV");
+                    node.classList.add("friend-list-item");
+
+                    const friendName = document.createElement("DIV");
+                        friendName.innerHTML = friendRequest.senderName;
+                node.appendChild(friendName);
+
+                    const buttonWrapper = document.createElement("DIV");
+                        buttonWrapper.classList.add("friend-list-button");
+
+                        const acceptButton = document.createElement("BUTTON");
+                            acceptButton.innerHTML = Localization.getAdditionalContent("accept-friend-request");
+                            acceptButton.onclick = function(){
+                                acceptFriendRequest(friendRequest.friendRequestId)
+                            };
+                    buttonWrapper.appendChild(acceptButton);
+
+                        const cancelButton = document.createElement("BUTTON");
+                            cancelButton.innerHTML = Localization.getAdditionalContent("cancel-friend-request");
+                            cancelButton.onclick = function(){
+                                cancelFriendRequest(friendRequest.friendRequestId);
+                            }
+                    buttonWrapper.appendChild(cancelButton);
+                node.appendChild(buttonWrapper);
+                return node;
+            }
+        }
     }
 
     function loadFriends(){
-        //TODO implement
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_FRIENDS"));
+            request.convertResponse = function(response){
+                return JSON.parse(response.body);
+            }
+            request.processValidResponse = displaySentFriendRequests
+        dao.sendRequestAsync(request);
+
+        function displaySentFriendRequests(friends){
+            const container = document.getElementById(ids.friendListContainer);
+                container.innerHTML = "";
+
+                if(friends.length == 0){
+                    const noResult = document.createElement("DIV");
+                        noResult.classList.add("friend-list-item");
+                        noResult.innerHTML = Localization.getAdditionalContent("empty-result");
+                    container.appendChild(noResult);
+                }
+
+            new Stream(friends)
+                .map(createNode)
+                .forEach(function(node){container.appendChild(node)});
+
+            function createNode(friend){
+                const node = document.createElement("DIV");
+                    node.classList.add("friend-list-item");
+
+                    const friendName = document.createElement("DIV");
+                        friendName.innerHTML = friend.friendName;
+                node.appendChild(friendName);
+
+                    const removeButton = document.createElement("BUTTON");
+                        removeButton.classList.add("friend-list-button");
+                        removeButton.innerHTML = Localization.getAdditionalContent("remove-friend");
+                        removeButton.onclick = function(){
+                            removeFriend(friend.friendshipId)
+                        }
+                node.appendChild(removeButton);
+                return node;
+            }
+        }
     }
 
     function loadSentFriendRequests(){
@@ -98,6 +195,13 @@
         function displaySentFriendRequests(friendRequests){
             const container = document.getElementById(ids.sentFriendRequestsContainer);
                 container.innerHTML = "";
+
+                if(friendRequests.length == 0){
+                    const noResult = document.createElement("DIV");
+                        noResult.classList.add("friend-list-item");
+                        noResult.innerHTML = Localization.getAdditionalContent("empty-result");
+                    container.appendChild(noResult);
+                }
 
             new Stream(friendRequests)
                 .map(createNode)
@@ -132,8 +236,29 @@
         dao.sendRequestAsync(request);
     }
 
+    function acceptFriendRequest(friendRequestId){
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_ACCEPT_FRIEND_REQUEST", {friendRequestId: friendRequestId}));
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("friend-request-accepted"));
+                loadFriendData();
+            }
+        dao.sendRequestAsync(request);
+    }
+
+    function removeFriend(friendshipId){
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_REMOVE_FRIEND", {friendshipId: friendshipId}));
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("friend-removed"));
+                loadFriendData();
+            }
+        dao.sendRequestAsync(request);
+    }
+
     function init(){
         $("#" + ids.searchFriendInput).on("keyup", searchFriendAttempt);
         loadFriendData();
+
+        document.getElementById(ids.friendsContainer).onmousemove = setRefreshInterval;
+        setRefreshInterval();
     }
 })();

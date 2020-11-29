@@ -1,0 +1,19 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-friendship" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="skyxplore" tableName="friendship"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="skyxplore" tableName="friendship">
+            <column name="friendship_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="friend_1" type="varchar(37)"/>
+            <column name="friend_2" type="varchar(37)"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="skyxplore" tableName="friendship" columnNames="friendship_id" constraintName="friendship-pk"/>
+    </changeSet>
+</databaseChangeLog>

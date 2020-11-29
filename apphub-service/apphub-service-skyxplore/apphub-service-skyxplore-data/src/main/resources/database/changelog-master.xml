@@ -12,4 +12,5 @@
 
     <include file="database/change_sets/character.xml"/>
     <include file="database/change_sets/friend_request.xml"/>
+    <include file="database/change_sets/friendship.xml"/>
 </databaseChangeLog>

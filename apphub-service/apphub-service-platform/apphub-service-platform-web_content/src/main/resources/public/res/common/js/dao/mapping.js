@@ -49,9 +49,13 @@ window.Mapping = new function(){
         SKYXPLORE_GET_CHARACTER: new Endpoint("/api/skyxplore/character", HttpMethod.GET),
         SKYXPLORE_CREATE_OR_UPDATE_CHARACTER: new Endpoint("/api/skyxplore/character", HttpMethod.POST),
         SKYXPLORE_SEARCH_FOR_FRIENDS: new Endpoint("/api/skyxplore/friend/candidate", HttpMethod.POST),
-        SKYXPLORE_ADD_FRIEND: new Endpoint("/api/skyxplore/friend", HttpMethod.PUT),
+        SKYXPLORE_ADD_FRIEND: new Endpoint("/api/skyxplore/friend/request", HttpMethod.PUT),
         SKYXPLORE_GET_SENT_FRIEND_REQUEST: new Endpoint("/api/skyxplore/friend/request/sent", HttpMethod.GET),
+        SKYXPLORE_GET_INCOMING_FRIEND_REQUEST: new Endpoint("/api/skyxplore/friend/request/incoming", HttpMethod.GET),
         SKYXPLORE_CANCEL_FRIEND_REQUEST: new Endpoint("/api/skyxplore/friend/request/{friendRequestId}", HttpMethod.DELETE),
+        SKYXPLORE_ACCEPT_FRIEND_REQUEST: new Endpoint("/api/skyxplore/friend/request/{friendRequestId}", HttpMethod.POST),
+        SKYXPLORE_GET_FRIENDS: new Endpoint("/api/skyxplore/friend", HttpMethod.GET),
+        SKYXPLORE_REMOVE_FRIEND: new Endpoint("/api/skyxplore/friend/{friendshipId}", HttpMethod.DELETE),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

@@ -84,6 +84,11 @@
     "character-saved": "Character saved.",
     "friend-request-sent": "Friend request sent.",
     "cancel-friend-request": "Cancel",
-    "friend-request-canceled": "Friend request is cancelled"
+    "friend-request-canceled": "Friend request is cancelled.",
+    "accept-friend-request": "Accept",
+    "friend-request-accepted": "Friend request accepted.",
+    "remove-friend": "Remove",
+    "friend-removed": "Friend removed.",
+    "empty-result": "Empty"
   }
 }

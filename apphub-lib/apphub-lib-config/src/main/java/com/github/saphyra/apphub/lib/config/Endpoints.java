@@ -75,7 +75,11 @@ public class Endpoints {
     public static final String SKYXPLORE_INTERNAL_GET_CHARACTER = "/api/skyxplore/character";
     public static final String SKYXPLORE_GET_CHARACTER = "/api/skyxplore/character";
     public static final String SKYXPLORE_SEARCH_FOR_FRIENDS = "/api/skyxplore/friend/candidate";
-    public static final String SKYXPLORE_ADD_FRIEND = "/api/skyxplore/friend";
+    public static final String SKYXPLORE_ADD_FRIEND = "/api/skyxplore/friend/request";
     public static final String SKYXPLORE_GET_SENT_FRIEND_REQUEST = "/api/skyxplore/friend/request/sent";
+    public static final String SKYXPLORE_GET_INCOMING_FRIEND_REQUEST = "/api/skyxplore/friend/request/incoming";
     public static final String SKYXPLORE_CANCEL_FRIEND_REQUEST = "/api/skyxplore/friend/request/{friendRequestId}";
+    public static final String SKYXPLORE_ACCEPT_FRIEND_REQUEST = "/api/skyxplore/friend/request/{friendRequestId}";
+    public static final String SKYXPLORE_GET_FRIENDS = "/api/skyxplore/friend";
+    public static final String SKYXPLORE_REMOVE_FRIEND = "/api/skyxplore/friend/{friendshipId}";
 }
