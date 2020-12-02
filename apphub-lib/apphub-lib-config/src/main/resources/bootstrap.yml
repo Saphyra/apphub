@@ -45,6 +45,9 @@ event-gateway:
 localization:
   ribbon:
     listOfServers: localization:8080
+message-sender:
+  ribbon:
+    listOfServers: message-sender:8080
 
 user-authentication:
   ribbon:

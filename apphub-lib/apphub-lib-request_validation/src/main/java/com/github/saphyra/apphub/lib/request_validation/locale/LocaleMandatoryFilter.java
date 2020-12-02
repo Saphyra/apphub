@@ -37,6 +37,7 @@ class LocaleMandatoryFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } else {
             log.warn("Locale header is not present in the request.");
+            //TODO add whitelisting
             ErrorResponseWrapper errorResponse = errorResponseFactory.create(
                 commonConfigProperties.getDefaultLocale(),
                 HttpStatus.BAD_REQUEST,

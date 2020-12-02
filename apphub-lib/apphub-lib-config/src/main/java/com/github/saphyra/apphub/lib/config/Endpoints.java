@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.lib.config;
 
 public class Endpoints {
+    //PAGES
     public static final String INDEX_PAGE = "/web";
     public static final String ACCOUNT_PAGE = "/web/user/account";
     public static final String MODULES_PAGE = "/web/modules";
@@ -12,18 +13,29 @@ public class Endpoints {
     public static final String SKYXPLORE_CHARACTER_PAGE = "/web/skyxplore/character";
     public static final String SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
 
+    //PLATFORM
     public static final String HEALTH = "/platform/health";
+    public static final String TRANSLATE_ERROR_CODE = "/internal/localization/error-code";
 
+    //EVENTS
     public static final String DELETE_EXPIRED_ACCESS_TOKENS_EVENT = "/event/delete-expired-access-tokens";
     public static final String REFRESH_ACCESS_TOKEN_EXPIRATION_EVENT = "/event/refresh-access-token-expiration";
     public static final String DELETE_ACCOUNT_EVENT = "/event/delete-account";
     public static final String PAGE_VISITED_EVENT = "/event/page-visited";
     public static final String SKYXPLORE_LOBBY_CLEANUP_EVENT = "/event/skyxplore/lobby/cleanup";
 
+    //WEB-SOCKET-MESSAGING
+    public static final String SEND_MESSAGE = "/internal/message/{group}/{id}";
+
+    //CONNECTION SUBSCRIPTIONS
+    public static final String CONNECTION_SKYXPLORE_MAIN_MENU = "/api/message-sender/skyxplore/main-menu";
+
+    //LOGIN
     public static final String LOGIN = "/api/user/authentication/login";
     public static final String LOGOUT = "/api/user/authentication/logout";
     public static final String CHECK_SESSION = "/api/user/authentication/session";
 
+    //ACCOUNT
     public static final String REGISTER = "/api/user";
     public static final String CHANGE_LANGUAGE = "/api/user/account/language";
     public static final String CHANGE_EMAIL = "/api/user/account/email";
@@ -32,23 +44,26 @@ public class Endpoints {
     public static final String DELETE_ACCOUNT = "/api/user/account";
     public static final String GET_LANGUAGES = "/api/user/data/languages";
 
-    public static final String GET_USER_ROLES = "/api/user/data/roles";
-    public static final String ADD_ROLE = "/api/user/data/roles";
-    public static final String REMOVE_ROLE = "/api/user/data/roles";
-
+    //USER-DATA
     public static final String INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";
     public static final String INTERNAL_GET_USER_LANGUAGE = "/internal/user/{userId}/data/language";
     public static final String INTERNAL_GET_LAST_VISITED_PAGE = "/internal/user/authentication/last-visited-page/{userId}";
+
+    //ADMIN_PANEL
+    public static final String GET_USER_ROLES = "/api/user/data/roles";
+    public static final String ADD_ROLE = "/api/user/data/roles";
+    public static final String REMOVE_ROLE = "/api/user/data/roles";
 
     public static final String REGISTER_PROCESSOR = "/platform/event-gateway";
     public static final String HEARTBEAT = "/platform/event-gateway/{serviceName}";
     public static final String SEND_EVENT = "/internal/event-gateway";
 
-    public static final String TRANSLATE_ERROR_CODE = "/internal/localization/error-code";
 
+    //MODULES
     public static final String GET_MODULES_OF_USER = "/api/modules";
     public static final String SET_FAVORITE = "/api/modules/{module}/favorite";
 
+    //NOTEBOOK
     public static final String GET_NOTEBOOK_CATEGORY_TREE = "/api/notebook/category";
     public static final String CREATE_NOTEBOOK_CATEGORY = "/api/notebook/category";
     public static final String CREATE_NOTEBOOK_TEXT = "/api/notebook/text";
@@ -73,6 +88,7 @@ public class Endpoints {
     public static final String UPDATE_CHECKLIST_TABLE_ROW_STATUS = "/api/notebook/checklist-table/{listItemId}/{rowIndex}";
     public static final String CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE = "/api/notebook/table/{listItemId}/convert-to-checklist-table";
 
+    //SKYXPLORE
     public static final String SKYXPLORE_IS_CHARACTER_EXISTS = "/internal/skyxplore/character/exists";
     public static final String SKYXPLORE_INTERNAL_CREATE_OR_UPDATE_CHARACTER = "/internal/skyxplore/character";
     public static final String SKYXPLORE_CREATE_OR_UPDATE_CHARACTER = "/api/skyxplore/character";

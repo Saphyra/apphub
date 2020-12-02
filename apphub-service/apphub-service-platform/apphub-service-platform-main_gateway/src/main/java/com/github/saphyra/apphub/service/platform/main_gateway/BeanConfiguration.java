@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.platform.main_gateway;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.ji4597056.EnableWsForward;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.CookieUtil;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
@@ -26,6 +27,7 @@ import org.springframework.util.AntPathMatcher;
 @EnableErrorTranslation
 @Import(CommonConfigProperties.class)
 @EnableHealthCheck
+@EnableWsForward
 class BeanConfiguration {
     @Bean
     AntPathMatcher antPathMatcher() {

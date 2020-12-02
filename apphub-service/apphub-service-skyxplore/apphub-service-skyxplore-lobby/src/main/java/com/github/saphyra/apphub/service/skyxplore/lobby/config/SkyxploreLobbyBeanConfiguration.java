@@ -13,7 +13,6 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.service.cleanup.LobbyIn
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 
 @Configuration
@@ -24,9 +23,8 @@ import org.springframework.context.annotation.Import;
 })
 @EnableLocalMandatoryRequestValidation
 @EnableErrorHandler
-@EnableAspectJAutoProxy
 @EnableEventProcessor
-public class SkyxploreDataLobbyBeanConfiguration {
+public class SkyxploreLobbyBeanConfiguration {
     @Bean
     FilterRegistrationBean<LobbyInterceptorFilter> metricsFilterFilterRegistrationBean(LobbyInterceptorFilter filter) {
         FilterRegistrationBean<LobbyInterceptorFilter> filterRegistrationBean = new FilterRegistrationBean<>();

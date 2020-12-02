@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
 @EnableAutoConfiguration(exclude = {
@@ -16,5 +17,6 @@ import org.springframework.context.annotation.Configuration;
 })
 @EnableHealthCheck
 @EnableLocalMandatoryRequestValidation
+@EnableScheduling
 public class BeanConfiguration {
 }

@@ -32,4 +32,10 @@ public class RestException extends RuntimeException {
         this.responseStatus = responseStatus;
         this.errorMessage = new ErrorMessage(errorCode);
     }
+
+    public RestException(HttpStatus responseStatus, String logMessage, Throwable cause) {
+        super(logMessage, cause);
+        this.responseStatus = responseStatus;
+        this.errorMessage = DEFAULT_ERROR_CODE;
+    }
 }

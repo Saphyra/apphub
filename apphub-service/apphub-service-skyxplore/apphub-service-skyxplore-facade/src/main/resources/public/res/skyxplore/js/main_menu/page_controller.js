@@ -1,4 +1,5 @@
 scriptLoader.loadScript("/res/skyxplore/js/main_menu/friend_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/main_menu/invitation_controller.js");
 
 (function PageController(){
     window.ids = {

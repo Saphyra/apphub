@@ -5,6 +5,15 @@ spring:
     exclude:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 
+ws:
+  forward:
+    enabled: true
+    handlers:
+      message-sender:
+        uri: /api/message-sender/**
+        listOfServers:
+          - message-sender:8080
+
 zuul:
   prefix: /
   routes:

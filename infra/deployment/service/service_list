@@ -2,6 +2,7 @@ apphub-service-platform-event_gateway
 apphub-service-platform-web_content
 apphub-service-platform-localization
 apphub-service-platform-main_gateway
+apphub-service-platform-message_sender
 apphub-service-platform-scheduler
 apphub-service-user
 apphub-service-notebook

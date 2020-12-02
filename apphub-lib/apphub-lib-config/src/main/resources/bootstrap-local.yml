@@ -76,3 +76,7 @@ skyxplore-facade:
 skyxplore-lobby:
   ribbon:
     listOfServers: localhost:8093
+
+message-sender:
+  ribbon:
+    listOfServers: localhost:8094
