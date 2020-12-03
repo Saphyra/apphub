@@ -1,7 +1,6 @@
-package com.github.saphyra.apphub.service.platform.main_gateway;
+package com.github.saphyra.apphub.service.platform.main_gateway.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.ji4597056.EnableWsForward;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.CookieUtil;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
@@ -12,6 +11,7 @@ import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.whitelist.EnableWhiteListedEndpointProperties;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorTranslation;
+import com.github.saphyra.apphub.lib.websocket_gateway.EnableWsForward;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;

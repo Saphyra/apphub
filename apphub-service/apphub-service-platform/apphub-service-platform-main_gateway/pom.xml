@@ -30,9 +30,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.ji4597056</groupId>
-            <artifactId>spring-websocket-forward</artifactId>
-            <version>1.0.3.SNAPSHOT</version>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-websocket_gateway</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

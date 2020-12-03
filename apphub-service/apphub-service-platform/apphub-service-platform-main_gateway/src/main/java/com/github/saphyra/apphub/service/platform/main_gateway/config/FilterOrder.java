@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.platform.main_gateway;
+package com.github.saphyra.apphub.service.platform.main_gateway.config;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
