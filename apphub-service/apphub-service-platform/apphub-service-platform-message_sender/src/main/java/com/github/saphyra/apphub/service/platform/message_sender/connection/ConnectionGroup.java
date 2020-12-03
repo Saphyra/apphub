@@ -7,5 +7,5 @@ import java.util.UUID;
 public interface ConnectionGroup {
     MessageGroup getGroup();
 
-    void sendEvent(UUID id, String message);
+    void sendEvent(UUID id, Object message);
 }

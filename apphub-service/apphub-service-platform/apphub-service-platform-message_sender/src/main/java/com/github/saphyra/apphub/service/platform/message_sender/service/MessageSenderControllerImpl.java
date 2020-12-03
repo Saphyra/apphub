@@ -26,7 +26,7 @@ public class MessageSenderControllerImpl implements MessageSenderController {
     @Override
     //TODO unit test
     //TODO int test
-    public void sendMessage(MessageGroup group, UUID id, String message) {
+    public void sendMessage(MessageGroup group, UUID id, Object message) {
         ConnectionGroup connectionGroup = connectionGroups.getOptional(group)
             .orElseThrow(() -> new RuntimeException("ConnectionGroup not found for MessageGroup " + group)); //TODO proper exception
 

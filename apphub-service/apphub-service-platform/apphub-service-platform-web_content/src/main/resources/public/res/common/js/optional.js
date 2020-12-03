@@ -7,6 +7,12 @@ function Optional(obj){
         }
     }
 
+    this.ifNotPresent = function(func){
+        if(!this.isPresent()){
+            func();
+        }
+    }
+
     this.isPresent = function(){
         return value !== null && value !== undefined;
     }

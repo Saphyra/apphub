@@ -1,6 +1,7 @@
 (function DOMUtil(){
     window.DOMUtil = new function(){
         this.getElementWidth = getElementWidth;
+        this.getElementHeight = getElementHeight;
     }
     
     /*
@@ -28,5 +29,18 @@
             const message = arguments.callee.name + " - " + err.name + ": " + err.message;
             logService.log(message, "error");
         }
+    }
+
+    function getElementHeight(element, parent){
+        parent = parent || document.body;
+
+        const testElement = element.cloneNode(true);
+            testElement.style.visibility = "hidden";
+            testElement.style.position = "absolute";
+        parent.appendChild(testElement);
+
+        const height = testElement.offsetHeight;
+        parent.removeChild(testElement);
+        return height;
     }
 })();

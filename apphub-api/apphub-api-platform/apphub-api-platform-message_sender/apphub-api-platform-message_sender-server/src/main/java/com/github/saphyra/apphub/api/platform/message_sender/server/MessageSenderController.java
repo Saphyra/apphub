@@ -10,5 +10,5 @@ import java.util.UUID;
 
 public interface MessageSenderController {
     @PostMapping(Endpoints.SEND_MESSAGE)
-    void sendMessage(@PathVariable("group") MessageGroup group, @PathVariable("id") UUID id, @RequestBody String message);
+    void sendMessage(@PathVariable("group") MessageGroup group, @PathVariable("id") UUID id, @RequestBody Object message);
 }

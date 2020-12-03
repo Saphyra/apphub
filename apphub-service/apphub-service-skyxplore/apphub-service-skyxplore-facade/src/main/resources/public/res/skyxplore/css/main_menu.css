@@ -120,3 +120,37 @@
             #outgoing-friend-request-list{
 
             }
+
+#invitations{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+    .invitation{
+        margin: 0.5rem;
+        border: 3px ridge white;
+        border-radius: 10px;
+    }
+
+        .invitation-title{
+            text-align: center;
+            margin: 0.25rem 0;
+            border-bottom: 3px ridge white;
+            font-size: 1.25rem;
+        }
+
+        .invitation-sender-name{
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .invitation-message{
+            margin: 0.25rem 0.5rem;
+            text-align: center;
+        }
+
+        .invitation-buttons{
+            text-align: center;
+        }

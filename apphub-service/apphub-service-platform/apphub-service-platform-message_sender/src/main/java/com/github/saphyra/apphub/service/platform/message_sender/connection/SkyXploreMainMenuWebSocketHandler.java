@@ -45,7 +45,7 @@ public class SkyXploreMainMenuWebSocketHandler extends TextWebSocketHandler impl
     }
 
     @Override
-    public void sendEvent(UUID id, String message) {
+    public void sendEvent(UUID id, Object message) {
         WebSocketSession session = sessionMap.get(id);
         if (isNull(session)) {
             throw new RuntimeException(id + " is not connected to " + getGroup());

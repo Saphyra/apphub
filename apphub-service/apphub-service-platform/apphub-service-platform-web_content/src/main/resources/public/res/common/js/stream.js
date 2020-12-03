@@ -15,7 +15,7 @@ function Stream(a){
     }
 
     this.findFirst = function(){
-        return array[0];
+        return array.length > 0 ? new Optional(array[0]) : new Optional();
     }
 
     this.flatMap = function(mappingFunction){

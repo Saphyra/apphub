@@ -83,6 +83,10 @@
     "friend-request-accepted": "Friend request accepted.",
     "remove-friend": "Remove",
     "friend-removed": "Friend removed.",
-    "empty-result": "Empty"
+    "empty-result": "Empty",
+    "invitation-title": "Invitation",
+    "invitation-message": "has invited you to a game!",
+    "accept-invitation": "Accept",
+    "reject-invitation": "Reject"
   }
 }

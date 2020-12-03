@@ -1,5 +1,6 @@
 scriptLoader.loadScript("/res/skyxplore/js/main_menu/friend_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/main_menu/invitation_controller.js");
+scriptLoader.loadScript("/res/common/js/web_socket.js");
 
 (function PageController(){
     window.ids = {
@@ -11,10 +12,15 @@ scriptLoader.loadScript("/res/skyxplore/js/main_menu/invitation_controller.js");
         sentFriendRequestsContainer: "outgoing-friend-request-list",
         incomingFriendRequestsContainer: "incoming-friend-request-list",
         friendListContainer: "friend-list",
-        friendsContainer: "friends-container"
+        friendsContainer: "friends-container",
+        invitationContainer: "invitations",
     }
+
+    const webSocketConnection = new WebSocketConnection(Mapping.getEndpoint("CONNECTION_SKYXPLORE_MAIN_MENU"));
 
     $(document).ready(function(){
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "skyxplore", fileName: "main_menu"}));
+        webSocketConnection.addHandler(invitationController.createHandler())
+            .connect();
     });
 })();

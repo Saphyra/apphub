@@ -83,6 +83,10 @@
     "friend-request-accepted": "Barátkérelem elfogadva.",
     "remove-friend": "Eltávolít",
     "friend-removed": "Barát eltávolítva.",
-    "empty-result": "Üres"
+    "empty-result": "Üres",
+    "invitation-title": "Játékmeghívás",
+    "invitation-message": "meghívott egy játékba!",
+    "accept-invitation": "Elfogad",
+    "reject-invitation": "Elutasít"
   }
 }
