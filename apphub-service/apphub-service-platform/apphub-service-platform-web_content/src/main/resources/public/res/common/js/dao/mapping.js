@@ -4,6 +4,7 @@ window.Mapping = new function(){
     this.INDEX_PAGE = "/web";
     this.MODULES_PAGE = "/web/modules";
     this.SKYXPLORE_PAGE = "/web/skyxplore";
+    this.SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
 
     const endpoints = {
         CONNECTION_SKYXPLORE_MAIN_MENU: new Endpoint("/api/message-sender/skyxplore/main-menu", HttpMethod.GET),

@@ -11,8 +11,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -47,6 +50,16 @@ public class SkyXplorePageController {
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_PAGE)
     public String lobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
         lobbyClient.createLobbyIfNotExists(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated());
+        return "lobby";
+    }
+
+    @GetMapping(Endpoints.SKYXPLORE_JOIN_LOBBY_PAGE)
+    public String joinLobby(@PathVariable("invitorId") UUID invitorId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
+        lobbyClient.joinLobby(
+            invitorId,
+            accessTokenHeaderConverter.convertDomain(accessTokenHeader),
+            localeProvider.getLocaleValidated()
+        );
         return "lobby";
     }
 }

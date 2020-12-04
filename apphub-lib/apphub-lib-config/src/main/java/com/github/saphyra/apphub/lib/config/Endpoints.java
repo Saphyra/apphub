@@ -12,6 +12,7 @@ public class Endpoints {
     public static final String SKYXPLORE_START_PAGE = "/web/skyxplore";
     public static final String SKYXPLORE_CHARACTER_PAGE = "/web/skyxplore/character";
     public static final String SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
+    public static final String SKYXPLORE_JOIN_LOBBY_PAGE = "/web/skyxplore/lobby/{invitorId}";
 
     //PLATFORM
     public static final String HEALTH = "/platform/health";
@@ -91,8 +92,6 @@ public class Endpoints {
     //SKYXPLORE
     public static final String SKYXPLORE_IS_CHARACTER_EXISTS = "/internal/skyxplore/character/exists";
     public static final String SKYXPLORE_INTERNAL_CREATE_OR_UPDATE_CHARACTER = "/internal/skyxplore/character";
-    public static final String SKYXPLORE_CREATE_OR_UPDATE_CHARACTER = "/api/skyxplore/character";
-    public static final String SKYXPLORE_INTERNAL_GET_CHARACTER = "/api/skyxplore/character";
     public static final String SKYXPLORE_GET_CHARACTER = "/api/skyxplore/character";
     public static final String SKYXPLORE_SEARCH_FOR_FRIENDS = "/api/skyxplore/friend/candidate";
     public static final String SKYXPLORE_ADD_FRIEND = "/api/skyxplore/friend/request";
@@ -106,4 +105,5 @@ public class Endpoints {
     public static final String SKYXPLORE_CREATE_LOBBY = "/internal/lobby";
     public static final String SKYXPLORE_EXIT_FROM_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_INVITE_TO_LOBBY = "/api/skyxplore/lobby/invite/{friendId}";
+    public static final String SKYXPLORE_JOIN_LOBBY = "/api/skyxplore/lobby/join/{invitorId}";
 }

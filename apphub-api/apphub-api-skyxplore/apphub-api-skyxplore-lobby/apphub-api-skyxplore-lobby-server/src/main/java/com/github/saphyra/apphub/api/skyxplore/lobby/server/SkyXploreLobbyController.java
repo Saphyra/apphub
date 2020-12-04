@@ -20,4 +20,7 @@ public interface SkyXploreLobbyController {
 
     @PostMapping(Endpoints.SKYXPLORE_INVITE_TO_LOBBY)
     void inviteToLobby(@PathVariable("friendId") UUID friendId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.SKYXPLORE_JOIN_LOBBY)
+    void joinLobby(@PathVariable("invitorId") UUID invitorId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

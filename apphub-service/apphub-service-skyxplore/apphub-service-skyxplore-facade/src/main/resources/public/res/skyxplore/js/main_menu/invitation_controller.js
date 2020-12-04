@@ -40,6 +40,9 @@
 
                     const acceptButton = document.createElement("BUTTON");
                         acceptButton.innerHTML = Localization.getAdditionalContent("accept-invitation");
+                        acceptButton.onclick = function(){
+                            window.location.href = Mapping.SKYXPLORE_LOBBY_PAGE + "/" + invitation.senderId;
+                        }
                 buttons.appendChild(acceptButton);
 
                     const rejectButton = document.createElement("BUTTON");
