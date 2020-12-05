@@ -22,6 +22,17 @@
         overflow-y: auto;
     }
 
+        .system-message{
+            text-align: center;
+            border: 3px ridge white;
+            width: 80%;
+            margin: 0.5rem auto;
+            padding: 0.25rem;
+            font-size: 1.25rem;
+            border-radius: 10px;
+            background: black;
+        }
+
         .message-sender-container{
             margin: 0.5rem;
         }

@@ -87,6 +87,8 @@
     "invitation-title": "Játékmeghívás",
     "invitation-message": "meghívott egy játékba!",
     "accept-invitation": "Elfogad",
-    "reject-invitation": "Elutasít"
+    "reject-invitation": "Elutasít",
+    "character-joined-to-lobby": "csatlakozott az előszobához.",
+    "character-left-the-lobby": "kilépett."
   }
 }

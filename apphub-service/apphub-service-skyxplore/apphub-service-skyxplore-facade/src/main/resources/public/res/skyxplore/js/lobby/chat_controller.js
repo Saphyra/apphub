@@ -1,18 +1,30 @@
 (function ChatController(){
     window.chatController = new function(){
-        this.createHandler = createHandler;
+        this.createChatSendMessageHandler = function(){
+            return new WebSocketEventHandler(
+                function(eventName){return eventName == "chat-send-message"},
+                processChatSendMessageEvent
+            );
+        };
+
+        this.createCharacterJoinedHandler = function(){
+            return new WebSocketEventHandler(
+                function(eventName){return eventName == "join-to-lobby"},
+                processCharacterJoinedEvent
+            );
+        };
+
+        this.createCharacterLeftHandler = function(){
+            return new WebSocketEventHandler(
+                function(eventName){return eventName == "exit-from-lobby"},
+                processCharacterLeftEvent
+            );
+        };
     }
 
     $(document).ready(init);
 
-    function createHandler(){
-        return new WebSocketEventHandler(
-            function(eventName){return eventName == "chat-send-message"},
-            processChatEvent
-        );
-    }
-
-    function processChatEvent(chatEvent){
+    function processChatSendMessageEvent(chatEvent){
         const senderId = chatEvent.senderId;
         const senderName = chatEvent.senderName;
         const message = chatEvent.message;
@@ -83,6 +95,26 @@
         pageController.webSocketConnection.sendEvent(event);
 
         inputField.value = "";
+    }
+
+    function processCharacterJoinedEvent(event){
+        const characterName = event.characterName;
+
+        const messagesContainer = document.getElementById("messages");
+            const joinMessageNode = document.createElement("DIV");
+                joinMessageNode.classList.add("system-message");
+                joinMessageNode.innerHTML = characterName + " " + Localization.getAdditionalContent("character-joined-to-lobby");
+        messagesContainer.appendChild(joinMessageNode);
+    }
+
+    function processCharacterLeftEvent(event){
+        const characterName = event.characterName;
+
+        const messagesContainer = document.getElementById("messages");
+            const joinMessageNode = document.createElement("DIV");
+                joinMessageNode.classList.add("system-message");
+                joinMessageNode.innerHTML = characterName + " " + Localization.getAdditionalContent("character-left-the-lobby");
+        messagesContainer.appendChild(joinMessageNode);
     }
 
     function init(){

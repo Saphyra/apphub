@@ -40,6 +40,8 @@
   },
   "additionalContent": {
     "no-active-friends": "No active friends",
-    "friend-invited": "Friend is invited."
+    "friend-invited": "Friend is invited.",
+    "character-joined-to-lobby": "is joined to the lobby.",
+    "character-left-the-lobby": "has left."
   }
 }

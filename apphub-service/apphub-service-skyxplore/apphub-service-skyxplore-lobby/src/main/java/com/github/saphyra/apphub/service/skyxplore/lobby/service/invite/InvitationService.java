@@ -1,29 +1,25 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.invite;
 
-import com.github.saphyra.apphub.api.platform.message_sender.client.MessageSenderApiClient;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
-import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
-import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreCharacterDataApiClient;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
-import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import feign.FeignException;
+import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
+import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static com.github.saphyra.apphub.service.skyxplore.lobby.service.event.WebSocketEvents.INVITATION;
 
 @Component
 @RequiredArgsConstructor
@@ -33,10 +29,8 @@ public class InvitationService {
     private final LobbyDao lobbyDao;
     private final InvitationFactory invitationFactory;
     private final DateTimeUtil dateTimeUtil;
-    private final MessageSenderApiClient messageSenderApiClient;
-    private final LocaleProvider localeProvider;
-    private final SkyXploreCharacterDataApiClient characterClient;
-    private final AccessTokenProvider accessTokenProvider;
+    private final CharacterProxy characterProxy;
+    private final MessageSenderProxy messageSenderProxy;
 
     @Value("${lobby.invitation.floodingLimitSeconds}")
     private int floodingLimitSeconds;
@@ -65,24 +59,16 @@ public class InvitationService {
 
         InvitationMessage invitationMessage = InvitationMessage.builder()
             .senderId(userId)
-            .senderName(characterClient.getCharacter(accessTokenProvider.getAsString(), localeProvider.getLocaleValidated()).getName())
+            .senderName(characterProxy.getCharacter().getName())
             .build();
         WebSocketMessage message = WebSocketMessage.builder()
             .recipients(Arrays.asList(friendId))
             .event(WebSocketEvent.builder()
-                .eventName("invitation")
+                .eventName(INVITATION)
                 .payload(invitationMessage)
                 .build()
             )
             .build();
-        try {
-            List<UUID> disconnectedUsers = messageSenderApiClient.sendMessage(MessageGroup.SKYXPLORE_MAIN_MENU, message, localeProvider.getLocaleValidated());
-            //TODO handle disconnected users
-        } catch (FeignException e) {
-            if (e.status() == HttpStatus.NOT_FOUND.value()) {
-                //TODO handle target not connected error
-            }
-            throw e;
-        }
+        messageSenderProxy.sendToMainMenu(message);
     }
 }

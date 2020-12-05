@@ -28,7 +28,9 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/chat_controller.js");
 
     $(document).ready(function(){
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "skyxplore", fileName: "lobby"}));
-        wsConnection.addHandler(chatController.createHandler())
+        wsConnection.addHandler(chatController.createChatSendMessageHandler())
+        wsConnection.addHandler(chatController.createCharacterJoinedHandler())
+        wsConnection.addHandler(chatController.createCharacterLeftHandler())
             .connect();
     });
 })();
