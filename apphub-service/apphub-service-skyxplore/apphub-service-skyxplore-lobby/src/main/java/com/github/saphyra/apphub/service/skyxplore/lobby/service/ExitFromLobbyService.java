@@ -16,8 +16,11 @@ public class ExitFromLobbyService {
     private final LobbyDao lobbyDao;
 
     public void exit(UUID userId) {
-        Lobby lobby = lobbyDao.findByUserIdValidated(userId);
+        lobbyDao.findByUserId(userId)
+            .ifPresent(lobby -> exit(userId, lobby));
+    }
 
+    private void exit(UUID userId, Lobby lobby) {
         lobby.getMembers().remove(userId);
 
         //TODO Notify members about someone left the room

@@ -48,9 +48,11 @@ public class SkyXplorePageController {
     }
 
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_PAGE)
-    public String lobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
+    public ModelAndView lobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
         lobbyClient.createLobbyIfNotExists(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated());
-        return "lobby";
+        ModelAndView mav = new ModelAndView("lobby");
+        mav.addObject("characterId", accessTokenHeader.getUserId());
+        return mav;
     }
 
     @GetMapping(Endpoints.SKYXPLORE_JOIN_LOBBY_PAGE)
