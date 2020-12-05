@@ -1,4 +1,6 @@
+scriptLoader.loadScript("/res/common/js/web_socket.js");
 scriptLoader.loadScript("/res/skyxplore/js/lobby/friends_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/lobby/chat_controller.js");
 
 (function PageController(){
     window.ids = {
@@ -6,7 +8,15 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/friends_controller.js");
         friendsList: "friends-list"
     }
 
+    window.webSocketEvents = {
+        CHAT_SEND_MESSAGE: "chat-send-message"
+    }
+
+    const wsConnection = new WebSocketConnection(Mapping.getEndpoint("CONNECTION_SKYXPLORE_LOBBY"));
+
     window.pageController = new function(){
+        this.webSocketConnection = wsConnection;
+
         this.exitLobby = function(){
             const request = new Request(Mapping.getEndpoint("SKYXPLORE_EXIT_FROM_LOBBY"));
                 request.processValidResponse = function(){
@@ -18,5 +28,7 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/friends_controller.js");
 
     $(document).ready(function(){
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "skyxplore", fileName: "lobby"}));
+        wsConnection.addHandler(chatController.createHandler())
+            .connect();
     });
 })();

@@ -26,10 +26,11 @@ public class Endpoints {
     public static final String SKYXPLORE_LOBBY_CLEANUP_EVENT = "/event/skyxplore/lobby/cleanup";
 
     //WEB-SOCKET-MESSAGING
-    public static final String SEND_MESSAGE = "/internal/message/{group}/{id}";
+    public static final String SEND_MESSAGE = "/internal/message/{group}";
 
     //CONNECTION SUBSCRIPTIONS
     public static final String CONNECTION_SKYXPLORE_MAIN_MENU = "/api/message-sender/skyxplore/main-menu";
+    public static final String CONNECTION_SKYXPLORE_LOBBY = "/api/message-sender/skyxplore/lobby";
 
     //LOGIN
     public static final String LOGIN = "/api/user/authentication/login";
@@ -89,8 +90,9 @@ public class Endpoints {
     public static final String UPDATE_CHECKLIST_TABLE_ROW_STATUS = "/api/notebook/checklist-table/{listItemId}/{rowIndex}";
     public static final String CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE = "/api/notebook/table/{listItemId}/convert-to-checklist-table";
 
-    //SKYXPLORE
+    //SKYXPLORE-DATA
     public static final String SKYXPLORE_IS_CHARACTER_EXISTS = "/internal/skyxplore/character/exists";
+    public static final String INTERNAL_SKYXPLORE_GET_CHARACTER_BY_USER_ID = "/allowed-internal/skyxplore/character/{userId}";
     public static final String SKYXPLORE_INTERNAL_CREATE_OR_UPDATE_CHARACTER = "/internal/skyxplore/character";
     public static final String SKYXPLORE_GET_CHARACTER = "/api/skyxplore/character";
     public static final String SKYXPLORE_SEARCH_FOR_FRIENDS = "/api/skyxplore/friend/candidate";
@@ -102,8 +104,11 @@ public class Endpoints {
     public static final String SKYXPLORE_GET_FRIENDS = "/api/skyxplore/friend";
     public static final String SKYXPLORE_REMOVE_FRIEND = "/api/skyxplore/friend/{friendshipId}";
     public static final String SKYXPLORE_GET_ACTIVE_FRIENDS = "/api/skyxplore/friend/active";
+
+    //SKYXPLORE-LOBBY
     public static final String SKYXPLORE_CREATE_LOBBY = "/internal/lobby";
     public static final String SKYXPLORE_EXIT_FROM_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_INVITE_TO_LOBBY = "/api/skyxplore/lobby/invite/{friendId}";
     public static final String SKYXPLORE_JOIN_LOBBY = "/api/skyxplore/lobby/join/{invitorId}";
+    public static final String INTERNAL_SKYXPLORE_LOBBY_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/lobby/{userId}";
 }

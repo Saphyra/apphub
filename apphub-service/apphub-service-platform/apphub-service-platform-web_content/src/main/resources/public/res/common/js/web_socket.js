@@ -3,7 +3,7 @@ function WebSocketConnection(ep){
     const host = window.location.host;
     const handlers = [];
 
-    let connection;
+    let connection = null;
 
     this.addHandler = function(handler){
         handlers.push(handler);
@@ -20,9 +20,16 @@ function WebSocketConnection(ep){
         connection.onmessage = handleMessage;
     }
 
+    this.sendEvent = function(event){
+        if(!connection){
+            throwException("IllegalState", "Connection is not established");
+        }
+
+        connection.send(event.assemble())
+    }
+
     function handleMessage(event){
         const payload = JSON.parse(event.data);
-        console.log(payload); //TODO
 
         const eventName = payload.eventName;
         const eventData = payload.payload;
@@ -38,4 +45,13 @@ function WebSocketConnection(ep){
 function WebSocketEventHandler(ch, h){
     this.canHandle = ch;
     this.handle = h;
+}
+
+function WebSocketEvent(e, p){
+    const event = e;
+    const payload = p;
+
+    this.assemble = function(){
+        return JSON.stringify({eventName: event, payload: payload});
+    }
 }

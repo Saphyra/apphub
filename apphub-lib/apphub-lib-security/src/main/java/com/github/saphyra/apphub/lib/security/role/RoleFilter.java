@@ -35,7 +35,7 @@ class RoleFilter extends OncePerRequestFilter {
         if (roleSettings.isEmpty() || requiredRoleChecker.hasRequiredRoles(roleSettings)) {
             filterChain.doFilter(request, response);
         } else {
-            log.warn("User does not have the required role.");
+            log.warn("User does not have the required role to call endpoint {} - {}", request.getMethod(), request.getRequestURI());
             if (requestHelper.isRestCall(request)) {
                 sendRestError(request, response);
             } else {

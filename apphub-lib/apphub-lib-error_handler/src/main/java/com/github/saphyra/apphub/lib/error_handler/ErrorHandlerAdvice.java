@@ -1,12 +1,5 @@
 package com.github.saphyra.apphub.lib.error_handler;
 
-import java.util.HashMap;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-
 import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
@@ -15,6 +8,12 @@ import com.github.saphyra.apphub.lib.exception.RestException;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.HashMap;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -28,7 +27,7 @@ class ErrorHandlerAdvice {
     ResponseEntity<?> feignException(FeignException exception) {
         String content = exception.contentUTF8();
         HttpStatus status = HttpStatus.valueOf(exception.status());
-        log.warn("Handling feignException with status {} and content {}", status, content);
+        log.warn("Handling feignException with status {} and content {} for {} - {}", status, content, exception.request().httpMethod(), exception.request().url());
         return new ResponseEntity<>(content, status);
     }
 

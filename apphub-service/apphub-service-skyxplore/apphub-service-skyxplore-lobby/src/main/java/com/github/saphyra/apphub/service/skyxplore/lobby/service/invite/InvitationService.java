@@ -1,7 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.invite;
 
 import com.github.saphyra.apphub.api.platform.message_sender.client.MessageSenderApiClient;
-import com.github.saphyra.apphub.api.platform.message_sender.model.Message;
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreCharacterDataApiClient;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
@@ -18,7 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -64,12 +67,17 @@ public class InvitationService {
             .senderId(userId)
             .senderName(characterClient.getCharacter(accessTokenProvider.getAsString(), localeProvider.getLocaleValidated()).getName())
             .build();
-        Message message = Message.builder()
-            .eventName("invitation")
-            .payload(invitationMessage)
+        WebSocketMessage message = WebSocketMessage.builder()
+            .recipients(Arrays.asList(friendId))
+            .event(WebSocketEvent.builder()
+                .eventName("invitation")
+                .payload(invitationMessage)
+                .build()
+            )
             .build();
         try {
-            messageSenderApiClient.sendMessage(MessageGroup.SKYXPLORE_MAIN_MENU, friendId, message, localeProvider.getLocaleValidated());
+            List<UUID> disconnectedUsers = messageSenderApiClient.sendMessage(MessageGroup.SKYXPLORE_MAIN_MENU, message, localeProvider.getLocaleValidated());
+            //TODO handle disconnected users
         } catch (FeignException e) {
             if (e.status() == HttpStatus.NOT_FOUND.value()) {
                 //TODO handle target not connected error

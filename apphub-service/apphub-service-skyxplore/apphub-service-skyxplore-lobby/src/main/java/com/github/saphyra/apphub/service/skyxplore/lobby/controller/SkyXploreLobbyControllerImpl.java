@@ -1,10 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.controller;
 
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.skyxplore.lobby.server.SkyXploreLobbyController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.creation.LobbyCreationService;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.event.WebSocketEventHandlerService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.invite.InvitationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     private final LobbyCreationService lobbyCreationService;
     private final InvitationService invitationService;
     private final JoinToLobbyService joinToLobbyService;
+    private final WebSocketEventHandlerService webSocketEventHandlerService;
 
     @Override
     //TODO unit test
@@ -55,5 +58,14 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     public void joinLobby(UUID invitorId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to join to lobby of {}", accessTokenHeader.getUserId(), invitorId);
         joinToLobbyService.join(accessTokenHeader.getUserId(), invitorId);
+    }
+
+    @Override
+    //TODO unit test
+    //TODO int test
+    //TODO API test
+    public void processWebSocketEvent(UUID from, WebSocketEvent event) {
+        log.info("Handling event {} from {}", event.getEventName(), from);
+        webSocketEventHandlerService.handle(from, event);
     }
 }

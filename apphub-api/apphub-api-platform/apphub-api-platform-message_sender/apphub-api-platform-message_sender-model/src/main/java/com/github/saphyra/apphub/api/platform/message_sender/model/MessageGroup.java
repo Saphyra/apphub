@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum MessageGroup {
-    SKYXPLORE_MAIN_MENU(Endpoints.CONNECTION_SKYXPLORE_MAIN_MENU);
+    SKYXPLORE_MAIN_MENU(Endpoints.CONNECTION_SKYXPLORE_MAIN_MENU),
+    SKYXPLORE_LOBBY(Endpoints.CONNECTION_SKYXPLORE_MAIN_MENU);
 
     private final String topic;
 }

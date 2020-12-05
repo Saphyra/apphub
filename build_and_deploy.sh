@@ -3,7 +3,7 @@ if [ "$1" != "skipBuild" ]; then
   eval "$(minikube docker-env)"
 
   if [ "$1" == "skipTests" ]; then
-    mvn -T 16 install -DskipTests
+    mvn -T 16 clean install -DskipTests
   else
     mvn -T 4 clean install
   fi

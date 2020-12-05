@@ -5,11 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.UUID;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class Message {
-    private String eventName;
-    private Object payload;
+public class WebSocketMessage {
+    private List<UUID> recipients;
+    private WebSocketEvent event;
 }

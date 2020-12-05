@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -45,5 +47,13 @@ public class CharacterDataControllerImpl implements SkyXploreCharacterDataContro
     public void createOrUpdateCharacter(SkyXploreCharacterModel character, AccessTokenHeader accessTokenHeader) {
         log.info("Creating or updating SkyXplore character for user {}", accessTokenHeader.getUserId());
         characterCreationService.create(accessTokenHeader.getUserId(), character);
+    }
+
+    @Override
+    //TODO unit test
+    //todo int test
+    public SkyXploreCharacterModel internalGetCharacterByUserId(UUID userId) {
+        log.info("Querying character for userId {}", userId);
+        return characterModelConverter.convertEntity(characterDao.findByIdValidated(userId));
     }
 }

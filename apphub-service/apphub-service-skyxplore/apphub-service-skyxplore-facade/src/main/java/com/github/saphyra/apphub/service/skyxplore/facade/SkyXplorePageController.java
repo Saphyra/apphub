@@ -60,6 +60,6 @@ public class SkyXplorePageController {
             accessTokenHeaderConverter.convertDomain(accessTokenHeader),
             localeProvider.getLocaleValidated()
         );
-        return "lobby";
+        return "redirect:" + Endpoints.SKYXPLORE_LOBBY_PAGE;
     }
 }
