@@ -1,11 +1,13 @@
 package com.github.saphyra.apphub.lib.error_handler;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-
-import java.util.HashMap;
-import java.util.Map;
-
+import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
+import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
+import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
+import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.RestException;
+import feign.FeignException;
+import feign.Request;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -14,13 +16,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
-import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
-import com.github.saphyra.apphub.lib.exception.RestException;
-import feign.FeignException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ErrorHandlerAdviceTest {
@@ -42,10 +42,14 @@ public class ErrorHandlerAdviceTest {
     @Mock
     private FeignException feignException;
 
+    @Mock
+    private Request request;
+
     @Test
     public void feignException() {
         given(feignException.contentUTF8()).willReturn(CONTENT);
         given(feignException.status()).willReturn(400);
+        given(feignException.request()).willReturn(request);
 
         ResponseEntity<?> result = underTest.feignException(feignException);
 

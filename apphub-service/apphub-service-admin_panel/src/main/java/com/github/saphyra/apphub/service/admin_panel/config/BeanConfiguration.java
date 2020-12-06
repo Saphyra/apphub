@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.config.access_token.AccessTokenConfiguratio
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.thymeleaf.EnableThymeLeaf;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
-import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocalMandatoryRequestValidation;
+import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -23,7 +23,7 @@ import org.springframework.util.AntPathMatcher;
     RoleFilterConfiguration.class
 })
 @EnableErrorHandler
-@EnableLocalMandatoryRequestValidation
+@EnableLocaleMandatoryRequestValidation
 @EnableHealthCheck
 public class BeanConfiguration {
     @Bean

@@ -26,7 +26,6 @@ public class AccessTokenProvider {
         return getOptional().orElseThrow(() -> new IllegalStateException("AccessTokenHeader is not available for the current thread."));
     }
 
-    //TODO unit test
     public String getAsString() {
         return accessTokenHeaderConverter.convertDomain(get());
     }

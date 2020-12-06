@@ -15,9 +15,6 @@ public interface SkyXploreCharacterDataApiClient {
     @GetMapping(Endpoints.SKYXPLORE_IS_CHARACTER_EXISTS)
     boolean isCharacterExistsForUser(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
-    @GetMapping(Endpoints.SKYXPLORE_GET_CHARACTER)
-    SkyXploreCharacterModel getCharacter(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
-
     @GetMapping(Endpoints.INTERNAL_SKYXPLORE_GET_CHARACTER_BY_USER_ID)
     SkyXploreCharacterModel internalGetCharacterByUserId(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 }

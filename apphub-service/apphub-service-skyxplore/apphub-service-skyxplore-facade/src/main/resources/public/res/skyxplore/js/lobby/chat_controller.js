@@ -40,6 +40,7 @@
                 messageNode.innerHTML = message;
 
             getMessageList(senderContainer).appendChild(messageNode);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
 
         function getSenderContainer(messagesContainer, senderId, senderName){
@@ -105,6 +106,7 @@
                 joinMessageNode.classList.add("system-message");
                 joinMessageNode.innerHTML = characterName + " " + Localization.getAdditionalContent("character-joined-to-lobby");
         messagesContainer.appendChild(joinMessageNode);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
     function processCharacterLeftEvent(event){
@@ -115,6 +117,7 @@
                 joinMessageNode.classList.add("system-message");
                 joinMessageNode.innerHTML = characterName + " " + Localization.getAdditionalContent("character-left-the-lobby");
         messagesContainer.appendChild(joinMessageNode);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
     function init(){

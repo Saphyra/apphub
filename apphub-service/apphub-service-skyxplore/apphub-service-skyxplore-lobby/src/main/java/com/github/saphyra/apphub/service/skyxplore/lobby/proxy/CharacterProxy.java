@@ -20,8 +20,8 @@ public class CharacterProxy {
     private final AccessTokenProvider accessTokenProvider;
 
     public SkyXploreCharacterModel getCharacter() {
-        return characterClient.getCharacter(
-            accessTokenProvider.getAsString(),
+        return characterClient.internalGetCharacterByUserId(
+            accessTokenProvider.get().getUserId(),
             localeProvider.getLocaleValidated()
         );
     }

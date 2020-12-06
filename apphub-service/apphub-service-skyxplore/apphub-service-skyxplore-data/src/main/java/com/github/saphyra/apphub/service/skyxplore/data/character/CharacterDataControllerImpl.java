@@ -31,14 +31,8 @@ public class CharacterDataControllerImpl implements SkyXploreCharacterDataContro
     }
 
     @Override
-    //TODO unit test
-    //todo int test
     public ResponseEntity<SkyXploreCharacterModel> getCharacter(AccessTokenHeader accessTokenHeader) {
-        log.info("Querying SkyXplore character for user {}", accessTokenHeader.getUserId());
-        return characterDao.findById(accessTokenHeader.getUserId())
-            .map(characterModelConverter::convertEntity)
-            .map(ResponseEntity::ok)
-            .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return internalGetCharacterByUserId(accessTokenHeader.getUserId());
     }
 
     @Override
@@ -52,8 +46,10 @@ public class CharacterDataControllerImpl implements SkyXploreCharacterDataContro
     @Override
     //TODO unit test
     //todo int test
-    public SkyXploreCharacterModel internalGetCharacterByUserId(UUID userId) {
+    public ResponseEntity<SkyXploreCharacterModel> internalGetCharacterByUserId(UUID userId) {
         log.info("Querying character for userId {}", userId);
-        return characterModelConverter.convertEntity(characterDao.findByIdValidated(userId));
+        return characterModelConverter.convertEntity(characterDao.findById(userId))
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

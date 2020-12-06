@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Import({LocaleMandatoryFilterConfiguration.class})
-public @interface EnableLocalMandatoryRequestValidation {
+public @interface EnableLocaleMandatoryRequestValidation {
 }

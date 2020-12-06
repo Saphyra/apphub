@@ -1,3 +1,10 @@
 spring:
   application:
     name: message-sender
+
+locale-mandatory-filter:
+  whiteListedEndpoints:
+    - path: /api/message-sender/skyxplore/main-menu
+      method: GET
+    - path: /api/message-sender/skyxplore/lobby
+      method: GET
