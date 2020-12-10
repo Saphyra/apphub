@@ -12,13 +12,14 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class UserAuthenticationScheduler {
+//TODO unit test
+class MessageSenderPingRequestScheduler {
     private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;
 
-    @Scheduled(fixedRateString = "${interval.user.authentication.accessTokenCleanup}")
-    void accessTokenCleanup() {
-        String eventName = EmptyEvent.DELETE_EXPIRED_ACCESS_TOKENS_EVENT_NAME;
+    @Scheduled(fixedRateString = "${interval.platform.messageSender.pingRequest}")
+    void pingRequest() {
+        String eventName = EmptyEvent.MESSAGE_SENDER_PING_REQUEST_EVENT_NAME;
         log.info("Sending event with name {}", eventName);
         eventGatewayApi.sendEvent(
             SendEventRequest.builder()

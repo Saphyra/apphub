@@ -15,7 +15,7 @@ import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
-import com.github.saphyra.apphub.lib.event.DeleteExpiredAccessTokensEvent;
+import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
@@ -130,9 +130,8 @@ public class AuthenticationControllerTestIt {
             .build();
         accessTokenDao.saveAll(Arrays.asList(expiredNonPersistentAccessToken, validNonPersistentAccessToken, expiredPersistentAccessToken, validPersistentAccessToken));
 
-        SendEventRequest<DeleteExpiredAccessTokensEvent> request = new SendEventRequest<>();
-        request.setEventName(DeleteExpiredAccessTokensEvent.EVENT_NAME);
-        request.setPayload(new DeleteExpiredAccessTokensEvent());
+        SendEventRequest<?> request = new SendEventRequest<>();
+        request.setEventName(EmptyEvent.DELETE_EXPIRED_ACCESS_TOKENS_EVENT_NAME);
 
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(request))

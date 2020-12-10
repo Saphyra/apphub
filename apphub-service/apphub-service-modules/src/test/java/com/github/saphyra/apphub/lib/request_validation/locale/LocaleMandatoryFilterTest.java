@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
@@ -43,6 +44,9 @@ public class LocaleMandatoryFilterTest {
 
     @Mock
     private ObjectMapperWrapper objectMapperWrapper;
+
+    @Mock
+    private LocaleMandatoryFilterConfiguration localeMandatoryFilterConfiguration;
 
     @InjectMocks
     private LocaleMandatoryFilter underTest;
@@ -83,6 +87,7 @@ public class LocaleMandatoryFilterTest {
         given(errorResponseWrapper.getStatus()).willReturn(HttpStatus.BAD_REQUEST);
         given(errorResponseWrapper.getErrorResponse()).willReturn(errorResponse);
         given(objectMapperWrapper.writeValueAsString(errorResponse)).willReturn(RESPONSE_BODY);
+        given(localeMandatoryFilterConfiguration.getWhiteListedEndpoints()).willReturn(Collections.emptyList());
 
         underTest.doFilterInternal(request, response, filterChain);
 
@@ -93,5 +98,10 @@ public class LocaleMandatoryFilterTest {
         verify(printWriter).write(RESPONSE_BODY);
         verify(printWriter).flush();
         verify(printWriter).close();
+    }
+
+    @Test
+    public void whiteListedEndpoint() {
+        //TODO unit test
     }
 }

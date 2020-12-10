@@ -27,7 +27,6 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     @Override
     //TODO unit test
     //TODO int test
-    //TODO API test
     public void createLobbyIfNotExists(AccessTokenHeader accessTokenHeader) {
         log.info("Creating lobby for user {} if not exists", accessTokenHeader.getUserId());
         lobbyCreationService.createIfNotExists(accessTokenHeader.getUserId());
@@ -63,9 +62,16 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     @Override
     //TODO unit test
     //TODO int test
-    //TODO API test
     public void processWebSocketEvent(UUID from, WebSocketEvent event) {
         log.info("Handling event {} from {}", event.getEventName(), from);
         webSocketEventHandlerService.handle(from, event);
+    }
+
+    @Override
+    //TODO unit test
+    //TODO int test
+    public void userJoinedToLobby(UUID userId) {
+        log.info("User {} is joined to lobby.", userId);
+        joinToLobbyService.sendJoinedNotification(userId);
     }
 }

@@ -12,7 +12,7 @@
     }
 
     function loadActiveFriends(){
-        const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_ACTIVE_FRIENDS"));
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_ACTIVE_FRIENDS")); //TODO move to webSocket
             request.convertResponse = function(response){
                 return JSON.parse(response.body);
             }

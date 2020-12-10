@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class WebSocketEvent {
-    private String eventName;
+    private WebSocketEventName eventName;
     private Object payload;
 }

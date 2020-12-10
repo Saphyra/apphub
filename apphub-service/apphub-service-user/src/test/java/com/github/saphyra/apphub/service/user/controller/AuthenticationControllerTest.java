@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.api.user.model.request.LoginRequest;
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.api.user.model.response.LoginResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.event.DeleteExpiredAccessTokensEvent;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import com.github.saphyra.apphub.service.user.authentication.AuthenticationProperties;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
@@ -70,12 +69,9 @@ public class AuthenticationControllerTest {
     @Mock
     private AccessToken accessToken;
 
-    @Mock
-    private SendEventRequest<DeleteExpiredAccessTokensEvent> sendEventRequest;
-
     @Test
     public void deleteExpiredAccessTokens() {
-        underTest.deleteExpiredAccessTokens(sendEventRequest);
+        underTest.deleteExpiredAccessTokens();
 
         verify(accessTokenCleanupService).deleteExpiredAccessTokens();
     }
@@ -135,7 +131,7 @@ public class AuthenticationControllerTest {
         ResponseEntity<InternalAccessTokenResponse> result = underTest.getAccessTokenById(ACCESS_TOKEN_ID);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        //noinspection ConstantConditions
+        ////noinspection ConstantConditions
         assertThat(result.getBody().getAccessTokenId()).isEqualTo(ACCESS_TOKEN_ID);
         assertThat(result.getBody().getUserId()).isEqualTo(USER_ID);
         assertThat(result.getBody().getRoles()).isEqualTo(Arrays.asList(ROLE_VALUE));

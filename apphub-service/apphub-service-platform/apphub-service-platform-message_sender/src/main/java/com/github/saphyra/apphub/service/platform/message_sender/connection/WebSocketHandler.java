@@ -10,4 +10,8 @@ public interface WebSocketHandler {
     MessageGroup getGroup();
 
     List<UUID> sendEvent(WebSocketMessage message);
+
+    void sendPingRequest();
+
+    void cleanUp();
 }

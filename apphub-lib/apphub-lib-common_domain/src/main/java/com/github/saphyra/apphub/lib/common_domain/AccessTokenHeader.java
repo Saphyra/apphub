@@ -15,7 +15,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class AccessTokenHeader {
-    @NonNull
     private UUID accessTokenId;
 
     @NonNull

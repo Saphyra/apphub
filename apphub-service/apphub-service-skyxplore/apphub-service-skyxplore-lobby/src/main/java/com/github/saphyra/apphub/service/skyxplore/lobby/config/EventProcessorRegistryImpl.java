@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.config;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
 import com.github.saphyra.apphub.lib.config.Endpoints;
-import com.github.saphyra.apphub.lib.event.SkyXploreLobbyCleanupEvent;
+import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.lib.event.processor.EventProcessorRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class EventProcessorRegistryImpl implements EventProcessorRegistry {
         return Arrays.asList(
             RegisterProcessorRequest.builder()
                 .serviceName(serviceName)
-                .eventName(SkyXploreLobbyCleanupEvent.EVENT_NAME)
+                .eventName(EmptyEvent.SKYXPLORE_LOBBY_CLEANUP_EVENT_NAME)
                 .url(Endpoints.SKYXPLORE_LOBBY_CLEANUP_EVENT)
                 .build()
         );

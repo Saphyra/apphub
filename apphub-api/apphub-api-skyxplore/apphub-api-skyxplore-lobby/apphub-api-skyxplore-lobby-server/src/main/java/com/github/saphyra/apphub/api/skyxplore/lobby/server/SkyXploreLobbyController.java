@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
+//TODO split - extract WebSocket events
 public interface SkyXploreLobbyController {
-    @PutMapping(Endpoints.SKYXPLORE_CREATE_LOBBY)
+    @PutMapping(Endpoints.INTERNAL_SKYXPLORE_CREATE_LOBBY)
     void createLobbyIfNotExists(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @DeleteMapping(Endpoints.SKYXPLORE_EXIT_FROM_LOBBY)
@@ -23,9 +24,12 @@ public interface SkyXploreLobbyController {
     @PostMapping(Endpoints.SKYXPLORE_INVITE_TO_LOBBY)
     void inviteToLobby(@PathVariable("friendId") UUID friendId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @PostMapping(Endpoints.SKYXPLORE_JOIN_LOBBY)
+    @PostMapping(Endpoints.INTERNAL_SKYXPLORE_JOIN_LOBBY)
     void joinLobby(@PathVariable("invitorId") UUID invitorId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.INTERNAL_SKYXPLORE_LOBBY_PROCESS_WEB_SOCKET_EVENTS)
     void processWebSocketEvent(@PathVariable("userId") UUID from, @RequestBody WebSocketEvent event);
+
+    @PostMapping(Endpoints.INTERNAL_SKYXPLORE_USER_JOINED_TO_LOBBY)
+    void userJoinedToLobby(@PathVariable("userId") UUID userId);
 }

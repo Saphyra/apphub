@@ -1,11 +1,8 @@
-package com.github.saphyra.apphub.service.user.config;
+package com.github.saphyra.apphub.service.platform.message_sender.config;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
 import com.github.saphyra.apphub.lib.config.Endpoints;
-import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.event.EmptyEvent;
-import com.github.saphyra.apphub.lib.event.PageVisitedEvent;
-import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import com.github.saphyra.apphub.lib.event.processor.EventProcessorRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -28,23 +25,13 @@ public class EventProcessorRegistryImpl implements EventProcessorRegistry {
         return Arrays.asList(
             RegisterProcessorRequest.builder()
                 .serviceName(serviceName)
-                .eventName(EmptyEvent.DELETE_EXPIRED_ACCESS_TOKENS_EVENT_NAME)
-                .url(Endpoints.DELETE_EXPIRED_ACCESS_TOKENS_EVENT)
+                .eventName(EmptyEvent.MESSAGE_SENDER_PING_REQUEST_EVENT_NAME)
+                .url(Endpoints.MESSAGE_SENDER_PING_REQUEST_EVENT)
                 .build(),
             RegisterProcessorRequest.builder()
                 .serviceName(serviceName)
-                .eventName(RefreshAccessTokenExpirationEvent.EVENT_NAME)
-                .url(Endpoints.REFRESH_ACCESS_TOKEN_EXPIRATION_EVENT)
-                .build(),
-            RegisterProcessorRequest.builder()
-                .serviceName(serviceName)
-                .eventName(DeleteAccountEvent.EVENT_NAME)
-                .url(Endpoints.DELETE_ACCOUNT_EVENT)
-                .build(),
-            RegisterProcessorRequest.builder()
-                .serviceName(serviceName)
-                .eventName(PageVisitedEvent.EVENT_NAME)
-                .url(Endpoints.PAGE_VISITED_EVENT)
+                .eventName(EmptyEvent.MESSAGE_SENDER_CONNECTION_CLEANUP_EVENT)
+                .url(Endpoints.MESSAGE_SENDER_CONNECTION_CLEANUP_EVENT)
                 .build()
         );
     }

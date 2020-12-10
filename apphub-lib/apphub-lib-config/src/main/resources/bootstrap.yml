@@ -1,7 +1,7 @@
 spring:
   cloud:
     kubernetes:
-      enabled: false #todo fix k8s config map issue
+      enabled: false
   datasource:
     username: postgres
     password: postgres

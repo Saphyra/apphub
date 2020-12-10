@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.invite;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
@@ -18,8 +19,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.UUID;
-
-import static com.github.saphyra.apphub.service.skyxplore.lobby.service.event.WebSocketEvents.INVITATION;
 
 @Component
 @RequiredArgsConstructor
@@ -64,7 +63,7 @@ public class InvitationService {
         WebSocketMessage message = WebSocketMessage.builder()
             .recipients(Arrays.asList(friendId))
             .event(WebSocketEvent.builder()
-                .eventName(INVITATION)
+                .eventName(WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION)
                 .payload(invitationMessage)
                 .build()
             )

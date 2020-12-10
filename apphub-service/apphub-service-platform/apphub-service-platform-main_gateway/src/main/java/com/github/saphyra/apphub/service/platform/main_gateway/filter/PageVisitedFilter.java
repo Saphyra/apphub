@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-//TODO logging
 public class PageVisitedFilter extends ZuulFilter {
     private static final String WEB_PATTERN = "/web/**";
 
@@ -59,9 +58,11 @@ public class PageVisitedFilter extends ZuulFilter {
         String accessTokenId = cookieUtil.getCookie(request, Constants.ACCESS_TOKEN_COOKIE)
             .orElseThrow(() -> new IllegalStateException("AccessToken Cookie not found"));
 
+        String requestUri = request.getRequestURI();
+        log.info("User with accessToken {} is visited page {}", accessTokenId, requestUri);
         PageVisitedEvent event = PageVisitedEvent.builder()
             .accessTokenId(uuidConverter.convertEntity(accessTokenId))
-            .pageUrl(request.getRequestURI())
+            .pageUrl(requestUri)
             .build();
         SendEventRequest<PageVisitedEvent> sendEventRequest = SendEventRequest.<PageVisitedEvent>builder()
             .eventName(PageVisitedEvent.EVENT_NAME)

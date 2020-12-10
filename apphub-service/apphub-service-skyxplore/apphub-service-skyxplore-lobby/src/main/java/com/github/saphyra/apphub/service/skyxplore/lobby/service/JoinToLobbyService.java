@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
@@ -15,8 +16,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
-
-import static com.github.saphyra.apphub.service.skyxplore.lobby.service.event.WebSocketEvents.JOIN_TO_LOBBY;
 
 @Component
 @RequiredArgsConstructor
@@ -39,16 +38,19 @@ public class JoinToLobbyService {
 
         invitations.remove(invitation);
         lobby.getMembers().add(userId);
+    }
+
+    public void sendJoinedNotification(UUID userId) {
+        Lobby lobby = lobbyDao.findByUserIdValidated(userId);
 
         WebSocketMessage message = WebSocketMessage.builder()
             .recipients(lobby.getMembers())
             .event(WebSocketEvent.builder()
-                .eventName(JOIN_TO_LOBBY)
+                .eventName(WebSocketEventName.SKYXPLORE_LOBBY_JOIN_TO_LOBBY)
                 .payload(new JoinMessage(characterProxy.getCharacter(userId).getName()))
                 .build())
             .build();
-        List<UUID> disconnectedUsers = messageSenderProxy.sendToLobby(message);
-        //TODO handle disconnectedUsers
+        List<UUID> disconnectedUsers = messageSenderProxy.sendToLobby(message); //TODO handle disconnectedUsers
     }
 
     @Data

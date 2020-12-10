@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.UUID;
 
 public interface SkyXploreCharacterDataController {
-    @GetMapping(Endpoints.SKYXPLORE_IS_CHARACTER_EXISTS)
+    @GetMapping(Endpoints.INTERNAL_SKYXPLORE_IS_CHARACTER_EXISTS)
     boolean isCharacterExistsForUser(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(Endpoints.SKYXPLORE_GET_CHARACTER)
     ResponseEntity<SkyXploreCharacterModel> getCharacter(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @PostMapping(Endpoints.SKYXPLORE_INTERNAL_CREATE_OR_UPDATE_CHARACTER)
+    @PostMapping(Endpoints.INTERNAL_SKYXPLORE_CREATE_OR_UPDATE_CHARACTER)
     void createOrUpdateCharacter(@RequestBody SkyXploreCharacterModel character, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(Endpoints.INTERNAL_SKYXPLORE_GET_CHARACTER_BY_USER_ID)

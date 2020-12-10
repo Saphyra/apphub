@@ -20,6 +20,7 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/chat_controller.js");
         this.exitLobby = function(){
             const request = new Request(Mapping.getEndpoint("SKYXPLORE_EXIT_FROM_LOBBY"));
                 request.processValidResponse = function(){
+                    wsConnection.close();
                     window.location = "/web/skyxplore";
                 }
             dao.sendRequestAsync(request);

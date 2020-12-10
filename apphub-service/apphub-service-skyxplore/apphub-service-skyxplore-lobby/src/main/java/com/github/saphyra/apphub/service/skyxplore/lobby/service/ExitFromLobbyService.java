@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
@@ -14,8 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
-
-import static com.github.saphyra.apphub.service.skyxplore.lobby.service.event.WebSocketEvents.EXIT_FROM_LOBBY;
 
 @Component
 @RequiredArgsConstructor
@@ -37,11 +36,11 @@ public class ExitFromLobbyService {
         WebSocketMessage message = WebSocketMessage.builder()
             .recipients(lobby.getMembers())
             .event(WebSocketEvent.builder()
-                .eventName(EXIT_FROM_LOBBY)
+                .eventName(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY)
                 .payload(new ExitMessage(characterProxy.getCharacter(userId).getName()))
                 .build())
             .build();
-        List<UUID> disconnectedUsers = messageSenderProxy.sendToLobby(message);
+        List<UUID> disconnectedUsers = messageSenderProxy.sendToLobby(message); //TODO handle disconnected users
 
         if (lobby.getHost().equals(userId)) {
             //TODO notify members about the host left the room

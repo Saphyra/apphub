@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @FeignClient("skyxplore-data-character")
 public interface SkyXploreCharacterDataApiClient {
-    @GetMapping(Endpoints.SKYXPLORE_IS_CHARACTER_EXISTS)
+    @GetMapping(Endpoints.INTERNAL_SKYXPLORE_IS_CHARACTER_EXISTS)
     boolean isCharacterExistsForUser(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
     @GetMapping(Endpoints.INTERNAL_SKYXPLORE_GET_CHARACTER_BY_USER_ID)

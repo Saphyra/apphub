@@ -3,12 +3,12 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.event.handler;
 import com.github.saphyra.apphub.api.platform.message_sender.client.MessageSenderApiClient;
 import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreCharacterDataApiClient;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.event.WebSocketEvents;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +29,8 @@ public class ChatSendMessageWebSocketEventHandler implements WebSocketEventHandl
     private final MessageSenderApiClient messageSenderClient;
 
     @Override
-    public boolean canHandle(String eventName) {
-        return WebSocketEvents.CHAT_SEND_MESSAGE.equals(eventName);
+    public boolean canHandle(WebSocketEventName eventName) {
+        return WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE == eventName;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ChatSendMessageWebSocketEventHandler implements WebSocketEventHandl
             .getName();
 
         WebSocketEvent webSocketEvent = WebSocketEvent.builder()
-            .eventName(WebSocketEvents.CHAT_SEND_MESSAGE)
+            .eventName(WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE)
             .payload(new Message(from, senderName, event.getPayload().toString()))
             .build();
         WebSocketMessage message = WebSocketMessage.builder()

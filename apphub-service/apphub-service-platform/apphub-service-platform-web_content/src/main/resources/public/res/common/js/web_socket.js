@@ -1,7 +1,7 @@
 function WebSocketConnection(ep){
     const endpoint = ep;
     const host = window.location.host;
-    const handlers = [];
+    const handlers = [new PingWebSocketHandler(this)];
 
     let connection = null;
 
@@ -18,6 +18,10 @@ function WebSocketConnection(ep){
         connection = new WebSocket("ws://" + host + endpoint.getUrl());
 
         connection.onmessage = handleMessage;
+    }
+
+    this.close = function(){
+        connection.close();
     }
 
     this.sendEvent = function(event){
@@ -39,6 +43,18 @@ function WebSocketConnection(ep){
             .peek(function(handler){handler.handle(eventData, eventName)})
             .findFirst()
             .ifNotPresent(function(){logService.logToConsole("No WebSocketHandler found for eventName " + eventName)});
+    }
+
+    function PingWebSocketHandler(c){
+        const wsConnection = c;
+
+        this.canHandle = function(eventName){
+            return eventName == "ping";
+        }
+
+        this.handle = function(){
+            wsConnection.sendEvent(new WebSocketEvent("ping"));
+        }
     }
 }
 

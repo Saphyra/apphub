@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.api.user.model.response.LastVisitedPageResponse
 import com.github.saphyra.apphub.api.user.model.response.LoginResponse;
 import com.github.saphyra.apphub.api.user.server.UserAuthenticationController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.event.DeleteExpiredAccessTokensEvent;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import com.github.saphyra.apphub.service.user.authentication.AuthenticationProperties;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
@@ -48,7 +47,7 @@ public class AuthenticationController implements UserAuthenticationController {
     }
 
     @Override
-    public void deleteExpiredAccessTokens(SendEventRequest<DeleteExpiredAccessTokensEvent> request) {
+    public void deleteExpiredAccessTokens() {
         log.info("Deleting expired accessTokens...");
         accessTokenCleanupService.deleteExpiredAccessTokens();
         log.info("Expired accessTokens deleted.");
