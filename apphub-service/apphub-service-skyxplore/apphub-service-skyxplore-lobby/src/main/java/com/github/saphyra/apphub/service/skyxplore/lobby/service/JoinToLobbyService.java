@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMess
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,14 +39,18 @@ public class JoinToLobbyService {
             .orElseThrow(() -> new RuntimeException("You are not invited to this lobby.")); //TODO proper exception
 
         invitations.remove(invitation);
-        lobby.getMembers().add(userId);
+
+        Member member = Member.builder()
+            .userId(userId)
+            .build();
+        lobby.getMembers().put(userId, member);
     }
 
     public void sendJoinedNotification(UUID userId) {
         Lobby lobby = lobbyDao.findByUserIdValidated(userId);
 
         WebSocketMessage message = WebSocketMessage.builder()
-            .recipients(lobby.getMembers())
+            .recipients(new ArrayList<>(lobby.getMembers().keySet()))
             .event(WebSocketEvent.builder()
                 .eventName(WebSocketEventName.SKYXPLORE_LOBBY_JOIN_TO_LOBBY)
                 .payload(new JoinMessage(characterProxy.getCharacter(userId).getName()))

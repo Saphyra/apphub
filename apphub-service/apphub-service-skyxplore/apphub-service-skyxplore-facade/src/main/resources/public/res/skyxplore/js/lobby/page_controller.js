@@ -1,6 +1,7 @@
 scriptLoader.loadScript("/res/common/js/web_socket.js");
 scriptLoader.loadScript("/res/skyxplore/js/lobby/friends_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/lobby/chat_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/lobby/members_controller.js");
 
 (function PageController(){
     window.ids = {

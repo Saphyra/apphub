@@ -1,6 +1,6 @@
 :root{
     --tab-width: 30%;
-    --tab-title-height: 2rem;
+    --tab-title-height: 2.5rem;
     --message-input-height: 2.5rem;
 }
 
@@ -36,6 +36,14 @@
         .message-sender-container{
             margin: 0.5rem;
         }
+
+            .message-sender-container.not-own-message{
+                margin-right: 5rem;
+            }
+
+            .message-sender-container.own-message{
+                margin-left: 5rem;
+            }
 
             .own-message{
                 text-align: right;
@@ -121,6 +129,39 @@
         right: 0;
         bottom: 0;
     }
+
+        #game-settings{
+            border-bottom: 2px ridge white;
+            text-align: center;
+        }
+
+            .settings-panel{
+                display: inline-block;
+                margin: 0.5rem;
+                border: 1px solid white;
+                padding: 0.25rem;
+                border-radius: 10px;
+            }
+
+                .settings-panel span{
+                    font-size: 1.25rem;
+                }
+
+        #members{
+
+        }
+
+            #host{
+
+            }
+
+            #members-list{
+
+            }
+
+                .lobby-member{
+
+                }
 
 #friends{
     position: absolute;

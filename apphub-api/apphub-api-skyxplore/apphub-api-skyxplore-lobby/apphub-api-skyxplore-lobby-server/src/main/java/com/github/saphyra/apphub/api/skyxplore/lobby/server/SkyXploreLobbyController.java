@@ -1,10 +1,12 @@
 package com.github.saphyra.apphub.api.skyxplore.lobby.server;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,4 +34,7 @@ public interface SkyXploreLobbyController {
 
     @PostMapping(Endpoints.INTERNAL_SKYXPLORE_USER_JOINED_TO_LOBBY)
     void userJoinedToLobby(@PathVariable("userId") UUID userId);
+
+    @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_MEMBERS)
+    LobbyMembersResponse getMembersOfLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

@@ -36,10 +36,132 @@
         "key": "placeholder",
         "message": "Üzenet"
       }
+    ],
+    "universe-size-title": [
+      {
+        "key": "innerHTML",
+        "message": "Univerzum mérete"
+      }
+    ],
+    "universe-size-option-smallest": [
+      {
+        "key": "innerHTML",
+        "message": "Legkisebb"
+      }
+    ],
+    "universe-size-option-small": [
+      {
+        "key": "innerHTML",
+        "message": "Kicsi"
+      }
+    ],
+    "universe-size-option-medium": [
+      {
+        "key": "innerHTML",
+        "message": "Közepes"
+      }
+    ],
+    "universe-size-option-large": [
+      {
+        "key": "innerHTML",
+        "message": "Nagy"
+      }
+    ],
+    "system-size-title": [
+      {
+        "key": "innerHTML",
+        "message": "Rendszerek mérete"
+      }
+    ],
+    "system-size-option-small": [
+      {
+        "key": "innerHTML",
+        "message": "Kicsi"
+      }
+    ],
+    "system-size-option-medium": [
+      {
+        "key": "innerHTML",
+        "message": "Közepes"
+      }
+    ],
+    "system-size-option-large": [
+      {
+        "key": "innerHTML",
+        "message": "Nagy"
+      }
+    ],
+    "system-size-option-random": [
+      {
+        "key": "innerHTML",
+        "message": "Véletlenszerű"
+      }
+    ],
+    "planet-size-title": [
+      {
+        "key": "innerHTML",
+        "message": "Bolygók mérete"
+      }
+    ],
+    "planet-size-option-small": [
+      {
+        "key": "innerHTML",
+        "message": "Kicsi"
+      }
+    ],
+    "planet-size-option-medium": [
+      {
+        "key": "innerHTML",
+        "message": "Közepes"
+      }
+    ],
+    "planet-size-option-large": [
+      {
+        "key": "innerHTML",
+        "message": "Nagy"
+      }
+    ],
+    "planet-size-option-random": [
+      {
+        "key": "innerHTML",
+        "message": "Véletlenszerű"
+      }
+    ],
+    "ai-presence-title": [
+      {
+        "key": "innerHTML",
+        "message": "MI jelenlét"
+      }
+    ],
+    "ai-presence-none": [
+      {
+        "key": "innerHTML",
+        "message": "Nincs"
+      }
+    ],
+    "ai-presence-rare": [
+      {
+        "key": "innerHTML",
+        "message": "Ritka"
+      }
+    ],
+    "ai-presence-common": [
+      {
+        "key": "innerHTML",
+        "message": "Közepes"
+      }
+    ],
+    "ai-presence-everywhere": [
+      {
+        "key": "innerHTML",
+        "message": "Mindenhol"
+      }
     ]
   },
   "additionalContent": {
     "no-active-friends": "Nincs aktív barát",
-    "friend-invited": "Barát meghívva."
+    "friend-invited": "Barát meghívva.",
+    "character-joined-to-lobby": "csatlakozott az előszobához.",
+    "character-left-the-lobby": "kilépett."
   }
 }

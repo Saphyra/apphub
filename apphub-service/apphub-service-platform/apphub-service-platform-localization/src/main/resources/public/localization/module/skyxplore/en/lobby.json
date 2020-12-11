@@ -36,6 +36,126 @@
         "key": "placeholder",
         "message": "Message"
       }
+    ],
+    "universe-size-title": [
+      {
+        "key": "innerHTML",
+        "message": "Universe size"
+      }
+    ],
+    "universe-size-option-smallest": [
+      {
+        "key": "innerHTML",
+        "message": "Smallest"
+      }
+    ],
+    "universe-size-option-small": [
+      {
+        "key": "innerHTML",
+        "message": "Small"
+      }
+    ],
+    "universe-size-option-medium": [
+      {
+        "key": "innerHTML",
+        "message": "Medium"
+      }
+    ],
+    "universe-size-option-large": [
+      {
+        "key": "innerHTML",
+        "message": "Large"
+      }
+    ],
+    "system-size-title": [
+      {
+        "key": "innerHTML",
+        "message": "System size"
+      }
+    ],
+    "system-size-option-small": [
+      {
+        "key": "innerHTML",
+        "message": "Small"
+      }
+    ],
+    "system-size-option-medium": [
+      {
+        "key": "innerHTML",
+        "message": "Medium"
+      }
+    ],
+    "system-size-option-large": [
+      {
+        "key": "innerHTML",
+        "message": "Large"
+      }
+    ],
+    "system-size-option-random": [
+      {
+        "key": "innerHTML",
+        "message": "Random"
+      }
+    ],
+    "planet-size-title": [
+      {
+        "key": "innerHTML",
+        "message": "Planet size"
+      }
+    ],
+    "planet-size-option-small": [
+      {
+        "key": "innerHTML",
+        "message": "Small"
+      }
+    ],
+    "planet-size-option-medium": [
+      {
+        "key": "innerHTML",
+        "message": "Medium"
+      }
+    ],
+    "planet-size-option-large": [
+      {
+        "key": "innerHTML",
+        "message": "Large"
+      }
+    ],
+    "planet-size-option-random": [
+      {
+        "key": "innerHTML",
+        "message": "Random"
+      }
+    ],
+    "ai-presence-title": [
+      {
+        "key": "innerHTML",
+        "message": "AI presence"
+      }
+    ],
+    "ai-presence-none": [
+      {
+        "key": "innerHTML",
+        "message": "None"
+      }
+    ],
+    "ai-presence-rare": [
+      {
+        "key": "innerHTML",
+        "message": "Rare"
+      }
+    ],
+    "ai-presence-common": [
+      {
+        "key": "innerHTML",
+        "message": "Common"
+      }
+    ],
+    "ai-presence-everywhere": [
+      {
+        "key": "innerHTML",
+        "message": "Everywhere"
+      }
     ]
   },
   "additionalContent": {

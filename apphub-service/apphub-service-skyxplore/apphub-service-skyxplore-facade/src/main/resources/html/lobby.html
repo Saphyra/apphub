@@ -9,9 +9,8 @@
 
     <script th:inline="javascript">
         /*<![CDATA[*/
-            window.characterId = /*[[${characterId}]]*/;
+            window.userId = /*[[${userId}]]*/;
         /*]]>*/
-
     </script>
 
     <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
@@ -39,7 +38,54 @@
             <H2 id="settings-title"></H2>
 
             <DIV id="settings-container">
-                <DIV id="players-list"></DIV>
+                <DIV id="game-settings">
+                    <DIV id="settings-universe-size" class="settings-panel">
+                        <SPAN id="universe-size-title"></SPAN>
+                        <SELECT id="universe-size-input">
+                            <OPTION id="universe-size-option-smallest" value="SMALLEST"></OPTION>
+                            <OPTION id="universe-size-option-small" value="SMALL" selected></OPTION>
+                            <OPTION id="universe-size-option-medium" value="MEDIUM"></OPTION>
+                            <OPTION id="universe-size-option-large" value="LARGE"></OPTION>
+                        </SELECT>
+                    </DIV>
+
+                    <DIV id="settings-system-size" class="settings-panel">
+                        <SPAN id="system-size-title"></SPAN>
+                        <SELECT id="system-size-input">
+                            <OPTION id="system-size-option-small" value="SMALL"></OPTION>
+                            <OPTION id="system-size-option-medium" value="MEDIUM" selected></OPTION>
+                            <OPTION id="system-size-option-large" value="LARGE"></OPTION>
+                            <OPTION id="system-size-option-random" value="RANDOM"></OPTION>
+                        </SELECT>
+                    </DIV>
+
+                    <DIV id="settings-planet-size" class="settings-panel">
+                        <SPAN id="planet-size-title"></SPAN>
+                        <SELECT id="planet-size-input">
+                            <OPTION id="planet-size-option-small" value="SMALL"></OPTION>
+                            <OPTION id="planet-size-option-medium" value="MEDIUM" selected></OPTION>
+                            <OPTION id="planet-size-option-large" value="LARGE"></OPTION>
+                            <OPTION id="planet-size-option-random" value="RANDOM"></OPTION>
+                        </SELECT>
+                    </DIV>
+
+                    <DIV id="settings-ai-presence" class="settings-panel">
+                        <SPAN id="ai-presence-title"></SPAN>
+                        <SELECT id="ai-presence-input">
+                            <OPTION id="ai-presence-none" value="NONE"></OPTION>
+                            <OPTION id="ai-presence-rare" value="RARE" selected></OPTION>
+                            <OPTION id="ai-presence-common" value="COMMON"></OPTION>
+                            <OPTION id="ai-presence-everywhere" value="EVERYWHERE"></OPTION>
+                        </SELECT>
+                    </DIV>
+                </DIV>
+
+
+                <DIV id="members">
+                    <DIV id="host"></DIV>
+
+                    <DIV id="members-list"></DIV>
+                </DIV>
             </DIV>
         </DIV>
 

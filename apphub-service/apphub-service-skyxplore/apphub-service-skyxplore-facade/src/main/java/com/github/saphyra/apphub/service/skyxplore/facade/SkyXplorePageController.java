@@ -51,7 +51,7 @@ public class SkyXplorePageController {
     public ModelAndView lobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
         lobbyClient.createLobbyIfNotExists(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated());
         ModelAndView mav = new ModelAndView("lobby");
-        mav.addObject("characterId", accessTokenHeader.getUserId());
+        mav.addObject("userId", accessTokenHeader.getUserId());
         return mav;
     }
 

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,7 +35,7 @@ public class ExitFromLobbyService {
         lobby.getMembers().remove(userId);
 
         WebSocketMessage message = WebSocketMessage.builder()
-            .recipients(lobby.getMembers())
+            .recipients(new ArrayList<>(lobby.getMembers().keySet()))
             .event(WebSocketEvent.builder()
                 .eventName(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY)
                 .payload(new ExitMessage(characterProxy.getCharacter(userId).getName()))

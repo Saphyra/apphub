@@ -49,6 +49,10 @@ zuul:
       path: /api/skyxplore/lobby/join/*
       serviceId: skyxplore-lobby
       stripPrefix: false
+    get-lobby-members:
+      path: /api/skyxplore/lobby/members
+      serviceId: skyxplore-lobby
+      stripPrefix: false
 
 role:
   settings:

@@ -7,6 +7,7 @@ import lombok.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.Vector;
 
@@ -21,7 +22,7 @@ public class Lobby {
     private final UUID host;
 
     @NonNull
-    private final List<UUID> members;
+    private final Map<UUID, Member> members;
 
     @NonNull
     private LocalDateTime lastAccess;

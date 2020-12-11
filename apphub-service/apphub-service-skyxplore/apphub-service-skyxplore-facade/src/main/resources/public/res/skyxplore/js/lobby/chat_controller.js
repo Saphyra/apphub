@@ -34,7 +34,7 @@
 
             const messageNode = document.createElement("DIV");
                 messageNode.classList.add("chat-message");
-                if(senderId != window.characterId){
+                if(senderId != window.userId){
                     messageNode.classList.add("not-own-message");
                 }
                 messageNode.innerHTML = message;
@@ -57,8 +57,10 @@
                 const senderContainer = document.createElement("DIV");
                     senderContainer.classList.add("message-sender-container");
                     senderContainer.setAttribute("sender-id", senderId);
-                    if(senderId == window.characterId){
+                    if(senderId == window.userId){
                         senderContainer.classList.add("own-message");
+                    }else{
+                        senderContainer.classList.add("not-own-message");
                     }
 
                     const wrapper = document.createElement("DIV");
@@ -70,7 +72,7 @@
                     wrapper.appendChild(senderNameNode);
 
                         const messageList = document.createElement("DIV");
-                            if(senderId != window.characterId){
+                            if(senderId != window.userId){
                                 messageList.classList.add("not-own-message");
                             }
 
@@ -90,6 +92,10 @@
     function sendMessage(){
         const inputField = document.getElementById("message-input");
         const message = inputField.value;
+
+        if(!message.length){
+            return;
+        }
 
         const event = new WebSocketEvent(webSocketEvents.CHAT_SEND_MESSAGE, message);
 

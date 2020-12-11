@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,7 +39,7 @@ public class ChatSendMessageWebSocketEventHandler implements WebSocketEventHandl
         log.info("Sending message from {}", from);
         Lobby lobby = lobbyDao.findByUserIdValidated(from);
 
-        List<UUID> members = lobby.getMembers();
+        List<UUID> members = new ArrayList<>(lobby.getMembers().keySet());
         log.info("Recipients for chatMessage from {}: {}", from, members);
         String senderName = characterClient.internalGetCharacterByUserId(from, localeProvider.getLocaleValidated())
             .getName();
