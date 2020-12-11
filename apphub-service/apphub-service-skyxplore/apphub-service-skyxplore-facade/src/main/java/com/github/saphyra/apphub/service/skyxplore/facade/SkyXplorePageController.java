@@ -62,6 +62,6 @@ public class SkyXplorePageController {
             accessTokenHeaderConverter.convertDomain(accessTokenHeader),
             localeProvider.getLocaleValidated()
         );
-        return "redirect:" + Endpoints.SKYXPLORE_LOBBY_PAGE;
+        return "redirect:" + Endpoints.SKYXPLORE_LOBBY_PAGE; //TODO move lobby join to JavaScript, redirection does not work with ProductionProxy
     }
 }

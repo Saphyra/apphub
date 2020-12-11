@@ -5,6 +5,8 @@ forwardedPort: ${forwarded_port:9001}
 
 zuul:
   prefix: /
+  ignoredPatterns:
+    - /api/message-sender/**
   routes:
     proxy:
       path: /**
@@ -15,3 +17,12 @@ zuul:
 proxy:
   ribbon:
     listOfServers: localhost:${forwardedPort}
+
+ws:
+  forward:
+    enabled: true
+    handlers:
+      message-sender:
+        uri: /api/message-sender/**
+        listOfServers:
+          - localhost:${forwardedPort}
