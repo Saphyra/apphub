@@ -3,8 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.facade;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-import java.util.UUID;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,6 +67,6 @@ public class SkyXplorePageControllerTest {
         ModelAndView result = underTest.character();
 
         assertThat(result.getViewName()).isEqualTo("character");
-        assertThat(result.getModel().get("backUrl")).isEqualTo(Endpoints.SKYXPLORE_START_PAGE);
+        assertThat(result.getModel().get("backUrl")).isEqualTo(Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
     }
 }

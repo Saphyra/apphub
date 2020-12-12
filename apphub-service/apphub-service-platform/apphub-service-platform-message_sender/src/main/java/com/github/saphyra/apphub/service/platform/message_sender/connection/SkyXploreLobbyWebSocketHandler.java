@@ -39,6 +39,11 @@ public class SkyXploreLobbyWebSocketHandler extends DefaultWebSocketHandler {
     }
 
     @Override
+    protected void afterDisconnection(UUID userId) {
+        lobbyClient.userLeftLobby(userId, commonConfigProperties.getDefaultLocale());
+    }
+
+    @Override
     protected void handleMessage(UUID userId, WebSocketEvent event) {
         log.info("Event from {}: {}", userId, event.getEventName());
         lobbyClient.processWebSocketEvent(userId, event, commonConfigProperties.getDefaultLocale());

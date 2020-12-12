@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.skyxplore.lobby.server.SkyXploreLobbyController;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberQueryService;
@@ -26,13 +27,21 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     private final JoinToLobbyService joinToLobbyService;
     private final WebSocketEventHandlerService webSocketEventHandlerService;
     private final LobbyMemberQueryService lobbyMemberQueryService;
+    private final LobbyDao lobbyDao;
 
     @Override
     //TODO unit test
     //TODO int test
-    public void createLobbyIfNotExists(AccessTokenHeader accessTokenHeader) {//TODO always enter to a new lobby, and remove from the existing one
+    public void createLobby(AccessTokenHeader accessTokenHeader) {
         log.info("Creating lobby for user {} if not exists", accessTokenHeader.getUserId());
-        lobbyCreationService.createIfNotExists(accessTokenHeader.getUserId());
+        lobbyCreationService.create(accessTokenHeader.getUserId());
+    }
+
+    @Override
+    public boolean isInLobby(AccessTokenHeader accessTokenHeader) {
+        log.info("Checking if user {} is in lobby...", accessTokenHeader.getUserId());
+        return lobbyDao.findByUserId(accessTokenHeader.getUserId())
+            .isPresent();
     }
 
     @Override
@@ -57,9 +66,9 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     //TODO unit test
     //TODO int test
     //TODO API test
-    public void joinLobby(UUID invitorId, AccessTokenHeader accessTokenHeader) {
+    public void acceptInvitation(UUID invitorId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to join to lobby of {}", accessTokenHeader.getUserId(), invitorId);
-        joinToLobbyService.join(accessTokenHeader.getUserId(), invitorId);
+        joinToLobbyService.acceptInvitation(accessTokenHeader.getUserId(), invitorId);
     }
 
     @Override
@@ -75,7 +84,13 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     //TODO int test
     public void userJoinedToLobby(UUID userId) {
         log.info("User {} is joined to lobby.", userId);
-        joinToLobbyService.sendJoinedNotification(userId);
+        joinToLobbyService.userJoinedToLobby(userId);
+    }
+
+    @Override
+    public void userLeftLobby(UUID userId) {
+        log.info("User {} is left the lobby", userId);
+        exitFromLobbyService.sendDisconnectionMessage(userId);
     }
 
     @Override

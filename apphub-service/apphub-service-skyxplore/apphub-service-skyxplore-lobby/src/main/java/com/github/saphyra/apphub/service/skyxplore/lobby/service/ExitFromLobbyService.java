@@ -34,6 +34,14 @@ public class ExitFromLobbyService {
     private void exit(UUID userId, Lobby lobby) {
         lobby.getMembers().remove(userId);
 
+        sendNotification(userId, lobby);
+
+        if (lobby.getHost().equals(userId)) {
+            //TODO notify members about the host left the room
+        }
+    }
+
+    private void sendNotification(UUID userId, Lobby lobby) {
         WebSocketMessage message = WebSocketMessage.builder()
             .recipients(new ArrayList<>(lobby.getMembers().keySet()))
             .event(WebSocketEvent.builder()
@@ -42,10 +50,11 @@ public class ExitFromLobbyService {
                 .build())
             .build();
         List<UUID> disconnectedUsers = messageSenderProxy.sendToLobby(message); //TODO handle disconnected users
+    }
 
-        if (lobby.getHost().equals(userId)) {
-            //TODO notify members about the host left the room
-        }
+    public void sendDisconnectionMessage(UUID userId) {
+        lobbyDao.findByUserId(userId)
+            .ifPresent(lobby -> sendNotification(userId, lobby));
     }
 
     @Data

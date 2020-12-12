@@ -9,10 +9,9 @@ public class Endpoints {
     public static final String ADMIN_PANEL_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/role-management";
     public static final String ERROR_PAGE = "/web/error";
     public static final String NOTEBOOK_PAGE = "/web/notebook";
-    public static final String SKYXPLORE_START_PAGE = "/web/skyxplore";
+    public static final String SKYXPLORE_MAIN_MENU_PAGE = "/web/skyxplore";
     public static final String SKYXPLORE_CHARACTER_PAGE = "/web/skyxplore/character";
     public static final String SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
-    public static final String SKYXPLORE_JOIN_LOBBY_PAGE = "/web/skyxplore/lobby/{invitorId}";
 
     //PLATFORM
     public static final String HEALTH = "/platform/health";
@@ -105,15 +104,17 @@ public class Endpoints {
     public static final String SKYXPLORE_GET_FRIENDS = "/api/skyxplore/friend";
     public static final String SKYXPLORE_REMOVE_FRIEND = "/api/skyxplore/friend/{friendshipId}";
     public static final String SKYXPLORE_GET_ACTIVE_FRIENDS = "/api/skyxplore/friend/active";
+    public static final String SKYXPLORE_GET_CHARACTER = "/api/skyxplore/character";
 
     //SKYXPLORE-LOBBY
-    public static final String INTERNAL_SKYXPLORE_CREATE_LOBBY = "/internal/lobby";
     public static final String INTERNAL_SKYXPLORE_USER_JOINED_TO_LOBBY = "/internal/lobby/{userId}";
-    public static final String INTERNAL_SKYXPLORE_JOIN_LOBBY = "/api/internal/skyxplore/lobby/join/{invitorId}";
+    public static final String INTERNAL_SKYXPLORE_USER_LEFT_LOBBY = "/internal/lobby/{userId}";
     public static final String INTERNAL_SKYXPLORE_LOBBY_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/lobby/{userId}";
+    public static final String INTERNAL_SKYXPLORE_IS_USE_IN_LOBBY = "/internal/skyxplore/lobby";
 
     public static final String SKYXPLORE_EXIT_FROM_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_INVITE_TO_LOBBY = "/api/skyxplore/lobby/invite/{friendId}";
-    public static final String SKYXPLORE_GET_CHARACTER = "/api/skyxplore/character";
+    public static final String SKYXPLORE_LOBBY_ACCEPT_INVITATION = "/api/skyxplore/lobby/join/{invitorId}";
     public static final String SKYXPLORE_LOBBY_GET_MEMBERS = "/api/skyxplore/lobby/members";
+    public static final String SKYXPLORE_CREATE_LOBBY = "/api/skyxplore/lobby";
 }

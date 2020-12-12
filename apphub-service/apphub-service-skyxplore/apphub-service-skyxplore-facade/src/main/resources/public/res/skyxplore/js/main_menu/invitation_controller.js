@@ -41,7 +41,7 @@
                     const acceptButton = document.createElement("BUTTON");
                         acceptButton.innerHTML = Localization.getAdditionalContent("accept-invitation");
                         acceptButton.onclick = function(){
-                            window.location.href = Mapping.SKYXPLORE_LOBBY_PAGE + "/" + invitation.senderId;
+                            acceptInvitation(invitation.senderId);
                         }
                 buttons.appendChild(acceptButton);
 
@@ -57,5 +57,13 @@
         senders.push(invitation.senderId);
 
         animationFacade.rollInVertical(node, container, 500);
+    }
+
+    function acceptInvitation(senderId){
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_LOBBY_ACCEPT_INVITATION", {invitorId: senderId}));
+            request.processValidResponse = function(){
+                window.location.href = Mapping.SKYXPLORE_LOBBY_PAGE;
+            }
+        dao.sendRequestAsync(request);
     }
 })();

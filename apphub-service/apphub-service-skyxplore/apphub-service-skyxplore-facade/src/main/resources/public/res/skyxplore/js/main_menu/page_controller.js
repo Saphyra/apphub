@@ -18,6 +18,16 @@ scriptLoader.loadScript("/res/common/js/web_socket.js");
 
     const webSocketConnection = new WebSocketConnection(Mapping.getEndpoint("CONNECTION_SKYXPLORE_MAIN_MENU"));
 
+    window.pageController = new function(){
+        this.newGame = function(){
+            const request = new Request(Mapping.getEndpoint("SKYXPLORE_CREATE_LOBBY"));
+                request.processValidResponse = function(){
+                    window.location.href='/web/skyxplore/lobby'
+                }
+            dao.sendRequestAsync(request);
+        }
+    }
+
     $(document).ready(function(){
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "skyxplore", fileName: "main_menu"}));
         webSocketConnection.addHandler(invitationController.createHandler())

@@ -52,7 +52,7 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
         UUID userId = getUserId(session);
         log.info("User {} disconnected from messageGroup {}", userId, getGroup());
         sessionMap.remove(userId);
-        afterConnection(userId);
+        afterDisconnection(userId);
     }
 
     protected void afterDisconnection(UUID userId) {

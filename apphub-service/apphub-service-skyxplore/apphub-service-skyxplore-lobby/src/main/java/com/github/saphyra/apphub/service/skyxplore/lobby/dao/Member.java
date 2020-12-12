@@ -13,4 +13,5 @@ import java.util.UUID;
 public class Member {
     private final UUID userId;
     private boolean isReady;
+    private boolean connected;
 }

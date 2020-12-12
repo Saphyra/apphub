@@ -29,7 +29,7 @@ public class JoinToLobbyService {
     private final CharacterProxy characterProxy;
     private final MessageSenderProxy messageSenderProxy;
 
-    public void join(UUID userId, UUID invitorId) {
+    public void acceptInvitation(UUID userId, UUID invitorId) {
         Lobby lobby = lobbyDao.findByUserIdValidated(invitorId);
 
         List<Invitation> invitations = lobby.getInvitations();
@@ -47,8 +47,10 @@ public class JoinToLobbyService {
         lobby.getMembers().put(userId, member);
     }
 
-    public void sendJoinedNotification(UUID userId) {
+    public void userJoinedToLobby(UUID userId) {
         Lobby lobby = lobbyDao.findByUserIdValidated(userId);
+        Member member = lobby.getMembers().get(userId);
+        member.setConnected(true);
 
         JoinMessage joinMessage = JoinMessage.builder()
             .characterName(characterProxy.getCharacter(userId).getName())

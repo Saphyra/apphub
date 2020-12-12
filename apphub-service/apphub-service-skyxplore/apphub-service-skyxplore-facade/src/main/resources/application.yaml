@@ -5,6 +5,7 @@ spring:
 zuul:
   prefix: /
   routes:
+    #SkyXplore data
     create-or-update-character:
       path: /api/skyxplore/character
       serviceId: skyxplore-data
@@ -37,6 +38,12 @@ zuul:
       path: /api/skyxplore/friend/request/*
       serviceId: skyxplore-data
       stripPrefix: false
+
+    #SkyXplore lobby
+    create-lobby:
+      path: /api/skyxplore/lobby
+      serviceId: skyxplore-lobby
+      stripPrefix: false
     exit-from-lobby:
       path: /api/skyxplore/lobby
       serviceId: skyxplore-lobby
@@ -45,7 +52,7 @@ zuul:
       path: /api/skyxplore/lobby/invite/*
       serviceId: skyxplore-lobby
       stripPrefix: false
-    join-to-lobby:
+    accept-invitation:
       path: /api/skyxplore/lobby/join/*
       serviceId: skyxplore-lobby
       stripPrefix: false

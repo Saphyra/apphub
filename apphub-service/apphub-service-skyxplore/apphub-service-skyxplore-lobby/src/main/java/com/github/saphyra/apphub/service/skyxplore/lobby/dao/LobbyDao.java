@@ -19,10 +19,6 @@ import java.util.stream.Collectors;
 public class LobbyDao {
     private final Map<UUID, Lobby> repository = new ConcurrentHashMap<>();
 
-    public boolean alreadyInLobby(UUID userId) {
-        return findByUserId(userId).isPresent();
-    }
-
     public void save(Lobby lobby) {
         repository.put(lobby.getLobbyId(), lobby);
     }

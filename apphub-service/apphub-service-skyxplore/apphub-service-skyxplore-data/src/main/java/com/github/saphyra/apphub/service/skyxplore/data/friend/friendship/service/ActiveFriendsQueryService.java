@@ -48,8 +48,8 @@ public class ActiveFriendsQueryService {
         LastVisitedPageResponse lastVisitedPageResponse = authenticationClient.getLastVisitedPage(friendId, localeProvider.getLocaleValidated());
         log.info("Checking if friend {} is active by lastVisitedPage {}", friendId, lastVisitedPageResponse);
 
-        if (!lastVisitedPageResponse.getPageUrl().equals(Endpoints.SKYXPLORE_START_PAGE)) {
-            log.info("LastVisitedPage is not {}", Endpoints.SKYXPLORE_START_PAGE);
+        if (!lastVisitedPageResponse.getPageUrl().equals(Endpoints.SKYXPLORE_MAIN_MENU_PAGE)) {
+            log.info("LastVisitedPage is not {}", Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
             return false;
         }
 

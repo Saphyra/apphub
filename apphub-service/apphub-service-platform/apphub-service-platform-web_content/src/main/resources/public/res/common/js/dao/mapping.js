@@ -64,6 +64,8 @@ window.Mapping = new function(){
         SKYXPLORE_EXIT_FROM_LOBBY: new Endpoint("/api/skyxplore/lobby", HttpMethod.DELETE),
         SKYXPLORE_INVITE_TO_LOBBY: new Endpoint("/api/skyxplore/lobby/invite/{friendId}", HttpMethod.POST),
         SKYXPLORE_LOBBY_GET_MEMBERS: new Endpoint("/api/skyxplore/lobby/members", HttpMethod.GET),
+        SKYXPLORE_CREATE_LOBBY: new Endpoint("/api/skyxplore/lobby", HttpMethod.PUT),
+        SKYXPLORE_LOBBY_ACCEPT_INVITATION: new Endpoint("/api/skyxplore/lobby/join/{invitorId}", HttpMethod.POST),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

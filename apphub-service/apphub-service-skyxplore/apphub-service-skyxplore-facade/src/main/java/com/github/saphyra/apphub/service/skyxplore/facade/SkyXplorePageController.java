@@ -11,11 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,7 +23,7 @@ public class SkyXplorePageController {
     private final SkyXploreCharacterDataApiClient characterClient;
     private final SkyXploreLobbyApiClient lobbyClient;
 
-    @GetMapping(Endpoints.SKYXPLORE_START_PAGE)
+    @GetMapping(Endpoints.SKYXPLORE_MAIN_MENU_PAGE)
     public ModelAndView mainMenu(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
         log.info("Loading SkyXplore main menu for user {}", accessTokenHeader.getUserId());
         if (characterClient.isCharacterExistsForUser(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated())) {
@@ -43,25 +40,19 @@ public class SkyXplorePageController {
     public ModelAndView character() {
         log.info("Loading SkyXplore character page.");
         ModelAndView mav = new ModelAndView("character");
-        mav.addObject("backUrl", Endpoints.SKYXPLORE_START_PAGE);
+        mav.addObject("backUrl", Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
         return mav;
     }
 
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_PAGE)
     public ModelAndView lobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
-        lobbyClient.createLobbyIfNotExists(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated()); //TODO JavaScript should handle this
+        boolean isUserInLobby = lobbyClient.isInLobby(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated());
+        if (!isUserInLobby) {
+            log.info("User is not in lobby.");
+            return new ModelAndView("redirect:" + Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
+        }
         ModelAndView mav = new ModelAndView("lobby");
         mav.addObject("userId", accessTokenHeader.getUserId());
         return mav;
-    }
-
-    @GetMapping(Endpoints.SKYXPLORE_JOIN_LOBBY_PAGE)
-    public String joinLobby(@PathVariable("invitorId") UUID invitorId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
-        lobbyClient.joinLobby(
-            invitorId,
-            accessTokenHeaderConverter.convertDomain(accessTokenHeader),
-            localeProvider.getLocaleValidated()
-        );
-        return "redirect:" + Endpoints.SKYXPLORE_LOBBY_PAGE; //TODO move lobby join to JavaScript, redirection does not work with ProductionProxy
     }
 }
