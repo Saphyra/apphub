@@ -162,6 +162,9 @@
     "no-active-friends": "No active friends",
     "friend-invited": "Friend is invited.",
     "character-joined-to-lobby": "is joined to the lobby.",
-    "character-left-the-lobby": "has left."
+    "character-left-the-lobby": "has left.",
+    "alliance-title": "Alliance",
+    "no-alliance": "No alliance",
+    "new-alliance": "New alliance"
   }
 }

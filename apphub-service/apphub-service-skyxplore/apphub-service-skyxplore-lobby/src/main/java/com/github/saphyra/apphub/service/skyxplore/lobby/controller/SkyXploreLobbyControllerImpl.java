@@ -30,7 +30,7 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     @Override
     //TODO unit test
     //TODO int test
-    public void createLobbyIfNotExists(AccessTokenHeader accessTokenHeader) {
+    public void createLobbyIfNotExists(AccessTokenHeader accessTokenHeader) {//TODO always enter to a new lobby, and remove from the existing one
         log.info("Creating lobby for user {} if not exists", accessTokenHeader.getUserId());
         lobbyCreationService.createIfNotExists(accessTokenHeader.getUserId());
     }

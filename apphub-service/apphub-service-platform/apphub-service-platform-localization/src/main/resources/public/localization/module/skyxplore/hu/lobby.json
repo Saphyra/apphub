@@ -162,6 +162,9 @@
     "no-active-friends": "Nincs aktív barát",
     "friend-invited": "Barát meghívva.",
     "character-joined-to-lobby": "csatlakozott az előszobához.",
-    "character-left-the-lobby": "kilépett."
+    "character-left-the-lobby": "kilépett.",
+    "alliance-title": "Szövetség",
+    "no-alliance": "Nincs szövetség",
+    "new-alliance": "Új szövetség"
   }
 }

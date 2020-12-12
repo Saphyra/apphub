@@ -49,7 +49,7 @@ public class SkyXplorePageController {
 
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_PAGE)
     public ModelAndView lobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
-        lobbyClient.createLobbyIfNotExists(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated());
+        lobbyClient.createLobbyIfNotExists(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated()); //TODO JavaScript should handle this
         ModelAndView mav = new ModelAndView("lobby");
         mav.addObject("userId", accessTokenHeader.getUserId());
         return mav;

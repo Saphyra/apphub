@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,11 +50,16 @@ public class JoinToLobbyService {
     public void sendJoinedNotification(UUID userId) {
         Lobby lobby = lobbyDao.findByUserIdValidated(userId);
 
+        JoinMessage joinMessage = JoinMessage.builder()
+            .characterName(characterProxy.getCharacter(userId).getName())
+            .userId(userId)
+            .host(userId.equals(lobby.getHost()))
+            .build();
         WebSocketMessage message = WebSocketMessage.builder()
             .recipients(new ArrayList<>(lobby.getMembers().keySet()))
             .event(WebSocketEvent.builder()
                 .eventName(WebSocketEventName.SKYXPLORE_LOBBY_JOIN_TO_LOBBY)
-                .payload(new JoinMessage(characterProxy.getCharacter(userId).getName()))
+                .payload(joinMessage)
                 .build())
             .build();
         List<UUID> disconnectedUsers = messageSenderProxy.sendToLobby(message); //TODO handle disconnectedUsers
@@ -61,7 +67,10 @@ public class JoinToLobbyService {
 
     @Data
     @AllArgsConstructor
+    @Builder
     private static class JoinMessage {
         private String characterName;
+        private UUID userId;
+        private boolean host;
     }
 }

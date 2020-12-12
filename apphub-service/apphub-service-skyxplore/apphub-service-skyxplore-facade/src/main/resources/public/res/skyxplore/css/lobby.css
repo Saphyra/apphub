@@ -160,8 +160,22 @@
             }
 
                 .lobby-member{
-
+                    display: inline-block;
+                    margin: 0.5rem;
+                    border: 2px ridge white;
+                    border-radius: 10px;
                 }
+
+                    .lobby-member-name{
+                        text-align: center;
+                        font-size: 1.25rem;
+                        border-bottom: 2px ridge white;
+                        padding: 0.25rem;
+                    }
+
+                    .lobby-member-alliance-container{
+                        padding: 0.25rem;
+                    }
 
 #friends{
     position: absolute;
