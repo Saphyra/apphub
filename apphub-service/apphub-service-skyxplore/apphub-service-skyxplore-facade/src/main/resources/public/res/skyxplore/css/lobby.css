@@ -162,7 +162,7 @@
                 .lobby-member{
                     display: inline-block;
                     margin: 0.5rem;
-                    border: 2px ridge white;
+                    border: 2px ridge red;
                     border-radius: 10px;
                 }
 
@@ -176,6 +176,10 @@
                     .lobby-member-alliance-container{
                         padding: 0.25rem;
                     }
+
+                .lobby-member.ready{
+                    border-color: greenyellow;
+                }
 
 #friends{
     position: absolute;
@@ -209,4 +213,8 @@
     left: 0;
     right: 0;
     height: var(--tab-title-height);
+}
+
+#set-unready{
+    display: none;
 }

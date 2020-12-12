@@ -98,6 +98,10 @@
 
     <FOOTER>
         <BUTTON id="back-button" onclick='pageController.exitLobby()'></BUTTON>
+        <SPAN id="readiness-button-container">
+            <BUTTON id="set-ready" class="ready-button" onclick="membersController.setReady()"></BUTTON>
+            <BUTTON id="set-unready" class="ready-button" onclick="membersController.setUnready()"></BUTTON>
+        </SPAN>
     </FOOTER>
 </DIV>
 </BODY>

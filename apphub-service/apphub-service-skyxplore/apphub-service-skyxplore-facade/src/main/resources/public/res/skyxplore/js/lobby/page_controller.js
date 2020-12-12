@@ -12,7 +12,8 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/members_controller.js");
     }
 
     window.webSocketEvents = {
-        CHAT_SEND_MESSAGE: "chat-send-message"
+        CHAT_SEND_MESSAGE: "chat-send-message",
+        SET_READINESS: "set-readiness"
     }
 
     const wsConnection = new WebSocketConnection(Mapping.getEndpoint("CONNECTION_SKYXPLORE_LOBBY"));
@@ -36,6 +37,7 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/members_controller.js");
             .addHandler(chatController.createCharacterJoinedHandler())
             .addHandler(membersController.createCharacterJoinedHandler())
             .addHandler(chatController.createCharacterLeftHandler())
+            .addHandler(membersController.createReadinessHandler())
             .connect();
     });
 })();

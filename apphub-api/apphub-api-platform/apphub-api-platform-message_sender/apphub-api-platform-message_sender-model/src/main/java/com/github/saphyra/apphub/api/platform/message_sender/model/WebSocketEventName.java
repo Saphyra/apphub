@@ -11,6 +11,7 @@ public enum WebSocketEventName {
     SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE("chat-send-message"),
     SKYXPLORE_LOBBY_JOIN_TO_LOBBY("join-to-lobby"),
     SKYXPLORE_LOBBY_EXIT_FROM_LOBBY("exit-from-lobby"),
+    SKYXPLORE_LOBBY_SET_READINESS("set-readiness"),
 
     SKYXPLORE_MAIN_MENU_INVITATION("invitation");
 

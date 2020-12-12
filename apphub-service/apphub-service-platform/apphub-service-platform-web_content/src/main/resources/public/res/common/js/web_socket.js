@@ -6,6 +6,7 @@ function WebSocketConnection(ep){
     let connection = null;
 
     this.addHandler = function(handler){
+        console.log("Adding eventHandler", handler.canHandle);
         handlers.push(handler);
         return this;
     }
@@ -65,7 +66,7 @@ function WebSocketEventHandler(ch, h){
 
 function WebSocketEvent(e, p){
     const event = e;
-    const payload = p;
+    const payload = p == undefined ? null : p;
 
     this.assemble = function(){
         return JSON.stringify({eventName: event, payload: payload});

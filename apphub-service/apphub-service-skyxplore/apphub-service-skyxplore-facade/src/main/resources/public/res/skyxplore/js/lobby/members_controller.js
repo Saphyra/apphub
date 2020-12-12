@@ -8,6 +8,16 @@
                 processCharacterJoinedEvent
             );
         };
+
+        this.createReadinessHandler = function(){
+            return new WebSocketEventHandler(
+                function(eventName){return eventName == webSocketEvents.SET_READINESS},
+                setReadiness
+            )
+        }
+
+        this.setReady = setReady;
+        this.setUnready = setUnready;
     }
 
     $(document).ready(init);
@@ -34,10 +44,34 @@
     }
 
     function processCharacterJoinedEvent(event){
-        //TODO
+        const existingMember = members[event.userId];
+
+        if(existingMember){
+            existingMember.setReadiness(event.ready);
+        }else{
+            const member = {
+                userId: event.userId,
+                characterName: event.characterName,
+                ready: event.ready
+            }
+
+            const memberPanel = createMemberPanel(member, event.host);
+            if(event.host){
+                const container = document.getElementById(ids.host);
+                    container.innerHTML = "";
+                    container.appendChild(memberPanel);
+            }else{
+                const container = document.getElementById(ids.membersList);
+                    container.appendChild(memberPanel);
+            }
+        }
     }
 
     function createMemberPanel(member, isHost){
+        if(members[member.userId]){
+            return members[member.userId].container;
+        }
+
         const container = document.createElement("DIV");
             container.classList.add("lobby-member");
 
@@ -69,11 +103,37 @@
             ready: member.ready,
             userId: member.userId,
             allianceSelectMenu: allianceSelectMenu,
-            isHost: isHost
+            isHost: isHost,
+
+            setReadiness: function(r){
+                if(r){
+                    container.classList.add("ready");
+                }else{
+                    container.classList.remove("ready");
+                }
+            }
         }
 
         members[member.userId] = memberData;
         return container;
+    }
+
+    function setReadiness(event){
+        members[event.userId].setReadiness(event.ready);
+    }
+
+    function setReady(){
+        const event = new WebSocketEvent(webSocketEvents.SET_READINESS, true);
+        pageController.webSocketConnection.sendEvent(event);
+
+        switchTab("ready-button", "set-unready");
+    }
+
+    function setUnready(){
+        const event = new WebSocketEvent(webSocketEvents.SET_READINESS, false);
+        pageController.webSocketConnection.sendEvent(event);
+
+        switchTab("ready-button", "set-ready");
     }
 
     function init(){

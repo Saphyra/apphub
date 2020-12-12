@@ -45,7 +45,7 @@ public class ActiveFriendsQueryService {
 
     private boolean isActive(UUID userId, Friendship friendship) {
         UUID friendId = friendIdExtractor.getFriendId(friendship, userId);
-        LastVisitedPageResponse lastVisitedPageResponse = authenticationClient.getLastVisitedPage(friendId, localeProvider.getLocaleValidated());
+        LastVisitedPageResponse lastVisitedPageResponse = authenticationClient.getLastVisitedPage(friendId, localeProvider.getLocaleValidated()); //TODO get data from connected users
         log.info("Checking if friend {} is active by lastVisitedPage {}", friendId, lastVisitedPageResponse);
 
         if (!lastVisitedPageResponse.getPageUrl().equals(Endpoints.SKYXPLORE_MAIN_MENU_PAGE)) {
