@@ -25,6 +25,10 @@ public class Lobby {
     private final Map<UUID, Member> members;
 
     @NonNull
+    @Builder.Default
+    private final List<Alliance> alliances = new Vector<>();
+
+    @NonNull
     private LocalDateTime lastAccess;
 
     @Builder.Default

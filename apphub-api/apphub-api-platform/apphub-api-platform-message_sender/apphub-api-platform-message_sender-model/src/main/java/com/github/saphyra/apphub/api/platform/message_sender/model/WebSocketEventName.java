@@ -12,6 +12,7 @@ public enum WebSocketEventName {
     SKYXPLORE_LOBBY_JOIN_TO_LOBBY("join-to-lobby"),
     SKYXPLORE_LOBBY_EXIT_FROM_LOBBY("exit-from-lobby"),
     SKYXPLORE_LOBBY_SET_READINESS("set-readiness"),
+    SKYXPLORE_LOBBY_CHANGE_ALLIANCE("change-alliance"),
 
     SKYXPLORE_MAIN_MENU_INVITATION("invitation");
 

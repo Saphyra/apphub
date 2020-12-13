@@ -15,4 +15,5 @@ public class LobbyMemberResponse {
     private UUID userId;
     private String characterName;
     private boolean ready;
+    private String alliance;
 }

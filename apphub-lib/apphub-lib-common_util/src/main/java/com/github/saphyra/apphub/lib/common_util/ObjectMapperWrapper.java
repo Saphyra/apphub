@@ -65,4 +65,8 @@ public class ObjectMapperWrapper {
             throw new RuntimeException(e);
         }
     }
+
+    public <T> T convertValue(Object o, Class<T> clazz) {
+        return objectMapper.convertValue(o, clazz);
+    }
 }

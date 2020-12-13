@@ -14,4 +14,5 @@ import java.util.List;
 public class LobbyMembersResponse {
     private LobbyMemberResponse host;
     private List<LobbyMemberResponse> members;
+    private List<String> alliances;
 }

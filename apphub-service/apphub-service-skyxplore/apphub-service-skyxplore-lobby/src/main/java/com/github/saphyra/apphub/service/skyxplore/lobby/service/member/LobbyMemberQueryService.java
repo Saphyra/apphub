@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.member;
 
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +28,18 @@ public class LobbyMemberQueryService {
             .values()
             .stream()
             .filter(member -> !member.getUserId().equals(lobby.getHost()))
-            .map(converter::convertMember)
+            .map(member -> converter.convertMember(member, lobby.getAlliances()))
+            .collect(Collectors.toList());
+
+        List<String> alliances = lobby.getAlliances()
+            .stream()
+            .map(Alliance::getAllianceName)
             .collect(Collectors.toList());
 
         return LobbyMembersResponse.builder()
-            .host(converter.convertMember(lobby.getMembers().get(lobby.getHost())))
+            .host(converter.convertMember(lobby.getMembers().get(lobby.getHost()), lobby.getAlliances()))
             .members(members)
+            .alliances(alliances)
             .build();
     }
 }

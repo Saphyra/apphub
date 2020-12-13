@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -56,6 +58,7 @@ public class JoinToLobbyService {
             .characterName(characterProxy.getCharacter(userId).getName())
             .userId(userId)
             .host(userId.equals(lobby.getHost()))
+            .alliances(lobby.getAlliances().stream().map(Alliance::getAllianceName).collect(Collectors.toList()))
             .build();
         WebSocketMessage message = WebSocketMessage.builder()
             .recipients(new ArrayList<>(lobby.getMembers().keySet()))
@@ -74,5 +77,6 @@ public class JoinToLobbyService {
         private String characterName;
         private UUID userId;
         private boolean host;
+        private List<String> alliances;
     }
 }

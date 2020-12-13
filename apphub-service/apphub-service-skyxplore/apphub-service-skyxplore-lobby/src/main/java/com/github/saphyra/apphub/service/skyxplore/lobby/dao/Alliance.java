@@ -7,12 +7,10 @@ import lombok.Data;
 
 import java.util.UUID;
 
-@Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
-public class Member {
-    private final UUID userId;
-    private boolean isReady;
-    private boolean connected;
-    private UUID alliance;
+@Builder
+public class Alliance {
+    private final UUID allianceId;
+    private final String allianceName;
 }
