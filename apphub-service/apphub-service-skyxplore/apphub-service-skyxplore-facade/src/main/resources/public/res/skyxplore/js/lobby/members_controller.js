@@ -9,6 +9,13 @@
             );
         };
 
+        this.createCharacterLeftHandler = function(){
+            return new WebSocketEventHandler(
+                function(eventName){return eventName == "exit-from-lobby"},
+                processCharacterLeftEvent
+            )
+        }
+
         this.createReadinessHandler = function(){
             return new WebSocketEventHandler(
                 function(eventName){return eventName == webSocketEvents.SET_READINESS},
@@ -73,6 +80,16 @@
                     container.appendChild(memberPanel);
             }
         }
+    }
+
+    function processCharacterLeftEvent(event){
+        if(event.host){
+            window.location.href = Mapping.SKYXPLORE_PAGE;
+            return;
+        }
+
+        document.getElementById(ids.membersList).removeChild(members[event.userId].container);
+        delete members[userId];
     }
 
     function createMemberPanel(member, isHost, alliances){

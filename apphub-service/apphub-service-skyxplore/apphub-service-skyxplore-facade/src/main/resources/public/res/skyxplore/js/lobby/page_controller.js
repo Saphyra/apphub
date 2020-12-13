@@ -44,6 +44,7 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/settings_controller.js");
             .addHandler(chatController.createCharacterJoinedHandler())
             .addHandler(membersController.createCharacterJoinedHandler())
             .addHandler(chatController.createCharacterLeftHandler())
+            .addHandler(membersController.createCharacterLeftHandler())
             .addHandler(membersController.createReadinessHandler())
             .addHandler(membersController.createAllianceChangedHandler())
             .addHandler(settingsController.createGameSettingsChangedHandler())

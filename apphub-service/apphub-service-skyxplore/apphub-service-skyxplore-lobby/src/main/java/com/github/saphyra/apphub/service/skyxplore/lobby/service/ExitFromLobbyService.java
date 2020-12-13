@@ -35,10 +35,6 @@ public class ExitFromLobbyService {
         lobby.getMembers().remove(userId);
 
         sendNotification(userId, lobby);
-
-        if (lobby.getHost().equals(userId)) {
-            //TODO notify members about the host left the room
-        }
     }
 
     private void sendNotification(UUID userId, Lobby lobby) {
@@ -46,7 +42,11 @@ public class ExitFromLobbyService {
             .recipients(new ArrayList<>(lobby.getMembers().keySet()))
             .event(WebSocketEvent.builder()
                 .eventName(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY)
-                .payload(new ExitMessage(characterProxy.getCharacter(userId).getName()))
+                .payload(new ExitMessage(
+                    userId,
+                    lobby.getHost().equals(userId),
+                    characterProxy.getCharacter(userId).getName())
+                )
                 .build())
             .build();
         List<UUID> disconnectedUsers = messageSenderProxy.sendToLobby(message); //TODO handle disconnected users
@@ -60,6 +60,8 @@ public class ExitFromLobbyService {
     @Data
     @AllArgsConstructor
     private static class ExitMessage {
+        private UUID userId;
+        private boolean host;
         private String characterName;
     }
 }
