@@ -60,6 +60,10 @@ zuul:
       path: /api/skyxplore/lobby/members
       serviceId: skyxplore-lobby
       stripPrefix: false
+    get-lobby-settings:
+      path: /api/skyxplore/lobby/settings
+      serviceId: skyxplore-lobby
+      stripPrefix: false
 
 role:
   settings:

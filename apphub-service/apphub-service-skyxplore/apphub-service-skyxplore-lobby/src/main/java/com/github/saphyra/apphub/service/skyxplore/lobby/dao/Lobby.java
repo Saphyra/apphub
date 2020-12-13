@@ -33,4 +33,7 @@ public class Lobby {
 
     @Builder.Default
     private final List<Invitation> invitations = new Vector<>();
+
+    @Builder.Default
+    private final GameSettings settings = new GameSettings();
 }

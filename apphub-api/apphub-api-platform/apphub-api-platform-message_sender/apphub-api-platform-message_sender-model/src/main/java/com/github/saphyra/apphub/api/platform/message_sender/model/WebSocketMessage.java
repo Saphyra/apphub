@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -13,6 +13,6 @@ import java.util.UUID;
 @Data
 @Builder
 public class WebSocketMessage {
-    private List<UUID> recipients;
+    private Collection<UUID> recipients;
     private WebSocketEvent event;
 }

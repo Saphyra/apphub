@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.api.skyxplore.lobby.server;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
+import com.github.saphyra.apphub.api.skyxplore.response.GameSettingsResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
@@ -44,4 +45,7 @@ public interface SkyXploreLobbyController {
 
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_MEMBERS)
     LobbyMembersResponse getMembersOfLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_GAME_SETTINGS)
+    GameSettingsResponse getGameSettings(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-public class ChatSendMessageWebSocketEventHandler implements WebSocketEventHandler {
+class ChatSendMessageWebSocketEventHandler implements WebSocketEventHandler {
     private final LobbyDao lobbyDao;
     private final SkyXploreCharacterDataApiClient characterClient;
     private final LocaleProvider localeProvider;

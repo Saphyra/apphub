@@ -43,10 +43,10 @@
     function displayMembers(members){
         document.getElementById(ids.host).appendChild(createMemberPanel(members.host, true, members.alliances));
 
-        const membersContainer = document.getElementById(ids.membersList, false, members.alliances);
+        const membersContainer = document.getElementById(ids.membersList);
 
             new Stream(members.members)
-                .map(createMemberPanel)
+                .map(function(member){return createMemberPanel(member, false, members.alliances)})
                 .forEach(function(node){membersContainer.appendChild(node)});
     }
 

@@ -30,7 +30,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-public class ChangeAllianceWebSocketEventHandler implements WebSocketEventHandler {
+class ChangeAllianceWebSocketEventHandler implements WebSocketEventHandler {
     private static final String NO_ALLIANCE = "no-alliance";
     private static final String NEW_ALLIANCE = "new-alliance";
 

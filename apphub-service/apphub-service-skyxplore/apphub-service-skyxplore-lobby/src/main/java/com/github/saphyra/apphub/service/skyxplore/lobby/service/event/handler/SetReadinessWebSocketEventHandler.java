@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-public class SetReadinessWebSocketEventHandler implements WebSocketEventHandler {
+class SetReadinessWebSocketEventHandler implements WebSocketEventHandler {
     private final LobbyDao lobbyDao;
     private final MessageSenderApiClient messageSenderClient;
     private final LocaleProvider localeProvider;

@@ -2,9 +2,11 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.controller;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.skyxplore.lobby.server.SkyXploreLobbyController;
+import com.github.saphyra.apphub.api.skyxplore.response.GameSettingsResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.GameSettings;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
@@ -116,5 +118,21 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     public LobbyMembersResponse getMembersOfLobby(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the members of his lobby.", accessTokenHeader.getUserId());
         return lobbyMemberQueryService.getMembers(accessTokenHeader.getUserId());
+    }
+
+    @Override
+    //TODO unit test
+    //TODO int test
+    //TODO API test
+    public GameSettingsResponse getGameSettings(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to know the settings of his lobby.", accessTokenHeader.getUserId());
+        Lobby lobby = lobbyDao.findByUserIdValidated(accessTokenHeader.getUserId());
+        GameSettings settings = lobby.getSettings();
+        return GameSettingsResponse.builder()
+            .universeSize(settings.getUniverseSize().name())
+            .systemSize(settings.getSystemSize().name())
+            .planetSize(settings.getPlanetSize().name())
+            .aiPresence(settings.getAiPresence().name())
+            .build();
     }
 }
