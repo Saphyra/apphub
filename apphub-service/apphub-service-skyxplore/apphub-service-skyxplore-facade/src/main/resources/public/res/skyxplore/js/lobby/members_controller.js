@@ -95,8 +95,12 @@
             allianceNode.appendChild(allianceNodeTitle);
 
                 const allianceSelectMenu = document.createElement("SELECT");
-                    allianceSelectMenu.onchange = function(){
-                        handleAllianceChange(allianceSelectMenu.value, member.userId);
+                    if(member.userId != window.userId && window.host != window.userId){
+                        allianceSelectMenu.disabled = "disabled";
+                    }else{
+                        allianceSelectMenu.onchange = function(){
+                            handleAllianceChange(allianceSelectMenu.value, member.userId);
+                        }
                     }
 
                     const noAllianceOption = document.createElement("OPTION");

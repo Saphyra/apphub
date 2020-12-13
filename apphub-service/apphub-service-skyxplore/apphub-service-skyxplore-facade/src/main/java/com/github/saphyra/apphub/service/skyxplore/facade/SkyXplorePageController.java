@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.facade;
 
 import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreCharacterDataApiClient;
 import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
@@ -46,13 +47,14 @@ public class SkyXplorePageController {
 
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_PAGE)
     public ModelAndView lobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
-        boolean isUserInLobby = lobbyClient.isInLobby(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated());
-        if (!isUserInLobby) {
+        LobbyViewForPage view = lobbyClient.lobbyForPage(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated());
+        if (!view.isInLobby()) {
             log.info("User is not in lobby.");
             return new ModelAndView("redirect:" + Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
         }
         ModelAndView mav = new ModelAndView("lobby");
         mav.addObject("userId", accessTokenHeader.getUserId());
+        mav.addObject("host", view.getHost());
         return mav;
     }
 }

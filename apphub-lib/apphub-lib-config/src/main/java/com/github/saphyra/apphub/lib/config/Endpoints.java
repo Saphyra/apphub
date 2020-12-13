@@ -110,7 +110,7 @@ public class Endpoints {
     public static final String INTERNAL_SKYXPLORE_USER_JOINED_TO_LOBBY = "/internal/lobby/{userId}";
     public static final String INTERNAL_SKYXPLORE_USER_LEFT_LOBBY = "/internal/lobby/{userId}";
     public static final String INTERNAL_SKYXPLORE_LOBBY_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/lobby/{userId}";
-    public static final String INTERNAL_SKYXPLORE_IS_USE_IN_LOBBY = "/internal/skyxplore/lobby";
+    public static final String INTERNAL_SKYXPLORE_LOBBY_VIEW_FOR_PAGE = "/internal/skyxplore/lobby/page";
 
     public static final String SKYXPLORE_EXIT_FROM_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_INVITE_TO_LOBBY = "/api/skyxplore/lobby/invite/{friendId}";

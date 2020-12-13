@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.api.skyxplore.lobby.client;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -15,8 +16,8 @@ import java.util.UUID;
 
 @FeignClient("skyxplore-lobby")
 public interface SkyXploreLobbyApiClient {
-    @GetMapping(Endpoints.INTERNAL_SKYXPLORE_IS_USE_IN_LOBBY)
-    boolean isInLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    @GetMapping(Endpoints.INTERNAL_SKYXPLORE_LOBBY_VIEW_FOR_PAGE)
+    LobbyViewForPage lobbyForPage(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
     //TODO extract
     @PostMapping(Endpoints.INTERNAL_SKYXPLORE_LOBBY_PROCESS_WEB_SOCKET_EVENTS)

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.api.skyxplore.lobby.server;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.config.Endpoints;
@@ -20,8 +21,8 @@ public interface SkyXploreLobbyController {
     @PutMapping(Endpoints.SKYXPLORE_CREATE_LOBBY)
     void createLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @GetMapping(Endpoints.INTERNAL_SKYXPLORE_IS_USE_IN_LOBBY)
-    boolean isInLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    @GetMapping(Endpoints.INTERNAL_SKYXPLORE_LOBBY_VIEW_FOR_PAGE)
+    LobbyViewForPage lobbyForPage(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @DeleteMapping(Endpoints.SKYXPLORE_EXIT_FROM_LOBBY)
     void exitFromLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

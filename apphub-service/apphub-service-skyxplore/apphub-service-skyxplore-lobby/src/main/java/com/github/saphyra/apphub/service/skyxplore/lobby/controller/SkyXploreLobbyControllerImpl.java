@@ -3,7 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.controller;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.skyxplore.lobby.server.SkyXploreLobbyController;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyService;
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -38,10 +41,23 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     }
 
     @Override
-    public boolean isInLobby(AccessTokenHeader accessTokenHeader) {
+    public LobbyViewForPage lobbyForPage(AccessTokenHeader accessTokenHeader) {
         log.info("Checking if user {} is in lobby...", accessTokenHeader.getUserId());
-        return lobbyDao.findByUserId(accessTokenHeader.getUserId())
-            .isPresent();
+
+
+        Optional<Lobby> lobbyOptional = lobbyDao.findByUserId(accessTokenHeader.getUserId());
+        if (lobbyOptional.isPresent()) {
+            Lobby lobby = lobbyOptional.get();
+
+            return LobbyViewForPage.builder()
+                .inLobby(true)
+                .host(lobby.getHost())
+                .build();
+        } else {
+            return LobbyViewForPage.builder()
+                .inLobby(false)
+                .build();
+        }
     }
 
     @Override
