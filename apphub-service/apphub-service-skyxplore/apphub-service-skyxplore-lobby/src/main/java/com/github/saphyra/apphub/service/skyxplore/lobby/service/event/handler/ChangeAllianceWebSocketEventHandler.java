@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -51,7 +52,16 @@ public class ChangeAllianceWebSocketEventHandler implements WebSocketEventHandle
         ChangeAllianceEvent changeAllianceEvent = objectMapperWrapper.convertValue(event.getPayload(), ChangeAllianceEvent.class);
 
         Lobby lobby = lobbyDao.findByUserIdValidated(from);
+
         Member member = lobby.getMembers().get(changeAllianceEvent.getUserId());
+        if (!lobby.getHost().equals(from) && !from.equals(changeAllianceEvent.getUserId())) {
+            String alliance = Optional.ofNullable(member.getAlliance())
+                .map(allianceId -> lobby.getAlliances().stream().filter(a -> a.getAllianceId().equals(allianceId)).findFirst().orElseThrow(() -> new RuntimeException("Alliance not found with id " + allianceId)))
+                .map(Alliance::getAllianceName)
+                .orElse(NO_ALLIANCE);
+            sendMessage(changeAllianceEvent.getUserId(), alliance, false, lobby.getMembers());
+            throw new RuntimeException(from + " must not change the alliance of " + changeAllianceEvent.getUserId());
+        }
 
         switch (changeAllianceEvent.getAlliance()) {
             case NO_ALLIANCE:
