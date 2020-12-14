@@ -64,6 +64,10 @@ zuul:
       path: /api/skyxplore/lobby/settings
       serviceId: skyxplore-lobby
       stripPrefix: false
+    start-game:
+      path: /api/skyxplore/lobby/start
+      serviceId: skyxplore-lobby
+      stripPrefix: false
 
 role:
   settings:

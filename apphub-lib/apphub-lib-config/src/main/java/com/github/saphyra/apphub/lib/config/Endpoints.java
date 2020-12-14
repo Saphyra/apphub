@@ -118,4 +118,5 @@ public class Endpoints {
     public static final String SKYXPLORE_LOBBY_GET_MEMBERS = "/api/skyxplore/lobby/members";
     public static final String SKYXPLORE_CREATE_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_LOBBY_GET_GAME_SETTINGS = "/api/skyxplore/lobby/settings";
+    public static final String SKYXPLORE_START_GAME = "/api/skyxplore/lobby/start";
 }

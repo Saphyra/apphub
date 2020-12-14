@@ -168,6 +168,12 @@
         "key": "innerHTML",
         "message": "I'm not ready"
       }
+    ],
+    "start-game-button": [
+      {
+        "key": "innerHTML",
+        "message": "Start game"
+      }
     ]
   },
   "additionalContent": {
@@ -177,6 +183,7 @@
     "character-left-the-lobby": "has left.",
     "alliance-title": "Alliance",
     "no-alliance": "No alliance",
-    "new-alliance": "New alliance"
+    "new-alliance": "New alliance",
+    "game-started": "Game started."
   }
 }

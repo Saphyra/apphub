@@ -5,6 +5,7 @@ window.Mapping = new function(){
     this.MODULES_PAGE = "/web/modules";
     this.SKYXPLORE_PAGE = "/web/skyxplore";
     this.SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
+    this.SKYXPLORE_GAME_PAGE = "/web/skyxplore/game";
 
     const endpoints = {
         CONNECTION_SKYXPLORE_MAIN_MENU: new Endpoint("/api/message-sender/skyxplore/main-menu", HttpMethod.GET),
@@ -67,6 +68,7 @@ window.Mapping = new function(){
         SKYXPLORE_CREATE_LOBBY: new Endpoint("/api/skyxplore/lobby", HttpMethod.PUT),
         SKYXPLORE_LOBBY_ACCEPT_INVITATION: new Endpoint("/api/skyxplore/lobby/join/{invitorId}", HttpMethod.POST),
         SKYXPLORE_LOBBY_GET_GAME_SETTINGS: new Endpoint("/api/skyxplore/lobby/settings", HttpMethod.GET),
+        SKYXPLORE_START_GAME: new Endpoint("/api/skyxplore/lobby/start", HttpMethod.POST),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

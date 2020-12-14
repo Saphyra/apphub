@@ -168,6 +168,12 @@
         "key": "innerHTML",
         "message": "Nem vagyok kész"
       }
+    ],
+    "start-game-button": [
+      {
+        "key": "innerHTML",
+        "message": "Játék kezdése"
+      }
     ]
   },
   "additionalContent": {
@@ -177,6 +183,7 @@
     "character-left-the-lobby": "kilépett.",
     "alliance-title": "Szövetség",
     "no-alliance": "Nincs szövetség",
-    "new-alliance": "Új szövetség"
+    "new-alliance": "Új szövetség",
+    "game-started": "Játék elindítva."
   }
 }

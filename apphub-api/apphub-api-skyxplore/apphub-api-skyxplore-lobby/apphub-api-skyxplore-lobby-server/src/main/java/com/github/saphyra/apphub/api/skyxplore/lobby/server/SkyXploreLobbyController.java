@@ -48,4 +48,7 @@ public interface SkyXploreLobbyController {
 
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_GAME_SETTINGS)
     GameSettingsResponse getGameSettings(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.SKYXPLORE_START_GAME)
+    void startGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

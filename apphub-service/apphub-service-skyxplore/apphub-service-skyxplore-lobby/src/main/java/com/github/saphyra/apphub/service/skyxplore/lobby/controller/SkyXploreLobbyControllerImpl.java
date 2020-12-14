@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyService;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.StartGameService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberQueryService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.creation.LobbyCreationService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.event.WebSocketEventHandlerService;
@@ -33,6 +34,7 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     private final WebSocketEventHandlerService webSocketEventHandlerService;
     private final LobbyMemberQueryService lobbyMemberQueryService;
     private final LobbyDao lobbyDao;
+    private final StartGameService startGameService;
 
     @Override
     //TODO unit test
@@ -134,5 +136,14 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
             .planetSize(settings.getPlanetSize().name())
             .aiPresence(settings.getAiPresence().name())
             .build();
+    }
+
+    @Override
+    //TODO unit test
+    //TODO int test
+    //TODO API test
+    public void startGame(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to start the game.", accessTokenHeader.getUserId());
+        startGameService.startGame(accessTokenHeader.getUserId());
     }
 }

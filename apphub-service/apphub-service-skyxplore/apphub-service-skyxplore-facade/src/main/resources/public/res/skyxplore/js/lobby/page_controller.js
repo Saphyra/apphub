@@ -3,6 +3,7 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/friends_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/lobby/chat_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/lobby/members_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/lobby/settings_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/lobby/start_game_controller.js");
 
 (function PageController(){
     window.ids = {
@@ -14,6 +15,7 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/settings_controller.js");
         systemSizeInput: "system-size-input",
         planetSizeInput: "planet-size-input",
         aiPresenceInput: "ai-presence-input",
+        startGameButton: "start-game-button",
     }
 
     window.webSocketEvents = {
@@ -21,6 +23,8 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/settings_controller.js");
         SET_READINESS: "set-readiness",
         CHANGE_ALLIANCE: "change-alliance",
         GAME_SETTINGS_CHANGED: "game-settings-changed",
+        GAME_CREATION_INITIATED: "game-creation-initiated",
+        GAME_LOADED: "game-loaded",
     }
 
     const wsConnection = new WebSocketConnection(Mapping.getEndpoint("CONNECTION_SKYXPLORE_LOBBY"));
@@ -48,7 +52,8 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/settings_controller.js");
             .addHandler(membersController.createReadinessHandler())
             .addHandler(membersController.createAllianceChangedHandler())
             .addHandler(settingsController.createGameSettingsChangedHandler())
-            //TODO Handle member exit
+            .addHandler(startGameController.createGameCreationInitiatedHandler())
+            .addHandler(startGameController.createGameLoadedHandler())
             .connect();
     });
 })();
