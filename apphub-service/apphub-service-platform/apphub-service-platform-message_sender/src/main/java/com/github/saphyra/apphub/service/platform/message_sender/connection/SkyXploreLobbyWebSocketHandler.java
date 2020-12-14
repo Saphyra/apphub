@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.config.common.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

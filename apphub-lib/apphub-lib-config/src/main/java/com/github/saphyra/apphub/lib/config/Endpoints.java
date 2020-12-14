@@ -12,6 +12,7 @@ public class Endpoints {
     public static final String SKYXPLORE_MAIN_MENU_PAGE = "/web/skyxplore";
     public static final String SKYXPLORE_CHARACTER_PAGE = "/web/skyxplore/character";
     public static final String SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
+    public static final String SKYXPLORE_GAME_PAGE = "/web/skyxplore/game";
 
     //PLATFORM
     public static final String HEALTH = "/platform/health";
@@ -32,6 +33,7 @@ public class Endpoints {
     //CONNECTION SUBSCRIPTIONS
     public static final String CONNECTION_SKYXPLORE_MAIN_MENU = "/api/message-sender/skyxplore/main-menu";
     public static final String CONNECTION_SKYXPLORE_LOBBY = "/api/message-sender/skyxplore/lobby";
+    public static final String CONNECTION_SKYXPLORE_GAME = "/api/message-sender/skyxplore/lobby/game";
 
     //LOGIN
     public static final String LOGIN = "/api/user/authentication/login";
@@ -119,4 +121,7 @@ public class Endpoints {
     public static final String SKYXPLORE_CREATE_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_LOBBY_GET_GAME_SETTINGS = "/api/skyxplore/lobby/settings";
     public static final String SKYXPLORE_START_GAME = "/api/skyxplore/lobby/start";
+
+    //SKYXPLORE-GAME
+    public static final String INTERNAL_SKYXPLORE_CREATE_GAME = "/internal/skyxplore/game";
 }

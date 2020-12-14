@@ -77,6 +77,14 @@ skyxplore-lobby:
   ribbon:
     listOfServers: localhost:8093
 
+skyxplore-game:
+  ribbon:
+    listOfServers: localhost:8095
+
+skyxplore-game-creation:
+  ribbon:
+    listOfServers: localhost:8095
+
 message-sender:
   ribbon:
     listOfServers: localhost:8094

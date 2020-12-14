@@ -27,5 +27,6 @@
         <module>apphub-api-skyxplore-model</module>
         <module>apphub-api-skyxplore-facade</module>
         <module>apphub-api-skyxplore-lobby</module>
+        <module>apphub-api-skyxplore-game</module>
     </modules>
 </project>

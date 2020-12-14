@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.lib.request_validation.locale;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.config.common.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.FilterOrder;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorTranslation;
 import lombok.Data;

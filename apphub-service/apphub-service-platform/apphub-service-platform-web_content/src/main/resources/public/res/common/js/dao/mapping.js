@@ -10,6 +10,7 @@ window.Mapping = new function(){
     const endpoints = {
         CONNECTION_SKYXPLORE_MAIN_MENU: new Endpoint("/api/message-sender/skyxplore/main-menu", HttpMethod.GET),
         CONNECTION_SKYXPLORE_LOBBY: new Endpoint("/api/message-sender/skyxplore/lobby", HttpMethod.GET),
+        CONNECTION_SKYXPLORE_GAME: new Endpoint("/api/message-sender/skyxplore/game", HttpMethod.GET),
 
         ADD_ROLE: new Endpoint("/api/user/data/roles", HttpMethod.PUT),
         ADMIN_PANEL_MENU: new Endpoint("/res/admin-panel/json/index_menu.json", HttpMethod.GET),

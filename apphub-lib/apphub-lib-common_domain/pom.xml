@@ -21,7 +21,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${versions.spring}</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 

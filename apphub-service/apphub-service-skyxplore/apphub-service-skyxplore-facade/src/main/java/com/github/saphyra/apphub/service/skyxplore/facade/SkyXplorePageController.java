@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class SkyXplorePageController {
     private final AccessTokenHeaderConverter accessTokenHeaderConverter;
     private final LocaleProvider localeProvider;
@@ -57,6 +58,14 @@ public class SkyXplorePageController {
         mav.addObject("userId", accessTokenHeader.getUserId());
         mav.addObject("host", view.getHost());
         mav.addObject("gameCreationStarted", view.isGameCreationStarted());
+        return mav;
+    }
+
+    @GetMapping(Endpoints.SKYXPLORE_GAME_PAGE)
+    public ModelAndView game(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
+        //TODO check if player is in game
+        ModelAndView mav = new ModelAndView("game");
+
         return mav;
     }
 }

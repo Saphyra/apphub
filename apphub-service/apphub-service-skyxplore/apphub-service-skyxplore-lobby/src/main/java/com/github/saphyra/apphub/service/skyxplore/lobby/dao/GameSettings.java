@@ -1,5 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.dao;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.AiPresence;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.PlanetSize;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemSize;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.UniverseSize;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

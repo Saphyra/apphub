@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.lobby.dao;
+package com.github.saphyra.apphub.api.skyxplore.model.game_setting;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.lib.error_handler;
 
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
-import com.github.saphyra.apphub.lib.config.FeignClientConfiguration;
+import com.github.saphyra.apphub.lib.config.common.FeignClientConfiguration;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;

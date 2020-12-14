@@ -21,7 +21,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${versions.spring-boot}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -34,7 +33,6 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
             <version>${versions.spring-boot}</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 

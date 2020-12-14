@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.locale;
 import com.github.saphyra.apphub.api.user.client.UserDataApiClient;
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_util.CookieUtil;
-import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.config.common.CommonConfigProperties;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

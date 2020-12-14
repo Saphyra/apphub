@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: skyxplore-game
+
+role:
+  settings:
+    - pattern: /api/skyxplore/**
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - SKYXPLORE

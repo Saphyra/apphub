@@ -31,5 +31,6 @@
         <module>apphub-service-skyxplore-data</module>
         <module>apphub-service-skyxplore-lobby</module>
         <module>apphub-service-skyxplore-facade</module>
+        <module>apphub-service-skyxplore-game</module>
     </modules>
 </project>

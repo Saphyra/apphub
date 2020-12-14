@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.config;
+package com.github.saphyra.apphub.lib.config.common;
 
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Configuration;

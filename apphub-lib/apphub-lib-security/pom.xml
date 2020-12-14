@@ -33,7 +33,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${versions.spring-boot}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -46,7 +45,6 @@
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-error_handler</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 

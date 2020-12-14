@@ -7,13 +7,13 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.AiPresence;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.AiPresence;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.GameSettings;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.PlanetSize;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.SystemSize;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.UniverseSize;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.PlanetSize;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemSize;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.UniverseSize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

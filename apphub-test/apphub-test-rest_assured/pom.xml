@@ -21,7 +21,6 @@
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-common_util</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>

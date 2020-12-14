@@ -90,6 +90,10 @@ skyxplore-lobby:
   ribbon:
     listOfServers: skyxplore-lobby:8080
 
+skyxplore-game-creation:
+  ribbon:
+    listOfServers: skyxplore-game:8080
+
 event:
   processor:
     heartbeat:

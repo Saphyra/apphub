@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.notebook.config;
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.config.common.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenConfiguration;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
@@ -39,7 +39,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
     AccessTokenFilterConfiguration.class,
     RoleFilterConfiguration.class
 })
-class BeanConfiguration {
+class NotebookBeanConfiguration {
     @Bean
     UuidConverter uuidConverter() {
         return new UuidConverter();

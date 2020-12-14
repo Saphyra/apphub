@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.common_util.CookieUtil;
 import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.config.common.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.event.PageVisitedEvent;
 import com.github.saphyra.apphub.service.platform.main_gateway.config.FilterOrder;
 import com.netflix.zuul.ZuulFilter;

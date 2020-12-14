@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.platform.message_sender.config;
 
 import com.github.saphyra.apphub.lib.config.Endpoints;
+import com.github.saphyra.apphub.service.platform.message_sender.connection.SkyXploreGameConnectionHandler;
 import com.github.saphyra.apphub.service.platform.message_sender.connection.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.service.platform.message_sender.connection.SkyXploreMainMenuWebSocketHandler;
 import com.github.saphyra.apphub.service.platform.message_sender.session.AuthenticationHandshakeHandler;
@@ -16,11 +17,14 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
 
     private final SkyXploreMainMenuWebSocketHandler skyXploreMainMenuWebSocketHandler;
     private final SkyXploreLobbyWebSocketHandler skyXploreLobbyWebSocketHandler;
+    private final SkyXploreGameConnectionHandler skyXploreGameConnectionHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(skyXploreMainMenuWebSocketHandler, Endpoints.CONNECTION_SKYXPLORE_MAIN_MENU)
             .addHandler(skyXploreLobbyWebSocketHandler, Endpoints.CONNECTION_SKYXPLORE_LOBBY)
+            .addHandler(skyXploreLobbyWebSocketHandler, Endpoints.CONNECTION_SKYXPLORE_LOBBY)
+            .addHandler(skyXploreGameConnectionHandler, Endpoints.CONNECTION_SKYXPLORE_GAME)
             .setHandshakeHandler(authenticationHandshakeHandler);
     }
 }

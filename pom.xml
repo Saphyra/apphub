@@ -71,6 +71,13 @@
             <artifactId>logback-classic</artifactId>
             <version>${versions.logback}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${versions.apache-commons.commons-lang3}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
