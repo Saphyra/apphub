@@ -36,4 +36,6 @@ public class Lobby {
 
     @Builder.Default
     private final GameSettings settings = new GameSettings();
+
+    private boolean gameCreationStarted;
 }

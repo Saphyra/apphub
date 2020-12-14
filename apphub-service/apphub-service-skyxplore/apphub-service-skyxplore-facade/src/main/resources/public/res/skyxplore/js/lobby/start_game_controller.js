@@ -7,10 +7,7 @@ scriptLoader.loadScript("/res/common/js/animation/spinner.js");
         this.createGameCreationInitiatedHandler = function(){
             return new WebSocketEventHandler(
                 function(eventName){return eventName == webSocketEvents.GAME_CREATION_INITIATED},
-                function(){
-                    notificationService.showSuccess(Localization.getAdditionalContent("game-started"));
-                    spinner.open();
-                }
+                gameCreationStarted
             );
         };
 
@@ -29,9 +26,18 @@ scriptLoader.loadScript("/res/common/js/animation/spinner.js");
         dao.sendRequestAsync(request);
     }
 
+    function gameCreationStarted(){
+        notificationService.showSuccess(Localization.getAdditionalContent("game-started"));
+        spinner.open();
+    }
+
     function init(){
         if(window.userId != window.host){
             document.getElementById(ids.startGameButton).style.display = "none";
+        }
+
+        if(window.gameCreationStarted){
+            gameCreationStarted();
         }
     }
 })();

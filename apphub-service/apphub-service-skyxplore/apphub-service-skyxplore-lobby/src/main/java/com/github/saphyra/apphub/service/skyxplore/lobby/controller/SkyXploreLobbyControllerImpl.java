@@ -56,6 +56,7 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
             return LobbyViewForPage.builder()
                 .inLobby(true)
                 .host(lobby.getHost())
+                .gameCreationStarted(lobby.isGameCreationStarted())
                 .build();
         } else {
             return LobbyViewForPage.builder()

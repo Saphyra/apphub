@@ -36,6 +36,7 @@ public class StartGameService {
             throw new RuntimeException("There are member(s) not ready.");
         }
 
+        lobby.setGameCreationStarted(true);
         //TODO trigger game start
 
         WebSocketEvent event = WebSocketEvent.builder()

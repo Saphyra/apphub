@@ -50,11 +50,13 @@ public class SkyXplorePageController {
         LobbyViewForPage view = lobbyClient.lobbyForPage(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated());
         if (!view.isInLobby()) {
             log.info("User is not in lobby.");
+            //TODO check if player is in game
             return new ModelAndView("redirect:" + Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
         }
         ModelAndView mav = new ModelAndView("lobby");
         mav.addObject("userId", accessTokenHeader.getUserId());
         mav.addObject("host", view.getHost());
+        mav.addObject("gameCreationStarted", view.isGameCreationStarted());
         return mav;
     }
 }
