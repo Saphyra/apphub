@@ -28,6 +28,18 @@
             <artifactId>apphub-api-platform-message_sender-client</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-geometry</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

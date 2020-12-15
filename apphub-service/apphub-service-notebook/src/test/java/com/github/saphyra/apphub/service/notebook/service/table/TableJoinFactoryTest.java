@@ -39,7 +39,7 @@ public class TableJoinFactoryTest {
 
     @Test
     public void create() {
-        given(idGenerator.randomUUID()).willReturn(TABLE_JOIN_ID);
+        given(idGenerator.randomUuid()).willReturn(TABLE_JOIN_ID);
         given(contentFactory.create(TABLE_JOIN_ID, USER_ID, COLUMN_VALUE)).willReturn(content);
 
         List<BiWrapper<TableJoin, Content>> result = underTest.create(LIST_ITEM_ID, Arrays.asList(Arrays.asList(COLUMN_VALUE)), USER_ID);

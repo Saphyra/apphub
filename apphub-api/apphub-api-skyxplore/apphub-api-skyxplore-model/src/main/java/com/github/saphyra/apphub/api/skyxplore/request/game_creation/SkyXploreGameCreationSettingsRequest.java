@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.api.skyxplore.request.game_creation;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.AiPresence;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.PlanetSize;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemAmount;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemSize;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.UniverseSize;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SkyXploreGameCreationSettingsRequest {
     private UniverseSize universeSize;
+    private SystemAmount systemAmount; //TODO add to FE
     private SystemSize systemSize;
     private PlanetSize planetSize;
     private AiPresence aiPresence;

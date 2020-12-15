@@ -17,7 +17,7 @@ class FriendshipFactory {
 
     Friendship create(UUID friendId, UUID senderId) {
         return Friendship.builder()
-            .friendshipId(idGenerator.randomUUID())
+            .friendshipId(idGenerator.randomUuid())
             .friend1(friendId)
             .friend2(senderId)
             .build();

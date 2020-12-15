@@ -29,7 +29,7 @@ public class ListItemFactoryTest {
 
     @Test
     public void create() {
-        given(idGenerator.randomUUID()).willReturn(LIST_ITEM_ID);
+        given(idGenerator.randomUuid()).willReturn(LIST_ITEM_ID);
 
         ListItem result = underTest.create(USER_ID, TITLE, PARENT, ListItemType.CATEGORY);
 

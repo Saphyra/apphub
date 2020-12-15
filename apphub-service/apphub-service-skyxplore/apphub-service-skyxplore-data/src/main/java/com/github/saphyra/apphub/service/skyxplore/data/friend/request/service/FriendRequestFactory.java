@@ -17,7 +17,7 @@ class FriendRequestFactory {
 
     FriendRequest create(UUID senderId, UUID friendId) {
         return FriendRequest.builder()
-            .friendRequestId(idGenerator.randomUUID())
+            .friendRequestId(idGenerator.randomUuid())
             .senderId(senderId)
             .friendId(friendId)
             .build();

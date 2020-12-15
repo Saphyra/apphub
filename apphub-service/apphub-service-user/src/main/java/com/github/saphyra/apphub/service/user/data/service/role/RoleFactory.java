@@ -14,7 +14,7 @@ class RoleFactory {
 
     Role create(UUID userId, String role) {
         return Role.builder()
-            .roleId(idGenerator.randomUUID())
+            .roleId(idGenerator.randomUuid())
             .userId(userId)
             .role(role)
             .build();

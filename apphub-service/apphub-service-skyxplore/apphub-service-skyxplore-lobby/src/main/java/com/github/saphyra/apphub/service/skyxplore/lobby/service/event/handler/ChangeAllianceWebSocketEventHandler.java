@@ -70,7 +70,7 @@ class ChangeAllianceWebSocketEventHandler implements WebSocketEventHandler {
                 break;
             case NEW_ALLIANCE:
                 Alliance alliance = Alliance.builder()
-                    .allianceId(idGenerator.randomUUID())
+                    .allianceId(idGenerator.randomUuid())
                     .allianceName(String.valueOf(lobby.getAlliances().size() + 1))
                     .build();
                 lobby.getAlliances().add(alliance);

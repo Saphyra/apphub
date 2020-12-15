@@ -32,7 +32,7 @@ public class AccessTokenFactoryTest {
 
     @Test
     public void create() {
-        given(idGenerator.randomUUID()).willReturn(ACCESS_TOKEN_ID);
+        given(idGenerator.randomUuid()).willReturn(ACCESS_TOKEN_ID);
         given(dateTimeUtil.getCurrentDate()).willReturn(LAST_ACCESS);
 
         AccessToken result = underTest.create(USER_ID, true);

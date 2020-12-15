@@ -13,6 +13,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 class PingWebSocketEventHandler implements WebSocketEventHandler {
     private final LobbyDao lobbyDao;
     private final DateTimeUtil dateTimeUtil;
@@ -25,6 +26,6 @@ class PingWebSocketEventHandler implements WebSocketEventHandler {
     @Override
     public void handle(UUID from, WebSocketEvent event) {
         log.info("Handling ping from {}", from);
-        lobbyDao.findByUserIdValidated(from).setLastAccess(dateTimeUtil.getCurrentDate());
+        lobbyDao.findByUserId(from).ifPresent(lobby -> lobby.setLastAccess(dateTimeUtil.getCurrentDate()));
     }
 }

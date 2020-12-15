@@ -22,4 +22,5 @@ for file in $SCRIPT_DIRECTORY_NAME; do
   kubectl apply -n "$NAMESPACE_NAME" -f "$file"
 done
 
+echo "Waiting for pods to start..."
 sleep 20

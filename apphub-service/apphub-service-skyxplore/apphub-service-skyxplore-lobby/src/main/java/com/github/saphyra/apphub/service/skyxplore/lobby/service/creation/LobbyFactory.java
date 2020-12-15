@@ -25,7 +25,7 @@ class LobbyFactory {
         members.put(userId, Member.builder().userId(userId).build());
 
         return Lobby.builder()
-            .lobbyId(idGenerator.randomUUID())
+            .lobbyId(idGenerator.randomUuid())
             .host(userId)
             .members(members)
             .lastAccess(dateTimeUtil.getCurrentDate())

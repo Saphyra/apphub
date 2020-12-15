@@ -55,5 +55,6 @@
         <module>apphub-lib-exception</module>
       <module>apphub-lib-encryption</module>
     <module>apphub-lib-websocket_gateway</module>
+    <module>apphub-lib-geometry</module>
   </modules>
 </project>

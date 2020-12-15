@@ -82,5 +82,7 @@ public class StartGameService {
             .event(event)
             .build();
         messageSenderProxy.sendToLobby(message);
+
+        lobbyDao.delete(lobby);
     }
 }
