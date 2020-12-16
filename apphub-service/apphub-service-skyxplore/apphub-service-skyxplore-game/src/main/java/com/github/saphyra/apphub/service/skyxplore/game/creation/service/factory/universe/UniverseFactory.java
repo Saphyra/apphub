@@ -24,15 +24,18 @@ public class UniverseFactory {
     private final SystemConnectionFactory systemConnectionFactory;
 
     public Universe create(int memberNum, SkyXploreGameCreationSettingsRequest settings) {
+        log.info("Creating universe...");
         int universeSize = universeSizeCalculator.calculate(memberNum, settings.getUniverseSize());
+        log.info("UniverseSize: {}", universeSize);
 
         Map<Coordinate, SolarSystem> systems = starSystemFactory.create(memberNum, universeSize, settings);
         List<SystemConnection> connections = systemConnectionFactory.create(systems.keySet());
 
+        log.info("Universe created.");
         return Universe.builder()
             .size(universeSize)
             .systems(systems)
-            .connections(null)
+            .connections(connections)
             .build();
     }
 }

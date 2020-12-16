@@ -12,6 +12,7 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/start_game_controller.js");
         host: "host",
         membersList: "members-list",
         universeSizeInput: "universe-size-input",
+        systemAmountInput: "system-amount-input",
         systemSizeInput: "system-size-input",
         planetSizeInput: "planet-size-input",
         aiPresenceInput: "ai-presence-input",

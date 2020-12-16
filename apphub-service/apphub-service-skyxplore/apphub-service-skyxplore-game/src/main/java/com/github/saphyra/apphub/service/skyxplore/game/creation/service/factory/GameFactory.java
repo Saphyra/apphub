@@ -30,6 +30,7 @@ public class GameFactory {
         Map<UUID, Player> players = playerFactory.create(request.getMembers().keySet(), universe.getSystems().size(), request.getSettings());
         Map<UUID, Alliance> alliances = allianceFactory.create(request.getAlliances(), request.getMembers(), players);
 
+        log.info("Game generated.");
         return Game.builder()
             .gameId(idGenerator.randomUuid())
             .host(request.getHost())

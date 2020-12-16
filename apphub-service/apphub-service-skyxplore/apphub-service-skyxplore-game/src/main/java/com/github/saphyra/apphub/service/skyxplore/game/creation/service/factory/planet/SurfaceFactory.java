@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,13 +32,14 @@ public class SurfaceFactory {
     private final IdGenerator idGenerator;
 
     public Map<Coordinate, Surface> create(int planetSize) {
+        log.debug("Generating surfaces...");
         SurfaceType[][] surfaceMap = createSurfaceMap(planetSize);
 
         Map<Coordinate, Surface> result = new HashMap<>();
         for (int x = 0; x < surfaceMap.length; x++) {
             SurfaceType[] row = surfaceMap[x];
             for (int y = 0; y < row.length; y++) {
-                Coordinate coordinate = new Coordinate(new BigDecimal(x), new BigDecimal(y));
+                Coordinate coordinate = new Coordinate(x, y);
                 SurfaceType surfaceType = row[y];
                 Surface surface = Surface.builder()
                     .surfaceId(idGenerator.randomUuid())
@@ -49,6 +49,7 @@ public class SurfaceFactory {
                 result.put(coordinate, surface);
             }
         }
+        log.debug("Surfaces generated.");
         return result;
     }
 
@@ -118,7 +119,7 @@ public class SurfaceFactory {
     private void fillBlockWithSurfaceType(SurfaceType[][] surfaceMap, SurfaceType surfaceType, boolean initialPlacement) {
         Optional<Coordinate> coordinateOptional = initialPlacement ? getRandomEmptySlot(surfaceMap) : getRandomEmptySlotNextToSurfaceType(surfaceMap, surfaceType);
         coordinateOptional.ifPresent(coordinate -> {
-            surfaceMap[coordinate.getX().intValue()][coordinate.getY().intValue()] = surfaceType;
+            surfaceMap[(int) coordinate.getX()][(int) coordinate.getY()] = surfaceType;
             log.debug("Coordinate {} filled with surfaceType {}. surfaceMap: {}", coordinate, surfaceType, surfaceMap);
         });
     }
@@ -127,8 +128,8 @@ public class SurfaceFactory {
         Coordinate coordinate;
         do {
             coordinate = new Coordinate(
-                new BigDecimal(random.randInt(0, surfaceMap.length - 1)),
-                new BigDecimal(random.randInt(0, surfaceMap.length - 1))
+                random.randInt(0, surfaceMap.length - 1),
+                random.randInt(0, surfaceMap.length - 1)
             );
         } while (!isEmptySlot(surfaceMap, coordinate));
         log.debug("Random empty slot selected: {}", coordinate);
@@ -136,7 +137,7 @@ public class SurfaceFactory {
     }
 
     private boolean isEmptySlot(SurfaceType[][] surfaceMap, Coordinate coordinate) {
-        return isNull(surfaceMap[coordinate.getX().intValue()][coordinate.getY().intValue()]);
+        return isNull(surfaceMap[(int) coordinate.getX()][(int) coordinate.getY()]);
     }
 
     private Optional<Coordinate> getRandomEmptySlotNextToSurfaceType(SurfaceType[][] surfaceMap, SurfaceType surfaceType) {
@@ -158,16 +159,16 @@ public class SurfaceFactory {
             SurfaceType[] surfaceTypes = surfaceMap[x];
             for (int y = 0; y < surfaceTypes.length; y++) {
                 if (surfaceMap[x][y] == surfaceType) {
-                    slotsNextToSurfaceType.add(new Coordinate(new BigDecimal(x - 1), new BigDecimal(y)));
-                    slotsNextToSurfaceType.add(new Coordinate(new BigDecimal(x + 1), new BigDecimal(y)));
-                    slotsNextToSurfaceType.add(new Coordinate(new BigDecimal(x), new BigDecimal(y - 1)));
-                    slotsNextToSurfaceType.add(new Coordinate(new BigDecimal(x), new BigDecimal(y + 1)));
+                    slotsNextToSurfaceType.add(new Coordinate(x - 1, y));
+                    slotsNextToSurfaceType.add(new Coordinate(x + 1, y));
+                    slotsNextToSurfaceType.add(new Coordinate(x, y - 1));
+                    slotsNextToSurfaceType.add(new Coordinate(x, y + 1));
                 }
             }
         }
         List<Coordinate> result = slotsNextToSurfaceType.stream()
-            .filter(coordinate -> coordinate.getX().intValue() >= 0 && coordinate.getX().intValue() < surfaceMap.length)
-            .filter(coordinate -> coordinate.getY().intValue() >= 0 && coordinate.getY().intValue() < surfaceMap.length)
+            .filter(coordinate -> coordinate.getX() >= 0 && coordinate.getX() < surfaceMap.length)
+            .filter(coordinate -> coordinate.getY() >= 0 && coordinate.getY() < surfaceMap.length)
             .filter(coordinate -> isEmptySlot(surfaceMap, coordinate))
             .collect(Collectors.toList());
         log.debug("Empty slots next to surfaceType {}: {}", surfaceType, slotsNextToSurfaceType);

@@ -24,4 +24,8 @@ public class GameDao {
     public int size() {
         return repository.size();
     }
+
+    public void deleteAll() {
+        repository.clear();
+    }
 }

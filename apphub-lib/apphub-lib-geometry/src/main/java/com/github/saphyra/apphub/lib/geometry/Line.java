@@ -1,18 +1,36 @@
 package com.github.saphyra.apphub.lib.geometry;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static java.util.Objects.isNull;
+
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
-@Builder
 //TODO unit test
 public class Line {
     private Coordinate a;
     private Coordinate b;
+    private Double length = null;
+
+    @Builder
+    public Line(Coordinate a, Coordinate b) {
+        this.a = a;
+        this.b = b;
+    }
+
+    public double getLength(DistanceCalculator distanceCalculator) {
+        if (isNull(length)) {
+            length = distanceCalculator.getLength(this);
+        }
+        return length;
+    }
+
+    @Override
+    public int hashCode() {
+        return a.hashCode() * b.hashCode();
+    }
 
     @Override
     public boolean equals(Object o) {

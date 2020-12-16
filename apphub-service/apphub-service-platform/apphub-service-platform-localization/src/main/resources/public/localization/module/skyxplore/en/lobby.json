@@ -67,6 +67,36 @@
         "message": "Large"
       }
     ],
+    "system-amount-title": [
+      {
+        "key": "innerHTML",
+        "message": "System amount"
+      }
+    ],
+    "system-amount-option-small": [
+      {
+        "key": "innerHTML",
+        "message": "Small"
+      }
+    ],
+    "system-amount-option-medium": [
+      {
+        "key": "innerHTML",
+        "message": "Medium"
+      }
+    ],
+    "system-amount-option-common": [
+      {
+        "key": "innerHTML",
+        "message": "Common"
+      }
+    ],
+    "system-amount-option-random": [
+      {
+        "key": "innerHTML",
+        "message": "Random"
+      }
+    ],
     "system-size-title": [
       {
         "key": "innerHTML",

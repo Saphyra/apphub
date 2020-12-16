@@ -29,11 +29,12 @@ public class PlanetFactory {
     private final SurfaceFactory surfaceFactory;
 
     public Map<UUID, Planet> create(String systemName, SkyXploreGameCreationSettingsRequest settings) {
+        log.debug("Generating planets...");
         Range<Integer> range = properties.getPlanet().getSystemSize().get(settings.getSystemSize());
 
         Map<UUID, Planet> result = new HashMap<>();
         int expectedPlanetAmount = random.randInt(range.getMin(), range.getMax());
-        for (int i = 1; i < expectedPlanetAmount; i++) {
+        for (int i = 1; i <= expectedPlanetAmount; i++) {
             Range<Integer> planetSizeRange = properties.getPlanet().getPlanetSize().get(settings.getPlanetSize());
             int planetSize = random.randInt(planetSizeRange.getMin(), planetSizeRange.getMax());
 
@@ -41,13 +42,14 @@ public class PlanetFactory {
 
             Planet planet = Planet.builder()
                 .planetId(idGenerator.randomUuid())
-                .planetName(String.format("%s %s", systemName, ALPHABET.charAt(i)))
+                .planetName(String.format("%s %s", systemName, ALPHABET.charAt(i - 1)))
                 .size(planetSize)
                 .surfaces(surfaces)
                 .build();
 
             result.put(planet.getPlanetId(), planet);
         }
+        log.debug("Planets generated.");
         return result;
     }
 }

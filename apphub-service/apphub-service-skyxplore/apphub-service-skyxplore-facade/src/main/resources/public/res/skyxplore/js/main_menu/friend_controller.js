@@ -246,6 +246,7 @@
     }
 
     function removeFriend(friendshipId){
+        //TODO confirmation
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_REMOVE_FRIEND", {friendshipId: friendshipId}));
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("friend-removed"));

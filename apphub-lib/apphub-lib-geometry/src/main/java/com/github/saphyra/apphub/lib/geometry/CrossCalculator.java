@@ -3,10 +3,7 @@ package com.github.saphyra.apphub.lib.geometry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.math.BigDecimal;
 import java.util.Optional;
-
-import static java.math.BigDecimal.ZERO;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,44 +21,44 @@ public class CrossCalculator {
     }
 
     private boolean isCoordinateOnSection(Line line, Coordinate coordinate, boolean inclusive) {
-        BigDecimal sectionLength = distanceCalculator.getLength(line);
+        double sectionLength = distanceCalculator.getLength(line);
 
-        BigDecimal distanceFromA = distanceCalculator.getDistance(line.getA(), coordinate);
-        BigDecimal distanceFromB = distanceCalculator.getDistance(line.getB(), coordinate);
-        BigDecimal totalDistance = distanceFromA.add(distanceFromB);
+        double distanceFromA = distanceCalculator.getDistance(line.getA(), coordinate);
+        double distanceFromB = distanceCalculator.getDistance(line.getB(), coordinate);
+        double totalDistance = distanceFromA + distanceFromB;
 
-        BigDecimal difference = sectionLength.subtract(totalDistance);
+        double difference = sectionLength - totalDistance;
 
 
         if (isEndpoint(distanceFromA, distanceFromB) && !inclusive) {
             return false;
         }
 
-        return difference.compareTo(ZERO) == 0;
+        return difference == 0;
     }
 
-    private boolean isEndpoint(BigDecimal distanceFromA, BigDecimal distanceFromB) {
-        return distanceFromA.compareTo(ZERO) == 0 || distanceFromB.compareTo(ZERO) == 0;
+    private boolean isEndpoint(double distanceFromA, double distanceFromB) {
+        return distanceFromA == 0 || distanceFromB == 0;
     }
 
     public Optional<Coordinate> getCrossPointOfLines(Line l1, Line l2) {
-        BigDecimal a1 = l1.getB().getY().subtract(l1.getA().getY());
-        BigDecimal b1 = l1.getA().getX().subtract(l1.getB().getX());
-        BigDecimal c1 = a1.multiply(l1.getA().getX()).add(b1.multiply(l1.getA().getY()));
+        double a1 = l1.getB().getY() - l1.getA().getY();
+        double b1 = l1.getA().getX() - l1.getB().getX();
+        double c1 = a1 * l1.getA().getX() + b1 * l1.getA().getY();
 
-        BigDecimal a2 = l2.getB().getY().subtract(l2.getA().getY());
-        BigDecimal b2 = l2.getA().getX().subtract(l2.getB().getX());
-        BigDecimal c2 = a2.multiply(l2.getA().getX()).add(b2.multiply(l2.getA().getY()));
+        double a2 = l2.getB().getY() - l2.getA().getY();
+        double b2 = l2.getA().getX() - l2.getB().getX();
+        double c2 = a2 * l2.getA().getX() + b2 * l2.getA().getY();
 
-        BigDecimal determinant = a1.multiply(b2).subtract(a2.multiply(b1));
+        double determinant = a1 * b2 - a2 * b1;
 
-        if (determinant.compareTo(ZERO) == 0) {
+        if (determinant == 0) {
             log.debug("Lines are parallel");
             return Optional.empty();
         }
 
-        BigDecimal x = b2.multiply(c1).subtract(b1.multiply(c2)).divide(determinant);
-        BigDecimal y = a1.multiply(c2).subtract(a2.multiply(c1)).divide(determinant);
+        double x = (b2 * c1 - b1 * c2) / determinant;
+        double y = (a1 * c2 - a2 * c1) / determinant;
 
         Coordinate coordinate = new Coordinate(x, y);
 

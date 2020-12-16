@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,27 +22,35 @@ class SolarSystemCoordinateProvider {
     private final DistanceCalculator distanceCalculator;
 
     public List<Coordinate> getCoordinates(int memberNum, int universeSize, SystemAmount systemAmount) {
+        log.info("Placing systems...");
         GameCreationProperties.SolarSystemProperties solarSystemProperties = properties.getSolarSystem();
+
+        SystemAmount amount = systemAmount == SystemAmount.RANDOM ? SystemAmount.values()[random.randInt(0, 2)] : systemAmount;
         Double sizeMultiplier = solarSystemProperties
-            .getSizeMultipliers()
-            .get(systemAmount);
-        int maxAllocationTryCount = (int) (universeSize / sizeMultiplier);
-        int allocationTryCount = random.randInt(memberNum, maxAllocationTryCount);
+            .getSizeMultiplier()
+            .get(amount);
+        int maxAllocationTryCount = (int) (universeSize * sizeMultiplier);
 
         for (int overallTryCount = 0; overallTryCount < 10; overallTryCount++) {
+            log.info("Placing systems. TryCount: {}", overallTryCount);
+            int allocationTryCount = random.randInt(memberNum + 1, maxAllocationTryCount);
+            log.info("AllocationTryCount: {}. MemberNum: {}, maxAllocationTryCount: {}. UniverseSize: {}, sizeMultiplier: {}", allocationTryCount, memberNum, maxAllocationTryCount, universeSize, sizeMultiplier);
             List<Coordinate> coordinates = new ArrayList<>();
             for (int tryCount = 0; tryCount < allocationTryCount; tryCount++) {
                 Coordinate coordinate = new Coordinate(
-                    new BigDecimal(random.randInt(0, universeSize)),
-                    new BigDecimal(random.randInt(0, universeSize))
+                    random.randInt(0, universeSize),
+                    random.randInt(0, universeSize)
                 );
 
                 if (notTooClose(coordinate, coordinates)) {
                     coordinates.add(coordinate);
+                } else {
+                    log.debug("Could not place system: Another one is too close.");
                 }
             }
 
-            if (coordinates.size() >= memberNum) {
+            if (coordinates.size() >= memberNum + 1) {
+                log.info("Number of generated systems: {}", coordinates.size());
                 return coordinates;
             }
         }
@@ -52,6 +59,6 @@ class SolarSystemCoordinateProvider {
 
     private boolean notTooClose(Coordinate coordinate, List<Coordinate> coordinates) {
         return coordinates.stream()
-            .allMatch(c1 -> distanceCalculator.getDistance(c1, coordinate).doubleValue() >= properties.getSolarSystem().getMinSolarSystemDistance());
+            .allMatch(c1 -> distanceCalculator.getDistance(c1, coordinate) >= properties.getSolarSystem().getMinSolarSystemDistance());
     }
 }

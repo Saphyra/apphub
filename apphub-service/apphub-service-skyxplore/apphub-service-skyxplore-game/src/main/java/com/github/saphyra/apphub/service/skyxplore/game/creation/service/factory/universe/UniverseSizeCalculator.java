@@ -18,9 +18,9 @@ class UniverseSizeCalculator {
     int calculate(int memberNum, UniverseSize universeSize) {
         GameCreationProperties.UniverseProperties universeProperties = properties.getUniverse();
         int baseSize = universeProperties.getBaseSize();
-        double memberMultiplication = universeProperties.getMemberMultiplication();
-        double settingMultiplication = universeProperties.getSettingMultiplication().get(universeSize);
+        double memberMultiplication = universeProperties.getMemberMultiplier();
+        double settingMultiplication = universeProperties.getSettingMultiplier().get(universeSize);
 
-        return (int) Math.ceil(baseSize * memberNum * memberMultiplication * settingMultiplication * random.randDouble(universeProperties.getMinMultiplier(), universeProperties.getMaxMultiplier()));
+        return (int) Math.ceil(baseSize * Math.pow(memberMultiplication, memberNum) * settingMultiplication * random.randDouble(universeProperties.getMinMultiplier(), universeProperties.getMaxMultiplier()));
     }
 }

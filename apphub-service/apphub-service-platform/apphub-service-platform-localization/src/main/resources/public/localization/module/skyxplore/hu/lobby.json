@@ -67,6 +67,36 @@
         "message": "Nagy"
       }
     ],
+    "system-amount-title": [
+      {
+        "key": "innerHTML",
+        "message": "Rendszerek mennyisége"
+      }
+    ],
+    "system-amount-option-small": [
+      {
+        "key": "innerHTML",
+        "message": "Kevés"
+      }
+    ],
+    "system-amount-option-medium": [
+      {
+        "key": "innerHTML",
+        "message": "Közepes"
+      }
+    ],
+    "system-amount-option-common": [
+      {
+        "key": "innerHTML",
+        "message": "Sok"
+      }
+    ],
+    "system-amount-option-random": [
+      {
+        "key": "innerHTML",
+        "message": "Véletlenszerű"
+      }
+    ],
     "system-size-title": [
       {
         "key": "innerHTML",

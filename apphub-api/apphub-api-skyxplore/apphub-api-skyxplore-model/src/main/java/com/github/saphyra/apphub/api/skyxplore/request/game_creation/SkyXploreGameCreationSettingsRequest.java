@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SkyXploreGameCreationSettingsRequest {
     private UniverseSize universeSize;
-    private SystemAmount systemAmount; //TODO add to FE
+    private SystemAmount systemAmount;
     private SystemSize systemSize;
     private PlanetSize planetSize;
     private AiPresence aiPresence;

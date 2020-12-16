@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemAmount;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.AiPresence;
@@ -55,6 +56,7 @@ class GameSettingsChangedWebSocketEventHandler implements WebSocketEventHandler 
             GameSettings settings = lobby.getSettings();
             GameSettingsChangedEvent fwEvent = GameSettingsChangedEvent.builder()
                 .universeSize(settings.getUniverseSize())
+                .systemAmount(settings.getSystemAmount())
                 .systemSize(settings.getSystemSize())
                 .planetSize(settings.getPlanetSize())
                 .aiPresence(settings.getAiPresence())
@@ -85,12 +87,14 @@ class GameSettingsChangedWebSocketEventHandler implements WebSocketEventHandler 
     @Builder
     private static class GameSettingsChangedEvent {
         private UniverseSize universeSize;
+        private SystemAmount systemAmount;
         private SystemSize systemSize;
         private PlanetSize planetSize;
         private AiPresence aiPresence;
 
         public boolean isFilled() {
             return !isNull(universeSize)
+                && !isNull(systemAmount)
                 && !isNull(systemSize)
                 && !isNull(planetSize)
                 && !isNull(aiPresence);

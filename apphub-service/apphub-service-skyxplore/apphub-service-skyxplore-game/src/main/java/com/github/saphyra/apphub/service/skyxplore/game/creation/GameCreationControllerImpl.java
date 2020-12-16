@@ -20,6 +20,7 @@ public class GameCreationControllerImpl implements SkyXploreGameCreationControll
     //TODO int test
     public void createGame(SkyXploreGameCreationRequest request) {
         log.info("Creating game based on request {}", request);
+        //TODO validate request
         executorService.execute(() -> gameCreationService.create(request));
     }
 }

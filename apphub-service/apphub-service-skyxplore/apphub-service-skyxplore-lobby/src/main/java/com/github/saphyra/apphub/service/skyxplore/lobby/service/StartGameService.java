@@ -59,6 +59,7 @@ public class StartGameService {
 
         SkyXploreGameCreationSettingsRequest settings = SkyXploreGameCreationSettingsRequest.builder()
             .universeSize(lobby.getSettings().getUniverseSize())
+            .systemAmount(lobby.getSettings().getSystemAmount())
             .systemSize(lobby.getSettings().getSystemSize())
             .planetSize(lobby.getSettings().getPlanetSize())
             .aiPresence(lobby.getSettings().getAiPresence())

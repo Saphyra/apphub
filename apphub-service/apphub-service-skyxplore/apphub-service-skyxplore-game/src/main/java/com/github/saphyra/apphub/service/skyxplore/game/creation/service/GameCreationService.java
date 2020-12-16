@@ -25,7 +25,7 @@ public class GameCreationService {
 
     public void create(SkyXploreGameCreationRequest request) {
         Game game = gameFactory.create(request);
-        log.info("Game created: {}", objectMapperWrapper.writeValueAsString(game));
+        //log.info("Game created: {}", objectMapperWrapper.writeValueAsPrettyString(game));
         gameDao.save(game);
 
         WebSocketEvent event = WebSocketEvent.builder()

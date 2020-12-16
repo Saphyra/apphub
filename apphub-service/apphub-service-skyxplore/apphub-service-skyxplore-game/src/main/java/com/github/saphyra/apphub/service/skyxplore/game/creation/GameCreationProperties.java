@@ -7,15 +7,18 @@ import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemSize;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.UniverseSize;
 import com.github.saphyra.apphub.lib.common_domain.Range;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
 @ConfigurationProperties(prefix = "game.creation")
 @Data
 @Configuration
+@Slf4j
 public class GameCreationProperties {
     private UniverseProperties universe;
     private SolarSystemProperties solarSystem;
@@ -24,18 +27,23 @@ public class GameCreationProperties {
     private SystemConnectionProperties systemConnection;
     private PlayerCreationProperties player;
 
+    @PostConstruct
+    public void after() {
+        log.info("GameCreationProperties: {}", this);
+    }
+
     @Data
     public static class UniverseProperties {
         private int baseSize;
-        private Double memberMultiplication;
-        private Map<UniverseSize, Double> settingMultiplication;
+        private Double memberMultiplier;
+        private Map<UniverseSize, Double> settingMultiplier;
         private double minMultiplier;
         private double maxMultiplier;
     }
 
     @Data
     public static class SolarSystemProperties {
-        private Map<SystemAmount, Double> sizeMultipliers;
+        private Map<SystemAmount, Double> sizeMultiplier;
         private int minSolarSystemDistance;
     }
 

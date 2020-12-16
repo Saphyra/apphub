@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 //TODO unit test
 public class AllianceFactory {
     public Map<UUID, Alliance> create(Map<UUID, String> alliances, Map<UUID, UUID> members, Map<UUID, Player> players) {
+        log.info("Generating alliances...");
         return alliances.entrySet()
             .stream()
             .map(alliance -> Alliance.builder()

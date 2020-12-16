@@ -27,6 +27,7 @@
 
     function displayGameSettings(settings){
         document.getElementById(ids.universeSizeInput).value = settings.universeSize;
+        document.getElementById(ids.systemAmountInput).value = settings.systemAmount;
         document.getElementById(ids.systemSizeInput).value = settings.systemSize;
         document.getElementById(ids.planetSizeInput).value = settings.planetSize;
         document.getElementById(ids.aiPresenceInput).value = settings.aiPresence;
@@ -35,6 +36,7 @@
     function updateGameSettings(){
         const payload = {
             universeSize: document.getElementById(ids.universeSizeInput).value,
+            systemAmount: document.getElementById(ids.systemAmountInput).value,
             systemSize: document.getElementById(ids.systemSizeInput).value,
             planetSize: document.getElementById(ids.planetSizeInput).value,
             aiPresence: document.getElementById(ids.aiPresenceInput).value,
@@ -47,11 +49,13 @@
     function init(){
         if(window.host != window.userId){
             document.getElementById(ids.universeSizeInput).disabled = "disabled";
+            document.getElementById(ids.systemAmountInput).disabled = "disabled";
             document.getElementById(ids.systemSizeInput).disabled = "disabled";
             document.getElementById(ids.planetSizeInput).disabled = "disabled";
             document.getElementById(ids.aiPresenceInput).disabled = "disabled";
         }else{
             document.getElementById(ids.universeSizeInput).onchange = updateGameSettings;
+            document.getElementById(ids.systemAmountInput).onchange = updateGameSettings;
             document.getElementById(ids.systemSizeInput).onchange = updateGameSettings;
             document.getElementById(ids.planetSizeInput).onchange = updateGameSettings;
             document.getElementById(ids.aiPresenceInput).onchange = updateGameSettings;

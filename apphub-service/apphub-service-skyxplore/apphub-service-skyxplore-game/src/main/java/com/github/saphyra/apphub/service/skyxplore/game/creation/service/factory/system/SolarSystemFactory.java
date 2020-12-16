@@ -27,6 +27,7 @@ public class SolarSystemFactory {
     private final PlanetFactory planetFactory;
 
     public Map<Coordinate, SolarSystem> create(int memberNum, int universeSize, SkyXploreGameCreationSettingsRequest settings) {
+        log.info("Generating SolarSystems...");
         List<Coordinate> coordinates = solarSystemCoordinateProvider.getCoordinates(memberNum, universeSize, settings.getSystemAmount());
 
         List<String> usedSystemNames = new ArrayList<>();
@@ -48,6 +49,8 @@ public class SolarSystemFactory {
             result.put(solarSystem.getCoordinate(), solarSystem);
         }
 
+        log.info("SolarSystems generated.");
+        coordinates.forEach(coordinate -> log.info("SolarSystem generated: {}", coordinate));
         return result;
     }
 }

@@ -28,6 +28,7 @@ public class PlayerFactory {
     private final Random random;
 
     public Map<UUID, Player> create(Set<UUID> userIds, int systemAmount, SkyXploreGameCreationSettingsRequest settings) {
+        log.info("Generating players...");
         List<Player> players = new ArrayList<>();
 
         userIds.stream()
@@ -40,9 +41,14 @@ public class PlayerFactory {
             .map(uuid -> createPlayer(uuid, true))
             .forEach(players::add);
 
+        if (players.size() < 2) {
+            log.info("There is only one player. Adding an AI...");
+            players.add(createPlayer(idGenerator.randomUuid(), true));
+        }
+
+        log.info("Players generated.");
         return players.stream()
             .collect(Collectors.toMap(Player::getUserId, Function.identity()));
-
     }
 
     private Player createPlayer(UUID userId, boolean ai) {
@@ -53,6 +59,4 @@ public class PlayerFactory {
             .connected(ai)
             .build();
     }
-
-
 }

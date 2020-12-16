@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
 import io.restassured.response.Response;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +43,13 @@ public class GameCreationControllerImplTest {
     @Autowired
     private GameDao gameDao;
 
+    @After
+    public void clear() {
+        gameDao.deleteAll();
+    }
+
     @Test
-    public void createGame() throws InterruptedException {
+    public void largeGame() throws InterruptedException {
         Map<UUID, UUID> members = new HashMap<UUID, UUID>() {{
             put(UUID.randomUUID(), null);
         }};
@@ -53,11 +59,11 @@ public class GameCreationControllerImplTest {
             .members(members)
             .alliances(new HashMap<>())
             .settings(SkyXploreGameCreationSettingsRequest.builder()
-                .universeSize(UniverseSize.SMALL)
+                .universeSize(UniverseSize.LARGE)
                 .systemAmount(SystemAmount.COMMON)
-                .systemSize(SystemSize.MEDIUM)
-                .planetSize(PlanetSize.MEDIUM)
-                .aiPresence(AiPresence.COMMON)
+                .systemSize(SystemSize.LARGE)
+                .planetSize(PlanetSize.LARGE)
+                .aiPresence(AiPresence.EVERYWHERE)
                 .build()
             )
             .build();
@@ -68,7 +74,44 @@ public class GameCreationControllerImplTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 200; i++) {
+            if (gameDao.size() > 0) {
+                return;
+            }
+
+            Thread.sleep(1000);
+        }
+
+        fail("Game is not created.");
+    }
+
+    @Test
+    public void smallGame() throws InterruptedException {
+        Map<UUID, UUID> members = new HashMap<UUID, UUID>() {{
+            put(UUID.randomUUID(), null);
+        }};
+
+        SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
+            .host(UUID.randomUUID())
+            .members(members)
+            .alliances(new HashMap<>())
+            .settings(SkyXploreGameCreationSettingsRequest.builder()
+                .universeSize(UniverseSize.SMALLEST)
+                .systemAmount(SystemAmount.SMALL)
+                .systemSize(SystemSize.SMALL)
+                .planetSize(PlanetSize.SMALL)
+                .aiPresence(AiPresence.NONE)
+                .build()
+            )
+            .build();
+
+        Response response = RequestFactory.createRequest()
+            .body(request)
+            .put(UrlFactory.create(serverPort, Endpoints.INTERNAL_SKYXPLORE_CREATE_GAME));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+
+        for (int i = 0; i < 200; i++) {
             if (gameDao.size() > 0) {
                 return;
             }

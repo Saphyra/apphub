@@ -58,6 +58,14 @@ public class ObjectMapperWrapper {
         }
     }
 
+    public String writeValueAsPrettyString(Object value) {
+        try {
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(value);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public <V> V readValue(URL url, Class<V> clazz) {
         try {
             return objectMapper.readValue(url, clazz);
