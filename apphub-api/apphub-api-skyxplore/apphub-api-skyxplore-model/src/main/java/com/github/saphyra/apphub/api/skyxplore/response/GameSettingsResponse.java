@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class GameSettingsResponse {
     private String universeSize;
+    private String systemAmount;
     private String systemSize;
     private String planetSize;
     private String aiPresence;

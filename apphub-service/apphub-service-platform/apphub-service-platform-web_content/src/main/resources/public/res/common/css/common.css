@@ -57,6 +57,10 @@ main{
     padding: 0.5rem 0;
 }
 
+    main.headless{
+        top: 0;
+    }
+
     main.footerless{
         bottom: 0;
     }

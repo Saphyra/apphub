@@ -28,4 +28,12 @@ public class GameDao {
     public void deleteAll() {
         repository.clear();
     }
+
+    public Game findByUserIdValidated(UUID userId) {
+        return repository.values()
+            .stream()
+            .filter(game -> game.getPlayers().containsKey(userId))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Game not found for user " + userId));
+    }
 }

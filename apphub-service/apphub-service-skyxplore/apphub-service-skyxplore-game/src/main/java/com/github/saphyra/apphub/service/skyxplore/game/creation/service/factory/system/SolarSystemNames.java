@@ -16,7 +16,7 @@ class SolarSystemNames extends ClassPathList<String> {
     private final Random random;
 
     SolarSystemNames(ObjectMapperWrapper objectMapper, RomanNumberConverter romanNumberConverter, Random random) {
-        super(objectMapper, "star_names.json");
+        super(objectMapper, "solar_system_names.json");
         this.romanNumberConverter = romanNumberConverter;
         this.random = random;
     }
@@ -24,7 +24,7 @@ class SolarSystemNames extends ClassPathList<String> {
     String getRandomStarName(List<String> usedStarNames) {
         String nameBase = get(random.randInt(0, size() - 1));
         for (int i = 0; true; i++) {
-            String name = i > 0 ? String.format("%s - %s", nameBase, romanNumberConverter.toRoman(i)) : nameBase;
+            String name = i > 0 ? String.format("%s - %s", nameBase, romanNumberConverter.toRoman(i + 1)) : nameBase;
 
             if (!usedStarNames.contains(name)) {
                 return name;

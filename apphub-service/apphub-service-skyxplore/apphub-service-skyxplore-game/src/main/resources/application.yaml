@@ -15,13 +15,13 @@ game:
         MEDIUM: 1.5
         LARGE: 2
     solarSystem:
-      minSolarSystemDistance: 75
+      minSolarSystemDistance: 100
       sizeMultiplier:
         SMALL: 0.02
         MEDIUM: 0.04
         COMMON: 0.06
     systemConnection:
-      maxDistance: 150
+      maxDistanceRate: 0.3
       maxNumberOfConnections: 4
     planet:
       systemSize:

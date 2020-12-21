@@ -6,11 +6,11 @@
     <LINK rel="stylesheet" href="/res/common/css/common.css">
     <LINK rel="stylesheet" href="/res/skyxplore/css/skyxplore_common.css">
     <LINK rel="stylesheet" href="/res/skyxplore/css/game/common.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/game/map.css">
 
     <script th:inline="javascript">
         /*<![CDATA[*/
         /*]]>*/
-
     </script>
 
     <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
@@ -18,9 +18,9 @@
     <SCRIPT src="/res/skyxplore/js/game/page_controller.js"></SCRIPT>
 </HEAD>
 <BODY>
-<DIV id="main-menu" class="main-page">
-    <MAIN>
-
+<DIV id="map" class="main-page">
+    <MAIN id="map-container" class="headless">
+        <SVG id="map-svg-container"></SVG>
     </MAIN>
 
     <FOOTER>

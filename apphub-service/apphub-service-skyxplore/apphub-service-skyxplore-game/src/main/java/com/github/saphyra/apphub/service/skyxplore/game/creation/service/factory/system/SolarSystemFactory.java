@@ -50,7 +50,7 @@ public class SolarSystemFactory {
         }
 
         log.info("SolarSystems generated.");
-        coordinates.forEach(coordinate -> log.info("SolarSystem generated: {}", coordinate));
+        coordinates.forEach(coordinate -> log.debug("SolarSystem generated: {}", coordinate));
         return result;
     }
 }

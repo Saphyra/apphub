@@ -11,7 +11,10 @@ import com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.StopWatch;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
@@ -24,7 +27,10 @@ public class GameCreationService {
     private final ObjectMapperWrapper objectMapperWrapper;
 
     public void create(SkyXploreGameCreationRequest request) {
+        StopWatch stopWatch = StopWatch.createStarted();
         Game game = gameFactory.create(request);
+        stopWatch.stop();
+        log.info("Game created in {}ms", stopWatch.getTime(TimeUnit.MICROSECONDS));
         //log.info("Game created: {}", objectMapperWrapper.writeValueAsPrettyString(game));
         gameDao.save(game);
 

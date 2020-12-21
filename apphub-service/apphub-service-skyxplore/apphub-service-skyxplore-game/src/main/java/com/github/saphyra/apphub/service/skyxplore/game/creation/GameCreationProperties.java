@@ -67,7 +67,7 @@ public class GameCreationProperties {
 
     @Data
     public static class SystemConnectionProperties {
-        private int maxDistance;
+        private double maxDistanceRate;
         private int maxNumberOfConnections;
     }
 

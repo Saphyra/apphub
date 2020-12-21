@@ -9,6 +9,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 //TODO unit test
 public class CrossCalculator {
+    private static final double ACCURACY = 1E-10;
+
     private final DistanceCalculator distanceCalculator;
 
     public Optional<Coordinate> getCrossPointOfSections(Line l1, Line l2, boolean inclusive) {
@@ -27,18 +29,22 @@ public class CrossCalculator {
         double distanceFromB = distanceCalculator.getDistance(line.getB(), coordinate);
         double totalDistance = distanceFromA + distanceFromB;
 
-        double difference = sectionLength - totalDistance;
+        double difference = Math.abs(sectionLength - totalDistance);
 
 
         if (isEndpoint(distanceFromA, distanceFromB) && !inclusive) {
             return false;
         }
 
-        return difference == 0;
+        boolean result = difference < ACCURACY;
+        if (result) {
+            log.debug("Coordinate {} is on section {} with difference {}", coordinate, line, difference);
+        }
+        return result;
     }
 
     private boolean isEndpoint(double distanceFromA, double distanceFromB) {
-        return distanceFromA == 0 || distanceFromB == 0;
+        return distanceFromA < ACCURACY || distanceFromB < ACCURACY;
     }
 
     public Optional<Coordinate> getCrossPointOfLines(Line l1, Line l2) {

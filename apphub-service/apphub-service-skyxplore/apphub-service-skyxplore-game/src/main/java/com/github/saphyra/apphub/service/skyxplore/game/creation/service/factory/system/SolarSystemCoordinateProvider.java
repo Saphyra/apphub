@@ -33,7 +33,7 @@ class SolarSystemCoordinateProvider {
 
         for (int overallTryCount = 0; overallTryCount < 10; overallTryCount++) {
             log.info("Placing systems. TryCount: {}", overallTryCount);
-            int allocationTryCount = random.randInt(memberNum + 1, maxAllocationTryCount);
+            int allocationTryCount = random.randInt(Math.max(memberNum + 1, maxAllocationTryCount / 2), maxAllocationTryCount);
             log.info("AllocationTryCount: {}. MemberNum: {}, maxAllocationTryCount: {}. UniverseSize: {}, sizeMultiplier: {}", allocationTryCount, memberNum, maxAllocationTryCount, universeSize, sizeMultiplier);
             List<Coordinate> coordinates = new ArrayList<>();
             for (int tryCount = 0; tryCount < allocationTryCount; tryCount++) {

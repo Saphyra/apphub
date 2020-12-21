@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.RomanNumberConverter;
+import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.geometry.CrossCalculator;
@@ -52,5 +53,10 @@ public class SkyXploreGameBeanConfiguration {
     @Bean
     CrossCalculator crossCalculator(DistanceCalculator distanceCalculator) {
         return new CrossCalculator(distanceCalculator);
+    }
+
+    @Bean
+    SleepService sleepService() {
+        return new SleepService();
     }
 }

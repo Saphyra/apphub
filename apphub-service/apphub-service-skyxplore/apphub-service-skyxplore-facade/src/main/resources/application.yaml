@@ -69,6 +69,12 @@ zuul:
       serviceId: skyxplore-lobby
       stripPrefix: false
 
+    #SkyXplore game
+    get-map:
+      path: /api/skyxplore/game/map
+      serviceId: skyxplore-game
+      stripPrefix: false
+
 role:
   settings:
     - pattern: /web/skyxplore/**

@@ -1,7 +1,9 @@
 scriptLoader.loadScript("/res/common/js/web_socket.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/map_controller.js");
 
 (function PageController(){
     window.ids = {
+        mapSvgContainer: "map-svg-container"
     }
 
     window.webSocketEvents = {

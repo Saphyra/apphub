@@ -124,4 +124,6 @@ public class Endpoints {
 
     //SKYXPLORE-GAME
     public static final String INTERNAL_SKYXPLORE_CREATE_GAME = "/internal/skyxplore/game";
+
+    public static final String SKYXPLORE_GAME_MAP = "/api/skyxplore/game/map";
 }

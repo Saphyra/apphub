@@ -133,6 +133,7 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
         GameSettings settings = lobby.getSettings();
         return GameSettingsResponse.builder()
             .universeSize(settings.getUniverseSize().name())
+            .systemAmount(settings.getSystemAmount().name())
             .systemSize(settings.getSystemSize().name())
             .planetSize(settings.getPlanetSize().name())
             .aiPresence(settings.getAiPresence().name())

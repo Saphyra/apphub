@@ -54,6 +54,7 @@ class GameSettingsChangedWebSocketEventHandler implements WebSocketEventHandler 
 
         if (!lobby.getHost().equals(from) || !gameSettingsChangedEvent.isFilled()) {
             GameSettings settings = lobby.getSettings();
+
             GameSettingsChangedEvent fwEvent = GameSettingsChangedEvent.builder()
                 .universeSize(settings.getUniverseSize())
                 .systemAmount(settings.getSystemAmount())
@@ -64,6 +65,13 @@ class GameSettingsChangedWebSocketEventHandler implements WebSocketEventHandler 
             sendEvent(fwEvent, lobby);
             throw new RuntimeException(from + " must not change the game settings.");
         }
+
+        GameSettings settings = lobby.getSettings();
+        settings.setUniverseSize(gameSettingsChangedEvent.getUniverseSize());
+        settings.setSystemAmount(gameSettingsChangedEvent.getSystemAmount());
+        settings.setSystemSize(gameSettingsChangedEvent.getSystemSize());
+        settings.setPlanetSize(gameSettingsChangedEvent.getPlanetSize());
+        settings.setAiPresence(gameSettingsChangedEvent.getAiPresence());
 
         sendEvent(gameSettingsChangedEvent, lobby);
     }
