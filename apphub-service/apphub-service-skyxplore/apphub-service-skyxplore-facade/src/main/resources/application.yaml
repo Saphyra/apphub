@@ -71,7 +71,7 @@ zuul:
 
     #SkyXplore game
     get-map:
-      path: /api/skyxplore/game/map
+      path: /api/skyxplore/game/universe
       serviceId: skyxplore-game
       stripPrefix: false
 

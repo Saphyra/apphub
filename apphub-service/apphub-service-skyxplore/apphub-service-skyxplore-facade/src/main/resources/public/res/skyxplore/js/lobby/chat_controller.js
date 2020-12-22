@@ -37,7 +37,7 @@
                 if(senderId != window.userId){
                     messageNode.classList.add("not-own-message");
                 }
-                messageNode.innerHTML = message;
+                messageNode.innerText = message;
 
             getMessageList(senderContainer).appendChild(messageNode);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -68,7 +68,7 @@
 
                         const senderNameNode = document.createElement("DIV");
                             senderNameNode.classList.add("sender-name");
-                            senderNameNode.innerHTML = senderName;
+                            senderNameNode.innerText = senderName;
                     wrapper.appendChild(senderNameNode);
 
                         const messageList = document.createElement("DIV");
@@ -110,7 +110,7 @@
         const messagesContainer = document.getElementById("messages");
             const joinMessageNode = document.createElement("DIV");
                 joinMessageNode.classList.add("system-message");
-                joinMessageNode.innerHTML = characterName + " " + Localization.getAdditionalContent("character-joined-to-lobby");
+                joinMessageNode.innerText = characterName + " " + Localization.getAdditionalContent("character-joined-to-lobby");
         messagesContainer.appendChild(joinMessageNode);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
@@ -121,7 +121,7 @@
         const messagesContainer = document.getElementById("messages");
             const joinMessageNode = document.createElement("DIV");
                 joinMessageNode.classList.add("system-message");
-                joinMessageNode.innerHTML = characterName + " " + Localization.getAdditionalContent("character-left-the-lobby");
+                joinMessageNode.innerText = characterName + " " + Localization.getAdditionalContent("character-left-the-lobby");
         messagesContainer.appendChild(joinMessageNode);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }

@@ -70,7 +70,7 @@ window.Mapping = new function(){
         SKYXPLORE_LOBBY_ACCEPT_INVITATION: new Endpoint("/api/skyxplore/lobby/join/{invitorId}", HttpMethod.POST),
         SKYXPLORE_LOBBY_GET_GAME_SETTINGS: new Endpoint("/api/skyxplore/lobby/settings", HttpMethod.GET),
         SKYXPLORE_START_GAME: new Endpoint("/api/skyxplore/lobby/start", HttpMethod.POST),
-        SKYXPLORE_GET_MAP: new Endpoint("/api/skyxplore/game/map", HttpMethod.GET),
+        SKYXPLORE_GET_UNIVERSE: new Endpoint("/api/skyxplore/game/universe", HttpMethod.GET),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

@@ -16,7 +16,9 @@ function WebSocketConnection(ep){
             throwException("IllegalState", "Connection already established.");
         }
 
-        connection = new WebSocket("ws://" + host + endpoint.getUrl());
+        const url = "ws://" + host + endpoint.getUrl();
+        console.log("Connecting to WebSocket endpoint " + url);
+        connection = new WebSocket(url);
 
         connection.onmessage = handleMessage;
     }

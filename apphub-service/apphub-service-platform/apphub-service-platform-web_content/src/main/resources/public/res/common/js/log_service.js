@@ -165,7 +165,7 @@
             
             function createTextNode(message){
                 const element = document.createElement("SPAN");
-                    element.innerHTML = message;
+                    element.innerText = message;
                 return element;
             }
             
@@ -189,7 +189,7 @@
                             line.appendChild(document.createTextNode(key + ": "));
                             line.appendChild(parseObject(elem));
                         }else{
-                            line.innerHTML = key + ": " + elem;
+                            line.innerText = key + ": " + elem;
                         }
                     element.appendChild(line);
                 }

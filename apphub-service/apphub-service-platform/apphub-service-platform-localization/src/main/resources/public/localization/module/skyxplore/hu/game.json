@@ -1,7 +1,27 @@
 {
   "title": "SkyXplore",
   "staticText": {
+    "general-chat-button-title": [
+      {
+        "key": "innerHTML",
+        "message": "Általános"
+      }
+    ],
+    "alliance-chat-button-title": [
+      {
+        "key": "innerHTML",
+        "message": "Szövetség"
+      }
+    ],
+    "send-message-input": [
+      {
+        "key": "placeholder",
+        "message": "Üzenet küldése"
+      }
+    ]
   },
   "additionalContent": {
+    "character-joined-to-game": "csatlakozott.",
+    "character-left-the-game": "kilépett."
   }
 }

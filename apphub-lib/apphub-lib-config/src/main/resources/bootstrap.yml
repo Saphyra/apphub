@@ -98,6 +98,10 @@ skyxplore-game-creation:
   ribbon:
     listOfServers: skyxplore-game:8080
 
+skyxplore-game-ws:
+  ribbon:
+    listOfServers: skyxplore-game:8080
+
 event:
   processor:
     heartbeat:

@@ -1,7 +1,27 @@
 {
   "title": "SkyXplore",
   "staticText": {
+    "general-chat-button-title": [
+      {
+        "key": "innerHTML",
+        "message": "General"
+      }
+    ],
+    "alliance-chat-button-title": [
+      {
+        "key": "innerHTML",
+        "message": "Alliance"
+      }
+    ],
+    "send-message-input": [
+      {
+        "key": "placeholder",
+        "message": "Send message"
+      }
+    ]
   },
   "additionalContent": {
+    "character-joined-to-game": "is joined.",
+    "character-left-the-game": "has left."
   }
 }

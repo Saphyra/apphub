@@ -4,9 +4,8 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.common.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.query.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.GameFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +23,12 @@ public class GameCreationService {
     private final MessageSenderProxy messageSenderProxy;
     private final GameFactory gameFactory;
     private final GameDao gameDao;
-    private final ObjectMapperWrapper objectMapperWrapper;
 
     public void create(SkyXploreGameCreationRequest request) {
         StopWatch stopWatch = StopWatch.createStarted();
         Game game = gameFactory.create(request);
         stopWatch.stop();
         log.info("Game created in {}ms", stopWatch.getTime(TimeUnit.MICROSECONDS));
-        //log.info("Game created: {}", objectMapperWrapper.writeValueAsPrettyString(game));
         gameDao.save(game);
 
         WebSocketEvent event = WebSocketEvent.builder()

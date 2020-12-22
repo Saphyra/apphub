@@ -65,7 +65,7 @@
         function createCharacterNode(character){
             const node = document.createElement("DIV");
                 node.classList.add("button");
-                node.innerHTML = character.name;
+                node.innerText = character.name;
                 node.onclick = function(){addFriend(character.id)};
             return node;
         }
@@ -116,7 +116,7 @@
                     node.classList.add("friend-list-item");
 
                     const friendName = document.createElement("DIV");
-                        friendName.innerHTML = friendRequest.senderName;
+                        friendName.innerText = friendRequest.senderName;
                 node.appendChild(friendName);
 
                     const buttonWrapper = document.createElement("DIV");
@@ -169,7 +169,7 @@
                     node.classList.add("friend-list-item");
 
                     const friendName = document.createElement("DIV");
-                        friendName.innerHTML = friend.friendName;
+                        friendName.innerText = friend.friendName;
                 node.appendChild(friendName);
 
                     const removeButton = document.createElement("BUTTON");

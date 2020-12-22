@@ -65,7 +65,7 @@ public class SkyXplorePageController {
     public ModelAndView game(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
         //TODO check if player is in game
         ModelAndView mav = new ModelAndView("game");
-
+        mav.addObject("userId", accessTokenHeader.getUserId());
         return mav;
     }
 }

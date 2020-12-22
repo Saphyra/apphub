@@ -25,7 +25,7 @@
             }
             request.processValidResponse = function(tableData){
                 mapTableData(tableData);
-                document.getElementById("view-checklist-table-title").innerHTML = tableData.title;
+                document.getElementById("view-checklist-table-title").innerText = tableData.title;
                 displayChecklistTable();
             };
         dao.sendRequestAsync(request);
@@ -124,7 +124,7 @@
                 contentNode.classList.add("view-checklist-table-input-field");
                 if(columnData.tableJoinId) contentNode.id = columnData.tableJoinId;
                 contentNode.contenteditable = editingEnabled;
-                contentNode.innerHTML = columnData.content;
+                contentNode.innerText = columnData.content;
                 contentNode.contentEditable = editingEnabled;
         cell.appendChild(contentNode);
 

@@ -104,12 +104,12 @@
                 const row = document.createElement("tr");
 
                     const emailCell = document.createElement("td");
-                        emailCell.innerHTML = user.email;
+                        emailCell.innerText = user.email;
                         emailCell.classList.add("id-cell");
                 row.appendChild(emailCell);
 
                     const usernameCell = document.createElement("td");
-                        usernameCell.innerHTML = user.username;
+                        usernameCell.innerText = user.username;
                         usernameCell.classList.add("id-cell");
                 row.appendChild(usernameCell);
 

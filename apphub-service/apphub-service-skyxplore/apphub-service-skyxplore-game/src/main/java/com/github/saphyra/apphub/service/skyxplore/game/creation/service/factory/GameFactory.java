@@ -24,6 +24,7 @@ public class GameFactory {
     private final IdGenerator idGenerator;
     private final PlayerFactory playerFactory;
     private final UniverseFactory universeFactory;
+    private final ChatFactory chatFactory;
 
     public Game create(SkyXploreGameCreationRequest request) {
         Universe universe = universeFactory.create(request.getMembers().size(), request.getSettings());
@@ -37,6 +38,7 @@ public class GameFactory {
             .players(players)
             .alliances(alliances)
             .universe(universe)
+            .chat(chatFactory.create(request.getMembers()))
             .build();
     }
 }

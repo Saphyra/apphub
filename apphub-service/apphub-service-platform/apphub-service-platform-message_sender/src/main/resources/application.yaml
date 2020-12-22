@@ -11,3 +11,5 @@ locale-mandatory-filter:
       method: GET
     - path: /api/message-sender/skyxplore/lobby
       method: GET
+    - path: /api/message-sender/skyxplore/game
+      method: GET

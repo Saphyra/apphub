@@ -7,9 +7,11 @@
     <LINK rel="stylesheet" href="/res/skyxplore/css/skyxplore_common.css">
     <LINK rel="stylesheet" href="/res/skyxplore/css/game/common.css">
     <LINK rel="stylesheet" href="/res/skyxplore/css/game/map.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/game/chat.css">
 
     <script th:inline="javascript">
         /*<![CDATA[*/
+            window.userId = /*[[${userId}]]*/;
         /*]]>*/
     </script>
 
@@ -18,13 +20,40 @@
     <SCRIPT src="/res/skyxplore/js/game/page_controller.js"></SCRIPT>
 </HEAD>
 <BODY>
-<DIV id="map" class="main-page">
-    <MAIN id="map-container" class="headless">
-        <SVG id="map-svg-container"></SVG>
-    </MAIN>
+<DIV class="main-page">
+    <DIV id="map" class="main-tab">
+        <MAIN id="map-container" class="headless">
+            <SVG id="map-svg-container"></SVG>
+        </MAIN>
+    </DIV>
+
+    <DIV id="chat">
+        <DIV id="chat-rooms-container">
+            <SPAN id="chat-rooms">
+                <SPAN id="general-chat-button" class="button chat-button">
+                    <SPAN id="general-chat-button-title"></SPAN>
+                    <SPAN id="general-chat-notification" class="chat-notification"> (!)</SPAN>
+                </SPAN>
+                <SPAN id="alliance-chat-button" class="button chat-button">
+                    <SPAN id="alliance-chat-button-title"></SPAN>
+                    <SPAN id="alliance-chat-notification" class="chat-notification"> (!)</SPAN>
+                </SPAN>
+            </SPAN>
+            <BUTTON class="chat-button" onclick="chatController.createRoom()">+</BUTTON>
+        </DIV>
+
+        <DIV id="chat-message-containers">
+            <DIV id="general-chat-message-container" class="chat-message-container"></DIV>
+            <DIV id="alliance-chat-message-container" class="chat-message-container"></DIV>
+        </DIV>
+
+        <DIV id="send-message-input-container">
+            <INPUT type="text" id="send-message-input">
+        </DIV>
+    </DIV>
 
     <FOOTER>
-
+        <BUTTON id="chat-button"></BUTTON>
     </FOOTER>
 </DIV>
 </BODY>

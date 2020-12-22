@@ -33,7 +33,7 @@ public class Endpoints {
     //CONNECTION SUBSCRIPTIONS
     public static final String CONNECTION_SKYXPLORE_MAIN_MENU = "/api/message-sender/skyxplore/main-menu";
     public static final String CONNECTION_SKYXPLORE_LOBBY = "/api/message-sender/skyxplore/lobby";
-    public static final String CONNECTION_SKYXPLORE_GAME = "/api/message-sender/skyxplore/lobby/game";
+    public static final String CONNECTION_SKYXPLORE_GAME = "/api/message-sender/skyxplore/game";
 
     //LOGIN
     public static final String LOGIN = "/api/user/authentication/login";
@@ -123,7 +123,11 @@ public class Endpoints {
     public static final String SKYXPLORE_START_GAME = "/api/skyxplore/lobby/start";
 
     //SKYXPLORE-GAME
-    public static final String INTERNAL_SKYXPLORE_CREATE_GAME = "/internal/skyxplore/game";
+    public static final String INTERNAL_SKYXPLORE_GAME_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/game/{userId}";
 
-    public static final String SKYXPLORE_GAME_MAP = "/api/skyxplore/game/map";
+    public static final String INTERNAL_SKYXPLORE_CREATE_GAME = "/internal/skyxplore/game";
+    public static final String INTERNAL_SKYXPLORE_USER_JOINED_TO_GAME = "/internal/game/{userId}";
+    public static final String INTERNAL_SKYXPLORE_USER_LEFT_GAME = "/internal/game/{userId}";
+
+    public static final String SKYXPLORE_GAME_MAP = "/api/skyxplore/game/universe";
 }
