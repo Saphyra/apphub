@@ -39,7 +39,7 @@
                     <SPAN id="alliance-chat-notification" class="chat-notification"> (!)</SPAN>
                 </SPAN>
             </SPAN>
-            <BUTTON class="chat-button" onclick="chatController.createRoom()">+</BUTTON>
+            <BUTTON class="chat-button" onclick="chatController.openCreateChatRoomDialog()">+</BUTTON>
         </DIV>
 
         <DIV id="chat-message-containers">
@@ -54,6 +54,31 @@
 
     <FOOTER>
         <BUTTON id="chat-button"></BUTTON>
+    </FOOTER>
+</DIV>
+
+<DIV id="create-chat-room-container" class="main-page backgrounded">
+    <HEADER>
+        <H1 id="create-chat-room-title"></H1>
+        <BUTTON id="close-create-chat-room-dialog" class="window-close-button" onclick="document.getElementById(ids.createChatRoomContainer).style.display = 'none'">X</BUTTON>
+    </HEADER>
+
+    <MAIN>
+        <DIV id="create-chat-room-title-input-container">
+            <LABEL id="create-chat-room-title-label">
+                <INPUT type="text" id="create-chat-room-title-input">
+                <DIV id="invalid-title" class="invalid-input">X</DIV>
+            </LABEL>
+        </DIV>
+
+        <DIV id="create-chat-room-players-container">
+            <DIV id="create-chat-room-no-players"></DIV>
+            <DIV id="create-chat-room-players"></DIV>
+        </DIV>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="create-chat-room-button" onclick="chatController.createChatRoom()"></BUTTON>
     </FOOTER>
 </DIV>
 </BODY>

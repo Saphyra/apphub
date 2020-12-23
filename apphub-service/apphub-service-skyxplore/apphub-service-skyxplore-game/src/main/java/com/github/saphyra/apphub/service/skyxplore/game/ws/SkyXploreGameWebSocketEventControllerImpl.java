@@ -6,10 +6,9 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMess
 import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGameWebSocketEventController;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.SystemMessage;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.query.MessageSenderProxy;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,7 +60,7 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
             .forEach(chatRoom -> sendMessage(
                 game.filterConnectedPlayersFrom(chatRoom.getMembers()),
                 WebSocketEventName.SKYXPLORE_GAME_USER_JOINED,
-                new Message(chatRoom.getId(), userName, userId)
+                new SystemMessage(chatRoom.getId(), userName, userId)
             ));
     }
 
@@ -83,7 +82,7 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
             .forEach(chatRoom -> sendMessage(
                 game.filterConnectedPlayersFrom(chatRoom.getMembers()),
                 WebSocketEventName.SKYXPLORE_GAME_USER_LEFT,
-                new Message(chatRoom.getId(), userName, userId)
+                new SystemMessage(chatRoom.getId(), userName, userId)
             ));
     }
 
@@ -97,13 +96,5 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
             .event(webSocketEvent)
             .build();
         messageSenderProxy.sendToGame(message);
-    }
-
-    @Data
-    @AllArgsConstructor
-    private static class Message {
-        private String room;
-        private String characterName;
-        private UUID userId;
     }
 }

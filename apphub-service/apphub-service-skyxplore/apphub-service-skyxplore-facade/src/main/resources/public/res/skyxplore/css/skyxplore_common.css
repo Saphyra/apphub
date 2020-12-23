@@ -12,3 +12,13 @@ body{
             right: 0;
             font-size: 1.5rem;
         }
+
+.invalid-input{
+    display: none;
+    border: 3px outset red;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 3px;
+    padding: 0.125rem;
+}

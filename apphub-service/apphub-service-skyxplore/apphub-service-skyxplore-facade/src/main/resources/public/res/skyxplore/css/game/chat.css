@@ -11,7 +11,8 @@
     position: fixed;
     bottom: 0;
     right: 5px;
-    width: 25vw;
+    min-width: 25vw;
+    max-width: 50vw;
     background: black;
     max-height: calc(100% - var(--header-height) - var(--footer-height) - 10px);
     bottom: calc(var(--footer-height) + 5px);
@@ -23,6 +24,7 @@
     #chat-rooms-container{
         border-bottom: 3px ridge white;
         overflow-x: scroll;
+        white-space: nowrap;
     }
 
         .chat-button{
@@ -38,6 +40,15 @@
             .chat-notification{
                 display: none;
                 color: red;
+            }
+
+            .chat-leave-button{
+                border-width: 1px;
+                font-size: 0.5rem;
+                margin: 0;
+                margin-left: 0.25rem;
+                padding: 0;
+                padding: 0.05rem;
             }
 
     #chat-message-containers{
@@ -136,3 +147,31 @@
         #send-message-input{
             width: 90%;
         }
+
+#create-chat-room-title-input-container{
+    text-align: center;
+    margin: 1rem;
+}
+
+    create-chat-room-title-label{
+        position: relative;
+    }
+
+        #create-chat-room-title-input{
+            width: 80%;
+        }
+
+        #invalid-title{
+            top: -0.25rem;
+        }
+
+    #create-chat-room-no-players{
+        text-align: center;
+        font-size: 2rem;
+    }
+
+    .create-chat-room-player{
+        display: block;
+        margin: 1rem;
+        text-align: left;
+    }

@@ -29,7 +29,7 @@ public class UniverseFactory {
         log.info("UniverseSize: {}", universeSize);
 
         Map<Coordinate, SolarSystem> systems = starSystemFactory.create(memberNum, universeSize, settings);
-        List<SystemConnection> connections = systemConnectionFactory.create(systems.keySet(), universeSize);
+        List<SystemConnection> connections = systemConnectionFactory.create(systems.keySet());
 
         log.info("Universe created.");
         return Universe.builder()

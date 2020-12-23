@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.ws.handler;
+package com.github.saphyra.apphub.service.skyxplore.game.chat;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-public class ChatMessageWebSocketEventHandler implements WebSocketEventHandler {
+class ChatMessageWebSocketEventHandler implements WebSocketEventHandler {
     private final GameDao gameDao;
     private final ObjectMapperWrapper objectMapperWrapper;
     private final CharacterProxy characterProxy;

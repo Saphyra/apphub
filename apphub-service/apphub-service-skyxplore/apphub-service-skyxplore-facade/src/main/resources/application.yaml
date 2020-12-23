@@ -74,6 +74,18 @@ zuul:
       path: /api/skyxplore/game/universe
       serviceId: skyxplore-game
       stripPrefix: false
+    get-players:
+      path: /api/skyxplore/game/player
+      serviceId: skyxplore-game
+      stripPrefix: false
+    create-chat-room:
+      path: /api/skyxplore/game/chat/room
+      serviceId: skyxplore-game
+      stripPrefix: false
+    leave-chat-room:
+      path: /api/skyxplore/game/chat/room/*
+      serviceId: skyxplore-game
+      stripPrefix: false
 
 role:
   settings:

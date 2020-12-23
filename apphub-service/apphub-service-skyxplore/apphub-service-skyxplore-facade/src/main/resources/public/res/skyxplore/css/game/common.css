@@ -1,0 +1,10 @@
+.main-page.backgrounded{
+    background-image: url("/res/skyxplore/images/background.jpg");
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+    .main-page.backgrounded main{
+        background-color: rgba(0,0,0,0.5);
+    }

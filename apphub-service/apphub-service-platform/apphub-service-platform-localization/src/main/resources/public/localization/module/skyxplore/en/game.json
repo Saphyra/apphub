@@ -18,10 +18,36 @@
         "key": "placeholder",
         "message": "Send message"
       }
+    ],
+    "create-chat-room-title": [
+      {
+        "key": "innerHTML",
+        "message": "Create chat room"
+      }
+    ],
+    "create-chat-room-title-input": [
+      {
+        "key": "placeholder",
+        "message": "Title"
+      }
+    ],
+    "create-chat-room-button": [
+      {
+        "key": "innerHTML",
+        "message": "Create"
+      }
+    ],
+    "create-chat-room-no-players": [
+      {
+        "key": "innerHTML",
+        "message": "No other players in this game."
+      }
     ]
   },
   "additionalContent": {
     "character-joined-to-game": "is joined.",
-    "character-left-the-game": "has left."
+    "character-left-the-game": "has left.",
+    "chat-room-title-empty": "Chat room title must not be empty.",
+    "chat-room-title-too-long": "Chat room title too long (maximum 20 characters)."
   }
 }

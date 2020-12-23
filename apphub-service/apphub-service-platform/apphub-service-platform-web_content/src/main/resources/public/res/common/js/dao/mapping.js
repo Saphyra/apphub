@@ -71,6 +71,9 @@ window.Mapping = new function(){
         SKYXPLORE_LOBBY_GET_GAME_SETTINGS: new Endpoint("/api/skyxplore/lobby/settings", HttpMethod.GET),
         SKYXPLORE_START_GAME: new Endpoint("/api/skyxplore/lobby/start", HttpMethod.POST),
         SKYXPLORE_GET_UNIVERSE: new Endpoint("/api/skyxplore/game/universe", HttpMethod.GET),
+        SKYXPLORE_GAME_GET_PLAYERS: new Endpoint("/api/skyxplore/game/player", HttpMethod.GET),
+        SKYXPLORE_GAME_CREATE_CHAT_ROOM: new Endpoint("/api/skyxplore/game/chat/room", HttpMethod.PUT),
+        SKYXPLORE_GAME_LEAVE_ROOM: new Endpoint("/api/skyxplore/game/chat/room/{roomId}", HttpMethod.DELETE),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

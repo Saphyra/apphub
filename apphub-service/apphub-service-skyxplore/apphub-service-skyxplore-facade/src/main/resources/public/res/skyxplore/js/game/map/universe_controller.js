@@ -70,7 +70,7 @@
                 element.setAttribute("y", solarSystem.coordinate.y - mapConstants.STAR_NAME_OFFSET + mapConstants.Y_OFFSET);
                 element.setAttribute("text-anchor", "middle");
                 element.setAttribute("pointer-events", "none");
-                element.innerText = solarSystem.solarSystemName + " (" + solarSystem.planetNum + ")";
+                element.innerHTML = solarSystem.solarSystemName + " (" + solarSystem.planetNum + ")";
             return element;
         }
     }

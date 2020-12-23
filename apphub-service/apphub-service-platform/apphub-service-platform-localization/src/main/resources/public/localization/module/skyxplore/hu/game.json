@@ -18,10 +18,36 @@
         "key": "placeholder",
         "message": "Üzenet küldése"
       }
+    ],
+    "create-chat-room-title": [
+      {
+        "key": "innerHTML",
+        "message": "Chat szoba létrehozása"
+      }
+    ],
+    "create-chat-room-title-input": [
+      {
+        "key": "placeholder",
+        "message": "Cím"
+      }
+    ],
+    "create-chat-room-button": [
+      {
+        "key": "innerHTML",
+        "message": "Létrehoz"
+      }
+    ],
+    "create-chat-room-no-players": [
+      {
+        "key": "innerHTML",
+        "message": "Nincs más játékos ebben a játékban."
+      }
     ]
   },
   "additionalContent": {
     "character-joined-to-game": "csatlakozott.",
-    "character-left-the-game": "kilépett."
+    "character-left-the-game": "kilépett.",
+    "chat-room-title-empty": "A szoba címe nem lehet üres..",
+    "chat-room-title-too-long": "A szoba címe túl hosszú (maximum 20 karakter)."
   }
 }

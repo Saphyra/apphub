@@ -11,12 +11,19 @@ scriptLoader.loadScript("/res/skyxplore/js/game/map/map_controller.js");
         chatMessageInput: "send-message-input",
         generalChatButton: "general-chat-button",
         allianceChatButton: "alliance-chat-button",
+        createChatRoomTitleInput: "create-chat-room-title-input",
+        createChatRoomNoPlayers: "create-chat-room-no-players",
+        createChatRoomPlayerList: "create-chat-room-players",
+        createChatRoomContainer: "create-chat-room-container",
+        chatRooms: "chat-rooms",
+        chatMessageContainers: "chat-message-containers",
     }
 
     window.webSocketEvents = {
         CHAT_SEND_MESSAGE: "skyxplore-game-chat-send-message",
         USER_JOINED: "skyxplore-game-user-joined",
         USER_LEFT: "skyxplore-game-user-left",
+        CHAT_ROOM_CREATED: "skyxplore-game-chat-room-created",
     }
 
     const wsConnection = new WebSocketConnection(Mapping.getEndpoint("CONNECTION_SKYXPLORE_GAME"));
@@ -30,6 +37,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/map/map_controller.js");
         wsConnection.addHandler(chatController.createChatSendMessageHandler())
             .addHandler(chatController.createUserJoinedHandler())
             .addHandler(chatController.createUserLeftHandler())
+            .addHandler(chatController.createChatRoomCreatedHandler())
             .connect();
         //document.addEventListener('contextmenu', event => event.preventDefault()); //TODO restore when development is finished
     });

@@ -130,4 +130,7 @@ public class Endpoints {
     public static final String INTERNAL_SKYXPLORE_USER_LEFT_GAME = "/internal/game/{userId}";
 
     public static final String SKYXPLORE_GAME_MAP = "/api/skyxplore/game/universe";
+    public static final String SKYXPLORE_GAME_GET_PLAYERS = "/api/skyxplore/game/player";
+    public static final String SKYXPLORE_GAME_CREATE_CHAT_ROOM = "/api/skyxplore/game/chat/room";
+    public static final String SKYXPLORE_GAME_LEAVE_ROOM = "/api/skyxplore/game/chat/room/{roomId}";
 }

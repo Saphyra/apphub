@@ -41,7 +41,7 @@ public class SystemConnectionFactory {
     private final CrossCalculator crossCalculator;
     private final SleepService sleepService;
 
-    public List<SystemConnection> create(Collection<Coordinate> systems, int universeSize) {
+    public List<SystemConnection> create(Collection<Coordinate> systems) {
         log.info("Generating connections...");
         Set<Line> lines = new HashSet<>();
 
@@ -65,9 +65,9 @@ public class SystemConnectionFactory {
         removeCrosses(lines);
 
         log.info("Number of connections after removing crosses: {}", lines.size());
-        log.info("Removing distant systems...");
 
-        log.info("Number of connections after removing distand systems: {}", lines.size());
+        //TODO remove connections too close each other
+
         log.info("Removing connections from systems with too much connections...");
         removeConnectionOverflow(systems, lines);
 
