@@ -28,7 +28,7 @@ public class GameCreationService {
         StopWatch stopWatch = StopWatch.createStarted();
         Game game = gameFactory.create(request);
         stopWatch.stop();
-        log.info("Game created in {}ms", stopWatch.getTime(TimeUnit.MICROSECONDS));
+        log.info("Game created in {}ms", stopWatch.getTime(TimeUnit.MILLISECONDS));
         gameDao.save(game);
 
         WebSocketEvent event = WebSocketEvent.builder()

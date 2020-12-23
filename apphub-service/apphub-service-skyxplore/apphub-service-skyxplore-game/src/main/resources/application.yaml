@@ -22,7 +22,7 @@ game:
         COMMON: 0.06
     systemConnection:
       maxDistanceRate: 0.3
-      maxNumberOfConnections: 4
+      maxNumberOfConnections: 3
     planet:
       systemSize:
         SMALL:

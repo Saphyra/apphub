@@ -38,7 +38,7 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
         eventHandlers.forEach(webSocketEventHandler -> webSocketEventHandler.handle(from, event));
 
         if (eventHandlers.isEmpty()) {
-            log.warn("No {} found for event {}", WebSocketEventHandler.class.getName(), event.getEventName());
+            log.warn("No {} found for event {}", WebSocketEventHandler.class.getSimpleName(), event.getEventName());
         }
     }
 

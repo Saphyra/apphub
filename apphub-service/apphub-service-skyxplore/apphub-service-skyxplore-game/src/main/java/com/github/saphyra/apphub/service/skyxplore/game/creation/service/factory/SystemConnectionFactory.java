@@ -59,14 +59,15 @@ public class SystemConnectionFactory {
                 sleepService.sleep(1000);
             }
         } while (!allReady);
-
         log.info("Number of connections after connection all stars to each other: {}", lines.size());
+
         log.info("Removing crosses...");
         removeCrosses(lines);
-
         log.info("Number of connections after removing crosses: {}", lines.size());
 
-        //TODO remove connections too close each other
+        log.info("Removing connections too close to a system...");
+        removeLinesTooCloseToASystem(systems, lines);
+        log.info("Number of connections after removing the ones too close to a system: {}", lines.size());
 
         log.info("Removing connections from systems with too much connections...");
         removeConnectionOverflow(systems, lines);
@@ -100,7 +101,7 @@ public class SystemConnectionFactory {
             Line lineToRemove = Stream.of(line1, line2)
                 .max(Comparator.comparing(o -> o.getLength(distanceCalculator)))
                 .orElseThrow(() -> new RuntimeException("This should not happen"));
-            log.debug("Removing connection due to cross: {}", lineToRemove);
+            log.debug("Removing connection {}  due to cross with {}", lineToRemove, cross.getOther(lineToRemove));
 
             lines.remove(lineToRemove);
             crossAmount++;
@@ -126,13 +127,65 @@ public class SystemConnectionFactory {
         return Optional.empty();
     }
 
+    private void removeLinesTooCloseToASystem(Collection<Coordinate> systems, Set<Line> lines) {
+        Set<Line> linesToRemove = systems.stream()
+            .flatMap(coordinate -> getTooCloseSystems(coordinate, lines))
+            .collect(Collectors.toSet());
+
+        linesToRemove.forEach(lines::remove);
+        log.info("{} number of close connections were removed.", linesToRemove.size());
+    }
+
+    private Stream<Line> getTooCloseSystems(Coordinate coordinate, Set<Line> lines) {
+        return lines.stream()
+            .filter(line -> isTooClose(coordinate, line, lines));
+    }
+
+    boolean isTooClose(Coordinate coordinate, Line line, Collection<Line> lines) {
+        if (line.isEndpoint(coordinate)) {
+            log.debug("{} is endpoint of {}", coordinate, line);
+            return false;
+        }
+
+        if (!isTriangle(coordinate, line, lines)) {
+            log.debug("{} has no connection with both endpoints of {}", coordinate, line);
+            return false;
+        }
+
+        double height = distanceCalculator.getDistance(coordinate, line);
+        double aDist = distanceCalculator.getDistance(coordinate, line.getA());
+        double bDist = distanceCalculator.getDistance(coordinate, line.getB());
+
+        double aAngle = Math.acos(height / aDist);
+        double bAngle = Math.acos(height / bDist);
+
+        double angleRad = aAngle + bAngle;
+        double angle = angleRad * 180 / Math.PI;
+
+        boolean result = angle > 150;
+        log.debug("{}, {} - height: {}, angle: {}", coordinate, line, height, angle);
+        if (result) {
+            log.debug("Removing connection {} because it is too close to system {}. Distance: {}, angle: {}", line, coordinate, height, angle);
+        }
+        return result;
+    }
+
+    private boolean isTriangle(Coordinate coordinate, Line line, Collection<Line> lines) {
+        return hasConnection(coordinate, line.getA(), lines) && hasConnection(coordinate, line.getB(), lines);
+    }
+
+    private boolean hasConnection(Coordinate a, Coordinate b, Collection<Line> lines) {
+        return lines.stream()
+            .anyMatch(line -> line.isEndpoint(a) && line.isEndpoint(b));
+    }
+
     private void removeConnectionOverflow(Collection<Coordinate> systems, Set<Line> lines) {
         for (Coordinate system : systems) {
             log.debug("Checking if {} has too much connections...", system);
             for (int numberOfConnections = getNumberOfConnections(system, lines); numberOfConnections > properties.getSystemConnection().getMaxNumberOfConnections(); numberOfConnections = getNumberOfConnections(system, lines)) {
                 log.debug("{} has {} number of connections. Removing one...", system, numberOfConnections);
                 Line lineToRemove = getRemovableLine(system, lines);
-                log.debug("Removing connection {} because connected systems have too much.", lineToRemove);
+                log.debug("Removing connection {} because connected systems have too much connections.", lineToRemove);
                 lines.remove(lineToRemove);
             }
         }
@@ -190,5 +243,9 @@ public class SystemConnectionFactory {
     private static class Cross {
         private final Line line1;
         private final Line line2;
+
+        public Line getOther(Line line) {
+            return line.equals(line1) ? line2 : line1;
+        }
     }
 }

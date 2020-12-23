@@ -22,4 +22,17 @@ public class DistanceCalculatorTest {
         assertThat(result).isEqualTo(0);
     }
 
+    @Test
+    public void distance() {
+        Line line = new Line(
+            new Coordinate(0, 0),
+            new Coordinate(0, 10)
+        );
+        Coordinate coordinate = new Coordinate(10, 10);
+
+        double distance = underTest.getDistance(coordinate, line);
+
+        assertThat(distance).isLessThan(30);
+    }
+
 }
