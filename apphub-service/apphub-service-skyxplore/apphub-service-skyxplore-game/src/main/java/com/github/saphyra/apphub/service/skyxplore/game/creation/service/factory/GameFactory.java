@@ -28,8 +28,10 @@ public class GameFactory {
 
     public Game create(SkyXploreGameCreationRequest request) {
         Universe universe = universeFactory.create(request.getMembers().size(), request.getSettings());
-        Map<UUID, Player> players = playerFactory.create(request.getMembers().keySet(), universe.getSystems().size(), request.getSettings());
+        Map<UUID, Player> players = playerFactory.create(request.getMembers().keySet(), getPlanetCount(universe), request.getSettings());
         Map<UUID, Alliance> alliances = allianceFactory.create(request.getAlliances(), request.getMembers(), players);
+
+        //TODO modify inhabited planets
 
         log.info("Game generated.");
         return Game.builder()
@@ -40,5 +42,13 @@ public class GameFactory {
             .universe(universe)
             .chat(chatFactory.create(request.getMembers()))
             .build();
+    }
+
+    private int getPlanetCount(Universe universe) {
+        return (int) universe.getSystems()
+            .values()
+            .stream()
+            .mapToLong(solarSystem -> solarSystem.getPlanets().values().size())
+            .sum();
     }
 }

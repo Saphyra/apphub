@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
 import io.restassured.response.Response;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -46,6 +48,50 @@ public class GameCreationControllerImplTest {
     @After
     public void clear() {
         gameDao.deleteAll();
+    }
+
+    @Test
+    @Ignore
+    public void loadTest() throws InterruptedException {
+        int gameCount = 50;
+        Stream.generate(() -> "")
+            .limit(gameCount)
+            .parallel()
+            .forEach(s -> {
+                Map<UUID, UUID> members = new HashMap<UUID, UUID>() {{
+                    put(UUID.randomUUID(), null);
+                }};
+
+                SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
+                    .host(UUID.randomUUID())
+                    .members(members)
+                    .alliances(new HashMap<>())
+                    .settings(SkyXploreGameCreationSettingsRequest.builder()
+                        .universeSize(UniverseSize.LARGE)
+                        .systemAmount(SystemAmount.COMMON)
+                        .systemSize(SystemSize.LARGE)
+                        .planetSize(PlanetSize.LARGE)
+                        .aiPresence(AiPresence.EVERYWHERE)
+                        .build()
+                    )
+                    .build();
+
+                Response response = RequestFactory.createRequest()
+                    .body(request)
+                    .put(UrlFactory.create(serverPort, Endpoints.INTERNAL_SKYXPLORE_CREATE_GAME));
+
+                assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+            });
+
+        for (int i = 0; i < 200; i++) {
+            if (gameDao.size() == gameCount) {
+                return;
+            }
+
+            Thread.sleep(1000);
+        }
+
+        fail("Game is not created.");
     }
 
     @Test

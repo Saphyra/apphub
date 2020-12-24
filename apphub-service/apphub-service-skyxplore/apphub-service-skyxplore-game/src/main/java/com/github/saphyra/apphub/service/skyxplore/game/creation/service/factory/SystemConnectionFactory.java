@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory;
 
+import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.CrossCalculator;
 import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
@@ -21,9 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,32 +30,18 @@ import java.util.stream.Stream;
 @Slf4j
 //TODO unit test
 public class SystemConnectionFactory {
-    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(8);
-
+    private final ExecutorServiceBean executorServiceBean;
     private final GameCreationProperties properties;
     private final IdGenerator idGenerator;
     private final DistanceCalculator distanceCalculator;
     private final CrossCalculator crossCalculator;
-    private final SleepService sleepService;
 
     public List<SystemConnection> create(Collection<Coordinate> systems) {
         log.info("Generating connections...");
         Set<Line> lines = new HashSet<>();
 
-        List<Future<?>> futures = systems.stream()
-            .map(coordinate -> EXECUTOR.submit(() -> lines.addAll(connectToAllSystems(coordinate, systems))))
-            .collect(Collectors.toList());
-
-        boolean allReady;
-        do {
-            allReady = futures.stream()
-                .allMatch(Future::isDone);
-
-            if (!allReady) {
-                log.info("Connection generation is not done.");
-                sleepService.sleep(1000);
-            }
-        } while (!allReady);
+        executorServiceBean.processCollectionWithWait(systems, i -> connectToAllSystems(i, systems))
+            .forEach(lines::addAll);
         log.info("Number of connections after connection all stars to each other: {}", lines.size());
 
         log.info("Removing crosses...");

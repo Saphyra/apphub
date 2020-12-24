@@ -14,6 +14,7 @@ import java.util.UUID;
 @Builder
 public class SolarSystem {
     private final UUID solarSystemId;
+    private final int radius;
     private final String systemName; //TODO allow users to rename systems
     private final Coordinate coordinate;
     private final Map<UUID, Planet> planets;

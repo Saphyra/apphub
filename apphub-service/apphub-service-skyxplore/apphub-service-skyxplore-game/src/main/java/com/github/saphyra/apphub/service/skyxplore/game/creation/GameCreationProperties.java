@@ -45,6 +45,8 @@ public class GameCreationProperties {
     public static class SolarSystemProperties {
         private Map<SystemAmount, Double> sizeMultiplier;
         private int minSolarSystemDistance;
+        private int minPlanetDistance;
+        private Map<SystemSize, Range<Integer>> radius;
     }
 
     @Data

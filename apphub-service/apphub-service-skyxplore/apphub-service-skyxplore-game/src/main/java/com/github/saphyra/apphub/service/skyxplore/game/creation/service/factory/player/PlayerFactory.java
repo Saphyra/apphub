@@ -27,7 +27,7 @@ public class PlayerFactory {
     private final IdGenerator idGenerator;
     private final Random random;
 
-    public Map<UUID, Player> create(Set<UUID> userIds, int systemAmount, SkyXploreGameCreationSettingsRequest settings) {
+    public Map<UUID, Player> create(Set<UUID> userIds, int planetAmount, SkyXploreGameCreationSettingsRequest settings) {
         log.info("Generating players...");
         List<Player> players = new ArrayList<>();
 
@@ -36,7 +36,7 @@ public class PlayerFactory {
             .forEach(players::add);
 
         Stream.generate(idGenerator::randomUuid)
-            .limit(systemAmount - userIds.size())
+            .limit(planetAmount - userIds.size())
             .filter(uuid -> random.randInt(0, 100) < properties.getPlayer().getSpawnChance().get(settings.getAiPresence()))
             .map(uuid -> createPlayer(uuid, true))
             .forEach(players::add);

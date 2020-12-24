@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
+import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.common.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
@@ -33,8 +34,13 @@ import org.springframework.web.client.RestTemplate;
 class BeanConfiguration {
     @Bean
     @ConditionalOnMissingBean(ExecutorServiceBean.class)
-    ExecutorServiceBean executorServiceBean() {
-        return new ExecutorServiceBean();
+    ExecutorServiceBean executorServiceBean(SleepService sleepService) {
+        return new ExecutorServiceBean(sleepService);
+    }
+
+    @Bean
+    SleepService sleepService() {
+        return new SleepService();
     }
 
     @Bean

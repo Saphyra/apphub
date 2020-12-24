@@ -5,14 +5,18 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.query.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.GameFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.query.MessageSenderProxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -20,9 +24,12 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 //TODO unit test
 public class GameCreationService {
+    private final ExecutorService executorService = Executors.newFixedThreadPool(3);
+
     private final MessageSenderProxy messageSenderProxy;
     private final GameFactory gameFactory;
     private final GameDao gameDao;
+    private final BlockingQueue<SkyXploreGameCreationRequest> requests;
 
     public void create(SkyXploreGameCreationRequest request) {
         StopWatch stopWatch = StopWatch.createStarted();
@@ -41,5 +48,19 @@ public class GameCreationService {
             .build();
 
         messageSenderProxy.sendToLobby(message);
+    }
+
+    @PostConstruct
+    public void createGames() {
+        new Thread(() -> {
+            while (true) {
+                try {
+                    SkyXploreGameCreationRequest request = requests.take();
+                    executorService.submit(() -> create(request));
+                } catch (Exception e) {
+                    log.error("Execution failed", e);
+                }
+            }
+        }).start();
     }
 }

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.config;
 
+import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.Random;
@@ -16,6 +17,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
 @Configuration
 @EnableHealthCheck
 @Import({
@@ -26,8 +30,8 @@ import org.springframework.context.annotation.Import;
 @EnableErrorHandler
 public class SkyXploreGameBeanConfiguration {
     @Bean
-    ExecutorServiceBean executorServiceBean() {
-        return new ExecutorServiceBean();
+    ExecutorServiceBean executorServiceBean(SleepService sleepService) {
+        return new ExecutorServiceBean(sleepService);
     }
 
     @Bean
@@ -58,5 +62,10 @@ public class SkyXploreGameBeanConfiguration {
     @Bean
     SleepService sleepService() {
         return new SleepService();
+    }
+
+    @Bean
+    BlockingQueue<SkyXploreGameCreationRequest> gameCreationQueue() {
+        return new ArrayBlockingQueue<>(100);//TODO config value
     }
 }

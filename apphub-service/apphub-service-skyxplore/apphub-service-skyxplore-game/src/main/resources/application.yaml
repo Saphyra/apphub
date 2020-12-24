@@ -16,6 +16,20 @@ game:
         LARGE: 2
     solarSystem:
       minSolarSystemDistance: 100
+      minPlanetDistance: 100
+      radius:
+        SMALL:
+          min: 500
+          max: 1000
+        MEDIUM:
+          min: 750
+          max: 1500
+        LARGE:
+          min: 1000
+          max: 3000
+        RANDOM:
+          min: 500
+          max: 3000
       sizeMultiplier:
         SMALL: 0.02
         MEDIUM: 0.04
