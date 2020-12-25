@@ -126,11 +126,13 @@ public class Endpoints {
     public static final String INTERNAL_SKYXPLORE_GAME_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/game/{userId}";
 
     public static final String INTERNAL_SKYXPLORE_CREATE_GAME = "/internal/skyxplore/game";
-    public static final String INTERNAL_SKYXPLORE_USER_JOINED_TO_GAME = "/internal/game/{userId}";
-    public static final String INTERNAL_SKYXPLORE_USER_LEFT_GAME = "/internal/game/{userId}";
+    public static final String INTERNAL_SKYXPLORE_USER_JOINED_TO_GAME = "/internal/skyxplore/game/{userId}";
+    public static final String INTERNAL_SKYXPLORE_USER_LEFT_GAME = "/internal/skyxplore/game/{userId}";
+    public static final String INTERNAL_SKYXPLORE_IS_USER_IN_GAME = "/internal/skyxplore/game";
 
     public static final String SKYXPLORE_GAME_MAP = "/api/skyxplore/game/universe";
     public static final String SKYXPLORE_GAME_GET_PLAYERS = "/api/skyxplore/game/player";
     public static final String SKYXPLORE_GAME_CREATE_CHAT_ROOM = "/api/skyxplore/game/chat/room";
     public static final String SKYXPLORE_GAME_LEAVE_ROOM = "/api/skyxplore/game/chat/room/{roomId}";
+    public static final String SKYXPLORE_GET_SOLAR_SYSTEM = "/api/skyxplore/game/solar-system/{solarSystemId}";
 }

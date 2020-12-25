@@ -58,7 +58,7 @@
                     function(){element.setAttribute("stroke-width", 0)}
                 )
                 element.onclick = function(){
-                    //TODO open system view
+                    solarSystemController.viewSolarSystem(solarSystem.solarSystemId);
                 }
             return element;
         }

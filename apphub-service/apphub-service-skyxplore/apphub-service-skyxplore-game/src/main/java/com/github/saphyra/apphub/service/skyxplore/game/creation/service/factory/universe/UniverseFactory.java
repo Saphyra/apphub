@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.creation.service.factor
 
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
-import com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.SystemConnectionFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.system.SystemConnectionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.system.SolarSystemFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SystemConnection;

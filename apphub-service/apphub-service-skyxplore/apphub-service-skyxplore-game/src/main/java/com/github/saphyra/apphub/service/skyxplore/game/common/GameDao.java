@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,10 +31,14 @@ public class GameDao {
     }
 
     public Game findByUserIdValidated(UUID userId) {
+        return findByUserId(userId)
+            .orElseThrow(() -> new RuntimeException("Game not found for user " + userId));
+    }
+
+    public Optional<Game> findByUserId(UUID userId) {
         return repository.values()
             .stream()
             .filter(game -> game.getPlayers().containsKey(userId))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Game not found for user " + userId));
+            .findFirst();
     }
 }

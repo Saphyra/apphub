@@ -1,6 +1,7 @@
 scriptLoader.loadScript("/res/common/js/web_socket.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/chat_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/map/map_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/solar_system/solar_system_controller.js");
 
 (function PageController(){
     window.ids = {
@@ -17,6 +18,10 @@ scriptLoader.loadScript("/res/skyxplore/js/game/map/map_controller.js");
         createChatRoomContainer: "create-chat-room-container",
         chatRooms: "chat-rooms",
         chatMessageContainers: "chat-message-containers",
+        solarSystemSvgContainer: "solar-system-svg-container",
+        solarSystemContainer: "solar-system-container",
+        solarSystem: "solar-system",
+        solarSystemName: "solar-system-name",
     }
 
     window.webSocketEvents = {
@@ -30,6 +35,10 @@ scriptLoader.loadScript("/res/skyxplore/js/game/map/map_controller.js");
 
     window.pageController = new function(){
         this.webSocketConnection = wsConnection;
+
+        this.showMap = function(){
+            switchTab("main-tab", "map");
+        }
     }
 
     $(document).ready(function(){

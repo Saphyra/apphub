@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
-import com.github.saphyra.apphub.service.skyxplore.game.query.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.controller.MessageSenderProxy;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

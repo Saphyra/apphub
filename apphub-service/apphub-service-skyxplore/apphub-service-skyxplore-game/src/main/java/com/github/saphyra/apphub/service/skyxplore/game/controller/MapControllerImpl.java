@@ -1,8 +1,8 @@
-package com.github.saphyra.apphub.service.skyxplore.game.query;
+package com.github.saphyra.apphub.service.skyxplore.game.controller;
 
 import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGameMapController;
 import com.github.saphyra.apphub.api.skyxplore.response.game.map.SolarSystemConnectionResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.map.SolarSystemResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.map.MapSolarSystemResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.map.UniverseResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
@@ -31,11 +31,11 @@ public class MapControllerImpl implements SkyXploreGameMapController {
     }
 
     private UniverseResponse toUniverseResponse(Game game) {
-        List<SolarSystemResponse> solarSystems = game.getUniverse()
+        List<MapSolarSystemResponse> solarSystems = game.getUniverse()
             .getSystems()
             .values()
             .stream()
-            .map(solarSystem -> SolarSystemResponse.builder()
+            .map(solarSystem -> MapSolarSystemResponse.builder()
                 .solarSystemId(solarSystem.getSolarSystemId())
                 .coordinate(solarSystem.getCoordinate())
                 .solarSystemName(solarSystem.getSystemName())

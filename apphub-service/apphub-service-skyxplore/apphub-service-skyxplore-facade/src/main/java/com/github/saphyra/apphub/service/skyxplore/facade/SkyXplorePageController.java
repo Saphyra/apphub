@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.facade;
 
 import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreCharacterDataApiClient;
+import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameApiClient;
 import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
@@ -24,6 +25,7 @@ public class SkyXplorePageController {
     private final LocaleProvider localeProvider;
     private final SkyXploreCharacterDataApiClient characterClient;
     private final SkyXploreLobbyApiClient lobbyClient;
+    private final SkyXploreGameApiClient gameClient;
 
     @GetMapping(Endpoints.SKYXPLORE_MAIN_MENU_PAGE)
     public ModelAndView mainMenu(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
@@ -63,7 +65,9 @@ public class SkyXplorePageController {
 
     @GetMapping(Endpoints.SKYXPLORE_GAME_PAGE)
     public ModelAndView game(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
-        //TODO check if player is in game
+        if (!gameClient.isUserInGame(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated())) {
+            return new ModelAndView("redirect:" + Endpoints.SKYXPLORE_LOBBY_PAGE);
+        }
         ModelAndView mav = new ModelAndView("game");
         mav.addObject("userId", accessTokenHeader.getUserId());
         return mav;

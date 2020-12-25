@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory;
+package com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.system;
 
 import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
@@ -54,8 +54,9 @@ public class SystemConnectionFactory {
 
         log.info("Removing connections from systems with too much connections...");
         removeConnectionOverflow(systems, lines);
-
         log.info("Number of connections remaining: {}", lines.size());
+
+        //TODO post process - If a star has no connection, connect it to the closest one
         return lines.stream()
             .peek(line -> log.debug("Connection: {}", line))
             .map(line -> SystemConnection.builder().systemConnectionId(idGenerator.randomUuid()).line(line).build())

@@ -86,6 +86,10 @@ zuul:
       path: /api/skyxplore/game/chat/room/*
       serviceId: skyxplore-game
       stripPrefix: false
+    get-solar-system:
+      path: /api/skyxplore/game/solar-system/*
+      serviceId: skyxplore-game
+      stripPrefix: false
 
 role:
   settings:

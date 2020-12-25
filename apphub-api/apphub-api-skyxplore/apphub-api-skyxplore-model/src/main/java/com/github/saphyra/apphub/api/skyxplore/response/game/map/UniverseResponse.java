@@ -13,6 +13,6 @@ import java.util.List;
 @Builder
 public class UniverseResponse {
     private int universeSize;
-    private List<SolarSystemResponse> solarSystems;
+    private List<MapSolarSystemResponse> solarSystems;
     private List<SolarSystemConnectionResponse> connections;
 }

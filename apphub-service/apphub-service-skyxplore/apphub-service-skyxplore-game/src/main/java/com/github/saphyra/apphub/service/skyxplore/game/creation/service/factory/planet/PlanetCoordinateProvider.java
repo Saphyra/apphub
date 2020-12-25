@@ -9,7 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -58,7 +60,9 @@ class PlanetCoordinateProvider {
             }
 
             if (coordinates.size() == expectedPlanetAmount) {
-                return coordinates;
+                return coordinates.stream()
+                    .sorted(Comparator.comparingDouble(o -> distanceCalculator.getDistance(o, STAR_COORDINATE)))
+                    .collect(Collectors.toList());
             } else {
                 log.info("Failed to place all the necessary planets. {} planets were placed, but {} are expected.", coordinates.size(), expectedPlanetAmount);
             }
