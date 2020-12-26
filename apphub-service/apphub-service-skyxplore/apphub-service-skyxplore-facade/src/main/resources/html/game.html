@@ -9,6 +9,7 @@
     <LINK rel="stylesheet" href="/res/skyxplore/css/game/map.css">
     <LINK rel="stylesheet" href="/res/skyxplore/css/game/chat.css">
     <LINK rel="stylesheet" href="/res/skyxplore/css/game/solar_system.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/game/planet.css">
 
     <script th:inline="javascript">
         /*<![CDATA[*/
@@ -38,6 +39,23 @@
 
         <MAIN id="solar-system-container">
             <SVG id="solar-system-svg-container"></SVG>
+        </MAIN>
+    </DIV>
+
+    <DIV id="planet" class="main-tab">
+        <HEADER>
+            <H1>
+                <SPAN id="planet-name"></SPAN>
+                <BUTTON id="close-planet-button" class="window-close-button">X</BUTTON>
+            </H1>
+        </HEADER>
+
+        <MAIN>
+            <DIV id="planet-left-bar"></DIV>
+            <DIV id="planet-middle-bar">
+                <DIV id="planet-surface-container"></DIV>
+            </DIV>
+            <DIV id="planet-right-bar"></DIV>
         </MAIN>
     </DIV>
 

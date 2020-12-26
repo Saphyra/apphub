@@ -90,6 +90,10 @@ zuul:
       path: /api/skyxplore/game/solar-system/*
       serviceId: skyxplore-game
       stripPrefix: false
+    get-surface:
+      path: /api/skyxplore/game/planet/*/surface
+      serviceId: skyxplore-game
+      stripPrefix: false
 
 role:
   settings:

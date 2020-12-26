@@ -75,6 +75,7 @@ window.Mapping = new function(){
         SKYXPLORE_GAME_CREATE_CHAT_ROOM: new Endpoint("/api/skyxplore/game/chat/room", HttpMethod.PUT),
         SKYXPLORE_GAME_LEAVE_ROOM: new Endpoint("/api/skyxplore/game/chat/room/{roomId}", HttpMethod.DELETE),
         SKYXPLORE_GET_SOLAR_SYSTEM: new Endpoint("/api/skyxplore/game/solar-system/{solarSystemId}", HttpMethod.GET),
+        SKYXPLORE_GET_PLANET_SURFACE: new Endpoint("/api/skyxplore/game/planet/{planetId}/surface", HttpMethod.GET),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

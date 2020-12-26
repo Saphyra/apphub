@@ -1,0 +1,91 @@
+:root{
+    --planet-left-bar-width: 33rem;
+    --planet-right-bar-width: 17rem;
+    --surface-table-cell-size: 6vw;
+    --min-surface-table-cell-size: 6rem;
+}
+
+#planet-left-bar{
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--planet-left-bar-width);
+    border-right: 3px ridge white;
+}
+
+#planet-middle-bar{
+    position: absolute;
+    left: var(--planet-left-bar-width);
+    right: var(--planet-right-bar-width);
+    top: 0;
+    bottom: 0;
+    overflow: auto;
+}
+
+    #planet-surface-container{
+        white-space: nowrap;
+        margin: 1rem;
+    }
+
+    .surface-table-cell{
+        border: 2px outset white;
+        width: var(--surface-table-cell-size);
+        height: var(--surface-table-cell-size);
+        min-width: var(--min-surface-table-cell-size);
+        min-height: var(--min-surface-table-cell-size);
+        position: relative;
+        display: inline-block;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .surface-table-cell:hover{
+        border-color: red;
+        border-style: inset;
+    }
+
+        .surface-type-coal_field{
+            background-image: url("/res/skyxplore/images/surface/coal.jpg");
+        }
+
+        .surface-type-concrete{
+            background-image: url("/res/skyxplore/images/surface/concrete.jpg");
+        }
+
+        .surface-type-desert{
+            background-image: url("/res/skyxplore/images/surface/desert.jpg");
+        }
+
+        .surface-type-forest{
+            background-image: url("/res/skyxplore/images/surface/forest.jpg");
+        }
+
+        .surface-type-lake{
+            background-image: url("/res/skyxplore/images/surface/lake.jpg");
+        }
+
+        .surface-type-mountain{
+            background-image: url("/res/skyxplore/images/surface/mountain.jpg");
+        }
+
+        .surface-type-oil_field{
+            background-image: url("/res/skyxplore/images/surface/oil-field.jpg");
+        }
+
+        .surface-type-ore_field{
+            background-image: url("/res/skyxplore/images/surface/ore-mine.jpg");
+        }
+
+        .surface-type-volcano{
+            background-image: url("/res/skyxplore/images/surface/vulcan.jpg");
+        }
+
+#planet-right-bar{
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--planet-right-bar-width);
+    border-left: 3px ridge white;
+}

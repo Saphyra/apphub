@@ -66,7 +66,7 @@ game:
           max: 30
     surface:
       spawnDetails:
-        - surfaceName: COAL_MINE
+        - surfaceName: COAL_FIELD
           spawnRate: 1
           optional: true
         - surfaceName: DESERT
@@ -80,7 +80,7 @@ game:
           optional: false
         - surfaceName: OIL_FIELD
           spawnRate: 1
-        - surfaceName: ORE_MINE
+        - surfaceName: ORE_FIELD
           spawnRate: 1
         - surfaceName: VOLCANO
           spawnRate: 2

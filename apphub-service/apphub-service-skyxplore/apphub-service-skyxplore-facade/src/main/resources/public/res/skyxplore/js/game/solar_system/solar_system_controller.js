@@ -1,3 +1,5 @@
+scriptLoader.loadScript("/res/skyxplore/js/game/map/universe_controller.js");
+
 (function SolarSystemController(){
     window.solarSystemConstants = {
         SOLAR_SYSTEM_BORDER_WIDTH: 10,
@@ -60,7 +62,7 @@
 
 
             new Stream(solarSystem.planets)
-                .map(function(planet){return createPlanet(planet, solarSystem.radius)})
+                .map(function(planet){return createPlanet(planet, solarSystem.radius, solarSystem.solarSystemId)})
                 .forEach(function(node){svgContainer.appendChild(node)});
 
             new Stream(solarSystem.planets)
@@ -74,7 +76,7 @@
         solarSystemContainer.scrollTop = (solarSystemContainer.scrollHeight - window.innerHeight) / 2;
         solarSystemContainer.scrollLeft = (solarSystemContainer.scrollWidth - window.innerWidth) / 2;
 
-        function createPlanet(planet, systemRadius){
+        function createPlanet(planet, systemRadius, solarSystemId){
             const element = createSvgElement("circle");
                 element.setAttribute("r", solarSystemConstants.PLANET_RADIUS);
                 element.setAttribute("cx", solarSystemConstants.SOLAR_SYSTEM_BORDER_WIDTH + solarSystemConstants.OFFSET + systemRadius + planet.coordinate.x);
@@ -86,7 +88,7 @@
                     function(){element.setAttribute("stroke-width", 0)}
                 )
                 element.onclick = function(){
-                    //TODO
+                    planetController.viewPlanet(planet.planetId, function(){solarSystemController.viewSolarSystem(solarSystemId)});
                 }
             return element;
         }

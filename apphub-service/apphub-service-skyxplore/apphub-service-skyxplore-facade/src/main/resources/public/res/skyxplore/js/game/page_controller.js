@@ -2,6 +2,7 @@ scriptLoader.loadScript("/res/common/js/web_socket.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/chat_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/map/map_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/solar_system/solar_system_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
 
 (function PageController(){
     window.ids = {
@@ -22,6 +23,10 @@ scriptLoader.loadScript("/res/skyxplore/js/game/solar_system/solar_system_contro
         solarSystemContainer: "solar-system-container",
         solarSystem: "solar-system",
         solarSystemName: "solar-system-name",
+        closePlanetButton: "close-planet-button",
+        planet: "planet",
+        planetSurfaceContainer: "planet-surface-container",
+        planetMiddleBar: "planet-middle-bar",
     }
 
     window.webSocketEvents = {
