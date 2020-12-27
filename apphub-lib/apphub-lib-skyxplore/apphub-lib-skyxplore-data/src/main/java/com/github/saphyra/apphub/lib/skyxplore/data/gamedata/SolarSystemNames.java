@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.system;
+package com.github.saphyra.apphub.lib.skyxplore.data.gamedata;
 
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.Random;
@@ -11,17 +11,17 @@ import java.util.List;
 
 @Component
 @Slf4j
-class SolarSystemNames extends ClassPathList<String> {
+public class SolarSystemNames extends ClassPathList<String> {
     private final RomanNumberConverter romanNumberConverter;
     private final Random random;
 
-    SolarSystemNames(ObjectMapperWrapper objectMapper, RomanNumberConverter romanNumberConverter, Random random) {
-        super(objectMapper, "solar_system_names.json");
+    public SolarSystemNames(ObjectMapperWrapper objectMapper, RomanNumberConverter romanNumberConverter, Random random) {
+        super(objectMapper, "data/name/solar_system_names.json");
         this.romanNumberConverter = romanNumberConverter;
         this.random = random;
     }
 
-    String getRandomStarName(List<String> usedStarNames) {
+    public String getRandomStarName(List<String> usedStarNames) {
         String nameBase = get(random.randInt(0, size() - 1));
         for (int i = 0; true; i++) {
             String name = i > 0 ? String.format("%s - %s", nameBase, romanNumberConverter.toRoman(i + 1)) : nameBase;

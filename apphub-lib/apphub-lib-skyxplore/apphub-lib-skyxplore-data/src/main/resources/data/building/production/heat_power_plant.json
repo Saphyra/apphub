@@ -1,0 +1,29 @@
+{
+  "id": "heat_power_plant",
+  "buildingType": "production",
+  "gives": {
+    "energy": {
+      "placed": [
+        "concrete"
+      ],
+      "amount": 2,
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+        }
+      },
+      "requiredSkill": "ENGINEERING"
+    }
+  },
+  "workers": 1,
+  "constructionRequirements": {
+    "1": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1,
+        "iron": 1,
+        "stone": 1
+      }
+    }
+  }
+}

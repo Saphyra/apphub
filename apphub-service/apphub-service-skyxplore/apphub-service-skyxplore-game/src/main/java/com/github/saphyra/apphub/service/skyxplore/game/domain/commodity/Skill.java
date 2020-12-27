@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.commodity;
 
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

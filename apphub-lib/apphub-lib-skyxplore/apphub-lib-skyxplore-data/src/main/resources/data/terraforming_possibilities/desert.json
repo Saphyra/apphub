@@ -1,0 +1,34 @@
+[
+  {
+    "surfaceType": "concrete",
+    "constructionRequirements": {
+      "requiredWorkPoints": 20,
+      "requiredResources": {
+        "stone": 17,
+        "water": 21,
+        "energy": 39
+      }
+    }
+  },
+  {
+    "surfaceType": "forest",
+    "constructionRequirements": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "wood": 1,
+        "water": 1,
+        "energy": 1
+      }
+    }
+  },
+  {
+    "surfaceType": "lake",
+    "constructionRequirements": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1,
+        "water": 1
+      }
+    }
+  }
+]

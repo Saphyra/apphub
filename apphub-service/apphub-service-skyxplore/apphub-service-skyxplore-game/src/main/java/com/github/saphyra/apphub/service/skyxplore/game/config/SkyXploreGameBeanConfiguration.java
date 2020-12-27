@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
+import com.github.saphyra.apphub.lib.skyxplore.data.SkyXploreDataConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -24,7 +25,8 @@ import java.util.concurrent.BlockingQueue;
 @EnableHealthCheck
 @Import({
     AccessTokenFilterConfiguration.class,
-    RoleFilterConfiguration.class
+    RoleFilterConfiguration.class,
+    SkyXploreDataConfig.class
 })
 @EnableLocaleMandatoryRequestValidation
 @EnableErrorHandler

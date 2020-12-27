@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.domain.commodity;
+package com.github.saphyra.apphub.lib.skyxplore.data.gamedata;
 
 public enum SkillType {
     AIMING,
@@ -10,6 +10,5 @@ public enum SkillType {
     MELEE_FIGHTING,
     MINING,
     PILOTING,
-    RESEARCHING,
     SUPPLYING
 }

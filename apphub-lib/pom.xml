@@ -56,5 +56,6 @@
       <module>apphub-lib-encryption</module>
     <module>apphub-lib-websocket_gateway</module>
     <module>apphub-lib-geometry</module>
+    <module>apphub-lib-skyxplore</module>
   </modules>
 </project>

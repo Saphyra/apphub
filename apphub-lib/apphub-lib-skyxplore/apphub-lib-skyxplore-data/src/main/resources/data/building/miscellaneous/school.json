@@ -1,0 +1,18 @@
+{
+  "id": "school",
+  "buildingType": "miscellaneous",
+  "placeableSurfaceTypes": [
+    "concrete"
+  ],
+  "workers": 1,
+  "constructionRequirements": {
+    "1": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1,
+        "wood": 1,
+        "stone": 1
+      }
+    }
+  }
+}

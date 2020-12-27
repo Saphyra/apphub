@@ -1,0 +1,75 @@
+{
+  "id": "excavator",
+  "buildingType": "production",
+  "gives": {
+    "coal": {
+      "placed": [
+        "coal_field"
+      ],
+      "amount": 1,
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "energy": 1
+        }
+      },
+      "requiredSkill": "MINING"
+    },
+    "sand": {
+      "placed": [
+        "desert"
+      ],
+      "amount": 1,
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "energy": 1
+        }
+      },
+      "requiredSkill": "MINING"
+    },
+    "ore": {
+      "placed": [
+        "ore_field"
+      ],
+      "amount": 1,
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "energy": 1
+        }
+      },
+      "requiredSkill": "MINING"
+    },
+    "stone": {
+      "placed": [
+        "mountain"
+      ],
+      "amount": 1,
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "energy": 1
+        }
+      },
+      "requiredSkill": "MINING"
+    }
+  },
+  "workers": 1,
+  "constructionRequirements": {
+    "1": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1,
+        "wood": 1
+      }
+    },
+    "2": {
+      "requiredWorkPoints": 2,
+      "requiredResources": {
+        "energy": 2,
+        "wood": 2
+      }
+    }
+  }
+}

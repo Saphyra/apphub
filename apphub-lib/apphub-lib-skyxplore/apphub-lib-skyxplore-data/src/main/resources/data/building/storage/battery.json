@@ -1,0 +1,17 @@
+{
+  "id": "battery",
+  "buildingType": "storage",
+  "stores": "energy",
+  "capacity": 1000,
+  "defaultBuilding": true,
+  "constructionRequirements": {
+    "1": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1,
+        "iron": 1,
+        "silicon": 1
+      }
+    }
+  }
+}

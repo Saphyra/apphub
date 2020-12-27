@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.creation.GameCreationProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceType;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
