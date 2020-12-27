@@ -12,6 +12,6 @@ import java.util.UUID;
 @Builder
 public class Building {
     private final UUID buildingId;
-    private final BuildingType buildingType;
+    private final String dataId;
     private Integer level;
 }

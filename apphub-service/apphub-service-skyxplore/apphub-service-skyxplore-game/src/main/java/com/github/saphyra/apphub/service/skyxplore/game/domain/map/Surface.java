@@ -16,5 +16,5 @@ public class Surface {
     private final UUID surfaceId;
     private final Coordinate coordinate;
     private SurfaceType surfaceType;
-    private final Building building;
+    private Building building;
 }

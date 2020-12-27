@@ -66,10 +66,10 @@ public class SolarSystemFactory {
             .get(settings.getSystemSize());
         int systemRadius = random.randInt(range.getMin(), range.getMax());
 
-        Map<UUID, Planet> planets = planetFactory.create(systemName, systemRadius, settings);
-
+        UUID solarSystemId = idGenerator.randomUuid();
+        Map<UUID, Planet> planets = planetFactory.create(solarSystemId, systemName, systemRadius, settings);
         return SolarSystem.builder()
-            .solarSystemId(idGenerator.randomUuid())
+            .solarSystemId(solarSystemId)
             .radius(systemRadius)
             .systemName(systemName)
             .coordinate(coordinate)

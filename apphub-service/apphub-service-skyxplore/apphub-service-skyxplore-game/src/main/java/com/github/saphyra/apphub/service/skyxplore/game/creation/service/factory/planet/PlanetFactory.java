@@ -34,7 +34,7 @@ public class PlanetFactory {
     private final PlanetCoordinateProvider coordinateProvider;
     private final ExecutorServiceBean executorServiceBean;
 
-    public Map<UUID, Planet> create(String systemName, int systemRadius, SkyXploreGameCreationSettingsRequest settings) {
+    public Map<UUID, Planet> create(UUID solarSystemId, String systemName, int systemRadius, SkyXploreGameCreationSettingsRequest settings) {
         log.debug("Generating planets for system {} with radius {}", systemName, systemRadius);
         Range<Integer> range = properties.getPlanet().getSystemSize().get(settings.getSystemSize());
 
@@ -51,7 +51,7 @@ public class PlanetFactory {
             indexList.add(i);
         }
 
-        Map<UUID, Planet> result = executorServiceBean.processCollectionWithWait(indexList, planetIndex -> createPlanet(planetIndex, coordinates.get(planetIndex), systemName, planetSizeRange))
+        Map<UUID, Planet> result = executorServiceBean.processCollectionWithWait(indexList, planetIndex -> createPlanet(planetIndex, coordinates.get(planetIndex), solarSystemId, systemName, planetSizeRange))
             .stream()
             .collect(Collectors.toMap(Planet::getPlanetId, Function.identity()));
 
@@ -59,13 +59,14 @@ public class PlanetFactory {
         return result;
     }
 
-    private Planet createPlanet(Integer planetIndex, Coordinate coordinate, String systemName, Range<Integer> planetSizeRange) {
+    private Planet createPlanet(Integer planetIndex, Coordinate coordinate, UUID solarSystemId, String systemName, Range<Integer> planetSizeRange) {
         int planetSize = random.randInt(planetSizeRange.getMin(), planetSizeRange.getMax());
 
         Map<Coordinate, Surface> surfaces = surfaceFactory.create(planetSize);
 
         return Planet.builder()
             .planetId(idGenerator.randomUuid())
+            .solarSystemId(solarSystemId)
             .coordinate(coordinate)
             .planetName(String.format("%s %s", systemName, ALPHABET.charAt(planetIndex)))
             .size(planetSize)
