@@ -32,6 +32,10 @@
                     const surfaceNode = document.createElement("SPAN");
                         surfaceNode.classList.add("surface-table-cell");
                         surfaceNode.classList.add("surface-type-" + surface.surfaceType.toLowerCase());
+
+                        if(surface.building){
+                            surfaceNode.appendChild(createBuilding(surface.building));
+                        }
                     rowNode.appendChild(surfaceNode);
                 }
             surfaceContainer.appendChild(rowNode);
@@ -51,6 +55,35 @@
             }
 
             return result;
+        }
+
+        function createBuilding(building){
+            const content = document.createElement("DIV");
+                content.classList.add("building-" + building.dataId);
+                content.classList.add("surface-content");
+
+                const levelCell = document.createElement("DIV");
+                    levelCell.innerHTML = Localization.getAdditionalContent("level") + ": " + building.level;
+                    levelCell.classList.add("surface-header");
+            content.appendChild(levelCell);
+
+                if(building.level < building.maxLevel){ //TODO load BuildingData
+                    const footer = document.createElement("DIV");
+                        footer.classList.add("surface-footer");
+                        footer.appendChild(createFooterContent(building));
+                    content.appendChild(footer);
+                }
+
+            return content;
+
+            function createFooterContent(building){
+                const upgradeButton = document.createElement("button");
+                    upgradeButton.innerHTML = Localization.getAdditionalContent("upgrade");
+                    upgradeButton.onclick = function(){
+                        upgradeBuilding(building.buildingId);
+                    }
+                return upgradeButton;
+            }
         }
     }
 })();

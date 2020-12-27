@@ -48,6 +48,8 @@
     "character-joined-to-game": "csatlakozott.",
     "character-left-the-game": "kilépett.",
     "chat-room-title-empty": "A szoba címe nem lehet üres..",
-    "chat-room-title-too-long": "A szoba címe túl hosszú (maximum 20 karakter)."
+    "chat-room-title-too-long": "A szoba címe túl hosszú (maximum 20 karakter).",
+    "level": "Szint",
+    "upgrade": "Fejlesztés"
   }
 }

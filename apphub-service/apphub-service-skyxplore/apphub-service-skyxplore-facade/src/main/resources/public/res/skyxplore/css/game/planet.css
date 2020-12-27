@@ -81,6 +81,115 @@
             background-image: url("/res/skyxplore/images/surface/vulcan.jpg");
         }
 
+        .surface-content{
+            background-color: rgba(0,0,0,0.65);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-position: center;
+            background-size: cover;
+        }
+
+            .surface-header{
+                text-align: center;
+                opacity: 0.75;
+                background-color: rgb(0,0,0);
+                border-bottom: 1px ridge white;
+                position: absolute;
+                padding: 0.125rem;
+                top: 0;
+                left: 0;
+                right: 0;
+                white-space: initial;
+            }
+
+            .surface-footer{
+                text-align: center;
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                min-height: 1rem;
+            }
+
+                .surface-footer .build-button{
+                    width: 2rem;
+                    height: 2rem;
+                    background-position: center;
+                    background-size: cover;
+                    background-image: url("/res/skyxplore/images/edit.png");
+                }
+
+                .construction-status-container{
+                    color: red;
+                }
+
+                    .surface-footer-construction-queued{
+                        background-color: orange;
+                    }
+
+                    .surface-footer-construction-resource-collection{
+                        background-color: yellow;
+                    }
+
+                    .surface-footer-construction-in-progress{
+                        background-color: green;
+                    }
+
+            .surface-content .surface-footer{
+                background-color: rgb(0,0,0);
+                border-top: 1px ridge white;
+            }
+
+                .surface-content .surface-footer button{
+                    font-size: 0.75rem;
+                    margin: 0.125rem;
+                    padding: 0.125rem;
+                    border-width: 1px;
+                }
+
+        .surface-content.building-battery{
+            background-image: url("/res/skyxplore/images/building/battery.png");
+        }
+
+        .surface-content.building-camp{
+            background-image: url("/res/skyxplore/images/building/camp.png");
+        }
+
+        .surface-content.building-depot{
+            background-image: url("/res/skyxplore/images/building/depot.png");
+        }
+
+        .surface-content.building-excavator{
+            background-image: url("/res/skyxplore/images/building/excavator.png");
+        }
+
+        .surface-content.building-hospital{
+            background-image: url("/res/skyxplore/images/building/hospital.png");
+        }
+
+        .surface-content.building-house{
+            background-image: url("/res/skyxplore/images/building/house.png");
+        }
+
+        .surface-content.building-sawmill{
+            background-image: url("/res/skyxplore/images/building/sawmill.png");
+        }
+
+        .surface-content.building-solar_panel{
+            background-image: url("/res/skyxplore/images/building/solar_panel.png");
+        }
+
+        .surface-content.building-water_pump{
+            background-image: url("/res/skyxplore/images/building/water_pump.png");
+        }
+
+        .surface-content.building-water_tower{
+            background-image: url("/res/skyxplore/images/building/water_tower.png");
+        }
+
 #planet-right-bar{
     position: absolute;
     right: 0;
