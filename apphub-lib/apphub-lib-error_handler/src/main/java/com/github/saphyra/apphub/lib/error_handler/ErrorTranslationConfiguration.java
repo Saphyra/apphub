@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.error_handler;
 
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
 import com.github.saphyra.apphub.lib.config.common.FeignClientConfiguration;
@@ -16,8 +17,8 @@ import org.springframework.context.annotation.Import;
 public class ErrorTranslationConfiguration {
     @Bean
     @ConditionalOnMissingBean(LocaleProvider.class)
-    public LocaleProvider localeProvider(RequestContextProvider requestContextProvider) {
-        return new LocaleProvider(requestContextProvider);
+    public LocaleProvider localeProvider(RequestContextProvider requestContextProvider, CommonConfigProperties commonConfigProperties) {
+        return new LocaleProvider(requestContextProvider, commonConfigProperties);
     }
 
     @Bean

@@ -42,6 +42,60 @@
         "key": "innerHTML",
         "message": "Nincs más játékos ebben a játékban."
       }
+    ],
+    "planet-left-bar-title": [
+      {
+        "key": "innerHTML",
+        "message": "Részletek"
+      }
+    ],
+    "planet-right-bar-title": [
+      {
+        "key": "innerHTML",
+        "message": "Gyártósor"
+      }
+    ],
+    "planet-storage-header": [
+      {
+        "key": "innerHTML",
+        "message": "Raktár"
+      }
+    ],
+    "planet-buildings-header": [
+      {
+        "key": "innerHTML",
+        "message": "Épületek"
+      }
+    ],
+    "planet-population-header": [
+      {
+        "key": "innerHTML",
+        "message": "Lakosság"
+      }
+    ],
+    "planet-priorities-header": [
+      {
+        "key": "innerHTML",
+        "message": "Prioritások"
+      }
+    ],
+    "planet-priorities-construction-label": [
+      {
+        "key": "innerHTML",
+        "message": "Építkezés"
+      }
+    ],
+    "planet-priorities-manufacturing-label": [
+      {
+        "key": "innerHTML",
+        "message": "Gyártás"
+      }
+    ],
+    "planet-priorities-extraction-label": [
+      {
+        "key": "innerHTML",
+        "message": "Nyersanyagtermelés"
+      }
     ]
   },
   "additionalContent": {

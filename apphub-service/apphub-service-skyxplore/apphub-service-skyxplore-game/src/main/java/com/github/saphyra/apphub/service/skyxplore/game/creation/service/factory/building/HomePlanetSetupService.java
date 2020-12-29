@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.building;
 
+import com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.citizen.CitizenFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
@@ -17,10 +18,12 @@ import java.util.Collection;
 public class HomePlanetSetupService {
     private final HomePlanetSelector homePlanetSelector;
     private final BuildingPlacementService buildingPlacementService;
+    private final CitizenFactory citizenFactory;
 
     public void setUpHomePlanet(Player player, Collection<Alliance> alliances, Universe universe) {
         Planet planet = homePlanetSelector.selectPlanet(player.getUserId(), alliances, universe);
         planet.setOwner(player.getUserId());
         buildingPlacementService.placeDefaultBuildings(planet);
+        citizenFactory.addCitizens(planet);
     }
 }

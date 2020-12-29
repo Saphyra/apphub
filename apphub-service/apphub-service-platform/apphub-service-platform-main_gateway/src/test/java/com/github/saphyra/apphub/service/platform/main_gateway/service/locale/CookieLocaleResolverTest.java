@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.locale;
 
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.common_util.CookieUtil;
-import com.github.saphyra.apphub.lib.config.common.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

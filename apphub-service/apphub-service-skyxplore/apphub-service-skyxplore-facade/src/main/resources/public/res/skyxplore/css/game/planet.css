@@ -3,7 +3,78 @@
     --planet-right-bar-width: 17rem;
     --surface-table-cell-size: 6vw;
     --min-surface-table-cell-size: 6rem;
+    --planet-bar-title-height: 1.85rem;
 }
+
+.planet-bar-title{
+    text-align: center;
+    font-size: 1.5rem;
+    border-bottom: 3px ridge white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--planet-bar-title-height);
+}
+
+.planet-bar-content{
+    position: absolute;
+    top: var(--planet-bar-title-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+}
+
+    .planet-bar-container{
+        border: 1px solid white;
+        border-radius: 5px;
+        margin: 0.5rem;
+    }
+
+        .planet-bar-container-header{
+            text-align: center;
+            border-bottom: 1px solid white;
+            font-size: 1.5rem;
+        }
+
+.progress-bar-container{
+    position: relative;
+    height: 1.5rem;
+    margin: 0.25rem;
+    border: 1px solid white;
+    border-radius: 3px;
+}
+
+    .progress-bar-background{
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        background: green;
+    }
+
+    .progress-bar-background.full-progress-bar{
+        background: red;
+    }
+
+    .progress-bar-text{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: 0.125rem;
+        font-size: 1.25rem;
+    }
+
+    .planet-bar-list-item{
+        border: 2px solid green;
+        margin: 0.25rem;
+        padding: 0.125rem;
+        position: relative;
+        font-size: 1.25rem;
+    }
 
 #planet-left-bar{
     position: absolute;

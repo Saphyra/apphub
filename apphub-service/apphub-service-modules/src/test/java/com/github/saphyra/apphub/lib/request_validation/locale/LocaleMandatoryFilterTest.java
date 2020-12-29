@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.lib.config.common.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
 import com.github.saphyra.apphub.test.common.TestConstants;

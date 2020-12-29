@@ -12,6 +12,13 @@ import static org.apache.logging.log4j.util.Strings.isBlank;
 @RequiredArgsConstructor
 public class LocaleProvider {
     private final RequestContextProvider requestContextProvider;
+    private final CommonConfigProperties commonConfigProperties;
+
+    public String getOrDefault() {
+        return requestContextProvider.getHttpServletRequestOptional()
+            .map(this::getLocaleValidated)
+            .orElse(commonConfigProperties.getDefaultLocale());
+    }
 
     public String getLocaleValidated() {
         return getLocale().orElseThrow(() -> new BadRequestException(new ErrorMessage(ErrorCode.LOCALE_NOT_FOUND.name()), "Locale not found."));

@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.config.common.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
@@ -45,8 +45,8 @@ class BeanConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(LocaleProvider.class)
-    LocaleProvider localeProvider(RequestContextProvider requestContextProvider) {
-        return new LocaleProvider(requestContextProvider);
+    LocaleProvider localeProvider(RequestContextProvider requestContextProvider, CommonConfigProperties commonConfigProperties) {
+        return new LocaleProvider(requestContextProvider, commonConfigProperties);
     }
 
     @Bean

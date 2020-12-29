@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.platform.message_sender.connection;
 import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameWebSocketEventApiClient;
-import com.github.saphyra.apphub.lib.config.common.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 

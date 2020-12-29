@@ -15,5 +15,5 @@ public class GameSettings {
     private SystemAmount systemAmount = SystemAmount.MEDIUM;
     private SystemSize systemSize = SystemSize.MEDIUM;
     private PlanetSize planetSize = PlanetSize.MEDIUM;
-    private AiPresence aiPresence = AiPresence.RARE;
+    private AiPresence aiPresence = AiPresence.EVERYWHERE; //TODO reset to RARE
 }

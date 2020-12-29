@@ -21,7 +21,18 @@ public class ExecutorServiceBean implements Executor {
 
     @Override
     public void execute(Runnable command) {
-        executor.submit(command);
+        executor.submit(wrap(command));
+    }
+
+    private Runnable wrap(Runnable command) {
+        return () -> {
+            try {
+                command.run();
+            } catch (Exception e) {
+                log.error("Unexpected error during processing:", e);
+                throw e;
+            }
+        };
     }
 
     public <I, R> List<R> processCollectionWithWait(Collection<I> dataList, Function<I, R> mapper) {

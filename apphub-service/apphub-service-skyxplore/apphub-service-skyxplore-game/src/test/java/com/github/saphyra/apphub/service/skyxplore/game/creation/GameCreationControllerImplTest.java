@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.creation;
 
+import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.AiPresence;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.PlanetSize;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemAmount;
@@ -10,15 +11,18 @@ import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGa
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.service.skyxplore.game.SkyxploreGameApplication;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
 import io.restassured.response.Response;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
@@ -32,18 +36,29 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@ContextConfiguration(classes = SkyxploreGameApplication.class)
+@ContextConfiguration(classes = {SkyxploreGameApplication.class})
 public class GameCreationControllerImplTest {
+    private static final String CHARACTER_NAME = "character-name";
 
     @LocalServerPort
     private int serverPort;
 
     @Autowired
     private GameDao gameDao;
+
+    @MockBean
+    private CharacterProxy characterProxy;
+
+    @Before
+    public void setUp() {
+        given(characterProxy.getCharacterByUserId(any(UUID.class))).willReturn(SkyXploreCharacterModel.builder().name(CHARACTER_NAME).build());
+    }
 
     @After
     public void clear() {

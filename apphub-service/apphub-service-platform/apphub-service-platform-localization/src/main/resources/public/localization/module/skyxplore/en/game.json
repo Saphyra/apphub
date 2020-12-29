@@ -42,6 +42,60 @@
         "key": "innerHTML",
         "message": "No other players in this game."
       }
+    ],
+    "planet-left-bar-title": [
+      {
+        "key": "innerHTML",
+        "message": "Details"
+      }
+    ],
+    "planet-right-bar-title": [
+      {
+        "key": "innerHTML",
+        "message": "Production"
+      }
+    ],
+    "planet-storage-header": [
+      {
+        "key": "innerHTML",
+        "message": "Storage"
+      }
+    ],
+    "planet-buildings-header": [
+      {
+        "key": "innerHTML",
+        "message": "Buildings"
+      }
+    ],
+    "planet-population-header": [
+      {
+        "key": "innerHTML",
+        "message": "Population"
+      }
+    ],
+    "planet-priorities-header": [
+      {
+        "key": "innerHTML",
+        "message": "Priorities"
+      }
+    ],
+    "planet-priorities-construction-label": [
+      {
+        "key": "innerHTML",
+        "message": "Construction"
+      }
+    ],
+    "planet-priorities-manufacturing-label": [
+      {
+        "key": "innerHTML",
+        "message": "Manufacturing"
+      }
+    ],
+    "planet-priorities-extraction-label": [
+      {
+        "key": "innerHTML",
+        "message": "Extraction"
+      }
     ]
   },
   "additionalContent": {

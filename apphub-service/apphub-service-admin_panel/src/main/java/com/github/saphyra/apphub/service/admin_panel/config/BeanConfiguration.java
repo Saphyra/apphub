@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.admin_panel.config;
 
-import com.github.saphyra.apphub.lib.config.common.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenConfiguration;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.thymeleaf.EnableThymeLeaf;

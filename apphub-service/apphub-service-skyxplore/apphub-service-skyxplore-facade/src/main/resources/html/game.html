@@ -51,11 +51,57 @@
         </HEADER>
 
         <MAIN>
-            <DIV id="planet-left-bar"></DIV>
+            <DIV id="planet-left-bar">
+                <DIV id="planet-left-bar-title" class="planet-bar-title"></DIV>
+                <DIV id="planet-left-bar-content" class="planet-bar-content">
+                    <DIV class="planet-bar-container">
+                        <DIV id="planet-storage-header" class="planet-bar-container-header"></DIV>
+                        <DIV id="planet-storage-container"></DIV>
+                    </DIV>
+
+                    <DIV class="planet-bar-container">
+                        <DIV id="planet-population-header" class="planet-bar-container-header"></DIV>
+                        <DIV class="progress-bar-container">
+                            <DIV id="population-progress-bar-background" class="progress-bar-background"></DIV>
+                            <DIV id="population-progress-bar-text" class="progress-bar-text"></DIV>
+                        </DIV>
+                    </DIV>
+
+                    <DIV class="planet-bar-container">
+                        <DIV id="planet-buildings-header" class="planet-bar-container-header"></DIV>
+                        <DIV id="planet-buildings-container"></DIV>
+                        <DIV id="planet-buildings-total" class="planet-bar-list-item"></DIV>
+                    </DIV>
+
+                    <DIV class="planet-bar-container">
+                        <DIV id="planet-priorities-header" class="planet-bar-container-header"></DIV>
+                        <DIV class="planet-bar-list-item">
+                            <SPAN id="planet-priorities-construction-label"></SPAN>
+                            <INPUT type="range" id="planet-priorities-construction-input" min="1" max="10" step="1">
+                            <SPAN id="planet-priorities-construction-value"></SPAN>
+                        </DIV>
+
+                        <DIV class="planet-bar-list-item">
+                            <SPAN id="planet-priorities-manufacturing-label"></SPAN>
+                            <INPUT type="range" id="planet-priorities-manufacturing-input" min="1" max="10" step="1">
+                            <SPAN id="planet-priorities-manufacturing-value"></SPAN>
+                        </DIV>
+
+                        <DIV class="planet-bar-list-item">
+                            <SPAN id="planet-priorities-extraction-label"></SPAN>
+                            <INPUT type="range" id="planet-priorities-extraction-input" min="1" max="10" step="1">
+                            <SPAN id="planet-priorities-extraction-value"></SPAN>
+                        </DIV>
+                    </DIV>
+                </DIV>
+            </DIV>
             <DIV id="planet-middle-bar">
                 <DIV id="planet-surface-container"></DIV>
             </DIV>
-            <DIV id="planet-right-bar"></DIV>
+            <DIV id="planet-right-bar">
+                <DIV id="planet-right-bar-title" class="planet-bar-title"></DIV>
+                <DIV id="planet-right-bar-content" class="planet-bar-content"></DIV>
+            </DIV>
         </MAIN>
     </DIV>
 

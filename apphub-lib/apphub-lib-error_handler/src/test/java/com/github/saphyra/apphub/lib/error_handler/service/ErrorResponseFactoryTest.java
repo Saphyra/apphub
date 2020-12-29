@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.lib.error_handler.service;
 
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
-import com.github.saphyra.apphub.lib.config.common.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

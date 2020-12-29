@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.config.common.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenConfiguration;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
@@ -46,8 +46,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 class UserBeanConfiguration {
     @Bean
     @ConditionalOnMissingBean(LocaleProvider.class)
-    LocaleProvider localeProvider(RequestContextProvider requestContextProvider) {
-        return new LocaleProvider(requestContextProvider);
+    LocaleProvider localeProvider(RequestContextProvider requestContextProvider, CommonConfigProperties commonConfigProperties) {
+        return new LocaleProvider(requestContextProvider, commonConfigProperties);
     }
 
     @Bean

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.config.common;
+package com.github.saphyra.apphub.lib.common_util;
 
 import lombok.Data;
 import lombok.Getter;

@@ -1,7 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.map;
 
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Human;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,10 @@ public class Planet {
     private final int size;
     private final Map<Coordinate, Surface> surfaces;
     private UUID owner;
+
     @Builder.Default
-    private Map<UUID, Human> population = new HashMap<>();
+    private final Map<UUID, Citizen> population = new HashMap<>();
+
+    @Builder.Default
+    private final StorageDetails storageDetails = new StorageDetails();
 }

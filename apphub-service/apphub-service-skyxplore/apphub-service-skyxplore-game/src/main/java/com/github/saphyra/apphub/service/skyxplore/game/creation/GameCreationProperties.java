@@ -26,6 +26,7 @@ public class GameCreationProperties {
     private SurfaceProperties surface;
     private SystemConnectionProperties systemConnection;
     private PlayerCreationProperties player;
+    private SkillProperties skill;
 
     @PostConstruct
     public void after() {
@@ -76,5 +77,10 @@ public class GameCreationProperties {
     @Data
     public static class PlayerCreationProperties {
         private Map<AiPresence, Integer> spawnChance;
+    }
+
+    @Data
+    public static class SkillProperties {
+        private int initialNextLevel;
     }
 }

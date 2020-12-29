@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.common;
 
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
-import com.github.saphyra.apphub.lib.config.common.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

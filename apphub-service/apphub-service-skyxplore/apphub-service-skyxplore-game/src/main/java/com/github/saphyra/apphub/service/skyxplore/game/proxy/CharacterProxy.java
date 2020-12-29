@@ -18,6 +18,10 @@ public class CharacterProxy {
     private final SkyXploreCharacterDataApiClient client;
 
     public SkyXploreCharacterModel getCharacterByUserId(UUID userId) {
-        return client.internalGetCharacterByUserId(userId, localeProvider.getLocaleValidated());
+        String locale = localeProvider.getOrDefault();
+        log.debug("Querying character by userId {} with locale {}", userId, locale);
+        SkyXploreCharacterModel skyXploreCharacterModel = client.internalGetCharacterByUserId(userId, locale);
+        log.debug("Character found: {}", skyXploreCharacterModel);
+        return skyXploreCharacterModel;
     }
 }
