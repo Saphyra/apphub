@@ -27,6 +27,12 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
         planet: "planet",
         planetSurfaceContainer: "planet-surface-container",
         planetMiddleBar: "planet-middle-bar",
+        toggleEnergyDetailsButton: "toggle-energy-details-button",
+        toggleLiquidDetailsButton: "toggle-liquid-details-button",
+        toggleBulkDetailsButton: "toggle-bulk-details-button",
+        planetStorageEnergyDetailsContainer: "planet-storage-energy-details-container",
+        planetStorageLiquidDetailsContainer: "planet-storage-liquid-details-container",
+        planetStorageBulkDetailsContainer: "planet-storage-bulk-details-container",
     }
 
     window.webSocketEvents = {

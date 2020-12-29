@@ -8,3 +8,33 @@
     .main-page.backgrounded main{
         background-color: rgba(0,0,0,0.5);
     }
+
+.progress-bar-container{
+    position: relative;
+    height: 1.5rem;
+    margin: 0.25rem;
+    border: 1px solid white;
+    border-radius: 3px;
+}
+
+    .progress-bar-background{
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        background: green;
+    }
+
+    .progress-bar-background.full-progress-bar{
+        background: red;
+    }
+
+    .progress-bar-text{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: 0.125rem;
+        font-size: 1.25rem;
+    }

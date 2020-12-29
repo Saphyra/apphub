@@ -96,6 +96,30 @@
         "key": "innerHTML",
         "message": "Extraction"
       }
+    ],
+    "planet-storage-settings-button": [
+      {
+        "key": "innerHTML",
+        "message": "Storage settings"
+      }
+    ],
+    "planet-storage-energy-label": [
+      {
+        "key": "innerHTML",
+        "message": "Energy"
+      }
+    ],
+    "planet-storage-liquid-label": [
+      {
+        "key": "innerHTML",
+        "message": "Liquid"
+      }
+    ],
+    "planet-storage-bulk-label": [
+      {
+        "key": "innerHTML",
+        "message": "Bulk"
+      }
     ]
   },
   "additionalContent": {
@@ -104,6 +128,7 @@
     "chat-room-title-empty": "Chat room title must not be empty.",
     "chat-room-title-too-long": "Chat room title too long (maximum 20 characters).",
     "level": "Level",
-    "upgrade": "Upgrade"
+    "upgrade": "Upgrade",
+    "planet-storage-reserved-label": "Reserved"
   }
 }

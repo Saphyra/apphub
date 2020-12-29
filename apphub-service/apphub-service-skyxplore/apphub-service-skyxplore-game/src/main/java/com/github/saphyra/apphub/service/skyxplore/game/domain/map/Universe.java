@@ -27,4 +27,9 @@ public class Universe {
             .filter(planet -> planet.getPlanetId().equals(planetId))
             .findFirst();
     }
+
+    public Planet findPlanetByIdValidated(UUID planetId) {
+        return findPlanetById(planetId)
+            .orElseThrow(() -> new RuntimeException("Planet not found with id " + planetId)); //TODO proper exception
+    }
 }

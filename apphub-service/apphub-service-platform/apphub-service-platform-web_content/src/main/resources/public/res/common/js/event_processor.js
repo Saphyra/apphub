@@ -31,7 +31,7 @@
                 logService.logToConsole("Processing event " + eventType + " for EventProcessor " + processor.name);
                 setTimeout(function(){processor.process(event)}, 0);
                 if(processor.isOnceRunning()){
-                    logService.logToConsole("OnceRunning processor has run, removing from list...");
+                    logService.logToConsole("OnceRunning processor with name " + processor.name + " has run, removing from list...");
                     processors.splice(pindex, 1);
                 }
             }

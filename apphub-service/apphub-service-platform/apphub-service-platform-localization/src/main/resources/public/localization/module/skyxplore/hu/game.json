@@ -96,6 +96,30 @@
         "key": "innerHTML",
         "message": "Nyersanyagtermelés"
       }
+    ],
+    "planet-storage-settings-button": [
+      {
+        "key": "innerHTML",
+        "message": "Raktér beállítások"
+      }
+    ],
+    "planet-storage-energy-label": [
+      {
+        "key": "innerHTML",
+        "message": "Energia"
+      }
+    ],
+    "planet-storage-liquid-label": [
+      {
+        "key": "innerHTML",
+        "message": "Folyadék"
+      }
+    ],
+    "planet-storage-bulk-label": [
+      {
+        "key": "innerHTML",
+        "message": "Teher"
+      }
     ]
   },
   "additionalContent": {
@@ -104,6 +128,7 @@
     "chat-room-title-empty": "A szoba címe nem lehet üres..",
     "chat-room-title-too-long": "A szoba címe túl hosszú (maximum 20 karakter).",
     "level": "Szint",
-    "upgrade": "Fejlesztés"
+    "upgrade": "Fejlesztés",
+    "planet-storage-reserved-label": "Lefoglalt"
   }
 }
