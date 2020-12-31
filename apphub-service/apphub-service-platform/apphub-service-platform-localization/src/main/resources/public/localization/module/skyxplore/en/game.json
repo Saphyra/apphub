@@ -126,6 +126,18 @@
         "key": "innerHTML",
         "message": "Population overview"
       }
+    ],
+    "planet-buildings-total-label": [
+      {
+        "key": "innerHTML",
+        "message": "Total"
+      }
+    ],
+    "planet-buildings-total-level-label": [
+      {
+        "key": "innerHTML",
+        "message": "Level"
+      }
     ]
   },
   "additionalContent": {
@@ -137,6 +149,9 @@
     "upgrade": "Upgrade",
     "planet-storage-reserved-label": "Reserved",
     "stored-amount-label": "Amount",
-    "reserved-amount-label": "Reserved storage"
+    "reserved-amount-label": "Reserved storage",
+    "planet-building-detail-name": "Building",
+    "planet-building-detail-level-sum": "Total level",
+    "planet-building-detail-used-slots": "Used slots"
   }
 }

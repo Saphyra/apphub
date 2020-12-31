@@ -121,12 +121,4 @@
             $("#" + ids.planetStorageBulkDetailsContainer).toggle(); //TODO consider using fadeInVertical
         }
     }
-
-    function IdMask(m){
-        const mask = m;
-
-        this.get = function(replacement){
-            return mask.replace("*", replacement);
-        }
-    }
 })();

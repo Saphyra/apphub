@@ -1,2 +1,12 @@
 {
+  "excavator": "Markoló",
+  "water_pump": "Vízszivattyú",
+  "sawmill": "Fűrészmalom",
+  "camp": "Tábor",
+  "solar_panel": "Napelem",
+  "water_tower": "Víztorony",
+  "house": "Lakóház",
+  "hospital": "Kórház",
+  "depot": "Raktár",
+  "battery": "Akkumulátor"
 }

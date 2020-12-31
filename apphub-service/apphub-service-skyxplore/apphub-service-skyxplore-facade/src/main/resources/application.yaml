@@ -102,6 +102,14 @@ zuul:
       path: /api/skyxplore/game/planet/*/population
       serviceId: skyxplore-game
       stripPrefix: false
+    get-planet-building-overview:
+      path: /api/skyxplore/game/planet/*/building
+      serviceId: skyxplore-game
+      stripPrefix: false
+    get-planet-priorities:
+      path: /api/skyxplore/game/planet/*/priority
+      serviceId: skyxplore-game
+      stripPrefix: false
 
 role:
   settings:

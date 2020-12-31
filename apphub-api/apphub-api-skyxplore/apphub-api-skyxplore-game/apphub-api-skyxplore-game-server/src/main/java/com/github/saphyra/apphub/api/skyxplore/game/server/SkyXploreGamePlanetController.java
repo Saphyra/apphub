@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.api.skyxplore.game.server;
 
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetPopulationOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface SkyXploreGamePlanetController {
@@ -22,4 +24,10 @@ public interface SkyXploreGamePlanetController {
 
     @GetMapping(Endpoints.SKYXPLORE_PLANET_GET_POPULATION_OVERVIEW)
     PlanetPopulationOverviewResponse getPopulationOverview(@PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @GetMapping(Endpoints.SKYXPLORE_PLANET_GET_BUILDING_OVERVIEW)
+    Map<String, PlanetBuildingOverviewResponse> getBuildingOverview(@PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @GetMapping(Endpoints.SKYXPLORE_PLANET_GET_PRIORITIES)
+    Map<String, Integer> getPriorities(@PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

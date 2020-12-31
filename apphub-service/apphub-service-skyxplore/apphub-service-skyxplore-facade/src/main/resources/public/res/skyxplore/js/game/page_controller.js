@@ -39,6 +39,10 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
         planetPopulationOverviewProgressBarBackground: "planet-population-overview-progress-bar-background",
         planetPopulationOverviewActual: "planet-population-overview-actual",
         planetPopulationOverviewCapacity: "planet-population-overview-capacity",
+        planetBuildingsContainer: "planet-buildings-container",
+        planetBuildingsTotalUsedSlots: "planet-buildings-total-used-slots",
+        planetBuildingsTotalSlots: "planet-buildings-total-slots",
+        planetBuildingsTotalLevel: "planet-buildings-total-level",
     }
 
     window.webSocketEvents = {
@@ -50,6 +54,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
 
     window.itemData = new Cache(itemDataLoader);
     window.itemDataNameLocalization = new CustomLocalization("skyxplore", "items");
+    window.surfaceTypeLocalization = new CustomLocalization("skyxplore", "surface_type");
 
     const wsConnection = new WebSocketConnection(Mapping.getEndpoint("CONNECTION_SKYXPLORE_GAME"));
 
@@ -85,3 +90,13 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
         //document.addEventListener('contextmenu', event => event.preventDefault()); //TODO restore when development is finished
     });
 })();
+
+function IdMask(m){
+    const mask = m;
+
+    this.get = function(replacement){
+        const result = mask.replace("*", replacement);
+        console.log("Id generated: " + result);
+        return result;
+    }
+}

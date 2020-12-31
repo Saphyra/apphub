@@ -14,6 +14,32 @@ function Stream(a){
         return true;
     }
 
+    this.anyMatch = function(predicate){
+        for(let i in array){
+            if(predicate(array[i])){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    this.count = function(){
+        return array.length;
+    }
+
+    this.filter = function(filterMethod){
+        const result = [];
+
+        this.forEach(function(item){
+            if(filterMethod(item)){
+                result.push(item);
+            }
+        })
+
+        return new Stream(result);
+    }
+
     this.findFirst = function(){
         return array.length > 0 ? new Optional(array[0]) : new Optional();
     }
@@ -27,18 +53,6 @@ function Stream(a){
         });
 
         return new Stream(newArray);
-    }
-
-    this.filter = function(filterMethod){
-        const result = [];
-
-        this.forEach(function(item){
-            if(filterMethod(item)){
-                result.push(item);
-            }
-        })
-
-        return new Stream(result);
     }
 
     this.forEach = function(consumer){
@@ -70,16 +84,6 @@ function Stream(a){
         return new Stream(buff);
     }
 
-    this.anyMatch = function(predicate){
-        for(let i in array){
-            if(predicate(array[i])){
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     this.noneMatch = function(predicate){
         for(let i in array){
             if(predicate(array[i])){
@@ -98,6 +102,14 @@ function Stream(a){
     this.sorted = function(comparator){
         array.sort(comparator);
         return this;
+    }
+
+    this.sum = function(){
+        let result = 0;
+
+        this.forEach(function(item){result += item});
+
+        return result;
     }
 
     this.toList = function(){

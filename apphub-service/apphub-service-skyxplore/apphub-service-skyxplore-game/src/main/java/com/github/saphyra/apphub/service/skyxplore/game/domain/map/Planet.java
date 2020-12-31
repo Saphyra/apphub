@@ -8,9 +8,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -29,4 +32,8 @@ public class Planet {
 
     @Builder.Default
     private final StorageDetails storageDetails = new StorageDetails();
+
+    @Builder.Default
+    private final Map<PriorityType, Integer> priorities = Arrays.stream(PriorityType.values())
+        .collect(Collectors.toMap(Function.identity(), priorityType -> 5));
 }

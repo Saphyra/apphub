@@ -1,2 +1,12 @@
 {
+  "excavator": "Excavator",
+  "water_pump": "Water pump",
+  "sawmill": "Sawmill",
+  "camp": "Camp",
+  "solar_panel": "Solar panel",
+  "water_tower": "Water tower",
+  "house": "House",
+  "hospital": "Hospital",
+  "depot": "Depot",
+  "battery": "Battery"
 }
