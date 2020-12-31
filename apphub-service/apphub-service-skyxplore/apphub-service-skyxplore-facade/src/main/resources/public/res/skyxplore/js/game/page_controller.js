@@ -35,6 +35,10 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
         planetStorageEnergyDetailsContainer: "planet-storage-energy-details-container",
         planetStorageLiquidDetailsContainer: "planet-storage-liquid-details-container",
         planetStorageBulkDetailsContainer: "planet-storage-bulk-details-container",
+        planetOpenPopulationOverviewButton: "planet-open-population-overview-button",
+        planetPopulationOverviewProgressBarBackground: "planet-population-overview-progress-bar-background",
+        planetPopulationOverviewActual: "planet-population-overview-actual",
+        planetPopulationOverviewCapacity: "planet-population-overview-capacity",
     }
 
     window.webSocketEvents = {

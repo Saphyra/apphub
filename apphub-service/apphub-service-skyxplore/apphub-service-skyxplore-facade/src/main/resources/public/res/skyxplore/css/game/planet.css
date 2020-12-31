@@ -98,6 +98,10 @@
             padding.left: 0.5rem;
         }
 
+    #planet-population-overview-bar-text{
+        text-align: center;
+    }
+
 #planet-middle-bar{
     position: absolute;
     left: var(--planet-left-bar-width);

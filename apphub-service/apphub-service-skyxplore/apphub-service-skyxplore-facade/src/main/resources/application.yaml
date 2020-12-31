@@ -98,6 +98,10 @@ zuul:
       path: /api/skyxplore/game/planet/*/storage
       serviceId: skyxplore-game
       stripPrefix: false
+    get-planet-population-overview:
+      path: /api/skyxplore/game/planet/*/population
+      serviceId: skyxplore-game
+      stripPrefix: false
 
 role:
   settings:
