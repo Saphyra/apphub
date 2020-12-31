@@ -13,9 +13,13 @@
 
     window.log = window.logService;
 
-    function logToConsole(message){
+    function logToConsole(message, o){
         if(isConsoleEnabled){
-            console.log(message);
+            if(o == undefined){
+                console.log(message);
+            }else{
+                console.log(message, o);
+            }
         }
     }
     

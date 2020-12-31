@@ -120,6 +120,12 @@
         "key": "innerHTML",
         "message": "Teher"
       }
+    ],
+    "planet-open-population-overview-button": [
+      {
+        "key": "innerHTML",
+        "message": "Lakosság áttekintés"
+      }
     ]
   },
   "additionalContent": {
@@ -129,6 +135,8 @@
     "chat-room-title-too-long": "A szoba címe túl hosszú (maximum 20 karakter).",
     "level": "Szint",
     "upgrade": "Fejlesztés",
-    "planet-storage-reserved-label": "Lefoglalt"
+    "planet-storage-reserved-label": "Lefoglalt",
+    "stored-amount-label": "Mennyiség",
+    "reserved-amount-label": "Reserved storage"
   }
 }

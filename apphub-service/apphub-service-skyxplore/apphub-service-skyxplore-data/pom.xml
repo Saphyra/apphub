@@ -46,6 +46,12 @@
             <artifactId>postgresql</artifactId>
             <version>${versions.postgresql-connector}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-skyxplore-data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

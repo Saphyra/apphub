@@ -107,6 +107,7 @@ public class Endpoints {
     public static final String SKYXPLORE_REMOVE_FRIEND = "/api/skyxplore/friend/{friendshipId}";
     public static final String SKYXPLORE_GET_ACTIVE_FRIENDS = "/api/skyxplore/friend/active";
     public static final String SKYXPLORE_GET_CHARACTER = "/api/skyxplore/character";
+    public static final String SKYXPLORE_GET_ITEM_DATA = "/api/skyxplore/data/{dataId}";
 
     //SKYXPLORE-LOBBY
     public static final String INTERNAL_SKYXPLORE_USER_JOINED_TO_LOBBY = "/internal/lobby/{userId}";

@@ -7,6 +7,7 @@
         planetStorageActualProgressBar: new IdMask("planet-storage-*-actual-progress-bar"),
         planetStorageAllocatedProgressBar: new IdMask("planet-storage-*-allocated-progress-bar"),
         planetStorageReservedProgressBar: new IdMask("planet-storage-*-reserved-progress-bar"),
+        planetStorageDetailContainer: new IdMask("planet-storage-*-details-container"),
     }
 
     window.planetStorageController = new function(){
@@ -49,6 +50,8 @@
             document.getElementById(idMasks.planetStorageActual.get(storageType)).innerHTML = storageDetails.actualResourceAmount;
             document.getElementById(idMasks.planetStorageAllocated.get(storageType)).innerHTML = storageDetails.allocatedResourceAmount;
 
+            fillDetailedResourceList(storageType, storageDetails.resourceDetails);
+
             function setBars(storageType, storageDetails){
                 const actualWidth = (storageDetails.actualResourceAmount - storageDetails.allocatedResourceAmount) / storageDetails.capacity * 100;
                 const allocatedWidth = storageDetails.allocatedResourceAmount / storageDetails.capacity * 100;
@@ -63,6 +66,46 @@
                 const reservedProgressBar = document.getElementById(idMasks.planetStorageReservedProgressBar.get(storageType));
                     reservedProgressBar.style.left = (actualWidth + allocatedWidth) + "%";
                     reservedProgressBar.style.width = reservedWidth + "%";
+            }
+
+            function fillDetailedResourceList(storageType, resourceDetails){
+                const container = document.getElementById(idMasks.planetStorageDetailContainer.get(storageType));
+                    container.innerHTML = "";
+
+                    new Stream(resourceDetails)
+                        .sorted(function(a, b){itemDataNameLocalization.get(a.dataId).localeCompare(itemDataNameLocalization.get(b.dataId))})
+                        .map(createResourceDetailsNode)
+                        .forEach(function(node){container.appendChild(node)});
+
+                function createResourceDetailsNode(resourceDetail){
+                    const node = document.createElement("DIV");
+                        node.classList.add("planet-storage-storage-details-item");
+
+                        const resourceName = document.createElement("DIV");
+                            resourceName.innerHTML = itemDataNameLocalization.get(resourceDetail.dataId);
+                    node.appendChild(resourceName);
+
+                        const detailsContainer = document.createElement("UL");
+                            const storedAmount = document.createElement("LI");
+                                storedAmount.innerHTML = Localization.getAdditionalContent("stored-amount-label") + " (" + resourceDetail.allocatedResourceAmount + ")";
+                                const storedAmountLabel = document.createElement("SPAN");
+                                    storedAmountLabel.innerHTML = Localization.getAdditionalContent("stored-amount-label") + ": ";
+                            storedAmount.appendChild(storedAmountLabel);
+                                const storedAmountValue = document.createElement("SPAN");
+                                    storedAmountValue.innerHTML = resourceDetail.actualAmount;
+                            storedAmount.appendChild(storedAmountValue);
+                        detailsContainer.appendChild(storedAmount);
+
+                            const reservedAmount = document.createElement("LI");
+                                const reservedAmountLabel = document.createElement("SPAN");
+                                    reservedAmountLabel.innerHTML = Localization.getAdditionalContent("reserved-amount-label") + ": ";
+                            reservedAmount.appendChild(reservedAmountLabel);
+                                const reservedAmountValue = document.createElement("SPAN");
+                                    reservedAmountValue.innerHTML = resourceDetail.reservedStorageAmount;
+                            reservedAmount.appendChild(reservedAmountValue);
+                        detailsContainer.appendChild(reservedAmount);
+                    return node;
+                }
             }
         }
     }

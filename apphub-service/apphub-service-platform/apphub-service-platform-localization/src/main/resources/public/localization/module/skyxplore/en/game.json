@@ -120,6 +120,12 @@
         "key": "innerHTML",
         "message": "Bulk"
       }
+    ],
+    "planet-open-population-overview-button": [
+      {
+        "key": "innerHTML",
+        "message": "Population overview"
+      }
     ]
   },
   "additionalContent": {
@@ -129,6 +135,8 @@
     "chat-room-title-too-long": "Chat room title too long (maximum 20 characters).",
     "level": "Level",
     "upgrade": "Upgrade",
-    "planet-storage-reserved-label": "Reserved"
+    "planet-storage-reserved-label": "Reserved",
+    "stored-amount-label": "Amount",
+    "reserved-amount-label": "Reserved storage"
   }
 }

@@ -90,6 +90,14 @@
             text-align: left;
         }
 
+        .planet-storage-storage-details-item{
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            border-top: 1px solid white;
+            padding-top: 0.5rem;
+            padding.left: 0.5rem;
+        }
+
 #planet-middle-bar{
     position: absolute;
     left: var(--planet-left-bar-width);

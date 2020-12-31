@@ -2,9 +2,12 @@ package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource;
 
 import com.github.saphyra.apphub.lib.data.ValidationAbstractDataService;
 import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -22,5 +25,12 @@ public class ResourceDataService extends ValidationAbstractDataService<String, R
     @Override
     public void addItem(ResourceData content, String fileName) {
         put(content.getId(), content);
+    }
+
+    public List<ResourceData> getByStorageType(StorageType storageType) {
+        return values()
+            .stream()
+            .filter(resourceData -> resourceData.getStorageType().equals(storageType))
+            .collect(Collectors.toList());
     }
 }

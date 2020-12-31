@@ -1,4 +1,6 @@
 scriptLoader.loadScript("/res/common/js/web_socket.js");
+scriptLoader.loadScript("/res/common/js/cache.js");
+scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/chat_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/map/map_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/solar_system/solar_system_controller.js");
@@ -42,6 +44,9 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
         CHAT_ROOM_CREATED: "skyxplore-game-chat-room-created",
     }
 
+    window.itemData = new Cache(itemDataLoader);
+    window.itemDataNameLocalization = new CustomLocalization("skyxplore", "items");
+
     const wsConnection = new WebSocketConnection(Mapping.getEndpoint("CONNECTION_SKYXPLORE_GAME"));
 
     window.pageController = new function(){
@@ -49,6 +54,20 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
 
         this.showMap = function(){
             switchTab("main-tab", "map");
+        }
+    }
+
+    function itemDataLoader(itemId){
+        const endpoint = Mapping.getEndpoint("SKYXPLORE_GET_ITEM_DATA", {dataId, itemId});
+        const response = dao.sendRequest(endpoint.getMethod(), endpoint.getUrl());
+
+        if(response.status == ResponseStatus.OK){
+            const result = JSON.parse(response.body);
+            logService.logToConsole("Item loaded with id " + itemId, result);
+            return result;
+        }else{
+            new ErrorHandlerRegistry()
+                .handleError(null, response);
         }
     }
 

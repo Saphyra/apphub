@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.lib.skyxplore.data;
 
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.common_util.Random;
+import com.github.saphyra.apphub.lib.common_util.RomanNumberConverter;
 import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -21,5 +23,17 @@ public class SkyXploreDataConfig {
     @Bean
     PathMatchingResourcePatternResolver pathMatchingResourcePatternResolver() {
         return new PathMatchingResourcePatternResolver();
+    }
+
+    @ConditionalOnMissingBean(Random.class)
+    @Bean
+    Random random() {
+        return new Random();
+    }
+
+    @ConditionalOnMissingBean(RomanNumberConverter.class)
+    @Bean
+    RomanNumberConverter romanNumberConverter() {
+        return new RomanNumberConverter();
     }
 }

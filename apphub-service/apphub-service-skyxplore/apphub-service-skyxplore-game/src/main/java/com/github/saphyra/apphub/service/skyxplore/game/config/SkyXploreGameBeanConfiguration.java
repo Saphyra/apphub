@@ -3,8 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.config;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.common_util.Random;
-import com.github.saphyra.apphub.lib.common_util.RomanNumberConverter;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
@@ -39,16 +37,6 @@ public class SkyXploreGameBeanConfiguration {
     @Bean
     IdGenerator idGenerator() {
         return new IdGenerator();
-    }
-
-    @Bean
-    Random random() {
-        return new Random();
-    }
-
-    @Bean
-    RomanNumberConverter romanNumberConverter() {
-        return new RomanNumberConverter();
     }
 
     @Bean
