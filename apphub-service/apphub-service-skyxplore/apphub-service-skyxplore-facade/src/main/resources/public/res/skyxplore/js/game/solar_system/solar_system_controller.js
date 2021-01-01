@@ -13,6 +13,9 @@ scriptLoader.loadScript("/res/skyxplore/js/game/map/universe_controller.js");
 
     window.solarSystemController = new function(){
         this.viewSolarSystem = viewSolarSystem;
+        this.getOpenedSolarSystemId = function(){
+            return openedSolarSystemId;
+        }
     }
 
     $(document).ready(init);
@@ -88,7 +91,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/map/universe_controller.js");
                     function(){element.setAttribute("stroke-width", 0)}
                 )
                 element.onclick = function(){
-                    planetController.viewPlanet(planet.planetId, function(){solarSystemController.viewSolarSystem(solarSystemId)});
+                    planetController.viewPlanet(planet.planetId);
                 }
             return element;
         }

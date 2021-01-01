@@ -81,6 +81,7 @@ window.Mapping = new function(){
         SKYXPLORE_PLANET_GET_POPULATION_OVERVIEW: new Endpoint("/api/skyxplore/game/planet/{planetId}/population", HttpMethod.GET),
         SKYXPLORE_PLANET_GET_BUILDING_OVERVIEW: new Endpoint("/api/skyxplore/game/planet/{planetId}/building", HttpMethod.GET),
         SKYXPLORE_PLANET_GET_PRIORITIES: new Endpoint("/api/skyxplore/game/planet/{planetId}/priority", HttpMethod.GET),
+        SKYXPLORE_PLANET_GET_STORAGE_SETTINGS: new Endpoint("/api/skyxplore/game/planet/{planetId}/storage-settings", HttpMethod.GET),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

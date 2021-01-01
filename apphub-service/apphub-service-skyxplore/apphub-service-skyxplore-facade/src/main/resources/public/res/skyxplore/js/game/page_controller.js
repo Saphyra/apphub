@@ -43,6 +43,16 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
         planetBuildingsTotalUsedSlots: "planet-buildings-total-used-slots",
         planetBuildingsTotalSlots: "planet-buildings-total-slots",
         planetBuildingsTotalLevel: "planet-buildings-total-level",
+        closeStorageSettingsButton: "close-storage-settings-button",
+        storageSettingsPriorityInput: "storage-settings-priority-input",
+        storageSettingsPriorityValue: "storage-settings-priority-value",
+        storageSettings: "storage-settings",
+        storageSettingsResourceInput: "storage-settings-resource-input",
+        storageSettingsBatchSizeInput: "storage-settings-batch-size-input",
+        storageSettingsAmountInput: "storage-settings-amount-input",
+        storageSettingsCreateButton: "create-storage-settings-button",
+        noStorageSettings: "no-storage-settings",
+        currentStorageSettingsContainer: "storage-settings-list",
     }
 
     window.webSocketEvents = {
@@ -67,7 +77,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
     }
 
     function itemDataLoader(itemId){
-        const endpoint = Mapping.getEndpoint("SKYXPLORE_GET_ITEM_DATA", {dataId, itemId});
+        const endpoint = Mapping.getEndpoint("SKYXPLORE_GET_ITEM_DATA", {dataId: itemId});
         const response = dao.sendRequest(endpoint.getMethod(), endpoint.getUrl());
 
         if(response.status == ResponseStatus.OK){
@@ -77,6 +87,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
         }else{
             new ErrorHandlerRegistry()
                 .handleError(null, response);
+            throwException("Error", "Could not get item from server: " + itemId);
         }
     }
 
@@ -96,7 +107,6 @@ function IdMask(m){
 
     this.get = function(replacement){
         const result = mask.replace("*", replacement);
-        console.log("Id generated: " + result);
         return result;
     }
 }

@@ -138,6 +138,48 @@
         "key": "innerHTML",
         "message": "Level"
       }
+    ],
+    "storage-settings-title": [
+      {
+        "key": "innerHTML",
+        "message": "Storage settings"
+      }
+    ],
+    "storage-settings-resource-label": [
+      {
+        "key": "innerHTML",
+        "message": "Resource"
+      }
+    ],
+    "storage-settings-amount-label": [
+      {
+        "key": "innerHTML",
+        "message": "Amount"
+      }
+    ],
+    "storage-settings-batch-size-label": [
+      {
+        "key": "innerHTML",
+        "message": "Batch size"
+      }
+    ],
+    "storage-settings-priority-label": [
+      {
+        "key": "innerHTML",
+        "message": "Priority"
+      }
+    ],
+    "create-storage-settings-button": [
+      {
+        "key": "innerHTML",
+        "message": "Create new setting"
+      }
+    ],
+    "no-storage-settings": [
+      {
+        "key": "innerHTML",
+        "message": "No available storage settings."
+      }
     ]
   },
   "additionalContent": {

@@ -4,12 +4,14 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_storage_controller
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_population_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_building_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_priority_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/planet/storage_settings_controller.js");
 
 (function PlanetController(){
     let openedPlanetId;
 
     window.planetController = new function(){
         this.viewPlanet = viewPlanet;
+        this.openStorageSettings = openStorageSettings;
         this.getOpenedPlanetId = function(){
             return openedPlanetId;
         }
@@ -17,7 +19,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_priority_controlle
 
     $(document).ready(init);
 
-    function viewPlanet(planetId, closeCallBack){
+    function viewPlanet(planetId){
         openedPlanetId = planetId;
         surfaceViewController.loadSurface(planetId);
         planetStorageController.loadStorage(planetId);
@@ -25,8 +27,14 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_priority_controlle
         planetBuildingController.loadBuildings(planetId);
         planetPriorityController.loadPriorities(planetId);
 
-        document.getElementById(ids.closePlanetButton).onclick = closeCallBack;
+        document.getElementById(ids.closePlanetButton).onclick = function(){
+            solarSystemController.viewSolarSystem(solarSystemController.getOpenedSolarSystemId());
+        };
         switchTab("main-tab", ids.planet);
+    }
+
+    function openStorageSettings(){
+        storageSettingsController.viewStorageSettings(openedPlanetId);
     }
 
     function init(){

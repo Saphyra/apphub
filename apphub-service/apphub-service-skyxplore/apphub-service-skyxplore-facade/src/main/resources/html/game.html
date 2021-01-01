@@ -10,6 +10,7 @@
     <LINK rel="stylesheet" href="/res/skyxplore/css/game/chat.css">
     <LINK rel="stylesheet" href="/res/skyxplore/css/game/solar_system.css">
     <LINK rel="stylesheet" href="/res/skyxplore/css/game/planet.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/game/storage_settings.css">
 
     <script th:inline="javascript">
         /*<![CDATA[*/
@@ -122,7 +123,7 @@
                             <DIV id="planet-storage-bulk-details-container" class="planet-storage-details-container"></DIV>
                         </DIV>
 
-                        <DIV id="planet-storage-settings-button" class="button"></DIV>
+                        <DIV id="planet-storage-settings-button" class="button" onclick="planetController.openStorageSettings()"></DIV>
                     </DIV>
 
                     <DIV class="planet-bar-container">
@@ -178,6 +179,48 @@
             <DIV id="planet-right-bar">
                 <DIV id="planet-right-bar-title" class="planet-bar-title"></DIV>
                 <DIV id="planet-right-bar-content" class="planet-bar-content"></DIV>
+            </DIV>
+        </MAIN>
+    </DIV>
+
+    <DIV id="storage-settings" class="main-tab">
+        <HEADER>
+            <H1>
+                <SPAN id="storage-settings-title"></SPAN>
+                <BUTTON id="close-storage-settings-button" class="window-close-button">X</BUTTON>
+            </H1>
+
+
+        </HEADER>
+
+        <MAIN>
+            <DIV id="storage-settings-left-bar">
+                <LABEL>
+                    <SPAN id="storage-settings-resource-label"></SPAN>:
+                    <SELECT id="storage-settings-resource-input"></SELECT>
+                </LABEL>
+
+                <LABEL>
+                    <SPAN id="storage-settings-amount-label"></SPAN>:
+                    <INPUT type="number" id="storage-settings-amount-input" min="0" step="1">
+                </LABEL>
+
+                <LABEL>
+                    <SPAN id="storage-settings-batch-size-label"></SPAN>:
+                    <INPUT type="number" id="storage-settings-batch-size-input" min="1" step="1">
+                </LABEL>
+
+                <LABEL>
+                    <SPAN id="storage-settings-priority-label"></SPAN>:
+                    <INPUT type="range" id="storage-settings-priority-input" min="1" max="10" step="1">
+                    <SPAN id="storage-settings-priority-value"></SPAN>
+                </LABEL>
+
+                <BUTTON id="create-storage-settings-button" onclick="storageSettingsController.createStorageSettings()"></BUTTON>
+            </DIV>
+            <DIV id="storage-settings-right-bar">
+                <DIV id="no-storage-settings"></DIV>
+                <DIV id="storage-settings-list"></DIV>
             </DIV>
         </MAIN>
     </DIV>

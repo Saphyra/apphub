@@ -38,6 +38,10 @@ zuul:
       path: /api/skyxplore/friend/request/*
       serviceId: skyxplore-data
       stripPrefix: false
+    get-item:
+      path: /api/skyxplore/data/*
+      serviceId: skyxplore-data
+      stripPrefix: false
 
     #SkyXplore lobby
     create-lobby:
@@ -108,6 +112,10 @@ zuul:
       stripPrefix: false
     get-planet-priorities:
       path: /api/skyxplore/game/planet/*/priority
+      serviceId: skyxplore-game
+      stripPrefix: false
+    get-storage-settings:
+      path: /api/skyxplore/game/planet/*/storage-settings
       serviceId: skyxplore-game
       stripPrefix: false
 

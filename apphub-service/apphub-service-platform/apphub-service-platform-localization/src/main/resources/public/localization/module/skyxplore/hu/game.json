@@ -138,6 +138,48 @@
         "key": "innerHTML",
         "message": "Szint"
       }
+    ],
+    "storage-settings-title": [
+      {
+        "key": "innerHTML",
+        "message": "Raktárbeállítások"
+      }
+    ],
+    "storage-settings-resource-label": [
+      {
+        "key": "innerHTML",
+        "message": "Nyersanyag"
+      }
+    ],
+    "storage-settings-amount-label": [
+      {
+        "key": "innerHTML",
+        "message": "Mennyiség"
+      }
+    ],
+    "storage-settings-batch-size-label": [
+      {
+        "key": "innerHTML",
+        "message": "Darabolás"
+      }
+    ],
+    "storage-settings-priority-label": [
+      {
+        "key": "innerHTML",
+        "message": "Prioritás"
+      }
+    ],
+    "create-storage-settings-button": [
+      {
+        "key": "innerHTML",
+        "message": "Új beállítás létrehozása"
+      }
+    ],
+    "no-storage-settings": [
+      {
+        "key": "innerHTML",
+        "message": "Nincs elérhető beállítás."
+      }
     ]
   },
   "additionalContent": {
