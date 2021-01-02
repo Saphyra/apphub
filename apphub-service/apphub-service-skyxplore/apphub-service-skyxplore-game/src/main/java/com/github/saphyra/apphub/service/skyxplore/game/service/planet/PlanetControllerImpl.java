@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.Pla
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.PlanetPopulationOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.PlanetStorageQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.StorageSettingCreationService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.StorageSettingDeletionService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.StorageSettingsResponseQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.SurfaceQueryService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class PlanetControllerImpl implements SkyXploreGamePlanetController {
     private final StorageSettingsResponseQueryService storageSettingsResponseQueryService;
     private final SurfaceQueryService surfaceQueryService;
     private final StorageSettingCreationService storageSettingCreationService;
+    private final StorageSettingDeletionService storageSettingDeletionService;
 
     @Override
     //TODO unit test
@@ -104,5 +106,14 @@ public class PlanetControllerImpl implements SkyXploreGamePlanetController {
     public void createStorageSetting(StorageSettingsModel request, UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create storageSetting for resource {} on planet {}", accessTokenHeader.getUserId(), request.getDataId(), planetId);
         storageSettingCreationService.createStorageSetting(accessTokenHeader.getUserId(), planetId, request);
+    }
+
+    @Override
+    //TODO unit test
+    //TODO unt test
+    //TODO api test
+    public void deleteStorageSetting(UUID planetId, UUID storageSettingId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to delete storageSetting {} from planet {}", accessTokenHeader.getUserId(), storageSettingId, planetId);
+        storageSettingDeletionService.deleteStorageSetting(accessTokenHeader.getUserId(), planetId, storageSettingId);
     }
 }

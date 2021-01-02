@@ -55,7 +55,7 @@ public class StorageSettingsResponseQueryService {
 
     private StorageSettingsModel convert(StorageSetting storageSetting) {
         return StorageSettingsModel.builder()
-            .storageSettingsId(storageSetting.getStorageSettingsId())
+            .storageSettingId(storageSetting.getStorageSettingsId())
             .dataId(storageSetting.getDataId())
             .targetAmount(storageSetting.getTargetAmount())
             .batchSize(storageSetting.getBatchSize())

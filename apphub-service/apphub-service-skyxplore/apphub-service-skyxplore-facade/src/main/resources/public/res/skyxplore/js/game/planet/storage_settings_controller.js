@@ -1,3 +1,5 @@
+scriptLoader.loadScript("/res/common/js/confirmation_service.js");
+
 (function StorageSettingsController(){
     let availableStorage;
     let currentSettings;
@@ -44,6 +46,7 @@
             updateMaxResourceAmount();
             setBachSize();
             setPriority();
+            $(".create-storage-setting-input").prop("disabled", storageSettings.availableResources.length == 0);
 
             function createOption(dataId){
                 const option = document.createElement("OPTION");
@@ -66,11 +69,117 @@
                     .forEach(function(node){container.appendChild(node)});
 
             function createStorageSetting(storageSetting){
+                const dataId = storageSetting.dataId;
+                const storageType = itemData.get(dataId).storageType;
+                const maxAmount = availableStorage[storageType] + storageSetting.targetAmount;
+
                 const node = document.createElement("DIV");
-                    node.innerHTML = itemDataNameLocalization.get(storageSetting.dataId);
+                    node.classList.add("storage-setting");
+
+                    const title = document.createElement("H3");
+                        title.innerHTML = itemDataNameLocalization.get(storageSetting.dataId);
+                node.appendChild(title);
+
+                    const inputContainer = document.createElement("DIV");
+                        const amountLabel = document.createElement("LABEL");
+                            const amountTitle = document.createElement("SPAN");
+                                amountTitle.innerHTML = Localization.getAdditionalContent("storage-setting-amount") + ": ";
+                        amountLabel.appendChild(amountTitle);
+                            const amountInput = document.createElement("INPUT");
+                                amountInput.type = "number";
+                                amountInput.max = maxAmount;
+                                amountInput.step = 1;
+                                amountInput.value = storageSetting.targetAmount;
+                        amountLabel.appendChild(amountInput);
+                    inputContainer.appendChild(amountLabel);
+
+                        const batchSizeLabel = document.createElement("LABEL");
+                            const batchSizeTitle = document.createElement("SPAN");
+                                batchSizeTitle.innerHTML = Localization.getAdditionalContent("storage-setting-batch-size") + ": ";
+                        batchSizeLabel.appendChild(batchSizeTitle);
+                            const batchSizeInput = document.createElement("INPUT");
+                                batchSizeInput.type = "number";
+                                batchSizeInput.min = 1;
+                                batchSizeInput.step = 1;
+                                batchSizeInput.value = storageSetting.batchSize;
+                        batchSizeLabel.appendChild(batchSizeInput);
+                    inputContainer.appendChild(batchSizeLabel);
+
+                        const priorityLabel = document.createElement("LABEL");
+                            const priorityTitle = document.createElement("SPAN");
+                                priorityTitle.innerHTML = Localization.getAdditionalContent("storage-setting-priority") + ": ";
+                        priorityLabel.appendChild(priorityTitle);
+                            const priorityInput = document.createElement("INPUT");
+                                priorityInput.type = "range";
+                                priorityInput.min = 1;
+                                priorityInput.max = 10;
+                                priorityInput.step = 1;
+                                priorityInput.value = storageSetting.priority;
+                        priorityLabel.appendChild(priorityInput);
+                            const priorityValue = document.createElement("SPAN");
+                                priorityValue.innerHTML = storageSetting.priority;
+                        priorityLabel.appendChild(priorityValue);
+                    inputContainer.appendChild(priorityLabel);
+                node.appendChild(inputContainer);
+
+                    const buttonContainer = document.createElement("DIV");
+                        const saveButton = document.createElement("BUTTON");
+                            saveButton.innerHTML = Localization.getAdditionalContent("save-storage-setting");
+                    buttonContainer.appendChild(saveButton);
+
+                        const deleteButton = document.createElement("BUTTON");
+                            deleteButton.innerHTML = Localization.getAdditionalContent("delete-storage-setting");
+                    buttonContainer.appendChild(deleteButton);
+                node.appendChild(buttonContainer);
+
+                amountInput.onchange = function(){
+                    if(amountInput.value > maxAmount){
+                        amountInput.value = maxAmount;
+                    }
+                }
+
+                batchSizeInput.onchange = function(){
+                    if(batchSizeInput.value < 1){
+                        batchSizeInput.value = 1;
+                    }
+                }
+
+                priorityInput.onchange = function(){
+                    priorityValue.innerHTML = priorityInput.value;
+                }
+
+                saveButton.onclick = function(){updateStorageSetting(storageSetting.storageSettingId, amountInput.value, batchSizeInput.value, priorityInput.value)};
+                deleteButton.onclick = function(){deleteStorageSetting(storageSetting.storageSettingId, storageSetting.dataId)};
+
                 return node;
             }
         }
+    }
+
+    function updateStorageSetting(storageSettingId, targetAmount, batchSize, priority){
+        //TODO
+    }
+
+    function deleteStorageSetting(storageSettingId, dataId){
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(Localization.getAdditionalContent("delete-storage-setting-confirmation-dialog-title"))
+            .withDetail(Localization.getAdditionalContent("delete-storage-setting-confirmation-dialog-detail", {resource: itemDataNameLocalization.get(dataId)}))
+            .withConfirmButton(Localization.getAdditionalContent("delete-storage-setting-confirm-button"))
+            .withDeclineButton(Localization.getAdditionalContent("delete-storage-setting-decline-button"))
+
+
+        confirmationService.openDialog(
+            "delete-storage-setting-confirmation-dialog",
+            confirmationDialogLocalization,
+            function(){
+                const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_DELETE_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId(), storageSettingId: storageSettingId}));
+                    request.processValidResponse = function(){
+                        notificationService.showSuccess(Localization.getAdditionalContent("storage-setting-deleted"));
+                        viewStorageSettings(planetController.getOpenedPlanetId());
+                    }
+                dao.sendRequestAsync(request);
+            }
+        );
     }
 
     function createStorageSettings(){
@@ -100,11 +209,17 @@
     }
 
     function updateMaxResourceAmount(){
+        const amountInput = document.getElementById(ids.storageSettingsAmountInput);
+
         const dataId = document.getElementById(ids.storageSettingsResourceInput).value;
+        if(dataId == ""){
+            amountInput.value = 0;
+            return;
+        }
         const storageType = itemData.get(dataId).storageType;
         const maxAmount = availableStorage[storageType];
 
-        const amountInput = document.getElementById(ids.storageSettingsAmountInput)
+
             amountInput.max = maxAmount;
             amountInput.value = maxAmount == 0 ? 0 : 1;
 

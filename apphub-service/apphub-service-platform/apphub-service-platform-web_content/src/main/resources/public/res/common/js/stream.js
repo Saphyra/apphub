@@ -132,9 +132,6 @@ function Stream(a){
 }
 
 function MapStream(i){
-    if(i == null || i == undefined){
-        throwException("IllegalArgument", "Input must not be null or undefined.");
-    }
     const items = i || {};
 
     this.applyOnAllValues = function(consumer){

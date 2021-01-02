@@ -12,7 +12,7 @@ import java.util.UUID;
 @Data
 @Builder
 public class StorageSettingsModel {
-    private UUID storageSettingsId;
+    private UUID storageSettingId;
     private String dataId;
     private Integer targetAmount;
     private Integer priority;

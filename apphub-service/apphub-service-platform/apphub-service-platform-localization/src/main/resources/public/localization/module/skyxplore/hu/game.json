@@ -100,7 +100,7 @@
     "planet-storage-settings-button": [
       {
         "key": "innerHTML",
-        "message": "Raktér beállítások"
+        "message": "Raktár beállítások"
       }
     ],
     "planet-storage-energy-label": [
@@ -196,6 +196,16 @@
     "planet-building-detail-level-sum": "Összesített szint",
     "planet-building-detail-used-slots": "Felhasznált helyek",
     "storage-setting-amount-too-low": "Mennyiség túl kicsi. (Minimum 1)",
-    "storage-setting-created": "Raktár beállítás létrehozva."
+    "storage-setting-created": "Raktár beállítás létrehozva.",
+    "storage-setting-amount": "Mennyiség",
+    "storage-setting-batch-size": "Darabolás",
+    "storage-setting-priority": "Prioritás",
+    "save-storage-setting": "Mentés",
+    "delete-storage-setting": "Törlés",
+    "storage-setting-deleted": "Raktár beállítás törölve.",
+    "delete-storage-setting-confirmation-dialog-title": "Raktár beállítás törlése",
+    "delete-storage-setting-confirmation-dialog-detail": "Biztosan ki akarod törölni a {resource} beállítását?",
+    "delete-storage-setting-confirm-button": "Beállítás törlése",
+    "delete-storage-setting-decline-button": "Mégse"
   }
 }

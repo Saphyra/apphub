@@ -31,6 +31,7 @@
     bottom: 0;
     width: calc(100% - var(--storage-settings-left-bar-width));
     max-width: calc(100% - var(--storage-settings-left-bar-min-width));
+    overflow: auto;
 }
 
     #no-storage-settings{
@@ -38,3 +39,19 @@
         font-size: 2rem;
         margin: 1rem;
     }
+
+    .storage-setting{
+        margin: 0.5rem;
+        border: 2px ridge white;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 1.5rem;
+    }
+
+        .storage-setting h3{
+            border-bottom: 2px ridge white;
+        }
+
+        .storage-setting label{
+            white-space: nowrap;
+        }

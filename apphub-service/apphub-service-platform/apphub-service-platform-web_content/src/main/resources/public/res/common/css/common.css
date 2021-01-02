@@ -266,6 +266,7 @@ input:disabled, button:disabled, textarea:disabled, .disabled{
 }
 
     .confirmation-dialog-content-wrapper{
+        background: black;
         position: absolute;
         top: 20vh;
         left: 20vw;

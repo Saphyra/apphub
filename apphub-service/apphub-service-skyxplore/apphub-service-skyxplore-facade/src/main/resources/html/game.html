@@ -197,26 +197,26 @@
             <DIV id="storage-settings-left-bar">
                 <LABEL>
                     <SPAN id="storage-settings-resource-label"></SPAN>:
-                    <SELECT id="storage-settings-resource-input"></SELECT>
+                    <SELECT id="storage-settings-resource-input" class="create-storage-setting-input"></SELECT>
                 </LABEL>
 
                 <LABEL>
                     <SPAN id="storage-settings-amount-label"></SPAN>:
-                    <INPUT type="number" id="storage-settings-amount-input" min="0" step="1">
+                    <INPUT type="number" id="storage-settings-amount-input" class="create-storage-setting-input" min="0" step="1">
                 </LABEL>
 
                 <LABEL>
                     <SPAN id="storage-settings-batch-size-label"></SPAN>:
-                    <INPUT type="number" id="storage-settings-batch-size-input" min="1" step="1">
+                    <INPUT type="number" id="storage-settings-batch-size-input" class="create-storage-setting-input" min="1" step="1">
                 </LABEL>
 
                 <LABEL>
                     <SPAN id="storage-settings-priority-label"></SPAN>:
-                    <INPUT type="range" id="storage-settings-priority-input" min="1" max="10" step="1">
+                    <INPUT type="range" id="storage-settings-priority-input" class="create-storage-setting-input" min="1" max="10" step="1">
                     <SPAN id="storage-settings-priority-value"></SPAN>
                 </LABEL>
 
-                <BUTTON id="create-storage-settings-button" onclick="storageSettingsController.createStorageSettings()"></BUTTON>
+                <BUTTON id="create-storage-settings-button" class="create-storage-setting-input" onclick="storageSettingsController.createStorageSettings()"></BUTTON>
             </DIV>
             <DIV id="storage-settings-right-bar">
                 <DIV id="no-storage-settings"></DIV>

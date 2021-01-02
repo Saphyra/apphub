@@ -196,6 +196,16 @@
     "planet-building-detail-level-sum": "Total level",
     "planet-building-detail-used-slots": "Used slots",
     "storage-setting-amount-too-low": "Amount too low. (Minimum 1)",
-    "storage-setting-created": "Storage setting created."
+    "storage-setting-created": "Storage setting created.",
+    "storage-setting-amount": "Amount",
+    "storage-setting-batch-size": "Batch size",
+    "storage-setting-priority": "Priority",
+    "save-storage-setting": "Save",
+    "delete-storage-setting": "Delete",
+    "storage-setting-deleted": "Storage setting deleted.",
+    "delete-storage-setting-confirmation-dialog-title": "Confirm deleting storage setting",
+    "delete-storage-setting-confirmation-dialog-detail": "Are you sure you want to delete storage setting for {resource}?",
+    "delete-storage-setting-confirm-button": "Delete storage setting",
+    "delete-storage-setting-decline-button": "Cancel"
   }
 }
