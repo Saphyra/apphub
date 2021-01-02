@@ -74,7 +74,29 @@
     }
 
     function createStorageSettings(){
-        //TODO
+        const dataId = document.getElementById(ids.storageSettingsResourceInput).value;
+        const amount = document.getElementById(ids.storageSettingsAmountInput).value;
+        const batchSize = document.getElementById(ids.storageSettingsBatchSizeInput).value;
+        const priority = document.getElementById(ids.storageSettingsPriorityInput).value;
+
+        const payload = {
+            dataId: dataId,
+            targetAmount: amount,
+            batchSize: batchSize,
+            priority: priority
+        }
+
+        if(amount < 1){
+            notificationService.showError(Localization.getAdditionalContent("storage-setting-amount-too-low"));
+            return;
+        }
+
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_CREATE_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId()}), payload);
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("storage-setting-created"));
+                viewStorageSettings(planetController.getOpenedPlanetId());
+            }
+        dao.sendRequestAsync(request);
     }
 
     function updateMaxResourceAmount(){
@@ -113,6 +135,13 @@
             amountInput.onchange = function(){
                 if(amountInput.value > amountInput.max){
                     amountInput.value = amountInput.max;
+                }
+            }
+
+        const batchSizeInput = document.getElementById(ids.storageSettingsBatchSizeInput);
+            batchSizeInput.onchange = function(){
+                if(batchSizeInput.value < 1){
+                    batchSizeInput.value = 1;
                 }
             }
     }

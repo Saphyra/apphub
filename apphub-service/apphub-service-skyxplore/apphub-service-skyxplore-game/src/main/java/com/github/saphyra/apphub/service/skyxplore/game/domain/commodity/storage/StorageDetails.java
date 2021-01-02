@@ -12,7 +12,7 @@ import java.util.Vector;
 @Builder
 public class StorageDetails {
     private final List<AllocatedResource> allocatedResources = new Vector<>();
-    private final List<ReservedStorage> reservedStorages = new Vector<>();
+    private final ReservedStorages reservedStorages = new ReservedStorages();
     private final List<StoredResource> storedResources = new Vector<>();
-    private final List<StorageSetting> storageSettings = new Vector<>();
+    private final StorageSettings storageSettings = new StorageSettings();
 }

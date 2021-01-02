@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.query;
+package com.github.saphyra.apphub.service.skyxplore.game.service.planet.query;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ResourceDetailsResponse;
@@ -37,6 +37,8 @@ public class PlanetStorageQueryService {
         Planet planet = gameDao.findByUserIdValidated(userId)
             .getUniverse()
             .findPlanetByIdValidated(planetId);
+
+        log.debug("PlanetStorage: {}", planet.getStorageDetails());
         return PlanetStorageResponse.builder()
             .energy(getStorageDetails(planet, StorageType.ENERGY))
             .liquid(getStorageDetails(planet, StorageType.LIQUID))
@@ -54,7 +56,11 @@ public class PlanetStorageQueryService {
             .build();
     }
 
-    private int getCapacity(Planet planet, StorageType storageType) {
+    public int getFreeStorage(Planet planet, StorageType storageType) {
+        return getCapacity(planet, storageType) - getActualAmount(planet, storageType) - getReservedStorageAmount(planet, storageType);
+    }
+
+    public int getCapacity(Planet planet, StorageType storageType) {
         return planet.getSurfaces()
             .values()
             .stream()
@@ -66,7 +72,7 @@ public class PlanetStorageQueryService {
             .sum();
     }
 
-    private int getReservedStorageAmount(Planet planet, StorageType storageType) {
+    public int getReservedStorageAmount(Planet planet, StorageType storageType) {
         return planet.getStorageDetails()
             .getReservedStorages()
             .stream()
@@ -75,7 +81,7 @@ public class PlanetStorageQueryService {
             .sum();
     }
 
-    private int getActualAmount(Planet planet, StorageType storageType) {
+    public int getActualAmount(Planet planet, StorageType storageType) {
         return planet.getStorageDetails()
             .getStoredResources()
             .stream()
@@ -84,7 +90,7 @@ public class PlanetStorageQueryService {
             .sum();
     }
 
-    private int getAllocatedResourceAmount(Planet planet, StorageType storageType) {
+    public int getAllocatedResourceAmount(Planet planet, StorageType storageType) {
         return planet.getStorageDetails()
             .getAllocatedResources()
             .stream()
@@ -110,24 +116,40 @@ public class PlanetStorageQueryService {
             .build();
     }
 
-    private int getReservedStorageAmount(String id, List<ReservedStorage> reservedStorages) {
+    public int getReservedStorageAmount(String dataId, Planet planet) {
+        return getReservedStorageAmount(dataId, planet.getStorageDetails().getReservedStorages());
+    }
+
+    private int getReservedStorageAmount(String dataId, List<ReservedStorage> reservedStorages) {
         return reservedStorages.stream()
-            .filter(reservedStorage -> reservedStorage.getDataId().equals(id))
+            .filter(reservedStorage -> reservedStorage.getDataId().equals(dataId))
             .mapToInt(ReservedStorage::getAmount)
             .sum();
     }
 
-    private int getActualAmount(String id, List<StoredResource> storedResources) {
+    public int getActualAmount(String dataId, Planet planet) {
+        return getActualAmount(dataId, planet.getStorageDetails().getStoredResources());
+    }
+
+    private int getActualAmount(String dataId, List<StoredResource> storedResources) {
         return storedResources.stream()
-            .filter(storedResource -> storedResource.getDataId().equals(id))
+            .filter(storedResource -> storedResource.getDataId().equals(dataId))
             .mapToInt(StoredResource::getAmount)
             .sum();
     }
 
-    private int getAllocatedResourceAmount(String id, List<AllocatedResource> allocatedResources) {
+    public int getAllocatedResourceAmount(String dataId, Planet planet) {
+        return getAllocatedResourceAmount(dataId, planet.getStorageDetails().getAllocatedResources());
+    }
+
+    private int getAllocatedResourceAmount(String dataId, List<AllocatedResource> allocatedResources) {
         return allocatedResources.stream()
-            .filter(allocatedResource -> allocatedResource.getDataId().equals(id))
+            .filter(allocatedResource -> allocatedResource.getDataId().equals(dataId))
             .mapToInt(AllocatedResource::getAmount)
             .sum();
+    }
+
+    public int getUsableStoredResourceAmount(String dataId, Planet planet) {
+        return getActualAmount(dataId, planet) - getAllocatedResourceAmount(dataId, planet);
     }
 }

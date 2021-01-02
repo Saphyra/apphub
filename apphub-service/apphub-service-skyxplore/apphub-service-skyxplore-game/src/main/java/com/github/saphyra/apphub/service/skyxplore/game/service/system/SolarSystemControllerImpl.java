@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.controller;
+package com.github.saphyra.apphub.service.skyxplore.game.service.system;
 
 import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGameSolarSystemController;
 import com.github.saphyra.apphub.api.skyxplore.response.game.solar_system.PlanetLocationResponse;
@@ -27,7 +27,7 @@ public class SolarSystemControllerImpl implements SkyXploreGameSolarSystemContro
     //TODO unit test
     //TODO int test
     //TODO api test
-    public SolarSystemResponse getMap(UUID solarSystemId, AccessTokenHeader accessTokenHeader) {
+    public SolarSystemResponse getSolarSystem(UUID solarSystemId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to view solarSystem {}", accessTokenHeader.getUserId(), solarSystemId);
 
         Game game = gameDao.findByUserIdValidated(accessTokenHeader.getUserId());

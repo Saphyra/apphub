@@ -14,7 +14,7 @@ import java.util.UUID;
 public class StorageSettingsModel {
     private UUID storageSettingsId;
     private String dataId;
-    private int targetAmount;
-    private int priority;
-    private int batchSize;
+    private Integer targetAmount;
+    private Integer priority;
+    private Integer batchSize;
 }

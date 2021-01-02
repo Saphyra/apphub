@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.controller;
+package com.github.saphyra.apphub.service.skyxplore.game.service;
 
 import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGameController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;

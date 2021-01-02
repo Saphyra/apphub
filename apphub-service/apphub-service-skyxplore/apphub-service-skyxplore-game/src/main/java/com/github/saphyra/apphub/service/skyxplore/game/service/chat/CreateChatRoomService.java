@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.chat;
+package com.github.saphyra.apphub.service.skyxplore.game.service.chat;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
-import com.github.saphyra.apphub.service.skyxplore.game.controller.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

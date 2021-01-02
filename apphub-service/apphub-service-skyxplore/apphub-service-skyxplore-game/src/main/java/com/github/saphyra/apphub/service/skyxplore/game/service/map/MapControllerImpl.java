@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.controller;
+package com.github.saphyra.apphub.service.skyxplore.game.service.map;
 
 import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGameMapController;
 import com.github.saphyra.apphub.api.skyxplore.response.game.map.SolarSystemConnectionResponse;

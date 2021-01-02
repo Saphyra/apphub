@@ -1,6 +1,7 @@
-package com.github.saphyra.apphub.service.skyxplore.game.controller;
+package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
 import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGamePlanetController;
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingsModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetPopulationOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
@@ -8,11 +9,12 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageSetti
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.query.PlanetBuildingOverviewQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.query.PlanetPopulationOverviewQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.query.PlanetStorageQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.query.StorageSettingsQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.query.SurfaceQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.PlanetBuildingOverviewQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.PlanetPopulationOverviewQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.PlanetStorageQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.StorageSettingCreationService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.StorageSettingsResponseQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.SurfaceQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,8 +32,9 @@ public class PlanetControllerImpl implements SkyXploreGamePlanetController {
     private final PlanetStorageQueryService planetStorageQueryService;
     private final PlanetPopulationOverviewQueryService planetPopulationOverviewQueryService;
     private final PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
-    private final StorageSettingsQueryService storageSettingsQueryService;
+    private final StorageSettingsResponseQueryService storageSettingsResponseQueryService;
     private final SurfaceQueryService surfaceQueryService;
+    private final StorageSettingCreationService storageSettingCreationService;
 
     @Override
     //TODO unit test
@@ -91,6 +94,15 @@ public class PlanetControllerImpl implements SkyXploreGamePlanetController {
     //TODO api test
     public StorageSettingsResponse getStorageSettings(UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the storageSettings of planet {}", accessTokenHeader.getUserId(), planetId);
-        return storageSettingsQueryService.getStorageSettings(accessTokenHeader.getUserId(), planetId);
+        return storageSettingsResponseQueryService.getStorageSettings(accessTokenHeader.getUserId(), planetId);
+    }
+
+    @Override
+    //TODO unit test
+    //TODO unt test
+    //TODO api test
+    public void createStorageSetting(StorageSettingsModel request, UUID planetId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to create storageSetting for resource {} on planet {}", accessTokenHeader.getUserId(), request.getDataId(), planetId);
+        storageSettingCreationService.createStorageSetting(accessTokenHeader.getUserId(), planetId, request);
     }
 }

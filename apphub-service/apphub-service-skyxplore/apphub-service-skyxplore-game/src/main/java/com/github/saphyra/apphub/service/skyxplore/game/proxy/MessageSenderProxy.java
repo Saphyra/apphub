@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.controller;
+package com.github.saphyra.apphub.service.skyxplore.game.proxy;
 
 import com.github.saphyra.apphub.api.platform.message_sender.client.MessageSenderApiClient;
 import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;

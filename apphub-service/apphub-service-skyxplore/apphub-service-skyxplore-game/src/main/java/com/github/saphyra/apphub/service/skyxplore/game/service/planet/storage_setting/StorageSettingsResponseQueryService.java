@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.query;
+package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
 import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingsModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageSettingsResponse;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-public class StorageSettingsQueryService {
+public class StorageSettingsResponseQueryService {
     private final GameDao gameDao;
     private final ResourceDataService resourceDataService;
     private final StorageBuildingService storageBuildingService;

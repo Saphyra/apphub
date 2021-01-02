@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.query;
+package com.github.saphyra.apphub.service.skyxplore.game.service.planet.query;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceBuildingResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.query;
+package com.github.saphyra.apphub.service.skyxplore.game.service.planet.query;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetPopulationOverviewResponse;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;

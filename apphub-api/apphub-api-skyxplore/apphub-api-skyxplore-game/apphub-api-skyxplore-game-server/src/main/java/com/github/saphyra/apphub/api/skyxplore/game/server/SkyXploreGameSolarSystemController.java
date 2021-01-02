@@ -12,5 +12,5 @@ import java.util.UUID;
 
 public interface SkyXploreGameSolarSystemController {
     @GetMapping(Endpoints.SKYXPLORE_GET_SOLAR_SYSTEM)
-    SolarSystemResponse getMap(@PathVariable("solarSystemId") UUID solarSystemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    SolarSystemResponse getSolarSystem(@PathVariable("solarSystemId") UUID solarSystemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

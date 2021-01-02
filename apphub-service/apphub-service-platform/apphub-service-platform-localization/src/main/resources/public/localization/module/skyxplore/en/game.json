@@ -194,6 +194,8 @@
     "reserved-amount-label": "Reserved storage",
     "planet-building-detail-name": "Building",
     "planet-building-detail-level-sum": "Total level",
-    "planet-building-detail-used-slots": "Used slots"
+    "planet-building-detail-used-slots": "Used slots",
+    "storage-setting-amount-too-low": "Amount too low. (Minimum 1)",
+    "storage-setting-created": "Storage setting created."
   }
 }
