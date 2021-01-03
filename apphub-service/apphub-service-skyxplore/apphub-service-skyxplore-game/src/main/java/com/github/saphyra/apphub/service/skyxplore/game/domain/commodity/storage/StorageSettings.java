@@ -14,4 +14,10 @@ public class StorageSettings extends Vector<StorageSetting> {
     public void deleteByStorageSettingId(UUID storageSettingId) {
         removeIf(storageSetting -> storageSetting.getStorageSettingsId().equals(storageSettingId));
     }
+
+    public Optional<StorageSetting> findByStorageSettingId(UUID storageSettingId) {
+        return stream()
+            .filter(storageSetting -> storageSetting.getStorageSettingsId().equals(storageSettingId))
+            .findFirst();
+    }
 }

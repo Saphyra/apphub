@@ -126,6 +126,10 @@ zuul:
       path: /api/skyxplore/game/planet/*/storage-settings/*
       serviceId: skyxplore-game
       stripPrefix: false
+    edit-storage-settings:
+      path: /api/skyxplore/game/planet/*/storage-settings/*
+      serviceId: skyxplore-game
+      stripPrefix: false
 
 role:
   settings:

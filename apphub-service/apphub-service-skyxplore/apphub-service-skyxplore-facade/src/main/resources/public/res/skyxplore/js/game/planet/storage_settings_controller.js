@@ -157,7 +157,23 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
     }
 
     function updateStorageSetting(storageSettingId, targetAmount, batchSize, priority){
-        //TODO
+        if(targetAmount < 1){
+            notificationService.showError(Localization.getAdditionalContent("storage-setting-amount-too-low"));
+            return;
+        }
+
+        const payload = {
+            targetAmount: targetAmount,
+            batchSize: batchSize,
+            priority: priority
+        }
+
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_EDIT_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId(), storageSettingId: storageSettingId}), payload);
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("storage-setting-saved"));
+                viewStorageSettings(planetController.getOpenedPlanetId());
+            }
+        dao.sendRequestAsync(request);
     }
 
     function deleteStorageSetting(storageSettingId, dataId){

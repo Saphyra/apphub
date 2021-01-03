@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.Pla
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.PlanetStorageQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.StorageSettingCreationService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.StorageSettingDeletionService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.StorageSettingEditionService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.StorageSettingsResponseQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.SurfaceQueryService;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class PlanetControllerImpl implements SkyXploreGamePlanetController {
     private final SurfaceQueryService surfaceQueryService;
     private final StorageSettingCreationService storageSettingCreationService;
     private final StorageSettingDeletionService storageSettingDeletionService;
+    private final StorageSettingEditionService storageSettingEditionService;
 
     @Override
     //TODO unit test
@@ -115,5 +117,14 @@ public class PlanetControllerImpl implements SkyXploreGamePlanetController {
     public void deleteStorageSetting(UUID planetId, UUID storageSettingId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to delete storageSetting {} from planet {}", accessTokenHeader.getUserId(), storageSettingId, planetId);
         storageSettingDeletionService.deleteStorageSetting(accessTokenHeader.getUserId(), planetId, storageSettingId);
+    }
+
+    @Override
+    //TODO unit test
+    //TODO unt test
+    //TODO api test
+    public void editStorageSetting(StorageSettingsModel request, UUID planetId, UUID storageSettingId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to edit storageSetting {} on planet {}", accessTokenHeader.getUserId(), storageSettingId, planetId);
+        storageSettingEditionService.edit(accessTokenHeader.getUserId(), planetId, storageSettingId, request);
     }
 }

@@ -44,4 +44,7 @@ public interface SkyXploreGamePlanetController {
 
     @DeleteMapping(Endpoints.SKYXPLORE_PLANET_DELETE_STORAGE_SETTING)
     void deleteStorageSetting(@PathVariable("planetId") UUID planetId, @PathVariable("storageSettingId") UUID storageSettingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.SKYXPLORE_PLANET_EDIT_STORAGE_SETTING)
+    void editStorageSetting(@RequestBody StorageSettingsModel request, @PathVariable("planetId") UUID planetId, @PathVariable("storageSettingId") UUID storageSettingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

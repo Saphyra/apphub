@@ -84,6 +84,7 @@ window.Mapping = new function(){
         SKYXPLORE_PLANET_GET_STORAGE_SETTINGS: new Endpoint("/api/skyxplore/game/planet/{planetId}/storage-settings", HttpMethod.GET),
         SKYXPLORE_PLANET_CREATE_STORAGE_SETTING: new Endpoint("/api/skyxplore/game/planet/{planetId}/storage-settings", HttpMethod.POST),
         SKYXPLORE_PLANET_DELETE_STORAGE_SETTING: new Endpoint("/api/skyxplore/game/planet/{planetId}/storage-settings/{storageSettingId}", HttpMethod.DELETE),
+        SKYXPLORE_PLANET_EDIT_STORAGE_SETTING: new Endpoint("/api/skyxplore/game/planet/{planetId}/storage-settings/{storageSettingId}", HttpMethod.POST),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){
