@@ -107,7 +107,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
             .build();
         Response createResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(createChecklistItemRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CHECKLIST_ITEM));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CHECKLIST_ITEM));
         assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
         UUID listItemId = createResponse.getBody().jsonPath().getUUID("value");
@@ -129,7 +129,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_CHECKLIST_ITEM, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -150,7 +150,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
             .build();
         Response createResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(createChecklistItemRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CHECKLIST_ITEM));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CHECKLIST_ITEM));
         assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
         UUID listItemId = createResponse.getBody().jsonPath().getUUID("value");
@@ -172,7 +172,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_CHECKLIST_ITEM, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -193,7 +193,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
             .build();
         Response createResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(createChecklistItemRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CHECKLIST_ITEM));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CHECKLIST_ITEM));
         assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
         UUID listItemId = createResponse.getBody().jsonPath().getUUID("value");
@@ -216,7 +216,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_CHECKLIST_ITEM, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -237,7 +237,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
             .build();
         Response createResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(createChecklistItemRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CHECKLIST_ITEM));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CHECKLIST_ITEM));
         assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
         UUID listItemId = createResponse.getBody().jsonPath().getUUID("value");
@@ -260,7 +260,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_CHECKLIST_ITEM, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -281,7 +281,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
             .build();
         Response createResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(createChecklistItemRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CHECKLIST_ITEM));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CHECKLIST_ITEM));
         assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
         UUID listItemId = createResponse.getBody().jsonPath().getUUID("value");
@@ -303,7 +303,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_ITEM, "listItemId", UUID.randomUUID()));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_CHECKLIST_ITEM, "listItemId", UUID.randomUUID()));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -323,7 +323,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
             .build();
         Response createResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(createChecklistItemRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CHECKLIST_ITEM));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CHECKLIST_ITEM));
         assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
         UUID listItemId = createResponse.getBody().jsonPath().getUUID("value");
@@ -341,7 +341,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_CHECKLIST_ITEM, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -361,7 +361,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
             .build();
         Response createResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(createChecklistItemRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CHECKLIST_ITEM));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CHECKLIST_ITEM));
         assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
         UUID listItemId = createResponse.getBody().jsonPath().getUUID("value");
@@ -373,7 +373,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_CHECKLIST_ITEM, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -394,7 +394,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
             .build();
         Response createResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(createChecklistItemRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CHECKLIST_ITEM));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CHECKLIST_ITEM));
         assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
         UUID listItemId = createResponse.getBody().jsonPath().getUUID("value");
@@ -415,7 +415,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_CHECKLIST_ITEM, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -444,7 +444,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
             .build();
         Response createResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(createChecklistItemRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CHECKLIST_ITEM));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CHECKLIST_ITEM));
         assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
         UUID listItemId = createResponse.getBody().jsonPath().getUUID("value");
@@ -465,7 +465,7 @@ public class ChecklistControllerImplTestIt_editChecklistItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_CHECKLIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_CHECKLIST_ITEM, "listItemId", listItemId));
 
         assertThat(query(() -> listItemDao.findByIdValidated(listItemId)).getTitle()).isEqualTo(NEW_TITLE);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());

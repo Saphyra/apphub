@@ -35,7 +35,7 @@ function checklistTableNodeFactory(parent, itemDetails){
                     deleteButton.innerHTML = Localization.getAdditionalContent("delete-button");
                     deleteButton.onclick = function(e){
                         e.stopPropagation();
-                        deleteChecklistTable(itemDetails.id);
+                        deleteChecklistTable(itemDetails.id, itemDetails.title);
                     }
 
                 const cloneButton = document.createElement("BUTTON");
@@ -62,10 +62,10 @@ function checklistTableNodeFactory(parent, itemDetails){
     node.appendChild(optionsContainer);
     return node;
 
-    function deleteChecklistTable(listItemId){
+    function deleteChecklistTable(listItemId, title){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
             .withTitle(Localization.getAdditionalContent("deletion-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("deletion-confirmation-dialog-detail"))
+            .withDetail(Localization.getAdditionalContent("deletion-confirmation-dialog-detail", {listItemTitle: title}))
             .withConfirmButton(Localization.getAdditionalContent("deletion-confirmation-dialog-confirm-button"))
             .withDeclineButton(Localization.getAdditionalContent("deletion-confirmation-dialog-decline-button"));
 

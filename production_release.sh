@@ -20,7 +20,7 @@ wait
 
 #Deploying to production
 NAMESPACE_NAME="production"
-./deploy.sh "$NAMESPACE_NAME"
+./deploy.sh "$NAMESPACE_NAME" "$NAMESPACE_NAME"
 
 ./infra/deployment/script/wait_for_pods_ready.sh $NAMESPACE_NAME 12 10
 STARTUP_RESULT=$?

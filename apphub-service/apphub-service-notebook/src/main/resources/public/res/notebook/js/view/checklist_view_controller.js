@@ -7,6 +7,7 @@
         this.discardChanges = discardChanges;
         this.addItem = addItem;
         this.saveChanges = saveChanges;
+        this.deleteChecked = deleteChecked;
     }
 
     function viewChecklist(listItemId){
@@ -167,5 +168,26 @@
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
             }
         dao.sendRequestAsync(request);
+    }
+
+    function deleteChecked(){
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(Localization.getAdditionalContent("delete-checked-items-confirmation-title"))
+            .withDetail(Localization.getAdditionalContent("delete-checked-items-confirmation-detail"))
+            .withConfirmButton(Localization.getAdditionalContent("delete-checked-items-confirmation-confirm-button"))
+            .withDeclineButton(Localization.getAdditionalContent("delete-checked-items-confirmation-cancel-button"));
+
+        confirmationService.openDialog(
+            "delete-checked-items-confirmation",
+            confirmationDialogLocalization,
+            function(){
+                const request = new Request(Mapping.getEndpoint("NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST", {listItemId: openedChecklistId}));
+                    request.processValidResponse = function(){
+                        notificationService.showSuccess(Localization.getAdditionalContent("checked-items-deleted"));
+                        viewChecklist(openedChecklistId);
+                    }
+                dao.sendRequestAsync(request);
+            }
+        )
     }
 })();

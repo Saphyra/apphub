@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.notebook.model.response.ChecklistResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
+import com.github.saphyra.apphub.service.notebook.service.checklist.CheckedChecklistItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemQueryService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.creation.ChecklistCreationService;
@@ -39,6 +40,9 @@ public class ChecklistControllerImplTest {
 
     @Mock
     private ChecklistItemStatusUpdateService checklistItemStatusUpdateService;
+
+    @Mock
+    private CheckedChecklistItemDeletionService checkedChecklistItemDeletionService;
 
     @InjectMocks
     private ChecklistControllerImpl underTest;
@@ -86,5 +90,12 @@ public class ChecklistControllerImplTest {
         underTest.updateStatus(new OneParamRequest<>(true), CHECKLIST_ITEM_ID);
 
         verify(checklistItemStatusUpdateService).update(CHECKLIST_ITEM_ID, true);
+    }
+
+    @Test
+    public void deleteCheckedItems() {
+        underTest.deleteCheckedItems(LIST_ITEM_ID);
+
+        verify(checkedChecklistItemDeletionService).deleteCheckedItems(LIST_ITEM_ID);
     }
 }

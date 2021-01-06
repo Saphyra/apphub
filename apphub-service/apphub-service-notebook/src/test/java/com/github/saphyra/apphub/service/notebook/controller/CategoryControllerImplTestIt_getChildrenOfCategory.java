@@ -88,7 +88,7 @@ public class CategoryControllerImplTestIt_getChildrenOfCategory {
         queryParams.put("type", "asd,fwr");
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.GET_CHILDREN_OF_NOTEBOOK_CATEGORY, new HashMap<>(), queryParams));
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY, new HashMap<>(), queryParams));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
@@ -129,7 +129,7 @@ public class CategoryControllerImplTestIt_getChildrenOfCategory {
         queryParams.put("categoryId", PARENT_ID.toString());
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.GET_CHILDREN_OF_NOTEBOOK_CATEGORY, new HashMap<>(), queryParams));
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY, new HashMap<>(), queryParams));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

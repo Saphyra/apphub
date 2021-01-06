@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 public interface TableController {
-    @RequestMapping(method = RequestMethod.PUT, path = Endpoints.CREATE_NOTEBOOK_TABLE)
+    @RequestMapping(method = RequestMethod.PUT, path = Endpoints.NOTEBOOK_CREATE_TABLE)
     OneParamResponse<UUID> createTable(@RequestBody CreateTableRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @RequestMapping(method = RequestMethod.POST, path = Endpoints.EDIT_NOTEBOOK_TABLE)
+    @RequestMapping(method = RequestMethod.POST, path = Endpoints.NOTEBOOK_EDIT_TABLE)
     void editTable(@RequestBody EditTableRequest request, @PathVariable(name = "listItemId") UUID listItemId);
 
-    @RequestMapping(method = RequestMethod.GET, path = Endpoints.GET_NOTEBOOK_TABLE)
+    @RequestMapping(method = RequestMethod.GET, path = Endpoints.NOTEBOOK_GET_TABLE)
     TableResponse getTable(@PathVariable("listItemId") UUID listItemId);
 
-    @RequestMapping(method = RequestMethod.POST, path = Endpoints.CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE)
+    @RequestMapping(method = RequestMethod.POST, path = Endpoints.NOTEBOOK_CONVERT_TABLE_TO_CHECKLIST_TABLE)
     void convertToChecklistTable(@PathVariable("listItemId") UUID listItemId);
 }

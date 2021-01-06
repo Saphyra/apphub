@@ -94,6 +94,8 @@
                         const childrenContainer = document.createElement("DIV");
                             if(category.categoryId == null || isOpened){
                                 childrenContainer.style.display = "block";
+                            }else{
+                                childrenContainer.style.display = "none";
                             }
                             childrenContainer.classList.add("category-children-container");
                     wrapper.appendChild(childrenContainer);

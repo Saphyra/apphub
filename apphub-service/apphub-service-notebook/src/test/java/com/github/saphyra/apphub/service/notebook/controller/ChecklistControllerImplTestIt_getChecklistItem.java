@@ -96,7 +96,7 @@ public class ChecklistControllerImplTestIt_getChecklistItem {
     @Test
     public void listItemNotFound() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.GET_NOTEBOOK_CHECKLIST_ITEM, "listItemId", UUID.randomUUID()));
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_CHECKLIST_ITEM, "listItemId", UUID.randomUUID()));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -132,7 +132,7 @@ public class ChecklistControllerImplTestIt_getChecklistItem {
         save(() -> contentDao.save(content));
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.GET_NOTEBOOK_CHECKLIST_ITEM, "listItemId", LIST_ITEM_ID));
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_CHECKLIST_ITEM, "listItemId", LIST_ITEM_ID));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

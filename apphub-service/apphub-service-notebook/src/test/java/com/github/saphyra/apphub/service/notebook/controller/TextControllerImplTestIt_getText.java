@@ -89,7 +89,7 @@ public class TextControllerImplTestIt_getText {
         UUID textId = saveResponse.getBody().jsonPath().getUUID("value");
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.GET_NOTEBOOK_TEXT, "listItemId", textId));
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_TEXT, "listItemId", textId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

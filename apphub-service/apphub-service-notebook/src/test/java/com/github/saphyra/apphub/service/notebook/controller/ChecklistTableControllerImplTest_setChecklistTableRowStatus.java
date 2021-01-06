@@ -111,7 +111,7 @@ public class ChecklistTableControllerImplTest_setChecklistTableRowStatus {
 
         Response createChecklistTableResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CHECKLIST_TABLE));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CHECKLIST_TABLE));
 
         assertThat(createChecklistTableResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -124,7 +124,7 @@ public class ChecklistTableControllerImplTest_setChecklistTableRowStatus {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(new OneParamRequest<>(true))
-            .post(UrlFactory.create(serverPort, Endpoints.UPDATE_CHECKLIST_TABLE_ROW_STATUS, pathVariables));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS, pathVariables));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
 
@@ -143,7 +143,7 @@ public class ChecklistTableControllerImplTest_setChecklistTableRowStatus {
 
         Response createChecklistTableResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CHECKLIST_TABLE));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CHECKLIST_TABLE));
 
         assertThat(createChecklistTableResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -156,7 +156,7 @@ public class ChecklistTableControllerImplTest_setChecklistTableRowStatus {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(new OneParamRequest<>(true))
-            .post(UrlFactory.create(serverPort, Endpoints.UPDATE_CHECKLIST_TABLE_ROW_STATUS, pathVariables));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS, pathVariables));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

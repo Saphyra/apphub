@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrappe
 import com.github.saphyra.apphub.integration.frontend.model.notebook.NewChecklistItem;
 import com.github.saphyra.apphub.integration.frontend.model.notebook.NewChecklistItemData;
 import com.github.saphyra.apphub.integration.frontend.model.notebook.ViewChecklistItem;
+import com.github.saphyra.apphub.integration.frontend.service.common.CommonPageActions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -156,6 +157,10 @@ public class ChecklistActions {
 
     public static void closeWindow(WebDriver driver) {
         NotebookPage.viewChecklistCloseWindowButton(driver).click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> !isViewChecklistWindowOpened(driver))
+            .assertTrue("Could not close ViewChecklistWindow.");
     }
 
     public static void editChecklistRemoveItem(WebDriver driver, String checklistItemContent) {
@@ -165,5 +170,12 @@ public class ChecklistActions {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("ViewChecklistItem not found with content " + checklistItemContent))
             .remove();
+    }
+
+    public static void deleteCheckedChecklistItems(WebDriver driver) {
+        NotebookPage.deleteCheckedChecklistItemsButton(driver)
+            .click();
+
+        CommonPageActions.confirmDeletionDialog(driver, NotebookPage.DELETE_CHECKED_ITEMS_CONFIRMATION_DIALOG_ID);
     }
 }
