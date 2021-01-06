@@ -15,9 +15,9 @@ public interface TextController {
     @RequestMapping(method = RequestMethod.PUT, path = Endpoints.CREATE_NOTEBOOK_TEXT)
     OneParamResponse<UUID> createText(@RequestBody CreateTextRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @RequestMapping(method = RequestMethod.GET, path = Endpoints.GET_NOTEBOOK_TEXT)
+    @RequestMapping(method = RequestMethod.GET, path = Endpoints.NOTEBOOK_GET_TEXT)
     TextResponse getText(@PathVariable("listItemId") UUID textId);
 
-    @RequestMapping(method = RequestMethod.POST, path = Endpoints.EDIT_NOTEBOOK_TEXT)
+    @RequestMapping(method = RequestMethod.POST, path = Endpoints.NOTEBOOK_EDIT_TEXT)
     void editText(@RequestBody EditTextRequest request, @PathVariable("listItemId") UUID textId);
 }

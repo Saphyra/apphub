@@ -282,4 +282,14 @@ public class NotebookActions {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .post(UrlFactory.create(Endpoints.CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE, "listItemId", listItemId));
     }
+
+    public static Response getDeleteCheckedChecklistItemsResponse(Language language, UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .delete(UrlFactory.create(Endpoints.NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST, "listItemId", listItemId));
+    }
+
+    public static Response getDeleteCheckedChecklistTableItemsResponse(Language language, UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .delete(UrlFactory.create(Endpoints.NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST_TABLE, "listItemId", listItemId));
+    }
 }

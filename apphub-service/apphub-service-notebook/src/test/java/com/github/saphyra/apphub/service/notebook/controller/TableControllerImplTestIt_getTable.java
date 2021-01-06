@@ -91,7 +91,7 @@ public class TableControllerImplTestIt_getTable {
     @Test
     public void notFound() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.GET_NOTEBOOK_TABLE, "listItemId", UUID.randomUUID()));
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_TABLE, "listItemId", UUID.randomUUID()));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
 
@@ -110,13 +110,13 @@ public class TableControllerImplTestIt_getTable {
 
         Response createResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TABLE));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_TABLE));
 
         assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         UUID listItemId = createResponse.getBody().jsonPath().getUUID("value");
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.GET_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

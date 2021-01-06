@@ -95,7 +95,7 @@ public class LinkControllerImplTestIt_createLink {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(linkRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_LINK));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_LINK));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -114,7 +114,7 @@ public class LinkControllerImplTestIt_createLink {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(linkRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_LINK));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_LINK));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -140,7 +140,7 @@ public class LinkControllerImplTestIt_createLink {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(linkRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_LINK));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_LINK));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -157,7 +157,7 @@ public class LinkControllerImplTestIt_createLink {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(linkRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_LINK));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_LINK));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -184,7 +184,7 @@ public class LinkControllerImplTestIt_createLink {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(linkRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_LINK));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_LINK));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

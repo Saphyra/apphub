@@ -41,4 +41,4 @@ echo "Deployment finished."
 
 taskkill //F //IM chromedriver.exe //T
 
-./port_forward.sh $NAMESPACE_NAME
+start ./port_forward.sh $NAMESPACE_NAME

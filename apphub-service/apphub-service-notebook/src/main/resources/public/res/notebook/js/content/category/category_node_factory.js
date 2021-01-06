@@ -33,7 +33,7 @@ function categoryNodeFactory(parent, itemDetails){
                     deleteButton.innerHTML = Localization.getAdditionalContent("delete-button");
                     deleteButton.onclick = function(e){
                         e.stopPropagation();
-                        deleteCategory(itemDetails.id);
+                        deleteCategory(itemDetails.id, itemDetails.title);
                     }
             buttonListWrapper.appendChild(deleteButton);
 
@@ -61,10 +61,10 @@ function categoryNodeFactory(parent, itemDetails){
     node.appendChild(optionsContainer);
     return node;
 
-    function deleteCategory(categoryId){
+    function deleteCategory(categoryId, title){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
             .withTitle(Localization.getAdditionalContent("deletion-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("category-deletion-confirmation-dialog-detail"))
+            .withDetail(Localization.getAdditionalContent("category-deletion-confirmation-dialog-detail", {listItemTitle: title}))
             .withConfirmButton(Localization.getAdditionalContent("category-deletion-confirmation-dialog-confirm-button"))
             .withDeclineButton(Localization.getAdditionalContent("deletion-confirmation-dialog-decline-button"));
 

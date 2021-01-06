@@ -106,7 +106,7 @@ public class ListItemControllerIImplTestIt_editListItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_LIST_ITEM, "listItemId", LIST_ITEM_ID_1));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_LIST_ITEM, "listItemId", LIST_ITEM_ID_1));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -133,7 +133,7 @@ public class ListItemControllerIImplTestIt_editListItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_LIST_ITEM, "listItemId", LIST_ITEM_ID_1));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_LIST_ITEM, "listItemId", LIST_ITEM_ID_1));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -168,7 +168,7 @@ public class ListItemControllerIImplTestIt_editListItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_LIST_ITEM, "listItemId", LIST_ITEM_ID_1));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_LIST_ITEM, "listItemId", LIST_ITEM_ID_1));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -184,7 +184,7 @@ public class ListItemControllerIImplTestIt_editListItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_LIST_ITEM, "listItemId", LIST_ITEM_ID_1));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_LIST_ITEM, "listItemId", LIST_ITEM_ID_1));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -237,7 +237,7 @@ public class ListItemControllerIImplTestIt_editListItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_LIST_ITEM, "listItemId", LIST_ITEM_ID_1));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_LIST_ITEM, "listItemId", LIST_ITEM_ID_1));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -282,7 +282,7 @@ public class ListItemControllerIImplTestIt_editListItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_LIST_ITEM, "listItemId", LIST_ITEM_ID_1));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_LIST_ITEM, "listItemId", LIST_ITEM_ID_1));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -318,7 +318,7 @@ public class ListItemControllerIImplTestIt_editListItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_LIST_ITEM, "listItemId", LIST_ITEM_ID_1));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_LIST_ITEM, "listItemId", LIST_ITEM_ID_1));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -353,7 +353,7 @@ public class ListItemControllerIImplTestIt_editListItem {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_LIST_ITEM, "listItemId", LIST_ITEM_ID_1));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_LIST_ITEM, "listItemId", LIST_ITEM_ID_1));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
