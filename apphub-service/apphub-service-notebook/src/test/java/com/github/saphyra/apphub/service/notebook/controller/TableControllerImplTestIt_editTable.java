@@ -104,7 +104,7 @@ public class TableControllerImplTestIt_editTable {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TABLE));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_TABLE));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         listItemId = response.getBody().jsonPath().getUUID("value");
@@ -134,7 +134,7 @@ public class TableControllerImplTestIt_editTable {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
@@ -160,7 +160,7 @@ public class TableControllerImplTestIt_editTable {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
@@ -187,7 +187,7 @@ public class TableControllerImplTestIt_editTable {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
@@ -214,7 +214,7 @@ public class TableControllerImplTestIt_editTable {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
@@ -241,7 +241,7 @@ public class TableControllerImplTestIt_editTable {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
 
@@ -267,7 +267,7 @@ public class TableControllerImplTestIt_editTable {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
 
@@ -293,7 +293,7 @@ public class TableControllerImplTestIt_editTable {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", UUID.randomUUID()));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_TABLE, "listItemId", UUID.randomUUID()));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
 
@@ -314,7 +314,7 @@ public class TableControllerImplTestIt_editTable {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -343,7 +343,7 @@ public class TableControllerImplTestIt_editTable {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -381,7 +381,7 @@ public class TableControllerImplTestIt_editTable {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(editTableRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EDIT_NOTEBOOK_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

@@ -409,10 +409,16 @@
         "message": "Add column"
       }
     ],
-    "view-checklist-table-edit-add-row-button": [
+    "delete-checked-checklist-items": [
       {
         "key": "innerHTML",
-        "message": "Add row"
+        "message": "Delete checked"
+      }
+    ],
+    "delete-checked-checklist-table-items": [
+      {
+        "key": "innerHTML",
+        "message": "Delete checked"
       }
     ]
   },
@@ -422,8 +428,8 @@
     "clone-button": "Clone",
     "list-item-cloned": "Successfully cloned.",
     "deletion-confirmation-dialog-title": "Confirm deletion",
-    "category-deletion-confirmation-dialog-detail": "Are you sure you want to delete the category with all of its content? Deleted data cannot be restored.",
-    "deletion-confirmation-dialog-detail": "Are you sure you want to delete the item?",
+    "category-deletion-confirmation-dialog-detail": "Are you sure you want to delete the category <SPAN style='color: red; font-weight: bold;'>{listItemTitle}</SPAN> with all of its content? Deleted data cannot be restored.",
+    "deletion-confirmation-dialog-detail": "Are you sure you want to delete the item <SPAN style='color: red; font-weight: bold;'>{listItemTitle}</SPAN>?",
     "category-deletion-confirmation-dialog-confirm-button": "Delete the category.",
     "deletion-confirmation-dialog-confirm-button": "Delete",
     "deletion-confirmation-dialog-decline-button": "Cancel",
@@ -444,6 +450,11 @@
     "column-name-title": "Name of the column",
     "empty-column-name": "Column name must not be empty.",
     "table-head-checked-column": "Checked",
-    "table-conversion-successful": "Conversion successful."
+    "table-conversion-successful": "Conversion successful.",
+    "delete-checked-items-confirmation-title": "Confirm deleting checked items",
+    "delete-checked-items-confirmation-detail": "Are you sure you want to delete all checked items?",
+    "delete-checked-items-confirmation-confirm-button": "Delete",
+    "delete-checked-items-confirmation-cancel-button": "Cancel",
+    "checked-items-deleted": "Checked items are successfully deleted."
   }
 }

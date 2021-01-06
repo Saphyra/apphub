@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.integration.frontend.service.notebook;
 
 import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.model.notebook.ChecklistTableRow;
+import com.github.saphyra.apphub.integration.frontend.service.common.CommonPageActions;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -293,5 +294,12 @@ public class ChecklistTableActions {
 
     public static void closeWindow(WebDriver driver) {
         NotebookPage.viewChecklistTableCloseButton(driver).click();
+    }
+
+    public static void deleteCheckedChecklistTableItems(WebDriver driver) {
+        NotebookPage.deleteCheckedChecklistTableItemsButton(driver)
+            .click();
+
+        CommonPageActions.confirmDeletionDialog(driver, NotebookPage.DELETE_CHECKED_ITEMS_CONFIRMATION_DIALOG_ID);
     }
 }

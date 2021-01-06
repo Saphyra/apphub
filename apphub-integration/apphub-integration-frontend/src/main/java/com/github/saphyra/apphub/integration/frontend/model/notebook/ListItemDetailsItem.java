@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.frontend.model.notebook;
 
 import com.github.saphyra.apphub.integration.common.model.ListItemType;
+import com.github.saphyra.apphub.integration.frontend.service.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.frontend.service.notebook.NotebookPageActions;
 import lombok.AllArgsConstructor;
 import org.openqa.selenium.By;
@@ -16,6 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @AllArgsConstructor
 public class ListItemDetailsItem {
+    private static final String CONFIRMATION_DIALOG_ID = "deletion-confirmation-dialog";
+
     private static final By TITLE = By.cssSelector(":scope > span");
     private static final By OPTIONS_BUTTON = By.cssSelector(":scope .list-item-options-button");
     private static final By DELETE_BUTTON = By.cssSelector(":scope .list-item-options-button-list-wrapper .delete-button");
@@ -49,7 +52,7 @@ public class ListItemDetailsItem {
         assertThat(deleteButton.isDisplayed()).isTrue();
         deleteButton.click();
 
-        NotebookPageActions.confirmDeletionDialog(driver);
+        CommonPageActions.confirmDeletionDialog(driver, CONFIRMATION_DIALOG_ID);
     }
 
     public void cloneItem(WebDriver driver) {

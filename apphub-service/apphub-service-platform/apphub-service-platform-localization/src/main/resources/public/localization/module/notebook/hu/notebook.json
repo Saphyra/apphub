@@ -408,6 +408,18 @@
         "key": "innerHTML",
         "message": "Új sor"
       }
+    ],
+    "delete-checked-checklist-items": [
+      {
+        "key": "innerHTML",
+        "message": "Kijelöltek törlése"
+      }
+    ],
+    "delete-checked-checklist-table-items": [
+      {
+        "key": "innerHTML",
+        "message": "Kijelöltek törlése"
+      }
     ]
   },
   "additionalContent": {
@@ -416,8 +428,8 @@
     "clone-button": "Duplikálás",
     "list-item-cloned": "Duplikálás sikeres.",
     "deletion-confirmation-dialog-title": "Törlés megerősítése",
-    "category-deletion-confirmation-dialog-detail": "Biztosan törölni szeretné a kiválasztott kategóriát és teljes tartalmát? A törölt adatokat már nem lehet vissza állítani.",
-    "deletion-confirmation-dialog-detail": "Biztosan törölni szeretné a kiválasztott elemet?",
+    "category-deletion-confirmation-dialog-detail": "Biztosan törölni szeretnéd <SPAN style='color: red; font-weight: bold;'>{listItemTitle}</SPAN> kategóriát és teljes tartalmát? A törölt adatokat már nem lehet vissza állítani.",
+    "deletion-confirmation-dialog-detail": "Biztosan törölni szeretnéd a <SPAN style='color: red; font-weight: bold;'>{listItemTitle}</SPAN> elemet?",
     "category-deletion-confirmation-dialog-confirm-button": "Törlöm a kategóriát.",
     "deletion-confirmation-dialog-confirm-button": "Törlés",
     "deletion-confirmation-dialog-decline-button": "Mégse",
@@ -438,6 +450,11 @@
     "column-name-title": "Oszlop neve",
     "empty-column-name": "Az oszlop neve nem lehet üres.",
     "table-head-checked-column": "Jelölés",
-    "table-conversion-successful": "Átalakítás sikeres."
+    "table-conversion-successful": "Átalakítás sikeres.",
+    "delete-checked-items-confirmation-title": "Kijelölt elemek törlésének megerősítése",
+    "delete-checked-items-confirmation-detail": "Biztosan törölni akarod a kijelölt elemeket?",
+    "delete-checked-items-confirmation-confirm-button": "Törlés",
+    "delete-checked-items-confirmation-cancel-button": "Mégse",
+    "checked-items-deleted": "A kijelölt elemek sikeresen törölve."
   }
 }

@@ -80,7 +80,7 @@ public class ChecklistControllerImplTestIt_updateStatus {
     public void checklistItemNotFound() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(new OneParamRequest<>(true))
-            .post(UrlFactory.create(serverPort, Endpoints.UPDATE_CHECKLIST_ITEM_STATUS, "checklistItemId", UUID.randomUUID()));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS, "checklistItemId", UUID.randomUUID()));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
 
@@ -102,7 +102,7 @@ public class ChecklistControllerImplTestIt_updateStatus {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(new OneParamRequest<>(true))
-            .post(UrlFactory.create(serverPort, Endpoints.UPDATE_CHECKLIST_ITEM_STATUS, "checklistItemId", CHECKLIST_ITEM_ID));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS, "checklistItemId", CHECKLIST_ITEM_ID));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

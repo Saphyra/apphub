@@ -84,7 +84,7 @@ public class CategoryControllerImplTestIt_createCategory {
     public void blankTitle() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(CreateCategoryRequest.builder().title(" ").build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CATEGORY));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
@@ -98,7 +98,7 @@ public class CategoryControllerImplTestIt_createCategory {
     public void parentNotFound() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(CreateCategoryRequest.builder().title(TITLE_1).parent(PARENT_ID).build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CATEGORY));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -118,7 +118,7 @@ public class CategoryControllerImplTestIt_createCategory {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(CreateCategoryRequest.builder().title(TITLE_1).parent(PARENT_ID).build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CATEGORY));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -138,7 +138,7 @@ public class CategoryControllerImplTestIt_createCategory {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(CreateCategoryRequest.builder().title(TITLE_1).parent(PARENT_ID).build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CATEGORY));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         String categoryIdString = response.getBody().jsonPath().getString("value");
@@ -154,7 +154,7 @@ public class CategoryControllerImplTestIt_createCategory {
     public void successfullyCreated_noParent() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(CreateCategoryRequest.builder().title(TITLE_1).parent(null).build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CATEGORY));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

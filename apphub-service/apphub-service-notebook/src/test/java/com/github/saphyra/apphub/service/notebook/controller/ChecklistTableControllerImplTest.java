@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.notebook.model.response.ChecklistTableRespo
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
+import com.github.saphyra.apphub.service.notebook.service.checklist_table.CheckedChecklistTableItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.checklist_table.ChecklistTableQueryService;
 import com.github.saphyra.apphub.service.notebook.service.checklist_table.ChecklistTableStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.checklist_table.creation.ChecklistTableCreationService;
@@ -39,6 +40,9 @@ public class ChecklistTableControllerImplTest {
 
     @Mock
     private ChecklistTableStatusUpdateService checklistTableStatusUpdateService;
+
+    @Mock
+    private CheckedChecklistTableItemDeletionService checkedChecklistTableItemDeletionService;
 
     @InjectMocks
     private ChecklistTableControllerImpl underTest;
@@ -86,5 +90,12 @@ public class ChecklistTableControllerImplTest {
         underTest.setChecklistTableRowStatus(LIST_ITEM_ID, ROW_INDEX, new OneParamRequest<>(true));
 
         verify(checklistTableStatusUpdateService).updateStatus(LIST_ITEM_ID, ROW_INDEX, true);
+    }
+
+    @Test
+    public void deleteCheckedItems() {
+        underTest.deleteCheckedItems(LIST_ITEM_ID);
+
+        verify(checkedChecklistTableItemDeletionService).deleteCheckedItems(LIST_ITEM_ID);
     }
 }

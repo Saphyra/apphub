@@ -97,7 +97,7 @@ public class ListItemControllerIImplTestIt_clone {
     @Test
     public void listItemNotFound() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .post(UrlFactory.create(serverPort, Endpoints.CLONE_NOTEBOOK_LIST_ITEM, "listItemId", UUID.randomUUID()));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CLONE_LIST_ITEM, "listItemId", UUID.randomUUID()));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -109,28 +109,28 @@ public class ListItemControllerIImplTestIt_clone {
     public void cloneTest() {
         UUID rootId = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(CreateCategoryRequest.builder().title(ROOT_TITLE).build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY))
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CATEGORY))
             .getBody()
             .jsonPath()
             .getUUID("value");
 
         UUID parentId = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(CreateCategoryRequest.builder().title(PARENT_TITLE).parent(rootId).build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY))
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CATEGORY))
             .getBody()
             .jsonPath()
             .getUUID("value");
 
         UUID childCategoryId = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(CreateCategoryRequest.builder().title(CHILD_CATEGORY_TITLE).parent(parentId).build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY))
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CATEGORY))
             .getBody()
             .jsonPath()
             .getUUID("value");
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(LinkRequest.builder().title(LINK_TITLE).parent(childCategoryId).url(LINK_URL).build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_LINK));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_LINK));
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(CreateTextRequest.builder().title(TEXT_TITLE).parent(parentId).content(TEXT_CONTENT).build())
@@ -146,7 +146,7 @@ public class ListItemControllerIImplTestIt_clone {
                     .content(CHECKLIST_ITEM_CONTENT)
                     .build()))
                 .build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CHECKLIST_ITEM));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CHECKLIST_ITEM));
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(CreateTableRequest.builder()
@@ -155,10 +155,10 @@ public class ListItemControllerIImplTestIt_clone {
                 .columnNames(Arrays.asList(TABLE_COLUMN_NAME))
                 .columns(Arrays.asList(Arrays.asList(TABLE_COLUMN_VALUE)))
                 .build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TABLE));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_TABLE));
 
         Response cloneResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .post(UrlFactory.create(serverPort, Endpoints.CLONE_NOTEBOOK_LIST_ITEM, "listItemId", parentId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CLONE_LIST_ITEM, "listItemId", parentId));
 
         assertThat(cloneResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -187,7 +187,7 @@ public class ListItemControllerIImplTestIt_clone {
         NotebookView textItem = findByTitle(TEXT_TITLE, clonedParentItems.getChildren());
         assertThat(textItem.getType()).isEqualTo(ListItemType.TEXT.name());
         String textContent = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.GET_NOTEBOOK_TEXT, "listItemId", textItem.getId()))
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_TEXT, "listItemId", textItem.getId()))
             .getBody()
             .jsonPath()
             .getString("content");
@@ -196,7 +196,7 @@ public class ListItemControllerIImplTestIt_clone {
         NotebookView checklistItem = findByTitle(CHECKLIST_TITLE, clonedParentItems.getChildren());
         assertThat(checklistItem.getType()).isEqualTo(ListItemType.CHECKLIST.name());
         ChecklistResponse checklistData = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.GET_NOTEBOOK_CHECKLIST_ITEM, "listItemId", checklistItem.getId()))
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_CHECKLIST_ITEM, "listItemId", checklistItem.getId()))
             .getBody()
             .as(ChecklistResponse.class);
         assertThat(checklistData.getNodes()).hasSize(1);
@@ -207,7 +207,7 @@ public class ListItemControllerIImplTestIt_clone {
         NotebookView tableItem = findByTitle(TABLE_TITLE, clonedParentItems.getChildren());
         assertThat(tableItem.getType()).isEqualTo(ListItemType.TABLE.name());
         TableResponse tableData = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.GET_NOTEBOOK_TABLE, "listItemId", tableItem.getId()))
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_TABLE, "listItemId", tableItem.getId()))
             .getBody()
             .as(TableResponse.class);
         assertThat(tableData.getTableHeads()).hasSize(1);
@@ -224,7 +224,7 @@ public class ListItemControllerIImplTestIt_clone {
             put("categoryId", listItemId.toString());
         }};
         return RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.GET_CHILDREN_OF_NOTEBOOK_CATEGORY, new HashMap<>(), queryParams))
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY, new HashMap<>(), queryParams))
             .getBody()
             .as(ChildrenOfCategoryResponse.class);
     }
