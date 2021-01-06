@@ -58,6 +58,11 @@ public class NotificationUtil {
         return matchingNotification;
     }
 
+    public static void clearNotifications(WebDriver driver) {
+        getNotifications(driver)
+            .forEach(WebElement::click);
+    }
+
     private static List<WebElement> getNotifications(WebDriver driver) {
         return driver.findElements(NOTIFICATIONS_LOCATOR);
     }

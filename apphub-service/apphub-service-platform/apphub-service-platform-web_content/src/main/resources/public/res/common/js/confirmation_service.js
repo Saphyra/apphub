@@ -41,7 +41,9 @@
                     if(typeof localization.getDetail() == HTMLElement){
                         detailContainer.appendChild(localization.getDetail());
                     }else{
-                        detailContainer.appendChild(document.createTextNode(localization.getDetail()));
+                        const detailNode = document.createElement("SPAN");
+                            detailNode.innerHTML = localization.getDetail();
+                        detailContainer.appendChild(detailNode);
                     }
             wrapper.appendChild(detailContainer);
 

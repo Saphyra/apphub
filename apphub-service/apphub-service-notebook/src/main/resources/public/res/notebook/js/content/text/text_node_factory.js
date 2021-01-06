@@ -35,7 +35,7 @@ function textNodeFactory(parent, itemDetails){
                     deleteButton.innerHTML = Localization.getAdditionalContent("delete-button");
                     deleteButton.onclick = function(e){
                         e.stopPropagation();
-                        deleteText(itemDetails.id);
+                        deleteText(itemDetails.id, itemDetails.title);
                     }
             buttonListWrapper.appendChild(deleteButton);
 
@@ -62,10 +62,10 @@ function textNodeFactory(parent, itemDetails){
     node.appendChild(optionsContainer);
     return node;
 
-    function deleteText(listItemId){
+    function deleteText(listItemId, title){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
             .withTitle(Localization.getAdditionalContent("deletion-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("deletion-confirmation-dialog-detail"))
+            .withDetail(Localization.getAdditionalContent("deletion-confirmation-dialog-detail", {listItemTitle: title}))
             .withConfirmButton(Localization.getAdditionalContent("deletion-confirmation-dialog-confirm-button"))
             .withDeclineButton(Localization.getAdditionalContent("deletion-confirmation-dialog-decline-button"));
 

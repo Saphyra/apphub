@@ -423,4 +423,38 @@ public class ChecklistTableCrudTest extends SeleniumTest {
             Arrays.asList(new ChecklistTableRow(false, Arrays.asList(COLUMN_1_1)))
         );
     }
+
+    @Test
+    public void deleteCheckedItems() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+
+        ChecklistTableActions.createChecklistTable(
+            driver,
+            TABLE_TITLE,
+            Arrays.asList(COLUMN_NAME_1),
+            Arrays.asList(
+                new ChecklistTableRow(true, Arrays.asList(COLUMN_1_1)),
+                new ChecklistTableRow(false, Arrays.asList(COLUMN_2_1))
+            )
+        );
+
+        ChecklistTableActions.openChecklistTable(driver, TABLE_TITLE);
+        ChecklistTableActions.deleteCheckedChecklistTableItems(driver);
+
+        NotificationUtil.verifySuccessNotification(driver, "A kijelölt elemek sikeresen törölve.");
+        ChecklistTableActions.closeWindow(driver);
+        ChecklistTableActions.openChecklistTable(driver, TABLE_TITLE);
+
+        ChecklistTableActions.verifyViewChecklistTable(
+            driver,
+            TABLE_TITLE,
+            Arrays.asList(COLUMN_NAME_1),
+            Arrays.asList(new ChecklistTableRow(false, Arrays.asList(COLUMN_2_1)))
+        );
+    }
 }

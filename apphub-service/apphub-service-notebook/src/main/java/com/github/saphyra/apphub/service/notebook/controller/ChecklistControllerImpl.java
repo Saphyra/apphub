@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.api.notebook.server.ChecklistController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
+import com.github.saphyra.apphub.service.notebook.service.checklist.CheckedChecklistItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemQueryService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.creation.ChecklistCreationService;
@@ -25,6 +26,7 @@ public class ChecklistControllerImpl implements ChecklistController {
     private final ChecklistItemQueryService checklistItemQueryService;
     private final EditChecklistItemService editChecklistItemService;
     private final ChecklistItemStatusUpdateService checklistItemStatusUpdateService;
+    private final CheckedChecklistItemDeletionService checkedChecklistItemDeletionService;
 
     @Override
     public OneParamResponse<UUID> createChecklistItem(CreateChecklistItemRequest request, AccessTokenHeader accessTokenHeader) {
@@ -48,5 +50,11 @@ public class ChecklistControllerImpl implements ChecklistController {
     public void updateStatus(OneParamRequest<Boolean> request, UUID checklistItemId) {
         log.info("Updating status of {}", checklistItemId);
         checklistItemStatusUpdateService.update(checklistItemId, request.getValue());
+    }
+
+    @Override
+    public void deleteCheckedItems(UUID listItemId) {
+        log.info("Deleting checked items of checklist {}", listItemId);
+        checkedChecklistItemDeletionService.deleteCheckedItems(listItemId);
     }
 }

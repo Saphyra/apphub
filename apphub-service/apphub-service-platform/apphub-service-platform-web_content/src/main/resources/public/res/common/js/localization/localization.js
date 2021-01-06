@@ -2,8 +2,16 @@
     let additionalContent = {};
 
     window.Localization = new function(){
-        this.getAdditionalContent = function(contentId){
-            return additionalContent[contentId] || throwException("IllegalArgument", "No additionalContent found with id " + contentId + ". Available keys: " + Object.keys(additionalContent));
+        this.getAdditionalContent = function(contentId, variables){
+            let result = additionalContent[contentId] || "No additionalContent found with id " + contentId;
+
+            new MapStream(variables)
+                .forEach(function(search, value){
+                    const key = "{" + search + "}";
+                    result = result.replace(key, value);
+                });
+
+            return result;
         }
     }
 

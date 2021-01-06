@@ -82,7 +82,7 @@ public class TableControllerImplTestIt_convertToChecklistTable {
     @Test
     public void listItemNotFound() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .post(UrlFactory.create(serverPort, Endpoints.CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE, "listItemId", UUID.randomUUID()));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CONVERT_TABLE_TO_CHECKLIST_TABLE, "listItemId", UUID.randomUUID()));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
 
@@ -95,13 +95,13 @@ public class TableControllerImplTestIt_convertToChecklistTable {
     public void listItemNotTable() {
         UUID listItemId = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(CreateCategoryRequest.builder().title(TITLE).build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_CATEGORY))
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CATEGORY))
             .getBody()
             .jsonPath()
             .getUUID("value");
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .post(UrlFactory.create(serverPort, Endpoints.CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CONVERT_TABLE_TO_CHECKLIST_TABLE, "listItemId", listItemId));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value());
 
@@ -114,13 +114,13 @@ public class TableControllerImplTestIt_convertToChecklistTable {
     public void convertToChecklistTable() {
         UUID listItemId = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(CreateTableRequest.builder().title(TITLE).columnNames(Arrays.asList(COLUMN_NAME)).columns(Arrays.asList(Arrays.asList(COLUMN_VALUE))).build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TABLE))
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_TABLE))
             .getBody()
             .jsonPath()
             .getUUID("value");
 
         Response convertResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .post(UrlFactory.create(serverPort, Endpoints.CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CONVERT_TABLE_TO_CHECKLIST_TABLE, "listItemId", listItemId));
 
         assertThat(convertResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -131,12 +131,12 @@ public class TableControllerImplTestIt_convertToChecklistTable {
 
         Response changeRowStatusResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(new OneParamRequest<>(true))
-            .post(UrlFactory.create(serverPort, Endpoints.UPDATE_CHECKLIST_TABLE_ROW_STATUS, pathVariables));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS, pathVariables));
 
         assertThat(changeRowStatusResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
         ChecklistTableResponse checklistTableResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.GET_NOTEBOOK_CHECKLIST_TABLE, "listItemId", listItemId))
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_CHECKLIST_TABLE, "listItemId", listItemId))
             .getBody()
             .as(ChecklistTableResponse.class);
 

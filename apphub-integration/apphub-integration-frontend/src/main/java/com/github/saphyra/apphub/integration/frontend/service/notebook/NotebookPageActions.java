@@ -1,25 +1,15 @@
 package com.github.saphyra.apphub.integration.frontend.service.notebook;
 
+import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
+import org.openqa.selenium.WebDriver;
+
+import java.util.Optional;
+
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
 import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Optional;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-
-import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
-
 public class NotebookPageActions {
-    public static void confirmDeletionDialog(WebDriver driver) {
-        WebElement dialog = NotebookPage.deletionConfirmationDialog(driver);
-        assertThat(dialog.isDisplayed()).isTrue();
-
-        dialog.findElement(By.className("confirmation-dialog-confirm-button")).click();
-    }
-
     public static void verifyEditListItemDialogOpened(WebDriver driver) {
         assertThat(NotebookPage.editListItemDialog(driver).isDisplayed()).isTrue();
     }

@@ -319,4 +319,34 @@ public class ChecklistCrudTest extends SeleniumTest {
         ChecklistActions.openChecklist(driver, CHECKLIST_TITLE);
         assertThat(ChecklistActions.getChecklistItem(driver, CHECKLIST_ITEM_1).isChecked()).isFalse();
     }
+
+    @Test
+    public void deleteCheckedChecklistItems() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+
+        ChecklistActions.createChecklist(
+            driver,
+            CHECKLIST_TITLE,
+            Arrays.asList(
+                NewChecklistItemData.builder().content(CHECKLIST_ITEM_1).checked(true).build(),
+                NewChecklistItemData.builder().content(CHECKLIST_ITEM_2).checked(false).build()
+            )
+        );
+
+        ChecklistActions.openChecklist(driver, CHECKLIST_TITLE);
+        ChecklistActions.deleteCheckedChecklistItems(driver);
+        NotificationUtil.verifySuccessNotification(driver, "A kijelölt elemek sikeresen törölve.");
+
+        ChecklistActions.closeWindow(driver);
+        ChecklistActions.openChecklist(driver, CHECKLIST_TITLE);
+
+        List<ViewChecklistItem> checklistItems = ChecklistActions.getChecklistItems(driver);
+        assertThat(checklistItems).hasSize(1);
+        assertThat(checklistItems.get(0).getContent()).isEqualTo(CHECKLIST_ITEM_2);
+    }
 }

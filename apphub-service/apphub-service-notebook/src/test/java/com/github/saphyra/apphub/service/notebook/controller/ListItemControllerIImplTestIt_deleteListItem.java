@@ -82,7 +82,7 @@ public class ListItemControllerIImplTestIt_deleteListItem {
     @Test
     public void listItemNotFound() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .delete(UrlFactory.create(serverPort, Endpoints.DELETE_NOTEBOOK_LIST_ITEM, "listItemId", UUID.randomUUID()));
+            .delete(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_DELETE_LIST_ITEM, "listItemId", UUID.randomUUID()));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -116,7 +116,7 @@ public class ListItemControllerIImplTestIt_deleteListItem {
         saveListItem(listItem2);
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .delete(UrlFactory.create(serverPort, Endpoints.DELETE_NOTEBOOK_LIST_ITEM, "listItemId", PARENT_ID.toString()));
+            .delete(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_DELETE_LIST_ITEM, "listItemId", PARENT_ID.toString()));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(query(() -> listItemDao.findAll())).containsExactly(listItem2);

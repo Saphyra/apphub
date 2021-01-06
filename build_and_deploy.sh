@@ -27,4 +27,8 @@ if [[ "$STARTUP_RESULT" -ne 0 ]]; then
   exit 1
 fi
 
+if [ "$1" != "skipTests" ]; then
+    ./run_tests.sh "$NAMESPACE_NAME"
+fi
+
 start ./port_forward.sh "$NAMESPACE_NAME"

@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 class NotebookPage {
+    static final String DELETE_CHECKED_ITEMS_CONFIRMATION_DIALOG_ID = "delete-checked-items-confirmation";
+
     private static final By CREATE_CATEGORY_WINDOW = By.id("create-category");
     private static final By OPEN_CREATE_CATEGORY_WINDOW_BUTTON = By.id("new-category-button");
     private static final By NEW_BUTTON = By.id("new-button");
@@ -16,7 +18,6 @@ class NotebookPage {
     private static final By CATEGORY_TREE_ROOT = By.cssSelector("#category-list > .category-wrapper");
     private static final By TITLE_OF_OPENED_CATEGORY = By.id("category-details-title");
     private static final By DETAILED_LIST_ITEMS = By.cssSelector("#category-content-list .list-item-details-item");
-    private static final By DELETION_CONFIRMATION_DIALOG = By.id("deletion-confirmation-dialog");
     private static final By OPEN_CREATE_TEXT_WINDOW_BUTTON = By.id("new-text-button");
     private static final By CREATE_TEXT_WINDOW = By.id("create-text");
     private static final By SAVE_NEW_TEXT_BUTTON = By.id("create-text-button");
@@ -97,13 +98,15 @@ class NotebookPage {
     private static final By ROWS_FOR_NEW_CHECKLIST_TABLE = By.cssSelector("#new-checklist-table-content tr");
     private static final By COLUMN_NAMES_FOR_VIEW_CHECKLIST_TABLE = By.cssSelector("#view-checklist-table input.column-title");
     private static final By DISCARD_EDIT_CHECKLIST_TABLE_BUTTON = By.id("view-checklist-table-edit-cancel-button");
-    private static final By ROWS_FOR_VIEW_CHECKLIST_TABLE =  By.cssSelector("#view-checklist-table-content tr");
+    private static final By ROWS_FOR_VIEW_CHECKLIST_TABLE = By.cssSelector("#view-checklist-table-content tr");
     private static final By ADD_ROW_TO_EDIT_CHECKLIST_TABLE_BUTTON = By.id("view-checklist-table-edit-add-row-button");
     private static final By COLUMN_HEADS_FOR_EDIT_CHECKLIST_TABLE = By.cssSelector("#view-checklist-table-head-row .column-head");
     private static final By ADD_COLUMN_TO_EDIT_CHECKLIST_TABLE_BUTTON = By.id("view-checklist-table-edit-add-column-button");
     private static final By VIEW_CHECKLIST_TABLE_CLOSE_BUTTON = By.id("view-checklist-table-close-button");
     private static final By CLOSE_VIEW_TABLE_WINDOW_BUTTON = By.id("view-table-close-button");
     private static final By CONVERT_TABLE_TO_CHECKLIST_TABLE_BUTTON = By.id("convert-table-to-checklist-table-button");
+    private static final By DELETE_CHECKED_CHECKLIST_ITEM_BUTTON = By.id("delete-checked-checklist-items");
+    private static final By DELETE_CHECKED_CHECKLIST_TABLE_ITEM_BUTTON = By.id("delete-checked-checklist-table-items");
 
     public static WebElement createCategoryWindow(WebDriver driver) {
         return driver.findElement(CREATE_CATEGORY_WINDOW);
@@ -139,10 +142,6 @@ class NotebookPage {
 
     public static List<WebElement> detailedListItems(WebDriver driver) {
         return driver.findElements(DETAILED_LIST_ITEMS);
-    }
-
-    public static WebElement deletionConfirmationDialog(WebDriver driver) {
-        return driver.findElement(DELETION_CONFIRMATION_DIALOG);
     }
 
     public static WebElement openCreateTextWindowButton(WebDriver driver) {
@@ -491,5 +490,13 @@ class NotebookPage {
 
     public static WebElement convertTableToChecklistTableButton(WebDriver driver) {
         return driver.findElement(CONVERT_TABLE_TO_CHECKLIST_TABLE_BUTTON);
+    }
+
+    public static WebElement deleteCheckedChecklistItemsButton(WebDriver driver) {
+        return driver.findElement(DELETE_CHECKED_CHECKLIST_ITEM_BUTTON);
+    }
+
+    public static WebElement deleteCheckedChecklistTableItemsButton(WebDriver driver) {
+        return driver.findElement(DELETE_CHECKED_CHECKLIST_TABLE_ITEM_BUTTON);
     }
 }
