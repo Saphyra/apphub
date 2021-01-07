@@ -53,6 +53,7 @@ public class Endpoints {
     public static final String INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";
     public static final String INTERNAL_GET_USER_LANGUAGE = "/internal/user/{userId}/data/language";
     public static final String INTERNAL_GET_LAST_VISITED_PAGE = "/internal/user/authentication/last-visited-page/{userId}";
+    public static final String INTERNAL_USER_GET_USERNAME = "/internal/user/{userId}/data/name";
 
     //ADMIN_PANEL
     public static final String GET_USER_ROLES = "/api/user/data/roles";

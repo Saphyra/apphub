@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.api.user.model.request.RegistrationRequest;
 import com.github.saphyra.apphub.api.user.server.AccountController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangeEmailService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangePasswordService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangeUsernameService;
@@ -15,6 +16,8 @@ import com.github.saphyra.apphub.service.user.data.service.register.Registration
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 @RestController
 @Slf4j
@@ -25,6 +28,7 @@ class AccountControllerImpl implements AccountController {
     private final ChangeUsernameService changeUsernameService;
     private final DeleteAccountService deleteAccountService;
     private final RegistrationService registrationService;
+    protected final UserDao userDao;
 
     @Override
     public void changeEmail(AccessTokenHeader accessTokenHeader, ChangeEmailRequest request) {
@@ -54,5 +58,14 @@ class AccountControllerImpl implements AccountController {
     public void register(RegistrationRequest registrationRequest, String locale) {
         log.info("RegistrationRequest arrived for username {} and email {}", registrationRequest.getUsername(), registrationRequest.getEmail());
         registrationService.register(registrationRequest, locale);
+    }
+
+    @Override
+    //TODO unit test
+    //TODO int test
+    public String getUsernameByUserId(UUID userId) {
+        log.info("Querying name of user {}", userId);
+        return userDao.findById(userId)
+            .getUsername();
     }
 }

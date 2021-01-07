@@ -1,8 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.facade;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-
+import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreCharacterDataApiClient;
+import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
+import com.github.saphyra.apphub.lib.config.Endpoints;
+import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,11 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreCharacterDataApiClient;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
-import com.github.saphyra.apphub.lib.config.Endpoints;
-import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SkyXplorePageControllerTest {
@@ -64,7 +63,7 @@ public class SkyXplorePageControllerTest {
 
     @Test
     public void character() {
-        ModelAndView result = underTest.character();
+        ModelAndView result = underTest.character(accessTokenHeader);
 
         assertThat(result.getViewName()).isEqualTo("character");
         assertThat(result.getModel().get("backUrl")).isEqualTo(Endpoints.SKYXPLORE_MAIN_MENU_PAGE);

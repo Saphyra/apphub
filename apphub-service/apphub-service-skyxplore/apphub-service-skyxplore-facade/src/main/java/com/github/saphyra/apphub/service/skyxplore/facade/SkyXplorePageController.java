@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreCharacterDat
 import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameApiClient;
 import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
+import com.github.saphyra.apphub.api.user.client.UserDataApiClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.UUID;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -26,6 +29,8 @@ public class SkyXplorePageController {
     private final SkyXploreCharacterDataApiClient characterClient;
     private final SkyXploreLobbyApiClient lobbyClient;
     private final SkyXploreGameApiClient gameClient;
+    private final UserDataApiClient userDataClient;
+    private final SkyXploreCharacterDataApiClient skyXploreDataClient;
 
     @GetMapping(Endpoints.SKYXPLORE_MAIN_MENU_PAGE)
     public ModelAndView mainMenu(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
@@ -36,15 +41,17 @@ public class SkyXplorePageController {
             log.info("User has no character. Returning character page instead.");
             ModelAndView mav = new ModelAndView("character");
             mav.addObject("backUrl", Endpoints.MODULES_PAGE);
+            mav.addObject("characterName", userDataClient.getUsernameByUserId(accessTokenHeader.getUserId(), localeProvider.getLocaleValidated()));
             return mav;
         }
     }
 
     @GetMapping(Endpoints.SKYXPLORE_CHARACTER_PAGE)
-    public ModelAndView character() {
+    public ModelAndView character(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
         log.info("Loading SkyXplore character page.");
         ModelAndView mav = new ModelAndView("character");
         mav.addObject("backUrl", Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
+        mav.addObject("characterName", skyXploreDataClient.internalGetCharacterByUserId(accessTokenHeader.getUserId(), localeProvider.getLocaleValidated()).getName());
         return mav;
     }
 
@@ -53,7 +60,9 @@ public class SkyXplorePageController {
         LobbyViewForPage view = lobbyClient.lobbyForPage(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated());
         if (!view.isInLobby()) {
             log.info("User is not in lobby.");
-            //TODO check if player is in game
+            if (gameClient.isUserInGame(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated())) {
+                return gameMav(accessTokenHeader.getUserId());
+            }
             return new ModelAndView("redirect:" + Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
         }
         ModelAndView mav = new ModelAndView("lobby");
@@ -68,8 +77,12 @@ public class SkyXplorePageController {
         if (!gameClient.isUserInGame(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated())) {
             return new ModelAndView("redirect:" + Endpoints.SKYXPLORE_LOBBY_PAGE);
         }
+        return gameMav(accessTokenHeader.getUserId());
+    }
+
+    private ModelAndView gameMav(UUID userId) {
         ModelAndView mav = new ModelAndView("game");
-        mav.addObject("userId", accessTokenHeader.getUserId());
+        mav.addObject("userId", userId);
         return mav;
     }
 }
