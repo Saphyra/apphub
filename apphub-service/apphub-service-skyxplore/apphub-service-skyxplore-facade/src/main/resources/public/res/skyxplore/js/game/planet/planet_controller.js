@@ -5,6 +5,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_population_control
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_building_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_priority_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/storage_settings_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_controller.js");
 
 (function PlanetController(){
     let openedPlanetId;

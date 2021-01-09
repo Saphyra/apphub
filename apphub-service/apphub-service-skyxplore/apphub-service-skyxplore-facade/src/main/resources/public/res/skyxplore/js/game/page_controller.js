@@ -10,6 +10,8 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
     window.ids = {
         mapSvgContainer: "map-svg-container",
         mapContainer: "map-container",
+
+        //Chat
         chatButton: "chat-button",
         chatContainer: "chat",
         chatMessageInput: "send-message-input",
@@ -21,11 +23,15 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
         createChatRoomContainer: "create-chat-room-container",
         chatRooms: "chat-rooms",
         chatMessageContainers: "chat-message-containers",
+
+        //SolarSystem
         solarSystemSvgContainer: "solar-system-svg-container",
         solarSystemContainer: "solar-system-container",
         solarSystem: "solar-system",
         solarSystemName: "solar-system-name",
         closePlanetButton: "close-planet-button",
+
+        //Planet
         planet: "planet",
         planetSurfaceContainer: "planet-surface-container",
         planetMiddleBar: "planet-middle-bar",
@@ -43,6 +49,8 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
         planetBuildingsTotalUsedSlots: "planet-buildings-total-used-slots",
         planetBuildingsTotalSlots: "planet-buildings-total-slots",
         planetBuildingsTotalLevel: "planet-buildings-total-level",
+
+        //StorageSettings
         closeStorageSettingsButton: "close-storage-settings-button",
         storageSettingsPriorityInput: "storage-settings-priority-input",
         storageSettingsPriorityValue: "storage-settings-priority-value",
@@ -53,6 +61,14 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
         storageSettingsCreateButton: "create-storage-settings-button",
         noStorageSettings: "no-storage-settings",
         currentStorageSettingsContainer: "storage-settings-list",
+
+        //Population overview
+        closePopulationOverviewButton: "close-population-overview-button",
+        populationOverview: "population-overview",
+        populationOverviewSkillSelectionToggleButton: "population-overview-skill-selection-toggle-button",
+        populationOverviewOrderToggleButton: "population-overview-order-toggle-button",
+        populationOverviewSkillSelectionContainer: "population-overview-skill-selection-container",
+        populationOverviewOrderContainer: "population-overview-order-container",
     }
 
     window.webSocketEvents = {

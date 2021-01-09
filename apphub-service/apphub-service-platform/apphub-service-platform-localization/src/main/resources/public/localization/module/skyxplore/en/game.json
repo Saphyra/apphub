@@ -1,4 +1,4 @@
-{
+ {
   "title": "SkyXplore",
   "staticText": {
     "general-chat-button-title": [
@@ -179,6 +179,60 @@
       {
         "key": "innerHTML",
         "message": "No available storage settings."
+      }
+    ],
+    "population-overview-title": [
+      {
+        "key": "innerHTML",
+        "message": "Population"
+      }
+    ],
+    "population-overview-skill-selection-toggle-button": [
+      {
+        "key": "innerHTML",
+        "message": "Show / hide skills"
+      }
+    ],
+    "population-overview-show-all-skills": [
+      {
+        "key": "innerHTML",
+        "message": "Show all"
+      }
+    ],
+    "population-overview-hide-all-skills": [
+      {
+        "key": "innerHTML",
+        "message": "Hide all"
+      }
+    ],
+    "population-overview-order-toggle-button": [
+      {
+        "key": "innerHTML",
+        "message": "Order"
+      }
+    ],
+    "population-overview-order-by-name-button": [
+      {
+        "key": "innerHTML",
+        "message": "By name"
+      }
+    ],
+    "population-overview-order-by-skill-level-button": [
+      {
+        "key": "innerHTML",
+        "message": "By skill level"
+      }
+    ],
+    "population-overview-order-type-asc": [
+      {
+        "key": "innerHTML",
+        "message": "Ascending"
+      }
+    ],
+    "population-overview-order-type-desc": [
+      {
+        "key": "innerHTML",
+        "message": "Descending"
       }
     ]
   },

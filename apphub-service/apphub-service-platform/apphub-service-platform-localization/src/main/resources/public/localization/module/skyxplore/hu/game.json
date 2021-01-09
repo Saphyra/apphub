@@ -180,6 +180,60 @@
         "key": "innerHTML",
         "message": "Nincs elérhető beállítás."
       }
+    ],
+    "population-overview-title": [
+      {
+        "key": "innerHTML",
+        "message": "Lakosság"
+      }
+    ],
+    "population-overview-skill-selection-toggle-button": [
+      {
+        "key": "innerHTML",
+        "message": "Képességek mutatása / elrejtése"
+      }
+    ],
+    "population-overview-show-all-skills": [
+      {
+        "key": "innerHTML",
+        "message": "Összes mutatása"
+      }
+    ],
+    "population-overview-hide-all-skills": [
+      {
+        "key": "innerHTML",
+        "message": "Összes elrejtése"
+      }
+    ],
+    "population-overview-order-toggle-button": [
+      {
+        "key": "innerHTML",
+        "message": "Sorba rendezés"
+      }
+    ],
+    "population-overview-order-by-name-button": [
+      {
+        "key": "innerHTML",
+        "message": "Név szerint"
+      }
+    ],
+    "population-overview-order-by-skill-level-button": [
+      {
+        "key": "innerHTML",
+        "message": "Képesség szint szerint"
+      }
+    ],
+    "population-overview-order-type-asc": [
+      {
+        "key": "innerHTML",
+        "message": "Mövekvő"
+      }
+    ],
+    "population-overview-order-type-desc": [
+      {
+        "key": "innerHTML",
+        "message": "Csökkenő"
+      }
     ]
   },
   "additionalContent": {

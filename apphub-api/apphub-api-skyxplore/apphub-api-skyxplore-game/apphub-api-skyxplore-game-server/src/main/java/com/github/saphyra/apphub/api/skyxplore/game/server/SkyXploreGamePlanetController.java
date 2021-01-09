@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.api.skyxplore.game.server;
 
 import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingsModel;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetPopulationOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
@@ -47,4 +48,7 @@ public interface SkyXploreGamePlanetController {
 
     @PostMapping(Endpoints.SKYXPLORE_PLANET_EDIT_STORAGE_SETTING)
     void editStorageSetting(@RequestBody StorageSettingsModel request, @PathVariable("planetId") UUID planetId, @PathVariable("storageSettingId") UUID storageSettingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @GetMapping(Endpoints.SKYXPLORE_PLANET_GET_POPULATION)
+    List<CitizenResponse> getPopulation(@PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

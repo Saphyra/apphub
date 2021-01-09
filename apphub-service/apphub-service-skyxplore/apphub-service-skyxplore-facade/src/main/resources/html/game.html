@@ -189,8 +189,6 @@
                 <SPAN id="storage-settings-title"></SPAN>
                 <BUTTON id="close-storage-settings-button" class="window-close-button">X</BUTTON>
             </H1>
-
-
         </HEADER>
 
         <MAIN>
@@ -221,6 +219,56 @@
             <DIV id="storage-settings-right-bar">
                 <DIV id="no-storage-settings"></DIV>
                 <DIV id="storage-settings-list"></DIV>
+            </DIV>
+        </MAIN>
+    </DIV>
+
+    <DIV id="population-overview" class="main-tab">
+        <HEADER>
+            <H1>
+                <SPAN id="population-overview-title"></SPAN>
+                <BUTTON id="close-population-overview-button" class="window-close-button">X</BUTTON>
+            </H1>
+        </HEADER>
+
+        <MAIN>
+            <DIV id="population-overview-filter-container">
+                <SPAN>
+                    <BUTTON id="population-overview-skill-selection-toggle-button"></BUTTON>
+
+                    <DIV id="population-overview-skill-selection-container">
+                        <DIV id="population-overview-show-all-skills" class="button"></DIV>
+                        <DIV id="population-overview-hide-all-skills" class="button"></DIV>
+                        <DIV id="population-overview-skill-list"></DIV>
+                    </DIV>
+                </SPAN>
+
+                <SPAN>
+                    <BUTTON id="population-overview-order-toggle-button"></BUTTON>
+
+                    <DIV id="population-overview-order-container">
+                        <DIV id="population-overview-order-by-name-button" class="button"></DIV>
+                        <DIV id="population-overview-order-by-skill-level-button" class="button"></DIV>
+
+                        <SELECT id="population-overview-order-skill-list-input"></SELECT>
+
+                        <DIV id="population-overview-order-type-container">
+                            <LABEL>
+                                <INPUT type="radio" name="population-overview-order-type" value="asc" checked>
+                                <SPAN id="population-overview-order-type-asc"></SPAN>
+                            </LABEL>
+
+                            <LABEL>
+                                <INPUT type="radio" name="population-overview-order-type" value="desc">
+                                <SPAN id="population-overview-order-type-desc"></SPAN>
+                            </LABEL>
+                        </DIV>
+                    </DIV>
+                </SPAN>
+            </DIV>
+
+            <DIV id="population-overview-citizen-list">
+
             </DIV>
         </MAIN>
     </DIV>

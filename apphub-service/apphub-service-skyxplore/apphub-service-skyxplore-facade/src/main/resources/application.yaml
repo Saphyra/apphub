@@ -130,6 +130,10 @@ zuul:
       path: /api/skyxplore/game/planet/*/storage-settings/*
       serviceId: skyxplore-game
       stripPrefix: false
+    get-population:
+      path: /api/skyxplore/game/planet/*/citizen
+      serviceId: skyxplore-game
+      stripPrefix: false
 
 role:
   settings:

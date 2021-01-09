@@ -7,9 +7,7 @@
 
     function loadPopulation(planetId){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_GET_POPULATION_OVERVIEW", {planetId: planetId}));
-            request.convertResponse = function(response){
-                return JSON.parse(response.body);
-            }
+            request.convertResponse = jsonConverter;
             request.processValidResponse = function(population){
                 displayPopulation(population);
             }
@@ -35,7 +33,7 @@
 
     function init(){
         document.getElementById(ids.planetOpenPopulationOverviewButton).onclick = function(){
-            //TODO
+            populationOverviewController.viewPopulationOverview(planetController.getOpenedPlanetId());
         }
     }
 })();
