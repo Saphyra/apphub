@@ -69,6 +69,11 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
         populationOverviewOrderToggleButton: "population-overview-order-toggle-button",
         populationOverviewSkillSelectionContainer: "population-overview-skill-selection-container",
         populationOverviewOrderContainer: "population-overview-order-container",
+        populationOverviewSkillList: "population-overview-skill-list",
+        populationOverviewOrderSkillListInput: "population-overview-order-skill-list-input",
+        populationOverviewShowAllSkills: "population-overview-show-all-skills",
+        populationOverviewHideAllSkills: "population-overview-hide-all-skills",
+        populationOverviewCitizenList: "population-overview-citizen-list",
     }
 
     window.webSocketEvents = {
@@ -81,6 +86,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
     window.itemData = new Cache(itemDataLoader);
     window.itemDataNameLocalization = new CustomLocalization("skyxplore", "items");
     window.surfaceTypeLocalization = new CustomLocalization("skyxplore", "surface_type");
+    window.skillTypeLocalization = new CustomLocalization("skyxplore", "skill_type");
 
     const wsConnection = new WebSocketConnection(Mapping.getEndpoint("CONNECTION_SKYXPLORE_GAME"));
 

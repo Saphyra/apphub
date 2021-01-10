@@ -261,6 +261,8 @@
     "delete-storage-setting-confirmation-dialog-detail": "Are you sure you want to delete storage setting for {resource}?",
     "delete-storage-setting-confirm-button": "Delete storage setting",
     "delete-storage-setting-decline-button": "Cancel",
-    "storage-setting-saved": "Storage setting saved."
+    "storage-setting-saved": "Storage setting saved.",
+    "morale": "Morale",
+    "satiety": "Satiety"
   }
 }

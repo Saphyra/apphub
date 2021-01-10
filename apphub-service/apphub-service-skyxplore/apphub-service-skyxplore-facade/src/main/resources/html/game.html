@@ -11,6 +11,7 @@
     <LINK rel="stylesheet" href="/res/skyxplore/css/game/solar_system.css">
     <LINK rel="stylesheet" href="/res/skyxplore/css/game/planet.css">
     <LINK rel="stylesheet" href="/res/skyxplore/css/game/storage_settings.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/game/population_overview.css">
 
     <script th:inline="javascript">
         /*<![CDATA[*/
@@ -233,20 +234,20 @@
 
         <MAIN>
             <DIV id="population-overview-filter-container">
-                <SPAN>
+                <DIV class="population-overview-filter-wrapper">
                     <BUTTON id="population-overview-skill-selection-toggle-button"></BUTTON>
 
-                    <DIV id="population-overview-skill-selection-container">
+                    <DIV id="population-overview-skill-selection-container" class="population-overview-filter-selection-container">
                         <DIV id="population-overview-show-all-skills" class="button"></DIV>
                         <DIV id="population-overview-hide-all-skills" class="button"></DIV>
                         <DIV id="population-overview-skill-list"></DIV>
                     </DIV>
-                </SPAN>
+                </DIV>
 
-                <SPAN>
+                <DIV class="population-overview-filter-wrapper">
                     <BUTTON id="population-overview-order-toggle-button"></BUTTON>
 
-                    <DIV id="population-overview-order-container">
+                    <DIV id="population-overview-order-container" class="population-overview-filter-selection-container">
                         <DIV id="population-overview-order-by-name-button" class="button"></DIV>
                         <DIV id="population-overview-order-by-skill-level-button" class="button"></DIV>
 
@@ -264,7 +265,7 @@
                             </LABEL>
                         </DIV>
                     </DIV>
-                </SPAN>
+                </DIV>
             </DIV>
 
             <DIV id="population-overview-citizen-list">

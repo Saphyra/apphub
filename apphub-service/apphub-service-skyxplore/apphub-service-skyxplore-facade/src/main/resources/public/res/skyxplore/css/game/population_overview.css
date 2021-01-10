@@ -1,0 +1,70 @@
+:root{
+    --population-overview-filter-container-height: 2.85rem;
+}
+
+#population-overview main{
+    padding-top: 0;
+}
+
+    #population-overview-filter-container{
+        position: sticky;
+        top: 0;
+        left: 0;
+        right: 0;
+        border-bottom: 3px ridge white;
+        padding: 0.25rem;
+        background: rgba(0,0,0,0.5);
+        height: var(--population-overview-filter-container-height);
+        background-color: black;
+        z-index: 1;
+    }
+
+        .population-overview-filter-wrapper{
+            display: inline-block;
+            vertical-align: top;
+            background: black;
+        }
+
+            .population-overview-filter-selection-container{
+                border: 3px ridge white;
+                border-top: none;
+                border-radius: 5px;
+                padding-top: 0.5rem;
+            }
+
+                #population-overview-skill-list label{
+                    display: block;
+                    border: 1px solid;
+                    margin: 0.25rem;
+                    border-radius: 5px;
+                }
+
+                #population-overview-order-skill-list-input{
+                    width: 90%;
+                    margin: auto;
+                    display: block;
+                }
+
+    #population-overview-citizen-list{
+        text-align: center;
+    }
+
+        .population-overview-citizen{
+            display: inline-block;
+            margin: 0.5rem;
+            border: 3px ridge white;
+            border-radius: 10px;
+            min-width: 18rem;
+            width: calc(33% - 1rem);
+        }
+
+            .population-overview-citizen-name{
+                font-size: 1.5rem;
+                font-weight: bold;
+                margin: 0.5rem 0;
+            }
+
+            .population-overview-citizen-progress-bar{
+                width: 16rem;
+                display: inline-block;
+            }

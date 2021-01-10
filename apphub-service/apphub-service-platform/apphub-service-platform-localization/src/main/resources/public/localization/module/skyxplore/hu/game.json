@@ -261,6 +261,8 @@
     "delete-storage-setting-confirmation-dialog-detail": "Biztosan ki akarod törölni a {resource} beállítását?",
     "delete-storage-setting-confirm-button": "Beállítás törlése",
     "delete-storage-setting-decline-button": "Mégse",
-    "storage-setting-saved": "Raktár beállítás elmentve."
+    "storage-setting-saved": "Raktár beállítás elmentve.",
+    "morale": "Morál",
+    "satiety": "Jóllakottság"
   }
 }
