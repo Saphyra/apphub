@@ -61,9 +61,6 @@ public class ChecklistControllerImpl implements ChecklistController {
     }
 
     @Override
-    //TODO int test
-    //TODO api test
-    //TODO fe test
     public void orderItems(UUID listItemId) {
         log.info("Ordering checklist items {}", listItemId);
         checklistItemsOrderService.orderChecklistItems(listItemId);
