@@ -58,7 +58,7 @@ public class GetChecklistTest extends TestBase {
                 .order(ORDER)
                 .build()))
             .build();
-        UUID checklistId = NotebookActions.createChecklistItem(language, accessTokenId, checklistRequest);
+        UUID checklistId = NotebookActions.createChecklist(language, accessTokenId, checklistRequest);
 
         ChecklistResponse response = NotebookActions.getChecklist(language, accessTokenId, checklistId);
 

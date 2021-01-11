@@ -8,6 +8,7 @@
         this.addItem = addItem;
         this.saveChanges = saveChanges;
         this.deleteChecked = deleteChecked;
+        this.orderItems = orderItems;
     }
 
     function viewChecklist(listItemId){
@@ -189,5 +190,14 @@
                 dao.sendRequestAsync(request);
             }
         )
+    }
+
+    function orderItems(){
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_ORDER_CHECKLIST_ITEMS", {listItemId: openedChecklistId}));
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("checklist-items-ordered"));
+                viewChecklist(openedChecklistId);
+            }
+        dao.sendRequestAsync(request);
     }
 })();

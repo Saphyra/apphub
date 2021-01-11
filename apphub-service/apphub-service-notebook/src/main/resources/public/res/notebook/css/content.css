@@ -40,6 +40,10 @@
             overflow-y: hidden;
         }
 
+        #category-details-content{
+            overflow: auto;
+        }
+
         .detailed-container{
             position: absolute;
             top: 0;

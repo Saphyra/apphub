@@ -54,7 +54,7 @@ public class EditChecklistItemTest extends TestBase {
                 .build()))
             .build();
 
-        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+        UUID listItemId = NotebookActions.createChecklist(language, accessTokenId, request);
 
         ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
         UUID checklistItemId = checklistResponse.getNodes()
@@ -102,7 +102,7 @@ public class EditChecklistItemTest extends TestBase {
                 .build()))
             .build();
 
-        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+        UUID listItemId = NotebookActions.createChecklist(language, accessTokenId, request);
 
         ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
         UUID checklistItemId = checklistResponse.getNodes()
@@ -150,7 +150,7 @@ public class EditChecklistItemTest extends TestBase {
                 .build()))
             .build();
 
-        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+        UUID listItemId = NotebookActions.createChecklist(language, accessTokenId, request);
 
         ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
         UUID checklistItemId = checklistResponse.getNodes()
@@ -198,7 +198,7 @@ public class EditChecklistItemTest extends TestBase {
                 .build()))
             .build();
 
-        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+        UUID listItemId = NotebookActions.createChecklist(language, accessTokenId, request);
 
         ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
         UUID checklistItemId = checklistResponse.getNodes()
@@ -270,7 +270,7 @@ public class EditChecklistItemTest extends TestBase {
                 .build()))
             .build();
 
-        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+        UUID listItemId = NotebookActions.createChecklist(language, accessTokenId, request);
 
         ChecklistItemNodeRequest node = ChecklistItemNodeRequest.builder()
             .checklistItemId(UUID.randomUUID())
@@ -313,7 +313,7 @@ public class EditChecklistItemTest extends TestBase {
                 .build()))
             .build();
 
-        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+        UUID listItemId = NotebookActions.createChecklist(language, accessTokenId, request);
 
         EditChecklistItemRequest editRequest = EditChecklistItemRequest.builder()
             .title(NEW_TITLE)
@@ -345,7 +345,7 @@ public class EditChecklistItemTest extends TestBase {
             .nodes(Collections.emptyList())
             .build();
 
-        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+        UUID listItemId = NotebookActions.createChecklist(language, accessTokenId, request);
 
         ChecklistItemNodeRequest node = ChecklistItemNodeRequest.builder()
             .order(NEW_ORDER)
@@ -388,7 +388,7 @@ public class EditChecklistItemTest extends TestBase {
                 .content(ORIGINAL_CONTENT)
                 .build()))
             .build();
-        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+        UUID listItemId = NotebookActions.createChecklist(language, accessTokenId, request);
 
         UUID checklistItemId = NotebookActions.getChecklist(language, accessTokenId, listItemId)
             .getNodes()

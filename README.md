@@ -12,7 +12,6 @@ The app's purpose is to provide an easy-to extend frame for multiple application
 * Locale handling (Supported locales: EN, HU)
 
 ### Upcoming features:
-* Extend Notebook module with checklist-tables
 * Extend Notebook module with Search functionality
 * Extend Notebook module with archiving functionality
 * Add Language management to Index page
