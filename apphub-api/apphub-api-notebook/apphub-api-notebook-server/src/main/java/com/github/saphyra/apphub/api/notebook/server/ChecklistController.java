@@ -27,4 +27,7 @@ public interface ChecklistController {
 
     @DeleteMapping(Endpoints.NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST)
     void deleteCheckedItems(@PathVariable("listItemId") UUID listItemId);
+
+    @PostMapping(Endpoints.NOTEBOOK_ORDER_CHECKLIST_ITEMS)
+    void orderItems(@PathVariable("listItemId") UUID listItemId);
 }

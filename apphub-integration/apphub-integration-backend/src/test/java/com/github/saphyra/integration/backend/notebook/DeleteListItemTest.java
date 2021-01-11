@@ -112,7 +112,7 @@ public class DeleteListItemTest extends TestBase {
                 .build()))
             .build();
 
-        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+        UUID listItemId = NotebookActions.createChecklist(language, accessTokenId, request);
 
         NotebookActions.deleteListItem(language, accessTokenId, listItemId);
 

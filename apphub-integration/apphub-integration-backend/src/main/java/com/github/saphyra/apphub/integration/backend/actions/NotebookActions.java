@@ -117,7 +117,7 @@ public class NotebookActions {
             .put(UrlFactory.create(Endpoints.CREATE_NOTEBOOK_LINK));
     }
 
-    public static UUID createChecklistItem(Language language, UUID accessTokenId, CreateChecklistItemRequest request) {
+    public static UUID createChecklist(Language language, UUID accessTokenId, CreateChecklistItemRequest request) {
         Response response = getCreateChecklistItemResponse(language, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
@@ -291,5 +291,10 @@ public class NotebookActions {
     public static Response getDeleteCheckedChecklistTableItemsResponse(Language language, UUID accessTokenId, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .delete(UrlFactory.create(Endpoints.NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST_TABLE, "listItemId", listItemId));
+    }
+
+    public static Response orderChecklistItems(Language language, UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .post(UrlFactory.create(Endpoints.NOTEBOOK_ORDER_CHECKLIST_ITEMS, "listItemId", listItemId));
     }
 }

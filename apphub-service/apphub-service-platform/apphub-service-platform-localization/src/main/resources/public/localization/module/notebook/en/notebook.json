@@ -409,6 +409,12 @@
         "message": "Add column"
       }
     ],
+    "view-checklist-table-edit-add-row-button": [
+      {
+        "key": "innerHTML",
+        "message": "Add row"
+      }
+    ],
     "delete-checked-checklist-items": [
       {
         "key": "innerHTML",
@@ -419,6 +425,12 @@
       {
         "key": "innerHTML",
         "message": "Delete checked"
+      }
+    ],
+    "order-checklist-items": [
+      {
+        "key": "innerHTML",
+        "message": "Order items"
       }
     ]
   },
@@ -455,6 +467,7 @@
     "delete-checked-items-confirmation-detail": "Are you sure you want to delete all checked items?",
     "delete-checked-items-confirmation-confirm-button": "Delete",
     "delete-checked-items-confirmation-cancel-button": "Cancel",
-    "checked-items-deleted": "Checked items are successfully deleted."
+    "checked-items-deleted": "Checked items are successfully deleted.",
+    "checklist-items-ordered": "Items ordered."
   }
 }
