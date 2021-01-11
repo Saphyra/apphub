@@ -22,7 +22,7 @@ import java.util.UUID;
 import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CreateChecklistItemTest extends TestBase {
+public class CreateChecklistTest extends TestBase {
     private static final Integer ORDER = 234;
     private static final String CONTENT = "content";
     private static final String TITLE = "title";
@@ -210,7 +210,7 @@ public class CreateChecklistItemTest extends TestBase {
                 .build()))
             .build();
 
-        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, request);
+        UUID listItemId = NotebookActions.createChecklist(language, accessTokenId, request);
 
         ChecklistResponse response = NotebookActions.getChecklist(language, accessTokenId, listItemId);
 

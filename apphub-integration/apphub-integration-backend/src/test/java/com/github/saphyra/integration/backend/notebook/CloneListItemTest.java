@@ -68,7 +68,7 @@ public class CloneListItemTest extends TestBase {
 
         NotebookActions.createLink(language, accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).parent(childCategoryId).url(LINK_URL).build());
         NotebookActions.createText(language, accessTokenId, CreateTextRequest.builder().title(TEXT_TITLE).content(TEXT_CONTENT).parent(parentId).build());
-        NotebookActions.createChecklistItem(
+        NotebookActions.createChecklist(
             language,
             accessTokenId,
             CreateChecklistItemRequest.builder()

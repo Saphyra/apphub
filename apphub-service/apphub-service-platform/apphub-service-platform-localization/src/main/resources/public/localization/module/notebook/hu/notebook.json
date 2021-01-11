@@ -420,6 +420,12 @@
         "key": "innerHTML",
         "message": "Kijelöltek törlése"
       }
+    ],
+    "order-checklist-items": [
+      {
+        "key": "innerHTML",
+        "message": "Sorba rendezés"
+      }
     ]
   },
   "additionalContent": {
@@ -455,6 +461,7 @@
     "delete-checked-items-confirmation-detail": "Biztosan törölni akarod a kijelölt elemeket?",
     "delete-checked-items-confirmation-confirm-button": "Törlés",
     "delete-checked-items-confirmation-cancel-button": "Mégse",
-    "checked-items-deleted": "A kijelölt elemek sikeresen törölve."
+    "checked-items-deleted": "A kijelölt elemek sikeresen törölve.",
+    "checklist-items-ordered": "Sorba rendezés sikeres."
   }
 }
