@@ -2,6 +2,7 @@ package com.github.saphyra.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistItemNodeRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistItemResponse;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistResponse;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateChecklistItemRequest;
 import com.github.saphyra.apphub.integration.common.TestBase;
@@ -12,17 +13,16 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DeleteCheckedChecklistItemsTest extends TestBase {
+public class OrderChecklistTest extends TestBase {
     private static final String TITLE = "title";
-    private static final String CHECKED_CONTENT = "checked-content";
-    private static final String UNCHECKED_CONTENT = "unchecked-content";
 
     @Test
-    public void deleteCheckedChecklistItems() {
+    public void orderItems() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -31,27 +31,35 @@ public class DeleteCheckedChecklistItemsTest extends TestBase {
             .title(TITLE)
             .nodes(Arrays.asList(
                 ChecklistItemNodeRequest.builder()
-                    .order(3412)
+                    .order(1)
                     .checked(true)
-                    .content(CHECKED_CONTENT)
+                    .content("A")
                     .build(),
                 ChecklistItemNodeRequest.builder()
-                    .order(324)
-                    .checked(false)
-                    .content(UNCHECKED_CONTENT)
+                    .order(0)
+                    .checked(true)
+                    .content("B")
                     .build()
             ))
             .build();
 
         UUID listItemId = NotebookActions.createChecklist(language, accessTokenId, request);
 
-        Response response = NotebookActions.getDeleteCheckedChecklistItemsResponse(language, accessTokenId, listItemId);
+        Response response = NotebookActions.orderChecklistItems(language, accessTokenId, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
 
-        assertThat(checklistResponse.getNodes()).hasSize(1);
-        assertThat(checklistResponse.getNodes().get(0).getContent()).isEqualTo(UNCHECKED_CONTENT);
+        assertThat(checklistResponse.getNodes()).hasSize(2);
+        assertThat(findByOrder(checklistResponse.getNodes(), 0).getContent()).isEqualTo("A");
+        assertThat(findByOrder(checklistResponse.getNodes(), 1).getContent()).isEqualTo("B");
+    }
+
+    private ChecklistItemResponse findByOrder(List<ChecklistItemResponse> nodes, int order) {
+        return nodes.stream()
+            .filter(checklistItemResponse -> checklistItemResponse.getOrder().equals(order))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("No checklistItem found with order " + 2));
     }
 }

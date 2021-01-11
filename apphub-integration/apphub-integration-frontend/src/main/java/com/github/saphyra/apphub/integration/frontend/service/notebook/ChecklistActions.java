@@ -178,4 +178,9 @@ public class ChecklistActions {
 
         CommonPageActions.confirmDeletionDialog(driver, NotebookPage.DELETE_CHECKED_ITEMS_CONFIRMATION_DIALOG_ID);
     }
+
+    public static void orderItems(WebDriver driver) {
+        NotebookPage.orderChecklistItemsButton(driver)
+            .click();
+    }
 }

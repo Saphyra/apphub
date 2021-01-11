@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.checklist.CheckedChecklistItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemQueryService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemStatusUpdateService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemsOrderService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.creation.ChecklistCreationService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.edition.EditChecklistItemService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class ChecklistControllerImpl implements ChecklistController {
     private final EditChecklistItemService editChecklistItemService;
     private final ChecklistItemStatusUpdateService checklistItemStatusUpdateService;
     private final CheckedChecklistItemDeletionService checkedChecklistItemDeletionService;
+    private final ChecklistItemsOrderService checklistItemsOrderService;
 
     @Override
     public OneParamResponse<UUID> createChecklistItem(CreateChecklistItemRequest request, AccessTokenHeader accessTokenHeader) {
@@ -56,5 +58,11 @@ public class ChecklistControllerImpl implements ChecklistController {
     public void deleteCheckedItems(UUID listItemId) {
         log.info("Deleting checked items of checklist {}", listItemId);
         checkedChecklistItemDeletionService.deleteCheckedItems(listItemId);
+    }
+
+    @Override
+    public void orderItems(UUID listItemId) {
+        log.info("Ordering checklist items {}", listItemId);
+        checklistItemsOrderService.orderChecklistItems(listItemId);
     }
 }

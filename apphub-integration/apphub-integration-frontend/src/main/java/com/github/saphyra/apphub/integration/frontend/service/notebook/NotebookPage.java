@@ -107,6 +107,7 @@ class NotebookPage {
     private static final By CONVERT_TABLE_TO_CHECKLIST_TABLE_BUTTON = By.id("convert-table-to-checklist-table-button");
     private static final By DELETE_CHECKED_CHECKLIST_ITEM_BUTTON = By.id("delete-checked-checklist-items");
     private static final By DELETE_CHECKED_CHECKLIST_TABLE_ITEM_BUTTON = By.id("delete-checked-checklist-table-items");
+    private static final By ORDER_CHECKLIST_ITEMS_BUTTON = By.id("order-checklist-items");
 
     public static WebElement createCategoryWindow(WebDriver driver) {
         return driver.findElement(CREATE_CATEGORY_WINDOW);
@@ -498,5 +499,9 @@ class NotebookPage {
 
     public static WebElement deleteCheckedChecklistTableItemsButton(WebDriver driver) {
         return driver.findElement(DELETE_CHECKED_CHECKLIST_TABLE_ITEM_BUTTON);
+    }
+
+    public static WebElement orderChecklistItemsButton(WebDriver driver) {
+        return driver.findElement(ORDER_CHECKLIST_ITEMS_BUTTON);
     }
 }

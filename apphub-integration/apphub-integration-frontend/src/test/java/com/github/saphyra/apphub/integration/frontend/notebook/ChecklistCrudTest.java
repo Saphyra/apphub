@@ -349,4 +349,35 @@ public class ChecklistCrudTest extends SeleniumTest {
         assertThat(checklistItems).hasSize(1);
         assertThat(checklistItems.get(0).getContent()).isEqualTo(CHECKLIST_ITEM_2);
     }
+
+    @Test
+    public void orderItems() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+
+        ChecklistActions.createChecklist(
+            driver,
+            CHECKLIST_TITLE,
+            Arrays.asList(
+                NewChecklistItemData.builder().content("B").checked(true).build(),
+                NewChecklistItemData.builder().content("A").checked(false).build()
+            )
+        );
+
+        ChecklistActions.openChecklist(driver, CHECKLIST_TITLE);
+        ChecklistActions.orderItems(driver);
+
+        NotificationUtil.verifySuccessNotification(driver, "Sorba rendezés sikeres.");
+
+        ChecklistActions.closeWindow(driver);
+        ChecklistActions.openChecklist(driver, CHECKLIST_TITLE);
+        List<ViewChecklistItem> checklistItems = ChecklistActions.getChecklistItems(driver);
+        assertThat(checklistItems).hasSize(2);
+        assertThat(checklistItems.get(0).getContent()).isEqualTo("A");
+        assertThat(checklistItems.get(1).getContent()).isEqualTo("B");
+    }
 }

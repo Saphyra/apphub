@@ -59,7 +59,7 @@ public class UpdateChecklistItemStatusTest extends TestBase {
                 .build()))
             .build();
 
-        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, createChecklistItemRequest);
+        UUID listItemId = NotebookActions.createChecklist(language, accessTokenId, createChecklistItemRequest);
 
         ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
 
@@ -84,7 +84,7 @@ public class UpdateChecklistItemStatusTest extends TestBase {
                 .build()))
             .build();
 
-        UUID listItemId = NotebookActions.createChecklistItem(language, accessTokenId, createChecklistItemRequest);
+        UUID listItemId = NotebookActions.createChecklist(language, accessTokenId, createChecklistItemRequest);
 
         ChecklistResponse checklistResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
 
