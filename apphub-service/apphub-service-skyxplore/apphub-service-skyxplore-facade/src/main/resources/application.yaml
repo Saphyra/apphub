@@ -138,6 +138,10 @@ zuul:
       path: /api/skyxplore/game/planet/*/citizen/*/rename
       serviceId: skyxplore-game
       stripPrefix: false
+    set-planet-priority:
+      path: /api/skyxplore/game/planet/*/priority/*
+      serviceId: skyxplore-game
+      stripPrefix: false
 
 role:
   settings:

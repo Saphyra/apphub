@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceRespo
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.command.PriorityUpdateService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.command.RenameCitizenService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.PlanetBuildingOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.PlanetPopulationOverviewQueryService;
@@ -45,6 +46,7 @@ public class PlanetControllerImpl implements SkyXploreGamePlanetController {
     private final StorageSettingEditionService storageSettingEditionService;
     private final PopulationQueryService populationQueryService;
     private final RenameCitizenService renameCitizenService;
+    private final PriorityUpdateService priorityUpdateService;
 
     @Override
     //TODO unit test
@@ -150,5 +152,14 @@ public class PlanetControllerImpl implements SkyXploreGamePlanetController {
     public void renameCitizen(OneParamRequest<String> newName, UUID planetId, UUID citizenId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to rename citizen {} on planet {}", accessTokenHeader.getUserId(), citizenId, planetId);
         renameCitizenService.renameCitizen(accessTokenHeader.getUserId(), planetId, citizenId, newName.getValue());
+    }
+
+    @Override
+    //TODO unit test
+    //TODO unt test
+    //TODO api test
+    public void updatePriority(OneParamRequest<Integer> newPriority, UUID planetId, String priorityType, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to update priority of {} on planet {}", accessTokenHeader.getUserId(), priorityType, planetId);
+        priorityUpdateService.updatePriority(accessTokenHeader.getUserId(), planetId, priorityType, newPriority.getValue());
     }
 }

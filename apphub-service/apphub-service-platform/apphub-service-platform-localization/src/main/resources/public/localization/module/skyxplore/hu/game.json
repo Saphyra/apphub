@@ -266,6 +266,7 @@
     "satiety": "Jóllakottság",
     "citizen-name-too-short": "Név túl rövid (Minimum 3 karakter).",
     "citizen-name-too-long": "Név túl hosszú (Maximum 30 karakter).",
-    "citizen-renamed": "Átnevezés sikeres."
+    "citizen-renamed": "Átnevezés sikeres.",
+    "planet-priority-updated": "Prioritás beállítva."
   }
 }

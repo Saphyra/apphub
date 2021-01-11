@@ -266,6 +266,7 @@
     "satiety": "Satiety",
     "citizen-name-too-short": "Name too short (Min. 3 characters).",
     "citizen-name-too-long": "Name too long (Max. 30 characters).",
-    "citizen-renamed": "Rename successful."
+    "citizen-renamed": "Rename successful.",
+    "planet-priority-updated": "Priority updated."
   }
 }

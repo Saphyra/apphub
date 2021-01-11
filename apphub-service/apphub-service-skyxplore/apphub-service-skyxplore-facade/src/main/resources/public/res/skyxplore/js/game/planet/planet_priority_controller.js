@@ -33,8 +33,11 @@
 
     function updatePriority(priorityType, priority){
         const planetId = planetController.getOpenedPlanetId();
-        //TODO
-        notificationService.showSuccess("Updating priority of type " + priorityType + " to " + priority + " on planet " + planetId);
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_UPDATE_PRIORITY", {planetId: planetId, priorityType: priorityType}), {value: priority});
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("planet-priority-updated"));
+            }
+        dao.sendRequestAsync(request);
     }
 
     function init(){

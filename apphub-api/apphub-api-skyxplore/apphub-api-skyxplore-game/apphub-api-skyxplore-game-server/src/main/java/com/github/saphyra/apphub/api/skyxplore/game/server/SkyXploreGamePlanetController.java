@@ -55,4 +55,7 @@ public interface SkyXploreGamePlanetController {
 
     @PostMapping(Endpoints.SKYXPLORE_PLANET_RENAME_CITIZEN)
     void renameCitizen(@RequestBody OneParamRequest<String> newName, @PathVariable("planetId") UUID planetId, @PathVariable("citizenId") UUID citizenId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.SKYXPLORE_PLANET_UPDATE_PRIORITY)
+    void updatePriority(@RequestBody OneParamRequest<Integer> newPriority, @PathVariable("planetId") UUID planetId, @PathVariable("priorityType") String priorityType, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }
