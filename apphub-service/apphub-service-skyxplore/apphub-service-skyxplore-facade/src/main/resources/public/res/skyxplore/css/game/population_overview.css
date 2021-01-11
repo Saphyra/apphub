@@ -34,9 +34,18 @@
 
                 #population-overview-skill-list label{
                     display: block;
-                    border: 1px solid;
+                    border: 1px inset white;
                     margin: 0.25rem;
                     border-radius: 5px;
+                    padding: 0.15rem;
+                }
+
+                #population-overview-skill-list label:hover{
+                    border: 1px inset red;
+                }
+
+                #population-overview-skill-list label:active{
+                    border: 1px outset orange;
                 }
 
                 #population-overview-order-skill-list-input{
@@ -62,6 +71,7 @@
                 font-size: 1.5rem;
                 font-weight: bold;
                 margin: 0.5rem 0;
+                cursor: pointer;
             }
 
             .population-overview-citizen-progress-bar{

@@ -9,7 +9,9 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorag
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageSettingsResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.command.RenameCitizenService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.PlanetBuildingOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.PlanetPopulationOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.PlanetStorageQueryService;
@@ -42,6 +44,7 @@ public class PlanetControllerImpl implements SkyXploreGamePlanetController {
     private final StorageSettingDeletionService storageSettingDeletionService;
     private final StorageSettingEditionService storageSettingEditionService;
     private final PopulationQueryService populationQueryService;
+    private final RenameCitizenService renameCitizenService;
 
     @Override
     //TODO unit test
@@ -138,5 +141,14 @@ public class PlanetControllerImpl implements SkyXploreGamePlanetController {
     public List<CitizenResponse> getPopulation(UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the population of planet {}", accessTokenHeader.getUserId(), planetId);
         return populationQueryService.getPopulation(accessTokenHeader.getUserId(), planetId);
+    }
+
+    @Override
+    //TODO unit test
+    //TODO unt test
+    //TODO api test
+    public void renameCitizen(OneParamRequest<String> newName, UUID planetId, UUID citizenId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to rename citizen {} on planet {}", accessTokenHeader.getUserId(), citizenId, planetId);
+        renameCitizenService.renameCitizen(accessTokenHeader.getUserId(), planetId, citizenId, newName.getValue());
     }
 }

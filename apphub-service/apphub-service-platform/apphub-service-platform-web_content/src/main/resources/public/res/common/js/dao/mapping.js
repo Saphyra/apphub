@@ -88,6 +88,7 @@ window.Mapping = new function(){
         SKYXPLORE_PLANET_DELETE_STORAGE_SETTING: new Endpoint("/api/skyxplore/game/planet/{planetId}/storage-settings/{storageSettingId}", HttpMethod.DELETE),
         SKYXPLORE_PLANET_EDIT_STORAGE_SETTING: new Endpoint("/api/skyxplore/game/planet/{planetId}/storage-settings/{storageSettingId}", HttpMethod.POST),
         SKYXPLORE_PLANET_GET_POPULATION: new Endpoint("/api/skyxplore/game/planet/{planetId}/citizen", HttpMethod.GET),
+        SKYXPLORE_PLANET_RENAME_CITIZEN: new Endpoint("/api/skyxplore/game/planet/{planetId}/citizen/{citizenId}/rename", HttpMethod.POST),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorag
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageSettingsResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,4 +52,7 @@ public interface SkyXploreGamePlanetController {
 
     @GetMapping(Endpoints.SKYXPLORE_PLANET_GET_POPULATION)
     List<CitizenResponse> getPopulation(@PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.SKYXPLORE_PLANET_RENAME_CITIZEN)
+    void renameCitizen(@RequestBody OneParamRequest<String> newName, @PathVariable("planetId") UUID planetId, @PathVariable("citizenId") UUID citizenId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

@@ -263,6 +263,9 @@
     "delete-storage-setting-decline-button": "Cancel",
     "storage-setting-saved": "Storage setting saved.",
     "morale": "Morale",
-    "satiety": "Satiety"
+    "satiety": "Satiety",
+    "citizen-name-too-short": "Name too short (Min. 3 characters).",
+    "citizen-name-too-long": "Name too long (Max. 30 characters).",
+    "citizen-renamed": "Rename successful."
   }
 }

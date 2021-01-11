@@ -134,6 +134,10 @@ zuul:
       path: /api/skyxplore/game/planet/*/citizen
       serviceId: skyxplore-game
       stripPrefix: false
+    rename-citizen:
+      path: /api/skyxplore/game/planet/*/citizen/*/rename
+      serviceId: skyxplore-game
+      stripPrefix: false
 
 role:
   settings:

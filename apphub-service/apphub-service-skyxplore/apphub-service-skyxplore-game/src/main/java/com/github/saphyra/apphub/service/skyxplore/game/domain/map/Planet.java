@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.map;
 
+import com.github.saphyra.apphub.lib.common_util.map.OptionalHashMap;
+import com.github.saphyra.apphub.lib.common_util.map.OptionalMap;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
@@ -9,7 +11,6 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -32,7 +33,7 @@ public class Planet {
     private UUID owner;
 
     @Builder.Default
-    private final Map<UUID, Citizen> population = new HashMap<>();
+    private final OptionalMap<UUID, Citizen> population = new OptionalHashMap<>();
 
     @Builder.Default
     private final StorageDetails storageDetails = new StorageDetails();

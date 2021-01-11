@@ -34,7 +34,7 @@
     function updatePriority(priorityType, priority){
         const planetId = planetController.getOpenedPlanetId();
         //TODO
-        logService.showSuccess("Updating priority of type " + priorityType + " to " + priority + " on planet " + planetId);
+        notificationService.showSuccess("Updating priority of type " + priorityType + " to " + priority + " on planet " + planetId);
     }
 
     function init(){

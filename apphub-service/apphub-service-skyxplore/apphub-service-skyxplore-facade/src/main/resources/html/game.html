@@ -248,19 +248,19 @@
                     <BUTTON id="population-overview-order-toggle-button"></BUTTON>
 
                     <DIV id="population-overview-order-container" class="population-overview-filter-selection-container">
-                        <DIV id="population-overview-order-by-name-button" class="button"></DIV>
-                        <DIV id="population-overview-order-by-skill-level-button" class="button"></DIV>
+                        <DIV id="population-overview-order-by-name-button" class="button" onclick="populationOverviewController.setOrderType('name')"></DIV>
+                        <DIV id="population-overview-order-by-skill-level-button" class="button" onclick="populationOverviewController.setOrderType('skill_level')"></DIV>
 
                         <SELECT id="population-overview-order-skill-list-input"></SELECT>
 
                         <DIV id="population-overview-order-type-container">
                             <LABEL>
-                                <INPUT type="radio" name="population-overview-order-type" value="asc" checked>
+                                <INPUT type="radio" name="population-overview-order-type" class="population-overview-order-type" value="1" checked>
                                 <SPAN id="population-overview-order-type-asc"></SPAN>
                             </LABEL>
 
                             <LABEL>
-                                <INPUT type="radio" name="population-overview-order-type" value="desc">
+                                <INPUT type="radio" name="population-overview-order-type" class="population-overview-order-type" value="-1">
                                 <SPAN id="population-overview-order-type-desc"></SPAN>
                             </LABEL>
                         </DIV>

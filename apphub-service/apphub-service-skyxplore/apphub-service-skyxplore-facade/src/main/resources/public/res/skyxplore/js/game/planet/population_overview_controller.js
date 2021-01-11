@@ -1,8 +1,18 @@
 (function PopulationOverviewController(){
+    const orderTypes = {
+        NAME: "name",
+        SKILL_LEVEL: "skill_level"
+    }
+
     let population;
+    let orderType = orderTypes.NAME;
 
     window.populationOverviewController = new function(){
         this.viewPopulationOverview = viewPopulationOverview;
+        this.setOrderType = function(o){
+            orderType = o;
+            displayPopulation();
+        }
     }
 
     $(document).ready(init);
@@ -39,7 +49,21 @@
                 .forEach(function(node){populationContainer.appendChild(node)});
 
         function sortCitizens(a, b){
-            return 0; //TODO
+            const orderValue = Number(document.querySelector("input[name=population-overview-order-type]:checked").value);
+
+            switch(orderType){
+                case orderTypes.NAME:
+                    return orderValue * a.name.localeCompare(b.name);
+                break;
+                case orderTypes.SKILL_LEVEL:
+                    const skillType = document.getElementById(ids.populationOverviewOrderSkillListInput).value;
+
+                    return orderValue * (a.skills[skillType].level - b.skills[skillType].level);
+                break;
+                default:
+                    logService.warn("Unknown orderType: " + orderType);
+                    return 0;
+            }
         }
 
         function createCitizenNode(citizen){
@@ -48,7 +72,23 @@
 
                 const citizenName = document.createElement("DIV");
                     citizenName.classList.add("population-overview-citizen-name");
-                    citizenName.innerHTML = citizen.name;
+                    citizenName.innerText = citizen.name;
+
+                    citizenName.onclick = function(){
+                        citizenName.contentEditable = true;
+                        citizenName.focus();
+                    }
+
+                    $(citizenName).on("focusin", function(){selectElementText(citizenName);});
+                    $(citizenName).on("focusout", function(){
+                        const newName = citizenName.innerText;
+                        citizenName.contentEditable = false;
+                        clearSelection();
+                        citizenName.innerText = citizen.name;
+                        if(newName != citizen.name){
+                            updateCitizenName(citizen.citizenId, newName);
+                        }
+                    });
             node.appendChild(citizenName);
 
                 const baseStatContainer = document.createElement("DIV");
@@ -56,10 +96,15 @@
                     baseStatContainer.appendChild(createProgressBar(citizen.satiety, Localization.getAdditionalContent("satiety") + ": " + citizen.satiety));
             node.appendChild(baseStatContainer);
 
+                const displayableSkills = [];
+                $(".population-overview-skill-type:checked").each(function(){
+                    displayableSkills.push($(this).attr("value"));
+                });
+
                 const skillContainer = document.createElement("DIV");
                     skillContainer.classList.add("population-overview-citizen-skills");
                     new MapStream(citizen.skills)
-                        .filter(canDisplaySkill)
+                        .filter(function(skill){return canDisplaySkill(displayableSkills, skill)})
                         .sorted(sortSkills)
                         .map(createSkillProgressBar)
                         .toListStream()
@@ -86,12 +131,12 @@
                 return container;
             }
 
-            function canDisplaySkill(skillType){
-                return true; //TODO
+            function canDisplaySkill(displayableSkills, skillType){
+                return displayableSkills.indexOf(skillType) > -1;
             }
 
             function sortSkills(a, b){
-                return 0; //TODO
+                return skillTypeLocalization.get(a.getKey()).localeCompare(skillTypeLocalization.get(b.getKey()));
             }
 
             function createSkillProgressBar(skillType, skill){
@@ -100,6 +145,24 @@
                 return createProgressBar(percentage, label);
             }
         }
+    }
+
+    function updateCitizenName(citizenId, newName){
+        if(newName.length < 3){
+            notificationService.showError(Localization.getAdditionalContent("citizen-name-too-short"));
+            return;
+        }
+        if(newName.length > 30){
+            notificationService.showError(Localization.getAdditionalContent("citizen-name-too-long"));
+            return;
+        }
+        const planetId = planetController.getOpenedPlanetId();
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_RENAME_CITIZEN", {planetId: planetId, citizenId: citizenId}), {value: newName});
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("citizen-renamed"));
+                viewPopulationOverview(planetId);
+            }
+        dao.sendRequestAsync(request);
     }
 
     function init(){
@@ -133,6 +196,8 @@
             .sorted(function(a, b){return skillTypeLocalization.get(a).localeCompare(skillTypeLocalization.get(b))})
             .map(createSkillTypeOption)
             .forEach(function(node){skillTypeSelectInput.appendChild(node)});
+
+        $(".population-overview-order-type").on("change", displayPopulation);
 
         function createSkillTypeCheckbox(skillType){
             const node = document.createElement("LABEL");
