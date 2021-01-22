@@ -24,3 +24,7 @@ modules:
         mobileAllowed: true
         roles:
           - NOTEBOOK
+      - name: json-formatter
+        url: /web/utils/json-formatter
+        allowedByDefault: true
+        mobileAllowed: true

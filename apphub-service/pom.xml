@@ -143,5 +143,6 @@
         <module>apphub-service-platform</module>
         <module>apphub-service-admin_panel</module>
       <module>apphub-service-notebook</module>
+    <module>apphub-service-utils</module>
   </modules>
 </project>

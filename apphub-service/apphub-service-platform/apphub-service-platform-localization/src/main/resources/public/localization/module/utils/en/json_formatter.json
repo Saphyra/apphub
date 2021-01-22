@@ -1,0 +1,32 @@
+{
+  "title": "JSON formatter - Apphub",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "JSON formatter"
+      }
+    ],
+    "input": [
+      {
+        "key": "placeholder",
+        "message": "Paste the JSON here"
+      }
+    ],
+    "format-button": [
+      {
+        "key": "innerHTML",
+        "message": "Format"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Back"
+      }
+    ]
+  },
+  "additionalContent": {
+    "json-processing-failed": "Failed to process the input. Please check the syntax."
+  }
+}

@@ -29,6 +29,10 @@ zuul:
       path: /res/admin-panel/**
       serviceId: admin-panel
       stripPrefix: false
+    utils-resources:
+      path: /res/utils/**
+      serviceId: utils
+      stripPrefix: false
 
     #PAGES
     error-page:
@@ -55,6 +59,10 @@ zuul:
       path: /web/admin-panel/**
       serviceId: admin-panel
       stripPrefix: false
+    utils-pages:
+      path: /web/utils/**
+      serviceId: utils
+      stripPrefix: false
 
     #MODULES
     user:
@@ -72,6 +80,10 @@ zuul:
     modules:
       path: /api/modules/**
       serviceId: modules
+      stripPrefix: false
+    utils:
+      path: /api/utils/**
+      serviceId: utils
       stripPrefix: false
 
     #PLATFORM
