@@ -1,0 +1,58 @@
+<HTML>
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/utils/css/mobile_messages.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT src="/res/utils/js/mobile_messages/page_controller.js"></SCRIPT>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title"></H1>
+    </HEADER>
+
+    <MAIN>
+        <LABEL>
+            <SPAN id="message-type-label"></SPAN>
+            <SELECT id="message-type-input">
+                <OPTION value="OPTIONAL_APP_UPDATE">Optional App Update</OPTION>
+                <OPTION value="MANDATORY_APP_UPDATE">Mandatory App Update</OPTION>
+                <OPTION value="OPTIONAL_OS_UPDATE">Optional OS Update</OPTION>
+                <OPTION value="MANDATORY_OS_UPDATE">Mandatory OS Update</OPTION>
+            </SELECT>
+        </LABEL>
+
+        <LABEL>
+            <SPAN id="os-label"></SPAN>
+            <SELECT id="os-input">
+                <OPTION value="iOS">iOS</OPTION>
+                <OPTION value="Android">Android</OPTION>
+            </SELECT>
+        </LABEL>
+
+        <LABEL>
+            <SPAN id="version-label"></SPAN>
+            <INPUT type="text" id="version-input">
+        </LABEL>
+
+        <INPUT type="text" id="en-title" class="localization-input">
+        <INPUT type="text" id="de-title" class="localization-input">
+        <INPUT type="text" id="en-detail" class="localization-input">
+        <INPUT type="text" id="de-detail" class="localization-input">
+
+        <DIV id="generate-button" class="button" onclick="sqlGenerator.generate()"></DIV>
+
+        <DIV id="result"></DIV>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="back-button" onclick='window.location = "/web/modules"'></BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

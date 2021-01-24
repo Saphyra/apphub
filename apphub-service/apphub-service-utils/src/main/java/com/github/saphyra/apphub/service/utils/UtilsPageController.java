@@ -14,4 +14,9 @@ public class UtilsPageController {
     public String jsonFormatterPage() {
         return "json_formatter";
     }
+
+    @GetMapping(Endpoints.UTILS_MOBILE_MESSAGES)
+    public String mobileMessagesPage() {
+        return "mobile_messages";
+    }
 }
