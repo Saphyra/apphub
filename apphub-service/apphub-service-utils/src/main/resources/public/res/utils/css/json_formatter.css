@@ -9,22 +9,26 @@
     margin: 1rem;
 }
 
-.string {
-    color: lightgreen;
+#result{
+    overflow: auto;
 }
 
-.number {
-    color: orange;
-}
+    .string {
+        color: lightgreen;
+    }
 
-.boolean {
-    color: cyan;
-}
+    .number {
+        color: orange;
+    }
 
-.null {
-    color: pink;
-}
+    .boolean {
+        color: cyan;
+    }
 
-.key {
-    color: white;
-}
+    .null {
+        color: pink;
+    }
+
+    .key {
+        color: white;
+    }

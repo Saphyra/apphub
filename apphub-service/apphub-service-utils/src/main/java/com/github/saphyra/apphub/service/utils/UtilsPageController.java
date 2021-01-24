@@ -15,6 +15,11 @@ public class UtilsPageController {
         return "json_formatter";
     }
 
+    @GetMapping(Endpoints.UTILS_LOG_FORMATTER_PAGE)
+    public String logFormatterPage() {
+        return "log_formatter";
+    }
+
     @GetMapping(Endpoints.UTILS_MOBILE_MESSAGES)
     public String mobileMessagesPage() {
         return "mobile_messages";

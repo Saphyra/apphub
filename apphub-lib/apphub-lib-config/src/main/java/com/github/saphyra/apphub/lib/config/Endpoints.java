@@ -71,4 +71,8 @@ public class Endpoints {
     public static final String NOTEBOOK_PAGE = "/web/notebook";
     public static final String UTILS_JSON_FORMATTER_PAGE = "/web/utils/json-formatter";
     public static final String UTILS_MOBILE_MESSAGES = "/web/utils/mobile-messages";
+    public static final String UTILS_LOG_FORMATTER_PAGE = "/web/utils/log-formatter";
+
+    public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";
+    public static final String UTILS_LOG_FORMATTER_SET_VISIBILITY = "/api/utils/log-formatter/visibility";
 }

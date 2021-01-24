@@ -1,18 +1,3 @@
-/*
-    Request object for processing async BackEnd calls.
-    Fields:
-        - method:
-        - path:
-        - body: The request body. Will be converted to JSON if object.
-        - state: helper field for result processing
-    Methods:
-        - processResponse: will be called by dao when xhr request returns. Parameter: response object of the xhr
-        - isResponseOk: determinated if the request is Ok. If it is, processValidResponse, if not, processInvalidResponse will be called.
-        - convertResponse: converts the response of the xhr response.
-        - processValidResponse: will be called when xhr response is valid.
-        - processErrorResponse: will be called when xhr request fails.
-        - validate: validates if the Request is valid for sending.
-*/
 function Request(endpoint, body){
     this.method = endpoint.getMethod();
     this.path = endpoint.getUrl();
@@ -33,7 +18,7 @@ function Request(endpoint, body){
         if(this.isResponseOk(response)){
             this.processValidResponse(this.convertResponse(response), this.state);
         }else{
-            errorHandler.handleError(this, response);
+            this.processInvalidResponse(response);
         }
     }
     
@@ -47,6 +32,10 @@ function Request(endpoint, body){
     
     this.processValidResponse = function(payload, state){
         console.log("Using no overridden processValidResponse");
+    }
+
+    this.processInvalidResponse = function(response){
+        errorHandler.handleError(this, response);
     }
     
     this.processErrorResponse = function(response){

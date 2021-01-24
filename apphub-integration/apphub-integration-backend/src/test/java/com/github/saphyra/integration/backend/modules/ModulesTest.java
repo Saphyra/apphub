@@ -43,13 +43,32 @@ public class ModulesTest extends TestBase {
 
         Map<String, List<ModulesResponse>> result = ModulesPageActions.getModules(locale, accessTokenId);
 
-        assertThat(result).containsOnlyKeys("accounts", "office");
-        ModulesResponse expectedModule = ModulesResponse.builder()
+        assertThat(result).containsOnlyKeys("accounts", "office", "development-utils");
+        ModulesResponse expectedModuleAccount = ModulesResponse.builder()
             .name("account")
             .url("/web/user/account")
             .favorite(false)
             .build();
-        assertThat(result.get("accounts")).containsExactly(expectedModule);
+        assertThat(result.get("accounts")).containsExactly(expectedModuleAccount);
+
+        ModulesResponse expectedModuleNotebook = ModulesResponse.builder()
+            .name("notebook")
+            .url("/web/notebook")
+            .favorite(false)
+            .build();
+        assertThat(result.get("office")).containsExactly(expectedModuleNotebook);
+
+        ModulesResponse expectedModuleLogFormatter = ModulesResponse.builder()
+            .name("log-formatter")
+            .url("/web/utils/log-formatter")
+            .favorite(false)
+            .build();
+        ModulesResponse expectedModuleJsonFormatter = ModulesResponse.builder()
+            .name("json-formatter")
+            .url("/web/utils/json-formatter")
+            .favorite(false)
+            .build();
+        assertThat(result.get("development-utils")).containsExactlyInAnyOrder(expectedModuleLogFormatter, expectedModuleJsonFormatter);
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -128,7 +147,7 @@ public class ModulesTest extends TestBase {
             true
         );
 
-        assertThat(result).containsOnlyKeys("accounts", "office");
+        assertThat(result).containsOnlyKeys("accounts", "office", "development-utils");
         ModulesResponse expectedModule = ModulesResponse.builder()
             .name("account")
             .url("/web/user/account")

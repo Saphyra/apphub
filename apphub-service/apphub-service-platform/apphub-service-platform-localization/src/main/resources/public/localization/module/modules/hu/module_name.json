@@ -3,5 +3,6 @@
   "admin-panel": "Adminisztráció",
   "notebook": "Jegyzetfüzet",
   "json-formatter": "JSON formázó",
+  "log-formatter": "Log formázó",
   "mobile-messages": "Mobile Messages"
 }

@@ -1,3 +1,14 @@
 spring:
   application:
     name: utils
+
+liquibase:
+  schema: utils
+
+role:
+  settings:
+    - pattern: /web/utils/mobile-messages
+      methods:
+        - GET
+      requiredRoles:
+        - VERIMI_DEVELOPER

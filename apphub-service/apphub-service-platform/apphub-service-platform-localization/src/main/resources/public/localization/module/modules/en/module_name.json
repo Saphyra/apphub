@@ -3,5 +3,6 @@
   "admin-panel": "Admin panel",
   "notebook": "Notebook",
   "json-formatter": "JSON formatter",
+  "log-formatter": "Log formatter",
   "mobile-messages": "Mobile Messages"
 }

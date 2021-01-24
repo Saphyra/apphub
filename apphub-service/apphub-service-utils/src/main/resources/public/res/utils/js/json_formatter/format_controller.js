@@ -11,7 +11,9 @@
         try{
             const obj = JSON.parse(input);
             const formatted = JSON.stringify(obj, null, 2);
-            const highlighted = syntaxHighlight(formatted);
+            const highlighted = syntaxHighlight(formatted)
+                .replaceAll("\\r\\n", "\n")
+                .replaceAll("\\t", "\t");;
             result.innerHTML = highlighted;
         }catch(e){
             notificationService.showError(Localization.getAdditionalContent("json-processing-failed"));

@@ -1,0 +1,63 @@
+{
+  "title": "Log formatter - Apphub",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Log formatter"
+      }
+    ],
+    "input": [
+      {
+        "key": "placeholder",
+        "message": "Paste the log here"
+      }
+    ],
+    "format-button": [
+      {
+        "key": "innerHTML",
+        "message": "Format"
+      }
+    ],
+    "filter-input": [
+      {
+        "key": "placeholder",
+        "message": "Filter by"
+      }
+    ],
+    "add-filter-rule-button": [
+      {
+        "key": "innerHTML",
+        "message": "Add rule"
+      }
+    ],
+    "order-type-asc": [
+      {
+        "key": "innerHTML",
+        "message": "Ascending"
+      }
+    ],
+    "order-type-desc": [
+      {
+        "key": "innerHTML",
+        "message": "Descending"
+      }
+    ],
+    "order-original": [
+      {
+        "key": "innerHTML",
+        "message": "Original"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Back"
+      }
+    ]
+  },
+  "additionalContent": {
+    "json-processing-failed": "Failed to process the input. Please check the syntax.",
+    "empty-filter-text": "Please add the text to filter"
+  }
+}
