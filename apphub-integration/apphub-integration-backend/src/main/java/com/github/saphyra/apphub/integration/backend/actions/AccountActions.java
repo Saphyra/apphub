@@ -18,7 +18,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AccountPageActions {
+public class AccountActions {
     public static void changeLanguage(Language language, UUID accessTokenId, String locale) {
         Response response = getChangeLanguageResponse(language, accessTokenId, locale);
         assertThat(response.getStatusCode()).isEqualTo(200);

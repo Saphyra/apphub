@@ -40,46 +40,27 @@
             xhr.onerror = function(){
                 request.processErrorResponse(new Response(xhr));
             };
-            
-            
+
             xhr.send(request.body);
     }
     
-    /*
-    Sends HttpRequest based on the specified arguments
-    Arguments:
-        - method: The method of the request.
-        - path: The target of the request.
-        - content: The body of the request.
-    Returns:
-        - The sent request.
-    Throws:
-        - IllegalArgument exception, if method is not a string.
-        - IllegalArgument exception, if method is unsupported.
-        - IllegalArgument exception, if path is not a string.
-    */
-    function sendRequest(method, path, content){
-        validation(method, path);
-        method = method.toUpperCase();
-        
-        const request = new XMLHttpRequest();
-        try{
-            content = content || "";
-            if(typeof content === "object"){
-                content = JSON.stringify(content);
+    function sendRequest(request){
+        request.validate();
+
+        const xhr = new XMLHttpRequest();
+
+            xhr.open(request.method, request.path, 0);
+            prepareRequest(xhr, request.method);
+
+            try{
+                xhr.send(request.body);
+            }catch(e){
+                request.processErrorResponse(new Response(xhr));
+                throw e;
             }
-            
-            request.open(method, path, 0);
-            prepareRequest(request, method);
-            
-            request.send(content);
-        }
-        catch(err){
-            const message = arguments.callee.name + " - " + err.name + ": " + err.message;
-            logService.log(message, "error", request.responseURL + " - ");
-        }finally{
-            return new Response(request);
-        }
+
+            const response = new Response(xhr);
+            request.processResponse(response);
     }
     
     function validation(method, path){

@@ -10,7 +10,7 @@ import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
-import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocalMandatoryRequestValidation;
+import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -29,7 +29,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableErrorHandler
 @Import(CommonConfigProperties.class)
 @EnableHealthCheck
-@EnableLocalMandatoryRequestValidation
+@EnableLocaleMandatoryRequestValidation
 class BeanConfiguration {
     @Bean
     @ConditionalOnMissingBean(ExecutorServiceBean.class)

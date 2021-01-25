@@ -1,0 +1,63 @@
+{
+  "title": "Log formázó - Apphub",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Log formázó"
+      }
+    ],
+    "input": [
+      {
+        "key": "placeholder",
+        "message": "Másold ide a logot!"
+      }
+    ],
+    "format-button": [
+      {
+        "key": "innerHTML",
+        "message": "Formázás"
+      }
+    ],
+    "filter-input": [
+      {
+        "key": "placeholder",
+        "message": "Szűrés"
+      }
+    ],
+    "add-filter-rule-button": [
+      {
+        "key": "innerHTML",
+        "message": "Szabály hozzáadása"
+      }
+    ],
+    "order-type-asc": [
+      {
+        "key": "innerHTML",
+        "message": "Növekvő"
+      }
+    ],
+    "order-type-desc": [
+      {
+        "key": "innerHTML",
+        "message": "Csökkenő"
+      }
+    ],
+    "order-original": [
+      {
+        "key": "innerHTML",
+        "message": "Eredeti"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Back"
+      }
+    ]
+  },
+  "additionalContent": {
+    "json-processing-failed": "Nem sikerült a formázás. Ellenőrizd a formátumot!",
+    "empty-filter-text": "Adja meg a keresendő szöveget!"
+  }
+}

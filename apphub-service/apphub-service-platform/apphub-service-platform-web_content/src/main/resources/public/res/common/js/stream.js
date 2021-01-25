@@ -14,6 +14,13 @@ function Stream(a){
         return true;
     }
 
+    this.distinct = function(){
+        const newArr = array.filter(function(value, index, self){
+            return self.indexOf(value) === index
+        });
+        return new Stream(newArr);
+    }
+
     this.findFirst = function(){
         return array[0];
     }
@@ -92,6 +99,14 @@ function Stream(a){
 
     this.peek = function(consumer){
         this.forEach(consumer);
+        return this;
+    }
+
+    this.reverse = function(shouldReverse){
+        if(!hasValue(shouldReverse) || shouldReverse){
+            array.reverse();
+        }
+
         return this;
     }
 

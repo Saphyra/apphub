@@ -1,6 +1,6 @@
 package com.github.saphyra.integration.backend.account;
 
-import com.github.saphyra.apphub.integration.backend.actions.AccountPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.AccountActions;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.model.account.ChangePasswordRequest;
 import com.github.saphyra.apphub.integration.common.TestBase;
@@ -36,7 +36,7 @@ public class ChangePasswordTest extends TestBase {
             .password(userData.getPassword())
             .build();
 
-        Response response = AccountPageActions.getChangePasswordResponse(locale, accessTokenId, request);
+        Response response = AccountActions.getChangePasswordResponse(locale, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -55,7 +55,7 @@ public class ChangePasswordTest extends TestBase {
             .password(userData.getPassword())
             .build();
 
-        Response response = AccountPageActions.getChangePasswordResponse(locale, accessTokenId, request);
+        Response response = AccountActions.getChangePasswordResponse(locale, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -73,7 +73,7 @@ public class ChangePasswordTest extends TestBase {
             .password(userData.getPassword())
             .build();
 
-        Response response = AccountPageActions.getChangePasswordResponse(locale, accessTokenId, request);
+        Response response = AccountActions.getChangePasswordResponse(locale, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -91,7 +91,7 @@ public class ChangePasswordTest extends TestBase {
             .password(null)
             .build();
 
-        Response response = AccountPageActions.getChangePasswordResponse(locale, accessTokenId, request);
+        Response response = AccountActions.getChangePasswordResponse(locale, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -110,7 +110,7 @@ public class ChangePasswordTest extends TestBase {
             .password(DataConstants.INVALID_PASSWORD)
             .build();
 
-        Response response = AccountPageActions.getChangePasswordResponse(locale, accessTokenId, request);
+        Response response = AccountActions.getChangePasswordResponse(locale, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -129,7 +129,7 @@ public class ChangePasswordTest extends TestBase {
             .password(DataConstants.VALID_PASSWORD)
             .build();
 
-        Response response = AccountPageActions.getChangePasswordResponse(locale, accessTokenId, request);
+        Response response = AccountActions.getChangePasswordResponse(locale, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 

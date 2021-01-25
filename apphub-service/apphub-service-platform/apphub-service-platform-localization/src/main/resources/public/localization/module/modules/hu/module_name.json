@@ -1,5 +1,8 @@
 {
   "account": "Fiók kezelése",
   "admin-panel": "Adminisztráció",
-  "notebook": "Jegyzetfüzet"
+  "notebook": "Jegyzetfüzet",
+  "json-formatter": "JSON formázó",
+  "log-formatter": "Log formázó",
+  "mobile-messages": "Mobile Messages"
 }

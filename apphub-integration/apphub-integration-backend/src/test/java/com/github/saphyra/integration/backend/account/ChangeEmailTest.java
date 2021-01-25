@@ -1,6 +1,6 @@
 package com.github.saphyra.integration.backend.account;
 
-import com.github.saphyra.apphub.integration.backend.actions.AccountPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.AccountActions;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.model.account.ChangeEmailRequest;
 import com.github.saphyra.apphub.integration.common.TestBase;
@@ -36,7 +36,7 @@ public class ChangeEmailTest extends TestBase {
             .password(userData.getPassword())
             .build();
 
-        Response response = AccountPageActions.getChangeEmailResponse(locale, accessTokenId, request);
+        Response response = AccountActions.getChangeEmailResponse(locale, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -55,7 +55,7 @@ public class ChangeEmailTest extends TestBase {
             .password(userData.getPassword())
             .build();
 
-        Response response = AccountPageActions.getChangeEmailResponse(locale, accessTokenId, request);
+        Response response = AccountActions.getChangeEmailResponse(locale, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -74,7 +74,7 @@ public class ChangeEmailTest extends TestBase {
             .password(userData.getPassword())
             .build();
 
-        Response response = AccountPageActions.getChangeEmailResponse(locale, accessTokenId, request);
+        Response response = AccountActions.getChangeEmailResponse(locale, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(409);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -92,7 +92,7 @@ public class ChangeEmailTest extends TestBase {
             .password(null)
             .build();
 
-        Response response = AccountPageActions.getChangeEmailResponse(locale, accessTokenId, request);
+        Response response = AccountActions.getChangeEmailResponse(locale, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -111,7 +111,7 @@ public class ChangeEmailTest extends TestBase {
             .password("incorrect-password")
             .build();
 
-        Response response = AccountPageActions.getChangeEmailResponse(locale, accessTokenId, request);
+        Response response = AccountActions.getChangeEmailResponse(locale, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -131,7 +131,7 @@ public class ChangeEmailTest extends TestBase {
             .password(userData.getPassword())
             .build();
 
-        Response response = AccountPageActions.getChangeEmailResponse(locale, accessTokenId, request);
+        Response response = AccountActions.getChangeEmailResponse(locale, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 

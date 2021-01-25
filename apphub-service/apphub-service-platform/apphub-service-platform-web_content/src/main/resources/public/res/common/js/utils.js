@@ -115,3 +115,14 @@ function search(arr, predicate){
 
     return null;
 }
+
+function bulkReplaceAll(text, replacements){
+    let result = text;
+
+    for(let key in replacements){
+        while(result.indexOf(key) > -1){
+            result = result.replace(key, replacements[key]);
+        }
+    }
+    return result
+}

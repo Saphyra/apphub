@@ -1,6 +1,6 @@
 package com.github.saphyra.integration.backend.account;
 
-import com.github.saphyra.apphub.integration.backend.actions.AccountPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.AccountActions;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.model.LanguageResponse;
 import com.github.saphyra.apphub.integration.common.TestBase;
@@ -39,7 +39,7 @@ public class ChangeLanguageTest extends TestBase {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
 
-        Response response = AccountPageActions.getChangeLanguageResponse(locale, accessTokenId, null);
+        Response response = AccountActions.getChangeLanguageResponse(locale, accessTokenId, null);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -53,7 +53,7 @@ public class ChangeLanguageTest extends TestBase {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
 
-        Response response = AccountPageActions.getChangeLanguageResponse(locale, accessTokenId, "asd");
+        Response response = AccountActions.getChangeLanguageResponse(locale, accessTokenId, "asd");
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -67,9 +67,9 @@ public class ChangeLanguageTest extends TestBase {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(registerLanguage, userData);
 
-        AccountPageActions.changeLanguage(registerLanguage, accessTokenId, changeLanguage.getLocale());
+        AccountActions.changeLanguage(registerLanguage, accessTokenId, changeLanguage.getLocale());
 
-        List<LanguageResponse> languageResponses = AccountPageActions.getLanguages(registerLanguage, accessTokenId);
+        List<LanguageResponse> languageResponses = AccountActions.getLanguages(registerLanguage, accessTokenId);
 
         assertThat(
             languageResponses.stream()

@@ -1,0 +1,32 @@
+{
+  "title": "JSON formázó -  Apphub",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "JSON formázó"
+      }
+    ],
+    "input": [
+      {
+        "key": "placeholder",
+        "message": "Másold ide a JSON-t!"
+      }
+    ],
+    "format-button": [
+      {
+        "key": "innerHTML",
+        "message": "Formázás"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Vissza"
+      }
+    ]
+  },
+  "additionalContent": {
+    "json-processing-failed": "Nem sikerült a formázás. Ellenőrizd a formátumot!"
+  }
+}

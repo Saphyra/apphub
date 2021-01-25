@@ -10,7 +10,7 @@ import com.github.saphyra.apphub.lib.config.thymeleaf.EnableThymeLeaf;
 import com.github.saphyra.apphub.lib.encryption.EnableEncryption;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
-import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocalMandatoryRequestValidation;
+import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
 import com.github.saphyra.apphub.service.notebook.NotebookApplication;
@@ -31,7 +31,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableHealthCheck
 @EnableThymeLeaf
 @EnableErrorHandler
-@EnableLocalMandatoryRequestValidation
+@EnableLocaleMandatoryRequestValidation
 @EnableEncryption
 @Import({
     CommonConfigProperties.class,

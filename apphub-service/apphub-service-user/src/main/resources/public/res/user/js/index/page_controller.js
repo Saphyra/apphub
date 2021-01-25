@@ -8,10 +8,12 @@
     });
 
     function checkLogin(){
-        const endpoint = Mapping.getEndpoint("CHECK_SESSION");
-        const response = dao.sendRequest(endpoint.getMethod(), endpoint.getUrl());
-        if(response.status == ResponseStatus.OK){
-            window.location.href = Mapping.MODULES_PAGE;
-        }
+        const request = new Request(Mapping.getEndpoint("CHECK_SESSION"));
+            request.processValidResponse = function(){
+                window.location.href = Mapping.MODULES_PAGE;
+            }
+            request.processInvalidResponse = function(){
+            }
+        dao.sendRequest(request);
     }
 })();
