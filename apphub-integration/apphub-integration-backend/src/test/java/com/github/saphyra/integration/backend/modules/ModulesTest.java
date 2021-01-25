@@ -1,7 +1,7 @@
 package com.github.saphyra.integration.backend.modules;
 
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
-import com.github.saphyra.apphub.integration.backend.actions.ModulesPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.ModulesActions;
 import com.github.saphyra.apphub.integration.backend.model.ModulesResponse;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
@@ -41,7 +41,7 @@ public class ModulesTest extends TestBase {
                 .build()
         );
 
-        Map<String, List<ModulesResponse>> result = ModulesPageActions.getModules(locale, accessTokenId);
+        Map<String, List<ModulesResponse>> result = ModulesActions.getModules(locale, accessTokenId);
 
         assertThat(result).containsOnlyKeys("accounts", "office", "development-utils");
         ModulesResponse expectedModuleAccount = ModulesResponse.builder()
@@ -84,7 +84,7 @@ public class ModulesTest extends TestBase {
                 .build()
         );
 
-        Response response = ModulesPageActions.getSetAsFavoriteResponse(
+        Response response = ModulesActions.getSetAsFavoriteResponse(
             locale,
             accessTokenId,
             "unknown-module",
@@ -112,7 +112,7 @@ public class ModulesTest extends TestBase {
                 .build()
         );
 
-        Response response = ModulesPageActions.getSetAsFavoriteResponse(
+        Response response = ModulesActions.getSetAsFavoriteResponse(
             locale,
             accessTokenId,
             "account",
@@ -140,7 +140,7 @@ public class ModulesTest extends TestBase {
                 .build()
         );
 
-        Map<String, List<ModulesResponse>> result = ModulesPageActions.setAsFavorite(
+        Map<String, List<ModulesResponse>> result = ModulesActions.setAsFavorite(
             locale,
             accessTokenId,
             "account",

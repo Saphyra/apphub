@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class LogParameterVisibilityDao extends AbstractDao<LogParameterVisibilityEntity, LogParameterVisibility, String, LogParameterVisibilityRepository> {
     private final UuidConverter uuidConverter;
 

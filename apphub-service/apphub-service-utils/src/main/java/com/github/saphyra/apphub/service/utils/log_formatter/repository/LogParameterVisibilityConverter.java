@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-//TODO unit test
 class LogParameterVisibilityConverter extends ConverterBase<LogParameterVisibilityEntity, LogParameterVisibility> {
     private final StringEncryptor stringEncryptor;
     private final BooleanEncryptor booleanEncryptor;

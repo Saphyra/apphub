@@ -1,6 +1,6 @@
 package com.github.saphyra.integration.backend.index;
 
-import com.github.saphyra.apphub.integration.backend.actions.ModulesPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.ModulesActions;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
@@ -85,7 +85,7 @@ public class LoginTest extends TestBase {
         LocalDateTime newLastAccess = LocalDateTime.now().minusDays(100);
         DatabaseUtil.updateAccessTokenLastAccess(response.getAccessTokenId(), newLastAccess);
 
-        Response modulesResponse = ModulesPageActions.getModulesResponse(language, response.getAccessTokenId());
+        Response modulesResponse = ModulesActions.getModulesResponse(language, response.getAccessTokenId());
         assertThat(modulesResponse.getStatusCode()).isEqualTo(200);
     }
 
@@ -139,9 +139,9 @@ public class LoginTest extends TestBase {
             .build();
         UUID accessTokenId = IndexPageActions.login(locale, loginRequest);
 
-        ModulesPageActions.logout(locale, accessTokenId);
+        ModulesActions.logout(locale, accessTokenId);
 
-        Response response = ModulesPageActions.getLogoutResponse(locale, accessTokenId);
+        Response response = ModulesActions.getLogoutResponse(locale, accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(401);
 

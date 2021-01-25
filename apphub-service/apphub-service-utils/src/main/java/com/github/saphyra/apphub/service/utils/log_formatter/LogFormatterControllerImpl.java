@@ -26,9 +26,6 @@ public class LogFormatterControllerImpl implements LogFormatterController {
     private final LogParameterVisibilityDao dao;
 
     @Override
-    //TODO unit test
-    //TODO api test
-    //TODO int test
     public List<LogParameterVisibilityResponse> getVisibility(List<String> parameters, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the visibility of {} number of parameters", accessTokenHeader.getUserId(), parameters.size());
         Map<String, LogParameterVisibility> visibilities = dao.getByUserId(accessTokenHeader.getUserId())
@@ -64,9 +61,6 @@ public class LogFormatterControllerImpl implements LogFormatterController {
     }
 
     @Override
-    //TODO unit test
-    //TODO api test
-    //TODO int test
     public void setVisibility(SetLogParameterVisibilityRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to update visibility of id {}", accessTokenHeader.getUserId(), request.getId());
 
