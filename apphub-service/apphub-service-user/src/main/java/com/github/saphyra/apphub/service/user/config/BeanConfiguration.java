@@ -13,7 +13,7 @@ import com.github.saphyra.apphub.lib.config.thymeleaf.EnableThymeLeaf;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
-import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocalMandatoryRequestValidation;
+import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
 import com.github.saphyra.apphub.service.user.UserApplication;
@@ -42,7 +42,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableThymeLeaf
 @EnableEventProcessor
 @EnableHealthCheck
-@EnableLocalMandatoryRequestValidation
+@EnableLocaleMandatoryRequestValidation
 class BeanConfiguration {
     @Bean
     @ConditionalOnMissingBean(LocaleProvider.class)

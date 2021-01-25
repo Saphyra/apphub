@@ -24,3 +24,18 @@ modules:
         mobileAllowed: true
         roles:
           - NOTEBOOK
+    development-utils:
+      - name: json-formatter
+        url: /web/utils/json-formatter
+        allowedByDefault: true
+        mobileAllowed: true
+      - name: mobile-messages
+        url: /web/utils/mobile-messages
+        allowedByDefault: false
+        mobileAllowed: true
+        roles:
+          - VERIMI_DEVELOPER
+      - name: log-formatter
+        url: /web/utils/log-formatter
+        allowedByDefault: true
+        mobileAllowed: true

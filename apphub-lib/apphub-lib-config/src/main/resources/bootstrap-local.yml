@@ -58,3 +58,7 @@ admin-panel:
 notebook:
   ribbon:
     listOfServers: localhost:8090
+
+utils:
+  ribbon:
+    listOfServers: localhost:8095

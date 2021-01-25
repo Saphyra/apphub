@@ -1,7 +1,7 @@
 package com.github.saphyra.integration.backend.modules;
 
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
-import com.github.saphyra.apphub.integration.backend.actions.ModulesPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.ModulesActions;
 import com.github.saphyra.apphub.integration.backend.model.ModulesResponse;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
@@ -41,15 +41,34 @@ public class ModulesTest extends TestBase {
                 .build()
         );
 
-        Map<String, List<ModulesResponse>> result = ModulesPageActions.getModules(locale, accessTokenId);
+        Map<String, List<ModulesResponse>> result = ModulesActions.getModules(locale, accessTokenId);
 
-        assertThat(result).containsOnlyKeys("accounts", "office");
-        ModulesResponse expectedModule = ModulesResponse.builder()
+        assertThat(result).containsOnlyKeys("accounts", "office", "development-utils");
+        ModulesResponse expectedModuleAccount = ModulesResponse.builder()
             .name("account")
             .url("/web/user/account")
             .favorite(false)
             .build();
-        assertThat(result.get("accounts")).containsExactly(expectedModule);
+        assertThat(result.get("accounts")).containsExactly(expectedModuleAccount);
+
+        ModulesResponse expectedModuleNotebook = ModulesResponse.builder()
+            .name("notebook")
+            .url("/web/notebook")
+            .favorite(false)
+            .build();
+        assertThat(result.get("office")).containsExactly(expectedModuleNotebook);
+
+        ModulesResponse expectedModuleLogFormatter = ModulesResponse.builder()
+            .name("log-formatter")
+            .url("/web/utils/log-formatter")
+            .favorite(false)
+            .build();
+        ModulesResponse expectedModuleJsonFormatter = ModulesResponse.builder()
+            .name("json-formatter")
+            .url("/web/utils/json-formatter")
+            .favorite(false)
+            .build();
+        assertThat(result.get("development-utils")).containsExactlyInAnyOrder(expectedModuleLogFormatter, expectedModuleJsonFormatter);
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -65,7 +84,7 @@ public class ModulesTest extends TestBase {
                 .build()
         );
 
-        Response response = ModulesPageActions.getSetAsFavoriteResponse(
+        Response response = ModulesActions.getSetAsFavoriteResponse(
             locale,
             accessTokenId,
             "unknown-module",
@@ -93,7 +112,7 @@ public class ModulesTest extends TestBase {
                 .build()
         );
 
-        Response response = ModulesPageActions.getSetAsFavoriteResponse(
+        Response response = ModulesActions.getSetAsFavoriteResponse(
             locale,
             accessTokenId,
             "account",
@@ -121,14 +140,14 @@ public class ModulesTest extends TestBase {
                 .build()
         );
 
-        Map<String, List<ModulesResponse>> result = ModulesPageActions.setAsFavorite(
+        Map<String, List<ModulesResponse>> result = ModulesActions.setAsFavorite(
             locale,
             accessTokenId,
             "account",
             true
         );
 
-        assertThat(result).containsOnlyKeys("accounts", "office");
+        assertThat(result).containsOnlyKeys("accounts", "office", "development-utils");
         ModulesResponse expectedModule = ModulesResponse.builder()
             .name("account")
             .url("/web/user/account")

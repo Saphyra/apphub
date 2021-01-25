@@ -1,0 +1,53 @@
+#input{
+    width: 90vw;
+    display: block;
+    margin: auto;
+    height: 20vh;
+}
+
+#format-button{
+    margin: 1rem;
+}
+
+#order-by-buttons-container{
+    text-align: center;
+}
+
+#display-field-buttons-container{
+    text-align: center;
+}
+
+    .visibility-button{
+        display: inline-block;
+        border: 3px ridge white;
+        border-radius: 5px;
+        margin: 0.25rem;
+        padding: 0.25rem;
+    }
+
+    .visibility-button span{
+        cursor: pointer;
+        margin: 1rem;
+    }
+
+#filter-container{
+    text-align: center;
+}
+
+    .filter-rule{
+        display: inline-block;
+        border: 3px ridge white;
+        border-radius: 5px;
+        margin: 0.25rem;
+        padding: 0.25rem;
+        font-size: 1.25rem;
+    }
+
+        .filter-rule-remove-button{
+            margin: 0;
+            margin-left: 0.25rem;
+        }
+
+#result{
+    overflow: auto;
+}

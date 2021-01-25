@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.lib.config.thymeleaf.EnableThymeLeaf;
 import com.github.saphyra.apphub.lib.encryption.EnableEncryption;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
-import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocalMandatoryRequestValidation;
+import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Import;
 @EnableEncryption
 @EnableEventProcessor
 @EnableErrorHandler
-@EnableLocalMandatoryRequestValidation
+@EnableLocaleMandatoryRequestValidation
 @EnableHealthCheck
 class BeanConfiguration {
     @Bean

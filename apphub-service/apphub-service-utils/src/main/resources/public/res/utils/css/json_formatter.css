@@ -1,0 +1,34 @@
+#input{
+    width: 90vw;
+    display: block;
+    margin: auto;
+    height: 30vh;
+}
+
+#format-button{
+    margin: 1rem;
+}
+
+#result{
+    overflow: auto;
+}
+
+    .string {
+        color: lightgreen;
+    }
+
+    .number {
+        color: orange;
+    }
+
+    .boolean {
+        color: cyan;
+    }
+
+    .null {
+        color: pink;
+    }
+
+    .key {
+        color: white;
+    }
