@@ -13,6 +13,7 @@ public class Endpoints {
     public static final String SKYXPLORE_CHARACTER_PAGE = "/web/skyxplore/character";
     public static final String SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
     public static final String SKYXPLORE_GAME_PAGE = "/web/skyxplore/game";
+    public static final String UTILS_LOG_FORMATTER_PAGE = "/web/utils/log-formatter";
 
     //PLATFORM
     public static final String HEALTH = "/platform/health";
@@ -96,6 +97,10 @@ public class Endpoints {
     public static final String NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST = "/api/notebook/checklist/{listItemId}/checked";
     public static final String NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST_TABLE = "/api/notebook/checklist-table/{listItemId}/checked";
     public static final String NOTEBOOK_ORDER_CHECKLIST_ITEMS = "/api/notebook/checklist/{listItemId}/order";
+
+    //UTILS
+    public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";
+    public static final String UTILS_LOG_FORMATTER_SET_VISIBILITY = "/api/utils/log-formatter/visibility";
 
     //SKYXPLORE-DATA
     public static final String INTERNAL_SKYXPLORE_IS_CHARACTER_EXISTS = "/internal/skyxplore/character/exists";

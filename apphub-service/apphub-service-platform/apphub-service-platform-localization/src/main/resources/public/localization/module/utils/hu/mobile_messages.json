@@ -1,0 +1,73 @@
+{
+  "title": "Mobile messages -  Apphub",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Mobile messages"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Vissza"
+      }
+    ],
+    "message-type-label": [
+      {
+        "key": "innerHTML",
+        "message": "Üzenet típus"
+      }
+    ],
+    "os-label": [
+      {
+        "key": "innerHTML",
+        "message": "Operácíós rendszer"
+      }
+    ],
+    "version-label": [
+      {
+        "key": "innerHTML",
+        "message": "Verzió"
+      }
+    ],
+    "version-input": [
+      {
+        "key": "placeholder",
+        "message": "Verzió"
+      }
+    ],
+    "en-title": [
+      {
+        "key": "placeholder",
+        "message": "Angol cím"
+      }
+    ],
+    "de-title": [
+      {
+        "key": "placeholder",
+        "message": "Német cím"
+      }
+    ],
+    "en-detail": [
+      {
+        "key": "placeholder",
+        "message": "Angol leírás"
+      }
+    ],
+    "de-detail": [
+      {
+        "key": "placeholder",
+        "message": "Német leírás"
+      }
+    ],
+    "generate-button": [
+      {
+        "key": "innerHTML",
+        "message": "SQL generálás"
+      }
+    ]
+  },
+  "additionalContent": {
+  }
+}

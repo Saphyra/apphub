@@ -54,6 +54,8 @@ window.Mapping = new function(){
         NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST: new Endpoint("/api/notebook/checklist/{listItemId}/checked", HttpMethod.DELETE),
         NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST_TABLE: new Endpoint("/api/notebook/checklist-table/{listItemId}/checked", HttpMethod.DELETE),
         NOTEBOOK_ORDER_CHECKLIST_ITEMS: new Endpoint("/api/notebook/checklist/{listItemId}/order", HttpMethod.POST),
+        UTILS_LOG_FORMATTER_GET_VISIBILITY: new Endpoint("/api/utils/log-formatter/visibility", HttpMethod.PUT),
+        UTILS_LOG_FORMATTER_SET_VISIBILITY: new Endpoint("/api/utils/log-formatter/visibility", HttpMethod.POST),
 
         SKYXPLORE_GET_CHARACTER: new Endpoint("/api/skyxplore/character", HttpMethod.GET),
         SKYXPLORE_CREATE_OR_UPDATE_CHARACTER: new Endpoint("/api/skyxplore/character", HttpMethod.POST),

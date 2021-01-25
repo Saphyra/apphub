@@ -70,6 +70,10 @@ admin-panel:
   ribbon:
     listOfServers: admin-panel:8080
 
+utils:
+  ribbon:
+    listOfServers: utils:8080
+
 skyxplore-data:
   ribbon:
     listOfServers: skyxplore-data:8080

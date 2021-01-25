@@ -61,6 +61,10 @@ notebook:
   ribbon:
     listOfServers: localhost:8090
 
+utils:
+  ribbon:
+    listOfServers: localhost:8095
+
 skyxplore-data-character:
   ribbon:
     listOfServers: localhost:8091

@@ -70,7 +70,6 @@
             <artifactId>apphub-lib-encryption</artifactId>
             <version>${project.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>

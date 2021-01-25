@@ -38,6 +38,10 @@ zuul:
       path: /res/admin-panel/**
       serviceId: admin-panel
       stripPrefix: false
+    utils-resources:
+      path: /res/utils/**
+      serviceId: utils
+      stripPrefix: false
     skyxplore-resources:
       path: /res/skyxplore/**
       serviceId: skyxplore-facade
@@ -68,6 +72,10 @@ zuul:
       path: /web/admin-panel/**
       serviceId: admin-panel
       stripPrefix: false
+    utils-pages:
+      path: /web/utils/**
+      serviceId: utils
+      stripPrefix: false
     skyxplore-page:
       path: /web/skyxplore/**
       serviceId: skyxplore-facade
@@ -89,6 +97,10 @@ zuul:
     modules:
       path: /api/modules/**
       serviceId: modules
+      stripPrefix: false
+    utils:
+      path: /api/utils/**
+      serviceId: utils
       stripPrefix: false
     skyxplore:
       path: /api/skyxplore/**

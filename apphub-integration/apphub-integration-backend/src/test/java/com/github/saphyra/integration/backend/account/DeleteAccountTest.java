@@ -1,6 +1,6 @@
 package com.github.saphyra.integration.backend.account;
 
-import com.github.saphyra.apphub.integration.backend.actions.AccountPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.AccountActions;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.model.OneParamRequest;
 import com.github.saphyra.apphub.integration.common.TestBase;
@@ -32,7 +32,7 @@ public class DeleteAccountTest extends TestBase {
 
         OneParamRequest<String> request = new OneParamRequest<>(null);
 
-        Response response = AccountPageActions.getDeleteAccountResponse(locale, accessTokenId, request);
+        Response response = AccountActions.getDeleteAccountResponse(locale, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -48,7 +48,7 @@ public class DeleteAccountTest extends TestBase {
 
         OneParamRequest<String> request = new OneParamRequest<>(DataConstants.INVALID_PASSWORD);
 
-        Response response = AccountPageActions.getDeleteAccountResponse(locale, accessTokenId, request);
+        Response response = AccountActions.getDeleteAccountResponse(locale, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -63,7 +63,7 @@ public class DeleteAccountTest extends TestBase {
 
         OneParamRequest<String> request = new OneParamRequest<>(DataConstants.VALID_PASSWORD);
 
-        Response response = AccountPageActions.getDeleteAccountResponse(locale, accessTokenId, request);
+        Response response = AccountActions.getDeleteAccountResponse(locale, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 

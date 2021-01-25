@@ -18,7 +18,7 @@ import java.util.UUID;
 import static com.github.saphyra.apphub.integration.common.TestBase.OBJECT_MAPPER_WRAPPER;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ModulesPageActions {
+public class ModulesActions {
     public static void logout(Language locale, UUID accessTokenId) {
         Response response = getLogoutResponse(locale, accessTokenId);
 

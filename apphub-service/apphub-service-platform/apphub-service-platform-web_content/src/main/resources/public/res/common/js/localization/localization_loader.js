@@ -23,14 +23,26 @@ function loadLocalization(module, fileName, successCallback){
 
     function createQuery(module, fileName, locale, successCallback, errorCallback){
         return function(){
-            const response = dao.sendRequest(HttpMethod.GET, getPath(module, locale, fileName));
-            if(response.status === ResponseStatus.OK){
-                return successCallback(JSON.parse(response.body));
-            }else if(errorCallback){
-                return errorCallback();
-            }else{
-                logService.log(response.toString(), "error", "Error loading localization: ");
-            }
+            const endpoint = new Endpoint(getPath(module, locale, fileName), HttpMethod.GET);
+
+            let result;
+            const request = new Request(endpoint);
+                request.convertResponse = function(response){
+                    return JSON.parse(response.body);
+                }
+                request.processValidResponse = function(localization){
+                    result = successCallback(localization);
+                }
+                request.processInvalidResponse = function(){
+                    if(errorCallback){
+                        return errorCallback();
+                    }else{
+                        logService.log(response.toString(), "error", "Error loading localization: ");
+                    }
+                }
+            dao.sendRequest(request);
+
+            return result;
         }
     }
 

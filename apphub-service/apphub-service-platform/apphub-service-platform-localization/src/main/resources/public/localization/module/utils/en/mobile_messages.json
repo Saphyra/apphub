@@ -1,0 +1,73 @@
+{
+  "title": "Mobile messages - Apphub",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Mobile messages"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Back"
+      }
+    ],
+    "message-type-label": [
+      {
+        "key": "innerHTML",
+        "message": "Message type"
+      }
+    ],
+    "os-label": [
+      {
+        "key": "innerHTML",
+        "message": "Operating system"
+      }
+    ],
+    "version-label": [
+      {
+        "key": "innerHTML",
+        "message": "Version"
+      }
+    ],
+    "version-input": [
+      {
+        "key": "placeholder",
+        "message": "Version"
+      }
+    ],
+    "en-title": [
+      {
+        "key": "placeholder",
+        "message": "English title"
+      }
+    ],
+    "de-title": [
+      {
+        "key": "placeholder",
+        "message": "German title"
+      }
+    ],
+    "en-detail": [
+      {
+        "key": "placeholder",
+        "message": "English detail"
+      }
+    ],
+    "de-detail": [
+      {
+        "key": "placeholder",
+        "message": "German detail"
+      }
+    ],
+    "generate-button": [
+      {
+        "key": "innerHTML",
+        "message": "Generate SQL"
+      }
+    ]
+  },
+  "additionalContent": {
+  }
+}

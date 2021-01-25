@@ -1,0 +1,14 @@
+label{
+    display: block;
+    margin: 1rem;
+}
+
+.localization-input{
+    width: 95%;
+    display: block;
+    margin: 1rem auto;
+}
+
+#result{
+    padding: 1rem;
+}

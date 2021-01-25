@@ -28,6 +28,13 @@ function Stream(a){
         return array.length;
     }
 
+    this.distinct = function(){
+        const newArr = array.filter(function(value, index, self){
+            return self.indexOf(value) === index
+        });
+        return new Stream(newArr);
+    }
+
     this.filter = function(filterMethod){
         const result = [];
 
@@ -96,6 +103,14 @@ function Stream(a){
 
     this.peek = function(consumer){
         this.forEach(consumer);
+        return this;
+    }
+
+    this.reverse = function(shouldReverse){
+        if(!hasValue(shouldReverse) || shouldReverse){
+            array.reverse();
+        }
+
         return this;
     }
 

@@ -23,7 +23,7 @@ function Request(endpoint, body){
         if(this.isResponseOk(response)){
             this.processValidResponse(this.convertResponse(response), this.state);
         }else{
-            errorHandler.handleError(this, response);
+            this.processInvalidResponse(response);
         }
     }
     
@@ -37,6 +37,10 @@ function Request(endpoint, body){
     
     this.processValidResponse = function(payload, state){
         console.log("Using no overridden processValidResponse");
+    }
+
+    this.processInvalidResponse = function(response){
+        errorHandler.handleError(this, response);
     }
     
     this.validate = function(){

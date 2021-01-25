@@ -1,0 +1,32 @@
+<HTML>
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/utils/css/json_formatter.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT src="/res/utils/js/json_formatter/page_controller.js"></SCRIPT>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title"></H1>
+    </HEADER>
+
+    <MAIN>
+        <TEXTAREA id="input"></TEXTAREA>
+
+        <DIV id="format-button" class="button" onclick="formatController.format()"></DIV>
+
+        <PRE id="result" class="content-selectable"></PRE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="back-button" onclick='window.location = "/web/modules"'></BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>
