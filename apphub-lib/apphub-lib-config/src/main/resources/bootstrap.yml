@@ -144,3 +144,12 @@ endpoint:
       errorPage:
         path: /web/error
         method: GET
+logging:
+  level:
+    com:
+      github:
+        saphyra:
+          apphub:
+            lib:
+              security:
+                role: warn
