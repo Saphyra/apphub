@@ -42,8 +42,8 @@
 
         function generateMobileMessageSql(messageType, os, version, showContact){
             const template = "INSERT INTO master_data.mobile_message_configuration(message_type, platform, value, show_contact)"
-                 + " VALUES ('{messageType}', '{os}', '{version}', '{showContact}'"
-                 + " ON CONFLICT (message_type, platform) DO UPDATE SET value='{version}', show_contact='{showContact}'";
+                 + " VALUES ('{messageType}', '{os}', '{version}', '{showContact}')"
+                 + " ON CONFLICT (message_type, platform) DO UPDATE SET value='{version}', show_contact='{showContact}';";
 
             const replacements = {};
                 replacements["{messageType}"] = messageType;
@@ -57,7 +57,7 @@
         function generateLocalizedTextSql(messageType, type, os, locale, value){
             const template = "INSERT INTO master_data.localized_text(key, locale, value)"
                 + " VALUES('{messageType}_{type}_{os}', '{locale}', '{value}')"
-                + " ON CONFLICT (key, locale) DO UPDATE SET value='{value}'";
+                + " ON CONFLICT (key, locale) DO UPDATE SET value='{value}';";
 
             const replacements = {};
                 replacements["{messageType}"] = messageType;
