@@ -1,6 +1,6 @@
 (function SqlGenerator(){
     const TYPE_TITLE = "TITLE";
-    const TYPE_DETAIL = "DETAIL";
+    const TYPE_DETAIL = "DESCRIPTION";
     const LOCALE_EN = "en";
     const LOCALE_DE = "de";
 
@@ -28,7 +28,7 @@
         sqls.push(generateLocalizedTextSql(messageType, TYPE_TITLE, os, LOCALE_EN, enTitle));
         sqls.push(generateLocalizedTextSql(messageType, TYPE_DETAIL, os, LOCALE_EN, enDetail));
         sqls.push(generateLocalizedTextSql(messageType, TYPE_TITLE, os, LOCALE_DE, deTitle));
-        sqls.push(generateLocalizedTextSql(messageType, TYPE_TITLE, os, LOCALE_DE, deDetail));
+        sqls.push(generateLocalizedTextSql(messageType, TYPE_DETAIL, os, LOCALE_DE, deDetail));
 
         new Stream(sqls)
             .map(createNode)
