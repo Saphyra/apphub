@@ -71,7 +71,7 @@ public class LogFormatterControllerImplTest {
     @Test
     public void getVisibility_doesNotExist() {
         given(dao.getByUserId(USER_ID)).willReturn(Collections.emptyList());
-        given(idGenerator.randomUUID()).willReturn(ID);
+        given(idGenerator.randomUuid()).willReturn(ID);
 
         List<LogParameterVisibilityResponse> result = underTest.getVisibility(Arrays.asList(PARAMETER), accessTokenHeader);
 

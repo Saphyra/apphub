@@ -13,6 +13,8 @@ public class Endpoints {
     public static final String SKYXPLORE_CHARACTER_PAGE = "/web/skyxplore/character";
     public static final String SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
     public static final String SKYXPLORE_GAME_PAGE = "/web/skyxplore/game";
+    public static final String UTILS_JSON_FORMATTER_PAGE = "/web/utils/json-formatter";
+    public static final String UTILS_MOBILE_MESSAGES = "/web/utils/mobile-messages";
     public static final String UTILS_LOG_FORMATTER_PAGE = "/web/utils/log-formatter";
 
     //PLATFORM
