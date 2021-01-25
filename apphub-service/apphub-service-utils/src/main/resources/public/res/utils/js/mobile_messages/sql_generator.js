@@ -31,8 +31,17 @@
         sqls.push(generateLocalizedTextSql(messageType, TYPE_DETAIL, os, LOCALE_DE, deDetail));
 
         new Stream(sqls)
+            .map(escapeTags)
             .map(createNode)
             .forEach(function(node){result.appendChild(node)});
+
+        function escapeTags(sql){
+            const replacements = {};
+                replacements["<"] = "&lt;";
+                replacements[">"] = "&gt;";
+
+            return bulkReplaceAll(sql, replacements);
+        }
 
         function createNode(sql){
             const node = document.createElement("DIV");
