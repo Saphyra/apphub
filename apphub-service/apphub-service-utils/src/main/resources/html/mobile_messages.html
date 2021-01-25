@@ -40,6 +40,10 @@
             <INPUT type="text" id="version-input">
         </LABEL>
 
+        <LABEL>
+            <INPUT type="checkbox" id="show-contact"> Show contact
+        </LABEL>
+
         <INPUT type="text" id="en-title" class="localization-input">
         <INPUT type="text" id="de-title" class="localization-input">
         <INPUT type="text" id="en-detail" class="localization-input">
@@ -47,7 +51,7 @@
 
         <DIV id="generate-button" class="button" onclick="sqlGenerator.generate()"></DIV>
 
-        <DIV id="result"></DIV>
+        <DIV id="result" class="content-selectable"></DIV>
     </MAIN>
 
     <FOOTER>

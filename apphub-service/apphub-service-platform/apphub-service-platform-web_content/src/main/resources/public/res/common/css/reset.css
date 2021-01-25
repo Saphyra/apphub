@@ -6,7 +6,7 @@
     user-select: none;
 }
 
-.content-selectable{
+.content-selectable, .content-selectable *{
     -webkit-user-select: text;
     -moz-user-select: text;
     -ms-user-select: text;

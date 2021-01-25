@@ -5,10 +5,12 @@
         resultContainer: "result",
         messageTypeInput: "message-type-input",
         osInput: "os-input",
-        enTitleInput: "en-title-input",
-        enDetailInput: "en-detail-input",
-        deTitleInput: "de-title-input",
-        deDetailInput: "de-detail-input",
+        enTitleInput: "en-title",
+        enDetailInput: "en-detail",
+        deTitleInput: "de-title",
+        deDetailInput: "de-detail",
+        showContact: "show-contact",
+        version: "version-input",
     }
 
     window.pageController = new function(){
