@@ -10,7 +10,6 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class BuildingDataValidator implements DataValidator<BuildingData> {
     private final ConstructionRequirementsValidator constructionRequirementsValidator;
     private final GameDataItemValidator gameDataItemValidator;
@@ -18,10 +17,10 @@ public class BuildingDataValidator implements DataValidator<BuildingData> {
     @Override
     public void validate(BuildingData buildingData) {
         gameDataItemValidator.validate(buildingData);
+        requireNonNull(buildingData.getBuildingType(), "BuildingType must not be null.");
         if (isEmpty(buildingData.getConstructionRequirements())) {
             throw new IllegalStateException("ConstructionRequirements must be filled.");
         }
         buildingData.getConstructionRequirements().values().forEach(constructionRequirementsValidator::validate);
-        requireNonNull(buildingData.getBuildingType(), "BuildingType must not be null.");
     }
 }

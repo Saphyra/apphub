@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.lib.request_validation.locale;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
+import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
@@ -13,8 +14,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -22,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -32,6 +36,11 @@ import static org.mockito.Mockito.verifyNoInteractions;
 @RunWith(MockitoJUnitRunner.class)
 public class LocaleMandatoryFilterTest {
     private static final String RESPONSE_BODY = "response-body";
+    private static final String REQUEST_URI = "request-uri";
+    private static final String WHITELISTED_PATTERN = "whitelisted-pattern";
+
+    @Mock
+    private AntPathMatcher antPathMatcher;
 
     @Mock
     private CommonConfigProperties commonConfigProperties;
@@ -101,7 +110,19 @@ public class LocaleMandatoryFilterTest {
     }
 
     @Test
-    public void whiteListedEndpoint() {
-        //TODO unit test
+    public void whiteListedEndpoint() throws ServletException, IOException {
+        given(request.getRequestURI()).willReturn(REQUEST_URI);
+        given(request.getMethod()).willReturn(HttpMethod.POST.name());
+
+        WhiteListedEndpoint whiteListedEndpoint = WhiteListedEndpoint.builder()
+            .path(WHITELISTED_PATTERN)
+            .method(HttpMethod.POST.name())
+            .build();
+        given(localeMandatoryFilterConfiguration.getWhiteListedEndpoints()).willReturn(Arrays.asList(whiteListedEndpoint));
+        given(antPathMatcher.match(WHITELISTED_PATTERN, REQUEST_URI)).willReturn(true);
+
+        underTest.doFilterInternal(request, response, filterChain);
+
+        verify(filterChain).doFilter(request, response);
     }
 }

@@ -13,7 +13,6 @@ import static java.util.Objects.requireNonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StorageBuildingValidator implements DataValidator<Map<String, StorageBuilding>> {
     private final BuildingDataValidator buildingDataValidator;
 
@@ -28,6 +27,9 @@ public class StorageBuildingValidator implements DataValidator<Map<String, Stora
             buildingDataValidator.validate(storageBuilding);
             requireNonNull(storageBuilding.getStores(), "Stores must not be null.");
             requireNonNull(storageBuilding.getCapacity(), "Capacity must not be null.");
+            if (storageBuilding.getCapacity() < 1) {
+                throw new IllegalStateException("Capacity is " + storageBuilding.getCapacity() + " what is lower than 1");
+            }
         } catch (Exception e) {
             throw new IllegalStateException("Invalid data with key " + key, e);
         }

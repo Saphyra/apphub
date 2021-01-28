@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import static java.util.Objects.requireNonNull;
 
 @Component
-//TODO unit test
 public class GameDataItemValidator implements DataValidator<GameDataItem> {
     @Override
     public void validate(GameDataItem item) {

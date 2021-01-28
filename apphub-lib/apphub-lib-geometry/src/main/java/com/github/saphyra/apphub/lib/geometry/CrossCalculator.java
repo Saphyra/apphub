@@ -7,7 +7,6 @@ import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 public class CrossCalculator {
     private static final double ACCURACY = 1E-10;
 
@@ -66,6 +65,12 @@ public class CrossCalculator {
         double x = (b2 * c1 - b1 * c2) / determinant;
         double y = (a1 * c2 - a2 * c1) / determinant;
 
+        if (x == -0) {
+            x = 0;
+        }
+        if (y == -0) {
+            y = 0;
+        }
         Coordinate coordinate = new Coordinate(x, y);
 
         return Optional.of(coordinate);

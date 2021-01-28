@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.platform.message_sender.connection;
 import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
+import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyWsApiClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
@@ -19,12 +20,14 @@ import java.util.UUID;
 public class SkyXploreLobbyWebSocketHandler extends DefaultWebSocketHandler {
     private final AccessTokenHeaderConverter accessTokenHeaderConverter;
     private final SkyXploreLobbyApiClient lobbyClient;
+    private final SkyXploreLobbyWsApiClient lobbyWsClient;
     private final CommonConfigProperties commonConfigProperties;
 
-    public SkyXploreLobbyWebSocketHandler(WebSocketHandlerContext context, AccessTokenHeaderConverter accessTokenHeaderConverter, SkyXploreLobbyApiClient lobbyClient, CommonConfigProperties commonConfigProperties) {
+    public SkyXploreLobbyWebSocketHandler(WebSocketHandlerContext context, AccessTokenHeaderConverter accessTokenHeaderConverter, SkyXploreLobbyApiClient lobbyClient, SkyXploreLobbyWsApiClient lobbyWsClient, CommonConfigProperties commonConfigProperties) {
         super(context);
         this.accessTokenHeaderConverter = accessTokenHeaderConverter;
         this.lobbyClient = lobbyClient;
+        this.lobbyWsClient = lobbyWsClient;
         this.commonConfigProperties = commonConfigProperties;
     }
 
@@ -46,7 +49,7 @@ public class SkyXploreLobbyWebSocketHandler extends DefaultWebSocketHandler {
     @Override
     protected void handleMessage(UUID userId, WebSocketEvent event) {
         log.info("Event from {}: {}", userId, event.getEventName());
-        lobbyClient.processWebSocketEvent(userId, event, commonConfigProperties.getDefaultLocale());
+        lobbyWsClient.processWebSocketEvent(userId, event, commonConfigProperties.getDefaultLocale());
     }
 
     @Override

@@ -15,7 +15,6 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 public class TerraformingPossibilitiesValidator implements DataValidator<Map<SurfaceType, TerraformingPossibilities>> {
     private final ConstructionRequirementsValidator constructionRequirementsValidator;
 
@@ -38,7 +37,7 @@ public class TerraformingPossibilitiesValidator implements DataValidator<Map<Sur
 
     private void validate(TerraformingPossibility terraformingPossibility) {
         requireNonNull(terraformingPossibility, "TerraformingPossibility must not be null.");
-        constructionRequirementsValidator.validate(terraformingPossibility.getConstructionRequirements());
         requireNonNull(terraformingPossibility.getSurfaceType());
+        constructionRequirementsValidator.validate(terraformingPossibility.getConstructionRequirements());
     }
 }

@@ -13,10 +13,9 @@ import static java.util.Objects.requireNonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ProductionBuildingValidator implements DataValidator<Map<String, ProductionBuilding>> {
     private final BuildingDataValidator buildingDataValidator;
-    private final ProductionValidator productionValidator;
+    private final ProductionDataValidator productionDataValidator;
 
     @Override
     public void validate(Map<String, ProductionBuilding> item) {
@@ -33,7 +32,7 @@ public class ProductionBuildingValidator implements DataValidator<Map<String, Pr
             }
             requireNonNull(productionBuilding.getPrimarySurfaceType(), "PrimarySurfaceType must not be null.");
             requireNonNull(productionBuilding.getPlaceableSurfaceTypes(), "PlaceableSurfaceTypes must not be null.");
-            productionValidator.validate(productionBuilding.getGives());
+            productionDataValidator.validate(productionBuilding.getGives());
         } catch (Exception e) {
             throw new IllegalStateException("Invalid data with key " + key, e);
         }

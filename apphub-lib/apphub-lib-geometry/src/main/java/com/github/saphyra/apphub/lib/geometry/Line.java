@@ -1,18 +1,18 @@
 package com.github.saphyra.apphub.lib.geometry;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import static java.util.Objects.isNull;
 
 @NoArgsConstructor
-@Data
 @ToString(exclude = "length")
-//TODO unit test
 public class Line {
+    @Getter
     private Coordinate a;
+    @Getter
     private Coordinate b;
     private Double length = null;
 

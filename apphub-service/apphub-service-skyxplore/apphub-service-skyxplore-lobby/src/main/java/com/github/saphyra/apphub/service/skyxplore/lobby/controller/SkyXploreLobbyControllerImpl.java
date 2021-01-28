@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.controller;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.skyxplore.lobby.server.SkyXploreLobbyController;
 import com.github.saphyra.apphub.api.skyxplore.response.GameSettingsResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
@@ -12,10 +11,9 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.StartGameService;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberQueryService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.creation.LobbyCreationService;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.event.WebSocketEventHandlerService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.invite.InvitationService;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +29,6 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     private final LobbyCreationService lobbyCreationService;
     private final InvitationService invitationService;
     private final JoinToLobbyService joinToLobbyService;
-    private final WebSocketEventHandlerService webSocketEventHandlerService;
     private final LobbyMemberQueryService lobbyMemberQueryService;
     private final LobbyDao lobbyDao;
     private final StartGameService startGameService;
@@ -90,14 +87,6 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     public void acceptInvitation(UUID invitorId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to join to lobby of {}", accessTokenHeader.getUserId(), invitorId);
         joinToLobbyService.acceptInvitation(accessTokenHeader.getUserId(), invitorId);
-    }
-
-    @Override
-    //TODO unit test
-    //TODO int test
-    public void processWebSocketEvent(UUID from, WebSocketEvent event) {
-        log.info("Handling event {} from {}", event.getEventName(), from);
-        webSocketEventHandlerService.handle(from, event);
     }
 
     @Override

@@ -14,7 +14,6 @@ import static java.util.Objects.requireNonNull;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 public class ResourceValidator implements DataValidator<Map<String, ResourceData>> {
     private final GameDataItemValidator gameDataItemValidator;
     private final ProductionBuildingService productionBuildingService;

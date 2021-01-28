@@ -7,7 +7,6 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
 @Component
-//TODO unit test
 public class ConstructionRequirementsValidator implements DataValidator<ConstructionRequirements> {
     @Override
     public void validate(ConstructionRequirements item) {

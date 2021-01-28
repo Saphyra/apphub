@@ -8,7 +8,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Production {
+public class ProductionData {
     private List<SurfaceType> placed;
     private Integer amount;
     private ConstructionRequirements constructionRequirements;

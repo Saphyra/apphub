@@ -94,6 +94,10 @@ skyxplore-lobby:
   ribbon:
     listOfServers: skyxplore-lobby:8080
 
+skyxplore-lobby-ws:
+  ribbon:
+    listOfServers: skyxplore-lobby:8080
+
 skyxplore-game:
   ribbon:
     listOfServers: skyxplore-game:8080

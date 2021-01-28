@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.lib.geometry;
 
 import lombok.extern.slf4j.Slf4j;
 
-//TODO unit test
 @Slf4j
 public class DistanceCalculator {
     public double getDistance(Coordinate c1, Coordinate c2) {

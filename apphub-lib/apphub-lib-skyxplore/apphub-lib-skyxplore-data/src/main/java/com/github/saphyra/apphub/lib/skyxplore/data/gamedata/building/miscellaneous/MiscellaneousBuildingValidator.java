@@ -14,7 +14,6 @@ import static java.util.Objects.requireNonNull;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 public class MiscellaneousBuildingValidator implements DataValidator<Map<String, MiscellaneousBuilding>> {
     private final BuildingDataValidator buildingDataValidator;
 
@@ -25,7 +24,7 @@ public class MiscellaneousBuildingValidator implements DataValidator<Map<String,
 
     private void validate(String key, MiscellaneousBuilding miscellaneousBuilding) {
         try {
-            log.debug("Validating ProductionBuilding with key {}", key);
+            log.debug("Validating MiscellaneousBuilding with key {}", key);
             buildingDataValidator.validate(miscellaneousBuilding);
             requireNonNull(miscellaneousBuilding.getPlaceableSurfaceTypes(), "PlaceableSurfaceTypes must not be null");
             if (miscellaneousBuilding.getPlaceableSurfaceTypes().stream().anyMatch(Objects::isNull)) {
