@@ -143,8 +143,9 @@
         const processedRecords = processLogRecords();
 
         const formatted = JSON.stringify(processedRecords, null, 2)
-            .replaceAll("\\r\\n", "\n")
-            .replaceAll("\\t", "\t");
+            .replaceAll("\\n", "<BR>")
+            .replaceAll("\\r", "")
+            .replaceAll("\\t", "    ");
             resultContainer.innerText = formatted;
 
         function processLogRecords(){
