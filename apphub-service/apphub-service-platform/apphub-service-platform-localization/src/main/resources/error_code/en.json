@@ -10,6 +10,7 @@
   "LOCALE_NOT_FOUND": "Locale header not found.",
   "MISSING_ROLE": "You are not allowed to perform this operation.",
   "NO_SESSION_AVAILABLE": "Log in again!",
+  "NON_TRANSLATED_ERROR": "${key}",
   "PASSWORD_TOO_LONG": "Password is too long. (30 characters max.)",
   "PASSWORD_TOO_SHORT": "Password is too short. (6 characters min.)",
   "ROLE_ALREADY_EXISTS": "The user already has the selected role.",

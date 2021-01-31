@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Controller
 @Slf4j
-//TODO unit test
 public class SkyXploreMainMenuWebSocketHandler extends DefaultWebSocketHandler {
     private final SkyXploreLobbyWsApiClient lobbyWsClient;
     private final CommonConfigProperties commonConfigProperties;

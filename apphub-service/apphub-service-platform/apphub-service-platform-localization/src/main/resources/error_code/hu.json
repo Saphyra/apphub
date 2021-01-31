@@ -10,6 +10,7 @@
   "LOCALE_NOT_FOUND": "A locale header nem található.",
   "MISSING_ROLE": "Ehhez a művelethez nincs jogosultságod.",
   "NO_SESSION_AVAILABLE": "Jelentkezz be újra!",
+  "NON_TRANSLATED_ERROR": "${key}",
   "PASSWORD_TOO_LONG": "A jelszó túl hosszú. (Maximum 30 karakter)",
   "PASSWORD_TOO_SHORT": "A jelszó túl rövid. (Minimum 6 karakter)",
   "ROLE_ALREADY_EXISTS": "A felhasználó már rendelkezik a kiválasztott jogosultsággal.",

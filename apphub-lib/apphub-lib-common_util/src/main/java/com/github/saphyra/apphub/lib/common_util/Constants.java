@@ -18,4 +18,6 @@ public class Constants {
     public final String REQUEST_TYPE_HEADER = "Request-Type";
     public final String REQUEST_TYPE_VALUE = "rest";
     public final String AUTHORIZATION_HEADER = "auth";
+
+    public final String COOKIE_HEADER = "Cookie";
 }

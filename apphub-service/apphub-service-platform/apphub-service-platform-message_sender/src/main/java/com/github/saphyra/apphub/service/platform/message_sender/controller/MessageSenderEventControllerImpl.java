@@ -14,18 +14,13 @@ import java.util.List;
 public class MessageSenderEventControllerImpl implements MessageSenderEventController {
     private final List<WebSocketHandler> webSocketHandlers;
 
-
     @Override
-    //TODO unit test
-    //TODO int test
     public void sendPingRequests() {
         log.info("Processing pingRequests event...");
         webSocketHandlers.forEach(WebSocketHandler::sendPingRequest);
     }
 
     @Override
-    //TODO unit test
-    //TODO int test
     public void connectionCleanup() {
         log.info("Processing connectionCleanup event...");
         webSocketHandlers.forEach(WebSocketHandler::cleanUp);
