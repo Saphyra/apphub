@@ -14,6 +14,8 @@ public enum WebSocketEventName {
     SKYXPLORE_LOBBY_SET_READINESS("set-readiness"),
     SKYXPLORE_LOBBY_CHANGE_ALLIANCE("change-alliance"),
     SKYXPLORE_LOBBY_GAME_SETTINGS_CHANGED("game-settings-changed"),
+    SKYXPLORE_LOBBY_USER_ONLINE("skyxplore-lobby-user-online"),
+    SKYXPLORE_LOBBY_USER_OFFLINE("skyxplore-lobby-user-offline"),
 
     SKYXPLORE_LOBBY_GAME_CREATION_INITIATED("game-creation-initiated"),
     SKYXPLORE_LOBBY_GAME_LOADED("game-loaded"),

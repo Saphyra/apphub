@@ -12,8 +12,15 @@
         this.save = save;
     }
 
+    eventProcessor.registerProcessor(new EventProcessor(
+        function(eventType){return eventType == events.LOCALIZATION_LOADED},
+        validate,
+        true
+    ).setName("Auto-validator"));
+
     function init(){
         $("#" + ids.characterNameInput).on("keyup", function(){eventProcessor.processEvent(new Event(events.VALIDATION_ATTEMPT))});
+        validate();
     }
 
     eventProcessor.registerProcessor(new EventProcessor(

@@ -21,9 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class PageVisitedFilter extends ZuulFilter {
-    private static final String WEB_PATTERN = "/web/**";
+    static final String WEB_PATTERN = "/web/**";
 
     private final AntPathMatcher antPathMatcher;
     private final RequestContextProvider requestContextProvider;

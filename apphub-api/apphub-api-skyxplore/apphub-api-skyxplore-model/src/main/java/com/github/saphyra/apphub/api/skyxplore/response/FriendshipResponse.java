@@ -13,5 +13,6 @@ import java.util.UUID;
 @Builder
 public class FriendshipResponse {
     private UUID friendshipId;
+    private UUID friendId;
     private String friendName;
 }

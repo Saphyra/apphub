@@ -4,6 +4,8 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.CloseStatus;
@@ -12,6 +14,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,6 +27,7 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements WebSocketHandler {
+    @Getter(value = AccessLevel.PACKAGE)
     private final Map<UUID, SessionWrapper> sessionMap = new ConcurrentHashMap<>();
 
     private final WebSocketHandlerContext context;
@@ -88,8 +92,13 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
         WebSocketEvent event = WebSocketEvent.builder()
             .eventName(WebSocketEventName.PING)
             .build();
-        sessionMap.keySet()
-            .forEach(userId -> sendEvent(userId, event));
+        List<UUID> disconnected = sessionMap.keySet()
+            .stream()
+            .map(userId -> sendEvent(userId, event))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toList());
+        handleExpiredConnections(disconnected);
     }
 
     @Override
@@ -111,13 +120,19 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
     }
 
     private boolean isExpired(Map.Entry<UUID, SessionWrapper> entry) {
-        return entry.getValue().getLastUpdate().isBefore(context.getDateTimeUtil().getCurrentDate().minusMinutes(context.getWebSocketSessionExpirationSeconds()));
+        LocalDateTime expiration = context.getDateTimeUtil()
+            .getCurrentDate()
+            .minusSeconds(context.getWebSocketSessionExpirationSeconds());
+        return entry.getValue()
+            .getLastUpdate()
+            .isBefore(expiration);
     }
 
     @Override
     public List<UUID> sendEvent(WebSocketMessage message) {
         return message.getRecipients()
             .stream()
+            .filter(sessionMap::containsKey)
             .map(recipient -> sendEvent(recipient, message.getEvent()))
             .filter(Optional::isPresent)
             .map(Optional::get)
@@ -148,6 +163,7 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
         if (isNull(principal)) {
             throw new IllegalArgumentException("Principal is not set.");
         }
-        return context.getUuidConverter().convertEntity(principal.getName());
+        return context.getUuidConverter()
+            .convertEntity(principal.getName());
     }
 }

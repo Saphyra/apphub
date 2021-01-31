@@ -8,7 +8,7 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/start_game_controller.js");
 (function PageController(){
     window.ids = {
         friendsContainer: "friends",
-        friendsList: "friends-list",
+        activeFriendsList: "active-friends-list",
         host: "host",
         membersList: "members-list",
         universeSizeInput: "universe-size-input",
@@ -17,6 +17,7 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/start_game_controller.js");
         planetSizeInput: "planet-size-input",
         aiPresenceInput: "ai-presence-input",
         startGameButton: "start-game-button",
+        noActiveFriends: "no-active-friends",
     }
 
     window.webSocketEvents = {
@@ -55,6 +56,8 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/start_game_controller.js");
             .addHandler(settingsController.createGameSettingsChangedHandler())
             .addHandler(startGameController.createGameCreationInitiatedHandler())
             .addHandler(startGameController.createGameLoadedHandler())
+            .addHandler(friendsController.createCharacterOnlineHandler())
+            .addHandler(friendsController.createCharacterOfflineHandler())
             .connect();
     });
 })();

@@ -204,10 +204,15 @@
         "key": "innerHTML",
         "message": "Start game"
       }
+    ],
+    "no-active-friends": [
+      {
+        "key": "innerHTML",
+        "message": "No active friends."
+      }
     ]
   },
   "additionalContent": {
-    "no-active-friends": "No active friends",
     "friend-invited": "Friend is invited.",
     "character-joined-to-lobby": "is joined to the lobby.",
     "character-left-the-lobby": "has left.",

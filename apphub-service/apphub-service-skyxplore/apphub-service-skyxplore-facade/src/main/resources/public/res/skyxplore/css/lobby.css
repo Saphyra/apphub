@@ -198,6 +198,12 @@
         bottom: 0;
     }
 
+        #no-active-friends{
+            text-align: center;
+            margin: 1rem;
+            font-size: 1.5rem;
+        }
+
         .friend{
             text-align: center;
             margin: 0.5rem;

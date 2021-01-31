@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.api.skyxplore.lobby.server;
 
+import com.github.saphyra.apphub.api.skyxplore.response.ActiveFriendResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.GameSettingsResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface SkyXploreLobbyController {
@@ -45,4 +47,7 @@ public interface SkyXploreLobbyController {
 
     @PostMapping(Endpoints.SKYXPLORE_START_GAME)
     void startGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS)
+    List<ActiveFriendResponse> getActiveFriends(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

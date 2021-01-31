@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.data.friend;
 
 import com.github.saphyra.apphub.api.skyxplore.data.server.SkyXploreFriendDataController;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.api.skyxplore.response.ActiveFriendResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.FriendshipResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.IncomingFriendRequestResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.SentFriendRequestResponse;
@@ -114,14 +113,5 @@ public class FriendDataControllerImpl implements SkyXploreFriendDataController {
     public void removeFriend(UUID friendshipId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to remove friendship {}", accessTokenHeader.getUserId(), friendshipId);
         friendshipDeletionService.removeFriendship(friendshipId, accessTokenHeader.getUserId());
-    }
-
-    @Override
-    //TODO unit test
-    //TODO int test
-    //TODO API test
-    public List<ActiveFriendResponse> getActiveFriends(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know his active friends", accessTokenHeader.getUserId());
-        return activeFriendsQueryService.getActiveFriends(accessTokenHeader.getUserId());
     }
 }

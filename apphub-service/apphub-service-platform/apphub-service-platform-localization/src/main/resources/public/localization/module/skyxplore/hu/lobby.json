@@ -204,10 +204,15 @@
         "key": "innerHTML",
         "message": "Játék kezdése"
       }
+    ],
+    "no-active-friends": [
+      {
+        "key": "innerHTML",
+        "message": "Nincs aktív barát.."
+      }
     ]
   },
   "additionalContent": {
-    "no-active-friends": "Nincs aktív barát",
     "friend-invited": "Barát meghívva.",
     "character-joined-to-lobby": "csatlakozott az előszobához.",
     "character-left-the-lobby": "kilépett.",

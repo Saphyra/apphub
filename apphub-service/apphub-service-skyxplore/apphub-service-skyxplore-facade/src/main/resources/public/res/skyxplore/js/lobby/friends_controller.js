@@ -1,52 +1,60 @@
 (function FriendsController(){
-    let refreshInterval = null;
+    window.friendsController = new function(){
+        this.createCharacterOnlineHandler = function(){
+            return new WebSocketEventHandler(
+                function(eventName){return eventName == "skyxplore-lobby-user-online"},
+                addActiveFriend
+            );
+        };
+
+        this.createCharacterOfflineHandler = function(){
+            return new WebSocketEventHandler(
+                function(eventName){return eventName == "skyxplore-lobby-user-offline"},
+                removeActiveFriend
+            );
+        };
+    }
 
     $(document).ready(init);
 
-    function setRefreshInterval(){
-        if(refreshInterval){
-            clearInterval(refreshInterval);
-        }
-
-        refreshInterval = setInterval(loadActiveFriends, 5000);
-    }
-
     function loadActiveFriends(){
-        const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_ACTIVE_FRIENDS")); //TODO move to webSocket
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_ACTIVE_FRIENDS"));
             request.convertResponse = function(response){
                 return JSON.parse(response.body);
             }
             request.processValidResponse = function(friends){
-                displayFriends(friends);
+                new Stream(friends)
+                    .forEach(addActiveFriend);
             }
         dao.sendRequestAsync(request);
+    }
 
-        function displayFriends(friends){
-            const container = document.getElementById(ids.friendsList);
-                container.innerHTML = "";
+    function addActiveFriend(friend){
+        document.getElementById(ids.noActiveFriends).style.display = "none";
 
-                if(friends.length == 0){
-                    const noFriend = document.createElement("DIV");
-                        noFriend.classList.add("friend");
-                        noFriend.innerHTML = Localization.getAdditionalContent("no-active-friends");
-                    container.appendChild(noFriend);
+        const container = document.getElementById(ids.activeFriendsList);
+            const node = document.createElement("DIV");
+                node.id = createFriendNodeId(friend.friendId);
+                node.classList.add("friend");
+                node.classList.add("button");
+                node.innerHTML = friend.friendName;
+                node.onclick = function(){
+                    inviteFriend(friend.friendId);
                 }
+        container.appendChild(node);
+    }
 
-            new Stream(friends)
-                .map(createNode)
-                .forEach(function(node){container.appendChild(node)});
+    function removeActiveFriend(friend){
+        const container = document.getElementById(ids.activeFriendsList);
+            container.removeChild(document.getElementById(createFriendNodeId(friend.friendId)));
 
-            function createNode(friend){
-                const node = document.createElement("DIV");
-                    node.classList.add("friend");
-                    node.classList.add("button");
-                    node.innerHTML = friend.friendName;
-                    node.onclick = function(){
-                        inviteFriend(friend.friendId);
-                    }
-                return node;
+            if(container.childNodes.length == 0){
+                document.getElementById(ids.noActiveFriends).style.display = "block";
             }
-        }
+    }
+
+    function createFriendNodeId(friendId){
+        return "friend-" + friendId;
     }
 
     function inviteFriend(friendId){
@@ -59,7 +67,5 @@
 
     function init(){
         loadActiveFriends();
-        document.getElementById(ids.friendsContainer).onmousemove = setRefreshInterval;
-        setRefreshInterval();
     }
 })();

@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Controller
 @Slf4j
-//TODO unit test
 public class SkyXploreGameConnectionHandler extends DefaultWebSocketHandler {
     private final SkyXploreGameWebSocketEventApiClient gameClient;
     private final CommonConfigProperties properties;
@@ -35,7 +34,7 @@ public class SkyXploreGameConnectionHandler extends DefaultWebSocketHandler {
 
     @Override
     protected void afterDisconnection(UUID userId) {
-        gameClient.userLeftGame(userId, properties.getDefaultLocale());
+        sendExitFromGameRequest(userId);
     }
 
     @Override
@@ -46,10 +45,10 @@ public class SkyXploreGameConnectionHandler extends DefaultWebSocketHandler {
 
     @Override
     public void handleExpiredConnections(List<UUID> disconnectedUsers) {
-        disconnectedUsers.forEach(this::sendExitFromLobbyRequest);
+        disconnectedUsers.forEach(this::sendExitFromGameRequest);
     }
 
-    private void sendExitFromLobbyRequest(UUID userId) {
+    private void sendExitFromGameRequest(UUID userId) {
         try {
             gameClient.userLeftGame(userId, properties.getDefaultLocale());
         } catch (Exception e) {

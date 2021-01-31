@@ -16,7 +16,6 @@ import java.util.UUID;
 
 @Controller
 @Slf4j
-//TODO unit test
 public class SkyXploreLobbyWebSocketHandler extends DefaultWebSocketHandler {
     private final AccessTokenHeaderConverter accessTokenHeaderConverter;
     private final SkyXploreLobbyApiClient lobbyClient;

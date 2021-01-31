@@ -17,16 +17,16 @@ import java.util.stream.Collectors;
 public class FriendshipQueryService {
     private final FriendshipDao friendshipDao;
     private final FriendNameQueryService friendNameQueryService;
+    private final FriendIdExtractor friendIdExtractor;
 
     public List<FriendshipResponse> getFriends(UUID userId) {
         return friendshipDao.getByFriendId(userId)
             .stream()
             .map(friendship -> FriendshipResponse.builder()
                 .friendshipId(friendship.getFriendshipId())
+                .friendId(friendIdExtractor.getFriendId(friendship, userId))
                 .friendName(friendNameQueryService.getFriendName(friendship, userId))
                 .build())
             .collect(Collectors.toList());
     }
-
-
 }
