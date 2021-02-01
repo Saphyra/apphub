@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.map;
 
-import com.github.saphyra.apphub.lib.common_util.map.OptionalHashMap;
-import com.github.saphyra.apphub.lib.common_util.map.OptionalMap;
+import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
+import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;

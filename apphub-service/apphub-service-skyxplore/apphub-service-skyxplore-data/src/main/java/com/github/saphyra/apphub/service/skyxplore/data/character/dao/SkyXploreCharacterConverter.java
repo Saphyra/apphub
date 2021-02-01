@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-///TODO unit test
 public class SkyXploreCharacterConverter extends ConverterBase<SkyXploreCharacterEntity, SkyXploreCharacter> {
     private final UuidConverter uuidConverter;
 

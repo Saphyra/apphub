@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.common_util.map;
+package com.github.saphyra.apphub.lib.common_util.collection;
 
 import lombok.NoArgsConstructor;
 

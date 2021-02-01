@@ -11,7 +11,6 @@ import java.util.UUID;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 class CharacterModelToCharacterConverter {
     public SkyXploreCharacter convert(UUID userId, SkyXploreCharacterModel characterModel) {
         return SkyXploreCharacter.builder()

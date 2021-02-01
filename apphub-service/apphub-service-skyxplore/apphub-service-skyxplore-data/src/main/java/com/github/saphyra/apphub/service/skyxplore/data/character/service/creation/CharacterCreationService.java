@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CharacterCreationService {
     private final CharacterDao characterDao;
     private final CharacterCreationValidator validator;

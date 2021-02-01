@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.data;
 
-import com.github.saphyra.apphub.lib.common_util.map.OptionalMap;
+import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
 import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

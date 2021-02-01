@@ -2,11 +2,11 @@
 
     <changeSet id="create_schema_notebook" author="saphyra">
         <sql endDelimiter=";">
-            CREATE SCHEMA IF NOT EXISTS notebook
+            CREATE SCHEMA IF NOT EXISTS SKYXPLORE
         </sql>
 
         <rollback>
-            DROP SCHEMA IF EXIST notebook CASCADE
+            DROP SCHEMA IF EXIST SKYXPLORE CASCADE
         </rollback>
     </changeSet>
 

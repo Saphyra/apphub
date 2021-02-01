@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource;
 
-import com.github.saphyra.apphub.lib.common_util.map.OptionalHashMap;
+import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.GameDataItemValidator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuilding;
