@@ -35,7 +35,7 @@ public class SkyXplorePageController {
     @GetMapping(Endpoints.SKYXPLORE_MAIN_MENU_PAGE)
     public ModelAndView mainMenu(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
         log.info("Loading SkyXplore main menu for user {}", accessTokenHeader.getUserId());
-        if (characterClient.isCharacterExistsForUser(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated())) {
+        if (characterClient.doesCharacterExistForUser(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated())) {
             return new ModelAndView("main_menu");
         } else {
             log.info("User has no character. Returning character page instead.");

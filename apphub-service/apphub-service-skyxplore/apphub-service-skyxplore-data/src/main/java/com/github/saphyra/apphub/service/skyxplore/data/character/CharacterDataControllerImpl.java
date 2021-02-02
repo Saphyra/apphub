@@ -23,9 +23,7 @@ public class CharacterDataControllerImpl implements SkyXploreCharacterDataContro
     private final SkyXploreCharacterModelConverter characterModelConverter;
 
     @Override
-    //TODO unit test
-    //todo int test
-    public boolean isCharacterExistsForUser(AccessTokenHeader accessTokenHeader) {
+    public boolean doesCharacterExistForUser(AccessTokenHeader accessTokenHeader) {
         log.info("Checking is SkyXplore character is present for user {}", accessTokenHeader.getUserId());
         return characterDao.exists(accessTokenHeader.getUserId());
     }
@@ -36,16 +34,12 @@ public class CharacterDataControllerImpl implements SkyXploreCharacterDataContro
     }
 
     @Override
-    //TODO unit test
-    //todo int test
     public void createOrUpdateCharacter(SkyXploreCharacterModel character, AccessTokenHeader accessTokenHeader) {
         log.info("Creating or updating SkyXplore character for user {}", accessTokenHeader.getUserId());
         characterCreationService.create(accessTokenHeader.getUserId(), character);
     }
 
     @Override
-    //TODO unit test
-    //todo int test
     public ResponseEntity<SkyXploreCharacterModel> internalGetCharacterByUserId(UUID userId) {
         log.info("Querying character for userId {}", userId);
         return characterModelConverter.convertEntity(characterDao.findById(userId))

@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreC
 import org.springframework.stereotype.Component;
 
 @Component
-//TODO unit test
 public class SkyXploreCharacterModelConverter extends ConverterBase<SkyXploreCharacter, SkyXploreCharacterModel> {
     @Override
     protected SkyXploreCharacterModel processEntityConversion(SkyXploreCharacter entity) {

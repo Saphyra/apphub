@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public interface SkyXploreCharacterDataController {
     @GetMapping(Endpoints.INTERNAL_SKYXPLORE_IS_CHARACTER_EXISTS)
-    boolean isCharacterExistsForUser(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    boolean doesCharacterExistForUser(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(Endpoints.SKYXPLORE_GET_CHARACTER)
     ResponseEntity<SkyXploreCharacterModel> getCharacter(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
