@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO unit test
 public class FriendRequestDao extends AbstractDao<FriendRequestEntity, FriendRequest, String, FriendRequestRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 

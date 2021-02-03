@@ -10,7 +10,6 @@ import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreCharacter;
 import com.github.saphyra.apphub.service.skyxplore.data.common.SkyXploreCharacterModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service.ActiveFriendsQueryService;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service.FriendshipDeletionService;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service.FriendshipQueryService;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.service.FriendRequestAcceptService;
@@ -37,7 +36,6 @@ public class FriendDataControllerImpl implements SkyXploreFriendDataController {
     private final FriendRequestAcceptService friendRequestAcceptService;
     private final FriendshipQueryService friendshipQueryService;
     private final FriendshipDeletionService friendshipDeletionService;
-    private final ActiveFriendsQueryService activeFriendsQueryService;
 
     @Override
     //TODO unit test

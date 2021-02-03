@@ -40,12 +40,15 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     @Override
     //TODO unit test
     //TODO int test
+    //TODO API test
     public void createLobby(AccessTokenHeader accessTokenHeader) {
         log.info("Creating lobby for user {} if not exists", accessTokenHeader.getUserId());
         lobbyCreationService.create(accessTokenHeader.getUserId());
     }
 
     @Override
+    //TODO unit test
+    //TODO int test
     public LobbyViewForPage lobbyForPage(AccessTokenHeader accessTokenHeader) {
         log.info("Checking if user {} is in lobby...", accessTokenHeader.getUserId());
 
@@ -101,6 +104,8 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     }
 
     @Override
+    //TODO unit test
+    //TODO int test
     public void userLeftLobby(UUID userId) {
         log.info("User {} is left the lobby", userId);
         exitFromLobbyService.sendDisconnectionMessage(userId);

@@ -108,9 +108,9 @@
     </build>
 
     <modules>
+        <module>apphub-service</module>
         <module>apphub-api</module>
         <module>apphub-lib</module>
         <module>apphub-test</module>
-        <module>apphub-service</module>
     </modules>
 </project>

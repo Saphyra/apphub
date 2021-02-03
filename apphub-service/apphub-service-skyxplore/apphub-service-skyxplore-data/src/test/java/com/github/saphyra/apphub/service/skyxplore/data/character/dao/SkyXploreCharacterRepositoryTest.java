@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.character.dao;
 
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,14 @@ public class SkyXploreCharacterRepositoryTest {
     private static final String CHARACTER_NAME = "character-name";
     private static final String USER_ID_1 = "user-id-1";
     private static final String USER_ID_2 = "user-id-2";
+
     @Autowired
     private SkyXploreCharacterRepository underTest;
+
+    @After
+    public void clear() {
+        underTest.deleteAll();
+    }
 
     @Test
     public void findByName() {

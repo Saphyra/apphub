@@ -6,6 +6,8 @@
   "CHARACTER_NAME_TOO_SHORT": "Character name too short. (3 characters min.)",
   "CHARACTER_NAME_TOO_LONG": "Character name too long. (30 characters max.)",
   "EMAIL_ALREADY_EXISTS": "E-mail address is already in use.",
+  "FRIENDSHIP_NOT_FOUND": "Friendship not found.",
+  "FORBIDDEN_OPERATION": "You must not do this.",
   "GENERAL_ERROR": "Unknown error.",
   "INVALID_PARAM": "Invalid parameter.",
   "INVALID_TYPE": "Invalid type.",

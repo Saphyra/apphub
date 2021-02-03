@@ -6,6 +6,8 @@
   "CHARACTER_NAME_TOO_SHORT": "Karakternév túl rövid. (Minimum 3 karakter)",
   "CHARACTER_NAME_TOO_LONG": "Karakternév túl hosszú. (Maximum 30 karakter)",
   "EMAIL_ALREADY_EXISTS": "Az email foglalt.",
+  "FRIENDSHIP_NOT_FOUND": "A barát nem található.",
+  "FORBIDDEN_OPERATION": "Ezt nem teheted meg.",
   "GENERAL_ERROR": "Ismeretlen hiba.",
   "INVALID_PARAM": "Érvénytelen paraméter.",
   "INVALID_TYPE": "Érvénytelen típus.",

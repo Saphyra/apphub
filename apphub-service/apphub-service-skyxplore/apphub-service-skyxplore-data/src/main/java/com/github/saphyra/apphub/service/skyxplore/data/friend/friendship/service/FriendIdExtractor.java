@@ -10,7 +10,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class FriendIdExtractor {
     public UUID getFriendId(Friendship friendship, UUID userId) {
         return friendship.getFriend1().equals(userId) ? friendship.getFriend2() : friendship.getFriend1();

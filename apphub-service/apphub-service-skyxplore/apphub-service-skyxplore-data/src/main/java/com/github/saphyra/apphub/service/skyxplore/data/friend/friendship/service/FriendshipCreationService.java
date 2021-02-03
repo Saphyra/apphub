@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class FriendshipCreationService {
     private final FriendshipFactory friendshipFactory;
     private final FriendshipDao friendshipDao;
