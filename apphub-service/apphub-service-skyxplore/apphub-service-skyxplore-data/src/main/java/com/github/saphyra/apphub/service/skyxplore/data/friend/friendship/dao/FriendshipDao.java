@@ -30,4 +30,11 @@ public class FriendshipDao extends AbstractDao<FriendshipEntity, Friendship, Str
     public void deleteByUserId(UUID userId) {
         repository.deleteByFriendId(uuidConverter.convertDomain(userId));
     }
+
+    public Optional<Friendship> findByFriendIds(UUID friend1, UUID friend2) {
+        return converter.convertEntity(repository.findByFriendIds(
+            uuidConverter.convertDomain(friend1),
+            uuidConverter.convertDomain(friend2)
+        ));
+    }
 }

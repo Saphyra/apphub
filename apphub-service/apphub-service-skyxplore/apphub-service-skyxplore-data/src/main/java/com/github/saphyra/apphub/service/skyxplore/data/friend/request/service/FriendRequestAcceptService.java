@@ -1,5 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.request.service;
 
+import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ForbiddenException;
+import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service.FriendshipCreationService;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequest;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequestDao;
@@ -13,7 +17,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class FriendRequestAcceptService {
     private final FriendRequestDao friendRequestDao;
     private final FriendshipCreationService friendshipCreationService;
@@ -21,10 +24,10 @@ public class FriendRequestAcceptService {
     @Transactional
     public void accept(UUID userId, UUID friendRequestId) {
         FriendRequest friendRequest = friendRequestDao.findById(friendRequestId)
-            .orElseThrow(RuntimeException::new); //TODO proper exception
+            .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.FRIEND_REQUEST_NOT_FOUND.name()), "FriendRequest not found with id " + friendRequestId));
 
         if (!friendRequest.getFriendId().equals(userId)) {
-            //TODO throw exception
+            throw new ForbiddenException(new ErrorMessage(ErrorCode.FORBIDDEN_OPERATION.name()), userId + " cannot accept friendRequest " + friendRequest);
         }
 
         friendshipCreationService.fromRequest(friendRequest);

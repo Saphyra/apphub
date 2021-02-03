@@ -21,6 +21,10 @@ import static org.mockito.Mockito.verify;
 public class FriendshipDaoTest {
     private static final String USER_ID_STRING = "user-id";
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID FRIEND_1 = UUID.randomUUID();
+    private static final UUID FRIEND_2 = UUID.randomUUID();
+    private static final String FRIEND_1_STRING = "friend-1";
+    private static final String FRIEND_2_STRING = "friend-2";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -70,5 +74,17 @@ public class FriendshipDaoTest {
         underTest.deleteByUserId(USER_ID);
 
         verify(repository).deleteByFriendId(USER_ID_STRING);
+    }
+
+    @Test
+    public void findByFriendIds() {
+        given(uuidConverter.convertDomain(FRIEND_1)).willReturn(FRIEND_1_STRING);
+        given(uuidConverter.convertDomain(FRIEND_2)).willReturn(FRIEND_2_STRING);
+        given(repository.findByFriendIds(FRIEND_1_STRING, FRIEND_2_STRING)).willReturn(Optional.of(entity));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
+
+        Optional<Friendship> result = underTest.findByFriendIds(FRIEND_1, FRIEND_2);
+
+        assertThat(result).contains(domain);
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -81,5 +82,29 @@ public class FriendshipRepositoryTest {
         underTest.deleteByFriendId(FRIEND_ID_1);
 
         assertThat(underTest.findAll()).containsExactly(entity3);
+    }
+
+    @Test
+    public void findByFriendIds() {
+        FriendshipEntity entity1 = FriendshipEntity.builder()
+            .friendshipId(FRIENDSHIP_ID_1)
+            .friend1(FRIEND_ID_1)
+            .friend2(FRIEND_ID_2)
+            .build();
+        FriendshipEntity entity2 = FriendshipEntity.builder()
+            .friendshipId(FRIENDSHIP_ID_2)
+            .friend1(FRIEND_ID_3)
+            .friend2(FRIEND_ID_1)
+            .build();
+        FriendshipEntity entity3 = FriendshipEntity.builder()
+            .friendshipId(FRIENDSHIP_ID_3)
+            .friend1(FRIEND_ID_3)
+            .friend2(FRIEND_ID_2)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2, entity3));
+
+        Optional<FriendshipEntity> result = underTest.findByFriendIds(FRIEND_ID_2, FRIEND_ID_1);
+
+        assertThat(result).contains(entity1);
     }
 }
