@@ -44,10 +44,11 @@ import static org.mockito.BDDMockito.given;
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
 public class CharacterDataControllerImplTestIt_createOrUpdateCharacter {
-    private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID USER_ID_1 = UUID.randomUUID();
+    private static final UUID USER_ID_2 = UUID.randomUUID();
     private static final AccessTokenHeader ACCESS_TOKEN_HEADER = AccessTokenHeader.builder()
         .accessTokenId(UUID.randomUUID())
-        .userId(USER_ID)
+        .userId(USER_ID_1)
         .roles(Arrays.asList("SKYXPLORE"))
         .build();
     private static final String LOCALIZED_MESSAGE = "localized-message";
@@ -132,7 +133,7 @@ public class CharacterDataControllerImplTestIt_createOrUpdateCharacter {
 
     @Test
     public void characterNameAlreadyExists() {
-        RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
+        RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER.toBuilder().userId(USER_ID_2).build()))
             .body(SkyXploreCharacterModel.builder().name(CHARACTER_NAME).build())
             .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_CREATE_OR_UPDATE_CHARACTER));
 
@@ -148,6 +149,19 @@ public class CharacterDataControllerImplTestIt_createOrUpdateCharacter {
     }
 
     @Test
+    public void characterNameAlreadyExistsForTheSameUser() {
+        RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
+            .body(SkyXploreCharacterModel.builder().name(CHARACTER_NAME).build())
+            .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_CREATE_OR_UPDATE_CHARACTER));
+
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
+            .body(SkyXploreCharacterModel.builder().name(CHARACTER_NAME).build())
+            .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_CREATE_OR_UPDATE_CHARACTER));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @Test
     public void createCharacter() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(SkyXploreCharacterModel.builder().name(CHARACTER_NAME).build())
@@ -155,7 +169,7 @@ public class CharacterDataControllerImplTestIt_createOrUpdateCharacter {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        assertThat(characterDao.findById(USER_ID)).contains(SkyXploreCharacter.builder().userId(USER_ID).name(CHARACTER_NAME).build());
+        assertThat(characterDao.findById(USER_ID_1)).contains(SkyXploreCharacter.builder().userId(USER_ID_1).name(CHARACTER_NAME).build());
     }
 
     @Test
@@ -170,6 +184,6 @@ public class CharacterDataControllerImplTestIt_createOrUpdateCharacter {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        assertThat(characterDao.findById(USER_ID)).contains(SkyXploreCharacter.builder().userId(USER_ID).name(NEW_CHARACTER_NAME).build());
+        assertThat(characterDao.findById(USER_ID_1)).contains(SkyXploreCharacter.builder().userId(USER_ID_1).name(NEW_CHARACTER_NAME).build());
     }
 }

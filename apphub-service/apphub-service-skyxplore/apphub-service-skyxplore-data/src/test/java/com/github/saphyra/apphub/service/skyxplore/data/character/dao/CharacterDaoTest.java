@@ -37,7 +37,7 @@ public class CharacterDaoTest {
     private CharacterDao underTest;
 
     @Mock
-    private SkyXploreCharacter character;
+    private SkyXploreCharacter domain;
 
     @Mock
     private SkyXploreCharacterEntity entity;
@@ -64,21 +64,21 @@ public class CharacterDaoTest {
     @Test
     public void findByName() {
         given(repository.findByName(CHARACTER_NAME)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(character));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
 
         Optional<SkyXploreCharacter> result = underTest.findByName(CHARACTER_NAME);
 
-        assertThat(result).contains(character);
+        assertThat(result).contains(domain);
     }
 
     @Test
     public void findById() {
         given(repository.findById(USER_ID_STRING)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(entity)).willReturn(character);
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
 
         Optional<SkyXploreCharacter> result = underTest.findById(USER_ID);
 
-        assertThat(result).contains(character);
+        assertThat(result).contains(domain);
     }
 
     @Test(expected = NotFoundException.class)
@@ -91,20 +91,20 @@ public class CharacterDaoTest {
     @Test
     public void findByIdValidated_found() {
         given(repository.findById(USER_ID_STRING)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(entity)).willReturn(character);
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
 
         SkyXploreCharacter result = underTest.findByIdValidated(USER_ID);
 
-        assertThat(result).isEqualTo(character);
+        assertThat(result).isEqualTo(domain);
     }
 
     @Test
     public void getByNameLike() {
         given(repository.getByNameContainingIgnoreCase(CHARACTER_NAME)).willReturn(Arrays.asList(entity));
-        given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(character));
+        given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(domain));
 
         List<SkyXploreCharacter> result = underTest.getByNameLike(CHARACTER_NAME);
 
-        assertThat(result).containsExactly(character);
+        assertThat(result).containsExactly(domain);
     }
 }

@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,6 +24,7 @@ import static org.mockito.BDDMockito.given;
 @RunWith(MockitoJUnitRunner.class)
 public class CharacterCreationValidatorTest {
     private static final String CHARACTER_NAME = "character-name";
+    private static final UUID USER_ID = UUID.randomUUID();
     @Mock
     private CharacterDao characterDao;
 
@@ -34,7 +36,7 @@ public class CharacterCreationValidatorTest {
 
     @Test
     public void nullCharacterName() {
-        Throwable ex = catchThrowable(() -> underTest.validate(SkyXploreCharacterModel.builder().build()));
+        Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, SkyXploreCharacterModel.builder().build()));
 
         assertThat(ex).isInstanceOf(BadRequestException.class);
         BadRequestException exception = (BadRequestException) ex;
@@ -44,7 +46,7 @@ public class CharacterCreationValidatorTest {
 
     @Test
     public void characterNameTooShort() {
-        Throwable ex = catchThrowable(() -> underTest.validate(SkyXploreCharacterModel.builder().name("as").build()));
+        Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, SkyXploreCharacterModel.builder().name("as").build()));
 
         assertThat(ex).isInstanceOf(BadRequestException.class);
         BadRequestException exception = (BadRequestException) ex;
@@ -53,7 +55,7 @@ public class CharacterCreationValidatorTest {
 
     @Test
     public void characterNameTooLong() {
-        Throwable ex = catchThrowable(() -> underTest.validate(SkyXploreCharacterModel.builder().name(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())).build()));
+        Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, SkyXploreCharacterModel.builder().name(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())).build()));
 
         assertThat(ex).isInstanceOf(BadRequestException.class);
         BadRequestException exception = (BadRequestException) ex;
@@ -63,8 +65,9 @@ public class CharacterCreationValidatorTest {
     @Test
     public void characterNameAlreadyInUse() {
         given(characterDao.findByName(CHARACTER_NAME)).willReturn(Optional.of(character));
+        given(character.getUserId()).willReturn(UUID.randomUUID());
 
-        Throwable ex = catchThrowable(() -> underTest.validate(SkyXploreCharacterModel.builder().name(CHARACTER_NAME).build()));
+        Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, SkyXploreCharacterModel.builder().name(CHARACTER_NAME).build()));
 
         assertThat(ex).isInstanceOf(ConflictException.class);
         ConflictException exception = (ConflictException) ex;
@@ -72,10 +75,18 @@ public class CharacterCreationValidatorTest {
     }
 
     @Test
+    public void characterNameUsedByTheSameUser() {
+        given(characterDao.findByName(CHARACTER_NAME)).willReturn(Optional.of(character));
+        given(character.getUserId()).willReturn(USER_ID);
+
+        underTest.validate(USER_ID, SkyXploreCharacterModel.builder().name(CHARACTER_NAME).build());
+    }
+
+    @Test
     public void valid() {
         given(characterDao.findByName(CHARACTER_NAME)).willReturn(Optional.empty());
 
-        underTest.validate(SkyXploreCharacterModel.builder().name(CHARACTER_NAME).build());
+        underTest.validate(USER_ID, SkyXploreCharacterModel.builder().name(CHARACTER_NAME).build());
     }
 
 }

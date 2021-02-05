@@ -58,4 +58,62 @@ public class Endpoints {
 
     public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";
     public static final String UTILS_LOG_FORMATTER_SET_VISIBILITY = "/api/utils/log-formatter/visibility";
+
+    //SKYXPLORE-DATA
+    public static final String INTERNAL_SKYXPLORE_IS_CHARACTER_EXISTS = "/internal/skyxplore/character/exists";
+    public static final String INTERNAL_SKYXPLORE_GET_CHARACTER_BY_USER_ID = "/allowed-internal/skyxplore/character/{userId}";
+    public static final String SKYXPLORE_CREATE_OR_UPDATE_CHARACTER = "/api/skyxplore/character";
+    public static final String SKYXPLORE_SEARCH_FOR_FRIENDS = "/api/skyxplore/friend/candidate";
+    public static final String SKYXPLORE_ADD_FRIEND = "/api/skyxplore/friend/request";
+    public static final String SKYXPLORE_GET_SENT_FRIEND_REQUEST = "/api/skyxplore/friend/request/sent";
+    public static final String SKYXPLORE_GET_INCOMING_FRIEND_REQUEST = "/api/skyxplore/friend/request/incoming";
+    public static final String SKYXPLORE_CANCEL_FRIEND_REQUEST = "/api/skyxplore/friend/request/{friendRequestId}";
+    public static final String SKYXPLORE_ACCEPT_FRIEND_REQUEST = "/api/skyxplore/friend/request/{friendRequestId}";
+    public static final String SKYXPLORE_GET_FRIENDS = "/api/skyxplore/friend";
+    public static final String SKYXPLORE_REMOVE_FRIEND = "/api/skyxplore/friend/{friendshipId}";
+    public static final String SKYXPLORE_GET_CHARACTER = "/api/skyxplore/character";
+    public static final String SKYXPLORE_GET_ITEM_DATA = "/api/skyxplore/data/{dataId}";
+
+    //SKYXPLORE-LOBBY
+    public static final String INTERNAL_SKYXPLORE_USER_JOINED_TO_LOBBY = "/internal/lobby/{userId}";
+    public static final String INTERNAL_SKYXPLORE_USER_LEFT_LOBBY = "/internal/lobby/{userId}";
+    public static final String INTERNAL_SKYXPLORE_LOBBY_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/lobby/{userId}";
+    public static final String INTERNAL_SKYXPLORE_LOBBY_VIEW_FOR_PAGE = "/internal/skyxplore/lobby/page";
+    public static final String INTERNAL_SKYXPLORE_LOBBY_PLAYER_ONLINE = "/web-socket-event/skyxplore/lobby/online/{userId}";
+    public static final String INTERNAL_SKYXPLORE_LOBBY_PLAYER_OFFLINE = "/web-socket-event/skyxplore/lobby/online/{userId}";
+
+    public static final String SKYXPLORE_EXIT_FROM_LOBBY = "/api/skyxplore/lobby";
+    public static final String SKYXPLORE_INVITE_TO_LOBBY = "/api/skyxplore/lobby/invite/{friendId}";
+    public static final String SKYXPLORE_LOBBY_ACCEPT_INVITATION = "/api/skyxplore/lobby/join/{invitorId}";
+    public static final String SKYXPLORE_LOBBY_GET_MEMBERS = "/api/skyxplore/lobby/members";
+    public static final String SKYXPLORE_CREATE_LOBBY = "/api/skyxplore/lobby";
+    public static final String SKYXPLORE_LOBBY_GET_GAME_SETTINGS = "/api/skyxplore/lobby/settings";
+    public static final String SKYXPLORE_START_GAME = "/api/skyxplore/lobby/start";
+    public static final String SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS = "/api/skyxplore/friends/active";
+
+    //SKYXPLORE-GAME
+    public static final String INTERNAL_SKYXPLORE_GAME_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/game/{userId}";
+
+    public static final String INTERNAL_SKYXPLORE_CREATE_GAME = "/internal/skyxplore/game";
+    public static final String INTERNAL_SKYXPLORE_USER_JOINED_TO_GAME = "/internal/skyxplore/game/{userId}";
+    public static final String INTERNAL_SKYXPLORE_USER_LEFT_GAME = "/internal/skyxplore/game/{userId}";
+    public static final String INTERNAL_SKYXPLORE_IS_USER_IN_GAME = "/internal/skyxplore/game";
+
+    public static final String SKYXPLORE_GAME_MAP = "/api/skyxplore/game/universe";
+    public static final String SKYXPLORE_GAME_GET_PLAYERS = "/api/skyxplore/game/player";
+    public static final String SKYXPLORE_GAME_CREATE_CHAT_ROOM = "/api/skyxplore/game/chat/room";
+    public static final String SKYXPLORE_GAME_LEAVE_ROOM = "/api/skyxplore/game/chat/room/{roomId}";
+    public static final String SKYXPLORE_GET_SOLAR_SYSTEM = "/api/skyxplore/game/solar-system/{solarSystemId}";
+    public static final String SKYXPLORE_PLANET_GET_SURFACE = "/api/skyxplore/game/planet/{planetId}/surface";
+    public static final String SKYXPLORE_PLANET_GET_STORAGE = "/api/skyxplore/game/planet/{planetId}/storage";
+    public static final String SKYXPLORE_PLANET_GET_POPULATION_OVERVIEW = "/api/skyxplore/game/planet/{planetId}/population";
+    public static final String SKYXPLORE_PLANET_GET_BUILDING_OVERVIEW = "/api/skyxplore/game/planet/{planetId}/building";
+    public static final String SKYXPLORE_PLANET_GET_PRIORITIES = "/api/skyxplore/game/planet/{planetId}/priority";
+    public static final String SKYXPLORE_PLANET_GET_STORAGE_SETTINGS = "/api/skyxplore/game/planet/{planetId}/storage-settings";
+    public static final String SKYXPLORE_PLANET_CREATE_STORAGE_SETTING = "/api/skyxplore/game/planet/{planetId}/storage-settings";
+    public static final String SKYXPLORE_PLANET_DELETE_STORAGE_SETTING = "/api/skyxplore/game/planet/{planetId}/storage-settings/{storageSettingId}";
+    public static final String SKYXPLORE_PLANET_EDIT_STORAGE_SETTING = "/api/skyxplore/game/planet/{planetId}/storage-settings/{storageSettingId}";
+    public static final String SKYXPLORE_PLANET_GET_POPULATION = "/api/skyxplore/game/planet/{planetId}/citizen";
+    public static final String SKYXPLORE_PLANET_RENAME_CITIZEN = "/api/skyxplore/game/planet/{planetId}/citizen/{citizenId}/rename";
+    public static final String SKYXPLORE_PLANET_UPDATE_PRIORITY = "/api/skyxplore/game/planet/{planetId}/priority/{priorityType}";
 }

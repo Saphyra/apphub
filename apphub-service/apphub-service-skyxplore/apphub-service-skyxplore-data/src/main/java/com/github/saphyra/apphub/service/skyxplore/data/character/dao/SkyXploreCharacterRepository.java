@@ -9,4 +9,6 @@ public interface SkyXploreCharacterRepository extends CrudRepository<SkyXploreCh
     Optional<SkyXploreCharacterEntity> findByName(String name);
 
     List<SkyXploreCharacterEntity> getByNameContainingIgnoreCase(String characterName);
+
+    void deleteByUserId(String userId1);
 }

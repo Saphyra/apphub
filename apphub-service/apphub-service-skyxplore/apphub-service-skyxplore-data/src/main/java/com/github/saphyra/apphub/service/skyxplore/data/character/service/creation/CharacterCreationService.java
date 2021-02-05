@@ -18,7 +18,7 @@ public class CharacterCreationService {
     private final CharacterModelToCharacterConverter converter;
 
     public void create(UUID userId, SkyXploreCharacterModel characterModel) {
-        validator.validate(characterModel);
+        validator.validate(userId, characterModel);
 
         SkyXploreCharacter character = converter.convert(userId, characterModel);
         characterDao.save(character);

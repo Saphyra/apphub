@@ -7,9 +7,6 @@ import com.github.saphyra.apphub.api.skyxplore.response.IncomingFriendRequestRes
 import com.github.saphyra.apphub.api.skyxplore.response.SentFriendRequestResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
-import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreCharacter;
-import com.github.saphyra.apphub.service.skyxplore.data.common.SkyXploreCharacterModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service.FriendshipDeletionService;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service.FriendshipQueryService;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.service.FriendRequestAcceptService;
@@ -22,14 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 public class FriendDataControllerImpl implements SkyXploreFriendDataController {
-    private final CharacterDao characterDao;
-    private final SkyXploreCharacterModelConverter characterModelConverter;
+    private final FriendCandidateQueryService friendCandidateQueryService;
     private final FriendRequestCreationService friendRequestCreationService;
     private final FriendRequestQueryService friendRequestQueryService;
     private final FriendRequestCancelService friendRequestCancelService;
@@ -38,71 +33,42 @@ public class FriendDataControllerImpl implements SkyXploreFriendDataController {
     private final FriendshipDeletionService friendshipDeletionService;
 
     @Override
-    //TODO unit test
-    //TODO int test
-    //TODO API test
     public List<SkyXploreCharacterModel> getFriendCandidates(OneParamRequest<String> queryString, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to get the characters with name {}", accessTokenHeader.getUserId(), queryString.getValue());
-        SkyXploreCharacter ownCharacter = characterDao.findByIdValidated(accessTokenHeader.getUserId());
-
-        return characterDao.getByNameLike(queryString.getValue())
-            .stream()
-            .filter(skyXploreCharacter -> !skyXploreCharacter.getUserId().equals(ownCharacter.getUserId()))
-            //TODO filter friends
-            //TODO filter friend requests
-            .map(characterModelConverter::convertEntity)
-            .collect(Collectors.toList());
+        return friendCandidateQueryService.getFriendCandidates(accessTokenHeader.getUserId(), queryString.getValue());
     }
 
     @Override
-    //TODO unit test
-    //TODO int test
-    //TODO API test
-    public void createFriendRequest(OneParamRequest<UUID> characterId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to add {} as friend", accessTokenHeader.getUserId(), characterId.getValue());
-        friendRequestCreationService.createFriendRequest(accessTokenHeader.getUserId(), characterId.getValue());
+    public void createFriendRequest(OneParamRequest<UUID> userId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to add {} as friend", accessTokenHeader.getUserId(), userId.getValue());
+        friendRequestCreationService.createFriendRequest(accessTokenHeader.getUserId(), userId.getValue());
     }
 
     @Override
-    //TODO unit test
-    //TODO int test
-    //TODO API test
     public List<SentFriendRequestResponse> getSentFriendRequests(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to query his sent friend requests", accessTokenHeader.getUserId());
         return friendRequestQueryService.getSentFriendRequests(accessTokenHeader.getUserId());
     }
 
     @Override
-    //TODO unit test
-    //TODO int test
-    //TODO API test
     public List<IncomingFriendRequestResponse> getIncomingFriendRequests(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to query his incoming friend requests", accessTokenHeader.getUserId());
         return friendRequestQueryService.getIncomingFriendRequests(accessTokenHeader.getUserId());
     }
 
     @Override
-    //TODO unit test
-    //TODO int test
-    //TODO API test
     public void cancelFriendRequest(UUID friendRequestId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to cancel friendRequest {}", accessTokenHeader.getUserId(), friendRequestId);
         friendRequestCancelService.cancelFriendRequest(accessTokenHeader.getUserId(), friendRequestId);
     }
 
     @Override
-    //TODO unit test
-    //TODO int test
-    //TODO API test
     public void acceptFriendRequest(UUID friendRequestId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to accept friendRequest {}", accessTokenHeader.getUserId(), friendRequestId);
         friendRequestAcceptService.accept(accessTokenHeader.getUserId(), friendRequestId);
     }
 
     @Override
-    //TODO unit test
-    //TODO int test
-    //TODO API test
     public List<FriendshipResponse> getFriends(AccessTokenHeader accessTokenHeader) {
         return friendshipQueryService.getFriends(accessTokenHeader.getUserId());
     }

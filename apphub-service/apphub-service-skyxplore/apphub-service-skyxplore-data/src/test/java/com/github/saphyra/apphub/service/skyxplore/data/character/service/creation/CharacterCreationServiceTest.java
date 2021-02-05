@@ -41,7 +41,7 @@ public class CharacterCreationServiceTest {
 
         underTest.create(USER_ID, model);
 
-        verify(validator).validate(model);
+        verify(validator).validate(USER_ID, model);
         verify(characterDao).save(character);
     }
 }

@@ -18,6 +18,7 @@ public interface SkyXploreCharacterDataController {
     boolean doesCharacterExistForUser(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(Endpoints.SKYXPLORE_GET_CHARACTER)
+    @Deprecated
     ResponseEntity<SkyXploreCharacterModel> getCharacter(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.SKYXPLORE_CREATE_OR_UPDATE_CHARACTER)

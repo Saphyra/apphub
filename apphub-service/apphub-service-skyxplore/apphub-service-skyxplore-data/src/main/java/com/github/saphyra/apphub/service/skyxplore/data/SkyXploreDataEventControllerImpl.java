@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ public class SkyXploreDataEventControllerImpl implements SkyXploreDataEventContr
     private final List<DeleteByUserIdDao> deleteByUserIdDaos;
 
     @Override
+    @Transactional
     public void deleteAccountEvent(SendEventRequest<DeleteAccountEvent> request) {
         UUID userId = request.getPayload().getUserId();
         log.info("Processing DeleteAccountEvent for uid {}", userId);
