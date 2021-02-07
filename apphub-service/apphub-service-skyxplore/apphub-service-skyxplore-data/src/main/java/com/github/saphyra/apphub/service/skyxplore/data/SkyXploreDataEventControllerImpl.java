@@ -15,7 +15,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 //TODO int test
 public class SkyXploreDataEventControllerImpl implements SkyXploreDataEventController {
     private final List<DeleteByUserIdDao> deleteByUserIdDaos;
