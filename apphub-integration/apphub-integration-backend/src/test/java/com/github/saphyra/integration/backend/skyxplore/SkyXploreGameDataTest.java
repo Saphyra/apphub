@@ -1,6 +1,8 @@
 package com.github.saphyra.integration.backend.skyxplore;
 
+import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreGameDataActions;
+import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
@@ -28,6 +30,9 @@ public class SkyXploreGameDataTest extends TestBase {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
+        SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
+
         Response response = SkyXploreGameDataActions.getGameDateResponse(language, accessTokenId, "asd");
 
         assertThat(response.getStatusCode()).isEqualTo(404);
@@ -42,6 +47,9 @@ public class SkyXploreGameDataTest extends TestBase {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+
+        SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
 
         Response response = SkyXploreGameDataActions.getGameDateResponse(language, accessTokenId, "community_center");
 

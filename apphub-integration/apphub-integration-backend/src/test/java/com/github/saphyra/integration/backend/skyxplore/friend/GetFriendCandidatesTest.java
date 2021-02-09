@@ -38,7 +38,7 @@ public class GetFriendCandidatesTest extends TestBase {
         UUID userId4 = DatabaseUtil.getUserIdByEmail(userData4.getEmail());
 
         SkyXploreCharacterModel model = SkyXploreCharacterModel.valid(CHARACTER_IDENTIFIER);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model);
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
 
         SkyXploreCharacterModel model2 = SkyXploreCharacterModel.valid(CHARACTER_IDENTIFIER);
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model2);

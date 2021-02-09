@@ -33,6 +33,9 @@ public class RemoveFriendTest extends TestBase {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
+        SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
+
         Response response = SkyXploreFriendActions.getRemoveFriendResponse(language, accessTokenId, UUID.randomUUID());
 
         assertThat(response.getStatusCode()).isEqualTo(404);
@@ -55,6 +58,9 @@ public class RemoveFriendTest extends TestBase {
 
         SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
+
+        SkyXploreCharacterModel model3 = SkyXploreCharacterModel.valid();
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId3, model3);
 
         SkyXploreCharacterModel model2 = SkyXploreCharacterModel.valid();
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model2);

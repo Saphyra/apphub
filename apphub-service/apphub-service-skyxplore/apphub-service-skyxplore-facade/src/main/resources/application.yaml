@@ -147,6 +147,11 @@ zuul:
       serviceId: skyxplore-game
       stripPrefix: false
 
+character-existence:
+  whiteListedEndpoints:
+    - path: /api/skyxplore/character
+      method: POST
+
 role:
   settings:
     - pattern: /web/skyxplore/**

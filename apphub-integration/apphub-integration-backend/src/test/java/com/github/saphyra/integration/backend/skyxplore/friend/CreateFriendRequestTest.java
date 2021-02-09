@@ -34,6 +34,9 @@ public class CreateFriendRequestTest extends TestBase {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
+        SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
+
         Response response = SkyXploreFriendActions.getCreateFriendRequestResponse(language, accessTokenId, UUID.randomUUID());
 
         assertThat(response.getStatusCode()).isEqualTo(404);
@@ -52,7 +55,10 @@ public class CreateFriendRequestTest extends TestBase {
         UUID accessTokenId2 = IndexPageActions.registerAndLogin(language, userData2);
 
         SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model);
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
+
+        SkyXploreCharacterModel model2 = SkyXploreCharacterModel.valid();
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
         SkyXploreFriendActions.createFriendRequest(language, accessTokenId, userId2);
@@ -75,7 +81,10 @@ public class CreateFriendRequestTest extends TestBase {
         UUID accessTokenId2 = IndexPageActions.registerAndLogin(language, userData2);
 
         SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model);
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
+
+        SkyXploreCharacterModel model2 = SkyXploreCharacterModel.valid();
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
         SkyXploreFriendActions.createFriendRequest(language, accessTokenId, userId2);

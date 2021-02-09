@@ -34,6 +34,9 @@ public class AcceptFriendRequestTest extends TestBase {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
+        SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
+
         Response response = SkyXploreFriendActions.getAcceptFriendRequestResponse(language, accessTokenId, UUID.randomUUID());
 
         assertThat(response.getStatusCode()).isEqualTo(404);
@@ -55,8 +58,14 @@ public class AcceptFriendRequestTest extends TestBase {
         UUID accessTokenId3 = IndexPageActions.registerAndLogin(language, userData3);
 
         SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model);
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
+
+        SkyXploreCharacterModel model2 = SkyXploreCharacterModel.valid();
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
+
+        SkyXploreCharacterModel model3 = SkyXploreCharacterModel.valid();
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId3, model3);
 
         SkyXploreFriendActions.createFriendRequest(language, accessTokenId, userId2);
 

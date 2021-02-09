@@ -28,12 +28,15 @@ public class GetSentFriendRequestsTest extends TestBase {
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
         SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model);
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
+
+        SkyXploreCharacterModel model2 = SkyXploreCharacterModel.valid();
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model2);
 
         SkyXploreFriendActions.createFriendRequest(language, accessTokenId, userId2);
 
         List<SentFriendRequestResponse> sentFriendRequests = SkyXploreFriendActions.getSentFriendRequests(language, accessTokenId);
         assertThat(sentFriendRequests).hasSize(1);
-        assertThat(sentFriendRequests.get(0).getFriendName()).isEqualTo(model.getName());
+        assertThat(sentFriendRequests.get(0).getFriendName()).isEqualTo(model2.getName());
     }
 }
