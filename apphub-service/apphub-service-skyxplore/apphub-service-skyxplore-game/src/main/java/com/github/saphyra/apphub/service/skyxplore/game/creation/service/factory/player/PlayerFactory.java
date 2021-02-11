@@ -66,6 +66,7 @@ public class PlayerFactory {
 
         log.debug("Creating player with name {}", username);
         Player player = Player.builder()
+            .playerId(idGenerator.randomUuid())
             .userId(userId)
             .username(username)
             .ai(ai)

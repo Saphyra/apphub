@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.data.game;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;

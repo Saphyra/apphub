@@ -1,0 +1,22 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-game" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="skyxplore_game" tableName="player"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="skyxplore_game" tableName="player">
+            <column name="player_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_id" type="varchar(37)"/>
+            <column name="user_id" type="varchar(37)"/>
+            <column name="alliance_id" type="varchar(37)"/>
+            <column name="username" type="text"/>
+            <column name="ai" type="boolean"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="skyxplore_game" tableName="player" columnNames="player_id" constraintName="player_pk"/>
+    </changeSet>
+</databaseChangeLog>

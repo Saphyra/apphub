@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum GameItemType {
-    GAME(GameModel.class), //TODO create saver
+    GAME(GameModel.class),
     PLAYER(PlayerModel.class), //TODO create saver
     ALLIANCE(AllianceModel.class), //TODO create saver
     UNIVERSE(UniverseModel.class), //TODO create saver

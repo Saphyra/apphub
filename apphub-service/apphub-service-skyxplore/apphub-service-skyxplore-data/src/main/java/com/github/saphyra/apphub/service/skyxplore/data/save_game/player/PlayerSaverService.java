@@ -1,9 +1,9 @@
-package com.github.saphyra.apphub.service.skyxplore.data.game.game;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.player;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
-import com.github.saphyra.apphub.service.skyxplore.data.game.GameItemSaver;
+import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
+import com.github.saphyra.apphub.service.skyxplore.data.save_game.GameItemSaver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,29 +14,29 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-public class GameSaverService implements GameItemSaver {
-    private final GameDao gameDao;
-    private final GameModelValidator gameModelValidator;
+public class PlayerSaverService implements GameItemSaver {
+    private final PlayerDao playerDao;
+    private final PlayerModelValidator playerModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
-        gameDao.deleteById(gameId);
+        playerDao.deleteByGameId(gameId);
     }
 
     @Override
     public GameItemType getType() {
-        return GameItemType.GAME;
+        return GameItemType.PLAYER;
     }
 
     @Override
     public void save(GameItem gameItem) {
-        if (!(gameItem instanceof GameModel)) {
+        if (!(gameItem instanceof PlayerModel)) {
             throw new IllegalArgumentException("GameItem is not a " + getType() + ", it is " + gameItem.getType());
         }
 
-        GameModel model = (GameModel) gameItem;
-        gameModelValidator.validate(model);
+        PlayerModel model = (PlayerModel) gameItem;
+        playerModelValidator.validate(model);
 
-        gameDao.save(model);
+        playerDao.save(model);
     }
 }

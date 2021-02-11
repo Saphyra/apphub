@@ -1,5 +1,6 @@
-package com.github.saphyra.apphub.service.skyxplore.data.game.game;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.game;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -16,6 +17,8 @@ class GameConverter extends ConverterBase<GameEntity, GameModel> {
     protected GameModel processEntityConversion(GameEntity entity) {
         GameModel model = new GameModel();
         model.setId(uuidConverter.convertEntity(entity.getGameId()));
+        model.setGameId(uuidConverter.convertEntity(entity.getGameId()));
+        model.setType(GameItemType.GAME);
         model.setName(entity.getName());
         model.setHost(uuidConverter.convertEntity(entity.getHost()));
         return model;

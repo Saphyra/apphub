@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.data.game.game;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.game;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

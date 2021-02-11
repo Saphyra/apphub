@@ -1,10 +1,10 @@
-package com.github.saphyra.apphub.service.skyxplore.data.game.game;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.game;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.BadRequestException;
-import com.github.saphyra.apphub.service.skyxplore.data.game.GameItemValidator;
+import com.github.saphyra.apphub.service.skyxplore.data.save_game.GameItemValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

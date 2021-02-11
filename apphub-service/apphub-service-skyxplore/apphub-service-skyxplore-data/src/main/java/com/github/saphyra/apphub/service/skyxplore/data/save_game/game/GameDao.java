@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.data.game.game;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.game;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
