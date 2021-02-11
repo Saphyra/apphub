@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.map;
 
+import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,10 @@ import java.util.UUID;
 public class SolarSystem {
     private final UUID solarSystemId;
     private final int radius;
-    private final String systemName; //TODO allow users to rename systems
+    private final String defaultName; //TODO allow users to rename systems
+
+    @Builder.Default
+    private final Map<UUID, String> customNames = new OptionalHashMap<>();
     private final Coordinate coordinate;
     private final Map<UUID, Planet> planets;
 }

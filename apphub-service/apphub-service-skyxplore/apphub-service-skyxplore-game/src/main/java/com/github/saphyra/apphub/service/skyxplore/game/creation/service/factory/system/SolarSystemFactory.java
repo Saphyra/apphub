@@ -71,7 +71,7 @@ public class SolarSystemFactory {
         return SolarSystem.builder()
             .solarSystemId(solarSystemId)
             .radius(systemRadius)
-            .systemName(systemName)
+            .defaultName(systemName)
             .coordinate(coordinate)
             .planets(planets)
             .build();

@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
 import com.github.saphyra.apphub.api.user.client.UserDataApiClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import lombok.RequiredArgsConstructor;
@@ -22,45 +21,42 @@ import java.util.UUID;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SkyXplorePageController {
     private final AccessTokenHeaderConverter accessTokenHeaderConverter;
-    private final LocaleProvider localeProvider;
     private final SkyXploreCharacterDataApiClient characterClient;
     private final SkyXploreLobbyApiClient lobbyClient;
     private final SkyXploreGameApiClient gameClient;
     private final UserDataApiClient userDataClient;
-    private final SkyXploreCharacterDataApiClient skyXploreDataClient;
 
     @GetMapping(Endpoints.SKYXPLORE_MAIN_MENU_PAGE)
-    public ModelAndView mainMenu(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
+    public ModelAndView mainMenu(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale) {
         log.info("Loading SkyXplore main menu for user {}", accessTokenHeader.getUserId());
-        if (characterClient.doesCharacterExistForUser(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated())) {
+        if (characterClient.doesCharacterExistForUser(accessTokenHeaderConverter.convertDomain(accessTokenHeader), locale)) {
             return new ModelAndView("main_menu");
         } else {
             log.info("User has no character. Returning character page instead.");
             ModelAndView mav = new ModelAndView("character");
             mav.addObject("backUrl", Endpoints.MODULES_PAGE);
-            mav.addObject("characterName", userDataClient.getUsernameByUserId(accessTokenHeader.getUserId(), localeProvider.getLocaleValidated()));
+            mav.addObject("characterName", userDataClient.getUsernameByUserId(accessTokenHeader.getUserId(), locale));
             return mav;
         }
     }
 
     @GetMapping(Endpoints.SKYXPLORE_CHARACTER_PAGE)
-    public ModelAndView character(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
+    public ModelAndView character(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale) {
         log.info("Loading SkyXplore character page.");
         ModelAndView mav = new ModelAndView("character");
         mav.addObject("backUrl", Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
-        mav.addObject("characterName", skyXploreDataClient.internalGetCharacterByUserId(accessTokenHeader.getUserId(), localeProvider.getLocaleValidated()).getName());
+        mav.addObject("characterName", characterClient.internalGetCharacterByUserId(accessTokenHeader.getUserId(), locale).getName());
         return mav;
     }
 
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_PAGE)
-    public ModelAndView lobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
-        LobbyViewForPage view = lobbyClient.lobbyForPage(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated());
+    public ModelAndView lobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale) {
+        LobbyViewForPage view = lobbyClient.lobbyForPage(accessTokenHeaderConverter.convertDomain(accessTokenHeader), locale);
         if (!view.isInLobby()) {
             log.info("User is not in lobby.");
-            if (gameClient.isUserInGame(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated())) {
+            if (gameClient.isUserInGame(accessTokenHeaderConverter.convertDomain(accessTokenHeader), locale)) {
                 return gameMav(accessTokenHeader.getUserId());
             }
             return new ModelAndView("redirect:" + Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
@@ -73,8 +69,8 @@ public class SkyXplorePageController {
     }
 
     @GetMapping(Endpoints.SKYXPLORE_GAME_PAGE)
-    public ModelAndView game(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
-        if (!gameClient.isUserInGame(accessTokenHeaderConverter.convertDomain(accessTokenHeader), localeProvider.getLocaleValidated())) {
+    public ModelAndView game(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale) {
+        if (!gameClient.isUserInGame(accessTokenHeaderConverter.convertDomain(accessTokenHeader), locale)) {
             return new ModelAndView("redirect:" + Endpoints.SKYXPLORE_LOBBY_PAGE);
         }
         return gameMav(accessTokenHeader.getUserId());

@@ -68,7 +68,7 @@ public class PlanetFactory {
             .planetId(idGenerator.randomUuid())
             .solarSystemId(solarSystemId)
             .coordinate(coordinate)
-            .planetName(String.format("%s %s", systemName, ALPHABET.charAt(planetIndex)))
+            .defaultName(String.format("%s %s", systemName, ALPHABET.charAt(planetIndex)))
             .size(planetSize)
             .surfaces(surfaces)
             .build();

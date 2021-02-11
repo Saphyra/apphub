@@ -38,7 +38,7 @@ public class MapControllerImpl implements SkyXploreGameMapController {
             .map(solarSystem -> MapSolarSystemResponse.builder()
                 .solarSystemId(solarSystem.getSolarSystemId())
                 .coordinate(solarSystem.getCoordinate())
-                .solarSystemName(solarSystem.getSystemName())
+                .solarSystemName(solarSystem.getDefaultName())
                 .planetNum(solarSystem.getPlanets().size())
                 .build()
             )

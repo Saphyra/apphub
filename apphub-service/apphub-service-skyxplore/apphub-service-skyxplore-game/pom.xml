@@ -52,6 +52,12 @@
             <artifactId>apphub-api-skyxplore-data-client</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${versions.guava}</version>
+        </dependency>
     </dependencies>
 
     <build>

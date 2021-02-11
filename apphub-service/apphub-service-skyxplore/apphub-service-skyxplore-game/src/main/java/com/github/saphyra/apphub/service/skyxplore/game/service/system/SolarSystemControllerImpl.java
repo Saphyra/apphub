@@ -42,7 +42,7 @@ public class SolarSystemControllerImpl implements SkyXploreGameSolarSystemContro
         List<PlanetLocationResponse> planets = mapPlanets(solarSystem.getPlanets().values());
         return SolarSystemResponse.builder()
             .solarSystemId(solarSystemId)
-            .systemName(solarSystem.getSystemName())
+            .systemName(solarSystem.getDefaultName())
             .radius(solarSystem.getRadius())
             .planets(planets)
             .build();
@@ -57,7 +57,7 @@ public class SolarSystemControllerImpl implements SkyXploreGameSolarSystemContro
     private PlanetLocationResponse mapPlanet(Planet planet) {
         return PlanetLocationResponse.builder()
             .planetId(planet.getPlanetId())
-            .planetName(planet.getPlanetName())
+            .planetName(planet.getDefaultName())
             .coordinate(planet.getCoordinate())
             .build();
     }

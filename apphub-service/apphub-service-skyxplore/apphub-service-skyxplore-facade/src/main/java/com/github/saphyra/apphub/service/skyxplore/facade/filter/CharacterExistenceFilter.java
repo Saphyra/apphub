@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.facade.filter;
 import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreCharacterDataApiClient;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
-import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.skyxplore.facade.config.CharacterExistenceWhitelistConfiguration;
@@ -19,15 +18,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CharacterExistenceFilter extends ZuulFilter {
     private final SkyXploreCharacterDataApiClient characterApi;
-    private final RequestContextProvider requestContextProvider;
     private final CharacterExistenceWhitelistConfiguration configuration;
     private final AntPathMatcher antPathMatcher;
     private final AccessTokenProvider accessTokenProvider;
@@ -45,37 +41,41 @@ public class CharacterExistenceFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
-        HttpServletRequest request = requestContextProvider.getCurrentHttpRequest();
+        HttpServletRequest request = RequestContext.getCurrentContext()
+            .getRequest();
         String uri = request.getRequestURI();
         String method = request.getMethod();
 
+        log.info("Checking if {} - {} call is allowed...", method, uri);
+
         if (antPathMatcher.match(Constants.RESOURCE_PATH_PATTERN, uri)) {
-            log.debug("Resource request");
+            log.debug("{} - {} is a resource request", method, uri);
             return false;
         }
         boolean isWhiteListed = configuration.getWhiteListedEndpoints()
             .stream()
             .anyMatch(whiteListedEndpoint -> antPathMatcher.match(whiteListedEndpoint.getPath(), uri) && whiteListedEndpoint.getMethod().equalsIgnoreCase(method));
         if (isWhiteListed) {
+            log.debug("{} - {} is whiteListed", method, uri);
             return false;
         }
 
         return !characterApi.doesCharacterExistForUser(accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());
     }
 
-    @SneakyThrows
     @Override
+    @SneakyThrows
     public Object run() {
-        String uri = requestContextProvider.getCurrentHttpRequest().getRequestURI();
         RequestContext requestContext = RequestContext.getCurrentContext();
-        HttpServletResponse response = requestContext
-            .getResponse();
+        String uri = requestContext.getRequest()
+            .getRequestURI();
         if (antPathMatcher.match(Constants.API_URI_PATTERN, uri)) {
             requestContext.addZuulResponseHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
             requestContext.setResponseStatusCode(HttpStatus.EXPECTATION_FAILED.value());
             requestContext.setSendZuulResponse(false);
         } else {
-            response.sendRedirect(Endpoints.SKYXPLORE_CHARACTER_PAGE);
+            requestContext.getResponse()
+                .sendRedirect(Endpoints.SKYXPLORE_CHARACTER_PAGE);
         }
 
         return null;

@@ -26,7 +26,9 @@ import static java.util.Objects.isNull;
 public class Planet {
     private final UUID planetId;
     private final UUID solarSystemId;
-    private final String planetName; //TODO allow users to rename planets
+    private final String defaultName; //TODO allow users to rename planets
+    @Builder.Default
+    private final Map<UUID, String> customNames = new OptionalHashMap<>();
     private final Coordinate coordinate;
     private final int size;
     private final Map<Coordinate, Surface> surfaces;

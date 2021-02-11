@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.creation;
 
+import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreDataGameClient;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.AiPresence;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.PlanetSize;
@@ -54,6 +55,9 @@ public class GameCreationControllerImplTest {
 
     @MockBean
     private CharacterProxy characterProxy;
+
+    @MockBean
+    private SkyXploreDataGameClient skyXploreDataGameClient;
 
     @Before
     public void setUp() {

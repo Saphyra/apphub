@@ -3,6 +3,8 @@ spring:
     name: skyxplore-game
 
 game:
+  saver:
+    maxChunkSize: 500
   creation:
     universe:
       baseSize: 500

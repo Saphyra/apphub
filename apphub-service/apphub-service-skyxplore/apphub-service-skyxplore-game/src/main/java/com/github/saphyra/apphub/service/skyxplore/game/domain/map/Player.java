@@ -11,6 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class Player {
+    private final UUID playerId; //TODO fill in factory
     private final UUID userId;
     private final String username;
     private boolean ai;

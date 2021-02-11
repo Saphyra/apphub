@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CustomLocaleProvider {
     private final CommonConfigProperties commonConfigProperties;
     private final LocaleProvider localeProvider;
