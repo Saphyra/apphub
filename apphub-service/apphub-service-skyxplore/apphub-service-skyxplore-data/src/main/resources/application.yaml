@@ -26,3 +26,14 @@ role:
         - PUT
       requiredRoles:
         - SKYXPLORE
+
+logging:
+  level:
+    com:
+      github:
+        saphyra:
+          apphub:
+            service:
+              skyxplore:
+                data:
+                  game: DEBUG

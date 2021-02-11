@@ -56,6 +56,7 @@ public class GameToGameItemListConverter {
         gameModel.setId(game.getGameId());
         gameModel.setType(GameItemType.GAME);
         gameModel.setHost(game.getHost());
+        gameModel.setName(game.getGameName());
         return gameModel;
     }
 }

@@ -11,4 +11,5 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 public class GameModel extends GameItem {
     private UUID host;
+    private String name;
 }

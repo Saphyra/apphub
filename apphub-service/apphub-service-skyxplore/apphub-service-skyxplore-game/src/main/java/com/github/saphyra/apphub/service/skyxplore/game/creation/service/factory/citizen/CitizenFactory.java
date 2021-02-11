@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingService;
 import com.github.saphyra.apphub.service.skyxplore.game.creation.GameCreationProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.creation.service.RandomNameProvider;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Skill;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
@@ -37,14 +38,16 @@ public class CitizenFactory {
 
         Stream.generate(idGenerator::randomUuid)
             .limit(capacity)
-            .map(this::createCitizen)
+            .map(citizenId -> createCitizen(citizenId, planet.getPlanetId()))
             .forEach(citizen -> planet.getPopulation().put(citizen.getCitizenId(), citizen));
     }
 
-    private Citizen createCitizen(UUID citizenId) {
+    private Citizen createCitizen(UUID citizenId, UUID planetId) {
         return Citizen.builder()
             .citizenId(citizenId)
             .name(randomNameProvider.getRandomName(Collections.emptyList()))
+            .location(planetId)
+            .locationType(LocationType.PLANET)
             .morale(100)
             .satiety(100)
             .skills(createSkills())

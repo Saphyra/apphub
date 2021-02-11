@@ -107,7 +107,7 @@ public class Endpoints {
     //SKYXPLORE-DATA
     public static final String INTERNAL_SKYXPLORE_IS_CHARACTER_EXISTS = "/internal/skyxplore/character/exists";
     public static final String INTERNAL_SKYXPLORE_GET_CHARACTER_BY_USER_ID = "/allowed-internal/skyxplore/character/{userId}";
-    public static final String INTERNAL_SKYXPLORE_SAVE_GAME_DATA = "/internal/skyxplore/game/data";
+    public static final String INTERNAL_SKYXPLORE_SAVE_GAME_DATA = "/allowed-internal/skyxplore/game/data";
     public static final String SKYXPLORE_CREATE_OR_UPDATE_CHARACTER = "/api/skyxplore/character";
     public static final String SKYXPLORE_SEARCH_FOR_FRIENDS = "/api/skyxplore/friend/candidate";
     public static final String SKYXPLORE_ADD_FRIEND = "/api/skyxplore/friend/request";

@@ -15,8 +15,8 @@ import java.util.UUID;
 @Builder
 public class Citizen {
     private final UUID citizenId;
-    private UUID location; //TODO fill in factory
-    private LocationType locationType; //TODO fill in factory
+    private UUID location;
+    private LocationType locationType;
     private String name;
     private int morale;
     private int satiety;

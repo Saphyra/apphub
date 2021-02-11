@@ -139,7 +139,7 @@ public class GameCreationControllerImplTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 20; i++) {
             if (gameDao.size() > 0) {
                 return;
             }
@@ -176,7 +176,7 @@ public class GameCreationControllerImplTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 20; i++) {
             if (gameDao.size() > 0) {
                 return;
             }
