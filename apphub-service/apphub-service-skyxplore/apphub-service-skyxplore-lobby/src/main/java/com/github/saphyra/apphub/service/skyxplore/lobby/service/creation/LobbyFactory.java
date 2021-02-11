@@ -20,12 +20,13 @@ class LobbyFactory {
     private final DateTimeUtil dateTimeUtil;
     private final IdGenerator idGenerator;
 
-    Lobby create(UUID userId) {
+    Lobby create(UUID userId, String lobbyName) {
         Map<UUID, Member> members = new ConcurrentHashMap<>();
         members.put(userId, Member.builder().userId(userId).build());
 
         return Lobby.builder()
             .lobbyId(idGenerator.randomUuid())
+            .lobbyName(lobbyName)
             .host(userId)
             .members(members)
             .lastAccess(dateTimeUtil.getCurrentDate())

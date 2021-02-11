@@ -17,4 +17,5 @@ public class SkyXploreGameCreationRequest {
     private Map<UUID, UUID> members; //<UserId, AllianceId>
     private Map<UUID, String> alliances;
     private SkyXploreGameCreationSettingsRequest settings;
+    private String gameName;
 }

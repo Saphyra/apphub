@@ -19,7 +19,7 @@
 
     <MAIN id="main-menu-main" class="footerless">
         <DIV id="main-menu-button-wrapper">
-            <DIV id="new-game-button" class="button" onclick="pageController.newGame()"></DIV>
+            <DIV id="new-game-button" class="button" onclick="createLobbyController.newGame()"></DIV>
             <DIV id="load-game-button" class="button"></DIV>
             <DIV id="edit-character-button" class="button" onclick="window.location.href='/web/skyxplore/character'"></DIV>
             <DIV id="back-button" class="button" onclick="window.location.href='/web/modules'"></DIV>
@@ -48,6 +48,28 @@
         </DIV>
 
         <DIV id="invitations"></DIV>
+    </MAIN>
+</DIV>
+
+<DIV id="lobby-creation" class="main-page">
+    <HEADER>
+        <H1 id="lobby-creation-title"></H1>
+        <BUTTON class="dialog-close-button" onclick="pageController.showMainMenu()">X</BUTTON>
+    </HEADER>
+
+    <MAIN class="footerless">
+        <DIV id="lobby-creation-main-container">
+            <H2 id="lobby-creation-tab-title"></H2>
+            <DIV id="lobby-creation-input-container">
+                <LABEL>
+                    <SPAN id="lobby-creation-span"></SPAN>:
+                    <INPUT type="text" id="lobby-name" class="input-field">
+                    <DIV id="invalid-lobby-name" class="invalid-input">X</DIV>
+                </LABEL>
+            </DIV>
+
+            <BUTTON id="create-lobby-button" onclick="createLobbyController.createLobby()" disabled></BUTTON>
+        </DIV>
     </MAIN>
 </DIV>
 </BODY>

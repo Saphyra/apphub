@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 //TODO unit test
 public class Game {
     private final UUID gameId;
-    private final String gameName; //TODO fill value
+    private final String gameName;
     private final UUID host;
     private final Map<UUID, Player> players;
     private final Map<UUID, Alliance> alliances;

@@ -46,6 +46,7 @@ public class GameFactory {
             .alliances(alliances)
             .universe(universe)
             .chat(chatFactory.create(request.getMembers()))
+            .gameName(request.getGameName())
             .build();
     }
 

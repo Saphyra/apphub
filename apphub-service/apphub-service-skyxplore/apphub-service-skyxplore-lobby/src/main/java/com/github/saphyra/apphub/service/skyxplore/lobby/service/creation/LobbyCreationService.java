@@ -18,12 +18,11 @@ public class LobbyCreationService {
     private final LobbyDao lobbyDao;
     private final LobbyFactory lobbyFactory;
 
-    public void create(UUID userId) {
+    public void create(UUID userId, String lobbyName) {
         lobbyDao.findByUserId(userId)
             .ifPresent(lobby -> exitFromLobbyService.exit(userId));
 
-
-        Lobby lobby = lobbyFactory.create(userId);
+        Lobby lobby = lobbyFactory.create(userId, lobbyName);
         lobbyDao.save(lobby);
     }
 }

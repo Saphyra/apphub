@@ -70,6 +70,7 @@ public class StartGameService {
             .members(members)
             .alliances(alliances)
             .settings(settings)
+            .gameName(lobby.getLobbyName())
             .build();
 
         gameCreationClient.createGame(request, localeProvider.getLocaleValidated());

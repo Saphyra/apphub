@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.GameSettingsResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.GameSettings;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
@@ -41,9 +42,9 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     //TODO unit test
     //TODO int test
     //TODO API test
-    public void createLobby(AccessTokenHeader accessTokenHeader) {
+    public void createLobby(OneParamRequest<String> lobbyName, AccessTokenHeader accessTokenHeader) {
         log.info("Creating lobby for user {} if not exists", accessTokenHeader.getUserId());
-        lobbyCreationService.create(accessTokenHeader.getUserId());
+        lobbyCreationService.create(accessTokenHeader.getUserId(), lobbyName.getValue());
     }
 
     @Override

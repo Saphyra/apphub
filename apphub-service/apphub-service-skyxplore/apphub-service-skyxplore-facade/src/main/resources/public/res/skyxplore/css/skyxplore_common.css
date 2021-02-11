@@ -26,3 +26,9 @@ body{
 .main-tab:not(:first-child){
     display: none;
 }
+
+.dialog-close-button{
+    position: absolute;
+    right: 0;
+    top: 0;
+}

@@ -19,6 +19,9 @@ public class Lobby {
     private final UUID lobbyId;
 
     @NonNull
+    private final String lobbyName;
+
+    @NonNull
     private final UUID host;
 
     @NonNull

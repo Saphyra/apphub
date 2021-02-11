@@ -72,6 +72,36 @@
         "key": "innerHTML",
         "message": "Sent friend requests"
       }
+    ],
+    "lobby-creation-title": [
+      {
+        "key": "innerHTML",
+        "message": "New game"
+      }
+    ],
+    "lobby-creation-tab-title": [
+      {
+        "key": "innerHTML",
+        "message": "New game"
+      }
+    ],
+    "lobby-creation-span": [
+      {
+        "key": "innerHTML",
+        "message": "Game name"
+      }
+    ],
+    "lobby-name": [
+      {
+        "key": "placeholder",
+        "message": "Game name"
+      }
+    ],
+    "create-lobby-button": [
+      {
+        "key": "innerHTML",
+        "message": "Create game"
+      }
     ]
   },
   "additionalContent": {
@@ -87,6 +117,8 @@
     "invitation-title": "Invitation",
     "invitation-message": "has invited you to a game!",
     "accept-invitation": "Accept",
-    "reject-invitation": "Reject"
+    "reject-invitation": "Reject",
+    "game-name-too-short": "Game name too short (minimum 3 characters).",
+    "game-name-too-long": "Game name too long (maximum 30 character)."
   }
 }

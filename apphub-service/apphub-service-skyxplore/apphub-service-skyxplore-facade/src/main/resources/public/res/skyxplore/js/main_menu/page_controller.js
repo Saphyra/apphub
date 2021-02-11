@@ -1,6 +1,7 @@
+scriptLoader.loadScript("/res/common/js/web_socket.js");
 scriptLoader.loadScript("/res/skyxplore/js/main_menu/friend_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/main_menu/invitation_controller.js");
-scriptLoader.loadScript("/res/common/js/web_socket.js");
+scriptLoader.loadScript("/res/skyxplore/js/main_menu/create_lobby_controller.js");
 
 (function PageController(){
     window.ids = {
@@ -14,17 +15,16 @@ scriptLoader.loadScript("/res/common/js/web_socket.js");
         friendListContainer: "friend-list",
         friendsContainer: "friends-container",
         invitationContainer: "invitations",
+        lobbyNameInput: "lobby-name",
+        createLobbyButton: "create-lobby-button",
+        invalidLobbyName: "invalid-lobby-name",
     }
 
     const webSocketConnection = new WebSocketConnection(Mapping.getEndpoint("CONNECTION_SKYXPLORE_MAIN_MENU"));
 
     window.pageController = new function(){
-        this.newGame = function(){
-            const request = new Request(Mapping.getEndpoint("SKYXPLORE_CREATE_LOBBY"));
-                request.processValidResponse = function(){
-                    window.location.href='/web/skyxplore/lobby'
-                }
-            dao.sendRequestAsync(request);
+        this.showMainMenu = function(){
+            switchTab("main-page", "main-menu");
         }
     }
 

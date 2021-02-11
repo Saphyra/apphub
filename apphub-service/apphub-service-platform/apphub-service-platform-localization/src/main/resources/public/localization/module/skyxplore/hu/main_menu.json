@@ -72,6 +72,36 @@
         "key": "innerHTML",
         "message": "Elküldött barátkérelmek"
       }
+    ],
+    "lobby-creation-title": [
+      {
+        "key": "innerHTML",
+        "message": "Új játék"
+      }
+    ],
+    "lobby-creation-tab-title": [
+      {
+        "key": "innerHTML",
+        "message": "Új játék"
+      }
+    ],
+    "lobby-creation-span": [
+      {
+        "key": "innerHTML",
+        "message": "Játék neve"
+      }
+    ],
+    "lobby-name": [
+      {
+        "key": "placeholder",
+        "message": "Játék neve"
+      }
+    ],
+    "create-lobby-button": [
+      {
+        "key": "innerHTML",
+        "message": "Játék létrehozása"
+      }
     ]
   },
   "additionalContent": {
@@ -87,6 +117,8 @@
     "invitation-title": "Játékmeghívás",
     "invitation-message": "meghívott egy játékba!",
     "accept-invitation": "Elfogad",
-    "reject-invitation": "Elutasít"
+    "reject-invitation": "Elutasít",
+    "game-name-too-short": "A játék neve túl rövid (3 karakter minimum).",
+    "game-name-too-long": "A játék neve túl hosszú (30 karakter maximum)."
   }
 }
