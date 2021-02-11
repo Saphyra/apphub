@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory;
 
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
@@ -24,8 +25,9 @@ import static java.util.Objects.isNull;
 @Slf4j
 //TODO unit test
 public class ChatFactory {
-    public Chat create(Map<UUID, UUID> players) {
+    private final IdGenerator idGenerator;
 
+    public Chat create(Map<UUID, UUID> players) {
         List<ChatRoom> chatRooms = new ArrayList<>();
 
         chatRooms.add(createGeneral(players.keySet()));
@@ -38,22 +40,27 @@ public class ChatFactory {
     }
 
     private List<ChatRoom> createAlliances(Map<UUID, UUID> players) {
-        Map<UUID, List<UUID>> alliances = new HashMap<>();
-        for (Map.Entry<UUID, UUID> entry : players.entrySet()) {
-            if (isNull(entry.getValue())) {
-                alliances.put(UUID.randomUUID(), Arrays.asList(entry.getKey()));
-            } else {
-                if (!alliances.containsKey(entry.getValue())) {
-                    alliances.put(entry.getKey(), new ArrayList<>());
+        try {
+            Map<UUID, List<UUID>> alliances = new HashMap<>(); //<AllianceId, List<PlayerId>>
+            for (Map.Entry<UUID, UUID> entry : players.entrySet()) {
+                if (isNull(entry.getValue())) {
+                    alliances.put(idGenerator.randomUuid(), Arrays.asList(entry.getKey()));
+                } else {
+                    if (!alliances.containsKey(entry.getValue())) {
+                        alliances.put(entry.getValue(), new ArrayList<>());
+                    }
+                    alliances.get(entry.getValue()).add(entry.getKey());
                 }
-                alliances.get(entry.getValue()).add(entry.getKey());
             }
-        }
 
-        return alliances.values()
-            .stream()
-            .map(members -> createRoom(GameConstants.CHAT_ROOM_ALLIANCE, members))
-            .collect(Collectors.toList());
+            return alliances.values()
+                .stream()
+                .map(members -> createRoom(GameConstants.CHAT_ROOM_ALLIANCE, members))
+                .collect(Collectors.toList());
+        } catch (Exception e) {
+            log.error("Exception", e);
+            throw e;
+        }
     }
 
     private ChatRoom createGeneral(Set<UUID> members) {

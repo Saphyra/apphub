@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemSize;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.UniverseSize;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.service.skyxplore.game.SkyxploreGameApplication;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
@@ -46,6 +47,7 @@ import static org.mockito.BDDMockito.given;
 @ContextConfiguration(classes = {SkyxploreGameApplication.class})
 public class GameCreationControllerImplTest {
     private static final String CHARACTER_NAME = "character-name";
+    private static final String ALLIANCE_NAME = "alliance-name";
 
     @LocalServerPort
     private int serverPort;
@@ -152,14 +154,13 @@ public class GameCreationControllerImplTest {
 
     @Test
     public void smallGame() throws InterruptedException {
-        Map<UUID, UUID> members = new HashMap<UUID, UUID>() {{
-            put(UUID.randomUUID(), null);
-        }};
-
+        UUID playerId = UUID.randomUUID();
+        UUID allianceId = UUID.randomUUID();
+        Map<UUID, UUID> members = CollectionUtils.singleValueMap(playerId, allianceId);
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
             .host(UUID.randomUUID())
             .members(members)
-            .alliances(new HashMap<>())
+            .alliances(CollectionUtils.singleValueMap(allianceId, ALLIANCE_NAME))
             .settings(SkyXploreGameCreationSettingsRequest.builder()
                 .universeSize(UniverseSize.SMALLEST)
                 .systemAmount(SystemAmount.SMALL)

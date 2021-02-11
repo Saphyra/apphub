@@ -56,7 +56,13 @@ public class GameCreationService {
             while (true) {
                 try {
                     SkyXploreGameCreationRequest request = requests.take();
-                    executorService.submit(() -> create(request));
+                    executorService.submit(() -> {
+                        try {
+                            create(request);
+                        } catch (Exception e) {
+                            log.error("Exception during creating game", e);
+                        }
+                    });
                 } catch (Exception e) {
                     log.error("Execution failed", e);
                 }
