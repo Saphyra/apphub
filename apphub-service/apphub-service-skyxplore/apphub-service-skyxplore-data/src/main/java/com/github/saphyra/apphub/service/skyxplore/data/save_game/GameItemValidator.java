@@ -20,6 +20,10 @@ public class GameItemValidator {
             throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "id", "must not be null."), "id must not be null.");
         }
 
+        validateWithoutId(gameItem);
+    }
+
+    public void validateWithoutId(GameItem gameItem) {
         if (isNull(gameItem.getGameId())) {
             throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "gameId", "must not be null."), "gameId must not be null.");
         }

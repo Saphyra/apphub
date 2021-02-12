@@ -30,7 +30,6 @@ public class UniverseToModelConverter {
 
     private UniverseModel convert(Universe universe, Game game) {
         UniverseModel model = new UniverseModel();
-        model.setId(game.getGameId());
         model.setGameId(game.getGameId());
         model.setType(GameItemType.UNIVERSE);
         model.setSize(universe.getSize());

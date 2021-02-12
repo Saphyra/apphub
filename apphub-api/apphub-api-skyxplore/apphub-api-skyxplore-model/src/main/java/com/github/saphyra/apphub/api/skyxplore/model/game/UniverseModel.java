@@ -10,5 +10,5 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class UniverseModel extends GameItem {
-    private int size;
+    private Integer size;
 }

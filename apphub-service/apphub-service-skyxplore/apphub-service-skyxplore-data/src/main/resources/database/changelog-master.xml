@@ -26,4 +26,5 @@
     <include file="database/change_sets/game.xml"/>
     <include file="database/change_sets/player.xml"/>
     <include file="database/change_sets/alliance.xml"/>
+    <include file="database/change_sets/universe.xml"/>
 </databaseChangeLog>
