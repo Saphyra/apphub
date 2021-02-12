@@ -30,4 +30,5 @@
     <include file="database/change_sets/solar_system.xml"/>
     <include file="database/change_sets/coordinate.xml"/>
     <include file="database/change_sets/planet.xml"/>
+    <include file="database/change_sets/citizen.xml"/>
 </databaseChangeLog>

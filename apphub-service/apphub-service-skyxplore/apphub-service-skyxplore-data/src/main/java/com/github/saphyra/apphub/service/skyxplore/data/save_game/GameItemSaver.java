@@ -11,5 +11,5 @@ public interface GameItemSaver {
 
     GameItemType getType();
 
-    void save(List<GameItem> gameItem);
+    void save(List<GameItem> gameItems);
 }

@@ -15,6 +15,6 @@ public class CitizenModel extends GameItem {
     private UUID location;
     private String locationType;
     private String name;
-    private int morale;
-    private int satiety;
+    private Integer morale;
+    private Integer satiety;
 }
