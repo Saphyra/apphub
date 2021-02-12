@@ -27,4 +27,6 @@
     <include file="database/change_sets/player.xml"/>
     <include file="database/change_sets/alliance.xml"/>
     <include file="database/change_sets/universe.xml"/>
+    <include file="database/change_sets/solar_system.xml"/>
+    <include file="database/change_sets/coordinate.xml"/>
 </databaseChangeLog>

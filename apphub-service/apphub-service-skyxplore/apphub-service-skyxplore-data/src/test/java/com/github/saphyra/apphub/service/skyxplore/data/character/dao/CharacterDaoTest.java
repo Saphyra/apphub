@@ -49,6 +49,8 @@ public class CharacterDaoTest {
 
     @Test
     public void deleteByUserId() {
+        given(repository.existsById(USER_ID_STRING)).willReturn(true);
+
         underTest.deleteByUserId(USER_ID);
 
         verify(repository).deleteById(USER_ID_STRING);

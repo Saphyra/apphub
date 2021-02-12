@@ -21,7 +21,7 @@ public class CharacterDao extends AbstractDao<SkyXploreCharacterEntity, SkyXplor
 
     @Override
     public void deleteByUserId(UUID userId) {
-        repository.deleteById(uuidConverter.convertDomain(userId));
+        deleteById(uuidConverter.convertDomain(userId));
     }
 
     public boolean exists(UUID userId) {

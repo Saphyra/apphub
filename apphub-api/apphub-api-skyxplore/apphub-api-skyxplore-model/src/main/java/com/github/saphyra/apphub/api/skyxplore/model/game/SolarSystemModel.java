@@ -14,7 +14,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class SolarSystemModel extends GameItem {
-    private int radius;
+    private Integer radius;
     private String defaultName;
     private Map<UUID, String> customNames;
     private Coordinate coordinate;

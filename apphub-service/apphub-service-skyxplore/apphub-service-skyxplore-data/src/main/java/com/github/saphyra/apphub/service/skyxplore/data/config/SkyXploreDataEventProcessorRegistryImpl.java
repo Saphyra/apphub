@@ -11,10 +11,10 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class SkyXploreEventProcessorRegistryImpl implements EventProcessorRegistry {
+public class SkyXploreDataEventProcessorRegistryImpl implements EventProcessorRegistry {
     private final String serviceName;
 
-    public SkyXploreEventProcessorRegistryImpl(
+    public SkyXploreDataEventProcessorRegistryImpl(
         @Value("${spring.application.name}") String serviceName
     ) {
         this.serviceName = serviceName;
