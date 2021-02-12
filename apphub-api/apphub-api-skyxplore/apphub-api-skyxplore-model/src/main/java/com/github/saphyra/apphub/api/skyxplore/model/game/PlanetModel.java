@@ -18,6 +18,6 @@ public class PlanetModel extends GameItem {
     private String defaultName;
     private Map<UUID, String> customNames;
     private Coordinate coordinate;
-    private int size;
+    private Integer size;
     private UUID owner;
 }

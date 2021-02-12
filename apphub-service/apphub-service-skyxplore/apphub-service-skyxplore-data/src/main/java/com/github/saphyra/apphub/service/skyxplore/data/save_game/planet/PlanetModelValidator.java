@@ -1,6 +1,6 @@
-package com.github.saphyra.apphub.service.skyxplore.data.save_game.solar_system;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.planet;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.SolarSystemModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.BadRequestException;
@@ -17,14 +17,14 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-public class SolarSystemValidator {
+public class PlanetModelValidator {
     private final GameItemValidator gameItemValidator;
 
-    public void validate(SolarSystemModel model) {
+    public void validate(PlanetModel model) {
         gameItemValidator.validate(model);
 
-        if (isNull(model.getRadius())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "radius", "must not be null."), "radius must not be null.");
+        if (isNull(model.getSolarSystemId())) {
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "solarSystemId", "must not be null."), "solarSystemId must not be null.");
         }
 
         if (isNull(model.getDefaultName())) {
@@ -41,6 +41,10 @@ public class SolarSystemValidator {
 
         if (isNull(model.getCoordinate())) {
             throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "coordinate", "must not be null."), "coordinate must not be null.");
+        }
+
+        if (isNull(model.getSize())) {
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "size", "must not be null."), "size must not be null.");
         }
     }
 }

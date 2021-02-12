@@ -1,7 +1,7 @@
-package com.github.saphyra.apphub.service.skyxplore.data.save_game.solar_system;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.planet;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.SolarSystemModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.UuidStringMap;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
@@ -15,33 +15,39 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-class SolarSystemConverter extends ConverterBase<SolarSystemEntity, SolarSystemModel> {
+class PlanetConverter extends ConverterBase<PlanetEntity, PlanetModel> {
     private final UuidConverter uuidConverter;
-    private final CoordinateConverter coordinateConverter;
     private final ObjectMapperWrapper objectMapperWrapper;
+    private final CoordinateConverter coordinateConverter;
 
     @Override
-    protected SolarSystemModel processEntityConversion(SolarSystemEntity entity) {
-        SolarSystemModel model = new SolarSystemModel();
-        model.setId(uuidConverter.convertEntity(entity.getSolarSystemId()));
+    protected PlanetModel processEntityConversion(PlanetEntity entity) {
+        PlanetModel model = new PlanetModel();
+        model.setId(uuidConverter.convertEntity(entity.getPlanetId()));
         model.setGameId(uuidConverter.convertEntity(entity.getGameId()));
-        model.setType(GameItemType.SOLAR_SYSTEM);
-        model.setRadius(entity.getRadius());
+        model.setType(GameItemType.PLANET);
+        model.setSolarSystemId(uuidConverter.convertEntity(entity.getSolarSystemId()));
         model.setDefaultName(entity.getDefaultName());
         model.setCustomNames(objectMapperWrapper.readValue(entity.getCustomNames(), UuidStringMap.class));
         model.setCoordinate(coordinateConverter.convertEntity(entity.getCoordinate()));
+        model.setSize(entity.getSize());
+        model.setOwner(uuidConverter.convertEntity(entity.getOwner()));
         return model;
     }
 
     @Override
-    protected SolarSystemEntity processDomainConversion(SolarSystemModel domain) {
-        return SolarSystemEntity.builder()
-            .solarSystemId(uuidConverter.convertDomain(domain.getId()))
+    protected PlanetEntity processDomainConversion(PlanetModel domain) {
+        PlanetEntity result = PlanetEntity.builder()
+            .planetId(uuidConverter.convertDomain(domain.getId()))
             .gameId(uuidConverter.convertDomain(domain.getGameId()))
-            .radius(domain.getRadius())
+            .solarSystemId(uuidConverter.convertDomain(domain.getSolarSystemId()))
             .defaultName(domain.getDefaultName())
-            .customNames(objectMapperWrapper.writeValueAsPrettyString(domain.getCustomNames()))
+            .customNames(objectMapperWrapper.writeValueAsString(domain.getCustomNames()))
             .coordinate(coordinateConverter.convertDomain(domain.getCoordinate(), domain.getId()))
+            .size(domain.getSize())
+            .owner(uuidConverter.convertDomain(domain.getOwner()))
             .build();
+        log.info("Converted planet: {}", result);
+        return result;
     }
 }

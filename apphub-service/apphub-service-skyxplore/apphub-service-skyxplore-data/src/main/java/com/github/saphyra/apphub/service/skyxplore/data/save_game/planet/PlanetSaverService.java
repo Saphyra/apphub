@@ -1,8 +1,8 @@
-package com.github.saphyra.apphub.service.skyxplore.data.save_game.alliance;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.planet;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.AllianceModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.GameItemSaver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,33 +12,33 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Component
 @RequiredArgsConstructor
 @Slf4j
-@Component
 //TODO unit test
-public class AllianceSaverService implements GameItemSaver {
-    private final AllianceDao allianceDao;
-    private final AllianceModelValidator allianceModelValidator;
+public class PlanetSaverService implements GameItemSaver {
+    private final PlanetDao planetDao;
+    private final PlanetModelValidator planetModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
-        allianceDao.deleteByGameId(gameId);
+        planetDao.deleteByGameId(gameId);
     }
 
     @Override
     public GameItemType getType() {
-        return GameItemType.ALLIANCE;
+        return GameItemType.PLANET;
     }
 
     @Override
     public void save(List<GameItem> gameItems) {
-        List<AllianceModel> models = gameItems.stream()
-            .filter(gameItem -> gameItem instanceof AllianceModel)
-            .map(gameItem -> (AllianceModel) gameItem)
-            .peek(allianceModelValidator::validate)
+        List<PlanetModel> models = gameItems.stream()
+            .filter(gameItem -> gameItem instanceof PlanetModel)
+            .map(gameItem -> (PlanetModel) gameItem)
+            .peek(planetModelValidator::validate)
             .collect(Collectors.toList());
 
 
-        allianceDao.saveAll(models);
+        planetDao.saveAll(models);
     }
 }

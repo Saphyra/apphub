@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -16,7 +18,7 @@ import java.util.UUID;
 //TODO unit test
 public class SolarSystemSaverService implements GameItemSaver {
     private final SolarSystemDao solarSystemDao;
-    private final SolarSystemValidator solarSystemValidator;
+    private final SolarSystemModelValidator solarSystemModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
@@ -29,14 +31,14 @@ public class SolarSystemSaverService implements GameItemSaver {
     }
 
     @Override
-    public void save(GameItem gameItem) {
-        if (!(gameItem instanceof SolarSystemModel)) {
-            throw new IllegalArgumentException("GameItem is not a " + getType() + ", it is " + gameItem.getType());
-        }
+    public void save(List<GameItem> gameItems) {
+        List<SolarSystemModel> models = gameItems.stream()
+            .filter(gameItem -> gameItem instanceof SolarSystemModel)
+            .map(gameItem -> (SolarSystemModel) gameItem)
+            .peek(solarSystemModelValidator::validate)
+            .collect(Collectors.toList());
 
-        SolarSystemModel model = (SolarSystemModel) gameItem;
-        solarSystemValidator.validate(model);
 
-        solarSystemDao.save(model);
+        solarSystemDao.saveAll(models);
     }
 }

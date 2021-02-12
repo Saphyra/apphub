@@ -1,0 +1,23 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-planet" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="skyxplore_game" tableName="planet"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="skyxplore_game" tableName="planet">
+            <column name="planet_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_id" type="varchar(37)"/>
+            <column name="solar_system_id" type="varchar(37)"/>
+            <column name="owner" type="varchar(37)"/>
+            <column name="default_name" type="text"/>
+            <column name="custom_names" type="text"/>
+            <column name="size" type="integer"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="skyxplore_game" tableName="planet" columnNames="planet_id" constraintName="planet_pk"/>
+    </changeSet>
+</databaseChangeLog>

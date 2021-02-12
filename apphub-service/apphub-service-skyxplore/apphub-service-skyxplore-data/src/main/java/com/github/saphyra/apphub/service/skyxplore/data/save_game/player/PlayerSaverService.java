@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -29,14 +31,13 @@ public class PlayerSaverService implements GameItemSaver {
     }
 
     @Override
-    public void save(GameItem gameItem) {
-        if (!(gameItem instanceof PlayerModel)) {
-            throw new IllegalArgumentException("GameItem is not a " + getType() + ", it is " + gameItem.getType());
-        }
+    public void save(List<GameItem> gameItems) {
+        List<PlayerModel> models = gameItems.stream()
+            .filter(gameItem -> gameItem instanceof PlayerModel)
+            .map(gameItem -> (PlayerModel) gameItem)
+            .peek(playerModelValidator::validate)
+            .collect(Collectors.toList());
 
-        PlayerModel model = (PlayerModel) gameItem;
-        playerModelValidator.validate(model);
-
-        playerDao.save(model);
+        playerDao.saveAll(models);
     }
 }

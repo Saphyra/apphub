@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface GameItemSaver {
@@ -10,5 +11,5 @@ public interface GameItemSaver {
 
     GameItemType getType();
 
-    void save(GameItem gameItem);
+    void save(List<GameItem> gameItem);
 }

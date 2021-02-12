@@ -11,7 +11,7 @@ public enum GameItemType {
     ALLIANCE(AllianceModel.class),
     UNIVERSE(UniverseModel.class),
     SOLAR_SYSTEM(SolarSystemModel.class),
-    PLANET(PlanetModel.class), //TODO create saver
+    PLANET(PlanetModel.class),
     CITIZEN(CitizenModel.class), //TODO create saver
     SKILL(SkillModel.class), //TODO create saver
     SURFACE(SurfaceModel.class), //TODO create saver

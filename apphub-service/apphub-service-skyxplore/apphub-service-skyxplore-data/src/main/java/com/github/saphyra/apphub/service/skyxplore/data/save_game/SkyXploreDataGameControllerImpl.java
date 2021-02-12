@@ -4,16 +4,14 @@ import com.github.saphyra.apphub.api.skyxplore.data.server.SkyXploreDataGameCont
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -35,33 +33,37 @@ public class SkyXploreDataGameControllerImpl implements SkyXploreDataGameControl
     //TODO unit test
     //TODO int test
     public void saveGameData(List<Object> items) {
-        List<BiWrapper<Object, GameItem>> gameItems = items.stream()
-            .map(o -> new BiWrapper<>(o, objectMapperWrapper.convertValue(o, GameItem.class)))
-            .collect(Collectors.toList());
-
-        if (log.isDebugEnabled()) {
-            log.debug("saveGameData request arrived with size {} and types {}", items.size(), gameItems.stream().map(BiWrapper::getEntity2).map(GameItem::getType).map(Enum::name).collect(Collectors.joining(", ")));
-        }
-        gameItems.stream()
-            .parallel()
-            .forEach(biWrapper -> save(biWrapper.getEntity1(), biWrapper.getEntity2()));
+        log.info("Saving {} number of gameItems...", items.size());
+        items.stream()
+            .map(o -> new BiWrapper<>(o, objectMapperWrapper.convertValue(o, GameItem.class).getType()))
+            .filter(this::isTypeFilled)
+            .collect(Collectors.groupingBy(BiWrapper::getEntity2))
+            .entrySet()
+            .stream()
+            .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().stream().map(BiWrapper::getEntity1).collect(Collectors.toList())))
+            .forEach(this::save);
     }
 
-    private void save(Object gameItemObject, GameItem gameItem) {
+    private boolean isTypeFilled(BiWrapper<Object, GameItemType> biWrapper) {
+        boolean result = isNull(biWrapper.getEntity2());
+        if (result) {
+            log.warn("Null type for gameItem {}", biWrapper.getEntity1());
+        }
+        return !result;
+    }
+
+    private void save(GameItemType gameItemType, List<Object> gameItemObjects) {
         try {
-            if (isNull(gameItem.getType())) {
-                throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "type", "must not be null"), "type must not be null");
-            }
+            log.info("Saving {} number of {}s", gameItemObjects.size(), gameItemType);
+            GameItemSaver gameItemSaver = savers.getOptional(gameItemType)
+                .orElseThrow(() -> new IllegalStateException("GameItemDao not found for type " + gameItemType));
 
-            GameItemSaver gameItemSaver = savers.getOptional(gameItem.getType())
-                .orElseThrow(() -> new IllegalStateException("GameItemDao not found for type " + gameItem.getType()));
-
-            log.debug("GameItem: {}", gameItem);
-            GameItem model = objectMapperWrapper.convertValue(gameItemObject, gameItem.getType().getModelType());
-            log.debug("Model: {}", model);
-            gameItemSaver.save(model);
+            List<GameItem> models = gameItemObjects.stream()
+                .map(o -> objectMapperWrapper.convertValue(o, gameItemType.getModelType()))
+                .collect(Collectors.toList());
+            gameItemSaver.save(models);
         } catch (Exception e) {
-            log.error("Failed to save gameItem {} with id {}", gameItem.getType(), gameItem.getId(), e);
+            log.error("Failed to save gameItem {}", gameItemType, e);
         }
     }
 }
