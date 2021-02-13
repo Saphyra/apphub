@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 public class Skill {
     private final UUID skillId;
-    private final UUID citizenId; //TODO fill in factory
+    private final UUID citizenId;
     private final SkillType skillType;
     private int level;
     private int experience;

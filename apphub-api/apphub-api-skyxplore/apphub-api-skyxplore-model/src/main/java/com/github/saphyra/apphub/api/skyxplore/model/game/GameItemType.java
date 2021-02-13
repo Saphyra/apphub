@@ -13,7 +13,7 @@ public enum GameItemType {
     SOLAR_SYSTEM(SolarSystemModel.class),
     PLANET(PlanetModel.class),
     CITIZEN(CitizenModel.class),
-    SKILL(SkillModel.class), //TODO create saver
+    SKILL(SkillModel.class),
     SURFACE(SurfaceModel.class), //TODO create saver
     BUILDING(BuildingModel.class), //TODO create saver
     SYSTEM_CONNECTION(SystemConnectionModel.class), //TODO create saver

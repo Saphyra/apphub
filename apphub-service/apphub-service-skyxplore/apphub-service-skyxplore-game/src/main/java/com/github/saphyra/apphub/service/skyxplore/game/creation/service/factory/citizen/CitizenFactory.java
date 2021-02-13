@@ -50,19 +50,20 @@ public class CitizenFactory {
             .locationType(LocationType.PLANET)
             .morale(100)
             .satiety(100)
-            .skills(createSkills())
+            .skills(createSkills(citizenId))
             .build();
     }
 
-    private Map<SkillType, Skill> createSkills() {
+    private Map<SkillType, Skill> createSkills(UUID citizenId) {
         return Arrays.stream(SkillType.values())
-            .map(this::createSkill)
+            .map(skillType -> createSkill(skillType, citizenId))
             .collect(Collectors.toMap(Skill::getSkillType, Function.identity()));
     }
 
-    private Skill createSkill(SkillType skillType) {
+    private Skill createSkill(SkillType skillType, UUID citizenId) {
         return Skill.builder()
             .skillId(idGenerator.randomUuid())
+            .citizenId(citizenId)
             .skillType(skillType)
             .level(1)
             .experience(0)
