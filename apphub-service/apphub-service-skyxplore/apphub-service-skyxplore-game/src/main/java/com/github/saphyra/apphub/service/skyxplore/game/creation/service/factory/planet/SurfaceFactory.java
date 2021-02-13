@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,7 +32,7 @@ public class SurfaceFactory {
     private final GameCreationProperties properties;
     private final IdGenerator idGenerator;
 
-    public Map<Coordinate, Surface> create(int planetSize) {
+    public Map<Coordinate, Surface> create(UUID planetId, int planetSize) {
         log.debug("Generating surfaces...");
         SurfaceType[][] surfaceMap = createSurfaceMap(planetSize);
 
@@ -43,6 +44,7 @@ public class SurfaceFactory {
                 SurfaceType surfaceType = row[y];
                 Surface surface = Surface.builder()
                     .surfaceId(idGenerator.randomUuid())
+                    .planetId(planetId)
                     .coordinate(coordinate)
                     .surfaceType(surfaceType)
                     .build();

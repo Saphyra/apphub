@@ -14,7 +14,7 @@ public enum GameItemType {
     PLANET(PlanetModel.class),
     CITIZEN(CitizenModel.class),
     SKILL(SkillModel.class),
-    SURFACE(SurfaceModel.class), //TODO create saver
+    SURFACE(SurfaceModel.class),
     BUILDING(BuildingModel.class), //TODO create saver
     SYSTEM_CONNECTION(SystemConnectionModel.class), //TODO create saver
     ALLOCATED_RESOURCE(AllocatedResourceModel.class), //TODO create saver

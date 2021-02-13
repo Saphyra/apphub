@@ -61,11 +61,12 @@ public class PlanetFactory {
 
     private Planet createPlanet(Integer planetIndex, Coordinate coordinate, UUID solarSystemId, String systemName, Range<Integer> planetSizeRange) {
         int planetSize = random.randInt(planetSizeRange.getMin(), planetSizeRange.getMax());
+        UUID planetId = idGenerator.randomUuid();
 
-        Map<Coordinate, Surface> surfaces = surfaceFactory.create(planetSize);
+        Map<Coordinate, Surface> surfaces = surfaceFactory.create(planetId, planetSize);
 
         return Planet.builder()
-            .planetId(idGenerator.randomUuid())
+            .planetId(planetId)
             .solarSystemId(solarSystemId)
             .coordinate(coordinate)
             .defaultName(String.format("%s %s", systemName, ALPHABET.charAt(planetIndex)))

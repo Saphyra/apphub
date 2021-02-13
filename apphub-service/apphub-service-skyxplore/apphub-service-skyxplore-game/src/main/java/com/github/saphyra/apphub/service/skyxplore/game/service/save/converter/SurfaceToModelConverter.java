@@ -46,6 +46,7 @@ public class SurfaceToModelConverter {
         model.setType(GameItemType.SURFACE);
         model.setPlanetId(surface.getPlanetId());
         model.setSurfaceType(surface.getSurfaceType().name());
+        model.setCoordinate(surface.getCoordinate());
         return model;
     }
 }

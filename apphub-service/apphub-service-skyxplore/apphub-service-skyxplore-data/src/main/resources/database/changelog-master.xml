@@ -32,4 +32,5 @@
     <include file="database/change_sets/planet.xml"/>
     <include file="database/change_sets/citizen.xml"/>
     <include file="database/change_sets/skill.xml"/>
+    <include file="database/change_sets/surface.xml"/>
 </databaseChangeLog>

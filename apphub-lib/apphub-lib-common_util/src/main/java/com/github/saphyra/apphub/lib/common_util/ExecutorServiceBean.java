@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.lib.common_util;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
@@ -12,12 +11,20 @@ import java.util.concurrent.Future;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Slf4j
 public class ExecutorServiceBean implements Executor {
-    private final ExecutorService executor = Executors.newCachedThreadPool();
-
+    private final ExecutorService executor;
     private final SleepService sleepService;
+
+    public ExecutorServiceBean(SleepService sleepService) {
+        this.sleepService = sleepService;
+        executor = Executors.newCachedThreadPool();
+    }
+
+    public ExecutorServiceBean(ExecutorService executorService, SleepService sleepService) {
+        this.executor = executorService;
+        this.sleepService = sleepService;
+    }
 
     @Override
     public void execute(Runnable command) {

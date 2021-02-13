@@ -14,7 +14,7 @@ import java.util.UUID;
 @Builder
 public class Surface {
     private final UUID surfaceId;
-    private final UUID planetId; //TODO fill in factory
+    private final UUID planetId;
     private final Coordinate coordinate;
     private SurfaceType surfaceType;
     private Building building;
