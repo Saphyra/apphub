@@ -36,4 +36,5 @@
     <include file="database/change_sets/building.xml"/>
     <include file="database/change_sets/line.xml"/>
     <include file="database/change_sets/system_connection.xml"/>
+    <include file="database/change_sets/allocated_resource.xml"/>
 </databaseChangeLog>

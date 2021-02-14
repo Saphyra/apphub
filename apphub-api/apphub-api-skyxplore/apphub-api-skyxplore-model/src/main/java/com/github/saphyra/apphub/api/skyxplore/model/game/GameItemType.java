@@ -17,7 +17,7 @@ public enum GameItemType {
     SURFACE(SurfaceModel.class),
     BUILDING(BuildingModel.class),
     SYSTEM_CONNECTION(SystemConnectionModel.class),
-    ALLOCATED_RESOURCE(AllocatedResourceModel.class), //TODO create saver
+    ALLOCATED_RESOURCE(AllocatedResourceModel.class),
     RESERVED_STORAGE(ReservedStorageModel.class), //TODO create saver
     STORED_RESOURCE(StoredResourceModel.class), //TODO create saver
     STORAGE_SETTING(StorageSettingModel.class), //TODO create saver

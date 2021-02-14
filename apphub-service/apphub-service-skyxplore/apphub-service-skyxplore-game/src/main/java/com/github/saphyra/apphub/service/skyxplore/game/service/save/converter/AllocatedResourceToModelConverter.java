@@ -31,7 +31,6 @@ public class AllocatedResourceToModelConverter {
         model.setLocationType(allocatedResource.getLocationType().name());
         model.setExternalReference(allocatedResource.getExternalReference());
         model.setDataId(allocatedResource.getDataId());
-        model.setStorageType(allocatedResource.getStorageType().name());
         model.setAmount(allocatedResource.getAmount());
         return model;
     }

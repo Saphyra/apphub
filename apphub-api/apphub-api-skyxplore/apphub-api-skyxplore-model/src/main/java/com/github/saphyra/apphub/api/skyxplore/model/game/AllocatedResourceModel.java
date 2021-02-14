@@ -16,6 +16,5 @@ public class AllocatedResourceModel extends GameItem {
     private String locationType;
     private UUID externalReference;
     private String dataId;
-    private String storageType;
-    private int amount;
+    private Integer amount;
 }
