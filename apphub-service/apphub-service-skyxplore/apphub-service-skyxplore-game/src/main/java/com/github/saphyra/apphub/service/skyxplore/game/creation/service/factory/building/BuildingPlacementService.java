@@ -52,7 +52,7 @@ class BuildingPlacementService {
     private void placeBuilding(BuildingData buildingData, Collection<Surface> surfaces) {
         Surface surface = emptySurfaceProvider.getEmptySurfaceForType(buildingData.getPrimarySurfaceType(), surfaces);
 
-        Building building = buildingFactory.create(buildingData.getId());
+        Building building = buildingFactory.create(buildingData.getId(), surface.getSurfaceId());
         surface.setBuilding(building);
     }
 

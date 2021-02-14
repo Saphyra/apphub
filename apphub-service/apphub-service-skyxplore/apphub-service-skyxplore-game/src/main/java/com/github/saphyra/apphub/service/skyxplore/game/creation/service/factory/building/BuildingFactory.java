@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -13,9 +15,10 @@ import org.springframework.stereotype.Component;
 class BuildingFactory {
     private final IdGenerator idGenerator;
 
-    public Building create(String dataId) {
+    public Building create(String dataId, UUID surfaceId) {
         return Building.builder()
             .buildingId(idGenerator.randomUuid())
+            .surfaceId(surfaceId)
             .dataId(dataId)
             .level(1)
             .build();

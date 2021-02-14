@@ -11,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class Building {
-    private final UUID surfaceId; //TODO fill in factory
+    private final UUID surfaceId;
     private final UUID buildingId;
     private final String dataId;
     private int level;

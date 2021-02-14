@@ -14,5 +14,5 @@ import java.util.UUID;
 public class BuildingModel extends GameItem {
     private UUID surfaceId;
     private String dataId;
-    private int level;
+    private Integer level;
 }
