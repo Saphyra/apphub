@@ -1,0 +1,21 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-reserved_storage" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="skyxplore_game" tableName="reserved_storage"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="skyxplore_game" tableName="reserved_storage">
+            <column name="reserved_storage_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_id" type="varchar(37)"/>
+            <column name="external_reference" type="varchar(37)"/>
+            <column name="data_id" type="text"/>
+            <column name="amount" type="integer"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="skyxplore_game" tableName="reserved_storage" columnNames="reserved_storage_id" constraintName="reserved_storage_pk"/>
+    </changeSet>
+</databaseChangeLog>

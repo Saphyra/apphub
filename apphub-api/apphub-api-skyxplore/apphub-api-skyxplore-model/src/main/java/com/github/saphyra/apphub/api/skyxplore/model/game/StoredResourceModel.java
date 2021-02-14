@@ -14,7 +14,6 @@ import java.util.UUID;
 public class StoredResourceModel extends GameItem {
     private UUID location;
     private String locationType;
-    private String storageType;
     private String dataId;
-    private int amount;
+    private Integer amount;
 }
