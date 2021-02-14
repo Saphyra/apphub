@@ -12,9 +12,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ReservedStorageModel extends GameItem {
-    private UUID location;
-    private String locationType;
     private UUID externalReference;
     private String dataId;
-    private int amount;
+    private Integer amount;
 }

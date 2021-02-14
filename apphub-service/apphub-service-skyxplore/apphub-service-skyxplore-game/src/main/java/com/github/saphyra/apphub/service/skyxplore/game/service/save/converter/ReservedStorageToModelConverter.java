@@ -27,8 +27,6 @@ public class ReservedStorageToModelConverter {
         model.setId(reservedStorage.getReservedStorageId());
         model.setGameId(game.getGameId());
         model.setType(GameItemType.RESERVED_STORAGE);
-        model.setLocation(reservedStorage.getLocation());
-        model.setLocationType(reservedStorage.getLocationType().name());
         model.setExternalReference(reservedStorage.getExternalReference());
         model.setDataId(reservedStorage.getDataId());
         model.setAmount(reservedStorage.getAmount());

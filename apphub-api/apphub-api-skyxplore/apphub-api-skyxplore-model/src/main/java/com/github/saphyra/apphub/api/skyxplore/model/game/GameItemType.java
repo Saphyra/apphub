@@ -18,7 +18,7 @@ public enum GameItemType {
     BUILDING(BuildingModel.class),
     SYSTEM_CONNECTION(SystemConnectionModel.class),
     ALLOCATED_RESOURCE(AllocatedResourceModel.class),
-    RESERVED_STORAGE(ReservedStorageModel.class), //TODO create saver
+    RESERVED_STORAGE(ReservedStorageModel.class),
     STORED_RESOURCE(StoredResourceModel.class), //TODO create saver
     STORAGE_SETTING(StorageSettingModel.class), //TODO create saver
     PRIORITY(PriorityModel.class), //TODO create saver
