@@ -7,7 +7,7 @@
         </preConditions>
 
         <createTable schemaName="skyxplore_game" tableName="coordinate">
-            <column name="reference_id" type="varchar(37)">
+            <column name="reference_id" type="varchar(39)">
                 <constraints nullable="false"/>
             </column>
             <column name="x" type="number"/>
@@ -15,5 +15,6 @@
         </createTable>
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="coordinate" columnNames="reference_id" constraintName="coordinate_pk"/>
+
     </changeSet>
 </databaseChangeLog>

@@ -34,4 +34,6 @@
     <include file="database/change_sets/skill.xml"/>
     <include file="database/change_sets/surface.xml"/>
     <include file="database/change_sets/building.xml"/>
+    <include file="database/change_sets/line.xml"/>
+    <include file="database/change_sets/system_connection.xml"/>
 </databaseChangeLog>
