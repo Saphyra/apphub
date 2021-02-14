@@ -40,4 +40,5 @@
     <include file="database/change_sets/reserved_storage.xml"/>
     <include file="database/change_sets/stored_resource.xml"/>
     <include file="database/change_sets/storage_setting.xml"/>
+    <include file="database/change_sets/priority.xml"/>
 </databaseChangeLog>

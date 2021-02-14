@@ -1,13 +1,13 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <changeSet id="create-table-alliance" author="saphyra">
+    <changeSet id="create-table-storage_setting" author="saphyra">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists schemaName="skyxplore_game" tableName="alliance"/>
+                <tableExists schemaName="skyxplore_game" tableName="storage_setting"/>
             </not>
         </preConditions>
 
-        <createTable schemaName="skyxplore_game" tableName="alliance">
-            <column name="alliance_id" type="varchar(37)">
+        <createTable schemaName="skyxplore_game" tableName="storage_setting">
+            <column name="storage_setting_id" type="varchar(37)">
                 <constraints nullable="false"/>
             </column>
             <column name="game_id" type="varchar(37)"/>
@@ -19,6 +19,6 @@
             <column name="batch_size" type="integer"/>
         </createTable>
 
-        <addPrimaryKey schemaName="skyxplore_game" tableName="alliance" columnNames="alliance_id" constraintName="alliance_pk"/>
+        <addPrimaryKey schemaName="skyxplore_game" tableName="storage_setting" columnNames="storage_setting_id" constraintName="storage_setting_pk"/>
     </changeSet>
 </databaseChangeLog>
