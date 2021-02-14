@@ -1,0 +1,24 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-alliance" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="skyxplore_game" tableName="alliance"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="skyxplore_game" tableName="alliance">
+            <column name="alliance_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_id" type="varchar(37)"/>
+            <column name="location" type="varchar(37)"/>
+            <column name="location_type" type="text"/>
+            <column name="data_id" type="text"/>
+            <column name="target_amount" type="integer"/>
+            <column name="priority" type="integer"/>
+            <column name="batch_size" type="integer"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="skyxplore_game" tableName="alliance" columnNames="alliance_id" constraintName="alliance_pk"/>
+    </changeSet>
+</databaseChangeLog>

@@ -20,7 +20,7 @@ public enum GameItemType {
     ALLOCATED_RESOURCE(AllocatedResourceModel.class),
     RESERVED_STORAGE(ReservedStorageModel.class),
     STORED_RESOURCE(StoredResourceModel.class),
-    STORAGE_SETTING(StorageSettingModel.class), //TODO create saver
+    STORAGE_SETTING(StorageSettingModel.class),
     PRIORITY(PriorityModel.class), //TODO create saver
     ;
     private final Class<? extends GameItem> modelType;
