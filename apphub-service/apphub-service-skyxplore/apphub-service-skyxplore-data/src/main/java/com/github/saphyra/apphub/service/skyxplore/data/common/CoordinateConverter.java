@@ -1,17 +1,17 @@
 package com.github.saphyra.apphub.service.skyxplore.data.common;
 
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import static java.util.Objects.isNull;
 
 import java.util.UUID;
 
-import static java.util.Objects.isNull;
+import org.springframework.stereotype.Component;
+
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class CoordinateConverter {
     private final UuidConverter uuidConverter;
 

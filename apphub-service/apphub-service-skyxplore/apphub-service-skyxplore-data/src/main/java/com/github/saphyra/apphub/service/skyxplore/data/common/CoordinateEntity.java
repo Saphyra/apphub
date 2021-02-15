@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.common;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Entity
 @Table(schema = "skyxplore_game", name = "coordinate")
+@Builder
 public class CoordinateEntity {
     @Id
     private String referenceId;

@@ -1,19 +1,19 @@
 package com.github.saphyra.apphub.service.skyxplore.data.common;
 
+import static java.util.Objects.isNull;
+
+import java.util.UUID;
+
+import org.springframework.stereotype.Component;
+
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.geometry.Line;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
-import java.util.UUID;
-
-import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class LineConverter {
     private final UuidConverter uuidConverter;
     private final CoordinateConverter coordinateConverter;
@@ -32,14 +32,16 @@ public class LineConverter {
         if (isNull(domain)) {
             return null;
         }
-        String aId = referenceId + "-a";
-        String bId = referenceId + "-b";
+        String idString = uuidConverter.convertDomain(referenceId);
+        String aId = idString + "-a";
+        String bId = idString + "-b";
+
         return LineEntity.builder()
-            .referenceId(uuidConverter.convertDomain(referenceId))
+            .referenceId(idString)
             .aId(aId)
             .bId(bId)
             .a(coordinateConverter.convertDomain(domain.getA(), aId))
-            .b(coordinateConverter.convertDomain(domain.getA(), bId))
+            .b(coordinateConverter.convertDomain(domain.getB(), bId))
             .build();
     }
 }
