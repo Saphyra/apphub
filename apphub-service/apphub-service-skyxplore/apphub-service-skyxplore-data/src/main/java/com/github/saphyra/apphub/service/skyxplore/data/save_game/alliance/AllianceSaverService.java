@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @Component
-//TODO unit test
 public class AllianceSaverService implements GameItemSaver {
     private final AllianceDao allianceDao;
     private final AllianceModelValidator allianceModelValidator;

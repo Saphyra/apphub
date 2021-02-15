@@ -14,7 +14,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class AllianceModelValidator {
     private final GameItemValidator gameItemValidator;
 
@@ -22,7 +21,7 @@ public class AllianceModelValidator {
         gameItemValidator.validate(model);
 
         if (isNull(model.getName())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "name", "must not be null."), "name must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "name", "must not be null"), "name must not be null.");
         }
     }
 }
