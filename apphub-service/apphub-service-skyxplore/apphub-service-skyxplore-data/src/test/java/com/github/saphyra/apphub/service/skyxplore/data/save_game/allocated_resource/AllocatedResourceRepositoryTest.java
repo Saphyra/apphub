@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.data.save_game.alliance;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.allocated_resource;
 
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
 import lombok.extern.slf4j.Slf4j;
@@ -17,14 +17,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
 @Slf4j
-public class AllianceRepositoryTest {
-    private static final String ALLIANCE_ID_1 = "alliance-id-1";
-    private static final String ALLIANCE_ID_2 = "alliance-id-2";
+public class AllocatedResourceRepositoryTest {
+    private static final String ALLOCATED_RESOURCE_ID_1 = "allocated-resource-id-1";
+    private static final String ALLOCATED_RESOURCE_ID_2 = "allocated-resource-id-2";
     private static final String GAME_ID_1 = "game-id-1";
     private static final String GAME_ID_2 = "game-id-2";
 
     @Autowired
-    private AllianceRepository underTest;
+    private AllocatedResourceRepository underTest;
 
     @After
     public void clear() {
@@ -34,12 +34,12 @@ public class AllianceRepositoryTest {
     @Test
     @Transactional
     public void deleteByGameId() {
-        AllianceEntity entity1 = AllianceEntity.builder()
-            .allianceId(ALLIANCE_ID_1)
+        AllocatedResourceEntity entity1 = AllocatedResourceEntity.builder()
+            .allocatedResourceId(ALLOCATED_RESOURCE_ID_1)
             .gameId(GAME_ID_1)
             .build();
-        AllianceEntity entity2 = AllianceEntity.builder()
-            .allianceId(ALLIANCE_ID_2)
+        AllocatedResourceEntity entity2 = AllocatedResourceEntity.builder()
+            .allocatedResourceId(ALLOCATED_RESOURCE_ID_2)
             .gameId(GAME_ID_2)
             .build();
         underTest.saveAll(Arrays.asList(entity1, entity2));

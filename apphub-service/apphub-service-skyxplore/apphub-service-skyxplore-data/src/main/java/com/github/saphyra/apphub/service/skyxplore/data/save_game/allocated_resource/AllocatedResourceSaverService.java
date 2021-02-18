@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.allocated_res
 import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.GameItemSaver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class AllocatedResourceSaverService implements GameItemSaver {
     private final AllocatedResourceDao allocatedResourceDao;
     private final AllocatedResourceModelValidator allocatedResourceModelValidator;

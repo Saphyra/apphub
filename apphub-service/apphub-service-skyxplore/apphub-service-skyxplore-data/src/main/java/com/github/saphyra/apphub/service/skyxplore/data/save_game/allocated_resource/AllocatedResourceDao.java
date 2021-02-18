@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-//todo unit test
 public class AllocatedResourceDao extends AbstractDao<AllocatedResourceEntity, AllocatedResourceModel, String, AllocatedResourceRepository> {
     private final UuidConverter uuidConverter;
 

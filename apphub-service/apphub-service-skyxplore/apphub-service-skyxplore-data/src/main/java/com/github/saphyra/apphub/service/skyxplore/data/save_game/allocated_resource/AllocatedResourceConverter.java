@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class AllocatedResourceConverter extends ConverterBase<AllocatedResourceEntity, AllocatedResourceModel> {
     private final UuidConverter uuidConverter;
 
