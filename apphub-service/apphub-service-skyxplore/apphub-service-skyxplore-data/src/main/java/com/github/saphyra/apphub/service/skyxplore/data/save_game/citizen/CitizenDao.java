@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//todo unit test
 public class CitizenDao extends AbstractDao<CitizenEntity, CitizenModel, String, CitizenRepository> {
     private final UuidConverter uuidConverter;
 

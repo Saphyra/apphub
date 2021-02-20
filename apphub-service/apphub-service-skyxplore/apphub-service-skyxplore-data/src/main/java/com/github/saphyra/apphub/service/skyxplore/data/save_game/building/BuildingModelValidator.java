@@ -14,7 +14,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class BuildingModelValidator {
     private final GameItemValidator gameItemValidator;
 
@@ -22,15 +21,15 @@ public class BuildingModelValidator {
         gameItemValidator.validate(model);
 
         if (isNull(model.getSurfaceId())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "surfaceId", "must not be null."), "surfaceId must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "surfaceId", "must not be null"), "surfaceId must not be null.");
         }
 
         if (isNull(model.getDataId())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "dataId", "must not be null."), "dataId must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "dataId", "must not be null"), "dataId must not be null.");
         }
 
         if (isNull(model.getLevel())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "level", "must not be null."), "level must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "level", "must not be null"), "level must not be null.");
         }
     }
 }

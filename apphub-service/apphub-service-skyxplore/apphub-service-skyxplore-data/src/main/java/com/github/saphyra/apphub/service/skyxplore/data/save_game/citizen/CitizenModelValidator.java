@@ -14,7 +14,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CitizenModelValidator {
     private final GameItemValidator gameItemValidator;
 
@@ -22,23 +21,23 @@ public class CitizenModelValidator {
         gameItemValidator.validate(citizenModel);
 
         if (isNull(citizenModel.getLocation())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "location", "must not be null."), "location must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "location", "must not be null"), "location must not be null.");
         }
 
         if (isNull(citizenModel.getLocationType())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "locationType", "must not be null."), "locationType must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "locationType", "must not be null"), "locationType must not be null.");
         }
 
         if (isNull(citizenModel.getName())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "name", "must not be null."), "name must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "name", "must not be null"), "name must not be null.");
         }
 
         if (isNull(citizenModel.getMorale())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "morale", "must not be null."), "morale must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "morale", "must not be null"), "morale must not be null.");
         }
 
         if (isNull(citizenModel.getSatiety())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "satiety", "must not be null."), "satiety must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "satiety", "must not be null"), "satiety must not be null.");
         }
     }
 }
