@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class GameConverter extends ConverterBase<GameEntity, GameModel> {
     private final UuidConverter uuidConverter;
 

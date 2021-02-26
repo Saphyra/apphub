@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class GameDao extends AbstractDao<GameEntity, GameModel, String, GameRepository> {
     private final UuidConverter uuidConverter;
 
@@ -18,6 +17,6 @@ public class GameDao extends AbstractDao<GameEntity, GameModel, String, GameRepo
     }
 
     public void deleteById(UUID gameId) {
-        repository.deleteById(uuidConverter.convertDomain(gameId));
+        deleteById(uuidConverter.convertDomain(gameId));
     }
 }
