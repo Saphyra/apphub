@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class PlayerConverter extends ConverterBase<PlayerEntity, PlayerModel> {
     private final UuidConverter uuidConverter;
 
@@ -19,9 +18,9 @@ class PlayerConverter extends ConverterBase<PlayerEntity, PlayerModel> {
     protected PlayerModel processEntityConversion(PlayerEntity entity) {
         PlayerModel model = new PlayerModel();
         model.setId(uuidConverter.convertEntity(entity.getPlayerId()));
+        model.setUserId(uuidConverter.convertEntity(entity.getUserId()));
         model.setGameId(uuidConverter.convertEntity(entity.getGameId()));
         model.setType(GameItemType.PLAYER);
-        model.setUserId(uuidConverter.convertEntity(entity.getUserId()));
         model.setAllianceId(uuidConverter.convertEntity(entity.getAllianceId()));
         model.setUsername(entity.getUsername());
         model.setAi(entity.isAi());
@@ -36,7 +35,7 @@ class PlayerConverter extends ConverterBase<PlayerEntity, PlayerModel> {
             .userId(uuidConverter.convertDomain(domain.getUserId()))
             .allianceId(uuidConverter.convertDomain(domain.getAllianceId()))
             .username(domain.getUsername())
-            .ai(domain.isAi())
+            .ai(domain.getAi())
             .build();
     }
 }

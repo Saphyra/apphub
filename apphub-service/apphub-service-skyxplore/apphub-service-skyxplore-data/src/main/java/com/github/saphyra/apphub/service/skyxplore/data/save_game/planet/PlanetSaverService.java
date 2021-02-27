@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class PlanetSaverService implements GameItemSaver {
     private final PlanetDao planetDao;
     private final PlanetModelValidator planetModelValidator;

@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.reserved_stor
 
 import org.springframework.data.repository.CrudRepository;
 
-//TODO unit test
 interface ReservedStorageRepository extends CrudRepository<ReservedStorageEntity, String> {
     void deleteByGameId(String gameId);
 }

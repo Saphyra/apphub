@@ -15,8 +15,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-public class PriorityModelSaverService implements GameItemSaver {
+public class PrioritySaverService implements GameItemSaver {
     private final PriorityDao priorityDao;
     private final PriorityModelValidator priorityModelValidator;
 

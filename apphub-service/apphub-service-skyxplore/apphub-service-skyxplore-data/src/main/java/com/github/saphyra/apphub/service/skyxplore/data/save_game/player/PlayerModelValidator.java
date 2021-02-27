@@ -14,7 +14,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class PlayerModelValidator {
     private final GameItemValidator gameItemValidator;
 
@@ -27,6 +26,10 @@ public class PlayerModelValidator {
 
         if (isNull(model.getUsername())) {
             throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "username", "must not be null"), "username must not be null");
+        }
+
+        if (isNull(model.getAi())) {
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "ai", "must not be null"), "ai must not be null");
         }
     }
 }

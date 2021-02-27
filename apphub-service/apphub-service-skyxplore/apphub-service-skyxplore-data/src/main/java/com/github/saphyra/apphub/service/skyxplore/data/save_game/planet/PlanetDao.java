@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class PlanetDao extends AbstractDao<PlanetEntity, PlanetModel, String, PlanetRepository> {
     private final UuidConverter uuidConverter;
 

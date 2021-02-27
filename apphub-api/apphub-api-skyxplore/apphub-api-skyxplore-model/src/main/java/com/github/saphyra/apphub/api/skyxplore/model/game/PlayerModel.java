@@ -15,5 +15,5 @@ public class PlayerModel extends GameItem {
     private UUID userId;
     private UUID allianceId;
     private String username;
-    private boolean ai;
+    private Boolean ai;
 }

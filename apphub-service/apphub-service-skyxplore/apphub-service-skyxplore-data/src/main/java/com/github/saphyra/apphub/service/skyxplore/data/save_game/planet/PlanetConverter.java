@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class PlanetConverter extends ConverterBase<PlanetEntity, PlanetModel> {
     private final UuidConverter uuidConverter;
     private final ObjectMapperWrapper objectMapperWrapper;

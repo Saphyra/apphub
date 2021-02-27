@@ -14,7 +14,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class PriorityModelValidator {
     private final GameItemValidator gameItemValidator;
 
@@ -22,18 +21,18 @@ public class PriorityModelValidator {
         gameItemValidator.validateWithoutId(model);
 
         if (isNull(model.getLocation())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "location", "must not be null."), "location must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "location", "must not be null"), "location must not be null.");
         }
         if (isNull(model.getLocationType())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "locationType", "must not be null."), "locationType must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "locationType", "must not be null"), "locationType must not be null.");
         }
 
         if (isNull(model.getPriorityType())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "priorityType", "must not be null."), "priorityType must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "priorityType", "must not be null"), "priorityType must not be null.");
         }
 
         if (isNull(model.getValue())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "value", "must not be null."), "value must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "value", "must not be null"), "value must not be null.");
         }
     }
 }

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class PriorityDao extends AbstractDao<PriorityEntity, PriorityModel, PriorityPk, PriorityRepository> {
     private final UuidConverter uuidConverter;
 
