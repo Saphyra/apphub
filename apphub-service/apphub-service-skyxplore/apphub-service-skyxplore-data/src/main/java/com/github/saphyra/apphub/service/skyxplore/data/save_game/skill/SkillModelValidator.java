@@ -14,7 +14,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SkillModelValidator {
     private final GameItemValidator gameItemValidator;
 
@@ -22,23 +21,23 @@ public class SkillModelValidator {
         gameItemValidator.validate(model);
 
         if (isNull(model.getCitizenId())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "citizenId", "must not be null."), "citizenId must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "citizenId", "must not be null"), "citizenId must not be null.");
         }
 
         if (isNull(model.getSkillType())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "skillType", "must not be null."), "skillType must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "skillType", "must not be null"), "skillType must not be null.");
         }
 
         if (isNull(model.getLevel())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "level", "must not be null."), "level must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "level", "must not be null"), "level must not be null.");
         }
 
         if (isNull(model.getExperience())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "experience", "must not be null."), "experience must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "experience", "must not be null"), "experience must not be null.");
         }
 
         if (isNull(model.getNextLevel())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "nextLevel", "must not be null."), "nextLevel must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "nextLevel", "must not be null"), "nextLevel must not be null.");
         }
     }
 }

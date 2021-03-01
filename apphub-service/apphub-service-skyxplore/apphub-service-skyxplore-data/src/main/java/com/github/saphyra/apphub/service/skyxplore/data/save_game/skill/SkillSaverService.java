@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SkillSaverService implements GameItemSaver {
     private final SkillDao skillDao;
     private final SkillModelValidator skillModelValidator;

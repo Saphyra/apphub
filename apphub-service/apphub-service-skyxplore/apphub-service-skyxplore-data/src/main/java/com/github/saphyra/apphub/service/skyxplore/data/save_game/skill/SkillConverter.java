@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class SkillConverter extends ConverterBase<SkillEntity, SkillModel> {
     private final UuidConverter uuidConverter;
 
