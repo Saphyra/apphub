@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class StorageSettingDao extends AbstractDao<StorageSettingEntity, StorageSettingModel, String, StorageSettingRepository> {
     private final UuidConverter uuidConverter;
 

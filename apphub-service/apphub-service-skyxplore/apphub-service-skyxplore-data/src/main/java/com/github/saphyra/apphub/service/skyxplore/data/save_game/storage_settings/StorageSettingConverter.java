@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StorageSettingConverter extends ConverterBase<StorageSettingEntity, StorageSettingModel> {
     private final UuidConverter uuidConverter;
 

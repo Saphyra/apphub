@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.stored_resource;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StoredResourceConverter extends ConverterBase<StoredResourceEntity, StoredResourceModel> {
     private final UuidConverter uuidConverter;
 
@@ -19,6 +19,7 @@ class StoredResourceConverter extends ConverterBase<StoredResourceEntity, Stored
         StoredResourceModel model = new StoredResourceModel();
         model.setId(uuidConverter.convertEntity(entity.getStoredResourceId()));
         model.setGameId(uuidConverter.convertEntity(entity.getGameId()));
+        model.setType(GameItemType.STORED_RESOURCE);
         model.setLocation(uuidConverter.convertEntity(entity.getLocation()));
         model.setLocationType(entity.getLocationType());
         model.setDataId(entity.getDataId());

@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.storage_setti
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StorageSettingModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.GameItemSaver;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StorageSettingSaverService implements GameItemSaver {
     private final StorageSettingDao storageSettingDao;
     private final StorageSettingModelValidator storageSettingModelValidator;
