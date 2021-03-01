@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.data.save_game.planet;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.solar_system;
 
 import com.github.saphyra.apphub.service.skyxplore.data.common.CoordinateEntity;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.CoordinateTestRepository;
@@ -19,14 +19,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
 @Slf4j
-public class PlanetRepositoryTest {
+public class SolarSystemRepositoryTest {
     private static final String GAME_ID_1 = "game-id-1";
     private static final String GAME_ID_2 = "game-id-2";
-    private static final String PLANET_ID_1 = "planet-id-1";
-    private static final String PLANET_ID_2 = "planet-id-2";
+    private static final String SOLAR_SYSTEM_ID_1 = "solar-system-id-1";
+    private static final String SOLAR_SYSTEM_ID_2 = "solar-system-id-2";
 
     @Autowired
-    private PlanetRepository underTest;
+    private SolarSystemRepository underTest;
 
     @Autowired
     private CoordinateTestRepository coordinateRepository;
@@ -41,23 +41,23 @@ public class PlanetRepositoryTest {
     @Transactional
     public void deleteByGameId() {
         CoordinateEntity coordinate1 = CoordinateEntity.builder()
-            .referenceId(PLANET_ID_1)
+            .referenceId(SOLAR_SYSTEM_ID_1)
             .x(324d)
             .y(345d)
             .build();
-        PlanetEntity entity1 = PlanetEntity.builder()
-            .planetId(PLANET_ID_1)
+        SolarSystemEntity entity1 = SolarSystemEntity.builder()
+            .solarSystemId(SOLAR_SYSTEM_ID_1)
             .gameId(GAME_ID_1)
             .coordinate(coordinate1)
             .build();
 
         CoordinateEntity coordinate2 = CoordinateEntity.builder()
-            .referenceId(PLANET_ID_2)
+            .referenceId(SOLAR_SYSTEM_ID_2)
             .x(23423d)
             .y(23411d)
             .build();
-        PlanetEntity entity2 = PlanetEntity.builder()
-            .planetId(PLANET_ID_2)
+        SolarSystemEntity entity2 = SolarSystemEntity.builder()
+            .solarSystemId(SOLAR_SYSTEM_ID_2)
             .gameId(GAME_ID_2)
             .coordinate(coordinate2)
             .build();

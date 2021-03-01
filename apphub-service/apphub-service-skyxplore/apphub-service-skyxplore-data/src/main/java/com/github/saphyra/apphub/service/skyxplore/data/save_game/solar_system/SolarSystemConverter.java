@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class SolarSystemConverter extends ConverterBase<SolarSystemEntity, SolarSystemModel> {
     private final UuidConverter uuidConverter;
     private final CoordinateConverter coordinateConverter;
@@ -40,7 +39,7 @@ class SolarSystemConverter extends ConverterBase<SolarSystemEntity, SolarSystemM
             .gameId(uuidConverter.convertDomain(domain.getGameId()))
             .radius(domain.getRadius())
             .defaultName(domain.getDefaultName())
-            .customNames(objectMapperWrapper.writeValueAsPrettyString(domain.getCustomNames()))
+            .customNames(objectMapperWrapper.writeValueAsString(domain.getCustomNames()))
             .coordinate(coordinateConverter.convertDomain(domain.getCoordinate(), domain.getId()))
             .build();
     }

@@ -16,7 +16,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SolarSystemModelValidator {
     private final GameItemValidator gameItemValidator;
 
@@ -24,23 +23,23 @@ public class SolarSystemModelValidator {
         gameItemValidator.validate(model);
 
         if (isNull(model.getRadius())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "radius", "must not be null."), "radius must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "radius", "must not be null"), "radius must not be null.");
         }
 
         if (isNull(model.getDefaultName())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "defaultName", "must not be null."), "defaultName must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "defaultName", "must not be null"), "defaultName must not be null.");
         }
 
         if (isNull(model.getCustomNames())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "customNames", "must not be null."), "customNames must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "customNames", "must not be null"), "customNames must not be null.");
         }
 
         if (model.getCustomNames().values().stream().anyMatch(Objects::isNull)) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "customNames", "must not contain null."), "customNames must not contain null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "customNames", "must not contain null"), "customNames must not contain null.");
         }
 
         if (isNull(model.getCoordinate())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "coordinate", "must not be null."), "coordinate must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "coordinate", "must not be null"), "coordinate must not be null.");
         }
     }
 }
