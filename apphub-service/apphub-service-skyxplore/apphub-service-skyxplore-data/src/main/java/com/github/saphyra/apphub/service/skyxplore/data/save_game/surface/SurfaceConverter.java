@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class SurfaceConverter extends ConverterBase<SurfaceEntity, SurfaceModel> {
     private final UuidConverter uuidConverter;
     private final CoordinateConverter coordinateConverter;

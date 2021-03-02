@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class SurfaceDao extends AbstractDao<SurfaceEntity, SurfaceModel, String, SurfaceRepository> {
     private final UuidConverter uuidConverter;
 

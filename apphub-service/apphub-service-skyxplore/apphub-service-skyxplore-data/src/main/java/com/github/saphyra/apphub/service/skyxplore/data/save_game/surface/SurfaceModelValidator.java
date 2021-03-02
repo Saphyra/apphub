@@ -14,7 +14,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SurfaceModelValidator {
     private final GameItemValidator gameItemValidator;
 
@@ -22,15 +21,15 @@ public class SurfaceModelValidator {
         gameItemValidator.validate(model);
 
         if (isNull(model.getPlanetId())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "planetId", "must not be null."), "planetId must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "planetId", "must not be null"), "planetId must not be null.");
         }
 
         if (isNull(model.getCoordinate())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "coordinate", "must not be null."), "coordinate must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "coordinate", "must not be null"), "coordinate must not be null.");
         }
 
         if (isNull(model.getSurfaceType())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "surfaceType", "must not be null."), "surfaceType must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "surfaceType", "must not be null"), "surfaceType must not be null.");
         }
     }
 }

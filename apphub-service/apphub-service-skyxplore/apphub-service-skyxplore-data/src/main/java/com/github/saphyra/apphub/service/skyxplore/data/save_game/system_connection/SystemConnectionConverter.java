@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class SystemConnectionConverter extends ConverterBase<SystemConnectionEntity, SystemConnectionModel> {
     private final UuidConverter uuidConverter;
     private final LineConverter lineConverter;

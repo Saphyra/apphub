@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SurfaceSaverService implements GameItemSaver {
     private final SurfaceDao surfaceDao;
     private final SurfaceModelValidator surfaceModelValidator;

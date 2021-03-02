@@ -14,7 +14,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SystemConnectionModelValidator {
     private final GameItemValidator gameItemValidator;
 
@@ -22,7 +21,7 @@ public class SystemConnectionModelValidator {
         gameItemValidator.validate(model);
 
         if (isNull(model.getLine())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "line", "must not be null."), "line must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "line", "must not be null"), "line must not be null.");
         }
     }
 }
