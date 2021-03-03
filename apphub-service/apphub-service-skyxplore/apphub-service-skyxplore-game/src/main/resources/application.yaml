@@ -6,6 +6,7 @@ game:
   saver:
     maxChunkSize: 500
   creation:
+    queueSize: 100
     universe:
       baseSize: 500
       memberMultiplier: 1

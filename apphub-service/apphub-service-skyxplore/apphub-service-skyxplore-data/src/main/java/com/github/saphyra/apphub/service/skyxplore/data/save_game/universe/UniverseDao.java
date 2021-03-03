@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class UniverseDao extends AbstractDao<UniverseEntity, UniverseModel, String, UniverseRepository> {
     private final UuidConverter uuidConverter;
 
@@ -18,6 +17,6 @@ public class UniverseDao extends AbstractDao<UniverseEntity, UniverseModel, Stri
     }
 
     public void deleteById(UUID gameId) {
-        repository.deleteById(uuidConverter.convertDomain(gameId));
+        deleteById(uuidConverter.convertDomain(gameId));
     }
 }

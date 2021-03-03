@@ -13,11 +13,10 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class GameItemValidator {
     public void validate(GameItem gameItem) {
         if (isNull(gameItem.getId())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "id", "must not be null."), "id must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "id", "must not be null"), "id must not be null.");
         }
 
         validateWithoutId(gameItem);
@@ -25,7 +24,7 @@ public class GameItemValidator {
 
     public void validateWithoutId(GameItem gameItem) {
         if (isNull(gameItem.getGameId())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "gameId", "must not be null."), "gameId must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "gameId", "must not be null"), "gameId must not be null.");
         }
     }
 }

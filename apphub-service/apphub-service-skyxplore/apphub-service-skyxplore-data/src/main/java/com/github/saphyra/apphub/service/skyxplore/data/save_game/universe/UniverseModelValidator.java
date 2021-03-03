@@ -14,7 +14,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class UniverseModelValidator {
     private final GameItemValidator gameItemValidator;
 
@@ -22,7 +21,7 @@ public class UniverseModelValidator {
         gameItemValidator.validateWithoutId(model);
 
         if (isNull(model.getSize())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "size", "must not be null."), "size must not be null.");
+            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "size", "must not be null"), "size must not be null.");
         }
     }
 }

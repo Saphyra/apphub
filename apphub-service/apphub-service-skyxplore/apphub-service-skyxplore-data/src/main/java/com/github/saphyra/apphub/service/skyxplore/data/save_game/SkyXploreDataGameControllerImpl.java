@@ -30,8 +30,6 @@ public class SkyXploreDataGameControllerImpl implements SkyXploreDataGameControl
     }
 
     @Override
-    //TODO unit test
-    //TODO int test
     public void saveGameData(List<Object> items) {
         log.info("Saving {} number of gameItems...", items.size());
         items.stream()

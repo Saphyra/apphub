@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleManda
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
 import com.github.saphyra.apphub.lib.skyxplore.data.SkyXploreDataConfig;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -55,7 +56,7 @@ public class SkyXploreGameBeanConfiguration {
     }
 
     @Bean
-    BlockingQueue<SkyXploreGameCreationRequest> gameCreationQueue() {
-        return new ArrayBlockingQueue<>(100);//TODO config value
+    BlockingQueue<SkyXploreGameCreationRequest> gameCreationQueue(@Value("${game.creation.queueSize}") Integer queueSize) {
+        return new ArrayBlockingQueue<>(queueSize);
     }
 }
