@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO split
 //TODO unit test
 class PlanetCoordinateProvider {
     private static final Coordinate STAR_COORDINATE = new Coordinate(0, 0);

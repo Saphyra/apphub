@@ -29,6 +29,7 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO split
 //TODO unit test
 class HomePlanetSelector {
     private final Random random;

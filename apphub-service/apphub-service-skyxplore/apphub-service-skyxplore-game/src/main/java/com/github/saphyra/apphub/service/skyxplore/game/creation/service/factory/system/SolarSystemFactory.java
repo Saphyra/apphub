@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SolarSystemNames;
 import com.github.saphyra.apphub.service.skyxplore.game.creation.GameCreationProperties;
-import com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.planet.PlanetFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.planet.SystemPopulationService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class SolarSystemFactory {
     private final IdGenerator idGenerator;
     private final SolarSystemCoordinateProvider solarSystemCoordinateProvider;
     private final SolarSystemNames solarSystemNames;
-    private final PlanetFactory planetFactory;
+    private final SystemPopulationService systemPopulationService;
     private final Random random;
     private final GameCreationProperties properties;
     private final ExecutorServiceBean executorServiceBean;
@@ -67,7 +67,7 @@ public class SolarSystemFactory {
         int systemRadius = random.randInt(range.getMin(), range.getMax());
 
         UUID solarSystemId = idGenerator.randomUuid();
-        Map<UUID, Planet> planets = planetFactory.create(solarSystemId, systemName, systemRadius, settings);
+        Map<UUID, Planet> planets = systemPopulationService.populateSystemWithPlanets(solarSystemId, systemName, systemRadius, settings);
         return SolarSystem.builder()
             .solarSystemId(solarSystemId)
             .radius(systemRadius)
