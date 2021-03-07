@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.lib.geometry;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 @Slf4j
 public class DistanceCalculator {
     public double getDistance(Coordinate c1, Coordinate c2) {
@@ -31,5 +33,15 @@ public class DistanceCalculator {
         double distance = area * 2 / a;
         log.debug("Distance: {}", distance);
         return distance;
+    }
+
+    public Double getDistance(List<Coordinate> route) {
+        double result = 0;
+        for (int i = 0; i < route.size() - 1; i++) {
+            Coordinate c1 = route.get(i);
+            Coordinate c2 = route.get(i + 1);
+            result += getDistance(c1, c2);
+        }
+        return result;
     }
 }

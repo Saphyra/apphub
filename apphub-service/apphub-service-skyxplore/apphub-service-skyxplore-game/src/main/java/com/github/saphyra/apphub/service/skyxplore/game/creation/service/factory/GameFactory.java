@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.creation.service.factor
 
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.building.HomePlanetSetupService;
+import com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.home_planet.HomePlanetSetupService;
 import com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.player.PlayerPopulationService;
 import com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.universe.UniverseFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;

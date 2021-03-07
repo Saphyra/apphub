@@ -1,5 +1,6 @@
-package com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.building;
+package com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.home_planet;
 
+import com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.building.BuildingPlacementService;
 import com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.citizen.PlanetPopulationService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;

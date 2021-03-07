@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 @Component
 @Slf4j
-class BuildingPlacementService {
+public class BuildingPlacementService {
     private static final List<BuildingData> EXCAVATOR_BUILDINGS = Arrays.asList(
         new ExcavatorBuilding(SurfaceType.ORE_FIELD),
         new ExcavatorBuilding(SurfaceType.MOUNTAIN)
@@ -44,7 +44,7 @@ class BuildingPlacementService {
         this.emptySurfaceProvider = emptySurfaceProvider;
     }
 
-    void placeDefaultBuildings(Planet planet) {
+    public void placeDefaultBuildings(Planet planet) {
         defaultBuildings.forEach(buildingData -> placeBuilding(buildingData, planet.getSurfaces().values()));
     }
 
