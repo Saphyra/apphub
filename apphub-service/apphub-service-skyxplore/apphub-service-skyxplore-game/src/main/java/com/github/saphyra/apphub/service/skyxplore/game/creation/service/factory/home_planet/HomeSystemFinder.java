@@ -14,7 +14,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class HomeSystemFinder {
     private final FreePlanetCounter freePlanetCounter;
     private final InhabitantFinder inhabitantFinder;

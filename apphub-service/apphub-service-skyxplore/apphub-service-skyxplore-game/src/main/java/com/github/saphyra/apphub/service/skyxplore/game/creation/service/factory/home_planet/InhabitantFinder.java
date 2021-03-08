@@ -15,7 +15,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class InhabitantFinder {
     List<UUID> getInhabitants(SolarSystem solarSystem) {
         return solarSystem.getPlanets()

@@ -1,49 +1,58 @@
 package com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.planet;
 
-import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
-import lombok.extern.slf4j.Slf4j;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Comparator;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
-@Slf4j
 public class PlanetCoordinateProviderTest {
-    private static final Coordinate STAR = new Coordinate(0, 0);
+    private static final int EXPECTED_PLANET_AMOUNT = 2;
+    private static final int SYSTEM_RADIUS = 45231;
 
-    @Mock(answer = Answers.CALLS_REAL_METHODS)
-    private Random random;
-
-    @Mock(answer = Answers.CALLS_REAL_METHODS)
+    @Mock
     private DistanceCalculator distanceCalculator;
+
+    @Mock
+    private PlanetListPlaceService planetListPlaceService;
 
     @InjectMocks
     private PlanetCoordinateProvider underTest;
 
-    @Test
-    public void generate() {
-        List<Double> distances = Stream.generate(() -> underTest.getCoordinate(100))
-            .limit(1000)
-            .map(coordinate -> distanceCalculator.getDistance(coordinate, STAR))
-            .collect(Collectors.toList());
-        distances.stream()
-            .sorted(Comparator.comparingDouble(o -> o))
-            .forEach(distance -> log.info("{}", distance));
+    @Mock
+    private Coordinate coordinate1;
 
-        double average = distances.stream()
-            .mapToDouble(value -> value)
-            .average()
-            .getAsDouble();
-        log.info("Average: {}", average);
+    @Mock
+    private Coordinate coordinate2;
+
+    @Test
+    public void getCoordinates() {
+        given(planetListPlaceService.placePlanets(EXPECTED_PLANET_AMOUNT, SYSTEM_RADIUS)).willReturn(Collections.emptyList())
+            .willReturn(Arrays.asList(coordinate1, coordinate2));
+
+        given(distanceCalculator.getDistance(coordinate1, GameConstants.STAR_COORDINATE)).willReturn(10d);
+        given(distanceCalculator.getDistance(coordinate2, GameConstants.STAR_COORDINATE)).willReturn(3d);
+
+        List<Coordinate> result = underTest.getCoordinates(EXPECTED_PLANET_AMOUNT, SYSTEM_RADIUS);
+
+        assertThat(result).containsExactly(coordinate2, coordinate1);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void placementFailed() {
+        given(planetListPlaceService.placePlanets(EXPECTED_PLANET_AMOUNT, SYSTEM_RADIUS)).willReturn(Collections.emptyList());
+
+        underTest.getCoordinates(EXPECTED_PLANET_AMOUNT, SYSTEM_RADIUS);
     }
 }

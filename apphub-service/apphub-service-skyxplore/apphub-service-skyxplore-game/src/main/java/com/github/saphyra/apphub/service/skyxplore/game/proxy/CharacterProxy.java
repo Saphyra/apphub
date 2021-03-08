@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CharacterProxy {
     private final LocaleProvider localeProvider;
     private final SkyXploreCharacterDataApiClient client;

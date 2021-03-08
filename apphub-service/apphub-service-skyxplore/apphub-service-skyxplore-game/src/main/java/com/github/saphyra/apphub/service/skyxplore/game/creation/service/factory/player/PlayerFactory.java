@@ -14,23 +14,22 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class PlayerFactory {
-   private final IdGenerator idGenerator;
-   private final RandomNameProvider randomNameProvider;
-   private final CharacterProxy characterProxy;
+    private final IdGenerator idGenerator;
+    private final RandomNameProvider randomNameProvider;
+    private final CharacterProxy characterProxy;
 
-   Player create(UUID userId, boolean ai, List<String> usedPlayerNames) {
-      String username = ai ? randomNameProvider.getRandomName(usedPlayerNames) : characterProxy.getCharacterByUserId(userId).getName();
-      log.debug("Username: {}", username);
-      usedPlayerNames.add(username);
+    Player create(UUID userId, boolean ai, List<String> usedPlayerNames) {
+        String username = ai ? randomNameProvider.getRandomName(usedPlayerNames) : characterProxy.getCharacterByUserId(userId).getName();
+        log.debug("Username: {}", username);
+        usedPlayerNames.add(username);
 
-      log.debug("Creating player with name {}", username);
-      Player player = Player.builder()
-          .playerId(idGenerator.randomUuid())
-          .userId(userId)
-          .username(username)
-          .ai(ai)
+        log.debug("Creating player with name {}", username);
+        Player player = Player.builder()
+            .playerId(idGenerator.randomUuid())
+            .userId(userId)
+            .username(username)
+            .ai(ai)
             .connected(ai)
             .build();
         log.debug("Player generated: {}", player);

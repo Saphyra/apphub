@@ -1,0 +1,31 @@
+package com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.surface;
+
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
+import com.github.saphyra.apphub.service.skyxplore.game.creation.GameCreationProperties;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+@Component
+@Slf4j
+//TODO unit test
+class DefaultSurfaceTypeListProvider {
+    private final List<SurfaceType> surfaceTypes;
+
+    DefaultSurfaceTypeListProvider(GameCreationProperties properties) {
+        surfaceTypes = properties.getSurface()
+            .getSpawnDetails()
+            .stream()
+            .flatMap(surfaceTypeSpawnDetails -> Stream.generate(surfaceTypeSpawnDetails::getSurfaceName).limit(surfaceTypeSpawnDetails.getSpawnRate()))
+            .map(SurfaceType::valueOf)
+            .collect(Collectors.toList());
+    }
+
+    List<SurfaceType> getSurfaceTypes() {
+        return new ArrayList<>(surfaceTypes);
+    }
+}

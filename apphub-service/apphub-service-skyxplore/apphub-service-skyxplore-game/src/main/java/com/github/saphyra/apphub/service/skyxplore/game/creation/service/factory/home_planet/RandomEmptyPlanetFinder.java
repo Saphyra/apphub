@@ -16,7 +16,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class RandomEmptyPlanetFinder {
     private final Random random;
 
@@ -31,10 +30,6 @@ class RandomEmptyPlanetFinder {
         return randomEmptyPlanet(emptyPlanets);
     }
 
-    Planet randomEmptyPlanet(List<Planet> emptyPlanets) {
-        return emptyPlanets.get(random.randInt(0, emptyPlanets.size() - 1));
-    }
-
     Planet randomEmptyPlanet(SolarSystem allianceHomeSystem) {
         List<Planet> emptyPlanets = allianceHomeSystem.getPlanets()
             .values()
@@ -42,8 +37,12 @@ class RandomEmptyPlanetFinder {
             .filter(planet -> isNull(planet.getOwner()))
             .collect(Collectors.toList());
         if (emptyPlanets.isEmpty()) {
-            throw new IllegalStateException("Planet has no empty planets.");
+            throw new IllegalStateException("SolarSystem has no empty planets.");
         }
         return randomEmptyPlanet(emptyPlanets);
+    }
+
+    Planet randomEmptyPlanet(List<Planet> emptyPlanets) {
+        return emptyPlanets.get(random.randInt(0, emptyPlanets.size() - 1));
     }
 }

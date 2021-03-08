@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class HomePlanetSelector {
     private final AllianceMemberSystemFinder allianceMemberSystemFinder;
     private final RandomEmptyPlanetFinder randomEmptyPlanetFinder;

@@ -15,6 +15,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO split
 //TODO unit test
 class SolarSystemCoordinateProvider {
     private final GameCreationProperties properties;
