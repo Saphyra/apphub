@@ -21,7 +21,6 @@ import java.util.stream.Stream;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class PlayerPopulationService {
     private final GameCreationProperties properties;
     private final IdGenerator idGenerator;

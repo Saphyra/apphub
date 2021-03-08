@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EmptySurfaceMapFactory {
     SurfaceType[][] createEmptySurfaceMap(int planetSize) {
         SurfaceType[][] surfaceMap = new SurfaceType[planetSize][planetSize];

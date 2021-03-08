@@ -13,7 +13,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class SurfaceTypeListProvider {
     private final Random random;
     private final GameCreationProperties properties;

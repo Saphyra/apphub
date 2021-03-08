@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 
 @Component
 @Slf4j
-//TODO unit test
 class DefaultSurfaceTypeListProvider {
     private final List<SurfaceType> surfaceTypes;
 

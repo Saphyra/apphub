@@ -15,8 +15,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO split
-//TODO unit test
 public class SurfaceFactory {
     private final IdGenerator idGenerator;
     private final SurfaceMapFactory surfaceMapFactory;

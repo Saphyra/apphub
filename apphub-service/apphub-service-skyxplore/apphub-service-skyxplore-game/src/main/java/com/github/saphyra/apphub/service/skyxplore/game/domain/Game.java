@@ -22,7 +22,7 @@ public class Game {
     private final UUID gameId;
     private final String gameName;
     private final UUID host;
-    private final Map<UUID, Player> players;
+    private final Map<UUID, Player> players; //<UserId, Player>
     private final Map<UUID, Alliance> alliances;
     private final Universe universe;
 

@@ -11,12 +11,14 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class SurfaceBlockFiller {
     private final RandomEmptySlotProvider randomEmptySlotProvider;
 
     void fillBlockWithSurfaceType(SurfaceType[][] surfaceMap, SurfaceType surfaceType, boolean initialPlacement) {
-        Optional<Coordinate> coordinateOptional = initialPlacement ? randomEmptySlotProvider.getRandomEmptySlot(surfaceMap) : randomEmptySlotProvider.getRandomEmptySlotNextToSurfaceType(surfaceMap, surfaceType);
+        Optional<Coordinate> coordinateOptional = initialPlacement
+            ? randomEmptySlotProvider.getRandomEmptySlot(surfaceMap)
+            : randomEmptySlotProvider.getRandomEmptySlotNextToSurfaceType(surfaceMap, surfaceType);
+
         coordinateOptional.ifPresent(coordinate -> {
             surfaceMap[(int) coordinate.getX()][(int) coordinate.getY()] = surfaceType;
             log.debug("Coordinate {} filled with surfaceType {}. surfaceMap: {}", coordinate, surfaceType, surfaceMap);

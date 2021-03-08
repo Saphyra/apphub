@@ -18,7 +18,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class RandomEmptySlotProvider {
     private final Random random;
 

@@ -12,7 +12,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class SurfaceMapFiller {
     private final SurfaceTypeListProvider surfaceTypeListProvider;
     private final SurfaceBlockFiller surfaceBlockFiller;

@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.service.skyxplore.game.SkyxploreGameApplication;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
 import io.restassured.response.Response;
@@ -57,6 +58,9 @@ public class GameCreationControllerImplTest {
 
     @MockBean
     private CharacterProxy characterProxy;
+
+    @MockBean
+    private MessageSenderProxy messageSenderProxy;
 
     @MockBean
     private SkyXploreDataGameClient skyXploreDataGameClient;

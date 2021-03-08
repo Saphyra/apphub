@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class SurfaceMapFactory {
     private final EmptySurfaceMapFactory emptySurfaceMapFactory;
     private final SurfaceMapFiller surfaceMapFiller;
