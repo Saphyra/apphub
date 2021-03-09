@@ -1,15 +1,15 @@
 package com.github.saphyra.apphub.lib.geometry;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Optional;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CrossCalculatorTest {
@@ -30,10 +30,10 @@ public class CrossCalculatorTest {
             new Coordinate(1, -1)
         );
 
-        Optional<Coordinate> result = underTest.getCrossPointOfSections(line1, line2, false);
+        Optional<Cross> result = underTest.getCrossPointOfSections(line1, line2, false);
 
         assertThat(result).isNotEmpty();
-        assertThat(result.get()).isEqualTo(new Coordinate(0, 0));
+        assertThat(result.get().getCrossPoint()).isEqualTo(new Coordinate(0, 0));
     }
 
     @Test
@@ -47,7 +47,7 @@ public class CrossCalculatorTest {
             new Coordinate(2, -1)
         );
 
-        Optional<Coordinate> result = underTest.getCrossPointOfSections(line1, line2, false);
+        Optional<Cross> result = underTest.getCrossPointOfSections(line1, line2, false);
 
         assertThat(result).isEmpty();
     }
@@ -63,10 +63,10 @@ public class CrossCalculatorTest {
             new Coordinate(2, -1)
         );
 
-        Optional<Coordinate> result = underTest.getCrossPointOfSections(line1, line2, true);
+        Optional<Cross> result = underTest.getCrossPointOfSections(line1, line2, true);
 
         assertThat(result).isNotEmpty();
-        assertThat(result.get()).isEqualTo(new Coordinate(-1, -1));
+        assertThat(result.get().getCrossPoint()).isEqualTo(new Coordinate(-1, -1));
     }
 
     @Test

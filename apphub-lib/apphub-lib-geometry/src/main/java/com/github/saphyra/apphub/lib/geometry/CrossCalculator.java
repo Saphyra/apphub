@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.lib.geometry;
 
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -12,9 +12,10 @@ public class CrossCalculator {
 
     private final DistanceCalculator distanceCalculator;
 
-    public Optional<Coordinate> getCrossPointOfSections(Line l1, Line l2, boolean inclusive) {
+    public Optional<Cross> getCrossPointOfSections(Line l1, Line l2, boolean inclusive) {
         return getCrossPointOfLines(l1, l2)
-            .filter(coordinate -> isCoordinateOnSections(l1, l2, coordinate, inclusive));
+            .filter(coordinate -> isCoordinateOnSections(l1, l2, coordinate, inclusive))
+            .map(coordinate -> new Cross(l1, l2, coordinate));
     }
 
     private boolean isCoordinateOnSections(Line l1, Line l2, Coordinate coordinate, boolean inclusive) {
