@@ -1,21 +1,19 @@
 package com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.system_connection;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
 import com.github.saphyra.apphub.lib.geometry.Line;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class RemovableConnectionFinder {
     private final DistanceCalculator distanceCalculator;
     private final ConnectionsOfConnectedSystemsCalculator connectionsOfConnectedSystemsCalculator;

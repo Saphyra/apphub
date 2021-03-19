@@ -1,23 +1,21 @@
 package com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.system_connection;
 
+import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
+import com.github.saphyra.apphub.lib.geometry.Line;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.stereotype.Component;
-
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
-import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
-import com.github.saphyra.apphub.lib.geometry.Line;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class TooShortConnectionRemovalService {
     private final DistanceCalculator distanceCalculator;
     private final TriangleConnectionFinder triangleConnectionFinder;
@@ -38,7 +36,7 @@ class TooShortConnectionRemovalService {
             .filter(line -> isTooClose(coordinate, line, lines));
     }
 
-    boolean isTooClose(Coordinate coordinate, Line line, Collection<Line> lines) {
+    private boolean isTooClose(Coordinate coordinate, Line line, Collection<Line> lines) {
         if (line.isEndpoint(coordinate)) {
             log.debug("{} is endpoint of {}", coordinate, line);
             return false;

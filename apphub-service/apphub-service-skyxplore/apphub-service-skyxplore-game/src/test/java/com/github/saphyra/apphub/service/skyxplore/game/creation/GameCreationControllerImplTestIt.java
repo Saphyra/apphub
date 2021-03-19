@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemSize;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.UniverseSize;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.service.skyxplore.game.SkyxploreGameApplication;
@@ -46,9 +47,10 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = {SkyxploreGameApplication.class})
-public class GameCreationControllerImplTest {
+public class GameCreationControllerImplTestIt {
     private static final String CHARACTER_NAME = "character-name";
     private static final String ALLIANCE_NAME = "alliance-name";
+    private static final UUID ALLIANCE_ID = UUID.randomUUID();
 
     @LocalServerPort
     private int serverPort;
@@ -121,9 +123,16 @@ public class GameCreationControllerImplTest {
 
     @Test
     public void largeGame() throws InterruptedException {
-        Map<UUID, UUID> members = new HashMap<UUID, UUID>() {{
-            put(UUID.randomUUID(), null);
-        }};
+        Map<UUID, UUID> members = CollectionUtils.toMap(
+            new BiWrapper<>(UUID.randomUUID(), ALLIANCE_ID),
+            new BiWrapper<>(UUID.randomUUID(), ALLIANCE_ID),
+            new BiWrapper<>(UUID.randomUUID(), ALLIANCE_ID),
+            new BiWrapper<>(UUID.randomUUID(), ALLIANCE_ID),
+            new BiWrapper<>(UUID.randomUUID(), ALLIANCE_ID),
+            new BiWrapper<>(UUID.randomUUID(), ALLIANCE_ID),
+            new BiWrapper<>(UUID.randomUUID(), ALLIANCE_ID),
+            new BiWrapper<>(UUID.randomUUID(), ALLIANCE_ID)
+        );
 
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
             .host(UUID.randomUUID())

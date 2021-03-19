@@ -14,8 +14,12 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class AllianceFactory {
+    /**
+     * @param alliances <AllianceId, AllianceName>
+     * @param members   <UserId, AllianceId>
+     * @param players   <UserId, Player>
+     */
     public Map<UUID, Alliance> create(Map<UUID, String> alliances, Map<UUID, UUID> members, Map<UUID, Player> players) {
         log.info("Generating alliances...");
         return alliances.entrySet()
@@ -32,7 +36,7 @@ public class AllianceFactory {
     private Map<UUID, Player> getMembers(UUID alliance, Map<UUID, UUID> members, Map<UUID, Player> players) {
         return members.entrySet()
             .stream()
-            .filter(entry -> entry.getValue().equals(alliance))
+            .filter(entry -> alliance.equals(entry.getValue()))
             .map(Map.Entry::getKey)
             .map(players::get)
             .collect(Collectors.toMap(Player::getUserId, Function.identity()));

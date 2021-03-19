@@ -16,7 +16,6 @@ public class GameCreationControllerImpl implements SkyXploreGameCreationControll
 
     @Override
     //TODO unit test
-    //TODO int test
     public void createGame(SkyXploreGameCreationRequest request) throws InterruptedException {
         log.info("Creating game based on request {}", request);
         //TODO validate request

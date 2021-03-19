@@ -19,7 +19,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class GameFactory {
     private final AllianceFactory allianceFactory;
     private final IdGenerator idGenerator;

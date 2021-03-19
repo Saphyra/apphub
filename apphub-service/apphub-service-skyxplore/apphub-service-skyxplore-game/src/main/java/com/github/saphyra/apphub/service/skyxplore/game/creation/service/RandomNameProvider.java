@@ -11,7 +11,6 @@ import java.util.Collection;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class RandomNameProvider {
     private final FirstNames firstNames;
     private final LastNames lastNames;

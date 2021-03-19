@@ -23,10 +23,12 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ChatFactory {
     private final IdGenerator idGenerator;
 
+    /**
+     * @param players <UserId, AllianceId>
+     */
     public Chat create(Map<UUID, UUID> players) {
         List<ChatRoom> chatRooms = new ArrayList<>();
 
@@ -40,27 +42,22 @@ public class ChatFactory {
     }
 
     private List<ChatRoom> createAlliances(Map<UUID, UUID> players) {
-        try {
-            Map<UUID, List<UUID>> alliances = new HashMap<>(); //<AllianceId, List<PlayerId>>
-            for (Map.Entry<UUID, UUID> entry : players.entrySet()) {
-                if (isNull(entry.getValue())) {
-                    alliances.put(idGenerator.randomUuid(), Arrays.asList(entry.getKey()));
-                } else {
-                    if (!alliances.containsKey(entry.getValue())) {
-                        alliances.put(entry.getValue(), new ArrayList<>());
-                    }
-                    alliances.get(entry.getValue()).add(entry.getKey());
+        Map<UUID, List<UUID>> alliances = new HashMap<>(); //<AllianceId, List<PlayerId>>
+        for (Map.Entry<UUID, UUID> entry : players.entrySet()) {
+            if (isNull(entry.getValue())) {
+                alliances.put(idGenerator.randomUuid(), Arrays.asList(entry.getKey()));
+            } else {
+                if (!alliances.containsKey(entry.getValue())) {
+                    alliances.put(entry.getValue(), new ArrayList<>());
                 }
+                alliances.get(entry.getValue()).add(entry.getKey());
             }
-
-            return alliances.values()
-                .stream()
-                .map(members -> createRoom(GameConstants.CHAT_ROOM_ALLIANCE, members))
-                .collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error("Exception", e);
-            throw e;
         }
+
+        return alliances.values()
+            .stream()
+            .map(members -> createRoom(GameConstants.CHAT_ROOM_ALLIANCE, members))
+            .collect(Collectors.toList());
     }
 
     private ChatRoom createGeneral(Set<UUID> members) {

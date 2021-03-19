@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.GameFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
@@ -22,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
+@Builder
 public class GameCreationService {
     private final ExecutorService executorService = Executors.newFixedThreadPool(3);
 
@@ -31,7 +32,7 @@ public class GameCreationService {
     private final GameDao gameDao;
     private final BlockingQueue<SkyXploreGameCreationRequest> requests;
 
-    public void create(SkyXploreGameCreationRequest request) {
+    private void create(SkyXploreGameCreationRequest request) {
         StopWatch stopWatch = StopWatch.createStarted();
         Game game = gameFactory.create(request);
         stopWatch.stop();

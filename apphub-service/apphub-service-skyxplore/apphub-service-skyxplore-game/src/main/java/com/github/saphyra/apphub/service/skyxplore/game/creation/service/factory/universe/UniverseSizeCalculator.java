@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class UniverseSizeCalculator {
     private final GameCreationProperties properties;
     private final Random random;

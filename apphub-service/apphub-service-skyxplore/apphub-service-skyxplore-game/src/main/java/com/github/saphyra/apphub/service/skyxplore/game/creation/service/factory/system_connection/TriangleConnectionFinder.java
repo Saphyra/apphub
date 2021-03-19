@@ -1,20 +1,17 @@
 package com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.system_connection;
 
-import java.util.Collection;
-
-import org.springframework.stereotype.Component;
-
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.Line;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.Collection;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
- class TriangleConnectionFinder {
-
+class TriangleConnectionFinder {
     boolean isTriangle(Coordinate coordinate, Line line, Collection<Line> lines) {
         return hasConnection(coordinate, line.getA(), lines) && hasConnection(coordinate, line.getB(), lines);
     }
