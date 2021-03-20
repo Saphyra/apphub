@@ -12,6 +12,8 @@
   "FRIENDSHIP_ALREADY_EXISTS": "Ez a barátság már létrejött.",
   "FRIENDSHIP_NOT_FOUND": "A barát nem található.",
   "FORBIDDEN_OPERATION": "Ezt nem teheted meg.",
+  "GAME_NAME_TOO_SHORT": "Játéknév túl rövid. (Minimum 3 karakter)",
+  "GAME_NAME_TOO_LONG": "Játéknév túl hosszú. (Maximum 30 karakter)",
   "GENERAL_ERROR": "Ismeretlen hiba.",
   "INVALID_PARAM": "Érvénytelen paraméter.",
   "INVALID_TYPE": "Érvénytelen típus.",

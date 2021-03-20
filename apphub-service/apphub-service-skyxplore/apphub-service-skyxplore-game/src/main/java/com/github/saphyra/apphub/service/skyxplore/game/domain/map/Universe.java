@@ -1,20 +1,20 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.map;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+
+import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-//TODO unit test
 public class Universe {
     private final int size;
     private final Map<Coordinate, SolarSystem> systems;
@@ -30,6 +30,6 @@ public class Universe {
 
     public Planet findPlanetByIdValidated(UUID planetId) {
         return findPlanetById(planetId)
-            .orElseThrow(() -> new RuntimeException("Planet not found with id " + planetId)); //TODO proper exception
+            .orElseThrow(() -> new NotFoundException("Planet not found with id " + planetId));
     }
 }

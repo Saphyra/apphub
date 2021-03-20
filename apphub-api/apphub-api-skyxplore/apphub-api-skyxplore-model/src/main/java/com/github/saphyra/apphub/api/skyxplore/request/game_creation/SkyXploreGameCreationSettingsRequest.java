@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Builder
+@Builder(toBuilder = true)
 public class SkyXploreGameCreationSettingsRequest {
     private UniverseSize universeSize;
     private SystemAmount systemAmount;
