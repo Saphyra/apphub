@@ -1,13 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.creation.service.factory.system;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
 import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
@@ -16,6 +8,13 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -48,6 +47,7 @@ public class SolarSystemPlacingService {
         if (log.isDebugEnabled()) {
             coordinates.forEach((key, value) -> log.debug("SolarSystem generated with name {} and coordinate {}", value, key));
         }
+        log.info("Number of generated planets: {}", result.values().stream().mapToLong(solarSystem -> solarSystem.getPlanets().values().size()).sum());
         return result;
     }
 }

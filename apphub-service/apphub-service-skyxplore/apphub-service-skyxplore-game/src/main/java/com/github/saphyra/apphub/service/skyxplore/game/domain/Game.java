@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-//TODO unit test
 public class Game {
     private final UUID gameId;
     private final String gameName;

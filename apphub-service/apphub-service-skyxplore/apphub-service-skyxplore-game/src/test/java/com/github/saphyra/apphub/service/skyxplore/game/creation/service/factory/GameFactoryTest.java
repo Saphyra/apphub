@@ -21,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -82,8 +83,9 @@ public class GameFactoryTest {
     public void create() {
         SkyXploreGameCreationSettingsRequest settings = SkyXploreGameCreationSettingsRequest.builder()
             .build();
+        Map<UUID, UUID> members = CollectionUtils.singleValueMap(PLAYER_ID, ALLIANCE_ID);
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
-            .members(CollectionUtils.singleValueMap(PLAYER_ID, ALLIANCE_ID))
+            .members(members)
             .alliances(CollectionUtils.singleValueMap(ALLIANCE_ID, ALLIANCE_NAME))
             .settings(settings)
             .host(HOST)
@@ -95,10 +97,11 @@ public class GameFactoryTest {
         given(solarSystem.getPlanets()).willReturn(CollectionUtils.singleValueMap(UUID.randomUUID(), planet));
 
         given(playerPopulationService.populateGameWithPlayers(CollectionUtils.toSet(PLAYER_ID), 1, settings)).willReturn(CollectionUtils.singleValueMap(PLAYER_ID, player));
-        given(allianceFactory.create(CollectionUtils.singleValueMap(ALLIANCE_ID, ALLIANCE_NAME), CollectionUtils.singleValueMap(PLAYER_ID, ALLIANCE_ID), CollectionUtils.singleValueMap(PLAYER_ID, player)))
-            .willReturn(CollectionUtils.singleValueMap(ALLIANCE_ID, alliance));
+        Map<UUID, Alliance> allianceMap = CollectionUtils.singleValueMap(ALLIANCE_ID, alliance);
+        given(allianceFactory.create(CollectionUtils.singleValueMap(ALLIANCE_ID, ALLIANCE_NAME), members, CollectionUtils.singleValueMap(PLAYER_ID, player)))
+            .willReturn(allianceMap);
         given(idGenerator.randomUuid()).willReturn(GAME_ID);
-        given(chatFactory.create(CollectionUtils.singleValueMap(PLAYER_ID, ALLIANCE_ID))).willReturn(chat);
+        given(chatFactory.create(members)).willReturn(chat);
 
         Game result = underTest.create(request);
 
@@ -110,6 +113,6 @@ public class GameFactoryTest {
         assertThat(result.getChat()).isEqualTo(chat);
         assertThat(result.getGameName()).isEqualTo(GAME_NAME);
 
-        verify(homePlanetSetupService).setUpHomePlanet(player, CollectionUtils.singleValueMap(ALLIANCE_ID, alliance).values(), universe);
+        verify(homePlanetSetupService).setUpHomePlanet(player, allianceMap.values(), universe);
     }
 }

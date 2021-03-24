@@ -51,6 +51,7 @@ public class GameCreationControllerImplTestIt {
     private static final String CHARACTER_NAME = "character-name";
     private static final String ALLIANCE_NAME = "alliance-name";
     private static final UUID ALLIANCE_ID = UUID.randomUUID();
+    private static final String GAME_NAME = "game-name";
 
     @LocalServerPort
     private int serverPort;
@@ -123,8 +124,9 @@ public class GameCreationControllerImplTestIt {
 
     @Test
     public void largeGame() throws InterruptedException {
+        UUID host = UUID.randomUUID();
         Map<UUID, UUID> members = CollectionUtils.toMap(
-            new BiWrapper<>(UUID.randomUUID(), ALLIANCE_ID),
+            new BiWrapper<>(host, ALLIANCE_ID),
             new BiWrapper<>(UUID.randomUUID(), ALLIANCE_ID),
             new BiWrapper<>(UUID.randomUUID(), ALLIANCE_ID),
             new BiWrapper<>(UUID.randomUUID(), ALLIANCE_ID),
@@ -135,9 +137,9 @@ public class GameCreationControllerImplTestIt {
         );
 
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
-            .host(UUID.randomUUID())
+            .host(host)
             .members(members)
-            .alliances(new HashMap<>())
+            .alliances(CollectionUtils.singleValueMap(ALLIANCE_ID, ALLIANCE_NAME))
             .settings(SkyXploreGameCreationSettingsRequest.builder()
                 .universeSize(UniverseSize.LARGE)
                 .systemAmount(SystemAmount.COMMON)
@@ -146,6 +148,7 @@ public class GameCreationControllerImplTestIt {
                 .aiPresence(AiPresence.EVERYWHERE)
                 .build()
             )
+            .gameName(GAME_NAME)
             .build();
 
         Response response = RequestFactory.createRequest()
@@ -169,9 +172,16 @@ public class GameCreationControllerImplTestIt {
     public void smallGame() throws InterruptedException {
         UUID playerId = UUID.randomUUID();
         UUID allianceId = UUID.randomUUID();
-        Map<UUID, UUID> members = CollectionUtils.singleValueMap(playerId, allianceId);
+        Map<UUID, UUID> members = CollectionUtils.toMap(
+            new BiWrapper<>(playerId, allianceId),
+            new BiWrapper<>(UUID.randomUUID(), allianceId),
+            new BiWrapper<>(UUID.randomUUID(), allianceId),
+            new BiWrapper<>(UUID.randomUUID(), allianceId),
+            new BiWrapper<>(UUID.randomUUID(), allianceId),
+            new BiWrapper<>(UUID.randomUUID(), allianceId)
+        );
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
-            .host(UUID.randomUUID())
+            .host(playerId)
             .members(members)
             .alliances(CollectionUtils.singleValueMap(allianceId, ALLIANCE_NAME))
             .settings(SkyXploreGameCreationSettingsRequest.builder()
@@ -182,6 +192,7 @@ public class GameCreationControllerImplTestIt {
                 .aiPresence(AiPresence.NONE)
                 .build()
             )
+            .gameName(GAME_NAME)
             .build();
 
         Response response = RequestFactory.createRequest()

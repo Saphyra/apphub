@@ -37,15 +37,15 @@ public class SystemConnectionProvider {
 
         log.info("Removing crosses...");
         List<Line> withoutCrosses = crossRemovalService.removeCrosses(lines);
-        log.info("Number of connections after removing crosses: {}", lines.size());
+        log.info("Number of connections after removing crosses: {}", withoutCrosses.size());
 
         log.info("Removing connections too close to a system...");
         List<Line> withoutTooClose = tooShortConnectionRemovalService.filterLinesTooCloseToASystem(systems, withoutCrosses);
-        log.info("Number of connections after removing the ones too close to a system: {}", lines.size());
+        log.info("Number of connections after removing the ones too close to a system: {}", withoutTooClose.size());
 
         log.info("Removing connections from systems with too much connections...");
         List<Line> limited = connectionOverflowRemovalService.removeConnectionOverflow(systems, withoutTooClose);
-        log.info("Number of connections remaining: {}", lines.size());
+        log.info("Number of connections remaining: {}", limited.size());
 
         List<Line> allConnected = lonelySystemConnectionService.connectLonelySystems(systems, limited);
 

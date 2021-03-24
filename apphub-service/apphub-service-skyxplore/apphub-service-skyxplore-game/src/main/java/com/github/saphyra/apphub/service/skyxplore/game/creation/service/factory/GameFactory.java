@@ -32,7 +32,7 @@ public class GameFactory {
         Map<UUID, Player> players = playerPopulationService.populateGameWithPlayers(request.getMembers().keySet(), getPlanetCount(universe), request.getSettings());
         Map<UUID, Alliance> alliances = allianceFactory.create(request.getAlliances(), request.getMembers(), players);
 
-        log.info("Setting up home planets...");
+        log.info("Setting up home planets for {} number of players...", players.size());
         players.values()
             .forEach(player -> homePlanetSetupService.setUpHomePlanet(player, alliances.values(), universe));
         log.info("Home planets are set up.");

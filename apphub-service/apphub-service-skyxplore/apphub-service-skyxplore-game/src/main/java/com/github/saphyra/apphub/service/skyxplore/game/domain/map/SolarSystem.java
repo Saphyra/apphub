@@ -16,7 +16,7 @@ import java.util.UUID;
 public class SolarSystem {
     private final UUID solarSystemId;
     private final int radius;
-    private final String defaultName; //TODO allow users to rename systems
+    private final String defaultName;
 
     @Builder.Default
     private final Map<UUID, String> customNames = new OptionalHashMap<>();

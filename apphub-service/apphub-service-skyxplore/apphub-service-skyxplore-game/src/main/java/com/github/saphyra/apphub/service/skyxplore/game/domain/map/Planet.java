@@ -22,11 +22,10 @@ import static java.util.Objects.isNull;
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-//TODO unit test
 public class Planet {
     private final UUID planetId;
     private final UUID solarSystemId;
-    private final String defaultName; //TODO allow users to rename planets
+    private final String defaultName;
     @Builder.Default
     private final Map<UUID, String> customNames = new OptionalHashMap<>();
     private final Coordinate coordinate;

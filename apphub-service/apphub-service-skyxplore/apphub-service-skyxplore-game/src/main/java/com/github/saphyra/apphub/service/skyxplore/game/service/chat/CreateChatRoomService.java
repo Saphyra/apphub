@@ -58,7 +58,7 @@ class CreateChatRoomService {
             .getRooms()
             .add(chatRoom);
 
-        ChatRoomCreatedEvent payload = new ChatRoomCreatedEvent(chatRoom.getId(), request.getRoomTitle());
+        ChatRoomCreatedMessage payload = new ChatRoomCreatedMessage(chatRoom.getId(), request.getRoomTitle());
 
         WebSocketEvent event = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_GAME_CHAT_ROOM_CREATED)
@@ -74,7 +74,7 @@ class CreateChatRoomService {
 
     @Data
     @AllArgsConstructor
-    private static class ChatRoomCreatedEvent {
+    private static class ChatRoomCreatedMessage {
         private String id;
         private String title;
     }
