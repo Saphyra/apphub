@@ -3,6 +3,10 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.chat;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ForbiddenException;
+import com.github.saphyra.apphub.lib.exception.RestException;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
@@ -11,6 +15,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,7 +24,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class LeaveChatRoomService {
     private final GameDao gameDao;
     private final CharacterProxy characterProxy;
@@ -27,7 +31,7 @@ class LeaveChatRoomService {
 
     void leave(UUID userId, String roomId) {
         if (GameConstants.CHAT_ROOM_ALLIANCE.equals(roomId) || GameConstants.CHAT_ROOM_GENERAL.equals(roomId)) {
-            throw new RuntimeException(userId + " cannot leave room " + roomId); //TODO proper exception
+            throw new ForbiddenException(new ErrorMessage(ErrorCode.FORBIDDEN_OPERATION.name()), userId + " tried to leave chatRoom " + roomId);
         }
 
         List<ChatRoom> rooms = gameDao.findByUserIdValidated(userId)
@@ -37,9 +41,15 @@ class LeaveChatRoomService {
             .stream()
             .filter(room -> room.getId().equals(roomId))
             .findFirst()
-            .orElseThrow(() -> new RuntimeException("Chat room not found with id " + roomId)); //TODO throw proper exception
+            .orElseThrow(() -> RestException.createNonTranslated(HttpStatus.NOT_FOUND, "ChatRoom not found for id " + roomId));
 
-        chatRoom.getMembers().remove(userId);
+        boolean memberRemoved = chatRoom.getMembers()
+            .remove(userId);
+
+        if (!memberRemoved) {
+            log.info("{} was not a member of chatRoom {}", userId, roomId);
+            return;
+        }
 
         if (chatRoom.getMembers().isEmpty()) {
             rooms.remove(chatRoom);

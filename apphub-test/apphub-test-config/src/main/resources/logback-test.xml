@@ -6,5 +6,5 @@
     <logger name="org.springframework" level="off"/>
     <logger name="root" level="error"/>logback.xml
     <logger name="com.github.saphyra" level="info"/>
-    <logger name="com.github.saphyra.apphub.lib.error_handler" level="off"/>
+    <logger name="com.github.saphyra.apphub.lib.error_handler" level="warn"/>
 </configuration>

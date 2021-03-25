@@ -58,6 +58,12 @@
             <artifactId>guava</artifactId>
             <version>${versions.guava}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-test-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

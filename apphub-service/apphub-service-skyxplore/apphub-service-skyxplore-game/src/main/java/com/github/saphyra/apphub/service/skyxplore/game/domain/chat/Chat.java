@@ -14,4 +14,8 @@ import java.util.UUID;
 public class Chat {
     private final List<UUID> players;
     private final List<ChatRoom> rooms;
+
+    public void addRoom(ChatRoom chatRoom) {
+        rooms.add(chatRoom);
+    }
 }

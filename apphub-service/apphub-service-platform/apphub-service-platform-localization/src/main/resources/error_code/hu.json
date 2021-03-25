@@ -5,6 +5,8 @@
   "CHARACTER_NAME_ALREADY_EXISTS": "Ez a karakternév már foglalt.",
   "CHARACTER_NAME_TOO_SHORT": "Karakternév túl rövid. (Minimum 3 karakter)",
   "CHARACTER_NAME_TOO_LONG": "Karakternév túl hosszú. (Maximum 30 karakter)",
+  "CHAT_ROOM_TITLE_TOO_SHORT": "Chat szoba neve túl rövid. (Minimum 3 karakter)",
+  "CHAT_ROOM_TITLE_TOO_LONG": "Chat szoba neve túl hosszú. (Maximum 30 karakter)",
   "DATA_NOT_FOUND": "Az adat nem található.",
   "EMAIL_ALREADY_EXISTS": "Az email foglalt.",
   "FRIEND_REQUEST_ALREADY_EXISTS": "Már van ilyen barátkérelem.",

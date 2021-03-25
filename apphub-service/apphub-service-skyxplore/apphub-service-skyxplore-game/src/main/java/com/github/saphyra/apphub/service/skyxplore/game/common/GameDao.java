@@ -52,4 +52,9 @@ public class GameDao {
             .filter(game -> game.getPlayers().containsKey(userId))
             .findFirst();
     }
+
+    @VisibleForTesting
+    public void put(Game game) {
+        repository.put(Optional.ofNullable(game.getGameId()).orElse(UUID.randomUUID()), game);
+    }
 }
