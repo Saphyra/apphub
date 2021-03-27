@@ -21,7 +21,7 @@ public class SkyXploreDataGameControllerImplTest {
     private ObjectMapperWrapper objectMapperWrapper;
 
     @Mock
-    private GameItemSaver gameItemSaver;
+    private GameItemService gameItemService;
 
     private SkyXploreDataGameControllerImpl underTest;
 
@@ -30,10 +30,10 @@ public class SkyXploreDataGameControllerImplTest {
 
     @Before
     public void setUp() {
-        given(gameItemSaver.getType()).willReturn(GameItemType.UNIVERSE);
+        given(gameItemService.getType()).willReturn(GameItemType.UNIVERSE);
 
         underTest = new SkyXploreDataGameControllerImpl(
-            Arrays.asList(gameItemSaver),
+            Arrays.asList(gameItemService),
             objectMapperWrapper
         );
     }
@@ -46,6 +46,6 @@ public class SkyXploreDataGameControllerImplTest {
 
         underTest.saveGameData(Arrays.asList(universeModel));
 
-        verify(gameItemSaver).save(Arrays.asList(universeModel));
+        verify(gameItemService).save(Arrays.asList(universeModel));
     }
 }

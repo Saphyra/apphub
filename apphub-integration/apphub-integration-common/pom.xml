@@ -30,6 +30,12 @@
             <artifactId>postgresql</artifactId>
             <version>${versions.postgresql-connector}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>${versions.awaitility}</version>
+        </dependency>
     </dependencies>
 
     <build>

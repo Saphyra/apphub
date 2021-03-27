@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.framework;
 
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

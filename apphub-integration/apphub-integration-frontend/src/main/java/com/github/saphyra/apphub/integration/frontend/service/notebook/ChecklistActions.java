@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.service.notebook;
 
-import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.model.notebook.NewChecklistItem;
 import com.github.saphyra.apphub.integration.frontend.model.notebook.NewChecklistItemData;
 import com.github.saphyra.apphub.integration.frontend.model.notebook.ViewChecklistItem;

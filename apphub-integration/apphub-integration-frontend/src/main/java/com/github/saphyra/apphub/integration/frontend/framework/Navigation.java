@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.framework;
 
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import org.openqa.selenium.WebDriver;

@@ -71,7 +71,7 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
             userId = getUserId(session);
             String payload = message.getPayload();
             event = context.getObjectMapperWrapper().readValue(payload, WebSocketEvent.class);
-            sessionMap.get(userId).setLastUpdate(context.getDateTimeUtil().getCurrentDate());
+            Optional.ofNullable(sessionMap.get(userId)).ifPresent(sessionWrapper -> sessionWrapper.setLastUpdate(context.getDateTimeUtil().getCurrentDate()));
             handleMessage(userId, event);
         } catch (Exception e) {
             log.error("Failed processing event {} from {} in messageGroup {}", event.getEventName(), userId, getGroup(), e);
@@ -130,6 +130,7 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
 
     @Override
     public List<UUID> sendEvent(WebSocketMessage message) {
+        log.info("Sending {} event in messageGroup {} to recipients {}", message.getEvent().getEventName(), getGroup(), message.getRecipients());
         return message.getRecipients()
             .stream()
             .filter(sessionMap::containsKey)
@@ -140,7 +141,7 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
     }
 
     private Optional<UUID> sendEvent(UUID recipient, WebSocketEvent event) {
-        log.info("Sending {} event to recipient {} for messageGroup {}", event.getEventName(), recipient, getGroup());
+        log.debug("Sending {} event to recipient {} for messageGroup {}", event.getEventName(), recipient, getGroup());
         try {
             SessionWrapper sessionWrapper = sessionMap.get(recipient);
             WebSocketSession session = sessionWrapper.getSession();

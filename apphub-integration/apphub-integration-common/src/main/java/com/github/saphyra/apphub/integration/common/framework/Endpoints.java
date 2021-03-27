@@ -1,6 +1,10 @@
 package com.github.saphyra.apphub.integration.common.framework;
 
 public class Endpoints {
+    //CONNECTION SUBSCRIPTIONS
+    public static final String CONNECTION_SKYXPLORE_MAIN_MENU = "/api/message-sender/skyxplore/main-menu";
+    public static final String CONNECTION_SKYXPLORE_LOBBY = "/api/message-sender/skyxplore/lobby";
+    public static final String CONNECTION_SKYXPLORE_GAME = "/api/message-sender/skyxplore/game";
 
     public static final String LOGIN = "/api/user/authentication/login";
     public static final String LOGOUT = "/api/user/authentication/logout";
@@ -60,8 +64,6 @@ public class Endpoints {
     public static final String UTILS_LOG_FORMATTER_SET_VISIBILITY = "/api/utils/log-formatter/visibility";
 
     //SKYXPLORE-DATA
-    public static final String INTERNAL_SKYXPLORE_IS_CHARACTER_EXISTS = "/internal/skyxplore/character/exists";
-    public static final String INTERNAL_SKYXPLORE_GET_CHARACTER_BY_USER_ID = "/allowed-internal/skyxplore/character/{userId}";
     public static final String SKYXPLORE_CREATE_OR_UPDATE_CHARACTER = "/api/skyxplore/character";
     public static final String SKYXPLORE_SEARCH_FOR_FRIENDS = "/api/skyxplore/friend/candidate";
     public static final String SKYXPLORE_ADD_FRIEND = "/api/skyxplore/friend/request";
@@ -75,13 +77,6 @@ public class Endpoints {
     public static final String SKYXPLORE_GET_ITEM_DATA = "/api/skyxplore/data/{dataId}";
 
     //SKYXPLORE-LOBBY
-    public static final String INTERNAL_SKYXPLORE_USER_JOINED_TO_LOBBY = "/internal/lobby/{userId}";
-    public static final String INTERNAL_SKYXPLORE_USER_LEFT_LOBBY = "/internal/lobby/{userId}";
-    public static final String INTERNAL_SKYXPLORE_LOBBY_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/lobby/{userId}";
-    public static final String INTERNAL_SKYXPLORE_LOBBY_VIEW_FOR_PAGE = "/internal/skyxplore/lobby/page";
-    public static final String INTERNAL_SKYXPLORE_LOBBY_PLAYER_ONLINE = "/web-socket-event/skyxplore/lobby/online/{userId}";
-    public static final String INTERNAL_SKYXPLORE_LOBBY_PLAYER_OFFLINE = "/web-socket-event/skyxplore/lobby/online/{userId}";
-
     public static final String SKYXPLORE_EXIT_FROM_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_INVITE_TO_LOBBY = "/api/skyxplore/lobby/invite/{friendId}";
     public static final String SKYXPLORE_LOBBY_ACCEPT_INVITATION = "/api/skyxplore/lobby/join/{invitorId}";
@@ -92,13 +87,6 @@ public class Endpoints {
     public static final String SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS = "/api/skyxplore/friends/active";
 
     //SKYXPLORE-GAME
-    public static final String INTERNAL_SKYXPLORE_GAME_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/game/{userId}";
-
-    public static final String INTERNAL_SKYXPLORE_CREATE_GAME = "/internal/skyxplore/game";
-    public static final String INTERNAL_SKYXPLORE_USER_JOINED_TO_GAME = "/internal/skyxplore/game/{userId}";
-    public static final String INTERNAL_SKYXPLORE_USER_LEFT_GAME = "/internal/skyxplore/game/{userId}";
-    public static final String INTERNAL_SKYXPLORE_IS_USER_IN_GAME = "/internal/skyxplore/game";
-
     public static final String SKYXPLORE_GAME_MAP = "/api/skyxplore/game/universe";
     public static final String SKYXPLORE_GAME_GET_PLAYERS = "/api/skyxplore/game/player";
     public static final String SKYXPLORE_GAME_CREATE_CHAT_ROOM = "/api/skyxplore/game/chat/room";

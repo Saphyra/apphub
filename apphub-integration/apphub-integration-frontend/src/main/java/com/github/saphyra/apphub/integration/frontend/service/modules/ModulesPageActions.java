@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.integration.frontend.service.modules;
 
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.frontend.model.modules.Category;
 import com.github.saphyra.apphub.integration.frontend.model.modules.Favorite;

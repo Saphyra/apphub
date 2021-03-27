@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.chat.create.CreateChatRoomService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,9 +32,6 @@ public class SkyXploreGameChatControllerImplTest {
 
     @Mock
     private GameDao gameDao;
-
-    @Mock
-    private CharacterProxy characterProxy;
 
     @Mock
     private CreateChatRoomService createChatRoomService;
@@ -70,6 +66,7 @@ public class SkyXploreGameChatControllerImplTest {
         given(player3.isConnected()).willReturn(true);
 
         given(player3.getUserId()).willReturn(USER_ID_2);
+        given(player3.getUsername()).willReturn(CHARACTER_NAME);
 
         given(gameDao.findByUserIdValidated(USER_ID_1)).willReturn(game);
         given(game.getPlayers()).willReturn(CollectionUtils.toMap(
@@ -77,15 +74,9 @@ public class SkyXploreGameChatControllerImplTest {
             new BiWrapper<>(UUID.randomUUID(), player2),
             new BiWrapper<>(UUID.randomUUID(), player3)
         ));
-        SkyXploreCharacterModel model = SkyXploreCharacterModel.builder()
-            .id(USER_ID_2)
-            .name(CHARACTER_NAME)
-            .build();
-        given(characterProxy.getCharacterByUserId(USER_ID_2)).willReturn(model);
-
         List<SkyXploreCharacterModel> result = underTest.getPlayers(ACCESS_TOKEN_HEADER);
 
-        assertThat(result).containsExactly(model);
+        assertThat(result).containsExactly(SkyXploreCharacterModel.builder().id(USER_ID_2).name(CHARACTER_NAME).build());
     }
 
     @Test

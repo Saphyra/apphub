@@ -20,12 +20,12 @@ import static java.util.Objects.isNull;
 @RestController
 @Slf4j
 public class SkyXploreDataGameControllerImpl implements SkyXploreDataGameController {
-    private final OptionalMap<GameItemType, GameItemSaver> savers;
+    private final OptionalMap<GameItemType, GameItemService> savers;
     private final ObjectMapperWrapper objectMapperWrapper;
 
-    public SkyXploreDataGameControllerImpl(List<GameItemSaver> savers, ObjectMapperWrapper objectMapperWrapper) {
+    public SkyXploreDataGameControllerImpl(List<GameItemService> savers, ObjectMapperWrapper objectMapperWrapper) {
         this.savers = new OptionalHashMap<>(savers.stream()
-            .collect(Collectors.toMap(GameItemSaver::getType, Function.identity())));
+            .collect(Collectors.toMap(GameItemService::getType, Function.identity())));
         this.objectMapperWrapper = objectMapperWrapper;
     }
 
@@ -53,13 +53,13 @@ public class SkyXploreDataGameControllerImpl implements SkyXploreDataGameControl
     private void save(GameItemType gameItemType, List<Object> gameItemObjects) {
         try {
             log.info("Saving {} number of {}s", gameItemObjects.size(), gameItemType);
-            GameItemSaver gameItemSaver = savers.getOptional(gameItemType)
+            GameItemService gameItemService = savers.getOptional(gameItemType)
                 .orElseThrow(() -> new IllegalStateException("GameItemDao not found for type " + gameItemType));
 
             List<GameItem> models = gameItemObjects.stream()
                 .map(o -> objectMapperWrapper.convertValue(o, gameItemType.getModelType()))
                 .collect(Collectors.toList());
-            gameItemSaver.save(models);
+            gameItemService.save(models);
         } catch (Exception e) {
             log.error("Failed to save gameItem {}", gameItemType, e);
         }

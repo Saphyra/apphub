@@ -1,13 +1,17 @@
 package com.github.saphyra.apphub.integration.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.saphyra.apphub.integration.common.framework.*;
+import com.github.saphyra.apphub.integration.common.framework.CustomObjectMapper;
+import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.common.framework.Endpoints;
+import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
+import com.github.saphyra.apphub.integration.common.framework.RequestFactory;
+import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.model.LoginRequest;
 import com.github.saphyra.apphub.integration.common.model.OneParamRequest;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.common.model.UserRoleResponse;
-import com.github.saphyra.util.ObjectMapperWrapper;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.annotations.AfterMethod;
@@ -25,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class TestBase {
-    public static final ObjectMapperWrapper OBJECT_MAPPER_WRAPPER = new ObjectMapperWrapper(new ObjectMapper());
+    public static final CustomObjectMapper OBJECT_MAPPER_WRAPPER = new CustomObjectMapper(new ObjectMapper());
 
     public static int SERVER_PORT;
     public static int DATABASE_PORT;

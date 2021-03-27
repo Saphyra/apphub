@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.lib.config.liquibase;
 import liquibase.integration.spring.SpringLiquibase;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,7 +15,6 @@ import static java.util.Objects.isNull;
 
 @Configuration
 @Slf4j
-@ConditionalOnProperty(value = "liquibase.enabled", havingValue = "true")
 class LiquibaseConfig {
     private static final String CREATE_SCHEMA_SQL = "create schema if not exists %s";
 

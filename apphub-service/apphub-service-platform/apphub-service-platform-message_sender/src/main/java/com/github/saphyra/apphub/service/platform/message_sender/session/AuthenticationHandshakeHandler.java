@@ -21,6 +21,8 @@ public class AuthenticationHandshakeHandler extends DefaultHandshakeHandler {
 
     @Override
     protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {
+        log.info("Connecting to {} / {}", request.getRemoteAddress(), request.getLocalAddress());
+        log.debug("Attributes: {}", attributes);
         UUID userId = userIdProvider.findUserId(request);
         log.info("{} is connected.", userId);
         return () -> uuidConverter.convertDomain(userId);

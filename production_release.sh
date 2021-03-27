@@ -22,13 +22,6 @@ wait
 NAMESPACE_NAME="production"
 ./deploy.sh "$NAMESPACE_NAME" "$NAMESPACE_NAME"
 
-./infra/deployment/script/wait_for_pods_ready.sh $NAMESPACE_NAME 12 10
-STARTUP_RESULT=$?
-if [[ "$STARTUP_RESULT" -ne 0 ]]; then
-  echo "Services failed to start."
-  exit 1
-fi
-
 
 SERVER_PORT=$RANDOM
 DATABASE_PORT=$RANDOM

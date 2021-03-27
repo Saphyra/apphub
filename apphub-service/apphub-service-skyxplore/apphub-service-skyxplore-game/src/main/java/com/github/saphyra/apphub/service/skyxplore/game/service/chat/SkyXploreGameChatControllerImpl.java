@@ -23,7 +23,6 @@ public class SkyXploreGameChatControllerImpl implements SkyXploreGameChatControl
     private final LeaveChatRoomService leaveChatRoomService;
 
     @Override
-    //TODO api test
     public List<SkyXploreCharacterModel> getPlayers(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the players of game.", accessTokenHeader.getUserId());
         return gameDao.findByUserIdValidated(accessTokenHeader.getUserId())
