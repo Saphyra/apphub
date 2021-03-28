@@ -19,20 +19,15 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreFriendActions {
-    public static void setUpFriendship(Language language, UUID sender, UUID friend, String friendName) {
-        SkyXploreCharacterModel friendModel = getFriendCandidates(language, sender, friendName)
-            .stream()
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("No friendCandidate found with name " + friendName));
+    public static void setUpFriendship(Language language, UUID senderAccessTokenId, UUID friendAccessTokenId, UUID friendUserId) {
+        createFriendRequest(language, senderAccessTokenId, friendUserId);
 
-        createFriendRequest(language, sender, friendModel.getId());
-
-        IncomingFriendRequestResponse friendRequest = getIncomingFriendRequests(language, friend)
+        IncomingFriendRequestResponse friendRequest = getIncomingFriendRequests(language, friendAccessTokenId)
             .stream()
             .findFirst()
             .orElseThrow(() -> new RuntimeException("No incoming friendRequests"));
 
-        acceptFriendRequest(language, friend, friendRequest.getFriendRequestId());
+        acceptFriendRequest(language, friendAccessTokenId, friendRequest.getFriendRequestId());
     }
 
     public static void createFriendRequest(Language language, UUID accessTokenId, UUID userId) {

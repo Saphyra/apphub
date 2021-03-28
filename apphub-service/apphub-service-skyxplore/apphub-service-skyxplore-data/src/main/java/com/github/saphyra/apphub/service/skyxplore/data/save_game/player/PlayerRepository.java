@@ -7,6 +7,5 @@ import java.util.List;
 public interface PlayerRepository extends CrudRepository<PlayerEntity, String> {
     void deleteByGameId(String gameId);
 
-    //TODO unit test
     List<PlayerEntity> getByUserId(String userId);
 }

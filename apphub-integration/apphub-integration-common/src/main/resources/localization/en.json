@@ -5,6 +5,8 @@
   "ERROR_CODE_CHARACTER_NAME_ALREADY_EXISTS": "Character name already exists.",
   "ERROR_CODE_CHARACTER_NAME_TOO_LONG": "Character name too long. (30 characters max.)",
   "ERROR_CODE_CHARACTER_NAME_TOO_SHORT": "Character name too short. (3 characters min.)",
+  "ERROR_CODE_CHAT_ROOM_TITLE_TOO_SHORT": "Chat room name too short. (3 characters min.)",
+  "ERROR_CODE_CHAT_ROOM_TITLE_TOO_LONG": "Chat room name too long. (30 characters max.)",
   "ERROR_CODE_DATA_NOT_FOUND": "Data not found.",
   "ERROR_CODE_EMAIL_ALREADY_IN_USE": "E-mail address is already in use.",
   "ERROR_CODE_FRIEND_REQUEST_ALREADY_EXISTS": "Friend request already exists.",

@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.common.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.common.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
+import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
@@ -23,14 +24,14 @@ import java.util.Vector;
 import java.util.function.Predicate;
 
 @Slf4j
-public abstract class AbstractWsClient extends WebSocketClient {
+public class ApphubWsClient extends WebSocketClient {
     private static final ThreadLocal<List<WebSocketClient>> WS_CONNECTIONS = ThreadLocal.withInitial(ArrayList::new);
 
     private final List<WebSocketEvent> messages = new Vector<>();
 
     private final String endpoint;
 
-    public AbstractWsClient(Language language, String endpoint, UUID accessTokenId) throws URISyntaxException {
+    private ApphubWsClient(Language language, String endpoint, UUID accessTokenId) throws URISyntaxException {
         super(
             new URI(String.format("http://localhost:%s%s", TestBase.SERVER_PORT, endpoint)),
             new Draft_6455(),
@@ -45,6 +46,30 @@ public abstract class AbstractWsClient extends WebSocketClient {
         AwaitilityWrapper.createDefault()
             .until(this::isOpen);
         WS_CONNECTIONS.get().add(this);
+    }
+
+    public static ApphubWsClient createSkyXploreMainMenu(Language language, UUID accessTokenId) {
+        try {
+            return new ApphubWsClient(language, Endpoints.CONNECTION_SKYXPLORE_MAIN_MENU, accessTokenId);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static ApphubWsClient createSkyXploreLobby(Language language, UUID accessTokenId) {
+        try {
+            return new ApphubWsClient(language, Endpoints.CONNECTION_SKYXPLORE_LOBBY, accessTokenId);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static ApphubWsClient createSkyXploreGame(Language language, UUID accessTokenId) {
+        try {
+            return new ApphubWsClient(language, Endpoints.CONNECTION_SKYXPLORE_GAME, accessTokenId);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void send(WebSocketEvent event) {

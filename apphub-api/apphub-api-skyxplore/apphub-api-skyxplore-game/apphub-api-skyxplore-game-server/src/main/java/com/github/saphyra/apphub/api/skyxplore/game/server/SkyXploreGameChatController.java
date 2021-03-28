@@ -21,6 +21,6 @@ public interface SkyXploreGameChatController {
     @PutMapping(Endpoints.SKYXPLORE_GAME_CREATE_CHAT_ROOM)
     void createChatRoom(@RequestBody CreateChatRoomRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @DeleteMapping(Endpoints.SKYXPLORE_GAME_LEAVE_ROOM)
+    @DeleteMapping(Endpoints.SKYXPLORE_GAME_LEAVE_CHAT_ROOM)
     void leaveChatRoom(@PathVariable("roomId") String roomId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

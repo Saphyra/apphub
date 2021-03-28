@@ -9,9 +9,7 @@ import com.github.saphyra.apphub.integration.backend.model.skyxplore.FriendshipR
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.InvitationMessage;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.ReadinessEvent;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.backend.ws.SkyXploreGameWsClient;
-import com.github.saphyra.apphub.integration.backend.ws.SkyXploreLobbyWsClient;
-import com.github.saphyra.apphub.integration.backend.ws.SkyXploreMainMenuWsClient;
+import com.github.saphyra.apphub.integration.backend.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.backend.ws.model.WebSocketEvent;
 import com.github.saphyra.apphub.integration.backend.ws.model.WebSocketEventName;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
@@ -20,7 +18,6 @@ import com.github.saphyra.apphub.integration.common.framework.localization.Langu
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import org.testng.annotations.Test;
 
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,7 +27,7 @@ public class GetPlayersTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
     @Test
-    public void getPlayers() throws URISyntaxException {
+    public void getPlayers() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -51,11 +48,11 @@ public class GetPlayersTest extends BackEndTest {
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
         UUID userId3 = DatabaseUtil.getUserIdByEmail(userData3.getEmail());
 
-        SkyXploreFriendActions.setUpFriendship(language, accessTokenId1, accessTokenId2, characterModel2.getName());
-        SkyXploreFriendActions.setUpFriendship(language, accessTokenId1, accessTokenId3, characterModel3.getName());
+        SkyXploreFriendActions.setUpFriendship(language, accessTokenId1, accessTokenId2, userId2);
+        SkyXploreFriendActions.setUpFriendship(language, accessTokenId1, accessTokenId3, userId3);
 
-        SkyXploreMainMenuWsClient mainMenuWsClient2 = new SkyXploreMainMenuWsClient(language, accessTokenId2);
-        SkyXploreMainMenuWsClient mainMenuWsClient3 = new SkyXploreMainMenuWsClient(language, accessTokenId3);
+        ApphubWsClient mainMenuWsClient2 = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2);
+        ApphubWsClient mainMenuWsClient3 = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId3);
 
         SkyXploreLobbyActions.createLobby(language, accessTokenId1, GAME_NAME);
 
@@ -68,9 +65,9 @@ public class GetPlayersTest extends BackEndTest {
         acceptInvitation(language, accessTokenId2, mainMenuWsClient2);
         acceptInvitation(language, accessTokenId3, mainMenuWsClient3);
 
-        SkyXploreLobbyWsClient lobbyWsClient1 = new SkyXploreLobbyWsClient(language, accessTokenId1);
-        SkyXploreLobbyWsClient lobbyWsClient2 = new SkyXploreLobbyWsClient(language, accessTokenId2);
-        SkyXploreLobbyWsClient lobbyWsClient3 = new SkyXploreLobbyWsClient(language, accessTokenId3);
+        ApphubWsClient lobbyWsClient1 = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
+        ApphubWsClient lobbyWsClient2 = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2);
+        ApphubWsClient lobbyWsClient3 = ApphubWsClient.createSkyXploreLobby(language, accessTokenId3);
 
         WebSocketEvent readyEvent = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS)
@@ -89,7 +86,7 @@ public class GetPlayersTest extends BackEndTest {
 
         lobbyWsClient1.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED);
 
-        new SkyXploreGameWsClient(language, accessTokenId2);
+        ApphubWsClient.createSkyXploreGame(language, accessTokenId2);
 
         List<SkyXploreCharacterModel> characters = SkyXploreGameChatActions.getPlayers(language, accessTokenId1);
 
@@ -97,7 +94,7 @@ public class GetPlayersTest extends BackEndTest {
         assertThat(characters.get(0).getName()).isEqualTo(characterModel2.getName());
     }
 
-    private void acceptInvitation(Language language, UUID accessTokenId, SkyXploreMainMenuWsClient wsClient) {
+    private void acceptInvitation(Language language, UUID accessTokenId, ApphubWsClient wsClient) {
         WebSocketEvent event = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION)
             .orElseThrow(() -> new RuntimeException("Invitation did not arrive."));
 

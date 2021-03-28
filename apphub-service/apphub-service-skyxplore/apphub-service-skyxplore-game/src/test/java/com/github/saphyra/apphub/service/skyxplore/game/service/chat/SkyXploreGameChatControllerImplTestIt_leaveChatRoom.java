@@ -114,7 +114,7 @@ public class SkyXploreGameChatControllerImplTestIt_leaveChatRoom {
     @Test
     public void leaveGeneralChat() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_LEAVE_ROOM, "roomId", GameConstants.CHAT_ROOM_GENERAL));
+            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_LEAVE_CHAT_ROOM, "roomId", GameConstants.CHAT_ROOM_GENERAL));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN.value());
 
@@ -126,7 +126,7 @@ public class SkyXploreGameChatControllerImplTestIt_leaveChatRoom {
     @Test
     public void leaveAllianceChat() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_LEAVE_ROOM, "roomId", GameConstants.CHAT_ROOM_ALLIANCE));
+            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_LEAVE_CHAT_ROOM, "roomId", GameConstants.CHAT_ROOM_ALLIANCE));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN.value());
 
@@ -138,7 +138,7 @@ public class SkyXploreGameChatControllerImplTestIt_leaveChatRoom {
     @Test
     public void chatRoomNotFound() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_LEAVE_ROOM, "roomId", UUID.randomUUID()));
+            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_LEAVE_CHAT_ROOM, "roomId", UUID.randomUUID()));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
@@ -152,7 +152,7 @@ public class SkyXploreGameChatControllerImplTestIt_leaveChatRoom {
         chat.addRoom(chatRoom);
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_LEAVE_ROOM, "roomId", CHAT_ROOM_ID));
+            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_LEAVE_CHAT_ROOM, "roomId", CHAT_ROOM_ID));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -169,7 +169,7 @@ public class SkyXploreGameChatControllerImplTestIt_leaveChatRoom {
         chat.addRoom(chatRoom);
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_LEAVE_ROOM, "roomId", CHAT_ROOM_ID));
+            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_LEAVE_CHAT_ROOM, "roomId", CHAT_ROOM_ID));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -188,7 +188,7 @@ public class SkyXploreGameChatControllerImplTestIt_leaveChatRoom {
         chat.addRoom(chatRoom);
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_LEAVE_ROOM, "roomId", CHAT_ROOM_ID));
+            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_LEAVE_CHAT_ROOM, "roomId", CHAT_ROOM_ID));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

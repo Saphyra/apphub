@@ -40,14 +40,12 @@ public class SkyXploreGameChatControllerImpl implements SkyXploreGameChatControl
     }
 
     @Override
-    //TODO api test
     public void createChatRoom(CreateChatRoomRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a chat room for members {}", accessTokenHeader.getUserId(), request.getMembers());
         createChatRoomService.createChatRoom(accessTokenHeader.getUserId(), request);
     }
 
     @Override
-    //TODO api test
     public void leaveChatRoom(String roomId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to leave room {}", accessTokenHeader.getUserId(), roomId);
         leaveChatRoomService.leave(accessTokenHeader.getUserId(), roomId);

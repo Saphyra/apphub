@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.backend.actions.skyxplore;
 
+import com.github.saphyra.apphub.integration.backend.model.skyxplore.CreateChatRoomRequest;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.RequestFactory;
@@ -23,5 +24,22 @@ public class SkyXploreGameChatActions {
 
         return Arrays.stream(response.getBody().as(SkyXploreCharacterModel[].class))
             .collect(Collectors.toList());
+    }
+
+    public static void createChatRoom(Language language, UUID accessTokenId, CreateChatRoomRequest request) {
+        Response response = getCreateChatRoomResponse(language, accessTokenId, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getCreateChatRoomResponse(Language language, UUID accessTokenId, CreateChatRoomRequest request) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(request)
+            .put(UrlFactory.create(Endpoints.SKYXPLORE_GAME_CREATE_CHAT_ROOM));
+    }
+
+    public static Response getLeaveChatRoomResponse(Language language, UUID accessTokenId, String roomId) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .delete(UrlFactory.create(Endpoints.SKYXPLORE_GAME_LEAVE_CHAT_ROOM, "roomId", roomId));
     }
 }

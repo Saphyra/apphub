@@ -21,7 +21,6 @@ public class PlayerDao extends AbstractDao<PlayerEntity, PlayerModel, String, Pl
         repository.deleteByGameId(uuidConverter.convertDomain(gameId));
     }
 
-    //TODO unit test
     public List<PlayerModel> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }

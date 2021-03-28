@@ -20,7 +20,6 @@ class GameDeletionService implements DeleteByUserIdDao {
     private final PlayerDao playerDao;
 
     @Override
-    //TODO unit test
     public void deleteByUserId(UUID userId) {
         log.info("Processing games for deletion of user {}", userId);
         playerDao.getByUserId(userId)

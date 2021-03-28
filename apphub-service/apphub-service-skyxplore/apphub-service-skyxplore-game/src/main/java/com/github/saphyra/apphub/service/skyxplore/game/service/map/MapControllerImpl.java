@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.map.UniverseRespons
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,12 +28,11 @@ public class MapControllerImpl implements SkyXploreGameMapController {
     public UniverseResponse getMap(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know his map.", accessTokenHeader.getUserId());
         Game game = gameDao.findByUserIdValidated(accessTokenHeader.getUserId());
-        return toUniverseResponse(game);
+        return toUniverseResponse(game.getUniverse());
     }
 
-    private UniverseResponse toUniverseResponse(Game game) {
-        List<MapSolarSystemResponse> solarSystems = game.getUniverse()
-            .getSystems()
+    private UniverseResponse toUniverseResponse(Universe universe) {
+        List<MapSolarSystemResponse> solarSystems = universe.getSystems()
             .values()
             .stream()
             .map(solarSystem -> MapSolarSystemResponse.builder()
@@ -45,8 +45,7 @@ public class MapControllerImpl implements SkyXploreGameMapController {
             .collect(Collectors.toList());
 
 
-        List<SolarSystemConnectionResponse> connections = game.getUniverse()
-            .getConnections()
+        List<SolarSystemConnectionResponse> connections = universe.getConnections()
             .stream()
             .map(connection -> SolarSystemConnectionResponse.builder()
                 .a(connection.getLine().getA())
@@ -55,7 +54,7 @@ public class MapControllerImpl implements SkyXploreGameMapController {
             .collect(Collectors.toList());
 
         return UniverseResponse.builder()
-            .universeSize(game.getUniverse().getSize())
+            .universeSize(universe.getSize())
             .solarSystems(solarSystems)
             .connections(connections)
             .build();
