@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
-public class UniverseResponse {
+public class MapResponse {
     private int universeSize;
     private List<MapSolarSystemResponse> solarSystems;
     private List<SolarSystemConnectionResponse> connections;
