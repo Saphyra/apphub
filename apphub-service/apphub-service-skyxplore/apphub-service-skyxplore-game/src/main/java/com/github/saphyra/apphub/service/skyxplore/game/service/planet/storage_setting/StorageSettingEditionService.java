@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.PlanetStorageQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ import java.util.UUID;
 //TODO unit test
 public class StorageSettingEditionService {
     private final GameDao gameDao;
-    private final PlanetStorageQueryService planetStorageQueryService;
+    private final FreeStorageQueryService freeStorageQueryService;
     private final ResourceDataService resourceDataService;
 
     public void edit(UUID userId, UUID planetId, UUID storageSettingId, StorageSettingsModel request/*TODO validate*/) {
@@ -39,7 +39,7 @@ public class StorageSettingEditionService {
         storageSetting.setPriority(request.getPriority());
         storageSetting.setBatchSize(request.getBatchSize());
 
-        int maxTargetAmount = planetStorageQueryService.getFreeStorage(planet, resourceDataService.get(storageSetting.getDataId()).getStorageType()) + reservedStorage.getAmount();
+        int maxTargetAmount = freeStorageQueryService.getFreeStorage(planet, resourceDataService.get(storageSetting.getDataId()).getStorageType()) + reservedStorage.getAmount();
         int targetAmount = storageSetting.getTargetAmount();
         int newTargetAmount = Math.min(maxTargetAmount, request.getTargetAmount());
         storageSetting.setTargetAmount(newTargetAmount);

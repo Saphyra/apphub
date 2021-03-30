@@ -1,9 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
-import java.util.UUID;
-
-import org.springframework.stereotype.Component;
-
 import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingsModel;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
@@ -12,9 +8,12 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.query.PlanetStorageQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -23,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class StorageSettingCreationService {
     private final GameDao gameDao;
     private final StorageSettingsModelValidator storageSettingsModelValidator;
-    private final PlanetStorageQueryService planetStorageQueryService;
+    private final FreeStorageQueryService freeStorageQueryService;
     private final ResourceDataService resourceDataService;
     private final StorageSettingFactory storageSettingFactory;
     private final ReservedStorageFactory reservedStorageFactory;
@@ -41,9 +40,9 @@ public class StorageSettingCreationService {
 
         ResourceData resourceData = resourceDataService.get(request.getDataId());
 
-        int currentAmount = planetStorageQueryService.getUsableStoredResourceAmount(request.getDataId(), planet);
+        int currentAmount = freeStorageQueryService.getUsableStoredResourceAmount(request.getDataId(), planet);
         int missingAmount = request.getTargetAmount() - currentAmount;
-        int freeCapacity = planetStorageQueryService.getFreeStorage(planet, resourceData.getStorageType());
+        int freeCapacity = freeStorageQueryService.getFreeStorage(planet, resourceData.getStorageType());
 
         int targetAmount = Math.min(missingAmount, freeCapacity);
 
