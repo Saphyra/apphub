@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.backend.actions.skyxplore;
 
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.Player;
+import com.github.saphyra.apphub.integration.backend.model.skyxplore.ReadinessEvent;
 import com.github.saphyra.apphub.integration.backend.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.backend.ws.model.WebSocketEvent;
 import com.github.saphyra.apphub.integration.backend.ws.model.WebSocketEventName;
@@ -13,6 +14,8 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreFlow {
     public static Map<UUID, ApphubWsClient> startGame(Language language, String gameName, Player host, Player... members) {
@@ -38,6 +41,14 @@ public class SkyXploreFlow {
             .build();
 
         hostLobbyWsClient.send(readyEvent);
+
+        boolean allPlayersReady = Stream.concat(
+            Stream.of(host),
+            Arrays.stream(members)
+        )
+            .map(Player::getUserId)
+            .allMatch(userId -> hostLobbyWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS, event -> event.getPayloadAs(ReadinessEvent.class).equals(new ReadinessEvent(userId, true))).isPresent());
+        assertThat(allPlayersReady).isTrue();
 
         memberLobbyWsClients.forEach(skyXploreLobbyWsClient -> skyXploreLobbyWsClient.send(readyEvent));
 

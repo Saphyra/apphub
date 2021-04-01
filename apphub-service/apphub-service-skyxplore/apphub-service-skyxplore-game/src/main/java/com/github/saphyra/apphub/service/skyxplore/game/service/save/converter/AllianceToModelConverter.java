@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class AllianceToModelConverter {
     public AllianceModel convert(Alliance alliance, Game game) {
         AllianceModel model = new AllianceModel();

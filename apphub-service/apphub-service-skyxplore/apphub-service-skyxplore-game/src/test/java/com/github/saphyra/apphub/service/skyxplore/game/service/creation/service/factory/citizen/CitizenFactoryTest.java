@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.RandomNameProvider;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Citizen;
@@ -26,6 +27,8 @@ public class CitizenFactoryTest {
     private static final UUID CITIZEN_ID = UUID.randomUUID();
     private static final String CITIZEN_NAME = "citizen-name";
     private static final UUID PLANET_ID = UUID.randomUUID();
+    private static final int DEFAULT_MORALE = 1234;
+    private static final int DEFAULT_SATIETY = 234;
 
     @Mock
     private IdGenerator idGenerator;
@@ -36,17 +39,23 @@ public class CitizenFactoryTest {
     @Mock
     private SkillFactory skillFactory;
 
+    @Mock
+    private GameCreationProperties properties;
+
     @InjectMocks
     private CitizenFactory underTest;
 
     @Mock
     private Skill skill;
 
+    private final GameCreationProperties.CitizenProperties citizenProperties = new GameCreationProperties.CitizenProperties(DEFAULT_MORALE, DEFAULT_SATIETY);
+
     @Test
     public void create() {
         given(idGenerator.randomUuid()).willReturn(CITIZEN_ID);
         given(randomNameProvider.getRandomName(Collections.emptyList())).willReturn(CITIZEN_NAME);
         given(skillFactory.create(any(), eq(CITIZEN_ID))).willReturn(skill);
+        given(properties.getCitizen()).willReturn(citizenProperties);
 
         Citizen citizen = underTest.create(PLANET_ID);
 
@@ -54,8 +63,8 @@ public class CitizenFactoryTest {
         assertThat(citizen.getName()).isEqualTo(CITIZEN_NAME);
         assertThat(citizen.getLocation()).isEqualTo(PLANET_ID);
         assertThat(citizen.getLocationType()).isEqualTo(LocationType.PLANET);
-        assertThat(citizen.getMorale()).isEqualTo(100);
-        assertThat(citizen.getSatiety()).isEqualTo(100);
+        assertThat(citizen.getMorale()).isEqualTo(DEFAULT_MORALE);
+        assertThat(citizen.getSatiety()).isEqualTo(DEFAULT_SATIETY);
 
         assertThat(citizen.getSkills()).hasSize(1);
 

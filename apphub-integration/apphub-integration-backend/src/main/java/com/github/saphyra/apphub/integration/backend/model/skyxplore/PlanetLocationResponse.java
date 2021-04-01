@@ -1,6 +1,6 @@
-package com.github.saphyra.apphub.api.skyxplore.response.game.solar_system;
+package com.github.saphyra.apphub.integration.backend.model.skyxplore;
 
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import com.github.saphyra.apphub.integration.backend.model.Coordinate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

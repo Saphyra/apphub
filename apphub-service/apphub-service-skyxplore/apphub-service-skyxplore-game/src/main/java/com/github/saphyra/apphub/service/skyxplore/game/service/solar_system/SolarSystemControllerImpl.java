@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+//TODO extract
+//TODO split
 public class SolarSystemControllerImpl implements SkyXploreGameSolarSystemController {
     private final GameDao gameDao;
 
@@ -39,7 +42,7 @@ public class SolarSystemControllerImpl implements SkyXploreGameSolarSystemContro
             .findFirst()
             .orElseThrow(() -> new RuntimeException("SolarSystem not found with id " + solarSystemId));
 
-        List<PlanetLocationResponse> planets = mapPlanets(solarSystem.getPlanets().values());
+        List<PlanetLocationResponse> planets = mapPlanets(solarSystem.getPlanets().values(), game);
         return SolarSystemResponse.builder()
             .solarSystemId(solarSystemId)
             .systemName(solarSystem.getDefaultName())
@@ -48,17 +51,19 @@ public class SolarSystemControllerImpl implements SkyXploreGameSolarSystemContro
             .build();
     }
 
-    private List<PlanetLocationResponse> mapPlanets(Collection<Planet> planets) {
+    private List<PlanetLocationResponse> mapPlanets(Collection<Planet> planets, Game game) {
         return planets.stream()
-            .map(this::mapPlanet)
+            .map(planet -> mapPlanet(planet, game))
             .collect(Collectors.toList());
     }
 
-    private PlanetLocationResponse mapPlanet(Planet planet) {
+    private PlanetLocationResponse mapPlanet(Planet planet, Game game) {
         return PlanetLocationResponse.builder()
             .planetId(planet.getPlanetId())
             .planetName(planet.getDefaultName())
             .coordinate(planet.getCoordinate())
+            .owner(planet.getOwner())
+            .ownerName(Optional.ofNullable(planet.getOwner()).map(owner -> game.getPlayers().get(owner).getUsername()).orElse(null))
             .build();
     }
 }

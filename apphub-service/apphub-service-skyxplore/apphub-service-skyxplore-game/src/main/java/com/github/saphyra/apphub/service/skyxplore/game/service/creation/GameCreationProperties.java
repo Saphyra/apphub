@@ -6,7 +6,9 @@ import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemAmount;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemSize;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.UniverseSize;
 import com.github.saphyra.apphub.lib.common_domain.Range;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +28,7 @@ public class GameCreationProperties {
     private SurfaceProperties surface;
     private SystemConnectionProperties systemConnection;
     private PlayerCreationProperties player;
+    private CitizenProperties citizen;
     private SkillProperties skill;
 
     @PostConstruct
@@ -77,6 +80,14 @@ public class GameCreationProperties {
     @Data
     public static class PlayerCreationProperties {
         private Map<AiPresence, Integer> spawnChance;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CitizenProperties {
+        private int defaultMorale;
+        private int defaultSatiety;
     }
 
     @Data

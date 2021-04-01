@@ -94,6 +94,9 @@ game:
         RARE: 10
         COMMON: 30
         EVERYWHERE: 100
+    citizen:
+      defaultMorale: 100
+      defaultSatiety: 100
     skill:
       initialNextLevel: 1000
 

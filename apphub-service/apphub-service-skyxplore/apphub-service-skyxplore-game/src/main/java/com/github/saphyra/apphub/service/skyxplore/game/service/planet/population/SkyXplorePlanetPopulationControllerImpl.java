@@ -19,16 +19,12 @@ class SkyXplorePlanetPopulationControllerImpl implements SkyXplorePlanetPopulati
     private final RenameCitizenService renameCitizenService;
 
     @Override
-    //TODO int test
-    //TODO api test
     public List<CitizenResponse> getPopulation(UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the population of planet {}", accessTokenHeader.getUserId(), planetId);
         return populationQueryService.getPopulation(accessTokenHeader.getUserId(), planetId);
     }
 
     @Override
-    //TODO int test
-    //TODO api test
     public void renameCitizen(OneParamRequest<String> newName, UUID planetId, UUID citizenId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to rename citizen {} on planet {}", accessTokenHeader.getUserId(), citizenId, planetId);
         renameCitizenService.renameCitizen(accessTokenHeader.getUserId(), planetId, citizenId, newName.getValue());

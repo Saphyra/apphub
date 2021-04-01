@@ -18,18 +18,12 @@ public class PriorityControllerImpl implements SkyXplorePriorityController {
     private final PriorityQueryService priorityQueryService;
 
     @Override
-    //TODO unit test
-    //TODO unt test
-    //TODO api test
     public Map<String, Integer> getPriorities(UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the priorities of planet {}", accessTokenHeader.getUserId(), planetId);
         return priorityQueryService.getPriorities(accessTokenHeader.getUserId(), planetId);
     }
 
     @Override
-    //TODO unit test
-    //TODO unt test
-    //TODO api test
     public void updatePriority(OneParamRequest<Integer> newPriority, UUID planetId, String priorityType, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to update priority of {} on planet {}", accessTokenHeader.getUserId(), priorityType, planetId);
         priorityUpdateService.updatePriority(accessTokenHeader.getUserId(), planetId, priorityType, newPriority.getValue());

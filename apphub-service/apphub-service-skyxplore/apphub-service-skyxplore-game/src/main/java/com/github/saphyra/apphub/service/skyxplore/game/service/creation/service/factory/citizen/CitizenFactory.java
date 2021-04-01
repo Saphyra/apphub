@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.RandomNameProvider;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Citizen;
@@ -24,16 +25,19 @@ class CitizenFactory {
     private final IdGenerator idGenerator;
     private final RandomNameProvider randomNameProvider;
     private final SkillFactory skillFactory;
+    private final GameCreationProperties properties;
 
     Citizen create(UUID planetId) {
+        GameCreationProperties.CitizenProperties citizenProperties = properties.getCitizen();
+
         UUID citizenId = idGenerator.randomUuid();
         return Citizen.builder()
             .citizenId(citizenId)
             .name(randomNameProvider.getRandomName(Collections.emptyList()))
             .location(planetId)
             .locationType(LocationType.PLANET)
-            .morale(100)
-            .satiety(100)
+            .morale(citizenProperties.getDefaultMorale())
+            .satiety(citizenProperties.getDefaultSatiety())
             .skills(createSkills(citizenId))
             .build();
     }
