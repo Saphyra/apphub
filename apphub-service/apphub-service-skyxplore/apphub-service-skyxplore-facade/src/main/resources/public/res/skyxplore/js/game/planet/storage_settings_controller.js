@@ -163,6 +163,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
         }
 
         const payload = {
+            storageSettingId: storageSettingId,
             targetAmount: targetAmount,
             batchSize: batchSize,
             priority: priority

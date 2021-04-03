@@ -1,14 +1,15 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
+import java.util.UUID;
+
+import org.springframework.web.bind.annotation.RestController;
+
 import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXplorePlanetStorageSettingController;
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingsModel;
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageSettingsResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,7 +21,6 @@ class SkyXplorePlanetStorageSettingControllerImpl implements SkyXplorePlanetStor
     private final StorageSettingEditionService storageSettingEditionService;
 
     @Override
-    //TODO unit test
     //TODO unt test
     //TODO api test
     public StorageSettingsResponse getStorageSettings(UUID planetId, AccessTokenHeader accessTokenHeader) {
@@ -29,16 +29,14 @@ class SkyXplorePlanetStorageSettingControllerImpl implements SkyXplorePlanetStor
     }
 
     @Override
-    //TODO unit test
     //TODO unt test
     //TODO api test
-    public void createStorageSetting(StorageSettingsModel request, UUID planetId, AccessTokenHeader accessTokenHeader) {
+    public void createStorageSetting(StorageSettingModel request, UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create storageSetting for resource {} on planet {}", accessTokenHeader.getUserId(), request.getDataId(), planetId);
         storageSettingCreationService.createStorageSetting(accessTokenHeader.getUserId(), planetId, request);
     }
 
     @Override
-    //TODO unit test
     //TODO unt test
     //TODO api test
     public void deleteStorageSetting(UUID planetId, UUID storageSettingId, AccessTokenHeader accessTokenHeader) {
@@ -47,11 +45,10 @@ class SkyXplorePlanetStorageSettingControllerImpl implements SkyXplorePlanetStor
     }
 
     @Override
-    //TODO unit test
     //TODO unt test
     //TODO api test
-    public void editStorageSetting(StorageSettingsModel request, UUID planetId, UUID storageSettingId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to edit storageSetting {} on planet {}", accessTokenHeader.getUserId(), storageSettingId, planetId);
-        storageSettingEditionService.edit(accessTokenHeader.getUserId(), planetId, storageSettingId, request);
+    public void editStorageSetting(StorageSettingModel request, UUID planetId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to edit storageSetting {} on planet {}", accessTokenHeader.getUserId(), request.getStorageSettingId(), planetId);
+        storageSettingEditionService.edit(accessTokenHeader.getUserId(), planetId,  request);
     }
 }

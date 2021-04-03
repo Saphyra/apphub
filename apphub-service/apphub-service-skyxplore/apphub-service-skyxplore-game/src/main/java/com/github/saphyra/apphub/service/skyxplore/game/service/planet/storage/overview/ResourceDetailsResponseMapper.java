@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview;
 
+import org.springframework.stereotype.Component;
+
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ResourceDetailsResponse;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
@@ -8,12 +10,10 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.A
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.ReservedStorageQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ResourceDetailsResponseMapper {
     private final ReservedStorageQueryService reservedStorageQueryService;
     private final ActualResourceAmountQueryService actualResourceAmountQueryService;

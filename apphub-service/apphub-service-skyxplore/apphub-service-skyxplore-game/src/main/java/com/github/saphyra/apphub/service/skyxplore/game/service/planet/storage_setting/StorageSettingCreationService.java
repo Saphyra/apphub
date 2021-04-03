@@ -1,6 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingsModel;
+import java.util.UUID;
+
+import org.springframework.stereotype.Component;
+
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
@@ -11,14 +15,10 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StorageSettingCreationService {
     private final GameDao gameDao;
     private final StorageSettingsModelValidator storageSettingsModelValidator;
@@ -27,16 +27,12 @@ public class StorageSettingCreationService {
     private final StorageSettingFactory storageSettingFactory;
     private final ReservedStorageFactory reservedStorageFactory;
 
-    public void createStorageSetting(UUID userId, UUID planetId, StorageSettingsModel request) {
-        storageSettingsModelValidator.validate(request);
-
+    public void createStorageSetting(UUID userId, UUID planetId, StorageSettingModel request) {
         Planet planet = gameDao.findByUserIdValidated(userId)
             .getUniverse()
             .findPlanetByIdValidated(planetId);
 
-        if (planet.getStorageDetails().getStorageSettings().findByDataId(request.getDataId()).isPresent()) {
-            throw new RuntimeException("StorageSetting for dataId " + request.getDataId() + " already exists.");
-        }
+        storageSettingsModelValidator.validate(request, planet);
 
         ResourceData resourceData = resourceDataService.get(request.getDataId());
 
@@ -53,7 +49,7 @@ public class StorageSettingCreationService {
             .getStorageSettings()
             .add(storageSetting);
 
-        ReservedStorage reservedStorage = reservedStorageFactory.create(storageSetting.getStorageSettingsId(), request.getDataId(), missingAmount);
+        ReservedStorage reservedStorage = reservedStorageFactory.create(storageSetting.getStorageSettingId(), request.getDataId(), missingAmount);
 
         log.debug("ReservedStorage created: {}", reservedStorage);
         planet.getStorageDetails()

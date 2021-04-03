@@ -1,6 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingsModel;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Component;
+
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageSettingsResponse;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuilding;
@@ -15,13 +23,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -47,15 +48,15 @@ public class StorageSettingsResponseQueryService {
             .build();
     }
 
-    private List<StorageSettingsModel> convert(List<StorageSetting> storageSettings) {
+    private List<StorageSettingModel> convert(List<StorageSetting> storageSettings) {
         return storageSettings.stream()
             .map(this::convert)
             .collect(Collectors.toList());
     }
 
-    private StorageSettingsModel convert(StorageSetting storageSetting) {
-        return StorageSettingsModel.builder()
-            .storageSettingId(storageSetting.getStorageSettingsId())
+    private StorageSettingModel convert(StorageSetting storageSetting) {
+        return StorageSettingModel.builder()
+            .storageSettingId(storageSetting.getStorageSettingId())
             .dataId(storageSetting.getDataId())
             .targetAmount(storageSetting.getTargetAmount())
             .batchSize(storageSetting.getBatchSize())
@@ -86,8 +87,9 @@ public class StorageSettingsResponseQueryService {
         return capacity - usedStorage;
     }
 
-    private int countStoredResources(StorageType storageType, List<StoredResource> storedResources) {
-        return storedResources.stream()
+    private int countStoredResources(StorageType storageType, Map<String, StoredResource> storedResources) {
+        return storedResources.values()
+            .stream()
             .filter(storedResource -> resourceDataService.get(storedResource.getDataId()).getStorageType().equals(storageType))
             .mapToInt(StoredResource::getAmount)
             .sum();

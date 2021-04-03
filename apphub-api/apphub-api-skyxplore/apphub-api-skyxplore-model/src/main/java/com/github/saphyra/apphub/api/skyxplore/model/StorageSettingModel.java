@@ -11,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Builder
-public class StorageSettingsModel {
+public class StorageSettingModel {
     private UUID storageSettingId;
     private String dataId;
     private Integer targetAmount;

@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
-public class StorageTypeResponse {
+public class StorageDetailsResponse {
     private int capacity;
     private int reservedStorageAmount;
     private int actualResourceAmount;

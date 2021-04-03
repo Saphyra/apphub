@@ -1,6 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingsModel;
+import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
+import com.github.saphyra.apphub.lib.exception.RestException;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorage;
@@ -9,42 +15,41 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StorageSettingEditionService {
     private final GameDao gameDao;
     private final FreeStorageQueryService freeStorageQueryService;
     private final ResourceDataService resourceDataService;
+    private final StorageSettingsModelValidator storageSettingsModelValidator;
 
-    public void edit(UUID userId, UUID planetId, UUID storageSettingId, StorageSettingsModel request/*TODO validate*/) {
+    public void edit(UUID userId, UUID planetId, StorageSettingModel request) {
+        storageSettingsModelValidator.validate(request);
+
         Planet planet = gameDao.findByUserIdValidated(userId)
             .getUniverse()
             .findPlanetByIdValidated(planetId);
 
         StorageSetting storageSetting = planet.getStorageDetails()
             .getStorageSettings()
-            .findByStorageSettingId(storageSettingId)
-            .orElseThrow(() -> new RuntimeException("StorageSetting not found with id " + storageSettingId)); //TODO proper exception
-
-        ReservedStorage reservedStorage = planet.getStorageDetails()
-            .getReservedStorages()
-            .findByExternalReferenceValidated(storageSettingId);
+            .findByStorageSettingId(request.getStorageSettingId())
+            .orElseThrow(() -> RestException.createNonTranslated(HttpStatus.NOT_FOUND, "StorageSetting not found with id " + request.getStorageSettingId()));
 
         storageSetting.setPriority(request.getPriority());
         storageSetting.setBatchSize(request.getBatchSize());
 
-        int maxTargetAmount = freeStorageQueryService.getFreeStorage(planet, resourceDataService.get(storageSetting.getDataId()).getStorageType()) + reservedStorage.getAmount();
-        int targetAmount = storageSetting.getTargetAmount();
+        ReservedStorage reservedStorage = planet.getStorageDetails()
+            .getReservedStorages()
+            .findByExternalReferenceValidated(request.getStorageSettingId());
+
+        int oldTargetAmount = storageSetting.getTargetAmount();
+        int maxTargetAmount = freeStorageQueryService.getFreeStorage(planet, resourceDataService.get(request.getDataId()).getStorageType()) + reservedStorage.getAmount();
         int newTargetAmount = Math.min(maxTargetAmount, request.getTargetAmount());
         storageSetting.setTargetAmount(newTargetAmount);
 
-        int newReservedStorage = newTargetAmount - targetAmount + reservedStorage.getAmount();
+        int newReservedStorage = newTargetAmount - oldTargetAmount + reservedStorage.getAmount();
         reservedStorage.setAmount(Math.max(0, newReservedStorage));
     }
 }

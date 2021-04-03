@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingsModel;
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;
@@ -14,13 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StorageSettingFactory {
     private final IdGenerator idGenerator;
 
-    StorageSetting create(StorageSettingsModel request, int targetAmount, UUID location, LocationType locationType) {
+    StorageSetting create(StorageSettingModel request, int targetAmount, UUID location, LocationType locationType) {
         return StorageSetting.builder()
-            .storageSettingsId(idGenerator.randomUuid())
+            .storageSettingId(idGenerator.randomUuid())
             .dataId(request.getDataId())
             .location(location)
             .locationType(locationType)

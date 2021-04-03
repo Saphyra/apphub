@@ -24,7 +24,7 @@ public class StorageSettingToModelConverter {
 
     public StorageSettingModel convert(StorageSetting storageSetting, Game game) {
         StorageSettingModel model = new StorageSettingModel();
-        model.setId(storageSetting.getStorageSettingsId());
+        model.setId(storageSetting.getStorageSettingId());
         model.setGameId(game.getGameId());
         model.setType(GameItemType.STORAGE_SETTING);
         model.setLocation(storageSetting.getLocation());

@@ -11,7 +11,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class StorageSetting {
-    private final UUID storageSettingsId;
+    private final UUID storageSettingId;
     private final UUID location;
     private final LocationType locationType;
     private final String dataId;
