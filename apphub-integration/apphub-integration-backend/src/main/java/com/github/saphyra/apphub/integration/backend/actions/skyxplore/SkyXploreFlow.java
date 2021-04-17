@@ -42,6 +42,8 @@ public class SkyXploreFlow {
 
         hostLobbyWsClient.send(readyEvent);
 
+        memberLobbyWsClients.forEach(skyXploreLobbyWsClient -> skyXploreLobbyWsClient.send(readyEvent));
+
         boolean allPlayersReady = Stream.concat(
             Stream.of(host),
             Arrays.stream(members)
@@ -49,8 +51,6 @@ public class SkyXploreFlow {
             .map(Player::getUserId)
             .allMatch(userId -> hostLobbyWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS, event -> event.getPayloadAs(ReadinessEvent.class).equals(new ReadinessEvent(userId, true))).isPresent());
         assertThat(allPlayersReady).isTrue();
-
-        memberLobbyWsClients.forEach(skyXploreLobbyWsClient -> skyXploreLobbyWsClient.send(readyEvent));
 
         SkyXploreLobbyActions.startGame(language, host.getAccessTokenId());
         hostLobbyWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED);

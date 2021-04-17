@@ -140,7 +140,7 @@ public class PriorityControllerImplTestIt_updatePriority {
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getParams()).containsEntry("value", "too low");
+        assertThat(errorResponse.getParams()).containsEntry("priority", "too low");
     }
 
     @Test
@@ -164,7 +164,7 @@ public class PriorityControllerImplTestIt_updatePriority {
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getParams()).containsEntry("value", "too high");
+        assertThat(errorResponse.getParams()).containsEntry("priority", "too high");
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.lib.common_util;
 
 public enum ErrorCode {
+    ALREADY_EXISTS,
     BAD_CREDENTIALS,
     BAD_PASSWORD,
     CATEGORY_NOT_FOUND,

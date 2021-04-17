@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 
 import java.util.UUID;
 
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.query.StorageSettingsResponseQueryService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

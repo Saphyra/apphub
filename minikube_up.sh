@@ -1,8 +1,12 @@
 minikube start && start minikube dashboard
 
-kubectl -n production scale deployments --all --replicas=0
-kubectl -n production scale deployments --all --replicas=1
-
+./scale.sh production 1
 sleep 20
+./infra/deployment/script/wait_for_pods_ready.sh production 60 5
+
+./scale.sh develop 1
+sleep 20
+./infra/deployment/script/wait_for_pods_ready.sh develop 60 5
 
 ./pp.sh
+start ./port_forward.sh develop
