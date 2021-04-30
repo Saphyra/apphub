@@ -45,7 +45,7 @@ public class UpdatePriorityTest extends BackEndTest {
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.ERROR_CODE_INVALID_PARAM));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getParams()).containsEntry("priorityType", "unknown value");
     }
@@ -67,9 +67,9 @@ public class UpdatePriorityTest extends BackEndTest {
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.ERROR_CODE_INVALID_PARAM));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getParams()).containsEntry("value", "too low");
+        assertThat(errorResponse.getParams()).containsEntry("priority", "too low");
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -89,9 +89,9 @@ public class UpdatePriorityTest extends BackEndTest {
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.ERROR_CODE_INVALID_PARAM));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getParams()).containsEntry("value", "too high");
+        assertThat(errorResponse.getParams()).containsEntry("priority", "too high");
     }
 
     @Test

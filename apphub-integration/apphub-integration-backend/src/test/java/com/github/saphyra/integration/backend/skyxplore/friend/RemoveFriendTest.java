@@ -42,7 +42,7 @@ public class RemoveFriendTest extends TestBase {
         ErrorResponse errorResponse = response.getBody()
             .as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FRIENDSHIP_NOT_FOUND.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.ERROR_CODE_FRIENDSHIP_NOT_FOUND));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FRIENDSHIP_NOT_FOUND));
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -86,7 +86,7 @@ public class RemoveFriendTest extends TestBase {
         ErrorResponse errorResponse = response.getBody()
             .as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.ERROR_CODE_FORBIDDEN_OPERATION));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FORBIDDEN_OPERATION));
 
         assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId)).hasSize(1);
         assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId2)).hasSize(1);

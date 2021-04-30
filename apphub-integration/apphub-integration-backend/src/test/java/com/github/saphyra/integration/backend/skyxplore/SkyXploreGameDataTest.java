@@ -39,7 +39,7 @@ public class SkyXploreGameDataTest extends TestBase {
         ErrorResponse errorResponse = response.getBody()
             .as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.DATA_NOT_FOUND.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.ERROR_CODE_DATA_NOT_FOUND));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.DATA_NOT_FOUND));
     }
 
     @Test

@@ -42,7 +42,7 @@ public class SkyXploreCharacterTest extends TestBase {
             .as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getParams()).containsEntry("name", "Must not be null");
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.ERROR_CODE_INVALID_PARAM));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -60,7 +60,7 @@ public class SkyXploreCharacterTest extends TestBase {
         ErrorResponse errorResponse = response.getBody()
             .as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CHARACTER_NAME_TOO_SHORT.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.ERROR_CODE_CHARACTER_NAME_TOO_SHORT));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.CHARACTER_NAME_TOO_SHORT));
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -78,7 +78,7 @@ public class SkyXploreCharacterTest extends TestBase {
         ErrorResponse errorResponse = response.getBody()
             .as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CHARACTER_NAME_TOO_LONG.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.ERROR_CODE_CHARACTER_NAME_TOO_LONG));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.CHARACTER_NAME_TOO_LONG));
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -99,7 +99,7 @@ public class SkyXploreCharacterTest extends TestBase {
         ErrorResponse errorResponse = response.getBody()
             .as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CHARACTER_NAME_ALREADY_EXISTS.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.ERROR_CODE_CHARACTER_NAME_ALREADY_EXISTS));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.CHARACTER_NAME_ALREADY_EXISTS));
     }
 
     @Test

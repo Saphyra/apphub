@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.integration.common.model.RegistrationParameters
 import com.github.saphyra.apphub.integration.common.model.UserRoleResponse;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
@@ -35,6 +36,7 @@ public class TestBase {
     public static int DATABASE_PORT;
 
     private static final ThreadLocal<String> EMAIL_DOMAIN = new ThreadLocal<>();
+    private static final ThreadLocal<SoftAssertions> SOFT_ASSERTIONS = new ThreadLocal<>();
     private static volatile RegistrationParameters superUser;
     private static volatile UUID accessTokenId;
 
@@ -61,6 +63,7 @@ public class TestBase {
     @BeforeMethod(alwaysRun = true)
     public void setUpMethod() {
         EMAIL_DOMAIN.set(UUID.randomUUID().toString());
+        SOFT_ASSERTIONS.set(new SoftAssertions());
     }
 
     @AfterMethod(alwaysRun = true)
@@ -68,6 +71,12 @@ public class TestBase {
         deleteTestUsers();
 
         EMAIL_DOMAIN.remove();
+    }
+
+    @AfterMethod(alwaysRun = true)
+    public void assertSoftAssertions() {
+        SOFT_ASSERTIONS.get()
+            .assertAll();
     }
 
     private void deleteTestUsers() {
@@ -123,5 +132,9 @@ public class TestBase {
         } catch (Throwable e) {
             //
         }
+    }
+
+    public static SoftAssertions getSoftAssertions() {
+        return SOFT_ASSERTIONS.get();
     }
 }

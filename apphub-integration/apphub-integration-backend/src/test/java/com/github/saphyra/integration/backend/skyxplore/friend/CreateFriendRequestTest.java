@@ -43,7 +43,7 @@ public class CreateFriendRequestTest extends TestBase {
         ErrorResponse errorResponse = response.getBody()
             .as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USER_NOT_FOUND.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.ERROR_CODE_USER_NOT_FOUND));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.USER_NOT_FOUND));
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -69,7 +69,7 @@ public class CreateFriendRequestTest extends TestBase {
         ErrorResponse errorResponse = response.getBody()
             .as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FRIEND_REQUEST_ALREADY_EXISTS.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.ERROR_CODE_FRIEND_REQUEST_ALREADY_EXISTS));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FRIEND_REQUEST_ALREADY_EXISTS));
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -101,7 +101,7 @@ public class CreateFriendRequestTest extends TestBase {
         ErrorResponse errorResponse = response.getBody()
             .as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FRIENDSHIP_ALREADY_EXISTS.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.ERROR_CODE_FRIENDSHIP_ALREADY_EXISTS));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FRIENDSHIP_ALREADY_EXISTS));
     }
 
     @Test

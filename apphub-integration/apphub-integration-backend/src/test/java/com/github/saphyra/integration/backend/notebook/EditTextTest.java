@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_INVALID_PARAM;
+import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.INVALID_PARAM;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EditTextTest extends TestBase {
@@ -52,7 +52,7 @@ public class EditTextTest extends TestBase {
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getParams().get("title")).isEqualTo("must not be null or blank");
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, ERROR_CODE_INVALID_PARAM));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, INVALID_PARAM));
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -76,7 +76,7 @@ public class EditTextTest extends TestBase {
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getParams().get("content")).isEqualTo("must not be null");
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, ERROR_CODE_INVALID_PARAM));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, INVALID_PARAM));
     }
 
     @Test

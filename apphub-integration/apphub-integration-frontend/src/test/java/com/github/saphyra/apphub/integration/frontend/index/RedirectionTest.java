@@ -72,6 +72,6 @@ public class RedirectionTest extends SeleniumTest {
 
         ErrorMessageElement errorMessageElement = ErrorPageActions.getErrorMessage(driver);
         assertThat(errorMessageElement.getErrorCode()).isEqualTo(ErrorCode.MISSING_ROLE.name());
-        assertThat(errorMessageElement.getErrorMessage()).isEqualTo(LocalizationProperties.getProperty(Language.HUNGARIAN, LocalizationKey.ERROR_CODE_MISSING_ROLE));
+        assertThat(errorMessageElement.getErrorMessage()).isEqualTo(LocalizationProperties.getProperty(Language.HUNGARIAN, LocalizationKey.MISSING_ROLE));
     }
 }

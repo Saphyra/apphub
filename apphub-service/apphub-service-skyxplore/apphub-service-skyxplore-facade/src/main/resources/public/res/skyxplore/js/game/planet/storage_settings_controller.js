@@ -165,7 +165,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
             priority: priority
         }
 
-        const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_EDIT_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId(), storageSettingId: storageSettingId}), payload);
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_EDIT_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId()});
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("storage-setting-saved"));
                 viewStorageSettings(planetController.getOpenedPlanetId());

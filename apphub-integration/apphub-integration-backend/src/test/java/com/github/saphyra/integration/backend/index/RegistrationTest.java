@@ -17,11 +17,11 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_PASSWORD_TOO_LONG;
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_PASSWORD_TOO_SHORT;
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_USERNAME_ALREADY_EXISTS;
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_USERNAME_TOO_LONG;
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_USERNAME_TOO_SHORT;
+import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.PASSWORD_TOO_LONG;
+import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.PASSWORD_TOO_SHORT;
+import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.USERNAME_ALREADY_EXISTS;
+import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.USERNAME_TOO_LONG;
+import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.USERNAME_TOO_SHORT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RegistrationTest extends TestBase {
@@ -41,7 +41,7 @@ public class RegistrationTest extends TestBase {
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.ERROR_CODE_INVALID_PARAM));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.INVALID_PARAM));
         assertThat(errorResponse.getParams().get("email")).isEqualTo("invalid format");
     }
 
@@ -62,7 +62,7 @@ public class RegistrationTest extends TestBase {
         assertThat(response.getStatusCode()).isEqualTo(409);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.ERROR_CODE_EMAIL_ALREADY_IN_USE));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.EMAIL_ALREADY_IN_USE));
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.EMAIL_ALREADY_EXISTS.name());
     }
 
@@ -77,7 +77,7 @@ public class RegistrationTest extends TestBase {
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USERNAME_TOO_SHORT.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_USERNAME_TOO_SHORT));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, USERNAME_TOO_SHORT));
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -91,7 +91,7 @@ public class RegistrationTest extends TestBase {
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USERNAME_TOO_LONG.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_USERNAME_TOO_LONG));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, USERNAME_TOO_LONG));
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -111,7 +111,7 @@ public class RegistrationTest extends TestBase {
         assertThat(response.getStatusCode()).isEqualTo(409);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_USERNAME_ALREADY_EXISTS));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, USERNAME_ALREADY_EXISTS));
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USERNAME_ALREADY_EXISTS.name());
     }
 
@@ -126,7 +126,7 @@ public class RegistrationTest extends TestBase {
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_SHORT.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_PASSWORD_TOO_SHORT));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, PASSWORD_TOO_SHORT));
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -140,7 +140,7 @@ public class RegistrationTest extends TestBase {
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_LONG.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_PASSWORD_TOO_LONG));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, PASSWORD_TOO_LONG));
     }
 
     @Test

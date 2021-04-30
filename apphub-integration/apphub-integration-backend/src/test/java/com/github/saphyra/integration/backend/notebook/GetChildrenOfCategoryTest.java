@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_INVALID_PARAM;
+import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.INVALID_PARAM;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetChildrenOfCategoryTest extends TestBase {
@@ -42,7 +42,7 @@ public class GetChildrenOfCategoryTest extends TestBase {
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, ERROR_CODE_INVALID_PARAM));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, INVALID_PARAM));
         assertThat(errorResponse.getParams().get("type")).isEqualTo("contains invalid argument");
     }
 

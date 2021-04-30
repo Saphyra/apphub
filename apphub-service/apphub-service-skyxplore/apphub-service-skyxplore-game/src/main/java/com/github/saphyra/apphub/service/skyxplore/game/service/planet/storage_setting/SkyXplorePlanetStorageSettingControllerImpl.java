@@ -21,32 +21,24 @@ class SkyXplorePlanetStorageSettingControllerImpl implements SkyXplorePlanetStor
     private final StorageSettingEditionService storageSettingEditionService;
 
     @Override
-    //TODO int test
-    //TODO api test
     public StorageSettingsResponse getStorageSettings(UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the storageSettings of planet {}", accessTokenHeader.getUserId(), planetId);
         return storageSettingsResponseQueryService.getStorageSettings(accessTokenHeader.getUserId(), planetId);
     }
 
     @Override
-    //TODO int test
-    //TODO api test
     public void createStorageSetting(StorageSettingModel request, UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create storageSetting for resource {} on planet {}", accessTokenHeader.getUserId(), request.getDataId(), planetId);
         storageSettingCreationService.createStorageSetting(accessTokenHeader.getUserId(), planetId, request);
     }
 
     @Override
-    //TODO int test
-    //TODO api test
     public void deleteStorageSetting(UUID planetId, UUID storageSettingId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to delete storageSetting {} from planet {}", accessTokenHeader.getUserId(), storageSettingId, planetId);
         storageSettingDeletionService.deleteStorageSetting(accessTokenHeader.getUserId(), planetId, storageSettingId);
     }
 
     @Override
-    //TODO int test
-    //TODO api test
     public void editStorageSetting(StorageSettingModel request, UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to edit storageSetting {} on planet {}", accessTokenHeader.getUserId(), request.getStorageSettingId(), planetId);
         storageSettingEditionService.edit(accessTokenHeader.getUserId(), planetId,  request);
