@@ -1,7 +1,6 @@
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
 (function StorageSettingsController(){
-    let availableStorage;
     let currentSettings;
 
     window.storageSettingsController = new function(){
@@ -27,7 +26,6 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
     }
 
     function displayStorageSettings(storageSettings){
-        availableStorage = storageSettings.availableStorage;
         currentSettings = new Stream(storageSettings.currentSettings)
             .toMap(function(setting){return setting.dataId}, function(setting){return setting.targetAmount});
 
@@ -71,7 +69,6 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
             function createStorageSetting(storageSetting){
                 const dataId = storageSetting.dataId;
                 const storageType = itemData.get(dataId).storageType;
-                const maxAmount = availableStorage[storageType] + storageSetting.targetAmount;
 
                 const node = document.createElement("DIV");
                     node.classList.add("storage-setting");
@@ -87,7 +84,6 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
                         amountLabel.appendChild(amountTitle);
                             const amountInput = document.createElement("INPUT");
                                 amountInput.type = "number";
-                                amountInput.max = maxAmount;
                                 amountInput.step = 1;
                                 amountInput.value = storageSetting.targetAmount;
                         amountLabel.appendChild(amountInput);
@@ -234,10 +230,6 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
             return;
         }
         const storageType = itemData.get(dataId).storageType;
-        const maxAmount = availableStorage[storageType];
-
-
-            amountInput.max = maxAmount;
             amountInput.value = maxAmount == 0 ? 0 : 1;
 
         const disabled = maxAmount == 0;

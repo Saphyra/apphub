@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,5 +15,4 @@ import java.util.Map;
 public class StorageSettingsResponse {
     private List<StorageSettingModel> currentSettings;
     private List<String> availableResources;
-    private Map<String, Integer> availableStorage;
 }

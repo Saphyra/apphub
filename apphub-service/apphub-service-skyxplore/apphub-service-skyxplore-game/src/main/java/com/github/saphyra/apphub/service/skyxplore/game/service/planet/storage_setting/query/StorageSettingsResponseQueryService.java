@@ -18,7 +18,6 @@ public class StorageSettingsResponseQueryService {
     private final GameDao gameDao;
     private final AvailableResourcesMapper availableResourcesMapper;
     private final CurrentSettingsMapper currentSettingsMapper;
-    private final AvailableStorageMapper availableStorageMapper;
 
     public StorageSettingsResponse getStorageSettings(UUID userId, UUID planetId) {
         Planet planet = gameDao.findByUserIdValidated(userId)
@@ -31,7 +30,6 @@ public class StorageSettingsResponseQueryService {
         return StorageSettingsResponse.builder()
             .currentSettings(currentSettingsMapper.convert(storageSettings))
             .availableResources(availableResourcesMapper.getAvailableResources(storageSettings))
-            .availableStorage(availableStorageMapper.countAvailableStorage(planet.getBuildings(), planet.getStorageDetails()))
             .build();
     }
 }
