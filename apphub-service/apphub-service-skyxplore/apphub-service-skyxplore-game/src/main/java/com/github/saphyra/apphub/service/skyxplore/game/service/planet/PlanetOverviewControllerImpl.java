@@ -27,36 +27,24 @@ public class PlanetOverviewControllerImpl implements SkyXploreGamePlanetOverview
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
 
     @Override
-    //TODO unit test
-    //TODO unt test
-    //TODO api test
     public List<SurfaceResponse> getSurfaceOfPlanet(UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to query the surface of planet {}", accessTokenHeader.getUserId(), planetId);
         return surfaceQueryService.getSurfaceOfPlanet(accessTokenHeader.getUserId(), planetId);
     }
 
     @Override
-    //TODO unit test
-    //TODO unt test
-    //TODO api test
     public PlanetStorageResponse getStorageOfPlanet(UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the storage of planet {}", accessTokenHeader.getUserId(), planetId);
         return planetStorageOverviewQueryService.getStorage(accessTokenHeader.getUserId(), planetId);
     }
 
     @Override
-    //TODO unit test
-    //TODO unt test
-    //TODO api test
     public PlanetPopulationOverviewResponse getPopulationOverview(UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the population overview of planet {}", accessTokenHeader.getUserId(), planetId);
         return planetPopulationOverviewQueryService.getPopulationOverview(accessTokenHeader.getUserId(), planetId);
     }
 
     @Override
-    //TODO unit test
-    //TODO unt test
-    //TODO api test
     public Map<String, PlanetBuildingOverviewResponse> getBuildingOverview(UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the building overview of planet {}", accessTokenHeader.getUserId(), planetId);
         return planetBuildingOverviewQueryService.getBuildingOverview(accessTokenHeader.getUserId(), planetId);
