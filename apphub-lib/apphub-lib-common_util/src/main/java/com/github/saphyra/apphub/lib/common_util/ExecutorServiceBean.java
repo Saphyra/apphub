@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -40,6 +41,20 @@ public class ExecutorServiceBean implements Executor {
                 throw e;
             }
         };
+    }
+
+    public <I, R> R processWithWait(I input, Function<I, R> mapper) {
+        Future<R> result = executor.submit(() -> mapper.apply(input));
+
+        while (!result.isDone()) {
+            sleepService.sleep(1);
+        }
+
+        try {
+            return result.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("Task failed", e);
+        }
     }
 
     public <I, R> List<R> processCollectionWithWait(Collection<I> dataList, Function<I, R> mapper) {

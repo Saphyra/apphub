@@ -27,7 +27,7 @@ public class Planet {
     private final UUID solarSystemId;
     private final String defaultName;
     @Builder.Default
-    private final Map<UUID, String> customNames = new OptionalHashMap<>();
+    private final OptionalMap<UUID, String> customNames = new OptionalHashMap<>();
     private final Coordinate coordinate;
     private final int size;
     private final Map<Coordinate, Surface> surfaces;

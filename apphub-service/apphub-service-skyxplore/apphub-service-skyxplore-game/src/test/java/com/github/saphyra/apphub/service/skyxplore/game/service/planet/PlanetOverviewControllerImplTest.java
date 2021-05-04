@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.building_overview.PlanetBuildingOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.PlanetPopulationOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceResponseQueryService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +38,7 @@ public class PlanetOverviewControllerImplTest {
     private PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
 
     @Mock
-    private SurfaceQueryService surfaceQueryService;
+    private SurfaceResponseQueryService surfaceResponseQueryService;
 
     @Mock
     private PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
@@ -67,7 +68,7 @@ public class PlanetOverviewControllerImplTest {
 
     @Test
     public void getSurfaceOfPlanet() {
-        given(surfaceQueryService.getSurfaceOfPlanet(USER_ID, PLANET_ID)).willReturn(Arrays.asList(surfaceResponse));
+        given(surfaceResponseQueryService.getSurfaceOfPlanet(USER_ID, PLANET_ID)).willReturn(Arrays.asList(surfaceResponse));
 
         List<SurfaceResponse> result = underTest.getSurfaceOfPlanet(PLANET_ID, accessTokenHeader);
 

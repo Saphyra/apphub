@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class AllocatedResourceToModelConverter {
     public List<AllocatedResourceModel> convert(List<AllocatedResource> allocatedResources, Game game) {
         return allocatedResources.stream()
@@ -22,7 +21,7 @@ public class AllocatedResourceToModelConverter {
             .collect(Collectors.toList());
     }
 
-    public AllocatedResourceModel convert(AllocatedResource allocatedResource, Game game) {
+    private AllocatedResourceModel convert(AllocatedResource allocatedResource, Game game) {
         AllocatedResourceModel model = new AllocatedResourceModel();
         model.setId(allocatedResource.getAllocatedResourceId());
         model.setGameId(game.getGameId());

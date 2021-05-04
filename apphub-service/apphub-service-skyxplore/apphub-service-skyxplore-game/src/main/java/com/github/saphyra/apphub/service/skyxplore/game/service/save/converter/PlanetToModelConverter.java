@@ -18,15 +18,11 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class PlanetToModelConverter {
     private final SurfaceToModelConverter surfaceConverter;
     private final CitizenToModelConverter citizenConverter;
-    private final AllocatedResourceToModelConverter allocatedResourceConverter;
-    private final ReservedStorageToModelConverter reservedStorageConverter;
-    private final StoredResourceToModelConverter storedResourceConverter;
-    private final StorageSettingToModelConverter storageSettingConverter;
     private final PriorityToModelConverter priorityConverter;
+    private final StorageDetailsToModelConverter storageDetailsConverter;
 
     public List<GameItem> convertDeep(Collection<Planet> planets, Game game) {
         return planets.stream()
@@ -35,15 +31,12 @@ public class PlanetToModelConverter {
             .collect(Collectors.toList());
     }
 
-    public List<GameItem> convertDeep(Planet planet, Game game) {
+    private List<GameItem> convertDeep(Planet planet, Game game) {
         List<GameItem> result = new ArrayList<>();
         result.add(convert(planet, game));
         result.addAll(surfaceConverter.convertDeep(planet.getSurfaces().values(), game));
         result.addAll(citizenConverter.convertDeep(planet.getPopulation().values(), game));
-        result.addAll(allocatedResourceConverter.convert(planet.getStorageDetails().getAllocatedResources(), game));
-        result.addAll(reservedStorageConverter.convert(planet.getStorageDetails().getReservedStorages(), game));
-        result.addAll(storedResourceConverter.convert(planet.getStorageDetails().getStoredResources(), game));
-        result.addAll(storageSettingConverter.convert(planet.getStorageDetails().getStorageSettings(), game));
+        result.addAll(storageDetailsConverter.convertDeep(planet.getStorageDetails(), game));
         result.addAll(priorityConverter.convert(planet.getPriorities(), planet.getPlanetId(), LocationType.PLANET, game));
         return result;
     }

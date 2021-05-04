@@ -15,7 +15,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class UniverseToModelConverter {
     private final SystemConnectionToModelConverter connectionConverter;
     private final SolarSystemToModelConverter solarSystemConverter;

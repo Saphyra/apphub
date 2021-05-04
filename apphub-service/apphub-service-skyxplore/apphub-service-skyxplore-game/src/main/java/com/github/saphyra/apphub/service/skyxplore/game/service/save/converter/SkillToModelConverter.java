@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SkillToModelConverter {
     public List<SkillModel> convert(Collection<Skill> skills, Game game) {
         return skills.stream()
@@ -23,7 +22,7 @@ public class SkillToModelConverter {
             .collect(Collectors.toList());
     }
 
-    public SkillModel convert(Skill skill, Game game) {
+    private SkillModel convert(Skill skill, Game game) {
         SkillModel model = new SkillModel();
         model.setId(skill.getSkillId());
         model.setGameId(game.getGameId());

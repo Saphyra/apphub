@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.building_overview.PlanetBuildingOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.PlanetPopulationOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceResponseQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,13 +24,13 @@ import java.util.UUID;
 public class PlanetOverviewControllerImpl implements SkyXploreGamePlanetOverviewController {
     private final PlanetPopulationOverviewQueryService planetPopulationOverviewQueryService;
     private final PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
-    private final SurfaceQueryService surfaceQueryService;
+    private final SurfaceResponseQueryService surfaceResponseQueryService;
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
 
     @Override
     public List<SurfaceResponse> getSurfaceOfPlanet(UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to query the surface of planet {}", accessTokenHeader.getUserId(), planetId);
-        return surfaceQueryService.getSurfaceOfPlanet(accessTokenHeader.getUserId(), planetId);
+        return surfaceResponseQueryService.getSurfaceOfPlanet(accessTokenHeader.getUserId(), planetId);
     }
 
     @Override

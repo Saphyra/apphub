@@ -19,7 +19,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SurfaceToModelConverter {
     private final BuildingToModelConverter buildingConverter;
 
@@ -30,7 +29,7 @@ public class SurfaceToModelConverter {
             .collect(Collectors.toList());
     }
 
-    public List<GameItem> convertDeep(Surface surface, Game game) {
+    private List<GameItem> convertDeep(Surface surface, Game game) {
         List<GameItem> result = new ArrayList<>();
         result.add(convert(surface, game));
         if (!isNull(surface.getBuilding())) {

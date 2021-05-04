@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class PriorityToModelConverter {
     public List<PriorityModel> convert(Map<PriorityType, Integer> priorities, UUID location, LocationType locationType, Game game) {
         return priorities.entrySet()

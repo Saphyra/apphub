@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CitizenToModelConverter {
     private final SkillToModelConverter skillConverter;
 
@@ -28,7 +27,7 @@ public class CitizenToModelConverter {
             .collect(Collectors.toList());
     }
 
-    public List<GameItem> convertDeep(Citizen citizen, Game game) {
+    private List<GameItem> convertDeep(Citizen citizen, Game game) {
         List<GameItem> result = new ArrayList<>();
         result.add(convert(citizen, game));
         result.addAll(skillConverter.convert(citizen.getSkills().values(), game));

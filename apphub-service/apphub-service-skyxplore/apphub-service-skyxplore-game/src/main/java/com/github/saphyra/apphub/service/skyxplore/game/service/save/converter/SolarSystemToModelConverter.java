@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-//TODO unit test
 public class SolarSystemToModelConverter {
     private final PlanetToModelConverter planetToModelConverter;
 
@@ -28,7 +27,7 @@ public class SolarSystemToModelConverter {
             .collect(Collectors.toList());
     }
 
-    public List<GameItem> convertDeep(SolarSystem system, Game game) {
+    private List<GameItem> convertDeep(SolarSystem system, Game game) {
         List<GameItem> result = new ArrayList<>();
         result.add(convert(system, game));
         result.addAll(planetToModelConverter.convertDeep(system.getPlanets().values(), game));

@@ -14,9 +14,8 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-public class PlayerToModelConverter {
-    public PlayerModel convert(Player player, Game game) {
+class PlayerToModelConverter {
+    PlayerModel convert(Player player, Game game) {
         PlayerModel model = new PlayerModel();
         model.setId(player.getPlayerId());
         model.setGameId(game.getGameId());
@@ -27,7 +26,7 @@ public class PlayerToModelConverter {
         UUID allianceId = game.getAlliances()
             .values()
             .stream()
-            .filter(alliance -> alliance.getMembers().containsValue(player))
+            .filter(alliance -> alliance.getMembers().containsKey(player.getUserId()))
             .findFirst()
             .map(Alliance::getAllianceId)
             .orElse(null);

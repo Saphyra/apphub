@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StorageSettingToModelConverter {
     public List<StorageSettingModel> convert(List<StorageSetting> storageSettings, Game game) {
         return storageSettings.stream()
@@ -22,7 +21,7 @@ public class StorageSettingToModelConverter {
             .collect(Collectors.toList());
     }
 
-    public StorageSettingModel convert(StorageSetting storageSetting, Game game) {
+    private StorageSettingModel convert(StorageSetting storageSetting, Game game) {
         StorageSettingModel model = new StorageSettingModel();
         model.setId(storageSetting.getStorageSettingId());
         model.setGameId(game.getGameId());

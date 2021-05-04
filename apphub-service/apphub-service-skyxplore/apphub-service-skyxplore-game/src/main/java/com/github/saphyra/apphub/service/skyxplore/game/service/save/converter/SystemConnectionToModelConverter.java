@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SystemConnectionToModelConverter {
     public List<SystemConnectionModel> convert(List<SystemConnection> connections, Game game) {
         return connections.stream()
@@ -22,7 +21,7 @@ public class SystemConnectionToModelConverter {
             .collect(Collectors.toList());
     }
 
-    public SystemConnectionModel convert(SystemConnection connection, Game game) {
+    private SystemConnectionModel convert(SystemConnection connection, Game game) {
         SystemConnectionModel model = new SystemConnectionModel();
         model.setId(connection.getSystemConnectionId());
         model.setGameId(game.getGameId());

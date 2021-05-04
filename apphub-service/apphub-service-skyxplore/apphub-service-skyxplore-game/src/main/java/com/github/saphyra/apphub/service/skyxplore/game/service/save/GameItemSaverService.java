@@ -14,7 +14,6 @@ import java.util.concurrent.Executors;
 
 @Component
 @Slf4j
-//TODO unit test
 public class GameItemSaverService {
     private final ExecutorServiceBean executorServiceBean;
     private final SaverProperties saverProperties;

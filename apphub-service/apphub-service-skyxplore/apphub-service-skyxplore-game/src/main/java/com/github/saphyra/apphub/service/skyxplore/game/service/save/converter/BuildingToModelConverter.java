@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class BuildingToModelConverter {
     public BuildingModel convert(Building building, Game game) {
         BuildingModel model = new BuildingModel();

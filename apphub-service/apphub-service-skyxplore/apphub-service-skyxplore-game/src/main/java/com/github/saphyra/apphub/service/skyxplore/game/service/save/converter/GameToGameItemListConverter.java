@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class GameToGameItemListConverter {
     private final AllianceToModelConverter allianceConverter;
     private final PlayerToModelConverter playerConverter;
