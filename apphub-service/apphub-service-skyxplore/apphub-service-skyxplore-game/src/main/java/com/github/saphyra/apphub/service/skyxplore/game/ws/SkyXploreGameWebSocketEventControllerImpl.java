@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.SystemMessage;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@Builder
 public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameWebSocketEventController {
     private final GameDao gameDao;
     private final CharacterProxy characterProxy;
@@ -27,8 +29,6 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
     private final MessageSenderProxy messageSenderProxy;
 
     @Override
-    //TODO unit test
-    //TODO int test
     public void processWebSocketEvent(UUID from, WebSocketEvent event) {
         log.info("Processing WebSocketEvent {} from {}", event.getEventName(), from);
         List<WebSocketEventHandler> eventHandlers = handlers.stream()
@@ -43,13 +43,13 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
     }
 
     @Override
-    //TODO unit test
-    //TODO int test
     public void userJoinedToGame(UUID userId) {
         log.info("{} joined to the game.", userId);
         Game game = gameDao.findByUserIdValidated(userId);
 
-        game.getPlayers().get(userId).setConnected(true);
+        game.getPlayers()
+            .get(userId)
+            .setConnected(true);
 
         String userName = characterProxy.getCharacterByUserId(userId).getName();
 
@@ -65,8 +65,6 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
     }
 
     @Override
-    //TODO unit test
-    //TODO int test
     public void userLeftGame(UUID userId) {
         log.info("{} left the game.", userId);
         Game game = gameDao.findByUserIdValidated(userId);

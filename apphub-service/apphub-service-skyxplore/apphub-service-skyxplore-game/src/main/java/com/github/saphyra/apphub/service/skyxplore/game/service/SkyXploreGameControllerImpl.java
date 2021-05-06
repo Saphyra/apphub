@@ -14,8 +14,6 @@ public class SkyXploreGameControllerImpl implements SkyXploreGameController {
     private final GameDao gameDao;
 
     @Override
-    //TODO unit test
-    //TODO int test
     public boolean isUserInGame(AccessTokenHeader accessTokenHeader) {
         log.info("Checking if user {} is in game.", accessTokenHeader.getUserId());
         return gameDao.findByUserId(accessTokenHeader.getUserId()).isPresent();
