@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.api.user.model.response.LoginResponse;
 import com.github.saphyra.apphub.api.user.server.UserAuthenticationController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
+import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.apphub.service.user.authentication.AuthenticationProperties;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
@@ -60,7 +61,6 @@ public class AuthenticationController implements UserAuthenticationController {
     }
 
     @Override
-    //TODO unit test
     public LastVisitedPageResponse getLastVisitedPage(UUID userId) {
         log.info("Querying last visited page of user {}", userId);
         return accessTokenDao.getByUserId(userId)
@@ -70,7 +70,7 @@ public class AuthenticationController implements UserAuthenticationController {
                 .lastAccess(accessToken.getLastAccess())
                 .pageUrl(accessToken.getLastVisitedPage())
                 .build())
-            .orElseThrow(RuntimeException::new); //TODO proper exception
+            .orElseThrow(() -> new NotFoundException(userId + " is not logged in."));
     }
 
     @Override

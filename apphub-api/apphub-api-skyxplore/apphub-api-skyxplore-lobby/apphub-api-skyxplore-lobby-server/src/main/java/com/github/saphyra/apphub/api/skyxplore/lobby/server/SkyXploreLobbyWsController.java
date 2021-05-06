@@ -15,8 +15,8 @@ public interface SkyXploreLobbyWsController {
     void processWebSocketEvent(@PathVariable("userId") UUID from, @RequestBody WebSocketEvent event);
 
     @PutMapping(Endpoints.INTERNAL_SKYXPLORE_LOBBY_PLAYER_ONLINE)
-    void characterOnline(@PathVariable("userId") UUID userId);
+    void playerOnline(@PathVariable("userId") UUID userId);
 
     @DeleteMapping(Endpoints.INTERNAL_SKYXPLORE_LOBBY_PLAYER_OFFLINE)
-    void characterOffline(@PathVariable("userId") UUID userId);
+    void playerOffline(@PathVariable("userId") UUID userId);
 }

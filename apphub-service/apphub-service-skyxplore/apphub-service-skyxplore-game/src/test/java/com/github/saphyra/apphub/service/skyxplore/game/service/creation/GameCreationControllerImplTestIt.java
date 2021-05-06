@@ -123,7 +123,7 @@ public class GameCreationControllerImplTestIt {
     }
 
     @Test
-    @Ignore //TODO fix: "No empty planet left"
+    @Ignore //fix: "No empty planet left"
     public void largeGame() throws InterruptedException {
         UUID host = UUID.randomUUID();
         Map<UUID, UUID> members = CollectionUtils.toMap(
@@ -170,7 +170,7 @@ public class GameCreationControllerImplTestIt {
     }
 
     @Test
-    @Ignore //TODO fix: Cannot place enough stars
+    @Ignore //fix: Cannot place enough stars
     public void smallGame() throws InterruptedException {
         UUID playerId = UUID.randomUUID();
         UUID allianceId = UUID.randomUUID();

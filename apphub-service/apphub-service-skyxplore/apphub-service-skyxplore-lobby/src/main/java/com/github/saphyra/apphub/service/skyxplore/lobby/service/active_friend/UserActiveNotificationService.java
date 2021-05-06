@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class UserActiveNotificationService {
     private final SkyXploreDataProxy skyXploreDataProxy;
     private final LobbyDao lobbyDao;

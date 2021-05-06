@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.cleanup.LobbyInterceptorFilter;
+import com.github.saphyra.apphub.service.skyxplore.lobby.controller.filter.LobbyLastAccessInterceptorFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,8 +26,8 @@ import org.springframework.context.annotation.Import;
 @EnableEventProcessor
 public class SkyxploreLobbyBeanConfiguration {
     @Bean
-    FilterRegistrationBean<LobbyInterceptorFilter> metricsFilterFilterRegistrationBean(LobbyInterceptorFilter filter) {
-        FilterRegistrationBean<LobbyInterceptorFilter> filterRegistrationBean = new FilterRegistrationBean<>();
+    FilterRegistrationBean<LobbyLastAccessInterceptorFilter> metricsFilterFilterRegistrationBean(LobbyLastAccessInterceptorFilter filter) {
+        FilterRegistrationBean<LobbyLastAccessInterceptorFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(filter);
         filterRegistrationBean.setOrder(FilterOrder.ACCESS_TOKEN_FILTER.getFilterOrder() + 1);
         filterRegistrationBean.addUrlPatterns("/api/**");

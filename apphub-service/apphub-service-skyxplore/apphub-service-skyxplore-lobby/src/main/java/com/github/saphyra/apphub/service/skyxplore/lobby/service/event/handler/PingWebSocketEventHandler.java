@@ -13,7 +13,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class PingWebSocketEventHandler implements WebSocketEventHandler {
     private final LobbyDao lobbyDao;
     private final DateTimeUtil dateTimeUtil;

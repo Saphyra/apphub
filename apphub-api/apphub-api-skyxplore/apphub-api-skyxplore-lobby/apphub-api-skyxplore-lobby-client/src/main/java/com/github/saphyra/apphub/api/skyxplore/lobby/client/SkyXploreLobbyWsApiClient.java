@@ -19,8 +19,8 @@ public interface SkyXploreLobbyWsApiClient {
     void processWebSocketEvent(@PathVariable("userId") UUID from, @RequestBody WebSocketEvent event, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
     @PutMapping(Endpoints.INTERNAL_SKYXPLORE_LOBBY_PLAYER_ONLINE)
-    void characterOnline(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    void playerOnline(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
     @DeleteMapping(Endpoints.INTERNAL_SKYXPLORE_LOBBY_PLAYER_OFFLINE)
-    void characterOffline(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    void playerOffline(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 }

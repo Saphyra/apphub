@@ -36,7 +36,6 @@ public class UserEventControllerImpl implements UserEventController {
     }
 
     @Override
-    //TODO unit test
     public void pageVisitedEvent(SendEventRequest<PageVisitedEvent> request) {
         PageVisitedEvent event = request.getPayload();
         AccessToken accessToken = accessTokenDao.findById(event.getAccessTokenId())

@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class LobbyMemberQueryService {
     private final LobbyDao lobbyDao;
     private final LobbyMemberResponseConverter converter;
@@ -36,8 +36,10 @@ public class LobbyMemberQueryService {
             .map(Alliance::getAllianceName)
             .collect(Collectors.toList());
 
+        Member host = lobby.getMembers().get(lobby.getHost());
+        LobbyMemberResponse hostResponse = converter.convertMember(host, lobby.getAlliances());
         return LobbyMembersResponse.builder()
-            .host(converter.convertMember(lobby.getMembers().get(lobby.getHost()), lobby.getAlliances()))
+            .host(hostResponse)
             .members(members)
             .alliances(alliances)
             .build();

@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class LobbyCreationService {
     private final ExitFromLobbyService exitFromLobbyService;
     private final LobbyDao lobbyDao;

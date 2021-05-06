@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ActiveFriendsService {
     private final ActiveUsersDao activeUsersDao;
     private final SkyXploreDataProxy skyXploreDataProxy;
@@ -24,7 +23,7 @@ public class ActiveFriendsService {
     public List<ActiveFriendResponse> getActiveFriends(AccessTokenHeader accessTokenHeader) {
         return skyXploreDataProxy.getFriends(accessTokenHeader)
             .stream()
-            .filter(friendshipResponse -> isActive(friendshipResponse.getFriendId()))
+            .filter(friendshipResponse -> activeUsersDao.isOnline(friendshipResponse.getFriendId()))
             .map(friendshipResponse -> ActiveFriendResponse.builder()
                 .friendName(friendshipResponse.getFriendName())
                 .friendId(friendshipResponse.getFriendId())
@@ -33,17 +32,13 @@ public class ActiveFriendsService {
             .collect(Collectors.toList());
     }
 
-    private boolean isActive(UUID friendId) {
-        return activeUsersDao.isActive(friendId);
-    }
-
     public void playerOnline(UUID userId) {
-        activeUsersDao.userOnline(userId);
+        activeUsersDao.playerOnline(userId);
         userActiveNotificationService.sendEvent(userId, WebSocketEventName.SKYXPLORE_LOBBY_USER_ONLINE);
     }
 
     public void playerOffline(UUID userId) {
-        activeUsersDao.userOffline(userId);
+        activeUsersDao.playerOffline(userId);
         userActiveNotificationService.sendEvent(userId, WebSocketEventName.SKYXPLORE_LOBBY_USER_OFFLINE);
     }
 }

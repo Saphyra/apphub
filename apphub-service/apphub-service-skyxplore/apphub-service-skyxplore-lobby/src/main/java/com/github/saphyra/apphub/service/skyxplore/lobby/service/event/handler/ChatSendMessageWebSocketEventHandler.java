@@ -1,14 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.event.handler;
 
-import com.github.saphyra.apphub.api.platform.message_sender.client.MessageSenderApiClient;
-import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
-import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreCharacterDataApiClient;
-import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
+import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +20,10 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ChatSendMessageWebSocketEventHandler implements WebSocketEventHandler {
     private final LobbyDao lobbyDao;
-    private final SkyXploreCharacterDataApiClient characterClient;
-    private final LocaleProvider localeProvider;
-    private final MessageSenderApiClient messageSenderClient;
+    private final CharacterProxy characterProxy;
+    private final MessageSenderProxy messageSenderProxy;
 
     @Override
     public boolean canHandle(WebSocketEventName eventName) {
@@ -41,7 +37,7 @@ class ChatSendMessageWebSocketEventHandler implements WebSocketEventHandler {
 
         List<UUID> members = new ArrayList<>(lobby.getMembers().keySet());
         log.info("Recipients for chatMessage from {}: {}", from, members);
-        String senderName = characterClient.internalGetCharacterByUserId(from, localeProvider.getLocaleValidated())
+        String senderName = characterProxy.getCharacter(from)
             .getName();
 
         WebSocketEvent webSocketEvent = WebSocketEvent.builder()
@@ -52,12 +48,13 @@ class ChatSendMessageWebSocketEventHandler implements WebSocketEventHandler {
             .recipients(members)
             .event(webSocketEvent)
             .build();
-        messageSenderClient.sendMessage(MessageGroup.SKYXPLORE_LOBBY, message, localeProvider.getLocaleValidated());
+
+        messageSenderProxy.sendToLobby(message);
     }
 
     @Data
     @AllArgsConstructor
-    private static class Message {
+    static class Message {
         private UUID senderId;
         private String senderName;
         private String message;

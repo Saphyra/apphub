@@ -23,6 +23,5 @@ interface AccessTokenRepository extends CrudRepository<AccessTokenEntity, String
 
     void deleteByUserId(String userId);
 
-    //TODO unit test
     List<AccessTokenEntity> getByUserId(String userId);
 }

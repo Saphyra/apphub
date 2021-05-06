@@ -1,20 +1,21 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.event.handler;
 
-import com.github.saphyra.apphub.api.platform.message_sender.client.MessageSenderApiClient;
-import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemAmount;
-import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.AiPresence;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.PlanetSize;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemAmount;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemSize;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.UniverseSize;
+import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.exception.ForbiddenException;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.GameSettings;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.PlanetSize;
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemSize;
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.UniverseSize;
+import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,12 +32,10 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class GameSettingsChangedWebSocketEventHandler implements WebSocketEventHandler {
     private final ObjectMapperWrapper objectMapperWrapper;
     private final LobbyDao lobbyDao;
-    private final MessageSenderApiClient messageSenderClient;
-    private final LocaleProvider localeProvider;
+    private final MessageSenderProxy messageSenderProxy;
 
     @Override
     public boolean canHandle(WebSocketEventName eventName) {
@@ -63,7 +62,7 @@ class GameSettingsChangedWebSocketEventHandler implements WebSocketEventHandler 
                 .aiPresence(settings.getAiPresence())
                 .build();
             sendEvent(fwEvent, lobby);
-            throw new RuntimeException(from + " must not change the game settings.");
+            throw new ForbiddenException(new ErrorMessage(ErrorCode.FORBIDDEN_OPERATION.name()), from + " must not change the game settings.");
         }
 
         GameSettings settings = lobby.getSettings();
@@ -86,14 +85,14 @@ class GameSettingsChangedWebSocketEventHandler implements WebSocketEventHandler 
             .recipients(lobby.getMembers().keySet())
             .event(fwEvent)
             .build();
-        messageSenderClient.sendMessage(MessageGroup.SKYXPLORE_LOBBY, message, localeProvider.getLocaleValidated());
+        messageSenderProxy.sendToLobby(message);
     }
 
     @NoArgsConstructor
     @Data
     @AllArgsConstructor
     @Builder
-    private static class GameSettingsChangedEvent {
+    static class GameSettingsChangedEvent {
         private UniverseSize universeSize;
         private SystemAmount systemAmount;
         private SystemSize systemSize;

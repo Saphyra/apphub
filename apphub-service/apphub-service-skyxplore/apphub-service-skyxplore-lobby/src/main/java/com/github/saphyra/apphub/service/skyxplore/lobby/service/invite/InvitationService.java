@@ -3,13 +3,19 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.invite;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.PreconditionFailedException;
+import com.github.saphyra.apphub.lib.exception.TooManyRequestsException;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
-import lombok.RequiredArgsConstructor;
+import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -21,22 +27,44 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
-//TODO unit test
+@Builder
 public class InvitationService {
     private final LobbyDao lobbyDao;
     private final InvitationFactory invitationFactory;
     private final DateTimeUtil dateTimeUtil;
     private final CharacterProxy characterProxy;
     private final MessageSenderProxy messageSenderProxy;
+    private final SkyXploreDataProxy dataProxy;
+    private final int floodingLimitSeconds;
 
-    @Value("${lobby.invitation.floodingLimitSeconds}")
-    private int floodingLimitSeconds;
+    public InvitationService(
+        LobbyDao lobbyDao,
+        InvitationFactory invitationFactory,
+        DateTimeUtil dateTimeUtil,
+        CharacterProxy characterProxy,
+        MessageSenderProxy messageSenderProxy,
+        SkyXploreDataProxy dataProxy,
+        @Value("${lobby.invitation.floodingLimitSeconds}") int floodingLimitSeconds
+    ) {
+        this.lobbyDao = lobbyDao;
+        this.invitationFactory = invitationFactory;
+        this.dateTimeUtil = dateTimeUtil;
+        this.characterProxy = characterProxy;
+        this.messageSenderProxy = messageSenderProxy;
+        this.dataProxy = dataProxy;
+        this.floodingLimitSeconds = floodingLimitSeconds;
+    }
 
-    public void invite(UUID userId, UUID friendId) {
-        //TODO check if players are friends
-        Lobby lobby = lobbyDao.findByUserIdValidated(userId);
+    public void invite(AccessTokenHeader accessTokenHeader, UUID friendId) {
+        boolean friends = dataProxy.getFriends(accessTokenHeader)
+            .stream()
+            .anyMatch(friendshipResponse -> friendshipResponse.getFriendId().equals(friendId));
+        if (!friends) {
+            throw new PreconditionFailedException(accessTokenHeader.getUserId() + " is not a friend of " + friendId);
+        }
+
+        Lobby lobby = lobbyDao.findByUserIdValidated(accessTokenHeader.getUserId());
 
         Optional<Invitation> existingInvitation = lobby.getInvitations()
             .stream()
@@ -48,7 +76,7 @@ public class InvitationService {
             LocalDateTime localDateTime = dateTimeUtil.getCurrentDate()
                 .minusSeconds(floodingLimitSeconds);
             if (invitation.getInvitationTime().isAfter(localDateTime)) {
-                throw new RuntimeException(); //TODO proper exception
+                throw new TooManyRequestsException(new ErrorMessage(ErrorCode.TOO_FREQUENT_INVITATIONS.name()), accessTokenHeader.getUserId() + " cannot invite " + friendId + " again yet.");
             }
         }
 
@@ -57,15 +85,16 @@ public class InvitationService {
             .add(invitation);
 
         InvitationMessage invitationMessage = InvitationMessage.builder()
-            .senderId(userId)
+            .senderId(accessTokenHeader.getUserId())
             .senderName(characterProxy.getCharacter().getName())
+            .build();
+        WebSocketEvent event = WebSocketEvent.builder()
+            .eventName(WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION)
+            .payload(invitationMessage)
             .build();
         WebSocketMessage message = WebSocketMessage.builder()
             .recipients(Arrays.asList(friendId))
-            .event(WebSocketEvent.builder()
-                .eventName(WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION)
-                .payload(invitationMessage)
-                .build()
+            .event(event
             )
             .build();
         messageSenderProxy.sendToMainMenu(message);

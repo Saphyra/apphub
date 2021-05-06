@@ -31,11 +31,11 @@ public class SkyXploreMainMenuWebSocketHandler extends DefaultWebSocketHandler {
 
     @Override
     protected void afterConnection(UUID userId) {
-        lobbyWsClient.characterOnline(userId, commonConfigProperties.getDefaultLocale());
+        lobbyWsClient.playerOnline(userId, commonConfigProperties.getDefaultLocale());
     }
 
     @Override
     protected void afterDisconnection(UUID userId) {
-        lobbyWsClient.characterOffline(userId, commonConfigProperties.getDefaultLocale());
+        lobbyWsClient.playerOffline(userId, commonConfigProperties.getDefaultLocale());
     }
 }

@@ -2,6 +2,9 @@ package com.github.saphyra.apphub.service.user.controller;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
+import com.github.saphyra.apphub.lib.event.PageVisitedEvent;
+import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -11,13 +14,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Optional;
 import java.util.UUID;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserEventControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
+    private static final String PAGE_URL = "page-url";
 
     @Mock
     private AccessTokenDao accessTokenDao;
@@ -31,6 +38,9 @@ public class UserEventControllerImplTest {
     @InjectMocks
     private UserEventControllerImpl underTest;
 
+    @Mock
+    private AccessToken accessToken;
+
     @Test
     public void deleteAccountEvent() {
         DeleteAccountEvent event = new DeleteAccountEvent(USER_ID);
@@ -43,5 +53,20 @@ public class UserEventControllerImplTest {
         verify(accessTokenDao).deleteByUserId(USER_ID);
         verify(userDao).deleteById(USER_ID);
         verify(roleDao).deleteByUserId(USER_ID);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void pageVisitedEvent_accessTokenNotFound() {
+        underTest.pageVisitedEvent(SendEventRequest.<PageVisitedEvent>builder().payload(new PageVisitedEvent(UUID.randomUUID(), null)).build());
+    }
+
+    @Test
+    public void pageVisitedEvent() {
+        given(accessTokenDao.findById(ACCESS_TOKEN_ID)).willReturn(Optional.of(accessToken));
+
+        underTest.pageVisitedEvent(SendEventRequest.<PageVisitedEvent>builder().payload(new PageVisitedEvent(ACCESS_TOKEN_ID, PAGE_URL)).build());
+
+        verify(accessToken).setLastVisitedPage(PAGE_URL);
+        verify(accessTokenDao).save(accessToken);
     }
 }

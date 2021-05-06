@@ -6,7 +6,11 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMess
 import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameCreationApiClient;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
+import com.github.saphyra.apphub.lib.exception.ForbiddenException;
+import com.github.saphyra.apphub.lib.exception.PreconditionFailedException;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
@@ -24,7 +28,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StartGameService {
     private final LobbyDao lobbyDao;
     private final MessageSenderProxy messageSenderProxy;
@@ -35,7 +38,7 @@ public class StartGameService {
         Lobby lobby = lobbyDao.findByUserIdValidated(userId);
 
         if (!lobby.getHost().equals(userId)) {
-            throw new RuntimeException(userId + " must not start the game."); //TODO proper exception
+            throw new ForbiddenException(new ErrorMessage(ErrorCode.FORBIDDEN_OPERATION.name()), userId + " must not start the game.");
         }
 
         boolean allReady = lobby.getMembers()
@@ -43,10 +46,8 @@ public class StartGameService {
             .stream()
             .allMatch(Member::isReady);
         if (!allReady) {
-            throw new RuntimeException("There are member(s) not ready.");
+            throw new PreconditionFailedException(new ErrorMessage(ErrorCode.LOBBY_MEMBER_NOT_READY.name()), "There are member(s) not ready.");
         }
-
-        lobby.setGameCreationStarted(true);
 
         Map<UUID, UUID> members = new HashMap<>();
         lobby.getMembers()
@@ -74,6 +75,7 @@ public class StartGameService {
             .build();
 
         gameCreationClient.createGame(request, localeProvider.getLocaleValidated());
+        lobby.setGameCreationStarted(true);
 
         WebSocketEvent event = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED)

@@ -14,13 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ExitFromLobbyService {
     private final CharacterProxy characterProxy;
     private final LobbyDao lobbyDao;
@@ -43,23 +41,25 @@ public class ExitFromLobbyService {
     }
 
     private void sendNotification(UUID userId, Lobby lobby) {
+        ExitMessage payload = new ExitMessage(
+            userId,
+            lobby.getHost().equals(userId),
+            characterProxy.getCharacter(userId).getName()
+        );
+        WebSocketEvent event = WebSocketEvent.builder()
+            .eventName(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY)
+            .payload(payload)
+            .build();
         WebSocketMessage message = WebSocketMessage.builder()
             .recipients(new ArrayList<>(lobby.getMembers().keySet()))
-            .event(WebSocketEvent.builder()
-                .eventName(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY)
-                .payload(new ExitMessage(
-                    userId,
-                    lobby.getHost().equals(userId),
-                    characterProxy.getCharacter(userId).getName())
-                )
-                .build())
+            .event(event)
             .build();
-        List<UUID> disconnectedUsers = messageSenderProxy.sendToLobby(message); //TODO handle disconnected users
+        messageSenderProxy.sendToLobby(message);
     }
 
     @Data
     @AllArgsConstructor
-    private static class ExitMessage {
+    static class ExitMessage {
         private UUID userId;
         private boolean host;
         private String characterName;

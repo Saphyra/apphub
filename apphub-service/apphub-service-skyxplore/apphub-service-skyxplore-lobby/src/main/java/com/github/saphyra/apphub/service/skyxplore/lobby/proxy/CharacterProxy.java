@@ -13,17 +13,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-//TODO unit test
 public class CharacterProxy {
     private final LocaleProvider localeProvider;
     private final SkyXploreCharacterDataApiClient characterClient;
     private final AccessTokenProvider accessTokenProvider;
 
     public SkyXploreCharacterModel getCharacter() {
-        return characterClient.internalGetCharacterByUserId(
-            accessTokenProvider.get().getUserId(),
-            localeProvider.getLocaleValidated()
-        );
+        return getCharacter(accessTokenProvider.get().getUserId());
     }
 
     public SkyXploreCharacterModel getCharacter(UUID userId) {

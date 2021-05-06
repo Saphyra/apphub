@@ -44,13 +44,13 @@ public class SkyXploreMainMenuWebSocketHandlerTest {
     public void afterConnection() {
         underTest.afterConnection(USER_ID);
 
-        verify(lobbyWsClient).characterOnline(USER_ID, LOCALE);
+        verify(lobbyWsClient).playerOnline(USER_ID, LOCALE);
     }
 
     @Test
     public void afterDisconnection() {
         underTest.afterDisconnection(USER_ID);
 
-        verify(lobbyWsClient).characterOffline(USER_ID, LOCALE);
+        verify(lobbyWsClient).playerOffline(USER_ID, LOCALE);
     }
 }

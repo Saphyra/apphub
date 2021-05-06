@@ -15,7 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class LobbyFactory {
     private final DateTimeUtil dateTimeUtil;
     private final IdGenerator idGenerator;

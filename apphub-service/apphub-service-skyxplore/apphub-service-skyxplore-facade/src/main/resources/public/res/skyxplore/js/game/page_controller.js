@@ -99,8 +99,8 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
     }
 
     function itemDataLoader(itemId){
-        const endpoint = Mapping.getEndpoint("SKYXPLORE_GET_ITEM_DATA", {dataId: itemId});
-        const response = dao.sendRequest(endpoint.getMethod(), endpoint.getUrl()); //TODO update to new syntax
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_ITEM_DATA", {dataId: itemId}))
+        const response = dao.sendRequest(request);
 
         if(response.status == ResponseStatus.OK){
             const result = JSON.parse(response.body);

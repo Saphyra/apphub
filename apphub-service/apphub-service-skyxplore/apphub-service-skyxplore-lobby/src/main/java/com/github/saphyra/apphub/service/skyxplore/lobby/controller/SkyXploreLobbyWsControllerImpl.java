@@ -18,25 +18,19 @@ public class SkyXploreLobbyWsControllerImpl implements SkyXploreLobbyWsControlle
     private final WebSocketEventHandlerService webSocketEventHandlerService;
 
     @Override
-    //TODO unit test
-    //TODO int test
     public void processWebSocketEvent(UUID from, WebSocketEvent event) {
         log.info("Handling event {} from {}", event.getEventName(), from);
         webSocketEventHandlerService.handle(from, event);
     }
 
     @Override
-    //TODO unit test
-    //TODO int test
-    public void characterOnline(UUID userId) {
+    public void playerOnline(UUID userId) {
         log.info("{} came online.", userId);
         activeFriendsService.playerOnline(userId);
     }
 
     @Override
-    //TODO unit test
-    //TODO int test
-    public void characterOffline(UUID userId) {
+    public void playerOffline(UUID userId) {
         log.info("{} went offline.", userId);
         activeFriendsService.playerOffline(userId);
     }

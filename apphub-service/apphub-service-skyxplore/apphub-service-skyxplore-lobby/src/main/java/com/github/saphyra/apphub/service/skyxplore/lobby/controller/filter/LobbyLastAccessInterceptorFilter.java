@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.lobby.service.cleanup;
+package com.github.saphyra.apphub.service.skyxplore.lobby.controller.filter;
 
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
@@ -18,8 +18,7 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-public class LobbyInterceptorFilter extends OncePerRequestFilter {
+public class LobbyLastAccessInterceptorFilter extends OncePerRequestFilter {
     private final AccessTokenProvider accessTokenProvider;
     private final DateTimeUtil dateTimeUtil;
     private final LobbyDao lobbyDao;

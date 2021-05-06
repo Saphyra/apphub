@@ -3,6 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ForbiddenException;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
@@ -25,7 +28,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class JoinToLobbyService {
     private final LobbyDao lobbyDao;
     private final CharacterProxy characterProxy;
@@ -39,7 +41,7 @@ public class JoinToLobbyService {
             .stream()
             .filter(i -> i.getCharacterId().equals(userId))
             .findFirst()
-            .orElseThrow(() -> new RuntimeException("You are not invited to this lobby.")); //TODO proper exception
+            .orElseThrow(() -> new ForbiddenException(new ErrorMessage(ErrorCode.FORBIDDEN_OPERATION.name()), "You are not invited to this lobby."));
 
         invitations.remove(invitation);
 
@@ -60,20 +62,21 @@ public class JoinToLobbyService {
             .host(userId.equals(lobby.getHost()))
             .alliances(lobby.getAlliances().stream().map(Alliance::getAllianceName).collect(Collectors.toList()))
             .build();
+        WebSocketEvent event = WebSocketEvent.builder()
+            .eventName(WebSocketEventName.SKYXPLORE_LOBBY_JOIN_TO_LOBBY)
+            .payload(joinMessage)
+            .build();
         WebSocketMessage message = WebSocketMessage.builder()
             .recipients(new ArrayList<>(lobby.getMembers().keySet()))
-            .event(WebSocketEvent.builder()
-                .eventName(WebSocketEventName.SKYXPLORE_LOBBY_JOIN_TO_LOBBY)
-                .payload(joinMessage)
-                .build())
+            .event(event)
             .build();
-        List<UUID> disconnectedUsers = messageSenderProxy.sendToLobby(message); //TODO handle disconnectedUsers
+        messageSenderProxy.sendToLobby(message);
     }
 
     @Data
     @AllArgsConstructor
     @Builder
-    private static class JoinMessage {
+    static class JoinMessage {
         private String characterName;
         private UUID userId;
         private boolean host;

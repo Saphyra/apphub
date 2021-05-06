@@ -61,8 +61,6 @@ class AccountControllerImpl implements AccountController {
     }
 
     @Override
-    //TODO unit test
-    //TODO int test
     public String getUsernameByUserId(UUID userId) {
         log.info("Querying name of user {}", userId);
         return userDao.findById(userId)

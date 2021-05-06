@@ -11,21 +11,20 @@ import java.util.Vector;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ActiveUsersDao {
-    private final List<UUID> activeCharacters = new Vector<>();
+    private final List<UUID> activePlayers = new Vector<>();
 
-    void userOnline(UUID userId) {
-        if (!activeCharacters.contains(userId)) {
-            activeCharacters.add(userId);
+    void playerOnline(UUID userId) {
+        if (!activePlayers.contains(userId)) {
+            activePlayers.add(userId);
         }
     }
 
-    void userOffline(UUID userId) {
-        activeCharacters.removeIf(uuid -> uuid.equals(userId));
+    void playerOffline(UUID userId) {
+        activePlayers.removeIf(uuid -> uuid.equals(userId));
     }
 
-    public boolean isActive(UUID userId) {
-        return activeCharacters.contains(userId);
+    public boolean isOnline(UUID userId) {
+        return activePlayers.contains(userId);
     }
 }

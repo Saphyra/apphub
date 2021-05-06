@@ -40,12 +40,10 @@ public class AccessTokenDao extends AbstractDao<AccessTokenEntity, AccessToken, 
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }
 
-    //TODO unit test
     public List<AccessToken> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
 
-    //TODO unit test
     public Optional<AccessToken> findById(UUID accessTokenId) {
         return findById(uuidConverter.convertDomain(accessTokenId));
     }
