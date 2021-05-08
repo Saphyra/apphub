@@ -21,7 +21,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -46,7 +48,38 @@ public class ExitFromLobbyServiceTest {
     private Lobby lobby;
 
     @Test
-    public void exit() {
+    public void memberLeft() {
+        given(lobbyDao.findByUserId(MEMBER_ID)).willReturn(Optional.of(lobby));
+        given(lobby.getMembers()).willReturn(CollectionUtils.toMap(
+            new BiWrapper<>(USER_ID, null),
+            new BiWrapper<>(MEMBER_ID, null)
+        ));
+        given(lobby.getHost()).willReturn(USER_ID);
+
+        given(characterProxy.getCharacter(MEMBER_ID)).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
+
+        underTest.exit(MEMBER_ID);
+
+        assertThat(lobby.getMembers()).containsOnlyKeys(USER_ID);
+
+        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
+        verify(messageSenderProxy).sendToLobby(argumentCaptor.capture());
+        WebSocketMessage message = argumentCaptor.getValue();
+        assertThat(message.getRecipients()).containsExactly(USER_ID);
+
+        WebSocketEvent event = message.getEvent();
+        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY);
+
+        ExitFromLobbyService.ExitMessage payload = (ExitFromLobbyService.ExitMessage) event.getPayload();
+        assertThat(payload.getUserId()).isEqualTo(MEMBER_ID);
+        assertThat(payload.getCharacterName()).isEqualTo(PLAYER_NAME);
+        assertThat(payload.isHost()).isFalse();
+
+        verify(lobbyDao, times(0)).delete(any());
+    }
+
+    @Test
+    public void hostLeft() {
         given(lobbyDao.findByUserId(USER_ID)).willReturn(Optional.of(lobby));
         given(lobby.getMembers()).willReturn(CollectionUtils.toMap(
             new BiWrapper<>(USER_ID, null),
@@ -72,5 +105,7 @@ public class ExitFromLobbyServiceTest {
         assertThat(payload.getUserId()).isEqualTo(USER_ID);
         assertThat(payload.getCharacterName()).isEqualTo(PLAYER_NAME);
         assertThat(payload.isHost()).isTrue();
+
+        verify(lobbyDao).delete(lobby);
     }
 }

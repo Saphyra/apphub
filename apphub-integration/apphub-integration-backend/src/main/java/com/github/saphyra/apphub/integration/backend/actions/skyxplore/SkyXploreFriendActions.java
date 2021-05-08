@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.backend.actions.skyxplore;
 
+import com.github.saphyra.apphub.integration.backend.model.skyxplore.ActiveFriendResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.FriendshipResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.IncomingFriendRequestResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SentFriendRequestResponse;
@@ -101,5 +102,14 @@ public class SkyXploreFriendActions {
     public static Response getRemoveFriendResponse(Language language, UUID accessTokenId, UUID friendshipId) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .delete(UrlFactory.create(Endpoints.SKYXPLORE_REMOVE_FRIEND, "friendshipId", friendshipId));
+    }
+
+    public static List<ActiveFriendResponse> getActiveFriends(Language language, UUID accessTokenId) {
+        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS));
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        return Arrays.stream(response.getBody().as(ActiveFriendResponse[].class))
+            .collect(Collectors.toList());
     }
 }

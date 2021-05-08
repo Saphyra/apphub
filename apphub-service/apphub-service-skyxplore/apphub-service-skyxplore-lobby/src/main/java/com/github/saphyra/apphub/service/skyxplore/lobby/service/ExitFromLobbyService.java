@@ -33,6 +33,10 @@ public class ExitFromLobbyService {
         lobby.getMembers().remove(userId);
 
         sendNotification(userId, lobby);
+
+        if (lobby.getHost().equals(userId)) {
+            lobbyDao.delete(lobby);
+        }
     }
 
     public void sendDisconnectionMessage(UUID userId) {

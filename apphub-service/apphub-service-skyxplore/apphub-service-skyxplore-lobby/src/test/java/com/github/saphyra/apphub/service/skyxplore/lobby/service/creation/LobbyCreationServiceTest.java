@@ -29,6 +29,9 @@ public class LobbyCreationServiceTest {
     @Mock
     private LobbyFactory lobbyFactory;
 
+    @Mock
+    private LobbyNameValidator lobbyNameValidator;
+
     @InjectMocks
     private LobbyCreationService underTest;
 
@@ -45,6 +48,7 @@ public class LobbyCreationServiceTest {
 
         underTest.create(USER_ID, LOBBY_NAME);
 
+        verify(lobbyNameValidator).validate(LOBBY_NAME);
         verify(exitFromLobbyService).exit(USER_ID);
         verify(lobbyDao).save(newLobby);
     }

@@ -13,11 +13,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class LobbyCreationService {
+    private final LobbyNameValidator lobbyNameValidator;
     private final ExitFromLobbyService exitFromLobbyService;
     private final LobbyDao lobbyDao;
     private final LobbyFactory lobbyFactory;
 
     public void create(UUID userId, String lobbyName) {
+        lobbyNameValidator.validate(lobbyName);
+
         lobbyDao.findByUserId(userId)
             .ifPresent(lobby -> exitFromLobbyService.exit(userId));
 

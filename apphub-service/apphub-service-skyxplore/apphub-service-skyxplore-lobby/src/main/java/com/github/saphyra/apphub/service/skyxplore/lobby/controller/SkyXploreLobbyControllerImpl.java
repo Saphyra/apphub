@@ -39,7 +39,6 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     private final StartGameService startGameService;
 
     @Override
-    //TODO API test
     public void createLobby(OneParamRequest<String> lobbyName, AccessTokenHeader accessTokenHeader) {
         log.info("Creating lobby for user {} if not exists", accessTokenHeader.getUserId());
         lobbyCreationService.create(accessTokenHeader.getUserId(), lobbyName.getValue());
@@ -66,21 +65,18 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     }
 
     @Override
-    //TODO API test
     public void exitFromLobby(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to exit from lobby", accessTokenHeader.getUserId());
         exitFromLobbyService.exit(accessTokenHeader.getUserId());
     }
 
     @Override
-    //TODO API test
     public void inviteToLobby(UUID friendId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to invite {} to lobby.", accessTokenHeader.getUserId(), friendId);
         invitationService.invite(accessTokenHeader, friendId);
     }
 
     @Override
-    //TODO API test
     public void acceptInvitation(UUID invitorId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to join to lobby of {}", accessTokenHeader.getUserId(), invitorId);
         joinToLobbyService.acceptInvitation(accessTokenHeader.getUserId(), invitorId);
@@ -99,14 +95,12 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     }
 
     @Override
-    //TODO API test
     public LobbyMembersResponse getMembersOfLobby(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the members of his lobby.", accessTokenHeader.getUserId());
         return lobbyMemberQueryService.getMembers(accessTokenHeader.getUserId());
     }
 
     @Override
-    //TODO API test
     public GameSettingsResponse getGameSettings(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the settings of his lobby.", accessTokenHeader.getUserId());
         Lobby lobby = lobbyDao.findByUserIdValidated(accessTokenHeader.getUserId());
@@ -121,14 +115,12 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     }
 
     @Override
-    //TODO API test
     public void startGame(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to start the game.", accessTokenHeader.getUserId());
         startGameService.startGame(accessTokenHeader.getUserId());
     }
 
     @Override
-    //TODO API test
     public List<ActiveFriendResponse> getActiveFriends(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know his active friends", accessTokenHeader.getUserId());
         return activeFriendsService.getActiveFriends(accessTokenHeader);
