@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
+import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
 import com.github.saphyra.apphub.lib.geometry.CrossCalculator;
 import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
 import com.github.saphyra.apphub.lib.geometry.RandomCoordinateProvider;
@@ -31,6 +32,7 @@ import java.util.concurrent.BlockingQueue;
 })
 @EnableLocaleMandatoryRequestValidation
 @EnableErrorHandler
+@EnableEventProcessor
 public class SkyXploreGameBeanConfiguration {
     @Bean
     ExecutorServiceBean executorServiceBean(SleepService sleepService) {

@@ -24,7 +24,7 @@ import static org.awaitility.Awaitility.await;
 @Slf4j
 public class IndexPageActions {
     public static void fillRegistrationForm(WebDriver driver, RegistrationParameters parameters) {
-        assertThat(driver.getCurrentUrl()).endsWith(Endpoints.WEB_ROOT);
+        assertThat(driver.getCurrentUrl()).endsWith(Endpoints.INDEX_PAGE);
 
         log.info("Filling registrationForm with {}", parameters);
         clearAndFill(IndexPage.emailInput(driver), parameters.getEmail());
@@ -34,7 +34,7 @@ public class IndexPageActions {
     }
 
     public static void verifyRegistrationForm(WebDriver driver, RegistrationValidationResult validationResult) {
-        assertThat(driver.getCurrentUrl()).endsWith(Endpoints.WEB_ROOT);
+        assertThat(driver.getCurrentUrl()).endsWith(Endpoints.INDEX_PAGE);
 
         verifyInvalidFieldState(
             IndexPage.emailValid(driver),
@@ -76,7 +76,7 @@ public class IndexPageActions {
     }
 
     public static void submitRegistration(WebDriver driver) {
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.WEB_ROOT));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE));
         WebElement submitButton = IndexPage.registrationSubmitButton(driver);
 
         AwaitilityWrapper.createDefault()

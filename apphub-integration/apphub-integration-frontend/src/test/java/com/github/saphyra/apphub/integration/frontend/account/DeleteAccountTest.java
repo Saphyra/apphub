@@ -83,13 +83,13 @@ public class DeleteAccountTest extends SeleniumTest {
         AccountPageActions.deleteAccount(driver, DataConstants.VALID_PASSWORD);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.WEB_ROOT)));
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE)));
 
         NotificationUtil.verifySuccessNotification(driver, "Account törölve.");
 
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
 
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.WEB_ROOT));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE));
         NotificationUtil.verifyErrorNotification(driver, "Az email cím és jelszó kombinációja ismeretlen.");
     }
 }

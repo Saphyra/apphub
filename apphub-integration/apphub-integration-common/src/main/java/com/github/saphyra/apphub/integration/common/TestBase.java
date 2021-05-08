@@ -108,7 +108,7 @@ public class TestBase {
     private UserRoleResponse[] getCandidates(Language language, UUID accessTokenId) {
         Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(new OneParamRequest<>("@" + getEmailDomain() + ".com"))
-            .post(UrlFactory.create(Endpoints.GET_ROLES));
+            .post(UrlFactory.create(Endpoints.GET_USER_ROLES));
 
         return response.getBody().as(UserRoleResponse[].class);
     }

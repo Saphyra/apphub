@@ -13,7 +13,7 @@ import java.util.UUID;
 public class Player {
     private final UUID playerId;
     private final UUID userId;
-    private final String username;
+    private String username;
     private boolean ai;
     private boolean connected;
 }

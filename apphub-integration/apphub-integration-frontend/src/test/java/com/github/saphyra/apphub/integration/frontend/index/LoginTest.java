@@ -38,7 +38,7 @@ public class LoginTest extends SeleniumTest {
 
         NotificationUtil.verifyErrorNotification(driver, errorMessage);
 
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.WEB_ROOT));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class LoginTest extends SeleniumTest {
 
         NotificationUtil.verifyErrorNotification(driver, BAD_CREDENTIALS_MESSAGE);
 
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.WEB_ROOT));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE));
     }
 
     private LoginParameters emptyEmail() {

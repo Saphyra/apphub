@@ -25,6 +25,7 @@ class GameDeletionService implements DeleteByUserIdDao {
         playerDao.getByUserId(userId)
             .stream()
             .peek(playerModel -> playerModel.setAi(true))
+            .peek(playerModel -> playerModel.setUsername(playerModel.getUsername() + " (AI)"))
             .forEach(playerDao::save);
 
         gameDao.getByHost(userId)

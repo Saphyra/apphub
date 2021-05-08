@@ -62,7 +62,7 @@ class WebDriverFactory {
         WebDriverWrapper webDriverWrapper = DRIVER_CACHE.get(id);
         WebDriver driver = webDriverWrapper.getDriver();
         driver.manage().deleteAllCookies();
-        driver.navigate().to(UrlFactory.create(Endpoints.WEB_ROOT));
+        driver.navigate().to(UrlFactory.create(Endpoints.INDEX_PAGE));
         webDriverWrapper.setLocked(false);
     }
 

@@ -26,7 +26,7 @@ public class ModulesPageActions {
 
         ModulesPage.logoutButton(driver).click();
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.WEB_ROOT)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE)))
             .assertTrue();
 
         NotificationUtil.verifySuccessNotification(driver, "Sikeres kijelentkezés.");

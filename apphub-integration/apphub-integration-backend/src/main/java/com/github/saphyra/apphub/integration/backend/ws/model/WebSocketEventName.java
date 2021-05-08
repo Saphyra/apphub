@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum WebSocketEventName {
     PING("ping"),
+    REDIRECT("redirect"),
 
     SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE("chat-send-message"),
     SKYXPLORE_LOBBY_JOIN_TO_LOBBY("join-to-lobby"),

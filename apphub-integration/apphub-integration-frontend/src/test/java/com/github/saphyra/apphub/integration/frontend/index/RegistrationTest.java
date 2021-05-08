@@ -64,7 +64,7 @@ public class RegistrationTest extends SeleniumTest {
         //THEN
         NotificationUtil.verifyErrorNotification(driver, "Az email foglalt.");
 
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.WEB_ROOT));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class RegistrationTest extends SeleniumTest {
         //THEN
         NotificationUtil.verifyErrorNotification(driver, "A felhasználónév foglalt.");
 
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.WEB_ROOT));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE));
     }
 
     @Test

@@ -30,7 +30,7 @@ public class RedirectionTest extends SeleniumTest {
         driver.navigate().to(UrlFactory.create(SERVER_PORT, Endpoints.MODULES_PAGE));
 
         //THEN
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(SERVER_PORT, Endpoints.WEB_ROOT));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(SERVER_PORT, Endpoints.INDEX_PAGE));
     }
 
     @Test
@@ -39,10 +39,10 @@ public class RedirectionTest extends SeleniumTest {
         WebDriver driver = extractDriver();
 
         //WHEN
-        driver.navigate().to(UrlFactory.create(SERVER_PORT, Endpoints.ROOT));
+        driver.navigate().to(UrlFactory.create(SERVER_PORT, "/"));
 
 
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(SERVER_PORT, Endpoints.WEB_ROOT));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(SERVER_PORT, Endpoints.INDEX_PAGE));
     }
 
     @Test

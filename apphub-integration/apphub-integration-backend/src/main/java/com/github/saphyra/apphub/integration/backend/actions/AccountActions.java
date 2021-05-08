@@ -57,6 +57,12 @@ public class AccountActions {
             .post(UrlFactory.create(Endpoints.CHANGE_PASSWORD));
     }
 
+    public static void deleteAccount(Language language, UUID accessTokenId, String password) {
+        Response response = getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(password));
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
     public static Response getDeleteAccountResponse(Language locale, UUID accessTokenId, OneParamRequest<String> request) {
         return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
             .body(request)

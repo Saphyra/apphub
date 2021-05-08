@@ -70,4 +70,14 @@ public class GameDaoTest {
 
         assertThat(result).contains(game);
     }
+
+    @Test
+    public void delete() {
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, null));
+        underTest.save(game);
+
+        underTest.delete(game);
+
+        assertThat(underTest.findByUserId(USER_ID)).isEmpty();
+    }
 }

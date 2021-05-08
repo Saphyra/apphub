@@ -20,6 +20,7 @@ import static org.mockito.Mockito.verify;
 public class GameDeletionServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final String USERNAME = "username";
 
     @Mock
     private GameDao gameDao;
@@ -52,10 +53,12 @@ public class GameDeletionServiceTest {
         given(playerDao.getByUserId(USER_ID)).willReturn(Arrays.asList(playerModel));
         given(gameDao.getByHost(USER_ID)).willReturn(Arrays.asList(gameModel));
         given(gameModel.getGameId()).willReturn(GAME_ID);
+        given(playerModel.getUsername()).willReturn(USERNAME);
 
         underTest.deleteByUserId(USER_ID);
 
         verify(playerModel).setAi(true);
+        verify(playerModel).setUsername(USERNAME + " (AI)");
         verify(playerDao).save(playerModel);
 
         verify(gameItemService).deleteByGameId(GAME_ID);

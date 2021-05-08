@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 
 public class Navigation {
     public static String toIndexPage(WebDriver driver) {
-        String url = UrlFactory.create(Endpoints.WEB_ROOT);
+        String url = UrlFactory.create(Endpoints.INDEX_PAGE);
         driver.navigate().to(url);
         return url;
     }
@@ -22,7 +22,7 @@ public class Navigation {
     }
 
     public static void toAdminPanel(WebDriver driver) {
-        String url = UrlFactory.create(Endpoints.ADMIN_PANEL_PAGE);
+        String url = UrlFactory.create(Endpoints.ADMIN_PANEL_INDEX_PAGE);
 
         driver.navigate().to(url);
     }

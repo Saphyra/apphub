@@ -1,7 +1,7 @@
 function WebSocketConnection(ep){
     const endpoint = ep;
     const host = window.location.host;
-    const handlers = [new PingWebSocketHandler(this)];
+    const handlers = [new PingWebSocketHandler(this), new RedirectWebSocketHandler(this)];
 
     let connection = null;
 
@@ -59,6 +59,18 @@ function WebSocketConnection(ep){
             wsConnection.sendEvent(new WebSocketEvent("ping"));
         }
     }
+
+    function RedirectWebSocketHandler(c){
+            const wsConnection = c;
+
+            this.canHandle = function(eventName){
+                return eventName == "redirect";
+            }
+
+            this.handle = function(redirectUrl){
+                window.location.href = event.eventName;
+            }
+        }
 }
 
 function WebSocketEventHandler(ch, h){

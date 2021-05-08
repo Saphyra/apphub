@@ -57,4 +57,8 @@ public class GameDao {
     public void put(Game game) {
         repository.put(Optional.ofNullable(game.getGameId()).orElse(UUID.randomUUID()), game);
     }
+
+    public void delete(Game game) {
+        repository.remove(game.getGameId());
+    }
 }
