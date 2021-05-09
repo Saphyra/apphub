@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.allocated_resource;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,6 +55,7 @@ public class AllocatedResourceConverterTest {
 
         assertThat(result.getId()).isEqualTo(ALLOCATED_RESOURCE_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
+        assertThat(result.getType()).isEqualTo(GameItemType.ALLOCATED_RESOURCE);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);

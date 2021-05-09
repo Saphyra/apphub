@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.allocated_resource;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ class AllocatedResourceConverter extends ConverterBase<AllocatedResourceEntity, 
         AllocatedResourceModel model = new AllocatedResourceModel();
         model.setId(uuidConverter.convertEntity(entity.getAllocatedResourceId()));
         model.setGameId(uuidConverter.convertEntity(entity.getGameId()));
+        model.setType(GameItemType.ALLOCATED_RESOURCE);
         model.setLocation(uuidConverter.convertEntity(entity.getLocation()));
         model.setLocationType(entity.getLocationType());
         model.setExternalReference(uuidConverter.convertEntity(entity.getExternalReference()));

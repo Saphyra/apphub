@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.planet;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
@@ -109,6 +110,7 @@ public class PlanetConverterTest {
 
         assertThat(result.getId()).isEqualTo(PLANET_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
+        assertThat(result.getType()).isEqualTo(GameItemType.PLANET);
         assertThat(result.getSolarSystemId()).isEqualTo(SOLAR_SYSTEM_ID);
         assertThat(result.getDefaultName()).isEqualTo(DEFAULT_NAME);
         assertThat(result.getCustomNames()).isEqualTo(CUSTOM_NAMES);

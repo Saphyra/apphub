@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.game;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.Test;
@@ -60,5 +61,6 @@ public class GameConverterTest {
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getName()).isEqualTo(NAME);
         assertThat(result.getHost()).isEqualTo(HOST);
+        assertThat(result.getType()).isEqualTo(GameItemType.GAME);
     }
 }

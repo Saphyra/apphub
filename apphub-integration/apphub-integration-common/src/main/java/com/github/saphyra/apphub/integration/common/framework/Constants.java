@@ -12,4 +12,5 @@ public class Constants {
     public final String ROLE_NOTEBOOK = "NOTEBOOK";
     public final String ROLE_SKYXPLORE = "SKYXPLORE";
     public final String AUTHORIZATION_HEADER = "auth";
+    public final String GENERAL_CHAT_ROOM_NAME = "general";
 }
