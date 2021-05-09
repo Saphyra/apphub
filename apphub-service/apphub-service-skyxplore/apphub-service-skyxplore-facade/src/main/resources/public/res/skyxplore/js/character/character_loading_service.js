@@ -5,7 +5,6 @@
         true
     ).setName("CharacterLoader"));
 
-    //TODO Page gets the proposed characterName from the model. Add the type=CREATE/EDIT to the model, and eliminate this file. The endpoint call also can be removed.
     function loadCharacter(){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_CHARACTER"));
             request.convertResponse = function(response){

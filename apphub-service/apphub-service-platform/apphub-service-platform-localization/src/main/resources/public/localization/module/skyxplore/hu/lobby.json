@@ -208,7 +208,7 @@
     "no-active-friends": [
       {
         "key": "innerHTML",
-        "message": "Nincs aktív barát.."
+        "message": "Nincs aktív barát."
       }
     ]
   },

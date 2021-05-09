@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 public enum ModuleLocation {
     ADMIN_PANEL("accounts", "admin-panel"),
     MANAGE_ACCOUNT("accounts", "account"),
-    NOTEBOOK("office", "notebook");
+    NOTEBOOK("office", "notebook"),
+    SKYXPLORE("game", "skyxplore");
 
     private final String categoryId;
     private final String moduleId;

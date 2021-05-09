@@ -63,8 +63,8 @@ public class CharacterExistenceFilter extends ZuulFilter {
         return !characterApi.doesCharacterExistForUser(accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());
     }
 
-    @Override
     @SneakyThrows
+    @Override
     public Object run() {
         RequestContext requestContext = RequestContext.getCurrentContext();
         String uri = requestContext.getRequest()

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.framework;
 
+import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -8,8 +9,6 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class NotificationUtil {
@@ -39,7 +38,7 @@ public class NotificationUtil {
     }
 
     public static void verifyZeroNotifications(WebDriver driver) {
-        assertThat(getNotifications(driver)).isEmpty();
+        TestBase.getSoftAssertions().assertThat(getNotifications(driver)).isEmpty();
     }
 
     private static void waitUntilNotificationVisible(WebDriver driver, String notificationMessage) {
