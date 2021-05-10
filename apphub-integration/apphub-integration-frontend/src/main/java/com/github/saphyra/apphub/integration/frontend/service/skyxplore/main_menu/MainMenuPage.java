@@ -4,6 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+
 class MainMenuPage {
     private static final By BACK_BUTTON = By.id("back-button");
     private static final By EDIT_CHARACTER_BUTTON = By.id("edit-character-button");
@@ -39,5 +41,25 @@ class MainMenuPage {
 
     static WebElement submitGameCreationFormButton(WebDriver driver) {
         return driver.findElement(SUBMIT_GAME_CREATION_FORM_BUTTON);
+    }
+
+    static WebElement newFriendName(WebDriver driver) {
+        return driver.findElement(By.id("new-friend-name"));
+    }
+
+    static List<WebElement> friendCandidates(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#new-friend-search-result .button"));
+    }
+
+    static List<WebElement> incomingFriendRequests(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#incoming-friend-request-list .friend-list-item"));
+    }
+
+    static List<WebElement> friends(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#friend-list .friend-list-item"));
+    }
+
+    public static List<WebElement> invitations(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#invitations .invitation"));
     }
 }

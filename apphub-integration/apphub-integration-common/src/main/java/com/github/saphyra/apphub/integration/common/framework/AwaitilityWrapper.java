@@ -27,9 +27,13 @@ public class AwaitilityWrapper {
     private final ConditionFactory conditionFactory;
 
     public static AwaitilityWrapper createDefault() {
+        return create(10, 1);
+    }
+
+    public static AwaitilityWrapper create(int timeout, int pollInterval) {
         ConditionFactory conditionFactory = Awaitility.await()
-            .atMost(10, TimeUnit.SECONDS)
-            .pollInterval(1, TimeUnit.SECONDS);
+            .atMost(timeout, TimeUnit.SECONDS)
+            .pollInterval(pollInterval, TimeUnit.SECONDS);
         return wrap(conditionFactory);
     }
 

@@ -23,6 +23,8 @@ import org.testng.annotations.BeforeSuite;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.github.saphyra.apphub.integration.common.framework.DataConstants.VALID_PASSWORD;
 import static com.github.saphyra.apphub.integration.common.framework.DataConstants.VALID_PASSWORD2;
@@ -30,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class TestBase {
+    public static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
     public static final CustomObjectMapper OBJECT_MAPPER_WRAPPER = new CustomObjectMapper(new ObjectMapper());
 
     public static int SERVER_PORT;

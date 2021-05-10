@@ -4,6 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+
 class LobbyPage {
     public static WebElement startGameCreationButton(WebDriver driver) {
         return driver.findElement(By.id("start-game-button"));
@@ -15,5 +17,17 @@ class LobbyPage {
 
     public static WebElement hostMember(WebDriver driver) {
         return driver.findElement(By.cssSelector("#host .lobby-member"));
+    }
+
+    public static List<WebElement> systemMessages(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#messages .system-message"));
+    }
+
+    public static List<WebElement> onlineFriends(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#active-friends-list .friend"));
+    }
+
+    public static List<WebElement> lobbyMembers(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#members-list .lobby-member"));
     }
 }

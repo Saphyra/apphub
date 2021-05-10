@@ -13,6 +13,8 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -33,20 +35,19 @@ public class SeleniumTest extends TestBase {
         HEADLESS_MODE = headless;
     }
 
-    private final ThreadLocal<WebDriverWrapper> driverWrapper = new ThreadLocal<>();
+    private final ThreadLocal<List<WebDriverWrapper>> driverWrappers = new ThreadLocal<>();
 
     @AfterMethod(alwaysRun = true)
     public void afterMethod(ITestResult testResult) {
-        WebDriverWrapper webDriverWrapper = driverWrapper.get();
-        if (isNull(webDriverWrapper)) {
-            return;
-        }
-        WebDriver driver = webDriverWrapper.getDriver();
-        if (ITestResult.FAILURE == testResult.getStatus() && !HEADLESS_MODE) {
-            extractLogs(driver);
-            SleepUtil.sleep(20000);
-        }
-        WebDriverFactory.release(webDriverWrapper.getId());
+        driverWrappers.get()
+            .forEach(webDriverWrapper -> {
+                WebDriver driver = webDriverWrapper.getDriver();
+                if (ITestResult.FAILURE == testResult.getStatus() && !HEADLESS_MODE) {
+                    extractLogs(driver);
+                    SleepUtil.sleep(20000);
+                }
+                WebDriverFactory.release(webDriverWrapper.getId());
+            });
     }
 
     @AfterSuite
@@ -72,7 +73,10 @@ public class SeleniumTest extends TestBase {
             throw new RuntimeException(e);
         }
 
-        driverWrapper.set(webDriverWrapper);
+        if (isNull(driverWrappers.get())) {
+            driverWrappers.set(new ArrayList<>());
+        }
+        driverWrappers.get().add(webDriverWrapper);
 
         WebDriver driver = webDriverWrapper.getDriver();
         driver.manage().deleteAllCookies();

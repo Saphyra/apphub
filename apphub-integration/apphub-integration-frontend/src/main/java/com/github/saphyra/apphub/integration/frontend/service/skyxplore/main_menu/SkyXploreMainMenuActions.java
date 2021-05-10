@@ -4,13 +4,24 @@ import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.character.SkyXploreCharacterActions;
+import com.github.saphyra.apphub.integration.frontend.service.skyxplore.lobby.Invitation;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
 
 public class SkyXploreMainMenuActions {
     public static void back(WebDriver driver) {
         MainMenuPage.backButton(driver).click();
+    }
+
+    public static void createLobby(WebDriver driver, String gameName) {
+        openCreateGameDialog(driver);
+        fillGameName(driver, gameName);
+        submitGameCreationForm(driver);
     }
 
     public static void editCharacter(WebDriver driver) {
@@ -49,6 +60,18 @@ public class SkyXploreMainMenuActions {
     }
 
     public static void submitGameCreationForm(WebDriver driver) {
-        MainMenuPage.submitGameCreationFormButton(driver).click();
+        WebElement submitButton = MainMenuPage.submitGameCreationFormButton(driver);
+        AwaitilityWrapper.createDefault()
+            .until(submitButton::isEnabled)
+            .assertTrue("Game creation form is invalid.");
+
+        submitButton.click();
+    }
+
+    public static List<Invitation> getInvitations(WebDriver driver) {
+        return MainMenuPage.invitations(driver)
+            .stream()
+            .map(Invitation::new)
+            .collect(Collectors.toList());
     }
 }
