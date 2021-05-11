@@ -30,4 +30,16 @@ class LobbyPage {
     public static List<WebElement> lobbyMembers(WebDriver driver) {
         return driver.findElements(By.cssSelector("#members-list .lobby-member"));
     }
+
+    public static WebElement chatInput(WebDriver driver) {
+        return driver.findElement(By.id("message-input"));
+    }
+
+    public static List<WebElement> messages(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#messages .message-sender-container"));
+    }
+
+    public static WebElement exitButton(WebDriver driver) {
+        return driver.findElement(By.id("back-button"));
+    }
 }

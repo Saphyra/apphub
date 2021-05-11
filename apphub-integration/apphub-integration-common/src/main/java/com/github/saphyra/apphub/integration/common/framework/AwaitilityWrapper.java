@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.common.framework;
 
+import com.github.saphyra.apphub.integration.common.TestBase;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -88,6 +89,10 @@ public class AwaitilityWrapper {
             if (!result) {
                 throw new IllegalStateException(message);
             }
+        }
+
+        public void softAssertTrue() {
+            TestBase.getSoftAssertions().assertThat(result).isTrue();
         }
     }
 

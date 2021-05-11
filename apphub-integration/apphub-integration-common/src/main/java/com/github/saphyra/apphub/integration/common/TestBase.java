@@ -133,7 +133,7 @@ public class TestBase {
             assertThat(response.getStatusCode()).isEqualTo(200);
             log.info("User deleted: {}", email);
         } catch (Throwable e) {
-            //
+            log.error("Failed deleting user {}", email, e);
         }
     }
 

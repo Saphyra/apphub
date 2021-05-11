@@ -4,7 +4,8 @@ import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.character.SkyXploreCharacterActions;
-import com.github.saphyra.apphub.integration.frontend.service.skyxplore.lobby.Invitation;
+import com.github.saphyra.apphub.integration.frontend.model.skyxplore.Invitation;
+import com.github.saphyra.apphub.integration.frontend.service.skyxplore.lobby.SkyXploreLobbyActions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -22,6 +23,10 @@ public class SkyXploreMainMenuActions {
         openCreateGameDialog(driver);
         fillGameName(driver, gameName);
         submitGameCreationForm(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXploreLobbyActions.pageLoaded(driver))
+            .assertTrue("LobbyPage not loaded.");
     }
 
     public static void editCharacter(WebDriver driver) {
@@ -73,5 +78,14 @@ public class SkyXploreMainMenuActions {
             .stream()
             .map(Invitation::new)
             .collect(Collectors.toList());
+    }
+
+    public static void acceptInvitation(WebDriver driver, String username) {
+        AwaitilityWrapper.getListWithWait(() -> getInvitations(driver), invitations -> !invitations.isEmpty())
+            .stream()
+            .filter(invitation -> invitation.getInvitor().equals(username))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Invitation not found"))
+            .accept();
     }
 }

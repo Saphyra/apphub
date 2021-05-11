@@ -52,19 +52,11 @@ public class LobbyInvitationTest extends SeleniumTest {
 
         SkyXploreMainMenuActions.createLobby(driver1, GAME_NAME);
 
-        AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.pageLoaded(driver1))
-            .assertTrue("LobbyPage not loaded.");
-
         getSoftAssertions().assertThat(SkyXploreLobbyActions.getOnlineFriends(driver1)).isEmpty();
 
         ModulesPageActions.openModule(driver2, ModuleLocation.SKYXPLORE);
 
-        WebElement inviteFriendButton = AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getOnlineFriends(driver1), webElements -> !webElements.isEmpty())
-            .stream()
-            .filter(element -> element.getText().equals(userData2.getUsername()))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Friend is not online."));
+        WebElement inviteFriendButton = SkyXploreLobbyActions.getOnlineFriend(driver1, userData2.getUsername());
 
         inviteFriendButton.click();
         NotificationUtil.verifySuccessNotification(driver1, "Barát meghívva.");
@@ -72,12 +64,7 @@ public class LobbyInvitationTest extends SeleniumTest {
         inviteFriendButton.click();
         NotificationUtil.verifyErrorNotification(driver1, "Ezt a játékost nem rég hívtad meg. Várj pár másodpercet, mielőtt újra próbálkozhatsz!");
 
-        AwaitilityWrapper.getListWithWait(() -> SkyXploreMainMenuActions.getInvitations(driver2), invitations -> !invitations.isEmpty())
-            .stream()
-            .filter(invitation -> invitation.getInvitor().equals(userData1.getUsername()))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Invitation did not arrive"))
-            .accept();
+        SkyXploreMainMenuActions.acceptInvitation(driver2, userData1.getUsername());
 
         AwaitilityWrapper.createDefault()
             .until(() -> driver2.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_LOBBY_PAGE))
