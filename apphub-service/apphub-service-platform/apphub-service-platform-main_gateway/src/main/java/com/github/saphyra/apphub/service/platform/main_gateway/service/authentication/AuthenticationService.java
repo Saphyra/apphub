@@ -2,11 +2,10 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.authenti
 
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.common_util.CookieUtil;
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
@@ -30,11 +29,10 @@ public class AuthenticationService {
     private final AccessTokenExpirationUpdateService accessTokenExpirationUpdateService;
     private final AccessTokenHeaderFactory accessTokenHeaderFactory;
     private final AccessTokenQueryService accessTokenQueryService;
-    private final Base64Encoder base64Encoder;
     private final CookieUtil cookieUtil;
     private final ErrorResponseFactory errorResponseFactory;
     private final ErrorResponseHandler errorResponseHandler;
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final AccessTokenHeaderConverter accessTokenHeaderConverter;
 
     public void authenticate(RequestContext requestContext) {
         Optional<String> accessTokenIdStringOptional = cookieUtil.getCookie(
@@ -62,9 +60,7 @@ public class AuthenticationService {
 
         InternalAccessTokenResponse accessTokenResponse = accessTokenResponseOptional.get();
         AccessTokenHeader accessToken = accessTokenHeaderFactory.create(accessTokenResponse);
-        String accessTokenString = objectMapperWrapper.writeValueAsString(accessToken);
-        log.debug("Stringified accessToken: {}", accessTokenString);
-        String encodedAccessToken = base64Encoder.encode(accessTokenString);
+        String encodedAccessToken = accessTokenHeaderConverter.convertDomain(accessToken);
         log.debug("Enriching request with auth header: {}", encodedAccessToken);
 
         requestContext.addZuulRequestHeader(ACCESS_TOKEN_HEADER, encodedAccessToken);

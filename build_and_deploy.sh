@@ -1,3 +1,5 @@
+set -e
+
 ./build.sh "$1"
 
 NAMESPACE_NAME=$(git rev-parse --abbrev-ref HEAD)

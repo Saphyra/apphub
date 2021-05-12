@@ -136,7 +136,9 @@ public class TextCrudTest extends SeleniumTest {
         TextActions.saveChanges(driver);
 
         NotificationUtil.verifySuccessNotification(driver, "Szöveg elmentve.");
-        assertThat(TextActions.isEditingEnabled(driver)).isFalse();
+        AwaitilityWrapper.createDefault()
+            .until(() -> !TextActions.isEditingEnabled(driver))
+            .assertTrue("Editing remained enabled.");
 
         TextActions.closeView(driver);
 

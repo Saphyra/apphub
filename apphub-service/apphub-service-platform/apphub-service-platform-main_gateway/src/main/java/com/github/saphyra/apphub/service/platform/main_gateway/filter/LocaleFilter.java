@@ -19,7 +19,6 @@ import static com.github.saphyra.apphub.lib.common_util.Constants.RESOURCE_PATH_
 @Slf4j
 @RequiredArgsConstructor
 public class LocaleFilter extends ZuulFilter {
-
     private final AntPathMatcher antPathMatcher;
     private final ApphubLocaleResolver apphubLocaleResolver;
 

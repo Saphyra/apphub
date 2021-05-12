@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.service.skyxplore.lobby;
 
+import com.github.saphyra.apphub.integration.frontend.model.skyxplore.GameSettingOption;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -41,5 +42,9 @@ class LobbyPage {
 
     public static WebElement exitButton(WebDriver driver) {
         return driver.findElement(By.id("back-button"));
+    }
+
+    public static WebElement getGameSettingSelect(WebDriver driver, GameSettingOption option) {
+        return driver.findElement(By.id(option.getInputFieldId()));
     }
 }

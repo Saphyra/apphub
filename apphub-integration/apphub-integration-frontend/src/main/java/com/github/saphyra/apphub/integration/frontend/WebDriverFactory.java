@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -22,7 +23,7 @@ import static java.util.Objects.isNull;
 
 @Slf4j
 class WebDriverFactory {
-    public static final int BROWSER_STARTUP_LIMIT = 3;
+    public static final int BROWSER_STARTUP_LIMIT = 2;
     private static final int MAX_DRIVER_COUNT = 15;
 
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(BROWSER_STARTUP_LIMIT);
@@ -31,7 +32,7 @@ class WebDriverFactory {
 
     static synchronized Future<WebDriverWrapper> getDriver() {
         log.info("Querying driver...");
-        for (int i = 0; true; i++) {
+        for (int i = 0; i < 60; i++) {
             Optional<WebDriverWrapper> webDriverWrapperOptional = DRIVER_CACHE.values()
                 .stream()
                 .filter(wrapper -> !wrapper.isLocked())
@@ -43,18 +44,26 @@ class WebDriverFactory {
                 return EXECUTOR.submit(() -> webDriverWrapper);
             } else if (DRIVER_CACHE.size() < MAX_DRIVER_COUNT) {
                 log.info("No available webDriver found. Creating a new one...");
-                WebDriverWrapper webDriverWrapper = new WebDriverWrapper();
-                DRIVER_CACHE.put(webDriverWrapper.getId(), webDriverWrapper);
-                return EXECUTOR.submit(() -> {
-                    WebDriver webDriver = createDriver();
-                    webDriverWrapper.setDriver(webDriver);
-                    return webDriverWrapper;
-                });
+                return createNewDriver();
             }
 
             log.debug("No available webDriver found and limit is reached. Waiting for releasing for {} seconds", i);
             SleepUtil.sleep(1000);
         }
+
+        log.warn("WebDriver could not be allocated in one minute. Creating a new one exceeding the limits");
+        return createNewDriver();
+    }
+
+    @NotNull
+    private static Future<WebDriverWrapper> createNewDriver() {
+        WebDriverWrapper webDriverWrapper = new WebDriverWrapper();
+        DRIVER_CACHE.put(webDriverWrapper.getId(), webDriverWrapper);
+        return EXECUTOR.submit(() -> {
+            WebDriver webDriver = createDriver();
+            webDriverWrapper.setDriver(webDriver);
+            return webDriverWrapper;
+        });
     }
 
     public static void release(UUID id) {

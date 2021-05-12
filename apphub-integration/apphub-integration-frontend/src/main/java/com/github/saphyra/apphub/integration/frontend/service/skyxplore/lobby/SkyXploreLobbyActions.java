@@ -1,6 +1,9 @@
 package com.github.saphyra.apphub.integration.frontend.service.skyxplore.lobby;
 
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.frontend.model.SelectMenu;
+import com.github.saphyra.apphub.integration.frontend.model.skyxplore.GameSettingOption;
+import com.github.saphyra.apphub.integration.frontend.model.skyxplore.GameSettingOptionValue;
 import com.github.saphyra.apphub.integration.frontend.model.skyxplore.LobbyChatMessage;
 import com.github.saphyra.apphub.integration.frontend.model.skyxplore.LobbyMember;
 import org.openqa.selenium.Keys;
@@ -11,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreLobbyActions {
     public static void startGameCreation(WebDriver driver) {
@@ -77,5 +81,24 @@ public class SkyXploreLobbyActions {
 
     public static void exitLobby(WebDriver driver) {
         LobbyPage.exitButton(driver).click();
+    }
+
+    public static void changeGameSetting(WebDriver driver, GameSettingOption option, GameSettingOptionValue optionValue) {
+        SelectMenu selectMenu = getGameSettingInput(driver, option);
+        assertThat(selectMenu.isEnabled()).isTrue();
+
+        selectMenu.selectOption(optionValue.name());
+    }
+
+    public static SelectMenu getGameSettingInput(WebDriver driver, GameSettingOption option) {
+        return new SelectMenu(LobbyPage.getGameSettingSelect(driver, option));
+    }
+
+    public static LobbyMember getMember(WebDriver driver, String username) {
+        return getMembers(driver)
+            .stream()
+            .filter(lobbyMember -> lobbyMember.getName().equals(username))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("LobbyMember not found."));
     }
 }

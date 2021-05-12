@@ -33,7 +33,7 @@ public class ResponseLoggingFilter extends ZuulFilter {
     @Override
     public boolean shouldFilter() {
         String requestUri = RequestContext.getCurrentContext().getRequest().getRequestURI();
-        return !antPathMatcher.match(RESOURCE_PATH_PATTERN, requestUri);
+        return !antPathMatcher.match(RESOURCE_PATH_PATTERN, requestUri) && RequestContext.getCurrentContext().getResponse().getStatus() != 200;
     }
 
     @Override

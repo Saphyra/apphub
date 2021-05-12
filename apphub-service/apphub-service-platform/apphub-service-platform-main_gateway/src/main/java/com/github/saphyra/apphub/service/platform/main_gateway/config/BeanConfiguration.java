@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.whitelist.EnableWhiteListedEndpointProperties;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorTranslation;
@@ -29,6 +30,11 @@ import org.springframework.util.AntPathMatcher;
 @EnableHealthCheck
 @EnableWsForward
 class BeanConfiguration {
+    @Bean
+    AccessTokenHeaderConverter accessTokenHeaderConverter(Base64Encoder base64Encoder, ObjectMapperWrapper objectMapperWrapper) {
+        return new AccessTokenHeaderConverter(base64Encoder, objectMapperWrapper);
+    }
+
     @Bean
     AntPathMatcher antPathMatcher() {
         return new AntPathMatcher();

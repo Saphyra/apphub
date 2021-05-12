@@ -73,7 +73,6 @@ public class GameDaoTest {
 
     @Test
     public void delete() {
-        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, null));
         underTest.save(game);
 
         underTest.delete(game);
