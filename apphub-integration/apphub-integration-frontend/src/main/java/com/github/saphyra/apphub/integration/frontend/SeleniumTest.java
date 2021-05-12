@@ -12,6 +12,7 @@ import org.openqa.selenium.WebElement;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +45,16 @@ public class SeleniumTest extends TestBase {
                 WebDriver driver = webDriverWrapper.getDriver();
                 if (ITestResult.FAILURE == testResult.getStatus() && !HEADLESS_MODE) {
                     extractLogs(driver);
-                    SleepUtil.sleep(20000);
                 }
                 WebDriverFactory.release(webDriverWrapper.getId());
             });
+    }
+
+    @BeforeSuite
+    public void startDrivers() {
+        if (Boolean.parseBoolean(System.getProperty("preCreateDrivers"))) {
+            WebDriverFactory.startDrivers();
+        }
     }
 
     @AfterSuite

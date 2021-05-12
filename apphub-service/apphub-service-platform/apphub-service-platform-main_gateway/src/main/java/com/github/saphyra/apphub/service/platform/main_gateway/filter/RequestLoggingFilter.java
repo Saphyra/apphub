@@ -35,6 +35,12 @@ public class RequestLoggingFilter extends ZuulFilter {
 
     @Override
     public Object run() {
+        //TODO remove
+        long totalMemory = Runtime.getRuntime().totalMemory();
+        long freeMemory = Runtime.getRuntime().freeMemory();
+        long usedMemory = totalMemory - freeMemory;
+        log.info("Total memory: {}, used memory: {}, free memory: {}", totalMemory, usedMemory, freeMemory);
+
         RequestContext requestContext = RequestContext.getCurrentContext();
         log.info("Handling request {} - {}", requestContext.getRequest().getMethod(), requestContext.getRequest().getRequestURI());
         return null;

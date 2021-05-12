@@ -10,10 +10,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -29,6 +32,30 @@ class WebDriverFactory {
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(BROWSER_STARTUP_LIMIT);
 
     private static final Map<UUID, WebDriverWrapper> DRIVER_CACHE = new ConcurrentHashMap<>();
+
+    public static void startDrivers() {
+
+
+        List<Future<WebDriverWrapper>> futures = new ArrayList<>();
+
+        for (int i = 0; i < MAX_DRIVER_COUNT; i++) {
+            futures.add(createNewDriver());
+        }
+
+        while (futures.stream().anyMatch(webDriverWrapperFuture -> !webDriverWrapperFuture.isDone())) {
+            SleepUtil.sleep(1000);
+        }
+
+        futures.stream()
+            .parallel()
+            .map(webDriverWrapperFuture -> {
+                try {
+                    return webDriverWrapperFuture.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    throw new RuntimeException(e);
+                }
+            }).forEach(webDriverWrapper -> release(webDriverWrapper.getId()));
+    }
 
     static synchronized Future<WebDriverWrapper> getDriver() {
         log.info("Querying driver...");

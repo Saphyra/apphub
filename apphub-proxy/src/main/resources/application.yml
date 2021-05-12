@@ -14,6 +14,18 @@ zuul:
       stripPrefix: false
       sensitiveHeaders:
 
+hystryx:
+  command:
+    default:
+      timeout:
+        enabled: true
+      isolation:
+        thread:
+          timeoutInMilliseconds: 60000
+ribbon:
+  ConnectTimeout: 60000
+  ReadTimeout: 60000
+
 proxy:
   ribbon:
     listOfServers: localhost:${forwardedPort}

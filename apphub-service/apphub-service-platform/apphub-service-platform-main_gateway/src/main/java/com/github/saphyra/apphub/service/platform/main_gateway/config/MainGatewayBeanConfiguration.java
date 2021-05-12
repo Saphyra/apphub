@@ -29,7 +29,7 @@ import org.springframework.util.AntPathMatcher;
 @Import(CommonConfigProperties.class)
 @EnableHealthCheck
 @EnableWsForward
-class BeanConfiguration {
+class MainGatewayBeanConfiguration {
     @Bean
     AccessTokenHeaderConverter accessTokenHeaderConverter(Base64Encoder base64Encoder, ObjectMapperWrapper objectMapperWrapper) {
         return new AccessTokenHeaderConverter(base64Encoder, objectMapperWrapper);

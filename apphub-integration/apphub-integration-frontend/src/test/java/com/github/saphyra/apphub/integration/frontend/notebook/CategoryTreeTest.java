@@ -48,8 +48,14 @@ public class CategoryTreeTest extends SeleniumTest {
             .until(() -> DetailedListActions.getDetailedListItems(driver).stream().anyMatch(listItemDetailsItem -> listItemDetailsItem.getTitle().equals(CHILD_TITLE)))
             .assertTrue();
 
-        rootsChild.openChildrenList();
-        List<CategoryTreeElement> youngestChildren = rootsChild.getChildren();
+        CategoryActions.getCategoryTreeRoot(driver)
+            .getChildren()
+            .get(0)
+            .openChildrenList();
+
+        List<CategoryTreeElement> youngestChildren = CategoryActions.getCategoryTreeRoot(driver)
+            .getChildren()
+            .get(0).getChildren();
         assertThat(youngestChildren).hasSize(1);
         CategoryTreeElement youngestChild = youngestChildren.get(0);
         youngestChild.openInMainWindow();
