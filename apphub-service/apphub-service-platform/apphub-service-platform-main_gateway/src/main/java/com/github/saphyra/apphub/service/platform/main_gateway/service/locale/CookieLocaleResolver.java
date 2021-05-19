@@ -1,24 +1,24 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.locale;
 
-import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.lib.common_util.CookieUtil;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.Constants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpCookie;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
 @Component
-class CookieLocaleResolver {
-    private final CookieUtil cookieUtil;
+public class CookieLocaleResolver {
     private final CommonConfigProperties commonConfigProperties;
 
-    Optional<String> getLocale(HttpServletRequest request) {
-        return cookieUtil.getCookie(request, Constants.LOCALE_COOKIE)
+    public Optional<String> getLocale(MultiValueMap<String, HttpCookie> cookies) {
+        return Optional.ofNullable(cookies.getFirst(Constants.LOCALE_COOKIE))
+            .map(HttpCookie::getValue)
             .filter(locale -> commonConfigProperties.getSupportedLocales().contains(locale));
     }
 }

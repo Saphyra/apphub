@@ -23,7 +23,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AddRoleTest extends TestBase {
-    @DataProvider(name = "localeDataProvider", parallel = true)
+    @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();
     }

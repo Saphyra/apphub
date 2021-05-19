@@ -1,18 +1,17 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.locale;
 
-import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.lib.common_util.CookieUtil;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.Constants;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpCookie;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -22,43 +21,35 @@ public class CookieLocaleResolverTest {
     private static final String LOCALE = "locale";
 
     @Mock
-    private CookieUtil cookieUtil;
-
-    @Mock
     private CommonConfigProperties commonConfigProperties;
 
     @InjectMocks
     private CookieLocaleResolver underTest;
 
     @Mock
-    private HttpServletRequest request;
+    private HttpCookie cookie;
+
+    private final MultiValueMap<String, HttpCookie> cookies = new LinkedMultiValueMap<>();
 
     @Test
-    public void getLocale_cookieNotPresent() {
-        given(cookieUtil.getCookie(request, Constants.LOCALE_COOKIE)).willReturn(Optional.empty());
-
-        Optional<String> result = underTest.getLocale(request);
-
-        assertThat(result).isEmpty();
+    public void cookieNotFound() {
+        assertThat(underTest.getLocale(cookies)).isEmpty();
     }
 
     @Test
-    public void getLocale_notSupported() {
-        given(cookieUtil.getCookie(request, Constants.LOCALE_COOKIE)).willReturn(Optional.of(LOCALE));
-        given(commonConfigProperties.getSupportedLocales()).willReturn(Collections.emptyList());
+    public void notSupportedLocale() {
+        cookies.put(Constants.LOCALE_COOKIE, Arrays.asList(cookie));
+        given(cookie.getValue()).willReturn(LOCALE);
 
-        Optional<String> result = underTest.getLocale(request);
-
-        assertThat(result).isEmpty();
+        assertThat(underTest.getLocale(cookies)).isEmpty();
     }
 
     @Test
-    public void getLocale() {
-        given(cookieUtil.getCookie(request, Constants.LOCALE_COOKIE)).willReturn(Optional.of(LOCALE));
+    public void resolvedFromCookie() {
+        cookies.put(Constants.LOCALE_COOKIE, Arrays.asList(cookie));
+        given(cookie.getValue()).willReturn(LOCALE);
         given(commonConfigProperties.getSupportedLocales()).willReturn(Arrays.asList(LOCALE));
 
-        Optional<String> result = underTest.getLocale(request);
-
-        assertThat(result).contains(LOCALE);
+        assertThat(underTest.getLocale(cookies)).contains(LOCALE);
     }
 }

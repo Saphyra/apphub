@@ -2,17 +2,19 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.locale;
 
 import com.github.saphyra.apphub.api.user.client.UserDataApiClient;
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
-import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.lib.common_util.CookieUtil;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpCookie;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,57 +35,54 @@ public class UserSettingLocaleResolverTest {
     private CommonConfigProperties commonConfigProperties;
 
     @Mock
-    private CookieUtil cookieUtil;
-
-    @Mock
     private UserDataApiClient userDataApi;
 
     @InjectMocks
     private UserSettingLocaleResolver underTest;
 
     @Mock
-    private HttpServletRequest request;
+    private HttpCookie cookie;
+
+    @Mock
+    private InternalAccessTokenResponse accessTokenResponse;
+
+    private final MultiValueMap<String, HttpCookie> cookies = new LinkedMultiValueMap<>();
 
     @Test
-    public void getLocale_cookieNotPresent() {
-        given(cookieUtil.getCookie(request, Constants.ACCESS_TOKEN_COOKIE)).willReturn(Optional.empty());
-
-        Optional<String> result = underTest.getLocale(request);
-
-        assertThat(result).isEmpty();
+    public void accessTokenCookieNotPresent() {
+        assertThat(underTest.getLocale(cookies)).isEmpty();
     }
 
     @Test
-    public void getLocale_accessTokenNotFound() {
-        given(cookieUtil.getCookie(request, Constants.ACCESS_TOKEN_COOKIE)).willReturn(Optional.of(ACCESS_TOKEN_ID));
+    public void accessTokenNotFound() {
+        cookies.put(Constants.ACCESS_TOKEN_COOKIE, Arrays.asList(cookie));
+        given(cookie.getValue()).willReturn(ACCESS_TOKEN_ID);
         given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID)).willReturn(Optional.empty());
 
-        Optional<String> result = underTest.getLocale(request);
-
-        assertThat(result).isEmpty();
+        assertThat(underTest.getLocale(cookies)).isEmpty();
     }
 
     @Test
-    public void getLocale_languageNotFound() {
-        given(cookieUtil.getCookie(request, Constants.ACCESS_TOKEN_COOKIE)).willReturn(Optional.of(ACCESS_TOKEN_ID));
-        given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID)).willReturn(Optional.of(InternalAccessTokenResponse.builder().userId(USER_ID).build()));
+    public void languageQueryFailed() {
+        cookies.put(Constants.ACCESS_TOKEN_COOKIE, Arrays.asList(cookie));
+        given(cookie.getValue()).willReturn(ACCESS_TOKEN_ID);
+        given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID)).willReturn(Optional.of(accessTokenResponse));
+        given(accessTokenResponse.getUserId()).willReturn(USER_ID);
         given(commonConfigProperties.getDefaultLocale()).willReturn(DEFAULT_LOCALE);
         given(userDataApi.getLanguage(USER_ID, DEFAULT_LOCALE)).willThrow(new RuntimeException());
 
-        Optional<String> result = underTest.getLocale(request);
-
-        assertThat(result).isEmpty();
+        assertThat(underTest.getLocale(cookies)).isEmpty();
     }
 
     @Test
-    public void getLocale() {
-        given(cookieUtil.getCookie(request, Constants.ACCESS_TOKEN_COOKIE)).willReturn(Optional.of(ACCESS_TOKEN_ID));
-        given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID)).willReturn(Optional.of(InternalAccessTokenResponse.builder().userId(USER_ID).build()));
+    public void localeResolved() {
+        cookies.put(Constants.ACCESS_TOKEN_COOKIE, Arrays.asList(cookie));
+        given(cookie.getValue()).willReturn(ACCESS_TOKEN_ID);
+        given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID)).willReturn(Optional.of(accessTokenResponse));
+        given(accessTokenResponse.getUserId()).willReturn(USER_ID);
         given(commonConfigProperties.getDefaultLocale()).willReturn(DEFAULT_LOCALE);
         given(userDataApi.getLanguage(USER_ID, DEFAULT_LOCALE)).willReturn(LOCALE);
 
-        Optional<String> result = underTest.getLocale(request);
-
-        assertThat(result).contains(LOCALE);
+        assertThat(underTest.getLocale(cookies)).contains(LOCALE);
     }
 }

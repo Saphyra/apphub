@@ -20,7 +20,7 @@ public class LoginTest extends SeleniumTest {
     private static final String EMPTY_CREDENTIALS_MESSAGE = "E-mail és jelszó megadása kötelező!";
     private static final String BAD_CREDENTIALS_MESSAGE = "Az email cím és jelszó kombinációja ismeretlen.";
 
-    @DataProvider(name = "badCredentials", parallel = true)
+    @DataProvider(name = "badCredentials")
     public Object[][] badCredentials() {
         return new Object[][]{
             new Object[]{emptyEmail(), EMPTY_CREDENTIALS_MESSAGE},

@@ -38,7 +38,7 @@ public class CloneListItemTest extends TestBase {
     private static final String CHECKLIST_TABLE_COLUMN_NAME = "checklist-table-column-name";
     private static final String CHECKLIST_TABLE_COLUMN_VALUE = "checklist-table-column-value";
 
-    @DataProvider(name = "localeDataProvider", parallel = true)
+    @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();
     }

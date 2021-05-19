@@ -2,14 +2,14 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.locale;
 
 import com.github.saphyra.apphub.api.user.client.UserDataApiClient;
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
-import com.github.saphyra.apphub.lib.common_util.CookieUtil;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpCookie;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,11 +21,11 @@ import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_C
 class UserSettingLocaleResolver {
     private final AccessTokenQueryService accessTokenQueryService;
     private final CommonConfigProperties commonConfigProperties;
-    private final CookieUtil cookieUtil;
     private final UserDataApiClient userDataApi;
 
-    Optional<String> getLocale(HttpServletRequest request) {
-        Optional<UUID> userIdOptional = cookieUtil.getCookie(request, ACCESS_TOKEN_COOKIE)
+    Optional<String> getLocale(MultiValueMap<String, HttpCookie> cookies) {
+        Optional<UUID> userIdOptional = Optional.ofNullable(cookies.getFirst(ACCESS_TOKEN_COOKIE))
+            .map(HttpCookie::getValue)
             .flatMap(accessTokenQueryService::getAccessToken)
             .map(InternalAccessTokenResponse::getUserId);
         if (userIdOptional.isPresent()) {

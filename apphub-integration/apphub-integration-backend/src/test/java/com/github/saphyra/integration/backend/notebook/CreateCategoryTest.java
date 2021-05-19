@@ -25,7 +25,7 @@ public class CreateCategoryTest extends TestBase {
     private static final String TITLE_1 = "title-1";
     private static final String TITLE_2 = "title-2";
 
-    @DataProvider(name = "localeDataProvider", parallel = true)
+    @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();
     }

@@ -113,6 +113,8 @@ public class TestBase {
             .body(new OneParamRequest<>("@" + getEmailDomain() + ".com"))
             .post(UrlFactory.create(Endpoints.GET_USER_ROLES));
 
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
         return response.getBody().as(UserRoleResponse[].class);
     }
 

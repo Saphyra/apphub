@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.proxy;
 import com.github.saphyra.apphub.api.platform.message_sender.client.MessageSenderApiClient;
 import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
-import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
+import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

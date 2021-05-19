@@ -2,59 +2,38 @@ package com.github.saphyra.apphub.service.platform.main_gateway.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
-import com.github.saphyra.apphub.lib.common_util.CookieUtil;
-import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.lib.common_util.RequestContextProvider;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
+import com.github.saphyra.apphub.lib.config.common.FeignClientConfiguration;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.whitelist.EnableWhiteListedEndpointProperties;
-import com.github.saphyra.apphub.lib.error_handler.EnableErrorTranslation;
-import com.github.saphyra.apphub.lib.websocket_gateway.EnableWsForward;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
+import feign.codec.Decoder;
+import feign.codec.Encoder;
+import feign.form.spring.SpringFormEncoder;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.cloud.openfeign.support.SpringDecoder;
+import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.util.AntPathMatcher;
 
 @Configuration
-@ComponentScan(basePackages = "com.github.saphyra.util")
-@EnableZuulProxy
-@EnableWhiteListedEndpointProperties
-@EnableErrorTranslation
-@Import(CommonConfigProperties.class)
+@Import({
+    CommonConfigProperties.class,
+    FeignClientConfiguration.class
+})
 @EnableHealthCheck
-@EnableWsForward
-class MainGatewayBeanConfiguration {
-    @Bean
-    AccessTokenHeaderConverter accessTokenHeaderConverter(Base64Encoder base64Encoder, ObjectMapperWrapper objectMapperWrapper) {
-        return new AccessTokenHeaderConverter(base64Encoder, objectMapperWrapper);
-    }
+@EnableWhiteListedEndpointProperties
+public class MainGatewayBeanConfiguration {
+    private final ObjectFactory<HttpMessageConverters> messageConverters = HttpMessageConverters::new;
 
     @Bean
     AntPathMatcher antPathMatcher() {
         return new AntPathMatcher();
-    }
-
-    @Bean
-    Base64Encoder base64Encoder() {
-        return new Base64Encoder();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(LocaleProvider.class)
-    LocaleProvider localeProvider(RequestContextProvider requestContextProvider, CommonConfigProperties commonConfigProperties) {
-        return new LocaleProvider(requestContextProvider, commonConfigProperties);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(RequestContextProvider.class)
-    RequestContextProvider requestContextProvider() {
-        return new RequestContextProvider();
     }
 
     @Bean
@@ -63,12 +42,27 @@ class MainGatewayBeanConfiguration {
     }
 
     @Bean
-    CookieUtil cookieUtil() {
-        return new CookieUtil();
+    AccessTokenHeaderConverter accessTokenHeaderConverter(Base64Encoder base64Encoder, ObjectMapperWrapper objectMapperWrapper) {
+        return new AccessTokenHeaderConverter(base64Encoder, objectMapperWrapper);
+    }
+
+    @Bean
+    Base64Encoder base64Encoder() {
+        return new Base64Encoder();
     }
 
     @Bean
     ObjectMapperWrapper objectMapperWrapper(ObjectMapper objectMapper) {
         return new ObjectMapperWrapper(objectMapper);
+    }
+
+    @Bean
+    Encoder feignFormEncoder() {
+        return new SpringFormEncoder(new SpringEncoder(messageConverters));
+    }
+
+    @Bean
+    Decoder feignFormDecoder() {
+        return new SpringDecoder(messageConverters);
     }
 }

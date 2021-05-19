@@ -27,7 +27,7 @@ public class CreateTableTest extends TestBase {
     private static final String COLUMN_VALUE = "column-value";
     private static final String TITLE = "title";
 
-    @DataProvider(name = "localeDataProvider", parallel = true)
+    @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();
     }

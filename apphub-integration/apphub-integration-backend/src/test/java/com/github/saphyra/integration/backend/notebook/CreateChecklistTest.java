@@ -27,7 +27,7 @@ public class CreateChecklistTest extends TestBase {
     private static final String CONTENT = "content";
     private static final String TITLE = "title";
 
-    @DataProvider(name = "localeDataProvider", parallel = true)
+    @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();
     }

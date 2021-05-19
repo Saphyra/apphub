@@ -34,6 +34,13 @@
             <artifactId>rest-assured</artifactId>
             <version>${versions.rest-assured}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+            <version>${versions.jackson-core}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

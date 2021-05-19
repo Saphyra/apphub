@@ -15,8 +15,9 @@ import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AccessTokenIdConverterTest {
-    private static final String INPUT = "input";
+    private static final String ACCESS_TOKEN_ID_STRING = "access-token-id";
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
+
     @Mock
     private UuidConverter uuidConverter;
 
@@ -24,20 +25,18 @@ public class AccessTokenIdConverterTest {
     private AccessTokenIdConverter underTest;
 
     @Test
-    public void convert_error() {
-        given(uuidConverter.convertEntity(Optional.of(INPUT))).willThrow(new RuntimeException());
+    public void convert() {
+        given(uuidConverter.convertEntity(Optional.of(ACCESS_TOKEN_ID_STRING))).willReturn(Optional.of(ACCESS_TOKEN_ID));
 
-        Optional<UUID> result = underTest.convertAccessTokenId(INPUT);
+        Optional<UUID> result = underTest.convertAccessTokenId(ACCESS_TOKEN_ID_STRING);
 
-        assertThat(result).isEmpty();
+        assertThat(result).contains(ACCESS_TOKEN_ID);
     }
 
     @Test
-    public void convert() {
-        given(uuidConverter.convertEntity(Optional.of(INPUT))).willReturn(Optional.of(ACCESS_TOKEN_ID));
+    public void error() {
+        given(uuidConverter.convertEntity(Optional.of(ACCESS_TOKEN_ID_STRING))).willThrow(new RuntimeException());
 
-        Optional<UUID> result = underTest.convertAccessTokenId(INPUT);
-
-        assertThat(result).contains(ACCESS_TOKEN_ID);
+        assertThat(underTest.convertAccessTokenId(ACCESS_TOKEN_ID_STRING)).isEmpty();
     }
 }

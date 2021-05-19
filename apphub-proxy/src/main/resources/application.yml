@@ -2,17 +2,20 @@ server:
   port: ${server_port:9000}
 
 forwardedPort: ${forwarded_port:9001}
+host: localhost:${forwardedPort}
 
-zuul:
-  prefix: /
-  ignoredPatterns:
-    - /api/message-sender/**
-  routes:
-    proxy:
-      path: /**
-      serviceId: proxy
-      stripPrefix: false
-      sensitiveHeaders:
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: api
+          uri: http://localhost:${forwardedPort}
+          predicates:
+            - Path=/**
+        - id: ws
+          uri: ws://localhost:${forwardedPort}
+          predicates:
+            - Path=/**
 
 hystryx:
   command:
@@ -21,20 +24,4 @@ hystryx:
         enabled: true
       isolation:
         thread:
-          timeoutInMilliseconds: 60000
-ribbon:
-  ConnectTimeout: 60000
-  ReadTimeout: 60000
-
-proxy:
-  ribbon:
-    listOfServers: localhost:${forwardedPort}
-
-ws:
-  forward:
-    enabled: true
-    handlers:
-      message-sender:
-        uri: /api/message-sender/**
-        listOfServers:
-          - localhost:${forwardedPort}
+          timeoutInMilliseconds: 10000

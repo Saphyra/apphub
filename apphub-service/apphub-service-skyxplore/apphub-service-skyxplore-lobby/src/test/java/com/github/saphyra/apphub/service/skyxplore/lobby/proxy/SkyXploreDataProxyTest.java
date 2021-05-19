@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.proxy;
 import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreDataFriendApiClient;
 import com.github.saphyra.apphub.api.skyxplore.response.FriendshipResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
+import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import org.junit.Test;
 import org.junit.runner.RunWith;

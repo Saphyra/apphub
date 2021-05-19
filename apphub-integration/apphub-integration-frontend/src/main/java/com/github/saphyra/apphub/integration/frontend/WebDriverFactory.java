@@ -97,8 +97,8 @@ class WebDriverFactory {
         log.info("Releasing webDriver with id {}", id);
         WebDriverWrapper webDriverWrapper = DRIVER_CACHE.get(id);
         WebDriver driver = webDriverWrapper.getDriver();
-        driver.manage().deleteAllCookies();
         driver.navigate().to(UrlFactory.create(Endpoints.INDEX_PAGE));
+        driver.manage().deleteAllCookies();
         webDriverWrapper.setLocked(false);
     }
 

@@ -41,7 +41,6 @@ public class RedirectionTest extends SeleniumTest {
         //WHEN
         driver.navigate().to(UrlFactory.create(SERVER_PORT, "/"));
 
-
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(SERVER_PORT, Endpoints.INDEX_PAGE));
     }
 

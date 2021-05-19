@@ -25,7 +25,7 @@ public class UpdateChecklistItemStatusTest extends TestBase {
     private static final String TITLE = "title";
     private static final String CONTENT = "content";
 
-    @DataProvider(name = "localeDataProvider", parallel = true)
+    @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();
     }

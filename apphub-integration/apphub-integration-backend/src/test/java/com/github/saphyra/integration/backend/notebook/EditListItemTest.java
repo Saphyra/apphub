@@ -24,7 +24,7 @@ public class EditListItemTest extends TestBase {
     private static final String ORIGINAL_URL = "original-url";
     private static final String NEW_URL = "new-url";
 
-    @DataProvider(name = "localeDataProvider", parallel = true)
+    @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();
     }

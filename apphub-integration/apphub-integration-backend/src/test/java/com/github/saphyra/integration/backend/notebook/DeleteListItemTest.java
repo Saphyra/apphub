@@ -21,7 +21,7 @@ public class DeleteListItemTest extends TestBase {
     private static final String CONTENT = "content";
     private static final String COLUMN_NAME = "column-name";
 
-    @DataProvider(name = "localeDataProvider", parallel = true)
+    @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();
     }

@@ -26,7 +26,7 @@ public class GetChecklistTest extends TestBase {
     private static final String CONTENT = "content";
     private static final Integer ORDER = 23;
 
-    @DataProvider(name = "localeDataProvider", parallel = true)
+    @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();
     }

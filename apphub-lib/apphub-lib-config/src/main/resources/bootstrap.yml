@@ -31,10 +31,10 @@ hystryx:
         enabled: true
       isolation:
         thread:
-          timeoutInMilliseconds: 60000
+          timeoutInMilliseconds: 10000
 ribbon:
-  ConnectTimeout: 60000
-  ReadTimeout: 60000
+  ConnectTimeout: 10000
+  ReadTimeout: 10000
 
 web-content:
   ribbon:

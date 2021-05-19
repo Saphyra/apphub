@@ -27,7 +27,7 @@ public class GetChildrenOfCategoryTest extends TestBase {
     private static final String TITLE_4 = "title-4";
     private static final String TITLE_5 = "title-5";
 
-    @DataProvider(name = "localeDataProvider", parallel = true)
+    @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();
     }

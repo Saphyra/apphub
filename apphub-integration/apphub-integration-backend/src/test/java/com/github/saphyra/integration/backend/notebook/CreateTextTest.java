@@ -27,7 +27,7 @@ public class CreateTextTest extends TestBase {
     private static final String TITLE = "title";
     private static final String PARENT_TITLE = "parent-title";
 
-    @DataProvider(name = "localeDataProvider", parallel = true)
+    @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();
     }

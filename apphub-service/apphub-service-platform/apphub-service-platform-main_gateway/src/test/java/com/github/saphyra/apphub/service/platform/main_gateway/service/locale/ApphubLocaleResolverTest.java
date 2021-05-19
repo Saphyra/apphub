@@ -6,8 +6,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpCookie;
+import org.springframework.http.HttpHeaders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.Optional;
 
@@ -34,46 +36,51 @@ public class ApphubLocaleResolverTest {
     private ApphubLocaleResolver underTest;
 
     @Mock
-    private HttpServletRequest request;
+    private HttpHeaders httpHeaders;
+
+    @Mock
+    private HttpCookie cookie;
+
+    private MultiValueMap<String, HttpCookie> cookies = new LinkedMultiValueMap<>();
 
     @Test
-    public void getFromUserSettings() {
-        given(userSettingLocaleResolver.getLocale(request)).willReturn(Optional.of(LOCALE));
+    public void resolveFromUserSettings() {
+        given(userSettingLocaleResolver.getLocale(cookies)).willReturn(Optional.of(LOCALE));
 
-        String result = underTest.getLocale(request);
+        String result = underTest.getLocale(httpHeaders, cookies);
 
         assertThat(result).isEqualTo(LOCALE);
     }
 
     @Test
-    public void getFromCookie() {
-        given(userSettingLocaleResolver.getLocale(request)).willReturn(Optional.empty());
-        given(cookieLocaleResolver.getLocale(request)).willReturn(Optional.of(LOCALE));
+    public void resolveFromCookie() {
+        given(userSettingLocaleResolver.getLocale(cookies)).willReturn(Optional.empty());
+        given(cookieLocaleResolver.getLocale(cookies)).willReturn(Optional.of(LOCALE));
 
-        String result = underTest.getLocale(request);
-
-        assertThat(result).isEqualTo(LOCALE);
-    }
-
-    @Test
-    public void getFromBrowserLanguage() {
-        given(userSettingLocaleResolver.getLocale(request)).willReturn(Optional.empty());
-        given(cookieLocaleResolver.getLocale(request)).willReturn(Optional.empty());
-        given(browserLanguageLocaleResolver.getLocale(request)).willReturn(Optional.of(LOCALE));
-
-        String result = underTest.getLocale(request);
+        String result = underTest.getLocale(httpHeaders, cookies);
 
         assertThat(result).isEqualTo(LOCALE);
     }
 
     @Test
-    public void getDefault() {
-        given(userSettingLocaleResolver.getLocale(request)).willReturn(Optional.empty());
-        given(cookieLocaleResolver.getLocale(request)).willReturn(Optional.empty());
-        given(browserLanguageLocaleResolver.getLocale(request)).willReturn(Optional.empty());
+    public void resolveFromBrowserLanguage() {
+        given(userSettingLocaleResolver.getLocale(cookies)).willReturn(Optional.empty());
+        given(cookieLocaleResolver.getLocale(cookies)).willReturn(Optional.empty());
+        given(browserLanguageLocaleResolver.getLocale(httpHeaders)).willReturn(Optional.of(LOCALE));
+
+        String result = underTest.getLocale(httpHeaders, cookies);
+
+        assertThat(result).isEqualTo(LOCALE);
+    }
+
+    @Test
+    public void useDefault() {
+        given(userSettingLocaleResolver.getLocale(cookies)).willReturn(Optional.empty());
+        given(cookieLocaleResolver.getLocale(cookies)).willReturn(Optional.empty());
+        given(browserLanguageLocaleResolver.getLocale(httpHeaders)).willReturn(Optional.empty());
         given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
 
-        String result = underTest.getLocale(request);
+        String result = underTest.getLocale(httpHeaders, cookies);
 
         assertThat(result).isEqualTo(LOCALE);
     }

@@ -26,7 +26,7 @@ public class EditTextTest extends TestBase {
     private static final String NEW_CONTENT = "new-content";
     private static final String NEW_TITLE = "new-title";
 
-    @DataProvider(name = "localeDataProvider", parallel = true)
+    @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();
     }

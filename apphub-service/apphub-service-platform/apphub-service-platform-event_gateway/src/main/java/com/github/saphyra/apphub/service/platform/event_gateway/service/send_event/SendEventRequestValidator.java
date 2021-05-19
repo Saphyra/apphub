@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import static com.github.saphyra.apphub.service.platform.event_gateway.service.InvalidParamExceptionFactory.createException;
 import static java.util.Objects.isNull;
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Component
 class SendEventRequestValidator {

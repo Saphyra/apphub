@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 public class PingService {
     private final RestTemplate restTemplate;
 
-    @Value("${proxy.ribbon.listOfServers}")
+    @Value("${host}")
     private String host;
 
     @Scheduled(fixedRate = 60000)

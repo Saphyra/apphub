@@ -20,7 +20,7 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RegistrationTest extends SeleniumTest {
-    @DataProvider(name = "registrationParameters", parallel = true)
+    @DataProvider(name = "registrationParameters")
     public Object[][] registrationParameters() {
         return new Object[][]{
             {RegistrationParameters.validParameters(), valid()},

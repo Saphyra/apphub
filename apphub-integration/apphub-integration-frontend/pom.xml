@@ -60,10 +60,6 @@
                             <name>threadcount</name>
                             <value>20</value>
                         </property>
-                        <property>
-                            <name>dataproviderthreadcount</name>
-                            <value>5</value>
-                        </property>
                     </properties>
                 </configuration>
             </plugin>
