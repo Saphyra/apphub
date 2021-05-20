@@ -249,7 +249,7 @@
     "planet-building-detail-name": "Building",
     "planet-building-detail-level-sum": "Total level",
     "planet-building-detail-used-slots": "Used slots",
-    "storage-setting-amount-too-low": "Amount too low. (Minimum 1)",
+    "storage-setting-amount-too-low": "Amount too low. (Minimum 0)",
     "storage-setting-created": "Storage setting created.",
     "storage-setting-amount": "Amount",
     "storage-setting-batch-size": "Batch size",

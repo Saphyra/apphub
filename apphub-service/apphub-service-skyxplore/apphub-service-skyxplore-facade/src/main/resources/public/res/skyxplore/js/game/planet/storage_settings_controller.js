@@ -1,8 +1,6 @@
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
 (function StorageSettingsController(){
-    let currentSettings;
-
     window.storageSettingsController = new function(){
         this.viewStorageSettings = viewStorageSettings;
         this.createStorageSettings = createStorageSettings;
@@ -26,9 +24,6 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
     }
 
     function displayStorageSettings(storageSettings){
-        currentSettings = new Stream(storageSettings.currentSettings)
-            .toMap(function(setting){return setting.dataId}, function(setting){return setting.targetAmount});
-
         setUpCreatePanel(storageSettings);
         displayCurrentSettings(storageSettings);
 
@@ -41,7 +36,6 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
                     .map(createOption)
                     .forEach(function(node){resourceSelectMenu.appendChild(node)})
 
-            updateMaxResourceAmount();
             setBachSize();
             setPriority();
             $(".create-storage-setting-input").prop("disabled", storageSettings.availableResources.length == 0);
@@ -165,7 +159,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
             priority: priority
         }
 
-        const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_EDIT_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId()});
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_EDIT_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId()}));
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("storage-setting-saved"));
                 viewStorageSettings(planetController.getOpenedPlanetId());
@@ -208,7 +202,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
             priority: priority
         }
 
-        if(amount < 1){
+        if(amount < 0){
             notificationService.showError(Localization.getAdditionalContent("storage-setting-amount-too-low"));
             return;
         }
@@ -219,22 +213,6 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
                 viewStorageSettings(planetController.getOpenedPlanetId());
             }
         dao.sendRequestAsync(request);
-    }
-
-    function updateMaxResourceAmount(){
-        const amountInput = document.getElementById(ids.storageSettingsAmountInput);
-
-        const dataId = document.getElementById(ids.storageSettingsResourceInput).value;
-        if(dataId == ""){
-            amountInput.value = 0;
-            return;
-        }
-        const storageType = itemData.get(dataId).storageType;
-            amountInput.value = maxAmount == 0 ? 0 : 1;
-
-        const disabled = maxAmount == 0;
-        document.getElementById(ids.storageSettingsAmountInput).disabled = disabled;
-        document.getElementById(ids.storageSettingsCreateButton).disabled = disabled;
     }
 
     function setBachSize(){
@@ -251,14 +229,10 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
             priorityInput.onchange = function(){
                 document.getElementById(ids.storageSettingsPriorityValue).innerHTML = priorityInput.value;
             }
-        document.getElementById(ids.storageSettingsResourceInput).onchange = function(){
-            updateMaxResourceAmount();
-        }
-
         const amountInput = document.getElementById(ids.storageSettingsAmountInput);
             amountInput.onchange = function(){
-                if(amountInput.value > amountInput.max){
-                    amountInput.value = amountInput.max;
+                if(amountInput.value < 0){
+                    amountInput.value = 0;
                 }
             }
 

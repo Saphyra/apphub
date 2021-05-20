@@ -99,18 +99,17 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
     }
 
     function itemDataLoader(itemId){
-        const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_ITEM_DATA", {dataId: itemId}))
+        let result;
+
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_ITEM_DATA", {dataId: itemId}));
+            request.processValidResponse = function(response){
+                const parsed = JSON.parse(response.body);
+                logService.logToConsole("Item loaded with id " + itemId, parsed);
+                result = parsed;
+            };
         const response = dao.sendRequest(request);
 
-        if(response.status == ResponseStatus.OK){
-            const result = JSON.parse(response.body);
-            logService.logToConsole("Item loaded with id " + itemId, result);
-            return result;
-        }else{
-            new ErrorHandlerRegistry()
-                .handleError(null, response);
-            throwException("Error", "Could not get item from server: " + itemId);
-        }
+        return result;
     }
 
     $(document).ready(function(){

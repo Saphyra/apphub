@@ -249,7 +249,7 @@
     "planet-building-detail-name": "Épület",
     "planet-building-detail-level-sum": "Összesített szint",
     "planet-building-detail-used-slots": "Felhasznált helyek",
-    "storage-setting-amount-too-low": "Mennyiség túl kicsi. (Minimum 1)",
+    "storage-setting-amount-too-low": "Mennyiség túl kicsi. (Minimum 0)",
     "storage-setting-created": "Raktár beállítás létrehozva.",
     "storage-setting-amount": "Mennyiség",
     "storage-setting-batch-size": "Darabolás",

@@ -45,7 +45,7 @@ class StorageSettingsModelValidator {
             throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "targetAmount", "must not be null"), "TargetAmount is null");
         }
 
-        if (model.getTargetAmount() < 1) {
+        if (model.getTargetAmount() < 0) {
             throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "targetAmount", "too low"), "TargetAmount too low");
         }
 

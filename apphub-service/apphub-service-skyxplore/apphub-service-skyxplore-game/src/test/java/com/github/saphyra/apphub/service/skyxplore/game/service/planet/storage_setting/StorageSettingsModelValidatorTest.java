@@ -111,7 +111,7 @@ public class StorageSettingsModelValidatorTest {
 
     @Test
     public void tooLowTargetAmount() {
-        given(model.getTargetAmount()).willReturn(0);
+        given(model.getTargetAmount()).willReturn(-1);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
 
