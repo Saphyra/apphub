@@ -9,7 +9,6 @@ import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCh
 import com.github.saphyra.apphub.integration.backend.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.backend.ws.model.WebSocketEvent;
 import com.github.saphyra.apphub.integration.backend.ws.model.WebSocketEventName;
-import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
@@ -22,6 +21,8 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class InviteToLobbyTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
@@ -43,7 +44,7 @@ public class InviteToLobbyTest extends BackEndTest {
         SkyXploreLobbyActions.createLobby(language, accessTokenId1, GAME_NAME);
 
         Response notFriendsResponse = SkyXploreLobbyActions.getInviteToLobbyResponse(language, accessTokenId1, userId2);
-        TestBase.getSoftAssertions().assertThat(notFriendsResponse.getStatusCode()).isEqualTo(412);
+        assertThat(notFriendsResponse.getStatusCode()).isEqualTo(412);
 
         SkyXploreFriendActions.setUpFriendship(language, accessTokenId1, accessTokenId2, userId2);
 
@@ -54,14 +55,14 @@ public class InviteToLobbyTest extends BackEndTest {
         WebSocketEvent event = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION)
             .orElseThrow(() -> new RuntimeException("Invitation not arrived"));
         LobbyInvitationWsMessage payload = event.getPayloadAs(LobbyInvitationWsMessage.class);
-        TestBase.getSoftAssertions().assertThat(payload.getSenderId()).isEqualTo(userId1);
-        TestBase.getSoftAssertions().assertThat(payload.getSenderName()).isEqualTo(characterModel1.getName());
+        assertThat(payload.getSenderId()).isEqualTo(userId1);
+        assertThat(payload.getSenderName()).isEqualTo(characterModel1.getName());
 
         Response floodingResponse = SkyXploreLobbyActions.getInviteToLobbyResponse(language, accessTokenId1, userId2);
-        TestBase.getSoftAssertions().assertThat(floodingResponse.getStatusCode()).isEqualTo(429);
+        assertThat(floodingResponse.getStatusCode()).isEqualTo(429);
         ErrorResponse errorResponse = floodingResponse.getBody().as(ErrorResponse.class);
-        TestBase.getSoftAssertions().assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.TOO_FREQUENT_INVITATIONS.name());
-        TestBase.getSoftAssertions().assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.TOO_FREQUENT_INVITATIONS));
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.TOO_FREQUENT_INVITATIONS.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.TOO_FREQUENT_INVITATIONS));
 
     }
 }

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.common.framework;
 
+import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import io.restassured.config.DecoderConfig;
 import io.restassured.config.RestAssuredConfig;
@@ -21,13 +22,16 @@ public class RequestFactory {
     public static RequestSpecification createRequest(Language locale) {
         RequestSpecification requestSpecification = given()
             .config(RestAssuredConfig.config().decoderConfig(DecoderConfig.decoderConfig().contentDecoders(DecoderConfig.ContentDecoder.DEFLATE)))
-            .filter(new ResponseLoggingFilter())
-            .log().all()
             .contentType(ContentType.JSON)
             .header("Connection", "close")
             .header("Request-Type", "rest");
         if (!isNull(locale)) {
             requestSpecification.cookie(Constants.LOCALE_COOKIE, locale.getLocale());
+        }
+
+        if (TestBase.REST_LOGGING_ENABLED) {
+            requestSpecification.filter(new ResponseLoggingFilter())
+                .log().all();
         }
         return requestSpecification;
     }

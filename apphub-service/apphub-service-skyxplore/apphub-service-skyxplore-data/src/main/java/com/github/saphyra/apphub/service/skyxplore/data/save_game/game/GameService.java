@@ -21,6 +21,7 @@ public class GameService implements GameItemService {
 
     @Override
     public void deleteByGameId(UUID gameId) {
+        log.info("Deleting {}s by gameId {}", getClass().getSimpleName(), gameId);
         gameDao.deleteById(gameId);
     }
 

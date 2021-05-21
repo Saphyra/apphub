@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.EditTextRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.TextResponse;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
@@ -20,7 +20,7 @@ import java.util.UUID;
 import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.INVALID_PARAM;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EditTextTest extends TestBase {
+public class EditTextTest extends BackEndTest {
     private static final String ORIGINAL_TITLE = "original-title";
     private static final String ORIGINAL_CONTENT = "original-content";
     private static final String NEW_CONTENT = "new-content";

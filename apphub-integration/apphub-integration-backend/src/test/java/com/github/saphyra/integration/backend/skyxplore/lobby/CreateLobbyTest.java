@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplore
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.LobbyMemberResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.LobbyMembersResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
@@ -42,9 +41,9 @@ public class CreateLobbyTest extends BackEndTest {
     private void verify(Language language, Response response, String message) {
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        TestBase.getSoftAssertions().assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        TestBase.getSoftAssertions().assertThat(errorResponse.getParams()).containsEntry("lobbyName", message);
-        TestBase.getSoftAssertions().assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getParams()).containsEntry("lobbyName", message);
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
     }
 
     @Test

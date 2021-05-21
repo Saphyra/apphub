@@ -1,7 +1,7 @@
 package com.github.saphyra.integration.backend.index;
 
 import com.github.saphyra.apphub.integration.backend.actions.ModulesActions;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
@@ -25,7 +25,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LoginTest extends TestBase {
+public class LoginTest extends BackEndTest {
     @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();

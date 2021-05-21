@@ -1,12 +1,14 @@
 package com.github.saphyra.apphub.integration.frontend;
 
 import com.github.saphyra.apphub.integration.common.TestBase;
-import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.ITestResult;
@@ -14,9 +16,10 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.Objects.isNull;
@@ -26,17 +29,10 @@ public class SeleniumTest extends TestBase {
     static final boolean HEADLESS_MODE;
 
     static {
-        String arg = System.getProperty("headless");
-        boolean headless;
-        if (isNull(arg)) {
-            headless = false;
-        } else {
-            headless = Boolean.parseBoolean(arg);
-        }
-        HEADLESS_MODE = headless;
+        HEADLESS_MODE = Boolean.parseBoolean(System.getProperty("headless"));
     }
 
-    private final ThreadLocal<List<WebDriverWrapper>> driverWrappers = new ThreadLocal<>();
+    private static final ThreadLocal<List<WebDriverWrapper>> driverWrappers = new ThreadLocal<>();
 
     @AfterMethod(alwaysRun = true)
     public void afterMethod(ITestResult testResult) {
@@ -44,14 +40,29 @@ public class SeleniumTest extends TestBase {
             .forEach(webDriverWrapper -> {
                 WebDriver driver = webDriverWrapper.getDriver();
                 if (ITestResult.FAILURE == testResult.getStatus() && !HEADLESS_MODE) {
+                    log.error("Current URL: {}", driver.getCurrentUrl());
+                    takeScreenshot(webDriverWrapper, testResult.getName());
                     extractLogs(driver);
+                    testResult.getName();
                 }
                 WebDriverFactory.release(webDriverWrapper.getId());
             });
+        driverWrappers.remove();
+    }
+
+    private void takeScreenshot(WebDriverWrapper driver, String method) {
+        TakesScreenshot scrShot = ((TakesScreenshot) driver.getDriver());
+        File SrcFile = scrShot.getScreenshotAs(OutputType.FILE);
+        File target = new File("d:/screenshots/" + method + "/" + driver.getId() + ".png");
+        try {
+            FileUtils.copyFile(SrcFile, target);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @BeforeSuite
-    public void startDrivers() {
+    public void startDrivers() throws Exception {
         if (Boolean.parseBoolean(System.getProperty("preCreateDrivers"))) {
             WebDriverFactory.startDrivers();
         }
@@ -62,23 +73,17 @@ public class SeleniumTest extends TestBase {
         WebDriverFactory.stopDrivers();
     }
 
-    protected WebDriver extractDriver() {
+    protected static synchronized WebDriver extractDriver() {
         StopWatch stopWatch = StopWatch.createStarted();
-        Future<WebDriverWrapper> webDriverWrapperFuture = WebDriverFactory.getDriver();
-
-        while (!webDriverWrapperFuture.isDone()) {
-            SleepUtil.sleep(1000);
-        }
-
-        stopWatch.stop();
-        log.info("WebDriver allocated in {} seconds", stopWatch.getTime(TimeUnit.SECONDS));
-
         WebDriverWrapper webDriverWrapper;
         try {
-            webDriverWrapper = webDriverWrapperFuture.get();
+            webDriverWrapper = WebDriverFactory.DRIVER_POOL.borrowObject();
+            stopWatch.stop();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        log.info("WebDriver with id {} allocated in {} seconds", webDriverWrapper.getId(), stopWatch.getTime(TimeUnit.SECONDS));
 
         if (isNull(driverWrappers.get())) {
             driverWrappers.set(new ArrayList<>());

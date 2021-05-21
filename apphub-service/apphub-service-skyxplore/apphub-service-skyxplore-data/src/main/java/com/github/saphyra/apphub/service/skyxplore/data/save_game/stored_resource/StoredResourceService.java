@@ -21,6 +21,7 @@ public class StoredResourceService implements GameItemService {
 
     @Override
     public void deleteByGameId(UUID gameId) {
+        log.info("Deleting {}s by gameId {}", getClass().getSimpleName(), gameId);
         storedResourceDao.deleteByGameId(gameId);
     }
 

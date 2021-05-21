@@ -48,7 +48,7 @@ public class SkyXploreLobbyActions {
     }
 
     public static List<LobbyMember> getMembers(WebDriver driver) {
-        return LobbyPage.lobbyMembers(driver)
+        return AwaitilityWrapper.getListWithWait(() -> LobbyPage.lobbyMembers(driver), webElements -> !webElements.isEmpty())
             .stream()
             .map(LobbyMember::new)
             .collect(Collectors.toList());

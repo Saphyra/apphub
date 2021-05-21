@@ -3,7 +3,7 @@ package com.github.saphyra.integration.backend.skyxplore;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreGameDataActions;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -19,7 +19,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SkyXploreGameDataTest extends TestBase {
+public class SkyXploreGameDataTest extends BackEndTest {
     @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();

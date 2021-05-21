@@ -9,7 +9,6 @@ import com.github.saphyra.apphub.integration.backend.model.skyxplore.PlanetLocat
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.Player;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.StorageSettingModel;
-import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
@@ -22,6 +21,8 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EditStorageSettingTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
@@ -53,7 +54,7 @@ public class EditStorageSettingTest extends BackEndTest {
         runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().dataId(" ").build(), "dataId", "must not be blank");
         runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().dataId("asd").build(), "dataId", "unknown resource");
         runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().targetAmount(null).build(), "targetAmount", "must not be null");
-        runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().targetAmount(0).build(), "targetAmount", "too low");
+        runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().targetAmount(-1).build(), "targetAmount", "too low");
         runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().batchSize(null).build(), "batchSize", "must not be null");
         runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().batchSize(0).build(), "batchSize", "too low");
     }
@@ -61,12 +62,12 @@ public class EditStorageSettingTest extends BackEndTest {
     private void runValidationTest(Language language, UUID accessTokenId, UUID planetId, StorageSettingModel model, String key, String value) {
         Response response = SkyXploreStorageSettingActions.getEditStorageSettingResponse(language, accessTokenId, planetId, model);
 
-        TestBase.getSoftAssertions().assertThat(response.getStatusCode()).isEqualTo(400);
+        assertThat(response.getStatusCode()).isEqualTo(400);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        TestBase.getSoftAssertions().assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        TestBase.getSoftAssertions().assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.valueOf(ErrorCode.INVALID_PARAM.name())));
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.valueOf(ErrorCode.INVALID_PARAM.name())));
 
-        TestBase.getSoftAssertions().assertThat(errorResponse.getParams()).containsEntry(key, value);
+        assertThat(errorResponse.getParams()).containsEntry(key, value);
     }
 }

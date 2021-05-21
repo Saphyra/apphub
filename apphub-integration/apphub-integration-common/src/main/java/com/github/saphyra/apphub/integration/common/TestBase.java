@@ -15,6 +15,8 @@ import com.github.saphyra.apphub.integration.common.model.UserRoleResponse;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.SoftAssertions;
+import org.testng.ITestContext;
+import org.testng.ITestNGMethod;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
@@ -22,6 +24,7 @@ import org.testng.annotations.BeforeSuite;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,6 +40,7 @@ public class TestBase {
 
     public static int SERVER_PORT;
     public static int DATABASE_PORT;
+    public static boolean REST_LOGGING_ENABLED;
 
     private static final ThreadLocal<String> EMAIL_DOMAIN = new ThreadLocal<>();
     private static final ThreadLocal<SoftAssertions> SOFT_ASSERTIONS = new ThreadLocal<>();
@@ -48,14 +52,27 @@ public class TestBase {
     }
 
     @BeforeSuite(alwaysRun = true)
-    public void setUpSuite() {
+    public void setUpSuite(ITestContext context) {
         SERVER_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("serverPort"), "serverPort is null"));
         log.info("ServerPort: {}", SERVER_PORT);
 
         DATABASE_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("databasePort"), "serverPort is null"));
         log.info("DatabasePort: {}", DATABASE_PORT);
 
+        REST_LOGGING_ENABLED = Optional.ofNullable(System.getProperty("restLoggingEnabled"))
+            .map(Boolean::parseBoolean)
+            .orElse(true);
+        log.info("RestLoggingEnabled: {}", REST_LOGGING_ENABLED);
+
         registerSuperuser();
+
+        if (Boolean.parseBoolean(System.getProperty("retryEnabled"))) {
+            for (ITestNGMethod method : context.getAllTestMethods()) {
+                method.setRetryAnalyzerClass(RetryAnalyzerImpl.class);
+            }
+        }
+
+        System.setProperty("testng.show.stack.frames", "true");
     }
 
     @AfterSuite(alwaysRun = true)

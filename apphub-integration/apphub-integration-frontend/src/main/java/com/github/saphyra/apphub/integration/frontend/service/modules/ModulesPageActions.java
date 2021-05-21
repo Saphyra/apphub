@@ -70,9 +70,8 @@ public class ModulesPageActions {
             .open();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> !driver.getCurrentUrl().equals(modulesPageUrl))
-            .assertTrue();
-
+            .until(() -> moduleLocation.pageLoaded(driver))
+            .assertTrue(String.format("Failed to open module %s. Current url: %s", moduleLocation, driver.getCurrentUrl()));
     }
 
     public static Optional<Module> getModule(WebDriver driver, ModuleLocation moduleLocation) {

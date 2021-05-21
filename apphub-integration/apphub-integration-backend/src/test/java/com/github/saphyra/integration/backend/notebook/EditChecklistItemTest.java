@@ -2,7 +2,7 @@ package com.github.saphyra.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.*;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -21,7 +21,7 @@ import static com.github.saphyra.apphub.integration.common.framework.localizatio
 import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.LIST_ITEM_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EditChecklistItemTest extends TestBase {
+public class EditChecklistItemTest extends BackEndTest {
     private static final String ORIGINAL_TITLE = "original-title";
     private static final Integer ORIGINAL_ORDER = 432523;
     private static final String ORIGINAL_CONTENT = "original-content";

@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplore
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.IncomingFriendRequestResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SentFriendRequestResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
@@ -23,7 +23,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CreateFriendRequestTest extends TestBase {
+public class CreateFriendRequestTest extends BackEndTest {
     @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();

@@ -3,7 +3,7 @@ package com.github.saphyra.integration.backend.notebook;
 import com.github.saphyra.apphub.integration.backend.model.notebook.*;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
@@ -16,7 +16,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DeleteListItemTest extends TestBase {
+public class DeleteListItemTest extends BackEndTest {
     private static final String TITLE = "title";
     private static final String CONTENT = "content";
     private static final String COLUMN_NAME = "column-name";

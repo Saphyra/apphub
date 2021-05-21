@@ -1,7 +1,7 @@
 package com.github.saphyra.integration.backend.index;
 
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
@@ -24,7 +24,7 @@ import static com.github.saphyra.apphub.integration.common.framework.localizatio
 import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.USERNAME_TOO_SHORT;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RegistrationTest extends TestBase {
+public class RegistrationTest extends BackEndTest {
     @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();

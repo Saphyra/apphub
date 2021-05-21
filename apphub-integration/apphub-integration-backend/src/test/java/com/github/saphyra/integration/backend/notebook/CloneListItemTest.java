@@ -2,7 +2,7 @@ package com.github.saphyra.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.*;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -21,7 +21,7 @@ import java.util.UUID;
 import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.LIST_ITEM_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CloneListItemTest extends TestBase {
+public class CloneListItemTest extends BackEndTest {
     private static final String ROOT_TITLE = "root-title";
     private static final String PARENT_TITLE = "parent-title";
     private static final String CHILD_CATEGORY_TITLE = "child-category-title";

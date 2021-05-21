@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistIte
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistItemResponse;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistResponse;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateChecklistItemRequest;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
@@ -18,7 +18,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OrderChecklistTest extends TestBase {
+public class OrderChecklistTest extends BackEndTest {
     private static final String TITLE = "title";
 
     @Test

@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistTableResponse;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistTableRowRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateChecklistTableRequest;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -21,7 +21,7 @@ import java.util.UUID;
 import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.LIST_ITEM_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GetChecklistTableTest extends TestBase {
+public class GetChecklistTableTest extends BackEndTest {
     private static final String TITLE = "title";
     private static final String COLUMN_NAME = "column-name";
     private static final String COLUMN_VALUE = "column-value";

@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistItemNodeRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistResponse;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateChecklistItemRequest;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -21,7 +21,7 @@ import java.util.UUID;
 import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.LIST_ITEM_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GetChecklistTest extends TestBase {
+public class GetChecklistTest extends BackEndTest {
     private static final String TITLE = "title";
     private static final String CONTENT = "content";
     private static final Integer ORDER = 23;

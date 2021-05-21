@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.integration.backend.model.notebook.ChildrenOfCa
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateCategoryRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.TextResponse;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
@@ -22,7 +22,7 @@ import java.util.UUID;
 import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CreateTextTest extends TestBase {
+public class CreateTextTest extends BackEndTest {
     private static final String CONTENT = "content";
     private static final String TITLE = "title";
     private static final String PARENT_TITLE = "parent-title";

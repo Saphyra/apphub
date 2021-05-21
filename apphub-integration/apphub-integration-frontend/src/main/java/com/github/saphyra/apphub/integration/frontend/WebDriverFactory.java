@@ -1,22 +1,25 @@
 package com.github.saphyra.apphub.integration.frontend;
 
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.pool2.DestroyMode;
+import org.apache.commons.pool2.PooledObject;
+import org.apache.commons.pool2.PooledObjectFactory;
+import org.apache.commons.pool2.impl.DefaultPooledObject;
+import org.apache.commons.pool2.impl.GenericObjectPool;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -25,65 +28,27 @@ import static com.github.saphyra.apphub.integration.frontend.SeleniumTest.HEADLE
 import static java.util.Objects.isNull;
 
 @Slf4j
-class WebDriverFactory {
-    public static final int BROWSER_STARTUP_LIMIT = 2;
+class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
+    private static final int BROWSER_STARTUP_LIMIT = 2;
     private static final int MAX_DRIVER_COUNT = 15;
 
-    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(BROWSER_STARTUP_LIMIT);
+    private static final GenericObjectPoolConfig<WebDriverWrapper> DRIVER_POOL_CONFIG = new GenericObjectPoolConfig<>();
 
-    private static final Map<UUID, WebDriverWrapper> DRIVER_CACHE = new ConcurrentHashMap<>();
-
-    public static void startDrivers() {
-
-
-        List<Future<WebDriverWrapper>> futures = new ArrayList<>();
-
-        for (int i = 0; i < MAX_DRIVER_COUNT; i++) {
-            futures.add(createNewDriver());
-        }
-
-        while (futures.stream().anyMatch(webDriverWrapperFuture -> !webDriverWrapperFuture.isDone())) {
-            SleepUtil.sleep(1000);
-        }
-
-        futures.stream()
-            .parallel()
-            .map(webDriverWrapperFuture -> {
-                try {
-                    return webDriverWrapperFuture.get();
-                } catch (InterruptedException | ExecutionException e) {
-                    throw new RuntimeException(e);
-                }
-            }).forEach(webDriverWrapper -> release(webDriverWrapper.getId()));
+    static {
+        DRIVER_POOL_CONFIG.setMaxTotal(MAX_DRIVER_COUNT);
+        DRIVER_POOL_CONFIG.setMinIdle(MAX_DRIVER_COUNT);
     }
 
-    static synchronized Future<WebDriverWrapper> getDriver() {
-        log.info("Querying driver...");
-        for (int i = 0; i < 60; i++) {
-            Optional<WebDriverWrapper> webDriverWrapperOptional = DRIVER_CACHE.values()
-                .stream()
-                .filter(wrapper -> !wrapper.isLocked())
-                .findAny();
+    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(BROWSER_STARTUP_LIMIT);
+    private static final Map<UUID, WebDriverWrapper> DRIVER_CACHE = new ConcurrentHashMap<>();
+    public static final GenericObjectPool<WebDriverWrapper> DRIVER_POOL = new GenericObjectPool<>(new WebDriverFactory(), DRIVER_POOL_CONFIG);
 
-            if (webDriverWrapperOptional.isPresent()) {
-                WebDriverWrapper webDriverWrapper = webDriverWrapperOptional.get();
-                webDriverWrapper.setLocked(true);
-                return EXECUTOR.submit(() -> webDriverWrapper);
-            } else if (DRIVER_CACHE.size() < MAX_DRIVER_COUNT) {
-                log.info("No available webDriver found. Creating a new one...");
-                return createNewDriver();
-            }
-
-            log.debug("No available webDriver found and limit is reached. Waiting for releasing for {} seconds", i);
-            SleepUtil.sleep(1000);
-        }
-
-        log.warn("WebDriver could not be allocated in one minute. Creating a new one exceeding the limits");
-        return createNewDriver();
+    public static void startDrivers() throws Exception {
+        DRIVER_POOL.addObjects(MAX_DRIVER_COUNT);
     }
 
     @NotNull
-    private static Future<WebDriverWrapper> createNewDriver() {
+    private Future<WebDriverWrapper> createNewDriver() {
         WebDriverWrapper webDriverWrapper = new WebDriverWrapper();
         DRIVER_CACHE.put(webDriverWrapper.getId(), webDriverWrapper);
         return EXECUTOR.submit(() -> {
@@ -97,12 +62,22 @@ class WebDriverFactory {
         log.info("Releasing webDriver with id {}", id);
         WebDriverWrapper webDriverWrapper = DRIVER_CACHE.get(id);
         WebDriver driver = webDriverWrapper.getDriver();
-        driver.manage().deleteAllCookies();
-        driver.navigate().to(UrlFactory.create(Endpoints.INDEX_PAGE));
-        webDriverWrapper.setLocked(false);
+        try {
+            driver.navigate().to(UrlFactory.create(Endpoints.ERROR_PAGE));
+
+            AwaitilityWrapper.createDefault()
+                .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ERROR_PAGE))
+                .assertTrue("Failed to redirect to Error page. Current url: " + driver.getCurrentUrl());
+            driver.manage().deleteAllCookies();
+        } catch (Exception e) {
+            log.error("Failed releasing driver. Removing from cache...");
+            stopDriver(webDriverWrapper);
+        }
+
+        DRIVER_POOL.returnObject(webDriverWrapper);
     }
 
-    private static WebDriver createDriver() {
+    private WebDriver createDriver() {
         ChromeDriver driver = null;
         for (int tryCount = 0; tryCount < 3 && isNull(driver); tryCount++) {
             try {
@@ -124,17 +99,13 @@ class WebDriverFactory {
     }
 
     static void stopDrivers() {
-        DRIVER_CACHE.entrySet()
+        DRIVER_CACHE.values()
             .stream()
             .parallel()
             .forEach(WebDriverFactory::stopDriver);
     }
 
-    private static void stopDriver(Map.Entry<UUID, WebDriverWrapper> entry) {
-        stopDriver(entry.getKey(), entry.getValue());
-    }
-
-    private static void stopDriver(UUID uuid, WebDriverWrapper webDriverWrapper) {
+    private static void stopDriver(WebDriverWrapper webDriverWrapper) {
         WebDriver driver = webDriverWrapper.getDriver();
         for (int tryCount = 0; tryCount < 3; tryCount++) {
             try {
@@ -145,6 +116,52 @@ class WebDriverFactory {
                 log.error("Could not stop driver", e);
             }
         }
-        DRIVER_CACHE.remove(uuid);
+        DRIVER_CACHE.remove(webDriverWrapper.getId());
+        try {
+            DRIVER_POOL.invalidateObject(webDriverWrapper);
+        } catch (Exception e) {
+            log.error("Failed invalidating WebDriverWrapper {}", webDriverWrapper, e);
+        }
+    }
+
+    @Override
+    public PooledObject<WebDriverWrapper> makeObject() throws Exception {
+        Future<WebDriverWrapper> newDriver = createNewDriver();
+        while (!newDriver.isDone()) {
+            SleepUtil.sleep(1000);
+        }
+        WebDriverWrapper webDriverWrapper = newDriver.get();
+
+        DRIVER_CACHE.put(webDriverWrapper.getId(), webDriverWrapper);
+
+        return new DefaultPooledObject<>(newDriver.get());
+    }
+
+    @Override
+    public void destroyObject(PooledObject<WebDriverWrapper> p) {
+        stopDriver(p.getObject());
+    }
+
+    @Override
+    public void destroyObject(PooledObject<WebDriverWrapper> p, DestroyMode mode) {
+        stopDriver(p.getObject());
+    }
+
+    @Override
+    public boolean validateObject(PooledObject<WebDriverWrapper> p) {
+        return !p.getObject()
+            .isLocked();
+    }
+
+    @Override
+    public void activateObject(PooledObject<WebDriverWrapper> p) {
+        p.getObject()
+            .setLocked(true);
+    }
+
+    @Override
+    public void passivateObject(PooledObject<WebDriverWrapper> p) {
+        p.getObject()
+            .setLocked(false);
     }
 }

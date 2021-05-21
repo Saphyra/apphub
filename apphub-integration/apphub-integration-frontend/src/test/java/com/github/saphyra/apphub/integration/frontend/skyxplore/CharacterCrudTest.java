@@ -16,6 +16,8 @@ import org.testng.annotations.Test;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class CharacterCrudTest extends SeleniumTest {
     @Test
     public void createAndEditCharacter() {
@@ -26,8 +28,8 @@ public class CharacterCrudTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
-        getSoftAssertions().assertThat(SkyXploreCharacterActions.getBoxTitle(driver)).isEqualTo("Új karakter");
-        getSoftAssertions().assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(userData1.getUsername());
+        assertThat(SkyXploreCharacterActions.getBoxTitle(driver)).isEqualTo("Új karakter");
+        assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(userData1.getUsername());
 
         SkyXploreCharacterActions.fillCharacterName(driver, "aa");
         SleepUtil.sleep(2000);
@@ -67,8 +69,8 @@ public class CharacterCrudTest extends SeleniumTest {
 
         SkyXploreMainMenuActions.editCharacter(driver);
 
-        getSoftAssertions().assertThat(SkyXploreCharacterActions.getBoxTitle(driver)).isEqualTo("Karakter szerkesztése");
-        getSoftAssertions().assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(userData2.getUsername());
+        assertThat(SkyXploreCharacterActions.getBoxTitle(driver)).isEqualTo("Karakter szerkesztése");
+        assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(userData2.getUsername());
 
         String newCharacterName = RegistrationParameters.validParameters()
             .getUsername();
@@ -79,6 +81,6 @@ public class CharacterCrudTest extends SeleniumTest {
         NotificationUtil.verifySuccessNotification(driver, "Karakter elmentve.");
 
         SkyXploreMainMenuActions.editCharacter(driver);
-        getSoftAssertions().assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(newCharacterName);
+        assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(newCharacterName);
     }
 }

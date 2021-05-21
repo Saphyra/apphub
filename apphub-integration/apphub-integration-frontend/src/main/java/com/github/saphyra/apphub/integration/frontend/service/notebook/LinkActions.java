@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 
+import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
 import static java.util.Objects.isNull;
 
 public class LinkActions {
@@ -26,8 +27,8 @@ public class LinkActions {
     }
 
     public static void fillCreateLinkForm(WebDriver driver, String title, String url, String... categories) {
-        NotebookPage.createLinkTitleInput(driver).sendKeys(title);
-        NotebookPage.createLinkUrlInput(driver).sendKeys(url);
+        clearAndFill(NotebookPage.createLinkTitleInput(driver), title);
+        clearAndFill(NotebookPage.createLinkUrlInput(driver), url);
         selectCategoryForNewLink(driver, categories);
     }
 

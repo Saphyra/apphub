@@ -3,7 +3,7 @@ package com.github.saphyra.integration.backend.notebook;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.*;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
@@ -19,7 +19,7 @@ import java.util.UUID;
 import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CreateLinkTest extends TestBase {
+public class CreateLinkTest extends BackEndTest {
     private static final String URL = "url";
     private static final String TITLE = "title";
     private static final String PARENT_TITLE = "parent-title";

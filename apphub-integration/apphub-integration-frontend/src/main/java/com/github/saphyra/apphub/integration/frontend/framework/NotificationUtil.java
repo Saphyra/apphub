@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class NotificationUtil {
@@ -60,10 +61,19 @@ public class NotificationUtil {
 
     public static void clearNotifications(WebDriver driver) {
         getNotifications(driver)
+            .stream()
+            .filter(WebElement::isDisplayed)
             .forEach(WebElement::click);
     }
 
     private static List<WebElement> getNotifications(WebDriver driver) {
         return driver.findElements(NOTIFICATIONS_LOCATOR);
+    }
+
+    public static List<String> getNotificationTexts(WebDriver driver) {
+        return getNotifications(driver)
+            .stream()
+            .map(WebElement::getText)
+            .collect(Collectors.toList());
     }
 }

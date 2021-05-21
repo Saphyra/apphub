@@ -3,7 +3,7 @@ package com.github.saphyra.integration.backend.utils;
 import com.github.saphyra.apphub.integration.backend.actions.UtilsActions;
 import com.github.saphyra.apphub.integration.backend.model.utils.LogParameterVisibilityResponse;
 import com.github.saphyra.apphub.integration.backend.model.utils.SetLogParameterVisibilityRequest;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LogParameterVisibilityTest extends TestBase {
+public class LogParameterVisibilityTest extends BackEndTest {
     private static final String PARAMETER = "parameter";
 
     @Test

@@ -31,6 +31,8 @@ public class ApphubWsClient extends WebSocketClient {
 
     private final String endpoint;
 
+    private final Thread thread;
+
     private ApphubWsClient(Language language, String endpoint, UUID accessTokenId) throws URISyntaxException {
         super(
             new URI(String.format("http://localhost:%s%s", TestBase.SERVER_PORT, endpoint)),
@@ -39,13 +41,16 @@ public class ApphubWsClient extends WebSocketClient {
                 new BiWrapper<>("Cookie", Constants.ACCESS_TOKEN_COOKIE + "=" + accessTokenId + "; " + Constants.LOCALE_COOKIE + "=" + language.getLocale()),
                 new BiWrapper<>("Host", "localhost:" + TestBase.SERVER_PORT),
                 new BiWrapper<>("Origin", "http://localhost:" + TestBase.SERVER_PORT)
-            )
+            ),
+            10000
         );
         this.endpoint = endpoint;
         connect();
         AwaitilityWrapper.createDefault()
-            .until(this::isOpen);
+            .until(this::isOpen)
+            .assertTrue("Connection failed");
         WS_CONNECTIONS.get().add(this);
+        thread = Thread.currentThread();
     }
 
     public static ApphubWsClient createSkyXploreMainMenu(Language language, UUID accessTokenId) {
@@ -74,7 +79,8 @@ public class ApphubWsClient extends WebSocketClient {
 
     public void send(WebSocketEvent event) {
         AwaitilityWrapper.createDefault()
-            .until(this::isOpen);
+            .until(this::isOpen)
+            .assertTrue("WebSocket is not connected.");
         send(TestBase.OBJECT_MAPPER_WRAPPER.writeValueAsString(event));
     }
 
@@ -84,7 +90,7 @@ public class ApphubWsClient extends WebSocketClient {
         WebSocketEvent event = TestBase.OBJECT_MAPPER_WRAPPER.readValue(message, WebSocketEvent.class);
         messages.add(event);
 
-        if (event.getEventName() == WebSocketEventName.PING) {
+        if (event.getEventName() == WebSocketEventName.PING && isOpen()) {
             send(event);
         }
     }
@@ -97,6 +103,10 @@ public class ApphubWsClient extends WebSocketClient {
     @Override
     public void onClose(int code, String reason, boolean remote) {
         log.info("WebSocket connection closed for endpoint {} with code {}, reason {}, remote {}", endpoint, code, reason, remote);
+        if (code != 1000) {
+            thread.interrupt();
+            throw new RuntimeException();
+        }
     }
 
     @Override

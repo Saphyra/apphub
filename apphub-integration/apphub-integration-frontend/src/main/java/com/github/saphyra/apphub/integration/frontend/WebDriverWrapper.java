@@ -11,5 +11,5 @@ import java.util.UUID;
 public class WebDriverWrapper {
     private final UUID id = UUID.randomUUID();
     private WebDriver driver;
-    private volatile boolean locked = true;
+    private volatile boolean locked;
 }

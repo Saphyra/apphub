@@ -3,7 +3,7 @@ package com.github.saphyra.integration.backend.account;
 import com.github.saphyra.apphub.integration.backend.actions.AccountActions;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.model.LanguageResponse;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ChangeLanguageTest extends TestBase {
+public class ChangeLanguageTest extends BackEndTest {
     @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();

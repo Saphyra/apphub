@@ -1,10 +1,10 @@
 package com.github.saphyra.integration.backend.modules;
 
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.backend.actions.ModulesActions;
 import com.github.saphyra.apphub.integration.backend.model.ModulesResponse;
-import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
 import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
@@ -22,7 +22,7 @@ import java.util.UUID;
 import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.INVALID_PARAM;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ModulesTest extends TestBase {
+public class ModulesTest extends BackEndTest {
     @DataProvider(name = "localeDataProvider")
     public Object[] localeDataProvider() {
         return Language.values();

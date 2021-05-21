@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplore
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.FriendshipResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SentFriendRequestResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -18,7 +18,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GetFriendsTest extends TestBase {
+public class GetFriendsTest extends BackEndTest {
     @Test
     public void getFriends() {
         Language language = Language.HUNGARIAN;

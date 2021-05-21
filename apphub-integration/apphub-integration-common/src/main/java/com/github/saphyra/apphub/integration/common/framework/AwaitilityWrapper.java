@@ -10,7 +10,6 @@ import org.awaitility.Awaitility;
 import org.awaitility.core.ConditionFactory;
 import org.awaitility.core.ConditionTimeoutException;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -64,7 +63,7 @@ public class AwaitilityWrapper {
         createDefault()
             .until(helper::get);
 
-        return helper.getResult(result -> Optional.ofNullable(result).orElse(Collections.emptyList()));
+        return helper.getResult(result -> Optional.ofNullable(result).orElseThrow(() -> new RuntimeException("Expected list not found.")));
     }
 
     public AwaitResult until(Callable<Boolean> callable) {

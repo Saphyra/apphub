@@ -21,6 +21,7 @@ public class AllocatedResourceService implements GameItemService {
 
     @Override
     public void deleteByGameId(UUID gameId) {
+        log.info("Deleting {}s by gameId {}", getClass().getSimpleName(), gameId);
         allocatedResourceDao.deleteByGameId(gameId);
     }
 

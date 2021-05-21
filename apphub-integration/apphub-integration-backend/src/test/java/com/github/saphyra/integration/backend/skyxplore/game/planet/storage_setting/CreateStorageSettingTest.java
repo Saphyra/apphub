@@ -9,7 +9,6 @@ import com.github.saphyra.apphub.integration.backend.model.skyxplore.PlanetLocat
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.Player;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.StorageSettingModel;
-import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
@@ -48,7 +47,7 @@ public class CreateStorageSettingTest extends BackEndTest {
         runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().dataId(" ").build(), "dataId", "must not be blank");
         runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().dataId("asd").build(), "dataId", "unknown resource");
         runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().targetAmount(null).build(), "targetAmount", "must not be null");
-        runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().targetAmount(0).build(), "targetAmount", "too low");
+        runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().targetAmount(-1).build(), "targetAmount", "too low");
         runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().batchSize(null).build(), "batchSize", "must not be null");
         runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().batchSize(0).build(), "batchSize", "too low");
 
@@ -88,17 +87,17 @@ public class CreateStorageSettingTest extends BackEndTest {
     private void runValidationTest(Language language, UUID accessTokenId, UUID planetId, StorageSettingModel model, String key, String value) {
         ErrorResponse errorResponse = runValidationTest(400, ErrorCode.INVALID_PARAM, language, accessTokenId, planetId, model);
 
-        TestBase.getSoftAssertions().assertThat(errorResponse.getParams()).containsEntry(key, value);
+        assertThat(errorResponse.getParams()).containsEntry(key, value);
     }
 
     private ErrorResponse runValidationTest(int status, ErrorCode errorCode, Language language, UUID accessTokenId, UUID planetId, StorageSettingModel model) {
         Response response = SkyXploreStorageSettingActions.getCreateStorageSettingResponse(language, accessTokenId, planetId, model);
 
-        TestBase.getSoftAssertions().assertThat(response.getStatusCode()).isEqualTo(status);
+        assertThat(response.getStatusCode()).isEqualTo(status);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        TestBase.getSoftAssertions().assertThat(errorResponse.getErrorCode()).isEqualTo(errorCode.name());
-        TestBase.getSoftAssertions().assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.valueOf(errorCode.name())));
+        assertThat(errorResponse.getErrorCode()).isEqualTo(errorCode.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.valueOf(errorCode.name())));
 
         return errorResponse;
     }

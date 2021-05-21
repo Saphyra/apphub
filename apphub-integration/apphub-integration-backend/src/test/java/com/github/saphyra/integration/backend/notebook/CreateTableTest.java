@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.backend.model.notebook.CreateCatego
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.TableResponse;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -22,7 +22,7 @@ import java.util.UUID;
 import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CreateTableTest extends TestBase {
+public class CreateTableTest extends BackEndTest {
     private static final String COLUMN_NAME = "column-name";
     private static final String COLUMN_VALUE = "column-value";
     private static final String TITLE = "title";

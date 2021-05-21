@@ -1,13 +1,5 @@
 package com.github.saphyra.apphub.integration.frontend.notebook;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.Test;
-
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.model.ListItemType;
@@ -23,6 +15,13 @@ import com.github.saphyra.apphub.integration.frontend.service.notebook.CategoryA
 import com.github.saphyra.apphub.integration.frontend.service.notebook.DetailedListActions;
 import com.github.saphyra.apphub.integration.frontend.service.notebook.LinkActions;
 import com.github.saphyra.apphub.integration.frontend.service.notebook.NotebookPageActions;
+import org.openqa.selenium.WebDriver;
+import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class LinkCrudTest extends SeleniumTest {
     private static final String URL = Endpoints.ACCOUNT_PAGE;
@@ -33,41 +32,7 @@ public class LinkCrudTest extends SeleniumTest {
     private static final String NEW_TITLE = "new-title";
 
     @Test
-    public void createLink_emptyTitle() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        LinkActions.openCreateLinkWindow(driver);
-        LinkActions.fillCreateLinkForm(driver, "", URL);
-        LinkActions.submitCreateLinkForm(driver);
-
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
-        assertThat(LinkActions.isCreateLinkWindowDisplayed(driver)).isTrue();
-    }
-
-    @Test
-    public void createLink_emptyUrl() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        LinkActions.openCreateLinkWindow(driver);
-        LinkActions.fillCreateLinkForm(driver, TITLE, "");
-        LinkActions.submitCreateLinkForm(driver);
-
-        NotificationUtil.verifyErrorNotification(driver, "URL nem lehet üres.");
-        assertThat(LinkActions.isCreateLinkWindowDisplayed(driver)).isTrue();
-    }
-
-    @Test
-    public void createLink() {
+    public void linkCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -76,8 +41,22 @@ public class LinkCrudTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
 
         CategoryActions.createCategory(driver, CATEGORY_TITLE_1);
+        CategoryActions.createCategory(driver, CATEGORY_TITLE_2);
 
+        //Create link
         LinkActions.openCreateLinkWindow(driver);
+
+        //Empty title
+        LinkActions.fillCreateLinkForm(driver, "", URL);
+        LinkActions.submitCreateLinkForm(driver);
+        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
+
+        //Empty URL
+        LinkActions.fillCreateLinkForm(driver, TITLE, "");
+        LinkActions.submitCreateLinkForm(driver);
+        NotificationUtil.verifyErrorNotification(driver, "URL nem lehet üres.");
+
+        //Valid
         LinkActions.fillCreateLinkForm(driver, TITLE, URL, CATEGORY_TITLE_1);
         LinkActions.submitCreateLinkForm(driver);
 
@@ -97,85 +76,26 @@ public class LinkCrudTest extends SeleniumTest {
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(URL));
-    }
+        driver.close();
+        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
 
-    @Test
-    public void deleteLink() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
+        NotificationUtil.clearNotifications(driver);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        LinkActions.createLink(driver, TITLE, URL);
-
-        DetailedListActions.findDetailedItem(driver, TITLE)
-            .delete(driver);
-
-        NotificationUtil.verifySuccessNotification(driver, "Elem törölve.");
-        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
-    }
-
-    @Test
-    public void editLink_emptyTitle() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        LinkActions.createLink(driver, TITLE, URL);
-
+        //Edit link
         DetailedListActions.findDetailedItem(driver, TITLE)
             .edit(driver);
 
+        //Empty title
         NotebookPageActions.fillEditListItemDialog(driver, "", NEW_URL, 0);
         NotebookPageActions.submitEditListItemDialog(driver);
-
         NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
-    }
 
-    @Test
-    public void editLink_emptyUrl() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        LinkActions.createLink(driver, TITLE, URL);
-
-        DetailedListActions.findDetailedItem(driver, TITLE)
-            .edit(driver);
-
+        //Empty URL
         NotebookPageActions.fillEditListItemDialog(driver, NEW_TITLE, "", 0);
         NotebookPageActions.submitEditListItemDialog(driver);
-
         NotificationUtil.verifyErrorNotification(driver, "URL nem lehet üres.");
-    }
 
-    @Test
-    public void editLink() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        CategoryActions.createCategory(driver, CATEGORY_TITLE_1);
-        CategoryActions.createCategory(driver, CATEGORY_TITLE_2);
-
-        LinkActions.createLink(driver, TITLE, URL, CATEGORY_TITLE_1);
-
-        CategoryActions.openCategory(driver, CATEGORY_TITLE_1);
-
-        DetailedListActions.findDetailedItem(driver, TITLE)
-            .edit(driver);
-
+        //Valid
         NotebookPageActions.fillEditListItemDialog(driver, NEW_TITLE, NEW_URL, 1, CATEGORY_TITLE_2);
         NotebookPageActions.submitEditListItemDialog(driver);
 
@@ -185,7 +105,6 @@ public class LinkCrudTest extends SeleniumTest {
         assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
 
         DetailedListActions.up(driver);
-
         CategoryActions.openCategory(driver, CATEGORY_TITLE_2);
 
         ListItemDetailsItem item = DetailedListActions.findDetailedItem(driver, NEW_TITLE);
@@ -193,5 +112,14 @@ public class LinkCrudTest extends SeleniumTest {
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(NEW_URL));
+        driver.close();
+        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
+
+        //Delete link
+        DetailedListActions.findDetailedItem(driver, NEW_TITLE)
+            .delete(driver);
+
+        NotificationUtil.verifySuccessNotification(driver, "Elem törölve.");
+        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
     }
 }

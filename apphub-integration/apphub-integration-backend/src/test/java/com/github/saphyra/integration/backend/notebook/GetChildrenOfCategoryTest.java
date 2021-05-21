@@ -2,7 +2,7 @@ package com.github.saphyra.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.*;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -20,7 +20,7 @@ import java.util.UUID;
 import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.INVALID_PARAM;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GetChildrenOfCategoryTest extends TestBase {
+public class GetChildrenOfCategoryTest extends BackEndTest {
     private static final String TITLE_1 = "title-1";
     private static final String TITLE_2 = "title-2";
     private static final String TITLE_3 = "title-3";

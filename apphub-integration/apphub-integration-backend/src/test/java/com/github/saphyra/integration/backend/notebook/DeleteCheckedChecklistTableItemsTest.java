@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistTableResponse;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistTableRowRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateChecklistTableRequest;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
@@ -16,7 +16,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DeleteCheckedChecklistTableItemsTest extends TestBase {
+public class DeleteCheckedChecklistTableItemsTest extends BackEndTest {
     private static final String TITLE = "title";
     private static final String COLUMN_NAME = "column-name";
     private static final String CHECKED_COLUMN = "checked-column";

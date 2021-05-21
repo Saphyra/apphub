@@ -21,6 +21,7 @@ public class PlayerService implements GameItemService {
 
     @Override
     public void deleteByGameId(UUID gameId) {
+        log.info("Deleting {}s by gameId {}", getClass().getSimpleName(), gameId);
         playerDao.deleteByGameId(gameId);
     }
 

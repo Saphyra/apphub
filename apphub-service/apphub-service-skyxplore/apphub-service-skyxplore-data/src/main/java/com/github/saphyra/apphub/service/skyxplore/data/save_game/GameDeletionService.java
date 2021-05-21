@@ -31,6 +31,7 @@ class GameDeletionService implements DeleteByUserIdDao {
         gameDao.getByHost(userId)
             .stream()
             .map(GameItem::getGameId)
+            .peek(gameId -> log.info("Deleting game by id {} of host {}", gameId, userId))
             .forEach(gameId -> gameItemServices.forEach(gameItemService -> gameItemService.deleteByGameId(gameId)));
     }
 }

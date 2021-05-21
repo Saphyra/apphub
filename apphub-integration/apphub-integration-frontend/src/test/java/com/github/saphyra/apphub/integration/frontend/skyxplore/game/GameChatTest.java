@@ -17,9 +17,13 @@ import com.github.saphyra.apphub.integration.frontend.service.skyxplore.characte
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.game.SkyXploreGameChatActions;
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.lobby.SkyXploreLobbyActions;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -54,6 +58,8 @@ public class GameChatTest extends SeleniumTest {
                 IndexPageActions.registerUser(biWrapper.getEntity1(), biWrapper.getEntity2());
                 ModulesPageActions.openModule(biWrapper.getEntity1(), ModuleLocation.SKYXPLORE);
                 SkyXploreCharacterActions.submitForm(biWrapper.getEntity1());
+                new WebDriverWait(biWrapper.getEntity1(), Duration.ofSeconds(10))
+                    .until(ExpectedConditions.textToBe(By.id("main-title"), "Főmenü"));
                 return null;
             }))
             .collect(Collectors.toList());

@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplore
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreFriendActions;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SentFriendRequestResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -16,7 +16,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GetFriendCandidatesTest extends TestBase {
+public class GetFriendCandidatesTest extends BackEndTest {
     private static final String CHARACTER_IDENTIFIER = UUID.randomUUID().toString().substring(0, 6);
 
     @Test
