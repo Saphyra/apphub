@@ -9,14 +9,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class LobbyChatMessage {
+public class GameChatMessage {
     private final WebElement webElement;
 
-    public String getSender() {
-        return webElement.findElement(By.cssSelector(":scope .sender-name")).getText();
+    public String getFrom() {
+        return webElement.findElement(By.cssSelector(":scope .sender-name"))
+            .getText();
     }
 
-    public boolean isOwn() {
+    public boolean isOwnMessage() {
         return WebElementUtils.getClasses(webElement)
             .contains("own-message");
     }

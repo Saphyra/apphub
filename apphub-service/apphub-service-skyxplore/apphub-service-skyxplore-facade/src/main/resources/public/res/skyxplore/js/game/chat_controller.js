@@ -168,7 +168,8 @@
                         checkbox.type = "checkbox";
                 container.appendChild(checkbox);
 
-                    const playerName = document.createTextNode(player.name);
+                    const playerName = document.createElement("SPAN");
+                        playerName.innerText = player.name;
                 container.appendChild(playerName);
 
                 return container;

@@ -49,7 +49,7 @@ public class NotificationUtil {
 
     private static Optional<WebElement> getMatchingNotification(WebDriver driver, String notificationMessage) {
         Optional<WebElement> matchingNotification = getNotifications(driver).stream()
-            .peek(webElement -> log.info("Notification found with message {}", webElement.findElement(NOTIFICATION_TEXT_LOCATOR).getText()))
+            .peek(webElement -> log.debug("Notification found with message {}", webElement.findElement(NOTIFICATION_TEXT_LOCATOR).getText()))
             .filter(webElement -> webElement.findElement(NOTIFICATION_TEXT_LOCATOR).getText().equals(notificationMessage))
             .findAny();
         if (!matchingNotification.isPresent()) {

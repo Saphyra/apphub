@@ -22,7 +22,7 @@ class HomePlanetSelector {
     private final RandomEmptyPlanetFinder randomEmptyPlanetFinder;
 
     public Planet selectPlanet(UUID userId, Collection<Alliance> alliances, Universe universe) {
-        Optional<Alliance> allianceOptional = findAlliance(userId, alliances);
+        Optional<Alliance> allianceOptional = Optional.empty(); //findAlliance(userId, alliances); TODO restore when planet finder bug is fixed
         if (allianceOptional.isPresent()) {
             List<UUID> members = allianceOptional.get()
                 .getMembers()

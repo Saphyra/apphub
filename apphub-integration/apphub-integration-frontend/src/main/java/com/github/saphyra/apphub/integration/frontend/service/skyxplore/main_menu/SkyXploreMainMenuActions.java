@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.character.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.frontend.model.skyxplore.Invitation;
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.lobby.SkyXploreLobbyActions;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -14,12 +15,15 @@ import java.util.stream.Collectors;
 
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
 
+@Slf4j
 public class SkyXploreMainMenuActions {
     public static void back(WebDriver driver) {
         MainMenuPage.backButton(driver).click();
     }
 
     public static void createLobby(WebDriver driver, String gameName) {
+        log.info("Creating lobby with name {}", gameName);
+
         openCreateGameDialog(driver);
         fillGameName(driver, gameName);
         submitGameCreationForm(driver);

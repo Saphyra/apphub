@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.frontend.model.skyxplore.GameSettin
 import com.github.saphyra.apphub.integration.frontend.model.skyxplore.GameSettingOptionValue;
 import com.github.saphyra.apphub.integration.frontend.model.skyxplore.LobbyChatMessage;
 import com.github.saphyra.apphub.integration.frontend.model.skyxplore.LobbyMember;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,9 +17,11 @@ import java.util.stream.Collectors;
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class SkyXploreLobbyActions {
     public static void startGameCreation(WebDriver driver) {
         LobbyPage.startGameCreationButton(driver).click();
+        log.info("Game creation started.");
     }
 
     public static void setReady(WebDriver driver) {

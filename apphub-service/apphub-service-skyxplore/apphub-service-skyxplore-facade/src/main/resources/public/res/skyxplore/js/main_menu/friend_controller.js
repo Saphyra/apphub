@@ -102,7 +102,7 @@
 
                 if(friendRequests.length == 0){
                     const noResult = document.createElement("DIV");
-                        noResult.classList.add("friend-list-item");
+                        noResult.classList.add("no-friend-list-item");
                         noResult.innerHTML = Localization.getAdditionalContent("empty-result");
                     container.appendChild(noResult);
                 }
@@ -155,7 +155,7 @@
 
                 if(friends.length == 0){
                     const noResult = document.createElement("DIV");
-                        noResult.classList.add("friend-list-item");
+                        noResult.classList.add("no-friend-list-item");
                         noResult.innerHTML = Localization.getAdditionalContent("empty-result");
                     container.appendChild(noResult);
                 }
@@ -198,7 +198,7 @@
 
                 if(friendRequests.length == 0){
                     const noResult = document.createElement("DIV");
-                        noResult.classList.add("friend-list-item");
+                        noResult.classList.add("no-friend-list-item");
                         noResult.innerHTML = Localization.getAdditionalContent("empty-result");
                     container.appendChild(noResult);
                 }

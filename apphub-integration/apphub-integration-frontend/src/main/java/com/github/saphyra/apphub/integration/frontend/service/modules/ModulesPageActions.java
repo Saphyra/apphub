@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.integration.frontend.model.modules.Category;
 import com.github.saphyra.apphub.integration.frontend.model.modules.Favorite;
 import com.github.saphyra.apphub.integration.frontend.model.modules.Module;
 import com.github.saphyra.apphub.integration.frontend.model.modules.ModuleLocation;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class ModulesPageActions {
     public static void logout(WebDriver driver) {
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.MODULES_PAGE));
@@ -59,6 +61,7 @@ public class ModulesPageActions {
     }
 
     public static void openModule(WebDriver driver, ModuleLocation moduleLocation) {
+        log.info("Opening module {}", moduleLocation);
         String modulesPageUrl = UrlFactory.create(Endpoints.MODULES_PAGE);
         assertThat(driver.getCurrentUrl()).isEqualTo(modulesPageUrl);
 

@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.lobby.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.main_menu.SkyXploreFriendshipActions;
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.main_menu.SkyXploreMainMenuActions;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Arrays;
@@ -13,9 +14,12 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class SkyXploreLobbyCreationFlow {
     @SafeVarargs
     public static void setUpLobbyWithMembers(String gameName, WebDriver hostDriver, String hostName, BiWrapper<WebDriver, String>... members) {
+        log.info("Setting up lobby...");
+
         boolean allInMainMenu = Stream.concat(Stream.of(hostDriver), Arrays.stream(members).map(BiWrapper::getEntity1))
             .allMatch(driver -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE));
         assertThat(allInMainMenu).isTrue();

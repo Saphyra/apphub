@@ -83,7 +83,7 @@
                 border-color: green;
             }
 
-            .friend-list-item{
+            .friend-list-item, .no-friend-list-item{
                 border: 1px solid white;
                 margin: 0.5rem;
                 padding: 0.25rem;

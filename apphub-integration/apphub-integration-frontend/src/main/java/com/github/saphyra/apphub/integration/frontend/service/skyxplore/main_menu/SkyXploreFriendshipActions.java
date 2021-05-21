@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.frontend.model.skyxplore.Friend;
 import com.github.saphyra.apphub.integration.frontend.model.skyxplore.IncomingFriendRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -13,8 +14,10 @@ import java.util.stream.Collectors;
 
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
 
+@Slf4j
 public class SkyXploreFriendshipActions {
     public static void setUpFriendship(WebDriver driver1, WebDriver driver2, String username1, String username2) {
+        log.info("Setting up friendship between {} and {}", username1, username2);
         AwaitilityWrapper.createDefault()
             .until(() -> driver1.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
             .assertTrue("Lobby page is not opened.");
@@ -67,6 +70,5 @@ public class SkyXploreFriendshipActions {
             .stream()
             .map(IncomingFriendRequest::new)
             .collect(Collectors.toList());
-
     }
 }
