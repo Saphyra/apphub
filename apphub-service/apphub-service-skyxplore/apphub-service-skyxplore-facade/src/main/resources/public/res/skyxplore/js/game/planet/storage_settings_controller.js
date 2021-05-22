@@ -128,17 +128,11 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
                     }
                 }
 
-                batchSizeInput.onchange = function(){
-                    if(batchSizeInput.value < 1){
-                        batchSizeInput.value = 1;
-                    }
-                }
-
                 priorityInput.onchange = function(){
                     priorityValue.innerHTML = priorityInput.value;
                 }
 
-                saveButton.onclick = function(){updateStorageSetting(storageSetting.storageSettingId, amountInput.value, batchSizeInput.value, priorityInput.value)};
+                saveButton.onclick = function(){updateStorageSetting(dataId, storageSetting.storageSettingId, amountInput.value, batchSizeInput.value, priorityInput.value)};
                 deleteButton.onclick = function(){deleteStorageSetting(storageSetting.storageSettingId, storageSetting.dataId)};
 
                 return node;
@@ -146,20 +140,21 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
         }
     }
 
-    function updateStorageSetting(storageSettingId, targetAmount, batchSize, priority){
+    function updateStorageSetting(dataId, storageSettingId, targetAmount, batchSize, priority){
         if(targetAmount < 1){
             notificationService.showError(Localization.getAdditionalContent("storage-setting-amount-too-low"));
             return;
         }
 
         const payload = {
+            dataId: dataId,
             storageSettingId: storageSettingId,
             targetAmount: targetAmount,
             batchSize: batchSize,
             priority: priority
         }
 
-        const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_EDIT_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId()}));
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_EDIT_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId()}), payload);
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("storage-setting-saved"));
                 viewStorageSettings(planetController.getOpenedPlanetId());
@@ -233,13 +228,6 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
             amountInput.onchange = function(){
                 if(amountInput.value < 0){
                     amountInput.value = 0;
-                }
-            }
-
-        const batchSizeInput = document.getElementById(ids.storageSettingsBatchSizeInput);
-            batchSizeInput.onchange = function(){
-                if(batchSizeInput.value < 1){
-                    batchSizeInput.value = 1;
                 }
             }
     }

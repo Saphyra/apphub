@@ -86,6 +86,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/map/universe_controller.js");
                 element.setAttribute("cy", solarSystemConstants.SOLAR_SYSTEM_BORDER_WIDTH + solarSystemConstants.OFFSET + systemRadius + planet.coordinate.y);
                 element.setAttribute("stroke", "blue");
                 element.setAttribute("stroke-width", 0);
+                element.classList.add("planet-svg-element");
                 $(element).hover(
                     function(){element.setAttribute("stroke-width", 3)},
                     function(){element.setAttribute("stroke-width", 0)}

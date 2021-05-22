@@ -45,7 +45,7 @@ public class SeleniumTest extends TestBase {
                     extractLogs(driver);
                     testResult.getName();
                 }
-                WebDriverFactory.release(webDriverWrapper.getId());
+                WebDriverFactory.release(webDriverWrapper);
             });
         driverWrappers.remove();
     }
@@ -77,7 +77,7 @@ public class SeleniumTest extends TestBase {
         StopWatch stopWatch = StopWatch.createStarted();
         WebDriverWrapper webDriverWrapper;
         try {
-            webDriverWrapper = WebDriverFactory.DRIVER_POOL.borrowObject();
+            webDriverWrapper = WebDriverFactory.getDriver();
             stopWatch.stop();
         } catch (Exception e) {
             throw new RuntimeException(e);

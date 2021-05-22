@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.frontend.service.skyxplore.character;
 
 import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils;
 import org.openqa.selenium.WebDriver;
 
@@ -31,5 +32,10 @@ public class SkyXploreCharacterActions {
 
     public static void submitForm(WebDriver driver) {
         CharacterPage.submitButton(driver).click();
+    }
+
+    public static void createCharacter(WebDriver driver) {
+        submitForm(driver);
+        NotificationUtil.verifySuccessNotification(driver, "Karakter elmentve.");
     }
 }

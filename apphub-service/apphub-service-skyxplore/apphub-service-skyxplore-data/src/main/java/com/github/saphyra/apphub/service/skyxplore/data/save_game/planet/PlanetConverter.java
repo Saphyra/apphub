@@ -46,7 +46,7 @@ class PlanetConverter extends ConverterBase<PlanetEntity, PlanetModel> {
             .size(domain.getSize())
             .owner(uuidConverter.convertDomain(domain.getOwner()))
             .build();
-        log.info("Converted planet: {}", result);
+        log.debug("Converted planet: {}", result);
         return result;
     }
 }
