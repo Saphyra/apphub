@@ -90,7 +90,7 @@ public class RoleControllerImplTestIt_removeRole {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .delete(UrlFactory.create(serverPort, Endpoints.REMOVE_ROLE));
+            .delete(UrlFactory.create(serverPort, Endpoints.USER_DATA_REMOVE_ROLE));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -114,7 +114,7 @@ public class RoleControllerImplTestIt_removeRole {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .delete(UrlFactory.create(serverPort, Endpoints.REMOVE_ROLE));
+            .delete(UrlFactory.create(serverPort, Endpoints.USER_DATA_REMOVE_ROLE));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -138,7 +138,7 @@ public class RoleControllerImplTestIt_removeRole {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .delete(UrlFactory.create(serverPort, Endpoints.REMOVE_ROLE));
+            .delete(UrlFactory.create(serverPort, Endpoints.USER_DATA_REMOVE_ROLE));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -170,7 +170,7 @@ public class RoleControllerImplTestIt_removeRole {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .delete(UrlFactory.create(serverPort, Endpoints.REMOVE_ROLE));
+            .delete(UrlFactory.create(serverPort, Endpoints.USER_DATA_REMOVE_ROLE));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -208,7 +208,7 @@ public class RoleControllerImplTestIt_removeRole {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .delete(UrlFactory.create(serverPort, Endpoints.REMOVE_ROLE));
+            .delete(UrlFactory.create(serverPort, Endpoints.USER_DATA_REMOVE_ROLE));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(roleDao.findByUserIdAndRole(USER_ID_1, ROLE_1)).isEmpty();

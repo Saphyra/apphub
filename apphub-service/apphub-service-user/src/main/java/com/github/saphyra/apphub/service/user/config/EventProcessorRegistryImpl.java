@@ -29,22 +29,22 @@ public class EventProcessorRegistryImpl implements EventProcessorRegistry {
             RegisterProcessorRequest.builder()
                 .serviceName(serviceName)
                 .eventName(EmptyEvent.DELETE_EXPIRED_ACCESS_TOKENS_EVENT_NAME)
-                .url(Endpoints.DELETE_EXPIRED_ACCESS_TOKENS_EVENT)
+                .url(Endpoints.EVENT_DELETE_EXPIRED_ACCESS_TOKENS)
                 .build(),
             RegisterProcessorRequest.builder()
                 .serviceName(serviceName)
                 .eventName(RefreshAccessTokenExpirationEvent.EVENT_NAME)
-                .url(Endpoints.REFRESH_ACCESS_TOKEN_EXPIRATION_EVENT)
+                .url(Endpoints.EVENT_REFRESH_ACCESS_TOKEN_EXPIRATION)
                 .build(),
             RegisterProcessorRequest.builder()
                 .serviceName(serviceName)
                 .eventName(DeleteAccountEvent.EVENT_NAME)
-                .url(Endpoints.DELETE_ACCOUNT_EVENT)
+                .url(Endpoints.EVENT_DELETE_ACCOUNT)
                 .build(),
             RegisterProcessorRequest.builder()
                 .serviceName(serviceName)
                 .eventName(PageVisitedEvent.EVENT_NAME)
-                .url(Endpoints.PAGE_VISITED_EVENT)
+                .url(Endpoints.EVENT_PAGE_VISITED)
                 .build()
         );
     }

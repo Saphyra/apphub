@@ -29,7 +29,7 @@ public class RoleManagementPageActions {
     public static Response getRolesResponse(Language language, UUID accessTokenId, String queryString) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(new OneParamRequest<>(queryString))
-            .post(UrlFactory.create(Endpoints.GET_USER_ROLES));
+            .post(UrlFactory.create(Endpoints.USER_DATA_GET_USER_ROLES));
     }
 
     public static void addRole(Language language, UUID accessTokenId, RoleRequest roleRequest) {
@@ -40,7 +40,7 @@ public class RoleManagementPageActions {
     public static Response getAddRoleResponse(Language language, UUID accessTokenId, RoleRequest roleRequest) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(roleRequest)
-            .put(UrlFactory.create(Endpoints.ADD_ROLE));
+            .put(UrlFactory.create(Endpoints.USER_DATA_ADD_ROLE));
     }
 
     public static void removeRole(Language language, UUID accessTokenId, RoleRequest roleRequest) {
@@ -51,6 +51,6 @@ public class RoleManagementPageActions {
     public static Response getRemoveRoleResponse(Language language, UUID accessTokenId, RoleRequest roleRequest) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(roleRequest)
-            .delete(UrlFactory.create(Endpoints.REMOVE_ROLE));
+            .delete(UrlFactory.create(Endpoints.USER_DATA_REMOVE_ROLE));
     }
 }

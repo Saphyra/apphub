@@ -126,7 +126,7 @@ public class SkyXploreDataEventControllerImplTestIt_deleteAccountEvent {
 
         Response response = RequestFactory.createRequest()
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.DELETE_ACCOUNT_EVENT));
+            .post(UrlFactory.create(serverPort, Endpoints.EVENT_DELETE_ACCOUNT));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

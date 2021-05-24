@@ -106,7 +106,7 @@ public class GameCreationControllerImplTestIt {
 
                 Response response = RequestFactory.createRequest()
                     .body(request)
-                    .put(UrlFactory.create(serverPort, Endpoints.INTERNAL_SKYXPLORE_CREATE_GAME));
+                    .put(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_INTERNAL_CREATE_GAME));
 
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
             });
@@ -154,7 +154,7 @@ public class GameCreationControllerImplTestIt {
 
         Response response = RequestFactory.createRequest()
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.INTERNAL_SKYXPLORE_CREATE_GAME));
+            .put(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_INTERNAL_CREATE_GAME));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -199,7 +199,7 @@ public class GameCreationControllerImplTestIt {
 
         Response response = RequestFactory.createRequest()
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.INTERNAL_SKYXPLORE_CREATE_GAME));
+            .put(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_INTERNAL_CREATE_GAME));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 public interface SkyXploreGameCreationController {
-    @PutMapping(Endpoints.INTERNAL_SKYXPLORE_CREATE_GAME)
+    @PutMapping(Endpoints.SKYXPLORE_INTERNAL_CREATE_GAME)
     void createGame(@RequestBody SkyXploreGameCreationRequest request) throws InterruptedException;
 }

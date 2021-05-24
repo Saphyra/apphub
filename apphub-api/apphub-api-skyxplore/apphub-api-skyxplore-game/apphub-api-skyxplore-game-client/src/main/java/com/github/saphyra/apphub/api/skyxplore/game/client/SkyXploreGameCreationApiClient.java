@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient("skyxplore-game-creation")
 public interface SkyXploreGameCreationApiClient {
-    @PutMapping(Endpoints.INTERNAL_SKYXPLORE_CREATE_GAME)
+    @PutMapping(Endpoints.SKYXPLORE_INTERNAL_CREATE_GAME)
     void createGame(@RequestBody SkyXploreGameCreationRequest request, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 }

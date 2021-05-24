@@ -21,10 +21,10 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(skyXploreMainMenuWebSocketHandler, Endpoints.CONNECTION_SKYXPLORE_MAIN_MENU)
-            .addHandler(skyXploreLobbyWebSocketHandler, Endpoints.CONNECTION_SKYXPLORE_LOBBY)
-            .addHandler(skyXploreLobbyWebSocketHandler, Endpoints.CONNECTION_SKYXPLORE_LOBBY)
-            .addHandler(skyXploreGameConnectionHandler, Endpoints.CONNECTION_SKYXPLORE_GAME)
+        registry.addHandler(skyXploreMainMenuWebSocketHandler, Endpoints.WS_CONNECTION_SKYXPLORE_MAIN_MENU)
+            .addHandler(skyXploreLobbyWebSocketHandler, Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY)
+            .addHandler(skyXploreLobbyWebSocketHandler, Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY)
+            .addHandler(skyXploreGameConnectionHandler, Endpoints.WS_CONNECTION_SKYXPLORE_GAME)
             .setHandshakeHandler(authenticationHandshakeHandler);
     }
 }

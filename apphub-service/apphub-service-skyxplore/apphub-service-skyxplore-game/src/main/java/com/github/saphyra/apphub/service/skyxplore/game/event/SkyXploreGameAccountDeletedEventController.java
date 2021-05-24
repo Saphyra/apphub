@@ -25,7 +25,7 @@ class SkyXploreGameAccountDeletedEventController {
     private final GameDao gameDao;
     private final MessageSenderProxy messageSenderProxy;
 
-    @PostMapping(Endpoints.DELETE_ACCOUNT_EVENT)
+    @PostMapping(Endpoints.EVENT_DELETE_ACCOUNT)
     void deleteAccountEvent(@RequestBody SendEventRequest<DeleteAccountEvent> request) {
         UUID userId = request.getPayload().getUserId();
         log.info("Processing DeleteAccountEvent for uid {}", userId);

@@ -115,7 +115,7 @@ public class LoginTest extends BackEndTest {
 
         Response response = RequestFactory.createRequest(language)
             .header(Constants.AUTHORIZATION_HEADER, loginResponse.getAccessTokenId())
-            .get(UrlFactory.create(Endpoints.GET_MODULES_OF_USER));
+            .get(UrlFactory.create(Endpoints.MODULES_GET_MODULES_OF_USER));
 
 
         assertThat(response.getStatusCode()).isEqualTo(200);

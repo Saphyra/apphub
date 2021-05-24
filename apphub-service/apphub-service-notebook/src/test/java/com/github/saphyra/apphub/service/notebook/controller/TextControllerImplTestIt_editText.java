@@ -89,7 +89,7 @@ public class TextControllerImplTestIt_editText {
 
         Response saveResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(createRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TEXT));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_TEXT));
         assertThat(saveResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         UUID textId = saveResponse.getBody().jsonPath().getUUID("value");
 
@@ -118,7 +118,7 @@ public class TextControllerImplTestIt_editText {
 
         Response saveResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(createRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TEXT));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_TEXT));
         assertThat(saveResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         UUID textId = saveResponse.getBody().jsonPath().getUUID("value");
 
@@ -163,7 +163,7 @@ public class TextControllerImplTestIt_editText {
 
         Response saveResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(createRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TEXT));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_TEXT));
         assertThat(saveResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         UUID textId = saveResponse.getBody().jsonPath().getUUID("value");
 

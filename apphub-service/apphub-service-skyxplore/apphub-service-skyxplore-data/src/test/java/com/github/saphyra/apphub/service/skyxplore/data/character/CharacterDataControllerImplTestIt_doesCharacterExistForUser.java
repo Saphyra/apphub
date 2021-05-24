@@ -80,7 +80,7 @@ public class CharacterDataControllerImplTestIt_doesCharacterExistForUser {
             .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_CREATE_OR_UPDATE_CHARACTER));
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.INTERNAL_SKYXPLORE_IS_CHARACTER_EXISTS));
+            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_INTERNAL_IS_CHARACTER_EXISTS));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -90,7 +90,7 @@ public class CharacterDataControllerImplTestIt_doesCharacterExistForUser {
     @Test
     public void characterDoesNotExist() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.INTERNAL_SKYXPLORE_IS_CHARACTER_EXISTS));
+            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_INTERNAL_IS_CHARACTER_EXISTS));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

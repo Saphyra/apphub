@@ -43,7 +43,7 @@ public class GameCreationUtils {
 
         Response gameCreationResponse = RequestFactory.createRequest()
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.INTERNAL_SKYXPLORE_CREATE_GAME));
+            .put(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_INTERNAL_CREATE_GAME));
 
         assertThat(gameCreationResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

@@ -85,7 +85,7 @@ public class AccountControllerImplTestIt_UsernameChange {
     public void nullUsername() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST.toBuilder().username(null).build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_USERNAME));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_USERNAME));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -100,7 +100,7 @@ public class AccountControllerImplTestIt_UsernameChange {
     public void usernameTooShort() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST.toBuilder().username("as").build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_USERNAME));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_USERNAME));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -114,7 +114,7 @@ public class AccountControllerImplTestIt_UsernameChange {
     public void usernameTooLong() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST.toBuilder().username(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())).build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_USERNAME));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_USERNAME));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -137,7 +137,7 @@ public class AccountControllerImplTestIt_UsernameChange {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST.toBuilder().username(USERNAME).build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_USERNAME));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_USERNAME));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -151,7 +151,7 @@ public class AccountControllerImplTestIt_UsernameChange {
     public void nullPassword() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST.toBuilder().password(null).build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_USERNAME));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_USERNAME));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -175,7 +175,7 @@ public class AccountControllerImplTestIt_UsernameChange {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST)
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_USERNAME));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_USERNAME));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -198,7 +198,7 @@ public class AccountControllerImplTestIt_UsernameChange {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST)
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_USERNAME));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_USERNAME));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

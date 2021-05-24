@@ -135,7 +135,7 @@ public class AuthenticationControllerTestIt {
 
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(request))
-            .post(UrlFactory.create(serverPort, Endpoints.DELETE_EXPIRED_ACCESS_TOKENS_EVENT));
+            .post(UrlFactory.create(serverPort, Endpoints.EVENT_DELETE_EXPIRED_ACCESS_TOKENS));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -160,7 +160,7 @@ public class AuthenticationControllerTestIt {
 
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(request))
-            .post(UrlFactory.create(serverPort, Endpoints.REFRESH_ACCESS_TOKEN_EXPIRATION_EVENT));
+            .post(UrlFactory.create(serverPort, Endpoints.EVENT_REFRESH_ACCESS_TOKEN_EXPIRATION));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(accessTokenDao.findById(ACCESS_TOKEN_ID_1.toString()).get().getLastAccess()).isAfter(referenceDate);
@@ -320,6 +320,6 @@ public class AuthenticationControllerTestIt {
         Map<String, Object> uriParams = new HashMap<>();
         uriParams.put("accessTokenId", ACCESS_TOKEN_ID_1.toString());
         return RequestFactory.createRequest()
-            .get(UrlFactory.create(serverPort, Endpoints.INTERNAL_GET_ACCESS_TOKEN_BY_ID, uriParams));
+            .get(UrlFactory.create(serverPort, Endpoints.USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID, uriParams));
     }
 }

@@ -26,7 +26,7 @@ public class SkyXploreDataEventProcessorRegistryImpl implements EventProcessorRe
             RegisterProcessorRequest.builder()
                 .serviceName(serviceName)
                 .eventName(DeleteAccountEvent.EVENT_NAME)
-                .url(Endpoints.DELETE_ACCOUNT_EVENT)
+                .url(Endpoints.EVENT_DELETE_ACCOUNT)
                 .build()
         );
     }

@@ -23,7 +23,7 @@ public interface UserAuthenticationController {
     @RequestMapping(method = RequestMethod.GET, value = Endpoints.CHECK_SESSION)
     void checkSession(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessToken);
 
-    @RequestMapping(method = RequestMethod.POST, value = Endpoints.DELETE_EXPIRED_ACCESS_TOKENS_EVENT)
+    @RequestMapping(method = RequestMethod.POST, value = Endpoints.EVENT_DELETE_EXPIRED_ACCESS_TOKENS)
     void deleteExpiredAccessTokens();
 
     @RequestMapping(method = RequestMethod.POST, value = Endpoints.LOGIN)
@@ -32,12 +32,12 @@ public interface UserAuthenticationController {
     @RequestMapping(method = RequestMethod.POST, value = Endpoints.LOGOUT)
     void logout(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessToken);
 
-    @RequestMapping(method = RequestMethod.GET, value = Endpoints.INTERNAL_GET_ACCESS_TOKEN_BY_ID)
+    @RequestMapping(method = RequestMethod.GET, value = Endpoints.USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID)
     ResponseEntity<InternalAccessTokenResponse> getAccessTokenById(@PathVariable("accessTokenId") UUID accessTokenId);
 
-    @RequestMapping(method = RequestMethod.POST, value = Endpoints.REFRESH_ACCESS_TOKEN_EXPIRATION_EVENT)
+    @RequestMapping(method = RequestMethod.POST, value = Endpoints.EVENT_REFRESH_ACCESS_TOKEN_EXPIRATION)
     void refreshAccessTokenExpiration(@RequestBody SendEventRequest<RefreshAccessTokenExpirationEvent> request);
 
-    @GetMapping(Endpoints.INTERNAL_GET_LAST_VISITED_PAGE)
+    @GetMapping(Endpoints.USER_DATAINTERNAL_GET_LAST_VISITED_PAGE)
     LastVisitedPageResponse getLastVisitedPage(@PathVariable("userId") UUID userId);
 }

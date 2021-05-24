@@ -90,7 +90,7 @@ public class RoleControllerImplTestIt_addRole {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.ADD_ROLE));
+            .put(UrlFactory.create(serverPort, Endpoints.USER_DATA_ADD_ROLE));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -114,7 +114,7 @@ public class RoleControllerImplTestIt_addRole {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.ADD_ROLE));
+            .put(UrlFactory.create(serverPort, Endpoints.USER_DATA_ADD_ROLE));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -138,7 +138,7 @@ public class RoleControllerImplTestIt_addRole {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.ADD_ROLE));
+            .put(UrlFactory.create(serverPort, Endpoints.USER_DATA_ADD_ROLE));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -176,7 +176,7 @@ public class RoleControllerImplTestIt_addRole {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.ADD_ROLE));
+            .put(UrlFactory.create(serverPort, Endpoints.USER_DATA_ADD_ROLE));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -208,7 +208,7 @@ public class RoleControllerImplTestIt_addRole {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.ADD_ROLE));
+            .put(UrlFactory.create(serverPort, Endpoints.USER_DATA_ADD_ROLE));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(roleDao.findByUserIdAndRole(USER_ID_1, ROLE_1)).isPresent();

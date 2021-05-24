@@ -258,7 +258,7 @@ public class GameCreationControllerImplTestIt_validation {
     private ErrorResponse performTest(SkyXploreGameCreationRequest request, ErrorCode errorCode) {
         Response response = RequestFactory.createRequest()
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.INTERNAL_SKYXPLORE_CREATE_GAME));
+            .put(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_INTERNAL_CREATE_GAME));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 

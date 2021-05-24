@@ -86,7 +86,7 @@ public class AccountControllerImplTestIt_Register {
     public void register_emailNull() {
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(REGISTRATION_REQUEST.toBuilder().email(null).build()))
-            .post(UrlFactory.create(serverPort, Endpoints.REGISTER));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_REGISTER));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
@@ -101,7 +101,7 @@ public class AccountControllerImplTestIt_Register {
     public void register_emailInvalid() {
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(REGISTRATION_REQUEST.toBuilder().email("asd").build()))
-            .post(UrlFactory.create(serverPort, Endpoints.REGISTER));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_REGISTER));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
@@ -125,7 +125,7 @@ public class AccountControllerImplTestIt_Register {
 
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(REGISTRATION_REQUEST.toBuilder().build()))
-            .post(UrlFactory.create(serverPort, Endpoints.REGISTER));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_REGISTER));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
@@ -139,7 +139,7 @@ public class AccountControllerImplTestIt_Register {
     public void register_usernameNull() {
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(REGISTRATION_REQUEST.toBuilder().username(null).build()))
-            .post(UrlFactory.create(serverPort, Endpoints.REGISTER));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_REGISTER));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
@@ -154,7 +154,7 @@ public class AccountControllerImplTestIt_Register {
     public void register_usernameTooShort() {
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(REGISTRATION_REQUEST.toBuilder().username("aa").build()))
-            .post(UrlFactory.create(serverPort, Endpoints.REGISTER));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_REGISTER));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
@@ -168,7 +168,7 @@ public class AccountControllerImplTestIt_Register {
     public void register_usernameTooLong() {
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(REGISTRATION_REQUEST.toBuilder().username(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())).build()))
-            .post(UrlFactory.create(serverPort, Endpoints.REGISTER));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_REGISTER));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
@@ -191,7 +191,7 @@ public class AccountControllerImplTestIt_Register {
 
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(REGISTRATION_REQUEST))
-            .post(UrlFactory.create(serverPort, Endpoints.REGISTER));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_REGISTER));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
@@ -205,7 +205,7 @@ public class AccountControllerImplTestIt_Register {
     public void register_nullPassword() {
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(REGISTRATION_REQUEST.toBuilder().password(null).build()))
-            .post(UrlFactory.create(serverPort, Endpoints.REGISTER));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_REGISTER));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
@@ -220,7 +220,7 @@ public class AccountControllerImplTestIt_Register {
     public void register_passwordTooShort() {
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(REGISTRATION_REQUEST.toBuilder().password("as").build()))
-            .post(UrlFactory.create(serverPort, Endpoints.REGISTER));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_REGISTER));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
@@ -234,7 +234,7 @@ public class AccountControllerImplTestIt_Register {
     public void register_passwordTooLong() {
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(REGISTRATION_REQUEST.toBuilder().password(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())).build()))
-            .post(UrlFactory.create(serverPort, Endpoints.REGISTER));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_REGISTER));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
@@ -248,7 +248,7 @@ public class AccountControllerImplTestIt_Register {
     public void successfulRegistration() {
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(REGISTRATION_REQUEST))
-            .post(UrlFactory.create(serverPort, Endpoints.REGISTER));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_REGISTER));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

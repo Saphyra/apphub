@@ -72,7 +72,7 @@ public class CharacterDataControllerImplTestIt_internalGetCharacterByUserId {
     @Test
     public void characterDoesNotExist() {
         Response response = RequestFactory.createRequest()
-            .get(UrlFactory.create(serverPort, Endpoints.INTERNAL_SKYXPLORE_GET_CHARACTER_BY_USER_ID, "userId", USER_ID));
+            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_INTERNAL_GET_CHARACTER_BY_USER_ID, "userId", USER_ID));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
@@ -84,7 +84,7 @@ public class CharacterDataControllerImplTestIt_internalGetCharacterByUserId {
             .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_CREATE_OR_UPDATE_CHARACTER));
 
         Response response = RequestFactory.createRequest()
-            .get(UrlFactory.create(serverPort, Endpoints.INTERNAL_SKYXPLORE_GET_CHARACTER_BY_USER_ID, "userId", USER_ID));
+            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_INTERNAL_GET_CHARACTER_BY_USER_ID, "userId", USER_ID));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         SkyXploreCharacterModel result = response.getBody().as(SkyXploreCharacterModel.class);

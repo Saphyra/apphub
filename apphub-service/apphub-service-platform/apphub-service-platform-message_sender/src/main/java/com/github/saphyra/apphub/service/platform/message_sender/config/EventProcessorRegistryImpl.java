@@ -26,12 +26,12 @@ public class EventProcessorRegistryImpl implements EventProcessorRegistry {
             RegisterProcessorRequest.builder()
                 .serviceName(serviceName)
                 .eventName(EmptyEvent.MESSAGE_SENDER_PING_REQUEST_EVENT_NAME)
-                .url(Endpoints.MESSAGE_SENDER_PING_REQUEST_EVENT)
+                .url(Endpoints.EVENT_MESSAGE_SENDER_PING_REQUEST)
                 .build(),
             RegisterProcessorRequest.builder()
                 .serviceName(serviceName)
                 .eventName(EmptyEvent.MESSAGE_SENDER_CONNECTION_CLEANUP_EVENT)
-                .url(Endpoints.MESSAGE_SENDER_CONNECTION_CLEANUP_EVENT)
+                .url(Endpoints.EVENT_MESSAGE_SENDER_CONNECTION_CLEANUP)
                 .build()
         );
     }

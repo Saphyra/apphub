@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.UUID;
 
 public interface SkyXploreLobbyWsController {
-    @PostMapping(Endpoints.INTERNAL_SKYXPLORE_LOBBY_PROCESS_WEB_SOCKET_EVENTS)
+    @PostMapping(Endpoints.SKYXPLORE_INTERNAL_LOBBY_PROCESS_WEB_SOCKET_EVENTS)
     void processWebSocketEvent(@PathVariable("userId") UUID from, @RequestBody WebSocketEvent event);
 
-    @PutMapping(Endpoints.INTERNAL_SKYXPLORE_LOBBY_PLAYER_ONLINE)
+    @PutMapping(Endpoints.SKYXPLORE_INTERNAL_LOBBY_PLAYER_ONLINE)
     void playerOnline(@PathVariable("userId") UUID userId);
 
-    @DeleteMapping(Endpoints.INTERNAL_SKYXPLORE_LOBBY_PLAYER_OFFLINE)
+    @DeleteMapping(Endpoints.SKYXPLORE_INTERNAL_LOBBY_PLAYER_OFFLINE)
     void playerOffline(@PathVariable("userId") UUID userId);
 }

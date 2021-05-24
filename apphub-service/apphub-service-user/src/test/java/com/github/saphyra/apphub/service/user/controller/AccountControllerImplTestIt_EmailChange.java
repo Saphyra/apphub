@@ -83,7 +83,7 @@ public class AccountControllerImplTestIt_EmailChange {
     public void nullEmail() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST.toBuilder().email(null).build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_EMAIL));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_EMAIL));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -98,7 +98,7 @@ public class AccountControllerImplTestIt_EmailChange {
     public void invalidEmail() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST.toBuilder().email("asd").build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_EMAIL));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_EMAIL));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -122,7 +122,7 @@ public class AccountControllerImplTestIt_EmailChange {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST.toBuilder().email(EMAIL).build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_EMAIL));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_EMAIL));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -136,7 +136,7 @@ public class AccountControllerImplTestIt_EmailChange {
     public void nullPassword() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST.toBuilder().password(null).build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_EMAIL));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_EMAIL));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -160,7 +160,7 @@ public class AccountControllerImplTestIt_EmailChange {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST)
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_EMAIL));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_EMAIL));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -183,7 +183,7 @@ public class AccountControllerImplTestIt_EmailChange {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST)
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_EMAIL));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_EMAIL));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

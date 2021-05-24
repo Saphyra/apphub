@@ -19,6 +19,6 @@ public interface MessageSenderApiClient {
     /**
      * @return Id of users the message could not be sent to
      */
-    @PostMapping(Endpoints.SEND_MESSAGE)
+    @PostMapping(Endpoints.WEB_SOCKET_SEND_MESSAGE)
     List<UUID> sendMessage(@PathVariable("group") MessageGroup group, @RequestBody WebSocketMessage message, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 }

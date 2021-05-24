@@ -82,7 +82,7 @@ public class NotebookActions {
     public static Response getCreateTextResponse(Language language, UUID accessTokenId, CreateTextRequest request) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(request)
-            .put(UrlFactory.create(Endpoints.CREATE_NOTEBOOK_TEXT));
+            .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_TEXT));
     }
 
     public static TextResponse getText(Language language, UUID accessTokenId, UUID textId) {

@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.lib.config.Endpoints;
 import org.springframework.web.bind.annotation.PostMapping;
 
 public interface MessageSenderEventController {
-    @PostMapping(Endpoints.MESSAGE_SENDER_PING_REQUEST_EVENT)
+    @PostMapping(Endpoints.EVENT_MESSAGE_SENDER_PING_REQUEST)
     void sendPingRequests();
 
-    @PostMapping(Endpoints.MESSAGE_SENDER_CONNECTION_CLEANUP_EVENT)
+    @PostMapping(Endpoints.EVENT_MESSAGE_SENDER_CONNECTION_CLEANUP)
     void connectionCleanup();
 }

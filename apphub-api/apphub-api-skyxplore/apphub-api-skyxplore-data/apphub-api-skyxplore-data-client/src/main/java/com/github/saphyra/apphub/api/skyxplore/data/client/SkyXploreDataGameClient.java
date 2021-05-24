@@ -12,6 +12,6 @@ import java.util.List;
 
 @FeignClient("skyxplore-data-game")
 public interface SkyXploreDataGameClient {
-    @PostMapping(Endpoints.INTERNAL_SKYXPLORE_SAVE_GAME_DATA)
+    @PostMapping(Endpoints.SKYXPLORE_INTERNAL_SAVE_GAME_DATA)
     void saveGameData(@RequestBody List<GameItem> items, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 }

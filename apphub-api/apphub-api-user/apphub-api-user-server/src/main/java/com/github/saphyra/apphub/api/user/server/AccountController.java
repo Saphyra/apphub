@@ -18,21 +18,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.UUID;
 
 public interface AccountController {
-    @RequestMapping(method = RequestMethod.POST, value = Endpoints.CHANGE_EMAIL)
+    @RequestMapping(method = RequestMethod.POST, value = Endpoints.ACCOUNT_CHANGE_EMAIL)
     void changeEmail(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestBody ChangeEmailRequest request);
 
-    @RequestMapping(method = RequestMethod.POST, value = Endpoints.CHANGE_USERNAME)
+    @RequestMapping(method = RequestMethod.POST, value = Endpoints.ACCOUNT_CHANGE_USERNAME)
     void changeUsername(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestBody ChangeUsernameRequest request);
 
-    @RequestMapping(method = RequestMethod.POST, value = Endpoints.CHANGE_PASSWORD)
+    @RequestMapping(method = RequestMethod.POST, value = Endpoints.ACCOUNT_CHANGE_PASSWORD)
     void changePassword(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestBody ChangePasswordRequest request);
 
-    @RequestMapping(method = RequestMethod.DELETE, value = Endpoints.DELETE_ACCOUNT)
+    @RequestMapping(method = RequestMethod.DELETE, value = Endpoints.ACCOUNT_DELETE_ACCOUNT)
     void deleteAccount(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestBody OneParamRequest<String> password);
 
-    @RequestMapping(method = RequestMethod.POST, value = Endpoints.REGISTER)
+    @RequestMapping(method = RequestMethod.POST, value = Endpoints.ACCOUNT_REGISTER)
     void register(@RequestBody RegistrationRequest registrationRequest, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
-    @GetMapping(Endpoints.INTERNAL_USER_GET_USERNAME)
+    @GetMapping(Endpoints.USER_DATAINTERNAL_USER_GET_USERNAME)
     String getUsernameByUserId(@PathVariable("userId") UUID userId);
 }

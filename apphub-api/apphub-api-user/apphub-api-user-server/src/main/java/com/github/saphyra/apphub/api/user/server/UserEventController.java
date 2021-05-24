@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 public interface UserEventController {
-    @RequestMapping(method = RequestMethod.POST, path = Endpoints.DELETE_ACCOUNT_EVENT)
+    @RequestMapping(method = RequestMethod.POST, path = Endpoints.EVENT_DELETE_ACCOUNT)
     void deleteAccountEvent(@RequestBody SendEventRequest<DeleteAccountEvent> request);
 
-    @RequestMapping(method = RequestMethod.POST, path = Endpoints.PAGE_VISITED_EVENT)
+    @RequestMapping(method = RequestMethod.POST, path = Endpoints.EVENT_PAGE_VISITED)
     void pageVisitedEvent(@RequestBody SendEventRequest<PageVisitedEvent> request);
 }

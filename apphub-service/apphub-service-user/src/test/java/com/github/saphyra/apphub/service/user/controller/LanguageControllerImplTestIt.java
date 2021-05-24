@@ -84,7 +84,7 @@ public class LanguageControllerImplTestIt {
         Response response = RequestFactory.createRequest()
             .header(Constants.ACCESS_TOKEN_HEADER, accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(new OneParamRequest<>())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_LANGUAGE));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_LANGUAGE));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
@@ -106,7 +106,7 @@ public class LanguageControllerImplTestIt {
         Response response = RequestFactory.createRequest()
             .header(Constants.ACCESS_TOKEN_HEADER, accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(new OneParamRequest<>("asd"))
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_LANGUAGE));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_LANGUAGE));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
@@ -137,7 +137,7 @@ public class LanguageControllerImplTestIt {
         Response response = RequestFactory.createRequest()
             .header(Constants.ACCESS_TOKEN_HEADER, accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(new OneParamRequest<>("hu"))
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_LANGUAGE));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_LANGUAGE));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -150,7 +150,7 @@ public class LanguageControllerImplTestIt {
         paramMap.put("userId", USER_ID);
 
         Response response = RequestFactory.createRequest()
-            .get(UrlFactory.create(serverPort, Endpoints.INTERNAL_GET_USER_LANGUAGE, paramMap));
+            .get(UrlFactory.create(serverPort, Endpoints.USER_DATA_INTERNAL_GET_USER_LANGUAGE, paramMap));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -175,7 +175,7 @@ public class LanguageControllerImplTestIt {
         paramMap.put("userId", USER_ID);
 
         Response response = RequestFactory.createRequest()
-            .get(UrlFactory.create(serverPort, Endpoints.INTERNAL_GET_USER_LANGUAGE, paramMap));
+            .get(UrlFactory.create(serverPort, Endpoints.USER_DATA_INTERNAL_GET_USER_LANGUAGE, paramMap));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getBody().asString()).isEqualTo(LOCALE);
@@ -198,7 +198,7 @@ public class LanguageControllerImplTestIt {
         userDao.save(user);
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(accessTokenHeader))
-            .get(UrlFactory.create(serverPort, Endpoints.GET_LANGUAGES));
+            .get(UrlFactory.create(serverPort, Endpoints.ACCOUNT_GET_LANGUAGES));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

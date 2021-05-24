@@ -55,7 +55,7 @@ public class ApphubWsClient extends WebSocketClient {
 
     public static ApphubWsClient createSkyXploreMainMenu(Language language, UUID accessTokenId) {
         try {
-            return new ApphubWsClient(language, Endpoints.CONNECTION_SKYXPLORE_MAIN_MENU, accessTokenId);
+            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_MAIN_MENU, accessTokenId);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -63,7 +63,7 @@ public class ApphubWsClient extends WebSocketClient {
 
     public static ApphubWsClient createSkyXploreLobby(Language language, UUID accessTokenId) {
         try {
-            return new ApphubWsClient(language, Endpoints.CONNECTION_SKYXPLORE_LOBBY, accessTokenId);
+            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY, accessTokenId);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -71,7 +71,7 @@ public class ApphubWsClient extends WebSocketClient {
 
     public static ApphubWsClient createSkyXploreGame(Language language, UUID accessTokenId) {
         try {
-            return new ApphubWsClient(language, Endpoints.CONNECTION_SKYXPLORE_GAME, accessTokenId);
+            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_GAME, accessTokenId);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

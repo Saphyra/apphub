@@ -134,7 +134,7 @@ public class ListItemControllerIImplTestIt_clone {
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(CreateTextRequest.builder().title(TEXT_TITLE).parent(parentId).content(TEXT_CONTENT).build())
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TEXT));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_TEXT));
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(CreateChecklistItemRequest.builder()

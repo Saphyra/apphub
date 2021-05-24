@@ -89,7 +89,7 @@ public class AccountControllerImplTestIt_DeleteAccount {
     public void nullPassword() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(new OneParamRequest<>(null))
-            .delete(UrlFactory.create(serverPort, Endpoints.DELETE_ACCOUNT));
+            .delete(UrlFactory.create(serverPort, Endpoints.ACCOUNT_DELETE_ACCOUNT));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -113,7 +113,7 @@ public class AccountControllerImplTestIt_DeleteAccount {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(new OneParamRequest<>(PASSWORD))
-            .delete(UrlFactory.create(serverPort, Endpoints.DELETE_ACCOUNT));
+            .delete(UrlFactory.create(serverPort, Endpoints.ACCOUNT_DELETE_ACCOUNT));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -136,7 +136,7 @@ public class AccountControllerImplTestIt_DeleteAccount {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(new OneParamRequest<>(PASSWORD))
-            .delete(UrlFactory.create(serverPort, Endpoints.DELETE_ACCOUNT));
+            .delete(UrlFactory.create(serverPort, Endpoints.ACCOUNT_DELETE_ACCOUNT));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

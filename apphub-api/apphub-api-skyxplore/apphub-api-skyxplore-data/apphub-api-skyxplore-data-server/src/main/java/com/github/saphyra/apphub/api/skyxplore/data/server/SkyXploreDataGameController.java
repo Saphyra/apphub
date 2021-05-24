@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 public interface SkyXploreDataGameController {
-    @PostMapping(Endpoints.INTERNAL_SKYXPLORE_SAVE_GAME_DATA)
+    @PostMapping(Endpoints.SKYXPLORE_INTERNAL_SAVE_GAME_DATA)
     void saveGameData(@RequestBody List<Object> items);
 }

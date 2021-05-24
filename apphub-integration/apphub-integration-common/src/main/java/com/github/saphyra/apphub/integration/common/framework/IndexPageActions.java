@@ -27,7 +27,7 @@ public class IndexPageActions {
     public static Response getRegistrationResponse(Language locale, RegistrationRequest registrationRequest) {
         return RequestFactory.createRequest(locale)
             .body(registrationRequest)
-            .post(UrlFactory.create(TestBase.SERVER_PORT, Endpoints.REGISTER));
+            .post(UrlFactory.create(TestBase.SERVER_PORT, Endpoints.ACCOUNT_REGISTER));
     }
 
     public static UUID login(Language locale, String email, String password) {

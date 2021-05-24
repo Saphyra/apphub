@@ -93,7 +93,7 @@ public class RoleControllerImplTestIt_getRoles {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.GET_USER_ROLES));
+            .post(UrlFactory.create(serverPort, Endpoints.USER_DATA_GET_USER_ROLES));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -114,7 +114,7 @@ public class RoleControllerImplTestIt_getRoles {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.GET_USER_ROLES));
+            .post(UrlFactory.create(serverPort, Endpoints.USER_DATA_GET_USER_ROLES));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -165,7 +165,7 @@ public class RoleControllerImplTestIt_getRoles {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.GET_USER_ROLES));
+            .post(UrlFactory.create(serverPort, Endpoints.USER_DATA_GET_USER_ROLES));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         List<UserRoleResponse> roles = Arrays.asList(response.getBody().as(UserRoleResponse[].class));

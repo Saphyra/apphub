@@ -14,15 +14,15 @@ import java.util.UUID;
 
 @FeignClient("skyxplore-lobby")
 public interface SkyXploreLobbyApiClient {
-    @GetMapping(Endpoints.INTERNAL_SKYXPLORE_LOBBY_VIEW_FOR_PAGE)
+    @GetMapping(Endpoints.SKYXPLORE_INTERNAL_LOBBY_VIEW_FOR_PAGE)
     LobbyViewForPage lobbyForPage(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
     @DeleteMapping(Endpoints.SKYXPLORE_EXIT_FROM_LOBBY)
     void exitFromLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
-    @PostMapping(Endpoints.INTERNAL_SKYXPLORE_USER_JOINED_TO_LOBBY)
+    @PostMapping(Endpoints.SKYXPLORE_INTERNAL_USER_JOINED_TO_LOBBY)
     void userJoinedToLobby(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
-    @DeleteMapping(Endpoints.INTERNAL_SKYXPLORE_USER_LEFT_LOBBY)
+    @DeleteMapping(Endpoints.SKYXPLORE_INTERNAL_USER_LEFT_LOBBY)
     void userLeftLobby(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 }

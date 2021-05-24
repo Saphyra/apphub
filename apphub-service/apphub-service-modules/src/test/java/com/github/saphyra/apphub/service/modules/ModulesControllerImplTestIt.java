@@ -108,7 +108,7 @@ public class ModulesControllerImplTestIt {
 
         Response response = createRequest()
             .body(sendEventRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.DELETE_ACCOUNT_EVENT));
+            .post(UrlFactory.create(serverPort, Endpoints.EVENT_DELETE_ACCOUNT));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -133,7 +133,7 @@ public class ModulesControllerImplTestIt {
 
         Response response = createRequest()
             .header(Constants.ACCESS_TOKEN_HEADER, accessTokenHeaderConverter.convertDomain(accessTokenHeader))
-            .get(UrlFactory.create(serverPort, Endpoints.GET_MODULES_OF_USER))
+            .get(UrlFactory.create(serverPort, Endpoints.MODULES_GET_MODULES_OF_USER))
             .andReturn();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
@@ -171,7 +171,7 @@ public class ModulesControllerImplTestIt {
         Response response = createRequest()
             .header(Constants.ACCESS_TOKEN_HEADER, accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.SET_FAVORITE, pathVariables));
+            .post(UrlFactory.create(serverPort, Endpoints.MODULES_SET_FAVORITE, pathVariables));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody()
@@ -197,7 +197,7 @@ public class ModulesControllerImplTestIt {
         Response response = createRequest()
             .header(Constants.ACCESS_TOKEN_HEADER, accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.SET_FAVORITE, pathVariables));
+            .post(UrlFactory.create(serverPort, Endpoints.MODULES_SET_FAVORITE, pathVariables));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody()
@@ -224,7 +224,7 @@ public class ModulesControllerImplTestIt {
         Response response = createRequest()
             .header(Constants.ACCESS_TOKEN_HEADER, accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.SET_FAVORITE, pathVariables));
+            .post(UrlFactory.create(serverPort, Endpoints.MODULES_SET_FAVORITE, pathVariables));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

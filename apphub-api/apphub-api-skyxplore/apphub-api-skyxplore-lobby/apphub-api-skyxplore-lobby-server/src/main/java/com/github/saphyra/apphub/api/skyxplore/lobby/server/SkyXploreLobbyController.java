@@ -23,7 +23,7 @@ public interface SkyXploreLobbyController {
     @PutMapping(Endpoints.SKYXPLORE_CREATE_LOBBY)
     void createLobby(@RequestBody OneParamRequest<String> name, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @GetMapping(Endpoints.INTERNAL_SKYXPLORE_LOBBY_VIEW_FOR_PAGE)
+    @GetMapping(Endpoints.SKYXPLORE_INTERNAL_LOBBY_VIEW_FOR_PAGE)
     LobbyViewForPage lobbyForPage(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @DeleteMapping(Endpoints.SKYXPLORE_EXIT_FROM_LOBBY)
@@ -35,10 +35,10 @@ public interface SkyXploreLobbyController {
     @PostMapping(Endpoints.SKYXPLORE_LOBBY_ACCEPT_INVITATION)
     void acceptInvitation(@PathVariable("invitorId") UUID invitorId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @PostMapping(Endpoints.INTERNAL_SKYXPLORE_USER_JOINED_TO_LOBBY)
+    @PostMapping(Endpoints.SKYXPLORE_INTERNAL_USER_JOINED_TO_LOBBY)
     void userJoinedToLobby(@PathVariable("userId") UUID userId);
 
-    @DeleteMapping(Endpoints.INTERNAL_SKYXPLORE_USER_LEFT_LOBBY)
+    @DeleteMapping(Endpoints.SKYXPLORE_INTERNAL_USER_LEFT_LOBBY)
     void userLeftLobby(@PathVariable("userId") UUID userId);
 
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_MEMBERS)

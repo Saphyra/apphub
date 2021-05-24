@@ -128,7 +128,7 @@ public class TestBase {
     private static UserRoleResponse[] getCandidates(Language language, UUID accessTokenId) {
         Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(new OneParamRequest<>("@" + getEmailDomain() + ".com"))
-            .post(UrlFactory.create(Endpoints.GET_USER_ROLES));
+            .post(UrlFactory.create(Endpoints.USER_DATA_GET_USER_ROLES));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -147,7 +147,7 @@ public class TestBase {
 
             Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
                 .body(new OneParamRequest<>(password))
-                .delete(UrlFactory.create(Endpoints.DELETE_ACCOUNT));
+                .delete(UrlFactory.create(Endpoints.ACCOUNT_DELETE_ACCOUNT));
 
             assertThat(response.getStatusCode()).isEqualTo(200);
             log.debug("User deleted: {}", email);

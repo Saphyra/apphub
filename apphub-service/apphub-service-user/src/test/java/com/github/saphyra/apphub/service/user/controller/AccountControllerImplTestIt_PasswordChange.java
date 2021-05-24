@@ -88,7 +88,7 @@ public class AccountControllerImplTestIt_PasswordChange {
     public void nullNewPassword() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST.toBuilder().newPassword(null).build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_PASSWORD));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_PASSWORD));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -103,7 +103,7 @@ public class AccountControllerImplTestIt_PasswordChange {
     public void passwordTooShort() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST.toBuilder().newPassword("asasa").build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_PASSWORD));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_PASSWORD));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -117,7 +117,7 @@ public class AccountControllerImplTestIt_PasswordChange {
     public void passwordTooLong() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST.toBuilder().newPassword(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())).build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_PASSWORD));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_PASSWORD));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -131,7 +131,7 @@ public class AccountControllerImplTestIt_PasswordChange {
     public void nullPassword() {
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST.toBuilder().password(null).build())
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_PASSWORD));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_PASSWORD));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -155,7 +155,7 @@ public class AccountControllerImplTestIt_PasswordChange {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST)
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_PASSWORD));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_PASSWORD));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -178,7 +178,7 @@ public class AccountControllerImplTestIt_PasswordChange {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(REQUEST)
-            .post(UrlFactory.create(serverPort, Endpoints.CHANGE_PASSWORD));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_PASSWORD));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

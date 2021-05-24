@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 public interface SkyXploreGameController {
-    @GetMapping(Endpoints.INTERNAL_SKYXPLORE_IS_USER_IN_GAME)
+    @GetMapping(Endpoints.SKYXPLORE_INTERNAL_IS_USER_IN_GAME)
     boolean isUserInGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

@@ -15,9 +15,9 @@ import java.util.UUID;
 
 @FeignClient("user-authentication")
 public interface UserAuthenticationApiClient {
-    @RequestMapping(method = RequestMethod.GET, value = Endpoints.INTERNAL_GET_ACCESS_TOKEN_BY_ID)
+    @RequestMapping(method = RequestMethod.GET, value = Endpoints.USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID)
     InternalAccessTokenResponse getAccessTokenById(@PathVariable("accessTokenId") UUID accessTokenId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
-    @GetMapping(Endpoints.INTERNAL_GET_LAST_VISITED_PAGE)
+    @GetMapping(Endpoints.USER_DATAINTERNAL_GET_LAST_VISITED_PAGE)
     LastVisitedPageResponse getLastVisitedPage(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 }

@@ -11,6 +11,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface MessageSenderController {
-    @PostMapping(Endpoints.SEND_MESSAGE)
+    @PostMapping(Endpoints.WEB_SOCKET_SEND_MESSAGE)
     List<UUID> sendMessage(@PathVariable("group") MessageGroup group, @RequestBody WebSocketMessage message);
 }

@@ -13,9 +13,9 @@ import java.util.UUID;
 
 @FeignClient(name = "user-data")
 public interface UserDataApiClient {
-    @RequestMapping(method = RequestMethod.GET, value = Endpoints.INTERNAL_GET_USER_LANGUAGE)
+    @RequestMapping(method = RequestMethod.GET, value = Endpoints.USER_DATA_INTERNAL_GET_USER_LANGUAGE)
     String getLanguage(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
-    @GetMapping(Endpoints.INTERNAL_USER_GET_USERNAME)
+    @GetMapping(Endpoints.USER_DATAINTERNAL_USER_GET_USERNAME)
     String getUsernameByUserId(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 }

@@ -26,7 +26,7 @@ public class EventProcessorRegistryImpl implements EventProcessorRegistry {
             RegisterProcessorRequest.builder()
                 .serviceName(serviceName)
                 .eventName(EmptyEvent.SKYXPLORE_LOBBY_CLEANUP_EVENT_NAME)
-                .url(Endpoints.SKYXPLORE_LOBBY_CLEANUP_EVENT)
+                .url(Endpoints.EVENT_SKYXPLORE_LOBBY_CLEANUP)
                 .build()
         );
     }

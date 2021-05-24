@@ -14,12 +14,12 @@ import java.util.UUID;
 
 @FeignClient("skyxplore-game-ws")
 public interface SkyXploreGameWebSocketEventApiClient {
-    @PostMapping(Endpoints.INTERNAL_SKYXPLORE_GAME_PROCESS_WEB_SOCKET_EVENTS)
+    @PostMapping(Endpoints.SKYXPLORE_INTERNAL_GAME_PROCESS_WEB_SOCKET_EVENTS)
     void processWebSocketEvent(@PathVariable("userId") UUID from, @RequestBody WebSocketEvent event, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
-    @PostMapping(Endpoints.INTERNAL_SKYXPLORE_USER_JOINED_TO_GAME)
+    @PostMapping(Endpoints.SKYXPLORE_INTERNAL_USER_JOINED_TO_GAME)
     void userJoinedToGame(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
-    @DeleteMapping(Endpoints.INTERNAL_SKYXPLORE_USER_LEFT_GAME)
+    @DeleteMapping(Endpoints.SKYXPLORE_INTERNAL_USER_LEFT_GAME)
     void userLeftGame(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 }

@@ -42,7 +42,7 @@ public class ModulesActions {
 
     public static Response getModulesResponse(Language locale, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
-            .get(UrlFactory.create(Endpoints.GET_MODULES_OF_USER));
+            .get(UrlFactory.create(Endpoints.MODULES_GET_MODULES_OF_USER));
     }
 
     public static Map<String, List<ModulesResponse>> setAsFavorite(Language locale, UUID accessTokenId, String module, Boolean favorite) {
@@ -61,6 +61,6 @@ public class ModulesActions {
 
         return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
             .body(new OneParamRequest<>(favorite))
-            .post(UrlFactory.create(Endpoints.SET_FAVORITE, pathVariables));
+            .post(UrlFactory.create(Endpoints.MODULES_SET_FAVORITE, pathVariables));
     }
 }
