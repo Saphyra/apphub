@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: skyxplore-lobby
+
+lobby:
+  expirationMinutes: 10
+  invitation:
+    floodingLimitSeconds: 10
+
+role:
+  settings:
+    - pattern: /api/skyxplore/**
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - SKYXPLORE
+    - pattern: /internal/skyxplore/**
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - SKYXPLORE

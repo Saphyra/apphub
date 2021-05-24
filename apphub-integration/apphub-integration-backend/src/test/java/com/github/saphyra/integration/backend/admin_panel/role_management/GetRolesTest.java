@@ -1,19 +1,18 @@
 package com.github.saphyra.integration.backend.admin_panel.role_management;
 
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.backend.actions.RoleManagementPageActions;
-import com.github.saphyra.apphub.integration.common.model.UserRoleResponse;
-import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
 import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
+import com.github.saphyra.apphub.integration.common.model.UserRoleResponse;
 import io.restassured.response.Response;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -21,12 +20,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GetRolesTest extends TestBase {
-    @DataProvider(name = "localeDataProvider", parallel = true)
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
-
+public class GetRolesTest extends BackEndTest {
     @Test(dataProvider = "localeDataProvider")
     public void getRoles_nullQueryString(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -38,7 +32,7 @@ public class GetRolesTest extends TestBase {
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.ERROR_CODE_INVALID_PARAM));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getParams().get("searchText")).isEqualTo("must not be null");
     }
@@ -54,7 +48,7 @@ public class GetRolesTest extends TestBase {
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.ERROR_CODE_INVALID_PARAM));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getParams().get("searchText")).isEqualTo("too short");
     }
@@ -73,6 +67,6 @@ public class GetRolesTest extends TestBase {
         UserRoleResponse userRoleResponse = response.get(0);
         assertThat(userRoleResponse.getEmail()).isEqualTo(userData.getEmail());
         assertThat(userRoleResponse.getUsername()).isEqualTo(userData.getUsername());
-        assertThat(userRoleResponse.getRoles()).containsExactlyInAnyOrder(Constants.ROLE_ADMIN, Constants.ROLE_NOTEBOOK);
+        assertThat(userRoleResponse.getRoles()).containsExactlyInAnyOrder(Constants.ROLE_ADMIN, Constants.ROLE_NOTEBOOK, Constants.ROLE_SKYXPLORE);
     }
 }

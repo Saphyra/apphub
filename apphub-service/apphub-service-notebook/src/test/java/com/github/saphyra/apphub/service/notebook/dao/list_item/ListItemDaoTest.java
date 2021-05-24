@@ -66,7 +66,7 @@ public class ListItemDaoTest {
     @Test
     public void findById() {
         given(repository.findById(LIST_ITEM_ID_STRING)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(entity)).willReturn(domain);
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
 
         Optional<ListItem> result = underTest.findById(LIST_ITEM_ID);
 

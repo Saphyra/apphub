@@ -1,0 +1,57 @@
+:root{
+    --storage-settings-left-bar-min-width: 25rem;
+    --storage-settings-left-bar-width: 25%;
+}
+
+#storage-settings input[type=number]{
+    width: 5rem;
+}
+
+#storage-settings-left-bar{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--storage-settings-left-bar-width);
+    min-width: var(--storage-settings-left-bar-min-width);
+    border-right: 3px ridge white;
+    text-align: center;
+    font-size: 1.5rem;
+    padding-top: 1rem;
+}
+
+    #storage-settings-left-bar label{
+        display: block;
+    }
+
+#storage-settings-right-bar{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: calc(100% - var(--storage-settings-left-bar-width));
+    max-width: calc(100% - var(--storage-settings-left-bar-min-width));
+    overflow: auto;
+}
+
+    #no-storage-settings{
+        text-align: center;
+        font-size: 2rem;
+        margin: 1rem;
+    }
+
+    .storage-setting{
+        margin: 0.5rem;
+        border: 2px ridge white;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 1.5rem;
+    }
+
+        .storage-setting h3{
+            border-bottom: 2px ridge white;
+        }
+
+        .storage-setting label{
+            white-space: nowrap;
+        }

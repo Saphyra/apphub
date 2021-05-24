@@ -53,6 +53,9 @@
         <module>apphub-lib-security</module>
         <module>apphub-lib-request_validation</module>
         <module>apphub-lib-exception</module>
-      <module>apphub-lib-encryption</module>
-  </modules>
+        <module>apphub-lib-encryption</module>
+        <module>apphub-lib-geometry</module>
+        <module>apphub-lib-skyxplore</module>
+        <module>apphub-lib-web_utils</module>
+    </modules>
 </project>

@@ -3,7 +3,9 @@ package com.github.saphyra.apphub.integration.frontend.service.index;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
-import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
+import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.frontend.model.login.LoginParameters;
 import com.github.saphyra.apphub.integration.frontend.model.registration.EmailValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.registration.PasswordValidationResult;
@@ -24,7 +26,11 @@ import static org.awaitility.Awaitility.await;
 @Slf4j
 public class IndexPageActions {
     public static void fillRegistrationForm(WebDriver driver, RegistrationParameters parameters) {
-        assertThat(driver.getCurrentUrl()).endsWith(Endpoints.WEB_ROOT);
+        if (!driver.getCurrentUrl().endsWith(Endpoints.INDEX_PAGE)) {
+            driver.navigate().to(UrlFactory.create(Endpoints.INDEX_PAGE));
+        }
+
+        SleepUtil.sleep(1000);
 
         log.info("Filling registrationForm with {}", parameters);
         clearAndFill(IndexPage.emailInput(driver), parameters.getEmail());
@@ -34,7 +40,7 @@ public class IndexPageActions {
     }
 
     public static void verifyRegistrationForm(WebDriver driver, RegistrationValidationResult validationResult) {
-        assertThat(driver.getCurrentUrl()).endsWith(Endpoints.WEB_ROOT);
+        assertThat(driver.getCurrentUrl()).endsWith(Endpoints.INDEX_PAGE);
 
         verifyInvalidFieldState(
             IndexPage.emailValid(driver),
@@ -72,11 +78,11 @@ public class IndexPageActions {
             .pollInterval(1, TimeUnit.SECONDS);
         AwaitilityWrapper.wrap(conditionFactory)
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
-            .assertTrue("Registration failed.");
+            .assertTrue("Registration failed. Notifications: " + NotificationUtil.getNotificationTexts(driver));
     }
 
     public static void submitRegistration(WebDriver driver) {
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.WEB_ROOT));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE));
         WebElement submitButton = IndexPage.registrationSubmitButton(driver);
 
         AwaitilityWrapper.createDefault()

@@ -6,6 +6,11 @@ echo "Deploying to namespace $NAMESPACE_NAME with scriptDirName $SCRIPT_DIR_NAME
 echo ""
 kubectl create namespace "$NAMESPACE_NAME"
 echo ""
+
+#kubectl -n "$NAMESPACE_NAME" scale deployments --replicas=0 --all
+#sleep 5
+#./infra/deployment/script/wait_for_pods_ready.sh "$NAMESPACE_NAME" 30 1
+
 ./infra/deployment/script/setup_namespace.sh "$NAMESPACE_NAME"
 
 SCRIPT_DIRECTORY_NAME="./infra/deployment/service/$SCRIPT_DIR_NAME/*"
@@ -19,4 +24,13 @@ for file in $SCRIPT_DIRECTORY_NAME; do
   kubectl apply -n "$NAMESPACE_NAME" -f "$file"
 done
 
+echo ""
+echo "Waiting for pods to start..."
 sleep 20
+
+./infra/deployment/script/wait_for_pods_ready.sh "$NAMESPACE_NAME" 60 2
+STARTUP_RESULT=$?
+if [[ "$STARTUP_RESULT" -ne 0 ]]; then
+  echo "Services failed to start."
+  exit 1
+fi

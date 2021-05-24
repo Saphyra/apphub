@@ -1,0 +1,46 @@
+{
+  "id": "sawmill",
+  "buildingType": "production",
+  "gives": {
+    "wood": {
+      "placed": [
+        "forest"
+      ],
+      "amount": 1,
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "energy": 1
+        }
+      },
+      "requiredSkill": "ENGINEERING"
+    },
+    "plank": {
+      "placed": [
+        "forest",
+        "concrete"
+      ],
+      "amount": 1,
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "energy": 1,
+          "wood": 1
+        }
+      },
+      "requiredSkill": "ENGINEERING"
+    }
+  },
+  "workers": 1,
+  "defaultBuilding": true,
+  "constructionRequirements": {
+    "1": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1,
+        "stone": 1,
+        "wood": 1
+      }
+    }
+  }
+}

@@ -8,3 +8,10 @@ interval:
   user:
     authentication:
       accessTokenCleanup: 60000
+  skyxplore:
+    lobby:
+      lobbyCleanup: 300000
+  platform:
+    messageSender:
+      pingRequest: 30000
+      connectionCleanup: 600000

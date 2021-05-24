@@ -43,7 +43,7 @@ public class ChecklistItemFactoryTest {
 
     @Test
     public void create() {
-        given(idGenerator.randomUUID()).willReturn(CHECKLIST_ITEM_ID);
+        given(idGenerator.randomUuid()).willReturn(CHECKLIST_ITEM_ID);
         given(listItem.getUserId()).willReturn(USER_ID);
         given(listItem.getListItemId()).willReturn(LIST_ITEM_ID);
         given(contentFactory.create(CHECKLIST_ITEM_ID, USER_ID, CONTENT)).willReturn(content);

@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: message-sender
+
+webSocketSession:
+  expirationSeconds: 60
+
+locale-mandatory-filter:
+  whiteListedEndpoints:
+    - path: /api/message-sender/skyxplore/main-menu
+      method: GET
+    - path: /api/message-sender/skyxplore/lobby
+      method: GET
+    - path: /api/message-sender/skyxplore/game
+      method: GET

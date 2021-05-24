@@ -1,0 +1,43 @@
+{
+  "id": "camp",
+  "buildingType": "production",
+  "gives": {
+    "raw_food": {
+      "placed": [
+        "forest",
+        "mountain"
+      ],
+      "amount": 1,
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+        }
+      },
+      "requiredSkill": "FARMING"
+    },
+    "leather": {
+      "placed": [
+        "forest",
+        "mountain"
+      ],
+      "amount": 1,
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+        }
+      },
+      "requiredSkill": "FARMING"
+    }
+  },
+  "workers": 1,
+  "defaultBuilding": true,
+  "constructionRequirements": {
+    "1": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1,
+        "wood": 1
+      }
+    }
+  }
+}

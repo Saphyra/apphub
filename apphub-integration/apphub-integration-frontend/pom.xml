@@ -38,16 +38,17 @@
         </dependency>
 
         <dependency>
-            <groupId>org.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
-            <version>${versions.awaitility}</version>
-        </dependency>
-
-        <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>4.0.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -64,11 +65,7 @@
                         </property>
                         <property>
                             <name>threadcount</name>
-                            <value>20</value>
-                        </property>
-                        <property>
-                            <name>dataproviderthreadcount</name>
-                            <value>5</value>
+                            <value>10</value>
                         </property>
                     </properties>
                 </configuration>

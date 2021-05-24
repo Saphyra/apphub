@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -144,5 +145,23 @@ public class AccessTokenRepositoryTest {
         underTest.deleteByUserId(USER_ID_1);
 
         assertThat(underTest.findAll()).containsExactly(entity3);
+    }
+
+    @Test
+    public void getByUserId() {
+        AccessTokenEntity entity1 = AccessTokenEntity.builder()
+            .accessTokenId(ACCESS_TOKEN_ID_1)
+            .userId(USER_ID_1)
+            .build();
+
+        AccessTokenEntity entity2 = AccessTokenEntity.builder()
+            .accessTokenId(ACCESS_TOKEN_ID_2)
+            .userId(USER_ID_2)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2));
+
+        List<AccessTokenEntity> result = underTest.getByUserId(USER_ID_1);
+
+        assertThat(result).containsExactly(entity1);
     }
 }

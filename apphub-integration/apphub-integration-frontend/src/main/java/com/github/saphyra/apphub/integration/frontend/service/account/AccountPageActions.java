@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.integration.frontend.service.account;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
-import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChEmailPasswordValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChangeEmailParameters;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_email.ChangeEmailValidationResult;

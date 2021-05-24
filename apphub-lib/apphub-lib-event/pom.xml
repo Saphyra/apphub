@@ -27,7 +27,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
             <version>${versions.spring-boot}</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 

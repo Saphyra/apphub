@@ -1,0 +1,76 @@
+<HTML>
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/skyxplore_common.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/main_menu.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT src="/res/skyxplore/js/main_menu/page_controller.js"></SCRIPT>
+</HEAD>
+<BODY>
+<DIV id="main-menu" class="main-page">
+    <HEADER>
+        <H1 id="main-title"></H1>
+    </HEADER>
+
+    <MAIN id="main-menu-main" class="footerless">
+        <DIV id="main-menu-button-wrapper">
+            <DIV id="new-game-button" class="button" onclick="createLobbyController.newGame()"></DIV>
+            <DIV id="load-game-button" class="button"></DIV>
+            <DIV id="edit-character-button" class="button" onclick="window.location.href='/web/skyxplore/character'"></DIV>
+            <DIV id="back-button" class="button" onclick="window.location.href='/web/modules'"></DIV>
+        </DIV>
+
+        <DIV id="friends">
+            <H2 id="friends-title"></H2>
+            <DIV id="add-friend-container">
+                <INPUT type="text" id="new-friend-name">
+                <DIV id="new-friend-search-result-wrapper">
+                    <DIV id="no-character-found"></DIV>
+                    <DIV id="query-string-too-short"></DIV>
+                    <DIV id="new-friend-search-result"></DIV>
+                </DIV>
+            </DIV>
+            <DIV id="friends-container">
+                <DIV id="incoming-friend-request-list-title" class="friend-list-title"></DIV>
+                <DIV id="incoming-friend-request-list"></DIV>
+
+                <DIV id="friend-list-title" class="friend-list-title"></DIV>
+                <DIV id="friend-list"></DIV>
+
+                <DIV id="outgoing-friend-request-list-title" class="friend-list-title"></DIV>
+                <DIV id="outgoing-friend-request-list"></DIV>
+            </DIV>
+        </DIV>
+
+        <DIV id="invitations"></DIV>
+    </MAIN>
+</DIV>
+
+<DIV id="lobby-creation" class="main-page">
+    <HEADER>
+        <H1 id="lobby-creation-title"></H1>
+        <BUTTON class="dialog-close-button" onclick="pageController.showMainMenu()">X</BUTTON>
+    </HEADER>
+
+    <MAIN class="footerless">
+        <DIV id="lobby-creation-main-container">
+            <H2 id="lobby-creation-tab-title"></H2>
+            <DIV id="lobby-creation-input-container">
+                <LABEL>
+                    <SPAN id="lobby-creation-span"></SPAN>:
+                    <INPUT type="text" id="lobby-name" class="input-field">
+                    <DIV id="invalid-lobby-name" class="invalid-input">X</DIV>
+                </LABEL>
+            </DIV>
+
+            <BUTTON id="create-lobby-button" onclick="createLobbyController.createLobby()" disabled></BUTTON>
+        </DIV>
+    </MAIN>
+</DIV>
+</BODY>
+</HTML>

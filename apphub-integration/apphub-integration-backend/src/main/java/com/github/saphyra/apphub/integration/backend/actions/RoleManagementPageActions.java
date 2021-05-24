@@ -29,7 +29,7 @@ public class RoleManagementPageActions {
     public static Response getRolesResponse(Language language, UUID accessTokenId, String queryString) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(new OneParamRequest<>(queryString))
-            .post(UrlFactory.create(Endpoints.GET_ROLES));
+            .post(UrlFactory.create(Endpoints.GET_USER_ROLES));
     }
 
     public static void addRole(Language language, UUID accessTokenId, RoleRequest roleRequest) {

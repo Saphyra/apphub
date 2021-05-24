@@ -81,7 +81,7 @@ public class UserDaoTest {
     public void findById() {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(repository.findById(USER_ID_STRING)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(entity)).willReturn(user);
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(user));
 
         User result = underTest.findById(USER_ID);
 
@@ -91,6 +91,7 @@ public class UserDaoTest {
     @Test
     public void deleteById() {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(repository.existsById(USER_ID_STRING)).willReturn(true);
 
         underTest.deleteById(USER_ID);
 

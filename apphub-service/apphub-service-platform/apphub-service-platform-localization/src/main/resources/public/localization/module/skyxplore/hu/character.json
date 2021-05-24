@@ -1,0 +1,42 @@
+{
+  "title": "SkyXplore - Karakter",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Karakter"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Vissza"
+      }
+    ],
+    "character-name-span": [
+      {
+        "key": "innerHTML",
+        "message": "Karakternév"
+      }
+    ],
+    "character-name": [
+      {
+        "key": "placeholder",
+        "message": "Karakternév"
+      }
+    ],
+    "save-character": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
+    ]
+  },
+  "additionalContent": {
+    "create-character-title": "Új karakter",
+    "edit-character-title": "Karakter szerkesztése",
+    "character-name-too-short": "Karakternév túl rövid (minimum 3 karakter).",
+    "character-name-too-long": "Karakternév túl hosszú (maximum 30 karakter).",
+    "character-saved": "Karakter elmentve."
+  }
+}

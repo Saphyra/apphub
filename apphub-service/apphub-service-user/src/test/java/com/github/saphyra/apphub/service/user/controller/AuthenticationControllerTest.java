@@ -3,12 +3,14 @@ package com.github.saphyra.apphub.service.user.controller;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.user.model.request.LoginRequest;
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
+import com.github.saphyra.apphub.api.user.model.response.LastVisitedPageResponse;
 import com.github.saphyra.apphub.api.user.model.response.LoginResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.event.DeleteExpiredAccessTokensEvent;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
+import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.apphub.service.user.authentication.AuthenticationProperties;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
+import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenCleanupService;
 import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenUpdateService;
 import com.github.saphyra.apphub.service.user.authentication.service.LoginService;
@@ -24,7 +26,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,6 +43,8 @@ public class AuthenticationControllerTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String ROLE_VALUE = "role";
     private static final Role ROLE = Role.builder().roleId(UUID.randomUUID()).userId(USER_ID).role(ROLE_VALUE).build();
+    private static final LocalDateTime LAST_ACCESS = LocalDateTime.now();
+    private static final String LAST_VISITED_PAGE = "last-visited-page";
 
     @Mock
     private AccessTokenCleanupService accessTokenCleanupService;
@@ -61,6 +67,9 @@ public class AuthenticationControllerTest {
     @Mock
     private ValidAccessTokenQueryService validAccessTokenQueryService;
 
+    @Mock
+    private AccessTokenDao accessTokenDao;
+
     @InjectMocks
     private AuthenticationController underTest;
 
@@ -68,14 +77,14 @@ public class AuthenticationControllerTest {
     private LoginRequest loginRequest;
 
     @Mock
-    private AccessToken accessToken;
+    private AccessToken accessToken1;
 
     @Mock
-    private SendEventRequest<DeleteExpiredAccessTokensEvent> sendEventRequest;
+    private AccessToken accessToken2;
 
     @Test
     public void deleteExpiredAccessTokens() {
-        underTest.deleteExpiredAccessTokens(sendEventRequest);
+        underTest.deleteExpiredAccessTokens();
 
         verify(accessTokenCleanupService).deleteExpiredAccessTokens();
     }
@@ -91,9 +100,9 @@ public class AuthenticationControllerTest {
     @Test
     public void login_persistent() {
         given(authenticationProperties.getAccessTokenCookieExpirationDays()).willReturn(ACCESS_TOKEN_COOKIE_EXPIRATION_DAYS);
-        given(loginService.login(loginRequest)).willReturn(accessToken);
-        given(accessToken.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
-        given(accessToken.isPersistent()).willReturn(true);
+        given(loginService.login(loginRequest)).willReturn(accessToken1);
+        given(accessToken1.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
+        given(accessToken1.isPersistent()).willReturn(true);
 
         LoginResponse result = underTest.login(loginRequest);
 
@@ -103,9 +112,9 @@ public class AuthenticationControllerTest {
 
     @Test
     public void login_notPersistent() {
-        given(loginService.login(loginRequest)).willReturn(accessToken);
-        given(accessToken.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
-        given(accessToken.isPersistent()).willReturn(false);
+        given(loginService.login(loginRequest)).willReturn(accessToken1);
+        given(accessToken1.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
+        given(accessToken1.isPersistent()).willReturn(false);
 
         LoginResponse result = underTest.login(loginRequest);
 
@@ -127,15 +136,15 @@ public class AuthenticationControllerTest {
 
     @Test
     public void getAccessTokenById() {
-        given(validAccessTokenQueryService.findByAccessTokenId(ACCESS_TOKEN_ID)).willReturn(Optional.of(accessToken));
-        given(accessToken.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
-        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(validAccessTokenQueryService.findByAccessTokenId(ACCESS_TOKEN_ID)).willReturn(Optional.of(accessToken1));
+        given(accessToken1.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
+        given(accessToken1.getUserId()).willReturn(USER_ID);
         given(roleDao.getByUserId(USER_ID)).willReturn(Arrays.asList(ROLE));
 
         ResponseEntity<InternalAccessTokenResponse> result = underTest.getAccessTokenById(ACCESS_TOKEN_ID);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        //noinspection ConstantConditions
+        ////noinspection ConstantConditions
         assertThat(result.getBody().getAccessTokenId()).isEqualTo(ACCESS_TOKEN_ID);
         assertThat(result.getBody().getUserId()).isEqualTo(USER_ID);
         assertThat(result.getBody().getRoles()).isEqualTo(Arrays.asList(ROLE_VALUE));
@@ -148,5 +157,25 @@ public class AuthenticationControllerTest {
         ResponseEntity<InternalAccessTokenResponse> result = underTest.getAccessTokenById(ACCESS_TOKEN_ID);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void getLastVisitedPage_notFound() {
+        given(accessTokenDao.getByUserId(USER_ID)).willReturn(Collections.emptyList());
+
+        underTest.getLastVisitedPage(USER_ID);
+    }
+
+    @Test
+    public void getLastVisitedPage() {
+        given(accessTokenDao.getByUserId(USER_ID)).willReturn(Arrays.asList(accessToken1, accessToken2));
+        given(accessToken1.getLastAccess()).willReturn(LAST_ACCESS);
+        given(accessToken2.getLastAccess()).willReturn(LAST_ACCESS.plusSeconds(1));
+        given(accessToken2.getLastVisitedPage()).willReturn(LAST_VISITED_PAGE);
+
+        LastVisitedPageResponse result = underTest.getLastVisitedPage(USER_ID);
+
+        assertThat(result.getLastAccess()).isEqualTo(LAST_ACCESS.plusSeconds(1));
+        assertThat(result.getPageUrl()).isEqualTo(LAST_VISITED_PAGE);
     }
 }

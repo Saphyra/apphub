@@ -1,0 +1,617 @@
+
+[INFO] ----------------< com.github.saphyra:apphub-lib-config >----------------
+[INFO] Building apphub-lib-config 0.0.1-SNAPSHOT                         [6/79]
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:3.1.2:tree (default-cli) @ apphub-lib-config ---
+[INFO] com.github.saphyra:apphub-lib-config:jar:0.0.1-SNAPSHOT
+[INFO] +- org.thymeleaf:thymeleaf-spring5:jar:3.0.11.RELEASE:compile
+[INFO] |  +- org.thymeleaf:thymeleaf:jar:3.0.11.RELEASE:compile
+[INFO] |  |  +- org.attoparser:attoparser:jar:2.0.5.RELEASE:compile
+[INFO] |  |  \- org.unbescape:unbescape:jar:1.1.6.RELEASE:compile
+[INFO] |  \- org.slf4j:slf4j-api:jar:1.7.30:compile
+[INFO] +- org.springframework.boot:spring-boot-autoconfigure:jar:2.2.6.RELEASE:compile
+[INFO] |  \- org.springframework.boot:spring-boot:jar:2.2.6.RELEASE:compile
+[INFO] |     \- org.springframework:spring-core:jar:5.2.5.RELEASE:compile
+[INFO] |        \- org.springframework:spring-jcl:jar:5.2.5.RELEASE:compile
+[INFO] +- com.github.saphyra:apphub-lib-common_domain:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- org.springframework:spring-context:jar:5.2.5.RELEASE:compile
+[INFO] |  |  +- org.springframework:spring-aop:jar:5.2.5.RELEASE:compile
+[INFO] |  |  +- org.springframework:spring-beans:jar:5.2.5.RELEASE:compile
+[INFO] |  |  \- org.springframework:spring-expression:jar:5.2.5.RELEASE:compile
+[INFO] |  \- org.springframework:spring-web:jar:5.2.5.RELEASE:compile
+[INFO] +- com.github.saphyra:apphub-lib-common_util:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- com.github.saphyra:apphub-lib-exception:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- org.springframework.data:spring-data-commons:jar:2.2.6.RELEASE:compile
+[INFO] |  \- com.fasterxml.jackson.core:jackson-databind:jar:2.10.3:compile
+[INFO] |     +- com.fasterxml.jackson.core:jackson-annotations:jar:2.10.3:compile
+[INFO] |     \- com.fasterxml.jackson.core:jackson-core:jar:2.10.3:compile
+[INFO] +- org.liquibase:liquibase-core:jar:3.8.6:compile
+[INFO] |  \- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[INFO] |     \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[INFO] +- org.springframework.cloud:spring-cloud-starter-openfeign:jar:2.2.2.RELEASE:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-starter:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  +- org.springframework.boot:spring-boot-starter-logging:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  |  +- org.apache.logging.log4j:log4j-to-slf4j:jar:2.12.1:compile
+[INFO] |  |  |  |  |  \- org.apache.logging.log4j:log4j-api:jar:2.12.1:compile
+[INFO] |  |  |  |  \- org.slf4j:jul-to-slf4j:jar:1.7.30:compile
+[INFO] |  |  |  +- jakarta.annotation:jakarta.annotation-api:jar:1.3.5:compile
+[INFO] |  |  |  \- org.yaml:snakeyaml:jar:1.25:runtime
+[INFO] |  |  +- org.springframework.cloud:spring-cloud-context:jar:2.2.2.RELEASE:compile
+[INFO] |  |  \- org.springframework.security:spring-security-rsa:jar:1.0.9.RELEASE:compile
+[INFO] |  |     \- org.bouncycastle:bcpkix-jdk15on:jar:1.64:compile
+[INFO] |  |        \- org.bouncycastle:bcprov-jdk15on:jar:1.64:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-openfeign-core:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.cloud:spring-cloud-netflix-ribbon:jar:2.2.2.RELEASE:compile
+[INFO] |  |  |  \- org.springframework.cloud:spring-cloud-netflix-archaius:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter-aop:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  \- org.aspectj:aspectjweaver:jar:1.9.5:compile
+[INFO] |  |  \- io.github.openfeign.form:feign-form-spring:jar:3.8.0:compile
+[INFO] |  |     +- io.github.openfeign.form:feign-form:jar:3.8.0:compile
+[INFO] |  |     \- commons-fileupload:commons-fileupload:jar:1.4:compile
+[INFO] |  |        \- commons-io:commons-io:jar:2.2:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-commons:jar:2.2.2.RELEASE:compile
+[INFO] |  |  \- org.springframework.security:spring-security-crypto:jar:5.2.2.RELEASE:compile
+[INFO] |  +- io.github.openfeign:feign-core:jar:10.7.4:compile
+[INFO] |  +- io.github.openfeign:feign-slf4j:jar:10.7.4:compile
+[INFO] |  \- io.github.openfeign:feign-hystrix:jar:10.7.4:compile
+[INFO] |     +- com.netflix.archaius:archaius-core:jar:0.7.6:compile
+[INFO] |     |  +- com.google.code.findbugs:jsr305:jar:3.0.1:runtime
+[INFO] |     |  +- commons-configuration:commons-configuration:jar:1.8:runtime
+[INFO] |     |  |  +- commons-lang:commons-lang:jar:2.6:runtime
+[INFO] |     |  |  \- commons-logging:commons-logging:jar:1.1.1:runtime
+[INFO] |     |  \- com.google.guava:guava:jar:16.0:runtime
+[INFO] |     \- com.netflix.hystrix:hystrix-core:jar:1.5.18:compile
+[INFO] |        +- io.reactivex:rxjava:jar:1.3.8:compile
+[INFO] |        \- org.hdrhistogram:HdrHistogram:jar:2.1.9:compile
+[INFO] +- junit:junit:jar:4.13:test
+[INFO] |  \- org.hamcrest:hamcrest-core:jar:2.1:test
+[INFO] |     \- org.hamcrest:hamcrest:jar:2.1:test
+[INFO] +- org.mockito:mockito-core:jar:3.4.6:test
+[INFO] |  +- net.bytebuddy:byte-buddy:jar:1.10.8:test
+[INFO] |  +- net.bytebuddy:byte-buddy-agent:jar:1.10.8:test
+[INFO] |  \- org.objenesis:objenesis:jar:2.6:test
+[INFO] +- org.assertj:assertj-core:jar:3.15.0:test
+[INFO] +- org.projectlombok:lombok:jar:1.18.12:compile
+[INFO] +- org.projectlombok:lombok-maven:pom:1.18.12.0:compile
+[INFO] +- ch.qos.logback:logback-classic:jar:1.2.3:compile
+[INFO] |  \- ch.qos.logback:logback-core:jar:1.2.3:compile
+[INFO] +- ch.qos.logback.contrib:logback-json-classic:jar:0.1.5:compile
+[INFO] |  \- ch.qos.logback.contrib:logback-json-core:jar:0.1.5:compile
+[INFO] +- ch.qos.logback.contrib:logback-jackson:jar:0.1.5:compile
+[INFO] \- org.apache.commons:commons-lang3:jar:3.9:compile
+[INFO] 
+[INFO] -------------------< com.github.saphyra:apphub-api >--------------------
+[INFO] Building apphub-api 0.0.1-SNAPSHOT                                [7/79]
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:3.1.2:tree (default-cli) @ apphub-api ---
+[INFO] com.github.saphyra:apphub-api:pom:0.0.1-SNAPSHOT
+[INFO] +- org.springframework.cloud:spring-cloud-starter-openfeign:jar:2.2.2.RELEASE:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-starter:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  +- org.springframework.boot:spring-boot-starter-logging:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  |  +- org.apache.logging.log4j:log4j-to-slf4j:jar:2.12.1:compile
+[INFO] |  |  |  |  |  \- org.apache.logging.log4j:log4j-api:jar:2.12.1:compile
+[INFO] |  |  |  |  \- org.slf4j:jul-to-slf4j:jar:1.7.30:compile
+[INFO] |  |  |  +- jakarta.annotation:jakarta.annotation-api:jar:1.3.5:compile
+[INFO] |  |  |  \- org.yaml:snakeyaml:jar:1.25:runtime
+[INFO] |  |  +- org.springframework.cloud:spring-cloud-context:jar:2.2.2.RELEASE:compile
+[INFO] |  |  \- org.springframework.security:spring-security-rsa:jar:1.0.9.RELEASE:compile
+[INFO] |  |     \- org.bouncycastle:bcpkix-jdk15on:jar:1.64:compile
+[INFO] |  |        \- org.bouncycastle:bcprov-jdk15on:jar:1.64:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-openfeign-core:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.cloud:spring-cloud-netflix-ribbon:jar:2.2.2.RELEASE:compile
+[INFO] |  |  |  \- org.springframework.cloud:spring-cloud-netflix-archaius:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter-aop:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  \- org.aspectj:aspectjweaver:jar:1.9.5:compile
+[INFO] |  |  \- io.github.openfeign.form:feign-form-spring:jar:3.8.0:compile
+[INFO] |  |     +- io.github.openfeign.form:feign-form:jar:3.8.0:compile
+[INFO] |  |     \- commons-fileupload:commons-fileupload:jar:1.4:compile
+[INFO] |  |        \- commons-io:commons-io:jar:2.2:compile
+[INFO] |  +- org.springframework:spring-web:jar:5.2.5.RELEASE:compile
+[INFO] |  |  +- org.springframework:spring-beans:jar:5.2.5.RELEASE:compile
+[INFO] |  |  \- org.springframework:spring-core:jar:5.2.5.RELEASE:compile
+[INFO] |  |     \- org.springframework:spring-jcl:jar:5.2.5.RELEASE:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-commons:jar:2.2.2.RELEASE:compile
+[INFO] |  |  \- org.springframework.security:spring-security-crypto:jar:5.2.2.RELEASE:compile
+[INFO] |  +- io.github.openfeign:feign-core:jar:10.7.4:compile
+[INFO] |  +- io.github.openfeign:feign-slf4j:jar:10.7.4:compile
+[INFO] |  \- io.github.openfeign:feign-hystrix:jar:10.7.4:compile
+[INFO] |     +- com.netflix.archaius:archaius-core:jar:0.7.6:compile
+[INFO] |     |  +- com.google.code.findbugs:jsr305:jar:3.0.1:runtime
+[INFO] |     |  +- commons-configuration:commons-configuration:jar:1.8:runtime
+[INFO] |     |  |  +- commons-lang:commons-lang:jar:2.6:runtime
+[INFO] |     |  |  \- commons-logging:commons-logging:jar:1.1.1:runtime
+[INFO] |     |  \- com.google.guava:guava:jar:16.0:runtime
+[INFO] |     \- com.netflix.hystrix:hystrix-core:jar:1.5.18:compile
+[INFO] |        +- io.reactivex:rxjava:jar:1.3.8:compile
+[INFO] |        \- org.hdrhistogram:HdrHistogram:jar:2.1.9:compile
+[INFO] +- com.github.saphyra:apphub-lib-common_util:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- com.github.saphyra:apphub-lib-exception:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- org.springframework.data:spring-data-commons:jar:2.2.6.RELEASE:compile
+[INFO] |  \- com.fasterxml.jackson.core:jackson-databind:jar:2.10.3:compile
+[INFO] |     +- com.fasterxml.jackson.core:jackson-annotations:jar:2.10.3:compile
+[INFO] |     \- com.fasterxml.jackson.core:jackson-core:jar:2.10.3:compile
+[INFO] +- com.github.saphyra:apphub-lib-common_domain:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  \- org.springframework:spring-context:jar:5.2.5.RELEASE:compile
+[INFO] |     +- org.springframework:spring-aop:jar:5.2.5.RELEASE:compile
+[INFO] |     \- org.springframework:spring-expression:jar:5.2.5.RELEASE:compile
+[INFO] +- com.github.saphyra:apphub-lib-config:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- org.thymeleaf:thymeleaf-spring5:jar:3.0.11.RELEASE:compile
+[INFO] |  |  \- org.thymeleaf:thymeleaf:jar:3.0.11.RELEASE:compile
+[INFO] |  |     +- org.attoparser:attoparser:jar:2.0.5.RELEASE:compile
+[INFO] |  |     \- org.unbescape:unbescape:jar:1.1.6.RELEASE:compile
+[INFO] |  +- org.springframework.boot:spring-boot-autoconfigure:jar:2.2.6.RELEASE:compile
+[INFO] |  |  \- org.springframework.boot:spring-boot:jar:2.2.6.RELEASE:compile
+[INFO] |  \- org.liquibase:liquibase-core:jar:3.8.8:compile
+[INFO] |     \- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[INFO] |        \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[INFO] +- org.projectlombok:lombok:jar:1.18.12:compile
+[INFO] +- org.projectlombok:lombok-maven:pom:1.18.12.0:compile
+[INFO] +- ch.qos.logback:logback-classic:jar:1.2.3:compile
+[INFO] |  +- ch.qos.logback:logback-core:jar:1.2.3:compile
+[INFO] |  \- org.slf4j:slf4j-api:jar:1.7.30:compile
+[INFO] +- ch.qos.logback.contrib:logback-json-classic:jar:0.1.5:compile
+[INFO] |  \- ch.qos.logback.contrib:logback-json-core:jar:0.1.5:compile
+[INFO] +- ch.qos.logback.contrib:logback-jackson:jar:0.1.5:compile
+[INFO] \- org.apache.commons:commons-lang3:jar:3.9:compile
+[INFO] 
+[INFO] ---------------< com.github.saphyra:apphub-api-notebook >---------------
+[INFO] Building apphub-api-notebook 0.0.1-SNAPSHOT                       [8/79]
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:3.1.2:tree (default-cli) @ apphub-api-notebook ---
+[INFO] com.github.saphyra:apphub-api-notebook:pom:0.0.1-SNAPSHOT
+[INFO] +- org.springframework.cloud:spring-cloud-starter-openfeign:jar:2.2.2.RELEASE:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-starter:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  +- org.springframework.boot:spring-boot-starter-logging:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  |  +- org.apache.logging.log4j:log4j-to-slf4j:jar:2.12.1:compile
+[INFO] |  |  |  |  |  \- org.apache.logging.log4j:log4j-api:jar:2.12.1:compile
+[INFO] |  |  |  |  \- org.slf4j:jul-to-slf4j:jar:1.7.30:compile
+[INFO] |  |  |  +- jakarta.annotation:jakarta.annotation-api:jar:1.3.5:compile
+[INFO] |  |  |  \- org.yaml:snakeyaml:jar:1.25:runtime
+[INFO] |  |  +- org.springframework.cloud:spring-cloud-context:jar:2.2.2.RELEASE:compile
+[INFO] |  |  \- org.springframework.security:spring-security-rsa:jar:1.0.9.RELEASE:compile
+[INFO] |  |     \- org.bouncycastle:bcpkix-jdk15on:jar:1.64:compile
+[INFO] |  |        \- org.bouncycastle:bcprov-jdk15on:jar:1.64:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-openfeign-core:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.cloud:spring-cloud-netflix-ribbon:jar:2.2.2.RELEASE:compile
+[INFO] |  |  |  \- org.springframework.cloud:spring-cloud-netflix-archaius:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter-aop:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  \- org.aspectj:aspectjweaver:jar:1.9.5:compile
+[INFO] |  |  \- io.github.openfeign.form:feign-form-spring:jar:3.8.0:compile
+[INFO] |  |     +- io.github.openfeign.form:feign-form:jar:3.8.0:compile
+[INFO] |  |     \- commons-fileupload:commons-fileupload:jar:1.4:compile
+[INFO] |  |        \- commons-io:commons-io:jar:2.2:compile
+[INFO] |  +- org.springframework:spring-web:jar:5.2.5.RELEASE:compile
+[INFO] |  |  +- org.springframework:spring-beans:jar:5.2.5.RELEASE:compile
+[INFO] |  |  \- org.springframework:spring-core:jar:5.2.5.RELEASE:compile
+[INFO] |  |     \- org.springframework:spring-jcl:jar:5.2.5.RELEASE:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-commons:jar:2.2.2.RELEASE:compile
+[INFO] |  |  \- org.springframework.security:spring-security-crypto:jar:5.2.2.RELEASE:compile
+[INFO] |  +- io.github.openfeign:feign-core:jar:10.7.4:compile
+[INFO] |  +- io.github.openfeign:feign-slf4j:jar:10.7.4:compile
+[INFO] |  \- io.github.openfeign:feign-hystrix:jar:10.7.4:compile
+[INFO] |     +- com.netflix.archaius:archaius-core:jar:0.7.6:compile
+[INFO] |     |  +- com.google.code.findbugs:jsr305:jar:3.0.1:runtime
+[INFO] |     |  +- commons-configuration:commons-configuration:jar:1.8:runtime
+[INFO] |     |  |  +- commons-lang:commons-lang:jar:2.6:runtime
+[INFO] |     |  |  \- commons-logging:commons-logging:jar:1.1.1:runtime
+[INFO] |     |  \- com.google.guava:guava:jar:16.0:runtime
+[INFO] |     \- com.netflix.hystrix:hystrix-core:jar:1.5.18:compile
+[INFO] |        +- io.reactivex:rxjava:jar:1.3.8:compile
+[INFO] |        \- org.hdrhistogram:HdrHistogram:jar:2.1.9:compile
+[INFO] +- com.github.saphyra:apphub-lib-common_util:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- com.github.saphyra:apphub-lib-exception:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- org.springframework.data:spring-data-commons:jar:2.2.6.RELEASE:compile
+[INFO] |  \- com.fasterxml.jackson.core:jackson-databind:jar:2.10.3:compile
+[INFO] |     +- com.fasterxml.jackson.core:jackson-annotations:jar:2.10.3:compile
+[INFO] |     \- com.fasterxml.jackson.core:jackson-core:jar:2.10.3:compile
+[INFO] +- com.github.saphyra:apphub-lib-common_domain:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  \- org.springframework:spring-context:jar:5.2.5.RELEASE:compile
+[INFO] |     +- org.springframework:spring-aop:jar:5.2.5.RELEASE:compile
+[INFO] |     \- org.springframework:spring-expression:jar:5.2.5.RELEASE:compile
+[INFO] +- com.github.saphyra:apphub-lib-config:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- org.thymeleaf:thymeleaf-spring5:jar:3.0.11.RELEASE:compile
+[INFO] |  |  \- org.thymeleaf:thymeleaf:jar:3.0.11.RELEASE:compile
+[INFO] |  |     +- org.attoparser:attoparser:jar:2.0.5.RELEASE:compile
+[INFO] |  |     \- org.unbescape:unbescape:jar:1.1.6.RELEASE:compile
+[INFO] |  +- org.springframework.boot:spring-boot-autoconfigure:jar:2.2.6.RELEASE:compile
+[INFO] |  |  \- org.springframework.boot:spring-boot:jar:2.2.6.RELEASE:compile
+[INFO] |  \- org.liquibase:liquibase-core:jar:3.8.8:compile
+[INFO] |     \- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[INFO] |        \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[INFO] +- org.projectlombok:lombok:jar:1.18.12:compile
+[INFO] +- org.projectlombok:lombok-maven:pom:1.18.12.0:compile
+[INFO] +- ch.qos.logback:logback-classic:jar:1.2.3:compile
+[INFO] |  +- ch.qos.logback:logback-core:jar:1.2.3:compile
+[INFO] |  \- org.slf4j:slf4j-api:jar:1.7.30:compile
+[INFO] +- ch.qos.logback.contrib:logback-json-classic:jar:0.1.5:compile
+[INFO] |  \- ch.qos.logback.contrib:logback-json-core:jar:0.1.5:compile
+[INFO] +- ch.qos.logback.contrib:logback-jackson:jar:0.1.5:compile
+[INFO] \- org.apache.commons:commons-lang3:jar:3.9:compile
+[INFO] 
+[INFO] ------------< com.github.saphyra:apphub-api-notebook-model >------------
+[INFO] Building apphub-api-notebook-model 0.0.1-SNAPSHOT                 [9/79]
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:3.1.2:tree (default-cli) @ apphub-api-notebook-model ---
+[INFO] com.github.saphyra:apphub-api-notebook-model:jar:0.0.1-SNAPSHOT
+[INFO] +- org.springframework.cloud:spring-cloud-starter-openfeign:jar:2.2.2.RELEASE:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-starter:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  +- org.springframework.boot:spring-boot-starter-logging:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  |  +- org.apache.logging.log4j:log4j-to-slf4j:jar:2.12.1:compile
+[INFO] |  |  |  |  |  \- org.apache.logging.log4j:log4j-api:jar:2.12.1:compile
+[INFO] |  |  |  |  \- org.slf4j:jul-to-slf4j:jar:1.7.30:compile
+[INFO] |  |  |  +- jakarta.annotation:jakarta.annotation-api:jar:1.3.5:compile
+[INFO] |  |  |  \- org.yaml:snakeyaml:jar:1.25:runtime
+[INFO] |  |  +- org.springframework.cloud:spring-cloud-context:jar:2.2.2.RELEASE:compile
+[INFO] |  |  \- org.springframework.security:spring-security-rsa:jar:1.0.9.RELEASE:compile
+[INFO] |  |     \- org.bouncycastle:bcpkix-jdk15on:jar:1.64:compile
+[INFO] |  |        \- org.bouncycastle:bcprov-jdk15on:jar:1.64:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-openfeign-core:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.cloud:spring-cloud-netflix-ribbon:jar:2.2.2.RELEASE:compile
+[INFO] |  |  |  \- org.springframework.cloud:spring-cloud-netflix-archaius:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter-aop:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  \- org.aspectj:aspectjweaver:jar:1.9.5:compile
+[INFO] |  |  \- io.github.openfeign.form:feign-form-spring:jar:3.8.0:compile
+[INFO] |  |     +- io.github.openfeign.form:feign-form:jar:3.8.0:compile
+[INFO] |  |     \- commons-fileupload:commons-fileupload:jar:1.4:compile
+[INFO] |  |        \- commons-io:commons-io:jar:2.2:compile
+[INFO] |  +- org.springframework:spring-web:jar:5.2.5.RELEASE:compile
+[INFO] |  |  +- org.springframework:spring-beans:jar:5.2.5.RELEASE:compile
+[INFO] |  |  \- org.springframework:spring-core:jar:5.2.5.RELEASE:compile
+[INFO] |  |     \- org.springframework:spring-jcl:jar:5.2.5.RELEASE:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-commons:jar:2.2.2.RELEASE:compile
+[INFO] |  |  \- org.springframework.security:spring-security-crypto:jar:5.2.2.RELEASE:compile
+[INFO] |  +- io.github.openfeign:feign-core:jar:10.7.4:compile
+[INFO] |  +- io.github.openfeign:feign-slf4j:jar:10.7.4:compile
+[INFO] |  \- io.github.openfeign:feign-hystrix:jar:10.7.4:compile
+[INFO] |     +- com.netflix.archaius:archaius-core:jar:0.7.6:compile
+[INFO] |     |  +- com.google.code.findbugs:jsr305:jar:3.0.1:runtime
+[INFO] |     |  +- commons-configuration:commons-configuration:jar:1.8:runtime
+[INFO] |     |  |  +- commons-lang:commons-lang:jar:2.6:runtime
+[INFO] |     |  |  \- commons-logging:commons-logging:jar:1.1.1:runtime
+[INFO] |     |  \- com.google.guava:guava:jar:16.0:runtime
+[INFO] |     \- com.netflix.hystrix:hystrix-core:jar:1.5.18:compile
+[INFO] |        +- io.reactivex:rxjava:jar:1.3.8:compile
+[INFO] |        \- org.hdrhistogram:HdrHistogram:jar:2.1.9:compile
+[INFO] +- com.github.saphyra:apphub-lib-common_util:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- com.github.saphyra:apphub-lib-exception:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- org.springframework.data:spring-data-commons:jar:2.2.6.RELEASE:compile
+[INFO] |  \- com.fasterxml.jackson.core:jackson-databind:jar:2.10.3:compile
+[INFO] |     +- com.fasterxml.jackson.core:jackson-annotations:jar:2.10.3:compile
+[INFO] |     \- com.fasterxml.jackson.core:jackson-core:jar:2.10.3:compile
+[INFO] +- com.github.saphyra:apphub-lib-common_domain:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  \- org.springframework:spring-context:jar:5.2.5.RELEASE:compile
+[INFO] |     +- org.springframework:spring-aop:jar:5.2.5.RELEASE:compile
+[INFO] |     \- org.springframework:spring-expression:jar:5.2.5.RELEASE:compile
+[INFO] +- com.github.saphyra:apphub-lib-config:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- org.thymeleaf:thymeleaf-spring5:jar:3.0.11.RELEASE:compile
+[INFO] |  |  \- org.thymeleaf:thymeleaf:jar:3.0.11.RELEASE:compile
+[INFO] |  |     +- org.attoparser:attoparser:jar:2.0.5.RELEASE:compile
+[INFO] |  |     \- org.unbescape:unbescape:jar:1.1.6.RELEASE:compile
+[INFO] |  +- org.springframework.boot:spring-boot-autoconfigure:jar:2.2.6.RELEASE:compile
+[INFO] |  |  \- org.springframework.boot:spring-boot:jar:2.2.6.RELEASE:compile
+[INFO] |  \- org.liquibase:liquibase-core:jar:3.8.8:compile
+[INFO] |     \- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[INFO] |        \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[INFO] +- org.projectlombok:lombok:jar:1.18.12:compile
+[INFO] +- org.projectlombok:lombok-maven:pom:1.18.12.0:compile
+[INFO] +- ch.qos.logback:logback-classic:jar:1.2.3:compile
+[INFO] |  +- ch.qos.logback:logback-core:jar:1.2.3:compile
+[INFO] |  \- org.slf4j:slf4j-api:jar:1.7.30:compile
+[INFO] +- ch.qos.logback.contrib:logback-json-classic:jar:0.1.5:compile
+[INFO] |  \- ch.qos.logback.contrib:logback-json-core:jar:0.1.5:compile
+[INFO] +- ch.qos.logback.contrib:logback-jackson:jar:0.1.5:compile
+[INFO] \- org.apache.commons:commons-lang3:jar:3.9:compile
+[INFO] 
+[INFO] ---------------< com.github.saphyra:apphub-api-platform >---------------
+[INFO] Building apphub-api-platform 0.0.1-SNAPSHOT                      [10/79]
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:3.1.2:tree (default-cli) @ apphub-api-platform ---
+[INFO] com.github.saphyra:apphub-api-platform:pom:0.0.1-SNAPSHOT
+[INFO] +- org.springframework.cloud:spring-cloud-starter-openfeign:jar:2.2.2.RELEASE:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-starter:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  +- org.springframework.boot:spring-boot-starter-logging:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  |  +- org.apache.logging.log4j:log4j-to-slf4j:jar:2.12.1:compile
+[INFO] |  |  |  |  |  \- org.apache.logging.log4j:log4j-api:jar:2.12.1:compile
+[INFO] |  |  |  |  \- org.slf4j:jul-to-slf4j:jar:1.7.30:compile
+[INFO] |  |  |  +- jakarta.annotation:jakarta.annotation-api:jar:1.3.5:compile
+[INFO] |  |  |  \- org.yaml:snakeyaml:jar:1.25:runtime
+[INFO] |  |  +- org.springframework.cloud:spring-cloud-context:jar:2.2.2.RELEASE:compile
+[INFO] |  |  \- org.springframework.security:spring-security-rsa:jar:1.0.9.RELEASE:compile
+[INFO] |  |     \- org.bouncycastle:bcpkix-jdk15on:jar:1.64:compile
+[INFO] |  |        \- org.bouncycastle:bcprov-jdk15on:jar:1.64:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-openfeign-core:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.cloud:spring-cloud-netflix-ribbon:jar:2.2.2.RELEASE:compile
+[INFO] |  |  |  \- org.springframework.cloud:spring-cloud-netflix-archaius:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter-aop:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  \- org.aspectj:aspectjweaver:jar:1.9.5:compile
+[INFO] |  |  \- io.github.openfeign.form:feign-form-spring:jar:3.8.0:compile
+[INFO] |  |     +- io.github.openfeign.form:feign-form:jar:3.8.0:compile
+[INFO] |  |     \- commons-fileupload:commons-fileupload:jar:1.4:compile
+[INFO] |  |        \- commons-io:commons-io:jar:2.2:compile
+[INFO] |  +- org.springframework:spring-web:jar:5.2.5.RELEASE:compile
+[INFO] |  |  +- org.springframework:spring-beans:jar:5.2.5.RELEASE:compile
+[INFO] |  |  \- org.springframework:spring-core:jar:5.2.5.RELEASE:compile
+[INFO] |  |     \- org.springframework:spring-jcl:jar:5.2.5.RELEASE:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-commons:jar:2.2.2.RELEASE:compile
+[INFO] |  |  \- org.springframework.security:spring-security-crypto:jar:5.2.2.RELEASE:compile
+[INFO] |  +- io.github.openfeign:feign-core:jar:10.7.4:compile
+[INFO] |  +- io.github.openfeign:feign-slf4j:jar:10.7.4:compile
+[INFO] |  \- io.github.openfeign:feign-hystrix:jar:10.7.4:compile
+[INFO] |     +- com.netflix.archaius:archaius-core:jar:0.7.6:compile
+[INFO] |     |  +- com.google.code.findbugs:jsr305:jar:3.0.1:runtime
+[INFO] |     |  +- commons-configuration:commons-configuration:jar:1.8:runtime
+[INFO] |     |  |  +- commons-lang:commons-lang:jar:2.6:runtime
+[INFO] |     |  |  \- commons-logging:commons-logging:jar:1.1.1:runtime
+[INFO] |     |  \- com.google.guava:guava:jar:16.0:runtime
+[INFO] |     \- com.netflix.hystrix:hystrix-core:jar:1.5.18:compile
+[INFO] |        +- io.reactivex:rxjava:jar:1.3.8:compile
+[INFO] |        \- org.hdrhistogram:HdrHistogram:jar:2.1.9:compile
+[INFO] +- com.github.saphyra:apphub-lib-common_util:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- com.github.saphyra:apphub-lib-exception:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- org.springframework.data:spring-data-commons:jar:2.2.6.RELEASE:compile
+[INFO] |  \- com.fasterxml.jackson.core:jackson-databind:jar:2.10.3:compile
+[INFO] |     +- com.fasterxml.jackson.core:jackson-annotations:jar:2.10.3:compile
+[INFO] |     \- com.fasterxml.jackson.core:jackson-core:jar:2.10.3:compile
+[INFO] +- com.github.saphyra:apphub-lib-common_domain:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  \- org.springframework:spring-context:jar:5.2.5.RELEASE:compile
+[INFO] |     +- org.springframework:spring-aop:jar:5.2.5.RELEASE:compile
+[INFO] |     \- org.springframework:spring-expression:jar:5.2.5.RELEASE:compile
+[INFO] +- com.github.saphyra:apphub-lib-config:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- org.thymeleaf:thymeleaf-spring5:jar:3.0.11.RELEASE:compile
+[INFO] |  |  \- org.thymeleaf:thymeleaf:jar:3.0.11.RELEASE:compile
+[INFO] |  |     +- org.attoparser:attoparser:jar:2.0.5.RELEASE:compile
+[INFO] |  |     \- org.unbescape:unbescape:jar:1.1.6.RELEASE:compile
+[INFO] |  +- org.springframework.boot:spring-boot-autoconfigure:jar:2.2.6.RELEASE:compile
+[INFO] |  |  \- org.springframework.boot:spring-boot:jar:2.2.6.RELEASE:compile
+[INFO] |  \- org.liquibase:liquibase-core:jar:3.8.8:compile
+[INFO] |     \- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[INFO] |        \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[INFO] +- org.projectlombok:lombok:jar:1.18.12:compile
+[INFO] +- org.projectlombok:lombok-maven:pom:1.18.12.0:compile
+[INFO] +- ch.qos.logback:logback-classic:jar:1.2.3:compile
+[INFO] |  +- ch.qos.logback:logback-core:jar:1.2.3:compile
+[INFO] |  \- org.slf4j:slf4j-api:jar:1.7.30:compile
+[INFO] +- ch.qos.logback.contrib:logback-json-classic:jar:0.1.5:compile
+[INFO] |  \- ch.qos.logback.contrib:logback-json-core:jar:0.1.5:compile
+[INFO] +- ch.qos.logback.contrib:logback-jackson:jar:0.1.5:compile
+[INFO] \- org.apache.commons:commons-lang3:jar:3.9:compile
+[INFO] 
+[INFO] --------< com.github.saphyra:apphub-api-platform-event_gateway >--------
+[INFO] Building apphub-api-platform-event_gateway 0.0.1-SNAPSHOT        [11/79]
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:3.1.2:tree (default-cli) @ apphub-api-platform-event_gateway ---
+[INFO] com.github.saphyra:apphub-api-platform-event_gateway:pom:0.0.1-SNAPSHOT
+[INFO] +- org.springframework.cloud:spring-cloud-starter-openfeign:jar:2.2.2.RELEASE:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-starter:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  +- org.springframework.boot:spring-boot-starter-logging:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  |  +- org.apache.logging.log4j:log4j-to-slf4j:jar:2.12.1:compile
+[INFO] |  |  |  |  |  \- org.apache.logging.log4j:log4j-api:jar:2.12.1:compile
+[INFO] |  |  |  |  \- org.slf4j:jul-to-slf4j:jar:1.7.30:compile
+[INFO] |  |  |  +- jakarta.annotation:jakarta.annotation-api:jar:1.3.5:compile
+[INFO] |  |  |  \- org.yaml:snakeyaml:jar:1.25:runtime
+[INFO] |  |  +- org.springframework.cloud:spring-cloud-context:jar:2.2.2.RELEASE:compile
+[INFO] |  |  \- org.springframework.security:spring-security-rsa:jar:1.0.9.RELEASE:compile
+[INFO] |  |     \- org.bouncycastle:bcpkix-jdk15on:jar:1.64:compile
+[INFO] |  |        \- org.bouncycastle:bcprov-jdk15on:jar:1.64:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-openfeign-core:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.cloud:spring-cloud-netflix-ribbon:jar:2.2.2.RELEASE:compile
+[INFO] |  |  |  \- org.springframework.cloud:spring-cloud-netflix-archaius:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter-aop:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  \- org.aspectj:aspectjweaver:jar:1.9.5:compile
+[INFO] |  |  \- io.github.openfeign.form:feign-form-spring:jar:3.8.0:compile
+[INFO] |  |     +- io.github.openfeign.form:feign-form:jar:3.8.0:compile
+[INFO] |  |     \- commons-fileupload:commons-fileupload:jar:1.4:compile
+[INFO] |  |        \- commons-io:commons-io:jar:2.2:compile
+[INFO] |  +- org.springframework:spring-web:jar:5.2.5.RELEASE:compile
+[INFO] |  |  +- org.springframework:spring-beans:jar:5.2.5.RELEASE:compile
+[INFO] |  |  \- org.springframework:spring-core:jar:5.2.5.RELEASE:compile
+[INFO] |  |     \- org.springframework:spring-jcl:jar:5.2.5.RELEASE:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-commons:jar:2.2.2.RELEASE:compile
+[INFO] |  |  \- org.springframework.security:spring-security-crypto:jar:5.2.2.RELEASE:compile
+[INFO] |  +- io.github.openfeign:feign-core:jar:10.7.4:compile
+[INFO] |  +- io.github.openfeign:feign-slf4j:jar:10.7.4:compile
+[INFO] |  \- io.github.openfeign:feign-hystrix:jar:10.7.4:compile
+[INFO] |     +- com.netflix.archaius:archaius-core:jar:0.7.6:compile
+[INFO] |     |  +- com.google.code.findbugs:jsr305:jar:3.0.1:runtime
+[INFO] |     |  +- commons-configuration:commons-configuration:jar:1.8:runtime
+[INFO] |     |  |  +- commons-lang:commons-lang:jar:2.6:runtime
+[INFO] |     |  |  \- commons-logging:commons-logging:jar:1.1.1:runtime
+[INFO] |     |  \- com.google.guava:guava:jar:16.0:runtime
+[INFO] |     \- com.netflix.hystrix:hystrix-core:jar:1.5.18:compile
+[INFO] |        +- io.reactivex:rxjava:jar:1.3.8:compile
+[INFO] |        \- org.hdrhistogram:HdrHistogram:jar:2.1.9:compile
+[INFO] +- com.github.saphyra:apphub-lib-common_util:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- com.github.saphyra:apphub-lib-exception:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- org.springframework.data:spring-data-commons:jar:2.2.6.RELEASE:compile
+[INFO] |  \- com.fasterxml.jackson.core:jackson-databind:jar:2.10.3:compile
+[INFO] |     +- com.fasterxml.jackson.core:jackson-annotations:jar:2.10.3:compile
+[INFO] |     \- com.fasterxml.jackson.core:jackson-core:jar:2.10.3:compile
+[INFO] +- com.github.saphyra:apphub-lib-common_domain:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  \- org.springframework:spring-context:jar:5.2.5.RELEASE:compile
+[INFO] |     +- org.springframework:spring-aop:jar:5.2.5.RELEASE:compile
+[INFO] |     \- org.springframework:spring-expression:jar:5.2.5.RELEASE:compile
+[INFO] +- com.github.saphyra:apphub-lib-config:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- org.thymeleaf:thymeleaf-spring5:jar:3.0.11.RELEASE:compile
+[INFO] |  |  \- org.thymeleaf:thymeleaf:jar:3.0.11.RELEASE:compile
+[INFO] |  |     +- org.attoparser:attoparser:jar:2.0.5.RELEASE:compile
+[INFO] |  |     \- org.unbescape:unbescape:jar:1.1.6.RELEASE:compile
+[INFO] |  +- org.springframework.boot:spring-boot-autoconfigure:jar:2.2.6.RELEASE:compile
+[INFO] |  |  \- org.springframework.boot:spring-boot:jar:2.2.6.RELEASE:compile
+[INFO] |  \- org.liquibase:liquibase-core:jar:3.8.8:compile
+[INFO] |     \- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[INFO] |        \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[INFO] +- org.projectlombok:lombok:jar:1.18.12:compile
+[INFO] +- org.projectlombok:lombok-maven:pom:1.18.12.0:compile
+[INFO] +- ch.qos.logback:logback-classic:jar:1.2.3:compile
+[INFO] |  +- ch.qos.logback:logback-core:jar:1.2.3:compile
+[INFO] |  \- org.slf4j:slf4j-api:jar:1.7.30:compile
+[INFO] +- ch.qos.logback.contrib:logback-json-classic:jar:0.1.5:compile
+[INFO] |  \- ch.qos.logback.contrib:logback-json-core:jar:0.1.5:compile
+[INFO] +- ch.qos.logback.contrib:logback-jackson:jar:0.1.5:compile
+[INFO] \- org.apache.commons:commons-lang3:jar:3.9:compile
+[INFO] 
+[INFO] -----< com.github.saphyra:apphub-api-platform-event_gateway-model >-----
+[INFO] Building apphub-api-platform-event_gateway-model 0.0.1-SNAPSHOT  [12/79]
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:3.1.2:tree (default-cli) @ apphub-api-platform-event_gateway-model ---
+[INFO] com.github.saphyra:apphub-api-platform-event_gateway-model:jar:0.0.1-SNAPSHOT
+[INFO] +- org.springframework.cloud:spring-cloud-starter-openfeign:jar:2.2.2.RELEASE:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-starter:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  +- org.springframework.boot:spring-boot-starter-logging:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  |  +- org.apache.logging.log4j:log4j-to-slf4j:jar:2.12.1:compile
+[INFO] |  |  |  |  |  \- org.apache.logging.log4j:log4j-api:jar:2.12.1:compile
+[INFO] |  |  |  |  \- org.slf4j:jul-to-slf4j:jar:1.7.30:compile
+[INFO] |  |  |  +- jakarta.annotation:jakarta.annotation-api:jar:1.3.5:compile
+[INFO] |  |  |  \- org.yaml:snakeyaml:jar:1.25:runtime
+[INFO] |  |  +- org.springframework.cloud:spring-cloud-context:jar:2.2.2.RELEASE:compile
+[INFO] |  |  \- org.springframework.security:spring-security-rsa:jar:1.0.9.RELEASE:compile
+[INFO] |  |     \- org.bouncycastle:bcpkix-jdk15on:jar:1.64:compile
+[INFO] |  |        \- org.bouncycastle:bcprov-jdk15on:jar:1.64:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-openfeign-core:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.cloud:spring-cloud-netflix-ribbon:jar:2.2.2.RELEASE:compile
+[INFO] |  |  |  \- org.springframework.cloud:spring-cloud-netflix-archaius:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter-aop:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  \- org.aspectj:aspectjweaver:jar:1.9.5:compile
+[INFO] |  |  \- io.github.openfeign.form:feign-form-spring:jar:3.8.0:compile
+[INFO] |  |     +- io.github.openfeign.form:feign-form:jar:3.8.0:compile
+[INFO] |  |     \- commons-fileupload:commons-fileupload:jar:1.4:compile
+[INFO] |  |        \- commons-io:commons-io:jar:2.2:compile
+[INFO] |  +- org.springframework:spring-web:jar:5.2.5.RELEASE:compile
+[INFO] |  |  +- org.springframework:spring-beans:jar:5.2.5.RELEASE:compile
+[INFO] |  |  \- org.springframework:spring-core:jar:5.2.5.RELEASE:compile
+[INFO] |  |     \- org.springframework:spring-jcl:jar:5.2.5.RELEASE:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-commons:jar:2.2.2.RELEASE:compile
+[INFO] |  |  \- org.springframework.security:spring-security-crypto:jar:5.2.2.RELEASE:compile
+[INFO] |  +- io.github.openfeign:feign-core:jar:10.7.4:compile
+[INFO] |  +- io.github.openfeign:feign-slf4j:jar:10.7.4:compile
+[INFO] |  \- io.github.openfeign:feign-hystrix:jar:10.7.4:compile
+[INFO] |     +- com.netflix.archaius:archaius-core:jar:0.7.6:compile
+[INFO] |     |  +- com.google.code.findbugs:jsr305:jar:3.0.1:runtime
+[INFO] |     |  +- commons-configuration:commons-configuration:jar:1.8:runtime
+[INFO] |     |  |  +- commons-lang:commons-lang:jar:2.6:runtime
+[INFO] |     |  |  \- commons-logging:commons-logging:jar:1.1.1:runtime
+[INFO] |     |  \- com.google.guava:guava:jar:16.0:runtime
+[INFO] |     \- com.netflix.hystrix:hystrix-core:jar:1.5.18:compile
+[INFO] |        +- io.reactivex:rxjava:jar:1.3.8:compile
+[INFO] |        \- org.hdrhistogram:HdrHistogram:jar:2.1.9:compile
+[INFO] +- com.github.saphyra:apphub-lib-common_util:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- com.github.saphyra:apphub-lib-exception:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- org.springframework.data:spring-data-commons:jar:2.2.6.RELEASE:compile
+[INFO] |  \- com.fasterxml.jackson.core:jackson-databind:jar:2.10.3:compile
+[INFO] |     +- com.fasterxml.jackson.core:jackson-annotations:jar:2.10.3:compile
+[INFO] |     \- com.fasterxml.jackson.core:jackson-core:jar:2.10.3:compile
+[INFO] +- com.github.saphyra:apphub-lib-common_domain:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  \- org.springframework:spring-context:jar:5.2.5.RELEASE:compile
+[INFO] |     +- org.springframework:spring-aop:jar:5.2.5.RELEASE:compile
+[INFO] |     \- org.springframework:spring-expression:jar:5.2.5.RELEASE:compile
+[INFO] +- com.github.saphyra:apphub-lib-config:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- org.thymeleaf:thymeleaf-spring5:jar:3.0.11.RELEASE:compile
+[INFO] |  |  \- org.thymeleaf:thymeleaf:jar:3.0.11.RELEASE:compile
+[INFO] |  |     +- org.attoparser:attoparser:jar:2.0.5.RELEASE:compile
+[INFO] |  |     \- org.unbescape:unbescape:jar:1.1.6.RELEASE:compile
+[INFO] |  +- org.springframework.boot:spring-boot-autoconfigure:jar:2.2.6.RELEASE:compile
+[INFO] |  |  \- org.springframework.boot:spring-boot:jar:2.2.6.RELEASE:compile
+[INFO] |  \- org.liquibase:liquibase-core:jar:3.8.8:compile
+[INFO] |     \- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[INFO] |        \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[INFO] +- org.projectlombok:lombok:jar:1.18.12:compile
+[INFO] +- org.projectlombok:lombok-maven:pom:1.18.12.0:compile
+[INFO] +- ch.qos.logback:logback-classic:jar:1.2.3:compile
+[INFO] |  +- ch.qos.logback:logback-core:jar:1.2.3:compile
+[INFO] |  \- org.slf4j:slf4j-api:jar:1.7.30:compile
+[INFO] +- ch.qos.logback.contrib:logback-json-classic:jar:0.1.5:compile
+[INFO] |  \- ch.qos.logback.contrib:logback-json-core:jar:0.1.5:compile
+[INFO] +- ch.qos.logback.contrib:logback-jackson:jar:0.1.5:compile
+[INFO] \- org.apache.commons:commons-lang3:jar:3.9:compile
+[INFO] 
+[INFO] ----< com.github.saphyra:apphub-api-platform-event_gateway-client >-----
+[INFO] Building apphub-api-platform-event_gateway-client 0.0.1-SNAPSHOT [13/79]
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:3.1.2:tree (default-cli) @ apphub-api-platform-event_gateway-client ---
+[INFO] com.github.saphyra:apphub-api-platform-event_gateway-client:jar:0.0.1-SNAPSHOT
+[INFO] +- com.github.saphyra:apphub-api-platform-event_gateway-model:jar:0.0.1-SNAPSHOT:compile
+[INFO] +- org.springframework.cloud:spring-cloud-starter-openfeign:jar:2.2.2.RELEASE:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-starter:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  +- org.springframework.boot:spring-boot-starter-logging:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  |  +- org.apache.logging.log4j:log4j-to-slf4j:jar:2.12.1:compile
+[INFO] |  |  |  |  |  \- org.apache.logging.log4j:log4j-api:jar:2.12.1:compile
+[INFO] |  |  |  |  \- org.slf4j:jul-to-slf4j:jar:1.7.30:compile
+[INFO] |  |  |  +- jakarta.annotation:jakarta.annotation-api:jar:1.3.5:compile
+[INFO] |  |  |  \- org.yaml:snakeyaml:jar:1.25:runtime
+[INFO] |  |  +- org.springframework.cloud:spring-cloud-context:jar:2.2.2.RELEASE:compile
+[INFO] |  |  \- org.springframework.security:spring-security-rsa:jar:1.0.9.RELEASE:compile
+[INFO] |  |     \- org.bouncycastle:bcpkix-jdk15on:jar:1.64:compile
+[INFO] |  |        \- org.bouncycastle:bcprov-jdk15on:jar:1.64:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-openfeign-core:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.cloud:spring-cloud-netflix-ribbon:jar:2.2.2.RELEASE:compile
+[INFO] |  |  |  \- org.springframework.cloud:spring-cloud-netflix-archaius:jar:2.2.2.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter-aop:jar:2.2.6.RELEASE:compile
+[INFO] |  |  |  \- org.aspectj:aspectjweaver:jar:1.9.5:compile
+[INFO] |  |  \- io.github.openfeign.form:feign-form-spring:jar:3.8.0:compile
+[INFO] |  |     +- io.github.openfeign.form:feign-form:jar:3.8.0:compile
+[INFO] |  |     \- commons-fileupload:commons-fileupload:jar:1.4:compile
+[INFO] |  |        \- commons-io:commons-io:jar:2.2:compile
+[INFO] |  +- org.springframework:spring-web:jar:5.2.5.RELEASE:compile
+[INFO] |  |  +- org.springframework:spring-beans:jar:5.2.5.RELEASE:compile
+[INFO] |  |  \- org.springframework:spring-core:jar:5.2.5.RELEASE:compile
+[INFO] |  |     \- org.springframework:spring-jcl:jar:5.2.5.RELEASE:compile
+[INFO] |  +- org.springframework.cloud:spring-cloud-commons:jar:2.2.2.RELEASE:compile
+[INFO] |  |  \- org.springframework.security:spring-security-crypto:jar:5.2.2.RELEASE:compile
+[INFO] |  +- io.github.openfeign:feign-core:jar:10.7.4:compile
+[INFO] |  +- io.github.openfeign:feign-slf4j:jar:10.7.4:compile
+[INFO] |  \- io.github.openfeign:feign-hystrix:jar:10.7.4:compile
+[INFO] |     +- com.netflix.archaius:archaius-core:jar:0.7.6:compile
+[INFO] |     |  +- com.google.code.findbugs:jsr305:jar:3.0.1:runtime
+[INFO] |     |  +- commons-configuration:commons-configuration:jar:1.8:runtime
+[INFO] |     |  |  +- commons-lang:commons-lang:jar:2.6:runtime
+[INFO] |     |  |  \- commons-logging:commons-logging:jar:1.1.1:runtime
+[INFO] |     |  \- com.google.guava:guava:jar:16.0:runtime
+[INFO] |     \- com.netflix.hystrix:hystrix-core:jar:1.5.18:compile
+[INFO] |        +- io.reactivex:rxjava:jar:1.3.8:compile
+[INFO] |        \- org.hdrhistogram:HdrHistogram:jar:2.1.9:compile
+[INFO] +- com.github.saphyra:apphub-lib-common_util:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- com.github.saphyra:apphub-lib-exception:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- org.springframework.data:spring-data-commons:jar:2.2.6.RELEASE:compile
+[INFO] |  \- com.fasterxml.jackson.core:jackson-databind:jar:2.10.3:compile
+[INFO] |     +- com.fasterxml.jackson.core:jackson-annotations:jar:2.10.3:compile
+[INFO] |     \- com.fasterxml.jackson.core:jackson-core:jar:2.10.3:compile
+[INFO] +- com.github.saphyra:apphub-lib-common_domain:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  \- org.springframework:spring-context:jar:5.2.5.RELEASE:compile
+[INFO] |     +- org.springframework:spring-aop:jar:5.2.5.RELEASE:compile
+[INFO] |     \- org.springframework:spring-expression:jar:5.2.5.RELEASE:compile
+[INFO] +- com.github.saphyra:apphub-lib-config:jar:0.0.1-SNAPSHOT:compile
+[INFO] |  +- org.thymeleaf:thymeleaf-spring5:jar:3.0.11.RELEASE:compile
+[INFO] |  |  \- org.thymeleaf:thymeleaf:jar:3.0.11.RELEASE:compile
+[INFO] |  |     +- org.attoparser:attoparser:jar:2.0.5.RELEASE:compile
+[INFO] |  |     \- org.unbescape:unbescape:jar:1.1.6.RELEASE:compile
+[INFO] |  +- org.springframework.boot:spring-boot-autoconfigure:jar:2.2.6.RELEASE:compile
+[INFO] |  |  \- org.springframework.boot:spring-boot:jar:2.2.6.RELEASE:compile
+[INFO] |  \- org.liquibase:liquibase-core:jar:3.8.8:compile
+[INFO] |     \- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[INFO] |        \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[INFO] +- org.projectlombok:lombok:jar:1.18.12:compile
+[INFO] +- org.projectlombok:lombok-maven:pom:1.18.12.0:compile
+[INFO] +- ch.qos.logback:logback-classic:jar:1.2.3:compile
+[INFO] |  +- ch.qos.logback:logback-core:jar:1.2.3:compile
+[INFO] |  \- org.slf4j:slf4j-api:jar:1.7.30:compile
+[INFO] +- ch.qos.logback.contrib:logback-json-classic:jar:0.1.5:compile
+[INFO] |  \- ch.qos.logback.contrib:logback-json-core:jar:0.1.5:compile
+[INFO] +- ch.qos.logback.contrib:logback-jackson:jar:0.1.5:compile
+[INFO] \- org.apache.commons:commons-lang3:jar:3.9:compile
+[INFO] 

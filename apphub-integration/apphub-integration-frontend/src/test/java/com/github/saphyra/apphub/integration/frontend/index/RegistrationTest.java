@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.integration.frontend.index;
 
-import com.github.saphyra.apphub.integration.common.framework.Endpoints;
-import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.frontend.SeleniumTest;
 import com.github.saphyra.apphub.integration.frontend.framework.Navigation;
@@ -14,90 +12,53 @@ import com.github.saphyra.apphub.integration.frontend.model.registration.Usernam
 import com.github.saphyra.apphub.integration.frontend.service.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.frontend.service.modules.ModulesPageActions;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class RegistrationTest extends SeleniumTest {
-    @DataProvider(name = "registrationParameters", parallel = true)
-    public Object[][] registrationParameters() {
-        return new Object[][]{
-            {RegistrationParameters.validParameters(), valid()},
-            {RegistrationParameters.tooShortUsernameParameters(), usernameTooShort()},
-            {RegistrationParameters.tooLongUsernameParameters(), usernameTooLong()},
-            {RegistrationParameters.tooShortPasswordParameters(), passwordTooShort()},
-            {RegistrationParameters.tooLongPasswordParameters(), passwordTooLong()},
-            {RegistrationParameters.incorrectConfirmPasswordParameters(), confirmPasswordIncorrect()},
-            {RegistrationParameters.invalidEmailParameters(), emailInvalid()}
-        };
-    }
-
-    @Test(dataProvider = "registrationParameters")
-    public void verifyValidation(RegistrationParameters parameters, RegistrationValidationResult validationResult) {
-        //GIVEN
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        //WHEN
-        IndexPageActions.fillRegistrationForm(driver, parameters);
-        SleepUtil.sleep(2000);
-        //THEN
-        IndexPageActions.verifyRegistrationForm(driver, validationResult);
-    }
-
     @Test
-    public void emailAlreadyExists() {
-        //GIVEN
+    public void verifyValidation() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
+
+        //Invalid registration parameters
+        executeValidationTest(driver, RegistrationParameters.tooShortUsernameParameters(), usernameTooShort());
+        executeValidationTest(driver, RegistrationParameters.tooLongUsernameParameters(), usernameTooLong());
+        executeValidationTest(driver, RegistrationParameters.tooShortPasswordParameters(), passwordTooShort());
+        executeValidationTest(driver, RegistrationParameters.tooLongPasswordParameters(), passwordTooLong());
+        executeValidationTest(driver, RegistrationParameters.incorrectConfirmPasswordParameters(), confirmPasswordIncorrect());
+        executeValidationTest(driver, RegistrationParameters.invalidEmailParameters(), emailInvalid());
+
+        //Registration successful
 
         RegistrationParameters existingUser = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, existingUser);
+        NotificationUtil.verifySuccessNotification(driver, "Sikeres regisztráció.");
         ModulesPageActions.logout(driver);
 
-        RegistrationParameters registrationParameters = RegistrationParameters.validParameters().toBuilder()
+        //Username already exists
+        RegistrationParameters usernameAlreadyExists = RegistrationParameters.validParameters().toBuilder()
+            .username(existingUser.getUsername())
+            .build();
+        IndexPageActions.fillRegistrationForm(driver, usernameAlreadyExists);
+        IndexPageActions.submitRegistration(driver);
+
+        NotificationUtil.verifyErrorNotification(driver, "A felhasználónév foglalt.");
+
+        //Email already exists
+        RegistrationParameters emailAlreadyExists = RegistrationParameters.validParameters().toBuilder()
             .email(existingUser.getEmail())
             .build();
-        IndexPageActions.fillRegistrationForm(driver, registrationParameters);
+        IndexPageActions.fillRegistrationForm(driver, emailAlreadyExists);
         //WHEN
         IndexPageActions.submitRegistration(driver);
         //THEN
         NotificationUtil.verifyErrorNotification(driver, "Az email foglalt.");
-
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.WEB_ROOT));
     }
 
-    @Test
-    public void usernameAlreadyExists() {
-        //GIVEN
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-
-        RegistrationParameters existingUser = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, existingUser);
-        ModulesPageActions.logout(driver);
-
-        RegistrationParameters registrationParameters = RegistrationParameters.validParameters().toBuilder()
-            .username(existingUser.getUsername())
-            .build();
-        IndexPageActions.fillRegistrationForm(driver, registrationParameters);
-        //WHEN
-        IndexPageActions.submitRegistration(driver);
-        //THEN
-        NotificationUtil.verifyErrorNotification(driver, "A felhasználónév foglalt.");
-
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.WEB_ROOT));
-    }
-
-    @Test
-    public void successfulRegistration() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-
-        RegistrationParameters existingUser = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, existingUser);
-
-        NotificationUtil.verifySuccessNotification(driver, "Sikeres regisztráció.");
+    private void executeValidationTest(WebDriver driver, RegistrationParameters parameters, RegistrationValidationResult validationResult) {
+        IndexPageActions.fillRegistrationForm(driver, parameters);
+        SleepUtil.sleep(2000);
+        IndexPageActions.verifyRegistrationForm(driver, validationResult);
     }
 
     private RegistrationValidationResult valid() {

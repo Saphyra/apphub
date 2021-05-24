@@ -26,8 +26,8 @@ class HeartbeatService {
 
     @Scheduled(fixedRateString = "${event.processor.heartbeat.interval:60000}")
     void sendHeartbeat() {
-        log.info("Sending heartbeat...");
+        log.debug("Sending heartbeat...");
         eventGatewayApi.heartbeat(serviceName);
-        log.info("Heartbeat sent.");
+        log.debug("Heartbeat sent.");
     }
 }

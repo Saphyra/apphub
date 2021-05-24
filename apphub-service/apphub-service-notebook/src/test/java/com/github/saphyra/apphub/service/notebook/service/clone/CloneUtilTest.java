@@ -36,7 +36,7 @@ public class CloneUtilTest {
 
     @Before
     public void setUp() {
-        given(idGenerator.randomUUID()).willReturn(NEW_ID);
+        given(idGenerator.randomUuid()).willReturn(NEW_ID);
     }
 
     @Test

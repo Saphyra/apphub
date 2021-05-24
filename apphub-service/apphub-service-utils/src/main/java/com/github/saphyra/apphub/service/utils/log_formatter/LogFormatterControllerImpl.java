@@ -42,7 +42,7 @@ public class LogFormatterControllerImpl implements LogFormatterController {
         return Optional.ofNullable(visibilities.get(parameter))
             .orElseGet(() -> {
                 LogParameterVisibility visibility = LogParameterVisibility.builder()
-                    .id(idGenerator.randomUUID())
+                    .id(idGenerator.randomUuid())
                     .userId(userId)
                     .parameter(parameter)
                     .visible(true)

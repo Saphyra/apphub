@@ -13,6 +13,7 @@ accessToken:
 registration:
   defaultRoles:
     - NOTEBOOK
+    - SKYXPLORE
 
 role:
   settings:

@@ -16,7 +16,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class ChangeLanguageTest extends SeleniumTest {
-    @DataProvider(name = "languages", parallel = true)
+    @DataProvider(name = "languages")
     public Object[] languages() {
         return new Object[]{
             Language.ENGLISH,

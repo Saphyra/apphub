@@ -1,0 +1,42 @@
+{
+  "title": "SkyXplore - Character",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Character"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Back"
+      }
+    ],
+    "character-name-span": [
+      {
+        "key": "innerHTML",
+        "message": "Character name"
+      }
+    ],
+    "character-name": [
+      {
+        "key": "placeholder",
+        "message": "Character name"
+      }
+    ],
+    "save-character": [
+      {
+        "key": "innerHTML",
+        "message": "Save"
+      }
+    ]
+  },
+  "additionalContent": {
+    "create-character-title": "Create character",
+    "edit-character-title": "Edit character",
+    "character-name-too-short": "Character name is too short (minimum 3 characters).",
+    "character-name-too-long": "Character name is too long (maximum 30 characters).",
+    "character-saved": "Character saved."
+  }
+}

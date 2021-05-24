@@ -3,8 +3,9 @@ package com.github.saphyra.apphub.lib.error_handler;
 import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
-import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
+import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
 import com.github.saphyra.apphub.lib.exception.RestException;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,14 @@ class ErrorHandlerAdvice {
     private static final String GENERAL_ERROR_CODE = "GENERAL_ERROR";
 
     private final ErrorResponseFactory errorResponseFactory;
+
+    @ExceptionHandler(FeignException.class)
+    ResponseEntity<?> feignException(FeignException exception) {
+        String content = exception.contentUTF8();
+        HttpStatus status = HttpStatus.valueOf(exception.status());
+        log.warn("Handling feignException with status {} and content {} for {} - {}", status, content, exception.request().httpMethod(), exception.request().url());
+        return new ResponseEntity<>(content, status);
+    }
 
     @ExceptionHandler(RestException.class)
     ResponseEntity<ErrorResponse> restException(RestException exception) {

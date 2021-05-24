@@ -16,7 +16,7 @@ class AccessTokenFactory {
 
     AccessToken create(UUID userId, boolean persistent) {
         return AccessToken.builder()
-            .accessTokenId(idGenerator.randomUUID())
+            .accessTokenId(idGenerator.randomUuid())
             .userId(userId)
             .persistent(persistent)
             .lastAccess(dateTimeUtil.getCurrentDate())

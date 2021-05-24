@@ -1,0 +1,124 @@
+{
+  "title": "SkyXplore - Főmenü",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Főmenü"
+      }
+    ],
+    "new-game-button": [
+      {
+        "key": "innerHTML",
+        "message": "Új játék"
+      }
+    ],
+    "load-game-button": [
+      {
+        "key": "innerHTML",
+        "message": "Játék betöltése"
+      }
+    ],
+    "edit-character-button": [
+      {
+        "key": "innerHTML",
+        "message": "Karakter szerkesztése"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Vissza"
+      }
+    ],
+    "friends-title": [
+      {
+        "key": "innerHTML",
+        "message": "Barátok"
+      }
+    ],
+    "new-friend-name": [
+      {
+        "key": "placeholder",
+        "message": "Barátok keresése"
+      }
+    ],
+    "no-character-found": [
+      {
+        "key": "innerHTML",
+        "message": "Nem található karakter a megadott névvel"
+      }
+    ],
+    "query-string-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "Legalább 3 karaktert írj be"
+      }
+    ],
+    "incoming-friend-request-list-title": [
+      {
+        "key": "innerHTML",
+        "message": "Barátkérelmek"
+      }
+    ],
+    "friend-list-title": [
+      {
+        "key": "innerHTML",
+        "message": "Barátok"
+      }
+    ],
+    "outgoing-friend-request-list-title": [
+      {
+        "key": "innerHTML",
+        "message": "Elküldött barátkérelmek"
+      }
+    ],
+    "lobby-creation-title": [
+      {
+        "key": "innerHTML",
+        "message": "Új játék"
+      }
+    ],
+    "lobby-creation-tab-title": [
+      {
+        "key": "innerHTML",
+        "message": "Új játék"
+      }
+    ],
+    "lobby-creation-span": [
+      {
+        "key": "innerHTML",
+        "message": "Játék neve"
+      }
+    ],
+    "lobby-name": [
+      {
+        "key": "placeholder",
+        "message": "Játék neve"
+      }
+    ],
+    "create-lobby-button": [
+      {
+        "key": "innerHTML",
+        "message": "Játék létrehozása"
+      }
+    ]
+  },
+  "additionalContent": {
+    "character-saved": "Karakter elmentve.",
+    "friend-request-sent": "Barátkérelem elküldve.",
+    "cancel-friend-request": "Visszavon",
+    "friend-request-canceled": "Barátkérelem visszavonva.",
+    "accept-friend-request": "Elfogad",
+    "friend-request-accepted": "Barátkérelem elfogadva.",
+    "remove-friend": "Eltávolít",
+    "friend-removed": "Barát eltávolítva.",
+    "empty-result": "Üres",
+    "invitation-title": "Játékmeghívás",
+    "invitation-message": "meghívott egy játékba!",
+    "accept-invitation": "Elfogad",
+    "reject-invitation": "Elutasít",
+    "game-name-too-short": "A játék neve túl rövid (3 karakter minimum).",
+    "game-name-too-long": "A játék neve túl hosszú (30 karakter maximum)."
+  }
+}

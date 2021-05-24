@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -20,8 +21,17 @@ class RequiredRoleChecker {
         if (accessTokenHeaderOptional.isPresent()) {
             AccessTokenHeader accessTokenHeader = accessTokenHeaderOptional.get();
             log.info("Roles of user {}: {}", accessTokenHeader.getUserId(), accessTokenHeader.getRoles());
-            return roleSettings.stream()
-                .allMatch(roleSetting -> accessTokenHeader.getRoles().containsAll(roleSetting.getRequiredRoles()));
+
+            List<RoleSetting> failedRoles = roleSettings.stream()
+                .filter(roleSetting -> !accessTokenHeader.getRoles().containsAll(roleSetting.getRequiredRoles()))
+                .collect(Collectors.toList());
+
+            if (failedRoles.isEmpty()) {
+                return true;
+            } else {
+                log.warn("{} does not have the required roles. Roles: {}, Failed settings: {}", accessTokenHeader.getUserId(), accessTokenHeader.getRoles(), failedRoles);
+                return false;
+            }
         } else {
             log.info("User is not logged in. Access denied.");
             return false;

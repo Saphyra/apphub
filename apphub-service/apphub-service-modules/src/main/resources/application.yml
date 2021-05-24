@@ -39,3 +39,10 @@ modules:
         url: /web/utils/log-formatter
         allowedByDefault: true
         mobileAllowed: true
+    game:
+      - name: skyxplore
+        url: /web/skyxplore
+        allowedByDefault: false
+        mobileAllowed: false
+        roles:
+          - SKYXPLORE

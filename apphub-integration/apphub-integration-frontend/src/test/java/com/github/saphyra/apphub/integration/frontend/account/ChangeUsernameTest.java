@@ -19,7 +19,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class ChangeUsernameTest extends SeleniumTest {
-    @DataProvider(name = "invalidParameters", parallel = true)
+    @DataProvider(name = "invalidParameters")
     public Object[][] invalidParametersProvider() {
         return new Object[][]{
             new Object[]{ChangeUsernameParameters.valid(), valid()},

@@ -16,3 +16,7 @@ function Response(response){
         return this.status + ": " + this.statusKey + " - " + this.body;
     }
 }
+
+function jsonConverter(response){
+    return JSON.parse(response.body);
+}

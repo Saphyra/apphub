@@ -17,6 +17,7 @@ public class MessageAssemblerTest {
     private static final String MESSAGE = "asd ${key} asd";
     private static final String UNKNOWN_KEY = "unknown-key";
     private static final String UNKNOWN_VALUE = "unknown-value";
+
     @InjectMocks
     private MessageAssembler underTest;
 

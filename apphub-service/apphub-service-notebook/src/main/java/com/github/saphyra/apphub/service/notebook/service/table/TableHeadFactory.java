@@ -28,7 +28,7 @@ public class TableHeadFactory {
 
     public BiWrapper<TableHead, Content> create(UUID listItemId, String columnName, int columnIndex, UUID userId) {
         TableHead tableHead = TableHead.builder()
-            .tableHeadId(idGenerator.randomUUID())
+            .tableHeadId(idGenerator.randomUuid())
             .userId(userId)
             .parent(listItemId)
             .columnIndex(columnIndex)

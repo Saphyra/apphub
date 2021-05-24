@@ -24,7 +24,6 @@
     </build>
     <modules>
         <module>apphub-api-modules-model</module>
-        <module>apphub-api-modules-client</module>
         <module>apphub-api-modules-server</module>
     </modules>
 </project>

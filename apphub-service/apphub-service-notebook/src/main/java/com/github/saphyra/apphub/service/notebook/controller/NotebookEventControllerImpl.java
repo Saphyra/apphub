@@ -22,7 +22,7 @@ public class NotebookEventControllerImpl implements NotebookEventController {
     @Transactional
     public void deleteAccountEvent(SendEventRequest<DeleteAccountEvent> request) {
         UUID userId = request.getPayload().getUserId();
-        log.info("SendEventRequest arrived with userId {}", userId);
+        log.info("DeleteAccountEvent arrived with userId {}", userId);
         daos.forEach(deleteByUserIdDao -> deleteByUserIdDao.deleteByUserId(userId));
     }
 }

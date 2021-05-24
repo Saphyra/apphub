@@ -19,28 +19,28 @@ class CloneUtil {
 
     ChecklistItem clone(UUID parent, ChecklistItem toClone) {
         return toClone.toBuilder()
-            .checklistItemId(idGenerator.randomUUID())
+            .checklistItemId(idGenerator.randomUuid())
             .parent(parent)
             .build();
     }
 
     TableHead clone(UUID parent, TableHead toClone) {
         return toClone.toBuilder()
-            .tableHeadId(idGenerator.randomUUID())
+            .tableHeadId(idGenerator.randomUuid())
             .parent(parent)
             .build();
     }
 
     TableJoin clone(UUID parent, TableJoin toClone) {
         return toClone.toBuilder()
-            .tableJoinId(idGenerator.randomUUID())
+            .tableJoinId(idGenerator.randomUuid())
             .parent(parent)
             .build();
     }
 
     ChecklistTableRow clone(UUID parent, ChecklistTableRow toClone) {
         return toClone.toBuilder()
-            .rowId(idGenerator.randomUUID())
+            .rowId(idGenerator.randomUuid())
             .parent(parent)
             .build();
     }

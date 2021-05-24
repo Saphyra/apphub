@@ -19,7 +19,7 @@ public class ChecklistItemFactory {
     private final IdGenerator idGenerator;
 
     public BiWrapper<ChecklistItem, Content> create(ListItem listItem, ChecklistItemNodeRequest nodeRequest) {
-        UUID checklistItemId = idGenerator.randomUUID();
+        UUID checklistItemId = idGenerator.randomUuid();
         ChecklistItem checklistItem = ChecklistItem.builder()
             .checklistItemId(checklistItemId)
             .userId(listItem.getUserId())

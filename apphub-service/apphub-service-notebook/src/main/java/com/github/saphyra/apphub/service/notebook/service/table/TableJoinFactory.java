@@ -32,7 +32,7 @@ public class TableJoinFactory {
 
     public BiWrapper<TableJoin, Content> create(UUID listItemId, String columnContent, int rowIndex, int columnIndex, UUID userId) {
         TableJoin tableJoin = TableJoin.builder()
-            .tableJoinId(idGenerator.randomUUID())
+            .tableJoinId(idGenerator.randomUuid())
             .userId(userId)
             .parent(listItemId)
             .rowIndex(rowIndex)

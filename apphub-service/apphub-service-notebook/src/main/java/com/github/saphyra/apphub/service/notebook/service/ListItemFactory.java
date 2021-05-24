@@ -15,7 +15,7 @@ public class ListItemFactory {
 
     public ListItem create(UUID userId, String title, UUID parent, ListItemType type) {
         return ListItem.builder()
-            .listItemId(idGenerator.randomUUID())
+            .listItemId(idGenerator.randomUuid())
             .userId(userId)
             .parent(parent)
             .type(type)

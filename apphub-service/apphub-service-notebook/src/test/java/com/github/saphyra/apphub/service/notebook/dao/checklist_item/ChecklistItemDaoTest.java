@@ -84,7 +84,7 @@ public class ChecklistItemDaoTest {
         given(uuidConverter.convertDomain(CHECKLIST_ITEM_ID)).willReturn(CHECKLIST_ITEM_ID_STRING);
 
         given(repository.findById(CHECKLIST_ITEM_ID_STRING)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(entity)).willReturn(domain);
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
 
         ChecklistItem result = underTest.findByIdValidated(CHECKLIST_ITEM_ID);
 

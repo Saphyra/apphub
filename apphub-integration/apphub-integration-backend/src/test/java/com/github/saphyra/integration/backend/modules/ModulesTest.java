@@ -1,10 +1,10 @@
 package com.github.saphyra.integration.backend.modules;
 
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.backend.actions.ModulesActions;
 import com.github.saphyra.apphub.integration.backend.model.ModulesResponse;
-import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
 import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
@@ -12,22 +12,16 @@ import com.github.saphyra.apphub.integration.common.model.LoginRequest;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.common.model.RegistrationRequest;
 import io.restassured.response.Response;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_INVALID_PARAM;
+import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.INVALID_PARAM;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ModulesTest extends TestBase {
-    @DataProvider(name = "localeDataProvider", parallel = true)
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
-
+public class ModulesTest extends BackEndTest {
     @Test(dataProvider = "localeDataProvider")
     public void getModules(Language locale) {
         RegistrationRequest registrationRequest = RegistrationParameters.validParameters()
@@ -43,7 +37,7 @@ public class ModulesTest extends TestBase {
 
         Map<String, List<ModulesResponse>> result = ModulesActions.getModules(locale, accessTokenId);
 
-        assertThat(result).containsOnlyKeys("accounts", "office", "development-utils");
+        assertThat(result).containsOnlyKeys("accounts", "office", "development-utils", "game");
         ModulesResponse expectedModuleAccount = ModulesResponse.builder()
             .name("account")
             .url("/web/user/account")
@@ -69,6 +63,13 @@ public class ModulesTest extends TestBase {
             .favorite(false)
             .build();
         assertThat(result.get("development-utils")).containsExactlyInAnyOrder(expectedModuleLogFormatter, expectedModuleJsonFormatter);
+
+        ModulesResponse expectedModuleSkyXplore = ModulesResponse.builder()
+            .name("skyxplore")
+            .url("/web/skyxplore")
+            .favorite(false)
+            .build();
+        assertThat(result.get("game")).containsExactly(expectedModuleSkyXplore);
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -95,7 +96,7 @@ public class ModulesTest extends TestBase {
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_INVALID_PARAM));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, INVALID_PARAM));
         assertThat(errorResponse.getParams().get("module")).isEqualTo("does not exist");
     }
 
@@ -123,7 +124,7 @@ public class ModulesTest extends TestBase {
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_INVALID_PARAM));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, INVALID_PARAM));
         assertThat(errorResponse.getParams().get("value")).isEqualTo("must not be null");
     }
 
@@ -147,7 +148,7 @@ public class ModulesTest extends TestBase {
             true
         );
 
-        assertThat(result).containsOnlyKeys("accounts", "office", "development-utils");
+        assertThat(result).containsOnlyKeys("accounts", "office", "development-utils", "game");
         ModulesResponse expectedModule = ModulesResponse.builder()
             .name("account")
             .url("/web/user/account")

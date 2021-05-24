@@ -2,9 +2,10 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.authenti
 
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
-import com.github.saphyra.apphub.test.common.TestConstants;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -13,9 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import javax.servlet.http.HttpServletRequest;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -28,18 +26,20 @@ import static org.mockito.Mockito.verifyNoInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AccessTokenExpirationUpdateServiceTest {
-    private static final String REQUEST_URI = "request-uri";
-    private static final String NON_SESSION_EXTENDING_URI = "non-session-extending-uri";
+    private static final String METHOD = "method";
+    private static final String PATTERN = "pattern";
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
+    private static final String PATH = "path";
+    private static final String LOCALE = "locale";
 
     @Mock
     private AntPathMatcher antPathMatcher;
 
     @Mock
-    private EventGatewayApiClient eventGatewayApi;
+    private CommonConfigProperties commonConfigProperties;
 
     @Mock
-    private CommonConfigProperties commonConfigProperties;
+    private EventGatewayApiClient eventGatewayApi;
 
     @Mock
     private NonSessionExtendingUriProperties nonSessionExtendingUriProperties;
@@ -47,42 +47,33 @@ public class AccessTokenExpirationUpdateServiceTest {
     @InjectMocks
     private AccessTokenExpirationUpdateService underTest;
 
-    @Mock
-    private HttpServletRequest request;
-
     @Captor
-    ArgumentCaptor<SendEventRequest<RefreshAccessTokenExpirationEvent>> argumentCaptor;
+    private ArgumentCaptor<SendEventRequest<RefreshAccessTokenExpirationEvent>> argumentCaptor;
+
+    @Before
+    public void setUp() {
+        given(nonSessionExtendingUriProperties.getNonSessionExtendingUris()).willReturn(Arrays.asList(new WhiteListedEndpoint(PATTERN, METHOD)));
+    }
 
     @Test
-    public void updateExpiration_nonSessionExtendingUri() {
-        given(request.getRequestURI()).willReturn(REQUEST_URI);
-        given(request.getMethod()).willReturn(RequestMethod.GET.name());
+    public void nonSessionExtendingUri() {
+        given(antPathMatcher.match(PATTERN, PATH)).willReturn(true);
 
-        NonSessionExtendingUriProperties.NonSessionExtendingUri nonSessionExtendingUri = new NonSessionExtendingUriProperties.NonSessionExtendingUri(NON_SESSION_EXTENDING_URI, RequestMethod.GET.name());
-        given(nonSessionExtendingUriProperties.getNonSessionExtendingUris()).willReturn(Arrays.asList(nonSessionExtendingUri));
-
-        given(antPathMatcher.match(NON_SESSION_EXTENDING_URI, REQUEST_URI)).willReturn(true);
-
-        underTest.updateExpiration(request, ACCESS_TOKEN_ID);
+        underTest.updateExpiration(METHOD, PATH, ACCESS_TOKEN_ID);
 
         verifyNoInteractions(eventGatewayApi);
     }
 
     @Test
-    public void updateExpiration() {
-        given(request.getRequestURI()).willReturn(REQUEST_URI);
-        given(request.getMethod()).willReturn(RequestMethod.GET.name());
-        given(commonConfigProperties.getDefaultLocale()).willReturn(TestConstants.DEFAULT_LOCALE);
+    public void sessionExtendingUri() {
+        given(antPathMatcher.match(PATTERN, PATH)).willReturn(false);
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
 
-        NonSessionExtendingUriProperties.NonSessionExtendingUri nonSessionExtendingUri = new NonSessionExtendingUriProperties.NonSessionExtendingUri(NON_SESSION_EXTENDING_URI, RequestMethod.GET.name());
-        given(nonSessionExtendingUriProperties.getNonSessionExtendingUris()).willReturn(Arrays.asList(nonSessionExtendingUri));
+        underTest.updateExpiration(METHOD, PATH, ACCESS_TOKEN_ID);
 
-        given(antPathMatcher.match(NON_SESSION_EXTENDING_URI, REQUEST_URI)).willReturn(false);
+        verify(eventGatewayApi).sendEvent(argumentCaptor.capture(), eq(LOCALE));
 
-        underTest.updateExpiration(request, ACCESS_TOKEN_ID);
-
-        verify(eventGatewayApi).sendEvent(argumentCaptor.capture(), eq(TestConstants.DEFAULT_LOCALE));
-        assertThat(argumentCaptor.getValue().getEventName()).isEqualTo(RefreshAccessTokenExpirationEvent.EVENT_NAME);
-        assertThat(argumentCaptor.getValue().getPayload().getAccessTokenId()).isEqualTo(ACCESS_TOKEN_ID);
+        RefreshAccessTokenExpirationEvent payload = argumentCaptor.getValue().getPayload();
+        assertThat(payload.getAccessTokenId()).isEqualTo(ACCESS_TOKEN_ID);
     }
 }

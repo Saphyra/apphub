@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CategoryTreeView;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateCategoryRequest;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import org.testng.annotations.Test;
@@ -14,7 +14,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CategoryTreeTest extends TestBase {
+public class CategoryTreeTest extends BackEndTest {
     private static final String TITLE_1 = "title-1";
     private static final String TITLE_2 = "title-2";
 

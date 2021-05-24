@@ -2,6 +2,7 @@ function Request(endpoint, body){
     this.method = endpoint.getMethod();
     this.path = endpoint.getUrl();
     this.body = processBody(body);
+    const errorHandler = new ErrorHandlerRegistry();
     this.state = {};
     
     function processBody(body){
@@ -13,7 +14,11 @@ function Request(endpoint, body){
         }
         return body;
     }
-    
+
+    this.getErrorHandler = function(){
+        return errorHandler;
+    }
+
     this.processResponse = function(response){
         if(this.isResponseOk(response)){
             this.processValidResponse(this.convertResponse(response), this.state);
@@ -36,10 +41,6 @@ function Request(endpoint, body){
 
     this.processInvalidResponse = function(response){
         errorHandler.handleError(this, response);
-    }
-    
-    this.processErrorResponse = function(response){
-        notificationService.showError("Invalid response from BackEnd: " + response.toString());
     }
     
     this.validate = function(){

@@ -19,7 +19,7 @@ public class ContentFactory {
 
     public Content create(UUID parent, UUID userId, String content) {
         return Content.builder()
-            .contentId(idGenerator.randomUUID())
+            .contentId(idGenerator.randomUuid())
             .userId(userId)
             .parent(parent)
             .content(content)
