@@ -12,7 +12,6 @@ import com.github.saphyra.apphub.integration.common.model.LoginRequest;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.common.model.RegistrationRequest;
 import io.restassured.response.Response;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -23,11 +22,6 @@ import static com.github.saphyra.apphub.integration.common.framework.localizatio
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ModulesTest extends BackEndTest {
-    @DataProvider(name = "localeDataProvider")
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
-
     @Test(dataProvider = "localeDataProvider")
     public void getModules(Language locale) {
         RegistrationRequest registrationRequest = RegistrationParameters.validParameters()

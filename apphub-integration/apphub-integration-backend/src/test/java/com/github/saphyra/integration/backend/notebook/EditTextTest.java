@@ -1,18 +1,17 @@
 package com.github.saphyra.integration.backend.notebook;
 
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.EditTextRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.TextResponse;
-import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
 import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.UUID;
@@ -25,11 +24,6 @@ public class EditTextTest extends BackEndTest {
     private static final String ORIGINAL_CONTENT = "original-content";
     private static final String NEW_CONTENT = "new-content";
     private static final String NEW_TITLE = "new-title";
-
-    @DataProvider(name = "localeDataProvider")
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
 
     @Test(dataProvider = "localeDataProvider")
     public void blankTitle(Language language) {

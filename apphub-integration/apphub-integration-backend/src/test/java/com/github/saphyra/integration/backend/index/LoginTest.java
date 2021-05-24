@@ -1,7 +1,7 @@
 package com.github.saphyra.integration.backend.index;
 
-import com.github.saphyra.apphub.integration.backend.actions.ModulesActions;
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.ModulesActions;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
@@ -17,7 +17,6 @@ import com.github.saphyra.apphub.integration.common.model.LoginRequest;
 import com.github.saphyra.apphub.integration.common.model.LoginResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.time.LocalDateTime;
@@ -26,11 +25,6 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginTest extends BackEndTest {
-    @DataProvider(name = "localeDataProvider")
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
-
     @Test(dataProvider = "localeDataProvider")
     public void emailDoesNotExist(Language locale) {
         RegistrationParameters userData = RegistrationParameters.validParameters();

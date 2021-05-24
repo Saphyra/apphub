@@ -53,7 +53,9 @@ public class SkyXploreFlow {
         assertThat(allPlayersReady).isTrue();
 
         SkyXploreLobbyActions.startGame(language, host.getAccessTokenId());
-        hostLobbyWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED);
+        hostLobbyWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED)
+            .orElseThrow(() -> new RuntimeException("GameLoaded event not arrived."));
+        memberLobbyWsClients.forEach(memberLobbyWsClient -> memberLobbyWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED).orElseThrow(() -> new RuntimeException("GameLoaded event not arrived.")));
 
         return Stream.concat(Stream.of(host), Arrays.stream(members))
             .map(Player::getAccessTokenId)

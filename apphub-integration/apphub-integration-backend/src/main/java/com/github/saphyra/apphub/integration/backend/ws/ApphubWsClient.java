@@ -121,10 +121,10 @@ public class ApphubWsClient extends WebSocketClient {
     }
 
     public Optional<WebSocketEvent> awaitForEvent(WebSocketEventName eventName) {
-        return AwaitilityWrapper.findWithWait(() -> messages, webSocketEvent -> webSocketEvent.getEventName().equals(eventName));
+        return AwaitilityWrapper.findWithWait(60, () -> messages, webSocketEvent -> webSocketEvent.getEventName().equals(eventName));
     }
 
     public Optional<WebSocketEvent> awaitForEvent(WebSocketEventName eventName, Predicate<WebSocketEvent> customCondition) {
-        return AwaitilityWrapper.findWithWait(() -> messages, webSocketEvent -> webSocketEvent.getEventName().equals(eventName) && customCondition.test(webSocketEvent));
+        return AwaitilityWrapper.findWithWait(60, () -> messages, webSocketEvent -> webSocketEvent.getEventName().equals(eventName) && customCondition.test(webSocketEvent));
     }
 }

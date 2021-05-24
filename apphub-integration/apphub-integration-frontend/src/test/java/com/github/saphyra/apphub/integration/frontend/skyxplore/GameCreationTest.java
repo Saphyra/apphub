@@ -65,7 +65,7 @@ public class GameCreationTest extends SeleniumTest {
             .softAssertTrue();
 
         SkyXploreLobbyActions.startGameCreation(driver);
-        AwaitilityWrapper.createDefault()
+        AwaitilityWrapper.create(60, 1)
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_GAME_PAGE))
             .assertTrue("SkyXplore Game page is not loaded.");
     }

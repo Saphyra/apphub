@@ -70,10 +70,12 @@ public class DatabaseUtil {
             String sql = String.format(GET_USER_ID_BY_EMAIL_QUERY, email);
             log.info("GetUserIdByEmail SQL: {}", sql);
 
-            return query(sql, rs -> {
+            UUID result = query(sql, rs -> {
                 rs.next();
                 return UUID.fromString(rs.getString(1));
             });
+            log.info("UserId for email {}: {}", result, email);
+            return result;
 
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);

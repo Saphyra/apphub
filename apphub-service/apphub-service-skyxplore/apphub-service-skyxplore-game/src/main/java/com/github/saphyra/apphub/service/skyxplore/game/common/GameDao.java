@@ -27,8 +27,8 @@ public class GameDao {
     private final GameSaverService gameSaverService;
 
     public void save(Game game) {
-        gameSaverService.save(game);
         repository.put(game.getGameId(), game);
+        gameSaverService.save(game);
     }
 
     @VisibleForTesting

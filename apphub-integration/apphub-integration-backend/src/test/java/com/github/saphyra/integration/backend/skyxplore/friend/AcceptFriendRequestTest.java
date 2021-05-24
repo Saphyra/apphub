@@ -1,11 +1,11 @@
 package com.github.saphyra.integration.backend.skyxplore.friend;
 
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreFriendActions;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.FriendshipResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SentFriendRequestResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
@@ -15,7 +15,6 @@ import com.github.saphyra.apphub.integration.common.framework.localization.Local
 import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -24,11 +23,6 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AcceptFriendRequestTest extends BackEndTest {
-    @DataProvider(name = "localeDataProvider")
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
-
     @Test(dataProvider = "localeDataProvider")
     public void friendRequestNotFound(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();

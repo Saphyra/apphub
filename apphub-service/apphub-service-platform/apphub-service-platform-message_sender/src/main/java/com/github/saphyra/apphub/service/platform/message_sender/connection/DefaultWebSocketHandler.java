@@ -130,7 +130,8 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
 
     @Override
     public List<UUID> sendEvent(WebSocketMessage message) {
-        log.info("Sending {} event in messageGroup {} to recipients {}", message.getEvent().getEventName(), getGroup(), message.getRecipients());
+        log.info("Sending {} event in messageGroup {} to {} number of recipients", message.getEvent().getEventName(), getGroup(), message.getRecipients().size());
+        log.debug("Recipients: {}", message.getRecipients());
         return message.getRecipients()
             .stream()
             .filter(sessionMap::containsKey)

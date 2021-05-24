@@ -1,30 +1,45 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.save;
 
+import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreDataGameClient;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.service.skyxplore.game.common.CustomLocaleProvider;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.GameToGameItemListConverter;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameSaverServiceTest {
+    private static final String LOCALE = "locale";
+
     @Mock
     private GameToGameItemListConverter converter;
 
     @Mock
-    private GameItemSaverService saverService;
-    private final ExecutorServiceBean executorServiceBean = new ExecutorServiceBean(new SleepService());
+    private ExecutorServiceBean executorServiceBean;
 
+    @Mock
+    private SaverProperties saverProperties;
+
+    @Mock
+    private SkyXploreDataGameClient gameClient;
+
+    @Mock
+    private CustomLocaleProvider customLocaleProvider;
+
+    @InjectMocks
     private GameSaverService underTest;
 
     @Mock
@@ -33,21 +48,14 @@ public class GameSaverServiceTest {
     @Mock
     private GameItem gameItem;
 
-    @Before
-    public void setUp() {
-        underTest = GameSaverService.builder()
-            .converter(converter)
-            .saverService(saverService)
-            .executorServiceBean(executorServiceBean)
-            .build();
-    }
-
     @Test
     public void save() {
-        given(converter.convertDeep(game)).willReturn(Arrays.asList(gameItem));
+        given(executorServiceBean.processWithWait(eq(game), any())).willReturn(Arrays.asList(gameItem, gameItem));
+        given(saverProperties.getMaxChunkSize()).willReturn(1);
+        given(customLocaleProvider.getLocale()).willReturn(LOCALE);
 
         underTest.save(game);
 
-        verify(saverService).saveAsync(Arrays.asList(gameItem));
+        verify(gameClient, times(2)).saveGameData(Arrays.asList(gameItem), LOCALE);
     }
 }

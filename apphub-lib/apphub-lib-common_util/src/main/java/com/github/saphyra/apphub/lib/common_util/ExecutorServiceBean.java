@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -13,7 +12,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class ExecutorServiceBean implements Executor {
+public class ExecutorServiceBean {
     private final ExecutorService executor;
     private final SleepService sleepService;
 
@@ -27,9 +26,8 @@ public class ExecutorServiceBean implements Executor {
         this.sleepService = sleepService;
     }
 
-    @Override
-    public void execute(Runnable command) {
-        executor.submit(wrap(command));
+    public Future<?> execute(Runnable command) {
+        return executor.submit(wrap(command));
     }
 
     private Runnable wrap(Runnable command) {

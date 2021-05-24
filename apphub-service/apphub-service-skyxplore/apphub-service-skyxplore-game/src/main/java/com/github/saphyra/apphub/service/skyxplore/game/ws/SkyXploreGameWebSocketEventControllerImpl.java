@@ -67,21 +67,21 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
     @Override
     public void userLeftGame(UUID userId) {
         log.info("{} left the game.", userId);
-        Game game = gameDao.findByUserIdValidated(userId);
+        gameDao.findByUserId(userId).ifPresent(game -> {
+            game.getPlayers().get(userId).setConnected(false);
 
-        game.getPlayers().get(userId).setConnected(false);
+            String userName = characterProxy.getCharacterByUserId(userId).getName();
 
-        String userName = characterProxy.getCharacterByUserId(userId).getName();
-
-        game.getChat()
-            .getRooms()
-            .stream()
-            .filter(chatRoom -> chatRoom.getMembers().contains(userId))
-            .forEach(chatRoom -> sendMessage(
-                game.filterConnectedPlayersFrom(chatRoom.getMembers()),
-                WebSocketEventName.SKYXPLORE_GAME_USER_LEFT,
-                new SystemMessage(chatRoom.getId(), userName, userId)
-            ));
+            game.getChat()
+                .getRooms()
+                .stream()
+                .filter(chatRoom -> chatRoom.getMembers().contains(userId))
+                .forEach(chatRoom -> sendMessage(
+                    game.filterConnectedPlayersFrom(chatRoom.getMembers()),
+                    WebSocketEventName.SKYXPLORE_GAME_USER_LEFT,
+                    new SystemMessage(chatRoom.getId(), userName, userId)
+                ));
+        });
     }
 
     private void sendMessage(List<UUID> recipients, WebSocketEventName eventName, Object payload) {

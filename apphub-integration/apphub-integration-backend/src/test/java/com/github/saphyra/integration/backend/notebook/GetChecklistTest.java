@@ -1,10 +1,10 @@
 package com.github.saphyra.integration.backend.notebook;
 
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistItemNodeRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistResponse;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateChecklistItemRequest;
-import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -12,7 +12,6 @@ import com.github.saphyra.apphub.integration.common.framework.localization.Local
 import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -25,11 +24,6 @@ public class GetChecklistTest extends BackEndTest {
     private static final String TITLE = "title";
     private static final String CONTENT = "content";
     private static final Integer ORDER = 23;
-
-    @DataProvider(name = "localeDataProvider")
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
 
     @Test(dataProvider = "localeDataProvider")
     public void listItemNotFound(Language language) {

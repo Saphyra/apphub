@@ -31,7 +31,7 @@ public class SkyXploreDataGameControllerImpl implements SkyXploreDataGameControl
 
     @Override
     public void saveGameData(List<Object> items) {
-        log.info("Saving {} number of gameItems...", items.size());
+        log.info("Saving {} number of gameItems for game {}...", items.size(), objectMapperWrapper.convertValue(items.get(0), GameItem.class).getGameId());
         items.stream()
             .map(o -> new BiWrapper<>(o, objectMapperWrapper.convertValue(o, GameItem.class).getType()))
             .filter(this::isTypeFilled)

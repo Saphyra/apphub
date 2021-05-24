@@ -89,7 +89,7 @@ public class GameChatTest extends SeleniumTest {
 
         SkyXploreLobbyActions.startGameCreation(driver1);
 
-        AwaitilityWrapper.create(30, 2)
+        AwaitilityWrapper.create(60, 2)
             .until(() -> Stream.of(player1, player2, player3).allMatch(player -> SkyXploreGameActions.isGameLoaded(player.getEntity1())))
             .assertTrue("Game not loaded for all users");
 

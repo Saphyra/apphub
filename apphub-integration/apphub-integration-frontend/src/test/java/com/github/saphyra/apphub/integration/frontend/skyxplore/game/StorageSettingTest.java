@@ -39,7 +39,7 @@ public class StorageSettingTest extends SeleniumTest {
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
 
-        AwaitilityWrapper.createDefault()
+        AwaitilityWrapper.create(60, 1)
             .until(() -> SkyXploreGameActions.isGameLoaded(driver))
             .assertTrue("Game not loaded.");
 

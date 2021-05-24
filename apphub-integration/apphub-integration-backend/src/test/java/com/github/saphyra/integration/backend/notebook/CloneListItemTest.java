@@ -1,8 +1,20 @@
 package com.github.saphyra.integration.backend.notebook;
 
-import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
-import com.github.saphyra.apphub.integration.backend.model.notebook.*;
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
+import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistItemNodeRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistResponse;
+import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistTableResponse;
+import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistTableRowRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.ChildrenOfCategoryResponse;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateCategoryRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateChecklistTableRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateLinkRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTableRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTextRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.NotebookView;
+import com.github.saphyra.apphub.integration.backend.model.notebook.TableResponse;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -11,7 +23,6 @@ import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.ListItemType;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -37,11 +48,6 @@ public class CloneListItemTest extends BackEndTest {
     private static final String CHECKLIST_TABLE_TITLE = "checklist-table-title";
     private static final String CHECKLIST_TABLE_COLUMN_NAME = "checklist-table-column-name";
     private static final String CHECKLIST_TABLE_COLUMN_VALUE = "checklist-table-column-value";
-
-    @DataProvider(name = "localeDataProvider")
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
 
     @Test(dataProvider = "localeDataProvider")
     public void listItemNotFound(Language language) {

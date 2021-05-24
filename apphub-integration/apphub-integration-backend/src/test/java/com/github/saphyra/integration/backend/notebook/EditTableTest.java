@@ -1,8 +1,12 @@
 package com.github.saphyra.integration.backend.notebook;
 
-import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
-import com.github.saphyra.apphub.integration.backend.model.notebook.*;
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTableRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.EditTableRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.TableColumnResponse;
+import com.github.saphyra.apphub.integration.backend.model.notebook.TableHeadResponse;
+import com.github.saphyra.apphub.integration.backend.model.notebook.TableResponse;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -11,7 +15,6 @@ import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.KeyValuePair;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -29,11 +32,6 @@ public class EditTableTest extends BackEndTest {
     private static final String NEW_COLUMN_NAME = "new-column-name";
     private static final String NEW_COLUMN_VALUE = "new-column-value";
     private static final String NEW_TITLE = "new-title";
-
-    @DataProvider(name = "localeDataProvider")
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
 
     @Test(dataProvider = "localeDataProvider")
     public void blankTitle(Language language) {

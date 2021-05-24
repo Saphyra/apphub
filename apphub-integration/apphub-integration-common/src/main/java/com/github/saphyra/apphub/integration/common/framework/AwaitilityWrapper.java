@@ -49,6 +49,14 @@ public class AwaitilityWrapper {
         return helper.getResult();
     }
 
+    public static <T> Optional<T> findWithWait(int timeout, Supplier<List<T>> supplier, Predicate<T> predicate) {
+        FindWithWaitHelper<T> helper = new FindWithWaitHelper<>(supplier, predicate);
+        create(timeout, 1)
+            .until(helper::search);
+
+        return helper.getResult();
+    }
+
     public static <T> Optional<T> getWithWait(Supplier<T> supplier, Predicate<T> predicate) {
         GetWithWaitHelper<T> helper = new GetWithWaitHelper<>(supplier, predicate);
         createDefault()

@@ -1,10 +1,10 @@
 package com.github.saphyra.integration.backend.index;
 
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
@@ -12,7 +12,6 @@ import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.common.model.RegistrationRequest;
 import io.restassured.response.Response;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -25,11 +24,6 @@ import static com.github.saphyra.apphub.integration.common.framework.localizatio
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RegistrationTest extends BackEndTest {
-    @DataProvider(name = "localeDataProvider")
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
-
     @Test(dataProvider = "localeDataProvider")
     public void register_emailInvalid(Language locale) {
         RegistrationRequest registrationRequest = RegistrationParameters.invalidEmailParameters()

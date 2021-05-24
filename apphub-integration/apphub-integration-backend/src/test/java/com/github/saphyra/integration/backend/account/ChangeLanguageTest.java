@@ -21,11 +21,6 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangeLanguageTest extends BackEndTest {
-    @DataProvider(name = "localeDataProvider")
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
-
     @DataProvider(name = "biLocaleDataProvider")
     public Object[][] biLocaleDataProvider() {
         return new Object[][]{

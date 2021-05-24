@@ -30,11 +30,6 @@ public class EditChecklistTableTest extends BackEndTest {
     private static final String NEW_COLUMN_VALUE = "new-column-value";
     private static final String NEW_TITLE = "new-title";
 
-    @DataProvider(name = "localeDataProvider")
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
-
     @Test(dataProvider = "localeDataProvider")
     public void blankTitle(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();

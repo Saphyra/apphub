@@ -24,7 +24,7 @@ public class CharacterDataControllerImpl implements SkyXploreCharacterDataContro
 
     @Override
     public boolean doesCharacterExistForUser(AccessTokenHeader accessTokenHeader) {
-        log.info("Checking is SkyXplore character is present for user {}", accessTokenHeader.getUserId());
+        log.info("Checking if SkyXplore character is present for user {}", accessTokenHeader.getUserId());
         return characterDao.exists(accessTokenHeader.getUserId());
     }
 

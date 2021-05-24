@@ -1,8 +1,13 @@
 package com.github.saphyra.integration.backend.notebook;
 
-import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
-import com.github.saphyra.apphub.integration.backend.model.notebook.*;
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
+import com.github.saphyra.apphub.integration.backend.model.notebook.ChildrenOfCategoryResponse;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateCategoryRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateLinkRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTextRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.EditListItemRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.NotebookView;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -10,12 +15,14 @@ import com.github.saphyra.apphub.integration.common.framework.localization.Local
 import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.*;
+import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.CATEGORY_NOT_FOUND;
+import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.INVALID_PARAM;
+import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.INVALID_TYPE;
+import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.LIST_ITEM_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EditListItemTest extends BackEndTest {
@@ -23,11 +30,6 @@ public class EditListItemTest extends BackEndTest {
     private static final String NEW_TITLE = "new-title";
     private static final String ORIGINAL_URL = "original-url";
     private static final String NEW_URL = "new-url";
-
-    @DataProvider(name = "localeDataProvider")
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
 
     @Test(dataProvider = "localeDataProvider")
     public void blankTitle(Language language) {

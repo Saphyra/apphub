@@ -57,18 +57,23 @@ public class StartGameTest extends BackEndTest {
         getSoftAssertions().assertThat(notReadyErrorResponse.getErrorCode()).isEqualTo(ErrorCode.LOBBY_MEMBER_NOT_READY.name());
         getSoftAssertions().assertThat(notReadyErrorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.LOBBY_MEMBER_NOT_READY));
 
-        ApphubWsClient hostWsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
-        ApphubWsClient memberWsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2);
+        ApphubWsClient hostLobbyWsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
+        ApphubWsClient memberLobbyWsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2);
 
         WebSocketEvent readyEvent = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS)
             .payload(true)
             .build();
-        hostWsClient.send(readyEvent);
-        memberWsClient.send(readyEvent);
+        hostLobbyWsClient.send(readyEvent);
+        memberLobbyWsClient.send(readyEvent);
 
         SkyXploreLobbyActions.startGame(language, accessTokenId1);
 
-        hostWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED);
+        hostLobbyWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED)
+            .orElseThrow(() -> new RuntimeException("Lobby creation initiated event did not arrive."));
+
+        //Waiting until game is created, so user will not be deleted during the save process.
+        hostLobbyWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED)
+            .orElseThrow(() -> new RuntimeException("Game not loaded."));
     }
 }

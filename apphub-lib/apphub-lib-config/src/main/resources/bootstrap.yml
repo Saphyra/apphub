@@ -36,6 +36,13 @@ ribbon:
   ConnectTimeout: 10000
   ReadTimeout: 10000
 
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 30000
+        readTimeout: 30000
+
 web-content:
   ribbon:
     listOfServers: web-content:8080

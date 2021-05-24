@@ -99,8 +99,8 @@ public class TestBase {
             .assertAll();
     }
 
-    private void deleteTestUsers() {
-        log.info("Deleting testUsers...");
+    private static synchronized void deleteTestUsers() {
+        log.debug("Deleting testUsers...");
         Language language = Language.HUNGARIAN;
 
         deleteUsersWithPassword(language, VALID_PASSWORD, accessTokenId);
@@ -117,15 +117,15 @@ public class TestBase {
         log.info("AccessTokenId of superUser: {}", accessTokenId);
     }
 
-    private void deleteUsersWithPassword(Language language, String password, UUID accessTokenId) {
+    private static void deleteUsersWithPassword(Language language, String password, UUID accessTokenId) {
         UserRoleResponse[] userResponses = getCandidates(language, accessTokenId);
-        log.info("Deleting {} number of test accounts", userResponses.length);
+        log.debug("Deleting {} number of test accounts", userResponses.length);
 
         Arrays.stream(userResponses)
             .forEach(userRoleResponse -> deleteUser(userRoleResponse.getEmail(), password));
     }
 
-    private UserRoleResponse[] getCandidates(Language language, UUID accessTokenId) {
+    private static UserRoleResponse[] getCandidates(Language language, UUID accessTokenId) {
         Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(new OneParamRequest<>("@" + getEmailDomain() + ".com"))
             .post(UrlFactory.create(Endpoints.GET_USER_ROLES));
@@ -135,9 +135,9 @@ public class TestBase {
         return response.getBody().as(UserRoleResponse[].class);
     }
 
-    private void deleteUser(String email, String password) {
+    private static void deleteUser(String email, String password) {
         try {
-            log.info("Deleting user {}", email);
+            log.debug("Deleting user {}", email);
             LoginRequest loginRequest = LoginRequest.builder()
                 .email(email)
                 .password(password)
@@ -150,7 +150,7 @@ public class TestBase {
                 .delete(UrlFactory.create(Endpoints.DELETE_ACCOUNT));
 
             assertThat(response.getStatusCode()).isEqualTo(200);
-            log.info("User deleted: {}", email);
+            log.debug("User deleted: {}", email);
         } catch (Throwable e) {
             log.error("Failed deleting user {}", email, e);
         }
