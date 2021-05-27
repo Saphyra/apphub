@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UpdatePriorityTest extends BackEndTest {
     private static final String GAME_NAME = "game";
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void unknownPriorityType(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -50,7 +50,7 @@ public class UpdatePriorityTest extends BackEndTest {
         assertThat(errorResponse.getParams()).containsEntry("priorityType", "unknown value");
     }
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void newPriorityTooLow(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -72,7 +72,7 @@ public class UpdatePriorityTest extends BackEndTest {
         assertThat(errorResponse.getParams()).containsEntry("priority", "too low");
     }
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void newPriorityTooHigh(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -94,7 +94,7 @@ public class UpdatePriorityTest extends BackEndTest {
         assertThat(errorResponse.getParams()).containsEntry("priority", "too high");
     }
 
-    @Test
+    @Test(groups = "skyxplore")
     public void updatePriority() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

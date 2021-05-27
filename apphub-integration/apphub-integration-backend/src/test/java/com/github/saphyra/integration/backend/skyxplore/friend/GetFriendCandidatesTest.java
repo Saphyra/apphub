@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class GetFriendCandidatesTest extends BackEndTest {
     private static final String CHARACTER_IDENTIFIER = UUID.randomUUID().toString().substring(0, 6);
 
-    @Test
+    @Test(groups = "skyxplore")
     public void getFriendCandidates() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

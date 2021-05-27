@@ -29,7 +29,7 @@ public class LobbyChatTest extends SeleniumTest {
     private static final String MESSAGE_TEXT_3 = "message-3";
     private static final String USER_LEFT_LOBBY_TEMPLATE = "%s kilépett.";
 
-    @Test
+    @Test(groups = "skyxplore")
     public void sendAndReceiveMessages() {
         WebDriver driver1 = extractDriver();
         RegistrationParameters userData2 = RegistrationParameters.validParameters();

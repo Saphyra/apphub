@@ -25,7 +25,7 @@ public class StorageSettingTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
     public static final String RESOURCE_ID = "ore";
 
-    @Test
+    @Test(groups = "skyxplore")
     public void storageSettingCrud() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();

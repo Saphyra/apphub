@@ -21,7 +21,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CancelFriendRequestTest extends BackEndTest {
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void friendRequestNotFound(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -38,7 +38,7 @@ public class CancelFriendRequestTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FRIEND_REQUEST_NOT_FOUND));
     }
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void forbiddenOperation(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -79,7 +79,7 @@ public class CancelFriendRequestTest extends BackEndTest {
         assertThat(SkyXploreFriendActions.getIncomingFriendRequests(language, accessTokenId2)).hasSize(1);
     }
 
-    @Test
+    @Test(groups = "skyxplore")
     public void cancelFriendRequest() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

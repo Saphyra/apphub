@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class GetActiveFriendsTest extends BackEndTest {
-    @Test
+    @Test(groups = "skyxplore")
     public void getActiveFriends() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

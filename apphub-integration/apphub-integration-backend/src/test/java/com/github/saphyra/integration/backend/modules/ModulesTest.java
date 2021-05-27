@@ -37,7 +37,7 @@ public class ModulesTest extends BackEndTest {
 
         Map<String, List<ModulesResponse>> result = ModulesActions.getModules(locale, accessTokenId);
 
-        assertThat(result).containsOnlyKeys("accounts", "office", "development-utils", "game");
+        assertThat(result).containsKeys("accounts", "office", "development-utils");
         ModulesResponse expectedModuleAccount = ModulesResponse.builder()
             .name("account")
             .url("/web/user/account")
@@ -64,12 +64,15 @@ public class ModulesTest extends BackEndTest {
             .build();
         assertThat(result.get("development-utils")).containsExactlyInAnyOrder(expectedModuleLogFormatter, expectedModuleJsonFormatter);
 
-        ModulesResponse expectedModuleSkyXplore = ModulesResponse.builder()
-            .name("skyxplore")
-            .url("/web/skyxplore")
-            .favorite(false)
-            .build();
-        assertThat(result.get("game")).containsExactly(expectedModuleSkyXplore);
+        if (!DISABLED_TEST_GROUPS.contains("skyxplore")) {
+            assertThat(result).containsKey("game");
+            ModulesResponse expectedModuleSkyXplore = ModulesResponse.builder()
+                .name("skyxplore")
+                .url("/web/skyxplore")
+                .favorite(false)
+                .build();
+            assertThat(result.get("game")).containsExactly(expectedModuleSkyXplore);
+        }
     }
 
     @Test(dataProvider = "localeDataProvider")
@@ -148,7 +151,7 @@ public class ModulesTest extends BackEndTest {
             true
         );
 
-        assertThat(result).containsOnlyKeys("accounts", "office", "development-utils", "game");
+        assertThat(result).containsKeys("accounts", "office", "development-utils");
         ModulesResponse expectedModule = ModulesResponse.builder()
             .name("account")
             .url("/web/user/account")

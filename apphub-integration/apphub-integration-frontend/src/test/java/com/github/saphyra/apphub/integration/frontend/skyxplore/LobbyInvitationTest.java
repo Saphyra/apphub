@@ -22,7 +22,7 @@ import java.util.concurrent.Future;
 public class LobbyInvitationTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test
+    @Test(groups = "skyxplore")
     public void inviteFriendToLobby() {
         WebDriver driver1 = extractDriver();
         RegistrationParameters userData2 = RegistrationParameters.validParameters();

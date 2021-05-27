@@ -21,8 +21,10 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Listeners;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,6 +36,7 @@ import static com.github.saphyra.apphub.integration.common.framework.DataConstan
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
+@Listeners(SkipDisabledTestsInterceptor.class)
 public class TestBase {
     public static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
     public static final CustomObjectMapper OBJECT_MAPPER_WRAPPER = new CustomObjectMapper(new ObjectMapper());
@@ -41,6 +44,7 @@ public class TestBase {
     public static int SERVER_PORT;
     public static int DATABASE_PORT;
     public static boolean REST_LOGGING_ENABLED;
+    public static List<String> DISABLED_TEST_GROUPS;
 
     private static final ThreadLocal<String> EMAIL_DOMAIN = new ThreadLocal<>();
     private static final ThreadLocal<SoftAssertions> SOFT_ASSERTIONS = new ThreadLocal<>();
@@ -66,11 +70,17 @@ public class TestBase {
 
         registerSuperuser();
 
-        if (Boolean.parseBoolean(System.getProperty("retryEnabled"))) {
-            for (ITestNGMethod method : context.getAllTestMethods()) {
+
+        for (ITestNGMethod method : context.getAllTestMethods()) {
+            method.getXmlTest().getSuite().addListener(SkipDisabledTestsInterceptor.class.getName());
+            if (Boolean.parseBoolean(System.getProperty("retryEnabled"))) {
                 method.setRetryAnalyzerClass(RetryAnalyzerImpl.class);
             }
         }
+
+        DISABLED_TEST_GROUPS = Arrays.asList(Optional.ofNullable(System.getProperty("disabledGroups"))
+            .orElse("")
+            .split(","));
 
         System.setProperty("testng.show.stack.frames", "true");
     }

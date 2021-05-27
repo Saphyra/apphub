@@ -19,7 +19,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreGameDataTest extends BackEndTest {
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void gameDataNotFound(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -36,7 +36,7 @@ public class SkyXploreGameDataTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.DATA_NOT_FOUND));
     }
 
-    @Test
+    @Test(groups = "skyxplore")
     public void getGameData() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

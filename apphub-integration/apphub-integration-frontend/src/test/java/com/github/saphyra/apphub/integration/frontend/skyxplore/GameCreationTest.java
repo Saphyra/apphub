@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GameCreationTest extends SeleniumTest {
-    @Test
+    @Test(groups = "skyxplore")
     public void createGame() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

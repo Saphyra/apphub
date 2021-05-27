@@ -30,7 +30,7 @@ public class RenameCitizenTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
     private static final String NEW_NAME = "new-name";
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void blankNewName(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -54,7 +54,7 @@ public class RenameCitizenTest extends BackEndTest {
         assertThat(errorResponse.getParams()).containsEntry("value", "must not be blank");
     }
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void newNameTooLong(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -78,7 +78,7 @@ public class RenameCitizenTest extends BackEndTest {
         assertThat(errorResponse.getParams()).containsEntry("value", "too long");
     }
 
-    @Test
+    @Test(groups = "skyxplore")
     public void citizenNotFound() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
@@ -97,7 +97,7 @@ public class RenameCitizenTest extends BackEndTest {
         assertThat(response.getStatusCode()).isEqualTo(404);
     }
 
-    @Test
+    @Test(groups = "skyxplore")
     public void renameCitizen() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

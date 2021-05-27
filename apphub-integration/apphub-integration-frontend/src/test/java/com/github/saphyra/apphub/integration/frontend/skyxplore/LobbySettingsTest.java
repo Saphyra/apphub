@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LobbySettingsTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test
+    @Test(groups = "skyxplore")
     public void setUpLobby() {
         WebDriver driver1 = extractDriver();
         WebDriver driver2 = extractDriver();

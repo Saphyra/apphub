@@ -21,7 +21,7 @@ wait
 #Deploying to production
 NAMESPACE_NAME="production"
 ./deploy.sh "$NAMESPACE_NAME" "$NAMESPACE_NAME"
-./run_tests.sh "$NAMESPACE_NAME"
+./run_tests.sh "$NAMESPACE_NAME" true skyxplore
 
 echo "Deployment finished."
 

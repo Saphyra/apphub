@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CreateStorageSettingTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void validation(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -55,7 +55,7 @@ public class CreateStorageSettingTest extends BackEndTest {
         runValidationTest(409, ErrorCode.ALREADY_EXISTS, language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid());
     }
 
-    @Test
+    @Test(groups = "skyxplore")
     public void createStorageSetting() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

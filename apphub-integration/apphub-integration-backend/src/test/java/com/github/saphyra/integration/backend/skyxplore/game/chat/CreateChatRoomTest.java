@@ -34,7 +34,7 @@ public class CreateChatRoomTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
     private static final String ROOM_TITLE = "room-title";
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void nullMembers(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -59,7 +59,7 @@ public class CreateChatRoomTest extends BackEndTest {
         assertThat(errorResponse.getParams()).containsEntry("members", "must not be null");
     }
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void membersContainsNull(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -84,7 +84,7 @@ public class CreateChatRoomTest extends BackEndTest {
         assertThat(errorResponse.getParams()).containsEntry("members", "must not contain null");
     }
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void memberNotInGame(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -108,7 +108,7 @@ public class CreateChatRoomTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FORBIDDEN_OPERATION));
     }
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void nullRoomTitle(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -133,7 +133,7 @@ public class CreateChatRoomTest extends BackEndTest {
         assertThat(errorResponse.getParams()).containsEntry("roomTitle", "must not be null");
     }
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void roomTitleTooShort(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -157,7 +157,7 @@ public class CreateChatRoomTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.CHAT_ROOM_TITLE_TOO_SHORT));
     }
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void roomTitleTooLong(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -181,7 +181,7 @@ public class CreateChatRoomTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.CHAT_ROOM_TITLE_TOO_LONG));
     }
 
-    @Test
+    @Test(groups = "skyxplore")
     public void createChatRoom() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

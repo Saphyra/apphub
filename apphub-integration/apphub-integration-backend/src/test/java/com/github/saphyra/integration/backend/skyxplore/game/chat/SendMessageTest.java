@@ -24,7 +24,7 @@ public class SendMessageTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
     private static final String MESSAGE = "message";
 
-    @Test
+    @Test(groups = "skyxplore")
     public void createChatRoom() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class GetPlayersTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test
+    @Test(groups = "skyxplore")
     public void getPlayers() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

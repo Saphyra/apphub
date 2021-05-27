@@ -23,7 +23,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateFriendRequestTest extends BackEndTest {
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void characterNotFound(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -40,7 +40,7 @@ public class CreateFriendRequestTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.USER_NOT_FOUND));
     }
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void friendRequestAlreadyExists(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -66,7 +66,7 @@ public class CreateFriendRequestTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FRIEND_REQUEST_ALREADY_EXISTS));
     }
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void friendshipAlreadyExists(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -98,7 +98,7 @@ public class CreateFriendRequestTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FRIENDSHIP_ALREADY_EXISTS));
     }
 
-    @Test
+    @Test(groups = "skyxplore")
     public void createFriendRequest() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

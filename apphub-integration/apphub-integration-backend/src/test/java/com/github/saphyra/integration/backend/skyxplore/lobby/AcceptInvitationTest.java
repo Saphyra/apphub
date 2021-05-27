@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AcceptInvitationTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void forbiddenOperation(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -56,7 +56,7 @@ public class AcceptInvitationTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FORBIDDEN_OPERATION));
     }
 
-    @Test
+    @Test(groups = "skyxplore")
     public void acceptInvitation() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

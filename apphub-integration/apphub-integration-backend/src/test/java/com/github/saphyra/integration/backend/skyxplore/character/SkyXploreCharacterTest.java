@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreCharacterTest extends BackEndTest {
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void nullCharacterName(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -39,7 +39,7 @@ public class SkyXploreCharacterTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
     }
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void characterNameTooShort(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -57,7 +57,7 @@ public class SkyXploreCharacterTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.CHARACTER_NAME_TOO_SHORT));
     }
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void characterNameTooLong(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -75,7 +75,7 @@ public class SkyXploreCharacterTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.CHARACTER_NAME_TOO_LONG));
     }
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void characterNameAlreadyExists(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -96,7 +96,7 @@ public class SkyXploreCharacterTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.CHARACTER_NAME_ALREADY_EXISTS));
     }
 
-    @Test
+    @Test(groups = "skyxplore")
     public void characterNameAlreadyExistsForTheSameUser() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -111,7 +111,7 @@ public class SkyXploreCharacterTest extends BackEndTest {
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    @Test
+    @Test(groups = "skyxplore")
     public void createCharacter() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -126,7 +126,7 @@ public class SkyXploreCharacterTest extends BackEndTest {
         assertThat(characterName).isEqualTo(model.getName());
     }
 
-    @Test
+    @Test(groups = "skyxplore")
     public void editCharacter() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class EditStorageSettingTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void validation(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();

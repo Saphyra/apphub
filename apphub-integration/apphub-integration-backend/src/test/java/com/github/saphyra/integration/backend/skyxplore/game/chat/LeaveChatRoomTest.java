@@ -33,7 +33,7 @@ public class LeaveChatRoomTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
     private static final String ROOM_TITLE = "room-title";
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void leaveAllianceRoom(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -53,7 +53,7 @@ public class LeaveChatRoomTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FORBIDDEN_OPERATION));
     }
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
     public void leaveGeneralRoom(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -73,7 +73,7 @@ public class LeaveChatRoomTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FORBIDDEN_OPERATION));
     }
 
-    @Test
+    @Test(groups = "skyxplore")
     public void chatRoomNotFound() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
@@ -93,7 +93,7 @@ public class LeaveChatRoomTest extends BackEndTest {
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.NON_TRANSLATED_ERROR.name());
     }
 
-    @Test
+    @Test(groups = "skyxplore")
     public void notMemberOfChatRoom() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
@@ -129,7 +129,7 @@ public class LeaveChatRoomTest extends BackEndTest {
         assertThat(gameWsClients.get(accessTokenId1).awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_USER_LEFT)).isEmpty();
     }
 
-    @Test
+    @Test(groups = "skyxplore")
     public void lastMemberOfChatRoom() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
@@ -159,7 +159,7 @@ public class LeaveChatRoomTest extends BackEndTest {
         assertThat(gameWsClients.get(accessTokenId1).awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_USER_LEFT)).isEmpty();
     }
 
-    @Test
+    @Test(groups = "skyxplore")
     public void roomHasMemberLeft() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
