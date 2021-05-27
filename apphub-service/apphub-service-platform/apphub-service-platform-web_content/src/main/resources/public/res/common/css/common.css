@@ -247,6 +247,10 @@ input:disabled, button:disabled, textarea:disabled, .disabled{
     visibility: hidden;
 }
 
+.red{
+    color: red;
+}
+
 .spinner{
     position: fixed;
     top: 0;

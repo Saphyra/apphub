@@ -70,7 +70,7 @@ public class UserDaoTest {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(repository.findById(USER_ID_STRING)).willReturn(Optional.empty());
 
-        Throwable ex = catchThrowable(() -> underTest.findById(USER_ID));
+        Throwable ex = catchThrowable(() -> underTest.findByIdValidated(USER_ID));
 
         assertThat(ex).isInstanceOf(NotFoundException.class);
         NotFoundException exception = (NotFoundException) ex;
@@ -83,7 +83,7 @@ public class UserDaoTest {
         given(repository.findById(USER_ID_STRING)).willReturn(Optional.of(entity));
         given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(user));
 
-        User result = underTest.findById(USER_ID);
+        User result = underTest.findByIdValidated(USER_ID);
 
         assertThat(result).isEqualTo(user);
     }

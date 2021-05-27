@@ -33,6 +33,6 @@ public interface AccountController {
     @RequestMapping(method = RequestMethod.POST, value = Endpoints.ACCOUNT_REGISTER)
     void register(@RequestBody RegistrationRequest registrationRequest, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
-    @GetMapping(Endpoints.USER_DATAINTERNAL_USER_GET_USERNAME)
+    @GetMapping(Endpoints.USER_DATA_INTERNAL_USER_GET_USERNAME)
     String getUsernameByUserId(@PathVariable("userId") UUID userId);
 }

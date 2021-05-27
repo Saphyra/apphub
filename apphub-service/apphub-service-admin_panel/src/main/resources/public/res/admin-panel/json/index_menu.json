@@ -2,5 +2,9 @@
   {
     "id": "role-management",
     "url": "/web/admin-panel/role-management"
+  },
+  {
+    "id": "disabled-role-management",
+    "url": "/web/admin-panel/disabled-role-management"
   }
 ]

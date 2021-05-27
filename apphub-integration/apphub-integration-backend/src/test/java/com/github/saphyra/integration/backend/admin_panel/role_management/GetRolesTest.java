@@ -1,7 +1,7 @@
 package com.github.saphyra.integration.backend.admin_panel.role_management;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
-import com.github.saphyra.apphub.integration.backend.actions.RoleManagementPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.admin_panel.RoleManagementActions;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
@@ -28,7 +28,7 @@ public class GetRolesTest extends BackEndTest {
 
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
-        Response response = RoleManagementPageActions.getRolesResponse(language, accessTokenId, null);
+        Response response = RoleManagementActions.getRolesResponse(language, accessTokenId, null);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -44,7 +44,7 @@ public class GetRolesTest extends BackEndTest {
 
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
-        Response response = RoleManagementPageActions.getRolesResponse(language, accessTokenId, "as");
+        Response response = RoleManagementActions.getRolesResponse(language, accessTokenId, "as");
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -61,7 +61,7 @@ public class GetRolesTest extends BackEndTest {
 
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
-        List<UserRoleResponse> response = RoleManagementPageActions.getRoles(language, accessTokenId, userData.getEmail());
+        List<UserRoleResponse> response = RoleManagementActions.getRoles(language, accessTokenId, userData.getEmail());
 
         assertThat(response).hasSize(1);
         UserRoleResponse userRoleResponse = response.get(0);

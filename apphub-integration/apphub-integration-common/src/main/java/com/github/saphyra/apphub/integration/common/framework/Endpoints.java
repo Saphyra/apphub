@@ -14,7 +14,6 @@ public class Endpoints {
     public static final String SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
     public static final String SKYXPLORE_GAME_PAGE = "/web/skyxplore/game";
     public static final String UTILS_JSON_FORMATTER_PAGE = "/web/utils/json-formatter";
-    public static final String UTILS_MOBILE_MESSAGES = "/web/utils/mobile-messages";
     public static final String UTILS_LOG_FORMATTER_PAGE = "/web/utils/log-formatter";
 
     //PLATFORM
@@ -60,6 +59,9 @@ public class Endpoints {
     public static final String USER_DATA_GET_USER_ROLES = "/api/user/data/roles";
     public static final String USER_DATA_ADD_ROLE = "/api/user/data/roles";
     public static final String USER_DATA_REMOVE_ROLE = "/api/user/data/roles";
+    public static final String USER_DATA_DISABLE_ROLE = "/api/user/data/roles/{role}";
+    public static final String USER_DATA_ENABLE_ROLE = "/api/user/data/roles/{role}";
+    public static final String USER_DATA_GET_DISABLED_ROLES = "/api/user/data/roles/disabled";
 
     public static final String REGISTER_PROCESSOR = "/platform/event-gateway";
     public static final String HEARTBEAT = "/platform/event-gateway/{serviceName}";

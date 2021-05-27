@@ -15,4 +15,6 @@ public class Constants {
     public final String GENERAL_CHAT_ROOM_NAME = "general";
     public final String NEW_ALLIANCE_VALUE = "new-alliance";
     public final String NO_ALLIANCE_VALUE = "no-alliance";
+    public final String TEST_ROLE = "TEST";
+    public final String TEST_ROLE_NAME = "Teszt";
 }

@@ -22,6 +22,7 @@ window.Mapping = new function(){
         CHECK_SESSION: new Endpoint("/api/user/authentication/session", HttpMethod.GET),
         CLONE_NOTEBOOK_LIST_ITEM: new Endpoint("/api/notebook/{listItemId}/clone", HttpMethod.POST),
         CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE: new Endpoint("/api/notebook/table/{listItemId}/convert-to-checklist-table", HttpMethod.POST),
+
         CREATE_NOTEBOOK_CATEGORY: new Endpoint("/api/notebook/category", HttpMethod.PUT),
         CREATE_NOTEBOOK_LINK: new Endpoint("/api/notebook/link", HttpMethod.PUT),
         CREATE_NOTEBOOK_TEXT: new Endpoint("/api/notebook/text", HttpMethod.PUT),
@@ -43,17 +44,23 @@ window.Mapping = new function(){
         GET_NOTEBOOK_TEXT: new Endpoint("/api/notebook/text/{listItemId}", HttpMethod.GET),
         GET_NOTEBOOK_TABLE: new Endpoint("/api/notebook/table/{listItemId}", HttpMethod.GET),
         GET_NOTEBOOK_CHECKLIST_TABLE: new Endpoint("/api/notebook/checklist-table/{listItemId}", HttpMethod.GET),
-        GET_USER_ROLES: new Endpoint("/api/user/data/roles", HttpMethod.POST),
-        LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),
-        LOGOUT: new Endpoint("/api/user/authentication/logout", HttpMethod.POST),
-        MARK_AS_FAVORITE: new Endpoint("/api/modules/{module}/favorite", HttpMethod.POST),
-        REGISTER: new Endpoint("/api/user", HttpMethod.POST),
-        REMOVE_ROLE: new Endpoint("/api/user/data/roles", HttpMethod.DELETE),
         UPDATE_NOTEBOOK_CHECKLIST_ITEM_STATUS: new Endpoint("/api/notebook/checklist/item/{checklistItemId}/status", HttpMethod.POST),
         UPDATE_NOTEBOOK_CHECKLIST_TABLE_ROW_STATUS: new Endpoint("/api/notebook/checklist-table/{listItemId}/{rowIndex}", HttpMethod.POST),
         NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST: new Endpoint("/api/notebook/checklist/{listItemId}/checked", HttpMethod.DELETE),
         NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST_TABLE: new Endpoint("/api/notebook/checklist-table/{listItemId}/checked", HttpMethod.DELETE),
         NOTEBOOK_ORDER_CHECKLIST_ITEMS: new Endpoint("/api/notebook/checklist/{listItemId}/order", HttpMethod.POST),
+
+        LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),
+        LOGOUT: new Endpoint("/api/user/authentication/logout", HttpMethod.POST),
+        MARK_AS_FAVORITE: new Endpoint("/api/modules/{module}/favorite", HttpMethod.POST),
+        REGISTER: new Endpoint("/api/user", HttpMethod.POST),
+
+        REMOVE_ROLE: new Endpoint("/api/user/data/roles", HttpMethod.DELETE),
+        GET_USER_ROLES: new Endpoint("/api/user/data/roles", HttpMethod.POST),
+        DISABLED_ROLES_GET_DISABLED_ROLES: new Endpoint("/api/user/data/roles/disabled", HttpMethod.GET),
+        DISABLED_ROLES_ENABLE_ROLE: new Endpoint("/api/user/data/roles/{role}", HttpMethod.DELETE),
+        DISABLED_ROLES_DISABLE_ROLE: new Endpoint("/api/user/data/roles/{role}", HttpMethod.PUT),
+
         UTILS_LOG_FORMATTER_GET_VISIBILITY: new Endpoint("/api/utils/log-formatter/visibility", HttpMethod.PUT),
         UTILS_LOG_FORMATTER_SET_VISIBILITY: new Endpoint("/api/utils/log-formatter/visibility", HttpMethod.POST),
 

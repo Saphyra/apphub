@@ -32,7 +32,7 @@ public class DeleteAccountService {
             throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "password", "must not be null"), "Password must not be null.");
         }
 
-        User user = userDao.findById(userId);
+        User user = userDao.findByIdValidated(userId);
         if (!passwordService.authenticate(password, user.getPassword())) {
             throw new BadRequestException(ErrorCode.BAD_PASSWORD.name(), "Bad password.");
         }

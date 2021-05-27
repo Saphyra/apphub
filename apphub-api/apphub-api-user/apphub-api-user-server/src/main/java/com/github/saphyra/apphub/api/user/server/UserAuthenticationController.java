@@ -38,6 +38,6 @@ public interface UserAuthenticationController {
     @RequestMapping(method = RequestMethod.POST, value = Endpoints.EVENT_REFRESH_ACCESS_TOKEN_EXPIRATION)
     void refreshAccessTokenExpiration(@RequestBody SendEventRequest<RefreshAccessTokenExpirationEvent> request);
 
-    @GetMapping(Endpoints.USER_DATAINTERNAL_GET_LAST_VISITED_PAGE)
+    @GetMapping(Endpoints.USER_DATA_INTERNAL_GET_LAST_VISITED_PAGE)
     LastVisitedPageResponse getLastVisitedPage(@PathVariable("userId") UUID userId);
 }

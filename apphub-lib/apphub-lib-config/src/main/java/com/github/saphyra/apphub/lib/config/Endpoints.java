@@ -7,6 +7,7 @@ public class Endpoints {
     public static final String MODULES_PAGE = "/web/modules";
     public static final String ADMIN_PANEL_INDEX_PAGE = "/web/admin-panel";
     public static final String ADMIN_PANEL_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/role-management";
+    public static final String ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/disabled-role-management";
     public static final String ERROR_PAGE = "/web/error";
     public static final String NOTEBOOK_PAGE = "/web/notebook";
     public static final String SKYXPLORE_MAIN_MENU_PAGE = "/web/skyxplore";
@@ -14,7 +15,6 @@ public class Endpoints {
     public static final String SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
     public static final String SKYXPLORE_GAME_PAGE = "/web/skyxplore/game";
     public static final String UTILS_JSON_FORMATTER_PAGE = "/web/utils/json-formatter";
-    public static final String UTILS_MOBILE_MESSAGES = "/web/utils/mobile-messages";
     public static final String UTILS_LOG_FORMATTER_PAGE = "/web/utils/log-formatter";
 
     //PLATFORM
@@ -55,11 +55,14 @@ public class Endpoints {
     //USER-DATA
     public static final String USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";
     public static final String USER_DATA_INTERNAL_GET_USER_LANGUAGE = "/internal/user/{userId}/data/language";
-    public static final String USER_DATAINTERNAL_GET_LAST_VISITED_PAGE = "/internal/user/authentication/last-visited-page/{userId}";
-    public static final String USER_DATAINTERNAL_USER_GET_USERNAME = "/internal/user/{userId}/data/name";
+    public static final String USER_DATA_INTERNAL_GET_LAST_VISITED_PAGE = "/internal/user/authentication/last-visited-page/{userId}";
+    public static final String USER_DATA_INTERNAL_USER_GET_USERNAME = "/internal/user/{userId}/data/name";
     public static final String USER_DATA_GET_USER_ROLES = "/api/user/data/roles";
     public static final String USER_DATA_ADD_ROLE = "/api/user/data/roles";
     public static final String USER_DATA_REMOVE_ROLE = "/api/user/data/roles";
+    public static final String USER_DATA_DISABLE_ROLE = "/api/user/data/roles/{role}";
+    public static final String USER_DATA_ENABLE_ROLE = "/api/user/data/roles/{role}";
+    public static final String USER_DATA_GET_DISABLED_ROLES = "/api/user/data/roles/disabled";
 
     public static final String REGISTER_PROCESSOR = "/platform/event-gateway";
     public static final String HEARTBEAT = "/platform/event-gateway/{serviceName}";

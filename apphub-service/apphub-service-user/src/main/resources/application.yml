@@ -15,6 +15,11 @@ registration:
     - NOTEBOOK
     - SKYXPLORE
 
+rolesCanBeDisabled:
+  - NOTEBOOK
+  - SKYXPLORE
+  - TEST
+
 role:
   settings:
     - pattern: /api/user/data/roles
@@ -22,5 +27,16 @@ role:
         - POST
         - PUT
         - DELETE
+      requiredRoles:
+        - ADMIN
+    - pattern: /api/user/data/roles/*
+      methods:
+        - PUT
+        - DELETE
+      requiredRoles:
+        - ADMIN
+    - pattern: /api/user/data/roles/disabled
+      methods:
+        - GET
       requiredRoles:
         - ADMIN

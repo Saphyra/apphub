@@ -60,7 +60,7 @@ public class ChangeUsernameServiceTest {
 
     @Test
     public void invalidPassword() {
-        given(userDao.findById(USER_ID)).willReturn(user);
+        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
         given(user.getPassword()).willReturn(PASSWORD_HASH);
         given(passwordService.authenticate(PASSWORD, PASSWORD_HASH)).willReturn(false);
 
@@ -72,7 +72,7 @@ public class ChangeUsernameServiceTest {
 
     @Test
     public void changeUsername() {
-        given(userDao.findById(USER_ID)).willReturn(user);
+        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
         given(user.getPassword()).willReturn(PASSWORD_HASH);
         given(passwordService.authenticate(PASSWORD, PASSWORD_HASH)).willReturn(true);
 

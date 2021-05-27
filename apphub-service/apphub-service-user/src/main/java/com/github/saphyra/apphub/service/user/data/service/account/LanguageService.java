@@ -32,7 +32,7 @@ public class LanguageService {
             throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "value", "language not supported"), String.format("Language %s is not supported.", language));
         }
 
-        User user = userDao.findById(userId);
+        User user = userDao.findByIdValidated(userId);
         user.setLanguage(language);
         userDao.save(user);
     }
@@ -51,6 +51,6 @@ public class LanguageService {
     }
 
     public String getLanguage(UUID userId) {
-        return userDao.findById(userId).getLanguage();
+        return userDao.findByIdValidated(userId).getLanguage();
     }
 }

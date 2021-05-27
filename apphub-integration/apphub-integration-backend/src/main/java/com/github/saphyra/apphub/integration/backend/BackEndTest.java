@@ -25,7 +25,7 @@ public class BackEndTest extends TestBase {
         try {
             log.info("Available permits before acquiring: {}", SEMAPHORE.availablePermits());
             SEMAPHORE.acquire(getNecessaryPermitCount());
-            log.info("Available permits after acquiring: {}", SEMAPHORE.availablePermits());
+            log.debug("Available permits after acquiring: {}", SEMAPHORE.availablePermits());
         } catch (InterruptedException e) {
             log.error("Thread interrupted.", e);
         }
@@ -36,7 +36,7 @@ public class BackEndTest extends TestBase {
         try {
             ApphubWsClient.cleanUpConnections();
         } finally {
-            log.info("Available permits before releasing: {}", SEMAPHORE.availablePermits());
+            log.debug("Available permits before releasing: {}", SEMAPHORE.availablePermits());
             SEMAPHORE.release(getNecessaryPermitCount());
             log.info("Available permits after releasing: {}", SEMAPHORE.availablePermits());
         }

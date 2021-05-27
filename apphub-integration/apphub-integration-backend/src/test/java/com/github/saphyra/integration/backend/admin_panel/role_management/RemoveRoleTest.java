@@ -1,7 +1,7 @@
 package com.github.saphyra.integration.backend.admin_panel.role_management;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
-import com.github.saphyra.apphub.integration.backend.actions.RoleManagementPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.admin_panel.RoleManagementActions;
 import com.github.saphyra.apphub.integration.backend.model.RoleRequest;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
@@ -34,7 +34,7 @@ public class RemoveRoleTest extends BackEndTest {
             .role(Constants.ROLE_ADMIN)
             .build();
 
-        Response response = RoleManagementPageActions.getRemoveRoleResponse(language, accessTokenId, roleRequest);
+        Response response = RoleManagementActions.getRemoveRoleResponse(language, accessTokenId, roleRequest);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -55,7 +55,7 @@ public class RemoveRoleTest extends BackEndTest {
             .role(null)
             .build();
 
-        Response response = RoleManagementPageActions.getRemoveRoleResponse(language, accessTokenId, roleRequest);
+        Response response = RoleManagementActions.getRemoveRoleResponse(language, accessTokenId, roleRequest);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -76,7 +76,7 @@ public class RemoveRoleTest extends BackEndTest {
             .role(" ")
             .build();
 
-        Response response = RoleManagementPageActions.getRemoveRoleResponse(language, accessTokenId, roleRequest);
+        Response response = RoleManagementActions.getRemoveRoleResponse(language, accessTokenId, roleRequest);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -97,7 +97,7 @@ public class RemoveRoleTest extends BackEndTest {
             .role(Constants.ROLE_ADMIN)
             .build();
 
-        Response response = RoleManagementPageActions.getRemoveRoleResponse(language, accessTokenId, roleRequest);
+        Response response = RoleManagementActions.getRemoveRoleResponse(language, accessTokenId, roleRequest);
 
         assertThat(response.getStatusCode()).isEqualTo(404);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -121,7 +121,7 @@ public class RemoveRoleTest extends BackEndTest {
             .role(Constants.ROLE_ADMIN)
             .build();
 
-        Response response = RoleManagementPageActions.getRemoveRoleResponse(language, accessTokenId, roleRequest);
+        Response response = RoleManagementActions.getRemoveRoleResponse(language, accessTokenId, roleRequest);
 
         assertThat(response.getStatusCode()).isEqualTo(404);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
@@ -147,11 +147,11 @@ public class RemoveRoleTest extends BackEndTest {
             .role(Constants.ROLE_ADMIN)
             .build();
 
-        RoleManagementPageActions.addRole(language, accessTokenId, roleRequest);
+        RoleManagementActions.addRole(language, accessTokenId, roleRequest);
 
-        RoleManagementPageActions.removeRole(language, accessTokenId, roleRequest);
+        RoleManagementActions.removeRole(language, accessTokenId, roleRequest);
 
-        List<UserRoleResponse> responses = RoleManagementPageActions.getRoles(language, accessTokenId, testUser.getUsername());
+        List<UserRoleResponse> responses = RoleManagementActions.getRoles(language, accessTokenId, testUser.getUsername());
         assertThat(responses.get(0).getRoles()).doesNotContain(Constants.ROLE_ADMIN);
     }
 }

@@ -19,9 +19,4 @@ public class UtilsPageController {
     public String logFormatterPage() {
         return "log_formatter";
     }
-
-    @GetMapping(Endpoints.UTILS_MOBILE_MESSAGES)
-    public String mobileMessagesPage() {
-        return "mobile_messages";
-    }
 }

@@ -65,7 +65,7 @@ public class LanguageServiceTest {
     @Test
     public void changeLanguage() {
         given(commonConfigProperties.getSupportedLocales()).willReturn(Arrays.asList(LANGUAGE_1));
-        given(userDao.findById(USER_ID)).willReturn(user);
+        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
 
         underTest.changeLanguage(USER_ID, LANGUAGE_1);
 
@@ -75,7 +75,7 @@ public class LanguageServiceTest {
 
     @Test
     public void getLanguages() {
-        given(userDao.findById(USER_ID)).willReturn(user);
+        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
         given(user.getLanguage()).willReturn(LANGUAGE_1);
         given(commonConfigProperties.getSupportedLocales()).willReturn(Arrays.asList(LANGUAGE_1, LANGUAGE_2));
 
@@ -89,7 +89,7 @@ public class LanguageServiceTest {
 
     @Test
     public void getLanguage() {
-        given(userDao.findById(USER_ID)).willReturn(user);
+        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
         given(user.getLanguage()).willReturn(LANGUAGE_1);
 
         String result = underTest.getLanguage(USER_ID);
