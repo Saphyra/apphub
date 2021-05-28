@@ -40,3 +40,8 @@ role:
         - GET
       requiredRoles:
         - ADMIN
+    - pattern: /api/user/data/ban/*
+      methods:
+        - POST
+      requiredRoles:
+        - ADMIN

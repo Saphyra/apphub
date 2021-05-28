@@ -50,6 +50,7 @@ public class Endpoints {
     public static final String ACCOUNT_CHANGE_PASSWORD = "/api/user/account/password";
     public static final String ACCOUNT_DELETE_ACCOUNT = "/api/user/account";
     public static final String ACCOUNT_GET_LANGUAGES = "/api/user/data/languages";
+    public static final String ACCOUNT_BAN_USER = "/api/user/data/ban/{userId}";
 
     //USER-DATA
     public static final String USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ public class UserRepositoryTest {
     private static final String USER_ID_1 = "user-id-1";
     private static final String USER_ID_2 = "user-id-2";
     private static final String USER_ID_3 = "user-id-3";
+    private static final String USER_ID_4 = "user-id-4";
     private static final String EMAIL_1 = "email-1";
     private static final String EMAIL_2 = "email-2";
     private static final String USERNAME_1 = "username-1";
@@ -88,10 +90,42 @@ public class UserRepositoryTest {
             .build();
         underTest.saveAll(Arrays.asList(entity1, entity2, entity3));
 
-        underTest.findAll().forEach(userEntity -> log.info("{}", userEntity));
-
         List<UserEntity> result = underTest.getByUsernameOrEmailContainingIgnoreCase("AsD");
 
         assertThat(result).containsExactlyInAnyOrder(entity1, entity2);
+    }
+
+    @Test
+    public void getByUsersMarkedToDelete() {
+        UserEntity entity1 = UserEntity.builder()
+            .userId(USER_ID_1)
+            .username("adaSddf")
+            .email("ad@as.ad")
+            .markedForDeletion(true)
+            .build();
+        UserEntity entity2 = UserEntity.builder()
+            .userId(USER_ID_2)
+            .username("ad")
+            .email("adaSD@as.vfwr")
+            .markedForDeletion(true)
+            .markedForDeletionAt(LocalDateTime.now())
+            .build();
+        UserEntity entity3 = UserEntity.builder()
+            .userId(USER_ID_3)
+            .username("ad")
+            .email("ad@as.ad")
+            .build();
+        UserEntity entity4 = UserEntity.builder()
+            .userId(USER_ID_4)
+            .username("ad")
+            .email("adaSD@as.vfwr")
+            .markedForDeletion(true)
+            .markedForDeletionAt(LocalDateTime.now().minusSeconds(1))
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2, entity3, entity4));
+
+        List<UserEntity> result = underTest.getByUsersMarkedToDelete();
+
+        assertThat(result).containsExactly(entity4, entity2, entity1);
     }
 }

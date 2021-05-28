@@ -107,4 +107,14 @@ public class UserDaoTest {
 
         assertThat(result).containsExactly(user);
     }
+
+    @Test
+    public void getUsersMarkedToDelete() {
+        given(repository.getByUsersMarkedToDelete()).willReturn(Arrays.asList(entity));
+        given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(user));
+
+        List<User> result = underTest.getUsersMarkedToDelete();
+
+        assertThat(result).containsExactly(user);
+    }
 }

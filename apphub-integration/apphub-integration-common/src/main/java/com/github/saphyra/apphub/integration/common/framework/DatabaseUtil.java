@@ -24,6 +24,8 @@ public class DatabaseUtil {
     private static final String GET_ROLES_BY_USER_ID = "SELECT apphub_role FROM apphub_user.apphub_role WHERE user_id='%s'";
     private static final String UPDATE_ACCESS_TOKEN_LAST_ACCESS = "UPDATE apphub_user.access_token SET last_access='%s' WHERE access_token_id='%s'";
     private static final String FIND_SKYXPLORE_CHARACTER_NAME_BY_EMAIL = "SELECT name FROM skyxplore.character WHERE user_id = (SELECT user_id FROM apphub_user.apphub_user where email='%s')";
+    private static final String SET_MARKED_FOR_DELETION_AT_BY_EMAIL = "UPDATE apphub_user.apphub_user SET marked_for_deletion_at='%s' WHERE email='%s'";
+    private static final String SET_MARKED_FOR_DELETION_BY_EMAIL_LIKE = "UPDATE apphub_user.apphub_user SET marked_for_deletion=true WHERE email LIKE '%s'";
 
     private static <T> T query(String sql, Mapper<T> mapper) throws ClassNotFoundException, SQLException {
         Class.forName(JDBC_DRIVER);
@@ -54,10 +56,10 @@ public class DatabaseUtil {
     public static void addRoleByEmail(String email, String... roles) {
         try {
             for (String role : roles) {
-                log.info("Adding role {} to email {}", role, email);
+                log.debug("Adding role {} to email {}", role, email);
                 UUID roleId = UUID.randomUUID();
                 String sql = String.format(ADD_ROLE_BY_EMAIL_QUERY, roleId, email, role);
-                log.info("AddRole SQL: {}", sql);
+                log.debug("AddRole SQL: {}", sql);
                 execute(sql);
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -68,13 +70,13 @@ public class DatabaseUtil {
     public static UUID getUserIdByEmail(String email) {
         try {
             String sql = String.format(GET_USER_ID_BY_EMAIL_QUERY, email);
-            log.info("GetUserIdByEmail SQL: {}", sql);
+            log.debug("GetUserIdByEmail SQL: {}", sql);
 
             UUID result = query(sql, rs -> {
                 rs.next();
                 return UUID.fromString(rs.getString(1));
             });
-            log.info("UserId for email {}: {}", result, email);
+            log.debug("UserId for email {}: {}", result, email);
             return result;
 
         } catch (SQLException | ClassNotFoundException e) {
@@ -85,7 +87,7 @@ public class DatabaseUtil {
     public static List<String> getRolesByUserId(UUID userId) {
         try {
             String sql = String.format(GET_ROLES_BY_USER_ID, userId);
-            log.info("GetRolesByUserId SQL: {}", sql);
+            log.debug("GetRolesByUserId SQL: {}", sql);
 
             return query(
                 sql,
@@ -104,7 +106,7 @@ public class DatabaseUtil {
 
     public static void updateAccessTokenLastAccess(UUID accessTokenId, LocalDateTime newLastAccess) {
         String sql = String.format(UPDATE_ACCESS_TOKEN_LAST_ACCESS, newLastAccess, accessTokenId);
-        log.info("updateAccessTokenLastAccess sql: {}", sql);
+        log.debug("updateAccessTokenLastAccess sql: {}", sql);
 
         try {
             execute(sql);
@@ -129,6 +131,26 @@ public class DatabaseUtil {
             );
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException("Failed querying SkyXploreCharacter name", e);
+        }
+    }
+
+    public static void setMarkedForDeletionAtByEmail(String email, LocalDateTime date) {
+        String sql = String.format(SET_MARKED_FOR_DELETION_AT_BY_EMAIL, date, email);
+
+        try {
+            execute(sql);
+        } catch (ClassNotFoundException | SQLException e) {
+            throw new RuntimeException("Failed setting markedForDeletionAt", e);
+        }
+    }
+
+    public static void setMarkedForDeletionByEmailLike(String emailDomain) {
+        String sql = String.format(SET_MARKED_FOR_DELETION_BY_EMAIL_LIKE, "%" + emailDomain + "%");
+
+        try {
+            execute(sql);
+        } catch (ClassNotFoundException | SQLException e) {
+            throw new RuntimeException("Failed setting markedForDeletion", e);
         }
     }
 

@@ -34,4 +34,28 @@
             <column name="language" type="varchar(255)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="add-column-marked_for_deletion-to-user" author="Bernat Bonda">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="apphub_user" tableName="apphub_user" columnName="column_marked_for_deletion"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="apphub_user" tableName="apphub_user">
+            <column name="marked_for_deletion" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-marked_for_deletion_at-to-user" author="Bernat Bonda">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="apphub_user" tableName="apphub_user" columnName="column_marked_for_deletion_at"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="apphub_user" tableName="apphub_user">
+            <column name="marked_for_deletion_at" type="datetime"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

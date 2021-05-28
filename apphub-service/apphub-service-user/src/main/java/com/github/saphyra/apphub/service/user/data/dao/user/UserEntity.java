@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(schema = "apphub_user", name = "apphub_user")
@@ -22,4 +23,6 @@ class UserEntity {
     private String username;
     private String password;
     private String language;
+    private boolean markedForDeletion = false;
+    private LocalDateTime markedForDeletionAt;
 }

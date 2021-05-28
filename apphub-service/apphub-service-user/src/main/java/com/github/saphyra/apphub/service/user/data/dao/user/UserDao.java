@@ -40,4 +40,8 @@ public class UserDao extends AbstractDao<UserEntity, User, String, UserRepositor
     public List<User> getByUsernameOrEmailContainingIgnoreCase(String queryString) {
         return converter.convertEntity(repository.getByUsernameOrEmailContainingIgnoreCase(queryString));
     }
+
+    public List<User> getUsersMarkedToDelete() {
+        return converter.convertEntity(repository.getByUsersMarkedToDelete());
+    }
 }

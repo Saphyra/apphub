@@ -45,6 +45,11 @@ public class EventProcessorRegistryImpl implements EventProcessorRegistry {
                 .serviceName(serviceName)
                 .eventName(PageVisitedEvent.EVENT_NAME)
                 .url(Endpoints.EVENT_PAGE_VISITED)
+                .build(),
+            RegisterProcessorRequest.builder()
+                .serviceName(serviceName)
+                .eventName(EmptyEvent.TRIGGER_ACCOUNT_DELETION)
+                .url(Endpoints.EVENT_TRIGGER_ACCOUNT_DELETION)
                 .build()
         );
     }

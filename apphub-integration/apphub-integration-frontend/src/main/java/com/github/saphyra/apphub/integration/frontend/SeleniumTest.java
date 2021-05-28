@@ -39,11 +39,10 @@ public class SeleniumTest extends TestBase {
         driverWrappers.get()
             .forEach(webDriverWrapper -> {
                 WebDriver driver = webDriverWrapper.getDriver();
-                if (ITestResult.FAILURE == testResult.getStatus() && !HEADLESS_MODE) {
+                if (ITestResult.FAILURE == testResult.getStatus()) {
                     log.error("Current URL: {}", driver.getCurrentUrl());
                     takeScreenshot(webDriverWrapper, testResult.getName());
                     extractLogs(driver);
-                    testResult.getName();
                 }
                 WebDriverFactory.release(webDriverWrapper);
             });

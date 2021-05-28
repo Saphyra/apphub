@@ -5,4 +5,5 @@ public class EmptyEvent {
     public static final String SKYXPLORE_LOBBY_CLEANUP_EVENT_NAME = "skyxplore-lobby-cleanup";
     public static final String MESSAGE_SENDER_PING_REQUEST_EVENT_NAME = "message-sender-ping-request-event";
     public static final String MESSAGE_SENDER_CONNECTION_CLEANUP_EVENT = "message-sender-connection-cleanup";
+    public static final String TRIGGER_ACCOUNT_DELETION = "user-data-trigger-deletion";
 }

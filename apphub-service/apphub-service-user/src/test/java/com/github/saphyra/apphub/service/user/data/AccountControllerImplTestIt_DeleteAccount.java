@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.user.data;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
-import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
@@ -10,7 +9,6 @@ import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
-import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
@@ -21,8 +19,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -71,9 +67,6 @@ public class AccountControllerImplTestIt_DeleteAccount {
 
     @MockBean
     private EventGatewayApiClient eventGatewayApiClient;
-
-    @Captor
-    private ArgumentCaptor<SendEventRequest<DeleteAccountEvent>> argumentCaptor;
 
     @Before
     public void setUp() {
@@ -140,8 +133,6 @@ public class AccountControllerImplTestIt_DeleteAccount {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        verify(eventGatewayApiClient).sendEvent(argumentCaptor.capture(), eq(DEFAULT_LOCALE));
-        assertThat(argumentCaptor.getValue().getEventName()).isEqualTo(DeleteAccountEvent.EVENT_NAME);
-        assertThat(argumentCaptor.getValue().getPayload().getUserId()).isEqualTo(USER_ID);
+        assertThat(userDao.findByIdValidated(USER_ID).isMarkedForDeletion()).isTrue();
     }
 }

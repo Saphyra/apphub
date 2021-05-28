@@ -26,7 +26,8 @@ public class LoginService {
     private final PasswordService passwordService;
 
     public AccessToken login(LoginRequest loginRequest) {
-        User user = userDao.findByEmail(loginRequest.getEmail())
+        User user = userDao.findByEmail(loginRequest.getEmail().toLowerCase())
+            .filter(u -> !u.isMarkedForDeletion())
             .orElseThrow(() -> unauthorizedException(String.format("User not found with email %s", loginRequest.getEmail())));
 
         if (!passwordService.authenticate(loginRequest.getPassword(), user.getPassword())) {

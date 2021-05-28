@@ -16,6 +16,7 @@ import com.github.saphyra.apphub.integration.common.framework.localization.Langu
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import org.testng.annotations.Test;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
@@ -43,6 +44,7 @@ public class UserDeletedDuringTheGameTest extends BackEndTest {
         ApphubWsClient memberClient = gameWsClients.get(accessTokenId2);
 
         AccountActions.deleteAccount(language, accessTokenId1, userData1.getPassword());
+        DatabaseUtil.setMarkedForDeletionAtByEmail(userData1.getEmail(), LocalDateTime.now().minusYears(2));
 
         WebSocketEvent event = memberClient.awaitForEvent(WebSocketEventName.REDIRECT)
             .orElseThrow(() -> new RuntimeException("Redirect event not arrived"));

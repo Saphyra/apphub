@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.user.disabled_role;
+package com.github.saphyra.apphub.service.user.common;
 
 import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;

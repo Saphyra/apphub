@@ -36,7 +36,7 @@ public class ChangeEmailService {
             throw new BadRequestException(ErrorCode.BAD_PASSWORD.name(), "Bad password.");
         }
 
-        user.setEmail(request.getEmail());
+        user.setEmail(request.getEmail().toLowerCase());
         userDao.save(user);
     }
 }

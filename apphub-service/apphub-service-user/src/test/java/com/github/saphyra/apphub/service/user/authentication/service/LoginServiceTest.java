@@ -85,6 +85,23 @@ public class LoginServiceTest {
     }
 
     @Test
+    public void userMarkedForDeletion() {
+        given(userDao.findByEmail(EMAIL)).willReturn(Optional.of(user));
+        given(user.isMarkedForDeletion()).willReturn(true);
+
+        LoginRequest request = LoginRequest.builder()
+            .email(EMAIL)
+            .password(PASSWORD)
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.login(request));
+
+        assertThat(ex).isInstanceOf(UnauthorizedException.class);
+        UnauthorizedException exception = (UnauthorizedException) ex;
+        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
+    }
+
+    @Test
     public void login() {
         given(userDao.findByEmail(EMAIL)).willReturn(Optional.of(user));
         given(user.getPassword()).willReturn(PASSWORD_HASH);
