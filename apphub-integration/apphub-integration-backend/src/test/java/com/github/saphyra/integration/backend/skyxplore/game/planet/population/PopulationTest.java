@@ -12,22 +12,29 @@ import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkillRespon
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkillType;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
+import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
+import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
+import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
+import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GetPopulationTest extends BackEndTest {
+public class PopulationTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
+    private static final String NEW_NAME = "new-name";
 
-    @Test(groups = "skyxplore")
-    public void getPopulation() {
-        Language language = Language.HUNGARIAN;
+    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    public void getAndRenameCitizens(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);
@@ -39,10 +46,43 @@ public class GetPopulationTest extends BackEndTest {
 
         PlanetLocationResponse planet = SkyXplorePlanetActions.getPopulatedPlanet(language, accessTokenId1);
 
+        //Get
         List<CitizenResponse> citizens = SkyXplorePopulationActions.getPopulation(language, accessTokenId1, planet.getPlanetId());
 
         assertThat(citizens.size()).isEqualTo(10);
         citizens.forEach(this::validate);
+
+        CitizenResponse citizen = citizens.get(0);
+
+        //Blank name
+        Response blankNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, planet.getPlanetId(), citizen.getCitizenId(), " ");
+        verifyInvalidParam(language, blankNameResponse, "must not be blank");
+
+        //Too long name
+        Response tooLongNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, planet.getPlanetId(), citizen.getCitizenId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
+        verifyInvalidParam(language, tooLongNameResponse, "too long");
+
+        //Not found
+        Response notFoundResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, planet.getPlanetId(), UUID.randomUUID(), NEW_NAME);
+        assertThat(notFoundResponse.getStatusCode()).isEqualTo(404);
+
+        //Rename
+        Response renameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, planet.getPlanetId(), citizen.getCitizenId(), NEW_NAME);
+        assertThat(renameResponse.getStatusCode()).isEqualTo(200);
+        CitizenResponse modifiedCitizen = SkyXplorePopulationActions.getPopulation(language, accessTokenId1, planet.getPlanetId())
+            .stream()
+            .filter(citizenResponse -> citizenResponse.getCitizenId().equals(citizen.getCitizenId()))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Citizen not found with id " + citizen.getCitizenId()));
+        assertThat(modifiedCitizen.getName()).isEqualTo(NEW_NAME);
+    }
+
+    private void verifyInvalidParam(Language language, Response response, String value) {
+        assertThat(response.getStatusCode()).isEqualTo(400);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getParams()).containsEntry("value", value);
     }
 
     private void validate(CitizenResponse citizenResponse) {

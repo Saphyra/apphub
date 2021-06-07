@@ -49,7 +49,7 @@ public class CloneListItemTest extends BackEndTest {
     private static final String CHECKLIST_TABLE_COLUMN_NAME = "checklist-table-column-name";
     private static final String CHECKLIST_TABLE_COLUMN_VALUE = "checklist-table-column-value";
 
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "languageDataProvider")
     public void listItemNotFound(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -62,12 +62,19 @@ public class CloneListItemTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LIST_ITEM_NOT_FOUND));
     }
 
-    @Test
-    public void cloneListItem() {
-        Language language = Language.HUNGARIAN;
+    @Test(dataProvider = "languageDataProvider")
+    public void cloneListItem(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
+        //ListItem not found
+        Response response = NotebookActions.getCloneListItemResponse(language, accessTokenId, UUID.randomUUID());
+        assertThat(response.getStatusCode()).isEqualTo(404);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LIST_ITEM_NOT_FOUND));
+
+        //Clone
         UUID rootId = NotebookActions.createCategory(language, accessTokenId, CreateCategoryRequest.builder().title(ROOT_TITLE).build());
         UUID parentId = NotebookActions.createCategory(language, accessTokenId, CreateCategoryRequest.builder().title(PARENT_TITLE).parent(rootId).build());
         UUID childCategoryId = NotebookActions.createCategory(language, accessTokenId, CreateCategoryRequest.builder().title(CHILD_CATEGORY_TITLE).parent(parentId).build());

@@ -22,25 +22,8 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RemoveFriendTest extends BackEndTest {
-    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
-    public void friendshipNotFound(Language language) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
-
-        SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
-
-        Response response = SkyXploreFriendActions.getRemoveFriendResponse(language, accessTokenId, UUID.randomUUID());
-
-        assertThat(response.getStatusCode()).isEqualTo(404);
-        ErrorResponse errorResponse = response.getBody()
-            .as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FRIENDSHIP_NOT_FOUND.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FRIENDSHIP_NOT_FOUND));
-    }
-
-    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
-    public void forbiddenOperation(Language language) {
+    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    public void removeFriend(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
@@ -60,6 +43,11 @@ public class RemoveFriendTest extends BackEndTest {
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
+        //Friend not found
+        Response friendNotFoundResponse = SkyXploreFriendActions.getRemoveFriendResponse(language, accessTokenId, UUID.randomUUID());
+        verifyFriendNotFound(language, friendNotFoundResponse);
+
+        //Forbidden operation
         SkyXploreFriendActions.createFriendRequest(language, accessTokenId, userId2);
         UUID friendRequestId = SkyXploreFriendActions.getSentFriendRequests(language, accessTokenId)
             .stream()
@@ -74,53 +62,29 @@ public class RemoveFriendTest extends BackEndTest {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Friendship not found"));
 
-        Response response = SkyXploreFriendActions.getRemoveFriendResponse(language, accessTokenId3, friendshipId);
-
-        assertThat(response.getStatusCode()).isEqualTo(403);
-        ErrorResponse errorResponse = response.getBody()
-            .as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FORBIDDEN_OPERATION));
-
+        Response forbiddenOperationResponse = SkyXploreFriendActions.getRemoveFriendResponse(language, accessTokenId3, friendshipId);
+        verifyForbiddenOperation(language, forbiddenOperationResponse);
         assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId)).hasSize(1);
         assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId2)).hasSize(1);
-    }
 
-    @Test(groups = "skyxplore")
-    public void removeFriend() {
-        Language language = Language.HUNGARIAN;
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
-
-        RegistrationParameters userData2 = RegistrationParameters.validParameters();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(language, userData2);
-
-        SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
-
-        SkyXploreCharacterModel model2 = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model2);
-        UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
-
-        SkyXploreFriendActions.createFriendRequest(language, accessTokenId, userId2);
-        UUID friendRequestId = SkyXploreFriendActions.getSentFriendRequests(language, accessTokenId)
-            .stream()
-            .map(SentFriendRequestResponse::getFriendRequestId)
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("FriendRequest not found"));
-        SkyXploreFriendActions.acceptFriendRequest(language, accessTokenId2, friendRequestId);
-
-        UUID friendshipId = SkyXploreFriendActions.getFriends(language, accessTokenId)
-            .stream()
-            .map(FriendshipResponse::getFriendshipId)
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Friendship not found"));
-
-        Response response = SkyXploreFriendActions.getRemoveFriendResponse(language, accessTokenId, friendshipId);
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-
+        //Remove
+        Response removeResponse = SkyXploreFriendActions.getRemoveFriendResponse(language, accessTokenId, friendshipId);
+        assertThat(removeResponse.getStatusCode()).isEqualTo(200);
         assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId)).isEmpty();
         assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId2)).isEmpty();
+    }
+
+    private void verifyForbiddenOperation(Language language, Response response) {
+        assertThat(response.getStatusCode()).isEqualTo(403);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FORBIDDEN_OPERATION));
+    }
+
+    private void verifyFriendNotFound(Language language, Response response) {
+        assertThat(response.getStatusCode()).isEqualTo(404);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FRIENDSHIP_NOT_FOUND.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FRIENDSHIP_NOT_FOUND));
     }
 }

@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthorizationTest extends BackEndTest {
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "languageDataProvider")
     public void callProtectedEndpointWithoutAccessToken(Language language) {
         Response response = RequestFactory.createRequest(language)
             .get(UrlFactory.create(Endpoints.CHECK_SESSION));

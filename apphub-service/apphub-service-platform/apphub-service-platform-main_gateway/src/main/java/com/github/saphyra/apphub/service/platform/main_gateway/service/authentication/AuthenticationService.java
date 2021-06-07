@@ -44,13 +44,13 @@ public class AuthenticationService {
             .orElseThrow(() -> new IllegalStateException("Locale header not found."));
 
         if (!accessTokenIdStringOptional.isPresent()) {
-            log.info("accessTokenCookie is not present. Sending error...");
+            log.debug("accessTokenCookie is not present. Sending error...");
             return authenticationResultHandlerFactory.unauthorized(request.getHeaders(), createErrorResponse(locale));
         }
 
         Optional<InternalAccessTokenResponse> accessTokenResponseOptional = accessTokenQueryService.getAccessToken(accessTokenIdStringOptional.get());
         if (!accessTokenResponseOptional.isPresent()) {
-            log.info("AccessToken not found. Sending error...");
+            log.debug("AccessToken not found. Sending error...");
             return authenticationResultHandlerFactory.unauthorized(request.getHeaders(), createErrorResponse(locale));
         }
 

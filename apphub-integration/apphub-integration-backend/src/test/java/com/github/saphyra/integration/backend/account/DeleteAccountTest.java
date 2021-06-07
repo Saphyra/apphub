@@ -19,53 +19,43 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeleteAccountTest extends BackEndTest {
-    @Test(dataProvider = "localeDataProvider")
-    public void nullPassword(Language locale) {
+    @Test(dataProvider = "languageDataProvider")
+    public void deleteAccount(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
-        OneParamRequest<String> request = new OneParamRequest<>(null);
+        //Null password
+        Response nullPasswordResponse = AccountActions.getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(null));
+        verifyInvalidParam(language, nullPasswordResponse);
 
-        Response response = AccountActions.getDeleteAccountResponse(locale, accessTokenId, request);
+        //Incorrect password
+        Response incorrectPasswordResponse = AccountActions.getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(DataConstants.INVALID_PASSWORD));
+        verifyIncorrectPassword(language, incorrectPasswordResponse);
 
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.INVALID_PARAM));
-        assertThat(errorResponse.getParams().get("password")).isEqualTo("must not be null");
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void incorrectPassword(Language locale) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
-
-        OneParamRequest<String> request = new OneParamRequest<>(DataConstants.INVALID_PASSWORD);
-
-        Response response = AccountActions.getDeleteAccountResponse(locale, accessTokenId, request);
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_PASSWORD.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.BAD_PASSWORD));
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void successfulDeletion(Language locale) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
-
-        OneParamRequest<String> request = new OneParamRequest<>(DataConstants.VALID_PASSWORD);
-
-        Response response = AccountActions.getDeleteAccountResponse(locale, accessTokenId, request);
+        //Successful deletion
+        Response response = AccountActions.getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(userData.getPassword()));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
-        Response loginResponse = IndexPageActions.getLoginResponse(locale, userData.toLoginRequest());
-
+        Response loginResponse = IndexPageActions.getLoginResponse(language, userData.toLoginRequest());
         assertThat(loginResponse.getStatusCode()).isEqualTo(401);
         ErrorResponse errorResponse = loginResponse.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.BAD_CREDENTIALS));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.BAD_CREDENTIALS));
+    }
+
+    private void verifyIncorrectPassword(Language language, Response response) {
+        assertThat(response.getStatusCode()).isEqualTo(400);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_PASSWORD.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.BAD_PASSWORD));
+    }
+
+    private void verifyInvalidParam(Language language, Response response) {
+        assertThat(response.getStatusCode()).isEqualTo(400);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
+        assertThat(errorResponse.getParams().get("password")).isEqualTo("must not be null");
     }
 }

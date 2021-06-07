@@ -22,136 +22,68 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AddRoleTest extends BackEndTest {
-    @Test(dataProvider = "localeDataProvider")
-    public void nullUserId(Language language) {
+    @Test(dataProvider = "languageDataProvider")
+    public void addRole(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
-
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
-        RoleRequest roleRequest = RoleRequest.builder()
+        RegistrationParameters testUser = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(language, testUser.toRegistrationRequest());
+        UUID userId = DatabaseUtil.getUserIdByEmail(testUser.getEmail());
+
+        //Null userId
+        RoleRequest nullUserIdRequest = RoleRequest.builder()
             .userId(null)
             .role(Constants.ROLE_ADMIN)
             .build();
+        Response nullUserIdResponse = RoleManagementActions.getAddRoleResponse(language, accessTokenId, nullUserIdRequest);
+        verifyInvalidParam(language, nullUserIdResponse, "userId", "must not be null");
 
-        Response response = RoleManagementActions.getAddRoleResponse(language, accessTokenId, roleRequest);
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getParams().get("userId")).isEqualTo("must not be null");
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void nullRole(Language language) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
-
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-
-        RoleRequest roleRequest = RoleRequest.builder()
-            .userId(UUID.randomUUID())
-            .role(null)
-            .build();
-
-        Response response = RoleManagementActions.getAddRoleResponse(language, accessTokenId, roleRequest);
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getParams().get("role")).isEqualTo("must not be null or blank");
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void blankRole(Language language) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
-
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-
-        RoleRequest roleRequest = RoleRequest.builder()
+        //Blank role
+        RoleRequest blankRoleRequest = RoleRequest.builder()
             .userId(UUID.randomUUID())
             .role(" ")
             .build();
+        Response blankRoleResponse = RoleManagementActions.getAddRoleResponse(language, accessTokenId, blankRoleRequest);
+        verifyInvalidParam(language, blankRoleResponse, "role", "must not be null or blank");
 
-        Response response = RoleManagementActions.getAddRoleResponse(language, accessTokenId, roleRequest);
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getParams().get("role")).isEqualTo("must not be null or blank");
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void userNotFound(Language language) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
-
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-
-        RoleRequest roleRequest = RoleRequest.builder()
+        //User not found
+        RoleRequest userNotFoundRequest = RoleRequest.builder()
             .userId(UUID.randomUUID())
             .role(Constants.ROLE_ADMIN)
             .build();
+        Response userNotFoundResponse = RoleManagementActions.getAddRoleResponse(language, accessTokenId, userNotFoundRequest);
+        verifyResponse(language, userNotFoundResponse, 404, ErrorCode.USER_NOT_FOUND);
 
-        Response response = RoleManagementActions.getAddRoleResponse(language, accessTokenId, roleRequest);
-
-        assertThat(response.getStatusCode()).isEqualTo(404);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.USER_NOT_FOUND));
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USER_NOT_FOUND.name());
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void roleAlreadyExists(Language language) {
-        RegistrationParameters testUser = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(language, testUser.toRegistrationRequest());
-        UUID userId = DatabaseUtil.getUserIdByEmail(testUser.getEmail());
-
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
-
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-
-        RoleRequest roleRequest = RoleRequest.builder()
+        //Role already exists
+        RoleRequest roleAlreadyExistsRequest = RoleRequest.builder()
             .userId(userId)
-            .role(Constants.ROLE_ADMIN)
+            .role(Constants.ROLE_NOTEBOOK)
             .build();
+        Response roleAlreadyExistsResponse = RoleManagementActions.getAddRoleResponse(language, accessTokenId, roleAlreadyExistsRequest);
+        verifyResponse(language, roleAlreadyExistsResponse, 409, ErrorCode.ROLE_ALREADY_EXISTS);
 
-        RoleManagementActions.addRole(language, accessTokenId, roleRequest);
-
-        Response response = RoleManagementActions.getAddRoleResponse(language, accessTokenId, roleRequest);
-
-        assertThat(response.getStatusCode()).isEqualTo(409);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.ROLE_ALREADY_EXISTS));
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.ROLE_ALREADY_EXISTS.name());
-    }
-
-    @Test
-    public void addRole() {
-        Language language = Language.HUNGARIAN;
-
-        RegistrationParameters testUser = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(language, testUser.toRegistrationRequest());
-        UUID userId = DatabaseUtil.getUserIdByEmail(testUser.getEmail());
-
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
-
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-
-        RoleRequest roleRequest = RoleRequest.builder()
+        //Add role
+        RoleRequest addRoleRequest = RoleRequest.builder()
             .userId(userId)
-            .role(Constants.ROLE_ADMIN)
+            .role(Constants.ROLE_TEST)
             .build();
-
-        RoleManagementActions.addRole(language, accessTokenId, roleRequest);
-
+        RoleManagementActions.addRole(language, accessTokenId, addRoleRequest);
         List<UserRoleResponse> responses = RoleManagementActions.getRoles(language, accessTokenId, testUser.getUsername());
-        assertThat(responses.get(0).getRoles()).containsExactlyInAnyOrder(Constants.ROLE_ADMIN, Constants.ROLE_NOTEBOOK, Constants.ROLE_SKYXPLORE);
+        assertThat(responses.get(0).getRoles()).containsExactlyInAnyOrder(Constants.ROLE_TEST, Constants.ROLE_NOTEBOOK, Constants.ROLE_SKYXPLORE);
+    }
+
+    private void verifyInvalidParam(Language language, Response response, String field, String value) {
+        ErrorResponse errorResponse = verifyResponse(language, response, 400, ErrorCode.INVALID_PARAM);
+        assertThat(errorResponse.getParams().get(field)).isEqualTo(value);
+    }
+
+    private ErrorResponse verifyResponse(Language language, Response response, int httpStatus, ErrorCode errorCode) {
+        assertThat(response.getStatusCode()).isEqualTo(httpStatus);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.fromErrorCode(errorCode)));
+        assertThat(errorResponse.getErrorCode()).isEqualTo(errorCode.name());
+        return errorResponse;
     }
 }

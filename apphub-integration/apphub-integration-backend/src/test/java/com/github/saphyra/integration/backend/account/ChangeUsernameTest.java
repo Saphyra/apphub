@@ -20,128 +20,85 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangeUsernameTest extends BackEndTest {
-    @Test(dataProvider = "localeDataProvider")
-    public void nullUsername(Language locale) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
+    @Test(dataProvider = "languageDataProvider")
+    public void changeUsername(Language language) {
+        RegistrationParameters userData1 = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData1);
 
-        ChangeUsernameRequest request = ChangeUsernameRequest.builder()
+        //Null username
+        ChangeUsernameRequest nullUsernameRequest = ChangeUsernameRequest.builder()
             .username(null)
-            .password(userData.getPassword())
+            .password(userData1.getPassword())
             .build();
+        Response nullUsernameResponse = AccountActions.getChangeUsernameResponse(language, accessTokenId, nullUsernameRequest);
+        verifyInvalidParam(language, nullUsernameResponse, "username", "must not be null");
 
-        Response response = AccountActions.getChangeUsernameResponse(locale, accessTokenId, request);
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.INVALID_PARAM));
-        assertThat(errorResponse.getParams().get("username")).isEqualTo("must not be null");
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void tooShortUsername(Language locale) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
-
-        ChangeUsernameRequest request = ChangeUsernameRequest.builder()
+        //Too short username
+        ChangeUsernameRequest tooShortUsernameRequest = ChangeUsernameRequest.builder()
             .username(DataConstants.TOO_SHORT_USERNAME)
-            .password(userData.getPassword())
+            .password(userData1.getPassword())
             .build();
+        Response tooShortUsernameResponse = AccountActions.getChangeUsernameResponse(language, accessTokenId, tooShortUsernameRequest);
+        verifyBadRequest(language, tooShortUsernameResponse, ErrorCode.USERNAME_TOO_SHORT);
 
-        Response response = AccountActions.getChangeUsernameResponse(locale, accessTokenId, request);
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USERNAME_TOO_SHORT.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.USERNAME_TOO_SHORT));
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void tooLongUsername(Language locale) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
-
-        ChangeUsernameRequest request = ChangeUsernameRequest.builder()
+        //Too long username
+        ChangeUsernameRequest tooLongUsernameRequest = ChangeUsernameRequest.builder()
             .username(DataConstants.TOO_LONG_USERNAME)
-            .password(userData.getPassword())
+            .password(userData1.getPassword())
             .build();
+        Response tooLongUsernameResponse = AccountActions.getChangeUsernameResponse(language, accessTokenId, tooLongUsernameRequest);
+        verifyBadRequest(language, tooLongUsernameResponse, ErrorCode.USERNAME_TOO_LONG);
 
-        Response response = AccountActions.getChangeUsernameResponse(locale, accessTokenId, request);
+        //Username already exists
+        RegistrationParameters userData2 = RegistrationParameters.validParameters();
+        IndexPageActions.registerAndLogin(language, userData2);
 
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USERNAME_TOO_LONG.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.USERNAME_TOO_LONG));
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void usernameAlreadyExists(Language locale) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
-
-        ChangeUsernameRequest request = ChangeUsernameRequest.builder()
-            .username(userData.getUsername())
-            .password(userData.getPassword())
+        ChangeUsernameRequest usernameAlreadyExistsRequest = ChangeUsernameRequest.builder()
+            .username(userData2.getUsername())
+            .password(userData1.getPassword())
             .build();
+        Response usernameAlreadyExistsResponse = AccountActions.getChangeUsernameResponse(language, accessTokenId, usernameAlreadyExistsRequest);
+        verifyError(language, usernameAlreadyExistsResponse, ErrorCode.USERNAME_ALREADY_EXISTS, 409);
 
-        Response response = AccountActions.getChangeUsernameResponse(locale, accessTokenId, request);
-
-        assertThat(response.getStatusCode()).isEqualTo(409);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USERNAME_ALREADY_EXISTS.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.USERNAME_ALREADY_EXISTS));
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void nullPassword(Language locale) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
-
-        ChangeUsernameRequest request = ChangeUsernameRequest.builder()
+        //Null password
+        ChangeUsernameRequest nullPasswordRequest = ChangeUsernameRequest.builder()
             .username(RandomDataProvider.generateUsername())
             .password(null)
             .build();
+        Response nullPasswordResponse = AccountActions.getChangeUsernameResponse(language, accessTokenId, nullPasswordRequest);
+        verifyInvalidParam(language, nullPasswordResponse, "password", "must not be null");
 
-        Response response = AccountActions.getChangeUsernameResponse(locale, accessTokenId, request);
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.INVALID_PARAM));
-        assertThat(errorResponse.getParams().get("password")).isEqualTo("must not be null");
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void incorrectPassword(Language locale) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
-
-        ChangeUsernameRequest request = ChangeUsernameRequest.builder()
+        //Incorrect password
+        ChangeUsernameRequest incorrectPasswordRequest = ChangeUsernameRequest.builder()
             .username(RandomDataProvider.generateUsername())
             .password(DataConstants.INVALID_PASSWORD)
             .build();
+        Response incorrectPasswordResponse = AccountActions.getChangeUsernameResponse(language, accessTokenId, incorrectPasswordRequest);
+        verifyError(language, incorrectPasswordResponse, ErrorCode.BAD_PASSWORD, 400);
 
-        Response response = AccountActions.getChangeUsernameResponse(locale, accessTokenId, request);
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_PASSWORD.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.BAD_PASSWORD));
+        //Successful change
+        ChangeUsernameRequest successfulChangeRequest = ChangeUsernameRequest.builder()
+            .username(RandomDataProvider.generateUsername())
+            .password(userData1.getPassword())
+            .build();
+        Response successfulChangeResponse = AccountActions.getChangeUsernameResponse(language, accessTokenId, successfulChangeRequest);
+        assertThat(successfulChangeResponse.getStatusCode()).isEqualTo(200);
     }
 
-    @Test(dataProvider = "localeDataProvider")
-    public void successfulChange(Language locale) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
+    private void verifyInvalidParam(Language locale, Response response, String field, String value) {
+        ErrorResponse errorResponse = verifyBadRequest(locale, response, ErrorCode.INVALID_PARAM);
+        assertThat(errorResponse.getParams().get(field)).isEqualTo(value);
+    }
 
-        ChangeUsernameRequest request = ChangeUsernameRequest.builder()
-            .username(RandomDataProvider.generateUsername())
-            .password(userData.getPassword())
-            .build();
+    private ErrorResponse verifyBadRequest(Language locale, Response response, ErrorCode errorCode) {
+        return verifyError(locale, response, errorCode, 400);
+    }
 
-        Response response = AccountActions.getChangeUsernameResponse(locale, accessTokenId, request);
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
+    private ErrorResponse verifyError(Language locale, Response response, ErrorCode errorCode, int httpStatus) {
+        assertThat(response.getStatusCode()).isEqualTo(httpStatus);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(errorCode.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.fromErrorCode(errorCode)));
+        return errorResponse;
     }
 }

@@ -23,25 +23,8 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateFriendRequestTest extends BackEndTest {
-    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
-    public void characterNotFound(Language language) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
-
-        SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
-
-        Response response = SkyXploreFriendActions.getCreateFriendRequestResponse(language, accessTokenId, UUID.randomUUID());
-
-        assertThat(response.getStatusCode()).isEqualTo(404);
-        ErrorResponse errorResponse = response.getBody()
-            .as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USER_NOT_FOUND.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.USER_NOT_FOUND));
-    }
-
-    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
-    public void friendRequestAlreadyExists(Language language) {
+    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    public void createFriendRequest(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
@@ -55,33 +38,24 @@ public class CreateFriendRequestTest extends BackEndTest {
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
+        //Character not found
+        Response characterNotFoundResponse = SkyXploreFriendActions.getCreateFriendRequestResponse(language, accessTokenId, UUID.randomUUID());
+        verifyUserNotFound(language, characterNotFoundResponse);
+
+        //Create friend request
         SkyXploreFriendActions.createFriendRequest(language, accessTokenId, userId2);
+        List<SentFriendRequestResponse> sentFriendRequests = SkyXploreFriendActions.getSentFriendRequests(language, accessTokenId);
+        assertThat(sentFriendRequests).hasSize(1);
+        assertThat(sentFriendRequests.get(0).getFriendName()).isEqualTo(model2.getName());
+        List<IncomingFriendRequestResponse> incomingFriendRequests = SkyXploreFriendActions.getIncomingFriendRequests(language, accessTokenId2);
+        assertThat(incomingFriendRequests).hasSize(1);
+        assertThat(incomingFriendRequests.get(0).getSenderName()).isEqualTo(model.getName());
 
-        Response response = SkyXploreFriendActions.getCreateFriendRequestResponse(language, accessTokenId, userId2);
+        //Friend request already exists
+        Response friendRequestAlreadyExistsResponse = SkyXploreFriendActions.getCreateFriendRequestResponse(language, accessTokenId, userId2);
+        verifyFriendRequestAlreadyExists(language, friendRequestAlreadyExistsResponse);
 
-        assertThat(response.getStatusCode()).isEqualTo(409);
-        ErrorResponse errorResponse = response.getBody()
-            .as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FRIEND_REQUEST_ALREADY_EXISTS.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FRIEND_REQUEST_ALREADY_EXISTS));
-    }
-
-    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
-    public void friendshipAlreadyExists(Language language) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
-
-        RegistrationParameters userData2 = RegistrationParameters.validParameters();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(language, userData2);
-
-        SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
-
-        SkyXploreCharacterModel model2 = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model2);
-        UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
-
-        SkyXploreFriendActions.createFriendRequest(language, accessTokenId, userId2);
+        //Friendship already exists
         UUID friendRequestId = SkyXploreFriendActions.getSentFriendRequests(language, accessTokenId)
             .stream()
             .map(SentFriendRequestResponse::getFriendRequestId)
@@ -89,39 +63,29 @@ public class CreateFriendRequestTest extends BackEndTest {
             .orElseThrow(() -> new RuntimeException("FriendRequest not found"));
         SkyXploreFriendActions.acceptFriendRequest(language, accessTokenId2, friendRequestId);
 
-        Response response = SkyXploreFriendActions.getCreateFriendRequestResponse(language, accessTokenId, userId2);
+        Response friendshipAlreadyExistsResponse = SkyXploreFriendActions.getCreateFriendRequestResponse(language, accessTokenId, userId2);
 
-        assertThat(response.getStatusCode()).isEqualTo(409);
-        ErrorResponse errorResponse = response.getBody()
-            .as(ErrorResponse.class);
+        verifyFriendshipAlreadyExists(language, friendshipAlreadyExistsResponse);
+    }
+
+    private void verifyFriendshipAlreadyExists(Language language, Response friendshipAlreadyExistsResponse) {
+        assertThat(friendshipAlreadyExistsResponse.getStatusCode()).isEqualTo(409);
+        ErrorResponse errorResponse = friendshipAlreadyExistsResponse.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FRIENDSHIP_ALREADY_EXISTS.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FRIENDSHIP_ALREADY_EXISTS));
     }
 
-    @Test(groups = "skyxplore")
-    public void createFriendRequest() {
-        Language language = Language.HUNGARIAN;
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+    private void verifyFriendRequestAlreadyExists(Language language, Response response) {
+        assertThat(response.getStatusCode()).isEqualTo(409);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FRIEND_REQUEST_ALREADY_EXISTS.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FRIEND_REQUEST_ALREADY_EXISTS));
+    }
 
-        RegistrationParameters userData2 = RegistrationParameters.validParameters();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(language, userData2);
-
-        SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
-
-        SkyXploreCharacterModel model2 = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model2);
-        UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
-
-        SkyXploreFriendActions.createFriendRequest(language, accessTokenId, userId2);
-
-        List<SentFriendRequestResponse> sentFriendRequests = SkyXploreFriendActions.getSentFriendRequests(language, accessTokenId);
-        assertThat(sentFriendRequests).hasSize(1);
-        assertThat(sentFriendRequests.get(0).getFriendName()).isEqualTo(model2.getName());
-
-        List<IncomingFriendRequestResponse> incomingFriendRequests = SkyXploreFriendActions.getIncomingFriendRequests(language, accessTokenId2);
-        assertThat(incomingFriendRequests).hasSize(1);
-        assertThat(incomingFriendRequests.get(0).getSenderName()).isEqualTo(model.getName());
+    private void verifyUserNotFound(Language language, Response characterNotFoundResponse) {
+        assertThat(characterNotFoundResponse.getStatusCode()).isEqualTo(404);
+        ErrorResponse errorResponse = characterNotFoundResponse.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USER_NOT_FOUND.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.USER_NOT_FOUND));
     }
 }

@@ -22,7 +22,7 @@ import static com.github.saphyra.apphub.integration.common.framework.localizatio
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ModulesTest extends BackEndTest {
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "languageDataProvider")
     public void getModules(Language locale) {
         RegistrationRequest registrationRequest = RegistrationParameters.validParameters()
             .toRegistrationRequest();
@@ -75,88 +75,37 @@ public class ModulesTest extends BackEndTest {
         }
     }
 
-    @Test(dataProvider = "localeDataProvider")
-    public void setAsFavorite_unknownModule(Language locale) {
-        RegistrationRequest registrationRequest = RegistrationParameters.validParameters()
-            .toRegistrationRequest();
-        IndexPageActions.registerUser(locale, registrationRequest);
-        UUID accessTokenId = IndexPageActions.login(
-            locale,
-            LoginRequest.builder()
-                .email(registrationRequest.getEmail())
-                .password(registrationRequest.getPassword())
-                .build()
-        );
-
-        Response response = ModulesActions.getSetAsFavoriteResponse(
-            locale,
-            accessTokenId,
-            "unknown-module",
-            true
-        );
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, INVALID_PARAM));
-        assertThat(errorResponse.getParams().get("module")).isEqualTo("does not exist");
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void setAsFavorite_nullValue(Language locale) {
-        RegistrationRequest registrationRequest = RegistrationParameters.validParameters()
-            .toRegistrationRequest();
-        IndexPageActions.registerUser(locale, registrationRequest);
-        UUID accessTokenId = IndexPageActions.login(
-            locale,
-            LoginRequest.builder()
-                .email(registrationRequest.getEmail())
-                .password(registrationRequest.getPassword())
-                .build()
-        );
-
-        Response response = ModulesActions.getSetAsFavoriteResponse(
-            locale,
-            accessTokenId,
-            "account",
-            null
-        );
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, INVALID_PARAM));
-        assertThat(errorResponse.getParams().get("value")).isEqualTo("must not be null");
-    }
-
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "languageDataProvider")
     public void setAsFavorite(Language locale) {
-        RegistrationRequest registrationRequest = RegistrationParameters.validParameters()
-            .toRegistrationRequest();
-        IndexPageActions.registerUser(locale, registrationRequest);
-        UUID accessTokenId = IndexPageActions.login(
-            locale,
-            LoginRequest.builder()
-                .email(registrationRequest.getEmail())
-                .password(registrationRequest.getPassword())
-                .build()
-        );
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
 
-        Map<String, List<ModulesResponse>> result = ModulesActions.setAsFavorite(
-            locale,
-            accessTokenId,
-            "account",
-            true
-        );
+        //Unknown module
+        Response unknownModuleResponse = ModulesActions.getSetAsFavoriteResponse(locale, accessTokenId, "unknown-module", true);
+        verifyBadRequest(locale, unknownModuleResponse, "module", "does not exist");
 
-        assertThat(result).containsKeys("accounts", "office", "development-utils");
+        //Favorite null
+        Response favoriteNullResponse = ModulesActions.getSetAsFavoriteResponse(locale, accessTokenId, "account", null);
+        verifyBadRequest(locale, favoriteNullResponse, "value", "must not be null");
+
+        //Set as favorite
+        Map<String, List<ModulesResponse>> setAsFavoriteResponse = ModulesActions.setAsFavorite(locale, accessTokenId, "account", true);
+
+        assertThat(setAsFavoriteResponse).containsKeys("accounts", "office", "development-utils");
         ModulesResponse expectedModule = ModulesResponse.builder()
             .name("account")
             .url("/web/user/account")
             .favorite(true)
             .build();
-        assertThat(result.get("accounts")).containsExactly(expectedModule);
+        assertThat(setAsFavoriteResponse.get("accounts")).containsExactly(expectedModule);
+    }
+
+    private void verifyBadRequest(Language locale, Response unknownModuleResponse, String field, String value) {
+        assertThat(unknownModuleResponse.getStatusCode()).isEqualTo(400);
+
+        ErrorResponse errorResponse = unknownModuleResponse.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, INVALID_PARAM));
+        assertThat(errorResponse.getParams().get(field)).isEqualTo(value);
     }
 }

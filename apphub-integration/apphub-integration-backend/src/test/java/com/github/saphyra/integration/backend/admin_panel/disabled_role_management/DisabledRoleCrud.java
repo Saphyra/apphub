@@ -20,7 +20,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DisabledRoleCrud extends BackEndTest {
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "languageDataProvider")
     public void disabledRoleCrud(Language language) {
         RegistrationParameters testUser = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(language, testUser.toRegistrationRequest());
@@ -31,25 +31,25 @@ public class DisabledRoleCrud extends BackEndTest {
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         //Initial check
-        assertThat(DisabledRoleActions.getDisabledRoles(language, accessTokenId)).contains(new DisabledRoleResponse(Constants.TEST_ROLE, false));
+        assertThat(DisabledRoleActions.getDisabledRoles(language, accessTokenId)).contains(new DisabledRoleResponse(Constants.ROLE_TEST, false));
         //Disable role
         Response unknownRoleResponse = DisabledRoleActions.getDisableRoleResponse(language, accessTokenId, testUser.getPassword(), "asd");
         verifyBadRequest(language, unknownRoleResponse);
 
-        Response incorrectPasswordDisableResponse = DisabledRoleActions.getDisableRoleResponse(language, accessTokenId, "asd", Constants.TEST_ROLE);
+        Response incorrectPasswordDisableResponse = DisabledRoleActions.getDisableRoleResponse(language, accessTokenId, "asd", Constants.ROLE_TEST);
         verifyBadPassword(language, incorrectPasswordDisableResponse);
 
-        Response disableRoleResponse = DisabledRoleActions.getDisableRoleResponse(language, accessTokenId, testUser.getPassword(), Constants.TEST_ROLE);
+        Response disableRoleResponse = DisabledRoleActions.getDisableRoleResponse(language, accessTokenId, testUser.getPassword(), Constants.ROLE_TEST);
         assertThat(disableRoleResponse.getStatusCode()).isEqualTo(200);
-        assertThat(DisabledRoleActions.getDisabledRoles(language, accessTokenId)).contains(new DisabledRoleResponse(Constants.TEST_ROLE, true));
+        assertThat(DisabledRoleActions.getDisabledRoles(language, accessTokenId)).contains(new DisabledRoleResponse(Constants.ROLE_TEST, true));
 
         //Enable role
-        Response incorrectPasswordEnableResponse = DisabledRoleActions.getEnableRoleResponse(language, accessTokenId, "asd", Constants.TEST_ROLE);
+        Response incorrectPasswordEnableResponse = DisabledRoleActions.getEnableRoleResponse(language, accessTokenId, "asd", Constants.ROLE_TEST);
         verifyBadPassword(language, incorrectPasswordEnableResponse);
 
-        Response enableRoleResponse = DisabledRoleActions.getEnableRoleResponse(language, accessTokenId, testUser.getPassword(), Constants.TEST_ROLE);
+        Response enableRoleResponse = DisabledRoleActions.getEnableRoleResponse(language, accessTokenId, testUser.getPassword(), Constants.ROLE_TEST);
         assertThat(enableRoleResponse.getStatusCode()).isEqualTo(200);
-        assertThat(DisabledRoleActions.getDisabledRoles(language, accessTokenId)).contains(new DisabledRoleResponse(Constants.TEST_ROLE, false));
+        assertThat(DisabledRoleActions.getDisabledRoles(language, accessTokenId)).contains(new DisabledRoleResponse(Constants.ROLE_TEST, false));
     }
 
     private void verifyBadPassword(Language language, Response response) {

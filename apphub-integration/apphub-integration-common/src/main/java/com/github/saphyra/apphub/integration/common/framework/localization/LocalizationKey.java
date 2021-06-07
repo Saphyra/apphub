@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.integration.common.framework.localization;
 
+import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
+
 public enum LocalizationKey {
     ALREADY_EXISTS,
     BAD_CREDENTIALS,
@@ -11,7 +13,7 @@ public enum LocalizationKey {
     CHAT_ROOM_TITLE_TOO_SHORT,
     CHAT_ROOM_TITLE_TOO_LONG,
     DATA_NOT_FOUND,
-    EMAIL_ALREADY_IN_USE,
+    EMAIL_ALREADY_EXISTS,
     FRIEND_REQUEST_ALREADY_EXISTS,
     FRIEND_REQUEST_NOT_FOUND,
     FRIENDSHIP_ALREADY_EXISTS,
@@ -34,5 +36,15 @@ public enum LocalizationKey {
     USERNAME_TOO_LONG,
     USERNAME_TOO_SHORT,
 
-    NOTIFICATION_LANGUAGE_CHANGED
+    NOTIFICATION_LANGUAGE_CHANGED;
+
+    public static LocalizationKey fromErrorCode(ErrorCode errorCode) {
+        for (LocalizationKey key : values()) {
+            if (errorCode.name().equals(key.name())) {
+                return key;
+            }
+        }
+
+        throw new IllegalArgumentException("No LocalizationKey found for ErrorCode " + errorCode);
+    }
 }

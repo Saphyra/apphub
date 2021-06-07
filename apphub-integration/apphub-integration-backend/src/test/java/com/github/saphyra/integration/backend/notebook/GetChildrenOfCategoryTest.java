@@ -30,11 +30,12 @@ public class GetChildrenOfCategoryTest extends BackEndTest {
     private static final String TITLE_4 = "title-4";
     private static final String TITLE_5 = "title-5";
 
-    @Test(dataProvider = "localeDataProvider")
-    public void invalidType(Language language) {
+    @Test(dataProvider = "languageDataProvider")
+    public void getChildren(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
+        //Invalid type
         Response response = NotebookActions.getChildrenOfCategoryResponse(language, accessTokenId, null, Arrays.asList(ListItemType.CATEGORY.name(), "asd"));
 
         assertThat(response.getStatusCode()).isEqualTo(400);
@@ -42,14 +43,8 @@ public class GetChildrenOfCategoryTest extends BackEndTest {
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, INVALID_PARAM));
         assertThat(errorResponse.getParams().get("type")).isEqualTo("contains invalid argument");
-    }
 
-    @Test
-    public void getChildren() {
-        Language language = Language.HUNGARIAN;
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
-
+        //Get
         CreateCategoryRequest parentRequest = CreateCategoryRequest.builder()
             .title(TITLE_1)
             .build();

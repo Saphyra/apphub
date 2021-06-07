@@ -26,16 +26,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CreateLobbyTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
     public void validation(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId1, characterModel1);
+        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
+        //Validation
         verify(language, SkyXploreLobbyActions.getCreateLobbyResponse(language, accessTokenId1, null), "must not be null");
         verify(language, SkyXploreLobbyActions.getCreateLobbyResponse(language, accessTokenId1, "aa"), "too short");
         verify(language, SkyXploreLobbyActions.getCreateLobbyResponse(language, accessTokenId1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining())), "too long");
+
+        //Create
+        SkyXploreLobbyActions.createLobby(language, accessTokenId1, GAME_NAME);
+        LobbyMembersResponse lobbyMembers = SkyXploreLobbyActions.getLobbyMembers(language, accessTokenId1);
+        assertThat(lobbyMembers.getHost()).isEqualTo(LobbyMemberResponse.builder().userId(userId1).characterName(characterModel1.getName()).build());
+        assertThat(lobbyMembers.getMembers()).isEmpty();
     }
 
     private void verify(Language language, Response response, String message) {
@@ -44,22 +52,5 @@ public class CreateLobbyTest extends BackEndTest {
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getParams()).containsEntry("lobbyName", message);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
-    }
-
-    @Test(groups = "skyxplore")
-    public void createLobby() {
-        Language language = Language.HUNGARIAN;
-        RegistrationParameters userData1 = RegistrationParameters.validParameters();
-        SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId1, characterModel1);
-        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
-
-        SkyXploreLobbyActions.createLobby(language, accessTokenId1, GAME_NAME);
-
-        LobbyMembersResponse lobbyMembers = SkyXploreLobbyActions.getLobbyMembers(language, accessTokenId1);
-
-        assertThat(lobbyMembers.getHost()).isEqualTo(LobbyMemberResponse.builder().userId(userId1).characterName(characterModel1.getName()).build());
-        assertThat(lobbyMembers.getMembers()).isEmpty();
     }
 }

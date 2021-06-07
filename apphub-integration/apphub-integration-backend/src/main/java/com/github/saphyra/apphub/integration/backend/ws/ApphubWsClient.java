@@ -94,7 +94,7 @@ public class ApphubWsClient extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake serverHandshake) {
-        log.info("WebSocket connection opened for endpoint {}", endpoint);
+        log.debug("WebSocket connection opened for endpoint {}", endpoint);
     }
 
     @Override
@@ -122,5 +122,9 @@ public class ApphubWsClient extends WebSocketClient {
 
     public Optional<WebSocketEvent> awaitForEvent(WebSocketEventName eventName, Predicate<WebSocketEvent> customCondition) {
         return AwaitilityWrapper.findWithWait(60, () -> messages, webSocketEvent -> webSocketEvent.getEventName().equals(eventName) && customCondition.test(webSocketEvent));
+    }
+
+    public void clearMessages() {
+        messages.clear();
     }
 }

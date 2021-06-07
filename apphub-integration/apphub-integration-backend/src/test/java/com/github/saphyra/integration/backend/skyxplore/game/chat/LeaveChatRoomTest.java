@@ -23,7 +23,6 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
@@ -33,7 +32,7 @@ public class LeaveChatRoomTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
     private static final String ROOM_TITLE = "room-title";
 
-    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
     public void leaveAllianceRoom(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -41,67 +40,6 @@ public class LeaveChatRoomTest extends BackEndTest {
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId1, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId1, userId1))
-            .get(accessTokenId1);
-
-        Response response = SkyXploreGameChatActions.getLeaveChatRoomResponse(language, accessTokenId1, "alliance");
-
-        assertThat(response.getStatusCode()).isEqualTo(403);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FORBIDDEN_OPERATION));
-    }
-
-    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
-    public void leaveGeneralRoom(Language language) {
-        RegistrationParameters userData1 = RegistrationParameters.validParameters();
-        SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId1, characterModel1);
-        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
-
-        SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId1, userId1))
-            .get(accessTokenId1);
-
-        Response response = SkyXploreGameChatActions.getLeaveChatRoomResponse(language, accessTokenId1, "general");
-
-        assertThat(response.getStatusCode()).isEqualTo(403);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FORBIDDEN_OPERATION));
-    }
-
-    @Test(groups = "skyxplore")
-    public void chatRoomNotFound() {
-        Language language = Language.HUNGARIAN;
-        RegistrationParameters userData1 = RegistrationParameters.validParameters();
-        SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId1, characterModel1);
-        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
-
-        SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId1, userId1))
-            .get(accessTokenId1);
-
-        Response response = SkyXploreGameChatActions.getLeaveChatRoomResponse(language, accessTokenId1, "unknown-chat-room");
-
-        assertThat(response.getStatusCode()).isEqualTo(404);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.NON_TRANSLATED_ERROR.name());
-    }
-
-    @Test(groups = "skyxplore")
-    public void notMemberOfChatRoom() {
-        Language language = Language.HUNGARIAN;
-        RegistrationParameters userData1 = RegistrationParameters.validParameters();
-        SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId1, characterModel1);
-        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
-
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel2 = SkyXploreCharacterModel.valid();
         UUID accessTokenId2 = IndexPageActions.registerAndLogin(language, userData2);
@@ -110,87 +48,31 @@ public class LeaveChatRoomTest extends BackEndTest {
 
         Map<UUID, ApphubWsClient> gameWsClients = SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId1, userId1), new Player(accessTokenId2, userId2));
 
-        CreateChatRoomRequest createChatRoomRequest = CreateChatRoomRequest.builder()
-            .roomTitle(ROOM_TITLE)
-            .members(Collections.emptyList())
-            .build();
+        //Leave alliance room
+        Response leaveAllianceRoomResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(language, accessTokenId1, "alliance");
+        verifyForbiddenOperation(language, leaveAllianceRoomResponse);
 
-        SkyXploreGameChatActions.createChatRoom(language, accessTokenId2, createChatRoomRequest);
+        //Leave general room
+        Response leaveGeneralRoomResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(language, accessTokenId1, "general");
+        verifyForbiddenOperation(language, leaveGeneralRoomResponse);
 
-        String roomId = gameWsClients.get(accessTokenId2).awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_CHAT_ROOM_CREATED)
-            .map(event -> event.getPayloadAs(ChatRoomCreatedMessage.class))
-            .map(ChatRoomCreatedMessage::getId)
-            .orElseThrow(() -> new RuntimeException("ChatRoom was not created"));
+        //Chat room not found
+        Response chatRoomNotFoundResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(language, accessTokenId1, "unknown-chat-room");
+        verifyNotTranslatedNotFound(chatRoomNotFoundResponse);
 
-        Response response = SkyXploreGameChatActions.getLeaveChatRoomResponse(language, accessTokenId1, roomId);
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-
-        assertThat(gameWsClients.get(accessTokenId1).awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_USER_LEFT)).isEmpty();
-    }
-
-    @Test(groups = "skyxplore")
-    public void lastMemberOfChatRoom() {
-        Language language = Language.HUNGARIAN;
-        RegistrationParameters userData1 = RegistrationParameters.validParameters();
-        SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId1, characterModel1);
-        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
-
-        Map<UUID, ApphubWsClient> gameWsClients = SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId1, userId1));
-
-        CreateChatRoomRequest createChatRoomRequest = CreateChatRoomRequest.builder()
-            .roomTitle(ROOM_TITLE)
-            .members(Collections.emptyList())
-            .build();
-
-        SkyXploreGameChatActions.createChatRoom(language, accessTokenId1, createChatRoomRequest);
-
-        String roomId = gameWsClients.get(accessTokenId1).awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_CHAT_ROOM_CREATED)
-            .map(event -> event.getPayloadAs(ChatRoomCreatedMessage.class))
-            .map(ChatRoomCreatedMessage::getId)
-            .orElseThrow(() -> new RuntimeException("ChatRoom was not created"));
-
-        Response response = SkyXploreGameChatActions.getLeaveChatRoomResponse(language, accessTokenId1, roomId);
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-
-        assertThat(gameWsClients.get(accessTokenId1).awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_USER_LEFT)).isEmpty();
-    }
-
-    @Test(groups = "skyxplore")
-    public void roomHasMemberLeft() {
-        Language language = Language.HUNGARIAN;
-        RegistrationParameters userData1 = RegistrationParameters.validParameters();
-        SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId1, characterModel1);
-        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
-
-        RegistrationParameters userData2 = RegistrationParameters.validParameters();
-        SkyXploreCharacterModel characterModel2 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(language, userData2);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, characterModel2);
-        UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
-
-        Map<UUID, ApphubWsClient> gameWsClients = SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId1, userId1), new Player(accessTokenId2, userId2));
-
+        //Leave chat room
         CreateChatRoomRequest createChatRoomRequest = CreateChatRoomRequest.builder()
             .roomTitle(ROOM_TITLE)
             .members(Arrays.asList(userId1))
             .build();
-
         SkyXploreGameChatActions.createChatRoom(language, accessTokenId2, createChatRoomRequest);
-
         String roomId = gameWsClients.get(accessTokenId2).awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_CHAT_ROOM_CREATED)
             .map(event -> event.getPayloadAs(ChatRoomCreatedMessage.class))
             .map(ChatRoomCreatedMessage::getId)
             .orElseThrow(() -> new RuntimeException("ChatRoom was not created"));
+        Response leaveChatRoomResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(language, accessTokenId1, roomId);
 
-        Response response = SkyXploreGameChatActions.getLeaveChatRoomResponse(language, accessTokenId1, roomId);
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
+        assertThat(leaveChatRoomResponse.getStatusCode()).isEqualTo(200);
 
         SystemMessage message = gameWsClients.get(accessTokenId2).awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_USER_LEFT)
             .map(event -> event.getPayloadAs(SystemMessage.class))
@@ -199,5 +81,18 @@ public class LeaveChatRoomTest extends BackEndTest {
         assertThat(message.getUserId()).isEqualTo(userId1);
         assertThat(message.getCharacterName()).isEqualTo(characterModel1.getName());
         assertThat(message.getRoom()).isEqualTo(roomId);
+    }
+
+    private void verifyNotTranslatedNotFound(Response chatRoomNotFoundResponse) {
+        assertThat(chatRoomNotFoundResponse.getStatusCode()).isEqualTo(404);
+        ErrorResponse errorResponse = chatRoomNotFoundResponse.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.NON_TRANSLATED_ERROR.name());
+    }
+
+    private void verifyForbiddenOperation(Language language, Response response) {
+        assertThat(response.getStatusCode()).isEqualTo(403);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FORBIDDEN_OPERATION));
     }
 }

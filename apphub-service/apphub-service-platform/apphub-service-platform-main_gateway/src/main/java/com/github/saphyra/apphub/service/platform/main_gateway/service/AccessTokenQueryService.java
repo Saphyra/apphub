@@ -27,7 +27,7 @@ public class AccessTokenQueryService {
         try {
             return Optional.of(authenticationApi.getAccessTokenById(accessTokenId, commonConfigProperties.getDefaultLocale()));
         } catch (Exception e) {
-            log.warn("Failed to query accessToken by accessTokenId {}: {}", accessTokenId, e.getMessage());
+            log.debug("Failed to query accessToken by accessTokenId {}: {}", accessTokenId, e.getMessage());
             return Optional.empty();
         }
     }

@@ -24,7 +24,7 @@ import java.util.UUID;
 public class StartGameTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
     public void startGame(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();

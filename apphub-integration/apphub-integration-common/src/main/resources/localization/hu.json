@@ -9,7 +9,7 @@
   "CHAT_ROOM_TITLE_TOO_SHORT": "Chat szoba neve túl rövid. (Minimum 3 karakter)",
   "CHAT_ROOM_TITLE_TOO_LONG": "Chat szoba neve túl hosszú. (Maximum 30 karakter)",
   "DATA_NOT_FOUND": "Az adat nem található.",
-  "EMAIL_ALREADY_IN_USE": "Az email foglalt.",
+  "EMAIL_ALREADY_EXISTS": "Az email foglalt.",
   "FRIEND_REQUEST_ALREADY_EXISTS": "Már van ilyen barátkérelem.",
   "FRIEND_REQUEST_NOT_FOUND": "A barátkérelem nem található.",
   "FRIENDSHIP_ALREADY_EXISTS": "Ez a barátság már létrejött.",

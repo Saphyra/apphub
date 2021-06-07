@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class InviteToLobbyTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "localeDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
     public void invite(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -63,6 +63,5 @@ public class InviteToLobbyTest extends BackEndTest {
         ErrorResponse errorResponse = floodingResponse.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.TOO_FREQUENT_INVITATIONS.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.TOO_FREQUENT_INVITATIONS));
-
     }
 }
