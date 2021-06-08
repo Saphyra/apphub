@@ -27,7 +27,7 @@ class CharacterCreationValidator {
 
     public void validate(UUID userId, SkyXploreCharacterModel model) {
         if (isNull(model.getName())) {
-            Map<String, String> params = CollectionUtils.singleValueMap("name", "Must not be null");
+            Map<String, String> params = CollectionUtils.singleValueMap("name", "must not be null");
             throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), params), "Name must not be null.");
         }
 

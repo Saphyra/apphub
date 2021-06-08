@@ -94,7 +94,7 @@ public class CharacterDataControllerImplTestIt_createOrUpdateCharacter {
 
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getParams()).containsEntry("name", "Must not be null");
+        assertThat(errorResponse.getParams()).containsEntry("name", "must not be null");
     }
 
     @Test

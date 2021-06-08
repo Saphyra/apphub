@@ -1,4 +1,4 @@
-package com.github.saphyra.integration.backend.skyxplore.game.planet.storage_setting;
+package com.github.saphyra.integration.backend.skyxplore.game.planet;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreCharacterActions;

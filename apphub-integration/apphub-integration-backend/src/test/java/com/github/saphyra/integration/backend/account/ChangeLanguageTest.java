@@ -1,14 +1,11 @@
 package com.github.saphyra.integration.backend.account;
 
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.ResponseValidator;
 import com.github.saphyra.apphub.integration.backend.actions.AccountActions;
 import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.model.LanguageResponse;
-import com.github.saphyra.apphub.integration.backend.BackEndTest;
-import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.DataProvider;
@@ -36,11 +33,11 @@ public class ChangeLanguageTest extends BackEndTest {
 
         //Null language
         Response nullLanguageResponse = AccountActions.getChangeLanguageResponse(registerLanguage, accessTokenId, null);
-        verifyBadRequest(registerLanguage, nullLanguageResponse, "language must not be null");
+        ResponseValidator.verifyInvalidParam(registerLanguage, nullLanguageResponse, "value", "language must not be null");
 
         //Not supported language
         Response response = AccountActions.getChangeLanguageResponse(registerLanguage, accessTokenId, "asd");
-        verifyBadRequest(registerLanguage, response, "language not supported");
+        ResponseValidator.verifyInvalidParam(registerLanguage, response, "value", "language not supported");
 
         //Change language
         AccountActions.changeLanguage(registerLanguage, accessTokenId, changeLanguage.getLocale());
@@ -53,13 +50,5 @@ public class ChangeLanguageTest extends BackEndTest {
                 .map(LanguageResponse::getLanguage)
                 .collect(Collectors.toList())
         ).containsExactly(changeLanguage.getLocale());
-    }
-
-    private void verifyBadRequest(Language locale, Response response, String value) {
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.INVALID_PARAM));
-        assertThat(errorResponse.getParams().get("value")).isEqualTo(value);
     }
 }

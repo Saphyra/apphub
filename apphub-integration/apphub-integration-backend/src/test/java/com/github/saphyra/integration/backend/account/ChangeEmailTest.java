@@ -1,6 +1,7 @@
 package com.github.saphyra.integration.backend.account;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.ResponseValidator;
 import com.github.saphyra.apphub.integration.backend.actions.AccountActions;
 import com.github.saphyra.apphub.integration.backend.model.account.ChangeEmailRequest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
@@ -31,7 +32,7 @@ public class ChangeEmailTest extends BackEndTest {
             .password(userData1.getPassword())
             .build();
         Response nullEmailResponse = AccountActions.getChangeEmailResponse(language, accessTokenId1, nullEmailRequest);
-        verifyBadRequest(language, nullEmailResponse, "email", "must not be null");
+        ResponseValidator.verifyInvalidParam(language, nullEmailResponse, "email", "must not be null");
 
         //Invalid e-mail
         ChangeEmailRequest invalidEmailRequest = ChangeEmailRequest.builder()
@@ -39,7 +40,7 @@ public class ChangeEmailTest extends BackEndTest {
             .password(userData1.getPassword())
             .build();
         Response invalidEmailResponse = AccountActions.getChangeEmailResponse(language, accessTokenId1, invalidEmailRequest);
-        verifyBadRequest(language, invalidEmailResponse, "email", "invalid format");
+        ResponseValidator.verifyInvalidParam(language, invalidEmailResponse, "email", "invalid format");
 
         //Null password
         ChangeEmailRequest nullPasswordRequest = ChangeEmailRequest.builder()
@@ -47,7 +48,7 @@ public class ChangeEmailTest extends BackEndTest {
             .password(null)
             .build();
         Response nullPasswordResponse = AccountActions.getChangeEmailResponse(language, accessTokenId1, nullPasswordRequest);
-        verifyBadRequest(language, nullPasswordResponse, "password", "must not be null");
+        ResponseValidator.verifyInvalidParam(language, nullPasswordResponse, "password", "must not be null");
 
         //Incorrect password
         ChangeEmailRequest incorrectPasswordRequest = ChangeEmailRequest.builder()
@@ -55,18 +56,16 @@ public class ChangeEmailTest extends BackEndTest {
             .password("incorrect-password")
             .build();
         Response incorrectPasswordResponse = AccountActions.getChangeEmailResponse(language, accessTokenId1, incorrectPasswordRequest);
-        verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.BAD_PASSWORD);
+        ResponseValidator.verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.BAD_PASSWORD);
 
         //E-mail already exists
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         IndexPageActions.registerAndLogin(language, userData2);
-
         ChangeEmailRequest emailAlreadyExistsRequest = ChangeEmailRequest.builder()
             .email(userData2.getEmail())
             .password(userData1.getPassword())
             .build();
         Response emailAlreadyExistsResponse = AccountActions.getChangeEmailResponse(language, accessTokenId1, emailAlreadyExistsRequest);
-
         assertThat(emailAlreadyExistsResponse.getStatusCode()).isEqualTo(409);
         ErrorResponse emailAlreadyExistsErrorResponse = emailAlreadyExistsResponse.getBody().as(ErrorResponse.class);
         assertThat(emailAlreadyExistsErrorResponse.getErrorCode()).isEqualTo(ErrorCode.EMAIL_ALREADY_EXISTS.name());
@@ -78,30 +77,13 @@ public class ChangeEmailTest extends BackEndTest {
             .email(newEmail)
             .password(userData1.getPassword())
             .build();
-
         Response response = AccountActions.getChangeEmailResponse(language, accessTokenId1, request);
-
         assertThat(response.getStatusCode()).isEqualTo(200);
-
         Response failedLoginResponse = IndexPageActions.getLoginResponse(language, LoginRequest.builder().password(userData1.getPassword()).email(userData1.getEmail()).build());
         assertThat(failedLoginResponse.getStatusCode()).isEqualTo(401);
         ErrorResponse errorResponse = failedLoginResponse.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.BAD_CREDENTIALS));
-
         IndexPageActions.login(language, LoginRequest.builder().password(userData1.getPassword()).email(newEmail).build());
-    }
-
-    private void verifyBadRequest(Language locale, Response response, String field, String value) {
-        ErrorResponse errorResponse = verifyBadRequest(locale, response, ErrorCode.INVALID_PARAM);
-        assertThat(errorResponse.getParams().get(field)).isEqualTo(value);
-    }
-
-    private ErrorResponse verifyBadRequest(Language locale, Response response, ErrorCode errorCode) {
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(errorCode.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.valueOf(errorCode.name())));
-        return errorResponse;
     }
 }

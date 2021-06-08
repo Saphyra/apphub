@@ -1,6 +1,7 @@
 package com.github.saphyra.integration.backend.skyxplore.lobby;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreFriendActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreLobbyActions;
@@ -8,18 +9,14 @@ import com.github.saphyra.apphub.integration.backend.model.skyxplore.LobbyMember
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.LobbyMembersResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyForbiddenOperation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AcceptInvitationTest extends BackEndTest {
@@ -57,12 +54,5 @@ public class AcceptInvitationTest extends BackEndTest {
         LobbyMembersResponse lobbyMembers = SkyXploreLobbyActions.getLobbyMembers(language, accessTokenId2);
         assertThat(lobbyMembers.getHost()).isEqualTo(LobbyMemberResponse.builder().userId(userId1).characterName(characterModel1.getName()).build());
         assertThat(lobbyMembers.getMembers()).containsExactly(LobbyMemberResponse.builder().userId(userId2).characterName(characterModel2.getName()).build());
-    }
-
-    private void verifyForbiddenOperation(Language language, Response response) {
-        assertThat(response.getStatusCode()).isEqualTo(403);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FORBIDDEN_OPERATION));
     }
 }

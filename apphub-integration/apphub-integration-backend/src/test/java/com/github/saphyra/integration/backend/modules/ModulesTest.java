@@ -1,13 +1,10 @@
 package com.github.saphyra.integration.backend.modules;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.ModulesActions;
 import com.github.saphyra.apphub.integration.backend.model.ModulesResponse;
-import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.LoginRequest;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.common.model.RegistrationRequest;
@@ -18,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.INVALID_PARAM;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ModulesTest extends BackEndTest {
@@ -82,11 +79,11 @@ public class ModulesTest extends BackEndTest {
 
         //Unknown module
         Response unknownModuleResponse = ModulesActions.getSetAsFavoriteResponse(locale, accessTokenId, "unknown-module", true);
-        verifyBadRequest(locale, unknownModuleResponse, "module", "does not exist");
+        verifyInvalidParam(locale, unknownModuleResponse, "module", "does not exist");
 
         //Favorite null
         Response favoriteNullResponse = ModulesActions.getSetAsFavoriteResponse(locale, accessTokenId, "account", null);
-        verifyBadRequest(locale, favoriteNullResponse, "value", "must not be null");
+        verifyInvalidParam(locale, favoriteNullResponse, "value", "must not be null");
 
         //Set as favorite
         Map<String, List<ModulesResponse>> setAsFavoriteResponse = ModulesActions.setAsFavorite(locale, accessTokenId, "account", true);
@@ -98,14 +95,5 @@ public class ModulesTest extends BackEndTest {
             .favorite(true)
             .build();
         assertThat(setAsFavoriteResponse.get("accounts")).containsExactly(expectedModule);
-    }
-
-    private void verifyBadRequest(Language locale, Response unknownModuleResponse, String field, String value) {
-        assertThat(unknownModuleResponse.getStatusCode()).isEqualTo(400);
-
-        ErrorResponse errorResponse = unknownModuleResponse.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, INVALID_PARAM));
-        assertThat(errorResponse.getParams().get(field)).isEqualTo(value);
     }
 }

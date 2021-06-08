@@ -18,6 +18,7 @@ import org.testng.annotations.Test;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyErrorResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginTest extends BackEndTest {
@@ -31,7 +32,7 @@ public class LoginTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
         Response unknownEmailResponse = IndexPageActions.getLoginResponse(language, unknownEmailRequest);
-        verifyBadCredentials(language, unknownEmailResponse);
+        verifyErrorResponse(language, unknownEmailResponse, 401, ErrorCode.BAD_CREDENTIALS);
 
         //Incorrect password
         IndexPageActions.registerUser(language, userData.toRegistrationRequest());
@@ -41,7 +42,7 @@ public class LoginTest extends BackEndTest {
             .password("asd")
             .build();
         Response incorrectPasswordResponse = IndexPageActions.getLoginResponse(language, incorrectPasswordRequest);
-        verifyBadCredentials(language, incorrectPasswordResponse);
+        verifyErrorResponse(language, incorrectPasswordResponse, 401, ErrorCode.BAD_CREDENTIALS);
 
         //Successful login - remember me
         LoginRequest rememberMeLoginRequest = LoginRequest.builder()
@@ -80,13 +81,5 @@ public class LoginTest extends BackEndTest {
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.NO_SESSION_AVAILABLE.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.SESSION_EXPIRED));
-    }
-
-    private void verifyBadCredentials(Language locale, Response response) {
-        assertThat(response.getStatusCode()).isEqualTo(401);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.BAD_CREDENTIALS));
     }
 }

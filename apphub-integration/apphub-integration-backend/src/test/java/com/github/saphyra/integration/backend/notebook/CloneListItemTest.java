@@ -1,6 +1,7 @@
 package com.github.saphyra.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.ResponseValidator;
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistItemNodeRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistResponse;
@@ -56,10 +57,7 @@ public class CloneListItemTest extends BackEndTest {
 
         Response response = NotebookActions.getCloneListItemResponse(language, accessTokenId, UUID.randomUUID());
 
-        assertThat(response.getStatusCode()).isEqualTo(404);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LIST_ITEM_NOT_FOUND));
+        ResponseValidator.verifyListItemNotFound(language, response);
     }
 
     @Test(dataProvider = "languageDataProvider")

@@ -1,6 +1,7 @@
-package com.github.saphyra.integration.backend.skyxplore.game.planet.population;
+package com.github.saphyra.integration.backend.skyxplore.game.planet;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreFlow;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplorePlanetActions;
@@ -12,12 +13,7 @@ import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkillRespon
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkillType;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -27,6 +23,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PopulationTest extends BackEndTest {
@@ -56,11 +53,11 @@ public class PopulationTest extends BackEndTest {
 
         //Blank name
         Response blankNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, planet.getPlanetId(), citizen.getCitizenId(), " ");
-        verifyInvalidParam(language, blankNameResponse, "must not be blank");
+        verifyInvalidParam(language, blankNameResponse, "value", "must not be blank");
 
         //Too long name
         Response tooLongNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, planet.getPlanetId(), citizen.getCitizenId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
-        verifyInvalidParam(language, tooLongNameResponse, "too long");
+        verifyInvalidParam(language, tooLongNameResponse, "value", "too long");
 
         //Not found
         Response notFoundResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, planet.getPlanetId(), UUID.randomUUID(), NEW_NAME);
@@ -75,14 +72,6 @@ public class PopulationTest extends BackEndTest {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Citizen not found with id " + citizen.getCitizenId()));
         assertThat(modifiedCitizen.getName()).isEqualTo(NEW_NAME);
-    }
-
-    private void verifyInvalidParam(Language language, Response response, String value) {
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getParams()).containsEntry("value", value);
     }
 
     private void validate(CitizenResponse citizenResponse) {

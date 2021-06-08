@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.frontend.admin_panel.disabled_role_management;
+package com.github.saphyra.apphub.integration.frontend.admin_panel;
 
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;

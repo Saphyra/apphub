@@ -1,6 +1,7 @@
 package com.github.saphyra.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CategoryTreeView;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTableRequest;
@@ -8,10 +9,7 @@ import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTextRe
 import com.github.saphyra.apphub.integration.backend.model.notebook.EditTableRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.TableResponse;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.KeyValuePair;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
@@ -22,10 +20,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.CATEGORY_NOT_FOUND;
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.INVALID_PARAM;
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.INVALID_TYPE;
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.LIST_ITEM_NOT_FOUND;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyErrorResponse;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyInvalidParam;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyListItemNotFound;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TableCrudTest extends BackEndTest {
@@ -58,7 +55,7 @@ public class TableCrudTest extends BackEndTest {
             .columns(Arrays.asList(Arrays.asList(COLUMN_VALUE)))
             .build();
         Response create_parentNotFoundResponse = NotebookActions.getCreateTableResponse(language, accessTokenId, create_parentNotFoundRequest);
-        verifyCategoryNotFound(language, create_parentNotFoundResponse);
+        verifyErrorResponse(language, create_parentNotFoundResponse, 404, ErrorCode.CATEGORY_NOT_FOUND);
 
         //Create - Parent not category
         UUID notCategoryParentId = NotebookActions.createText(language, accessTokenId, CreateTextRequest.builder().title(TITLE).content("").build());
@@ -69,7 +66,7 @@ public class TableCrudTest extends BackEndTest {
             .columns(Arrays.asList(Arrays.asList(COLUMN_VALUE)))
             .build();
         Response create_parentNotCategoryResponse = NotebookActions.getCreateTableResponse(language, accessTokenId, create_parentNotCategoryRequest);
-        verifyInvalidType(language, create_parentNotCategoryResponse);
+        verifyErrorResponse(language, create_parentNotCategoryResponse, 422, ErrorCode.INVALID_TYPE);
 
         //Create - Blank column name
         CreateTableRequest create_blankColumnNameRequest = CreateTableRequest.builder()
@@ -319,38 +316,5 @@ public class TableCrudTest extends BackEndTest {
 
         List<CategoryTreeView> categoryTreeViews = NotebookActions.getCategoryTree(language, accessTokenId);
         assertThat(categoryTreeViews).isEmpty();
-    }
-
-    private void verifyListItemNotFound(Language language, Response edit_columnHeadNotFoundResponse) {
-        assertThat(edit_columnHeadNotFoundResponse.getStatusCode()).isEqualTo(404);
-
-        ErrorResponse errorResponse = edit_columnHeadNotFoundResponse.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LIST_ITEM_NOT_FOUND));
-    }
-
-    private void verifyInvalidType(Language language, Response response) {
-        assertThat(response.getStatusCode()).isEqualTo(422);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_TYPE.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, INVALID_TYPE));
-    }
-
-    private void verifyCategoryNotFound(Language language, Response response) {
-        assertThat(response.getStatusCode()).isEqualTo(404);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CATEGORY_NOT_FOUND.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, CATEGORY_NOT_FOUND));
-    }
-
-    private void verifyInvalidParam(Language language, Response response, String field, String value) {
-        assertThat(response.getStatusCode()).isEqualTo(400);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, INVALID_PARAM));
-        assertThat(errorResponse.getParams().get(field)).isEqualTo(value);
     }
 }

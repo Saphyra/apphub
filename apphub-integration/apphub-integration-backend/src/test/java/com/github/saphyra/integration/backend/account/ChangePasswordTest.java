@@ -2,10 +2,10 @@ package com.github.saphyra.integration.backend.account;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.backend.actions.AccountActions;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.model.account.ChangePasswordRequest;
 import com.github.saphyra.apphub.integration.common.framework.DataConstants;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
@@ -17,6 +17,8 @@ import org.testng.annotations.Test;
 
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyBadRequest;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangePasswordTest extends BackEndTest {
@@ -31,7 +33,7 @@ public class ChangePasswordTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
         Response nullNewPasswordResponse = AccountActions.getChangePasswordResponse(language, accessTokenId, nullNewPasswordRequest);
-        verifyInvalidParam(language, nullNewPasswordResponse, "newPassword");
+        verifyInvalidParam(language, nullNewPasswordResponse, "newPassword", "must not be null");
 
         //Too short new password
         ChangePasswordRequest tooShortNewPasswordRequest = ChangePasswordRequest.builder()
@@ -55,7 +57,7 @@ public class ChangePasswordTest extends BackEndTest {
             .password(null)
             .build();
         Response nullPasswordResponse = AccountActions.getChangePasswordResponse(language, accessTokenId, nullPasswordRequest);
-        verifyInvalidParam(language, nullPasswordResponse, "password");
+        verifyInvalidParam(language, nullPasswordResponse, "password", "must not be null");
 
         //Incorrect password
         ChangePasswordRequest incorrectPasswordRequest = ChangePasswordRequest.builder()
@@ -81,18 +83,5 @@ public class ChangePasswordTest extends BackEndTest {
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.BAD_CREDENTIALS));
 
         IndexPageActions.login(language, LoginRequest.builder().password(DataConstants.VALID_PASSWORD2).email(userData.getEmail()).build());
-    }
-
-    private void verifyInvalidParam(Language language, Response response, String field) {
-        ErrorResponse errorResponse = verifyBadRequest(language, response, ErrorCode.INVALID_PARAM);
-        assertThat(errorResponse.getParams().get(field)).isEqualTo("must not be null");
-    }
-
-    private ErrorResponse verifyBadRequest(Language language, Response response, ErrorCode errorCode) {
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(errorCode.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.fromErrorCode(errorCode)));
-        return errorResponse;
     }
 }

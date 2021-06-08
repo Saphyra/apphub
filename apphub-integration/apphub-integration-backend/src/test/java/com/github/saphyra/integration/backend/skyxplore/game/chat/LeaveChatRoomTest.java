@@ -1,6 +1,7 @@
 package com.github.saphyra.integration.backend.skyxplore.game.chat;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreFlow;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreGameChatActions;
@@ -12,12 +13,7 @@ import com.github.saphyra.apphub.integration.backend.model.skyxplore.SystemMessa
 import com.github.saphyra.apphub.integration.backend.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.backend.ws.model.WebSocketEventName;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -26,6 +22,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyForbiddenOperation;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyNotTranslatedNotFound;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LeaveChatRoomTest extends BackEndTest {
@@ -58,7 +56,7 @@ public class LeaveChatRoomTest extends BackEndTest {
 
         //Chat room not found
         Response chatRoomNotFoundResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(language, accessTokenId1, "unknown-chat-room");
-        verifyNotTranslatedNotFound(chatRoomNotFoundResponse);
+        verifyNotTranslatedNotFound(chatRoomNotFoundResponse, 404);
 
         //Leave chat room
         CreateChatRoomRequest createChatRoomRequest = CreateChatRoomRequest.builder()
@@ -83,16 +81,4 @@ public class LeaveChatRoomTest extends BackEndTest {
         assertThat(message.getRoom()).isEqualTo(roomId);
     }
 
-    private void verifyNotTranslatedNotFound(Response chatRoomNotFoundResponse) {
-        assertThat(chatRoomNotFoundResponse.getStatusCode()).isEqualTo(404);
-        ErrorResponse errorResponse = chatRoomNotFoundResponse.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.NON_TRANSLATED_ERROR.name());
-    }
-
-    private void verifyForbiddenOperation(Language language, Response response) {
-        assertThat(response.getStatusCode()).isEqualTo(403);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FORBIDDEN_OPERATION));
-    }
 }

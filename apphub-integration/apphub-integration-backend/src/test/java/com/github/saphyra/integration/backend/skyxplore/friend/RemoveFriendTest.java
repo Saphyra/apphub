@@ -1,6 +1,7 @@
 package com.github.saphyra.integration.backend.skyxplore.friend;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreFriendActions;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.FriendshipResponse;
@@ -8,17 +9,15 @@ import com.github.saphyra.apphub.integration.backend.model.skyxplore.SentFriendR
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyErrorResponse;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyForbiddenOperation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RemoveFriendTest extends BackEndTest {
@@ -45,7 +44,7 @@ public class RemoveFriendTest extends BackEndTest {
 
         //Friend not found
         Response friendNotFoundResponse = SkyXploreFriendActions.getRemoveFriendResponse(language, accessTokenId, UUID.randomUUID());
-        verifyFriendNotFound(language, friendNotFoundResponse);
+        verifyErrorResponse(language, friendNotFoundResponse, 404, ErrorCode.FRIENDSHIP_NOT_FOUND);
 
         //Forbidden operation
         SkyXploreFriendActions.createFriendRequest(language, accessTokenId, userId2);
@@ -72,19 +71,5 @@ public class RemoveFriendTest extends BackEndTest {
         assertThat(removeResponse.getStatusCode()).isEqualTo(200);
         assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId)).isEmpty();
         assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId2)).isEmpty();
-    }
-
-    private void verifyForbiddenOperation(Language language, Response response) {
-        assertThat(response.getStatusCode()).isEqualTo(403);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FORBIDDEN_OPERATION));
-    }
-
-    private void verifyFriendNotFound(Language language, Response response) {
-        assertThat(response.getStatusCode()).isEqualTo(404);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FRIENDSHIP_NOT_FOUND.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FRIENDSHIP_NOT_FOUND));
     }
 }

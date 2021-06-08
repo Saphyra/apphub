@@ -1,14 +1,11 @@
 package com.github.saphyra.integration.backend.index;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.common.model.RegistrationRequest;
 import io.restassured.response.Response;
@@ -16,6 +13,9 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyBadRequest;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyErrorResponse;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RegistrationTest extends BackEndTest {
@@ -25,7 +25,7 @@ public class RegistrationTest extends BackEndTest {
         RegistrationRequest invalidEmailRequest = RegistrationParameters.invalidEmailParameters()
             .toRegistrationRequest();
         Response invalidEmailResponse = IndexPageActions.getRegistrationResponse(language, invalidEmailRequest);
-        verifyInvalidParam(language, invalidEmailResponse);
+        verifyInvalidParam(language, invalidEmailResponse, "email", "invalid format");
 
         //Username too short
         RegistrationRequest usernameTooShortRequest = RegistrationParameters.tooShortUsernameParameters()
@@ -62,7 +62,7 @@ public class RegistrationTest extends BackEndTest {
             .build()
             .toRegistrationRequest();
         Response existingEmailResponse = IndexPageActions.getRegistrationResponse(language, existingEmailRequest);
-        verifyResponse(language, existingEmailResponse, ErrorCode.EMAIL_ALREADY_EXISTS, 409);
+        verifyErrorResponse(language, existingEmailResponse, 409, ErrorCode.EMAIL_ALREADY_EXISTS);
 
         //Existing username
         RegistrationRequest existingUsernameRequest = RegistrationParameters.validParameters()
@@ -71,33 +71,14 @@ public class RegistrationTest extends BackEndTest {
             .build()
             .toRegistrationRequest();
         Response existingUsernameResponse = IndexPageActions.getRegistrationResponse(language, existingUsernameRequest);
-        verifyResponse(language, existingUsernameResponse, ErrorCode.USERNAME_ALREADY_EXISTS, 409);
+        verifyErrorResponse(language, existingUsernameResponse, 409, ErrorCode.USERNAME_ALREADY_EXISTS);
 
         //Successful registration
         RegistrationRequest registrationRequest = RegistrationParameters.validParameters()
             .toRegistrationRequest();
         Response response = IndexPageActions.getRegistrationResponse(language, registrationRequest);
-
         assertThat(response.getStatusCode()).isEqualTo(200);
-
         List<String> roles = DatabaseUtil.getRolesByUserId(DatabaseUtil.getUserIdByEmail(registrationRequest.getEmail()));
         assertThat(roles).containsExactlyInAnyOrder(Constants.ROLE_NOTEBOOK, Constants.ROLE_SKYXPLORE);
-    }
-
-    private void verifyInvalidParam(Language locale, Response response) {
-        ErrorResponse errorResponse = verifyBadRequest(locale, response, ErrorCode.INVALID_PARAM);
-        assertThat(errorResponse.getParams().get("email")).isEqualTo("invalid format");
-    }
-
-    private ErrorResponse verifyBadRequest(Language locale, Response response, ErrorCode errorCode) {
-        return verifyResponse(locale, response, errorCode, 400);
-    }
-
-    private ErrorResponse verifyResponse(Language locale, Response response, ErrorCode errorCode, int httpStatus) {
-        assertThat(response.getStatusCode()).isEqualTo(httpStatus);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(errorCode.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.fromErrorCode(errorCode)));
-        return errorResponse;
     }
 }

@@ -2,21 +2,21 @@ package com.github.saphyra.integration.backend.account;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.backend.actions.AccountActions;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.model.account.ChangeUsernameRequest;
 import com.github.saphyra.apphub.integration.common.framework.DataConstants;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.RandomDataProvider;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyBadRequest;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyErrorResponse;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangeUsernameTest extends BackEndTest {
@@ -58,7 +58,7 @@ public class ChangeUsernameTest extends BackEndTest {
             .password(userData1.getPassword())
             .build();
         Response usernameAlreadyExistsResponse = AccountActions.getChangeUsernameResponse(language, accessTokenId, usernameAlreadyExistsRequest);
-        verifyError(language, usernameAlreadyExistsResponse, ErrorCode.USERNAME_ALREADY_EXISTS, 409);
+        verifyErrorResponse(language, usernameAlreadyExistsResponse, 409, ErrorCode.USERNAME_ALREADY_EXISTS);
 
         //Null password
         ChangeUsernameRequest nullPasswordRequest = ChangeUsernameRequest.builder()
@@ -74,7 +74,7 @@ public class ChangeUsernameTest extends BackEndTest {
             .password(DataConstants.INCORRECT_PASSWORD)
             .build();
         Response incorrectPasswordResponse = AccountActions.getChangeUsernameResponse(language, accessTokenId, incorrectPasswordRequest);
-        verifyError(language, incorrectPasswordResponse, ErrorCode.BAD_PASSWORD, 400);
+        verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.BAD_PASSWORD);
 
         //Successful change
         ChangeUsernameRequest successfulChangeRequest = ChangeUsernameRequest.builder()
@@ -83,22 +83,5 @@ public class ChangeUsernameTest extends BackEndTest {
             .build();
         Response successfulChangeResponse = AccountActions.getChangeUsernameResponse(language, accessTokenId, successfulChangeRequest);
         assertThat(successfulChangeResponse.getStatusCode()).isEqualTo(200);
-    }
-
-    private void verifyInvalidParam(Language locale, Response response, String field, String value) {
-        ErrorResponse errorResponse = verifyBadRequest(locale, response, ErrorCode.INVALID_PARAM);
-        assertThat(errorResponse.getParams().get(field)).isEqualTo(value);
-    }
-
-    private ErrorResponse verifyBadRequest(Language locale, Response response, ErrorCode errorCode) {
-        return verifyError(locale, response, errorCode, 400);
-    }
-
-    private ErrorResponse verifyError(Language locale, Response response, ErrorCode errorCode, int httpStatus) {
-        assertThat(response.getStatusCode()).isEqualTo(httpStatus);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(errorCode.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.fromErrorCode(errorCode)));
-        return errorResponse;
     }
 }

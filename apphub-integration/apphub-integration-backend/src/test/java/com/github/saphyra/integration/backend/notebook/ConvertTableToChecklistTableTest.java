@@ -1,15 +1,13 @@
 package com.github.saphyra.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistTableResponse;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateCategoryRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -17,8 +15,8 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.INVALID_TYPE;
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.LIST_ITEM_NOT_FOUND;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyErrorResponse;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyListItemNotFound;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConvertTableToChecklistTableTest extends BackEndTest {
@@ -38,22 +36,7 @@ public class ConvertTableToChecklistTableTest extends BackEndTest {
         //Invalid type
         UUID listItemId = NotebookActions.createCategory(language, accessTokenId, CreateCategoryRequest.builder().title(TITLE).build());
         Response invalidTypeResponse = NotebookActions.getConvertTableToChecklistTableResponse(language, accessTokenId, listItemId);
-        verifyInvalidType(language, invalidTypeResponse);
-    }
-
-    private void verifyInvalidType(Language language, Response invalidTypeResponse) {
-        assertThat(invalidTypeResponse.getStatusCode()).isEqualTo(422);
-        ErrorResponse errorResponse = invalidTypeResponse.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_TYPE.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, INVALID_TYPE));
-    }
-
-    private void verifyListItemNotFound(Language language, Response itemNotFoundResponse) {
-        assertThat(itemNotFoundResponse.getStatusCode()).isEqualTo(404);
-
-        ErrorResponse errorResponse = itemNotFoundResponse.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LIST_ITEM_NOT_FOUND));
+        verifyErrorResponse(language, invalidTypeResponse, 422, ErrorCode.INVALID_TYPE);
     }
 
     @Test

@@ -1,32 +1,27 @@
 package com.github.saphyra.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateCategoryRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateLinkRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.EditListItemRequest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.CATEGORY_NOT_FOUND;
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.INVALID_PARAM;
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.INVALID_TYPE;
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.LIST_ITEM_NOT_FOUND;
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyErrorResponse;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyInvalidParam;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyListItemNotFound;
 
 public class EditListItemTest extends BackEndTest {
     private static final String ORIGINAL_TITLE = "original-title";
     private static final String NEW_TITLE = "new-title";
     private static final String ORIGINAL_URL = "original-url";
-    private static final String NEW_URL = "new-url";
 
     @Test(dataProvider = "languageDataProvider")
     public void editListITem(Language language) {
@@ -40,7 +35,7 @@ public class EditListItemTest extends BackEndTest {
             .title(" ")
             .build();
         Response blankTitleResponse = NotebookActions.getEditListItemResponse(language, accessTokenId, blankTitleRequest, parentCategoryId);
-        verifyInvalidParam(language, blankTitleResponse);
+        verifyInvalidParam(language, blankTitleResponse, "title", "must not be null or blank");
 
         //New parent not found
         EditListItemRequest newParentNotFoundRequest = EditListItemRequest.builder()
@@ -48,7 +43,7 @@ public class EditListItemTest extends BackEndTest {
             .parent(UUID.randomUUID())
             .build();
         Response newParentNotFoundResponse = NotebookActions.getEditListItemResponse(language, accessTokenId, newParentNotFoundRequest, parentCategoryId);
-        verifyCategoryNotFound(language, newParentNotFoundResponse);
+        verifyErrorResponse(language, newParentNotFoundResponse, 404, ErrorCode.CATEGORY_NOT_FOUND);
 
         //Parent not category
         CreateLinkRequest createLinkRequest = CreateLinkRequest.builder()
@@ -63,7 +58,7 @@ public class EditListItemTest extends BackEndTest {
             .parent(linkId)
             .build();
         Response parentNotCategoryResponse = NotebookActions.getEditListItemResponse(language, accessTokenId, parentNotCategoryRequest, parentCategoryId);
-        verifyInvalidType(language, parentNotCategoryResponse);
+        verifyErrorResponse(language, parentNotCategoryResponse, 422, ErrorCode.INVALID_TYPE);
 
         //ListItem not found
         EditListItemRequest listItemNotFoundRequest = EditListItemRequest.builder()
@@ -71,35 +66,5 @@ public class EditListItemTest extends BackEndTest {
             .build();
         Response listItemNotFoundResponse = NotebookActions.getEditListItemResponse(language, accessTokenId, listItemNotFoundRequest, UUID.randomUUID());
         verifyListItemNotFound(language, listItemNotFoundResponse);
-    }
-
-    private void verifyInvalidParam(Language language, Response ownChildResponse) {
-        assertThat(ownChildResponse.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = ownChildResponse.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, INVALID_PARAM));
-        assertThat(errorResponse.getParams().get("title")).isEqualTo("must not be null or blank");
-    }
-
-    private void verifyListItemNotFound(Language language, Response response) {
-        assertThat(response.getStatusCode()).isEqualTo(404);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LIST_ITEM_NOT_FOUND));
-    }
-
-    private void verifyInvalidType(Language language, Response response) {
-        assertThat(response.getStatusCode()).isEqualTo(422);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_TYPE.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, INVALID_TYPE));
-    }
-
-    private void verifyCategoryNotFound(Language language, Response response) {
-        assertThat(response.getStatusCode()).isEqualTo(404);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CATEGORY_NOT_FOUND.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, CATEGORY_NOT_FOUND));
     }
 }

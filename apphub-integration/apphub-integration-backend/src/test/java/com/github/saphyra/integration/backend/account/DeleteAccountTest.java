@@ -1,6 +1,7 @@
 package com.github.saphyra.integration.backend.account;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.ResponseValidator;
 import com.github.saphyra.apphub.integration.backend.actions.AccountActions;
 import com.github.saphyra.apphub.integration.common.framework.DataConstants;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
@@ -16,6 +17,7 @@ import org.testng.annotations.Test;
 
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeleteAccountTest extends BackEndTest {
@@ -26,36 +28,19 @@ public class DeleteAccountTest extends BackEndTest {
 
         //Null password
         Response nullPasswordResponse = AccountActions.getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(null));
-        verifyInvalidParam(language, nullPasswordResponse);
+        verifyInvalidParam(language, nullPasswordResponse, "password", "must not be null");
 
         //Incorrect password
         Response incorrectPasswordResponse = AccountActions.getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(DataConstants.INCORRECT_PASSWORD));
-        verifyIncorrectPassword(language, incorrectPasswordResponse);
+        ResponseValidator.verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.BAD_PASSWORD);
 
         //Successful deletion
         Response response = AccountActions.getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(userData.getPassword()));
-
         assertThat(response.getStatusCode()).isEqualTo(200);
-
         Response loginResponse = IndexPageActions.getLoginResponse(language, userData.toLoginRequest());
         assertThat(loginResponse.getStatusCode()).isEqualTo(401);
         ErrorResponse errorResponse = loginResponse.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.BAD_CREDENTIALS));
-    }
-
-    private void verifyIncorrectPassword(Language language, Response response) {
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_PASSWORD.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.BAD_PASSWORD));
-    }
-
-    private void verifyInvalidParam(Language language, Response response) {
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
-        assertThat(errorResponse.getParams().get("password")).isEqualTo("must not be null");
     }
 }

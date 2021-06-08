@@ -1,6 +1,7 @@
 package com.github.saphyra.integration.backend.skyxplore.game.chat;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreFlow;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreGameChatActions;
@@ -12,11 +13,7 @@ import com.github.saphyra.apphub.integration.backend.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.backend.ws.model.WebSocketEventName;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -28,6 +25,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyErrorResponse;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyForbiddenOperation;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateChatRoomTest extends BackEndTest {
@@ -88,7 +88,7 @@ public class CreateChatRoomTest extends BackEndTest {
             .members(Collections.emptyList())
             .build();
         Response roomTitleTooShortResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(language, accessTokenId1, roomTitleTooShortRequest);
-        verifyRoomTitleTooShort(language, roomTitleTooShortResponse);
+        verifyErrorResponse(language, roomTitleTooShortResponse, 400, ErrorCode.CHAT_ROOM_TITLE_TOO_SHORT);
 
         //Room title too long
         CreateChatRoomRequest roomTitleTooLongRequest = CreateChatRoomRequest.builder()
@@ -96,7 +96,7 @@ public class CreateChatRoomTest extends BackEndTest {
             .members(Collections.emptyList())
             .build();
         Response roomTitleTooLongResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(language, accessTokenId1, roomTitleTooLongRequest);
-        verifyRoomTitleTooLong(language, roomTitleTooLongResponse);
+        verifyErrorResponse(language, roomTitleTooLongResponse, 400, ErrorCode.CHAT_ROOM_TITLE_TOO_LONG);
 
         //Create
         CreateChatRoomRequest request = CreateChatRoomRequest.builder()
@@ -111,36 +111,5 @@ public class CreateChatRoomTest extends BackEndTest {
             .map(webSocketEvent -> webSocketEvent.orElseThrow(() -> new RuntimeException("ChatRoomCreated message has not arrived")))
             .map(event -> event.getPayloadAs(ChatRoomCreatedMessage.class))
             .forEach(chatRoomCreatedMessage -> assertThat(chatRoomCreatedMessage.getTitle()).isEqualTo(ROOM_TITLE));
-    }
-
-    private void verifyRoomTitleTooLong(Language language, Response response) {
-        assertThat(response.getStatusCode()).isEqualTo(400);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CHAT_ROOM_TITLE_TOO_LONG.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.CHAT_ROOM_TITLE_TOO_LONG));
-    }
-
-    private void verifyRoomTitleTooShort(Language language, Response response) {
-        assertThat(response.getStatusCode()).isEqualTo(400);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CHAT_ROOM_TITLE_TOO_SHORT.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.CHAT_ROOM_TITLE_TOO_SHORT));
-    }
-
-    private void verifyForbiddenOperation(Language language, Response response) {
-        assertThat(response.getStatusCode()).isEqualTo(403);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FORBIDDEN_OPERATION));
-    }
-
-    private void verifyInvalidParam(Language language, Response response, String field, String value) {
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.INVALID_PARAM));
-        assertThat(errorResponse.getParams()).containsEntry(field, value);
     }
 }

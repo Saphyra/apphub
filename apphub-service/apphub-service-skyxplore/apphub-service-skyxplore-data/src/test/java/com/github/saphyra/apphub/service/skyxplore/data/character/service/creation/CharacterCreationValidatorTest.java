@@ -41,7 +41,7 @@ public class CharacterCreationValidatorTest {
         assertThat(ex).isInstanceOf(BadRequestException.class);
         BadRequestException exception = (BadRequestException) ex;
         assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("name", "Must not be null");
+        assertThat(exception.getErrorMessage().getParams()).containsEntry("name", "must not be null");
     }
 
     @Test
