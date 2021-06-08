@@ -87,7 +87,9 @@ public class ChecklistActions {
     }
 
     public static void enableEditing(WebDriver driver) {
-        assertThat(isViewChecklistWindowOpened(driver)).isTrue();
+        AwaitilityWrapper.createDefault()
+            .until(() -> isViewChecklistWindowOpened(driver))
+            .assertTrue("Checklist editing is not enabled.");
         if (!isEditingEnabled(driver)) {
             NotebookPage.editChecklistButton(driver).click();
         }

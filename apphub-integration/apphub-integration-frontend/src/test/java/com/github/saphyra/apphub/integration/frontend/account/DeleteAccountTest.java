@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.integration.frontend.SeleniumTest;
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.framework.Navigation;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.common.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.frontend.model.account.delete_account.DeleteAccountPasswordValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.login.LoginParameters;
 import com.github.saphyra.apphub.integration.frontend.model.modules.ModuleLocation;
@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeleteAccountTest extends SeleniumTest {
     @Test
-    public void emptyPassword() {
+    public void deleteAccount() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -30,65 +30,28 @@ public class DeleteAccountTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
+        //Empty password
         AccountPageActions.fillDeleteAccountForm(driver, "");
         SleepUtil.sleep(2000);
-
         AccountPageActions.verifyDeleteAccountForm(driver, DeleteAccountPasswordValidationResult.EMPTY_PASSWORD);
-    }
 
-    @Test
-    public void incorrectPassword() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
-
-        AccountPageActions.deleteAccount(driver, DataConstants.INVALID_PASSWORD);
-
+        //Incorrect password
+        AccountPageActions.deleteAccount(driver, DataConstants.INCORRECT_PASSWORD);
         NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
-    }
+        NotificationUtil.clearNotifications(driver);
 
-    @Test
-    public void cancelDeletion() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
-
+        //Cancel deletion
         AccountPageActions.fillDeleteAccountForm(driver, DataConstants.VALID_PASSWORD);
         AccountPageActions.submitDeleteAccountForm(driver);
         AccountPageActions.cancelAccountDeletion(driver);
-
         NotificationUtil.verifyZeroNotifications(driver);
 
-        AccountPageActions.back(driver);
-        ModulesPageActions.logout(driver);
-
-        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
-    }
-
-    @Test
-    public void successfulDeletion() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
-
+        //Delete
         AccountPageActions.deleteAccount(driver, DataConstants.VALID_PASSWORD);
-
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE)));
-
         NotificationUtil.verifySuccessNotification(driver, "Account törölve.");
-
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
-
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE));
         NotificationUtil.verifyErrorNotification(driver, "Az email cím és jelszó kombinációja ismeretlen.");
     }

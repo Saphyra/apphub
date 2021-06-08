@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.backend.actions.AccountActions;
 import com.github.saphyra.apphub.integration.backend.model.account.ChangePasswordRequest;
 import com.github.saphyra.apphub.integration.common.framework.DataConstants;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
@@ -60,7 +60,7 @@ public class ChangePasswordTest extends BackEndTest {
         //Incorrect password
         ChangePasswordRequest incorrectPasswordRequest = ChangePasswordRequest.builder()
             .newPassword(DataConstants.VALID_PASSWORD2)
-            .password(DataConstants.INVALID_PASSWORD)
+            .password(DataConstants.INCORRECT_PASSWORD)
             .build();
         Response incorrectPasswordResponse = AccountActions.getChangePasswordResponse(language, accessTokenId, incorrectPasswordRequest);
         verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.BAD_PASSWORD);

@@ -35,10 +35,10 @@ public class ChangePasswordParameters {
             .build();
     }
 
-    public static ChangePasswordParameters invalidConfirmPassword() {
+    public static ChangePasswordParameters incorrectConfirmPassword() {
         return valid()
             .toBuilder()
-            .confirmPassword(DataConstants.INVALID_PASSWORD)
+            .confirmPassword(DataConstants.INCORRECT_PASSWORD)
             .build();
     }
 

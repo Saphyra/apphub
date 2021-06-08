@@ -1,14 +1,14 @@
 package com.github.saphyra.apphub.integration.frontend.account;
 
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.common.framework.DataConstants;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
+import com.github.saphyra.apphub.integration.common.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.frontend.SeleniumTest;
-import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.framework.Navigation;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_password.ChPasswordPasswordValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_password.ChangePasswordParameters;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_password.ChangePasswordValidationResult;
@@ -20,23 +20,11 @@ import com.github.saphyra.apphub.integration.frontend.service.account.AccountPag
 import com.github.saphyra.apphub.integration.frontend.service.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.frontend.service.modules.ModulesPageActions;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class ChangePasswordTest extends SeleniumTest {
-    @DataProvider(name = "invalidParameters")
-    public Object[][] invalidParametersProvider() {
-        return new Object[][]{
-            new Object[]{ChangePasswordParameters.valid(), valid()},
-            new Object[]{ChangePasswordParameters.tooShortPassword(), tooShortPassword()},
-            new Object[]{ChangePasswordParameters.tooLongPassword(), tooLongPassword()},
-            new Object[]{ChangePasswordParameters.invalidConfirmPassword(), invalidConfirmPassword()},
-            new Object[]{ChangePasswordParameters.emptyPassword(), emptyPassword()},
-        };
-    }
-
-    @Test(dataProvider = "invalidParameters")
-    public void invalidParameters(ChangePasswordParameters parameters, ChangePasswordValidationResult validationResult) {
+    @Test
+    public void changePassword() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -44,51 +32,43 @@ public class ChangePasswordTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
-        AccountPageActions.fillChangePasswordForm(driver, parameters);
+        //Too short password
+        AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.tooShortPassword());
         SleepUtil.sleep(2000);
+        AccountPageActions.verifyChangePasswordForm(driver, tooShortPassword());
 
-        AccountPageActions.verifyChangePasswordForm(driver, validationResult);
-    }
+        //Too long password
+        AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.tooLongPassword());
+        SleepUtil.sleep(2000);
+        AccountPageActions.verifyChangePasswordForm(driver, tooLongPassword());
 
-    @Test
-    public void invalidPassword() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
+        //Incorrect confirm password
+        AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.incorrectConfirmPassword());
+        SleepUtil.sleep(2000);
+        AccountPageActions.verifyChangePasswordForm(driver, incorrectConfirmPassword());
 
-        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
+        //Empty password
+        AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.emptyPassword());
+        SleepUtil.sleep(2000);
+        AccountPageActions.verifyChangePasswordForm(driver, emptyPassword());
 
-        ChangePasswordParameters parameters = ChangePasswordParameters.valid()
+        //Incorrect password
+        ChangePasswordParameters incorrectPasswordParameters = ChangePasswordParameters.valid()
             .toBuilder()
-            .password(DataConstants.INVALID_PASSWORD)
+            .password(DataConstants.INCORRECT_PASSWORD)
             .build();
-
-        AccountPageActions.changePassword(driver, parameters);
-
+        AccountPageActions.changePassword(driver, incorrectPasswordParameters);
         NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
-    }
 
-    @Test
-    public void successfulPasswordChange() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
-
-        ChangePasswordParameters parameters = ChangePasswordParameters.valid();
-        AccountPageActions.changePassword(driver, parameters);
-
+        //Change
+        ChangePasswordParameters changeParameters = ChangePasswordParameters.valid();
+        AccountPageActions.changePassword(driver, changeParameters);
         NotificationUtil.verifySuccessNotification(driver, "Jelszó megváltoztatva.");
         AccountPageActions.back(driver);
-
         ModulesPageActions.logout(driver);
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
         NotificationUtil.verifyErrorNotification(driver, "Az email cím és jelszó kombinációja ismeretlen.");
-
-        IndexPageActions.submitLogin(driver, LoginParameters.builder().email(userData.getEmail()).password(parameters.getNewPassword()).build());
+        IndexPageActions.submitLogin(driver, LoginParameters.builder().email(userData.getEmail()).password(changeParameters.getNewPassword()).build());
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
             .assertTrue();
@@ -116,7 +96,7 @@ public class ChangePasswordTest extends SeleniumTest {
             .build();
     }
 
-    private ChangePasswordValidationResult invalidConfirmPassword() {
+    private ChangePasswordValidationResult incorrectConfirmPassword() {
         return valid()
             .toBuilder()
             .confirmPassword(ConfirmPasswordValidationResult.INVALID_CONFIRM_PASSWORD)

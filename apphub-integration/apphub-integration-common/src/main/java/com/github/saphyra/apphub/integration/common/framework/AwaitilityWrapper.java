@@ -31,9 +31,13 @@ public class AwaitilityWrapper {
     }
 
     public static AwaitilityWrapper create(int timeout, int pollInterval) {
+        return create(timeout, TimeUnit.SECONDS, pollInterval, TimeUnit.SECONDS);
+    }
+
+    private static AwaitilityWrapper create(int timeout, TimeUnit timeoutUnit, int pollInterval, TimeUnit pollUnit) {
         ConditionFactory conditionFactory = Awaitility.await()
-            .atMost(timeout, TimeUnit.SECONDS)
-            .pollInterval(pollInterval, TimeUnit.SECONDS);
+            .atMost(timeout, timeoutUnit)
+            .pollInterval(pollInterval, pollUnit);
         return wrap(conditionFactory);
     }
 
@@ -72,6 +76,14 @@ public class AwaitilityWrapper {
             .until(helper::get);
 
         return helper.getResult(result -> Optional.ofNullable(result).orElseThrow(() -> new RuntimeException("Expected list not found.")));
+    }
+
+    public static <T> Optional<T> getWithWait(Supplier<T> supplier, Predicate<T> predicate, int timeout, TimeUnit timeoutUnit, int pollInterval, TimeUnit pollUnit) {
+        GetWithWaitHelper<T> helper = new GetWithWaitHelper<>(supplier, predicate);
+        create(timeout, timeoutUnit, pollInterval, pollUnit)
+            .until(helper::get);
+
+        return helper.getResult(Optional::ofNullable);
     }
 
     public AwaitResult until(Callable<Boolean> callable) {

@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class BackEndTest extends TestBase {
-    public static final int AVAILABLE_PERMITS = 10;
+    public static final int AVAILABLE_PERMITS = 15;
     private static final Semaphore SEMAPHORE = new Semaphore(AVAILABLE_PERMITS);
 
     @DataProvider(name = "languageDataProvider")
@@ -29,8 +29,7 @@ public class BackEndTest extends TestBase {
             Stopwatch stopwatch = Stopwatch.createStarted();
             SEMAPHORE.acquire(getNecessaryPermitCount());
             stopwatch.stop();
-            log.info("Permit acquired in {}ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
-            log.debug("Available permits after acquiring: {}", SEMAPHORE.availablePermits());
+            log.info("Permit acquired in {}ms. Permits left: {}", stopwatch.elapsed(TimeUnit.MILLISECONDS), SEMAPHORE.availablePermits());
         } catch (InterruptedException e) {
             log.error("Thread interrupted.", e);
         }

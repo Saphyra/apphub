@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.backend.actions.AccountActions;
 import com.github.saphyra.apphub.integration.common.framework.DataConstants;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
@@ -29,7 +29,7 @@ public class DeleteAccountTest extends BackEndTest {
         verifyInvalidParam(language, nullPasswordResponse);
 
         //Incorrect password
-        Response incorrectPasswordResponse = AccountActions.getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(DataConstants.INVALID_PASSWORD));
+        Response incorrectPasswordResponse = AccountActions.getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(DataConstants.INCORRECT_PASSWORD));
         verifyIncorrectPassword(language, incorrectPasswordResponse);
 
         //Successful deletion

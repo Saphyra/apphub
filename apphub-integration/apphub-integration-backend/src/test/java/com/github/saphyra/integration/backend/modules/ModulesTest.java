@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.backend.actions.ModulesActions;
 import com.github.saphyra.apphub.integration.backend.model.ModulesResponse;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
 import com.github.saphyra.apphub.integration.common.model.ErrorResponse;

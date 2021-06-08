@@ -36,4 +36,8 @@ public class DetailedListActions {
 
         upButton.click();
     }
+
+    public static void closeEditListItemWindow(WebDriver driver) {
+        NotebookPage.closeEditListItemWindowButton(driver).click();
+    }
 }

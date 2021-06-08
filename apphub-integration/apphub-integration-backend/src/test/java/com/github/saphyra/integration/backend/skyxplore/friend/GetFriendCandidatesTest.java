@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.integration.backend.model.skyxplore.SentFriendR
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import org.testng.annotations.Test;

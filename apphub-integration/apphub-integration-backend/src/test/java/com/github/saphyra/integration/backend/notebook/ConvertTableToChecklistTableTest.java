@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistTab
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateCategoryRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
 import com.github.saphyra.apphub.integration.common.model.ErrorResponse;

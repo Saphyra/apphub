@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.frontend.framework;
+package com.github.saphyra.apphub.integration.common.framework;
 
 public class SleepUtil {
     public static void sleep(int millis) {

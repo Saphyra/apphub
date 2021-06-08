@@ -27,196 +27,93 @@ public class TextCrudTest extends SeleniumTest {
     private static final String NEW_TEXT_CONTENT = "new-text-content";
 
     @Test
-    public void createText_emptyTitle() {
+    public void textCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        CategoryActions.createCategory(driver, CATEGORY_TITLE_1);
+        CategoryActions.createCategory(driver, CATEGORY_TITLE_2);
 
+        //Create - Empty title
         TextActions.openCreateTextWindow(driver);
         TextActions.submitCreateTextForm(driver);
-
         NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
         assertThat(TextActions.isCreateTextWindowDisplayed(driver)).isTrue();
-    }
 
-    @Test
-    public void createText() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        CategoryActions.createCategory(driver, CATEGORY_TITLE_1);
-
-        TextActions.openCreateTextWindow(driver);
+        //Create
         TextActions.fillNewTextTitle(driver, TEXT_TITLE);
         TextActions.fillNewTextContent(driver, TEXT_CONTENT);
         TextActions.selectCategoryForNewText(driver, CATEGORY_TITLE_1);
         TextActions.submitCreateTextForm(driver);
-
         NotificationUtil.verifySuccessNotification(driver, "Szöveg elmentve.");
-
         CategoryActions.openCategory(driver, CATEGORY_TITLE_1);
-
         List<ListItemDetailsItem> detailedListItems = DetailedListActions.getDetailedListItems(driver);
         assertThat(detailedListItems).hasSize(1);
         ListItemDetailsItem textItem = detailedListItems.get(0);
         assertThat(textItem.getTitle()).isEqualTo(TEXT_TITLE);
         assertThat(textItem.getType()).isEqualTo(ListItemType.TEXT);
-    }
 
-    @Test
-    public void editText_emptyTitle() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
+        NotificationUtil.clearNotifications(driver);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        TextActions.createText(driver, TEXT_TITLE, TEXT_CONTENT);
-
+        //Edit - Empty title
         TextActions.openText(driver, TEXT_TITLE);
-        TextActions.allowEditing(driver);
+        TextActions.enableEditing(driver);
         TextActions.editTitle(driver, "");
         TextActions.saveChanges(driver);
-
         NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
         assertThat(TextActions.isEditingEnabled(driver)).isTrue();
-    }
 
-    @Test
-    public void editText_discard() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        TextActions.createText(driver, TEXT_TITLE, TEXT_CONTENT);
-
-        TextActions.openText(driver, TEXT_TITLE);
-        TextActions.allowEditing(driver);
-
+        //Edit - Discard
         TextActions.editTitle(driver, NEW_TEXT_TITLE);
         TextActions.editContent(driver, NEW_TEXT_CONTENT);
-
         TextActions.discardChanges(driver);
-
         AwaitilityWrapper.createDefault()
             .until(() -> !TextActions.isEditingEnabled(driver))
             .assertTrue();
         assertThat(TextActions.getTitle(driver)).isEqualTo(TEXT_TITLE);
         assertThat(TextActions.getContent(driver)).isEqualTo(TEXT_CONTENT);
-    }
 
-    @Test
-    public void editText() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        TextActions.createText(driver, TEXT_TITLE, TEXT_CONTENT);
-
-        TextActions.openText(driver, TEXT_TITLE);
-        TextActions.allowEditing(driver);
-
+        //Edit
+        TextActions.enableEditing(driver);
         TextActions.editTitle(driver, NEW_TEXT_TITLE);
         TextActions.editContent(driver, NEW_TEXT_CONTENT);
-
         TextActions.saveChanges(driver);
-
         NotificationUtil.verifySuccessNotification(driver, "Szöveg elmentve.");
         AwaitilityWrapper.createDefault()
             .until(() -> !TextActions.isEditingEnabled(driver))
             .assertTrue("Editing remained enabled.");
-
         TextActions.closeView(driver);
-
         TextActions.openText(driver, NEW_TEXT_TITLE);
-
         assertThat(TextActions.getTitle(driver)).isEqualTo(NEW_TEXT_TITLE);
         assertThat(TextActions.getContent(driver)).isEqualTo(NEW_TEXT_CONTENT);
-    }
 
-    @Test
-    public void deleteText() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
+        NotificationUtil.clearNotifications(driver);
+        TextActions.closeView(driver);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        TextActions.createText(driver, TEXT_TITLE, TEXT_CONTENT);
-
-        DetailedListActions.findDetailedItem(driver, TEXT_TITLE)
-            .delete(driver);
-
-        NotificationUtil.verifySuccessNotification(driver, "Elem törölve.");
-        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
-    }
-
-    @Test
-    public void editTextListItem_emptyTitle() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        TextActions.createText(driver, TEXT_TITLE, TEXT_CONTENT);
-
-        DetailedListActions.findDetailedItem(driver, TEXT_TITLE)
+        //Edit as listItem - Empty title
+        DetailedListActions.findDetailedItem(driver, NEW_TEXT_TITLE)
             .edit(driver);
-
         NotebookPageActions.fillEditListItemDialog(driver, "", null, 0);
         NotebookPageActions.submitEditListItemDialog(driver);
-
         NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
-    }
 
-    @Test
-    public void editTextListItem() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        CategoryActions.createCategory(driver, CATEGORY_TITLE_1);
-        CategoryActions.createCategory(driver, CATEGORY_TITLE_2);
-
-        TextActions.createText(driver, TEXT_TITLE, TEXT_CONTENT, CATEGORY_TITLE_1);
-
-        CategoryActions.openCategory(driver, CATEGORY_TITLE_1);
-
-        DetailedListActions.findDetailedItem(driver, TEXT_TITLE)
-            .edit(driver);
-
-        NotebookPageActions.fillEditListItemDialog(driver, NEW_TEXT_TITLE, null, 1, CATEGORY_TITLE_2);
+        //Edit as listItem
+        NotebookPageActions.fillEditListItemDialog(driver, TEXT_TITLE, null, 1, CATEGORY_TITLE_2);
         NotebookPageActions.submitEditListItemDialog(driver);
-
         NotificationUtil.verifySuccessNotification(driver, "Elem elmentve.");
         NotebookPageActions.verifyEditListItemDialogClosed(driver);
-
         assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
-
         DetailedListActions.up(driver);
-
         CategoryActions.openCategory(driver, CATEGORY_TITLE_2);
+        DetailedListActions.findDetailedItem(driver, TEXT_TITLE);
 
-        DetailedListActions.findDetailedItem(driver, NEW_TEXT_TITLE);
+        //Delete
+        DetailedListActions.findDetailedItem(driver, TEXT_TITLE)
+            .delete(driver);
+        NotificationUtil.verifySuccessNotification(driver, "Elem törölve.");
+        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
     }
 }

@@ -24,50 +24,29 @@ public class FavoriteTest extends SeleniumTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
+        //Add to favorite
         Module module = getModule(driver);
         module.addFavorite();
         Favorite favorite = getFavorite(driver);
-
         assertThat(module.getModuleName()).isEqualTo(favorite.getModuleName());
-    }
 
-    @Test
-    public void removeFromFavorites_byFavoriteButton() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        Module module = getModule(driver);
-        module.addFavorite();
-        Favorite favorite = getFavorite(driver);
-
+        //Remove by favorite button
         favorite.removeFromFavorites();
-
         List<Favorite> favorites = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getFavorites(driver), List::isEmpty);
         assertThat(favorites).isEmpty();
         module = getModule(driver);
         assertThat(module.isFavorite()).isFalse();
-    }
 
-    @Test
-    public void removeFromFavorites_byModuleButton() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        Module module = getModule(driver);
+        //Remove by module button
+        module = getModule(driver);
         module.addFavorite();
         module = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getModules(driver), r -> r.stream().anyMatch(Module::isFavorite))
             .stream()
             .filter(Module::isFavorite)
             .findFirst()
             .orElseThrow(() -> new IllegalStateException("No module found"));
-
         module.removeFavorite();
-
-        List<Favorite> favorites = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getFavorites(driver), List::isEmpty);
+        favorites = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getFavorites(driver), List::isEmpty);
         assertThat(favorites).isEmpty();
         module = getModule(driver);
         assertThat(module.isFavorite()).isFalse();

@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.common.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.frontend.model.login.LoginParameters;
 import com.github.saphyra.apphub.integration.frontend.model.registration.EmailValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.registration.PasswordValidationResult;
@@ -32,7 +32,7 @@ public class IndexPageActions {
 
         SleepUtil.sleep(1000);
 
-        log.info("Filling registrationForm with {}", parameters);
+        log.debug("Filling registrationForm with {}", parameters);
         clearAndFill(IndexPage.emailInput(driver), parameters.getEmail());
         clearAndFill(IndexPage.usernameInput(driver), parameters.getUsername());
         clearAndFill(IndexPage.passwordInput(driver), parameters.getPassword());

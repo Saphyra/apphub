@@ -65,7 +65,7 @@
                         </property>
                         <property>
                             <name>threadcount</name>
-                            <value>20</value>
+                            <value>30</value>
                         </property>
                     </properties>
                 </configuration>

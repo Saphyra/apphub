@@ -1,7 +1,7 @@
 package com.github.saphyra.integration.backend.account;
 
 import com.github.saphyra.apphub.integration.backend.actions.AccountActions;
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.model.LanguageResponse;
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;

@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.integration.frontend.service.notebook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 import java.util.List;
 
@@ -503,5 +504,13 @@ class NotebookPage {
 
     public static WebElement orderChecklistItemsButton(WebDriver driver) {
         return driver.findElement(ORDER_CHECKLIST_ITEMS_BUTTON);
+    }
+
+    public static WebElement closeEditListItemWindowButton(WebDriver driver) {
+        return driver.findElement(By.id("edit-list-item-close-button"));
+    }
+
+    public static WebElement closeCreateTableButton(WebDriver driver) {
+        return driver.findElement(By.id("create-table-close-button"));
     }
 }

@@ -14,42 +14,33 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FilterTest extends SeleniumTest {
     @Test
-    public void searchByCategory() {
+    public void searchModule() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
+        //No result
         ModulesPageActions.search(driver, "asd");
         AwaitilityWrapper.createDefault()
             .until(() -> ModulesPageActions.getCategories(driver).isEmpty());
 
+        //Search category
         ModulesPageActions.search(driver, "kok");
-        Category category = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getCategories(driver), categories -> categories.size() == 1)
+        Category categoryResult = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getCategories(driver), categories -> categories.size() == 1)
             .stream()
             .findFirst()
             .orElseThrow(() -> new IllegalStateException("There is not only one category."));
 
-        assertThat(category.getModules()).hasSize(1);
-    }
+        assertThat(categoryResult.getModules()).hasSize(1);
 
-    @Test
-    public void searchByModule() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.search(driver, "asd");
-        AwaitilityWrapper.createDefault()
-            .until(() -> ModulesPageActions.getCategories(driver).isEmpty());
-
+        //Search by module
         ModulesPageActions.search(driver, "ók");
-        Category category = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getCategories(driver), categories -> categories.size() == 1)
+        Category moduleResult = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getCategories(driver), categories -> categories.size() == 1)
             .stream()
             .findFirst()
             .orElseThrow(() -> new IllegalStateException("There is not only one category."));
 
-        assertThat(category.getModules()).hasSize(1);
+        assertThat(moduleResult.getModules()).hasSize(1);
     }
 }

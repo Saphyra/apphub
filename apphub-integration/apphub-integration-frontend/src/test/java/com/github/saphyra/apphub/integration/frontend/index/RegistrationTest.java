@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.common.model.RegistrationParameters
 import com.github.saphyra.apphub.integration.frontend.SeleniumTest;
 import com.github.saphyra.apphub.integration.frontend.framework.Navigation;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.common.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.frontend.model.registration.EmailValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.registration.PasswordValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.registration.RegistrationValidationResult;
@@ -29,7 +29,6 @@ public class RegistrationTest extends SeleniumTest {
         executeValidationTest(driver, RegistrationParameters.invalidEmailParameters(), emailInvalid());
 
         //Registration successful
-
         RegistrationParameters existingUser = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, existingUser);
         NotificationUtil.verifySuccessNotification(driver, "Sikeres regisztráció.");
@@ -49,9 +48,7 @@ public class RegistrationTest extends SeleniumTest {
             .email(existingUser.getEmail())
             .build();
         IndexPageActions.fillRegistrationForm(driver, emailAlreadyExists);
-        //WHEN
         IndexPageActions.submitRegistration(driver);
-        //THEN
         NotificationUtil.verifyErrorNotification(driver, "Az email foglalt.");
     }
 

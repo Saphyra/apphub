@@ -64,7 +64,15 @@ public class NotificationUtil {
         getNotifications(driver)
             .stream()
             .filter(WebElement::isDisplayed)
-            .forEach(WebElement::click);
+            .forEach(NotificationUtil::click);
+    }
+
+    private static void click(WebElement webElement) {
+        try {
+            webElement.click();
+        } catch (Exception e) {
+            log.info("Element {} not clickable.", webElement, e);
+        }
     }
 
     private static List<WebElement> getNotifications(WebDriver driver) {

@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.integration.common.model.RegistrationParameters
 import com.github.saphyra.apphub.integration.frontend.SeleniumTest;
 import com.github.saphyra.apphub.integration.frontend.framework.Navigation;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.common.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.frontend.model.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.frontend.model.skyxplore.LobbyMember;
 import com.github.saphyra.apphub.integration.frontend.service.index.IndexPageActions;

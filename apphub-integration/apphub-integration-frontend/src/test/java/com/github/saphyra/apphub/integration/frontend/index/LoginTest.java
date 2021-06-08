@@ -18,7 +18,7 @@ public class LoginTest extends SeleniumTest {
     private static final String BAD_CREDENTIALS_MESSAGE = "Az email cím és jelszó kombinációja ismeretlen.";
 
     @Test
-    public void loginFailure() {
+    public void login() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
 

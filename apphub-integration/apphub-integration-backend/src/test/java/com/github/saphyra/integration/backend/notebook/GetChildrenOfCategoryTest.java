@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.integration.backend.model.notebook.CreateLinkRe
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.NotebookView;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
 import com.github.saphyra.apphub.integration.common.model.ErrorResponse;

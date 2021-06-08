@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.backend.actions.AccountActions;
 import com.github.saphyra.apphub.integration.backend.model.account.ChangeUsernameRequest;
 import com.github.saphyra.apphub.integration.common.framework.DataConstants;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.RandomDataProvider;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
@@ -71,7 +71,7 @@ public class ChangeUsernameTest extends BackEndTest {
         //Incorrect password
         ChangeUsernameRequest incorrectPasswordRequest = ChangeUsernameRequest.builder()
             .username(RandomDataProvider.generateUsername())
-            .password(DataConstants.INVALID_PASSWORD)
+            .password(DataConstants.INCORRECT_PASSWORD)
             .build();
         Response incorrectPasswordResponse = AccountActions.getChangeUsernameResponse(language, accessTokenId, incorrectPasswordRequest);
         verifyError(language, incorrectPasswordResponse, ErrorCode.BAD_PASSWORD, 400);

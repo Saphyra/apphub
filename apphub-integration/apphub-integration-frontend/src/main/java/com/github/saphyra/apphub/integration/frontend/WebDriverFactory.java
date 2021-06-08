@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.integration.frontend;
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.common.framework.SleepUtil;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.DestroyMode;

@@ -76,7 +76,7 @@ public class TextActions {
             .assertTrue();
     }
 
-    public static void allowEditing(WebDriver driver) {
+    public static void enableEditing(WebDriver driver) {
         assertThat(isViewTextWindowOpened(driver)).isTrue();
         if (!isEditingEnabled(driver)) {
             NotebookPage.editTextButton(driver).click();
