@@ -1,22 +1,22 @@
 package com.github.saphyra.apphub.service.user.data.service.account;
 
 import com.github.saphyra.apphub.api.user.model.request.ChangeUsernameRequest;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.service.user.data.service.validator.UsernameValidator;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -52,10 +52,7 @@ public class ChangeUsernameServiceTest {
     public void nullPassword() {
         Throwable ex = catchThrowable(() -> underTest.changeUsername(USER_ID, ChangeUsernameRequest.builder().username(USERNAME).build()));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams().get("password")).isEqualTo("must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "password", "must not be null");
     }
 
     @Test
@@ -65,9 +62,8 @@ public class ChangeUsernameServiceTest {
         given(passwordService.authenticate(PASSWORD, PASSWORD_HASH)).willReturn(false);
 
         Throwable ex = catchThrowable(() -> underTest.changeUsername(USER_ID, ChangeUsernameRequest.builder().username(USERNAME).password(PASSWORD).build()));
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.BAD_PASSWORD.name());
+
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.INCORRECT_PASSWORD);
     }
 
     @Test

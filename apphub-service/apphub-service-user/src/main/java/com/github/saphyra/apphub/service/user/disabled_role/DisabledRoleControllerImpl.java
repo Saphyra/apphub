@@ -3,10 +3,8 @@ package com.github.saphyra.apphub.service.user.disabled_role;
 import com.github.saphyra.apphub.api.user.model.response.DisabledRoleResponse;
 import com.github.saphyra.apphub.api.user.server.DisabledRoleController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleEntity;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleRepository;
@@ -31,7 +29,7 @@ public class DisabledRoleControllerImpl implements DisabledRoleController {
     @Override
     public void disableRole(OneParamRequest<String> password, String role, AccessTokenHeader accessTokenHeader) {
         if (!properties.getRolesCanBeDisabled().contains(role)) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "role", "unknown or cannot be disabled"), role + " is unknown or cannot be disabled");
+            throw ExceptionFactory.invalidParam("role", "unknown or cannot be disabled");
         }
 
         checkPasswordService.checkPassword(accessTokenHeader.getUserId(), password.getValue());
@@ -42,7 +40,7 @@ public class DisabledRoleControllerImpl implements DisabledRoleController {
     @Override
     public void enableRole(OneParamRequest<String> password, String role, AccessTokenHeader accessTokenHeader) {
         if (isBlank(role)) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "role", "must not be blank"), "Role is blank.");
+            throw ExceptionFactory.invalidParam("role", "must not be null or blank");
         }
 
         checkPasswordService.checkPassword(accessTokenHeader.getUserId(), password.getValue());

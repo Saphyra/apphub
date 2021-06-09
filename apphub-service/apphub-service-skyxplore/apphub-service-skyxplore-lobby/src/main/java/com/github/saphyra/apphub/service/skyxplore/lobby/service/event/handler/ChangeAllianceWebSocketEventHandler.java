@@ -3,12 +3,10 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.event.handler;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.lib.exception.ForbiddenException;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
@@ -20,6 +18,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -57,11 +56,11 @@ class ChangeAllianceWebSocketEventHandler implements WebSocketEventHandler {
             .get(changeAllianceEvent.getUserId());
         if (!lobby.getHost().equals(from) && !from.equals(changeAllianceEvent.getUserId())) {
             String originalAllianceName = Optional.ofNullable(member.getAlliance())
-                .map(allianceId -> lobby.getAlliances().stream().filter(a -> a.getAllianceId().equals(allianceId)).findFirst().orElseThrow(() -> new NotFoundException("Alliance not found with id " + allianceId)))
+                .map(allianceId -> lobby.getAlliances().stream().filter(a -> a.getAllianceId().equals(allianceId)).findFirst().orElseThrow(() -> ExceptionFactory.reportedException("Alliance not found with id " + allianceId)))
                 .map(Alliance::getAllianceName)
                 .orElse(NO_ALLIANCE);
             sendMessage(changeAllianceEvent.getUserId(), originalAllianceName, false, lobby.getMembers());
-            throw new ForbiddenException(new ErrorMessage(ErrorCode.FORBIDDEN_OPERATION.name()), from + " must not change the alliance of " + changeAllianceEvent.getUserId());
+            throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, from + " must not change the alliance of " + changeAllianceEvent.getUserId());
         }
 
         switch (changeAllianceEvent.getAlliance()) {
@@ -84,7 +83,7 @@ class ChangeAllianceWebSocketEventHandler implements WebSocketEventHandler {
                     .filter(a -> a.getAllianceName().equals(changeAllianceEvent.getAlliance()))
                     .findFirst()
                     .map(Alliance::getAllianceId)
-                    .orElseThrow(() -> new NotFoundException("Alliance not found with name " + changeAllianceEvent.getAlliance()));
+                    .orElseThrow(() -> ExceptionFactory.reportedException("Alliance not found with name " + changeAllianceEvent.getAlliance()));
 
                 member.setAlliance(allianceId);
                 sendMessage(changeAllianceEvent.getUserId(), changeAllianceEvent.getAlliance(), false, lobby.getMembers());

@@ -1,8 +1,6 @@
 package com.github.saphyra.apphub.service.modules.service;
 
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.modules.ModulesProperties;
 import com.github.saphyra.apphub.service.modules.dao.favorite.Favorite;
 import com.github.saphyra.apphub.service.modules.dao.favorite.FavoriteService;
@@ -24,11 +22,11 @@ public class FavoriteUpdateService {
 
     public void updateFavorite(UUID userId, String module, Boolean favoriteValue) {
         if (!isValidModule(module)) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "module", "does not exist"), String.format("Module does not exist with name %s", module));
+            throw ExceptionFactory.invalidParam("module", "does not exist");
         }
 
         if (isNull(favoriteValue)) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "value", "must not be null"), "favoriteValue is null.");
+            throw ExceptionFactory.invalidParam("value", "must not be null");
         }
 
         Favorite favorite = favoriteService.getOrDefault(userId, module);

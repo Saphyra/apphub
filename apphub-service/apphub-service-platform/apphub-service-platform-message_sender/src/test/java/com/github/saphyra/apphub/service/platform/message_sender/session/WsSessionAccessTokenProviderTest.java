@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.message_sender.session;
 
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.exception.RestException;
+import com.github.saphyra.apphub.lib.exception.LoggedException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -26,7 +26,7 @@ public class WsSessionAccessTokenProviderTest {
     @InjectMocks
     private WsSessionAccessTokenProvider underTest;
 
-    @Test(expected = RestException.class)
+    @Test(expected = LoggedException.class)
     public void getAccessTokenId_accessTokenCookieNotFound() {
         underTest.getAccessTokenId(new HashMap<>());
     }

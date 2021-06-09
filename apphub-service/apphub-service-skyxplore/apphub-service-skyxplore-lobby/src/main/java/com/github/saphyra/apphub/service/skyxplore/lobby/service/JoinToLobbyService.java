@@ -3,9 +3,8 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.ForbiddenException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
@@ -18,6 +17,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class JoinToLobbyService {
             .stream()
             .filter(i -> i.getCharacterId().equals(userId))
             .findFirst()
-            .orElseThrow(() -> new ForbiddenException(new ErrorMessage(ErrorCode.FORBIDDEN_OPERATION.name()), "You are not invited to this lobby."));
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, userId + " is not invited by " + invitorId));
 
         invitations.remove(invitation);
 

@@ -1,20 +1,19 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service;
 
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.ForbiddenException;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.Friendship;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.FriendshipDao;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -39,9 +38,7 @@ public class FriendshipDeletionServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.removeFriendship(FRIENDSHIP_ID, USER_ID));
 
-        assertThat(ex).isInstanceOf(NotFoundException.class);
-        NotFoundException exception = (NotFoundException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.FRIENDSHIP_NOT_FOUND.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.FRIENDSHIP_NOT_FOUND);
     }
 
     @Test
@@ -52,9 +49,7 @@ public class FriendshipDeletionServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.removeFriendship(FRIENDSHIP_ID, USER_ID));
 
-        assertThat(ex).isInstanceOf(ForbiddenException.class);
-        ForbiddenException exception = (ForbiddenException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
     }
 
     @Test

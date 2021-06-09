@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
-import com.github.saphyra.apphub.lib.exception.NotImplementedException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.service.notebook.service.checklist_table.Checkl
 import com.github.saphyra.apphub.service.notebook.service.table.TableDeletionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -52,7 +53,7 @@ public class ListItemDeletionService {
                 checklistTableDeletionService.deleteByListItemId(listItem.getListItemId());
                 break;
             default:
-                throw new NotImplementedException("Unhandled listItemType: " + listItem.getType());
+                throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, "Unhandled listItemType: " + listItem.getType());
         }
 
         listItemDao.delete(listItem);

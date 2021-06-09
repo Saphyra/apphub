@@ -1,17 +1,18 @@
 package com.github.saphyra.apphub.service.skyxplore.game.common;
 
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.GameSaverService;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -55,9 +56,7 @@ public class GameDaoTest {
     public void findByUserIdValidated_notFound() {
         Throwable ex = catchThrowable(() -> underTest.findByUserIdValidated(UUID.randomUUID()));
 
-        assertThat(ex).isInstanceOf(NotFoundException.class);
-        NotFoundException exception = (NotFoundException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.GAME_NOT_FOUND.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.GAME_NOT_FOUND);
     }
 
     @Test

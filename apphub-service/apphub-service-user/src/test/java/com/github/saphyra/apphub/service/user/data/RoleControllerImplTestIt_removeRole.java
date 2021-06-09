@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.platform.localization.client.LocalizationAp
 import com.github.saphyra.apphub.api.user.model.request.RoleRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.service.user.data.dao.role.Role;
@@ -94,7 +94,7 @@ public class RoleControllerImplTestIt_removeRole {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("userId")).isEqualTo("must not be null");
     }
@@ -118,7 +118,7 @@ public class RoleControllerImplTestIt_removeRole {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("role")).isEqualTo("must not be null or blank");
     }
@@ -142,7 +142,7 @@ public class RoleControllerImplTestIt_removeRole {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USER_NOT_FOUND.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USER_NOT_FOUND);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
     }
 
@@ -174,7 +174,7 @@ public class RoleControllerImplTestIt_removeRole {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.ROLE_NOT_FOUND.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.ROLE_NOT_FOUND);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
     }
 

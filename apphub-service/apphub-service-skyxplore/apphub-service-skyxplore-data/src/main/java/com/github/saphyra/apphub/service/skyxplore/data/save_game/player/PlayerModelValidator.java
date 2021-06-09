@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.player;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.GameItemValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,15 +19,15 @@ public class PlayerModelValidator {
         gameItemValidator.validate(model);
 
         if (isNull(model.getUserId())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "userId", "must not be null"), "userId must not be null");
+            throw ExceptionFactory.invalidParam("userId", "must not be null");
         }
 
         if (isNull(model.getUsername())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "username", "must not be null"), "username must not be null");
+            throw ExceptionFactory.invalidParam("username", "must not be null");
         }
 
         if (isNull(model.getAi())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "ai", "must not be null"), "ai must not be null");
+            throw ExceptionFactory.invalidParam("ai", "must not be null");
         }
     }
 }

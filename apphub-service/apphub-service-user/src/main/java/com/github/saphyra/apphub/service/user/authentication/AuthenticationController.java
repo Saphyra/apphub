@@ -7,8 +7,9 @@ import com.github.saphyra.apphub.api.user.model.response.LastVisitedPageResponse
 import com.github.saphyra.apphub.api.user.model.response.LoginResponse;
 import com.github.saphyra.apphub.api.user.server.UserAuthenticationController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenCleanupService;
@@ -19,6 +20,7 @@ import com.github.saphyra.apphub.service.user.authentication.service.LogoutServi
 import com.github.saphyra.apphub.service.user.authentication.service.ValidAccessTokenQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -67,7 +69,7 @@ class AuthenticationController implements UserAuthenticationController {
                 .lastAccess(accessToken.getLastAccess())
                 .pageUrl(accessToken.getLastVisitedPage())
                 .build())
-            .orElseThrow(() -> new NotFoundException(userId + " is not logged in."));
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR, "User is not logged in."));
     }
 
     @Override

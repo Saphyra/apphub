@@ -53,7 +53,7 @@ public class PopulationTest extends BackEndTest {
 
         //Blank name
         Response blankNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, planet.getPlanetId(), citizen.getCitizenId(), " ");
-        verifyInvalidParam(language, blankNameResponse, "value", "must not be blank");
+        verifyInvalidParam(language, blankNameResponse, "value", "must not be null or blank");
 
         //Too long name
         Response tooLongNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, planet.getPlanetId(), citizen.getCitizenId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));

@@ -1,22 +1,21 @@
 package com.github.saphyra.apphub.service.user.data.service.role;
 
 import com.github.saphyra.apphub.api.user.model.request.RoleRequest;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
@@ -47,10 +46,7 @@ public class RoleRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams().get("userId")).isEqualTo("must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "userId", "must not be null");
     }
 
     @Test
@@ -62,10 +58,7 @@ public class RoleRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams().get("role")).isEqualTo("must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "role", "must not be null or blank");
     }
 
     @Test
@@ -80,9 +73,7 @@ public class RoleRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(NotFoundException.class);
-        NotFoundException exception = (NotFoundException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.USER_NOT_FOUND.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.USER_NOT_FOUND);
     }
 
     @Test

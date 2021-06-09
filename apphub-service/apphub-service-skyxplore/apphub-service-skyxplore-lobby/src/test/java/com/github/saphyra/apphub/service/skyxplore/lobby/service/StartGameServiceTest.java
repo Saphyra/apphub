@@ -6,10 +6,8 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMess
 import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameCreationApiClient;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.exception.ForbiddenException;
-import com.github.saphyra.apphub.lib.exception.PreconditionFailedException;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.GameSettings;
@@ -17,12 +15,14 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -72,9 +72,7 @@ public class StartGameServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.startGame(USER_ID));
 
-        assertThat(ex).isInstanceOf(ForbiddenException.class);
-        ForbiddenException exception = (ForbiddenException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
     }
 
     @Test
@@ -86,9 +84,7 @@ public class StartGameServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.startGame(USER_ID));
 
-        assertThat(ex).isInstanceOf(PreconditionFailedException.class);
-        PreconditionFailedException exception = (PreconditionFailedException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.LOBBY_MEMBER_NOT_READY.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.PRECONDITION_FAILED, ErrorCode.LOBBY_MEMBER_NOT_READY);
     }
 
     @Test

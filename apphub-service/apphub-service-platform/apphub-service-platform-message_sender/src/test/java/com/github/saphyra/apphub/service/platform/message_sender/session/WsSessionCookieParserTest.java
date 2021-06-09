@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.message_sender.session;
 
 import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.lib.exception.RestException;
+import com.github.saphyra.apphub.lib.exception.LoggedException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,14 +34,14 @@ public class WsSessionCookieParserTest {
         given(request.getHeaders()).willReturn(httpHeaders);
     }
 
-    @Test(expected = RestException.class)
+    @Test(expected = LoggedException.class)
     public void cookieListNotFound() {
         given(httpHeaders.get(Constants.COOKIE_HEADER)).willReturn(null);
 
         underTest.getCookies(request);
     }
 
-    @Test(expected = RestException.class)
+    @Test(expected = LoggedException.class)
     public void cookieListEmpty() {
         given(httpHeaders.get(Constants.COOKIE_HEADER)).willReturn(Collections.emptyList());
 

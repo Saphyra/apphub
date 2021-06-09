@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.notebook;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;

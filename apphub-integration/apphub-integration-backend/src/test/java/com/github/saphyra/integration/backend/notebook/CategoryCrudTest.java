@@ -94,7 +94,7 @@ public class CategoryCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .build();
         Response ownChildResponse = NotebookActions.getEditListItemResponse(language, accessTokenId, ownChildRequest, parentCategoryId);
-        verifyErrorResponse(language, ownChildResponse, 422, ErrorCode.INVALID_PARAM, "parent", "must not be own child");
+        verifyErrorResponse(language, ownChildResponse, 400, ErrorCode.INVALID_PARAM, "parent", "must not be own child");
 
         //Edit
         CreateCategoryRequest createModifiedCategoryRequest = CreateCategoryRequest.builder()

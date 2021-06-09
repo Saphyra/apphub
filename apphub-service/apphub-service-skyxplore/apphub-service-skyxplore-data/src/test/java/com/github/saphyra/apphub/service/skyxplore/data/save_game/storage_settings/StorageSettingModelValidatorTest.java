@@ -1,9 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.storage_settings;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.StorageSettingModel;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.GameItemValidator;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +13,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -58,10 +56,7 @@ public class StorageSettingModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("location", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "location", "must not be null");
     }
 
     @Test
@@ -70,10 +65,7 @@ public class StorageSettingModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("locationType", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "locationType", "must not be null");
     }
 
     @Test
@@ -82,10 +74,7 @@ public class StorageSettingModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("dataId", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "dataId", "must not be null");
     }
 
     @Test
@@ -94,10 +83,7 @@ public class StorageSettingModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("targetAmount", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "targetAmount", "must not be null");
     }
 
     @Test
@@ -106,10 +92,7 @@ public class StorageSettingModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("priority", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "priority", "must not be null");
     }
 
     @Test
@@ -118,10 +101,7 @@ public class StorageSettingModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("batchSize", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "batchSize", "must not be null");
     }
 
     @Test

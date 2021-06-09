@@ -3,10 +3,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.chat;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.ForbiddenException;
-import com.github.saphyra.apphub.lib.exception.RestException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
@@ -31,7 +29,7 @@ class LeaveChatRoomService {
 
     void leave(UUID userId, String roomId) {
         if (GameConstants.CHAT_ROOM_ALLIANCE.equals(roomId) || GameConstants.CHAT_ROOM_GENERAL.equals(roomId)) {
-            throw new ForbiddenException(new ErrorMessage(ErrorCode.FORBIDDEN_OPERATION.name()), userId + " tried to leave chatRoom " + roomId);
+            throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, userId + " tried to leave chatRoom " + roomId);
         }
 
         List<ChatRoom> rooms = gameDao.findByUserIdValidated(userId)
@@ -41,7 +39,7 @@ class LeaveChatRoomService {
             .stream()
             .filter(room -> room.getId().equals(roomId))
             .findFirst()
-            .orElseThrow(() -> RestException.createNonTranslated(HttpStatus.NOT_FOUND, "ChatRoom not found for id " + roomId));
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR, "ChatRoom not found for id" + roomId));
 
         boolean memberRemoved = chatRoom.getMembers()
             .remove(userId);

@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.service.user.common;
 
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -23,7 +23,7 @@ public class CheckPasswordService {
             .getPassword();
 
         if (!passwordService.authenticate(password, hash)) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.BAD_PASSWORD.name()), "Bad password");
+            throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.INCORRECT_PASSWORD, "Incorrect password");
         }
     }
 }

@@ -1,27 +1,26 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
+import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameCreationRequestValidatorTest {
@@ -57,10 +56,7 @@ public class GameCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("host", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "host", "must not be null");
     }
 
     @Test
@@ -72,10 +68,7 @@ public class GameCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("members", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "members", "must not be null");
     }
 
     @Test
@@ -87,10 +80,7 @@ public class GameCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("host", "unknown id");
+        ExceptionValidator.validateInvalidParam(ex, "host", "unknown id");
     }
 
     @Test
@@ -102,10 +92,7 @@ public class GameCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("alliances", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "alliances", "must not be null");
     }
 
     @Test
@@ -120,10 +107,7 @@ public class GameCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("allianceName", "not unique");
+        ExceptionValidator.validateInvalidParam(ex, "allianceName", "not unique");
 
         verify(allianceNameValidator, times(2)).validate(ALLIANCE_NAME);
     }
@@ -137,10 +121,7 @@ public class GameCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("members", "contains unknown allianceId");
+        ExceptionValidator.validateInvalidParam(ex, "members", "contains unknown allianceId");
 
         verify(allianceNameValidator).validate(ALLIANCE_NAME);
     }
@@ -154,9 +135,7 @@ public class GameCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.GAME_NAME_TOO_SHORT.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.GAME_NAME_TOO_SHORT);
 
         verify(allianceNameValidator).validate(ALLIANCE_NAME);
     }
@@ -170,9 +149,7 @@ public class GameCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.GAME_NAME_TOO_LONG.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.GAME_NAME_TOO_LONG);
 
         verify(allianceNameValidator).validate(ALLIANCE_NAME);
     }

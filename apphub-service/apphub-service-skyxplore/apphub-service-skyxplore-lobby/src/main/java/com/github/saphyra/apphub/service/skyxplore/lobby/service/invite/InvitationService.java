@@ -4,11 +4,9 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.PreconditionFailedException;
-import com.github.saphyra.apphub.lib.exception.TooManyRequestsException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
@@ -18,6 +16,7 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProx
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -61,7 +60,7 @@ public class InvitationService {
             .stream()
             .anyMatch(friendshipResponse -> friendshipResponse.getFriendId().equals(friendId));
         if (!friends) {
-            throw new PreconditionFailedException(accessTokenHeader.getUserId() + " is not a friend of " + friendId);
+            throw ExceptionFactory.notLoggedException(HttpStatus.PRECONDITION_FAILED, accessTokenHeader.getUserId() + " is not a friuend of " + friendId);
         }
 
         Lobby lobby = lobbyDao.findByUserIdValidated(accessTokenHeader.getUserId());
@@ -76,7 +75,7 @@ public class InvitationService {
             LocalDateTime localDateTime = dateTimeUtil.getCurrentDate()
                 .minusSeconds(floodingLimitSeconds);
             if (invitation.getInvitationTime().isAfter(localDateTime)) {
-                throw new TooManyRequestsException(new ErrorMessage(ErrorCode.TOO_FREQUENT_INVITATIONS.name()), accessTokenHeader.getUserId() + " cannot invite " + friendId + " again yet.");
+                throw ExceptionFactory.notLoggedException(HttpStatus.TOO_MANY_REQUESTS, ErrorCode.TOO_FREQUENT_INVITATIONS, accessTokenHeader.getUserId() + " cannot invite " + friendId + " again yet.");
             }
         }
 

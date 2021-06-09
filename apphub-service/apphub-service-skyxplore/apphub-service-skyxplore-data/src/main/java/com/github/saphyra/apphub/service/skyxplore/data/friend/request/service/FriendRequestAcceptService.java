@@ -1,14 +1,13 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.request.service;
 
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.ForbiddenException;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service.FriendshipCreationService;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequest;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequestDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -24,10 +23,10 @@ public class FriendRequestAcceptService {
     @Transactional
     public void accept(UUID userId, UUID friendRequestId) {
         FriendRequest friendRequest = friendRequestDao.findById(friendRequestId)
-            .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.FRIEND_REQUEST_NOT_FOUND.name()), "FriendRequest not found with id " + friendRequestId));
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.FRIEND_REQUEST_NOT_FOUND, "FriendRequest not found with id " + friendRequestId));
 
         if (!friendRequest.getFriendId().equals(userId)) {
-            throw new ForbiddenException(new ErrorMessage(ErrorCode.FORBIDDEN_OPERATION.name()), userId + " cannot accept friendRequest " + friendRequest);
+            throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, userId + " cannot accept friendRequest " + friendRequest);
         }
 
         friendshipCreationService.fromRequest(friendRequest);

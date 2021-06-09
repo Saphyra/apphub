@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.integration.common.framework;
 public enum ErrorCode {
     ALREADY_EXISTS,
     BAD_CREDENTIALS,
-    BAD_PASSWORD,
+    INCORRECT_PASSWORD,
     CATEGORY_NOT_FOUND,
     CHARACTER_NAME_ALREADY_EXISTS,
     CHARACTER_NAME_TOO_SHORT,
@@ -17,6 +17,7 @@ public enum ErrorCode {
     FRIENDSHIP_ALREADY_EXISTS,
     FRIENDSHIP_NOT_FOUND,
     FORBIDDEN_OPERATION,
+    GENERAL_ERROR,
     INVALID_PARAM,
     INVALID_TYPE,
     LIST_ITEM_NOT_FOUND,

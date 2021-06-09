@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
 import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
@@ -92,7 +92,7 @@ public class LocaleMandatoryFilterTest {
         given(localeProvider.getLocale(request)).willReturn(Optional.empty());
         given(response.getWriter()).willReturn(printWriter);
         given(commonConfigProperties.getDefaultLocale()).willReturn(TestConstants.DEFAULT_LOCALE);
-        given(errorResponseFactory.create(TestConstants.DEFAULT_LOCALE, HttpStatus.BAD_REQUEST, ErrorCode.LOCALE_NOT_FOUND.name())).willReturn(errorResponseWrapper);
+        given(errorResponseFactory.create(TestConstants.DEFAULT_LOCALE, HttpStatus.BAD_REQUEST, ErrorCode.LOCALE_NOT_FOUND)).willReturn(errorResponseWrapper);
         given(errorResponseWrapper.getStatus()).willReturn(HttpStatus.BAD_REQUEST);
         given(errorResponseWrapper.getErrorResponse()).willReturn(errorResponse);
         given(objectMapperWrapper.writeValueAsString(errorResponse)).willReturn(RESPONSE_BODY);

@@ -1,10 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.surface;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.SurfaceModel;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.GameItemValidator;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +14,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -52,10 +50,7 @@ public class SurfaceModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("planetId", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "planetId", "must not be null");
     }
 
     @Test
@@ -64,10 +59,7 @@ public class SurfaceModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("coordinate", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "coordinate", "must not be null");
     }
 
     @Test
@@ -76,10 +68,7 @@ public class SurfaceModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("surfaceType", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "surfaceType", "must not be null");
     }
 
     @Test

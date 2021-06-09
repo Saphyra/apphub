@@ -1,7 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
 import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
-import com.github.saphyra.apphub.lib.exception.RestException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
@@ -29,7 +30,7 @@ public class StorageSettingEditionService {
         StorageSetting storageSetting = planet.getStorageDetails()
             .getStorageSettings()
             .findByStorageSettingId(request.getStorageSettingId())
-            .orElseThrow(() -> RestException.createNonTranslated(HttpStatus.NOT_FOUND, "StorageSetting not found with id " + request.getStorageSettingId()));
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR, "StorageSetting not found with id " + request.getStorageSettingId()));
 
         storageSetting.setPriority(request.getPriority());
         storageSetting.setBatchSize(request.getBatchSize());

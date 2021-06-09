@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.service.user.data.service.role;
 
 import com.github.saphyra.apphub.api.user.model.response.UserRoleResponse;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.user.data.dao.role.Role;
 import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
@@ -26,11 +24,11 @@ public class RoleQueryService {
 
     public List<UserRoleResponse> getRoles(String queryString) {
         if (isNull(queryString)) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "searchText", "must not be null"), "searchValue must not be null");
+            throw ExceptionFactory.invalidParam("searchText", "must not be null");
         }
 
         if (queryString.length() < 3) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "searchText", "too short"), "searchValue too short");
+            throw ExceptionFactory.invalidParam("searchText", "too short");
         }
 
         return userDao.getByUsernameOrEmailContainingIgnoreCase(queryString)

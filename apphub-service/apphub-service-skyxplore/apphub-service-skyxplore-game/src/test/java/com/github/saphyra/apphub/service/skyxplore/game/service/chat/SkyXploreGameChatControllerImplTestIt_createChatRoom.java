@@ -10,7 +10,7 @@ import com.github.saphyra.apphub.api.skyxplore.request.CreateChatRoomRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.StringStringMap;
@@ -120,7 +120,7 @@ public class SkyXploreGameChatControllerImplTestIt_createChatRoom {
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getParams()).containsEntry("members", "must not be null");
     }
 
@@ -139,7 +139,7 @@ public class SkyXploreGameChatControllerImplTestIt_createChatRoom {
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getParams()).containsEntry("members", "must not contain null");
     }
 
@@ -158,7 +158,7 @@ public class SkyXploreGameChatControllerImplTestIt_createChatRoom {
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION);
     }
 
     @Test
@@ -176,7 +176,7 @@ public class SkyXploreGameChatControllerImplTestIt_createChatRoom {
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getParams()).containsEntry("roomTitle", "must not be null");
     }
 
@@ -195,7 +195,7 @@ public class SkyXploreGameChatControllerImplTestIt_createChatRoom {
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CHAT_ROOM_TITLE_TOO_SHORT.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CHAT_ROOM_TITLE_TOO_SHORT);
     }
 
     @Test
@@ -213,7 +213,7 @@ public class SkyXploreGameChatControllerImplTestIt_createChatRoom {
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CHAT_ROOM_TITLE_TOO_LONG.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CHAT_ROOM_TITLE_TOO_LONG);
     }
 
     @Test

@@ -56,7 +56,7 @@ public class ChangeEmailTest extends BackEndTest {
             .password("incorrect-password")
             .build();
         Response incorrectPasswordResponse = AccountActions.getChangeEmailResponse(language, accessTokenId1, incorrectPasswordRequest);
-        ResponseValidator.verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.BAD_PASSWORD);
+        ResponseValidator.verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
 
         //E-mail already exists
         RegistrationParameters userData2 = RegistrationParameters.validParameters();

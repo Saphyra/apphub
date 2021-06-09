@@ -1,14 +1,15 @@
 package com.github.saphyra.apphub.service.skyxplore.data.game_data;
 
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.data.AbstractDataService;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 
@@ -20,7 +21,7 @@ import static org.mockito.BDDMockito.given;
 public class GameDataControllerImplTest {
     private static final String DATA_ID = "data-id";
 
-    private AbstractDataService<String, GameDataItem> dataService = new DummyDataService();
+    private final AbstractDataService<String, GameDataItem> dataService = new DummyDataService();
 
     private GameDataControllerImpl underTest;
 
@@ -39,9 +40,7 @@ public class GameDataControllerImplTest {
     public void dataNotFound() {
         Throwable ex = catchThrowable(() -> underTest.getGameData("asd"));
 
-        assertThat(ex).isInstanceOf(NotFoundException.class);
-        NotFoundException exception = (NotFoundException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.DATA_NOT_FOUND.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
 
     @Test

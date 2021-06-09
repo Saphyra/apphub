@@ -6,14 +6,12 @@ import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemAmount;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemSize;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.UniverseSize;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -25,10 +23,7 @@ public class GameCreationSettingsValidatorTest {
     public void nullSettings() {
         Throwable ex = catchThrowable(() -> underTest.validate(null));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("settings", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "settings", "must not be null");
     }
 
     @Test
@@ -40,10 +35,7 @@ public class GameCreationSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("universeSize", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "universeSize", "must not be null");
     }
 
     @Test
@@ -55,10 +47,7 @@ public class GameCreationSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("systemAmount", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "systemAmount", "must not be null");
     }
 
     @Test
@@ -70,10 +59,7 @@ public class GameCreationSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("systemSize", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "systemSize", "must not be null");
     }
 
     @Test
@@ -85,10 +71,7 @@ public class GameCreationSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("planetSize", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "planetSize", "must not be null");
     }
 
     @Test
@@ -100,10 +83,7 @@ public class GameCreationSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("aiPresence", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "aiPresence", "must not be null");
     }
 
     @Test

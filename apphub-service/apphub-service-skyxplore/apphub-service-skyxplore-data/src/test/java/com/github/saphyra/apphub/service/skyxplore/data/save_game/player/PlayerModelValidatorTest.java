@@ -1,9 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.player;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.GameItemValidator;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +13,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -50,10 +48,7 @@ public class PlayerModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("userId", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "userId", "must not be null");
     }
 
     @Test
@@ -62,10 +57,7 @@ public class PlayerModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("username", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "username", "must not be null");
     }
 
     @Test
@@ -74,10 +66,7 @@ public class PlayerModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("ai", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "ai", "must not be null");
     }
 
     @Test

@@ -1,8 +1,9 @@
 package com.github.saphyra.apphub.service.platform.message_sender.session;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.lib.exception.RestException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -34,11 +35,11 @@ class WsSessionCookieParser {
         }
 
         if (isNull(cookieList)) {
-            throw RestException.createNonTranslated(HttpStatus.BAD_REQUEST, "Cookies not found in headers");
+            throw ExceptionFactory.loggedException(HttpStatus.BAD_REQUEST, ErrorCode.UNKNOWN_ERROR, "Cookies not found in headers");
         }
 
         if (cookieList.isEmpty()) {
-            throw RestException.createNonTranslated(HttpStatus.BAD_REQUEST, "Cookie list it empty.");
+            throw ExceptionFactory.loggedException(HttpStatus.BAD_REQUEST, ErrorCode.UNKNOWN_ERROR, "Cookie list is empty.");
         }
 
         String cookieString = cookieList.get(0);

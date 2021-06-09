@@ -32,7 +32,7 @@ public class DeleteAccountTest extends BackEndTest {
 
         //Incorrect password
         Response incorrectPasswordResponse = AccountActions.getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(DataConstants.INCORRECT_PASSWORD));
-        ResponseValidator.verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.BAD_PASSWORD);
+        ResponseValidator.verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
 
         //Successful deletion
         Response response = AccountActions.getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(userData.getPassword()));

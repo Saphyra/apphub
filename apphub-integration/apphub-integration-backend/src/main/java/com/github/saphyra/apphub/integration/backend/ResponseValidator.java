@@ -55,6 +55,6 @@ public class ResponseValidator {
     public static void verifyNotTranslatedNotFound(Response chatRoomNotFoundResponse, int status) {
         assertThat(chatRoomNotFoundResponse.getStatusCode()).isEqualTo(status);
         ErrorResponse errorResponse = chatRoomNotFoundResponse.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.NON_TRANSLATED_ERROR.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.GENERAL_ERROR.name());
     }
 }

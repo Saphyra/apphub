@@ -1,15 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
 import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
-import com.github.saphyra.apphub.lib.exception.ConflictException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.PriorityValidator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,10 +16,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -79,10 +78,7 @@ public class StorageSettingsModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("dataId", "must not be blank");
+        ExceptionValidator.validateInvalidParam(ex, "dataId", "must not be null or blank");
     }
 
     @Test
@@ -91,10 +87,7 @@ public class StorageSettingsModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("dataId", "unknown resource");
+        ExceptionValidator.validateInvalidParam(ex, "dataId", "unknown resource");
     }
 
     @Test
@@ -103,10 +96,7 @@ public class StorageSettingsModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("targetAmount", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "targetAmount", "must not be null");
     }
 
     @Test
@@ -115,10 +105,7 @@ public class StorageSettingsModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("targetAmount", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "targetAmount", "too low");
     }
 
     @Test
@@ -127,10 +114,7 @@ public class StorageSettingsModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("batchSize", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "batchSize", "must not be null");
     }
 
     @Test
@@ -139,10 +123,7 @@ public class StorageSettingsModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("batchSize", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "batchSize", "too low");
     }
 
     @Test
@@ -151,9 +132,7 @@ public class StorageSettingsModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
 
-        assertThat(ex).isInstanceOf(ConflictException.class);
-        ConflictException exception = (ConflictException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.ALREADY_EXISTS.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS);
     }
 
     @Test

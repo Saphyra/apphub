@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.character.dao;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.lib.exception.NotLoggedException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -83,7 +83,7 @@ public class CharacterDaoTest {
         assertThat(result).contains(domain);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = NotLoggedException.class)
     public void findByIdValidated_notFound() {
         given(repository.findById(USER_ID_STRING)).willReturn(Optional.empty());
 

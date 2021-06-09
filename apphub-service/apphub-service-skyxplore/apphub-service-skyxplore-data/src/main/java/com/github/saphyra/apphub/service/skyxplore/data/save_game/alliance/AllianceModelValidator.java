@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.alliance;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.AllianceModel;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.GameItemValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +19,7 @@ public class AllianceModelValidator {
         gameItemValidator.validate(model);
 
         if (isNull(model.getName())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "name", "must not be null"), "name must not be null.");
+            throw ExceptionFactory.invalidParam("name", "must not be null");
         }
     }
 }

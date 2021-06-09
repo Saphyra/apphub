@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.data.game_data;
 
 import com.github.saphyra.apphub.api.skyxplore.data.server.SkyXploreGameDataController;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.data.AbstractDataService;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -30,6 +30,6 @@ public class GameDataControllerImpl implements SkyXploreGameDataController {
     public Object getGameData(String dataId) {
         log.info("Querying gameData item with id {}", dataId);
         return Optional.ofNullable(items.get(dataId))
-            .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.DATA_NOT_FOUND.name()), "Data not found with id " + dataId));
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Data not found with id " + dataId));
     }
 }

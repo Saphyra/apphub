@@ -1,14 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.common;
 
-import static java.util.Objects.isNull;
-
-import org.springframework.stereotype.Component;
-
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
@@ -16,15 +13,15 @@ import lombok.extern.slf4j.Slf4j;
 public class PriorityValidator {
     public void validate(Integer priority) {
         if (isNull(priority)) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "priority", "must not be null"), "Priority must not be null");
+            throw ExceptionFactory.invalidParam("priority", "must not be null");
         }
 
         if (priority < 1) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "priority", "too low"), "Priority too low");
+            throw ExceptionFactory.invalidParam("priority", "too low");
         }
 
         if (priority > 10) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "priority", "too high"), "Priority too high");
+            throw ExceptionFactory.invalidParam("priority", "too high");
         }
     }
 }

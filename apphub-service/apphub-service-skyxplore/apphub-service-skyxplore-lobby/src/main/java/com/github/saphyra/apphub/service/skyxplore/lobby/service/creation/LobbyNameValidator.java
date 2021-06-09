@@ -1,8 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.creation;
 
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,15 +13,15 @@ import static java.util.Objects.isNull;
 class LobbyNameValidator {
     void validate(String lobbyName) {
         if (isNull(lobbyName)) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "lobbyName", "must not be null"), "Lobby name is null.");
+            throw ExceptionFactory.invalidParam("lobbyName", "must not be null");
         }
 
         if (lobbyName.length() < 3) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "lobbyName", "too short"), "Lobby name is too short");
+            throw ExceptionFactory.invalidParam("lobbyName", "too short");
         }
 
         if (lobbyName.length() > 30) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "lobbyName", "too long"), "Lobby name is too long");
+            throw ExceptionFactory.invalidParam("lobbyName", "too long");
         }
     }
 }

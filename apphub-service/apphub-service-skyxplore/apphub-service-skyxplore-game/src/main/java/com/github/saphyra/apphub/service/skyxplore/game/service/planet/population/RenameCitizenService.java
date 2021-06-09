@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.population;
 
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
-import com.github.saphyra.apphub.lib.exception.RestException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +20,11 @@ class RenameCitizenService {
 
     void renameCitizen(UUID userId, UUID planetId, UUID citizenId, String newName) {
         if (isBlank(newName)) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "value", "must not be blank"), "Citizen name is blank");
+            throw ExceptionFactory.invalidParam("value", "must not be null or blank");
         }
 
         if (newName.length() > 30) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "value", "too long"), "Citizen name is too long");
+            throw ExceptionFactory.invalidParam("value", "too long");
         }
 
         gameDao.findByUserIdValidated(userId)
@@ -34,7 +32,7 @@ class RenameCitizenService {
             .findPlanetByIdValidated(planetId)
             .getPopulation()
             .getOptional(citizenId)
-            .orElseThrow(() -> RestException.createNonTranslated(HttpStatus.NOT_FOUND, "Citizen not found with id " + citizenId))
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR, "Citizen not found with id " + citizenId))
             .setName(newName);
     }
 }

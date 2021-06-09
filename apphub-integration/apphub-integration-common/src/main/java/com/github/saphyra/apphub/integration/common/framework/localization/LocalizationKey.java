@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 public enum LocalizationKey {
     ALREADY_EXISTS,
     BAD_CREDENTIALS,
-    BAD_PASSWORD,
+    INCORRECT_PASSWORD,
     CATEGORY_NOT_FOUND,
     CHARACTER_NAME_ALREADY_EXISTS,
     CHARACTER_NAME_TOO_SHORT,

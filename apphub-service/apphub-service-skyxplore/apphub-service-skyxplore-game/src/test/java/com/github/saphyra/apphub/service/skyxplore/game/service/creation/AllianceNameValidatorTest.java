@@ -1,18 +1,15 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AllianceNameValidatorTest {
@@ -23,30 +20,21 @@ public class AllianceNameValidatorTest {
     public void nullAllianceName() {
         Throwable ex = catchThrowable(() -> underTest.validate(null));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("allianceName", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "allianceName", "must not be null");
     }
 
     @Test
     public void allianceNameEmpty() {
         Throwable ex = catchThrowable(() -> underTest.validate(""));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("allianceName", "empty");
+        ExceptionValidator.validateInvalidParam(ex, "allianceName", "empty");
     }
 
     @Test
     public void allianceNameTooLong() {
         Throwable ex = catchThrowable(() -> underTest.validate(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("allianceName", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "allianceName", "too long");
     }
 
     @Test

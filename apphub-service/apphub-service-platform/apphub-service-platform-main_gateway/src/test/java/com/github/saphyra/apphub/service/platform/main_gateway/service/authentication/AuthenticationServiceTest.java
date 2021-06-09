@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResp
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
 import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.translation.ErrorResponseFactory;
@@ -91,7 +91,7 @@ public class AuthenticationServiceTest {
         given(request.getCookies()).willReturn(cookies);
         given(request.getHeaders()).willReturn(httpHeaders);
         given(httpHeaders.getFirst(Constants.LOCALE_HEADER)).willReturn(LOCALE);
-        given(errorResponseFactory.create(LOCALE, HttpStatus.UNAUTHORIZED, ErrorCode.NO_SESSION_AVAILABLE.name(), new HashMap<>())).willReturn(errorResponseWrapper);
+        given(errorResponseFactory.create(LOCALE, HttpStatus.UNAUTHORIZED, ErrorCode.NO_SESSION_AVAILABLE, new HashMap<>())).willReturn(errorResponseWrapper);
     }
 
     @Test

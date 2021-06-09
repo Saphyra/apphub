@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.platform.localization.client.LocalizationAp
 import com.github.saphyra.apphub.api.user.model.request.ChangePasswordRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
@@ -92,7 +92,7 @@ public class AccountControllerImplTestIt_PasswordChange {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("newPassword")).isEqualTo("must not be null");
 
@@ -107,7 +107,7 @@ public class AccountControllerImplTestIt_PasswordChange {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_SHORT.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_SHORT);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
 
         verify(localizationApiClient).translate(ErrorCode.PASSWORD_TOO_SHORT.name(), DEFAULT_LOCALE);
@@ -121,7 +121,7 @@ public class AccountControllerImplTestIt_PasswordChange {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_LONG.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_LONG);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
 
         verify(localizationApiClient).translate(ErrorCode.PASSWORD_TOO_LONG.name(), DEFAULT_LOCALE);
@@ -135,7 +135,7 @@ public class AccountControllerImplTestIt_PasswordChange {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("password")).isEqualTo("must not be null");
 
@@ -159,10 +159,10 @@ public class AccountControllerImplTestIt_PasswordChange {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_PASSWORD.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INCORRECT_PASSWORD);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
 
-        verify(localizationApiClient).translate(ErrorCode.BAD_PASSWORD.name(), DEFAULT_LOCALE);
+        verify(localizationApiClient).translate(ErrorCode.INCORRECT_PASSWORD.name(), DEFAULT_LOCALE);
     }
 
     @Test

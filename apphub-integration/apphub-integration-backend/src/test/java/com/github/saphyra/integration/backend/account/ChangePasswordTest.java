@@ -65,7 +65,7 @@ public class ChangePasswordTest extends BackEndTest {
             .password(DataConstants.INCORRECT_PASSWORD)
             .build();
         Response incorrectPasswordResponse = AccountActions.getChangePasswordResponse(language, accessTokenId, incorrectPasswordRequest);
-        verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.BAD_PASSWORD);
+        verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
 
         //Successful password change
         ChangePasswordRequest successfulPasswordChangeRequest = ChangePasswordRequest.builder()

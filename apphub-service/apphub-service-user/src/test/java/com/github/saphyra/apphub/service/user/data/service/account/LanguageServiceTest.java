@@ -1,11 +1,10 @@
 package com.github.saphyra.apphub.service.user.data.service.account;
 
 import com.github.saphyra.apphub.api.user.model.response.LanguageResponse;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -44,10 +43,7 @@ public class LanguageServiceTest {
     public void changeLanguage_nullLanguage() {
         Throwable ex = catchThrowable(() -> underTest.changeLanguage(USER_ID, null));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams().get("value")).isEqualTo("language must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "value", "must not be null");
     }
 
     @Test
@@ -56,10 +52,7 @@ public class LanguageServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.changeLanguage(USER_ID, LANGUAGE_1));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams().get("value")).isEqualTo("language not supported");
+        ExceptionValidator.validateInvalidParam(ex, "value", "not supported");
     }
 
     @Test

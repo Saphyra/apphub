@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.lib.security.role;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
@@ -89,7 +89,7 @@ public class RoleFilterTest {
     public void forbidden_rest() throws ServletException, IOException {
         given(requiredRoleChecker.hasRequiredRoles(Arrays.asList(roleSetting))).willReturn(false);
         given(requestHelper.isRestCall(request)).willReturn(true);
-        given(errorResponseFactory.create(request, HttpStatus.FORBIDDEN, ErrorCode.MISSING_ROLE.name())).willReturn(errorResponseWrapper);
+        given(errorResponseFactory.create(request, HttpStatus.FORBIDDEN, ErrorCode.MISSING_ROLE)).willReturn(errorResponseWrapper);
         given(errorResponseWrapper.getErrorResponse()).willReturn(errorResponse);
         given(errorResponseWrapper.getStatus()).willReturn(HttpStatus.FORBIDDEN);
 

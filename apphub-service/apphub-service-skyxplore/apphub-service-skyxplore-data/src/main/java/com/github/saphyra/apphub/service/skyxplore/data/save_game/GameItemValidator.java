@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +14,7 @@ import static java.util.Objects.isNull;
 public class GameItemValidator {
     public void validate(GameItem gameItem) {
         if (isNull(gameItem.getId())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "id", "must not be null"), "id must not be null.");
+            throw ExceptionFactory.invalidParam("id", "must not be null");
         }
 
         validateWithoutId(gameItem);
@@ -24,7 +22,7 @@ public class GameItemValidator {
 
     public void validateWithoutId(GameItem gameItem) {
         if (isNull(gameItem.getGameId())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "gameId", "must not be null"), "gameId must not be null.");
+            throw ExceptionFactory.invalidParam("gameId", "must not be null");
         }
     }
 }

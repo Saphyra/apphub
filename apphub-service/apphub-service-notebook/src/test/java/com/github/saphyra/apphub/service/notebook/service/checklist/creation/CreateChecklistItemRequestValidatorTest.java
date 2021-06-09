@@ -2,10 +2,9 @@ package com.github.saphyra.apphub.service.notebook.service.checklist.creation;
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.service.notebook.service.ListItemRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemNodeRequestValidator;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -15,7 +14,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.verify;
 
@@ -46,10 +44,7 @@ public class CreateChecklistItemRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams().get("nodes")).isEqualTo("must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "nodes", "must not be null");
 
         verify(listItemRequestValidator).validate(TITLE, PARENT);
     }

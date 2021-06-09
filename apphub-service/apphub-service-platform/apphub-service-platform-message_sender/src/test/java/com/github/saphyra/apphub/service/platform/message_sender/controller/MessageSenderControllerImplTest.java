@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.message_sender.controller;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
-import com.github.saphyra.apphub.lib.exception.InternalServerErrorException;
+import com.github.saphyra.apphub.lib.exception.ReportedException;
 import com.github.saphyra.apphub.service.platform.message_sender.connection.WebSocketHandler;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +32,7 @@ public class MessageSenderControllerImplTest {
         underTest = new MessageSenderControllerImpl(Arrays.asList(webSocketHandler));
     }
 
-    @Test(expected = InternalServerErrorException.class)
+    @Test(expected = ReportedException.class)
     public void unknownMessageGroup() {
         underTest.sendMessage(MessageGroup.SKYXPLORE_GAME, message);
     }

@@ -1,11 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.planet;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.GameItemValidator;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +16,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -61,10 +59,7 @@ public class PlanetModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("solarSystemId", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "solarSystemId", "must not be null");
     }
 
     @Test
@@ -73,10 +68,7 @@ public class PlanetModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("defaultName", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "defaultName", "must not be null");
     }
 
     @Test
@@ -85,10 +77,7 @@ public class PlanetModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("customNames", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "customNames", "must not be null");
     }
 
     @Test
@@ -97,10 +86,7 @@ public class PlanetModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("customNames", "must not contain null");
+        ExceptionValidator.validateInvalidParam(ex, "customNames", "must not contain null");
     }
 
     @Test
@@ -109,10 +95,7 @@ public class PlanetModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("coordinate", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "coordinate", "must not be null");
     }
 
     @Test
@@ -121,10 +104,7 @@ public class PlanetModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("size", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "size", "must not be null");
     }
 
     @Test

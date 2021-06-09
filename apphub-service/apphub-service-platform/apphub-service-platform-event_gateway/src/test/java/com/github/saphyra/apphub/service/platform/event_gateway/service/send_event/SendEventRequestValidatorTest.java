@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service.send_event;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -9,7 +9,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.HashMap;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -28,10 +27,7 @@ public class SendEventRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(sendEventRequest));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo("INVALID_PARAM");
-        assertThat(exception.getErrorMessage().getParams().get("metadata")).isEqualTo("Invalid parameter");
+        ExceptionValidator.validateInvalidParam(ex, "metadata", "must not be null");
     }
 
     @Test
@@ -43,10 +39,7 @@ public class SendEventRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(sendEventRequest));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo("INVALID_PARAM");
-        assertThat(exception.getErrorMessage().getParams().get("eventName")).isEqualTo("Invalid parameter");
+        ExceptionValidator.validateInvalidParam(ex, "eventName", "must not be null or blank");
     }
 
     @Test

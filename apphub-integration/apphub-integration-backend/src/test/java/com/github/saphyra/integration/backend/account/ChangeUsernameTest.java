@@ -74,7 +74,7 @@ public class ChangeUsernameTest extends BackEndTest {
             .password(DataConstants.INCORRECT_PASSWORD)
             .build();
         Response incorrectPasswordResponse = AccountActions.getChangeUsernameResponse(language, accessTokenId, incorrectPasswordRequest);
-        verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.BAD_PASSWORD);
+        verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
 
         //Successful change
         ChangeUsernameRequest successfulChangeRequest = ChangeUsernameRequest.builder()

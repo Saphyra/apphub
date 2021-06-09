@@ -38,7 +38,7 @@ public class DisabledRoleCrud extends BackEndTest {
 
         //Disable role - Incorrect password
         Response incorrectPasswordDisableResponse = DisabledRoleActions.getDisableRoleResponse(language, accessTokenId, "asd", Constants.ROLE_TEST);
-        verifyBadRequest(language, incorrectPasswordDisableResponse, ErrorCode.BAD_PASSWORD);
+        verifyBadRequest(language, incorrectPasswordDisableResponse, ErrorCode.INCORRECT_PASSWORD);
 
         //Disable role
         Response disableRoleResponse = DisabledRoleActions.getDisableRoleResponse(language, accessTokenId, testUser.getPassword(), Constants.ROLE_TEST);
@@ -47,7 +47,7 @@ public class DisabledRoleCrud extends BackEndTest {
 
         //Enable role - Bad password
         Response incorrectPasswordEnableResponse = DisabledRoleActions.getEnableRoleResponse(language, accessTokenId, "asd", Constants.ROLE_TEST);
-        verifyBadRequest(language, incorrectPasswordEnableResponse, ErrorCode.BAD_PASSWORD);
+        verifyBadRequest(language, incorrectPasswordEnableResponse, ErrorCode.INCORRECT_PASSWORD);
 
         //Enable role
         Response enableRoleResponse = DisabledRoleActions.getEnableRoleResponse(language, accessTokenId, testUser.getPassword(), Constants.ROLE_TEST);

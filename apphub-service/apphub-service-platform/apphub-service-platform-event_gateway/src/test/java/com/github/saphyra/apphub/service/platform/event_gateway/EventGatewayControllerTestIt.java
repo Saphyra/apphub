@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.Constants;
 import com.github.saphyra.apphub.lib.config.Endpoints;
@@ -65,7 +66,6 @@ public class EventGatewayControllerTestIt {
         .eventName(TEST_EVENT_NAME_1)
         .build();
     private static final String INVALID_PARAM_LOCALIZED_MESSAGE = "invalid-param-localized-message";
-    private static final String INVALID_PARAM_ERROR_CODE = "INVALID_PARAM";
 
     @Autowired
     private EventProcessorDao eventProcessorDao;
@@ -101,9 +101,9 @@ public class EventGatewayControllerTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(INVALID_PARAM_ERROR_CODE);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(INVALID_PARAM_LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getParams().get("serviceName")).isEqualTo("Invalid parameter");
+        assertThat(errorResponse.getParams().get("serviceName")).isEqualTo("must not be null or blank");
     }
 
     @Test
@@ -112,9 +112,9 @@ public class EventGatewayControllerTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(INVALID_PARAM_ERROR_CODE);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(INVALID_PARAM_LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getParams().get("eventName")).isEqualTo("Invalid parameter");
+        assertThat(errorResponse.getParams().get("eventName")).isEqualTo("must not be null or blank");
     }
 
     @Test
@@ -123,9 +123,9 @@ public class EventGatewayControllerTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(INVALID_PARAM_ERROR_CODE);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(INVALID_PARAM_LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getParams().get("url")).isEqualTo("Invalid parameter");
+        assertThat(errorResponse.getParams().get("url")).isEqualTo("must not be null");
     }
 
     @Test
@@ -175,9 +175,9 @@ public class EventGatewayControllerTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(INVALID_PARAM_ERROR_CODE);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(INVALID_PARAM_LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getParams().get("metadata")).isEqualTo("Invalid parameter");
+        assertThat(errorResponse.getParams().get("metadata")).isEqualTo("must not be null");
     }
 
     @Test
@@ -195,9 +195,9 @@ public class EventGatewayControllerTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(INVALID_PARAM_ERROR_CODE);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(INVALID_PARAM_LOCALIZED_MESSAGE);
-        assertThat(errorResponse.getParams().get("eventName")).isEqualTo("Invalid parameter");
+        assertThat(errorResponse.getParams().get("eventName")).isEqualTo("must not be null or blank");
     }
 
     @Test

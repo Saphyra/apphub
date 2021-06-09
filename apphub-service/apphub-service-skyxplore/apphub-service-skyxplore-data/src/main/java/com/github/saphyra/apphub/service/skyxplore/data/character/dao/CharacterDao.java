@@ -1,9 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.data.character.dao;
 
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -38,7 +40,7 @@ public class CharacterDao extends AbstractDao<SkyXploreCharacterEntity, SkyXplor
 
     public SkyXploreCharacter findByIdValidated(UUID userId) {
         return findById(userId)
-            .orElseThrow(() -> new NotFoundException("Character not found with id " + userId));
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR, "Character not found with id " + userId));
     }
 
     public List<SkyXploreCharacter> getByNameLike(String characterName) {

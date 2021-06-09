@@ -6,23 +6,23 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMess
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.skyxplore.response.FriendshipResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.exception.PreconditionFailedException;
-import com.github.saphyra.apphub.lib.exception.TooManyRequestsException;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -99,7 +99,7 @@ public class InvitationServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.invite(accessTokenHeader, FRIEND_ID));
 
-        assertThat(ex).isInstanceOf(PreconditionFailedException.class);
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.PRECONDITION_FAILED, ErrorCode.GENERAL_ERROR);
     }
 
     @Test
@@ -114,9 +114,7 @@ public class InvitationServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.invite(accessTokenHeader, FRIEND_ID));
 
-        assertThat(ex).isInstanceOf(TooManyRequestsException.class);
-        TooManyRequestsException exception = (TooManyRequestsException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.TOO_FREQUENT_INVITATIONS.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.TOO_MANY_REQUESTS, ErrorCode.TOO_FREQUENT_INVITATIONS);
     }
 
     @Test

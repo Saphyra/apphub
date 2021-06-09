@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.universe;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.UniverseModel;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.GameItemValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +19,7 @@ public class UniverseModelValidator {
         gameItemValidator.validateWithoutId(model);
 
         if (isNull(model.getSize())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "size", "must not be null"), "size must not be null.");
+            throw ExceptionFactory.invalidParam("size", "must not be null");
         }
     }
 }

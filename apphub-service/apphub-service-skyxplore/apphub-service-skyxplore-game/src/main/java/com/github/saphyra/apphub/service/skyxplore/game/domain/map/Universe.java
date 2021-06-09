@@ -1,16 +1,18 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.map;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -30,6 +32,6 @@ public class Universe {
 
     public Planet findPlanetByIdValidated(UUID planetId) {
         return findPlanetById(planetId)
-            .orElseThrow(() -> new NotFoundException("Planet not found with id " + planetId));
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Planet not found with id " + planetId));
     }
 }

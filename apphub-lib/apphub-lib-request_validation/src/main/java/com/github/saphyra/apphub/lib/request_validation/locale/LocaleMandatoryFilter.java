@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.lib.request_validation.locale;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
@@ -43,7 +43,7 @@ class LocaleMandatoryFilter extends OncePerRequestFilter {
             ErrorResponseWrapper errorResponse = errorResponseFactory.create(
                 commonConfigProperties.getDefaultLocale(),
                 HttpStatus.BAD_REQUEST,
-                ErrorCode.LOCALE_NOT_FOUND.name()
+                ErrorCode.LOCALE_NOT_FOUND
             );
 
             response.setStatus(errorResponse.getStatus().value());

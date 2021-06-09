@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
@@ -92,7 +92,7 @@ public class CharacterDataControllerImplTestIt_createOrUpdateCharacter {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
 
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams()).containsEntry("name", "must not be null");
     }
@@ -110,7 +110,7 @@ public class CharacterDataControllerImplTestIt_createOrUpdateCharacter {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
 
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CHARACTER_NAME_TOO_SHORT.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CHARACTER_NAME_TOO_SHORT);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
     }
 
@@ -127,7 +127,7 @@ public class CharacterDataControllerImplTestIt_createOrUpdateCharacter {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
 
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CHARACTER_NAME_TOO_LONG.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CHARACTER_NAME_TOO_LONG);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
     }
 
@@ -144,7 +144,7 @@ public class CharacterDataControllerImplTestIt_createOrUpdateCharacter {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT.value());
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
 
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CHARACTER_NAME_ALREADY_EXISTS.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.CHARACTER_NAME_ALREADY_EXISTS);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
     }
 

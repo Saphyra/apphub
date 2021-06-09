@@ -4,10 +4,8 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.exception.ForbiddenException;
-import com.github.saphyra.apphub.lib.exception.RestException;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -16,6 +14,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.SystemMessage;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -74,18 +73,14 @@ public class LeaveChatRoomServiceTest {
     public void leave_allianceRoom() {
         Throwable ex = catchThrowable(() -> underTest.leave(USER_ID, GameConstants.CHAT_ROOM_ALLIANCE));
 
-        assertThat(ex).isInstanceOf(ForbiddenException.class);
-        ForbiddenException exception = (ForbiddenException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
     }
 
     @Test
     public void leave_generalRoom() {
         Throwable ex = catchThrowable(() -> underTest.leave(USER_ID, GameConstants.CHAT_ROOM_GENERAL));
 
-        assertThat(ex).isInstanceOf(ForbiddenException.class);
-        ForbiddenException exception = (ForbiddenException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
     }
 
     @Test
@@ -94,9 +89,7 @@ public class LeaveChatRoomServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.leave(USER_ID, ROOM_ID));
 
-        assertThat(ex).isInstanceOf(RestException.class);
-        RestException exception = (RestException) ex;
-        assertThat(exception.getResponseStatus()).isEqualTo(HttpStatus.NOT_FOUND);
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR);
     }
 
     @Test

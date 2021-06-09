@@ -1,8 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.common;
 
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.GameSaverService;
 import com.google.common.annotations.VisibleForTesting;
@@ -10,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -43,7 +43,7 @@ public class GameDao {
 
     public Game findByUserIdValidated(UUID userId) {
         return findByUserId(userId)
-            .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.GAME_NOT_FOUND.name()), "Game not found for user " + userId));
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.GAME_NOT_FOUND, "Game not found for user " + userId));
     }
 
     public Optional<Game> findByUserId(UUID userId) {

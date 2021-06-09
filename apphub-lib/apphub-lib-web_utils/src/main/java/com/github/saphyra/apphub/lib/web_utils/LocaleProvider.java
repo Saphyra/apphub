@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.lib.web_utils;
 
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -25,11 +25,11 @@ public class LocaleProvider {
     }
 
     public String getLocaleValidated() {
-        return getLocale().orElseThrow(() -> new BadRequestException(new ErrorMessage(ErrorCode.LOCALE_NOT_FOUND.name()), "Locale not found."));
+        return getLocale().orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.BAD_REQUEST, ErrorCode.LOCALE_NOT_FOUND, "Locale not found."));
     }
 
     public String getLocaleValidated(HttpServletRequest request) {
-        return getLocale(request).orElseThrow(() -> new BadRequestException(new ErrorMessage(ErrorCode.LOCALE_NOT_FOUND.name()), "Locale not found."));
+        return getLocale(request).orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.BAD_REQUEST, ErrorCode.LOCALE_NOT_FOUND, "Locale not found."));
     }
 
     public Optional<String> getLocale() {

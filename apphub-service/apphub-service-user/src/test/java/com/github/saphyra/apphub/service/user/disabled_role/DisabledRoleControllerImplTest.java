@@ -3,11 +3,10 @@ package com.github.saphyra.apphub.service.user.disabled_role;
 import com.github.saphyra.apphub.api.user.model.response.DisabledRoleResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleEntity;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleRepository;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -72,7 +71,7 @@ public class DisabledRoleControllerImplTest {
     public void enableRole_blank() {
         Throwable ex = catchThrowable(() -> underTest.enableRole(new OneParamRequest<>(PASSWORD), " ", accessTokenHeader));
 
-        verifyException(ex, "must not be blank");
+        verifyException(ex, "must not be null or blank");
     }
 
     @Test
@@ -95,10 +94,6 @@ public class DisabledRoleControllerImplTest {
     }
 
     private void verifyException(Throwable ex, String message) {
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("role", message);
+        ExceptionValidator.validateInvalidParam(ex, "role", message);
     }
 }

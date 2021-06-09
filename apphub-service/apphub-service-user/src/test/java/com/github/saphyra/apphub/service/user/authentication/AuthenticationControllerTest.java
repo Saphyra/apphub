@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.api.user.model.response.LastVisitedPageResponse
 import com.github.saphyra.apphub.api.user.model.response.LoginResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.lib.exception.NotLoggedException;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenCleanupService;
@@ -154,7 +154,7 @@ public class AuthenticationControllerTest {
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = NotLoggedException.class)
     public void getLastVisitedPage_notFound() {
         given(accessTokenDao.getByUserId(USER_ID)).willReturn(Collections.emptyList());
 

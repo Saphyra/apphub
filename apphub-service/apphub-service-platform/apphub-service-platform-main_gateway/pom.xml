@@ -63,6 +63,7 @@
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-test-rest_assured</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

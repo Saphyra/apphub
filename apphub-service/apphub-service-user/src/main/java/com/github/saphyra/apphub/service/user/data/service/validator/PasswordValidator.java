@@ -1,7 +1,8 @@
 package com.github.saphyra.apphub.service.user.data.service.validator;
 
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.service.user.data.service.ExceptionUtil;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import static java.util.Objects.isNull;
@@ -14,15 +15,15 @@ public class PasswordValidator {
 
     public void validatePassword(String password, String fieldName) {
         if (isNull(password)) {
-            throw ExceptionUtil.wrongPayloadException(fieldName);
+            throw ExceptionFactory.invalidParam(fieldName, "must not be null");
         }
 
         if (password.length() < 6) {
-            throw ExceptionUtil.invalidParamException(ErrorCode.PASSWORD_TOO_SHORT, "Password is too short.");
+            throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.PASSWORD_TOO_SHORT, "Password too short.");
         }
 
         if (password.length() > 30) {
-            throw ExceptionUtil.invalidParamException(ErrorCode.PASSWORD_TOO_LONG, "Password is too long.");
+            throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.PASSWORD_TOO_LONG, "Password too long.");
         }
     }
 }

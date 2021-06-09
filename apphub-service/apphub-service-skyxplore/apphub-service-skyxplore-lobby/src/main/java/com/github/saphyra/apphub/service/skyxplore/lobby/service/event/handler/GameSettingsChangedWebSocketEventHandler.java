@@ -8,10 +8,9 @@ import com.github.saphyra.apphub.api.skyxplore.model.game_setting.PlanetSize;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemAmount;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemSize;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.UniverseSize;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.lib.exception.ForbiddenException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.GameSettings;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
@@ -22,6 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -62,7 +62,7 @@ class GameSettingsChangedWebSocketEventHandler implements WebSocketEventHandler 
                 .aiPresence(settings.getAiPresence())
                 .build();
             sendEvent(fwEvent, lobby);
-            throw new ForbiddenException(new ErrorMessage(ErrorCode.FORBIDDEN_OPERATION.name()), from + " must not change the game settings.");
+            throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, from + " must not change the game settings.");
         }
 
         GameSettings settings = lobby.getSettings();

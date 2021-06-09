@@ -1,7 +1,7 @@
 {
   "ALREADY_EXISTS": "Item already exists.",
   "BAD_CREDENTIALS": "Unknown combination of e-mail address and password.",
-  "BAD_PASSWORD": "Incorrect password.",
+  "INCORRECT_PASSWORD": "Incorrect password.",
   "CATEGORY_NOT_FOUND": "Category not found.",
   "CHARACTER_NAME_ALREADY_EXISTS": "Character name already exists.",
   "CHARACTER_NAME_TOO_LONG": "Character name too long. (30 characters max.)",

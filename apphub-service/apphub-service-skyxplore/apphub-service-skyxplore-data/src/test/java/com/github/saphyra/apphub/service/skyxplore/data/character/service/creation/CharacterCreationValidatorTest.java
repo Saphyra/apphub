@@ -1,23 +1,22 @@
 package com.github.saphyra.apphub.service.skyxplore.data.character.service.creation;
 
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
-import com.github.saphyra.apphub.lib.exception.ConflictException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreCharacter;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
@@ -38,28 +37,21 @@ public class CharacterCreationValidatorTest {
     public void nullCharacterName() {
         Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, SkyXploreCharacterModel.builder().build()));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams()).containsEntry("name", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "name", "must not be null");
     }
 
     @Test
     public void characterNameTooShort() {
         Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, SkyXploreCharacterModel.builder().name("as").build()));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.CHARACTER_NAME_TOO_SHORT.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.CHARACTER_NAME_TOO_SHORT);
     }
 
     @Test
     public void characterNameTooLong() {
         Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, SkyXploreCharacterModel.builder().name(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())).build()));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.CHARACTER_NAME_TOO_LONG.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.CHARACTER_NAME_TOO_LONG);
     }
 
     @Test
@@ -69,9 +61,7 @@ public class CharacterCreationValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, SkyXploreCharacterModel.builder().name(CHARACTER_NAME).build()));
 
-        assertThat(ex).isInstanceOf(ConflictException.class);
-        ConflictException exception = (ConflictException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.CHARACTER_NAME_ALREADY_EXISTS.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.CONFLICT, ErrorCode.CHARACTER_NAME_ALREADY_EXISTS);
     }
 
     @Test

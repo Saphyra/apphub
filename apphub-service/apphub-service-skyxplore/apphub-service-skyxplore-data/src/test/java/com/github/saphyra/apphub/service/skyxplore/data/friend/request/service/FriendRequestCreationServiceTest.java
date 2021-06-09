@@ -1,24 +1,23 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.request.service;
 
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.ConflictException;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreCharacter;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.Friendship;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.FriendshipDao;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequest;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequestDao;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -58,9 +57,7 @@ public class FriendRequestCreationServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.createFriendRequest(SENDER_ID, FRIEND_ID));
 
-        assertThat(ex).isInstanceOf(NotFoundException.class);
-        NotFoundException exception = (NotFoundException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.USER_NOT_FOUND.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.USER_NOT_FOUND);
     }
 
     @Test
@@ -70,9 +67,7 @@ public class FriendRequestCreationServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.createFriendRequest(SENDER_ID, FRIEND_ID));
 
-        assertThat(ex).isInstanceOf(ConflictException.class);
-        ConflictException exception = (ConflictException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.FRIEND_REQUEST_ALREADY_EXISTS.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.CONFLICT, ErrorCode.FRIEND_REQUEST_ALREADY_EXISTS);
     }
 
     @Test
@@ -83,9 +78,7 @@ public class FriendRequestCreationServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.createFriendRequest(SENDER_ID, FRIEND_ID));
 
-        assertThat(ex).isInstanceOf(ConflictException.class);
-        ConflictException exception = (ConflictException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.FRIENDSHIP_ALREADY_EXISTS.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.CONFLICT, ErrorCode.FRIENDSHIP_ALREADY_EXISTS);
     }
 
     @Test

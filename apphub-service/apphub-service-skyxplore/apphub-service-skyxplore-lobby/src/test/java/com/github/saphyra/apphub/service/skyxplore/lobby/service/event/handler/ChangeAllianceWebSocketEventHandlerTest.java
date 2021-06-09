@@ -3,17 +3,16 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.event.handler;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.exception.ForbiddenException;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +20,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -106,7 +106,7 @@ public class ChangeAllianceWebSocketEventHandlerTest {
 
         Throwable ex = catchThrowable(() -> underTest.handle(FROM, event));
 
-        assertThat(ex).isInstanceOf(NotFoundException.class);
+        ExceptionValidator.validateReportedException(ex, HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.GENERAL_ERROR);
 
         verifyNoInteractions(messageSenderProxy);
     }
@@ -119,10 +119,7 @@ public class ChangeAllianceWebSocketEventHandlerTest {
 
         Throwable ex = catchThrowable(() -> underTest.handle(FROM, event));
 
-        assertThat(ex).isInstanceOf(ForbiddenException.class);
-        ForbiddenException exception = (ForbiddenException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
-
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
         verifyMessageSent(DIFFERENT_MEMBER_ID, ALLIANCE_NAME, false, lobby.getMembers());
     }
 
@@ -134,9 +131,7 @@ public class ChangeAllianceWebSocketEventHandlerTest {
 
         Throwable ex = catchThrowable(() -> underTest.handle(FROM, event));
 
-        assertThat(ex).isInstanceOf(ForbiddenException.class);
-        ForbiddenException exception = (ForbiddenException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
 
         verifyMessageSent(DIFFERENT_MEMBER_ID, NO_ALLIANCE, false, lobby.getMembers());
     }
@@ -176,7 +171,8 @@ public class ChangeAllianceWebSocketEventHandlerTest {
         given(changeAllianceEvent.getAlliance()).willReturn("2");
 
         Throwable ex = catchThrowable(() -> underTest.handle(FROM, event));
-        assertThat(ex).isInstanceOf(NotFoundException.class);
+
+        ExceptionValidator.validateReportedException(ex, HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.GENERAL_ERROR);
     }
 
     @Test

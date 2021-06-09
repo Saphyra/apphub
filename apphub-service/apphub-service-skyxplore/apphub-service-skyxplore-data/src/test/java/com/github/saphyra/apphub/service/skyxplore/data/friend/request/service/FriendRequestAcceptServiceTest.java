@@ -1,21 +1,20 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.request.service;
 
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.ForbiddenException;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service.FriendshipCreationService;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequest;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequestDao;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -42,9 +41,7 @@ public class FriendRequestAcceptServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.accept(USER_ID, FRIEND_REQUEST_ID));
 
-        assertThat(ex).isInstanceOf(NotFoundException.class);
-        NotFoundException exception = (NotFoundException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.FRIEND_REQUEST_NOT_FOUND.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.FRIEND_REQUEST_NOT_FOUND);
     }
 
     @Test
@@ -54,9 +51,7 @@ public class FriendRequestAcceptServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.accept(USER_ID, FRIEND_REQUEST_ID));
 
-        assertThat(ex).isInstanceOf(ForbiddenException.class);
-        ForbiddenException exception = (ForbiddenException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
     }
 
     @Test

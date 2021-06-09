@@ -7,20 +7,22 @@ import java.util.Map;
 
 @Data
 public class ErrorMessage {
-    private final String errorCode;
+    public static ErrorMessage DEFAULT_ERROR_MESSAGE = new ErrorMessage(ErrorCode.GENERAL_ERROR);
+
+    private final ErrorCode errorCode;
 
     private final Map<String, String> params;
 
-    public ErrorMessage(String errorCode) {
+    public ErrorMessage(ErrorCode errorCode) {
         this(errorCode, new HashMap<>());
     }
 
-    public ErrorMessage(String errorCode, Map<String, String> params) {
+    public ErrorMessage(ErrorCode errorCode, Map<String, String> params) {
         this.errorCode = errorCode;
         this.params = params;
     }
 
-    public ErrorMessage(String errorCode, String paramKey, String paramValue) {
+    public ErrorMessage(ErrorCode errorCode, String paramKey, String paramValue) {
         this.errorCode = errorCode;
         Map<String, String> params = new HashMap<>();
         params.put(paramKey, paramValue);

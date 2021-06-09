@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.dao;
 
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -35,7 +35,7 @@ public class LobbyDao {
 
     public Lobby findByUserIdValidated(UUID userId) {
         return findByUserId(userId)
-            .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.LOBBY_NOT_FOUND.name()), "Lobby not found for userId " + userId));
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.LOBBY_NOT_FOUND, "Lobby not found for userUd" + userId));
     }
 
     public List<Lobby> getByLastAccessedBefore(LocalDateTime expiration) {

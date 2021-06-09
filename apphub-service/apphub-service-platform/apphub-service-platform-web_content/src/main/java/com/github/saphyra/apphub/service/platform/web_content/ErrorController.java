@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.web_content;
 
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.error_handler.service.LocalizedMessageProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
@@ -24,7 +24,9 @@ public class ErrorController {
     public ModelAndView errorPage(@RequestParam(name = "error_code", required = false) String errorCode) {
         log.info("Error page called with errorCode {}", errorCode);
         ModelAndView mav = new ModelAndView("err");
-        String ec = Optional.ofNullable(errorCode).orElse(ErrorCode.UNKNOWN_ERROR.name());
+        ErrorCode ec = Optional.ofNullable(errorCode)
+            .map(ErrorCode::valueOf)
+            .orElse(ErrorCode.UNKNOWN_ERROR);
         String localizedMessage = localizedMessageProvider.getLocalizedMessage(localeProvider.getLocaleValidated(), ec);
         mav.addObject("message", localizedMessage);
         mav.addObject("error_code", ec);

@@ -1,9 +1,9 @@
-package com.github.saphyra.apphub.lib.common_util;
+package com.github.saphyra.apphub.lib.common_domain;
 
 public enum ErrorCode {
     ALREADY_EXISTS,
     BAD_CREDENTIALS,
-    BAD_PASSWORD,
+    INCORRECT_PASSWORD,
     CATEGORY_NOT_FOUND,
     CHARACTER_NAME_ALREADY_EXISTS,
     CHARACTER_NAME_TOO_SHORT,
@@ -20,6 +20,7 @@ public enum ErrorCode {
     GAME_NAME_TOO_SHORT,
     GAME_NAME_TOO_LONG,
     GAME_NOT_FOUND,
+    GENERAL_ERROR,
     INVALID_PARAM,
     INVALID_TYPE,
     LIST_ITEM_NOT_FOUND,

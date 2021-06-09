@@ -1,18 +1,19 @@
 package com.github.saphyra.apphub.service.user.authentication.service;
 
 import com.github.saphyra.apphub.api.user.model.request.LoginRequest;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
-import com.github.saphyra.apphub.lib.exception.UnauthorizedException;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -61,9 +62,7 @@ public class LoginServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.login(request));
 
-        assertThat(ex).isInstanceOf(UnauthorizedException.class);
-        UnauthorizedException exception = (UnauthorizedException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.UNAUTHORIZED, ErrorCode.BAD_CREDENTIALS);
     }
 
     @Test
@@ -79,9 +78,7 @@ public class LoginServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.login(request));
 
-        assertThat(ex).isInstanceOf(UnauthorizedException.class);
-        UnauthorizedException exception = (UnauthorizedException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.UNAUTHORIZED, ErrorCode.BAD_CREDENTIALS);
     }
 
     @Test
@@ -96,9 +93,7 @@ public class LoginServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.login(request));
 
-        assertThat(ex).isInstanceOf(UnauthorizedException.class);
-        UnauthorizedException exception = (UnauthorizedException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.UNAUTHORIZED, ErrorCode.BAD_CREDENTIALS);
     }
 
     @Test

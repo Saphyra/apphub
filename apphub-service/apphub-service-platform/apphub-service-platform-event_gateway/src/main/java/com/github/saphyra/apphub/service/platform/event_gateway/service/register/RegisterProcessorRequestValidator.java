@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service.register;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static com.github.saphyra.apphub.service.platform.event_gateway.service.InvalidParamExceptionFactory.createException;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -13,15 +13,15 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 class RegisterProcessorRequestValidator {
     void validate(RegisterProcessorRequest request) {
         if (isBlank(request.getServiceName())) {
-            throw createException("serviceName");
+            throw ExceptionFactory.invalidParam("serviceName", "must not be null or blank");
         }
 
         if (isBlank(request.getEventName())) {
-            throw createException("eventName");
+            throw ExceptionFactory.invalidParam("eventName", "must not be null or blank");
         }
 
         if (isNull(request.getUrl())) {
-            throw createException("url");
+            throw ExceptionFactory.invalidParam("url", "must not be null");
         }
     }
 }

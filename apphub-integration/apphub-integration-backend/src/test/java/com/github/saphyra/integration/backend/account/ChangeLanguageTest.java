@@ -33,11 +33,11 @@ public class ChangeLanguageTest extends BackEndTest {
 
         //Null language
         Response nullLanguageResponse = AccountActions.getChangeLanguageResponse(registerLanguage, accessTokenId, null);
-        ResponseValidator.verifyInvalidParam(registerLanguage, nullLanguageResponse, "value", "language must not be null");
+        ResponseValidator.verifyInvalidParam(registerLanguage, nullLanguageResponse, "value", "must not be null");
 
         //Not supported language
         Response response = AccountActions.getChangeLanguageResponse(registerLanguage, accessTokenId, "asd");
-        ResponseValidator.verifyInvalidParam(registerLanguage, response, "value", "language not supported");
+        ResponseValidator.verifyInvalidParam(registerLanguage, response, "value", "not supported");
 
         //Change language
         AccountActions.changeLanguage(registerLanguage, accessTokenId, changeLanguage.getLocale());

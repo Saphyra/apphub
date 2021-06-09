@@ -1,14 +1,23 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.AiPresence;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.PlanetSize;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemAmount;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemSize;
+import com.github.saphyra.apphub.api.skyxplore.model.game_setting.UniverseSize;
+import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
+import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.config.Endpoints;
+import com.github.saphyra.apphub.service.skyxplore.game.SkyxploreGameApplication;
+import com.github.saphyra.apphub.test.common.TestConstants;
+import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
+import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
+import io.restassured.response.Response;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,24 +29,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.AiPresence;
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.PlanetSize;
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemAmount;
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemSize;
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.UniverseSize;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.config.Endpoints;
-import com.github.saphyra.apphub.service.skyxplore.game.SkyxploreGameApplication;
-import com.github.saphyra.apphub.test.common.TestConstants;
-import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
-import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
-import io.restassured.response.Response;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -263,7 +262,7 @@ public class GameCreationControllerImplTestIt_validation {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(errorCode.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(errorCode);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         return errorResponse;
     }

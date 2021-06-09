@@ -1,10 +1,8 @@
 package com.github.saphyra.apphub.service.user.data.service.account;
 
 import com.github.saphyra.apphub.api.user.model.response.LanguageResponse;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +24,10 @@ public class LanguageService {
 
     public void changeLanguage(UUID userId, String language) {
         if (isNull(language)) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "value", "language must not be null"), "Language must not be null.");
+            throw ExceptionFactory.invalidParam("value", "must not be null");
         }
         if (!commonConfigProperties.getSupportedLocales().contains(language)) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "value", "language not supported"), String.format("Language %s is not supported.", language));
+            throw ExceptionFactory.invalidParam("value", "not supported");
         }
 
         User user = userDao.findByIdValidated(userId);

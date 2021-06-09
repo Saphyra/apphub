@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.security.role;
 
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
@@ -47,7 +47,7 @@ class RoleFilter extends OncePerRequestFilter {
         ErrorResponseWrapper errorResponse = errorResponseFactory.create(
             request,
             HttpStatus.FORBIDDEN,
-            ErrorCode.MISSING_ROLE.name()
+            ErrorCode.MISSING_ROLE
         );
 
         requestHelper.sendRestError(
