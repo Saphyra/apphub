@@ -1,8 +1,10 @@
-package com.github.saphyra.apphub.lib.error_handler.service;
+package com.github.saphyra.apphub.lib.error_handler.service.translation;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.error_handler.service.translation.ErrorResponseFactory;
+import com.github.saphyra.apphub.lib.error_handler.service.translation.LocalizedMessageProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;

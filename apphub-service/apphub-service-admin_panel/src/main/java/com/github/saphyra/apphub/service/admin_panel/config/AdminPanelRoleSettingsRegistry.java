@@ -1,18 +1,19 @@
 package com.github.saphyra.apphub.service.admin_panel.config;
 
-import com.github.saphyra.apphub.lib.security.role.RoleFilterSettingRegistry;
-import com.github.saphyra.apphub.lib.security.role.RoleSetting;
-import lombok.Data;
+import java.util.List;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import com.github.saphyra.apphub.lib.security.role.RoleFilterSettingRegistry;
+import com.github.saphyra.apphub.lib.security.role.RoleSetting;
+import lombok.Data;
 
 @Component
 @ConfigurationProperties(prefix = "role")
 @EnableConfigurationProperties
 @Data
-public class RoleSettings implements RoleFilterSettingRegistry {
+public class AdminPanelRoleSettingsRegistry implements RoleFilterSettingRegistry {
     private List<RoleSetting> settings;
 }

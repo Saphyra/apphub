@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.web_content;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.error_handler.service.LocalizedMessageProvider;
+import com.github.saphyra.apphub.lib.error_handler.service.translation.LocalizedMessageProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.test.common.TestConstants;
 import org.junit.Test;

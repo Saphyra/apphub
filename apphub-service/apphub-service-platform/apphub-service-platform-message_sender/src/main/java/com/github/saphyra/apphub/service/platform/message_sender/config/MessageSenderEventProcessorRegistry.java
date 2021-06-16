@@ -1,20 +1,21 @@
 package com.github.saphyra.apphub.service.platform.message_sender.config;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.lib.event.processor.EventProcessorRegistry;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Component
-public class EventProcessorRegistryImpl implements EventProcessorRegistry {
+public class MessageSenderEventProcessorRegistry implements EventProcessorRegistry {
     private final String serviceName;
 
-    public EventProcessorRegistryImpl(
+    public MessageSenderEventProcessorRegistry(
         @Value("${spring.application.name}") String serviceName
     ) {
         this.serviceName = serviceName;

@@ -25,6 +25,12 @@
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-api-admin_panel-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-common_util</artifactId>
             <version>${project.version}</version>
         </dependency>

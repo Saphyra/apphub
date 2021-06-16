@@ -43,6 +43,10 @@ feign:
         connectTimeout: 30000
         readTimeout: 30000
 
+admin-panel-error-reporter:
+  ribbon:
+    listOfServers: admin-panel:8080
+
 web-content:
   ribbon:
     listOfServers: web-content:8080

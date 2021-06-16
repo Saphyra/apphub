@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.error_handler.service;
+package com.github.saphyra.apphub.lib.error_handler.service.translation;
 
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;

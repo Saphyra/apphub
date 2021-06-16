@@ -1,6 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.data.config;
 
-import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
@@ -11,9 +14,6 @@ import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleManda
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
 import com.github.saphyra.apphub.lib.skyxplore.data.SkyXploreDataConfig;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @EnableHealthCheck
@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Import;
 @EnableErrorHandler
 @EnableLiquibase
 @EnableEventProcessor
-public class SkyxploreDataBeanConfiguration {
+public class SkyXploreDataBeanConfiguration {
     @Bean
     IdGenerator idGenerator() {
         return new IdGenerator();
@@ -35,10 +35,5 @@ public class SkyxploreDataBeanConfiguration {
     @Bean
     UuidConverter uuidConverter() {
         return new UuidConverter();
-    }
-
-    @Bean
-    DateTimeUtil dateTimeUtil() {
-        return new DateTimeUtil();
     }
 }

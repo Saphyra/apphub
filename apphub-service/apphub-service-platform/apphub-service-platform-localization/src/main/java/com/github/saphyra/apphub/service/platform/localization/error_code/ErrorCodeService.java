@@ -1,11 +1,12 @@
 package com.github.saphyra.apphub.service.platform.localization.error_code;
 
-import com.github.saphyra.apphub.lib.data.AbstractDataService;
-import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import com.github.saphyra.apphub.lib.data.AbstractDataService;
+import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
 
 @Component
 public class ErrorCodeService extends AbstractDataService<String, ErrorCodeLocalization> {
@@ -29,6 +30,11 @@ public class ErrorCodeService extends AbstractDataService<String, ErrorCodeLocal
     public String getByLocaleAndErrorCode(String errorCode, String locale) {
         return getOptional(locale)
             .flatMap(errorCodeLocalization -> errorCodeLocalization.getOptional(errorCode))
-            .orElseGet(() -> String.format(ERROR_CODE_NOT_FOUND_MESSAGE, errorCode));
+            .orElseGet(() -> getDefault(errorCode));
+    }
+
+    private String getDefault(String errorCode) {
+        //TODO report issue
+        return String.format(ERROR_CODE_NOT_FOUND_MESSAGE, errorCode);
     }
 }

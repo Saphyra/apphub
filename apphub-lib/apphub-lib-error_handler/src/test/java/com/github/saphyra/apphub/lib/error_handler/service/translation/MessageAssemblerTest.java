@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.error_handler.service;
+package com.github.saphyra.apphub.lib.error_handler.service.translation;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.github.saphyra.apphub.lib.error_handler.service.translation.MessageAssembler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MessageAssemblerTest {

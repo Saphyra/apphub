@@ -41,6 +41,11 @@
             <version>${versions.jackson-core}</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${versions.rest-assured}</version>
+        </dependency>
     </dependencies>
 
     <build>

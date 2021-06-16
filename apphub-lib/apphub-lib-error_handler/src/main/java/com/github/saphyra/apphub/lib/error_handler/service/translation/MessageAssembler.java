@@ -1,10 +1,11 @@
-package com.github.saphyra.apphub.lib.error_handler.service;
+package com.github.saphyra.apphub.lib.error_handler.service.translation;
+
+import java.util.Map;
+
+import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.error_handler.service;
+package com.github.saphyra.apphub.lib.error_handler.service.translation;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;

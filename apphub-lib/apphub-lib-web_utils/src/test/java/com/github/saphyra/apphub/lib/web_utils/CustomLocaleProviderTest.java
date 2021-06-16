@@ -1,17 +1,17 @@
-package com.github.saphyra.apphub.service.skyxplore.game.common;
+package com.github.saphyra.apphub.lib.web_utils;
 
-import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+
+import java.util.Optional;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CustomLocaleProviderTest {

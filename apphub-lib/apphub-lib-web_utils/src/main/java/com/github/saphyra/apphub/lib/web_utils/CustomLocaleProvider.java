@@ -1,10 +1,10 @@
-package com.github.saphyra.apphub.service.skyxplore.game.common;
+package com.github.saphyra.apphub.lib.web_utils;
+
+import org.springframework.stereotype.Component;
 
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor

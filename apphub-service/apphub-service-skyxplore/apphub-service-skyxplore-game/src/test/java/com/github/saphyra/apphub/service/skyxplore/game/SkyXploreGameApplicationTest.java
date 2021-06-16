@@ -1,8 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game;
 
-import com.github.saphyra.apphub.lib.config.Endpoints;
-import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
-import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,12 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.github.saphyra.apphub.lib.config.Endpoints;
+import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
+import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class SkyxploreGameApplicationTest {
+public class SkyXploreGameApplicationTest {
     @LocalServerPort
     private int serverPort;
 
