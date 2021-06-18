@@ -51,3 +51,23 @@
 #result{
     overflow: auto;
 }
+
+    .string {
+        color: lightgreen;
+    }
+
+    .number {
+        color: orange;
+    }
+
+    .boolean {
+        color: cyan;
+    }
+
+    .null {
+        color: pink;
+    }
+
+    .key {
+        color: white;
+    }
