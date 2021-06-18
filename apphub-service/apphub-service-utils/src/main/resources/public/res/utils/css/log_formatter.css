@@ -9,6 +9,17 @@
     margin: 1rem;
 }
 
+#result-view-wrapper label{
+    border: 2px outset white;
+    padding: 0.25rem;
+    border-radius: 5px;
+}
+
+    #result-view-wrapper label:hover{
+        cursor: pointer;
+        border: 2px inset red;
+    }
+
 #order-by-buttons-container{
     text-align: center;
 }

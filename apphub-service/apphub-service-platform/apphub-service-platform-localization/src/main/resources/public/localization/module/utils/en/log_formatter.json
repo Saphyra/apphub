@@ -49,6 +49,18 @@
         "message": "Original"
       }
     ],
+    "result-view-json": [
+      {
+        "key": "innerHTML",
+        "message": "JSON view"
+      }
+    ],
+    "result-view-table": [
+      {
+        "key": "innerHTML",
+        "message": "Table view"
+      }
+    ],
     "back-button": [
       {
         "key": "innerHTML",

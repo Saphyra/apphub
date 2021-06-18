@@ -134,19 +134,29 @@
             document.getElementById(ids.filterSearchOperation).disabled = false;
             document.getElementById(ids.filterInput).disabled = false;
             document.getElementById(ids.addFilterRuleButton).disabled = false;
+
+            $("#result-view-wrapper input").prop("disabled", false);
         }
     }
 
     function displayLogRecords(){
         const resultContainer = document.getElementById(ids.resultContainer);
+            resultContainer.innerHTML = "";
 
         const processedRecords = processLogRecords();
 
-        const formatted = syntaxHighlight(JSON.stringify(processedRecords, null, 4))
-            .replaceAll("\\n", "<BR>")
-            .replaceAll("\\r", "")
-            .replaceAll("\\t", "    ");
-        resultContainer.innerHTML = formatted;
+        const displayType = document.querySelector("#result-view-wrapper input[name='view']:checked").value;
+        switch(displayType){
+            case "json":
+                const formatted = formatAsJson(processedRecords);
+                resultContainer.innerHTML = formatted;
+            break;
+            case "table":
+                resultContainer.appendChild(createTable(processedRecords));
+            break;
+            default:
+                throwException("IllegalState", "Unknown displayType: " + displayType);
+        }
 
         function processLogRecords(){
             const data = JSON.parse(JSON.stringify(logRecords));
@@ -181,23 +191,80 @@
             }
         }
 
-        function syntaxHighlight(json) {
-            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-                var cls = 'number';
-                if (/^"/.test(match)) {
-                    if (/:$/.test(match)) {
-                        cls = 'key';
-                    } else {
-                        cls = 'string';
-                    }
-                } else if (/true|false/.test(match)) {
-                    cls = 'boolean';
-                } else if (/null/.test(match)) {
-                    cls = 'null';
+        function formatAsJson(processedRecords){
+           return syntaxHighlight(JSON.stringify(processedRecords, null, 4))
+                .replaceAll("\\n", "<BR>")
+                .replaceAll("\\r", "")
+                .replaceAll("\\t", "    ");
+
+           function syntaxHighlight(json) {
+               json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+               return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                   var cls = 'number';
+                   if (/^"/.test(match)) {
+                       if (/:$/.test(match)) {
+                           cls = 'key';
+                       } else {
+                           cls = 'string';
+                       }
+                   } else if (/true|false/.test(match)) {
+                       cls = 'boolean';
+                   } else if (/null/.test(match)) {
+                       cls = 'null';
+                   }
+                   return '<span class="' + cls + '">' + match + '</span>';
+               });
+           }
+        }
+
+        function createTable(processedRecords){
+            const table = document.createElement("TABLE");
+                table.classList.add("formatted-table");
+
+                const columns = new Stream(processedRecords)
+                    .flatMap(function(row){return new Stream(Object.keys(row))})
+                    .distinct()
+                    .sorted(function(a, b){return a.localeCompare(b)})
+                    .toList();
+
+                table.appendChild(createTableHeads(columns));
+
+                new Stream(processedRecords)
+                    .map(function(record){return createRecordRow(columns, record)})
+                    .forEach(function(recordRow){table.appendChild(recordRow)});
+
+            return table;
+
+            function createTableHeads(columns){
+                const row = document.createElement("TR");
+
+                new Stream(columns)
+                    .map(function(column){return createTableHead(column)})
+                    .forEach(function(th){row.appendChild(th)});
+
+                return row;
+
+                function createTableHead(column){
+                    const th = document.createElement("TH");
+                        th.innerText = column;
+                    return th;
                 }
-                return '<span class="' + cls + '">' + match + '</span>';
-            });
+            }
+
+            function createRecordRow(columns, record){
+                const row = document.createElement("TR");
+                    new Stream(columns)
+                        .map(function(column){return record[column]})
+                        .map(createColumn)
+                        .forEach(function(column){row.appendChild(column)});
+                return row;
+
+                function createColumn(value){
+                    const column = document.createElement("TD");
+                        column.innerText = value;
+                    return column;
+                }
+            }
         }
     }
 
@@ -254,6 +321,8 @@
         }
 
         document.getElementById(ids.orderType).onchange = displayLogRecords;
+
+        $("#result-view-wrapper input").on("change", displayLogRecords);
     }
 
     function Rule(p, o, t){

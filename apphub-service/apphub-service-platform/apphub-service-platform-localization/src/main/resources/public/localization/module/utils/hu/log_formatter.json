@@ -49,6 +49,18 @@
         "message": "Eredeti"
       }
     ],
+    "result-view-json": [
+      {
+        "key": "innerHTML",
+        "message": "JSON nézet"
+      }
+    ],
+    "result-view-table": [
+      {
+        "key": "innerHTML",
+        "message": "Táblázat nézet"
+      }
+    ],
     "back-button": [
       {
         "key": "innerHTML",

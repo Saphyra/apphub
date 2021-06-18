@@ -22,6 +22,10 @@
         <DIV id="format-button" class="button" onclick="formatController.format()"></DIV>
 
         <DIV id="order-by-buttons-container">
+            <SPAN id="result-view-wrapper">
+                <LABEL><INPUT type="radio" name="view" value="json" checked disabled><SPAN id="result-view-json"></SPAN></LABEL>
+                <LABEL><INPUT type="radio" name="view" value="table" disabled><SPAN id="result-view-table"></SPAN></LABEL>
+            </SPAN>
             <SELECT id="order-type">
                 <OPTION value="asc" id="order-type-asc"></OPTION>
                 <OPTION value="desc" id="order-type-desc"></OPTION>
