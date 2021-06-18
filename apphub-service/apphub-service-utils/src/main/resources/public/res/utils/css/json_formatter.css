@@ -1,34 +1,51 @@
-#input{
-    width: 90vw;
-    display: block;
-    margin: auto;
-    height: 30vh;
+#input-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 14rem;
 }
 
-#format-button{
-    margin: 1rem;
+    #input{
+        width: 90vw;
+        display: block;
+        margin: auto;
+        height: 10rem;
+        margin-top: 1rem;
+    }
+
+    #format-button{
+        margin: 1rem;
+    }
+
+#result-container{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: calc(100% - 14rem);
 }
 
-#result{
-    overflow: auto;
-}
-
-    .string {
-        color: lightgreen;
+    #result{
+        overflow: auto;
     }
 
-    .number {
-        color: orange;
-    }
+        .string {
+            color: lightgreen;
+        }
 
-    .boolean {
-        color: cyan;
-    }
+        .number {
+            color: orange;
+        }
 
-    .null {
-        color: pink;
-    }
+        .boolean {
+            color: cyan;
+        }
 
-    .key {
-        color: white;
-    }
+        .null {
+            color: pink;
+        }
+
+        .key {
+            color: white;
+        }

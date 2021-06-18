@@ -17,11 +17,16 @@
     </HEADER>
 
     <MAIN>
-        <TEXTAREA id="input"></TEXTAREA>
+        <DIV id="input-container">
+            <TEXTAREA id="input"></TEXTAREA>
 
-        <DIV id="format-button" class="button" onclick="formatController.format()"></DIV>
+            <DIV id="format-button" class="button" onclick="formatController.format()"></DIV>
+        </DIV>
 
-        <PRE id="result" class="content-selectable"></PRE>
+
+        <DIV id="result-container">
+            <PRE id="result" class="content-selectable"></PRE>
+        </DIV>
     </MAIN>
 
     <FOOTER>

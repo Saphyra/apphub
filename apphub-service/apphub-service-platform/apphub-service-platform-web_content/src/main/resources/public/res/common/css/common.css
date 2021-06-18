@@ -251,6 +251,10 @@ input:disabled, button:disabled, textarea:disabled, .disabled{
     color: red;
 }
 
+.nowrap{
+    white-space: nowrap;
+}
+
 .spinner{
     position: fixed;
     top: 0;
