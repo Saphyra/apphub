@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Import;
 public class AccessTokenFilterConfiguration {
     @Bean
     public FilterRegistrationBean<AccessTokenFilter> accessTokenFilterFilterRegistrationBean(AccessTokenFilter contextFilter) {
-        log.info("AccessTokenFilterOrder order: {}", FilterOrder.ACCESS_TOKEN_FILTER);
+        log.debug("AccessTokenFilterOrder order: {}", FilterOrder.ACCESS_TOKEN_FILTER);
         FilterRegistrationBean<AccessTokenFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(contextFilter);
         filterRegistrationBean.setOrder(FilterOrder.ACCESS_TOKEN_FILTER.getFilterOrder());

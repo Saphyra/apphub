@@ -25,6 +25,10 @@ public class ExceptionFactory {
         return new ReportedException(status, message);
     }
 
+    public RestException reportedException(HttpStatus status, ErrorCode errorCode, String message) {
+        return new ReportedException(status, errorCode, message);
+    }
+
     public RestException notLoggedException(HttpStatus status, String message) {
         return notLoggedException(status, ErrorCode.GENERAL_ERROR, new HashMap<>(), message);
     }

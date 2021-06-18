@@ -1,17 +1,10 @@
 package com.github.saphyra.apphub.lib.error_handler;
 
-import java.util.HashMap;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
-import com.github.saphyra.apphub.lib.error_handler.service.ErrorReporterService;
+import com.github.saphyra.apphub.lib.error_handler.service.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.error_handler.service.translation.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.exception.LoggedException;
 import com.github.saphyra.apphub.lib.exception.NotLoggedException;
@@ -20,6 +13,12 @@ import com.github.saphyra.apphub.lib.exception.RestException;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.HashMap;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -37,8 +36,7 @@ class ErrorHandlerAdvice {
     }
 
     @ExceptionHandler(NotLoggedException.class)
-        //TODO unit test
-    ResponseEntity<ErrorResponse> expectedException(NotLoggedException exception) {
+    ResponseEntity<ErrorResponse> notLoggedException(NotLoggedException exception) {
         ErrorResponseWrapper errorResponse = getErrorResponse(exception);
         log.info("Returning errorResponse: {} with logMessage: {}", errorResponse, exception.getErrorMessage());
         log.debug("Exception:", exception);
@@ -47,7 +45,6 @@ class ErrorHandlerAdvice {
     }
 
     @ExceptionHandler(LoggedException.class)
-        //TODO unit test
     ResponseEntity<ErrorResponse> loggedException(LoggedException exception) {
         ErrorResponseWrapper errorResponse = getErrorResponse(exception);
         log.info("Returning errorResponse: {}", errorResponse, exception);
@@ -56,7 +53,6 @@ class ErrorHandlerAdvice {
     }
 
     @ExceptionHandler(ReportedException.class)
-        //TODO unit test
     ResponseEntity<ErrorResponse> reportedException(ReportedException exception) {
         ErrorResponseWrapper errorResponse = getErrorResponse(exception);
         log.info("Returning errorResponse: {}", errorResponse, exception);
@@ -72,7 +68,6 @@ class ErrorHandlerAdvice {
     }
 
     @ExceptionHandler(RuntimeException.class)
-        //TODO unit test
     ResponseEntity<ErrorResponse> generalException(RuntimeException exception) {
         log.error("Unknown exception occurred:", exception);
         ErrorResponseWrapper errorResponse = errorResponseFactory.create(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.GENERAL_ERROR, new HashMap<>());

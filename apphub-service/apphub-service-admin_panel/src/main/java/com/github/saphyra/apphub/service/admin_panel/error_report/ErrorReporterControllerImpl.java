@@ -11,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-//TODO int test
 public class ErrorReporterControllerImpl implements ErrorReporterController {
     private final ReportErrorService reportErrorService;
 

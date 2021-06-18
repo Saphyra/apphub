@@ -44,7 +44,7 @@ class LocaleMandatoryFilterConfiguration {
 
     @Bean
     FilterRegistrationBean<LocaleMandatoryFilter> localeMandatoryFilterFilterRegistrationBean(LocaleMandatoryFilter contextFilter) {
-        log.info("AccessTokenFilterOrder order: {}", FilterOrder.LOCALE_MANDATORY_FILTER);
+        log.debug("LocaleMandatoryFilter order: {}", FilterOrder.LOCALE_MANDATORY_FILTER);
         FilterRegistrationBean<LocaleMandatoryFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(contextFilter);
         filterRegistrationBean.setOrder(FilterOrder.LOCALE_MANDATORY_FILTER.getFilterOrder());

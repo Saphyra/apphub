@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.platform.localization.error_code;
 
 import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
+import com.github.saphyra.apphub.lib.error_handler.service.error_report.ErrorReporterService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ErrorCodeServiceTest {
@@ -18,6 +20,9 @@ public class ErrorCodeServiceTest {
 
     @Mock
     private ContentLoaderFactory contentLoaderFactory;
+
+    @Mock
+    private ErrorReporterService errorReporterService;
 
     @InjectMocks
     private ErrorCodeService underTest;
@@ -42,6 +47,7 @@ public class ErrorCodeServiceTest {
         String result = underTest.getByLocaleAndErrorCode("error-codes", LOCALE);
 
         assertThat(result).isEqualTo("error-codes could not be translated.");
+        verify(errorReporterService).report("Localization not found for errorCode error-codes and locale " + LOCALE);
     }
 
     @Test
