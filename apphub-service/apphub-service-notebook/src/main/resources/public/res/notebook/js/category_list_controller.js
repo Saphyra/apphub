@@ -107,7 +107,7 @@
 
                         toggleButton.onclick = function(e){
                             e.stopPropagation();
-                            if(childrenContainer.style.display == "block"){
+                            if(childrenContainer.style.display != "none"){
                                 toggleButton.innerHTML = "v";
                                 $(childrenContainer).fadeOut();
                             }else{
