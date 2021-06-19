@@ -59,7 +59,12 @@ public class ModulesTest extends BackEndTest {
             .url("/web/utils/json-formatter")
             .favorite(false)
             .build();
-        assertThat(result.get("development-utils")).containsExactlyInAnyOrder(expectedModuleLogFormatter, expectedModuleJsonFormatter);
+        ModulesResponse expectedModuleBase64Encoder = ModulesResponse.builder()
+            .name("base64")
+            .url("/web/utils/base64")
+            .favorite(false)
+            .build();
+        assertThat(result.get("development-utils")).containsExactlyInAnyOrder(expectedModuleLogFormatter, expectedModuleJsonFormatter, expectedModuleBase64Encoder);
 
         if (!DISABLED_TEST_GROUPS.contains("skyxplore")) {
             assertThat(result).containsKey("game");
