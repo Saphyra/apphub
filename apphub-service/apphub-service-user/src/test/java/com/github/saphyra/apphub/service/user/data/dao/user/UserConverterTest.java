@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.LOCAL_DATE_TIME;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -55,6 +54,30 @@ public class UserConverterTest {
     }
 
     @Test
+    public void convertEntity_nullMarkedForDeletion() {
+        UserEntity entity = UserEntity.builder()
+            .userId(USER_ID_STRING)
+            .username(USERNAME)
+            .email(EMAIL)
+            .password(PASSWORD)
+            .language(LANGUAGE)
+            .markedForDeletion(null)
+            .markedForDeletionAt(CURRENT_DATE)
+            .build();
+        given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
+
+        User result = underTest.convertEntity(entity);
+
+        assertThat(result.getUserId()).isEqualTo(USER_ID);
+        assertThat(result.getUsername()).isEqualTo(USERNAME);
+        assertThat(result.getEmail()).isEqualTo(EMAIL);
+        assertThat(result.getPassword()).isEqualTo(PASSWORD);
+        assertThat(result.getLanguage()).isEqualTo(LANGUAGE);
+        assertThat(result.isMarkedForDeletion()).isFalse();
+        assertThat(result.getMarkedForDeletionAt()).isEqualTo(CURRENT_DATE);
+    }
+
+    @Test
     public void convertDomain() {
         User user = User.builder()
             .userId(USER_ID)
@@ -74,7 +97,7 @@ public class UserConverterTest {
         assertThat(result.getEmail()).isEqualTo(EMAIL);
         assertThat(result.getPassword()).isEqualTo(PASSWORD);
         assertThat(result.getLanguage()).isEqualTo(LANGUAGE);
-        assertThat(result.isMarkedForDeletion()).isTrue();
+        assertThat(result.getMarkedForDeletion()).isTrue();
         assertThat(result.getMarkedForDeletionAt()).isEqualTo(CURRENT_DATE);
     }
 }

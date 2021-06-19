@@ -5,6 +5,8 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class UserConverter extends ConverterBase<UserEntity, User> {
@@ -18,7 +20,7 @@ public class UserConverter extends ConverterBase<UserEntity, User> {
             .username(entity.getUsername())
             .password(entity.getPassword())
             .language(entity.getLanguage())
-            .markedForDeletion(entity.isMarkedForDeletion())
+            .markedForDeletion(Optional.ofNullable(entity.getMarkedForDeletion()).orElse(false))
             .markedForDeletionAt(entity.getMarkedForDeletionAt())
             .build();
     }

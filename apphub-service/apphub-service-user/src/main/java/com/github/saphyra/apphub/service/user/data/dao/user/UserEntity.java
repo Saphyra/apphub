@@ -23,6 +23,6 @@ class UserEntity {
     private String username;
     private String password;
     private String language;
-    private boolean markedForDeletion = false;
+    private Boolean markedForDeletion = false;
     private LocalDateTime markedForDeletionAt;
 }
