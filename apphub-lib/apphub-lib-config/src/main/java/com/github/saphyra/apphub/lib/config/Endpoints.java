@@ -16,6 +16,7 @@ public class Endpoints {
     public static final String SKYXPLORE_GAME_PAGE = "/web/skyxplore/game";
     public static final String UTILS_JSON_FORMATTER_PAGE = "/web/utils/json-formatter";
     public static final String UTILS_LOG_FORMATTER_PAGE = "/web/utils/log-formatter";
+    public static final String UTILS_BASE64_ENCODER_PAGE = "/web/utils/base64";
 
     //PLATFORM
     public static final String HEALTH = "/platform/health";

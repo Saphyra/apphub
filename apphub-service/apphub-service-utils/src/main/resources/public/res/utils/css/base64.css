@@ -1,0 +1,19 @@
+main{
+    text-align: center;
+}
+
+    textarea{
+        width: 90vw;
+        display: block;
+        margin: auto;
+        height: calc(50% - 3.5rem);
+        margin: 1rem auto;
+    }
+
+    #action-button-container button{
+        min-width: 25%;
+    }
+
+    #result{
+        cursor: text;
+    }

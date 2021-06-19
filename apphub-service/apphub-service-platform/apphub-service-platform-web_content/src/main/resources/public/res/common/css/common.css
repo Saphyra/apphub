@@ -179,6 +179,10 @@ input:disabled, button:disabled, textarea:disabled, .disabled{
     float: right;
 }
 
+textarea{
+    resize: none;
+}
+
 /*================TABLE ELEMENTS==================*/
 .formatted-table th{
     font-size: 1.5rem;

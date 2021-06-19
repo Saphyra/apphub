@@ -4,6 +4,7 @@
   "notebook": "Notebook",
   "json-formatter": "JSON formatter",
   "log-formatter": "Log formatter",
+  "base64": "Base64 Encoder",
   "mobile-messages": "Mobile Messages",
   "skyxplore": "SkyXplore"
 }

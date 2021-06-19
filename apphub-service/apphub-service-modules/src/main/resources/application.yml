@@ -33,6 +33,10 @@ modules:
         url: /web/utils/log-formatter
         allowedByDefault: true
         mobileAllowed: true
+      - name: base64
+        url: /web/utils/base64
+        allowedByDefault: true
+        mobileAllowed: true
     game:
       - name: skyxplore
         url: /web/skyxplore

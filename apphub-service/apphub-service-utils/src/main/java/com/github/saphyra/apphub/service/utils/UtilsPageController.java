@@ -19,4 +19,9 @@ public class UtilsPageController {
     public String logFormatterPage() {
         return "log_formatter";
     }
+
+    @GetMapping(Endpoints.UTILS_BASE64_ENCODER_PAGE)
+    public String base64() {
+        return "base64";
+    }
 }
