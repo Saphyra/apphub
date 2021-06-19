@@ -18,7 +18,7 @@ class EventProcessorFactory {
     EventProcessor create(RegisterProcessorRequest request) {
         log.info("Creating new eventProcessor... {}", request);
         return EventProcessor.builder()
-            .eventProcessorId(idGenerator.randomUUID())
+            .eventProcessorId(idGenerator.randomUuid())
             .serviceName(request.getServiceName())
             .url(request.getUrl())
             .eventName(request.getEventName())

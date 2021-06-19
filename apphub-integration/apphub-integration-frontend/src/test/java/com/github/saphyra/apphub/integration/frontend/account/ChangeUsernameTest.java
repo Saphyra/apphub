@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.integration.frontend.account;
 
 import com.github.saphyra.apphub.integration.common.framework.DataConstants;
+import com.github.saphyra.apphub.integration.common.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.frontend.SeleniumTest;
 import com.github.saphyra.apphub.integration.frontend.framework.Navigation;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.frontend.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_username.ChUsernamePasswordValidationResult;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_username.ChangeUsernameParameters;
 import com.github.saphyra.apphub.integration.frontend.model.account.change_username.ChangeUsernameValidationResult;
@@ -15,37 +15,11 @@ import com.github.saphyra.apphub.integration.frontend.service.account.AccountPag
 import com.github.saphyra.apphub.integration.frontend.service.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.frontend.service.modules.ModulesPageActions;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class ChangeUsernameTest extends SeleniumTest {
-    @DataProvider(name = "invalidParameters", parallel = true)
-    public Object[][] invalidParametersProvider() {
-        return new Object[][]{
-            new Object[]{ChangeUsernameParameters.valid(), valid()},
-            new Object[]{ChangeUsernameParameters.tooShortUsername(), tooShortUsername()},
-            new Object[]{ChangeUsernameParameters.tooLongUsername(), tooLongUsername()},
-            new Object[]{ChangeUsernameParameters.emptyPassword(), emptyPassword()}
-        };
-    }
-
-    @Test(dataProvider = "invalidParameters")
-    public void invalidParameters(ChangeUsernameParameters parameters, ChangeUsernameValidationResult validationResult) {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
-
-        AccountPageActions.fillChangeUsernameForm(driver, parameters);
-        SleepUtil.sleep(2000);
-
-        AccountPageActions.verifyChangeUsernameForm(driver, validationResult);
-    }
-
     @Test
-    public void usernameAlreadyExists() {
+    public void changeUsername() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters existingUserData = RegistrationParameters.validParameters();
@@ -57,45 +31,40 @@ public class ChangeUsernameTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
-        ChangeUsernameParameters parameters = ChangeUsernameParameters.valid()
+        //Too short username
+        AccountPageActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.tooShortUsername());
+        SleepUtil.sleep(2000);
+        AccountPageActions.verifyChangeUsernameForm(driver, tooShortUsername());
+
+        //Too long username
+        AccountPageActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.tooLongUsername());
+        SleepUtil.sleep(2000);
+        AccountPageActions.verifyChangeUsernameForm(driver, tooLongUsername());
+
+        //Empty password
+        AccountPageActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.emptyPassword());
+        SleepUtil.sleep(2000);
+        AccountPageActions.verifyChangeUsernameForm(driver, emptyPassword());
+
+        //Username already exists
+        ChangeUsernameParameters usernameAlreadyExistsParameters = ChangeUsernameParameters.valid()
             .toBuilder()
             .username(existingUserData.getUsername())
             .build();
-        AccountPageActions.changeUsername(driver, parameters);
-
+        AccountPageActions.changeUsername(driver, usernameAlreadyExistsParameters);
         NotificationUtil.verifyErrorNotification(driver, "A felhasználónév foglalt.");
-    }
 
-    @Test
-    public void incorrectPassword() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
-
-        ChangeUsernameParameters parameters = ChangeUsernameParameters.valid()
+        //Incorrect password
+        ChangeUsernameParameters incorrectPasswordParameters = ChangeUsernameParameters.valid()
             .toBuilder()
-            .password(DataConstants.INVALID_PASSWORD)
+            .password(DataConstants.INCORRECT_PASSWORD)
             .build();
-        AccountPageActions.changeUsername(driver, parameters);
-
+        AccountPageActions.changeUsername(driver, incorrectPasswordParameters);
         NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
-    }
 
-    @Test
-    public void successfulUsernameChange() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
-
-        ChangeUsernameParameters parameters = ChangeUsernameParameters.valid();
-        AccountPageActions.changeUsername(driver, parameters);
-
+        //Change
+        ChangeUsernameParameters changeParameters = ChangeUsernameParameters.valid();
+        AccountPageActions.changeUsername(driver, changeParameters);
         NotificationUtil.verifySuccessNotification(driver, "Felhasználónév megváltoztatva.");
     }
 

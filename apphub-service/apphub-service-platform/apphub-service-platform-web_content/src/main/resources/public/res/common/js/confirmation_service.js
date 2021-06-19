@@ -38,7 +38,7 @@
 
                 const detailContainer = document.createElement("div");
                     detailContainer.classList.add("confirmation-dialog-detail-container");
-                    if(typeof localization.getDetail() == HTMLElement){
+                    if(localization.getDetail() instanceof Element){
                         detailContainer.appendChild(localization.getDetail());
                     }else{
                         const detailNode = document.createElement("SPAN");
@@ -125,5 +125,10 @@ function ConfirmationDialogOptions(){
 
     this.getCloseAfterChoice = function(){
         return closeAfterChoice;
+    }
+
+    this.withCloseAfterChoice = function(value){
+        closeAfterChoice = value;
+        return this;
     }
 }

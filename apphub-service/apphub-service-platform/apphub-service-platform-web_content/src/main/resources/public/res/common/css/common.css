@@ -57,6 +57,14 @@ main{
     padding: 0.5rem 0;
 }
 
+    main.headless{
+        top: 0;
+    }
+
+    main.footerless{
+        bottom: 0;
+    }
+
 footer{
     background-color: var(--background-color);
     position: absolute;
@@ -171,6 +179,10 @@ input:disabled, button:disabled, textarea:disabled, .disabled{
     float: right;
 }
 
+textarea{
+    resize: none;
+}
+
 /*================TABLE ELEMENTS==================*/
 .formatted-table th{
     font-size: 1.5rem;
@@ -200,6 +212,7 @@ input:disabled, button:disabled, textarea:disabled, .disabled{
     left: 5px;
     top: 5px;
     max-width: calc(100vw - 10px);
+    z-index: 999;
 }
 
     .notification-message-wrapper{
@@ -238,6 +251,14 @@ input:disabled, button:disabled, textarea:disabled, .disabled{
     visibility: hidden;
 }
 
+.red{
+    color: red;
+}
+
+.nowrap{
+    white-space: nowrap;
+}
+
 .spinner{
     position: fixed;
     top: 0;
@@ -258,6 +279,7 @@ input:disabled, button:disabled, textarea:disabled, .disabled{
 }
 
     .confirmation-dialog-content-wrapper{
+        background: black;
         position: absolute;
         top: 20vh;
         left: 20vw;

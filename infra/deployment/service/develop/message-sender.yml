@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: message-sender
+  labels:
+    app: message-sender
+    type: spring-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: message-sender
+  template:
+    metadata:
+      labels:
+        serviceType: spring-app
+        name: message-sender
+    spec:
+      containers:
+        - name: message-sender
+          image: saphyra/apphub-service-platform-message_sender:latest
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Never
+          livenessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 4
+          resources:
+            limits:
+              memory: 500Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: message-sender
+  labels:
+    app: message-sender
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+  selector:
+    name: message-sender

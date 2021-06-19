@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.service.notebook;
 
-import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Optional;

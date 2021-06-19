@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service;
 
 import com.github.saphyra.apphub.api.user.client.UserAuthenticationApiClient;
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
-import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ public class AccessTokenQueryService {
         try {
             return Optional.of(authenticationApi.getAccessTokenById(accessTokenId, commonConfigProperties.getDefaultLocale()));
         } catch (Exception e) {
-            log.warn("Failed to query accessToken by accessTokenId {}: {}", accessTokenId, e.getMessage());
+            log.debug("Failed to query accessToken by accessTokenId {}: {}", accessTokenId, e.getMessage());
             return Optional.empty();
         }
     }

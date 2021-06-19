@@ -1,19 +1,18 @@
 package com.github.saphyra.apphub.service.user.data.service.validator;
 
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
-import com.github.saphyra.apphub.lib.exception.ConflictException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
@@ -34,20 +33,14 @@ public class EmailValidatorTest {
     public void nullEmail() {
         Throwable ex = catchThrowable(() -> underTest.validateEmail(null));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams().get("email")).isEqualTo("must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "email", "must not be null");
     }
 
     @Test
     public void invalidEmail() {
         Throwable ex = catchThrowable(() -> underTest.validateEmail("asd"));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams().get("email")).isEqualTo("invalid format");
+        ExceptionValidator.validateInvalidParam(ex, "email", "invalid format");
     }
 
     @Test
@@ -56,9 +49,7 @@ public class EmailValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateEmail(EMAIL));
 
-        assertThat(ex).isInstanceOf(ConflictException.class);
-        ConflictException exception = (ConflictException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.EMAIL_ALREADY_EXISTS.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.CONFLICT, ErrorCode.EMAIL_ALREADY_EXISTS);
     }
 
     @Test

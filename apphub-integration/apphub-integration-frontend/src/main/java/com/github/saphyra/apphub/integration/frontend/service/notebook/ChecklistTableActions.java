@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.service.notebook;
 
-import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.model.notebook.ChecklistTableRow;
 import com.github.saphyra.apphub.integration.frontend.service.common.CommonPageActions;
 import lombok.extern.slf4j.Slf4j;

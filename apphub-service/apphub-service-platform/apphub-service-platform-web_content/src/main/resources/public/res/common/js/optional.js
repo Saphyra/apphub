@@ -1,9 +1,18 @@
 function Optional(obj){
     const value = obj;
 
-    this.ifPresent = function(consumer){
+    this.ifPresent = function(consumer, fallBack){
         if(this.isPresent()){
             consumer(value);
+        }else if(fallBack){
+            fallBack();
+        }
+        return this;
+    }
+
+    this.ifNotPresent = function(func){
+        if(!this.isPresent()){
+            func();
         }
     }
 

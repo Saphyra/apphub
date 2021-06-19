@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.UnprocessableEntityException;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
@@ -10,6 +8,7 @@ import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoinDao;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRowDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist_table.ChecklistTableRowFactory;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -19,7 +18,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -60,9 +58,7 @@ public class ConvertTableToChecklistTableServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.convert(LIST_ITEM_ID));
 
-        assertThat(ex).isInstanceOf(UnprocessableEntityException.class);
-        UnprocessableEntityException exception = (UnprocessableEntityException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_TYPE.name());
+        ExceptionValidator.validateInvalidType(ex);
     }
 
     @Test

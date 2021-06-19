@@ -1,8 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.UnprocessableEntityException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
@@ -31,7 +29,7 @@ public class ConvertTableToChecklistTableService {
         ListItem listItem = listItemDao.findByIdValidated(listItemId);
 
         if (listItem.getType() != ListItemType.TABLE) {
-            throw new UnprocessableEntityException(new ErrorMessage(ErrorCode.INVALID_TYPE.name()), listItemId + " is not a table, it is " + listItem.getType());
+            throw ExceptionFactory.invalidType(listItemId + " is not a table, it is " + listItem.getType());
         }
 
         listItem.setType(ListItemType.CHECKLIST_TABLE);

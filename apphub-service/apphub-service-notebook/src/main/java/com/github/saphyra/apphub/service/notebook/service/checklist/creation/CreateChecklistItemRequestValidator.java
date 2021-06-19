@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist.creation;
 
 import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.service.ListItemRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemNodeRequestValidator;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +18,7 @@ class CreateChecklistItemRequestValidator {
     void validate(CreateChecklistItemRequest request) {
         listItemRequestValidator.validate(request.getTitle(), request.getParent());
         if (isNull(request.getNodes())) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "nodes", "must not be null"), "Nodes must not be empty.");
+            throw ExceptionFactory.invalidParam("nodes", "must not be null");
         }
 
         request.getNodes()

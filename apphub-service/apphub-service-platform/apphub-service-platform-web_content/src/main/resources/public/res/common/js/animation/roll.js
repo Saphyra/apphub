@@ -3,6 +3,8 @@
         scriptLoader.loadScript("/res/common/js/animation/domutil.js");
         this.rollInHorizontal = rollInHorizontal;
         this.rollOutHorizontal = rollOutHorizontal;
+
+        this.rollInVertical = rollInVertical;
     }
     
     /*
@@ -29,12 +31,12 @@
                             element.style.width = actualWidth + "px";
                             if(actualWidth >= width){
                                 clearInterval(interval);
-                                resolve()
+                                resolve();
                             }
                         }catch(err){
                             const message = arguments.callee.name + " - " + err.name + ": " + err.message;
                             logService.log(message, "error");
-                            reject()
+                            reject();
                         }
                     }, timeout);
                 });
@@ -70,5 +72,22 @@
             const message = arguments.callee.name + " - " + err.name + ": " + err.message;
             logService.log(message, "error");
         }
+    }
+
+    function rollInVertical(element, container, time){
+        const height = DOMUtil.getElementHeight(element, container);
+            element.style.overflow = "hidden";
+        container.appendChild(element);
+
+        const actualHeight = element.offsetHeight;
+        $(element).height(0);
+
+        return new Promise(function(resolve, reject){
+            $(element).animate(
+                {height: actualHeight},
+                time,
+                function(){resolve()}
+             );
+        });
     }
 })();

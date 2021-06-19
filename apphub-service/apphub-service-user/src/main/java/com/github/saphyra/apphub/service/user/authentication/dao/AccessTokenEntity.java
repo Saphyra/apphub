@@ -22,4 +22,5 @@ class AccessTokenEntity {
     private String userId;
     private boolean persistent;
     private LocalDateTime lastAccess;
+    private String lastVisitedPage;
 }

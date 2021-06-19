@@ -13,9 +13,13 @@
 
     window.log = window.logService;
 
-    function logToConsole(message){
+    function logToConsole(message, o){
         if(isConsoleEnabled){
-            console.log(message);
+            if(o == undefined){
+                console.log(message);
+            }else{
+                console.log(message, o);
+            }
         }
     }
     
@@ -165,7 +169,7 @@
             
             function createTextNode(message){
                 const element = document.createElement("SPAN");
-                    element.innerHTML = message;
+                    element.innerText = message;
                 return element;
             }
             
@@ -189,7 +193,7 @@
                             line.appendChild(document.createTextNode(key + ": "));
                             line.appendChild(parseObject(elem));
                         }else{
-                            line.innerHTML = key + ": " + elem;
+                            line.innerText = key + ": " + elem;
                         }
                     element.appendChild(line);
                 }

@@ -2,12 +2,13 @@ package com.github.saphyra.apphub.integration.frontend.service.modules;
 
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.frontend.model.modules.Category;
 import com.github.saphyra.apphub.integration.frontend.model.modules.Favorite;
 import com.github.saphyra.apphub.integration.frontend.model.modules.Module;
 import com.github.saphyra.apphub.integration.frontend.model.modules.ModuleLocation;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -20,13 +21,14 @@ import java.util.stream.Collectors;
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class ModulesPageActions {
     public static void logout(WebDriver driver) {
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.MODULES_PAGE));
 
         ModulesPage.logoutButton(driver).click();
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.WEB_ROOT)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE)))
             .assertTrue();
 
         NotificationUtil.verifySuccessNotification(driver, "Sikeres kijelentkezés.");
@@ -59,6 +61,7 @@ public class ModulesPageActions {
     }
 
     public static void openModule(WebDriver driver, ModuleLocation moduleLocation) {
+        log.info("Opening module {}", moduleLocation);
         String modulesPageUrl = UrlFactory.create(Endpoints.MODULES_PAGE);
         assertThat(driver.getCurrentUrl()).isEqualTo(modulesPageUrl);
 
@@ -67,9 +70,8 @@ public class ModulesPageActions {
             .open();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> !driver.getCurrentUrl().equals(modulesPageUrl))
-            .assertTrue();
-
+            .until(() -> moduleLocation.pageLoaded(driver))
+            .assertTrue(String.format("Failed to open module %s. Current url: %s", moduleLocation, driver.getCurrentUrl()));
     }
 
     public static Optional<Module> getModule(WebDriver driver, ModuleLocation moduleLocation) {

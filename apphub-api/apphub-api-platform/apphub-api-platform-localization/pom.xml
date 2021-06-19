@@ -23,7 +23,6 @@
     <build>
     </build>
     <modules>
-        <module>apphub-api-platform-localization-model</module>
         <module>apphub-api-platform-localization-server</module>
         <module>apphub-api-platform-localization-client</module>
     </modules>

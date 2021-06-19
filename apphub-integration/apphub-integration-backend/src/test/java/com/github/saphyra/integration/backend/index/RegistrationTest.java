@@ -1,159 +1,84 @@
 package com.github.saphyra.integration.backend.index;
 
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.common.model.RegistrationRequest;
 import io.restassured.response.Response;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_PASSWORD_TOO_LONG;
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_PASSWORD_TOO_SHORT;
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_USERNAME_ALREADY_EXISTS;
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_USERNAME_TOO_LONG;
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_USERNAME_TOO_SHORT;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyBadRequest;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyErrorResponse;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RegistrationTest extends TestBase {
-    @DataProvider(name = "localeDataProvider", parallel = true)
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void register_emailInvalid(Language locale) {
-        RegistrationRequest registrationRequest = RegistrationParameters.invalidEmailParameters()
+public class RegistrationTest extends BackEndTest {
+    @Test(dataProvider = "languageDataProvider")
+    public void register(Language language) {
+        //Invalid e-mail
+        RegistrationRequest invalidEmailRequest = RegistrationParameters.invalidEmailParameters()
             .toRegistrationRequest();
+        Response invalidEmailResponse = IndexPageActions.getRegistrationResponse(language, invalidEmailRequest);
+        verifyInvalidParam(language, invalidEmailResponse, "email", "invalid format");
 
-        Response response = IndexPageActions.getRegistrationResponse(locale, registrationRequest);
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.ERROR_CODE_INVALID_PARAM));
-        assertThat(errorResponse.getParams().get("email")).isEqualTo("invalid format");
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void register_emailAlreadyExists(Language locale) {
-        RegistrationRequest existingEmailRegistrationRequest = RegistrationParameters.validParameters()
+        //Username too short
+        RegistrationRequest usernameTooShortRequest = RegistrationParameters.tooShortUsernameParameters()
             .toRegistrationRequest();
-        IndexPageActions.registerUser(locale, existingEmailRegistrationRequest);
+        Response usernameTooShortResponse = IndexPageActions.getRegistrationResponse(language, usernameTooShortRequest);
+        verifyBadRequest(language, usernameTooShortResponse, ErrorCode.USERNAME_TOO_SHORT);
 
-        RegistrationRequest registrationRequest = RegistrationParameters.validParameters()
+        //Username too long
+        RegistrationRequest usernameTooLongRequest = RegistrationParameters.tooLongUsernameParameters()
+            .toRegistrationRequest();
+        Response usernameTooLongResponse = IndexPageActions.getRegistrationResponse(language, usernameTooLongRequest);
+        verifyBadRequest(language, usernameTooLongResponse, ErrorCode.USERNAME_TOO_LONG);
+
+        //Password too short
+        RegistrationRequest passwordTooShortRequest = RegistrationParameters.tooShortPasswordParameters()
+            .toRegistrationRequest();
+        Response passwordTooShortResponse = IndexPageActions.getRegistrationResponse(language, passwordTooShortRequest);
+        verifyBadRequest(language, passwordTooShortResponse, ErrorCode.PASSWORD_TOO_SHORT);
+
+        //Password too long
+        RegistrationRequest passwordTooLongRequest = RegistrationParameters.tooLongPasswordParameters()
+            .toRegistrationRequest();
+        Response passwordTooLongResponse = IndexPageActions.getRegistrationResponse(language, passwordTooLongRequest);
+        verifyBadRequest(language, passwordTooLongResponse, ErrorCode.PASSWORD_TOO_LONG);
+
+        //Existing e-mail
+        RegistrationRequest existingUserRequest = RegistrationParameters.validParameters()
+            .toRegistrationRequest();
+        IndexPageActions.registerUser(language, existingUserRequest);
+
+        RegistrationRequest existingEmailRequest = RegistrationParameters.validParameters()
             .toBuilder()
-            .email(existingEmailRegistrationRequest.getEmail())
+            .email(existingUserRequest.getEmail())
             .build()
             .toRegistrationRequest();
+        Response existingEmailResponse = IndexPageActions.getRegistrationResponse(language, existingEmailRequest);
+        verifyErrorResponse(language, existingEmailResponse, 409, ErrorCode.EMAIL_ALREADY_EXISTS);
 
-        Response response = IndexPageActions.getRegistrationResponse(locale, registrationRequest);
-
-        assertThat(response.getStatusCode()).isEqualTo(409);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.ERROR_CODE_EMAIL_ALREADY_IN_USE));
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.EMAIL_ALREADY_EXISTS.name());
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void register_usernameTooShort(Language locale) {
-        RegistrationRequest registrationRequest = RegistrationParameters.tooShortUsernameParameters()
-            .toRegistrationRequest();
-
-        Response response = IndexPageActions.getRegistrationResponse(locale, registrationRequest);
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USERNAME_TOO_SHORT.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_USERNAME_TOO_SHORT));
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void register_usernameTooLong(Language locale) {
-        RegistrationRequest registrationRequest = RegistrationParameters.tooLongUsernameParameters()
-            .toRegistrationRequest();
-
-        Response response = IndexPageActions.getRegistrationResponse(locale, registrationRequest);
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USERNAME_TOO_LONG.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_USERNAME_TOO_LONG));
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void register_usernameAlreadyExists(Language locale) {
-        RegistrationRequest existingEmailRegistrationRequest = RegistrationParameters.validParameters()
-            .toRegistrationRequest();
-        IndexPageActions.registerUser(locale, existingEmailRegistrationRequest);
-
-        RegistrationRequest registrationRequest = RegistrationParameters.validParameters()
+        //Existing username
+        RegistrationRequest existingUsernameRequest = RegistrationParameters.validParameters()
             .toBuilder()
-            .username(existingEmailRegistrationRequest.getUsername())
+            .username(existingUserRequest.getUsername())
             .build()
             .toRegistrationRequest();
+        Response existingUsernameResponse = IndexPageActions.getRegistrationResponse(language, existingUsernameRequest);
+        verifyErrorResponse(language, existingUsernameResponse, 409, ErrorCode.USERNAME_ALREADY_EXISTS);
 
-        Response response = IndexPageActions.getRegistrationResponse(locale, registrationRequest);
-
-        assertThat(response.getStatusCode()).isEqualTo(409);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_USERNAME_ALREADY_EXISTS));
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.USERNAME_ALREADY_EXISTS.name());
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void register_passwordTooShort(Language locale) {
-        RegistrationRequest registrationRequest = RegistrationParameters.tooShortPasswordParameters()
-            .toRegistrationRequest();
-
-        Response response = IndexPageActions.getRegistrationResponse(locale, registrationRequest);
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_SHORT.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_PASSWORD_TOO_SHORT));
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void register_passwordTooLong(Language locale) {
-        RegistrationRequest registrationRequest = RegistrationParameters.tooLongPasswordParameters()
-            .toRegistrationRequest();
-
-        Response response = IndexPageActions.getRegistrationResponse(locale, registrationRequest);
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.PASSWORD_TOO_LONG.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, ERROR_CODE_PASSWORD_TOO_LONG));
-    }
-
-    @Test
-    public void successfulRegistration() {
-        Language locale = Language.HUNGARIAN;
-
+        //Successful registration
         RegistrationRequest registrationRequest = RegistrationParameters.validParameters()
             .toRegistrationRequest();
-        Response response = IndexPageActions.getRegistrationResponse(locale, registrationRequest);
-
+        Response response = IndexPageActions.getRegistrationResponse(language, registrationRequest);
         assertThat(response.getStatusCode()).isEqualTo(200);
-
         List<String> roles = DatabaseUtil.getRolesByUserId(DatabaseUtil.getUserIdByEmail(registrationRequest.getEmail()));
-        assertThat(roles).containsExactlyInAnyOrder(Constants.ROLE_NOTEBOOK);
+        assertThat(roles).containsExactlyInAnyOrder(Constants.ROLE_NOTEBOOK, Constants.ROLE_SKYXPLORE);
     }
 }

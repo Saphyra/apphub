@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.lib.common_util;
 
 import com.github.saphyra.apphub.lib.common_util.converter.Converter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Slf4j
 public abstract class AbstractDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRepository<ENTITY, ID>> {
     protected final Converter<ENTITY, DOMAIN> converter;
     protected final REPOSITORY repository;
@@ -26,7 +28,11 @@ public abstract class AbstractDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRep
     }
 
     public void deleteById(ID id) {
-        repository.deleteById(id);
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+        } else {
+            log.debug("No record to delete with id " + id);
+        }
     }
 
     public List<DOMAIN> findAll() {
@@ -44,7 +50,7 @@ public abstract class AbstractDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRep
     }
 
     public Optional<DOMAIN> findById(ID id) {
-        return repository.findById(id).map(converter::convertEntity);
+        return converter.convertEntity(repository.findById(id));
     }
 
     public void save(DOMAIN domain) {

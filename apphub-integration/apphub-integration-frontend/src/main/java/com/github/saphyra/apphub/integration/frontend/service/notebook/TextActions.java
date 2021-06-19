@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.service.notebook;
 
-import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -76,7 +76,7 @@ public class TextActions {
             .assertTrue();
     }
 
-    public static void allowEditing(WebDriver driver) {
+    public static void enableEditing(WebDriver driver) {
         assertThat(isViewTextWindowOpened(driver)).isTrue();
         if (!isEditingEnabled(driver)) {
             NotebookPage.editTextButton(driver).click();

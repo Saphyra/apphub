@@ -35,7 +35,8 @@ class EventProcessorRegisterService {
                 eventGatewayApi.registerProcessor(registerProcessorRequest);
                 return;
             } catch (RuntimeException e) {
-                log.warn("Registering eventProcessor {} failed for tryCount {}.", registerProcessorRequest, tryCount, e);
+                log.debug("Registering eventProcessor {} failed for tryCount {}.", registerProcessorRequest, tryCount, e);
+                log.warn("Registering eventProcessor {} failed for tryCount {}.", registerProcessorRequest, tryCount);
                 ex = e;
                 try {
                     Thread.sleep(eventProcessorProperties.getRegistrationFailureRetryDelay());

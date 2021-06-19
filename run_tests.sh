@@ -1,13 +1,14 @@
 NAMESPACE_NAME=${1:-develop}
 HEADLESS=${2:-true}
+DISABLED_GROUPS=${3:-}
 
 SERVER_PORT=$RANDOM
 DATABASE_PORT=$RANDOM
-kubectl port-forward deployment/main-gateway $SERVER_PORT:8080 -n "$NAMESPACE_NAME" &
-kubectl port-forward deployment/postgres $DATABASE_PORT:5432 -n "$NAMESPACE_NAME" &
+start kubectl port-forward deployment/main-gateway $SERVER_PORT:8080 -n "$NAMESPACE_NAME"
+start kubectl port-forward deployment/postgres $DATABASE_PORT:5432 -n "$NAMESPACE_NAME"
 
 cd apphub-integration || exit
-mvn -DargLine="-DserverPort=$SERVER_PORT -DdatabasePort=$DATABASE_PORT -Dheadless=$HEADLESS" clean test
+mvn -DargLine="-DserverPort=$SERVER_PORT -DdatabasePort=$DATABASE_PORT -Dheadless=$HEADLESS -DpreCreateDrivers=true -DretryEnabled=true -DrestLoggingEnabled=false -DdisabledGroups=$DISABLED_GROUPS" clean test
 if [[ "$TEST_RESULT" -ne 0 ]]; then
   echo "Tests failed"
 else

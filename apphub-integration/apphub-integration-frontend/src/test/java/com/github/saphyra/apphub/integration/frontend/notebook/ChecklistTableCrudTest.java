@@ -40,297 +40,31 @@ public class ChecklistTableCrudTest extends SeleniumTest {
     private static final String CATEGORY_TITLE_2 = "category-title-2";
 
     @Test
-    public void createChecklistTable_blankTitle() {
+    public void checklistTableCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        ChecklistTableActions.openCreateChecklistTableWindow(driver);
-        ChecklistTableActions.submitCreateChecklistTableForm(driver);
-
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
-        assertThat(ChecklistTableActions.isCreateChecklistTableWindowDisplayed(driver)).isTrue();
-    }
-
-    @Test
-    public void createChecklistTable_hasBlankColumnName() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        ChecklistTableActions.openCreateChecklistTableWindow(driver);
-        ChecklistTableActions.fillNewChecklistTableTitle(driver, TABLE_TITLE);
-        ChecklistTableActions.addColumnToNewChecklistTable(driver);
-        ChecklistTableActions.fillColumnName(driver, 0, COLUMN_NAME_1);
-        ChecklistTableActions.submitCreateChecklistTableForm(driver);
-
-        NotificationUtil.verifyErrorNotification(driver, "Az oszlop neve nem lehet üres.");
-        assertThat(ChecklistTableActions.isCreateChecklistTableWindowDisplayed(driver)).isTrue();
-    }
-
-    @Test
-    public void createChecklistTable() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        CategoryActions.createCategory(driver, CATEGORY_TITLE_1);
-
-        ChecklistTableActions.openCreateChecklistTableWindow(driver);
-        ChecklistTableActions.fillNewChecklistTableTitle(driver, TABLE_TITLE);
-        ChecklistTableActions.selectCategoryForNewChecklistTable(driver, CATEGORY_TITLE_1);
-        ChecklistTableActions.addColumnToNewChecklistTable(driver);
-        ChecklistTableActions.fillColumnName(driver, 0, COLUMN_NAME_1);
-        ChecklistTableActions.fillColumnName(driver, 1, COLUMN_NAME_2);
-        ChecklistTableActions.submitCreateChecklistTableForm(driver);
-
-        NotificationUtil.verifySuccessNotification(driver, "Lista-táblázat elmentve.");
-
-        CategoryActions.openCategory(driver, CATEGORY_TITLE_1);
-
-        List<ListItemDetailsItem> detailedListItems = DetailedListActions.getDetailedListItems(driver);
-        assertThat(detailedListItems).hasSize(1);
-        ListItemDetailsItem textItem = detailedListItems.get(0);
-        assertThat(textItem.getTitle()).isEqualTo(TABLE_TITLE);
-        assertThat(textItem.getType()).isEqualTo(ListItemType.CHECKLIST_TABLE);
-    }
-
-    @Test
-    public void editChecklistTable_blankTitle() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        ChecklistTableActions.createChecklistTable(
-            driver,
-            TABLE_TITLE,
-            Arrays.asList(COLUMN_NAME_1, COLUMN_NAME_2),
-            Arrays.asList(
-                new ChecklistTableRow(true, Arrays.asList(COLUMN_1_1, COLUMN_1_2)),
-                new ChecklistTableRow(false, Arrays.asList(COLUMN_2_1, COLUMN_2_2))
-            )
-        );
-
-        ChecklistTableActions.openChecklistTable(driver, TABLE_TITLE);
-
-        ChecklistTableActions.enableEditing(driver);
-        ChecklistTableActions.editChecklistTableTitle(driver, "");
-        ChecklistTableActions.saveChanges(driver);
-
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
-        assertThat(ChecklistTableActions.isEditingEnabled(driver)).isTrue();
-    }
-
-    @Test
-    public void editChecklistTable_hasBlankColumnName() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        ChecklistTableActions.createChecklistTable(
-            driver,
-            TABLE_TITLE,
-            Arrays.asList(COLUMN_NAME_1, COLUMN_NAME_2),
-            Arrays.asList(
-                new ChecklistTableRow(true, Arrays.asList(COLUMN_1_1, COLUMN_1_2)),
-                new ChecklistTableRow(false, Arrays.asList(COLUMN_2_1, COLUMN_2_2))
-            )
-        );
-
-        ChecklistTableActions.openChecklistTable(driver, TABLE_TITLE);
-
-        ChecklistTableActions.enableEditing(driver);
-
-        ChecklistTableActions.editColumnName(driver, 0, "");
-
-        ChecklistTableActions.saveChanges(driver);
-
-        NotificationUtil.verifyErrorNotification(driver, "Az oszlop neve nem lehet üres.");
-        assertThat(ChecklistTableActions.isEditingEnabled(driver)).isTrue();
-    }
-
-    @Test
-    public void editChecklistTable_discard() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        ChecklistTableActions.createChecklistTable(
-            driver,
-            TABLE_TITLE,
-            Arrays.asList(COLUMN_NAME_1, COLUMN_NAME_2),
-            Arrays.asList(
-                new ChecklistTableRow(true, Arrays.asList(COLUMN_1_1, COLUMN_1_2)),
-                new ChecklistTableRow(false, Arrays.asList(COLUMN_2_1, COLUMN_2_2))
-            )
-        );
-
-        ChecklistTableActions.openChecklistTable(driver, TABLE_TITLE);
-
-        ChecklistTableActions.editChecklistTable(
-            driver,
-            "asd",
-            Arrays.asList("asd", "asd"),
-            Arrays.asList(
-                new ChecklistTableRow(false, Arrays.asList(COLUMN_1_1, COLUMN_1_2)),
-                new ChecklistTableRow(true, Arrays.asList(COLUMN_2_1, COLUMN_2_2))
-            )
-        );
-
-        ChecklistTableActions.discardChanges(driver);
-        ChecklistTableActions.verifyViewChecklistTable(
-            driver,
-            TABLE_TITLE,
-            Arrays.asList(COLUMN_NAME_1, COLUMN_NAME_2),
-            Arrays.asList(
-                new ChecklistTableRow(true, Arrays.asList(COLUMN_1_1, COLUMN_1_2)),
-                new ChecklistTableRow(false, Arrays.asList(COLUMN_2_1, COLUMN_2_2))
-            )
-        );
-    }
-
-    @Test
-    public void editTable() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        ChecklistTableActions.createChecklistTable(
-            driver,
-            TABLE_TITLE,
-            Arrays.asList(COLUMN_NAME_1, COLUMN_NAME_2),
-            Arrays.asList(
-                new ChecklistTableRow(true, Arrays.asList(COLUMN_1_1, COLUMN_1_2)),
-                new ChecklistTableRow(false, Arrays.asList(COLUMN_2_1, COLUMN_2_2))
-            )
-        );
-
-        ChecklistTableActions.openChecklistTable(driver, TABLE_TITLE);
-        ChecklistTableActions.enableEditing(driver);
-
-        ChecklistTableActions.editChecklistTableTitle(driver, NEW_TABLE_TITLE);
-
-        ChecklistTableActions.addColumnToEditChecklistTable(driver);
-        ChecklistTableActions.editColumnName(driver, 2, COLUMN_NAME_3);
-
-        ChecklistTableActions.addRowToEditChecklistTable(driver);
-
-        ChecklistTableActions.removeColumnFromEditChecklistTable(driver, 1);
-        ChecklistTableActions.removeRowFromEditChecklistTable(driver, 1);
-
-        ChecklistTableActions.editColumnValue(driver, 0, 0, COLUMN_1_1_NEW);
-        ChecklistTableActions.editColumnValue(driver, 0, 1, COLUMN_1_2_NEW);
-        ChecklistTableActions.editColumnValue(driver, 1, 0, COLUMN_2_1_NEW);
-        ChecklistTableActions.editColumnValue(driver, 1, 1, COLUMN_2_2_NEW);
-
-        ChecklistTableActions.viewChecklistTableSetRowStatus(driver, 0, false);
-        ChecklistTableActions.viewChecklistTableSetRowStatus(driver, 1, true);
-
-        ChecklistTableActions.moveColumnLeft(driver, 1);
-        ChecklistTableActions.moveRowUp(driver, 1);
-
-        ChecklistTableActions.saveChanges(driver);
-
-        NotificationUtil.verifySuccessNotification(driver, "Lista-táblázat elmentve.");
-
-        ChecklistTableActions.verifyViewChecklistTable(
-            driver,
-            NEW_TABLE_TITLE,
-            Arrays.asList(COLUMN_NAME_3, COLUMN_NAME_1),
-            Arrays.asList(
-                new ChecklistTableRow(true, Arrays.asList(COLUMN_2_2_NEW, COLUMN_2_1_NEW)),
-                new ChecklistTableRow(false, Arrays.asList(COLUMN_1_2_NEW, COLUMN_1_1_NEW))
-            )
-        );
-    }
-
-    @Test
-    public void deleteChecklistTable() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        ChecklistTableActions.createChecklistTable(
-            driver,
-            TABLE_TITLE,
-            Arrays.asList(COLUMN_NAME_1, COLUMN_NAME_2),
-            Arrays.asList(
-                new ChecklistTableRow(true, Arrays.asList(COLUMN_1_1, COLUMN_1_2)),
-                new ChecklistTableRow(false, Arrays.asList(COLUMN_2_1, COLUMN_2_2))
-            )
-        );
-
-        DetailedListActions.findDetailedItem(driver, TABLE_TITLE)
-            .delete(driver);
-
-        NotificationUtil.verifySuccessNotification(driver, "Elem törölve.");
-        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
-    }
-
-    @Test
-    public void editChecklistTableAsListItem_blankTitle() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        ChecklistTableActions.createChecklistTable(
-            driver,
-            TABLE_TITLE,
-            Arrays.asList(COLUMN_NAME_1, COLUMN_NAME_2),
-            Arrays.asList(
-                new ChecklistTableRow(true, Arrays.asList(COLUMN_1_1, COLUMN_1_2)),
-                new ChecklistTableRow(false, Arrays.asList(COLUMN_2_1, COLUMN_2_2))
-            )
-        );
-
-        DetailedListActions.findDetailedItem(driver, TABLE_TITLE)
-            .edit(driver);
-
-        NotebookPageActions.fillEditListItemDialog(driver, "", null, 0);
-        NotebookPageActions.submitEditListItemDialog(driver);
-
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
-    }
-
-    @Test
-    public void editTableAsListItem() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
         CategoryActions.createCategory(driver, CATEGORY_TITLE_1);
         CategoryActions.createCategory(driver, CATEGORY_TITLE_2);
 
+        //Create - Blank title
+        ChecklistTableActions.openCreateChecklistTableWindow(driver);
+        ChecklistTableActions.submitCreateChecklistTableForm(driver);
+        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
+        assertThat(ChecklistTableActions.isCreateChecklistTableWindowDisplayed(driver)).isTrue();
+
+        //Create - Has Blank column name
+        ChecklistTableActions.fillNewChecklistTableTitle(driver, TABLE_TITLE);
+        ChecklistTableActions.addColumnToNewChecklistTable(driver);
+        ChecklistTableActions.fillColumnName(driver, 0, COLUMN_NAME_1);
+        ChecklistTableActions.submitCreateChecklistTableForm(driver);
+        NotificationUtil.verifyErrorNotification(driver, "Az oszlop neve nem lehet üres.");
+        assertThat(ChecklistTableActions.isCreateChecklistTableWindowDisplayed(driver)).isTrue();
+
+        //Create
         ChecklistTableActions.createChecklistTable(
             driver,
             TABLE_TITLE,
@@ -341,120 +75,143 @@ public class ChecklistTableCrudTest extends SeleniumTest {
             ),
             CATEGORY_TITLE_1
         );
-
         CategoryActions.openCategory(driver, CATEGORY_TITLE_1);
+        List<ListItemDetailsItem> detailedListItems = DetailedListActions.getDetailedListItems(driver);
+        assertThat(detailedListItems).hasSize(1);
+        ListItemDetailsItem tableItem = detailedListItems.get(0);
+        assertThat(tableItem.getTitle()).isEqualTo(TABLE_TITLE);
+        assertThat(tableItem.getType()).isEqualTo(ListItemType.CHECKLIST_TABLE);
 
-        DetailedListActions.findDetailedItem(driver, TABLE_TITLE)
-            .edit(driver);
+        NotificationUtil.clearNotifications(driver);
 
-        NotebookPageActions.fillEditListItemDialog(driver, NEW_TABLE_TITLE, null, 1, CATEGORY_TITLE_2);
-        NotebookPageActions.submitEditListItemDialog(driver);
-
-        NotificationUtil.verifySuccessNotification(driver, "Elem elmentve.");
-        NotebookPageActions.verifyEditListItemDialogClosed(driver);
-
-        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
-
-        DetailedListActions.up(driver);
-
-        CategoryActions.openCategory(driver, CATEGORY_TITLE_2);
-
-        DetailedListActions.findDetailedItem(driver, NEW_TABLE_TITLE);
-    }
-
-    @Test
-    public void checkChecklistTableRow() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        ChecklistTableActions.createChecklistTable(
-            driver,
-            TABLE_TITLE,
-            Arrays.asList(COLUMN_NAME_1),
-            Arrays.asList(new ChecklistTableRow(false, Arrays.asList(COLUMN_1_1)))
-        );
-
+        //Edit - Blank title
         ChecklistTableActions.openChecklistTable(driver, TABLE_TITLE);
-        ChecklistTableActions.viewChecklistTableSetRowStatus(driver, 0, true);
+        ChecklistTableActions.enableEditing(driver);
+        ChecklistTableActions.editChecklistTableTitle(driver, "");
+        ChecklistTableActions.saveChanges(driver);
+        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
+        assertThat(ChecklistTableActions.isEditingEnabled(driver)).isTrue();
 
-        ChecklistTableActions.closeWindow(driver);
+        //Edit - Has blank column name
+        ChecklistTableActions.editChecklistTableTitle(driver, NEW_TABLE_TITLE);
+        ChecklistTableActions.editColumnName(driver, 0, "");
+        ChecklistTableActions.saveChanges(driver);
+        NotificationUtil.verifyErrorNotification(driver, "Az oszlop neve nem lehet üres.");
+        assertThat(ChecklistTableActions.isEditingEnabled(driver)).isTrue();
 
-        ChecklistTableActions.openChecklistTable(driver, TABLE_TITLE);
-
-        ChecklistTableActions.verifyViewChecklistTable(
+        //Edit - Discard
+        ChecklistTableActions.editChecklistTable(
             driver,
-            TABLE_TITLE,
-            Arrays.asList(COLUMN_NAME_1),
-            Arrays.asList(new ChecklistTableRow(true, Arrays.asList(COLUMN_1_1)))
-        );
-    }
-
-    @Test
-    public void uncheckChecklistTableRow() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        ChecklistTableActions.createChecklistTable(
-            driver,
-            TABLE_TITLE,
-            Arrays.asList(COLUMN_NAME_1),
-            Arrays.asList(new ChecklistTableRow(true, Arrays.asList(COLUMN_1_1)))
-        );
-
-        ChecklistTableActions.openChecklistTable(driver, TABLE_TITLE);
-        ChecklistTableActions.viewChecklistTableSetRowStatus(driver, 0, false);
-
-        ChecklistTableActions.closeWindow(driver);
-
-        ChecklistTableActions.openChecklistTable(driver, TABLE_TITLE);
-
-        ChecklistTableActions.verifyViewChecklistTable(
-            driver,
-            TABLE_TITLE,
-            Arrays.asList(COLUMN_NAME_1),
-            Arrays.asList(new ChecklistTableRow(false, Arrays.asList(COLUMN_1_1)))
-        );
-    }
-
-    @Test
-    public void deleteCheckedItems() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        ChecklistTableActions.createChecklistTable(
-            driver,
-            TABLE_TITLE,
-            Arrays.asList(COLUMN_NAME_1),
+            "asd",
+            Arrays.asList("asd", "asd"),
             Arrays.asList(
-                new ChecklistTableRow(true, Arrays.asList(COLUMN_1_1)),
-                new ChecklistTableRow(false, Arrays.asList(COLUMN_2_1))
+                new ChecklistTableRow(false, Arrays.asList(COLUMN_1_1, COLUMN_1_2)),
+                new ChecklistTableRow(true, Arrays.asList(COLUMN_2_1, COLUMN_2_2))
+            )
+        );
+        ChecklistTableActions.discardChanges(driver);
+        ChecklistTableActions.verifyViewChecklistTable(
+            driver,
+            TABLE_TITLE,
+            Arrays.asList(COLUMN_NAME_1, COLUMN_NAME_2),
+            Arrays.asList(
+                new ChecklistTableRow(true, Arrays.asList(COLUMN_1_1, COLUMN_1_2)),
+                new ChecklistTableRow(false, Arrays.asList(COLUMN_2_1, COLUMN_2_2))
             )
         );
 
-        ChecklistTableActions.openChecklistTable(driver, TABLE_TITLE);
-        ChecklistTableActions.deleteCheckedChecklistTableItems(driver);
-
-        NotificationUtil.verifySuccessNotification(driver, "A kijelölt elemek sikeresen törölve.");
-        ChecklistTableActions.closeWindow(driver);
-        ChecklistTableActions.openChecklistTable(driver, TABLE_TITLE);
-
+        //Edit
+        ChecklistTableActions.enableEditing(driver);
+        ChecklistTableActions.editChecklistTableTitle(driver, NEW_TABLE_TITLE);
+        ChecklistTableActions.addColumnToEditChecklistTable(driver);
+        ChecklistTableActions.editColumnName(driver, 2, COLUMN_NAME_3);
+        ChecklistTableActions.addRowToEditChecklistTable(driver);
+        ChecklistTableActions.removeColumnFromEditChecklistTable(driver, 1);
+        ChecklistTableActions.removeRowFromEditChecklistTable(driver, 1);
+        ChecklistTableActions.editColumnValue(driver, 0, 0, COLUMN_1_1_NEW);
+        ChecklistTableActions.editColumnValue(driver, 0, 1, COLUMN_1_2_NEW);
+        ChecklistTableActions.editColumnValue(driver, 1, 0, COLUMN_2_1_NEW);
+        ChecklistTableActions.editColumnValue(driver, 1, 1, COLUMN_2_2_NEW);
+        ChecklistTableActions.viewChecklistTableSetRowStatus(driver, 0, false);
+        ChecklistTableActions.viewChecklistTableSetRowStatus(driver, 1, true);
+        ChecklistTableActions.moveColumnLeft(driver, 1);
+        ChecklistTableActions.moveRowUp(driver, 1);
+        ChecklistTableActions.saveChanges(driver);
+        NotificationUtil.verifySuccessNotification(driver, "Lista-táblázat elmentve.");
         ChecklistTableActions.verifyViewChecklistTable(
             driver,
-            TABLE_TITLE,
-            Arrays.asList(COLUMN_NAME_1),
-            Arrays.asList(new ChecklistTableRow(false, Arrays.asList(COLUMN_2_1)))
+            NEW_TABLE_TITLE,
+            Arrays.asList(COLUMN_NAME_3, COLUMN_NAME_1),
+            Arrays.asList(
+                new ChecklistTableRow(true, Arrays.asList(COLUMN_2_2_NEW, COLUMN_2_1_NEW)),
+                new ChecklistTableRow(false, Arrays.asList(COLUMN_1_2_NEW, COLUMN_1_1_NEW))
+            )
         );
+
+        //Check row
+        ChecklistTableActions.viewChecklistTableSetRowStatus(driver, 1, true);
+        ChecklistTableActions.closeWindow(driver);
+        ChecklistTableActions.openChecklistTable(driver, NEW_TABLE_TITLE);
+        ChecklistTableActions.verifyViewChecklistTable(
+            driver,
+            NEW_TABLE_TITLE,
+            Arrays.asList(COLUMN_NAME_3, COLUMN_NAME_1),
+            Arrays.asList(
+                new ChecklistTableRow(true, Arrays.asList(COLUMN_2_2_NEW, COLUMN_2_1_NEW)),
+                new ChecklistTableRow(true, Arrays.asList(COLUMN_1_2_NEW, COLUMN_1_1_NEW))
+            )
+        );
+
+        //Uncheck row
+        ChecklistTableActions.viewChecklistTableSetRowStatus(driver, 0, false);
+        ChecklistTableActions.closeWindow(driver);
+        ChecklistTableActions.openChecklistTable(driver, NEW_TABLE_TITLE);
+        ChecklistTableActions.verifyViewChecklistTable(
+            driver,
+            NEW_TABLE_TITLE,
+            Arrays.asList(COLUMN_NAME_3, COLUMN_NAME_1),
+            Arrays.asList(
+                new ChecklistTableRow(false, Arrays.asList(COLUMN_2_2_NEW, COLUMN_2_1_NEW)),
+                new ChecklistTableRow(true, Arrays.asList(COLUMN_1_2_NEW, COLUMN_1_1_NEW))
+            )
+        );
+
+        //Delete checked
+        ChecklistTableActions.deleteCheckedChecklistTableItems(driver);
+        NotificationUtil.verifySuccessNotification(driver, "A kijelölt elemek sikeresen törölve.");
+        ChecklistTableActions.closeWindow(driver);
+        ChecklistTableActions.openChecklistTable(driver, NEW_TABLE_TITLE);
+        ChecklistTableActions.verifyViewChecklistTable(
+            driver,
+            NEW_TABLE_TITLE,
+            Arrays.asList(COLUMN_NAME_3, COLUMN_NAME_1),
+            Arrays.asList(new ChecklistTableRow(false, Arrays.asList(COLUMN_2_2_NEW, COLUMN_2_1_NEW)))
+        );
+
+        NotificationUtil.clearNotifications(driver);
+        ChecklistTableActions.closeWindow(driver);
+
+        //Edit as listItem - Blank title
+        DetailedListActions.findDetailedItem(driver, NEW_TABLE_TITLE)
+            .edit(driver);
+        NotebookPageActions.fillEditListItemDialog(driver, "", null, 0);
+        NotebookPageActions.submitEditListItemDialog(driver);
+        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
+
+        //Edit as listItem
+        NotebookPageActions.fillEditListItemDialog(driver, TABLE_TITLE, null, 1, CATEGORY_TITLE_2);
+        NotebookPageActions.submitEditListItemDialog(driver);
+        NotificationUtil.verifySuccessNotification(driver, "Elem elmentve.");
+        NotebookPageActions.verifyEditListItemDialogClosed(driver);
+        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
+        DetailedListActions.up(driver);
+        CategoryActions.openCategory(driver, CATEGORY_TITLE_2);
+        DetailedListActions.findDetailedItem(driver, TABLE_TITLE);
+
+        //Delete
+        DetailedListActions.findDetailedItem(driver, TABLE_TITLE)
+            .delete(driver);
+        NotificationUtil.verifySuccessNotification(driver, "Elem törölve.");
+        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
     }
 }

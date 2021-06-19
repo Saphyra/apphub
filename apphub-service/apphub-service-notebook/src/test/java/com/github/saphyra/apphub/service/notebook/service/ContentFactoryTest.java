@@ -32,7 +32,7 @@ public class ContentFactoryTest {
 
     @Test
     public void create() {
-        given(idGenerator.randomUUID()).willReturn(CONTENT_ID);
+        given(idGenerator.randomUuid()).willReturn(CONTENT_ID);
         given(listItem.getListItemId()).willReturn(LIST_ITEM_ID);
         given(listItem.getUserId()).willReturn(USER_ID);
 

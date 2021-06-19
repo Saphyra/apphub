@@ -1,0 +1,26 @@
+table{
+    margin: 1rem auto;
+}
+
+    th{
+        font-size: 2rem;
+    }
+
+    .role-name{
+        text-align: right;
+        font-size: 1.5rem;
+    }
+
+    .role-enabled{
+        text-align: center;
+    }
+
+        .role-enabled input[type="checkbox"]{
+            transform: scale(1.5);
+        }
+
+.confirm-password{
+    margin: 1rem auto;
+    display: block;
+    font-size: 1.25rem;
+}

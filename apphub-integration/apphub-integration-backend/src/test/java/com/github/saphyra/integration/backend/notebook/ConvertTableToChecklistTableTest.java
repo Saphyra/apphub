@@ -1,68 +1,46 @@
 package com.github.saphyra.integration.backend.notebook;
 
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
 import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistTableResponse;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateCategoryRequest;
 import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTableRequest;
-import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
-import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_INVALID_TYPE;
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_LIST_ITEM_NOT_FOUND;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyErrorResponse;
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyListItemNotFound;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConvertTableToChecklistTableTest extends TestBase {
+public class ConvertTableToChecklistTableTest extends BackEndTest {
     private static final String TITLE = "title";
     private static final String COLUMN_NAME = "column-name";
     private static final String COLUMN_VALUE = "column-value";
 
-    @DataProvider(name = "localeDataProvider", parallel = true)
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void listItemNotFound(Language language) {
+    @Test(dataProvider = "languageDataProvider")
+    public void convertTableToChecklistTable_validation(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
-        Response response = NotebookActions.getConvertTableToChecklistTableResponse(language, accessTokenId, UUID.randomUUID());
+        //Item not found
+        Response itemNotFoundResponse = NotebookActions.getConvertTableToChecklistTableResponse(language, accessTokenId, UUID.randomUUID());
+        verifyListItemNotFound(language, itemNotFoundResponse);
 
-        assertThat(response.getStatusCode()).isEqualTo(404);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, ERROR_CODE_LIST_ITEM_NOT_FOUND));
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void invalidType(Language language) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
-
+        //Invalid type
         UUID listItemId = NotebookActions.createCategory(language, accessTokenId, CreateCategoryRequest.builder().title(TITLE).build());
-
-        Response response = NotebookActions.getConvertTableToChecklistTableResponse(language, accessTokenId, listItemId);
-
-        assertThat(response.getStatusCode()).isEqualTo(422);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_TYPE.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, ERROR_CODE_INVALID_TYPE));
+        Response invalidTypeResponse = NotebookActions.getConvertTableToChecklistTableResponse(language, accessTokenId, listItemId);
+        verifyErrorResponse(language, invalidTypeResponse, 422, ErrorCode.INVALID_TYPE);
     }
 
     @Test
-    public void convertTableToChecklistTable(){
+    public void convertTableToChecklistTable() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);

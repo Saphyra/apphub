@@ -1,16 +1,16 @@
 package com.github.saphyra.apphub.service.notebook.service.table.edition;
 
 import com.github.saphyra.apphub.api.notebook.model.request.EditTableRequest;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.KeyValuePair;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoinDao;
 import com.github.saphyra.apphub.service.notebook.service.TitleValidator;
 import com.github.saphyra.apphub.service.notebook.service.table.ColumnNameValidator;
 import com.github.saphyra.apphub.service.notebook.service.table.RowValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -54,13 +54,13 @@ class EditTableRequestValidator {
 
     private void validateTableHeadExistence(KeyValuePair<String> stringKeyValuePair) {
         if (!tableHeadDao.exists(stringKeyValuePair.getKey())) {
-            throw new NotFoundException(new ErrorMessage(ErrorCode.LIST_ITEM_NOT_FOUND.name()), "TableHead not found with id " + stringKeyValuePair.getKey());
+            throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.LIST_ITEM_NOT_FOUND, "TableHead not found with id " + stringKeyValuePair.getKey());
         }
     }
 
     private void validateTableJoinExistence(KeyValuePair<String> stringKeyValuePair) {
         if (!tableJoinDao.exists(stringKeyValuePair.getKey())) {
-            throw new NotFoundException(new ErrorMessage(ErrorCode.LIST_ITEM_NOT_FOUND.name()), "TableJoin not found with id " + stringKeyValuePair.getKey());
+            throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.LIST_ITEM_NOT_FOUND, "TableJoin not found with id " + stringKeyValuePair.getKey());
         }
     }
 }

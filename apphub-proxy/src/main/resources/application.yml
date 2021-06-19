@@ -2,16 +2,26 @@ server:
   port: ${server_port:9000}
 
 forwardedPort: ${forwarded_port:9001}
+host: localhost:${forwardedPort}
 
-zuul:
-  prefix: /
-  routes:
-    proxy:
-      path: /**
-      serviceId: proxy
-      stripPrefix: false
-      sensitiveHeaders:
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: api
+          uri: http://localhost:${forwardedPort}
+          predicates:
+            - Path=/**
+        - id: ws
+          uri: ws://localhost:${forwardedPort}
+          predicates:
+            - Path=/**
 
-proxy:
-  ribbon:
-    listOfServers: localhost:${forwardedPort}
+hystryx:
+  command:
+    default:
+      timeout:
+        enabled: true
+      isolation:
+        thread:
+          timeoutInMilliseconds: 10000

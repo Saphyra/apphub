@@ -1,7 +1,7 @@
 spring:
   cloud:
     kubernetes:
-      enabled: false #todo fix k8s config map issue
+      enabled: false
   datasource:
     username: postgres
     password: postgres
@@ -31,10 +31,21 @@ hystryx:
         enabled: true
       isolation:
         thread:
-          timeoutInMilliseconds: 60000
+          timeoutInMilliseconds: 10000
 ribbon:
-  ConnectTimeout: 60000
-  ReadTimeout: 60000
+  ConnectTimeout: 10000
+  ReadTimeout: 10000
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 30000
+        readTimeout: 30000
+
+admin-panel-error-reporter:
+  ribbon:
+    listOfServers: admin-panel:8080
 
 web-content:
   ribbon:
@@ -45,6 +56,9 @@ event-gateway:
 localization:
   ribbon:
     listOfServers: localization:8080
+message-sender:
+  ribbon:
+    listOfServers: message-sender:8080
 
 user-authentication:
   ribbon:
@@ -70,6 +84,46 @@ admin-panel:
 utils:
   ribbon:
     listOfServers: utils:8080
+
+skyxplore-data:
+  ribbon:
+    listOfServers: skyxplore-data:8080
+
+skyxplore-data-character:
+  ribbon:
+    listOfServers: skyxplore-data:8080
+
+skyxplore-data-friend:
+  ribbon:
+    listOfServers: skyxplore-data:8080
+
+skyxplore-data-game:
+  ribbon:
+    listOfServers: skyxplore-data:8080
+
+skyxplore-facade:
+  ribbon:
+    listOfServers: skyxplore-facade:8080
+
+skyxplore-lobby:
+  ribbon:
+    listOfServers: skyxplore-lobby:8080
+
+skyxplore-lobby-ws:
+  ribbon:
+    listOfServers: skyxplore-lobby:8080
+
+skyxplore-game:
+  ribbon:
+    listOfServers: skyxplore-game:8080
+
+skyxplore-game-creation:
+  ribbon:
+    listOfServers: skyxplore-game:8080
+
+skyxplore-game-ws:
+  ribbon:
+    listOfServers: skyxplore-game:8080
 
 event:
   processor:
@@ -109,3 +163,12 @@ endpoint:
       errorPage:
         path: /web/error
         method: GET
+logging:
+  level:
+    com:
+      github:
+        saphyra:
+          apphub:
+            lib:
+              security:
+                role: warn

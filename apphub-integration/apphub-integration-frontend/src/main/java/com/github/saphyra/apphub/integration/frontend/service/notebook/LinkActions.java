@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.integration.frontend.service.notebook;
 
-import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.frontend.model.notebook.ListItemDetailsItem;
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 
+import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
 import static java.util.Objects.isNull;
 
 public class LinkActions {
@@ -12,6 +12,9 @@ public class LinkActions {
         openCreateLinkWindow(driver);
         fillCreateLinkForm(driver, title, url, parents);
         submitCreateLinkForm(driver);
+        AwaitilityWrapper.createDefault()
+            .until(() -> !isCreateLinkWindowDisplayed(driver))
+            .assertTrue("Failed creating link");
     }
 
     public static void openCreateLinkWindow(WebDriver driver) {
@@ -24,8 +27,8 @@ public class LinkActions {
     }
 
     public static void fillCreateLinkForm(WebDriver driver, String title, String url, String... categories) {
-        NotebookPage.createLinkTitleInput(driver).sendKeys(title);
-        NotebookPage.createLinkUrlInput(driver).sendKeys(url);
+        clearAndFill(NotebookPage.createLinkTitleInput(driver), title);
+        clearAndFill(NotebookPage.createLinkUrlInput(driver), url);
         selectCategoryForNewLink(driver, categories);
     }
 
@@ -48,10 +51,5 @@ public class LinkActions {
 
     public static boolean isCreateLinkWindowDisplayed(WebDriver driver) {
         return NotebookPage.createLinkWindow(driver).isDisplayed();
-    }
-
-    public static String extractUrl(ListItemDetailsItem item) {
-
-        return null;
     }
 }

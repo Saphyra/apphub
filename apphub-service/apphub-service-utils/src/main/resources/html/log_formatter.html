@@ -17,41 +17,50 @@
     </HEADER>
 
     <MAIN>
-        <TEXTAREA id="input"></TEXTAREA>
+        <DIV id="input-container">
+            <TEXTAREA id="input"></TEXTAREA>
 
-        <DIV id="format-button" class="button" onclick="formatController.format()"></DIV>
+            <DIV id="format-button" class="button" onclick="formatController.format()"></DIV>
 
-        <DIV id="order-by-buttons-container">
-            <SELECT id="order-type">
-                <OPTION value="asc" id="order-type-asc"></OPTION>
-                <OPTION value="desc" id="order-type-desc"></OPTION>
-            </SELECT>
+            <DIV id="order-by-buttons-container" class="nowrap">
+                <SPAN id="result-view-wrapper">
+                    <LABEL><INPUT type="radio" name="view" value="json" checked disabled><SPAN id="result-view-json"></SPAN></LABEL>
+                    <LABEL><INPUT type="radio" name="view" value="table" disabled><SPAN id="result-view-table"></SPAN></LABEL>
+                </SPAN>
 
-            <BUTTON id="order-original" onclick="formatController.orderOriginal()"></BUTTON>
+                <SELECT id="order-type">
+                    <OPTION value="asc" id="order-type-asc"></OPTION>
+                    <OPTION value="desc" id="order-type-desc"></OPTION>
+                </SELECT>
 
-            <SPAN id="order-buttons"></SPAN>
+                <BUTTON id="order-original" onclick="formatController.orderOriginal()"></BUTTON>
+
+                <SPAN id="order-buttons"></SPAN>
+            </DIV>
+
+            <DIV id="display-field-buttons-container" class="nowrap"></DIV>
+
+            <DIV id="filter-container" class="nowrap">
+                <SELECT id="filter-parameter-select" disabled></SELECT>
+
+                <SELECT id="filter-search-operation" disabled>
+                    <OPTION value="IS">Is</OPTION>
+                    <OPTION value="IS_NOT">Is not</OPTION>
+                    <OPTION value="EXISTS">Exists</OPTION>
+                    <OPTION value="DOES_NOT_EXIST">Does not exist</OPTION>
+                </SELECT>
+
+                <INPUT type="text" id="filter-input" disabled>
+
+                <BUTTON id="add-filter-rule-button" onclick="formatController.addRule()" disabled></BUTTON>
+            </DIV>
+
+            <DIV id="filter-rule-container"></DIV>
         </DIV>
 
-        <DIV id="display-field-buttons-container"></DIV>
-
-        <DIV id="filter-container">
-            <SELECT id="filter-parameter-select" disabled></SELECT>
-
-            <SELECT id="filter-search-operation" disabled>
-                <OPTION value="IS">Is</OPTION>
-                <OPTION value="IS_NOT">Is not</OPTION>
-                <OPTION value="EXISTS">Exists</OPTION>
-                <OPTION value="DOES_NOT_EXIST">Does not exist</OPTION>
-            </SELECT>
-
-            <INPUT type="text" id="filter-input" disabled>
-
-            <BUTTON id="add-filter-rule-button" onclick="formatController.addRule()" disabled></BUTTON>
+        <DIV id="result-container">
+            <PRE id="result" class="content-selectable"></PRE>
         </DIV>
-
-        <DIV id="filter-rule-container"></DIV>
-
-        <PRE id="result" class="content-selectable"></PRE>
     </MAIN>
 
     <FOOTER>

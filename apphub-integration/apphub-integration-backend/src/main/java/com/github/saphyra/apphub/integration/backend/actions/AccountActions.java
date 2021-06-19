@@ -27,12 +27,12 @@ public class AccountActions {
     public static Response getChangeLanguageResponse(Language locale, UUID accessTokenId, String newLocale) {
         return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
             .body(new OneParamRequest<>(newLocale))
-            .post(UrlFactory.create(Endpoints.CHANGE_LANGUAGE));
+            .post(UrlFactory.create(Endpoints.ACCOUNT_CHANGE_LANGUAGE));
     }
 
     public static List<LanguageResponse> getLanguages(Language language, UUID accessTokenId) {
         Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
-            .get(UrlFactory.create(Endpoints.GET_LANGUAGES));
+            .get(UrlFactory.create(Endpoints.ACCOUNT_GET_LANGUAGES));
 
         TypeReference<List<LanguageResponse>> ref = new TypeReference<List<LanguageResponse>>() {
         };
@@ -42,24 +42,30 @@ public class AccountActions {
     public static Response getChangeEmailResponse(Language language, UUID accessTokenId, ChangeEmailRequest request) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(request)
-            .post(UrlFactory.create(Endpoints.CHANGE_EMAIL));
+            .post(UrlFactory.create(Endpoints.ACCOUNT_CHANGE_EMAIL));
     }
 
     public static Response getChangeUsernameResponse(Language locale, UUID accessTokenId, ChangeUsernameRequest request) {
         return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
             .body(request)
-            .post(UrlFactory.create(Endpoints.CHANGE_USERNAME));
+            .post(UrlFactory.create(Endpoints.ACCOUNT_CHANGE_USERNAME));
     }
 
     public static Response getChangePasswordResponse(Language locale, UUID accessTokenId, ChangePasswordRequest request) {
         return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
             .body(request)
-            .post(UrlFactory.create(Endpoints.CHANGE_PASSWORD));
+            .post(UrlFactory.create(Endpoints.ACCOUNT_CHANGE_PASSWORD));
+    }
+
+    public static void deleteAccount(Language language, UUID accessTokenId, String password) {
+        Response response = getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(password));
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
     public static Response getDeleteAccountResponse(Language locale, UUID accessTokenId, OneParamRequest<String> request) {
         return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
             .body(request)
-            .delete(UrlFactory.create(Endpoints.DELETE_ACCOUNT));
+            .delete(UrlFactory.create(Endpoints.ACCOUNT_DELETE_ACCOUNT));
     }
 }

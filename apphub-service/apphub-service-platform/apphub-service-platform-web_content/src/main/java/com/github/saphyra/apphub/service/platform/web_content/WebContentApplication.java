@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.web_content;
 
-import com.github.saphyra.apphub.lib.config.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.thymeleaf.EnableThymeLeaf;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;

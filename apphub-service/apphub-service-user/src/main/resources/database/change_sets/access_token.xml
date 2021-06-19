@@ -22,4 +22,16 @@
 
         <addPrimaryKey schemaName="apphub_user" tableName="access_token" columnNames="access_token_id" constraintName="access_token-pk"/>
     </changeSet>
+
+    <changeSet id="add-column-last_visited_page-to-access_token" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="apphub_user" tableName="access_token" columnName="last_visited_page"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="apphub_user" tableName="access_token">
+            <column name="last_visited_page" type="text"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

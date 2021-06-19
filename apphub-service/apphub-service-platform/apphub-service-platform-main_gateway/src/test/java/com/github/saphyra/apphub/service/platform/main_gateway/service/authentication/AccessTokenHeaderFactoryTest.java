@@ -23,16 +23,16 @@ public class AccessTokenHeaderFactoryTest {
 
     @Test
     public void create() {
-        InternalAccessTokenResponse response = InternalAccessTokenResponse.builder()
+        InternalAccessTokenResponse accessTokenResponse = InternalAccessTokenResponse.builder()
             .accessTokenId(ACCESS_TOKEN_ID)
             .userId(USER_ID)
             .roles(Arrays.asList(ROLE))
             .build();
 
-        AccessTokenHeader result = underTest.create(response);
+        AccessTokenHeader result = underTest.create(accessTokenResponse);
 
-        assertThat(result.getAccessTokenId()).isEqualTo(ACCESS_TOKEN_ID);
         assertThat(result.getUserId()).isEqualTo(USER_ID);
-        assertThat(result.getRoles()).isEqualTo(Arrays.asList(ROLE));
+        assertThat(result.getAccessTokenId()).isEqualTo(ACCESS_TOKEN_ID);
+        assertThat(result.getRoles()).containsExactly(ROLE);
     }
 }

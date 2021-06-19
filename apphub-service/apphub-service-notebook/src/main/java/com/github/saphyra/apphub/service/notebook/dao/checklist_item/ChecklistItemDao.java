@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.notebook.dao.checklist_item;
 
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -31,6 +31,6 @@ public class ChecklistItemDao extends AbstractDao<ChecklistItemEntity, Checklist
 
     public ChecklistItem findByIdValidated(UUID checklistItemId) {
         return findById(uuidConverter.convertDomain(checklistItemId))
-            .orElseThrow(() -> new NotFoundException(new ErrorMessage(ErrorCode.LIST_ITEM_NOT_FOUND.name()), "ChecklistItem not found with id " + checklistItemId));
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.LIST_ITEM_NOT_FOUND, "ChecklistItem not found with id " + checklistItemId));
     }
 }

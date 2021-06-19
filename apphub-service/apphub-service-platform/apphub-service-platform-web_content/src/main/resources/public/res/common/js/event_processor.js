@@ -10,6 +10,7 @@
         if(!processor || !processor instanceof EventProcessor){
             throwException("IllegalArgument", "eventProcessor is not type of EventProcessor");
         }
+        logService.logToConsole("EventProcessor registered with name " + processor.name);
         processors.push(processor);
     }
     
@@ -27,9 +28,10 @@
             const processor = processors[pindex];
             if(processor.canProcess(eventType)){
                 hasProcessor = true;
+                logService.logToConsole("Processing event " + eventType + " for EventProcessor " + processor.name);
                 setTimeout(function(){processor.process(event)}, 0);
                 if(processor.isOnceRunning()){
-                    logService.logToConsole("OnceRunning processor has run, removing from list...");
+                    logService.logToConsole("OnceRunning processor with name " + processor.name + " has run, removing from list...");
                     processors.splice(pindex, 1);
                 }
             }
@@ -44,7 +46,14 @@ function EventProcessor(canProcessCallback, processEventCallback, onceRunningPro
     const canProcess = canProcessCallback;
     const processEvent = processEventCallback;
     const onceRunning = onceRunningProcessor == null || onceRunningProcessor == undefined ? false : onceRunningProcessor;
-    
+
+    this.name = "Unknown eventProcessor";
+
+    this.setName = function(name){
+        this.name = name;
+        return this;
+    }
+
     this.canProcess = function(eventType){
         return canProcess(eventType);
     }

@@ -9,4 +9,12 @@
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
+
+    <org.apache.http level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </org.apache.http>
+
+    <io.restassured level="ERROR">
+        <appender-ref ref="STDOUT"/>
+    </io.restassured>
 </configuration>

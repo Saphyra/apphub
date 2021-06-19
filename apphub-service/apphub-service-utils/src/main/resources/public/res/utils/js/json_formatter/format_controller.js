@@ -10,7 +10,7 @@
             result.innerHTML = "";
         try{
             const obj = JSON.parse(input);
-            const formatted = JSON.stringify(obj, null, 2);
+            const formatted = JSON.stringify(obj, null, 4);
             const highlighted = syntaxHighlight(formatted)
                 .replaceAll("\\n", "<BR>")
                 .replaceAll("\\r", "")

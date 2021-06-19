@@ -126,7 +126,7 @@ public class NotebookEventControllerImplTestIt {
         SendEventRequest<DeleteAccountEvent> eventRequest = SendEventRequest.<DeleteAccountEvent>builder().payload(new DeleteAccountEvent(USER_ID)).build();
         Response response = RequestFactory.createRequest()
             .body(eventRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.DELETE_ACCOUNT_EVENT));
+            .post(UrlFactory.create(serverPort, Endpoints.EVENT_DELETE_ACCOUNT));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 

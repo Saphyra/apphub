@@ -2,9 +2,14 @@ apphub-service-platform-event_gateway
 apphub-service-platform-web_content
 apphub-service-platform-localization
 apphub-service-platform-main_gateway
+apphub-service-platform-message_sender
 apphub-service-platform-scheduler
 apphub-service-user
 apphub-service-notebook
 apphub-service-admin_panel
 apphub-service-modules
+apphub-service-skyxplore-data
+apphub-service-skyxplore-facade
+apphub-service-skyxplore-lobby
+apphub-service-skyxplore-game
 apphub-service-utils

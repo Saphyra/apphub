@@ -1,14 +1,10 @@
 package com.github.saphyra.integration.backend.index;
 
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.backend.actions.ModulesActions;
-import com.github.saphyra.apphub.integration.common.TestBase;
-import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
-import com.github.saphyra.apphub.integration.common.framework.RequestFactory;
-import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
@@ -17,136 +13,73 @@ import com.github.saphyra.apphub.integration.common.model.LoginRequest;
 import com.github.saphyra.apphub.integration.common.model.LoginResponse;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyErrorResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LoginTest extends TestBase {
-    @DataProvider(name = "localeDataProvider", parallel = true)
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void emailDoesNotExist(Language locale) {
+public class LoginTest extends BackEndTest {
+    @Test(dataProvider = "languageDataProvider")
+    public void loginAndOut(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        LoginRequest loginRequest = LoginRequest.builder()
+
+        //Unknown email
+        LoginRequest unknownEmailRequest = LoginRequest.builder()
             .email(userData.getEmail())
             .password(userData.getPassword())
             .build();
+        Response unknownEmailResponse = IndexPageActions.getLoginResponse(language, unknownEmailRequest);
+        verifyErrorResponse(language, unknownEmailResponse, 401, ErrorCode.BAD_CREDENTIALS);
 
-        Response response = IndexPageActions.getLoginResponse(locale, loginRequest);
+        //Incorrect password
+        IndexPageActions.registerUser(language, userData.toRegistrationRequest());
 
-        assertThat(response.getStatusCode()).isEqualTo(401);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.ERROR_CODE_BAD_CREDENTIALS));
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void wrongPassword(Language locale) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(locale, userData.toRegistrationRequest());
-
-        LoginRequest loginRequest = LoginRequest.builder()
+        LoginRequest incorrectPasswordRequest = LoginRequest.builder()
             .email(userData.getEmail())
             .password("asd")
             .build();
+        Response incorrectPasswordResponse = IndexPageActions.getLoginResponse(language, incorrectPasswordRequest);
+        verifyErrorResponse(language, incorrectPasswordResponse, 401, ErrorCode.BAD_CREDENTIALS);
 
-        Response response = IndexPageActions.getLoginResponse(locale, loginRequest);
-
-        assertThat(response.getStatusCode()).isEqualTo(401);
-
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.ERROR_CODE_BAD_CREDENTIALS));
-    }
-
-    @Test
-    public void successfulLogin_rememberMe() throws InterruptedException {
-        Language language = Language.HUNGARIAN;
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(language, userData.toRegistrationRequest());
-
-        LoginRequest loginRequest = LoginRequest.builder()
+        //Successful login - remember me
+        LoginRequest rememberMeLoginRequest = LoginRequest.builder()
             .email(userData.getEmail())
             .password(userData.getPassword())
             .rememberMe(true)
             .build();
 
-        LoginResponse response = IndexPageActions.getSuccessfulLoginResponse(language, loginRequest);
-        assertThat(response.getExpirationDays()).isEqualTo(365);
+        LoginResponse rememberMeLoginResponse = IndexPageActions.getSuccessfulLoginResponse(language, rememberMeLoginRequest);
+        assertThat(rememberMeLoginResponse.getExpirationDays()).isEqualTo(365);
 
         LocalDateTime newLastAccess = LocalDateTime.now().minusDays(100);
-        DatabaseUtil.updateAccessTokenLastAccess(response.getAccessTokenId(), newLastAccess);
+        DatabaseUtil.updateAccessTokenLastAccess(rememberMeLoginResponse.getAccessTokenId(), newLastAccess);
 
-        Response modulesResponse = ModulesActions.getModulesResponse(language, response.getAccessTokenId());
+        Response modulesResponse = ModulesActions.getModulesResponse(language, rememberMeLoginResponse.getAccessTokenId());
         assertThat(modulesResponse.getStatusCode()).isEqualTo(200);
-    }
 
-    @Test
-    public void successfulLogin_oneTimeLogin() {
-        Language language = Language.HUNGARIAN;
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(language, userData.toRegistrationRequest());
-
-        LoginRequest loginRequest = LoginRequest.builder()
+        //One time login
+        LoginRequest oneTimeLoginRequest = LoginRequest.builder()
             .email(userData.getEmail())
             .password(userData.getPassword())
             .rememberMe(false)
             .build();
 
-        LoginResponse response = IndexPageActions.getSuccessfulLoginResponse(language, loginRequest);
-        assertThat(response.getExpirationDays()).isNull();
-    }
+        LoginResponse oneTimeLoginResponse = IndexPageActions.getSuccessfulLoginResponse(language, oneTimeLoginRequest);
+        assertThat(oneTimeLoginResponse.getExpirationDays()).isNull();
 
-    @Test
-    public void callEndpointWithAuthHeader() {
-        Language language = Language.HUNGARIAN;
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(language, userData.toRegistrationRequest());
+        //Logout
+        UUID accessTokenId = oneTimeLoginResponse.getAccessTokenId();
+        ModulesActions.logout(language, accessTokenId);
 
-        LoginRequest loginRequest = LoginRequest.builder()
-            .email(userData.getEmail())
-            .password(userData.getPassword())
-            .rememberMe(false)
-            .build();
-
-        LoginResponse loginResponse = IndexPageActions.getSuccessfulLoginResponse(language, loginRequest);
-
-        Response response = RequestFactory.createRequest(language)
-            .header(Constants.AUTHORIZATION_HEADER, loginResponse.getAccessTokenId())
-            .get(UrlFactory.create(Endpoints.GET_MODULES_OF_USER));
-
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-    }
-
-    @Test(dataProvider = "localeDataProvider")
-    public void successfulLogout(Language locale) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(locale, userData.toRegistrationRequest());
-
-        LoginRequest loginRequest = LoginRequest.builder()
-            .email(userData.getEmail())
-            .password(userData.getPassword())
-            .rememberMe(false)
-            .build();
-        UUID accessTokenId = IndexPageActions.login(locale, loginRequest);
-
-        ModulesActions.logout(locale, accessTokenId);
-
-        Response response = ModulesActions.getLogoutResponse(locale, accessTokenId);
+        Response response = ModulesActions.getLogoutResponse(language, accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(401);
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.NO_SESSION_AVAILABLE.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(locale, LocalizationKey.ERROR_CODE_SESSION_EXPIRED));
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.SESSION_EXPIRED));
     }
 }

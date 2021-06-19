@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.service.notebook;
 
-import com.github.saphyra.apphub.integration.frontend.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.model.notebook.NewChecklistItem;
 import com.github.saphyra.apphub.integration.frontend.model.notebook.NewChecklistItemData;
 import com.github.saphyra.apphub.integration.frontend.model.notebook.ViewChecklistItem;
@@ -87,7 +87,9 @@ public class ChecklistActions {
     }
 
     public static void enableEditing(WebDriver driver) {
-        assertThat(isViewChecklistWindowOpened(driver)).isTrue();
+        AwaitilityWrapper.createDefault()
+            .until(() -> isViewChecklistWindowOpened(driver))
+            .assertTrue("Checklist editing is not enabled.");
         if (!isEditingEnabled(driver)) {
             NotebookPage.editChecklistButton(driver).click();
         }

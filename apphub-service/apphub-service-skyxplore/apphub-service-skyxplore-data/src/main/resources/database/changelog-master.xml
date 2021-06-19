@@ -1,0 +1,44 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create_schema_skyxplore" author="saphyra">
+        <sql endDelimiter=";">
+            CREATE SCHEMA IF NOT EXISTS SKYXPLORE
+        </sql>
+
+        <rollback>
+            DROP SCHEMA IF EXIST SKYXPLORE CASCADE
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_schema_skyxplore_game" author="saphyra">
+        <sql endDelimiter=";">
+            CREATE SCHEMA IF NOT EXISTS SKYXPLORE_GAME
+        </sql>
+
+        <rollback>
+            DROP SCHEMA IF EXIST SKYXPLORE_GAME CASCADE
+        </rollback>
+    </changeSet>
+
+    <include file="database/change_sets/character.xml"/>
+    <include file="database/change_sets/friend_request.xml"/>
+    <include file="database/change_sets/friendship.xml"/>
+    <include file="database/change_sets/game.xml"/>
+    <include file="database/change_sets/player.xml"/>
+    <include file="database/change_sets/alliance.xml"/>
+    <include file="database/change_sets/universe.xml"/>
+    <include file="database/change_sets/solar_system.xml"/>
+    <include file="database/change_sets/coordinate.xml"/>
+    <include file="database/change_sets/planet.xml"/>
+    <include file="database/change_sets/citizen.xml"/>
+    <include file="database/change_sets/skill.xml"/>
+    <include file="database/change_sets/surface.xml"/>
+    <include file="database/change_sets/building.xml"/>
+    <include file="database/change_sets/line.xml"/>
+    <include file="database/change_sets/system_connection.xml"/>
+    <include file="database/change_sets/allocated_resource.xml"/>
+    <include file="database/change_sets/reserved_storage.xml"/>
+    <include file="database/change_sets/stored_resource.xml"/>
+    <include file="database/change_sets/storage_setting.xml"/>
+    <include file="database/change_sets/priority.xml"/>
+</databaseChangeLog>

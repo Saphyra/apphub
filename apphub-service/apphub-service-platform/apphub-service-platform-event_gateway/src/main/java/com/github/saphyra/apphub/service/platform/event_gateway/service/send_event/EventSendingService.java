@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.event_gateway.service.send_ev
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.common_util.LocaleProvider;
+import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.api.notebook.model.request.EditListItemRequest;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.UnprocessableEntityException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
@@ -52,7 +50,7 @@ public class ListItemEditionService {
                 return currentItemIs.equals(newParent);
             });
         if (listItemId.equals(newParent) || childMatchesNewParent) {
-            throw new UnprocessableEntityException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "parent", "must not be own child"), "Category cannot be its own child.");
+            throw ExceptionFactory.invalidParam("parent", "must not be own child");
         }
         children.forEach(listItem -> validateNotOwnChild(listItem.getListItemId(), newParent, userId));
     }

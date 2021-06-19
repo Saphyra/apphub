@@ -39,7 +39,7 @@ public class TableHeadFactoryTest {
 
     @Test
     public void create() {
-        given(idGenerator.randomUUID()).willReturn(TABLE_HEAD_ID);
+        given(idGenerator.randomUuid()).willReturn(TABLE_HEAD_ID);
         given(contentFactory.create(TABLE_HEAD_ID, USER_ID, COLUMN_NAME)).willReturn(content);
 
         List<BiWrapper<TableHead, Content>> result = underTest.create(LIST_ITEM_ID, Arrays.asList(COLUMN_NAME), USER_ID);

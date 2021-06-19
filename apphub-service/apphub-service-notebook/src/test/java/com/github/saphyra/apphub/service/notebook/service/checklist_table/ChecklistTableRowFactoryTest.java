@@ -28,7 +28,7 @@ public class ChecklistTableRowFactoryTest {
 
     @Test
     public void create() {
-        given(idGenerator.randomUUID()).willReturn(ROW_ID);
+        given(idGenerator.randomUuid()).willReturn(ROW_ID);
 
         ChecklistTableRow result = underTest.create(USER_ID, PARENT, ROW_INDEX, true);
 

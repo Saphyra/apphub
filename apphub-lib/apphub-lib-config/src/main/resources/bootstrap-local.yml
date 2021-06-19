@@ -12,6 +12,8 @@ spring:
     password: postgres
     url: jdbc:postgresql://localhost:5432/apphub
     driverClassName: org.postgresql.Driver
+    hikari:
+      maximumPoolSize: 5
 
 eureka:
   client:
@@ -62,3 +64,31 @@ notebook:
 utils:
   ribbon:
     listOfServers: localhost:8095
+
+skyxplore-data-character:
+  ribbon:
+    listOfServers: localhost:8091
+
+skyxplore-data-friend:
+  ribbon:
+    listOfServers: localhost:8091
+
+skyxplore-facade:
+  ribbon:
+    listOfServers: localhost:8092
+
+skyxplore-lobby:
+  ribbon:
+    listOfServers: localhost:8093
+
+skyxplore-game:
+  ribbon:
+    listOfServers: localhost:8095
+
+skyxplore-game-creation:
+  ribbon:
+    listOfServers: localhost:8095
+
+message-sender:
+  ribbon:
+    listOfServers: localhost:8094

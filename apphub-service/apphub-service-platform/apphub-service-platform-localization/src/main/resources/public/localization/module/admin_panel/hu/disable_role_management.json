@@ -1,0 +1,42 @@
+{
+  "title": "Apphub - Jogosultságok engedélyezése / letiltása",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Jogosultságok engedélyezése / letiltása"
+      }
+    ],
+    "role-name-table-head": [
+      {
+        "key": "innerHTML",
+        "message": "Jogosultság"
+      }
+    ],
+    "enabled-table-head": [
+      {
+        "key": "innerHTML",
+        "message": "Engedélyezve"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Vissza"
+      }
+    ]
+  },
+  "additionalContent": {
+    "confirm-enable-role": "Művelet megerősítése",
+    "confirm-disable-role": "Művelet megerősítése",
+    "enable-role-detail": "Biztos, hogy <SPAN class=\"red\">engedélyezni</SPAN> szeretnéd <SPAN class=\"red\">{roleName}</SPAN> jogosultságot?",
+    "disable-role-detail": "Biztos, hogy <SPAN class=\"red\">le szeretnéd tiltani</SPAN> <SPAN class=\"red\">{roleName}</SPAN> jogosultságot?",
+    "enable-role": "Engedélyezés",
+    "disable-role": "Letiltás",
+    "cancel": "Mégse",
+    "password": "Password",
+    "empty-password": "Írd be a jelszavad!",
+    "role-enabled": "Jogosultság engedélyezve.",
+    "role-disabled": "Jogosultság letiltva."
+  }
+}

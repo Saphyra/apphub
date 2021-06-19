@@ -1,0 +1,17 @@
+{
+  "id": "depot",
+  "buildingType": "storage",
+  "stores": "bulk",
+  "capacity": 1000,
+  "defaultBuilding": true,
+  "constructionRequirements": {
+    "1": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1,
+        "stone": 1,
+        "wood": 1
+      }
+    }
+  }
+}

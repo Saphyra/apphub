@@ -1,53 +1,110 @@
-#input{
-    width: 90vw;
-    display: block;
-    margin: auto;
-    height: 20vh;
+#input-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 19rem;
 }
 
-#format-button{
-    margin: 1rem;
-}
-
-#order-by-buttons-container{
-    text-align: center;
-}
-
-#display-field-buttons-container{
-    text-align: center;
-}
-
-    .visibility-button{
-        display: inline-block;
-        border: 3px ridge white;
-        border-radius: 5px;
-        margin: 0.25rem;
-        padding: 0.25rem;
+    #input{
+        width: 90vw;
+        display: block;
+        margin: auto;
+        height: 5rem;
+        margin-top: 1rem;
     }
 
-    .visibility-button span{
-        cursor: pointer;
+        #input .nowrap{
+            overflow-x: scroll;
+        }
+
+    #format-button{
         margin: 1rem;
     }
 
-#filter-container{
-    text-align: center;
-}
-
-    .filter-rule{
-        display: inline-block;
-        border: 3px ridge white;
-        border-radius: 5px;
-        margin: 0.25rem;
+    #result-view-wrapper label{
+        border: 2px outset white;
         padding: 0.25rem;
-        font-size: 1.25rem;
+        border-radius: 5px;
     }
 
-        .filter-rule-remove-button{
-            margin: 0;
-            margin-left: 0.25rem;
+        #result-view-wrapper label:hover{
+            cursor: pointer;
+            border: 2px inset red;
         }
 
-#result{
-    overflow: auto;
+    #order-by-buttons-container{
+        text-align: center;
+    }
+
+    #display-field-buttons-container{
+        text-align: center;
+    }
+
+        .visibility-button{
+            display: inline-block;
+            border: 3px ridge white;
+            border-radius: 5px;
+            margin: 0.25rem;
+            padding: 0.25rem;
+        }
+
+        .visibility-button span{
+            cursor: pointer;
+            margin: 1rem;
+        }
+
+    #filter-container{
+        text-align: center;
+    }
+
+        .filter-rule{
+            display: inline-block;
+            border: 3px ridge white;
+            border-radius: 5px;
+            margin: 0.25rem;
+            padding: 0.25rem;
+            font-size: 1.25rem;
+        }
+
+            .filter-rule-remove-button{
+                margin: 0;
+                margin-left: 0.25rem;
+            }
+
+#result-container{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: calc(100% - 19rem);
 }
+
+    #result{
+        overflow: auto;
+        height: 100%
+    }
+
+        #result table{
+            margin: 1rem auto;
+        }
+
+        .string {
+            color: lightgreen;
+        }
+
+        .number {
+            color: orange;
+        }
+
+        .boolean {
+            color: cyan;
+        }
+
+        .null {
+            color: pink;
+        }
+
+        .key {
+            color: white;
+        }

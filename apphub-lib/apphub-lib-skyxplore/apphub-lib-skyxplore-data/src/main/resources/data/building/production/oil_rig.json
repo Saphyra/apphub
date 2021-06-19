@@ -1,0 +1,30 @@
+{
+  "id": "oil_rig",
+  "buildingType": "production",
+  "gives": {
+    "oil": {
+      "placed": [
+        "oil_field"
+      ],
+      "amount": 1,
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "energy": 1
+        }
+      },
+      "requiredSkill": "ENGINEERING"
+    }
+  },
+  "workers": 1,
+  "constructionRequirements": {
+    "1": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1,
+        "iron": 1,
+        "stone": 1
+      }
+    }
+  }
+}

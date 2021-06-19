@@ -1,10 +1,9 @@
 package com.github.saphyra.apphub.lib.security.role;
 
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.RequestHelper;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.config.Endpoints;
-import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
-import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
+import com.github.saphyra.apphub.lib.error_handler.service.translation.ErrorResponseFactory;
+import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -35,7 +34,7 @@ class RoleFilter extends OncePerRequestFilter {
         if (roleSettings.isEmpty() || requiredRoleChecker.hasRequiredRoles(roleSettings)) {
             filterChain.doFilter(request, response);
         } else {
-            log.warn("User does not have the required role.");
+            log.warn("User does not have the required role to call endpoint {} - {}", request.getMethod(), request.getRequestURI());
             if (requestHelper.isRestCall(request)) {
                 sendRestError(request, response);
             } else {
@@ -48,7 +47,7 @@ class RoleFilter extends OncePerRequestFilter {
         ErrorResponseWrapper errorResponse = errorResponseFactory.create(
             request,
             HttpStatus.FORBIDDEN,
-            ErrorCode.MISSING_ROLE.name()
+            ErrorCode.MISSING_ROLE
         );
 
         requestHelper.sendRestError(

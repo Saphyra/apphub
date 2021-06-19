@@ -1,22 +1,21 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
-import com.github.saphyra.apphub.lib.exception.UnprocessableEntityException;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -56,9 +55,7 @@ public class ListItemRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(TITLE, PARENT));
 
-        assertThat(ex).isInstanceOf(NotFoundException.class);
-        NotFoundException exception = (NotFoundException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.CATEGORY_NOT_FOUND.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.CATEGORY_NOT_FOUND);
     }
 
     @Test
@@ -68,9 +65,7 @@ public class ListItemRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(TITLE, PARENT));
 
-        assertThat(ex).isInstanceOf(UnprocessableEntityException.class);
-        UnprocessableEntityException exception = (UnprocessableEntityException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_TYPE.name());
+        ExceptionValidator.validateInvalidType(ex);
     }
 
     @Test

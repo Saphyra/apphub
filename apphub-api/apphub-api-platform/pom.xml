@@ -25,5 +25,6 @@
     <modules>
         <module>apphub-api-platform-event_gateway</module>
         <module>apphub-api-platform-localization</module>
+        <module>apphub-api-platform-message_sender</module>
     </modules>
 </project>

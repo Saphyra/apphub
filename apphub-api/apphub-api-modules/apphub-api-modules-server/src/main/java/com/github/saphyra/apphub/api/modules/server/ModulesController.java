@@ -15,13 +15,13 @@ import java.util.Map;
 
 @FeignClient("modules")
 public interface ModulesController {
-    @RequestMapping(method = RequestMethod.POST, path = Endpoints.DELETE_ACCOUNT_EVENT)
+    @RequestMapping(method = RequestMethod.POST, path = Endpoints.EVENT_DELETE_ACCOUNT)
     void deleteAccountEvent(@RequestBody SendEventRequest<DeleteAccountEvent> request);
 
-    @RequestMapping(method = RequestMethod.GET, path = Endpoints.GET_MODULES_OF_USER)
+    @RequestMapping(method = RequestMethod.GET, path = Endpoints.MODULES_GET_MODULES_OF_USER)
     Map<String, List<ModuleResponse>> getModules(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessToken, @RequestParam(name = "mobile", required = false, defaultValue = "false") boolean mobileClient);
 
-    @RequestMapping(method = RequestMethod.POST, path = Endpoints.SET_FAVORITE)
+    @RequestMapping(method = RequestMethod.POST, path = Endpoints.MODULES_SET_FAVORITE)
     Map<String, List<ModuleResponse>> setFavorite(
         @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessToken,
         @PathVariable("module") String module,

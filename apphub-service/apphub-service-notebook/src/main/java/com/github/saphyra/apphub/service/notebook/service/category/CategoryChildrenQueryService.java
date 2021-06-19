@@ -2,9 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.category;
 
 import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
-import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
@@ -51,7 +49,7 @@ public class CategoryChildrenQueryService {
                 .orElseGet(() -> Arrays.stream(ListItemType.values())
                     .collect(Collectors.toList()));
         } catch (IllegalArgumentException e) {
-            throw new BadRequestException(new ErrorMessage(ErrorCode.INVALID_PARAM.name(), "type", "contains invalid argument"), type + "could not be converted to ListItemTypes");
+            throw ExceptionFactory.invalidParam("type", "contains invalid argument");
         }
     }
 }

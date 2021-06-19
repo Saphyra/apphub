@@ -2,26 +2,23 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.authenti
 
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
+import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
 import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.lib.common_util.CookieUtil;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseFactory;
-import com.github.saphyra.apphub.lib.error_handler.service.ErrorResponseWrapper;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
-import com.github.saphyra.apphub.service.platform.main_gateway.util.ErrorResponseHandler;
-import com.netflix.zuul.context.RequestContext;
+import com.github.saphyra.apphub.service.platform.main_gateway.service.translation.ErrorResponseFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Optional;
 
 import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_COOKIE;
-import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_HEADER;
 
 @Component
 @RequiredArgsConstructor
@@ -30,55 +27,48 @@ public class AuthenticationService {
     private final AccessTokenExpirationUpdateService accessTokenExpirationUpdateService;
     private final AccessTokenHeaderFactory accessTokenHeaderFactory;
     private final AccessTokenQueryService accessTokenQueryService;
-    private final Base64Encoder base64Encoder;
-    private final CookieUtil cookieUtil;
     private final ErrorResponseFactory errorResponseFactory;
-    private final ErrorResponseHandler errorResponseHandler;
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final AccessTokenHeaderConverter accessTokenHeaderConverter;
+    private final AuthenticationResultHandlerFactory authenticationResultHandlerFactory;
 
-    public void authenticate(RequestContext requestContext) {
-        Optional<String> accessTokenIdStringOptional = cookieUtil.getCookie(
-            requestContext.getRequest(),
-            ACCESS_TOKEN_COOKIE
-        );
+    public AuthenticationResultHandler authenticate(ServerHttpRequest request) {
+        Optional<String> accessTokenIdStringOptional = Optional.ofNullable(request.getCookies().getFirst(ACCESS_TOKEN_COOKIE))
+            .map(HttpCookie::getValue);
 
         if (!accessTokenIdStringOptional.isPresent()) {
-            log.info("AccessToken cookie not present. Checking Auth header...");
-            accessTokenIdStringOptional = Optional.ofNullable(requestContext.getRequest().getHeader(Constants.AUTHORIZATION_HEADER));
+            log.debug("AccessToken cookie not present. Checking Auth header...");
+            accessTokenIdStringOptional = Optional.ofNullable(request.getHeaders().getFirst(Constants.AUTHORIZATION_HEADER));
         }
 
+        String locale = Optional.ofNullable(request.getHeaders().getFirst(Constants.LOCALE_HEADER))
+            .orElseThrow(() -> new IllegalStateException("Locale header not found."));
+
         if (!accessTokenIdStringOptional.isPresent()) {
-            log.info("accessTokenCookie is not present. Sending error...");
-            errorResponseHandler.sendErrorResponse(requestContext, createErrorResponse(requestContext));
-            return;
+            log.debug("accessTokenCookie is not present. Sending error...");
+            return authenticationResultHandlerFactory.unauthorized(request.getHeaders(), createErrorResponse(locale));
         }
 
         Optional<InternalAccessTokenResponse> accessTokenResponseOptional = accessTokenQueryService.getAccessToken(accessTokenIdStringOptional.get());
         if (!accessTokenResponseOptional.isPresent()) {
-            log.info("AccessToken not found. Sending error...");
-            errorResponseHandler.sendErrorResponse(requestContext, createErrorResponse(requestContext));
-            return;
+            log.debug("AccessToken not found. Sending error...");
+            return authenticationResultHandlerFactory.unauthorized(request.getHeaders(), createErrorResponse(locale));
         }
 
         InternalAccessTokenResponse accessTokenResponse = accessTokenResponseOptional.get();
         AccessTokenHeader accessToken = accessTokenHeaderFactory.create(accessTokenResponse);
-        String accessTokenString = objectMapperWrapper.writeValueAsString(accessToken);
-        log.debug("Stringified accessToken: {}", accessTokenString);
-        String encodedAccessToken = base64Encoder.encode(accessTokenString);
+        String encodedAccessToken = accessTokenHeaderConverter.convertDomain(accessToken);
         log.debug("Enriching request with auth header: {}", encodedAccessToken);
 
-        requestContext.addZuulRequestHeader(ACCESS_TOKEN_HEADER, encodedAccessToken);
+        accessTokenExpirationUpdateService.updateExpiration(request.getMethodValue(), request.getURI().getPath(), accessTokenResponse.getAccessTokenId());
 
-        accessTokenExpirationUpdateService.updateExpiration(requestContext.getRequest(), accessTokenResponse.getAccessTokenId());
+        return authenticationResultHandlerFactory.authorized(encodedAccessToken);
     }
 
-    private ErrorResponseWrapper createErrorResponse(RequestContext requestContext) {
-        String locale = requestContext.getZuulRequestHeaders()
-            .get(Constants.LOCALE_HEADER);
+    private ErrorResponseWrapper createErrorResponse(String locale) {
         return errorResponseFactory.create(
             locale,
             HttpStatus.UNAUTHORIZED,
-            ErrorCode.NO_SESSION_AVAILABLE.name(),
+            ErrorCode.NO_SESSION_AVAILABLE,
             new HashMap<>()
         );
     }

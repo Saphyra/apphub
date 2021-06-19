@@ -4,5 +4,7 @@
   "notebook": "Jegyzetfüzet",
   "json-formatter": "JSON formázó",
   "log-formatter": "Log formázó",
-  "mobile-messages": "Mobile Messages"
+  "base64": "Base64 kódoló",
+  "mobile-messages": "Mobile Messages",
+  "skyxplore": "SkyXplore"
 }

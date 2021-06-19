@@ -1,0 +1,60 @@
+{
+  "id": "farm",
+  "buildingType": "production",
+  "gives": {
+    "leather": {
+      "placed": [
+        "desert",
+        "forest"
+      ],
+      "amount": 1,
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "wheat": 1
+        }
+      },
+      "requiredSkill": "FARMING"
+    },
+    "raw_food": {
+      "placed": [
+        "desert",
+        "forest"
+      ],
+      "amount": 2,
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "wheat": 1,
+          "water": 1
+        }
+      },
+      "requiredSkill": "FARMING"
+    },
+    "wheat": {
+      "placed": [
+        "desert",
+        "forest"
+      ],
+      "amount": 1,
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "water": 1
+        }
+      },
+      "requiredSkill": "FARMING"
+    }
+  },
+  "workers": 1,
+  "constructionRequirements": {
+    "1": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1,
+        "wood": 1,
+        "stone": 1
+      }
+    }
+  }
+}

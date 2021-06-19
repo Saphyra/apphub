@@ -29,13 +29,18 @@ modules:
         url: /web/utils/json-formatter
         allowedByDefault: true
         mobileAllowed: true
-      - name: mobile-messages
-        url: /web/utils/mobile-messages
-        allowedByDefault: false
-        mobileAllowed: true
-        roles:
-          - VERIMI_DEVELOPER
       - name: log-formatter
         url: /web/utils/log-formatter
         allowedByDefault: true
         mobileAllowed: true
+      - name: base64
+        url: /web/utils/base64
+        allowedByDefault: true
+        mobileAllowed: true
+    game:
+      - name: skyxplore
+        url: /web/skyxplore
+        allowedByDefault: false
+        mobileAllowed: false
+        roles:
+          - SKYXPLORE

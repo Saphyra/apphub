@@ -16,7 +16,7 @@ public class ChecklistTableRowFactory {
 
     public ChecklistTableRow create(UUID userId, UUID parent, int rowIndex, boolean checked) {
         return ChecklistTableRow.builder()
-            .rowId(idGenerator.randomUUID())
+            .rowId(idGenerator.randomUuid())
             .userId(userId)
             .parent(parent)
             .rowIndex(rowIndex)

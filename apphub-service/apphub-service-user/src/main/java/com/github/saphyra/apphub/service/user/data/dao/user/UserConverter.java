@@ -18,6 +18,8 @@ public class UserConverter extends ConverterBase<UserEntity, User> {
             .username(entity.getUsername())
             .password(entity.getPassword())
             .language(entity.getLanguage())
+            .markedForDeletion(entity.isMarkedForDeletion())
+            .markedForDeletionAt(entity.getMarkedForDeletionAt())
             .build();
     }
 
@@ -29,6 +31,8 @@ public class UserConverter extends ConverterBase<UserEntity, User> {
             .username(user.getUsername())
             .password(user.getPassword())
             .language(user.getLanguage())
+            .markedForDeletion(user.isMarkedForDeletion())
+            .markedForDeletionAt(user.getMarkedForDeletionAt())
             .build();
     }
 }

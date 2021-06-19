@@ -14,7 +14,7 @@ class UserFactory {
 
     User create(String email, String username, String password, String locale) {
         return User.builder()
-            .userId(idGenerator.randomUUID())
+            .userId(idGenerator.randomUuid())
             .email(email.toLowerCase())
             .username(username)
             .password(passwordService.hashPassword(password))

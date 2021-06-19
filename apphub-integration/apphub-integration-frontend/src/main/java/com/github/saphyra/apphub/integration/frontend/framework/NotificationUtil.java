@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.framework;
 
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -7,6 +8,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,7 +51,7 @@ public class NotificationUtil {
 
     private static Optional<WebElement> getMatchingNotification(WebDriver driver, String notificationMessage) {
         Optional<WebElement> matchingNotification = getNotifications(driver).stream()
-            .peek(webElement -> log.info("Notification found with message {}", webElement.findElement(NOTIFICATION_TEXT_LOCATOR).getText()))
+            .peek(webElement -> log.debug("Notification found with message {}", webElement.findElement(NOTIFICATION_TEXT_LOCATOR).getText()))
             .filter(webElement -> webElement.findElement(NOTIFICATION_TEXT_LOCATOR).getText().equals(notificationMessage))
             .findAny();
         if (!matchingNotification.isPresent()) {
@@ -60,10 +62,27 @@ public class NotificationUtil {
 
     public static void clearNotifications(WebDriver driver) {
         getNotifications(driver)
-            .forEach(WebElement::click);
+            .stream()
+            .filter(WebElement::isDisplayed)
+            .forEach(NotificationUtil::click);
+    }
+
+    private static void click(WebElement webElement) {
+        try {
+            webElement.click();
+        } catch (Exception e) {
+            log.info("Element {} not clickable.", webElement, e);
+        }
     }
 
     private static List<WebElement> getNotifications(WebDriver driver) {
         return driver.findElements(NOTIFICATIONS_LOCATOR);
+    }
+
+    public static List<String> getNotificationTexts(WebDriver driver) {
+        return getNotifications(driver)
+            .stream()
+            .map(WebElement::getText)
+            .collect(Collectors.toList());
     }
 }

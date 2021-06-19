@@ -1,14 +1,13 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service.register;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -34,30 +33,21 @@ public class RegisterProcessorRequestValidatorTest {
     public void blankServiceName() {
         Throwable ex = catchThrowable(() -> underTest.validate(builder.serviceName(" ").build()));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo("INVALID_PARAM");
-        assertThat(exception.getErrorMessage().getParams().get("serviceName")).isEqualTo("Invalid parameter");
+        ExceptionValidator.validateInvalidParam(ex, "serviceName", "must not be null or blank");
     }
 
     @Test
     public void blankEventName() {
         Throwable ex = catchThrowable(() -> underTest.validate(builder.eventName(" ").build()));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo("INVALID_PARAM");
-        assertThat(exception.getErrorMessage().getParams().get("eventName")).isEqualTo("Invalid parameter");
+        ExceptionValidator.validateInvalidParam(ex, "eventName", "must not be null or blank");
     }
 
     @Test
     public void nullUrl() {
         Throwable ex = catchThrowable(() -> underTest.validate(builder.url(null).build()));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo("INVALID_PARAM");
-        assertThat(exception.getErrorMessage().getParams().get("url")).isEqualTo("Invalid parameter");
+        ExceptionValidator.validateInvalidParam(ex, "url", "must not be null");
     }
 
     @Test

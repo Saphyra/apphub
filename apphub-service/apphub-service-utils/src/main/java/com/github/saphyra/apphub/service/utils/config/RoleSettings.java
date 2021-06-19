@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -14,5 +15,5 @@ import java.util.List;
 @EnableConfigurationProperties
 @Data
 public class RoleSettings implements RoleFilterSettingRegistry {
-    private List<RoleSetting> settings;
+    private List<RoleSetting> settings = new ArrayList<>();
 }

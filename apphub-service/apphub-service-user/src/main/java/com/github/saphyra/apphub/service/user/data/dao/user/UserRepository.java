@@ -14,4 +14,7 @@ public interface UserRepository extends CrudRepository<UserEntity, String> {
 
     @Query("SELECT u from UserEntity u WHERE LOWER(u.username) LIKE CONCAT('%', LOWER(:queryString), '%') OR LOWER(u.email) LIKE CONCAT('%', LOWER(:queryString), '%')")
     List<UserEntity> getByUsernameOrEmailContainingIgnoreCase(@Param("queryString") String queryString);
+
+    @Query("SELECT u FROM UserEntity u WHERE u.markedForDeletion=true ORDER BY u.markedForDeletionAt nulls last")
+    List<UserEntity> getByUsersMarkedToDelete();
 }

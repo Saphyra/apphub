@@ -1,36 +1,31 @@
 package com.github.saphyra.apphub.proxy;
 
-import com.netflix.zuul.ZuulFilter;
-import com.netflix.zuul.context.RequestContext;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
+import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
-import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
 
-@Component
 @Slf4j
-public class RequestLoggingFilter extends ZuulFilter {
+@Component
+public class RequestLoggingFilter implements GlobalFilter {
     @Override
-    public String filterType() {
-        return FilterConstants.PRE_TYPE;
-    }
-
-    @Override
-    public int filterOrder() {
-        return 0;
-    }
-
-    @Override
-    public boolean shouldFilter() {
-        return true;
-    }
-
-    @Override
-    public Object run() {
-        RequestContext currentContext = RequestContext.getCurrentContext();
-        HttpServletRequest request = currentContext.getRequest();
-        log.info("Request arrived: {} - {}", request.getMethod(), request.getRequestURI());
-        return null;
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        ServerHttpRequest request = exchange.getRequest();
+        HttpMethod method = request.getMethod();
+        URI uri = request.getURI();
+        log.info("Handling request: {} - {}", method, uri);
+        Mono<Void> result = chain.filter(exchange);
+        ServerHttpResponse response = exchange.getResponse();
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            log.info("Response ststus of {} - {}: {}", method, uri, response.getStatusCode());
+        }
+        return result;
     }
 }

@@ -1,11 +1,10 @@
 package com.github.saphyra.apphub.service.modules.service;
 
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.service.modules.ModulesProperties;
 import com.github.saphyra.apphub.service.modules.dao.favorite.Favorite;
 import com.github.saphyra.apphub.service.modules.dao.favorite.FavoriteService;
 import com.github.saphyra.apphub.service.modules.domain.Module;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -47,10 +45,7 @@ public class FavoriteUpdateServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.updateFavorite(USER_ID, MODULE, true));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams().get("module")).isEqualTo("does not exist");
+        ExceptionValidator.validateInvalidParam(ex, "module", "does not exist");
     }
 
     @Test
@@ -61,10 +56,7 @@ public class FavoriteUpdateServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.updateFavorite(USER_ID, MODULE, null));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams().get("value")).isEqualTo("must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "value", "must not be null");
     }
 
     @Test

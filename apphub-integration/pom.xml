@@ -27,7 +27,7 @@
         <versions.apache-commons.commons-net>3.6</versions.apache-commons.commons-net>
         <versions.assertj-core>3.15.0</versions.assertj-core>
         <versions.jackson-core>2.10.2</versions.jackson-core>
-        <versions.rest-assured>3.0.0</versions.rest-assured>
+        <versions.rest-assured>4.4.0</versions.rest-assured>
         <versions.selenium>4.0.0-alpha-4</versions.selenium>
         <versions.testng>7.1.0</versions.testng>
         <versions.logback>1.2.3</versions.logback>

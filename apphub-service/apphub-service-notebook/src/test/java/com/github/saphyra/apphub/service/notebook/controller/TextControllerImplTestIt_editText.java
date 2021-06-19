@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.notebook.model.response.TextResponse;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
@@ -89,7 +89,7 @@ public class TextControllerImplTestIt_editText {
 
         Response saveResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(createRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TEXT));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_TEXT));
         assertThat(saveResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         UUID textId = saveResponse.getBody().jsonPath().getUUID("value");
 
@@ -104,7 +104,7 @@ public class TextControllerImplTestIt_editText {
 
         assertThat(editResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = editResponse.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("title")).isEqualTo("must not be null or blank");
     }
@@ -118,7 +118,7 @@ public class TextControllerImplTestIt_editText {
 
         Response saveResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(createRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TEXT));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_TEXT));
         assertThat(saveResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         UUID textId = saveResponse.getBody().jsonPath().getUUID("value");
 
@@ -133,7 +133,7 @@ public class TextControllerImplTestIt_editText {
 
         assertThat(editResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = editResponse.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("content")).isEqualTo("must not be null");
     }
@@ -150,7 +150,7 @@ public class TextControllerImplTestIt_editText {
             .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_TEXT, "listItemId", UUID.randomUUID()));
 
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
     }
 
@@ -163,7 +163,7 @@ public class TextControllerImplTestIt_editText {
 
         Response saveResponse = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(createRequest)
-            .put(UrlFactory.create(serverPort, Endpoints.CREATE_NOTEBOOK_TEXT));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_TEXT));
         assertThat(saveResponse.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         UUID textId = saveResponse.getBody().jsonPath().getUUID("value");
 

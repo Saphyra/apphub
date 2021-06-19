@@ -1,97 +1,114 @@
 spring:
   application:
-    name: main-gateway
+    name: gateway
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  cloud:
+    gateway:
+      routes:
+        #RESOURCES
+        - id: common-resorces
+          uri: http://web-content:8080
+          predicates:
+            - Path=/res/common/**
+        - id: user-resorces
+          uri: http://user:8080
+          predicates:
+            - Path=/res/user/**
+        - id: notebook-resorces
+          uri: http://notebook:8080
+          predicates:
+            - Path=/res/notebook/**
+        - id: modules-resorces
+          uri: http://modules:8080
+          predicates:
+            - Path=/res/modules/**
+        - id: admin-panel-resorces
+          uri: http://admin-panel:8080
+          predicates:
+            - Path=/res/admin-panel/**
+        - id: utils-resorces
+          uri: http://utils:8080
+          predicates:
+            - Path=/res/utils/**
+        - id: skyxplore-resorces
+          uri: http://skyxplore-facade:8080
+          predicates:
+            - Path=/res/skyxplore/**
 
-zuul:
-  prefix: /
-  routes:
-    #RESOURCES
-    common-resources:
-      path: /res/common/**
-      serviceId: web-content
-      stripPrefix: false
-    user-resources:
-      path: /res/user/**
-      serviceId: user
-      stripPrefix: false
-    notebook-resources:
-      path: /res/notebook/**
-      serviceId: notebook
-      stripPrefix: false
-    modules-resources:
-      path: /res/modules/**
-      serviceId: modules
-      stripPrefix: false
-    admin-panel-resources:
-      path: /res/admin-panel/**
-      serviceId: admin-panel
-      stripPrefix: false
-    utils-resources:
-      path: /res/utils/**
-      serviceId: utils
-      stripPrefix: false
+        #PAGES
+        - id: error-page
+          uri: http://web-content:8080
+          predicates:
+            - Path=/web/error
+        - id: index-page
+          uri: http://user:8080
+          predicates:
+            - Path=/web
+        - id: notebook-page
+          uri: http://notebook:8080
+          predicates:
+            - Path=/web/notebook
+        - id: account-page
+          uri: http://user:8080
+          predicates:
+            - Path=/web/user/account
+        - id: modules-page
+          uri: http://modules:8080
+          predicates:
+            - Path=/web/modules
+        - id: admin-panel-pages
+          uri: http://admin-panel:8080
+          predicates:
+            - Path=/web/admin-panel/**
+        - id: utils-pages
+          uri: http://utils:8080
+          predicates:
+            - Path=/web/utils/**
+        - id: skyxplore-pages
+          uri: http://skyxplore-facade:8080
+          predicates:
+            - Path=/web/skyxplore/**
 
-    #PAGES
-    error-page:
-      path: /web/error
-      serviceId: web-content
-      stripPrefix: false
-    index-page:
-      path: /web
-      serviceId: user
-      stripPrefix: false
-    notebook-page:
-      path: /web/notebook/**
-      serviceId: notebook
-      stripPrefix: false
-    account-page:
-      path: /web/user/account
-      serviceId: user
-      stripPrefix: false
-    modules-page:
-      path: /web/modules
-      serviceId: modules
-      stripPrefix: false
-    admin-panel-page:
-      path: /web/admin-panel/**
-      serviceId: admin-panel
-      stripPrefix: false
-    utils-pages:
-      path: /web/utils/**
-      serviceId: utils
-      stripPrefix: false
+        #MODULES
+        - id: user
+          uri: http://user:8080
+          predicates:
+            - Path=/api/user/**
+        - id: notebook
+          uri: http://notebook:8080
+          predicates:
+            - Path=/api/notebook/**
+        - id: admin-panel
+          uri: http://admin-panel:8080
+          predicates:
+            - Path=/api/admi-panel/**
+        - id: modules
+          uri: http://modules:8080
+          predicates:
+            - Path=/api/modules/**
+        - id: utils
+          uri: http://utils:8080
+          predicates:
+            - Path=/api/utils/**
+        - id: skyxplore
+          uri: http://skyxplore-facade:8080
+          predicates:
+            - Path=/api/skyxplore/**
 
-    #MODULES
-    user:
-      path: /api/user/**
-      serviceId: user
-      stripPrefix: false
-    notebook:
-      path: /api/notebook/**
-      serviceId: notebook
-      stripPrefix: false
-    admin-panel:
-      path: /api/admin-panel/**
-      serviceId: admin-panel
-      stripPrefix: false
-    modules:
-      path: /api/modules/**
-      serviceId: modules
-      stripPrefix: false
-    utils:
-      path: /api/utils/**
-      serviceId: utils
-      stripPrefix: false
+        #PLATFORM
+        - id: localization
+          uri: http://localization:8080
+          predicates:
+            - Path=/localization/**
 
-    #PLATFORM
-    localization:
-      path: /localization/**
-      serviceId: localization
-      stripPrefix: false
+        #WS
+        - id: ws
+          uri: ws://message-sender:8080
+          predicates:
+            - Path=/api/message-sender/**
 
 nonSessionExtendingUris:
-  - uri: /api/user/authentication/session
+  - path: /api/user/authentication/session
     method: GET

@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_util.Constants;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
@@ -108,7 +108,7 @@ public class ModulesControllerImplTestIt {
 
         Response response = createRequest()
             .body(sendEventRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.DELETE_ACCOUNT_EVENT));
+            .post(UrlFactory.create(serverPort, Endpoints.EVENT_DELETE_ACCOUNT));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -133,7 +133,7 @@ public class ModulesControllerImplTestIt {
 
         Response response = createRequest()
             .header(Constants.ACCESS_TOKEN_HEADER, accessTokenHeaderConverter.convertDomain(accessTokenHeader))
-            .get(UrlFactory.create(serverPort, Endpoints.GET_MODULES_OF_USER))
+            .get(UrlFactory.create(serverPort, Endpoints.MODULES_GET_MODULES_OF_USER))
             .andReturn();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
@@ -171,13 +171,13 @@ public class ModulesControllerImplTestIt {
         Response response = createRequest()
             .header(Constants.ACCESS_TOKEN_HEADER, accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.SET_FAVORITE, pathVariables));
+            .post(UrlFactory.create(serverPort, Endpoints.MODULES_SET_FAVORITE, pathVariables));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody()
             .as(ErrorResponse.class);
 
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("module")).isEqualTo("does not exist");
     }
@@ -197,13 +197,13 @@ public class ModulesControllerImplTestIt {
         Response response = createRequest()
             .header(Constants.ACCESS_TOKEN_HEADER, accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.SET_FAVORITE, pathVariables));
+            .post(UrlFactory.create(serverPort, Endpoints.MODULES_SET_FAVORITE, pathVariables));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = response.getBody()
             .as(ErrorResponse.class);
 
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("value")).isEqualTo("must not be null");
     }
@@ -224,7 +224,7 @@ public class ModulesControllerImplTestIt {
         Response response = createRequest()
             .header(Constants.ACCESS_TOKEN_HEADER, accessTokenHeaderConverter.convertDomain(accessTokenHeader))
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.SET_FAVORITE, pathVariables));
+            .post(UrlFactory.create(serverPort, Endpoints.MODULES_SET_FAVORITE, pathVariables));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

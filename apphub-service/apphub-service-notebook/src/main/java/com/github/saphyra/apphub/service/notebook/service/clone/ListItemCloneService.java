@@ -1,11 +1,12 @@
 package com.github.saphyra.apphub.service.notebook.service.clone;
 
-import com.github.saphyra.apphub.lib.exception.NotImplementedException;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -51,7 +52,7 @@ public class ListItemCloneService {
                 checklistTableCloneService.clone(toClone, listItemClone);
                 break;
             default:
-                throw new NotImplementedException(toClone.getType() + " cannot be cloned.");
+                throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, toClone.getType() + "cannot be cloned.");
         }
     }
 }

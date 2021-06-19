@@ -2,11 +2,10 @@ package com.github.saphyra.apphub.service.notebook.service.category;
 
 import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -48,11 +47,7 @@ public class CategoryChildrenQueryServiceTest {
     public void invalidType() {
         Throwable ex = catchThrowable(() -> underTest.getChildrenOfCategory(USER_ID, CATEGORY_ID, "a", null));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams().get("type")).isEqualTo("contains invalid argument");
+        ExceptionValidator.validateInvalidParam(ex, "type", "contains invalid argument");
     }
 
     @Test

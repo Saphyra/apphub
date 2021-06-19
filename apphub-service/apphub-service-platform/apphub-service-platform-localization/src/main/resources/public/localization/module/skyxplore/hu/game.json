@@ -1,0 +1,272 @@
+{
+  "title": "SkyXplore",
+  "staticText": {
+    "general-chat-button-title": [
+      {
+        "key": "innerHTML",
+        "message": "Általános"
+      }
+    ],
+    "alliance-chat-button-title": [
+      {
+        "key": "innerHTML",
+        "message": "Szövetség"
+      }
+    ],
+    "send-message-input": [
+      {
+        "key": "placeholder",
+        "message": "Üzenet küldése"
+      }
+    ],
+    "create-chat-room-title": [
+      {
+        "key": "innerHTML",
+        "message": "Chat szoba létrehozása"
+      }
+    ],
+    "create-chat-room-title-input": [
+      {
+        "key": "placeholder",
+        "message": "Cím"
+      }
+    ],
+    "create-chat-room-button": [
+      {
+        "key": "innerHTML",
+        "message": "Létrehoz"
+      }
+    ],
+    "create-chat-room-no-players": [
+      {
+        "key": "innerHTML",
+        "message": "Nincs más játékos ebben a játékban."
+      }
+    ],
+    "planet-left-bar-title": [
+      {
+        "key": "innerHTML",
+        "message": "Részletek"
+      }
+    ],
+    "planet-right-bar-title": [
+      {
+        "key": "innerHTML",
+        "message": "Gyártósor"
+      }
+    ],
+    "planet-storage-header": [
+      {
+        "key": "innerHTML",
+        "message": "Raktár"
+      }
+    ],
+    "planet-buildings-header": [
+      {
+        "key": "innerHTML",
+        "message": "Épületek"
+      }
+    ],
+    "planet-population-header": [
+      {
+        "key": "innerHTML",
+        "message": "Lakosság"
+      }
+    ],
+    "planet-priorities-header": [
+      {
+        "key": "innerHTML",
+        "message": "Prioritások"
+      }
+    ],
+    "planet-priorities-construction-label": [
+      {
+        "key": "innerHTML",
+        "message": "Építkezés"
+      }
+    ],
+    "planet-priorities-manufacturing-label": [
+      {
+        "key": "innerHTML",
+        "message": "Gyártás"
+      }
+    ],
+    "planet-priorities-extraction-label": [
+      {
+        "key": "innerHTML",
+        "message": "Nyersanyagtermelés"
+      }
+    ],
+    "planet-storage-settings-button": [
+      {
+        "key": "innerHTML",
+        "message": "Raktár beállítások"
+      }
+    ],
+    "planet-storage-energy-label": [
+      {
+        "key": "innerHTML",
+        "message": "Energia"
+      }
+    ],
+    "planet-storage-liquid-label": [
+      {
+        "key": "innerHTML",
+        "message": "Folyadék"
+      }
+    ],
+    "planet-storage-bulk-label": [
+      {
+        "key": "innerHTML",
+        "message": "Teher"
+      }
+    ],
+    "planet-open-population-overview-button": [
+      {
+        "key": "innerHTML",
+        "message": "Lakosság áttekintés"
+      }
+    ],
+    "planet-buildings-total-label": [
+      {
+        "key": "innerHTML",
+        "message": "Összesen"
+      }
+    ],
+    "planet-buildings-total-level-label": [
+      {
+        "key": "innerHTML",
+        "message": "Szint"
+      }
+    ],
+    "storage-settings-title": [
+      {
+        "key": "innerHTML",
+        "message": "Raktárbeállítások"
+      }
+    ],
+    "storage-settings-resource-label": [
+      {
+        "key": "innerHTML",
+        "message": "Nyersanyag"
+      }
+    ],
+    "storage-settings-amount-label": [
+      {
+        "key": "innerHTML",
+        "message": "Mennyiség"
+      }
+    ],
+    "storage-settings-batch-size-label": [
+      {
+        "key": "innerHTML",
+        "message": "Darabolás"
+      }
+    ],
+    "storage-settings-priority-label": [
+      {
+        "key": "innerHTML",
+        "message": "Prioritás"
+      }
+    ],
+    "create-storage-settings-button": [
+      {
+        "key": "innerHTML",
+        "message": "Új beállítás létrehozása"
+      }
+    ],
+    "no-storage-settings": [
+      {
+        "key": "innerHTML",
+        "message": "Nincs elérhető beállítás."
+      }
+    ],
+    "population-overview-title": [
+      {
+        "key": "innerHTML",
+        "message": "Lakosság"
+      }
+    ],
+    "population-overview-skill-selection-toggle-button": [
+      {
+        "key": "innerHTML",
+        "message": "Képességek mutatása / elrejtése"
+      }
+    ],
+    "population-overview-show-all-skills": [
+      {
+        "key": "innerHTML",
+        "message": "Összes mutatása"
+      }
+    ],
+    "population-overview-hide-all-skills": [
+      {
+        "key": "innerHTML",
+        "message": "Összes elrejtése"
+      }
+    ],
+    "population-overview-order-toggle-button": [
+      {
+        "key": "innerHTML",
+        "message": "Sorba rendezés"
+      }
+    ],
+    "population-overview-order-by-name-button": [
+      {
+        "key": "innerHTML",
+        "message": "Név szerint"
+      }
+    ],
+    "population-overview-order-by-skill-level-button": [
+      {
+        "key": "innerHTML",
+        "message": "Képesség szint szerint"
+      }
+    ],
+    "population-overview-order-type-asc": [
+      {
+        "key": "innerHTML",
+        "message": "Növekvő"
+      }
+    ],
+    "population-overview-order-type-desc": [
+      {
+        "key": "innerHTML",
+        "message": "Csökkenő"
+      }
+    ]
+  },
+  "additionalContent": {
+    "character-joined-to-game": "csatlakozott.",
+    "character-left-the-game": "kilépett.",
+    "chat-room-title-empty": "A szoba címe nem lehet üres..",
+    "chat-room-title-too-long": "A szoba címe túl hosszú (maximum 20 karakter).",
+    "level": "Szint",
+    "upgrade": "Fejlesztés",
+    "planet-storage-reserved-label": "Lefoglalt",
+    "stored-amount-label": "Mennyiség",
+    "reserved-amount-label": "Reserved storage",
+    "planet-building-detail-name": "Épület",
+    "planet-building-detail-level-sum": "Összesített szint",
+    "planet-building-detail-used-slots": "Felhasznált helyek",
+    "storage-setting-amount-too-low": "Mennyiség túl kicsi. (Minimum 0)",
+    "storage-setting-created": "Raktár beállítás létrehozva.",
+    "storage-setting-amount": "Mennyiség",
+    "storage-setting-batch-size": "Darabolás",
+    "storage-setting-priority": "Prioritás",
+    "save-storage-setting": "Mentés",
+    "delete-storage-setting": "Törlés",
+    "storage-setting-deleted": "Raktár beállítás törölve.",
+    "delete-storage-setting-confirmation-dialog-title": "Raktár beállítás törlése",
+    "delete-storage-setting-confirmation-dialog-detail": "Biztosan ki akarod törölni a {resource} beállítását?",
+    "delete-storage-setting-confirm-button": "Beállítás törlése",
+    "delete-storage-setting-decline-button": "Mégse",
+    "storage-setting-saved": "Raktár beállítás elmentve.",
+    "morale": "Morál",
+    "satiety": "Jóllakottság",
+    "citizen-name-too-short": "Név túl rövid (Minimum 3 karakter).",
+    "citizen-name-too-long": "Név túl hosszú (Maximum 30 karakter).",
+    "citizen-renamed": "Átnevezés sikeres.",
+    "planet-priority-updated": "Prioritás beállítva."
+  }
+}

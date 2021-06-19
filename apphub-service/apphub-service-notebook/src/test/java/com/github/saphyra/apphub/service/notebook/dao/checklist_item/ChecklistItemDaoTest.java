@@ -1,13 +1,14 @@
 package com.github.saphyra.apphub.service.notebook.dao.checklist_item;
 
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.exception.NotFoundException;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 import java.util.List;
@@ -74,9 +75,7 @@ public class ChecklistItemDaoTest {
 
         Throwable ex = catchThrowable(() -> underTest.findByIdValidated(CHECKLIST_ITEM_ID));
 
-        assertThat(ex).isInstanceOf(NotFoundException.class);
-        NotFoundException exception = (NotFoundException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND.name());
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.LIST_ITEM_NOT_FOUND);
     }
 
     @Test
@@ -84,7 +83,7 @@ public class ChecklistItemDaoTest {
         given(uuidConverter.convertDomain(CHECKLIST_ITEM_ID)).willReturn(CHECKLIST_ITEM_ID_STRING);
 
         given(repository.findById(CHECKLIST_ITEM_ID_STRING)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(entity)).willReturn(domain);
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
 
         ChecklistItem result = underTest.findByIdValidated(CHECKLIST_ITEM_ID);
 

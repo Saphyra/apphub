@@ -65,7 +65,7 @@
                 const element = document.createElement("DIV");
                     element.classList.add("notification-message");
                     element.classList.add(messageClass);
-                    element.innerHTML = message;
+                    element.innerText = message;
                     element.classList.add("button");
             wrapper.appendChild(element);
             return wrapper;

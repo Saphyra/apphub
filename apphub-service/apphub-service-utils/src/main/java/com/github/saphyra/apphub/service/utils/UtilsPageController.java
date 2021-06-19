@@ -20,8 +20,8 @@ public class UtilsPageController {
         return "log_formatter";
     }
 
-    @GetMapping(Endpoints.UTILS_MOBILE_MESSAGES)
-    public String mobileMessagesPage() {
-        return "mobile_messages";
+    @GetMapping(Endpoints.UTILS_BASE64_ENCODER_PAGE)
+    public String base64() {
+        return "base64";
     }
 }

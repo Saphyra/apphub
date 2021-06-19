@@ -1,9 +1,16 @@
 package com.github.saphyra.apphub.integration.frontend.service.index;
 
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+
+import static java.util.Objects.isNull;
 
 @RequiredArgsConstructor
 class IndexPage {
@@ -20,16 +27,25 @@ class IndexPage {
     private static final By LOGIN_PASSWORD = By.id("login-password");
     private static final By LOGIN_BUTTON = By.id("login-button");
 
-    public static WebElement emailInput(WebDriver driver) {
-        return driver.findElement(EMAIL_INPUT);
+    static WebElement emailInput(WebDriver driver) {
+        return AwaitilityWrapper.getWithWait(() -> {
+                try {
+                    return driver.findElement(EMAIL_INPUT);
+                } catch (Exception e) {
+                    return null;
+                }
+            },
+            t -> !isNull(t)
+        ).orElseThrow(() -> new RuntimeException("Email input not present on url " + driver.getCurrentUrl()));
     }
 
-    public static WebElement emailValid(WebDriver driver) {
+    static WebElement emailValid(WebDriver driver) {
         return driver.findElement(EMAIL_VALID);
     }
 
     static WebElement usernameInput(WebDriver driver) {
-        return driver.findElement(USER_NAME_INPUT);
+        return new WebDriverWait(driver, Duration.ofSeconds(10))
+            .until(ExpectedConditions.presenceOfElementLocated(USER_NAME_INPUT));
     }
 
     static WebElement passwordInput(WebDriver driver) {
@@ -56,15 +72,15 @@ class IndexPage {
         return driver.findElement(REGISTRATION_SUBMIT_BUTTON);
     }
 
-    public static WebElement loginEmail(WebDriver driver) {
+    static WebElement loginEmail(WebDriver driver) {
         return driver.findElement(LOGIN_EMAIL);
     }
 
-    public static WebElement loginPassword(WebDriver driver) {
+    static WebElement loginPassword(WebDriver driver) {
         return driver.findElement(LOGIN_PASSWORD);
     }
 
-    public static WebElement loginButton(WebDriver driver) {
+    static WebElement loginButton(WebDriver driver) {
         return driver.findElement(LOGIN_BUTTON);
     }
 }

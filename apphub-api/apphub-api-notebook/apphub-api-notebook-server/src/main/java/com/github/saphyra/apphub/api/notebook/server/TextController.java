@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 public interface TextController {
-    @RequestMapping(method = RequestMethod.PUT, path = Endpoints.CREATE_NOTEBOOK_TEXT)
+    @RequestMapping(method = RequestMethod.PUT, path = Endpoints.NOTEBOOK_CREATE_TEXT)
     OneParamResponse<UUID> createText(@RequestBody CreateTextRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @RequestMapping(method = RequestMethod.GET, path = Endpoints.NOTEBOOK_GET_TEXT)

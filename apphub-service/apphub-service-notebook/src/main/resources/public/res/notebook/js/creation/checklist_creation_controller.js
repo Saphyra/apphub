@@ -33,7 +33,7 @@
     }
 
     function displayChildrenOfCategory(categoryId, parent, categories, title){
-        document.getElementById("create-checklist-selected-category-title").innerHTML = title;
+        document.getElementById("create-checklist-selected-category-title").innerText = title;
 
         const parentButton = document.getElementById("create-checklist-parent-selection-parent-button");
             if(categoryId == null){
@@ -67,7 +67,7 @@
                 node.classList.add("button");
                 node.classList.add("create-item-category");
 
-                node.innerHTML = category.title;
+                node.innerText = category.title;
 
                 node.onclick = function(){
                     loadChildrenOfCategory(category.id);
@@ -155,7 +155,7 @@
 
         function fetchChecklistItemNode(listItem, order){
             const checked = listItem.querySelector(".checklist-item-options-checked").checked;
-            const content = listItem.querySelector(".checklist-item-content").innerHTML;
+            const content = listItem.querySelector(".checklist-item-content").innerText;
             return {
                 order: order,
                 checked: checked,

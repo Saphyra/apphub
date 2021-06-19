@@ -27,7 +27,7 @@ public class RoleFactoryTest {
 
     @Test
     public void create() {
-        given(idGenerator.randomUUID()).willReturn(ROLE_ID);
+        given(idGenerator.randomUuid()).willReturn(ROLE_ID);
 
         Role result = underTest.create(USER_ID, ROLE);
 

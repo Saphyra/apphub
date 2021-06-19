@@ -1,12 +1,11 @@
 package com.github.saphyra.apphub.service.user.data.service.role;
 
 import com.github.saphyra.apphub.api.user.model.response.UserRoleResponse;
-import com.github.saphyra.apphub.lib.common_util.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.BadRequestException;
 import com.github.saphyra.apphub.service.user.data.dao.role.Role;
 import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -48,20 +47,14 @@ public class RoleQueryServiceTest {
     public void nullQueryString() {
         Throwable ex = catchThrowable(() -> underTest.getRoles(null));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams().get("searchText")).isEqualTo("must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "searchText", "must not be null");
     }
 
     @Test
     public void tooShortQueryString() {
         Throwable ex = catchThrowable(() -> underTest.getRoles("as"));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
-        BadRequestException exception = (BadRequestException) ex;
-        assertThat(exception.getErrorMessage().getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(exception.getErrorMessage().getParams().get("searchText")).isEqualTo("too short");
+        ExceptionValidator.validateInvalidParam(ex, "searchText", "too short");
     }
 
     @Test

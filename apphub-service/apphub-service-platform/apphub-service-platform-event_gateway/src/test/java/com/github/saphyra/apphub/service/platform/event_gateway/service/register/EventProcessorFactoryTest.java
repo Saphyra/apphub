@@ -40,7 +40,7 @@ public class EventProcessorFactoryTest {
             .eventName(EVENT_NAME)
             .url(URL)
             .build();
-        given(idGenerator.randomUUID()).willReturn(EVENT_PROCESSOR_ID);
+        given(idGenerator.randomUuid()).willReturn(EVENT_PROCESSOR_ID);
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
 
         EventProcessor result = underTest.create(request);

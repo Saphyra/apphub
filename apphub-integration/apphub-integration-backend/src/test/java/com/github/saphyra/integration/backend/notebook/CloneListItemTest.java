@@ -1,27 +1,39 @@
 package com.github.saphyra.integration.backend.notebook;
 
+import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.ResponseValidator;
 import com.github.saphyra.apphub.integration.backend.actions.NotebookActions;
-import com.github.saphyra.apphub.integration.backend.model.notebook.*;
-import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistItemNodeRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistResponse;
+import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistTableResponse;
+import com.github.saphyra.apphub.integration.backend.model.notebook.ChecklistTableRowRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.ChildrenOfCategoryResponse;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateCategoryRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateChecklistTableRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateLinkRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTableRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.CreateTextRequest;
+import com.github.saphyra.apphub.integration.backend.model.notebook.NotebookView;
+import com.github.saphyra.apphub.integration.backend.model.notebook.TableResponse;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.common.framework.IndexPageActions;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
 import com.github.saphyra.apphub.integration.common.model.ErrorResponse;
 import com.github.saphyra.apphub.integration.common.model.ListItemType;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.ERROR_CODE_LIST_ITEM_NOT_FOUND;
+import static com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey.LIST_ITEM_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CloneListItemTest extends TestBase {
+public class CloneListItemTest extends BackEndTest {
     private static final String ROOT_TITLE = "root-title";
     private static final String PARENT_TITLE = "parent-title";
     private static final String CHILD_CATEGORY_TITLE = "child-category-title";
@@ -38,30 +50,29 @@ public class CloneListItemTest extends TestBase {
     private static final String CHECKLIST_TABLE_COLUMN_NAME = "checklist-table-column-name";
     private static final String CHECKLIST_TABLE_COLUMN_VALUE = "checklist-table-column-value";
 
-    @DataProvider(name = "localeDataProvider", parallel = true)
-    public Object[] localeDataProvider() {
-        return Language.values();
-    }
-
-    @Test(dataProvider = "localeDataProvider")
+    @Test(dataProvider = "languageDataProvider")
     public void listItemNotFound(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
         Response response = NotebookActions.getCloneListItemResponse(language, accessTokenId, UUID.randomUUID());
 
-        assertThat(response.getStatusCode()).isEqualTo(404);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, ERROR_CODE_LIST_ITEM_NOT_FOUND));
+        ResponseValidator.verifyListItemNotFound(language, response);
     }
 
-    @Test
-    public void cloneListItem() {
-        Language language = Language.HUNGARIAN;
+    @Test(dataProvider = "languageDataProvider")
+    public void cloneListItem(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
+        //ListItem not found
+        Response response = NotebookActions.getCloneListItemResponse(language, accessTokenId, UUID.randomUUID());
+        assertThat(response.getStatusCode()).isEqualTo(404);
+        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND.name());
+        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LIST_ITEM_NOT_FOUND));
+
+        //Clone
         UUID rootId = NotebookActions.createCategory(language, accessTokenId, CreateCategoryRequest.builder().title(ROOT_TITLE).build());
         UUID parentId = NotebookActions.createCategory(language, accessTokenId, CreateCategoryRequest.builder().title(PARENT_TITLE).parent(rootId).build());
         UUID childCategoryId = NotebookActions.createCategory(language, accessTokenId, CreateCategoryRequest.builder().title(CHILD_CATEGORY_TITLE).parent(parentId).build());
