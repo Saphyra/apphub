@@ -67,13 +67,10 @@ public class SkyXplorePageControllerTest {
     @Test
     public void mainMenu_characterDoesNotExist() {
         given(characterClient.doesCharacterExistForUser(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(false);
-        given(userDataClient.getUsernameByUserId(USER_ID, LOCALE)).willReturn(USERNAME);
 
         ModelAndView result = underTest.mainMenu(accessTokenHeader, LOCALE);
 
-        assertThat(result.getViewName()).isEqualTo("character");
-        assertThat(result.getModel().get("backUrl")).isEqualTo(Endpoints.MODULES_PAGE);
-        assertThat(result.getModel().get("characterName")).isEqualTo(USERNAME);
+        assertThat(result.getViewName()).isEqualTo("redirect:" + Endpoints.SKYXPLORE_CHARACTER_PAGE);
     }
 
     @Test
@@ -86,7 +83,22 @@ public class SkyXplorePageControllerTest {
     }
 
     @Test
+    public void character_notFound() {
+        given(accessTokenHeaderConverter.convertDomain(accessTokenHeader)).willReturn(ACCESS_TOKEN_HEADER_STRING);
+        given(characterClient.doesCharacterExistForUser(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(false);
+        given(userDataClient.getUsernameByUserId(USER_ID, LOCALE)).willReturn(USERNAME);
+
+        ModelAndView result = underTest.character(accessTokenHeader, LOCALE);
+
+        assertThat(result.getViewName()).isEqualTo("character");
+        assertThat(result.getModel().get("backUrl")).isEqualTo(Endpoints.MODULES_PAGE);
+        assertThat(result.getModel().get("characterName")).isEqualTo(USERNAME);
+    }
+
+    @Test
     public void character() {
+        given(accessTokenHeaderConverter.convertDomain(accessTokenHeader)).willReturn(ACCESS_TOKEN_HEADER_STRING);
+        given(characterClient.doesCharacterExistForUser(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(true);
         given(characterClient.internalGetCharacterByUserId(USER_ID, LOCALE)).willReturn(characterModel);
         given(characterModel.getName()).willReturn(CHARACTER_NAME);
 
@@ -105,8 +117,7 @@ public class SkyXplorePageControllerTest {
 
         ModelAndView result = underTest.lobby(accessTokenHeader, LOCALE);
 
-        assertThat(result.getViewName()).isEqualTo("game");
-        assertThat(result.getModel().get("userId")).isEqualTo(USER_ID);
+        assertThat(result.getViewName()).isEqualTo("redirect:" + Endpoints.SKYXPLORE_GAME_PAGE);
     }
 
     @Test

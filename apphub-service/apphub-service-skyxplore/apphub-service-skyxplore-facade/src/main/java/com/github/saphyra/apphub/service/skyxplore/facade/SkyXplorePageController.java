@@ -34,21 +34,25 @@ public class SkyXplorePageController {
         if (characterClient.doesCharacterExistForUser(accessTokenHeaderConverter.convertDomain(accessTokenHeader), locale)) {
             return new ModelAndView("main_menu");
         } else {
-            log.info("User has no character. Returning character page instead.");
-            ModelAndView mav = new ModelAndView("character");
-            mav.addObject("backUrl", Endpoints.MODULES_PAGE);
-            mav.addObject("characterName", userDataClient.getUsernameByUserId(accessTokenHeader.getUserId(), locale));
-            return mav;
+            log.info("User has no character. Redirecting to character page instead.");
+            return new ModelAndView("redirect:" + Endpoints.SKYXPLORE_CHARACTER_PAGE);
         }
     }
 
     @GetMapping(Endpoints.SKYXPLORE_CHARACTER_PAGE)
     public ModelAndView character(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale) {
-        log.info("Loading SkyXplore character page.");
-        ModelAndView mav = new ModelAndView("character");
-        mav.addObject("backUrl", Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
-        mav.addObject("characterName", characterClient.internalGetCharacterByUserId(accessTokenHeader.getUserId(), locale).getName());
-        return mav;
+        if (characterClient.doesCharacterExistForUser(accessTokenHeaderConverter.convertDomain(accessTokenHeader), locale)) {
+            log.info("Loading SkyXplore character page.");
+            ModelAndView mav = new ModelAndView("character");
+            mav.addObject("backUrl", Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
+            mav.addObject("characterName", characterClient.internalGetCharacterByUserId(accessTokenHeader.getUserId(), locale).getName());
+            return mav;
+        } else {
+            ModelAndView mav = new ModelAndView("character");
+            mav.addObject("backUrl", Endpoints.MODULES_PAGE);
+            mav.addObject("characterName", userDataClient.getUsernameByUserId(accessTokenHeader.getUserId(), locale));
+            return mav;
+        }
     }
 
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_PAGE)
@@ -57,7 +61,7 @@ public class SkyXplorePageController {
         if (!view.isInLobby()) {
             log.info("User is not in lobby.");
             if (gameClient.isUserInGame(accessTokenHeaderConverter.convertDomain(accessTokenHeader), locale)) {
-                return gameMav(accessTokenHeader.getUserId());
+                return new ModelAndView("redirect:" + Endpoints.SKYXPLORE_GAME_PAGE);
             }
             return new ModelAndView("redirect:" + Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
         }
