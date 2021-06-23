@@ -52,7 +52,7 @@ public class ListItemDetailsItem {
         assertThat(deleteButton.isDisplayed()).isTrue();
         deleteButton.click();
 
-        CommonPageActions.confirmDeletionDialog(driver, CONFIRMATION_DIALOG_ID);
+        CommonPageActions.confirmConfirmationDialog(driver, CONFIRMATION_DIALOG_ID);
     }
 
     public void cloneItem(WebDriver driver) {

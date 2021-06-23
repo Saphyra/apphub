@@ -1,15 +1,46 @@
 (function FriendController(){
+    scriptLoader.loadScript("/res/common/js/confirmation_service.js");
+
     let searchForFriendTimeout = null;
-    let refreshInterval = null;
 
     $(document).ready(init);
 
-    function setRefreshInterval(){
-        if(refreshInterval){
-            clearInterval(refreshInterval);
-        }
+    window.friendController = new function(){
+        this.createHandlers = function(){
+            return [
+                new WebSocketEventHandler(
+                    function(eventName){return eventName == "skyxplore-main-menu-friend-request-accepted"},
+                    loadFriendData
+                ),
 
-        refreshInterval = setInterval(loadFriendData, 5000);
+                new WebSocketEventHandler(
+                    function(eventName){return eventName == "skyxplore-main-menu-friend-request-sent"},
+                    function(){
+                        loadIncomingFriendRequests();
+                        loadSentFriendRequests();
+                    }
+                ),
+
+                new WebSocketEventHandler(
+                    function(eventName){return eventName == "skyxplore-main-menu-friend-request-deleted"},
+                    function(){
+                        loadIncomingFriendRequests();
+                        loadSentFriendRequests();
+                    }
+                ),
+
+                new WebSocketEventHandler(
+                    function(eventName){return eventName == "skyxplore-main-menu-friendship-deleted"},
+                    loadFriends
+                ),
+            ];
+        }
+    }
+
+    function loadFriendData(){
+        loadIncomingFriendRequests();
+        loadFriends();
+        loadSentFriendRequests();
     }
 
     function searchFriendAttempt(){
@@ -80,12 +111,6 @@
                 loadFriendData();
             }
         dao.sendRequestAsync(request);
-    }
-
-    function loadFriendData(){
-        loadIncomingFriendRequests();
-        loadFriends();
-        loadSentFriendRequests();
     }
 
     function loadIncomingFriendRequests(){
@@ -176,7 +201,7 @@
                         removeButton.classList.add("friend-list-button");
                         removeButton.innerHTML = Localization.getAdditionalContent("remove-friend");
                         removeButton.onclick = function(){
-                            removeFriend(friend.friendshipId)
+                            removeFriend(friend.friendshipId, friend.friendName)
                         }
                 node.appendChild(removeButton);
                 return node;
@@ -245,21 +270,29 @@
         dao.sendRequestAsync(request);
     }
 
-    function removeFriend(friendshipId){
-        //TODO confirmation
-        const request = new Request(Mapping.getEndpoint("SKYXPLORE_REMOVE_FRIEND", {friendshipId: friendshipId}));
-            request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("friend-removed"));
-                loadFriendData();
+    function removeFriend(friendshipId, friendName){
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(Localization.getAdditionalContent("remove-friend-confirmation-dialog-title"))
+            .withDetail(Localization.getAdditionalContent("remove-friend-confirmation-dialog-detail", {friendName: friendName}))
+            .withConfirmButton(Localization.getAdditionalContent("remove-friend-confirmation-dialog-confirm-button"))
+            .withDeclineButton(Localization.getAdditionalContent("remove-friend-confirmation-dialog-cancel-button"));
+
+        confirmationService.openDialog(
+            "remove-friend-confirmation-dialog",
+            confirmationDialogLocalization,
+            function(){
+                const request = new Request(Mapping.getEndpoint("SKYXPLORE_REMOVE_FRIEND", {friendshipId: friendshipId}));
+                    request.processValidResponse = function(){
+                        notificationService.showSuccess(Localization.getAdditionalContent("friend-removed"));
+                        loadFriendData();
+                    }
+                dao.sendRequestAsync(request);
             }
-        dao.sendRequestAsync(request);
+        )
     }
 
     function init(){
         $("#" + ids.searchFriendInput).on("keyup", searchFriendAttempt);
         loadFriendData();
-
-        document.getElementById(ids.friendsContainer).onmousemove = setRefreshInterval;
-        setRefreshInterval();
     }
 })();

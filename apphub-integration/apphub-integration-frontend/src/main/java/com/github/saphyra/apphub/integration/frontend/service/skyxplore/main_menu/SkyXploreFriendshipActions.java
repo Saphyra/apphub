@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.frontend.model.skyxplore.Friend;
 import com.github.saphyra.apphub.integration.frontend.model.skyxplore.IncomingFriendRequest;
+import com.github.saphyra.apphub.integration.frontend.model.skyxplore.SentFriendRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -26,13 +27,9 @@ public class SkyXploreFriendshipActions {
             .until(() -> driver2.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
             .assertTrue("Lobby page is not opened.");
 
-        clearAndFill(MainMenuPage.newFriendName(driver1), username2);
+        fillSearchCharacterForm(driver1, username2);
 
-        AwaitilityWrapper.getListWithWait(() -> getFriendCandidates(driver1), webElements -> !webElements.isEmpty())
-            .stream()
-            .filter(element -> element.getText().equals(username2))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Friend candidate not found"))
+        findFriendCandidate(driver1, username2)
             .click();
         NotificationUtil.verifySuccessNotification(driver1, "Barátkérelem elküldve.");
 
@@ -54,21 +51,40 @@ public class SkyXploreFriendshipActions {
             .assertTrue("Friend did not appear.");
     }
 
-    private static List<Friend> getFriends(WebDriver driver) {
+    public static WebElement findFriendCandidate(WebDriver driver, String username) {
+        return AwaitilityWrapper.getListWithWait(() -> getFriendCandidates(driver), webElements -> !webElements.isEmpty())
+            .stream()
+            .filter(element -> element.getText().equals(username))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Friend candidate not found"));
+    }
+
+    public static void fillSearchCharacterForm(WebDriver driver, String username) {
+        clearAndFill(MainMenuPage.newFriendName(driver), username);
+    }
+
+    public static List<Friend> getFriends(WebDriver driver) {
         return MainMenuPage.friends(driver)
             .stream()
             .map(Friend::new)
             .collect(Collectors.toList());
     }
 
-    private static List<WebElement> getFriendCandidates(WebDriver driver) {
+    public static List<WebElement> getFriendCandidates(WebDriver driver) {
         return MainMenuPage.friendCandidates(driver);
     }
 
-    private static List<IncomingFriendRequest> getIncomingFriendRequests(WebDriver driver) {
+    public static List<IncomingFriendRequest> getIncomingFriendRequests(WebDriver driver) {
         return MainMenuPage.incomingFriendRequests(driver)
             .stream()
             .map(IncomingFriendRequest::new)
+            .collect(Collectors.toList());
+    }
+
+    public static List<SentFriendRequest> getSentFriendRequests(WebDriver driver) {
+        return MainMenuPage.sentFriendRequests(driver)
+            .stream()
+            .map(SentFriendRequest::new)
             .collect(Collectors.toList());
     }
 }

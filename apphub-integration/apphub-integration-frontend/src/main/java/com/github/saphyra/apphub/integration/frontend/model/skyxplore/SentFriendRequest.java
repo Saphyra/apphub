@@ -5,16 +5,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 @RequiredArgsConstructor
-public class Friend {
+public class SentFriendRequest {
     private final WebElement webElement;
 
-
-    public String getName() {
+    public String getFriendName() {
         return webElement.findElement(By.cssSelector(":scope div:first-child"))
             .getText();
     }
 
-    public void remove() {
+    public void cancel() {
         webElement.findElement(By.cssSelector(":scope button"))
             .click();
     }

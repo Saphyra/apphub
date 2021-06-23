@@ -30,6 +30,7 @@ public class ApphubWsClient extends WebSocketClient {
     private final List<WebSocketEvent> messages = new Vector<>();
 
     private final String endpoint;
+    private volatile boolean opened;
 
     private ApphubWsClient(Language language, String endpoint, UUID accessTokenId) throws URISyntaxException {
         super(
@@ -48,6 +49,7 @@ public class ApphubWsClient extends WebSocketClient {
             .until(this::isOpen)
             .assertTrue("Connection failed");
         WS_CONNECTIONS.get().add(this);
+        opened = true;
     }
 
     public static ApphubWsClient createSkyXploreMainMenu(Language language, UUID accessTokenId) {
@@ -87,7 +89,7 @@ public class ApphubWsClient extends WebSocketClient {
         WebSocketEvent event = TestBase.OBJECT_MAPPER_WRAPPER.readValue(message, WebSocketEvent.class);
         messages.add(event);
 
-        if (event.getEventName() == WebSocketEventName.PING && isOpen()) {
+        if (event.getEventName() == WebSocketEventName.PING && opened) {
             send(event);
         }
     }
@@ -99,6 +101,7 @@ public class ApphubWsClient extends WebSocketClient {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
+        opened = false;
         log.debug("WebSocket connection closed for endpoint {} with code {}, reason {}, remote {}", endpoint, code, reason, remote);
         if (code != 1000) {
             throw new RuntimeException("WebSocket connection was closed with a code " + code + " and reason " + reason);

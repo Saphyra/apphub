@@ -7,6 +7,8 @@ import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplore
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.FriendshipResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SentFriendRequestResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.integration.backend.ws.ApphubWsClient;
+import com.github.saphyra.apphub.integration.backend.ws.model.WebSocketEventName;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -59,6 +61,9 @@ public class AcceptFriendRequestTest extends BackEndTest {
         verifyForbiddenOperation(language, forbiddenOperationResponse);
 
         //Accept
+        ApphubWsClient senderClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId);
+        ApphubWsClient friendClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2);
+
         Response acceptResponse = SkyXploreFriendActions.getAcceptFriendRequestResponse(language, accessTokenId2, friendRequestId);
         assertThat(acceptResponse.getStatusCode()).isEqualTo(200);
         assertThat(SkyXploreFriendActions.getSentFriendRequests(language, accessTokenId)).isEmpty();
@@ -69,5 +74,8 @@ public class AcceptFriendRequestTest extends BackEndTest {
         List<FriendshipResponse> receiverFriendships = SkyXploreFriendActions.getFriends(language, accessTokenId2);
         assertThat(receiverFriendships).hasSize(1);
         assertThat(receiverFriendships.get(0).getFriendName()).isEqualTo(model.getName());
+
+        assertThat(senderClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_ACCEPTED)).isPresent();
+        assertThat(friendClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_ACCEPTED)).isPresent();
     }
 }

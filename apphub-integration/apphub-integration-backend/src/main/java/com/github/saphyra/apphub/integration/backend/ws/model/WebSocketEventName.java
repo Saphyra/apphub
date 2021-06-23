@@ -9,6 +9,11 @@ public enum WebSocketEventName {
     PING("ping"),
     REDIRECT("redirect"),
 
+    SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_ACCEPTED("skyxplore-main-menu-friend-request-accepted"),
+    SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_SENT("skyxplore-main-menu-friend-request-sent"),
+    SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_DELETED("skyxplore-main-menu-friend-request-deleted"),
+    SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED("skyxplore-main-menu-friendship-deleted"),
+
     SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE("chat-send-message"),
     SKYXPLORE_LOBBY_JOIN_TO_LOBBY("join-to-lobby"),
     SKYXPLORE_LOBBY_EXIT_FROM_LOBBY("exit-from-lobby"),

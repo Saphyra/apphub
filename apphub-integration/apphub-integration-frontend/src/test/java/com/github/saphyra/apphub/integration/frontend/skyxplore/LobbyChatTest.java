@@ -46,8 +46,6 @@ public class LobbyChatTest extends SeleniumTest {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver1, userData1);
 
-        ModulesPageActions.openModule(driver1, ModuleLocation.SKYXPLORE);
-        SkyXploreCharacterActions.submitForm(driver1);
 
         AwaitilityWrapper.create(120, 5)
             .until(driverFuture::isDone)
