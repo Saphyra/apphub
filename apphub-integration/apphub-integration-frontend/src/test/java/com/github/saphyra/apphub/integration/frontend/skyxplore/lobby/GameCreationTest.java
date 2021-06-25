@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.frontend.skyxplore;
+package com.github.saphyra.apphub.integration.frontend.skyxplore.lobby;
 
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;

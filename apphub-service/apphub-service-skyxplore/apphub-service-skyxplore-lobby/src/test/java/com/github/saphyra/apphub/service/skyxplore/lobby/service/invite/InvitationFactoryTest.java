@@ -18,6 +18,7 @@ import static org.mockito.BDDMockito.given;
 public class InvitationFactoryTest {
     private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
     private static final UUID CHARACTER_ID = UUID.randomUUID();
+    private static final UUID INVITOR_ID = UUID.randomUUID();
 
     @Mock
     private DateTimeUtil dateTimeUtil;
@@ -29,8 +30,9 @@ public class InvitationFactoryTest {
     public void create() {
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
 
-        Invitation result = underTest.create(CHARACTER_ID);
+        Invitation result = underTest.create(INVITOR_ID, CHARACTER_ID);
 
+        assertThat(result.getInvitorId()).isEqualTo(INVITOR_ID);
         assertThat(result.getCharacterId()).isEqualTo(CHARACTER_ID);
         assertThat(result.getInvitationTime()).isEqualTo(CURRENT_DATE);
     }

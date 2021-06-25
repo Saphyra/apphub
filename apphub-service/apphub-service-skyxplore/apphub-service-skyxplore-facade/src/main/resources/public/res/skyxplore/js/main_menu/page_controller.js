@@ -30,7 +30,7 @@ scriptLoader.loadScript("/res/skyxplore/js/main_menu/create_lobby_controller.js"
 
     $(document).ready(function(){
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "skyxplore", fileName: "main_menu"}));
-        webSocketConnection.addHandler(invitationController.createHandler())
+        webSocketConnection.addHandlers(invitationController.createHandlers())
             .addHandlers(friendController.createHandlers())
             .connect();
     });

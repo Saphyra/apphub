@@ -9,6 +9,8 @@ public enum WebSocketEventName {
     PING("ping"),
     REDIRECT("redirect"),
 
+    SKYXPLORE_MAIN_MENU_INVITATION("invitation"),
+    SKYXPLORE_MAIN_MENU_CANCEL_INVITATION("skyxplore-main-menu-cancel-invitation"),
     SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_ACCEPTED("skyxplore-main-menu-friend-request-accepted"),
     SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_SENT("skyxplore-main-menu-friend-request-sent"),
     SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_DELETED("skyxplore-main-menu-friend-request-deleted"),
@@ -30,9 +32,7 @@ public enum WebSocketEventName {
     SKYXPLORE_GAME_CHAT_SEND_MESSAGE("skyxplore-game-chat-send-message"),
     SKYXPLORE_GAME_USER_JOINED("skyxplore-game-user-joined"),
     SKYXPLORE_GAME_USER_LEFT("skyxplore-game-user-left"),
-    SKYXPLORE_GAME_CHAT_ROOM_CREATED("skyxplore-game-chat-room-created"),
-
-    SKYXPLORE_MAIN_MENU_INVITATION("invitation");
+    SKYXPLORE_GAME_CHAT_ROOM_CREATED("skyxplore-game-chat-room-created");
 
     private final String eventName;
 

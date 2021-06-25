@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMess
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
@@ -55,6 +56,7 @@ public class ExitFromLobbyServiceTest {
             new BiWrapper<>(MEMBER_ID, null)
         ));
         given(lobby.getHost()).willReturn(USER_ID);
+        given(lobby.getInvitations()).willReturn(CollectionUtils.toList(Invitation.builder().invitorId(MEMBER_ID).characterId(USER_ID).build()));
 
         given(characterProxy.getCharacter(MEMBER_ID)).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
 
@@ -76,6 +78,15 @@ public class ExitFromLobbyServiceTest {
         assertThat(payload.isHost()).isFalse();
 
         verify(lobbyDao, times(0)).delete(any());
+
+        ArgumentCaptor<WebSocketMessage> invitationArgumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
+        verify(messageSenderProxy).sendToMainMenu(invitationArgumentCaptor.capture());
+        WebSocketMessage invitationMessage = invitationArgumentCaptor.getValue();
+
+        assertThat(invitationMessage.getRecipients()).containsExactly(USER_ID);
+        assertThat(invitationMessage.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION);
+        assertThat(invitationMessage.getEvent().getPayload()).isEqualTo(MEMBER_ID);
+        assertThat(lobby.getInvitations()).isEmpty();
     }
 
     @Test
@@ -86,6 +97,10 @@ public class ExitFromLobbyServiceTest {
             new BiWrapper<>(MEMBER_ID, null)
         ));
         given(lobby.getHost()).willReturn(USER_ID);
+        Invitation remainingInvitation = Invitation.builder()
+            .invitorId(UUID.randomUUID())
+            .build();
+        given(lobby.getInvitations()).willReturn(CollectionUtils.toList(Invitation.builder().invitorId(USER_ID).characterId(MEMBER_ID).build(), remainingInvitation));
 
         given(characterProxy.getCharacter(USER_ID)).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
 
@@ -107,5 +122,14 @@ public class ExitFromLobbyServiceTest {
         assertThat(payload.isHost()).isTrue();
 
         verify(lobbyDao).delete(lobby);
+
+        ArgumentCaptor<WebSocketMessage> invitationArgumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
+        verify(messageSenderProxy).sendToMainMenu(invitationArgumentCaptor.capture());
+        WebSocketMessage invitationMessage = invitationArgumentCaptor.getValue();
+
+        assertThat(invitationMessage.getRecipients()).containsExactly(MEMBER_ID);
+        assertThat(invitationMessage.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION);
+        assertThat(invitationMessage.getEvent().getPayload()).isEqualTo(USER_ID);
+        assertThat(lobby.getInvitations()).containsExactly(remainingInvitation);
     }
 }

@@ -68,6 +68,7 @@ public class InvitationService {
         Optional<Invitation> existingInvitation = lobby.getInvitations()
             .stream()
             .filter(invitation -> invitation.getCharacterId().equals(friendId))
+            .filter(invitation -> invitation.getInvitorId().equals(accessTokenHeader.getUserId()))
             .max(Comparator.comparing(Invitation::getInvitationTime));
 
         if (existingInvitation.isPresent()) {
@@ -79,7 +80,7 @@ public class InvitationService {
             }
         }
 
-        Invitation invitation = invitationFactory.create(friendId);
+        Invitation invitation = invitationFactory.create(accessTokenHeader.getUserId(), friendId);
         lobby.getInvitations()
             .add(invitation);
 

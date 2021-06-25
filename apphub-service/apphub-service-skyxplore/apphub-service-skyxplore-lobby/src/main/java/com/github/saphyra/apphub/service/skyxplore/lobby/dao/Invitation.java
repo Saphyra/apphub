@@ -11,6 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class Invitation {
+    private final UUID invitorId;
     private final UUID characterId;
     private final LocalDateTime invitationTime;
 }
