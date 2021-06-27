@@ -5,6 +5,27 @@
     --detailed-container-title-height: 3rem;
 }
 
+
+body{
+    background-color: black;
+}
+
+     #contents{
+        position: absolute;
+        top: 0;
+        left: var(--category-list-width);
+        right: 0;
+        bottom: 3rem;
+     }
+
+        main{
+            bottom: 0;
+        }
+
+    .main-page{
+        border: none;
+    }
+
 .category{
     border-color: springgreen;
 }
@@ -43,6 +64,14 @@
 }
 
 /*=== FOOTER BUTTONS ===*/
+.button-wrapper{
+    display: none;
+}
+
+#category-content-buttons{
+    display: inline;
+}
+
 #new-button-wrapper{
     position: relative;
     display: inline-block;

@@ -21,6 +21,7 @@
 
         loadChildrenOfCategory(itemDetails.id, parent);
         switchTab("main-page", "edit-list-item")
+        switchTab("button-wrapper", "edit-list-item-buttons")
     }
 
     function loadChildrenOfCategory(originalListItemId, categoryId){

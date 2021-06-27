@@ -27,7 +27,7 @@
             request.processValidResponse = function(categoryResponse){
                 displayCategoryDetails(categoryId, categoryResponse);
                 if(shouldSwitchTab){
-                    switchTab("content-container", "category-content-container");
+                    pageController.openMainPage();
                 }
             }
         dao.sendRequestAsync(request);

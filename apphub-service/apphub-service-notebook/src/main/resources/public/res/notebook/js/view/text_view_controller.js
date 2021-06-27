@@ -27,6 +27,7 @@
         contentArea.value = textData.content;
         contentArea.readOnly = true;
         switchTab("main-page", "view-text");
+        switchTab("button-wrapper", "view-text-buttons");
         switchTab("view-text-button-wrapper", "view-text-edit-button-wrapper");
     }
 

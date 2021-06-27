@@ -18,9 +18,3 @@
         bottom: 0;
         right: 0;
     }
-
-#create-category-button{
-    display: block;
-    margin: 0.25rem auto;
-    width: 50%;
-}
