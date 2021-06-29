@@ -8,4 +8,6 @@ public interface PlayerRepository extends CrudRepository<PlayerEntity, String> {
     void deleteByGameId(String gameId);
 
     List<PlayerEntity> getByUserId(String userId);
+
+    List<PlayerEntity> getByGameId(String gameId);
 }

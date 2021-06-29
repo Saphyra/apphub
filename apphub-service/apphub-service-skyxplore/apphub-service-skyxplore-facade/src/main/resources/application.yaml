@@ -42,6 +42,10 @@ zuul:
       path: /api/skyxplore/data/*
       serviceId: skyxplore-data
       stripPrefix: false
+    get-saved-game:
+      path: /api/skyxplore/game
+      serviceId: skyxplore-data
+      stripPrefix: false
 
     #SkyXplore lobby
     create-lobby:

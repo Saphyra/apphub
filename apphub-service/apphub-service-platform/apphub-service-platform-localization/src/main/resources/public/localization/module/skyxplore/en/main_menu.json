@@ -123,6 +123,9 @@
     "remove-friend-confirmation-dialog-title": "Confirm friend removal",
     "remove-friend-confirmation-dialog-detail": "Are you sure you want to remove <SPAN style='color: red; font-weight: bold;'>{friendName}</SPAN> from your friend list?",
     "remove-friend-confirmation-dialog-confirm-button": "Remove",
-    "remove-friend-confirmation-dialog-cancel-button": "Cancel"
+    "remove-friend-confirmation-dialog-cancel-button": "Cancel",
+    "additional-players": "Players",
+    "last-played": "Last played",
+    "delete": "Delete"
   }
 }

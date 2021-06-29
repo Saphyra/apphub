@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -20,4 +21,5 @@ class GameEntity {
     private String gameId;
     private String host;
     private String name;
+    private LocalDateTime lastPlayed;
 }

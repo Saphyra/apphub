@@ -123,6 +123,9 @@
     "remove-friend-confirmation-dialog-title": "Barát eltávolításának megerősítése",
     "remove-friend-confirmation-dialog-detail": "Biztosan el akarod távolítani <SPAN style='color: red; font-weight: bold;'>{friendName}</SPAN>-t a barátlistádról?",
     "remove-friend-confirmation-dialog-confirm-button": "Eltávolítás",
-    "remove-friend-confirmation-dialog-cancel-button": "Mégse"
+    "remove-friend-confirmation-dialog-cancel-button": "Mégse",
+    "additional-players": "Játékosok",
+    "last-played": "Utoljára játszva",
+    "delete": "Törlés"
   }
 }

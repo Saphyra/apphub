@@ -5,5 +5,6 @@
         this.rollInHorizontal = roll.rollInHorizontal;
         this.rollOutHorizontal = roll.rollOutHorizontal;
         this.rollInVertical = roll.rollInVertical;
+        this.rollOutVertical = roll.rollOutVertical;
     }
 })();

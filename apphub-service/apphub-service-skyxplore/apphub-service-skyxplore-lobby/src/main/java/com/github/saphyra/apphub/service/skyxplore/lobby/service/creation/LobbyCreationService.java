@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.creation;
 
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ public class LobbyCreationService {
         lobbyDao.findByUserId(userId)
             .ifPresent(lobby -> exitFromLobbyService.exit(userId));
 
-        Lobby lobby = lobbyFactory.create(userId, lobbyName);
+        Lobby lobby = lobbyFactory.create(userId, lobbyName, LobbyType.NEW_GAME);
         lobbyDao.save(lobby);
     }
 }

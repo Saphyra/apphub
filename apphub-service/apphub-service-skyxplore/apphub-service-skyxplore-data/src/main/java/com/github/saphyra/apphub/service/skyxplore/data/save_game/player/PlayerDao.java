@@ -24,4 +24,8 @@ public class PlayerDao extends AbstractDao<PlayerEntity, PlayerModel, String, Pl
     public List<PlayerModel> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
+
+    public List<PlayerModel> getByGameId(UUID gameId) {
+        return converter.convertEntity(repository.getByGameId(uuidConverter.convertDomain(gameId)));
+    }
 }

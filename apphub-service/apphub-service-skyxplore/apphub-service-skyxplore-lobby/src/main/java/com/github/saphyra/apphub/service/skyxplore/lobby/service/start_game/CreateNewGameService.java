@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.lobby.service;
+package com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
@@ -27,19 +27,13 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class StartGameService {
+class CreateNewGameService {
     private final LobbyDao lobbyDao;
     private final MessageSenderProxy messageSenderProxy;
     private final SkyXploreGameCreationApiClient gameCreationClient;
     private final LocaleProvider localeProvider;
 
-    public void startGame(UUID userId) {
-        Lobby lobby = lobbyDao.findByUserIdValidated(userId);
-
-        if (!lobby.getHost().equals(userId)) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, userId + " must not start the game.");
-        }
-
+    void createNewGame(Lobby lobby) {
         boolean allReady = lobby.getMembers()
             .values()
             .stream()

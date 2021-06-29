@@ -12,7 +12,7 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyService;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.StartGameService;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game.StartGameService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.active_friend.ActiveFriendsService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.creation.LobbyCreationService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.invite.InvitationService;
@@ -56,6 +56,7 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
                 .inLobby(true)
                 .host(lobby.getHost())
                 .gameCreationStarted(lobby.isGameCreationStarted())
+                .lobbyName(lobby.getLobbyName())
                 .build();
         } else {
             return LobbyViewForPage.builder()

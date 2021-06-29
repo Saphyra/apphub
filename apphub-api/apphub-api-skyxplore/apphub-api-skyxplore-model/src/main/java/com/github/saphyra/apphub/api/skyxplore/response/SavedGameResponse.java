@@ -5,15 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Builder
-public class LobbyViewForPage {
-    private boolean inLobby;
-    private UUID host;
-    private boolean gameCreationStarted;
-    private String lobbyName;
+public class SavedGameResponse {
+    private UUID gameId;
+    private String gameName;
+    private String players;
+    private LocalDateTime lastPlayed;
 }

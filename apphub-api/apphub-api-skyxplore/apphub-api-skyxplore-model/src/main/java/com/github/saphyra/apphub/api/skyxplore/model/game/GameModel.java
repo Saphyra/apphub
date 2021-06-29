@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -12,4 +13,5 @@ import java.util.UUID;
 public class GameModel extends GameItem {
     private UUID host;
     private String name;
+    private LocalDateTime lastPlayed;
 }

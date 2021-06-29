@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.creation;
 
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,7 +45,7 @@ public class LobbyCreationServiceTest {
     @Test
     public void create() {
         given(lobbyDao.findByUserId(USER_ID)).willReturn(Optional.of(currentLobby));
-        given(lobbyFactory.create(USER_ID, LOBBY_NAME)).willReturn(newLobby);
+        given(lobbyFactory.create(USER_ID, LOBBY_NAME, LobbyType.NEW_GAME)).willReturn(newLobby);
 
         underTest.create(USER_ID, LOBBY_NAME);
 

@@ -25,5 +25,9 @@ class GameModelValidator {
         if (isNull(model.getName())) {
             throw ExceptionFactory.invalidParam("name", "must not be null");
         }
+
+        if (isNull(model.getLastPlayed())) {
+            throw ExceptionFactory.invalidParam("lastPlayed", "must not be null");
+        }
     }
 }

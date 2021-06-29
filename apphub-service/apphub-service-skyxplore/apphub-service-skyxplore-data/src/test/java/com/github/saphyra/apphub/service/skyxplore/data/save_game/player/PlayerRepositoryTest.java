@@ -68,4 +68,23 @@ public class PlayerRepositoryTest {
 
         assertThat(result).containsExactly(entity1);
     }
+
+    @Test
+    public void getByGameId() {
+        PlayerEntity entity1 = PlayerEntity.builder()
+            .playerId(PLAYER_ID_1)
+            .userId(USER_ID_1)
+            .gameId(GAME_ID_1)
+            .build();
+        PlayerEntity entity2 = PlayerEntity.builder()
+            .playerId(PLAYER_ID_2)
+            .userId(USER_ID_2)
+            .gameId(GAME_ID_2)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2));
+
+        List<PlayerEntity> result = underTest.getByGameId(GAME_ID_1);
+
+        assertThat(result).containsExactly(entity1);
+    }
 }

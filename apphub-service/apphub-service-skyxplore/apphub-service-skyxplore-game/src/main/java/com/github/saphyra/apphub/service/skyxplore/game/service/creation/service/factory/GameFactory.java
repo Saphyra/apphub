@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory;
 
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.home_planet.HomePlanetSetupService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.player.PlayerPopulationService;
@@ -26,6 +27,7 @@ public class GameFactory {
     private final UniverseFactory universeFactory;
     private final ChatFactory chatFactory;
     private final HomePlanetSetupService homePlanetSetupService;
+    private final DateTimeUtil dateTimeUtil;
 
     public Game create(SkyXploreGameCreationRequest request) {
         Universe universe = universeFactory.create(request.getMembers().size(), request.getSettings());
@@ -46,6 +48,7 @@ public class GameFactory {
             .universe(universe)
             .chat(chatFactory.create(request.getMembers()))
             .gameName(request.getGameName())
+            .lastPlayed(dateTimeUtil.getCurrentDate())
             .build();
     }
 

@@ -60,4 +60,15 @@ public class PlayerDaoTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void getByGameId() {
+        given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
+        given(repository.getByGameId(GAME_ID_STRING)).willReturn(Arrays.asList(entity));
+        given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(model));
+
+        List<PlayerModel> result = underTest.getByGameId(GAME_ID);
+
+        assertThat(result).containsExactly(model);
+    }
 }

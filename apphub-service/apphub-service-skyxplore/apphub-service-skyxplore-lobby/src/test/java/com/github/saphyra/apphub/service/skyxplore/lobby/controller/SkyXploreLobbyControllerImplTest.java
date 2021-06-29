@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyService;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.StartGameService;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game.StartGameService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.active_friend.ActiveFriendsService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.creation.LobbyCreationService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.invite.InvitationService;
@@ -95,12 +95,14 @@ public class SkyXploreLobbyControllerImplTest {
         given(lobbyDao.findByUserId(USER_ID)).willReturn(Optional.of(lobby));
         given(lobby.getHost()).willReturn(HOST);
         given(lobby.isGameCreationStarted()).willReturn(true);
+        given(lobby.getLobbyName()).willReturn(LOBBY_NAME);
 
         LobbyViewForPage result = underTest.lobbyForPage(accessTokenHeader);
 
         assertThat(result.isInLobby()).isTrue();
         assertThat(result.isGameCreationStarted()).isTrue();
         assertThat(result.getHost()).isEqualTo(HOST);
+        assertThat(result.getLobbyName()).isEqualTo(LOBBY_NAME);
     }
 
     @Test

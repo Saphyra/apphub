@@ -32,8 +32,10 @@ public class LobbyChatTest extends SeleniumTest {
     @Test(groups = "skyxplore")
     public void sendAndReceiveMessages() {
         WebDriver driver1 = extractDriver();
-        RegistrationParameters userData2 = RegistrationParameters.validParameters();
         WebDriver driver2 = extractDriver();
+        RegistrationParameters userData1 = RegistrationParameters.validParameters();
+        RegistrationParameters userData2 = RegistrationParameters.validParameters();
+
         Future<Void> driverFuture = EXECUTOR_SERVICE.submit(() -> {
             Navigation.toIndexPage(driver2);
             IndexPageActions.registerUser(driver2, userData2);
@@ -43,9 +45,9 @@ public class LobbyChatTest extends SeleniumTest {
         });
 
         Navigation.toIndexPage(driver1);
-        RegistrationParameters userData1 = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver1, userData1);
-
+        ModulesPageActions.openModule(driver1, ModuleLocation.SKYXPLORE);
+        SkyXploreCharacterActions.submitForm(driver1);
 
         AwaitilityWrapper.create(120, 5)
             .until(driverFuture::isDone)

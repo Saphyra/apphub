@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -21,6 +22,7 @@ import static org.mockito.Mockito.verify;
 public class GameModelValidatorTest {
     private static final String NAME = "name";
     private static final UUID HOST = UUID.randomUUID();
+    private static final LocalDateTime LAST_PLAYED = LocalDateTime.now();
 
     @Mock
     private GameItemValidator gameItemValidator;
@@ -35,6 +37,7 @@ public class GameModelValidatorTest {
     public void setUp() {
         given(model.getName()).willReturn(NAME);
         given(model.getHost()).willReturn(HOST);
+        given(model.getLastPlayed()).willReturn(LAST_PLAYED);
     }
 
     @After
@@ -58,6 +61,15 @@ public class GameModelValidatorTest {
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
         ExceptionValidator.validateInvalidParam(ex, "name", "must not be null");
+    }
+
+    @Test
+    public void nullLastPlayed() {
+        given(model.getLastPlayed()).willReturn(null);
+
+        Throwable ex = catchThrowable(() -> underTest.validate(model));
+
+        ExceptionValidator.validateInvalidParam(ex, "lastPlayed", "must not be null");
     }
 
     @Test

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.lobby.service;
+package com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
@@ -34,7 +34,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class StartGameServiceTest {
+public class CreateNewGameServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID ALLIANCE_ID = UUID.randomUUID();
     private static final String ALLIANCE_NAME = "alliance-name";
@@ -54,7 +54,7 @@ public class StartGameServiceTest {
     private LocaleProvider localeProvider;
 
     @InjectMocks
-    private StartGameService underTest;
+    private CreateNewGameService underTest;
 
     @Mock
     private Lobby lobby;
@@ -66,32 +66,19 @@ public class StartGameServiceTest {
     private Alliance alliance;
 
     @Test
-    public void forbiddenOperation() {
-        given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
-        given(lobby.getHost()).willReturn(UUID.randomUUID());
-
-        Throwable ex = catchThrowable(() -> underTest.startGame(USER_ID));
-
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
-    }
-
-    @Test
     public void unreadyMember() {
-        given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
-        given(lobby.getHost()).willReturn(USER_ID);
         given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
         given(member.isReady()).willReturn(false);
 
-        Throwable ex = catchThrowable(() -> underTest.startGame(USER_ID));
+        Throwable ex = catchThrowable(() -> underTest.createNewGame(lobby));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.PRECONDITION_FAILED, ErrorCode.LOBBY_MEMBER_NOT_READY);
     }
 
     @Test
     public void startGame() {
-        given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
-        given(lobby.getHost()).willReturn(USER_ID);
         given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
+        given(lobby.getHost()).willReturn(USER_ID);
         given(member.isReady()).willReturn(true);
         given(member.getAlliance()).willReturn(ALLIANCE_ID);
         given(lobby.getAlliances()).willReturn(Arrays.asList(alliance));
@@ -103,7 +90,7 @@ public class StartGameServiceTest {
         given(lobby.getLobbyName()).willReturn(GAME_NAME);
         given(member.getUserId()).willReturn(USER_ID);
 
-        underTest.startGame(USER_ID);
+        underTest.createNewGame(lobby);
 
         ArgumentCaptor<SkyXploreGameCreationRequest> gameCreationRequestArgumentCaptor = ArgumentCaptor.forClass(SkyXploreGameCreationRequest.class);
         verify(gameCreationClient).createGame(gameCreationRequestArgumentCaptor.capture(), eq(LOCALE));

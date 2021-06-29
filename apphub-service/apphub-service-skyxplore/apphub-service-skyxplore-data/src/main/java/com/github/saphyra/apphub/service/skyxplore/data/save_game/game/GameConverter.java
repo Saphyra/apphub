@@ -20,6 +20,7 @@ class GameConverter extends ConverterBase<GameEntity, GameModel> {
         model.setType(GameItemType.GAME);
         model.setName(entity.getName());
         model.setHost(uuidConverter.convertEntity(entity.getHost()));
+        model.setLastPlayed(entity.getLastPlayed());
         return model;
     }
 
@@ -29,6 +30,7 @@ class GameConverter extends ConverterBase<GameEntity, GameModel> {
             .gameId(uuidConverter.convertDomain(domain.getGameId()))
             .name(domain.getName())
             .host(uuidConverter.convertDomain(domain.getHost()))
+            .lastPlayed(domain.getLastPlayed())
             .build();
     }
 }

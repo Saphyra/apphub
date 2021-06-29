@@ -18,6 +18,8 @@ public class Lobby {
     @NonNull
     private final UUID lobbyId;
 
+    private final LobbyType type;
+
     @NonNull
     private final String lobbyName;
 

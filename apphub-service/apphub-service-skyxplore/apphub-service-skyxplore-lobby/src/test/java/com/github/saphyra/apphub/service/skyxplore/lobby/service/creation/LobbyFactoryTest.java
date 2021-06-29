@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.creation;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,9 +38,10 @@ public class LobbyFactoryTest {
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
         given(idGenerator.randomUuid()).willReturn(LOBBY_ID);
 
-        Lobby result = underTest.create(USER_ID, LOBBY_NAME);
+        Lobby result = underTest.create(USER_ID, LOBBY_NAME, LobbyType.LOAD_GAME);
 
         assertThat(result.getLobbyId()).isEqualTo(LOBBY_ID);
+        assertThat(result.getType()).isEqualTo(LobbyType.LOAD_GAME);
         assertThat(result.getLobbyName()).isEqualTo(LOBBY_NAME);
         assertThat(result.getHost()).isEqualTo(USER_ID);
         assertThat(result.getMembers()).containsEntry(USER_ID, Member.builder().userId(USER_ID).build());
