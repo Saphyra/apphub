@@ -47,4 +47,9 @@ public class ExceptionValidator {
     public static void validateInvalidType(Throwable ex) {
         validateNotLoggedException(ex, HttpStatus.UNPROCESSABLE_ENTITY, ErrorCode.INVALID_TYPE);
     }
+
+    public static void validateNotLoggedException(Throwable ex, HttpStatus status) {
+        assertThat(ex).isInstanceOf(NotLoggedException.class);
+        assertThat(((RestException) ex).getResponseStatus()).isEqualTo(status);
+    }
 }

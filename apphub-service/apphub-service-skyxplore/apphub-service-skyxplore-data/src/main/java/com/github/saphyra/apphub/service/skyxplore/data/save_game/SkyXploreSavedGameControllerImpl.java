@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -30,13 +31,15 @@ public class SkyXploreSavedGameControllerImpl implements SkyXploreSavedGameContr
     private final ObjectMapperWrapper objectMapperWrapper;
     private final GameDao gameDao;
     private final PlayerDao playerDao;
+    private final GameDeletionService gameDeletionService;
 
-    public SkyXploreSavedGameControllerImpl(List<GameItemService> savers, ObjectMapperWrapper objectMapperWrapper, GameDao gameDao, PlayerDao playerDao) {
+    public SkyXploreSavedGameControllerImpl(List<GameItemService> savers, ObjectMapperWrapper objectMapperWrapper, GameDao gameDao, PlayerDao playerDao, GameDeletionService gameDeletionService) {
         this.savers = new OptionalHashMap<>(savers.stream()
             .collect(Collectors.toMap(GameItemService::getType, Function.identity())));
         this.objectMapperWrapper = objectMapperWrapper;
         this.gameDao = gameDao;
         this.playerDao = playerDao;
+        this.gameDeletionService = gameDeletionService;
     }
 
     @Override
@@ -54,6 +57,7 @@ public class SkyXploreSavedGameControllerImpl implements SkyXploreSavedGameContr
 
     @Override
     public List<SavedGameResponse> getSavedGames(AccessTokenHeader accessTokenHeader) {
+        log.info("Querying saved games for {}", accessTokenHeader.getUserId());
         return gameDao.getByHost(accessTokenHeader.getUserId())
             .stream()
             .map(gameModel -> SavedGameResponse.builder()
@@ -63,6 +67,12 @@ public class SkyXploreSavedGameControllerImpl implements SkyXploreSavedGameContr
                 .lastPlayed(gameModel.getLastPlayed())
                 .build())
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteGame(UUID gameId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to delete game {}", accessTokenHeader.getUserId(), gameId);
+        gameDeletionService.deleteByGameId(gameId, accessTokenHeader.getUserId());
     }
 
     private String getPlayers(GameModel gameModel) {

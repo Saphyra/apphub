@@ -126,6 +126,12 @@
     "remove-friend-confirmation-dialog-cancel-button": "Mégse",
     "additional-players": "Játékosok",
     "last-played": "Utoljára játszva",
-    "delete": "Törlés"
+    "delete": "Törlés",
+    "delete-game-confirmation-dialog-title": "Játék törlésének megerősítése",
+    "delete-game-confirmation-dialog-detail": "Biztosan törölni szeretnéd <SPAN style='color: red; font-weight: bold;'>{gameName}</SPAN> játékot? A kitörölt játékokat már nem lehet visszaállítani.",
+    "delete-game-confirmation-dialog-confirm-button": "Törlés",
+    "delete-game-confirmation-dialog-cancel-button": "Mégse",
+    "game-deleted": "Játék törölve.",
+    "no-game": "Nincs mentett játék. Kezdj egy újat!"
   }
 }

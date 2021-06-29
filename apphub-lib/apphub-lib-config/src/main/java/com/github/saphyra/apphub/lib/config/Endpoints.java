@@ -116,7 +116,8 @@ public class Endpoints {
     public static final String SKYXPLORE_INTERNAL_SAVE_GAME_DATA = "/allowed-internal/skyxplore/game/data";
 
     public static final String SKYXPLORE_CREATE_OR_UPDATE_CHARACTER = "/api/skyxplore/character";
-    public static final String SKYXPLORE_GET_GAMES = "/api/skyxplore/game";
+    public static final String SKYXPLORE_GET_GAMES = "/api/skyxplore/saved-game";
+    public static final String SKYXPLORE_DELETE_GAME = "/api/skyxplore/saved-game/{gameId}";
     public static final String SKYXPLORE_SEARCH_FOR_FRIENDS = "/api/skyxplore/friend/candidate";
     public static final String SKYXPLORE_ADD_FRIEND = "/api/skyxplore/friend/request";
     public static final String SKYXPLORE_GET_SENT_FRIEND_REQUEST = "/api/skyxplore/friend/request/sent";

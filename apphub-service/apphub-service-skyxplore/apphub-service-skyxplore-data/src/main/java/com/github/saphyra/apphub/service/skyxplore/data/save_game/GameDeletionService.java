@@ -1,11 +1,15 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.game.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.player.PlayerDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,6 +36,21 @@ class GameDeletionService implements DeleteByUserIdDao {
             .stream()
             .map(GameItem::getGameId)
             .peek(gameId -> log.info("Deleting game by id {} of host {}", gameId, userId))
-            .forEach(gameId -> gameItemServices.forEach(gameItemService -> gameItemService.deleteByGameId(gameId)));
+            .forEach(this::deleteByGamaId);
+    }
+
+    public void deleteByGameId(UUID gameId, UUID userId) {
+        GameModel gameModel = gameDao.findById(gameId)
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, "Game not found with id " + gameId));
+
+        if (!gameModel.getHost().equals(userId)) {
+            throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, userId + " must not delete game " + gameId);
+        }
+
+        deleteByGamaId(gameId);
+    }
+
+    private void deleteByGamaId(UUID gameId) {
+        gameItemServices.forEach(gameItemService -> gameItemService.deleteByGameId(gameId));
     }
 }

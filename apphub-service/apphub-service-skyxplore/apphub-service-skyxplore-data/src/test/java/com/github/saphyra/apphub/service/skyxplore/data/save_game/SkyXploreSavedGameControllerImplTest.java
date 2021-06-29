@@ -44,6 +44,9 @@ public class SkyXploreSavedGameControllerImplTest {
     @Mock
     private PlayerDao playerDao;
 
+    @Mock
+    private GameDeletionService gameDeletionService;
+
     private SkyXploreSavedGameControllerImpl underTest;
 
     @Mock
@@ -74,7 +77,7 @@ public class SkyXploreSavedGameControllerImplTest {
         underTest = new SkyXploreSavedGameControllerImpl(
             Arrays.asList(gameItemService),
             objectMapperWrapper,
-            gameDao, playerDao);
+            gameDao, playerDao, gameDeletionService);
     }
 
     @Test
@@ -120,5 +123,14 @@ public class SkyXploreSavedGameControllerImplTest {
         assertThat(response.getGameName()).isEqualTo(GAME_NAME);
         assertThat(response.getLastPlayed()).isEqualTo(LAST_PLAYED);
         assertThat(response.getPlayers()).isEqualTo("player-name-1, player-name-2");
+    }
+
+    @Test
+    public void deleteGame() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
+        underTest.deleteGame(GAME_ID, accessTokenHeader);
+
+        verify(gameDeletionService).deleteByGameId(GAME_ID, USER_ID);
     }
 }

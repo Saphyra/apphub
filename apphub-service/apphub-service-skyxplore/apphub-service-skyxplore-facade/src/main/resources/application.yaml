@@ -43,7 +43,11 @@ zuul:
       serviceId: skyxplore-data
       stripPrefix: false
     get-saved-game:
-      path: /api/skyxplore/game
+      path: /api/skyxplore/saved-game
+      serviceId: skyxplore-data
+      stripPrefix: false
+    delete-game:
+      path: /api/skyxplore/saved-game/*
       serviceId: skyxplore-data
       stripPrefix: false
 

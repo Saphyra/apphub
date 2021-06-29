@@ -126,6 +126,12 @@
     "remove-friend-confirmation-dialog-cancel-button": "Cancel",
     "additional-players": "Players",
     "last-played": "Last played",
-    "delete": "Delete"
+    "delete": "Delete",
+    "delete-game-confirmation-dialog-title": "Confirm game deletion",
+    "delete-game-confirmation-dialog-detail": "Are you sure you want to delete game <SPAN style='color: red; font-weight: bold;'>{gameName}</SPAN>? Deleted games cannot be restored.",
+    "delete-game-confirmation-dialog-confirm-button": "Delete",
+    "delete-game-confirmation-dialog-cancel-button": "Cancel",
+    "game-deleted": "Game deleted.",
+    "no-game": "No saved games. Please create a new one."
   }
 }
