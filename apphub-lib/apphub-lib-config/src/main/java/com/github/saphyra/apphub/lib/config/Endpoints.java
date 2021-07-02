@@ -145,6 +145,7 @@ public class Endpoints {
     public static final String SKYXPLORE_LOBBY_GET_GAME_SETTINGS = "/api/skyxplore/lobby/settings";
     public static final String SKYXPLORE_START_GAME = "/api/skyxplore/lobby/start";
     public static final String SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS = "/api/skyxplore/friends/active";
+    public static final String SKYXPLORE_LOBBY_LOAD_GAME = "/api/skyxplore/lobby/load-game/{gameId}";
 
     //SKYXPLORE-GAME
     public static final String SKYXPLORE_INTERNAL_GAME_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/game/{userId}";
@@ -153,6 +154,7 @@ public class Endpoints {
     public static final String SKYXPLORE_INTERNAL_USER_JOINED_TO_GAME = "/internal/skyxplore/game/{userId}";
     public static final String SKYXPLORE_INTERNAL_USER_LEFT_GAME = "/internal/skyxplore/game/{userId}";
     public static final String SKYXPLORE_INTERNAL_IS_USER_IN_GAME = "/internal/skyxplore/game";
+    public static final String SKYXPLORE_INTERNAL_GET_GAME_FOR_LOBBY_CREATION = "/internal/skyxplore/game/{gameId}/load-preview";
 
     public static final String SKYXPLORE_GAME_MAP = "/api/skyxplore/game/universe";
     public static final String SKYXPLORE_GAME_GET_PLAYERS = "/api/skyxplore/game/player";

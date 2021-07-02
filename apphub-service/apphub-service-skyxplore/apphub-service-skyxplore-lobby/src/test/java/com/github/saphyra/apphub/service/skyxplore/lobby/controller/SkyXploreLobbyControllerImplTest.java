@@ -38,6 +38,7 @@ public class SkyXploreLobbyControllerImplTest {
     private static final String LOBBY_NAME = "lobby-name";
     private static final UUID HOST = UUID.randomUUID();
     private static final UUID FRIEND_ID = UUID.randomUUID();
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private ActiveFriendsService activeFriendsService;
@@ -87,7 +88,7 @@ public class SkyXploreLobbyControllerImplTest {
     public void createLobby() {
         underTest.createLobby(new OneParamRequest<>(LOBBY_NAME), accessTokenHeader);
 
-        verify(lobbyCreationService).create(USER_ID, LOBBY_NAME);
+        verify(lobbyCreationService).createNew(USER_ID, LOBBY_NAME);
     }
 
     @Test
@@ -187,5 +188,12 @@ public class SkyXploreLobbyControllerImplTest {
         List<ActiveFriendResponse> result = underTest.getActiveFriends(accessTokenHeader);
 
         assertThat(result).containsExactly(activeFriendResponse);
+    }
+
+    @Test
+    public void loadGame() {
+        underTest.loadGame(GAME_ID, accessTokenHeader);
+
+        verify(lobbyCreationService).createForExistingGame(USER_ID, GAME_ID);
     }
 }

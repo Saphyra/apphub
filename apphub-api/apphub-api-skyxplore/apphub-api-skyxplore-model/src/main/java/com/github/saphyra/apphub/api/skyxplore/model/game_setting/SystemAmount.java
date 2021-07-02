@@ -9,7 +9,7 @@ public enum SystemAmount {
     RANDOM;
 
     @JsonCreator
-    public static SystemAmount forValues(String value) {
+    public static SystemAmount forValue(String value) {
         for (SystemAmount systemAmount : values()) {
             if (systemAmount.name().equalsIgnoreCase(value)) {
                 return systemAmount;

@@ -6,10 +6,13 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.UniverseModel;
 import com.github.saphyra.apphub.api.skyxplore.response.SavedGameResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCreation;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.service.skyxplore.data.save_game.game.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.data.save_game.player.PlayerDao;
+import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameDeletionService;
+import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
+import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.game.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.player.PlayerDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,6 +50,9 @@ public class SkyXploreSavedGameControllerImplTest {
     @Mock
     private GameDeletionService gameDeletionService;
 
+    @Mock
+    private GameViewForLobbyCreationQueryService gameViewForLobbyCreationQueryService;
+
     private SkyXploreSavedGameControllerImpl underTest;
 
     @Mock
@@ -70,14 +76,20 @@ public class SkyXploreSavedGameControllerImplTest {
     @Mock
     private PlayerModel aiPlayer;
 
+    @Mock
+    private GameViewForLobbyCreation gameViewForLobbyCreation;
+
     @Before
     public void setUp() {
         given(gameItemService.getType()).willReturn(GameItemType.UNIVERSE);
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
 
         underTest = new SkyXploreSavedGameControllerImpl(
             Arrays.asList(gameItemService),
             objectMapperWrapper,
-            gameDao, playerDao, gameDeletionService);
+            gameDao, playerDao, gameDeletionService,
+            gameViewForLobbyCreationQueryService
+        );
     }
 
     @Test
@@ -93,7 +105,6 @@ public class SkyXploreSavedGameControllerImplTest {
 
     @Test
     public void getSavedGames() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(gameDao.getByHost(USER_ID)).willReturn(Arrays.asList(gameModel));
         given(gameModel.getHost()).willReturn(USER_ID);
 
@@ -132,5 +143,14 @@ public class SkyXploreSavedGameControllerImplTest {
         underTest.deleteGame(GAME_ID, accessTokenHeader);
 
         verify(gameDeletionService).deleteByGameId(GAME_ID, USER_ID);
+    }
+
+    @Test
+    public void getGameViewForLobbyCreation() {
+        given(gameViewForLobbyCreationQueryService.getView(USER_ID, GAME_ID)).willReturn(gameViewForLobbyCreation);
+
+        GameViewForLobbyCreation result = underTest.getGameForLobbyCreation(GAME_ID, accessTokenHeader);
+
+        assertThat(result).isEqualTo(gameViewForLobbyCreation);
     }
 }

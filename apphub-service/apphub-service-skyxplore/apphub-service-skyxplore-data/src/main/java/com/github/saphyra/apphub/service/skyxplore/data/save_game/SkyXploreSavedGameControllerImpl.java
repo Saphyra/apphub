@@ -6,13 +6,16 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
 import com.github.saphyra.apphub.api.skyxplore.response.SavedGameResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCreation;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
-import com.github.saphyra.apphub.service.skyxplore.data.save_game.game.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.data.save_game.player.PlayerDao;
+import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameDeletionService;
+import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
+import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.game.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.player.PlayerDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,14 +35,16 @@ public class SkyXploreSavedGameControllerImpl implements SkyXploreSavedGameContr
     private final GameDao gameDao;
     private final PlayerDao playerDao;
     private final GameDeletionService gameDeletionService;
+    private final GameViewForLobbyCreationQueryService gameViewForLobbyCreationQueryService;
 
-    public SkyXploreSavedGameControllerImpl(List<GameItemService> savers, ObjectMapperWrapper objectMapperWrapper, GameDao gameDao, PlayerDao playerDao, GameDeletionService gameDeletionService) {
+    public SkyXploreSavedGameControllerImpl(List<GameItemService> savers, ObjectMapperWrapper objectMapperWrapper, GameDao gameDao, PlayerDao playerDao, GameDeletionService gameDeletionService, GameViewForLobbyCreationQueryService gameViewForLobbyCreationQueryService) {
         this.savers = new OptionalHashMap<>(savers.stream()
             .collect(Collectors.toMap(GameItemService::getType, Function.identity())));
         this.objectMapperWrapper = objectMapperWrapper;
         this.gameDao = gameDao;
         this.playerDao = playerDao;
         this.gameDeletionService = gameDeletionService;
+        this.gameViewForLobbyCreationQueryService = gameViewForLobbyCreationQueryService;
     }
 
     @Override
@@ -73,6 +78,12 @@ public class SkyXploreSavedGameControllerImpl implements SkyXploreSavedGameContr
     public void deleteGame(UUID gameId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to delete game {}", accessTokenHeader.getUserId(), gameId);
         gameDeletionService.deleteByGameId(gameId, accessTokenHeader.getUserId());
+    }
+
+    @Override
+    public GameViewForLobbyCreation getGameForLobbyCreation(UUID gameId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to query game {} for lobby creation", accessTokenHeader.getUserId(), gameId);
+        return gameViewForLobbyCreationQueryService.getView(accessTokenHeader.getUserId(), gameId);
     }
 
     private String getPlayers(GameModel gameModel) {

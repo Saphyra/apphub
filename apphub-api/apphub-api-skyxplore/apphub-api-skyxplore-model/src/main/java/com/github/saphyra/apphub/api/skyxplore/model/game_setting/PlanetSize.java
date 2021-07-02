@@ -9,7 +9,7 @@ public enum PlanetSize {
     RANDOM;
 
     @JsonCreator
-    public static PlanetSize forValues(String value) {
+    public static PlanetSize forValue(String value) {
         for (PlanetSize planetSize : values()) {
             if (planetSize.name().equalsIgnoreCase(value)) {
                 return planetSize;

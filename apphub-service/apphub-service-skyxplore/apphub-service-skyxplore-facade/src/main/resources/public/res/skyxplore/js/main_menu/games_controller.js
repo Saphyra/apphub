@@ -101,6 +101,10 @@
     }
 
     function loadGame(gameId){
-        //TODO implement
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_LOBBY_LOAD_GAME", {gameId: gameId}));
+            request.processValidResponse = function(){
+                window.location.href = Mapping.SKYXPLORE_LOBBY_PAGE;
+            }
+        dao.sendRequestAsync(request);
     }
 })();

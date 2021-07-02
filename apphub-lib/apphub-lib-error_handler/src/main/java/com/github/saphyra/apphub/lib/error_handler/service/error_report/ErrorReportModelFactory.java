@@ -21,7 +21,7 @@ class ErrorReportModelFactory {
     ErrorReportModel create(HttpStatus status, ErrorResponse errorResponse, Throwable exception) {
         return ErrorReportModel.builder()
             .createdAt(dateTimeUtil.getCurrentDate())
-            .message(safeConvert(exception, Throwable::getMessage))
+            .message(safeConvert(exception, Throwable::getMessage, "No message"))
             .responseStatus(status.value())
             .responseBody(objectMapperWrapper.writeValueAsString(errorResponse))
             .exception(objectMapperWrapper.writeValueAsString(exception))

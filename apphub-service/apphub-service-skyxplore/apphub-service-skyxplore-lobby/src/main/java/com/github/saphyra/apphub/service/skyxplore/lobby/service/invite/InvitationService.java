@@ -60,7 +60,7 @@ public class InvitationService {
             .stream()
             .anyMatch(friendshipResponse -> friendshipResponse.getFriendId().equals(friendId));
         if (!friends) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.PRECONDITION_FAILED, accessTokenHeader.getUserId() + " is not a friuend of " + friendId);
+            throw ExceptionFactory.notLoggedException(HttpStatus.PRECONDITION_FAILED, accessTokenHeader.getUserId() + " is not a friend of " + friendId);
         }
 
         Lobby lobby = lobbyDao.findByUserIdValidated(accessTokenHeader.getUserId());
@@ -80,12 +80,16 @@ public class InvitationService {
             }
         }
 
-        Invitation invitation = invitationFactory.create(accessTokenHeader.getUserId(), friendId);
+        inviteDirectly(accessTokenHeader.getUserId(), friendId, lobby);
+    }
+
+    public void inviteDirectly(UUID senderId, UUID characterID, Lobby lobby) {
+        Invitation invitation = invitationFactory.create(senderId, characterID);
         lobby.getInvitations()
             .add(invitation);
 
         InvitationMessage invitationMessage = InvitationMessage.builder()
-            .senderId(accessTokenHeader.getUserId())
+            .senderId(senderId)
             .senderName(characterProxy.getCharacter().getName())
             .build();
         WebSocketEvent event = WebSocketEvent.builder()
@@ -93,7 +97,7 @@ public class InvitationService {
             .payload(invitationMessage)
             .build();
         WebSocketMessage message = WebSocketMessage.builder()
-            .recipients(Arrays.asList(friendId))
+            .recipients(Arrays.asList(characterID))
             .event(event
             )
             .build();

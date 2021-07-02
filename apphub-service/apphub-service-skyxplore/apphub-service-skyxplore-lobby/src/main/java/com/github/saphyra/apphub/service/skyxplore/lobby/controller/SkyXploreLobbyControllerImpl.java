@@ -41,7 +41,7 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     @Override
     public void createLobby(OneParamRequest<String> lobbyName, AccessTokenHeader accessTokenHeader) {
         log.info("Creating lobby for user {} if not exists", accessTokenHeader.getUserId());
-        lobbyCreationService.create(accessTokenHeader.getUserId(), lobbyName.getValue());
+        lobbyCreationService.createNew(accessTokenHeader.getUserId(), lobbyName.getValue());
     }
 
     @Override
@@ -125,5 +125,11 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     public List<ActiveFriendResponse> getActiveFriends(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know his active friends", accessTokenHeader.getUserId());
         return activeFriendsService.getActiveFriends(accessTokenHeader);
+    }
+
+    @Override
+    public void loadGame(UUID gameId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to load game {}", accessTokenHeader.getUserId(), gameId);
+        lobbyCreationService.createForExistingGame(accessTokenHeader.getUserId(), gameId);
     }
 }

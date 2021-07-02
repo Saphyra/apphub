@@ -11,13 +11,19 @@ public class NullSafeConverterTest {
 
     @Test
     public void convertNull() {
-        Integer result = NullSafeConverter.safeConvert((String) null, String::length);
+        Integer result = NullSafeConverter.safeConvert(null, String::length);
         assertThat(result).isNull();
     }
 
     @Test
     public void convertValue() {
         Integer result = NullSafeConverter.safeConvert("asd", String::length);
+        assertThat(result).isEqualTo(3);
+    }
+
+    @Test
+    public void convertToDefault() {
+        Integer result = NullSafeConverter.safeConvert(null, String::length, 3);
         assertThat(result).isEqualTo(3);
     }
 }

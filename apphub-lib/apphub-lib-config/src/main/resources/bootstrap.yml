@@ -97,6 +97,10 @@ skyxplore-data-friend:
   ribbon:
     listOfServers: skyxplore-data:8080
 
+skyxplore-data-saved-game:
+  ribbon:
+    listOfServers: skyxplore-data:8080
+
 skyxplore-data-game:
   ribbon:
     listOfServers: skyxplore-data:8080

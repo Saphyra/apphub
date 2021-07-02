@@ -31,7 +31,7 @@ public class ExitFromLobbyService {
             .ifPresent(lobby -> exit(userId, lobby));
     }
 
-    private void exit(UUID userId, Lobby lobby) {
+    public void exit(UUID userId, Lobby lobby) {
         lobby.getMembers().remove(userId);
 
         sendNotifications(userId, lobby);

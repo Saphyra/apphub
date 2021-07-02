@@ -8,7 +8,9 @@ echo "Namespace: $NAMESPACE_NAME"
 ./deploy.sh "$NAMESPACE_NAME"
 
 if [ "$1" != "skipTests" ]; then
+  if [ "$1" != "skipIntegrationTests" ]; then
     ./run_tests.sh "$NAMESPACE_NAME"
+  fi
 fi
 
 start ./port_forward.sh "$NAMESPACE_NAME"

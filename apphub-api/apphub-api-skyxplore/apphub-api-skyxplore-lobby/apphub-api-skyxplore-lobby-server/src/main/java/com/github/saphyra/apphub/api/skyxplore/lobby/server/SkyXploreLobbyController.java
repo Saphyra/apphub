@@ -52,4 +52,7 @@ public interface SkyXploreLobbyController {
 
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS)
     List<ActiveFriendResponse> getActiveFriends(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.SKYXPLORE_LOBBY_LOAD_GAME)
+    void loadGame(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

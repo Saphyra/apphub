@@ -84,6 +84,10 @@ zuul:
       path: /api/skyxplore/friends/active
       serviceId: skyxplore-lobby
       stripPrefix: false
+    load-game:
+      path: /api/skyxplore/lobby/load-game/*
+      serviceId: skyxplore-lobby
+      stripPrefix: false
 
     #SkyXplore game
     get-map:

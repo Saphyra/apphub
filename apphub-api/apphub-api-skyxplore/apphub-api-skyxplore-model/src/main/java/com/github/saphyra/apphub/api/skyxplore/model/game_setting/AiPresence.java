@@ -9,7 +9,7 @@ public enum AiPresence {
     EVERYWHERE;
 
     @JsonCreator
-    public static AiPresence forValues(String value) {
+    public static AiPresence forValue(String value) {
         for (AiPresence aiPresence : values()) {
             if (aiPresence.name().equalsIgnoreCase(value)) {
                 return aiPresence;
