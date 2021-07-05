@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.GameSettings;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game.StartGameService;
@@ -97,6 +98,7 @@ public class SkyXploreLobbyControllerImplTest {
         given(lobby.getHost()).willReturn(HOST);
         given(lobby.isGameCreationStarted()).willReturn(true);
         given(lobby.getLobbyName()).willReturn(LOBBY_NAME);
+        given(lobby.getType()).willReturn(LobbyType.NEW_GAME);
 
         LobbyViewForPage result = underTest.lobbyForPage(accessTokenHeader);
 
@@ -104,6 +106,7 @@ public class SkyXploreLobbyControllerImplTest {
         assertThat(result.isGameCreationStarted()).isTrue();
         assertThat(result.getHost()).isEqualTo(HOST);
         assertThat(result.getLobbyName()).isEqualTo(LOBBY_NAME);
+        assertThat(result.getType()).isEqualTo(LobbyType.NEW_GAME.name());
     }
 
     @Test
@@ -147,7 +150,7 @@ public class SkyXploreLobbyControllerImplTest {
     public void userLeftLobby() {
         underTest.userLeftLobby(USER_ID);
 
-        verify(exitFromLobbyService).sendDisconnectionMessage(USER_ID);
+        verify(exitFromLobbyService).exit(USER_ID);
     }
 
     @Test

@@ -20,7 +20,7 @@ class LobbyMemberResponseConverter {
     LobbyMemberResponse convertMember(Member member, List<Alliance> alliances) {
         return LobbyMemberResponse.builder()
             .userId(member.getUserId())
-            .ready(member.isReady())
+            .status(member.getStatus())
             .characterName(characterProxy.getCharacter(member.getUserId()).getName())
             .alliance(getAllianceName(alliances, member.getAlliance()))
             .build();

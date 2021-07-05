@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMess
 import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameCreationApiClient;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberStatus;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
@@ -68,7 +69,7 @@ public class CreateNewGameServiceTest {
     @Test
     public void unreadyMember() {
         given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
-        given(member.isReady()).willReturn(false);
+        given(member.getStatus()).willReturn(LobbyMemberStatus.NOT_READY);
 
         Throwable ex = catchThrowable(() -> underTest.createNewGame(lobby));
 
@@ -79,7 +80,7 @@ public class CreateNewGameServiceTest {
     public void startGame() {
         given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
         given(lobby.getHost()).willReturn(USER_ID);
-        given(member.isReady()).willReturn(true);
+        given(member.getStatus()).willReturn(LobbyMemberStatus.READY);
         given(member.getAlliance()).willReturn(ALLIANCE_ID);
         given(lobby.getAlliances()).willReturn(Arrays.asList(alliance));
         given(alliance.getAllianceName()).willReturn(ALLIANCE_NAME);

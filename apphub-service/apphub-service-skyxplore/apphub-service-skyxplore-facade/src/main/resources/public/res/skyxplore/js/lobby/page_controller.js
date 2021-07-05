@@ -18,6 +18,7 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/start_game_controller.js");
         aiPresenceInput: "ai-presence-input",
         startGameButton: "start-game-button",
         noActiveFriends: "no-active-friends",
+        gameSettings: "game-settings",
     }
 
     window.webSocketEvents = {
@@ -59,5 +60,9 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/start_game_controller.js");
             .addHandler(friendsController.createCharacterOnlineHandler())
             .addHandler(friendsController.createCharacterOfflineHandler())
             .connect();
+
+        if(lobbyType == "LOAD_GAME"){
+            $("#" + ids.gameSettings).hide();
+        }
     });
 })();

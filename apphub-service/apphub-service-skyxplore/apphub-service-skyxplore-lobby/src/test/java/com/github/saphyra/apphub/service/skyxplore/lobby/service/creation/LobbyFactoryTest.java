@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.creation;
 
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberStatus;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
@@ -53,7 +54,7 @@ public class LobbyFactoryTest {
         assertThat(result.getType()).isEqualTo(LobbyType.LOAD_GAME);
         assertThat(result.getLobbyName()).isEqualTo(LOBBY_NAME);
         assertThat(result.getHost()).isEqualTo(USER_ID);
-        assertThat(result.getMembers()).containsEntry(USER_ID, Member.builder().userId(USER_ID).build());
+        assertThat(result.getMembers()).containsEntry(USER_ID, Member.builder().userId(USER_ID).status(LobbyMemberStatus.NOT_READY).build());
         assertThat(result.getLastAccess()).isEqualTo(CURRENT_DATE);
     }
 
@@ -69,7 +70,7 @@ public class LobbyFactoryTest {
         assertThat(result.getType()).isEqualTo(LobbyType.LOAD_GAME);
         assertThat(result.getLobbyName()).isEqualTo(LOBBY_NAME);
         assertThat(result.getHost()).isEqualTo(USER_ID);
-        assertThat(result.getMembers()).containsEntry(USER_ID, Member.builder().userId(USER_ID).alliance(ALLIANCE_ID).build());
+        assertThat(result.getMembers()).containsEntry(USER_ID, Member.builder().userId(USER_ID).alliance(ALLIANCE_ID).status(LobbyMemberStatus.NOT_READY).build());
         assertThat(result.getLastAccess()).isEqualTo(CURRENT_DATE);
         assertThat(result.getAlliances()).containsExactly(alliance);
         assertThat(result.getExpectedPlayers()).containsExactly(PLAYER_ID);

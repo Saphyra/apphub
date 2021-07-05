@@ -18,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -57,6 +58,7 @@ public class ExitFromLobbyServiceTest {
         ));
         given(lobby.getHost()).willReturn(USER_ID);
         given(lobby.getInvitations()).willReturn(CollectionUtils.toList(Invitation.builder().invitorId(MEMBER_ID).characterId(USER_ID).build()));
+        given(lobby.getExpectedPlayers()).willReturn(Arrays.asList(MEMBER_ID));
 
         given(characterProxy.getCharacter(MEMBER_ID)).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
 
@@ -76,6 +78,7 @@ public class ExitFromLobbyServiceTest {
         assertThat(payload.getUserId()).isEqualTo(MEMBER_ID);
         assertThat(payload.getCharacterName()).isEqualTo(PLAYER_NAME);
         assertThat(payload.isHost()).isFalse();
+        assertThat(payload.isExpectedPlayer()).isTrue();
 
         verify(lobbyDao, times(0)).delete(any());
 

@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.event.handler;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberStatus;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
@@ -56,7 +57,7 @@ public class SetReadinessWebSocketEventHandlerTest {
 
         underTest.handle(FROM, WebSocketEvent.builder().payload(String.valueOf(true)).build());
 
-        verify(member).setReady(true);
+        verify(member).setStatus(LobbyMemberStatus.READY);
 
         ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
         verify(messageSenderProxy).sendToLobby(argumentCaptor.capture());

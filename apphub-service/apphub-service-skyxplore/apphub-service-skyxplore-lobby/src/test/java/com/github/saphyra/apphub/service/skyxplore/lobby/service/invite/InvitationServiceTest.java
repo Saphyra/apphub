@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
@@ -174,5 +175,14 @@ public class InvitationServiceTest {
         InvitationMessage payload = (InvitationMessage) event.getPayload();
         assertThat(payload.getSenderId()).isEqualTo(USER_ID);
         assertThat(payload.getSenderName()).isEqualTo(PLAYER_NAME);
+    }
+
+    @Test
+    public void inviteDirectly_forbiddenOperation() {
+        given(lobby.getType()).willReturn(LobbyType.LOAD_GAME);
+
+        Throwable ex = catchThrowable(() -> underTest.inviteDirectly(USER_ID, FRIEND_ID, lobby));
+
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
     }
 }

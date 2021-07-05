@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplore
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreFriendActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.LobbyMemberResponse;
+import com.github.saphyra.apphub.integration.backend.model.skyxplore.LobbyMemberStatus;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.LobbyMembersResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
@@ -52,7 +53,7 @@ public class AcceptInvitationTest extends BackEndTest {
         //Accept invitation
         SkyXploreLobbyActions.acceptInvitation(language, accessTokenId2, userId1);
         LobbyMembersResponse lobbyMembers = SkyXploreLobbyActions.getLobbyMembers(language, accessTokenId2);
-        assertThat(lobbyMembers.getHost()).isEqualTo(LobbyMemberResponse.builder().userId(userId1).characterName(characterModel1.getName()).build());
-        assertThat(lobbyMembers.getMembers()).containsExactly(LobbyMemberResponse.builder().userId(userId2).characterName(characterModel2.getName()).build());
+        assertThat(lobbyMembers.getHost()).isEqualTo(LobbyMemberResponse.builder().userId(userId1).characterName(characterModel1.getName()).status(LobbyMemberStatus.NOT_READY).build());
+        assertThat(lobbyMembers.getMembers()).containsExactly(LobbyMemberResponse.builder().userId(userId2).characterName(characterModel2.getName()).status(LobbyMemberStatus.NOT_READY).build());
     }
 }

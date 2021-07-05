@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberStatus;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
@@ -84,7 +85,7 @@ public class JoinToLobbyServiceTest {
         underTest.acceptInvitation(USER_ID, INVITOR_ID);
 
         assertThat(lobby.getInvitations()).isEmpty();
-        assertThat(lobby.getMembers()).containsEntry(USER_ID, Member.builder().userId(USER_ID).build());
+        assertThat(lobby.getMembers()).containsEntry(USER_ID, Member.builder().userId(USER_ID).status(LobbyMemberStatus.NOT_READY).build());
     }
 
     @Test
@@ -95,10 +96,12 @@ public class JoinToLobbyServiceTest {
         given(lobby.getHost()).willReturn(HOST);
         given(lobby.getAlliances()).willReturn(Arrays.asList(alliance));
         given(alliance.getAllianceName()).willReturn(ALLIANCE_NAME);
+        given(member.getStatus()).willReturn(LobbyMemberStatus.NOT_READY);
 
         underTest.userJoinedToLobby(USER_ID);
 
         verify(member).setConnected(true);
+        verify(member).setStatus(LobbyMemberStatus.NOT_READY);
 
         ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
         verify(messageSenderProxy).sendToLobby(argumentCaptor.capture());
@@ -112,5 +115,6 @@ public class JoinToLobbyServiceTest {
         assertThat(payload.getCharacterName()).isEqualTo(PLAYER_NAME);
         assertThat(payload.isHost()).isFalse();
         assertThat(payload.getAlliances()).containsExactly(ALLIANCE_NAME);
+        assertThat(payload.getStatus()).isEqualTo(LobbyMemberStatus.NOT_READY);
     }
 }

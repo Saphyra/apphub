@@ -21,6 +21,8 @@ import org.testng.annotations.Test;
 
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class StartGameTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
@@ -46,16 +48,16 @@ public class StartGameTest extends BackEndTest {
         SkyXploreLobbyActions.acceptInvitation(language, accessTokenId2, userId1);
 
         Response forbiddenResponse = SkyXploreLobbyActions.getStartGameResponse(language, accessTokenId2);
-        getSoftAssertions().assertThat(forbiddenResponse.getStatusCode()).isEqualTo(403);
+        assertThat(forbiddenResponse.getStatusCode()).isEqualTo(403);
         ErrorResponse forbiddenErrorResponse = forbiddenResponse.getBody().as(ErrorResponse.class);
-        getSoftAssertions().assertThat(forbiddenErrorResponse.getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
-        getSoftAssertions().assertThat(forbiddenErrorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FORBIDDEN_OPERATION));
+        assertThat(forbiddenErrorResponse.getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
+        assertThat(forbiddenErrorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.FORBIDDEN_OPERATION));
 
         Response notReadyResponse = SkyXploreLobbyActions.getStartGameResponse(language, accessTokenId1);
-        getSoftAssertions().assertThat(notReadyResponse.getStatusCode()).isEqualTo(412);
+        assertThat(notReadyResponse.getStatusCode()).isEqualTo(412);
         ErrorResponse notReadyErrorResponse = notReadyResponse.getBody().as(ErrorResponse.class);
-        getSoftAssertions().assertThat(notReadyErrorResponse.getErrorCode()).isEqualTo(ErrorCode.LOBBY_MEMBER_NOT_READY.name());
-        getSoftAssertions().assertThat(notReadyErrorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.LOBBY_MEMBER_NOT_READY));
+        assertThat(notReadyErrorResponse.getErrorCode()).isEqualTo(ErrorCode.LOBBY_MEMBER_NOT_READY.name());
+        assertThat(notReadyErrorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.LOBBY_MEMBER_NOT_READY));
 
         ApphubWsClient hostLobbyWsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
         ApphubWsClient memberLobbyWsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2);

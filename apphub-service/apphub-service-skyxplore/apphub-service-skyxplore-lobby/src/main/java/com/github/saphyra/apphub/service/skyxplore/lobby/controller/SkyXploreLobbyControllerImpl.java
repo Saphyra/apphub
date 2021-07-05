@@ -57,6 +57,7 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
                 .host(lobby.getHost())
                 .gameCreationStarted(lobby.isGameCreationStarted())
                 .lobbyName(lobby.getLobbyName())
+                .type(lobby.getType().name())
                 .build();
         } else {
             return LobbyViewForPage.builder()
@@ -92,7 +93,7 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     @Override
     public void userLeftLobby(UUID userId) {
         log.info("User {} is left the lobby", userId);
-        exitFromLobbyService.sendDisconnectionMessage(userId);
+        exitFromLobbyService.exit(userId);
     }
 
     @Override

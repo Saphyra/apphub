@@ -31,6 +31,7 @@ public class SkyXplorePageControllerTest {
     private static final String CHARACTER_NAME = "character-name";
     private static final UUID HOST = UUID.randomUUID();
     private static final String LOBBY_NAME = "lobby-name";
+    private static final String TYPE = "type";
 
     @Mock
     private AccessTokenHeaderConverter accessTokenHeaderConverter;
@@ -139,6 +140,7 @@ public class SkyXplorePageControllerTest {
         given(lobbyViewForPage.getHost()).willReturn(HOST);
         given(lobbyViewForPage.isGameCreationStarted()).willReturn(true);
         given(lobbyViewForPage.getLobbyName()).willReturn(LOBBY_NAME);
+        given(lobbyViewForPage.getType()).willReturn(TYPE);
 
         ModelAndView result = underTest.lobby(accessTokenHeader, LOCALE);
 
@@ -147,6 +149,7 @@ public class SkyXplorePageControllerTest {
         assertThat(result.getModel().get("host")).isEqualTo(HOST);
         assertThat(result.getModel().get("gameCreationStarted")).isEqualTo(true);
         assertThat(result.getModel().get("lobbyName")).isEqualTo(LOBBY_NAME);
+        assertThat(result.getModel()).containsEntry("type", TYPE);
     }
 
     @Test

@@ -23,6 +23,7 @@ function loadLocalization(module, fileName, successCallback){
 
     function createQuery(module, fileName, locale, successCallback, errorCallback){
         return function(){
+
             const endpoint = new Endpoint(getPath(module, locale, fileName), HttpMethod.GET);
 
             let result;
@@ -47,6 +48,11 @@ function loadLocalization(module, fileName, successCallback){
     }
 
     function getPath(module, locale, fileName){
-        return "/localization/module/" + module + "/" + locale + "/" + fileName + ".json";
+        return "/localization/module/" + module + "/" + locale + "/" + fileName + ".json?date=" + getDate();
+    }
+
+    function getDate(){
+        const date = new Date();
+        return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + "/" + date.getHours() + ":" + date.getMinutes();
     }
 }

@@ -16,4 +16,5 @@ public class LobbyViewForPage {
     private UUID host;
     private boolean gameCreationStarted;
     private String lobbyName;
+    private String type;
 }

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.creation;
 
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberStatus;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
@@ -24,7 +25,7 @@ class LobbyFactory {
 
     Lobby create(UUID userId, String lobbyName, LobbyType type) {
         Map<UUID, Member> members = new ConcurrentHashMap<>();
-        members.put(userId, Member.builder().userId(userId).build());
+        members.put(userId, Member.builder().userId(userId).status(LobbyMemberStatus.NOT_READY).build());
 
         return Lobby.builder()
             .lobbyId(idGenerator.randomUuid())
@@ -38,7 +39,7 @@ class LobbyFactory {
 
     Lobby create(UUID host, UUID gameId, UUID hostAlliance, String lobbyName, LobbyType lobbyType, List<Alliance> alliances, List<UUID> expectedPlayers) {
         Map<UUID, Member> members = new ConcurrentHashMap<>();
-        members.put(host, Member.builder().userId(host).alliance(hostAlliance).build());
+        members.put(host, Member.builder().userId(host).status(LobbyMemberStatus.NOT_READY).alliance(hostAlliance).build());
 
         return Lobby.builder()
             .lobbyId(idGenerator.randomUuid())

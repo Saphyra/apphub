@@ -37,13 +37,9 @@ public class ExitFromLobbyService {
         sendNotifications(userId, lobby);
 
         if (lobby.getHost().equals(userId)) {
+            log.info("Host left the lobby. Deleting...");
             lobbyDao.delete(lobby);
         }
-    }
-
-    public void sendDisconnectionMessage(UUID userId) {
-        lobbyDao.findByUserId(userId)
-            .ifPresent(lobby -> sendNotifications(userId, lobby));
     }
 
     private void sendNotifications(UUID userId, Lobby lobby) {
@@ -73,7 +69,8 @@ public class ExitFromLobbyService {
         ExitMessage payload = new ExitMessage(
             userId,
             lobby.getHost().equals(userId),
-            characterProxy.getCharacter(userId).getName()
+            characterProxy.getCharacter(userId).getName(),
+            lobby.getExpectedPlayers().contains(userId)
         );
         WebSocketEvent event = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY)
@@ -92,5 +89,6 @@ public class ExitFromLobbyService {
         private UUID userId;
         private boolean host;
         private String characterName;
+        private boolean expectedPlayer;
     }
 }

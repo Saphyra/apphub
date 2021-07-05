@@ -32,6 +32,12 @@
 
         this.setReady = setReady;
         this.setUnready = setUnready;
+
+        this.allMembersConnected = function(){
+            return new MapStream(members)
+                .toListStream()
+                .noneMatch(function(member){return member.status == "INVITED"});
+        }
     }
 
     $(document).ready(init);
@@ -61,12 +67,12 @@
         const existingMember = members[event.userId];
 
         if(existingMember){
-            existingMember.setReadiness(event.ready);
+            existingMember.setStatus(event.status);
         }else{
             const member = {
                 userId: event.userId,
                 characterName: event.characterName,
-                ready: event.ready,
+                status: event.status,
                 alliance: event.alliance
             }
 
@@ -88,8 +94,12 @@
             return;
         }
 
-        document.getElementById(ids.membersList).removeChild(members[event.userId].container);
-        delete members[userId];
+        if(event.expectedUser){
+            members[event.userId].setStatus("INVITED");
+        }else{
+            document.getElementById(ids.membersList).removeChild(members[event.userId].container);
+            delete members[userId];
+        }
     }
 
     function createMemberPanel(member, isHost, alliances){
@@ -139,32 +149,43 @@
                     })
                     .forEach(function(node){allianceSelectMenu.appendChild(node)});
 
+                if(member.alliance){
+                    allianceSelectMenu.value = member.alliance;
+                }
+
                 allianceSelectMenu.value = member.alliance || "no-alliance";
             allianceNode.appendChild(allianceSelectMenu);
         container.appendChild(allianceNode);
 
         const memberData = {
             container: container,
-            ready: member.ready,
+            status: member.status,
             userId: member.userId,
             allianceSelectMenu: allianceSelectMenu,
             isHost: isHost,
 
-            setReadiness: function(r){
-                if(r){
+            setStatus: function(r){
+                status = r;
+                if(r == "READY"){
                     container.classList.add("ready");
+                    container.classList.remove("invited");
+                }else if(r == "INVITED"){
+                    container.classList.add("invited");
                 }else{
                     container.classList.remove("ready");
+                    container.classList.remove("invited");
                 }
             }
         }
+
+        memberData.setStatus(member.status);
 
         members[member.userId] = memberData;
         return container;
     }
 
     function setReadiness(event){
-        members[event.userId].setReadiness(event.ready);
+        members[event.userId].setStatus(event.ready ? "READY" : "NOT_READY");
     }
 
     function setReady(){

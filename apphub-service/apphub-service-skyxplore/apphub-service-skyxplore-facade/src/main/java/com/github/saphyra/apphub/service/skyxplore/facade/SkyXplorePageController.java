@@ -70,6 +70,7 @@ public class SkyXplorePageController {
         mav.addObject("host", view.getHost());
         mav.addObject("gameCreationStarted", view.isGameCreationStarted());
         mav.addObject("lobbyName", view.getLobbyName());
+        mav.addObject("type", view.getType());
         return mav;
     }
 

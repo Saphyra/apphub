@@ -219,6 +219,10 @@
     "alliance-title": "Alliance",
     "no-alliance": "No alliance",
     "new-alliance": "New alliance",
-    "game-started": "Game started."
+    "game-started": "Game started.",
+    "start-game-confirmation-dialog-title": "Confirm starting game",
+    "start-game-confirmation-dialog-detail": "Not all the players are joined. AI-s will take over their empire, and they might not be happy about it. Are you sure you want to start the game?",
+    "start-game-confirmation-dialog-confirm-button": "Start the game",
+    "start-game-confirmation-dialog-cancel-button": "Cancel"
   }
 }

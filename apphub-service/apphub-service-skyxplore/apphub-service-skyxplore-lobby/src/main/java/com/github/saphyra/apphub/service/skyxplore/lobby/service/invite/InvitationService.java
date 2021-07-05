@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
@@ -83,8 +84,12 @@ public class InvitationService {
         inviteDirectly(accessTokenHeader.getUserId(), friendId, lobby);
     }
 
-    public void inviteDirectly(UUID senderId, UUID characterID, Lobby lobby) {
-        Invitation invitation = invitationFactory.create(senderId, characterID);
+    public void inviteDirectly(UUID senderId, UUID characterId, Lobby lobby) {
+        if (LobbyType.LOAD_GAME == lobby.getType() && !lobby.getExpectedPlayers().contains(characterId)) {
+            throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, characterId + " is not an expected member of LOAD_GAME lobby " + lobby.getLobbyId());
+        }
+
+        Invitation invitation = invitationFactory.create(senderId, characterId);
         lobby.getInvitations()
             .add(invitation);
 
@@ -97,9 +102,8 @@ public class InvitationService {
             .payload(invitationMessage)
             .build();
         WebSocketMessage message = WebSocketMessage.builder()
-            .recipients(Arrays.asList(characterID))
-            .event(event
-            )
+            .recipients(Arrays.asList(characterId))
+            .event(event)
             .build();
         messageSenderProxy.sendToMainMenu(message);
     }

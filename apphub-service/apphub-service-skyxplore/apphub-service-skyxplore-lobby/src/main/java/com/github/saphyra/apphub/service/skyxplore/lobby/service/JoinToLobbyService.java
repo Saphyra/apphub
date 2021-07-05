@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberStatus;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
@@ -47,6 +48,7 @@ public class JoinToLobbyService {
 
         Member member = Member.builder()
             .userId(userId)
+            .status(LobbyMemberStatus.NOT_READY)
             .build();
         lobby.getMembers().put(userId, member);
     }
@@ -55,12 +57,14 @@ public class JoinToLobbyService {
         Lobby lobby = lobbyDao.findByUserIdValidated(userId);
         Member member = lobby.getMembers().get(userId);
         member.setConnected(true);
+        member.setStatus(LobbyMemberStatus.NOT_READY);
 
         JoinMessage joinMessage = JoinMessage.builder()
             .characterName(characterProxy.getCharacter(userId).getName())
             .userId(userId)
             .host(userId.equals(lobby.getHost()))
             .alliances(lobby.getAlliances().stream().map(Alliance::getAllianceName).collect(Collectors.toList()))
+            .status(member.getStatus())
             .build();
         WebSocketEvent event = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_JOIN_TO_LOBBY)
@@ -81,5 +85,6 @@ public class JoinToLobbyService {
         private UUID userId;
         private boolean host;
         private List<String> alliances;
+        private LobbyMemberStatus status;
     }
 }
