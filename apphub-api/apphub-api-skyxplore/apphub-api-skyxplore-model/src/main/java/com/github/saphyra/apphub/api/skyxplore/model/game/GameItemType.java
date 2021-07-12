@@ -22,6 +22,7 @@ public enum GameItemType {
     STORED_RESOURCE(StoredResourceModel.class),
     STORAGE_SETTING(StorageSettingModel.class),
     PRIORITY(PriorityModel.class),
-    ;
+    COORDINATE(CoordinateModel.class),
+    LINE(LineModel.class);
     private final Class<? extends GameItem> modelType;
 }

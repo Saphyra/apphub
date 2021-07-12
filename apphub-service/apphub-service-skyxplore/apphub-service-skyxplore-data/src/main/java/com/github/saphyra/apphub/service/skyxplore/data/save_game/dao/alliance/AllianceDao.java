@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -23,5 +24,9 @@ public class AllianceDao extends AbstractDao<AllianceEntity, AllianceModel, Stri
 
     public List<AllianceModel> getByGameId(UUID gameId) {
         return converter.convertEntity(repository.getByGameId(uuidConverter.convertDomain(gameId)));
+    }
+
+    public Optional<AllianceModel> findById(UUID allianceId) {
+        return findById(uuidConverter.convertDomain(allianceId));
     }
 }

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.solar_system;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.solar_system.PlanetLocationResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
@@ -23,7 +24,6 @@ import static org.mockito.BDDMockito.given;
 public class PlanetToLocationResponseConverterTest {
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final String DEFAULT_NAME = "default-name";
-    private static final Coordinate COORDINATE = new Coordinate(3124, 142);
     private static final UUID OWNER = UUID.randomUUID();
     private static final String OWNER_NAME = "owner-name";
 
@@ -39,11 +39,18 @@ public class PlanetToLocationResponseConverterTest {
     @Mock
     private Player player;
 
+    @Mock
+    private CoordinateModel coordinateModel;
+
+    @Mock
+    private Coordinate coordinate;
+
     @Test
     public void mapPlanets() {
         given(planet.getPlanetId()).willReturn(PLANET_ID);
         given(planet.getDefaultName()).willReturn(DEFAULT_NAME);
-        given(planet.getCoordinate()).willReturn(COORDINATE);
+        given(planet.getCoordinate()).willReturn(coordinateModel);
+        given(coordinateModel.getCoordinate()).willReturn(coordinate);
         given(planet.getOwner()).willReturn(OWNER);
         given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(OWNER, player));
         given(player.getUsername()).willReturn(OWNER_NAME);
@@ -52,7 +59,7 @@ public class PlanetToLocationResponseConverterTest {
 
         assertThat(result.get(0).getPlanetId()).isEqualTo(PLANET_ID);
         assertThat(result.get(0).getPlanetName()).isEqualTo(DEFAULT_NAME);
-        assertThat(result.get(0).getCoordinate()).isEqualTo(COORDINATE);
+        assertThat(result.get(0).getCoordinate()).isEqualTo(coordinate);
         assertThat(result.get(0).getOwner()).isEqualTo(OWNER);
         assertThat(result.get(0).getOwnerName()).isEqualTo(OWNER_NAME);
     }

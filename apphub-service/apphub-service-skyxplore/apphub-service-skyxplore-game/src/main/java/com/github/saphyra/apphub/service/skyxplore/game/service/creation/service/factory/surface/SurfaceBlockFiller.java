@@ -20,7 +20,7 @@ class SurfaceBlockFiller {
             : randomEmptySlotProvider.getRandomEmptySlotNextToSurfaceType(surfaceMap, surfaceType);
 
         coordinateOptional.ifPresent(coordinate -> {
-            surfaceMap[(int) coordinate.getX()][(int) coordinate.getY()] = surfaceType;
+            surfaceMap[(int) Math.round(coordinate.getX())][(int) Math.round(coordinate.getY())] = surfaceType;
             log.debug("Coordinate {} filled with surfaceType {}. surfaceMap: {}", coordinate, surfaceType, surfaceMap);
         });
     }

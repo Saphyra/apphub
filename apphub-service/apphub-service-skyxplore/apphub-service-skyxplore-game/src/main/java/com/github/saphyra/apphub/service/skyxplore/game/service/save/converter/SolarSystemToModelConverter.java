@@ -30,6 +30,7 @@ public class SolarSystemToModelConverter {
     private List<GameItem> convertDeep(SolarSystem system, Game game) {
         List<GameItem> result = new ArrayList<>();
         result.add(convert(system, game));
+        result.add(system.getCoordinate());
         result.addAll(planetToModelConverter.convertDeep(system.getPlanets().values(), game));
         return result;
     }
@@ -42,7 +43,6 @@ public class SolarSystemToModelConverter {
         model.setRadius(system.getRadius());
         model.setDefaultName(system.getDefaultName());
         model.setCustomNames(system.getCustomNames());
-        model.setCoordinate(system.getCoordinate());
         return model;
     }
 }

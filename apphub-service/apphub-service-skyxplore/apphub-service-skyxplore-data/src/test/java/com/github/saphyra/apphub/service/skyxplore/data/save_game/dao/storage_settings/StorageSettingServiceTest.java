@@ -9,14 +9,18 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StorageSettingServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID ID = UUID.randomUUID();
 
     @Mock
     private StorageSettingDao storageSettingDao;
@@ -48,5 +52,23 @@ public class StorageSettingServiceTest {
 
         verify(storageSettingModelValidator).validate(model);
         verify(storageSettingDao).saveAll(Arrays.asList(model));
+    }
+
+    @Test
+    public void findById() {
+        given(storageSettingDao.findById(ID)).willReturn(Optional.of(model));
+
+        Optional<StorageSettingModel> result = underTest.findById(ID);
+
+        assertThat(result).contains(model);
+    }
+
+    @Test
+    public void getByParent() {
+        given(storageSettingDao.getByLocation(ID)).willReturn(Arrays.asList(model));
+
+        List<StorageSettingModel> result = underTest.getByParent(ID);
+
+        assertThat(result).containsExactly(model);
     }
 }

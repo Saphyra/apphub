@@ -6,9 +6,6 @@ import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.UuidStringMap;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
-import com.github.saphyra.apphub.service.skyxplore.data.common.CoordinateConverter;
-import com.github.saphyra.apphub.service.skyxplore.data.common.CoordinateEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -35,19 +32,10 @@ public class SolarSystemConverterTest {
     private UuidConverter uuidConverter;
 
     @Mock
-    private CoordinateConverter coordinateConverter;
-
-    @Mock
     private ObjectMapperWrapper objectMapperWrapper;
 
     @InjectMocks
     private SolarSystemConverter underTest;
-
-    @Mock
-    private Coordinate coordinate;
-
-    @Mock
-    private CoordinateEntity coordinateEntity;
 
     @Test
     public void convertDomain() {
@@ -57,12 +45,10 @@ public class SolarSystemConverterTest {
         model.setRadius(RADIUS);
         model.setDefaultName(DEFAULT_NAME);
         model.setCustomNames(CUSTOM_NAMES);
-        model.setCoordinate(coordinate);
 
         given(uuidConverter.convertDomain(SOLAR_SYSTEM_ID)).willReturn(SOLAR_SYSTEM_ID_STRING);
         given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
         given(objectMapperWrapper.writeValueAsString(CUSTOM_NAMES)).willReturn(CUSTOM_NAMES_STRING);
-        given(coordinateConverter.convertDomain(coordinate, SOLAR_SYSTEM_ID)).willReturn(coordinateEntity);
 
         SolarSystemEntity result = underTest.convertDomain(model);
 
@@ -71,7 +57,6 @@ public class SolarSystemConverterTest {
         assertThat(result.getRadius()).isEqualTo(RADIUS);
         assertThat(result.getDefaultName()).isEqualTo(DEFAULT_NAME);
         assertThat(result.getCustomNames()).isEqualTo(CUSTOM_NAMES_STRING);
-        assertThat(result.getCoordinate()).isEqualTo(coordinateEntity);
     }
 
     @Test
@@ -82,13 +67,11 @@ public class SolarSystemConverterTest {
             .radius(RADIUS)
             .defaultName(DEFAULT_NAME)
             .customNames(CUSTOM_NAMES_STRING)
-            .coordinate(coordinateEntity)
             .build();
 
         given(uuidConverter.convertEntity(SOLAR_SYSTEM_ID_STRING)).willReturn(SOLAR_SYSTEM_ID);
         given(uuidConverter.convertEntity(GAME_ID_STRING)).willReturn(GAME_ID);
         given(objectMapperWrapper.readValue(CUSTOM_NAMES_STRING, UuidStringMap.class)).willReturn(CUSTOM_NAMES);
-        given(coordinateConverter.convertEntity(coordinateEntity)).willReturn(coordinate);
 
         SolarSystemModel result = underTest.convertEntity(entity);
 
@@ -98,6 +81,5 @@ public class SolarSystemConverterTest {
         assertThat(result.getRadius()).isEqualTo(RADIUS);
         assertThat(result.getDefaultName()).isEqualTo(DEFAULT_NAME);
         assertThat(result.getCustomNames()).isEqualTo(CUSTOM_NAMES);
-        assertThat(result.getCoordinate()).isEqualTo(coordinate);
     }
 }

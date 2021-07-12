@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import com.github.saphyra.apphub.service.skyxplore.game.common.CoordinateModelFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.surface.SurfaceFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
@@ -23,17 +24,18 @@ class PlanetFactory {
     private final IdGenerator idGenerator;
     private final Random random;
     private final SurfaceFactory surfaceFactory;
+    private final CoordinateModelFactory coordinateModelFactory;
 
-    Planet create(Integer planetIndex, Coordinate coordinate, UUID solarSystemId, String systemName, Range<Integer> planetSizeRange) {
+    Planet create(UUID gameId, Integer planetIndex, Coordinate coordinate, UUID solarSystemId, String systemName, Range<Integer> planetSizeRange) {
         int planetSize = random.randInt(planetSizeRange.getMin(), planetSizeRange.getMax());
         UUID planetId = idGenerator.randomUuid();
 
-        Map<Coordinate, Surface> surfaces = surfaceFactory.create(planetId, planetSize);
+        Map<Coordinate, Surface> surfaces = surfaceFactory.create(gameId, planetId, planetSize);
 
         return Planet.builder()
             .planetId(planetId)
             .solarSystemId(solarSystemId)
-            .coordinate(coordinate)
+            .coordinate(coordinateModelFactory.create(coordinate, gameId, planetId))
             .defaultName(String.format("%s %s", systemName, ALPHABET.charAt(planetIndex)))
             .size(planetSize)
             .surfaces(surfaces)

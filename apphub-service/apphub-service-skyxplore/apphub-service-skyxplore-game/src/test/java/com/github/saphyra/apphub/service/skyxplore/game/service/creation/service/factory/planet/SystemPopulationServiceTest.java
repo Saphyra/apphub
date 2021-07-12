@@ -34,6 +34,7 @@ public class SystemPopulationServiceTest {
     private static final Integer MIN_PLANET_SIZE = 3465253;
     private static final Integer MAX_PLANET_SIZE = 64698;
     private static final UUID PLANET_ID = UUID.randomUUID();
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private Random random;
@@ -84,10 +85,10 @@ public class SystemPopulationServiceTest {
         given(planetProperties.getPlanetSize()).willReturn(CollectionUtils.singleValueMap(PlanetSize.LARGE, planetSizeRange));
         given(random.randInt(MIN_PLANET_AMOUNT, MAX_PLANET_AMOUNT)).willReturn(1);
         given(coordinateProvider.getCoordinates(1, SYSTEM_RADIUS)).willReturn(Arrays.asList(coordinate));
-        given(planetFactory.create(0, coordinate, SOLAR_SYSTEM_ID, SYSTEM_NAME, planetSizeRange)).willReturn(planet);
+        given(planetFactory.create(GAME_ID, 0, coordinate, SOLAR_SYSTEM_ID, SYSTEM_NAME, planetSizeRange)).willReturn(planet);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
 
-        Map<UUID, Planet> result = underTest.populateSystemWithPlanets(SOLAR_SYSTEM_ID, SYSTEM_NAME, SYSTEM_RADIUS, settings);
+        Map<UUID, Planet> result = underTest.populateSystemWithPlanets(GAME_ID, SOLAR_SYSTEM_ID, SYSTEM_NAME, SYSTEM_RADIUS, settings);
 
         assertThat(result).containsEntry(PLANET_ID, planet);
     }

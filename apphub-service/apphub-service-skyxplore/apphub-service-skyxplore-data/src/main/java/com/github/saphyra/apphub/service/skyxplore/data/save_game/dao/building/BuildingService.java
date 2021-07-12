@@ -8,7 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,5 +42,17 @@ public class BuildingService implements GameItemService {
             .collect(Collectors.toList());
 
         buildingDao.saveAll(models);
+    }
+
+    @Override
+    public Optional<BuildingModel> findById(UUID id) {
+        return buildingDao.findById(id);
+    }
+
+    @Override
+    public List<BuildingModel> getByParent(UUID parent) {
+        return buildingDao.findBySurfaceId(parent)
+            .map(Arrays::asList)
+            .orElse(Collections.emptyList());
     }
 }

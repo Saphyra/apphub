@@ -37,6 +37,8 @@ public class ReservedStorageModelValidatorTest {
         given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(model.getDataId()).willReturn(DATA_ID);
         given(model.getAmount()).willReturn(AMOUNT);
+        given(model.getLocation()).willReturn(UUID.randomUUID());
+        given(model.getLocationType()).willReturn("asd");
     }
 
     @After
@@ -51,6 +53,24 @@ public class ReservedStorageModelValidatorTest {
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
         ExceptionValidator.validateInvalidParam(ex, "externalReference", "must not be null");
+    }
+
+    @Test
+    public void nullLocation() {
+        given(model.getLocation()).willReturn(null);
+
+        Throwable ex = catchThrowable(() -> underTest.validate(model));
+
+        ExceptionValidator.validateInvalidParam(ex, "location", "must not be null");
+    }
+
+    @Test
+    public void nullLocationType() {
+        given(model.getLocationType()).willReturn(null);
+
+        Throwable ex = catchThrowable(() -> underTest.validate(model));
+
+        ExceptionValidator.validateInvalidParam(ex, "locationType", "must not be null");
     }
 
     @Test

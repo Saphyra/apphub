@@ -9,14 +9,18 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BuildingServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID ID = UUID.randomUUID();
 
     @Mock
     private BuildingDao buildingDao;
@@ -48,5 +52,32 @@ public class BuildingServiceTest {
 
         verify(buildingModelValidator).validate(model);
         buildingDao.saveAll(Arrays.asList(model));
+    }
+
+    @Test
+    public void findById() {
+        given(buildingDao.findById(ID)).willReturn(Optional.of(model));
+
+        Optional<BuildingModel> result = underTest.findById(ID);
+
+        assertThat(result).contains(model);
+    }
+
+    @Test
+    public void getByParent_notFound() {
+        given(buildingDao.findBySurfaceId(ID)).willReturn(Optional.empty());
+
+        List<BuildingModel> result = underTest.getByParent(ID);
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    public void getByParent() {
+        given(buildingDao.findBySurfaceId(ID)).willReturn(Optional.of(model));
+
+        List<BuildingModel> result = underTest.getByParent(ID);
+
+        assertThat(result).containsExactly(model);
     }
 }

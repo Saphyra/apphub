@@ -5,11 +5,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import javax.transaction.Transactional;
+import java.util.Optional;
 
 interface BuildingRepository extends CrudRepository<BuildingEntity, String> {
-    @Transactional
     @Modifying
     @Query("DELETE FROM BuildingEntity e WHERE e.gameId = :gameId")
     void deleteByGameId(@Param("gameId") String gameId);
+
+    Optional<BuildingEntity> findBySurfaceId(String surfaceId);
 }

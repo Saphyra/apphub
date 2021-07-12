@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,16 @@ public class SolarSystemService implements GameItemService {
             .peek(solarSystemModelValidator::validate)
             .collect(Collectors.toList());
 
-
         solarSystemDao.saveAll(models);
+    }
+
+    @Override
+    public Optional<SolarSystemModel> findById(UUID id) {
+        return solarSystemDao.findById(id);
+    }
+
+    @Override
+    public List<SolarSystemModel> getByParent(UUID parent) {
+        return solarSystemDao.getByGameId(parent);
     }
 }

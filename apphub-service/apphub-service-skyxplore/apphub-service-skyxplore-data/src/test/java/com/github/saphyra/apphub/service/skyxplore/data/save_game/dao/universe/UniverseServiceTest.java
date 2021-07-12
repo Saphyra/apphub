@@ -9,14 +9,18 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UniverseServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID ID = UUID.randomUUID();
 
     @Mock
     private UniverseDao universeDao;
@@ -48,5 +52,32 @@ public class UniverseServiceTest {
 
         verify(universeModelValidator).validate(model);
         verify(universeDao).saveAll(Arrays.asList(model));
+    }
+
+    @Test
+    public void findById() {
+        given(universeDao.findById(ID)).willReturn(Optional.of(model));
+
+        Optional<UniverseModel> result = underTest.findById(ID);
+
+        assertThat(result).contains(model);
+    }
+
+    @Test
+    public void getByParent_notFound() {
+        given(universeDao.findById(ID)).willReturn(Optional.empty());
+
+        List<UniverseModel> result = underTest.getByParent(ID);
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    public void getByParent() {
+        given(universeDao.findById(ID)).willReturn(Optional.of(model));
+
+        List<UniverseModel> result = underTest.getByParent(ID);
+
+        assertThat(result).containsExactly(model);
     }
 }

@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.surface;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.SurfaceModel;
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
@@ -29,13 +28,9 @@ public class SurfaceModelValidatorTest {
     @Mock
     private SurfaceModel model;
 
-    @Mock
-    private Coordinate coordinate;
-
     @Before
     public void setUp() {
         given(model.getPlanetId()).willReturn(UUID.randomUUID());
-        given(model.getCoordinate()).willReturn(coordinate);
         given(model.getSurfaceType()).willReturn("asd");
     }
 
@@ -51,15 +46,6 @@ public class SurfaceModelValidatorTest {
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
         ExceptionValidator.validateInvalidParam(ex, "planetId", "must not be null");
-    }
-
-    @Test
-    public void nullCoordinate() {
-        given(model.getCoordinate()).willReturn(null);
-
-        Throwable ex = catchThrowable(() -> underTest.validate(model));
-
-        ExceptionValidator.validateInvalidParam(ex, "coordinate", "must not be null");
     }
 
     @Test

@@ -9,14 +9,18 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SurfaceServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID ID = UUID.randomUUID();
 
     @Mock
     private SurfaceDao surfaceDao;
@@ -48,5 +52,23 @@ public class SurfaceServiceTest {
 
         verify(surfaceModelValidator).validate(model);
         verify(surfaceDao).saveAll(Arrays.asList(model));
+    }
+
+    @Test
+    public void findById() {
+        given(surfaceDao.findById(ID)).willReturn(Optional.of(model));
+
+        Optional<SurfaceModel> result = underTest.findById(ID);
+
+        assertThat(result).contains(model);
+    }
+
+    @Test
+    public void getByParent() {
+        given(surfaceDao.getByPlanetId(ID)).willReturn(Arrays.asList(model));
+
+        List<SurfaceModel> result = underTest.getByParent(ID);
+
+        assertThat(result).containsExactly(model);
     }
 }

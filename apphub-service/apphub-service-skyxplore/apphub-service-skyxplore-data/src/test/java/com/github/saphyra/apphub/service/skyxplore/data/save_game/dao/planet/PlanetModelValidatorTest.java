@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.planet;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
@@ -36,15 +35,11 @@ public class PlanetModelValidatorTest {
     @Mock
     private PlanetModel model;
 
-    @Mock
-    private Coordinate coordinate;
-
     @Before
     public void setUp() {
         given(model.getSolarSystemId()).willReturn(SOLAR_SYSTEM_ID);
         given(model.getDefaultName()).willReturn(DEFAULT_NAME);
         given(model.getCustomNames()).willReturn(CUSTOM_NAMES);
-        given(model.getCoordinate()).willReturn(coordinate);
         given(model.getSize()).willReturn(SIZE);
     }
 
@@ -87,15 +82,6 @@ public class PlanetModelValidatorTest {
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
         ExceptionValidator.validateInvalidParam(ex, "customNames", "must not contain null");
-    }
-
-    @Test
-    public void nullCoordinate() {
-        given(model.getCoordinate()).willReturn(null);
-
-        Throwable ex = catchThrowable(() -> underTest.validate(model));
-
-        ExceptionValidator.validateInvalidParam(ex, "coordinate", "must not be null");
     }
 
     @Test

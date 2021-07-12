@@ -30,7 +30,8 @@ public class GameFactory {
     private final DateTimeUtil dateTimeUtil;
 
     public Game create(SkyXploreGameCreationRequest request) {
-        Universe universe = universeFactory.create(request.getMembers().size(), request.getSettings());
+        UUID gameId = idGenerator.randomUuid();
+        Universe universe = universeFactory.create(gameId, request.getMembers().size(), request.getSettings());
         Map<UUID, Player> players = playerPopulationService.populateGameWithPlayers(request.getMembers().keySet(), getPlanetCount(universe), request.getSettings());
         Map<UUID, Alliance> alliances = allianceFactory.create(request.getAlliances(), request.getMembers(), players);
 
@@ -41,7 +42,7 @@ public class GameFactory {
 
         log.info("Game generated.");
         return Game.builder()
-            .gameId(idGenerator.randomUuid())
+            .gameId(gameId)
             .host(request.getHost())
             .players(players)
             .alliances(alliances)

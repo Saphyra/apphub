@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,5 +40,15 @@ public class SystemConnectionService implements GameItemService {
             .collect(Collectors.toList());
 
         systemConnectionDao.saveAll(models);
+    }
+
+    @Override
+    public Optional<SystemConnectionModel> findById(UUID id) {
+        return systemConnectionDao.findById(id);
+    }
+
+    @Override
+    public List<SystemConnectionModel> getByParent(UUID parent) {
+        return systemConnectionDao.getByGameId(parent);
     }
 }

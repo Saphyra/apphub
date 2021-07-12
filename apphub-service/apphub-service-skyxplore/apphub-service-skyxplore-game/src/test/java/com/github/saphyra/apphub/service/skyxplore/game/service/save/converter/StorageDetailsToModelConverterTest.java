@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.StorageSettingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
@@ -20,12 +21,15 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StorageDetailsToModelConverterTest {
+    private static final UUID LOCATION = UUID.randomUUID();
+
     @Mock
     private AllocatedResourceToModelConverter allocatedResourceConverter;
 
@@ -71,7 +75,7 @@ public class StorageDetailsToModelConverterTest {
     @Test
     public void convertDeep() {
         given(allocatedResourceConverter.convert(Arrays.asList(allocatedResource), game)).willReturn(Arrays.asList(allocatedResourceModel));
-        given(reservedStorageConverter.convert(Arrays.asList(reservedStorage), game)).willReturn(Arrays.asList(reservedStorageModel));
+        given(reservedStorageConverter.convert(Arrays.asList(reservedStorage), game, LOCATION, LocationType.PLANET)).willReturn(Arrays.asList(reservedStorageModel));
         given(storedResourceConverter.convert(CollectionUtils.singleValueMap("", storedResource), game)).willReturn(Arrays.asList(storedResourceModel));
         given(storageSettingConverter.convert(Arrays.asList(storageSetting), game)).willReturn(Arrays.asList(storageSettingModel));
 
@@ -81,7 +85,7 @@ public class StorageDetailsToModelConverterTest {
         storageDetails.getStorageSettings().add(storageSetting);
         storageDetails.getStoredResources().put("", storedResource);
 
-        List<GameItem> result = underTest.convertDeep(storageDetails, game);
+        List<GameItem> result = underTest.convertDeep(storageDetails, game, LOCATION, LocationType.PLANET);
 
         assertThat(result).containsExactlyInAnyOrder(allocatedResourceModel, reservedStorageModel, storageSettingModel, storedResourceModel);
     }

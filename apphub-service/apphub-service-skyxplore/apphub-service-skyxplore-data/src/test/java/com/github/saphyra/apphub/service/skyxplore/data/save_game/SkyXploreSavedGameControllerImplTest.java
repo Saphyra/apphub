@@ -34,6 +34,7 @@ public class SkyXploreSavedGameControllerImplTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final String GAME_NAME = "game-name";
     private static final LocalDateTime LAST_PLAYED = LocalDateTime.now();
+    private static final UUID ID = UUID.randomUUID();
 
     @Mock
     private ObjectMapperWrapper objectMapperWrapper;
@@ -52,6 +53,9 @@ public class SkyXploreSavedGameControllerImplTest {
 
     @Mock
     private GameViewForLobbyCreationQueryService gameViewForLobbyCreationQueryService;
+
+    @Mock
+    private LoadGameItemService loadGameItemService;
 
     private SkyXploreSavedGameControllerImpl underTest;
 
@@ -88,7 +92,8 @@ public class SkyXploreSavedGameControllerImplTest {
             Arrays.asList(gameItemService),
             objectMapperWrapper,
             gameDao, playerDao, gameDeletionService,
-            gameViewForLobbyCreationQueryService
+            gameViewForLobbyCreationQueryService,
+            loadGameItemService
         );
     }
 
@@ -152,5 +157,25 @@ public class SkyXploreSavedGameControllerImplTest {
         GameViewForLobbyCreation result = underTest.getGameForLobbyCreation(GAME_ID, accessTokenHeader);
 
         assertThat(result).isEqualTo(gameViewForLobbyCreation);
+    }
+
+    @Test
+    public void loadGameItem() {
+        given(loadGameItemService.loadGameItem(ID, GameItemType.GAME)).willReturn(gameModel);
+
+        GameItem result = underTest.loadGameItem(ID, GameItemType.GAME);
+
+        assertThat(result).isEqualTo(gameModel);
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    @Test
+    public void loadChildrenOfGameItem() {
+        List list = Arrays.asList(gameModel);
+        given(loadGameItemService.loadChildrenOfGameItem(ID, GameItemType.GAME)).willReturn(list);
+
+        List result = underTest.loadChildrenOfGameItem(ID, GameItemType.GAME);
+
+        assertThat(result).containsExactly(gameModel);
     }
 }

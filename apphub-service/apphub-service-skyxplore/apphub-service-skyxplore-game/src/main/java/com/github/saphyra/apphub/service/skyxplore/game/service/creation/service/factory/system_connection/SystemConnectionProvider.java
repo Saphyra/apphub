@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -26,7 +27,7 @@ public class SystemConnectionProvider {
     private final LonelySystemConnectionService lonelySystemConnectionService;
     private final SystemConnectionFactory systemConnectionFactory;
 
-    public List<SystemConnection> getConnections(Collection<Coordinate> systems) {
+    public List<SystemConnection> getConnections(UUID gameId, Collection<Coordinate> systems) {
         log.info("Generating connections...");
         List<Line> lines = executorServiceBean.processCollectionWithWait(systems, i -> allSystemsConnectionProvider.connectToAllSystems(i, systems))
             .stream()
@@ -51,7 +52,7 @@ public class SystemConnectionProvider {
 
         return allConnected.stream()
             .peek(line -> log.debug("Connection: {}", line))
-            .map(systemConnectionFactory::create)
+            .map(line -> systemConnectionFactory.create(gameId, line))
             .collect(Collectors.toList());
     }
 }

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.system;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemAmount;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
 import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
@@ -16,6 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -25,6 +27,7 @@ public class SolarSystemPlacingServiceTest {
     private static final int MEMBER_NUM = 425;
     private static final int UNIVERSE_SIZE = 345;
     private static final String SYSTEM_NAME = "system-name";
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private SolarSystemCoordinateProvider solarSystemCoordinateProvider;
@@ -32,7 +35,7 @@ public class SolarSystemPlacingServiceTest {
     @Mock
     private SolarSystemNames solarSystemNames;
 
-    private ExecutorServiceBean executorServiceBean = new ExecutorServiceBean(new SleepService());
+    private final ExecutorServiceBean executorServiceBean = new ExecutorServiceBean(new SleepService());
 
     @Mock
     private SolarSystemFactory solarSystemFactory;
@@ -44,6 +47,9 @@ public class SolarSystemPlacingServiceTest {
 
     @Mock
     private SolarSystem solarSystem;
+
+    @Mock
+    private CoordinateModel coordinateModel;
 
     @Before
     public void setUp() {
@@ -63,10 +69,11 @@ public class SolarSystemPlacingServiceTest {
 
         given(solarSystemCoordinateProvider.getCoordinates(MEMBER_NUM, UNIVERSE_SIZE, SystemAmount.RANDOM)).willReturn(Arrays.asList(coordinate));
         given(solarSystemNames.getRandomStarName(Collections.emptyList())).willReturn(SYSTEM_NAME);
-        given(solarSystemFactory.create(settings, SYSTEM_NAME, coordinate)).willReturn(solarSystem);
-        given(solarSystem.getCoordinate()).willReturn(coordinate);
+        given(solarSystemFactory.create(GAME_ID, settings, SYSTEM_NAME, coordinate)).willReturn(solarSystem);
+        given(solarSystem.getCoordinate()).willReturn(coordinateModel);
+        given(coordinateModel.getCoordinate()).willReturn(coordinate);
 
-        Map<Coordinate, SolarSystem> result = underTest.create(MEMBER_NUM, UNIVERSE_SIZE, settings);
+        Map<Coordinate, SolarSystem> result = underTest.create(GAME_ID, MEMBER_NUM, UNIVERSE_SIZE, settings);
 
         assertThat(result).containsEntry(coordinate, solarSystem);
     }

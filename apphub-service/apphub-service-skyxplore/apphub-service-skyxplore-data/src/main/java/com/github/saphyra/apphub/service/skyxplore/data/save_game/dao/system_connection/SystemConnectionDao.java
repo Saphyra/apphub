@@ -5,6 +5,8 @@ import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -18,5 +20,13 @@ public class SystemConnectionDao extends AbstractDao<SystemConnectionEntity, Sys
 
     public void deleteByGameId(UUID gameId) {
         repository.deleteByGameId(uuidConverter.convertDomain(gameId));
+    }
+
+    public Optional<SystemConnectionModel> findById(UUID systemConnectionId) {
+        return findById(uuidConverter.convertDomain(systemConnectionId));
+    }
+
+    public List<SystemConnectionModel> getByGameId(UUID gameId) {
+        return converter.convertEntity(repository.getByGameId(uuidConverter.convertDomain(gameId)));
     }
 }

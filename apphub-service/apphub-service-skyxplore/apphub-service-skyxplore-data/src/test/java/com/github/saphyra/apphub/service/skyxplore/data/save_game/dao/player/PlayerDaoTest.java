@@ -10,6 +10,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,6 +23,8 @@ public class PlayerDaoTest {
     private static final String GAME_ID_STRING = "game-id";
     private static final String USER_ID_STRING = "user-id";
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID PLAYER_ID = UUID.randomUUID();
+    private static final String PLAYER_ID_STRING = "player-id";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -70,5 +73,16 @@ public class PlayerDaoTest {
         List<PlayerModel> result = underTest.getByGameId(GAME_ID);
 
         assertThat(result).containsExactly(model);
+    }
+
+    @Test
+    public void findById() {
+        given(uuidConverter.convertDomain(PLAYER_ID)).willReturn(PLAYER_ID_STRING);
+        given(repository.findById(PLAYER_ID_STRING)).willReturn(Optional.of(entity));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(model));
+
+        Optional<PlayerModel> result = underTest.findById(PLAYER_ID);
+
+        assertThat(result).contains(model);
     }
 }

@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.common;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.GameSaverService;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,11 +23,8 @@ public class GameDao {
     @Getter(value = AccessLevel.PACKAGE)
     private final Map<UUID, Game> repository = new ConcurrentHashMap<>();
 
-    private final GameSaverService gameSaverService;
-
     public void save(Game game) {
         repository.put(game.getGameId(), game);
-        gameSaverService.save(game);
     }
 
     @VisibleForTesting

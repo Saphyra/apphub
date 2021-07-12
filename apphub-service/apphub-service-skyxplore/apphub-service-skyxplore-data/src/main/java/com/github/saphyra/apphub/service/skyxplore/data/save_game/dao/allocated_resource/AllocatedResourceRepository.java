@@ -5,11 +5,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import javax.transaction.Transactional;
+import java.util.List;
 
 interface AllocatedResourceRepository extends CrudRepository<AllocatedResourceEntity, String> {
-    @Transactional
     @Modifying
     @Query("DELETE FROM AllocatedResourceEntity e WHERE e.gameId = :gameId")
     void deleteByGameId(@Param("gameId") String gameId);
+
+    List<AllocatedResourceEntity> getByLocation(String location);
 }

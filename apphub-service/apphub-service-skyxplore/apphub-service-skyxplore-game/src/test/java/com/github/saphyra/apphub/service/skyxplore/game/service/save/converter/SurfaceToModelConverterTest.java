@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SurfaceModel;
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
@@ -27,7 +27,6 @@ public class SurfaceToModelConverterTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID SURFACE_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
-    private static final Coordinate COORDINATE = new Coordinate(0, 0);
 
     @Mock
     private BuildingToModelConverter buildingToModelConverter;
@@ -44,6 +43,9 @@ public class SurfaceToModelConverterTest {
     @Mock
     private BuildingModel buildingModel;
 
+    @Mock
+    private CoordinateModel coordinateModel;
+
     @Test
     public void convertDeep() {
         given(game.getGameId()).willReturn(GAME_ID);
@@ -52,7 +54,7 @@ public class SurfaceToModelConverterTest {
         Surface surface = Surface.builder()
             .surfaceId(SURFACE_ID)
             .planetId(PLANET_ID)
-            .coordinate(COORDINATE)
+            .coordinate(coordinateModel)
             .surfaceType(SurfaceType.DESERT)
             .building(building)
             .build();
@@ -65,8 +67,7 @@ public class SurfaceToModelConverterTest {
         expected.setType(GameItemType.SURFACE);
         expected.setPlanetId(PLANET_ID);
         expected.setSurfaceType(SurfaceType.DESERT.name());
-        expected.setCoordinate(COORDINATE);
 
-        assertThat(result).containsExactlyInAnyOrder(expected, buildingModel);
+        assertThat(result).containsExactlyInAnyOrder(expected, buildingModel, coordinateModel);
     }
 }

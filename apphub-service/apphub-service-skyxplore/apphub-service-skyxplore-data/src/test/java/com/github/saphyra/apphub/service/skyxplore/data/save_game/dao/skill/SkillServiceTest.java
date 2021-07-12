@@ -9,14 +9,18 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SkillServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID ID = UUID.randomUUID();
 
     @Mock
     private SkillDao skillDao;
@@ -48,5 +52,23 @@ public class SkillServiceTest {
 
         verify(skillModelValidator).validate(model);
         verify(skillDao).saveAll(Arrays.asList(model));
+    }
+
+    @Test
+    public void findById() {
+        given(skillDao.findById(ID)).willReturn(Optional.of(model));
+
+        Optional<SkillModel> result = underTest.findById(ID);
+
+        assertThat(result).contains(model);
+    }
+
+    @Test
+    public void getByParent() {
+        given(skillDao.getByCitizenId(ID)).willReturn(Arrays.asList(model));
+
+        List<SkillModel> result = underTest.getByParent(ID);
+
+        assertThat(result).containsExactly(model);
     }
 }

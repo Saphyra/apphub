@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,5 +40,15 @@ public class SurfaceService implements GameItemService {
             .collect(Collectors.toList());
 
         surfaceDao.saveAll(models);
+    }
+
+    @Override
+    public Optional<SurfaceModel> findById(UUID id) {
+        return surfaceDao.findById(id);
+    }
+
+    @Override
+    public List<SurfaceModel> getByParent(UUID parent) {
+        return surfaceDao.getByPlanetId(parent);
     }
 }

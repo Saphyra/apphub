@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -18,5 +19,9 @@ public class PriorityDao extends AbstractDao<PriorityEntity, PriorityModel, Prio
 
     public void deleteByGameId(UUID gameId) {
         repository.deleteByGameId(uuidConverter.convertDomain(gameId));
+    }
+
+    public List<PriorityModel> getByLocation(UUID location) {
+        return converter.convertEntity(repository.getByPkLocation(uuidConverter.convertDomain(location)));
     }
 }

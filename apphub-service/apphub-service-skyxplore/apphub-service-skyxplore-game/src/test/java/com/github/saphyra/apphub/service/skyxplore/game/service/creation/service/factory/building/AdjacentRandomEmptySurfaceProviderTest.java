@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.building;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import org.junit.Test;
@@ -29,11 +30,15 @@ public class AdjacentRandomEmptySurfaceProviderTest {
     private Surface surface2;
 
     @Mock
+    private CoordinateModel coordinateModel;
+
+    @Mock
     private Coordinate coordinate;
 
     @Test
     public void surfaceFound() {
-        given(surface1.getCoordinate()).willReturn(coordinate);
+        given(surface1.getCoordinate()).willReturn(coordinateModel);
+        given(coordinateModel.getCoordinate()).willReturn(coordinate);
         given(adjacentEmptySurfaceProvider.getEmptySurfaceNextTo(coordinate, Arrays.asList(surface2))).willReturn(Optional.of(surface2));
 
         Surface result = underTest.getRandomEmptySurfaceNextTo(Arrays.asList(surface1), Arrays.asList(surface2));
@@ -43,10 +48,11 @@ public class AdjacentRandomEmptySurfaceProviderTest {
 
     @Test(expected = IllegalStateException.class)
     public void surfaceNotFound() {
-        given(surface1.getCoordinate()).willReturn(coordinate);
+        given(surface1.getCoordinate()).willReturn(coordinateModel);
+        given(coordinateModel.getCoordinate()).willReturn(coordinate);
 
         given(adjacentEmptySurfaceProvider.getEmptySurfaceNextTo(coordinate, Arrays.asList(surface2))).willReturn(Optional.empty());
 
-        Surface result = underTest.getRandomEmptySurfaceNextTo(Arrays.asList(surface1), Arrays.asList(surface2));
+        underTest.getRandomEmptySurfaceNextTo(Arrays.asList(surface1), Arrays.asList(surface2));
     }
 }

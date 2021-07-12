@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,5 +40,15 @@ public class SkillService implements GameItemService {
             .collect(Collectors.toList());
 
         skillDao.saveAll(models);
+    }
+
+    @Override
+    public Optional<SkillModel> findById(UUID id) {
+        return skillDao.findById(id);
+    }
+
+    @Override
+    public List<SkillModel> getByParent(UUID parent) {
+        return skillDao.getByCitizenId(parent);
     }
 }

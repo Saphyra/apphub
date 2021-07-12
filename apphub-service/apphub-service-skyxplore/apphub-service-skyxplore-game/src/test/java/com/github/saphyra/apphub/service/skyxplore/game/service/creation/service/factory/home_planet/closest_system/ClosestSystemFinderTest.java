@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.home_planet.closest_system;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
@@ -7,6 +8,7 @@ import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
 import com.github.saphyra.apphub.lib.geometry.Line;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -48,6 +50,12 @@ public class ClosestSystemFinderTest {
     private Universe universe;
 
     @Mock
+    private CoordinateModel coordinateModel1;
+
+    @Mock
+    private CoordinateModel coordinateModel2;
+
+    @Mock
     private Coordinate coordinate1;
 
     @Mock
@@ -56,14 +64,20 @@ public class ClosestSystemFinderTest {
     @Mock
     private Line line;
 
+    @Before
+    public void setUp() {
+        given(coordinateModel1.getCoordinate()).willReturn(coordinate1);
+        given(coordinateModel2.getCoordinate()).willReturn(coordinate2);
+    }
+
     @Test
     public void getClosestSystemWithEmptyPlanet_found() {
-        given(referenceSystem.getCoordinate()).willReturn(coordinate1);
+        given(referenceSystem.getCoordinate()).willReturn(coordinateModel1);
         given(waypointCandidateFilter.getWayPointCandidates(referenceSystem, universe, Arrays.asList(coordinate1))).willReturn(Arrays.asList(line));
         Map<Coordinate, SolarSystem> systems = CollectionUtils.singleValueMap(coordinate1, referenceSystem);
         given(universe.getSystems()).willReturn(systems);
         given(closestHabitableSystemFinder.findClosestHabitableSystem(referenceSystem, systems, Arrays.asList(line))).willReturn(Optional.of(solarSystem));
-        given(solarSystem.getCoordinate()).willReturn(coordinate2);
+        given(solarSystem.getCoordinate()).willReturn(coordinateModel2);
 
         SolarSystem result = underTest.getClosestSystemWithEmptyPlanet(referenceSystem, universe);
 
@@ -73,7 +87,7 @@ public class ClosestSystemFinderTest {
 
     @Test
     public void getClosestSystemWithEmptyPlanet_recursiveStep() {
-        given(referenceSystem.getCoordinate()).willReturn(coordinate1);
+        given(referenceSystem.getCoordinate()).willReturn(coordinateModel1);
         given(waypointCandidateFilter.getWayPointCandidates(referenceSystem, universe, Arrays.asList(coordinate1))).willReturn(Arrays.asList(line));
         Map<Coordinate, SolarSystem> systems = CollectionUtils.singleValueMap(coordinate1, referenceSystem);
         given(universe.getSystems()).willReturn(systems);

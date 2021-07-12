@@ -24,7 +24,7 @@ class ClosestHabitableSystemFinder {
     Optional<SolarSystem> findClosestHabitableSystem(SolarSystem solarSystem, Map<Coordinate, SolarSystem> systems, List<Line> connections) {
         return connections.stream()
             .sorted(Comparator.comparingDouble(o -> o.getLength(distanceCalculator)))
-            .map(line -> line.getOtherEndpoint(solarSystem.getCoordinate()))
+            .map(line -> line.getOtherEndpoint(solarSystem.getCoordinate().getCoordinate()))
             .map(systems::get)
             .filter(this::hasEmptyPlanet)
             .findFirst();

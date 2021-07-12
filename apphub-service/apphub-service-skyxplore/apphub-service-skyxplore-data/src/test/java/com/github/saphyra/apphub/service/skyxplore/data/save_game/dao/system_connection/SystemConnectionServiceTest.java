@@ -9,14 +9,18 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SystemConnectionServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID ID = UUID.randomUUID();
 
     @Mock
     private SystemConnectionDao systemConnectionDao;
@@ -48,5 +52,23 @@ public class SystemConnectionServiceTest {
 
         verify(systemConnectionModelValidator).validate(model);
         verify(systemConnectionDao).saveAll(Arrays.asList(model));
+    }
+
+    @Test
+    public void findById() {
+        given(systemConnectionDao.findById(ID)).willReturn(Optional.of(model));
+
+        Optional<SystemConnectionModel> result = underTest.findById(ID);
+
+        assertThat(result).contains(model);
+    }
+
+    @Test
+    public void getByParent() {
+        given(systemConnectionDao.getByGameId(ID)).willReturn(Arrays.asList(model));
+
+        List<SystemConnectionModel> result = underTest.getByParent(ID);
+
+        assertThat(result).containsExactly(model);
     }
 }

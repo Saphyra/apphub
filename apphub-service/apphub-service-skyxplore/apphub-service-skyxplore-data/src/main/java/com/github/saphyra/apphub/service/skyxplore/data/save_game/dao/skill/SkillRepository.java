@@ -5,11 +5,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import javax.transaction.Transactional;
+import java.util.List;
 
 interface SkillRepository extends CrudRepository<SkillEntity, String> {
-    @Transactional
     @Modifying
     @Query("DELETE FROM SkillEntity e WHERE e.gameId = :gameId")
     void deleteByGameId(@Param("gameId") String gameId);
+
+    List<SkillEntity> getByCitizenId(String citizenId);
 }

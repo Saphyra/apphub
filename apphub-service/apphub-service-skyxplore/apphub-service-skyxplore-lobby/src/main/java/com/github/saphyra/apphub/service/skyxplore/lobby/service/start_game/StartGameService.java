@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game;
 
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberStatus;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
@@ -24,6 +25,14 @@ public class StartGameService {
 
         if (!lobby.getHost().equals(userId)) {
             throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, userId + " must not start the game.");
+        }
+
+        boolean allReady = lobby.getMembers()
+            .values()
+            .stream()
+            .allMatch(member -> member.getStatus().equals(LobbyMemberStatus.READY));
+        if (!allReady) {
+            throw ExceptionFactory.notLoggedException(HttpStatus.PRECONDITION_FAILED, ErrorCode.LOBBY_MEMBER_NOT_READY, "There are member(s) not ready.");
         }
 
         switch (lobby.getType()) {

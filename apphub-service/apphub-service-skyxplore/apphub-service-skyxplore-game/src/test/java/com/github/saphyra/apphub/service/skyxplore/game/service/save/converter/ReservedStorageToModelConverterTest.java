@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +25,7 @@ public class ReservedStorageToModelConverterTest {
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
     private static final int AMOUNT = 3215;
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @InjectMocks
     private ReservedStorageToModelConverter underTest;
@@ -42,7 +44,7 @@ public class ReservedStorageToModelConverterTest {
             .amount(AMOUNT)
             .build();
 
-        List<ReservedStorageModel> result = underTest.convert(Arrays.asList(reservedStorage), game);
+        List<ReservedStorageModel> result = underTest.convert(Arrays.asList(reservedStorage), game, LOCATION, LocationType.PLANET);
 
         assertThat(result.get(0).getId()).isEqualTo(RESERVED_STORAGE_ID);
         assertThat(result.get(0).getGameId()).isEqualTo(GAME_ID);
@@ -50,5 +52,7 @@ public class ReservedStorageToModelConverterTest {
         assertThat(result.get(0).getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.get(0).getDataId()).isEqualTo(DATA_ID);
         assertThat(result.get(0).getAmount()).isEqualTo(AMOUNT);
+        assertThat(result.get(0).getLocationType()).isEqualTo(LocationType.PLANET.name());
+        assertThat(result.get(0).getLocation()).isEqualTo(LOCATION);
     }
 }

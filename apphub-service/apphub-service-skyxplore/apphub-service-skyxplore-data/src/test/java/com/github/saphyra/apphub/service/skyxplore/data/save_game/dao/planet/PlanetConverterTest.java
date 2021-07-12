@@ -6,9 +6,6 @@ import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.UuidStringMap;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
-import com.github.saphyra.apphub.service.skyxplore.data.common.CoordinateConverter;
-import com.github.saphyra.apphub.service.skyxplore.data.common.CoordinateEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -41,17 +38,8 @@ public class PlanetConverterTest {
     @Mock
     private ObjectMapperWrapper objectMapperWrapper;
 
-    @Mock
-    private CoordinateConverter coordinateConverter;
-
     @InjectMocks
     private PlanetConverter underTest;
-
-    @Mock
-    private Coordinate coordinate;
-
-    @Mock
-    private CoordinateEntity coordinateEntity;
 
     @Test
     public void convertDomain() {
@@ -61,7 +49,6 @@ public class PlanetConverterTest {
         model.setSolarSystemId(SOLAR_SYSTEM_ID);
         model.setDefaultName(DEFAULT_NAME);
         model.setCustomNames(CUSTOM_NAMES);
-        model.setCoordinate(coordinate);
         model.setSize(SIZE);
         model.setOwner(OWNER);
 
@@ -71,7 +58,6 @@ public class PlanetConverterTest {
         given(uuidConverter.convertDomain(OWNER)).willReturn(OWNER_STRING);
 
         given(objectMapperWrapper.writeValueAsString(CUSTOM_NAMES)).willReturn(CUSTOM_NAMES_STRING);
-        given(coordinateConverter.convertDomain(coordinate, PLANET_ID)).willReturn(coordinateEntity);
 
         PlanetEntity result = underTest.convertDomain(model);
 
@@ -80,7 +66,6 @@ public class PlanetConverterTest {
         assertThat(result.getSolarSystemId()).isEqualTo(SOLAR_SYSTEM_ID_STRING);
         assertThat(result.getDefaultName()).isEqualTo(DEFAULT_NAME);
         assertThat(result.getCustomNames()).isEqualTo(CUSTOM_NAMES_STRING);
-        assertThat(result.getCoordinate()).isEqualTo(coordinateEntity);
         assertThat(result.getSize()).isEqualTo(SIZE);
         assertThat(result.getOwner()).isEqualTo(OWNER_STRING);
     }
@@ -93,7 +78,6 @@ public class PlanetConverterTest {
             .solarSystemId(SOLAR_SYSTEM_ID_STRING)
             .defaultName(DEFAULT_NAME)
             .customNames(CUSTOM_NAMES_STRING)
-            .coordinate(coordinateEntity)
             .size(SIZE)
             .owner(OWNER_STRING)
             .build();
@@ -104,7 +88,6 @@ public class PlanetConverterTest {
         given(uuidConverter.convertEntity(OWNER_STRING)).willReturn(OWNER);
 
         given(objectMapperWrapper.readValue(CUSTOM_NAMES_STRING, UuidStringMap.class)).willReturn(CUSTOM_NAMES);
-        given(coordinateConverter.convertEntity(coordinateEntity)).willReturn(coordinate);
 
         PlanetModel result = underTest.convertEntity(entity);
 
@@ -114,7 +97,6 @@ public class PlanetConverterTest {
         assertThat(result.getSolarSystemId()).isEqualTo(SOLAR_SYSTEM_ID);
         assertThat(result.getDefaultName()).isEqualTo(DEFAULT_NAME);
         assertThat(result.getCustomNames()).isEqualTo(CUSTOM_NAMES);
-        assertThat(result.getCoordinate()).isEqualTo(coordinate);
         assertThat(result.getSize()).isEqualTo(SIZE);
         assertThat(result.getOwner()).isEqualTo(OWNER);
     }

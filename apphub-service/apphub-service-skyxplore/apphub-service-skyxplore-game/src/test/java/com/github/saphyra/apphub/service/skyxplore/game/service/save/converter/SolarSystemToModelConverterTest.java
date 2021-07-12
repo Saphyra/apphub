@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
@@ -7,7 +8,6 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.SolarSystemModel;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
@@ -33,7 +33,6 @@ public class SolarSystemToModelConverterTest {
     private static final int RADIUS = 235;
     private static final String DEFAULT_NAME = "default-name";
     private static final OptionalMap<UUID, String> CUSTOM_NAMES = new OptionalHashMap<>(CollectionUtils.singleValueMap(UUID.randomUUID(), "custom-name"));
-    private static final Coordinate COORDINATE = new Coordinate(0, 0);
 
     @Mock
     private PlanetToModelConverter planetToModelConverter;
@@ -50,6 +49,9 @@ public class SolarSystemToModelConverterTest {
     @Mock
     private PlanetModel planetModel;
 
+    @Mock
+    private CoordinateModel coordinateModel;
+
     @Test
     public void convertDeep() {
         given(game.getGameId()).willReturn(GAME_ID);
@@ -59,7 +61,7 @@ public class SolarSystemToModelConverterTest {
             .radius(RADIUS)
             .defaultName(DEFAULT_NAME)
             .customNames(CUSTOM_NAMES)
-            .coordinate(COORDINATE)
+            .coordinate(coordinateModel)
             .planets(CollectionUtils.singleValueMap(UUID.randomUUID(), planet))
             .build();
 
@@ -74,8 +76,7 @@ public class SolarSystemToModelConverterTest {
         expected.setRadius(RADIUS);
         expected.setDefaultName(DEFAULT_NAME);
         expected.setCustomNames(CUSTOM_NAMES);
-        expected.setCoordinate(COORDINATE);
 
-        assertThat(result).containsExactlyInAnyOrder(expected, planetModel);
+        assertThat(result).containsExactlyInAnyOrder(expected, planetModel, coordinateModel);
     }
 }

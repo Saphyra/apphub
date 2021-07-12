@@ -1,9 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game;
 
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberStatus;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,6 +40,9 @@ public class StartGameServiceTest {
     @Mock
     private Lobby lobby;
 
+    @Mock
+    private Member member;
+
     @Test
     public void forbiddenOperation() {
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
@@ -45,6 +51,18 @@ public class StartGameServiceTest {
         Throwable ex = catchThrowable(() -> underTest.startGame(USER_ID));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
+    }
+
+    @Test
+    public void unreadyMember() {
+        given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
+        given(member.getStatus()).willReturn(LobbyMemberStatus.NOT_READY);
+        given(lobby.getHost()).willReturn(USER_ID);
+
+        Throwable ex = catchThrowable(() -> underTest.startGame(USER_ID));
+
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.PRECONDITION_FAILED, ErrorCode.LOBBY_MEMBER_NOT_READY);
     }
 
     @Test

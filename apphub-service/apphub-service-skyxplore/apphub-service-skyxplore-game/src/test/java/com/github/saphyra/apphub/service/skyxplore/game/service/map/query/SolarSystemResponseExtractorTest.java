@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.map.query;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.map.MapSolarSystemResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
@@ -31,6 +32,9 @@ public class SolarSystemResponseExtractorTest {
     private Universe universe;
 
     @Mock
+    private CoordinateModel coordinateModel;
+
+    @Mock
     private Coordinate coordinate;
 
     @Mock
@@ -40,11 +44,12 @@ public class SolarSystemResponseExtractorTest {
     public void getSolarSystems() {
         SolarSystem solarSystem = SolarSystem.builder()
             .solarSystemId(SOLAR_SYSTEM_ID)
-            .coordinate(coordinate)
+            .coordinate(coordinateModel)
             .defaultName(DEFAULT_SOLAR_SYSTEM_NAME)
             .planets(CollectionUtils.singleValueMap(UUID.randomUUID(), planet))
             .build();
         given(universe.getSystems()).willReturn(CollectionUtils.singleValueMap(coordinate, solarSystem));
+        given(coordinateModel.getCoordinate()).willReturn(coordinate);
 
         List<MapSolarSystemResponse> result = underTest.getSolarSystems(universe);
 

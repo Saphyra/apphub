@@ -35,9 +35,5 @@ public class SolarSystemModelValidator {
         if (model.getCustomNames().values().stream().anyMatch(Objects::isNull)) {
             throw ExceptionFactory.invalidParam("customNames", "must not contain null");
         }
-
-        if (isNull(model.getCoordinate())) {
-            throw ExceptionFactory.invalidParam("coordinate", "must not be null");
-        }
     }
 }

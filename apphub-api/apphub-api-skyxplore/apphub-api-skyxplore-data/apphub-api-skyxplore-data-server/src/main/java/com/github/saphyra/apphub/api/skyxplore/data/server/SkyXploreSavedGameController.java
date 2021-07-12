@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.api.skyxplore.data.server;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.response.SavedGameResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCreation;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
@@ -18,6 +20,12 @@ import java.util.UUID;
 public interface SkyXploreSavedGameController {
     @PostMapping(Endpoints.SKYXPLORE_INTERNAL_SAVE_GAME_DATA)
     void saveGameData(@RequestBody List<Object> items);
+
+    @GetMapping(Endpoints.SKYXPLORE_INTERNAL_LOAD_GAME_ITEM)
+    GameItem loadGameItem(@PathVariable("id") UUID id, @PathVariable("type") GameItemType type);
+
+    @GetMapping(Endpoints.SKYXPLORE_INTERNAL_LOAD_GAME_ITEM_CHILDREN)
+    List<? extends GameItem> loadChildrenOfGameItem(@PathVariable("parent") UUID parent, @PathVariable("type") GameItemType type);
 
     @GetMapping(Endpoints.SKYXPLORE_GET_GAMES)
     List<SavedGameResponse> getSavedGames(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

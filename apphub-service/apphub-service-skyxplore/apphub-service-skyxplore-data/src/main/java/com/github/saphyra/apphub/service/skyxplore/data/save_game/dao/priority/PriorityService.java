@@ -3,12 +3,14 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.priority;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PriorityModel;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,5 +41,15 @@ public class PriorityService implements GameItemService {
             .collect(Collectors.toList());
 
         priorityDao.saveAll(models);
+    }
+
+    @Override
+    public Optional<PriorityModel> findById(UUID id) {
+        throw ExceptionFactory.reportedException("Priority cannot be loaded by id.");
+    }
+
+    @Override
+    public List<PriorityModel> getByParent(UUID parent) {
+        return priorityDao.getByLocation(parent);
     }
 }

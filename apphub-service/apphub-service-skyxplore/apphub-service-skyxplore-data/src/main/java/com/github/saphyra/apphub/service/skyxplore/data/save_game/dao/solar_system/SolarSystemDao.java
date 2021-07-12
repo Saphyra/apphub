@@ -6,6 +6,8 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -20,5 +22,13 @@ public class SolarSystemDao extends AbstractDao<SolarSystemEntity, SolarSystemMo
 
     public void deleteByGameId(UUID gameId) {
         repository.deleteByGameId(uuidConverter.convertDomain(gameId));
+    }
+
+    public Optional<SolarSystemModel> findById(UUID solarSystemId) {
+        return findById(uuidConverter.convertDomain(solarSystemId));
+    }
+
+    public List<SolarSystemModel> getByGameId(UUID gameId) {
+        return converter.convertEntity(repository.getByGameId(uuidConverter.convertDomain(gameId)));
     }
 }

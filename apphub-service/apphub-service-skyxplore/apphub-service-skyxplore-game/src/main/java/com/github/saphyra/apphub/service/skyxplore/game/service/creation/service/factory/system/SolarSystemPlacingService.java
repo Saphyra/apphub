@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ public class SolarSystemPlacingService {
     private final ExecutorServiceBean executorServiceBean;
     private final SolarSystemFactory solarSystemFactory;
 
-    public Map<Coordinate, SolarSystem> create(int memberNum, int universeSize, SkyXploreGameCreationSettingsRequest settings) {
+    public Map<Coordinate, SolarSystem> create(UUID gameId, int memberNum, int universeSize, SkyXploreGameCreationSettingsRequest settings) {
         log.info("Generating SolarSystems...");
 
         List<String> usedSystemNames = new ArrayList<>();
@@ -39,9 +40,9 @@ public class SolarSystemPlacingService {
                 return name;
             }));
 
-        Map<Coordinate, SolarSystem> result = executorServiceBean.processCollectionWithWait(coordinates.entrySet(), entry -> solarSystemFactory.create(settings, entry.getValue(), entry.getKey()))
+        Map<Coordinate, SolarSystem> result = executorServiceBean.processCollectionWithWait(coordinates.entrySet(), entry -> solarSystemFactory.create(gameId, settings, entry.getValue(), entry.getKey()))
             .stream()
-            .collect(Collectors.toMap(SolarSystem::getCoordinate, Function.identity()));
+            .collect(Collectors.toMap(solarSystem -> solarSystem.getCoordinate().getCoordinate(), Function.identity()));
 
         log.info("SolarSystems generated.");
         if (log.isDebugEnabled()) {

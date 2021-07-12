@@ -6,9 +6,6 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMess
 import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameCreationApiClient;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
-import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberStatus;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
@@ -16,7 +13,6 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -34,14 +30,6 @@ class CreateNewGameService {
     private final LocaleProvider localeProvider;
 
     void createNewGame(Lobby lobby) {
-        boolean allReady = lobby.getMembers()
-            .values()
-            .stream()
-            .allMatch(member -> member.getStatus().equals(LobbyMemberStatus.READY));
-        if (!allReady) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.PRECONDITION_FAILED, ErrorCode.LOBBY_MEMBER_NOT_READY, "There are member(s) not ready.");
-        }
-
         Map<UUID, UUID> members = new HashMap<>();
         lobby.getMembers()
             .values()

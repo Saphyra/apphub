@@ -9,14 +9,19 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CitizenServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID CITIZEN_ID = UUID.randomUUID();
+    private static final UUID PARENT = UUID.randomUUID();
 
     @Mock
     private CitizenDao citizenDao;
@@ -29,6 +34,9 @@ public class CitizenServiceTest {
 
     @Mock
     private CitizenModel model;
+
+    @Mock
+    private CitizenModel citizen;
 
     @Test
     public void deleteByGameId() {
@@ -48,5 +56,23 @@ public class CitizenServiceTest {
 
         verify(citizenModelValidator).validate(model);
         verify(citizenDao).saveAll(Arrays.asList(model));
+    }
+
+    @Test
+    public void findById() {
+        given(citizenDao.findById(CITIZEN_ID)).willReturn(Optional.of(citizen));
+
+        Optional<CitizenModel> result = underTest.findById(CITIZEN_ID);
+
+        assertThat(result).contains(citizen);
+    }
+
+    @Test
+    public void getByParent() {
+        given(citizenDao.getByLocation(PARENT)).willReturn(Arrays.asList(citizen));
+
+        List<CitizenModel> result = underTest.getByParent(PARENT);
+
+        assertThat(result).containsExactly(citizen);
     }
 }

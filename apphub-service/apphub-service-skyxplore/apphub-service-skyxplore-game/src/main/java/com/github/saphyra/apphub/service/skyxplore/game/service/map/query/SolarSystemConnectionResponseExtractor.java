@@ -17,8 +17,8 @@ class SolarSystemConnectionResponseExtractor {
         return universe.getConnections()
             .stream()
             .map(connection -> SolarSystemConnectionResponse.builder()
-                .a(connection.getLine().getA())
-                .b(connection.getLine().getB())
+                .a(connection.getLine().getLine().getA())
+                .b(connection.getLine().getLine().getB())
                 .build())
             .collect(Collectors.toList());
     }

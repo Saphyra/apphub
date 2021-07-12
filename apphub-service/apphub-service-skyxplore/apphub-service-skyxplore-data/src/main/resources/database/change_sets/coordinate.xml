@@ -15,6 +15,45 @@
         </createTable>
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="coordinate" columnNames="reference_id" constraintName="coordinate_pk"/>
+    </changeSet>
 
+    <changeSet id="drop-primary-key-from-coordinate" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <primaryKeyExists schemaName="skyxplore_game" tableName="coordinate" primaryKeyName="coordinate_pk"/>
+        </preConditions>
+
+        <dropPrimaryKey schemaName="skyxplore_game" tableName="coordinate" constraintName="coordinate_pk"/>
+    </changeSet>
+
+    <changeSet id="add-column_coordinate_id-to-coordinate" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="coordinate" columnName="coordinate_id"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="coordinate">
+            <column name="coordinate_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addPrimaryKey schemaName="skyxplore_game" tableName="coordinate" columnNames="coordinate_id" constraintName="coordinate_pk-coordinate_id"/>
+    </changeSet>
+
+    <changeSet id="add-column-game_id-to-coordinate" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="coordinate" columnName="game_id"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="coordinate">
+            <column name="game_id" type="varchar(37)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="drop-not_null-constraint-from-reference_id-from-coordinate" author="saphyra">
+        <dropNotNullConstraint schemaName="skyxplore_game" tableName="coordinate" columnName="reference_id"/>
     </changeSet>
 </databaseChangeLog>

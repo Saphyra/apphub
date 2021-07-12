@@ -8,7 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -40,5 +43,17 @@ public class UniverseService implements GameItemService {
 
 
         universeDao.saveAll(models);
+    }
+
+    @Override
+    public Optional<UniverseModel> findById(UUID id) {
+        return universeDao.findById(id);
+    }
+
+    @Override
+    public List<UniverseModel> getByParent(UUID parent) {
+        return universeDao.findById(parent)
+            .map(Arrays::asList)
+            .orElse(Collections.emptyList());
     }
 }

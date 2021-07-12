@@ -10,6 +10,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,6 +21,8 @@ import static org.mockito.Mockito.verify;
 public class AllianceDaoTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final String GAME_ID_STRING = "game-id";
+    private static final UUID ALLIANCE_ID = UUID.randomUUID();
+    private static final String ALLIANCE_ID_STRING = "alliance-id";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -57,5 +60,16 @@ public class AllianceDaoTest {
         List<AllianceModel> result = underTest.getByGameId(GAME_ID);
 
         assertThat(result).containsExactly(model);
+    }
+
+    @Test
+    public void findById() {
+        given(uuidConverter.convertDomain(ALLIANCE_ID)).willReturn(ALLIANCE_ID_STRING);
+        given(repository.findById(ALLIANCE_ID_STRING)).willReturn(Optional.of(entity));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(model));
+
+        Optional<AllianceModel> result = underTest.findById(ALLIANCE_ID);
+
+        assertThat(result).contains(model);
     }
 }

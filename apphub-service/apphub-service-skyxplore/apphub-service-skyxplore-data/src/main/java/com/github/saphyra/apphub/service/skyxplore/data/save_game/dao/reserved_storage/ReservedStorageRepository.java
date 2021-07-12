@@ -6,10 +6,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 interface ReservedStorageRepository extends CrudRepository<ReservedStorageEntity, String> {
-    @Transactional
     @Modifying
     @Query("DELETE FROM ReservedStorageEntity e WHERE e.gameId = :gameId")
     void deleteByGameId(@Param("gameId") String gameId);
+
+    List<ReservedStorageEntity> getByLocation(String location);
 }

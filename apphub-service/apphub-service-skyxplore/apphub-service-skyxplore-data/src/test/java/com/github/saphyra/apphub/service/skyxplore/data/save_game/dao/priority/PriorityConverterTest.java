@@ -48,6 +48,7 @@ public class PriorityConverterTest {
         assertThat(result.getPk().getPriorityType()).isEqualTo(PRIORITY_TYPE);
         assertThat(result.getGameId()).isEqualTo(GAME_ID_STRING);
         assertThat(result.getValue()).isEqualTo(VALUE);
+        assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
     }
 
     @Test
@@ -70,6 +71,7 @@ public class PriorityConverterTest {
         PriorityModel result = underTest.convertEntity(entity);
 
         assertThat(result.getLocation()).isEqualTo(LOCATION);
+        assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
         assertThat(result.getPriorityType()).isEqualTo(PRIORITY_TYPE);
         assertThat(result.getType()).isEqualTo(GameItemType.PRIORITY);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);

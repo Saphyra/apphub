@@ -6,6 +6,8 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -20,5 +22,13 @@ public class CitizenDao extends AbstractDao<CitizenEntity, CitizenModel, String,
 
     public void deleteByGameId(UUID gameId) {
         repository.deleteByGameId(uuidConverter.convertDomain(gameId));
+    }
+
+    public Optional<CitizenModel> findById(UUID citizenId) {
+        return findById(uuidConverter.convertDomain(citizenId));
+    }
+
+    public List<CitizenModel> getByLocation(UUID location) {
+        return converter.convertEntity(repository.getByLocation(uuidConverter.convertDomain(location)));
     }
 }

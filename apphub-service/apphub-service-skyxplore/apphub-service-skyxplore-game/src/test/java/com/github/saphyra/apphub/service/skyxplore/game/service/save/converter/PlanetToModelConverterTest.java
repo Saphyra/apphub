@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
@@ -84,6 +85,9 @@ public class PlanetToModelConverterTest {
     @Mock
     private PriorityModel priorityModel;
 
+    @Mock
+    private CoordinateModel coordinateModel;
+
     @Test
     public void convertDeep() {
         Planet planet = Planet.builder()
@@ -91,7 +95,7 @@ public class PlanetToModelConverterTest {
             .solarSystemId(SOLAR_SYSTEM_ID)
             .defaultName(DEFAULT_NAME)
             .customNames(CUSTOM_NAMES)
-            .coordinate(COORDINATE)
+            .coordinate(coordinateModel)
             .size(SIZE)
             .population(new OptionalHashMap<>(CollectionUtils.singleValueMap(UUID.randomUUID(), citizen)))
             .surfaces(CollectionUtils.singleValueMap(COORDINATE, surface))
@@ -103,7 +107,7 @@ public class PlanetToModelConverterTest {
         given(game.getGameId()).willReturn(GAME_ID);
         given(surfaceConverter.convertDeep(any(), eq(game))).willReturn(Arrays.asList(surfaceModel));
         given(citizenConverter.convertDeep(any(), eq(game))).willReturn(Arrays.asList(citizenModel));
-        given(storageDetailsConverter.convertDeep(storageDetails, game)).willReturn(Arrays.asList(storageDetailsItem));
+        given(storageDetailsConverter.convertDeep(storageDetails, game, PLANET_ID, LocationType.PLANET)).willReturn(Arrays.asList(storageDetailsItem));
         given(priorityConverter.convert(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION, PRIORITY), PLANET_ID, LocationType.PLANET, game)).willReturn(Arrays.asList(priorityModel));
 
         List<GameItem> result = underTest.convertDeep(Arrays.asList(planet), game);
@@ -115,10 +119,9 @@ public class PlanetToModelConverterTest {
         expected.setSolarSystemId(SOLAR_SYSTEM_ID);
         expected.setDefaultName(DEFAULT_NAME);
         expected.setCustomNames(CUSTOM_NAMES);
-        expected.setCoordinate(COORDINATE);
         expected.setSize(SIZE);
         expected.setOwner(OWNER);
 
-        assertThat(result).containsExactlyInAnyOrder(expected, surfaceModel, citizenModel, storageDetailsItem, priorityModel);
+        assertThat(result).containsExactlyInAnyOrder(expected, surfaceModel, citizenModel, storageDetailsItem, priorityModel, coordinateModel);
     }
 }

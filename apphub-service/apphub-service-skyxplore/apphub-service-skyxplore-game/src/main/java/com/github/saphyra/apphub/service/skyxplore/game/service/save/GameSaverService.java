@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.save;
 
-import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreDataGameClient;
+import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreSavedGameClient;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.web_utils.CustomLocaleProvider;
@@ -20,7 +20,7 @@ public class GameSaverService {
     private final GameToGameItemListConverter converter;
     private final ExecutorServiceBean executorServiceBean;
     private final SaverProperties saverProperties;
-    private final SkyXploreDataGameClient gameClient;
+    private final SkyXploreSavedGameClient gameClient;
     private final CustomLocaleProvider customLocaleProvider;
 
     public void save(Game game) {

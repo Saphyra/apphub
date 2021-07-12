@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.api.skyxplore.model.game;
 
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -17,5 +16,4 @@ public class SolarSystemModel extends GameItem {
     private Integer radius;
     private String defaultName;
     private Map<UUID, String> customNames;
-    private Coordinate coordinate;
 }

@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -18,5 +19,9 @@ public class UniverseDao extends AbstractDao<UniverseEntity, UniverseModel, Stri
 
     public void deleteById(UUID gameId) {
         deleteById(uuidConverter.convertDomain(gameId));
+    }
+
+    public Optional<UniverseModel> findById(UUID gameId) {
+        return findById(uuidConverter.convertDomain(gameId));
     }
 }

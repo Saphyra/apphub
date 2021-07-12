@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -27,5 +28,9 @@ public class PlayerDao extends AbstractDao<PlayerEntity, PlayerModel, String, Pl
 
     public List<PlayerModel> getByGameId(UUID gameId) {
         return converter.convertEntity(repository.getByGameId(uuidConverter.convertDomain(gameId)));
+    }
+
+    public Optional<PlayerModel> findById(UUID playerId) {
+        return findById(uuidConverter.convertDomain(playerId));
     }
 }

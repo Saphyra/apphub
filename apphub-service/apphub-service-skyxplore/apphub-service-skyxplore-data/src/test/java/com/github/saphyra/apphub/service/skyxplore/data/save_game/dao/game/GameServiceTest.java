@@ -9,14 +9,18 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID HOST = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
@@ -48,5 +52,23 @@ public class GameServiceTest {
 
         verify(gameModelValidator).validate(model);
         verify(gameDao).saveAll(Arrays.asList(model));
+    }
+
+    @Test
+    public void findById() {
+        given(gameDao.findById(GAME_ID)).willReturn(Optional.of(model));
+
+        Optional<GameModel> result = underTest.findById(GAME_ID);
+
+        assertThat(result).contains(model);
+    }
+
+    @Test
+    public void getByParent() {
+        given(gameDao.getByHost(HOST)).willReturn(Arrays.asList(model));
+
+        List<GameModel> result = underTest.getByParent(HOST);
+
+        assertThat(result).containsExactly(model);
     }
 }

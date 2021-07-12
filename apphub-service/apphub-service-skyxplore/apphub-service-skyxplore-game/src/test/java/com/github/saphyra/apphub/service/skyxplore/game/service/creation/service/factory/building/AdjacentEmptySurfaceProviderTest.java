@@ -1,21 +1,21 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.building;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-
-import java.util.Arrays;
-import java.util.Optional;
-
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
+import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
-import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
+import java.util.Arrays;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AdjacentEmptySurfaceProviderTest {
@@ -29,6 +29,9 @@ public class AdjacentEmptySurfaceProviderTest {
     private Coordinate coordinate1;
 
     @Mock
+    private CoordinateModel coordinateModel;
+
+    @Mock
     private Coordinate coordinate2;
 
     @Mock
@@ -39,7 +42,8 @@ public class AdjacentEmptySurfaceProviderTest {
 
     @Test
     public void surfaceFound() {
-        given(surface.getCoordinate()).willReturn(coordinate2);
+        given(surface.getCoordinate()).willReturn(coordinateModel);
+        given(coordinateModel.getCoordinate()).willReturn(coordinate2);
         given(distanceCalculator.getDistance(coordinate1, coordinate2)).willReturn(1d);
 
         Optional<Surface> result = underTest.getEmptySurfaceNextTo(coordinate1, Arrays.asList(surface));
@@ -58,7 +62,8 @@ public class AdjacentEmptySurfaceProviderTest {
 
     @Test
     public void surfaceNotFound() {
-        given(surface.getCoordinate()).willReturn(coordinate2);
+        given(surface.getCoordinate()).willReturn(coordinateModel);
+        given(coordinateModel.getCoordinate()).willReturn(coordinate2);
         given(distanceCalculator.getDistance(coordinate1, coordinate2)).willReturn(2d);
 
         Optional<Surface> result = underTest.getEmptySurfaceNextTo(coordinate1, Arrays.asList(surface));

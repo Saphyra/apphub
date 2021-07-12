@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SurfaceModel;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.skyxplore.data.common.CoordinateConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 class SurfaceConverter extends ConverterBase<SurfaceEntity, SurfaceModel> {
     private final UuidConverter uuidConverter;
-    private final CoordinateConverter coordinateConverter;
 
     @Override
     protected SurfaceModel processEntityConversion(SurfaceEntity entity) {
@@ -23,7 +21,6 @@ class SurfaceConverter extends ConverterBase<SurfaceEntity, SurfaceModel> {
         model.setGameId(uuidConverter.convertEntity(entity.getGameId()));
         model.setType(GameItemType.SURFACE);
         model.setPlanetId(uuidConverter.convertEntity(entity.getPlanetId()));
-        model.setCoordinate(coordinateConverter.convertEntity(entity.getCoordinate()));
         model.setSurfaceType(entity.getSurfaceType());
         return model;
     }
@@ -35,7 +32,6 @@ class SurfaceConverter extends ConverterBase<SurfaceEntity, SurfaceModel> {
             .gameId(uuidConverter.convertDomain(domain.getGameId()))
             .planetId(uuidConverter.convertDomain(domain.getPlanetId()))
             .surfaceType(domain.getSurfaceType())
-            .coordinate(coordinateConverter.convertDomain(domain.getCoordinate(), domain.getId()))
             .build();
     }
 }

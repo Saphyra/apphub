@@ -5,6 +5,8 @@ import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -18,5 +20,13 @@ public class SkillDao extends AbstractDao<SkillEntity, SkillModel, String, Skill
 
     public void deleteByGameId(UUID gameId) {
         repository.deleteByGameId(uuidConverter.convertDomain(gameId));
+    }
+
+    public Optional<SkillModel> findById(UUID skillId) {
+        return findById(uuidConverter.convertDomain(skillId));
+    }
+
+    public List<SkillModel> getByCitizenId(UUID citizenId) {
+        return converter.convertEntity(repository.getByCitizenId(uuidConverter.convertDomain(citizenId)));
     }
 }

@@ -32,6 +32,7 @@ public class SurfaceToModelConverter {
     private List<GameItem> convertDeep(Surface surface, Game game) {
         List<GameItem> result = new ArrayList<>();
         result.add(convert(surface, game));
+        result.add(surface.getCoordinate());
         if (!isNull(surface.getBuilding())) {
             result.add(buildingConverter.convert(surface.getBuilding(), game));
         }
@@ -45,7 +46,6 @@ public class SurfaceToModelConverter {
         model.setType(GameItemType.SURFACE);
         model.setPlanetId(surface.getPlanetId());
         model.setSurfaceType(surface.getSurfaceType().name());
-        model.setCoordinate(surface.getCoordinate());
         return model;
     }
 }

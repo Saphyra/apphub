@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,5 +40,15 @@ public class ReservedStorageService implements GameItemService {
             .collect(Collectors.toList());
 
         reservedStorageDao.saveAll(models);
+    }
+
+    @Override
+    public Optional<ReservedStorageModel> findById(UUID id) {
+        return reservedStorageDao.findById(id);
+    }
+
+    @Override
+    public List<ReservedStorageModel> getByParent(UUID parent) {
+        return reservedStorageDao.getByLocation(parent);
     }
 }

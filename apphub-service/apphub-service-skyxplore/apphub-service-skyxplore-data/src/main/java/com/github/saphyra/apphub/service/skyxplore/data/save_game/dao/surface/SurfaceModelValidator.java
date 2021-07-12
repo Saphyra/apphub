@@ -22,10 +22,6 @@ public class SurfaceModelValidator {
             throw ExceptionFactory.invalidParam("planetId", "must not be null");
         }
 
-        if (isNull(model.getCoordinate())) {
-            throw ExceptionFactory.invalidParam("coordinate", "must not be null");
-        }
-
         if (isNull(model.getSurfaceType())) {
             throw ExceptionFactory.invalidParam("surfaceType", "must not be null");
         }

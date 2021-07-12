@@ -1,8 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.LineModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SystemConnectionModel;
-import com.github.saphyra.apphub.lib.geometry.Line;
+import com.github.saphyra.apphub.service.skyxplore.game.common.LineModelWrapper;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SystemConnection;
 import org.junit.Test;
@@ -30,22 +33,36 @@ public class SystemConnectionToModelConverterTest {
     private Game game;
 
     @Mock
-    private Line line;
+    private LineModelWrapper line;
+
+    @Mock
+    private LineModel lineModel;
+
+    @Mock
+    private CoordinateModel coordinateModel1;
+
+    @Mock
+    private CoordinateModel coordinateModel2;
 
     @Test
     public void convert() {
         given(game.getGameId()).willReturn(GAME_ID);
+        given(line.getModel()).willReturn(lineModel);
+        given(line.getA()).willReturn(coordinateModel1);
+        given(line.getB()).willReturn(coordinateModel2);
 
         SystemConnection connection = SystemConnection.builder()
             .systemConnectionId(SYSTEM_CONNECTION_ID)
             .line(line)
             .build();
 
-        List<SystemConnectionModel> result = underTest.convert(Arrays.asList(connection), game);
+        List<GameItem> result = underTest.convert(Arrays.asList(connection), game);
 
-        assertThat(result.get(0).getId()).isEqualTo(SYSTEM_CONNECTION_ID);
-        assertThat(result.get(0).getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.get(0).getType()).isEqualTo(GameItemType.SYSTEM_CONNECTION);
-        assertThat(result.get(0).getLine()).isEqualTo(line);
+        SystemConnectionModel expected = new SystemConnectionModel();
+        expected.setId(SYSTEM_CONNECTION_ID);
+        expected.setGameId(GAME_ID);
+        expected.setType(GameItemType.SYSTEM_CONNECTION);
+
+        assertThat(result).containsExactlyInAnyOrder(expected, lineModel, coordinateModel1, coordinateModel2);
     }
 }

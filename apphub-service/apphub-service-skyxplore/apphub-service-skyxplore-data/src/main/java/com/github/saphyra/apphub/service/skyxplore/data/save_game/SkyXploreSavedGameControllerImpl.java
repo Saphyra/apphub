@@ -29,6 +29,7 @@ import static java.util.Objects.isNull;
 
 @RestController
 @Slf4j
+//TODO refactor - split
 public class SkyXploreSavedGameControllerImpl implements SkyXploreSavedGameController {
     private final OptionalMap<GameItemType, GameItemService> savers;
     private final ObjectMapperWrapper objectMapperWrapper;
@@ -36,8 +37,17 @@ public class SkyXploreSavedGameControllerImpl implements SkyXploreSavedGameContr
     private final PlayerDao playerDao;
     private final GameDeletionService gameDeletionService;
     private final GameViewForLobbyCreationQueryService gameViewForLobbyCreationQueryService;
+    private final LoadGameItemService loadGameItemService;
 
-    public SkyXploreSavedGameControllerImpl(List<GameItemService> savers, ObjectMapperWrapper objectMapperWrapper, GameDao gameDao, PlayerDao playerDao, GameDeletionService gameDeletionService, GameViewForLobbyCreationQueryService gameViewForLobbyCreationQueryService) {
+    public SkyXploreSavedGameControllerImpl(
+        List<GameItemService> savers,
+        ObjectMapperWrapper objectMapperWrapper,
+        GameDao gameDao,
+        PlayerDao playerDao,
+        GameDeletionService gameDeletionService,
+        GameViewForLobbyCreationQueryService gameViewForLobbyCreationQueryService,
+        LoadGameItemService loadGameItemService
+    ) {
         this.savers = new OptionalHashMap<>(savers.stream()
             .collect(Collectors.toMap(GameItemService::getType, Function.identity())));
         this.objectMapperWrapper = objectMapperWrapper;
@@ -45,6 +55,7 @@ public class SkyXploreSavedGameControllerImpl implements SkyXploreSavedGameContr
         this.playerDao = playerDao;
         this.gameDeletionService = gameDeletionService;
         this.gameViewForLobbyCreationQueryService = gameViewForLobbyCreationQueryService;
+        this.loadGameItemService = loadGameItemService;
     }
 
     @Override
@@ -58,6 +69,18 @@ public class SkyXploreSavedGameControllerImpl implements SkyXploreSavedGameContr
             .stream()
             .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().stream().map(BiWrapper::getEntity1).collect(Collectors.toList())))
             .forEach(this::save);
+    }
+
+    @Override
+    public GameItem loadGameItem(UUID id, GameItemType type) {
+        log.info("Loading gameItem for id {} and type {}", id, type);
+        return loadGameItemService.loadGameItem(id, type);
+    }
+
+    @Override
+    public List<? extends GameItem> loadChildrenOfGameItem(UUID parent, GameItemType type) {
+        log.info("Loading children of gameItem for id {} and type {}", parent, type);
+        return loadGameItemService.loadChildrenOfGameItem(parent, type);
     }
 
     @Override

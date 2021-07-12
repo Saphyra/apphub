@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.UuidStringMap;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.skyxplore.data.common.CoordinateConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 class SolarSystemConverter extends ConverterBase<SolarSystemEntity, SolarSystemModel> {
     private final UuidConverter uuidConverter;
-    private final CoordinateConverter coordinateConverter;
     private final ObjectMapperWrapper objectMapperWrapper;
 
     @Override
@@ -28,7 +26,6 @@ class SolarSystemConverter extends ConverterBase<SolarSystemEntity, SolarSystemM
         model.setRadius(entity.getRadius());
         model.setDefaultName(entity.getDefaultName());
         model.setCustomNames(objectMapperWrapper.readValue(entity.getCustomNames(), UuidStringMap.class));
-        model.setCoordinate(coordinateConverter.convertEntity(entity.getCoordinate()));
         return model;
     }
 
@@ -40,7 +37,6 @@ class SolarSystemConverter extends ConverterBase<SolarSystemEntity, SolarSystemM
             .radius(domain.getRadius())
             .defaultName(domain.getDefaultName())
             .customNames(objectMapperWrapper.writeValueAsString(domain.getCustomNames()))
-            .coordinate(coordinateConverter.convertDomain(domain.getCoordinate(), domain.getId()))
             .build();
     }
 }

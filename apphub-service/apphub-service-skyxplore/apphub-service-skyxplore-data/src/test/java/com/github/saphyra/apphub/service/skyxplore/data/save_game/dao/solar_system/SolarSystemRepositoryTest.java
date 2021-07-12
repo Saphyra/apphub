@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.solar_system;
 
-import com.github.saphyra.apphub.service.skyxplore.data.common.CoordinateEntity;
-import com.github.saphyra.apphub.service.skyxplore.data.save_game.CoordinateTestRepository;
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
@@ -13,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,44 +27,45 @@ public class SolarSystemRepositoryTest {
     @Autowired
     private SolarSystemRepository underTest;
 
-    @Autowired
-    private CoordinateTestRepository coordinateRepository;
-
     @After
     public void clear() {
         underTest.deleteAll();
-        coordinateRepository.deleteAll();
     }
 
     @Test
     @Transactional
     public void deleteByGameId() {
-        CoordinateEntity coordinate1 = CoordinateEntity.builder()
-            .referenceId(SOLAR_SYSTEM_ID_1)
-            .x(324d)
-            .y(345d)
-            .build();
         SolarSystemEntity entity1 = SolarSystemEntity.builder()
             .solarSystemId(SOLAR_SYSTEM_ID_1)
             .gameId(GAME_ID_1)
-            .coordinate(coordinate1)
             .build();
 
-        CoordinateEntity coordinate2 = CoordinateEntity.builder()
-            .referenceId(SOLAR_SYSTEM_ID_2)
-            .x(23423d)
-            .y(23411d)
-            .build();
         SolarSystemEntity entity2 = SolarSystemEntity.builder()
             .solarSystemId(SOLAR_SYSTEM_ID_2)
             .gameId(GAME_ID_2)
-            .coordinate(coordinate2)
             .build();
         underTest.saveAll(Arrays.asList(entity1, entity2));
 
         underTest.deleteByGameId(GAME_ID_1);
 
         assertThat(underTest.findAll()).containsExactly(entity2);
-        assertThat(coordinateRepository.findAll()).containsExactly(coordinate2);
+    }
+
+    @Test
+    public void getByGameId() {
+        SolarSystemEntity entity1 = SolarSystemEntity.builder()
+            .solarSystemId(SOLAR_SYSTEM_ID_1)
+            .gameId(GAME_ID_1)
+            .build();
+
+        SolarSystemEntity entity2 = SolarSystemEntity.builder()
+            .solarSystemId(SOLAR_SYSTEM_ID_2)
+            .gameId(GAME_ID_2)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2));
+
+        List<SolarSystemEntity> result = underTest.getByGameId(GAME_ID_1);
+
+        assertThat(result).containsExactly(entity1);
     }
 }

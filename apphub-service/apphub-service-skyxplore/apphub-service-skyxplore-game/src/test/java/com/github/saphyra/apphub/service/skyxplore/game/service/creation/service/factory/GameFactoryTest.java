@@ -98,7 +98,7 @@ public class GameFactoryTest {
             .gameName(GAME_NAME)
             .build();
 
-        given(universeFactory.create(1, settings)).willReturn(universe);
+        given(universeFactory.create(GAME_ID, 1, settings)).willReturn(universe);
         given(universe.getSystems()).willReturn(CollectionUtils.singleValueMap(coordinate, solarSystem));
         given(solarSystem.getPlanets()).willReturn(CollectionUtils.singleValueMap(UUID.randomUUID(), planet));
 

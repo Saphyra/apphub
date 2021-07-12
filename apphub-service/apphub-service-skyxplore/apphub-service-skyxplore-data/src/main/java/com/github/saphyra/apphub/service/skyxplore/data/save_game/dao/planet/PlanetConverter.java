@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.UuidStringMap;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.skyxplore.data.common.CoordinateConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Component;
 class PlanetConverter extends ConverterBase<PlanetEntity, PlanetModel> {
     private final UuidConverter uuidConverter;
     private final ObjectMapperWrapper objectMapperWrapper;
-    private final CoordinateConverter coordinateConverter;
 
     @Override
     protected PlanetModel processEntityConversion(PlanetEntity entity) {
@@ -28,7 +26,6 @@ class PlanetConverter extends ConverterBase<PlanetEntity, PlanetModel> {
         model.setSolarSystemId(uuidConverter.convertEntity(entity.getSolarSystemId()));
         model.setDefaultName(entity.getDefaultName());
         model.setCustomNames(objectMapperWrapper.readValue(entity.getCustomNames(), UuidStringMap.class));
-        model.setCoordinate(coordinateConverter.convertEntity(entity.getCoordinate()));
         model.setSize(entity.getSize());
         model.setOwner(uuidConverter.convertEntity(entity.getOwner()));
         return model;
@@ -42,7 +39,6 @@ class PlanetConverter extends ConverterBase<PlanetEntity, PlanetModel> {
             .solarSystemId(uuidConverter.convertDomain(domain.getSolarSystemId()))
             .defaultName(domain.getDefaultName())
             .customNames(objectMapperWrapper.writeValueAsString(domain.getCustomNames()))
-            .coordinate(coordinateConverter.convertDomain(domain.getCoordinate(), domain.getId()))
             .size(domain.getSize())
             .owner(uuidConverter.convertDomain(domain.getOwner()))
             .build();

@@ -1,11 +1,13 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.home_planet.closest_system;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
 import com.github.saphyra.apphub.lib.geometry.Line;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -39,6 +41,9 @@ public class ClosestHabitableSystemFinderTest {
     private Line line2;
 
     @Mock
+    private CoordinateModel coordinateModel;
+
+    @Mock
     private Coordinate systemCoordinate;
 
     @Mock
@@ -59,12 +64,17 @@ public class ClosestHabitableSystemFinderTest {
     @Mock
     private Planet planet2;
 
+    @Before
+    public void setUp() {
+        given(coordinateModel.getCoordinate()).willReturn(systemCoordinate);
+    }
+
     @Test
     public void findClosestHabitableSystem_found() {
         given(line1.getLength(distanceCalculator)).willReturn(10d);
         given(line2.getLength(distanceCalculator)).willReturn(5d);
 
-        given(referenceSystem.getCoordinate()).willReturn(systemCoordinate);
+        given(referenceSystem.getCoordinate()).willReturn(coordinateModel);
         given(line2.getOtherEndpoint(systemCoordinate)).willReturn(coordinate2);
 
         Map<Coordinate, SolarSystem> systems = new HashMap<Coordinate, SolarSystem>() {{
@@ -84,7 +94,7 @@ public class ClosestHabitableSystemFinderTest {
         given(line1.getLength(distanceCalculator)).willReturn(10d);
         given(line2.getLength(distanceCalculator)).willReturn(5d);
 
-        given(referenceSystem.getCoordinate()).willReturn(systemCoordinate);
+        given(referenceSystem.getCoordinate()).willReturn(coordinateModel);
         given(line1.getOtherEndpoint(systemCoordinate)).willReturn(coordinate1);
         given(line2.getOtherEndpoint(systemCoordinate)).willReturn(coordinate2);
 

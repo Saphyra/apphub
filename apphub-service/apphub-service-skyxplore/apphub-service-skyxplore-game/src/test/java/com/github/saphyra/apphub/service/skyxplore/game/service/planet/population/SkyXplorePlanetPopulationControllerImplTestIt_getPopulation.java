@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.populati
 
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.api.platform.message_sender.client.MessageSenderApiClient;
-import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreDataGameClient;
+import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreSavedGameClient;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SkillResponse;
@@ -74,7 +74,7 @@ public class SkyXplorePlanetPopulationControllerImplTestIt_getPopulation {
     private MessageSenderApiClient messageSenderClient;
 
     @MockBean
-    private SkyXploreDataGameClient skyXploreDataGameClient;
+    private SkyXploreSavedGameClient skyXploreSavedGameClient;
 
     @Autowired
     private GameDao gameDao;

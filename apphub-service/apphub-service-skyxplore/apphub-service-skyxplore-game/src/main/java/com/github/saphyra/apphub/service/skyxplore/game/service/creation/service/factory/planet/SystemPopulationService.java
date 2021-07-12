@@ -30,7 +30,7 @@ public class SystemPopulationService {
     private final ExecutorServiceBean executorServiceBean;
     private final PlanetFactory planetFactory;
 
-    public Map<UUID, Planet> populateSystemWithPlanets(UUID solarSystemId, String systemName, int systemRadius, SkyXploreGameCreationSettingsRequest settings) {
+    public Map<UUID, Planet> populateSystemWithPlanets(UUID gameId, UUID solarSystemId, String systemName, int systemRadius, SkyXploreGameCreationSettingsRequest settings) {
         log.debug("Generating planets for system {} with radius {}", systemName, systemRadius);
         Range<Integer> range = properties.getPlanet()
             .getSystemSize()
@@ -51,7 +51,7 @@ public class SystemPopulationService {
             indexList.add(i);
         }
 
-        Map<UUID, Planet> result = executorServiceBean.processCollectionWithWait(indexList, planetIndex -> planetFactory.create(planetIndex, coordinates.get(planetIndex), solarSystemId, systemName, planetSizeRange))
+        Map<UUID, Planet> result = executorServiceBean.processCollectionWithWait(indexList, planetIndex -> planetFactory.create(gameId, planetIndex, coordinates.get(planetIndex), solarSystemId, systemName, planetSizeRange))
             .stream()
             .collect(Collectors.toMap(Planet::getPlanetId, Function.identity()));
 
