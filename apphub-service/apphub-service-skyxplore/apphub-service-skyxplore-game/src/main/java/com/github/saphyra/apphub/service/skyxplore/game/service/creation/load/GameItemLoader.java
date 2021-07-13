@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -23,16 +22,11 @@ public class GameItemLoader {
     public <T extends GameItem> Optional<T> loadItem(UUID id, GameItemType type) {
         //noinspection unchecked
         return Optional.ofNullable(gameDataProxy.loadItem(id, type))
-            .filter(gameItem1 -> gameItem1.getType() == type)
-            .map(item -> (T) objectMapperWrapper.convertValue(item, type.getModelType()));
+            .map(s -> (T) objectMapperWrapper.readValue(s, type.getModelType()));
     }
 
-    public <T extends GameItem> List<T> loadChildren(UUID parent, GameItemType type) {
-        //noinspection unchecked
-        return gameDataProxy.loadChildren(parent, type)
-            .stream()
-            .filter(gameItem1 -> gameItem1.getType() == type)
-            .map(item -> (T) objectMapperWrapper.convertValue(item, type.getModelType()))
-            .collect(Collectors.toList());
+    public <T extends GameItem> List<T> loadChildren(UUID parent, GameItemType type, Class<T[]> clazz) {
+        String data = gameDataProxy.loadChildren(parent, type);
+        return objectMapperWrapper.readArrayValue(data, clazz);
     }
 }

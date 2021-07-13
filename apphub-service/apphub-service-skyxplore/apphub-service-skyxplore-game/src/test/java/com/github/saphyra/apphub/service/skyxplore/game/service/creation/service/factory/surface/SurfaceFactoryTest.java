@@ -48,7 +48,7 @@ public class SurfaceFactoryTest {
         Coordinate coordinate = new Coordinate(0, 0);
 
         given(surfaceMapFactory.createSurfaceMap(PLANET_SIZE)).willReturn(surfaceMap);
-        given(coordinateModelFactory.create(coordinate, GAME_ID, PLANET_ID)).willReturn(coordinateModel);
+        given(coordinateModelFactory.create(coordinate, GAME_ID, SURFACE_ID)).willReturn(coordinateModel);
 
         given(idGenerator.randomUuid()).willReturn(SURFACE_ID);
 

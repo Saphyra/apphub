@@ -43,7 +43,7 @@ public class PlayerLoaderTest {
 
     @Before
     public void setUp() {
-        given(gameItemLoader.loadChildren(GAME_ID, GameItemType.PLAYER)).willReturn(Arrays.asList(model));
+        given(gameItemLoader.loadChildren(GAME_ID, GameItemType.PLAYER, PlayerModel[].class)).willReturn(Arrays.asList(model));
 
         given(model.getId()).willReturn(PLAYER_ID);
         given(model.getUserId()).willReturn(USER_ID);
@@ -99,6 +99,6 @@ public class PlayerLoaderTest {
         assertThat(player.isConnected()).isFalse();
 
         verify(model).setAi(true);
-        verify(gameDataProxy).saveListItem(model);
+        verify(gameDataProxy).saveItem(model);
     }
 }

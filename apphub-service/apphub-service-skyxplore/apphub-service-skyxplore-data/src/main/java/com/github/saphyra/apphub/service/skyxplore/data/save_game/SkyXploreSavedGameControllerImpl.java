@@ -74,13 +74,17 @@ public class SkyXploreSavedGameControllerImpl implements SkyXploreSavedGameContr
     @Override
     public GameItem loadGameItem(UUID id, GameItemType type) {
         log.info("Loading gameItem for id {} and type {}", id, type);
-        return loadGameItemService.loadGameItem(id, type);
+        GameItem result = loadGameItemService.loadGameItem(id, type);
+        log.info("GameItem found for id {} and type {}: {}", id, type, result);
+        return result;
     }
 
     @Override
     public List<? extends GameItem> loadChildrenOfGameItem(UUID parent, GameItemType type) {
         log.info("Loading children of gameItem for id {} and type {}", parent, type);
-        return loadGameItemService.loadChildrenOfGameItem(parent, type);
+        List<? extends GameItem> result = loadGameItemService.loadChildrenOfGameItem(parent, type);
+        log.info("GameItems found for parent {} and type {}: {}", parent, type, result);
+        return result;
     }
 
     @Override

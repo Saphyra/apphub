@@ -39,6 +39,7 @@ public class LoadGameService {
 
         Optional<GameModel> o = gameItemLoader.loadItem(request.getGameId(), GameItemType.GAME);
         GameModel game = o.orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.GAME_NOT_FOUND, "Game not found with id " + request.getGameId()));
+        log.info("GameModel: {}", game);
 
         if (!game.getHost().equals(request.getHost())) {
             throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, request.getHost() + " must not load game " + request.getGameId());

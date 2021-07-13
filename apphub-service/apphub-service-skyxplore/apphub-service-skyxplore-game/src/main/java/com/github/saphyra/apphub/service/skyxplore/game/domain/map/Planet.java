@@ -38,7 +38,7 @@ public class Planet {
     private final OptionalMap<UUID, Citizen> population = new OptionalHashMap<>();
 
     @Builder.Default
-    private final StorageDetails storageDetails = new StorageDetails();
+    private final StorageDetails storageDetails = StorageDetails.builder().build();
 
     @Builder.Default
     private final Map<PriorityType, Integer> priorities = Arrays.stream(PriorityType.values())

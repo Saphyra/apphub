@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.UniverseModel;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
@@ -17,11 +17,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameItemLoaderTest {
     private static final UUID ID = UUID.randomUUID();
+    private static final String DATA = "data";
 
     @Mock
     private ObjectMapperWrapper objectMapperWrapper;
@@ -33,29 +36,12 @@ public class GameItemLoaderTest {
     private GameItemLoader underTest;
 
     @Mock
-    private GameItem gameItem1;
-
-    @Mock
-    private GameItem gameItem2;
-
-    @Mock
     private UniverseModel universeModel;
 
     @Test
-    public void loadItem_differentType() {
-        given(gameDataProxy.loadItem(ID, GameItemType.UNIVERSE)).willReturn(gameItem1);
-        given(gameItem1.getType()).willReturn(GameItemType.GAME);
-
-        Optional<UniverseModel> result = underTest.loadItem(ID, GameItemType.UNIVERSE);
-
-        assertThat(result).isEmpty();
-    }
-
-    @Test
     public void loadItem() {
-        given(gameDataProxy.loadItem(ID, GameItemType.UNIVERSE)).willReturn(gameItem1);
-        given(gameItem1.getType()).willReturn(GameItemType.UNIVERSE);
-        given(objectMapperWrapper.convertValue(gameItem1, UniverseModel.class)).willReturn(universeModel);
+        given(gameDataProxy.loadItem(ID, GameItemType.UNIVERSE)).willReturn(DATA);
+        given(objectMapperWrapper.readValue(DATA, UniverseModel.class)).willReturn(universeModel);
 
         Optional<UniverseModel> result = underTest.loadItem(ID, GameItemType.UNIVERSE);
 
@@ -64,12 +50,11 @@ public class GameItemLoaderTest {
 
     @Test
     public void loadChildren() {
-        given(gameDataProxy.loadChildren(ID, GameItemType.UNIVERSE)).willReturn(Arrays.asList(gameItem1, gameItem2));
-        given(gameItem2.getType()).willReturn(GameItemType.GAME);
-        given(gameItem1.getType()).willReturn(GameItemType.UNIVERSE);
-        given(objectMapperWrapper.convertValue(gameItem1, UniverseModel.class)).willReturn(universeModel);
+        given(gameDataProxy.loadChildren(ID, GameItemType.UNIVERSE)).willReturn(DATA);
+        //noinspection unchecked
+        given(objectMapperWrapper.readValue(eq(DATA), any(TypeReference.class))).willReturn(Arrays.asList(universeModel));
 
-        List<UniverseModel> result = underTest.loadChildren(ID, GameItemType.UNIVERSE);
+        List<UniverseModel> result = underTest.loadChildren(ID, GameItemType.UNIVERSE, UniverseModel[].class);
 
         assertThat(result).containsExactly(universeModel);
     }

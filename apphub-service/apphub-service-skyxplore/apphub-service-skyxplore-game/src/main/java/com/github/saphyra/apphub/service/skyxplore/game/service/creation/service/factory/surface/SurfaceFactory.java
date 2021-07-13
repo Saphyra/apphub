@@ -31,10 +31,11 @@ public class SurfaceFactory {
             for (int y = 0; y < row.length; y++) {
                 Coordinate coordinate = new Coordinate(x, y);
                 SurfaceType surfaceType = row[y];
+                UUID surfaceId = idGenerator.randomUuid();
                 Surface surface = Surface.builder()
-                    .surfaceId(idGenerator.randomUuid())
+                    .surfaceId(surfaceId)
                     .planetId(planetId)
-                    .coordinate(coordinateModelFactory.create(coordinate, gameId, planetId))
+                    .coordinate(coordinateModelFactory.create(coordinate, gameId, surfaceId))
                     .surfaceType(surfaceType)
                     .build();
                 result.put(coordinate, surface);

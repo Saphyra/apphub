@@ -22,8 +22,8 @@ class PlayerLoader {
     private final GameItemLoader gameItemLoader;
     private final GameDataProxy gameDataProxy;
 
-    public Map<UUID, Player> load(UUID gameId, List<UUID> members) {
-        List<PlayerModel> players = gameItemLoader.loadChildren(gameId, GameItemType.PLAYER);
+    Map<UUID, Player> load(UUID gameId, List<UUID> members) {
+        List<PlayerModel> players = gameItemLoader.loadChildren(gameId, GameItemType.PLAYER, PlayerModel[].class);
         return players.stream()
             .map(playerModel -> convert(playerModel, members))
             .collect(Collectors.toMap(Player::getUserId, Function.identity()));
@@ -45,7 +45,7 @@ class PlayerLoader {
         }
 
         model.setAi(true);
-        gameDataProxy.saveListItem(model);
+        gameDataProxy.saveItem(model);
         return true;
     }
 }

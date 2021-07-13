@@ -36,7 +36,7 @@ public class PlanetToModelConverter {
         result.add(convert(planet, game));
         result.addAll(surfaceConverter.convertDeep(planet.getSurfaces().values(), game));
         result.addAll(citizenConverter.convertDeep(planet.getPopulation().values(), game));
-        result.addAll(storageDetailsConverter.convertDeep(planet.getStorageDetails(), game, planet.getPlanetId(), LocationType.PLANET));
+        result.addAll(storageDetailsConverter.convertDeep(planet.getStorageDetails(), game));
         result.addAll(priorityConverter.convert(planet.getPriorities(), planet.getPlanetId(), LocationType.PLANET, game));
         result.add(planet.getCoordinate());
         return result;

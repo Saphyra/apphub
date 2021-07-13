@@ -20,8 +20,8 @@ public interface SkyXploreSavedGameClient {
     void saveGameData(@RequestBody List<GameItem> items, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
     @GetMapping(Endpoints.SKYXPLORE_INTERNAL_LOAD_GAME_ITEM)
-    GameItem loadGameItem(@PathVariable("id") UUID id, @PathVariable("type") GameItemType type, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    String loadGameItem(@PathVariable("id") UUID id, @PathVariable("type") GameItemType type, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
     @GetMapping(Endpoints.SKYXPLORE_INTERNAL_LOAD_GAME_ITEM_CHILDREN)
-    List<GameItem> loadChildrenOfGameItem(@PathVariable("parent") UUID parent, @PathVariable("type") GameItemType type, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    String loadChildrenOfGameItem(@PathVariable("parent") UUID parent, @PathVariable("type") GameItemType type, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 }

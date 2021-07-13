@@ -107,7 +107,7 @@ public class PlanetToModelConverterTest {
         given(game.getGameId()).willReturn(GAME_ID);
         given(surfaceConverter.convertDeep(any(), eq(game))).willReturn(Arrays.asList(surfaceModel));
         given(citizenConverter.convertDeep(any(), eq(game))).willReturn(Arrays.asList(citizenModel));
-        given(storageDetailsConverter.convertDeep(storageDetails, game, PLANET_ID, LocationType.PLANET)).willReturn(Arrays.asList(storageDetailsItem));
+        given(storageDetailsConverter.convertDeep(storageDetails, game)).willReturn(Arrays.asList(storageDetailsItem));
         given(priorityConverter.convert(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION, PRIORITY), PLANET_ID, LocationType.PLANET, game)).willReturn(Arrays.asList(priorityModel));
 
         List<GameItem> result = underTest.convertDeep(Arrays.asList(planet), game);

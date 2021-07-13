@@ -26,6 +26,7 @@ public class GameSaverService {
     public void save(Game game) {
         try {
             List<GameItem> items = executorServiceBean.processWithWait(game, converter::convertDeep);
+            log.info("Number of gameItems to save: {}", items.size());
             Lists.partition(items, saverProperties.getMaxChunkSize())
                 .forEach(items1 -> gameClient.saveGameData(items1, customLocaleProvider.getLocale()));
         } catch (Exception e) {

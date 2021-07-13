@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +22,7 @@ import static org.mockito.Mockito.verify;
 public class GameDataProxyTest {
     private static final String LOCALE = "locale";
     private static final UUID ID = UUID.randomUUID();
+    private static final String RESULT = "result";
 
     @Mock
     private SkyXploreSavedGameClient dataGameClient;
@@ -43,25 +43,25 @@ public class GameDataProxyTest {
 
     @Test
     public void loadItem() {
-        given(dataGameClient.loadGameItem(ID, GameItemType.GAME, LOCALE)).willReturn(gameItem);
+        given(dataGameClient.loadGameItem(ID, GameItemType.GAME, LOCALE)).willReturn(RESULT);
 
-        GameItem result = underTest.loadItem(ID, GameItemType.GAME);
+        String result = underTest.loadItem(ID, GameItemType.GAME);
 
-        assertThat(result).isEqualTo(gameItem);
+        assertThat(result).isEqualTo(RESULT);
     }
 
     @Test
     public void loadChildren() {
-        given(dataGameClient.loadChildrenOfGameItem(ID, GameItemType.GAME, LOCALE)).willReturn(Arrays.asList(gameItem));
+        given(dataGameClient.loadChildrenOfGameItem(ID, GameItemType.GAME, LOCALE)).willReturn(RESULT);
 
-        List<GameItem> result = underTest.loadChildren(ID, GameItemType.GAME);
+        String result = underTest.loadChildren(ID, GameItemType.GAME);
 
-        assertThat(result).containsExactly(gameItem);
+        assertThat(result).isEqualTo(RESULT);
     }
 
     @Test
     public void saveGameData() {
-        underTest.saveListItem(gameItem);
+        underTest.saveItem(gameItem);
 
         verify(dataGameClient).saveGameData(Arrays.asList(gameItem), LOCALE);
     }

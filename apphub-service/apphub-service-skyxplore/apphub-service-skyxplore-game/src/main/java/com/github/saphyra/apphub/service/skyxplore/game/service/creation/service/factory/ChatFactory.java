@@ -1,9 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory;
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,13 @@ import static java.util.Objects.isNull;
 @Slf4j
 public class ChatFactory {
     private final IdGenerator idGenerator;
+
+    public Chat create(Collection<Player> values) {
+        List<Player> players = values.stream()
+            .filter(player -> !player.isAi())
+            .collect(Collectors.toList());
+        return create(CollectionUtils.toMap(Player::getUserId, Player::getAllianceId, players));
+    }
 
     /**
      * @param players <UserId, AllianceId>

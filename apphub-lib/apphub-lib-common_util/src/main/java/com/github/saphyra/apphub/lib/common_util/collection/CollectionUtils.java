@@ -3,12 +3,15 @@ package com.github.saphyra.apphub.lib.common_util.collection;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 public class CollectionUtils {
     @SafeVarargs
@@ -38,6 +41,17 @@ public class CollectionUtils {
             result.put(entry.getEntity1(), entry.getEntity2());
         }
 
+        return result;
+    }
+
+    @SafeVarargs
+    public static <K, V, T> Map<K, V> toMap(Function<T, K> keyMapper, Function<T, V> valueMapper, T... items) {
+        return toMap(keyMapper, valueMapper, Arrays.asList(items));
+    }
+
+    public static <K, V, T> Map<K, V> toMap(Function<T, K> keyMapper, Function<T, V> valueMapper, Collection<T> items) {
+        Map<K, V> result = new HashMap<>();
+        items.forEach(t -> result.put(keyMapper.apply(t), valueMapper.apply(t)));
         return result;
     }
 }
