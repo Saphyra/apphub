@@ -14,6 +14,7 @@ public class Player {
     private final UUID playerId;
     private final UUID userId;
     private String username;
+    private UUID allianceId;
     private boolean ai;
     private boolean connected;
 }

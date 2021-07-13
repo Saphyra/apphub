@@ -17,6 +17,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameDataProxyTest {
@@ -56,5 +57,12 @@ public class GameDataProxyTest {
         List<GameItem> result = underTest.loadChildren(ID, GameItemType.GAME);
 
         assertThat(result).containsExactly(gameItem);
+    }
+
+    @Test
+    public void saveGameData() {
+        underTest.saveListItem(gameItem);
+
+        verify(dataGameClient).saveGameData(Arrays.asList(gameItem), LOCALE);
     }
 }

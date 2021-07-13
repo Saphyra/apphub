@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,5 +25,9 @@ public class GameDataProxy {
 
     public List<GameItem> loadChildren(UUID parent, GameItemType type) {
         return dataGameClient.loadChildrenOfGameItem(parent, type, localeProvider.getOrDefault());
+    }
+
+    public void saveListItem(GameItem... model) {
+        dataGameClient.saveGameData(Arrays.asList(model), localeProvider.getOrDefault());
     }
 }

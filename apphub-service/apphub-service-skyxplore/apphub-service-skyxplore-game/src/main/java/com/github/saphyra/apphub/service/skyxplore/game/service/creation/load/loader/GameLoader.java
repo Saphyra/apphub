@@ -17,6 +17,7 @@ import java.util.UUID;
 public class GameLoader {
     private final DateTimeUtil dateTimeUtil;
     private final GameDao gameDao;
+    private final PlayerLoader playerLoader;
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
         Game game = Game.builder()
@@ -24,7 +25,7 @@ public class GameLoader {
             .gameName(gameModel.getName())
             .host(gameModel.getHost())
             .lastPlayed(dateTimeUtil.getCurrentDate())
-            .players(null) //TODO
+            .players(playerLoader.load(gameModel.getId(), members))
             .alliances(null)//TODO
             .universe(null)//TODO
             .chat(null)//TODO

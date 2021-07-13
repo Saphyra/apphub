@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AllianceFactoryTest {
@@ -52,5 +53,6 @@ public class AllianceFactoryTest {
         assertThat(result.get(ALLIANCE_ID).getAllianceId()).isEqualTo(ALLIANCE_ID);
         assertThat(result.get(ALLIANCE_ID).getAllianceName()).isEqualTo(ALLIANCE_NAME);
         assertThat(result.get(ALLIANCE_ID).getMembers()).containsEntry(PLAYER_ID_1, player1);
+        verify(player1).setAllianceId(ALLIANCE_ID);
     }
 }
