@@ -1,16 +1,14 @@
 package com.github.saphyra.apphub.lib.common_util;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ExecutorService;
 
-@Component
 @RequiredArgsConstructor
 public class ExecutorServiceBeanFactory {
-    private final SleepService sleepService;
+    private static final SleepService SLEEP_SERVICE = new SleepService();
 
-    public ExecutorServiceBean create(ExecutorService executorService) {
-        return new ExecutorServiceBean(executorService, sleepService);
+    public static ExecutorServiceBean create(ExecutorService executorService) {
+        return new ExecutorServiceBean(executorService, SLEEP_SERVICE);
     }
 }

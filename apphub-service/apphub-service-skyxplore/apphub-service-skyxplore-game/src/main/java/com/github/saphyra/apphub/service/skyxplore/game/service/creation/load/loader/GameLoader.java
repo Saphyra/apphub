@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.ChatFactory;
+import com.google.common.base.Stopwatch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
@@ -33,6 +35,7 @@ public class GameLoader {
     private final MessageSenderProxy messageSenderProxy;
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
+        Stopwatch stopwatch = Stopwatch.createStarted();
         gameModel.setLastPlayed(dateTimeUtil.getCurrentDate());
         Map<UUID, Player> players = playerLoader.load(gameModel.getId(), members);
         Game game = Game.builder()
@@ -48,6 +51,9 @@ public class GameLoader {
 
         gameDataProxy.saveItem(gameModel);
         gameDao.save(game);
+
+        stopwatch.stop();
+        log.info("Game loaded in {}s", stopwatch.elapsed(TimeUnit.SECONDS));
 
         WebSocketMessage message = WebSocketMessage.builder()
             .recipients(members)

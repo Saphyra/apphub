@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.l
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
+import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
@@ -25,11 +26,13 @@ class PlanetLoader {
     private final CitizenLoader citizenLoader;
     private final PriorityLoader priorityLoader;
     private final StorageDetailsLoader storageDetailsLoader;
+    private final ExecutorServiceBean executorServiceBean;
 
     Map<UUID, Planet> load(UUID solarSystemId) {
         List<PlanetModel> models = gameItemLoader.loadChildren(solarSystemId, GameItemType.PLANET, PlanetModel[].class);
-        return models.stream()
-            .map(this::convert)
+
+        return executorServiceBean.processCollectionWithWait(models, this::convert, 4)
+            .stream()
             .collect(Collectors.toMap(Planet::getPlanetId, Function.identity()));
     }
 

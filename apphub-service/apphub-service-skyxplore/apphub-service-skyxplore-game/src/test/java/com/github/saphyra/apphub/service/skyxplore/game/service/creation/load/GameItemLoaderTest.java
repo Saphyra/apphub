@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.UniverseModel;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
@@ -17,8 +16,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -51,8 +48,7 @@ public class GameItemLoaderTest {
     @Test
     public void loadChildren() {
         given(gameDataProxy.loadChildren(ID, GameItemType.UNIVERSE)).willReturn(DATA);
-        //noinspection unchecked
-        given(objectMapperWrapper.readValue(eq(DATA), any(TypeReference.class))).willReturn(Arrays.asList(universeModel));
+        given(objectMapperWrapper.readArrayValue(DATA, UniverseModel[].class)).willReturn(Arrays.asList(universeModel));
 
         List<UniverseModel> result = underTest.loadChildren(ID, GameItemType.UNIVERSE, UniverseModel[].class);
 

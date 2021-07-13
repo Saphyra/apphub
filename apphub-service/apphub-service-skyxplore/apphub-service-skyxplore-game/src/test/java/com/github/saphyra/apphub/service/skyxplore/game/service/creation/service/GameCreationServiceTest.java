@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -23,7 +22,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -43,9 +41,6 @@ public class GameCreationServiceTest {
     @Mock
     private GameSaverService gameSaverService;
 
-    @Mock
-    private ExecutorServiceBeanFactory executorServiceBeanFactory;
-
     private final BlockingQueue<SkyXploreGameCreationRequest> requests = new ArrayBlockingQueue<>(1);
 
     private GameCreationService underTest;
@@ -61,14 +56,11 @@ public class GameCreationServiceTest {
 
     @Before
     public void setUp() {
-        given(executorServiceBeanFactory.create(any())).willReturn(executorServiceBean);
-
         underTest = GameCreationService.builder()
             .messageSenderProxy(messageSenderProxy)
             .gameFactory(gameFactory)
             .gameDao(gameDao)
             .requests(requests)
-            .executorServiceBeanFactory(executorServiceBeanFactory)
             .gameSaverService(gameSaverService)
             .build();
     }
@@ -77,10 +69,6 @@ public class GameCreationServiceTest {
     public void create() throws InterruptedException {
         given(gameFactory.create(request)).willReturn(game);
         given(request.getMembers()).willReturn(CollectionUtils.singleValueMap(PLAYER_ID, null));
-        given(executorServiceBean.execute(any())).willAnswer(invocation -> {
-            invocation.getArgument(0, Runnable.class).run();
-            return null;
-        });
 
         underTest.createGames();
 

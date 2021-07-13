@@ -37,15 +37,14 @@ public class GameCreationService {
         GameFactory gameFactory,
         GameDao gameDao,
         BlockingQueue<SkyXploreGameCreationRequest> requests,
-        GameSaverService gameSaverService,
-        ExecutorServiceBeanFactory executorServiceBeanFactory
+        GameSaverService gameSaverService
     ) {
         this.messageSenderProxy = messageSenderProxy;
         this.gameFactory = gameFactory;
         this.gameDao = gameDao;
         this.requests = requests;
         this.gameSaverService = gameSaverService;
-        executorServiceBean = executorServiceBeanFactory.create(Executors.newFixedThreadPool(3));
+        executorServiceBean = ExecutorServiceBeanFactory.create(Executors.newFixedThreadPool(3));
     }
 
     private void create(SkyXploreGameCreationRequest request) {

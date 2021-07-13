@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.lib.common_util;
 
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
@@ -53,6 +55,18 @@ public class ExecutorServiceBean {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException("Task failed", e);
         }
+    }
+
+    public <I, R> List<R> processCollectionWithWait(List<I> dataList, Function<I, R> mapper, int parallelism) {
+        if (parallelism < 1) {
+            throw ExceptionFactory.reportedException("Parallelism must not be lower than 1. It was " + parallelism);
+        }
+
+        return Lists.partition(dataList, parallelism)
+            .stream()
+            .map(part -> processCollectionWithWait(part, mapper))
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
     }
 
     public <I, R> List<R> processCollectionWithWait(Collection<I> dataList, Function<I, R> mapper) {

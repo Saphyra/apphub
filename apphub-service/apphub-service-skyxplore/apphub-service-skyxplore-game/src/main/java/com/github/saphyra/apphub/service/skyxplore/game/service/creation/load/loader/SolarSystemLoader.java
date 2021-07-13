@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.l
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SolarSystemModel;
+import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
@@ -23,11 +24,13 @@ class SolarSystemLoader {
     private final GameItemLoader gameItemLoader;
     private final CoordinateLoader coordinateLoader;
     private final PlanetLoader planetLoader;
+    private final ExecutorServiceBean executorServiceBean;
 
     public Map<Coordinate, SolarSystem> load(UUID gameId) {
         List<SolarSystemModel> models = gameItemLoader.loadChildren(gameId, GameItemType.SOLAR_SYSTEM, SolarSystemModel[].class);
-        return models.stream()
-            .map(this::convert)
+
+        return executorServiceBean.processCollectionWithWait(models, this::convert, 3)
+            .stream()
             .collect(Collectors.toMap(solarSystem -> solarSystem.getCoordinate().getCoordinate(), Function.identity()));
     }
 

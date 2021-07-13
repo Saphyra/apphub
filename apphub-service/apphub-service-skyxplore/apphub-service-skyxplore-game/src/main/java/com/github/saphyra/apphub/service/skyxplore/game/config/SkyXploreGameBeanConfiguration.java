@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.config;
 
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
@@ -68,10 +67,5 @@ public class SkyXploreGameBeanConfiguration {
     @Bean
     RandomCoordinateProvider randomCoordinateProvider(Random random) {
         return new RandomCoordinateProvider(random);
-    }
-
-    @Bean
-    ExecutorServiceBeanFactory executorServiceBeanFactory(SleepService sleepService) {
-        return new ExecutorServiceBeanFactory(sleepService);
     }
 }
