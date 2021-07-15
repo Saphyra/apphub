@@ -20,7 +20,7 @@ class AdjacentEmptySurfaceProvider {
 
     Optional<Surface> getEmptySurfaceNextTo(Coordinate coordinate, Collection<Surface> surfaces) {
         for (Surface surface : surfaces) {
-            if (isNull(surface.getBuilding()) && isNextTo(coordinate, surface.getCoordinate())) {
+            if (isNull(surface.getBuilding()) && isNextTo(coordinate, surface.getCoordinate().getCoordinate())) {
                 return Optional.of(surface);
             }
         }

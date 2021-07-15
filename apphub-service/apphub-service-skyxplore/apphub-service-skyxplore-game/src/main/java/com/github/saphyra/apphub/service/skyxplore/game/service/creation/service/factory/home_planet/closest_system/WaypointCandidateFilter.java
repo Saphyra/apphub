@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.Line;
+import com.github.saphyra.apphub.service.skyxplore.game.common.LineModelWrapper;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SystemConnection;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
@@ -20,7 +21,8 @@ class WaypointCandidateFilter {
         return universe.getConnections()
             .stream()
             .map(SystemConnection::getLine)
-            .filter(systemConnection -> systemConnection.isEndpoint(solarSystem.getCoordinate()))
+            .map(LineModelWrapper::getLine)
+            .filter(systemConnection -> systemConnection.isEndpoint(solarSystem.getCoordinate().getCoordinate()))
             .filter(systemConnection -> !route.contains(systemConnection.getA()) && !route.contains(systemConnection.getB()))
             .collect(Collectors.toList());
     }

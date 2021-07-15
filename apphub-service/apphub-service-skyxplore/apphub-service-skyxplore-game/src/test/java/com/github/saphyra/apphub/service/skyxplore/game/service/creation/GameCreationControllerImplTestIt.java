@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation;
 
-import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreDataGameClient;
+import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreSavedGameClient;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.AiPresence;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.PlanetSize;
@@ -66,7 +66,7 @@ public class GameCreationControllerImplTestIt {
     private MessageSenderProxy messageSenderProxy;
 
     @MockBean
-    private SkyXploreDataGameClient skyXploreDataGameClient;
+    private SkyXploreSavedGameClient skyXploreSavedGameClient;
 
     @Before
     public void setUp() {

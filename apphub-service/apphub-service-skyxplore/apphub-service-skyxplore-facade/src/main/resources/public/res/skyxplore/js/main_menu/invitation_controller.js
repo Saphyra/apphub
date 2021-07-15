@@ -1,17 +1,23 @@
 (function InvitationController(){
-    const senders = [];
+    const invitations = {};
 
     window.invitationController = new function(){
-        this.createHandler = function(){
-            return new WebSocketEventHandler(
-                function(eventName){return eventName == "invitation"},
-                displayInvitation
-            )
+        this.createHandlers = function(){
+            return [
+                new WebSocketEventHandler(
+                    function(eventName){return eventName == "invitation"},
+                    displayInvitation
+                ),
+                new WebSocketEventHandler(
+                    function(eventName){return eventName == "skyxplore-main-menu-cancel-invitation"},
+                    rejectInvitation
+                )
+            ]
         }
     }
 
     function displayInvitation(invitation){
-        if(senders.indexOf(invitation.senderId) > -1){
+        if(invitations[invitation.senderId]){
             return;
         }
 
@@ -48,15 +54,19 @@
                     const rejectButton = document.createElement("BUTTON");
                         rejectButton.innerHTML = Localization.getAdditionalContent("reject-invitation");
                         rejectButton.onclick = function(){
-                            container.removeChild(node);
-                            senders.splice(senders.indexOf(invitation.senderId), 1);
+                            rejectInvitation(invitation.senderId);
                         }
                 buttons.appendChild(rejectButton);
             node.appendChild(buttons);
 
-        senders.push(invitation.senderId);
-
+        invitations[invitation.senderId] = node;
         animationFacade.rollInVertical(node, container, 500);
+    }
+
+    function rejectInvitation(senderId){
+        const node = invitations[senderId];
+        document.getElementById(ids.invitationContainer).removeChild(node);
+        delete invitations[senderId];
     }
 
     function acceptInvitation(senderId){

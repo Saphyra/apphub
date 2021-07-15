@@ -5,6 +5,7 @@
         this.rollOutHorizontal = rollOutHorizontal;
 
         this.rollInVertical = rollInVertical;
+        this.rollOutVertical = rollOutVertical;
     }
     
     /*
@@ -50,10 +51,9 @@
     Adds a roll-out display effect for a given element.
     Arguments:
         - element: the element to display
-        - container: the container to append the new element into.
         - time: the timeout of the roll-out effect.
     */
-    function rollOutHorizontal(element, container, time){
+    function rollOutHorizontal(element, time){
         try{
             const timeout = Math.round(time / element.offsetWidth) * 3;
             
@@ -88,6 +88,22 @@
                 time,
                 function(){resolve()}
              );
+        });
+    }
+
+    function rollOutVertical(element, time){
+        let actualHeight = element.offsetHeight;
+        const timeout = Math.round(time / actualHeight) * 3;
+
+        return new Promise(function(resolve, reject){
+            const interval = setInterval(function(){
+            actualHeight -= 3;
+            element.style.height = actualHeight + "px";
+            if(actualHeight <= 0){
+                clearInterval(interval);
+                resolve();
+            }
+        }, timeout);
         });
     }
 })();

@@ -4,33 +4,48 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
+import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.GameFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.GameFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.save.GameSaverService;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
-@Builder
 public class GameCreationService {
-    private final ExecutorService executorService = Executors.newFixedThreadPool(3);
-
+    private final ExecutorServiceBean executorServiceBean;
     private final MessageSenderProxy messageSenderProxy;
     private final GameFactory gameFactory;
     private final GameDao gameDao;
     private final BlockingQueue<SkyXploreGameCreationRequest> requests;
+    private final GameSaverService gameSaverService;
+
+    @Builder
+    public GameCreationService(
+        MessageSenderProxy messageSenderProxy,
+        GameFactory gameFactory,
+        GameDao gameDao,
+        BlockingQueue<SkyXploreGameCreationRequest> requests,
+        GameSaverService gameSaverService
+    ) {
+        this.messageSenderProxy = messageSenderProxy;
+        this.gameFactory = gameFactory;
+        this.gameDao = gameDao;
+        this.requests = requests;
+        this.gameSaverService = gameSaverService;
+        executorServiceBean = ExecutorServiceBeanFactory.create(Executors.newFixedThreadPool(3));
+    }
 
     private void create(SkyXploreGameCreationRequest request) {
         StopWatch stopWatch = StopWatch.createStarted();
@@ -38,6 +53,7 @@ public class GameCreationService {
         stopWatch.stop();
         log.info("Game {} created in {}ms for host {}", game.getGameId(), stopWatch.getTime(TimeUnit.MILLISECONDS), game.getHost());
         gameDao.save(game);
+        gameSaverService.save(game);
 
         WebSocketEvent event = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED)
@@ -57,16 +73,11 @@ public class GameCreationService {
             while (true) {
                 try {
                     SkyXploreGameCreationRequest request = requests.take();
-                    executorService.submit(() -> {
-                        try {
-                            create(request);
-                        } catch (Exception e) {
-                            log.error("Exception during creating game", e);
-                        }
-                    });
+                    executorServiceBean.execute(() -> create(request));
                 } catch (Exception e) {
                     log.error("Execution failed", e);
                 }
+                //Sleeping is not necessary, because requests.take() blocks the thread until new item is put into the queue
             }
         }).start();
     }

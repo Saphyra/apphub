@@ -3,11 +3,13 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
+import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.GameFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.GameFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.save.GameSaverService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +38,9 @@ public class GameCreationServiceTest {
     @Mock
     private GameDao gameDao;
 
+    @Mock
+    private GameSaverService gameSaverService;
+
     private final BlockingQueue<SkyXploreGameCreationRequest> requests = new ArrayBlockingQueue<>(1);
 
     private GameCreationService underTest;
@@ -46,6 +51,9 @@ public class GameCreationServiceTest {
     @Mock
     private Game game;
 
+    @Mock
+    private ExecutorServiceBean executorServiceBean;
+
     @Before
     public void setUp() {
         underTest = GameCreationService.builder()
@@ -53,6 +61,7 @@ public class GameCreationServiceTest {
             .gameFactory(gameFactory)
             .gameDao(gameDao)
             .requests(requests)
+            .gameSaverService(gameSaverService)
             .build();
     }
 
@@ -73,5 +82,6 @@ public class GameCreationServiceTest {
         WebSocketMessage message = argumentCaptor.getValue();
         assertThat(message.getRecipients()).containsExactly(PLAYER_ID);
         assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED);
+        verify(gameSaverService).save(game);
     }
 }

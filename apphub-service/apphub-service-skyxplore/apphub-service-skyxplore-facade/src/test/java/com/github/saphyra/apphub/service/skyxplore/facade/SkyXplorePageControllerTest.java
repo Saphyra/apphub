@@ -30,6 +30,8 @@ public class SkyXplorePageControllerTest {
     private static final String USERNAME = "username";
     private static final String CHARACTER_NAME = "character-name";
     private static final UUID HOST = UUID.randomUUID();
+    private static final String LOBBY_NAME = "lobby-name";
+    private static final String TYPE = "type";
 
     @Mock
     private AccessTokenHeaderConverter accessTokenHeaderConverter;
@@ -67,13 +69,10 @@ public class SkyXplorePageControllerTest {
     @Test
     public void mainMenu_characterDoesNotExist() {
         given(characterClient.doesCharacterExistForUser(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(false);
-        given(userDataClient.getUsernameByUserId(USER_ID, LOCALE)).willReturn(USERNAME);
 
         ModelAndView result = underTest.mainMenu(accessTokenHeader, LOCALE);
 
-        assertThat(result.getViewName()).isEqualTo("character");
-        assertThat(result.getModel().get("backUrl")).isEqualTo(Endpoints.MODULES_PAGE);
-        assertThat(result.getModel().get("characterName")).isEqualTo(USERNAME);
+        assertThat(result.getViewName()).isEqualTo("redirect:" + Endpoints.SKYXPLORE_CHARACTER_PAGE);
     }
 
     @Test
@@ -86,7 +85,22 @@ public class SkyXplorePageControllerTest {
     }
 
     @Test
+    public void character_notFound() {
+        given(accessTokenHeaderConverter.convertDomain(accessTokenHeader)).willReturn(ACCESS_TOKEN_HEADER_STRING);
+        given(characterClient.doesCharacterExistForUser(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(false);
+        given(userDataClient.getUsernameByUserId(USER_ID, LOCALE)).willReturn(USERNAME);
+
+        ModelAndView result = underTest.character(accessTokenHeader, LOCALE);
+
+        assertThat(result.getViewName()).isEqualTo("character");
+        assertThat(result.getModel().get("backUrl")).isEqualTo(Endpoints.MODULES_PAGE);
+        assertThat(result.getModel().get("characterName")).isEqualTo(USERNAME);
+    }
+
+    @Test
     public void character() {
+        given(accessTokenHeaderConverter.convertDomain(accessTokenHeader)).willReturn(ACCESS_TOKEN_HEADER_STRING);
+        given(characterClient.doesCharacterExistForUser(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(true);
         given(characterClient.internalGetCharacterByUserId(USER_ID, LOCALE)).willReturn(characterModel);
         given(characterModel.getName()).willReturn(CHARACTER_NAME);
 
@@ -105,8 +119,7 @@ public class SkyXplorePageControllerTest {
 
         ModelAndView result = underTest.lobby(accessTokenHeader, LOCALE);
 
-        assertThat(result.getViewName()).isEqualTo("game");
-        assertThat(result.getModel().get("userId")).isEqualTo(USER_ID);
+        assertThat(result.getViewName()).isEqualTo("redirect:" + Endpoints.SKYXPLORE_GAME_PAGE);
     }
 
     @Test
@@ -126,6 +139,8 @@ public class SkyXplorePageControllerTest {
         given(lobbyViewForPage.isInLobby()).willReturn(true);
         given(lobbyViewForPage.getHost()).willReturn(HOST);
         given(lobbyViewForPage.isGameCreationStarted()).willReturn(true);
+        given(lobbyViewForPage.getLobbyName()).willReturn(LOBBY_NAME);
+        given(lobbyViewForPage.getType()).willReturn(TYPE);
 
         ModelAndView result = underTest.lobby(accessTokenHeader, LOCALE);
 
@@ -133,6 +148,8 @@ public class SkyXplorePageControllerTest {
         assertThat(result.getModel().get("userId")).isEqualTo(USER_ID);
         assertThat(result.getModel().get("host")).isEqualTo(HOST);
         assertThat(result.getModel().get("gameCreationStarted")).isEqualTo(true);
+        assertThat(result.getModel().get("lobbyName")).isEqualTo(LOBBY_NAME);
+        assertThat(result.getModel()).containsEntry("type", TYPE);
     }
 
     @Test

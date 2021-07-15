@@ -2,6 +2,7 @@ scriptLoader.loadScript("/res/common/js/web_socket.js");
 scriptLoader.loadScript("/res/skyxplore/js/main_menu/friend_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/main_menu/invitation_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/main_menu/create_lobby_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/main_menu/games_controller.js");
 
 (function PageController(){
     window.ids = {
@@ -18,6 +19,8 @@ scriptLoader.loadScript("/res/skyxplore/js/main_menu/create_lobby_controller.js"
         lobbyNameInput: "lobby-name",
         createLobbyButton: "create-lobby-button",
         invalidLobbyName: "invalid-lobby-name",
+        gamesWrapper: "games-wrapper",
+        games: "games",
     }
 
     const webSocketConnection = new WebSocketConnection(Mapping.getEndpoint("CONNECTION_SKYXPLORE_MAIN_MENU"));
@@ -30,7 +33,8 @@ scriptLoader.loadScript("/res/skyxplore/js/main_menu/create_lobby_controller.js"
 
     $(document).ready(function(){
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "skyxplore", fileName: "main_menu"}));
-        webSocketConnection.addHandler(invitationController.createHandler())
+        webSocketConnection.addHandlers(invitationController.createHandlers())
+            .addHandlers(friendController.createHandlers())
             .connect();
     });
 })();

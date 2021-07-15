@@ -12,7 +12,7 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyService;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.StartGameService;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game.StartGameService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.active_friend.ActiveFriendsService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.creation.LobbyCreationService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.invite.InvitationService;
@@ -41,7 +41,7 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     @Override
     public void createLobby(OneParamRequest<String> lobbyName, AccessTokenHeader accessTokenHeader) {
         log.info("Creating lobby for user {} if not exists", accessTokenHeader.getUserId());
-        lobbyCreationService.create(accessTokenHeader.getUserId(), lobbyName.getValue());
+        lobbyCreationService.createNew(accessTokenHeader.getUserId(), lobbyName.getValue());
     }
 
     @Override
@@ -56,6 +56,8 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
                 .inLobby(true)
                 .host(lobby.getHost())
                 .gameCreationStarted(lobby.isGameCreationStarted())
+                .lobbyName(lobby.getLobbyName())
+                .type(lobby.getType().name())
                 .build();
         } else {
             return LobbyViewForPage.builder()
@@ -91,7 +93,7 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     @Override
     public void userLeftLobby(UUID userId) {
         log.info("User {} is left the lobby", userId);
-        exitFromLobbyService.sendDisconnectionMessage(userId);
+        exitFromLobbyService.exit(userId);
     }
 
     @Override
@@ -124,5 +126,11 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     public List<ActiveFriendResponse> getActiveFriends(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know his active friends", accessTokenHeader.getUserId());
         return activeFriendsService.getActiveFriends(accessTokenHeader);
+    }
+
+    @Override
+    public void loadGame(UUID gameId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to load game {}", accessTokenHeader.getUserId(), gameId);
+        lobbyCreationService.createForExistingGame(accessTokenHeader.getUserId(), gameId);
     }
 }

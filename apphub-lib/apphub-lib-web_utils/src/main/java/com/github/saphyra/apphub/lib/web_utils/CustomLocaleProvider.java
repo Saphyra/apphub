@@ -18,6 +18,7 @@ public class CustomLocaleProvider {
             return localeProvider.getLocale()
                 .orElseGet(commonConfigProperties::getDefaultLocale);
         } catch (Exception e) {
+            log.debug("Locale could not be read from delegate. Returning default locale...", e);
             return commonConfigProperties.getDefaultLocale();
         }
     }

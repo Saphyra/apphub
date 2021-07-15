@@ -35,6 +35,7 @@
                 .forEach(function(node){contentTable.appendChild(node)});
 
         switchTab("main-page", "view-checklist");
+        switchTab("button-wrapper", "view-checklist-buttons");
         switchTab("view-checklist-button-wrapper", "view-checklist-edit-button-wrapper");
     }
 

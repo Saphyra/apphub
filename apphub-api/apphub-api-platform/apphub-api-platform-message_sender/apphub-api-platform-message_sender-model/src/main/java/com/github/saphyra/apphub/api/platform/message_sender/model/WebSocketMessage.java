@@ -15,4 +15,15 @@ import java.util.UUID;
 public class WebSocketMessage {
     private Collection<UUID> recipients;
     private WebSocketEvent event;
+
+    public static WebSocketMessage forEventAndRecipients(WebSocketEventName eventName, Collection<UUID> recipients) {
+        return forEventAndRecipients(eventName, recipients, null);
+    }
+
+    public static WebSocketMessage forEventAndRecipients(WebSocketEventName eventName, Collection<UUID> recipients, Object payload) {
+        return builder()
+            .recipients(recipients)
+            .event(WebSocketEvent.builder().eventName(eventName).payload(payload).build())
+            .build();
+    }
 }

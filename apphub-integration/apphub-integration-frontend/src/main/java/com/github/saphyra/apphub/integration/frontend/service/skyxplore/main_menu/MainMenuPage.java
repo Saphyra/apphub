@@ -62,4 +62,8 @@ class MainMenuPage {
     public static List<WebElement> invitations(WebDriver driver) {
         return driver.findElements(By.cssSelector("#invitations .invitation"));
     }
+
+    public static List<WebElement> sentFriendRequests(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#outgoing-friend-request-list .friend-list-item"));
+    }
 }

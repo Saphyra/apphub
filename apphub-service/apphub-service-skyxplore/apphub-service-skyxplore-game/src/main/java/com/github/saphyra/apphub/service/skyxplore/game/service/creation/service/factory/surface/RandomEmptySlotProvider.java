@@ -69,6 +69,6 @@ class RandomEmptySlotProvider {
     }
 
     private boolean isEmptySlot(SurfaceType[][] surfaceMap, Coordinate coordinate) {
-        return isNull(surfaceMap[(int) coordinate.getX()][(int) coordinate.getY()]);
+        return isNull(surfaceMap[(int) Math.round(coordinate.getX())][(int) Math.round(coordinate.getY())]);
     }
 }

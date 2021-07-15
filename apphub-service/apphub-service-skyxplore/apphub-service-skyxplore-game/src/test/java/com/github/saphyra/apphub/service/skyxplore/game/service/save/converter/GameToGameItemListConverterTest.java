@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +30,7 @@ public class GameToGameItemListConverterTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID HOST = UUID.randomUUID();
     private static final String GAME_NAME = "game-name";
+    private static final LocalDateTime LAST_PLAYED = LocalDateTime.now();
 
     @Mock
     private AllianceToModelConverter allianceConverter;
@@ -69,6 +71,7 @@ public class GameToGameItemListConverterTest {
             .players(CollectionUtils.singleValueMap(UUID.randomUUID(), player))
             .alliances(CollectionUtils.singleValueMap(UUID.randomUUID(), alliance))
             .universe(universe)
+            .lastPlayed(LAST_PLAYED)
             .build();
 
         given(universeConverter.convertDeep(universe, game)).willReturn(Arrays.asList(universeModel));
@@ -83,6 +86,7 @@ public class GameToGameItemListConverterTest {
         expected.setType(GameItemType.GAME);
         expected.setHost(HOST);
         expected.setName(GAME_NAME);
+        expected.setLastPlayed(LAST_PLAYED);
 
         assertThat(result).containsExactlyInAnyOrder(expected, playerModel, allianceModel, universeModel);
     }

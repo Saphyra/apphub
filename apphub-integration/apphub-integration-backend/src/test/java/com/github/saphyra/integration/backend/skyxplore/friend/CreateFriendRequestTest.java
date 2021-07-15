@@ -7,6 +7,8 @@ import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplore
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.IncomingFriendRequestResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SentFriendRequestResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.integration.backend.ws.ApphubWsClient;
+import com.github.saphyra.apphub.integration.backend.ws.model.WebSocketEventName;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -41,6 +43,9 @@ public class CreateFriendRequestTest extends BackEndTest {
         verifyErrorResponse(language, characterNotFoundResponse, 404, ErrorCode.USER_NOT_FOUND);
 
         //Create friend request
+        ApphubWsClient senderClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId);
+        ApphubWsClient friendClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2);
+
         SkyXploreFriendActions.createFriendRequest(language, accessTokenId, userId2);
         List<SentFriendRequestResponse> sentFriendRequests = SkyXploreFriendActions.getSentFriendRequests(language, accessTokenId);
         assertThat(sentFriendRequests).hasSize(1);
@@ -49,7 +54,10 @@ public class CreateFriendRequestTest extends BackEndTest {
         assertThat(incomingFriendRequests).hasSize(1);
         assertThat(incomingFriendRequests.get(0).getSenderName()).isEqualTo(model.getName());
 
+        assertThat(senderClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_SENT)).isPresent();
+        assertThat(friendClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_SENT)).isPresent();
         //Friend request already exists
+
         Response friendRequestAlreadyExistsResponse = SkyXploreFriendActions.getCreateFriendRequestResponse(language, accessTokenId, userId2);
         verifyErrorResponse(language, friendRequestAlreadyExistsResponse, 409, ErrorCode.FRIEND_REQUEST_ALREADY_EXISTS);
 

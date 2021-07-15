@@ -25,7 +25,7 @@ public class ClosestSystemFinder {
     private final NextWaypointSelector nextWaypointSelector;
 
     public SolarSystem getClosestSystemWithEmptyPlanet(SolarSystem solarSystem, Universe universe) {
-        return getClosestSystemWithEmptyPlanet(solarSystem, universe, Arrays.asList(solarSystem.getCoordinate()))
+        return getClosestSystemWithEmptyPlanet(solarSystem, universe, Arrays.asList(solarSystem.getCoordinate().getCoordinate()))
             .getEntity1();
     }
 
@@ -37,7 +37,7 @@ public class ClosestSystemFinder {
         if (closestSystemWithEmptyPlanetOptional.isPresent()) {
             SolarSystem closestSystemWithEmptyPlanet = closestSystemWithEmptyPlanetOptional.get();
             List<Coordinate> newRoute = new ArrayList<>(route);
-            newRoute.add(closestSystemWithEmptyPlanet.getCoordinate());
+            newRoute.add(closestSystemWithEmptyPlanet.getCoordinate().getCoordinate());
             return BiWrapper.<SolarSystem, Double>builder()
                 .entity1(closestSystemWithEmptyPlanet)
                 .entity2(distanceCalculator.getDistance(newRoute))

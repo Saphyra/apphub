@@ -19,7 +19,7 @@ class SolarSystemResponseExtractor {
             .stream()
             .map(solarSystem -> MapSolarSystemResponse.builder()
                 .solarSystemId(solarSystem.getSolarSystemId())
-                .coordinate(solarSystem.getCoordinate())
+                .coordinate(solarSystem.getCoordinate().getCoordinate())
                 .solarSystemName(solarSystem.getDefaultName())
                 .planetNum(solarSystem.getPlanets().size())
                 .build()

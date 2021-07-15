@@ -1,8 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.request.service;
 
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreCharacter;
+import com.github.saphyra.apphub.service.skyxplore.data.common.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.Friendship;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.FriendshipDao;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequest;
@@ -10,6 +13,7 @@ import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.Frien
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -18,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -38,6 +43,9 @@ public class FriendRequestCreationServiceTest {
 
     @Mock
     private FriendRequestFactory friendRequestFactory;
+
+    @Mock
+    private MessageSenderProxy messageSenderProxy;
 
     @InjectMocks
     private FriendRequestCreationService underTest;
@@ -91,5 +99,10 @@ public class FriendRequestCreationServiceTest {
         underTest.createFriendRequest(SENDER_ID, FRIEND_ID);
 
         verify(friendRequestDao).save(friendRequest);
+        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
+        verify(messageSenderProxy).sendToMainMenu(argumentCaptor.capture());
+        WebSocketMessage message = argumentCaptor.getValue();
+        assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_SENT);
+        assertThat(message.getRecipients()).containsExactlyInAnyOrder(FRIEND_ID, SENDER_ID);
     }
 }

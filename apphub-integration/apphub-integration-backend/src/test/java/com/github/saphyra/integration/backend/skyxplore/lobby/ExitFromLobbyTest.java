@@ -1,6 +1,7 @@
 package com.github.saphyra.integration.backend.skyxplore.lobby;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreFriendActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreLobbyActions;
@@ -11,7 +12,6 @@ import com.github.saphyra.apphub.integration.backend.ws.model.WebSocketEvent;
 import com.github.saphyra.apphub.integration.backend.ws.model.WebSocketEventName;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
@@ -48,8 +48,16 @@ public class ExitFromLobbyTest extends BackEndTest {
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId3, characterModel3);
         UUID userId3 = DatabaseUtil.getUserIdByEmail(userData3.getEmail());
 
+        RegistrationParameters userData4 = RegistrationParameters.validParameters();
+        SkyXploreCharacterModel characterModel4 = SkyXploreCharacterModel.valid();
+        UUID accessTokenId4 = IndexPageActions.registerAndLogin(language, userData4);
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId4, characterModel4);
+        UUID userId4 = DatabaseUtil.getUserIdByEmail(userData4.getEmail());
+
         SkyXploreFriendActions.setUpFriendship(language, accessTokenId1, accessTokenId2, userId2);
         SkyXploreFriendActions.setUpFriendship(language, accessTokenId1, accessTokenId3, userId3);
+        SkyXploreFriendActions.setUpFriendship(language, accessTokenId3, accessTokenId4, userId4);
+        SkyXploreFriendActions.setUpFriendship(language, accessTokenId2, accessTokenId4, userId4);
 
         SkyXploreLobbyActions.createLobby(language, accessTokenId1, GAME_NAME);
 
@@ -61,6 +69,9 @@ public class ExitFromLobbyTest extends BackEndTest {
         ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2);
 
         //Member left
+        SkyXploreLobbyActions.inviteToLobby(language, accessTokenId3, userId4);
+        ApphubWsClient mainMenuClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId4);
+
         SkyXploreLobbyActions.exitFromLobby(language, accessTokenId3);
         WebSocketEvent memberLeftEvent = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY)
             .orElseThrow(() -> new RuntimeException("WebSocket event did not arrive"));
@@ -69,8 +80,16 @@ public class ExitFromLobbyTest extends BackEndTest {
         assertThat(memberLeftMessage.getUserId()).isEqualTo(userId3);
         assertThat(memberLeftMessage.isHost()).isFalse();
 
+        WebSocketEvent rejectInvitationEvent = mainMenuClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION)
+            .orElseThrow(() -> new RuntimeException("RejectInvitation event did not arrive."));
+        assertThat(rejectInvitationEvent.getPayload()).isEqualTo(userId3.toString());
+
         wsClient.clearMessages();
+        mainMenuClient.clearMessages();
+
         //Host left
+        SkyXploreLobbyActions.inviteToLobby(language, accessTokenId2, userId4);
+
         SkyXploreLobbyActions.exitFromLobby(language, accessTokenId1);
         WebSocketEvent hostLeftEvent = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY)
             .orElseThrow(() -> new RuntimeException("WebSocket event did not arrive"));
@@ -83,5 +102,9 @@ public class ExitFromLobbyTest extends BackEndTest {
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LOBBY_NOT_FOUND.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.LOBBY_NOT_FOUND));
+
+        rejectInvitationEvent = mainMenuClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION)
+            .orElseThrow(() -> new RuntimeException("RejectInvitation event did not arrive."));
+        assertThat(rejectInvitationEvent.getPayload()).isEqualTo(userId2.toString());
     }
 }

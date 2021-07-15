@@ -219,6 +219,10 @@
     "alliance-title": "Szövetség",
     "no-alliance": "Nincs szövetség",
     "new-alliance": "Új szövetség",
-    "game-started": "Játék elindítva."
+    "game-started": "Játék elindítva.",
+    "start-game-confirmation-dialog-title": "Játék indításának megerősítése",
+    "start-game-confirmation-dialog-detail": "Nem csatlakozott az összes játékus. MI-k fogják átvenni a birodalmuk irányítását, és lehet, hogy nem fognak örülni neki. Mindenképp folytatod?",
+    "start-game-confirmation-dialog-confirm-button": "Játék kezdése",
+    "start-game-confirmation-dialog-cancel-button": "Mégse"
   }
 }

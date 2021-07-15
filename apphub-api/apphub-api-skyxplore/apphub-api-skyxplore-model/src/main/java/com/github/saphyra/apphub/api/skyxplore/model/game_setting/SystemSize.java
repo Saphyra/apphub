@@ -9,7 +9,7 @@ public enum SystemSize {
     RANDOM;
 
     @JsonCreator
-    public static SystemSize forValues(String value) {
+    public static SystemSize forValue(String value) {
         for (SystemSize systemSize : values()) {
             if (systemSize.name().equalsIgnoreCase(value)) {
                 return systemSize;

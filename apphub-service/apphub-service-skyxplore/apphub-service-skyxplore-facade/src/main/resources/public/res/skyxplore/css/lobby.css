@@ -181,6 +181,10 @@
                     border-color: greenyellow;
                 }
 
+                .lobby-member.invited{
+                    border-color: orange;
+                }
+
 #friends{
     position: absolute;
     top: 0;

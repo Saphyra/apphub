@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -24,6 +25,7 @@ public class Game {
     private final Map<UUID, Player> players; //<UserId, Player>
     private final Map<UUID, Alliance> alliances;
     private final Universe universe;
+    private final LocalDateTime lastPlayed;
 
     private final Chat chat;
 

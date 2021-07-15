@@ -300,6 +300,6 @@ public class ChecklistTableActions {
         NotebookPage.deleteCheckedChecklistTableItemsButton(driver)
             .click();
 
-        CommonPageActions.confirmDeletionDialog(driver, NotebookPage.DELETE_CHECKED_ITEMS_CONFIRMATION_DIALOG_ID);
+        CommonPageActions.confirmConfirmationDialog(driver, NotebookPage.DELETE_CHECKED_ITEMS_CONFIRMATION_DIALOG_ID);
     }
 }

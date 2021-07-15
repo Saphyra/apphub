@@ -1,10 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.planet;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import com.github.saphyra.apphub.service.skyxplore.game.common.CoordinateModelFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.surface.SurfaceFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
@@ -28,6 +30,8 @@ public class PlanetFactoryTest {
     private static final UUID SOLAR_SYSTEM_ID = UUID.randomUUID();
     private static final Integer PLANET_INDEX = 1;
     private static final String SYSTEM_NAME = "system-name";
+    private static final UUID GAME_ID = UUID.randomUUID();
+
     @Mock
     private IdGenerator idGenerator;
 
@@ -36,6 +40,9 @@ public class PlanetFactoryTest {
 
     @Mock
     private SurfaceFactory surfaceFactory;
+
+    @Mock
+    private CoordinateModelFactory coordinateModelFactory;
 
     @InjectMocks
     private PlanetFactory underTest;
@@ -46,18 +53,22 @@ public class PlanetFactoryTest {
     @Mock
     private Surface surface;
 
+    @Mock
+    private CoordinateModel coordinateModel;
+
     @Test
     public void create() {
         given(random.randInt(MIN_PLANET_SIZE_RANGE, MAX_PLANET_SIZE_RANGE)).willReturn(PLANET_SIZE);
         given(idGenerator.randomUuid()).willReturn(PLANET_ID);
 
-        given(surfaceFactory.create(PLANET_ID, PLANET_SIZE)).willReturn(CollectionUtils.singleValueMap(coordinate, surface));
+        given(surfaceFactory.create(GAME_ID, PLANET_ID, PLANET_SIZE)).willReturn(CollectionUtils.singleValueMap(coordinate, surface));
+        given(coordinateModelFactory.create(coordinate, GAME_ID, PLANET_ID)).willReturn(coordinateModel);
 
-        Planet result = underTest.create(PLANET_INDEX, coordinate, SOLAR_SYSTEM_ID, SYSTEM_NAME, new Range<>(MIN_PLANET_SIZE_RANGE, MAX_PLANET_SIZE_RANGE));
+        Planet result = underTest.create(GAME_ID, PLANET_INDEX, coordinate, SOLAR_SYSTEM_ID, SYSTEM_NAME, new Range<>(MIN_PLANET_SIZE_RANGE, MAX_PLANET_SIZE_RANGE));
 
         assertThat(result.getPlanetId()).isEqualTo(PLANET_ID);
         assertThat(result.getSolarSystemId()).isEqualTo(SOLAR_SYSTEM_ID);
-        assertThat(result.getCoordinate()).isEqualTo(coordinate);
+        assertThat(result.getCoordinate()).isEqualTo(coordinateModel);
         assertThat(result.getDefaultName()).isEqualTo(SYSTEM_NAME + " B");
         assertThat(result.getSize()).isEqualTo(PLANET_SIZE);
         assertThat(result.getSurfaces()).containsEntry(coordinate, surface);

@@ -26,7 +26,7 @@ class PlanetToLocationResponseConverter {
         return PlanetLocationResponse.builder()
             .planetId(planet.getPlanetId())
             .planetName(planet.getDefaultName())
-            .coordinate(planet.getCoordinate())
+            .coordinate(planet.getCoordinate().getCoordinate())
             .owner(planet.getOwner())
             .ownerName(Optional.ofNullable(planet.getOwner()).map(owner -> game.getPlayers().get(owner).getUsername()).orElse(null))
             .build();

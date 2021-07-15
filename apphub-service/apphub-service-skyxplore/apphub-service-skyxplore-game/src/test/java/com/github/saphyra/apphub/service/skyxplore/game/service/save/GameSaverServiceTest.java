@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.save;
 
-import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreDataGameClient;
+import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreSavedGameClient;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.web_utils.CustomLocaleProvider;
@@ -34,7 +34,7 @@ public class GameSaverServiceTest {
     private SaverProperties saverProperties;
 
     @Mock
-    private SkyXploreDataGameClient gameClient;
+    private SkyXploreSavedGameClient gameClient;
 
     @Mock
     private CustomLocaleProvider customLocaleProvider;

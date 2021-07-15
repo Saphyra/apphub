@@ -18,14 +18,6 @@ role:
         - PUT
       requiredRoles:
         - SKYXPLORE
-    - pattern: /internal/skyxplore/**
-      methods:
-        - GET
-        - DELETE
-        - POST
-        - PUT
-      requiredRoles:
-        - SKYXPLORE
 
 logging:
   level:

@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 class CommonPage {
-    public static WebElement deletionConfirmationDialog(WebDriver driver, String id) {
+    public static WebElement confirmationDialog(WebDriver driver, String id) {
         return driver.findElement(By.id(id));
     }
 }

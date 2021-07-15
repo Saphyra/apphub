@@ -7,6 +7,8 @@ import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplore
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.FriendshipResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SentFriendRequestResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.integration.backend.ws.ApphubWsClient;
+import com.github.saphyra.apphub.integration.backend.ws.model.WebSocketEventName;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -67,9 +69,15 @@ public class RemoveFriendTest extends BackEndTest {
         assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId2)).hasSize(1);
 
         //Remove
+        ApphubWsClient senderClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId);
+        ApphubWsClient friendClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2);
+
         Response removeResponse = SkyXploreFriendActions.getRemoveFriendResponse(language, accessTokenId, friendshipId);
         assertThat(removeResponse.getStatusCode()).isEqualTo(200);
         assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId)).isEmpty();
         assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId2)).isEmpty();
+
+        assertThat(senderClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED)).isPresent();
+        assertThat(friendClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED)).isPresent();
     }
 }

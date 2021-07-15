@@ -20,7 +20,8 @@
     <MAIN id="main-menu-main" class="footerless">
         <DIV id="main-menu-button-wrapper">
             <DIV id="new-game-button" class="button" onclick="createLobbyController.newGame()"></DIV>
-            <DIV id="load-game-button" class="button"></DIV>
+            <DIV id="load-game-button" class="button" onclick="gamesController.toggleSavedGames()"></DIV>
+            <DIV id="games"></DIV>
             <DIV id="edit-character-button" class="button" onclick="window.location.href='/web/skyxplore/character'"></DIV>
             <DIV id="back-button" class="button" onclick="window.location.href='/web/modules'"></DIV>
         </DIV>

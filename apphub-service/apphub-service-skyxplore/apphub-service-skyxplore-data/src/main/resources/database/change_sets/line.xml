@@ -16,4 +16,56 @@
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="line" columnNames="reference_id" constraintName="line_pk"/>
     </changeSet>
+
+    <changeSet id="drop-primary-key-reference_id-from-line" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <primaryKeyExists schemaName="skyxplore_game" tableName="line" primaryKeyName="line_pk"/>
+        </preConditions>
+
+        <dropPrimaryKey schemaName="skyxplore_game" tableName="line" constraintName="line_pk"/>
+    </changeSet>
+
+    <changeSet id="add-column-line_id-to-line" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="line" columnName="line_id"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="line">
+            <column name="line_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addPrimaryKey schemaName="skyxplore_game" tableName="line" columnNames="line_id" constraintName="line_pk-line-id"/>
+    </changeSet>
+
+    <changeSet id="add-column-game_id-to-line" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="line" columnName="game_id"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="line">
+            <column name="game_id" type="varchar(37)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-reference_id-to-line" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="line" columnName="reference_id"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="line">
+            <column name="reference_id" type="varchar(37)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="drop-not_null-constraint-from-reference_id-from-line" author="saphyra">
+        <dropNotNullConstraint schemaName="skyxplore_game" tableName="line" columnName="reference_id"/>
+    </changeSet>
 </databaseChangeLog>

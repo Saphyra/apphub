@@ -119,6 +119,19 @@
     "accept-invitation": "Elfogad",
     "reject-invitation": "Elutasít",
     "game-name-too-short": "A játék neve túl rövid (3 karakter minimum).",
-    "game-name-too-long": "A játék neve túl hosszú (30 karakter maximum)."
+    "game-name-too-long": "A játék neve túl hosszú (30 karakter maximum).",
+    "remove-friend-confirmation-dialog-title": "Barát eltávolításának megerősítése",
+    "remove-friend-confirmation-dialog-detail": "Biztosan el akarod távolítani <SPAN style='color: red; font-weight: bold;'>{friendName}</SPAN>-t a barátlistádról?",
+    "remove-friend-confirmation-dialog-confirm-button": "Eltávolítás",
+    "remove-friend-confirmation-dialog-cancel-button": "Mégse",
+    "additional-players": "Játékosok",
+    "last-played": "Utoljára játszva",
+    "delete": "Törlés",
+    "delete-game-confirmation-dialog-title": "Játék törlésének megerősítése",
+    "delete-game-confirmation-dialog-detail": "Biztosan törölni szeretnéd <SPAN style='color: red; font-weight: bold;'>{gameName}</SPAN> játékot? A kitörölt játékokat már nem lehet visszaállítani.",
+    "delete-game-confirmation-dialog-confirm-button": "Törlés",
+    "delete-game-confirmation-dialog-cancel-button": "Mégse",
+    "game-deleted": "Játék törölve.",
+    "no-game": "Nincs mentett játék. Kezdj egy újat!"
   }
 }

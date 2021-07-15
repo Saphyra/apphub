@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.LobbyMemberResponse;
+import com.github.saphyra.apphub.integration.backend.model.skyxplore.LobbyMemberStatus;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.LobbyMembersResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
@@ -38,7 +39,7 @@ public class CreateLobbyTest extends BackEndTest {
         //Create
         SkyXploreLobbyActions.createLobby(language, accessTokenId1, GAME_NAME);
         LobbyMembersResponse lobbyMembers = SkyXploreLobbyActions.getLobbyMembers(language, accessTokenId1);
-        assertThat(lobbyMembers.getHost()).isEqualTo(LobbyMemberResponse.builder().userId(userId1).characterName(characterModel1.getName()).build());
+        assertThat(lobbyMembers.getHost()).isEqualTo(LobbyMemberResponse.builder().userId(userId1).characterName(characterModel1.getName()).status(LobbyMemberStatus.NOT_READY).build());
         assertThat(lobbyMembers.getMembers()).isEmpty();
     }
 }

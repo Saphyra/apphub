@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.member;
 
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberStatus;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
@@ -39,7 +40,7 @@ public class LobbyMemberResponseConverterTest {
     @Test
     public void convert() {
         given(member.getUserId()).willReturn(USER_ID);
-        given(member.isReady()).willReturn(true);
+        given(member.getStatus()).willReturn(LobbyMemberStatus.NOT_READY);
         given(member.getAlliance()).willReturn(ALLIANCE_ID);
         given(alliance.getAllianceId()).willReturn(ALLIANCE_ID);
         given(alliance.getAllianceName()).willReturn(ALLIANCE_NAME);
@@ -48,7 +49,7 @@ public class LobbyMemberResponseConverterTest {
         LobbyMemberResponse result = underTest.convertMember(member, Arrays.asList(alliance));
 
         assertThat(result.getUserId()).isEqualTo(USER_ID);
-        assertThat(result.isReady()).isTrue();
+        assertThat(result.getStatus()).isEqualTo(LobbyMemberStatus.NOT_READY);
         assertThat(result.getCharacterName()).isEqualTo(USERNAME);
         assertThat(result.getAlliance()).isEqualTo(ALLIANCE_NAME);
     }

@@ -18,4 +18,8 @@ public class IncomingFriendRequest {
     public void accept() {
         webElement.findElement(By.cssSelector(":scope .friend-list-button button:first-child")).click();
     }
+
+    public void cancel() {
+        webElement.findElement(By.cssSelector(":scope .friend-list-button:nth-child(2)")).click();
+    }
 }

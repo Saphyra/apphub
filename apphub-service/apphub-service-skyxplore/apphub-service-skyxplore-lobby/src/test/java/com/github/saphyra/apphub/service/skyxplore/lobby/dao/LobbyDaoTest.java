@@ -1,11 +1,15 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.dao;
 
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -19,6 +23,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LobbyDaoTest {
@@ -26,6 +31,10 @@ public class LobbyDaoTest {
     private static final UUID LOBBY_ID_2 = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
     private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
+    private static final UUID CHARACTER_ID = UUID.randomUUID();
+
+    @Mock
+    private MessageSenderProxy messageSenderProxy;
 
     @InjectMocks
     private LobbyDao underTest;
@@ -76,8 +85,16 @@ public class LobbyDaoTest {
 
     @Test
     public void delete() {
+        given(lobby1.getInvitations())
+            .willReturn(CollectionUtils.toList(Invitation.builder().invitorId(USER_ID).characterId(CHARACTER_ID).build()));
+
         underTest.delete(lobby1);
 
         assertThat(underTest.getAll()).containsExactly(lobby2);
+        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
+        verify(messageSenderProxy).sendToMainMenu(argumentCaptor.capture());
+        assertThat(argumentCaptor.getValue().getRecipients()).containsExactly(CHARACTER_ID);
+        assertThat(argumentCaptor.getValue().getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION);
+        assertThat(argumentCaptor.getValue().getEvent().getPayload()).isEqualTo(USER_ID);
     }
 }

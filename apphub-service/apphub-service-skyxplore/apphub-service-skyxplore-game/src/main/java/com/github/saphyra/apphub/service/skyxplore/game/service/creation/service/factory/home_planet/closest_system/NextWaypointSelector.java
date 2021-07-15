@@ -19,7 +19,7 @@ import java.util.List;
 class NextWaypointSelector {
     BiWrapper<SolarSystem, Double> findNextWaypoint(SolarSystem solarSystem, Universe universe, List<Coordinate> route, List<Line> connections, ClosestSystemFinder closestSystemFinder) {
         return connections.stream()
-            .map(line -> line.getOtherEndpoint(solarSystem.getCoordinate()))
+            .map(line -> line.getOtherEndpoint(solarSystem.getCoordinate().getCoordinate()))
             .map(coordinate -> {
                 List<Coordinate> newRoute = new ArrayList<>(route);
                 newRoute.add(coordinate);

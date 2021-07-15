@@ -11,6 +11,14 @@ function WebSocketConnection(ep){
         return this;
     }
 
+    this.addHandlers = function(h){
+        console.log(h)
+        new Stream(h)
+            .peek(function(handler){console.log("Adding eventHandler", handler.canHandle)})
+            .forEach(function(handler){handlers.push(handler)});
+        return this;
+    }
+
     this.connect = function(){
         if(connection){
             throwException("IllegalState", "Connection already established.");

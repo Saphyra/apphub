@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.home_planet.closest_system;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.Line;
@@ -33,6 +34,9 @@ public class NextWaypointSelectorTest {
     private Universe universe;
 
     @Mock
+    private CoordinateModel coordinateModel;
+
+    @Mock
     private Coordinate inRouteCoordinate;
 
     @Mock
@@ -64,7 +68,8 @@ public class NextWaypointSelectorTest {
 
     @Test
     public void findNextWaypoint() {
-        given(referenceSystem.getCoordinate()).willReturn(inRouteCoordinate);
+        given(referenceSystem.getCoordinate()).willReturn(coordinateModel);
+        given(coordinateModel.getCoordinate()).willReturn(inRouteCoordinate);
 
         given(line1.getOtherEndpoint(inRouteCoordinate)).willReturn(coordinate1);
         given(line2.getOtherEndpoint(inRouteCoordinate)).willReturn(coordinate2);

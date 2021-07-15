@@ -114,7 +114,12 @@ public class Endpoints {
     public static final String SKYXPLORE_INTERNAL_IS_CHARACTER_EXISTS = "/internal/skyxplore/character/exists";
     public static final String SKYXPLORE_INTERNAL_GET_CHARACTER_BY_USER_ID = "/allowed-internal/skyxplore/character/{userId}";
     public static final String SKYXPLORE_INTERNAL_SAVE_GAME_DATA = "/allowed-internal/skyxplore/game/data";
+    public static final String SKYXPLORE_INTERNAL_LOAD_GAME_ITEM = "/internal/skyxplore/game/data/item/{id}/{type}";
+    public static final String SKYXPLORE_INTERNAL_LOAD_GAME_ITEM_CHILDREN = "/internal/skyxplore/game/data/item/children/{parent}/{type}";
+
     public static final String SKYXPLORE_CREATE_OR_UPDATE_CHARACTER = "/api/skyxplore/character";
+    public static final String SKYXPLORE_GET_GAMES = "/api/skyxplore/saved-game";
+    public static final String SKYXPLORE_DELETE_GAME = "/api/skyxplore/saved-game/{gameId}";
     public static final String SKYXPLORE_SEARCH_FOR_FRIENDS = "/api/skyxplore/friend/candidate";
     public static final String SKYXPLORE_ADD_FRIEND = "/api/skyxplore/friend/request";
     public static final String SKYXPLORE_GET_SENT_FRIEND_REQUEST = "/api/skyxplore/friend/request/sent";
@@ -142,14 +147,17 @@ public class Endpoints {
     public static final String SKYXPLORE_LOBBY_GET_GAME_SETTINGS = "/api/skyxplore/lobby/settings";
     public static final String SKYXPLORE_START_GAME = "/api/skyxplore/lobby/start";
     public static final String SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS = "/api/skyxplore/friends/active";
+    public static final String SKYXPLORE_LOBBY_LOAD_GAME = "/api/skyxplore/lobby/load-game/{gameId}";
 
     //SKYXPLORE-GAME
     public static final String SKYXPLORE_INTERNAL_GAME_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/game/{userId}";
 
     public static final String SKYXPLORE_INTERNAL_CREATE_GAME = "/internal/skyxplore/game";
+    public static final String SKYXPLORE_INTERNAL_LOAD_GAME = "/internal/skyxplore/game";
     public static final String SKYXPLORE_INTERNAL_USER_JOINED_TO_GAME = "/internal/skyxplore/game/{userId}";
     public static final String SKYXPLORE_INTERNAL_USER_LEFT_GAME = "/internal/skyxplore/game/{userId}";
     public static final String SKYXPLORE_INTERNAL_IS_USER_IN_GAME = "/internal/skyxplore/game";
+    public static final String SKYXPLORE_INTERNAL_GET_GAME_FOR_LOBBY_CREATION = "/internal/skyxplore/game/{gameId}/load-preview";
 
     public static final String SKYXPLORE_GAME_MAP = "/api/skyxplore/game/universe";
     public static final String SKYXPLORE_GAME_GET_PLAYERS = "/api/skyxplore/game/player";

@@ -30,30 +30,37 @@
         this.openCreateCategoryDialog = function(){
             document.getElementById("new-category-title").value = "";
             switchTab("main-page", "create-category");
+            switchTab("button-wrapper", "create-category-buttons");
         }
 
         this.openCreateTextDialog = function(){
             switchTab("main-page", "create-text");
+            switchTab("button-wrapper", "create-text-buttons");
         }
 
         this.openCreateLinkDialog = function(){
             switchTab("main-page", "create-link");
+            switchTab("button-wrapper", "create-link-buttons");
         }
 
         this.openCreateChecklistDialog = function(){
             switchTab("main-page", "create-checklist");
+            switchTab("button-wrapper", "create-checklist-buttons");
         }
 
         this.openCreateTableDialog = function(){
             switchTab("main-page", "create-table");
+            switchTab("button-wrapper", "create-table-buttons");
         }
 
         this.openCreateChecklistTableDialog = function(){
             switchTab("main-page", "create-checklist-table");
+            switchTab("button-wrapper", "create-checklist-table-buttons");
         }
 
         this.openMainPage = function(){
-            switchTab("main-page", "main");
+            switchTab("main-page", "category-content");
+            switchTab("button-wrapper", "category-content-buttons");
         }
     }
 

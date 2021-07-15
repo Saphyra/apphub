@@ -24,7 +24,7 @@ public class ChecklistItemsOrderService {
         List<ChecklistItem> items = checklistItemDao.getByParent(listItemId)
             .stream()
             .map(checklistItem -> new BiWrapper<>(checklistItem, contentDao.findByParentValidated(checklistItem.getChecklistItemId())))
-            .sorted(Comparator.comparing(o -> o.getEntity2().getContent()))
+            .sorted(Comparator.comparing(o -> o.getEntity2().getContent().toLowerCase()))
             .map(BiWrapper::getEntity1)
             .collect(Collectors.toList());
 

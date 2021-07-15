@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.map;
 
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.UUID;
 public class Surface {
     private final UUID surfaceId;
     private final UUID planetId;
-    private final Coordinate coordinate;
+    private final CoordinateModel coordinate;
     private SurfaceType surfaceType;
     private Building building;
 }

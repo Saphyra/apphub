@@ -14,8 +14,9 @@ import java.util.UUID;
 class InvitationFactory {
     private final DateTimeUtil dateTimeUtil;
 
-    Invitation create(UUID characterId) {
+    Invitation create(UUID invitorId, UUID characterId) {
         return Invitation.builder()
+            .invitorId(invitorId)
             .characterId(characterId)
             .invitationTime(dateTimeUtil.getCurrentDate())
             .build();

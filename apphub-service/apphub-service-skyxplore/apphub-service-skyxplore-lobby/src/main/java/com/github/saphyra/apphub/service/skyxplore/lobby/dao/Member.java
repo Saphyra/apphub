@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.dao;
 
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Data
 public class Member {
     private final UUID userId;
-    private boolean isReady;
+    private LobbyMemberStatus status;
     private boolean connected;
     private UUID alliance;
 }

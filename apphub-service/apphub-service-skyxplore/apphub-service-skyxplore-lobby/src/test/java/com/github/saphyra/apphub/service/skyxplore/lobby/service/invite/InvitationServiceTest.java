@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
@@ -109,6 +110,7 @@ public class InvitationServiceTest {
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getInvitations()).willReturn(Arrays.asList(invitation));
         given(invitation.getCharacterId()).willReturn(FRIEND_ID);
+        given(invitation.getInvitorId()).willReturn(USER_ID);
         given(invitation.getInvitationTime()).willReturn(CURRENT_DATE);
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
 
@@ -118,15 +120,14 @@ public class InvitationServiceTest {
     }
 
     @Test
-    public void sendInvitation() {
+    public void sendInvitation_invitedByDifferentPlayer() {
         given(dataProxy.getFriends(accessTokenHeader)).willReturn(Arrays.asList(friendshipResponse));
         given(friendshipResponse.getFriendId()).willReturn(FRIEND_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getInvitations()).willReturn(CollectionUtils.toList(invitation));
         given(invitation.getCharacterId()).willReturn(FRIEND_ID);
-        given(invitation.getInvitationTime()).willReturn(CURRENT_DATE.minusSeconds(FLOODING_LIMIT_SECONDS));
-        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
-        given(invitationFactory.create(FRIEND_ID)).willReturn(newInvitation);
+        given(invitation.getInvitorId()).willReturn(UUID.randomUUID());
+        given(invitationFactory.create(USER_ID, FRIEND_ID)).willReturn(newInvitation);
         given(characterProxy.getCharacter()).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
 
         underTest.invite(accessTokenHeader, FRIEND_ID);
@@ -144,5 +145,44 @@ public class InvitationServiceTest {
         InvitationMessage payload = (InvitationMessage) event.getPayload();
         assertThat(payload.getSenderId()).isEqualTo(USER_ID);
         assertThat(payload.getSenderName()).isEqualTo(PLAYER_NAME);
+    }
+
+    @Test
+    public void sendInvitation_lastInvitationNotTooRecent() {
+        given(dataProxy.getFriends(accessTokenHeader)).willReturn(Arrays.asList(friendshipResponse));
+        given(friendshipResponse.getFriendId()).willReturn(FRIEND_ID);
+        given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
+        given(lobby.getInvitations()).willReturn(CollectionUtils.toList(invitation));
+        given(invitation.getCharacterId()).willReturn(FRIEND_ID);
+        given(invitation.getInvitorId()).willReturn(USER_ID);
+        given(invitation.getInvitationTime()).willReturn(CURRENT_DATE.minusSeconds(FLOODING_LIMIT_SECONDS));
+        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(invitationFactory.create(USER_ID, FRIEND_ID)).willReturn(newInvitation);
+        given(characterProxy.getCharacter()).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
+
+        underTest.invite(accessTokenHeader, FRIEND_ID);
+
+        assertThat(lobby.getInvitations()).containsExactlyInAnyOrder(invitation, newInvitation);
+
+        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
+        verify(messageSenderProxy).sendToMainMenu(argumentCaptor.capture());
+        WebSocketMessage message = argumentCaptor.getValue();
+        assertThat(message.getRecipients()).containsExactly(FRIEND_ID);
+
+        WebSocketEvent event = message.getEvent();
+        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION);
+
+        InvitationMessage payload = (InvitationMessage) event.getPayload();
+        assertThat(payload.getSenderId()).isEqualTo(USER_ID);
+        assertThat(payload.getSenderName()).isEqualTo(PLAYER_NAME);
+    }
+
+    @Test
+    public void inviteDirectly_forbiddenOperation() {
+        given(lobby.getType()).willReturn(LobbyType.LOAD_GAME);
+
+        Throwable ex = catchThrowable(() -> underTest.inviteDirectly(USER_ID, FRIEND_ID, lobby));
+
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
     }
 }

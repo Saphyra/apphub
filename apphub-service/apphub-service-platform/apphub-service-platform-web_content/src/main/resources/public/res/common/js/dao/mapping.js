@@ -66,6 +66,8 @@ window.Mapping = new function(){
 
         SKYXPLORE_GET_CHARACTER: new Endpoint("/api/skyxplore/character", HttpMethod.GET),
         SKYXPLORE_CREATE_OR_UPDATE_CHARACTER: new Endpoint("/api/skyxplore/character", HttpMethod.POST),
+        SKYXPLORE_GET_GAMES: new Endpoint("/api/skyxplore/saved-game", HttpMethod.GET),
+        SKYXPLORE_DELETE_GAME: new Endpoint("/api/skyxplore/saved-game/{gameId}", HttpMethod.DELETE),
         SKYXPLORE_SEARCH_FOR_FRIENDS: new Endpoint("/api/skyxplore/friend/candidate", HttpMethod.POST),
         SKYXPLORE_ADD_FRIEND: new Endpoint("/api/skyxplore/friend/request", HttpMethod.PUT),
         SKYXPLORE_GET_SENT_FRIEND_REQUEST: new Endpoint("/api/skyxplore/friend/request/sent", HttpMethod.GET),
@@ -100,6 +102,7 @@ window.Mapping = new function(){
         SKYXPLORE_PLANET_GET_POPULATION: new Endpoint("/api/skyxplore/game/planet/{planetId}/citizen", HttpMethod.GET),
         SKYXPLORE_PLANET_RENAME_CITIZEN: new Endpoint("/api/skyxplore/game/planet/{planetId}/citizen/{citizenId}/rename", HttpMethod.POST),
         SKYXPLORE_PLANET_UPDATE_PRIORITY: new Endpoint("/api/skyxplore/game/planet/{planetId}/priority/{priorityType}", HttpMethod.POST),
+        SKYXPLORE_LOBBY_LOAD_GAME: new Endpoint("/api/skyxplore/lobby/load-game/{gameId}", HttpMethod.POST),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

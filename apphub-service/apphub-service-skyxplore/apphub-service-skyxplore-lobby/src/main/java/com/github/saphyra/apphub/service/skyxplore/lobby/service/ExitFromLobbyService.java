@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 @Component
@@ -29,26 +31,46 @@ public class ExitFromLobbyService {
             .ifPresent(lobby -> exit(userId, lobby));
     }
 
-    private void exit(UUID userId, Lobby lobby) {
+    public void exit(UUID userId, Lobby lobby) {
         lobby.getMembers().remove(userId);
 
-        sendNotification(userId, lobby);
+        sendNotifications(userId, lobby);
 
         if (lobby.getHost().equals(userId)) {
+            log.info("Host left the lobby. Deleting...");
             lobbyDao.delete(lobby);
         }
     }
 
-    public void sendDisconnectionMessage(UUID userId) {
-        lobbyDao.findByUserId(userId)
-            .ifPresent(lobby -> sendNotification(userId, lobby));
+    private void sendNotifications(UUID userId, Lobby lobby) {
+        rejectInvitations(userId, lobby);
+        sendExitMessage(userId, lobby);
     }
 
-    private void sendNotification(UUID userId, Lobby lobby) {
+    private void rejectInvitations(UUID userId, Lobby lobby) {
+        lobby.getInvitations()
+            .stream()
+            .filter(invitation -> invitation.getInvitorId().equals(userId))
+            .forEach(this::rejectInvitation);
+
+        lobby.getInvitations().removeIf(invitation -> invitation.getInvitorId().equals(userId));
+    }
+
+    private void rejectInvitation(Invitation invitation) {
+        WebSocketMessage message = WebSocketMessage.forEventAndRecipients(
+            WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION,
+            Arrays.asList(invitation.getCharacterId()),
+            invitation.getInvitorId()
+        );
+        messageSenderProxy.sendToMainMenu(message);
+    }
+
+    private void sendExitMessage(UUID userId, Lobby lobby) {
         ExitMessage payload = new ExitMessage(
             userId,
             lobby.getHost().equals(userId),
-            characterProxy.getCharacter(userId).getName()
+            characterProxy.getCharacter(userId).getName(),
+            lobby.getExpectedPlayers().contains(userId)
         );
         WebSocketEvent event = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY)
@@ -67,5 +89,6 @@ public class ExitFromLobbyService {
         private UUID userId;
         private boolean host;
         private String characterName;
+        private boolean expectedPlayer;
     }
 }

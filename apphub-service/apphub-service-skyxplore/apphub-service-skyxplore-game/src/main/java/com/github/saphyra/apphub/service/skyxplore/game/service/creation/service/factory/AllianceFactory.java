@@ -39,6 +39,7 @@ public class AllianceFactory {
             .filter(entry -> alliance.equals(entry.getValue()))
             .map(Map.Entry::getKey)
             .map(players::get)
+            .peek(player -> player.setAllianceId(alliance))
             .collect(Collectors.toMap(Player::getUserId, Function.identity()));
     }
 }

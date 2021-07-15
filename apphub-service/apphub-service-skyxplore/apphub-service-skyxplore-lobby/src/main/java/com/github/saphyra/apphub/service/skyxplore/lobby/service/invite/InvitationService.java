@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
@@ -60,7 +61,7 @@ public class InvitationService {
             .stream()
             .anyMatch(friendshipResponse -> friendshipResponse.getFriendId().equals(friendId));
         if (!friends) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.PRECONDITION_FAILED, accessTokenHeader.getUserId() + " is not a friuend of " + friendId);
+            throw ExceptionFactory.notLoggedException(HttpStatus.PRECONDITION_FAILED, accessTokenHeader.getUserId() + " is not a friend of " + friendId);
         }
 
         Lobby lobby = lobbyDao.findByUserIdValidated(accessTokenHeader.getUserId());
@@ -68,6 +69,7 @@ public class InvitationService {
         Optional<Invitation> existingInvitation = lobby.getInvitations()
             .stream()
             .filter(invitation -> invitation.getCharacterId().equals(friendId))
+            .filter(invitation -> invitation.getInvitorId().equals(accessTokenHeader.getUserId()))
             .max(Comparator.comparing(Invitation::getInvitationTime));
 
         if (existingInvitation.isPresent()) {
@@ -79,12 +81,20 @@ public class InvitationService {
             }
         }
 
-        Invitation invitation = invitationFactory.create(friendId);
+        inviteDirectly(accessTokenHeader.getUserId(), friendId, lobby);
+    }
+
+    public void inviteDirectly(UUID senderId, UUID characterId, Lobby lobby) {
+        if (LobbyType.LOAD_GAME == lobby.getType() && !lobby.getExpectedPlayers().contains(characterId)) {
+            throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, characterId + " is not an expected member of LOAD_GAME lobby " + lobby.getLobbyId());
+        }
+
+        Invitation invitation = invitationFactory.create(senderId, characterId);
         lobby.getInvitations()
             .add(invitation);
 
         InvitationMessage invitationMessage = InvitationMessage.builder()
-            .senderId(accessTokenHeader.getUserId())
+            .senderId(senderId)
             .senderName(characterProxy.getCharacter().getName())
             .build();
         WebSocketEvent event = WebSocketEvent.builder()
@@ -92,9 +102,8 @@ public class InvitationService {
             .payload(invitationMessage)
             .build();
         WebSocketMessage message = WebSocketMessage.builder()
-            .recipients(Arrays.asList(friendId))
-            .event(event
-            )
+            .recipients(Arrays.asList(characterId))
+            .event(event)
             .build();
         messageSenderProxy.sendToMainMenu(message);
     }

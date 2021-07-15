@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NonNull;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -17,6 +18,13 @@ import java.util.Vector;
 public class Lobby {
     @NonNull
     private final UUID lobbyId;
+
+    @NonNull
+    private final LobbyType type;
+    private final UUID gameId;
+
+    @Builder.Default
+    private final List<UUID> expectedPlayers = Collections.emptyList();
 
     @NonNull
     private final String lobbyName;

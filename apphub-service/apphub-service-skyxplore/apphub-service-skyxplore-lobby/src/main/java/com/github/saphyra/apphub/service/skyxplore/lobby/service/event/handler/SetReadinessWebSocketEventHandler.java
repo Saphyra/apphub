@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.event.handler;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberStatus;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
@@ -35,7 +36,7 @@ class SetReadinessWebSocketEventHandler implements WebSocketEventHandler {
         Lobby lobby = lobbyDao.findByUserIdValidated(from);
 
         Member member = lobby.getMembers().get(from);
-        member.setReady(readiness);
+        member.setStatus(readiness ? LobbyMemberStatus.READY : LobbyMemberStatus.NOT_READY);
 
         WebSocketEvent readyEvent = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS)

@@ -134,6 +134,10 @@
         margin: 1rem;
     }
 
+    .surface-table-row{
+        text-align: center;
+    }
+
     .surface-table-cell{
         border: 2px outset white;
         width: var(--surface-table-cell-size);

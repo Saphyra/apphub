@@ -9,7 +9,7 @@ public enum UniverseSize {
     LARGE;
 
     @JsonCreator
-    public static UniverseSize forValues(String value) {
+    public static UniverseSize forValue(String value) {
         for (UniverseSize universeSize : values()) {
             if (universeSize.name().equalsIgnoreCase(value)) {
                 return universeSize;

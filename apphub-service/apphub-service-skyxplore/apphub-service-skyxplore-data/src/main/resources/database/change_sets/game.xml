@@ -16,4 +16,16 @@
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="game" columnNames="game_id" constraintName="game_pk"/>
     </changeSet>
+
+    <changeSet id="add-column-last_played-to-game" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="game" columnName="last_played"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="game">
+            <column name="last_played" type="datetime"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

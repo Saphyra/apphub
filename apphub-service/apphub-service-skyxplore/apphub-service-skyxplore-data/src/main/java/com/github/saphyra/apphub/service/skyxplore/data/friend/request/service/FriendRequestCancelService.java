@@ -1,7 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.request.service;
 
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.skyxplore.data.common.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequest;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequestDao;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 @Component
@@ -16,6 +20,7 @@ import java.util.UUID;
 @Slf4j
 public class FriendRequestCancelService {
     private final FriendRequestDao friendRequestDao;
+    private final MessageSenderProxy messageSenderProxy;
 
     public void cancelFriendRequest(UUID userId, UUID friendRequestId) {
         FriendRequest friendRequest = friendRequestDao.findById(friendRequestId)
@@ -26,5 +31,8 @@ public class FriendRequestCancelService {
         }
 
         friendRequestDao.delete(friendRequest);
+
+        WebSocketMessage message = WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_DELETED, Arrays.asList(friendRequest.getSenderId(), friendRequest.getFriendId()));
+        messageSenderProxy.sendToMainMenu(message);
     }
 }

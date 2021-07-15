@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -22,13 +23,13 @@ public class UniverseFactory {
     private final SolarSystemPlacingService starSystemFactory;
     private final SystemConnectionProvider systemConnectionProvider;
 
-    public Universe create(int memberNum, SkyXploreGameCreationSettingsRequest settings) {
+    public Universe create(UUID gameId, int memberNum, SkyXploreGameCreationSettingsRequest settings) {
         log.info("Creating universe...");
         int universeSize = universeSizeCalculator.calculate(memberNum, settings.getUniverseSize());
         log.info("UniverseSize: {}", universeSize);
 
-        Map<Coordinate, SolarSystem> systems = starSystemFactory.create(memberNum, universeSize, settings);
-        List<SystemConnection> connections = systemConnectionProvider.getConnections(systems.keySet());
+        Map<Coordinate, SolarSystem> systems = starSystemFactory.create(gameId, memberNum, universeSize, settings);
+        List<SystemConnection> connections = systemConnectionProvider.getConnections(gameId, systems.keySet());
 
         log.info("Universe created.");
         return Universe.builder()

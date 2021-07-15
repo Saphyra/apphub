@@ -19,6 +19,22 @@
             margin: 1rem;
         }
 
+            .game-item{
+                width: 80%;
+                position: relative;
+                margin: 0.5rem auto !important;
+                font-size: 1.5rem;
+                text-align: left;
+            }
+
+                .game-item button{
+                    position: absolute;
+                    right: 0.25rem;
+                    font-size: 0.75rem;
+                    margin: 0;
+                    border-width: 1px;
+                }
+
     #friends{
         position: absolute;
         top: 0;

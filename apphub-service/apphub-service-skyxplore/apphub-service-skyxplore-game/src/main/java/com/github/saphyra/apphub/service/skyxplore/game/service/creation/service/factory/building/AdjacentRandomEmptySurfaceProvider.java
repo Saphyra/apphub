@@ -17,7 +17,7 @@ class AdjacentRandomEmptySurfaceProvider {
 
     Surface getRandomEmptySurfaceNextTo(List<Surface> surfacesWithMatchingType, Collection<Surface> surfaces) {
         for (Surface surface : surfacesWithMatchingType) {
-            Optional<Surface> emptySurface = adjacentEmptySurfaceProvider.getEmptySurfaceNextTo(surface.getCoordinate(), surfaces);
+            Optional<Surface> emptySurface = adjacentEmptySurfaceProvider.getEmptySurfaceNextTo(surface.getCoordinate().getCoordinate(), surfaces);
             if (emptySurface.isPresent()) {
                 return emptySurface.get();
             }

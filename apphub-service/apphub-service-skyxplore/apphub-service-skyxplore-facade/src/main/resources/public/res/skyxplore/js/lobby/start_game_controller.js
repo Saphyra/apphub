@@ -1,4 +1,5 @@
 scriptLoader.loadScript("/res/common/js/animation/spinner.js");
+scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
 (function StartGameController(){
     $(document).ready(init);
@@ -23,7 +24,22 @@ scriptLoader.loadScript("/res/common/js/animation/spinner.js");
 
     function startGame(){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_START_GAME"));
-        dao.sendRequestAsync(request);
+
+        if(lobbyType == "LOAD_GAME" && !membersController.allMembersConnected()){
+            const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+                .withTitle(Localization.getAdditionalContent("start-game-confirmation-dialog-title"))
+                .withDetail(Localization.getAdditionalContent("start-game-confirmation-dialog-detail"))
+                .withConfirmButton(Localization.getAdditionalContent("start-game-confirmation-dialog-confirm-button"))
+                .withDeclineButton(Localization.getAdditionalContent("start-game-confirmation-dialog-cancel-button"));
+
+            confirmationService.openDialog(
+                "start-game-confirmation-dialog",
+                confirmationDialogLocalization,
+                function(){dao.sendRequestAsync(request);}
+            )
+        }else{
+            dao.sendRequestAsync(request);
+        }
     }
 
     function gameCreationStarted(){

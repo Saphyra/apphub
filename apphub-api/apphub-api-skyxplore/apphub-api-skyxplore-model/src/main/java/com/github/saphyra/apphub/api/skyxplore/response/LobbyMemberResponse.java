@@ -14,6 +14,6 @@ import java.util.UUID;
 public class LobbyMemberResponse {
     private UUID userId;
     private String characterName;
-    private boolean ready;
+    private LobbyMemberStatus status;
     private String alliance;
 }

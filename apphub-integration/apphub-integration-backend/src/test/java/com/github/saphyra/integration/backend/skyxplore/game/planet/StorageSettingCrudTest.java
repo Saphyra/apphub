@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StorageSettingCrudTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
     public void storageSettingCrud(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();

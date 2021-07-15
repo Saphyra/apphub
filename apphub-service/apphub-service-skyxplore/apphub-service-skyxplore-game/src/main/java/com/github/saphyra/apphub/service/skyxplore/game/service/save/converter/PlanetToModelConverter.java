@@ -38,6 +38,7 @@ public class PlanetToModelConverter {
         result.addAll(citizenConverter.convertDeep(planet.getPopulation().values(), game));
         result.addAll(storageDetailsConverter.convertDeep(planet.getStorageDetails(), game));
         result.addAll(priorityConverter.convert(planet.getPriorities(), planet.getPlanetId(), LocationType.PLANET, game));
+        result.add(planet.getCoordinate());
         return result;
     }
 
@@ -49,7 +50,6 @@ public class PlanetToModelConverter {
         model.setSolarSystemId(planet.getSolarSystemId());
         model.setDefaultName(planet.getDefaultName());
         model.setCustomNames(planet.getCustomNames());
-        model.setCoordinate(planet.getCoordinate());
         model.setSize(planet.getSize());
         model.setOwner(planet.getOwner());
         return model;

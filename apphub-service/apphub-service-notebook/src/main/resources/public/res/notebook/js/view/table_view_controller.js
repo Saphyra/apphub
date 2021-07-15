@@ -33,6 +33,7 @@
 
         document.getElementById("view-table-title").contentEditable = false;
         switchTab("main-page", "view-table");
+        switchTab("button-wrapper", "view-table-buttons");
         switchTab("view-table-button-wrapper", "view-table-edit-button-wrapper");
 
         function mapTableData(tableData){

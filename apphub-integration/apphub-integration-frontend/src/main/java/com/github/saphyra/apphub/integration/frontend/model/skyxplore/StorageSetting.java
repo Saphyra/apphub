@@ -64,7 +64,7 @@ public class StorageSetting {
     public void delete(WebDriver driver) {
         webElement.findElement(By.cssSelector(":scope button:last-child")).click();
 
-        CommonPageActions.confirmDeletionDialog(driver, "delete-storage-setting-confirmation-dialog");
+        CommonPageActions.confirmConfirmationDialog(driver, "delete-storage-setting-confirmation-dialog");
 
         NotificationUtil.verifySuccessNotification(driver, "Raktár beállítás törölve.");
     }

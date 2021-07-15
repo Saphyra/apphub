@@ -15,7 +15,7 @@ class SurfaceToResponseConverter {
     SurfaceResponse convert(Surface surface) {
         return SurfaceResponse.builder()
             .surfaceId(surface.getSurfaceId())
-            .coordinate(surface.getCoordinate())
+            .coordinate(surface.getCoordinate().getCoordinate())
             .surfaceType(surface.getSurfaceType().name())
             .building(buildingToResponseConverter.convert(surface.getBuilding()))
             .build();

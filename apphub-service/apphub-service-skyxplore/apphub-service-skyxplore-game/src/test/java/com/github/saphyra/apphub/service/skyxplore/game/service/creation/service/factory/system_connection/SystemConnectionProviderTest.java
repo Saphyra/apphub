@@ -13,12 +13,15 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SystemConnectionProviderTest {
+    private static final UUID GAME_ID = UUID.randomUUID();
+
     private final ExecutorServiceBean executorServiceBean = new ExecutorServiceBean(new SleepService());
 
     @Mock
@@ -86,10 +89,10 @@ public class SystemConnectionProviderTest {
         given(connectionOverflowRemovalService.removeConnectionOverflow(Arrays.asList(coordinate), Arrays.asList(line1, line2))).willReturn(Arrays.asList(line1));
         given(lonelySystemConnectionService.connectLonelySystems(Arrays.asList(coordinate), Arrays.asList(line1))).willReturn(Arrays.asList(line1, line5));
 
-        given(systemConnectionFactory.create(line1)).willReturn(systemConnection1);
-        given(systemConnectionFactory.create(line5)).willReturn(systemConnection2);
+        given(systemConnectionFactory.create(GAME_ID, line1)).willReturn(systemConnection1);
+        given(systemConnectionFactory.create(GAME_ID, line5)).willReturn(systemConnection2);
 
-        List<SystemConnection> result = underTest.getConnections(Arrays.asList(coordinate));
+        List<SystemConnection> result = underTest.getConnections(GAME_ID, Arrays.asList(coordinate));
 
         assertThat(result).containsExactlyInAnyOrder(systemConnection1, systemConnection2);
     }

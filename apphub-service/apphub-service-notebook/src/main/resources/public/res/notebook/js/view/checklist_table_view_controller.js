@@ -33,6 +33,7 @@
 
         document.getElementById("view-checklist-table-title").contentEditable = false;
         switchTab("main-page", "view-checklist-table");
+        switchTab("button-wrapper", "view-checklist-table-buttons");
         switchTab("view-checklist-table-button-wrapper", "view-checklist-table-edit-button-wrapper");
 
         function mapTableData(tableData){

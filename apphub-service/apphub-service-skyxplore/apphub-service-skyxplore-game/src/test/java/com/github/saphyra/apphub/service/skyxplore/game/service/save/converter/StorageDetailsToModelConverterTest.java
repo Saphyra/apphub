@@ -75,7 +75,7 @@ public class StorageDetailsToModelConverterTest {
         given(storedResourceConverter.convert(CollectionUtils.singleValueMap("", storedResource), game)).willReturn(Arrays.asList(storedResourceModel));
         given(storageSettingConverter.convert(Arrays.asList(storageSetting), game)).willReturn(Arrays.asList(storageSettingModel));
 
-        StorageDetails storageDetails = new StorageDetails();
+        StorageDetails storageDetails = StorageDetails.builder().build();
         storageDetails.getAllocatedResources().add(allocatedResource);
         storageDetails.getReservedStorages().add(reservedStorage);
         storageDetails.getStorageSettings().add(storageSetting);

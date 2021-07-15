@@ -11,4 +11,5 @@ public class ExitFromLobbyWsMessage {
     private UUID userId;
     private boolean host;
     private String characterName;
+    private boolean expectedPlayer;
 }

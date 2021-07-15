@@ -1,11 +1,13 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.member;
 
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberStatus;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
+import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class LobbyMemberQueryService {
     private final LobbyDao lobbyDao;
     private final LobbyMemberResponseConverter converter;
+    private final CharacterProxy characterProxy;
 
     public LobbyMembersResponse getMembers(UUID userId) {
         Lobby lobby = lobbyDao.findByUserIdValidated(userId);
@@ -30,6 +33,12 @@ public class LobbyMemberQueryService {
             .filter(member -> !member.getUserId().equals(lobby.getHost()))
             .map(member -> converter.convertMember(member, lobby.getAlliances()))
             .collect(Collectors.toList());
+
+        lobby.getExpectedPlayers()
+            .stream()
+            .filter(uuid -> !lobby.getMembers().containsKey(uuid))
+            .map(this::createInvitedMember)
+            .forEach(members::add);
 
         List<String> alliances = lobby.getAlliances()
             .stream()
@@ -42,6 +51,14 @@ public class LobbyMemberQueryService {
             .host(hostResponse)
             .members(members)
             .alliances(alliances)
+            .build();
+    }
+
+    private LobbyMemberResponse createInvitedMember(UUID userId) {
+        return LobbyMemberResponse.builder()
+            .userId(userId)
+            .characterName(characterProxy.getCharacter(userId).getName())
+            .status(LobbyMemberStatus.INVITED)
             .build();
     }
 }

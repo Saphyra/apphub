@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.map;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +21,6 @@ public class SolarSystem {
 
     @Builder.Default
     private final OptionalMap<UUID, String> customNames = new OptionalHashMap<>();
-    private final Coordinate coordinate;
+    private final CoordinateModel coordinate;
     private final Map<UUID, Planet> planets;
 }

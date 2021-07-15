@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory;
 
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.home_planet.HomePlanetSetupService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.player.PlayerPopulationService;
@@ -26,9 +27,11 @@ public class GameFactory {
     private final UniverseFactory universeFactory;
     private final ChatFactory chatFactory;
     private final HomePlanetSetupService homePlanetSetupService;
+    private final DateTimeUtil dateTimeUtil;
 
     public Game create(SkyXploreGameCreationRequest request) {
-        Universe universe = universeFactory.create(request.getMembers().size(), request.getSettings());
+        UUID gameId = idGenerator.randomUuid();
+        Universe universe = universeFactory.create(gameId, request.getMembers().size(), request.getSettings());
         Map<UUID, Player> players = playerPopulationService.populateGameWithPlayers(request.getMembers().keySet(), getPlanetCount(universe), request.getSettings());
         Map<UUID, Alliance> alliances = allianceFactory.create(request.getAlliances(), request.getMembers(), players);
 
@@ -39,13 +42,14 @@ public class GameFactory {
 
         log.info("Game generated.");
         return Game.builder()
-            .gameId(idGenerator.randomUuid())
+            .gameId(gameId)
             .host(request.getHost())
             .players(players)
             .alliances(alliances)
             .universe(universe)
             .chat(chatFactory.create(request.getMembers()))
             .gameName(request.getGameName())
+            .lastPlayed(dateTimeUtil.getCurrentDate())
             .build();
     }
 
