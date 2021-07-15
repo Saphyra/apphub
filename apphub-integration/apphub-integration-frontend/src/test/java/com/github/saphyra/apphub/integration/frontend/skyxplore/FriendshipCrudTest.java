@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FriendshipCrudTest extends SeleniumTest {
-    @Test
+    @Test(groups = "skyxplore")
     public void friendshipCrud() {
         WebDriver driver1 = extractDriver();
         WebDriver driver2 = extractDriver();
