@@ -93,6 +93,10 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
     window.pageController = new function(){
         this.webSocketConnection = wsConnection;
 
+        this.exitGame = function(){
+            window.location.href = Mapping.SKYXPLORE_PAGE;
+        }
+
         this.showMap = function(){
             switchTab("main-tab", "map");
         }

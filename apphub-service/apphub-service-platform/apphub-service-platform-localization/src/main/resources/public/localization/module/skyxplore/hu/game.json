@@ -1,6 +1,12 @@
 {
   "title": "SkyXplore",
   "staticText": {
+    "exit-button": [
+      {
+        "key": "innerHTML",
+        "message": "Kilépés"
+      }
+    ],
     "general-chat-button-title": [
       {
         "key": "innerHTML",
