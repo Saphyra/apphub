@@ -17,6 +17,7 @@
   "FORBIDDEN_OPERATION": "Ezt nem teheted meg.",
   "GAME_NAME_TOO_SHORT": "Játéknév túl rövid. (Minimum 3 karakter)",
   "GAME_NAME_TOO_LONG": "Játéknév túl hosszú. (Maximum 30 karakter)",
+  "GAME_NOT_FOUND": "A játék nem található.",
   "GENERAL_ERROR": "Ismeretlen hiba.",
   "INVALID_PARAM": "Érvénytelen paraméter.",
   "INVALID_TYPE": "Érvénytelen típus.",

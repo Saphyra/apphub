@@ -44,7 +44,7 @@ public class GameDeletionService implements DeleteByUserIdDao {
     @Transactional
     public void deleteByGameId(UUID gameId, UUID userId) {
         GameModel gameModel = gameDao.findById(gameId)
-            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, "Game not found with id " + gameId));
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.GAME_NOT_FOUND, "Game not found with id " + gameId));
 
         if (!gameModel.getHost().equals(userId)) {
             throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, userId + " must not delete game " + gameId);
