@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.error_handler.service.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.error_handler.service.translation.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.exception.LoggedException;
@@ -18,7 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -32,7 +35,9 @@ class ErrorHandlerAdvice {
         String content = exception.contentUTF8();
         HttpStatus status = HttpStatus.valueOf(exception.status());
         log.warn("Handling feignException with status {} and content {} for {} - {}", status, content, exception.request().httpMethod(), exception.request().url());
-        return new ResponseEntity<>(content, status);
+        Map<String, Collection<String>> headers = exception.responseHeaders();
+        log.debug("Headers: {}", headers);
+        return new ResponseEntity<>(content, CollectionUtils.toMultiValueMap(headers), status);
     }
 
     @ExceptionHandler(NotLoggedException.class)

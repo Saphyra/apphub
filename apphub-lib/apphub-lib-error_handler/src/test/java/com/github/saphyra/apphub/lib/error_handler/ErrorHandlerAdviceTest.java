@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.lib.error_handler;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.error_handler.service.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.error_handler.service.translation.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
@@ -20,6 +21,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,6 +31,8 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class ErrorHandlerAdviceTest {
     private static final String CONTENT = "content";
+    private static final String HEADER_KEY = "header-key";
+    private static final String HEADER_VALUE = "header-value";
 
     @Mock
     private ErrorResponseFactory errorResponseFactory;
@@ -62,11 +66,13 @@ public class ErrorHandlerAdviceTest {
         given(feignException.contentUTF8()).willReturn(CONTENT);
         given(feignException.status()).willReturn(400);
         given(feignException.request()).willReturn(request);
+        given(feignException.responseHeaders()).willReturn(CollectionUtils.singleValueMap(HEADER_KEY, Arrays.asList(HEADER_VALUE)));
 
         ResponseEntity<?> result = underTest.feignException(feignException);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(result.getBody()).isEqualTo(CONTENT);
+        assertThat(result.getHeaders()).containsEntry(HEADER_KEY, Arrays.asList(HEADER_VALUE));
     }
 
     @Test

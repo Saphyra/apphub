@@ -17,6 +17,8 @@ import org.testng.annotations.Test;
 
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class ChatTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
     private static final String MESSAGE = "message";
@@ -58,7 +60,7 @@ public class ChatTest extends BackEndTest {
             .message(MESSAGE)
             .build();
 
-        getSoftAssertions().assertThat(hostClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE).map(event1 -> event1.getPayloadAs(ChatWsMessageForLobby.class))).contains(expected);
-        getSoftAssertions().assertThat(memberClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE).map(event1 -> event1.getPayloadAs(ChatWsMessageForLobby.class))).contains(expected);
+        assertThat(hostClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE).map(event1 -> event1.getPayloadAs(ChatWsMessageForLobby.class))).contains(expected);
+        assertThat(memberClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE).map(event1 -> event1.getPayloadAs(ChatWsMessageForLobby.class))).contains(expected);
     }
 }

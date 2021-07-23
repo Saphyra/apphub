@@ -19,6 +19,8 @@ import org.testng.annotations.Test;
 
 import java.util.concurrent.Future;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class LobbyInvitationTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
@@ -52,7 +54,7 @@ public class LobbyInvitationTest extends SeleniumTest {
 
         SkyXploreMainMenuActions.createLobby(driver1, GAME_NAME);
 
-        getSoftAssertions().assertThat(SkyXploreLobbyActions.getOnlineFriends(driver1)).isEmpty();
+        assertThat(SkyXploreLobbyActions.getOnlineFriends(driver1)).isEmpty();
 
         ModulesPageActions.openModule(driver2, ModuleLocation.SKYXPLORE);
 

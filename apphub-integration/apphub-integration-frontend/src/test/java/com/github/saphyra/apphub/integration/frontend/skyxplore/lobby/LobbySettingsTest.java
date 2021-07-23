@@ -68,11 +68,11 @@ public class LobbySettingsTest extends SeleniumTest {
         hostMember.changeAllianceTo(Constants.NEW_ALLIANCE_VALUE);
         AwaitilityWrapper.createDefault()
             .until(() -> hostMember.getAlliance().equals("1"))
-            .softAssertTrue();
+            .assertTrue();
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreLobbyActions.getHostMember(driver2).getAlliance().equals("1"))
-            .softAssertTrue();
+            .assertTrue();
 
         assertThat(SkyXploreLobbyActions.getHostMember(driver2).allianceChangeEnabled()).isFalse();
 
@@ -81,22 +81,22 @@ public class LobbySettingsTest extends SeleniumTest {
 
         AwaitilityWrapper.createDefault()
             .until(() -> lobbyMember.getAlliance().equals("1"))
-            .softAssertTrue();
+            .assertTrue();
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreLobbyActions.getMember(driver1, userData2.getUsername()).getAlliance().equals("1"))
-            .softAssertTrue();
+            .assertTrue();
 
         SkyXploreLobbyActions.getMember(driver1, userData2.getUsername())
             .changeAllianceTo(Constants.NO_ALLIANCE_VALUE);
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreLobbyActions.getMember(driver1, userData2.getUsername()).getAlliance().equals(Constants.NO_ALLIANCE_VALUE))
-            .softAssertTrue();
+            .assertTrue();
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreLobbyActions.getMember(driver2, userData2.getUsername()).getAlliance().equals(Constants.NO_ALLIANCE_VALUE))
-            .softAssertTrue();
+            .assertTrue();
     }
 
     private void changeAndVerify(WebDriver hostDriver, WebDriver memberDriver, GameSettingOption option) {
@@ -112,6 +112,6 @@ public class LobbySettingsTest extends SeleniumTest {
     private void verify(WebDriver driver, GameSettingOption option, GameSettingOptionValue optionValue) {
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreLobbyActions.getGameSettingInput(driver, option).getValue().equals(optionValue.name()))
-            .softAssertTrue();
+            .assertTrue();
     }
 }

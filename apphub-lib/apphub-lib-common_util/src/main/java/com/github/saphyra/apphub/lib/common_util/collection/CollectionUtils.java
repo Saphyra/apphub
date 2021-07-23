@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.lib.common_util.collection;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,6 +54,12 @@ public class CollectionUtils {
     public static <K, V, T> Map<K, V> toMap(Function<T, K> keyMapper, Function<T, V> valueMapper, Collection<T> items) {
         Map<K, V> result = new HashMap<>();
         items.forEach(t -> result.put(keyMapper.apply(t), valueMapper.apply(t)));
+        return result;
+    }
+
+    public static <K, V> MultiValueMap<K, V> toMultiValueMap(Map<K, Collection<V>> in) {
+        MultiValueMap<K, V> result = new LinkedMultiValueMap<>();
+        in.forEach((k, vs) -> result.put(k, new ArrayList<>(vs)));
         return result;
     }
 }

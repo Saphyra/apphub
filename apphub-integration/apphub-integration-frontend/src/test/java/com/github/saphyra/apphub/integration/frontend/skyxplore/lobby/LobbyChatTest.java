@@ -59,7 +59,7 @@ public class LobbyChatTest extends SeleniumTest {
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreLobbyActions.getSystemMessages(driver1).contains(String.format(USER_JOINED_TO_LOBBY_TEMPLATE, userData1.getUsername())))
-            .softAssertTrue();
+            .assertTrue();
 
         SkyXploreLobbyActions.inviteFriend(driver1, userData2.getUsername());
 
@@ -67,11 +67,11 @@ public class LobbyChatTest extends SeleniumTest {
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreLobbyActions.getSystemMessages(driver1).contains(String.format(USER_JOINED_TO_LOBBY_TEMPLATE, userData2.getUsername())))
-            .softAssertTrue();
+            .assertTrue();
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreLobbyActions.getSystemMessages(driver2).contains(String.format(USER_JOINED_TO_LOBBY_TEMPLATE, userData2.getUsername())))
-            .softAssertTrue();
+            .assertTrue();
 
         SkyXploreLobbyActions.sendMessage(driver1, MESSAGE_TEXT_1);
 
@@ -105,13 +105,13 @@ public class LobbyChatTest extends SeleniumTest {
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreLobbyActions.getSystemMessages(driver1).contains(String.format(USER_LEFT_LOBBY_TEMPLATE, userData2.getUsername())))
-            .softAssertTrue();
+            .assertTrue();
     }
 
     private void verifyChatMessage(LobbyChatMessage message, String senderName, boolean ownMessage, List<String> messages) {
-        getSoftAssertions().assertThat(message.getSender()).isEqualTo(senderName);
-        getSoftAssertions().assertThat(message.isOwn()).isEqualTo(ownMessage);
+        assertThat(message.getSender()).isEqualTo(senderName);
+        assertThat(message.isOwn()).isEqualTo(ownMessage);
 
-        getSoftAssertions().assertThat(message.getMessages()).isEqualTo(messages);
+        assertThat(message.getMessages()).isEqualTo(messages);
     }
 }

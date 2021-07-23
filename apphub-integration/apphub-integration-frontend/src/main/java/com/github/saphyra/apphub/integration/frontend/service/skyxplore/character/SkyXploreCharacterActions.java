@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.integration.frontend.service.skyxplore.character;
 
-import com.github.saphyra.apphub.integration.common.TestBase;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils;
 import org.openqa.selenium.WebDriver;
 
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreCharacterActions {
     public static String getCharacterName(WebDriver driver) {
@@ -22,12 +22,12 @@ public class SkyXploreCharacterActions {
 
     public static void verifyInvalidCharacterName(WebDriver driver, String errorMessage) {
         WebElementUtils.verifyInvalidFieldStateSoft(CharacterPage.invalidCharacterName(driver), true, errorMessage);
-        TestBase.getSoftAssertions().assertThat(CharacterPage.submitButton(driver).isEnabled()).isFalse();
+        assertThat(CharacterPage.submitButton(driver).isEnabled()).isFalse();
     }
 
     public static void verifyValidCharacterName(WebDriver driver) {
         WebElementUtils.verifyInvalidFieldStateSoft(CharacterPage.invalidCharacterName(driver), false, null);
-        TestBase.getSoftAssertions().assertThat(CharacterPage.submitButton(driver).isEnabled()).isTrue();
+        assertThat(CharacterPage.submitButton(driver).isEnabled()).isTrue();
     }
 
     public static void submitForm(WebDriver driver) {

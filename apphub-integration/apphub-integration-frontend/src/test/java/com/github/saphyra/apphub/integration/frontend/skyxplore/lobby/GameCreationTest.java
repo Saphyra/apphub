@@ -62,7 +62,7 @@ public class GameCreationTest extends SeleniumTest {
         LobbyMember lobbyMember = SkyXploreLobbyActions.getHostMember(driver);
         AwaitilityWrapper.createDefault()
             .until(lobbyMember::isReady)
-            .softAssertTrue();
+            .assertTrue();
 
         SkyXploreLobbyActions.startGameCreation(driver);
         AwaitilityWrapper.create(60, 1)
