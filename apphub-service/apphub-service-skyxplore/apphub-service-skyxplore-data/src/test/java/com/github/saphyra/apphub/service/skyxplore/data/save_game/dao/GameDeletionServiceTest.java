@@ -73,7 +73,7 @@ public class GameDeletionServiceTest {
     public void deleteByGameId_gameNotFound() {
         Throwable ex = catchThrowable(() -> underTest.deleteByGameId(GAME_ID, USER_ID));
 
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND);
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.GAME_NOT_FOUND);
     }
 
     @Test

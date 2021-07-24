@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -28,6 +29,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SkyXploreGameWebSocketEventControllerImplTest {
@@ -57,7 +59,10 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
     private Game game;
 
     @Mock
-    private Player player;
+    private Player player1;
+
+    @Mock
+    private Player player2;
 
     @Mock
     private Chat chat;
@@ -99,25 +104,39 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
     @Test
     public void userJoinedToGame() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player1));
 
         underTest.userJoinedToGame(USER_ID);
 
-        verify(player).setConnected(true);
+        verify(player1).setConnected(true);
 
         verifyMessageSent(WebSocketEventName.SKYXPLORE_GAME_USER_JOINED);
     }
 
     @Test
-    public void userLeftGame() {
+    public void userLeftGame_connectedMemberLeft() {
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
-        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.toMap(new BiWrapper<>(USER_ID, player1), new BiWrapper<>(UUID.randomUUID(), player2)));
+        given(player2.isConnected()).willReturn(true);
 
         underTest.userLeftGame(USER_ID);
 
-        verify(player).setConnected(false);
+        verify(player1).setConnected(false);
 
         verifyMessageSent(WebSocketEventName.SKYXPLORE_GAME_USER_LEFT);
+    }
+
+    @Test
+    public void userLeftGame_noMoreConnectedMembers() {
+        given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
+        given(game.getPlayers()).willReturn(CollectionUtils.toMap(new BiWrapper<>(USER_ID, player1)));
+
+        underTest.userLeftGame(USER_ID);
+
+        verify(player1).setConnected(false);
+        verify(gameDao).delete(game);
+
+        verifyNoInteractions(messageSenderProxy);
     }
 
     private void verifyMessageSent(WebSocketEventName eventName) {

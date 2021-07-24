@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 public class ExitFromLobbyTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test
+    @Test(groups = "skyxplore")
     public void exitFromLobby() {
         WebDriver driver1 = extractDriver();
         WebDriver driver2 = extractDriver();

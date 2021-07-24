@@ -94,7 +94,7 @@
             return;
         }
 
-        if(event.expectedUser){
+        if(event.expectedPlayer){
             members[event.userId].setStatus("INVITED");
         }else{
             document.getElementById(ids.membersList).removeChild(members[event.userId].container);
@@ -165,7 +165,7 @@
             isHost: isHost,
 
             setStatus: function(r){
-                status = r;
+                this.status = r;
                 if(r == "READY"){
                     container.classList.add("ready");
                     container.classList.remove("invited");

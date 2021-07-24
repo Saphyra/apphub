@@ -52,10 +52,17 @@
             <artifactId>apphub-lib-web_utils</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-core</artifactId>
+            <version>${versions.openfeign}</version>
         </dependency>
     </dependencies>
 

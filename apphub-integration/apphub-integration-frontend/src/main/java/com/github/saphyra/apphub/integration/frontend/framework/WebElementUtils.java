@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integration.frontend.framework;
 
-import com.github.saphyra.apphub.integration.common.TestBase;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -9,6 +8,8 @@ import org.openqa.selenium.interactions.Actions;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -47,6 +48,14 @@ public class WebElementUtils {
         return Arrays.asList(element.getAttribute("class").split(" "));
     }
 
+    public static Optional<WebElement> getIfPresent(Supplier<WebElement> search) {
+        try {
+            return Optional.of(search.get());
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
     public static boolean isStale(WebElement element) {
         try {
             element.isDisplayed();
@@ -58,10 +67,10 @@ public class WebElementUtils {
 
     public static void verifyInvalidFieldStateSoft(WebElement inputValid, boolean shouldBeVisible, String errorMessage) {
         if (shouldBeVisible) {
-            TestBase.getSoftAssertions().assertThat(inputValid.isDisplayed()).isTrue();
-            TestBase.getSoftAssertions().assertThat(inputValid.getAttribute("title")).isEqualTo(errorMessage);
+            assertThat(inputValid.isDisplayed()).isTrue();
+            assertThat(inputValid.getAttribute("title")).isEqualTo(errorMessage);
         } else {
-            TestBase.getSoftAssertions().assertThat(inputValid.isDisplayed()).isFalse();
+            assertThat(inputValid.isDisplayed()).isFalse();
         }
     }
 }

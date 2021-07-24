@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.integration.common.framework.CustomObjectMapper;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.SoftAssertions;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
 import org.testng.annotations.AfterMethod;
@@ -34,7 +33,6 @@ public class TestBase {
     public static List<String> DISABLED_TEST_GROUPS;
 
     private static final ThreadLocal<String> EMAIL_DOMAIN = new ThreadLocal<>();
-    private static final ThreadLocal<SoftAssertions> SOFT_ASSERTIONS = new ThreadLocal<>();
 
     public static String getEmailDomain() {
         return EMAIL_DOMAIN.get();
@@ -75,7 +73,6 @@ public class TestBase {
     public void setUpMethod(Method method) {
         String testMethod = method.getDeclaringClass().getSimpleName() + "-" + method.getName();
         EMAIL_DOMAIN.set(testMethod.toLowerCase() + "-" + UUID.randomUUID().toString().split("-")[0]);
-        SOFT_ASSERTIONS.set(new SoftAssertions());
     }
 
     @AfterMethod(alwaysRun = true)
@@ -85,18 +82,8 @@ public class TestBase {
         EMAIL_DOMAIN.remove();
     }
 
-    @AfterMethod(alwaysRun = true)
-    public void assertSoftAssertions() {
-        SOFT_ASSERTIONS.get()
-            .assertAll();
-    }
-
     private static void deleteTestUsers() {
         log.debug("Deleting testUsers...");
         DatabaseUtil.setMarkedForDeletionByEmailLike(getEmailDomain());
-    }
-
-    public static SoftAssertions getSoftAssertions() {
-        return SOFT_ASSERTIONS.get();
     }
 }

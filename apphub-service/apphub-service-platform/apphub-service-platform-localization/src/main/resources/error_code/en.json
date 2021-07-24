@@ -17,6 +17,7 @@
   "FORBIDDEN_OPERATION": "You cannot do this.",
   "GAME_NAME_TOO_SHORT": "Game name too short. (3 characters min.)",
   "GAME_NAME_TOO_LONG": "Game name too long. (30 characters max.)",
+  "GAME_NOT_FOUND": "Game not found.",
   "GENERAL_ERROR": "Unknown error.",
   "INVALID_PARAM": "Invalid parameter.",
   "INVALID_TYPE": "Invalid type.",

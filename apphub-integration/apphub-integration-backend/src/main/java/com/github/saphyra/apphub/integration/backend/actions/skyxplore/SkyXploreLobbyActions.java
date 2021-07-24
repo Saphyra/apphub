@@ -86,4 +86,15 @@ public class SkyXploreLobbyActions {
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().as(GameSettingsResponse.class);
     }
+
+    public static Response getLoadGameResponse(Language language, UUID accessTokenId, UUID gameId) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .post(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_LOAD_GAME, "gameId", gameId));
+    }
+
+    public static void loadGame(Language language, UUID accessTokenId, UUID gameId) {
+        Response response = getLoadGameResponse(language, accessTokenId, gameId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
 }
