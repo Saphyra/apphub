@@ -8,6 +8,8 @@ import org.openqa.selenium.interactions.Actions;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,6 +46,14 @@ public class WebElementUtils {
 
     public static List<String> getClasses(WebElement element) {
         return Arrays.asList(element.getAttribute("class").split(" "));
+    }
+
+    public static Optional<WebElement> getIfPresent(Supplier<WebElement> search) {
+        try {
+            return Optional.of(search.get());
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     public static boolean isStale(WebElement element) {

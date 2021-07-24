@@ -1,8 +1,10 @@
 package com.github.saphyra.apphub.integration.frontend.service.skyxplore.main_menu;
 
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.frontend.model.skyxplore.Invitation;
+import com.github.saphyra.apphub.integration.frontend.model.skyxplore.SavedGame;
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.character.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.lobby.SkyXploreLobbyActions;
 import lombok.extern.slf4j.Slf4j;
@@ -91,5 +93,21 @@ public class SkyXploreMainMenuActions {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Invitation not found"))
             .accept();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_LOBBY_PAGE));
+    }
+
+    public static void openSavedGames(WebDriver driver) {
+        if (!WebElementUtils.getIfPresent(() -> MainMenuPage.savedGamesWrapper(driver)).isPresent()) {
+            MainMenuPage.LoadGameButton(driver).click();
+        }
+    }
+
+    public static List<SavedGame> getSavedGames(WebDriver driver) {
+        return MainMenuPage.savedGames(driver)
+            .stream()
+            .map(SavedGame::new)
+            .collect(Collectors.toList());
     }
 }

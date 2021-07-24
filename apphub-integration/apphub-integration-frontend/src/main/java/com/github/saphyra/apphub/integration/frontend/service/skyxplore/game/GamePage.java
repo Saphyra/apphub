@@ -155,4 +155,8 @@ class GamePage {
     public static WebElement populationOverviewShowAllSkillsButton(WebDriver driver) {
         return driver.findElement(By.id("population-overview-show-all-skills"));
     }
+
+    public static WebElement exitButton(WebDriver driver) {
+        return driver.findElement(By.id("exit-button"));
+    }
 }

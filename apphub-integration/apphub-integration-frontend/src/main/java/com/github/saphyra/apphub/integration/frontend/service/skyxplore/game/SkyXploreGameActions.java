@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.integration.frontend.service.skyxplore.game;
 
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.common.framework.Endpoints;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,5 +12,12 @@ public class SkyXploreGameActions {
         return SkyXploreMapActions.getSolarSystems(driver)
             .stream()
             .map(WebElement::getText).count() > 0;
+    }
+
+    public static void exit(WebDriver driver) {
+        GamePage.exitButton(driver).click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE));
     }
 }

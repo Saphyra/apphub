@@ -46,7 +46,11 @@
 
     function removeActiveFriend(friend){
         const container = document.getElementById(ids.activeFriendsList);
-            container.removeChild(document.getElementById(createFriendNodeId(friend.friendId)));
+
+            const friendNode = document.getElementById(createFriendNodeId(friend.friendId));
+            if(friendNode){
+                container.removeChild();
+            }
 
             if(container.childNodes.length == 0){
                 document.getElementById(ids.noActiveFriends).style.display = "block";

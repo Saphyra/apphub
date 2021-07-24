@@ -66,4 +66,16 @@ class MainMenuPage {
     public static List<WebElement> sentFriendRequests(WebDriver driver) {
         return driver.findElements(By.cssSelector("#outgoing-friend-request-list .friend-list-item"));
     }
+
+    public static WebElement savedGamesWrapper(WebDriver driver) {
+        return driver.findElement(By.id("games-wrapper"));
+    }
+
+    public static WebElement LoadGameButton(WebDriver driver) {
+        return driver.findElement(By.id("load-game-button"));
+    }
+
+    public static List<WebElement> savedGames(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#games .game-item"));
+    }
 }
