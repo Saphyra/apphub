@@ -243,6 +243,10 @@ textarea{
     text-align: center;
 }
 
+.left{
+    text-align: left;
+}
+
 .relative{
     position: relative;
 }
@@ -257,6 +261,13 @@ textarea{
 
 .nowrap{
     white-space: nowrap;
+}
+
+.selectable, .selectable *{
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
 }
 
 .spinner{

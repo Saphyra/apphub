@@ -26,12 +26,17 @@ public class ExceptionFactory {
     }
 
     public RestException reportedException(HttpStatus status, ErrorCode errorCode, String message) {
-        return new ReportedException(status, errorCode, message);
+        return reportedException(status, errorCode, message, null);
+    }
+
+    public RestException reportedException(HttpStatus status, ErrorCode errorCode, String message, Throwable cause) {
+        return new ReportedException(status, errorCode, message, cause);
     }
 
     public RestException notLoggedException(HttpStatus status, String message) {
         return notLoggedException(status, ErrorCode.GENERAL_ERROR, new HashMap<>(), message);
     }
+
 
     public RestException notLoggedException(HttpStatus status, ErrorCode errorCode, String message) {
         return notLoggedException(status, errorCode, new HashMap<>(), message);
@@ -41,10 +46,18 @@ public class ExceptionFactory {
         return new NotLoggedException(status, errorCode, params, message);
     }
 
+    private RestException notLoggedException(HttpStatus status, ErrorCode errorCode, Map<String, String> params, String message, Exception cause) {
+        throw new NotLoggedException(status, errorCode, params, message, cause);
+    }
+
     public RestException invalidParam(String field, String value) {
+        return invalidParam(field, value, null);
+    }
+
+    public RestException invalidParam(String field, String value, Exception cause) {
         Map<String, String> params = new HashMap<>();
         params.put(field, value);
-        return notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.INVALID_PARAM, params, String.join(" ", field, value));
+        return notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.INVALID_PARAM, params, String.join(" ", field, value), cause);
     }
 
     public RestException invalidType(String message) {

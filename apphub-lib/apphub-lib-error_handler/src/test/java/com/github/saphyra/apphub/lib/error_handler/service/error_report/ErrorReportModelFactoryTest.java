@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.lib.error_handler.service.error_report;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
@@ -20,14 +21,18 @@ import static org.mockito.BDDMockito.given;
 public class ErrorReportModelFactoryTest {
     private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
     private static final String ERROR_RESPONSE = "error-response";
-    private static final String EXCEPTION = "exception";
     private static final String MESSAGE = "message";
+    private static final String THREAD = "thread";
+    private static final String TYPE = "type";
 
     @Mock
     private DateTimeUtil dateTimeUtil;
 
     @Mock
     private ObjectMapperWrapper objectMapperWrapper;
+
+    @Mock
+    private ExceptionMapper exceptionMapper;
 
     @InjectMocks
     private ErrorReportModelFactory underTest;
@@ -38,21 +43,26 @@ public class ErrorReportModelFactoryTest {
     @Mock
     private RuntimeException exception;
 
+    @Mock
+    private ExceptionModel exceptionModel;
+
     @Test
     public void create() {
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
         given(objectMapperWrapper.writeValueAsString(errorResponse)).willReturn(ERROR_RESPONSE);
-        given(objectMapperWrapper.writeValueAsString(exception)).willReturn(EXCEPTION);
+        given(exceptionMapper.map(exception)).willReturn(exceptionModel);
         given(exception.getMessage()).willReturn(MESSAGE);
+        given(exceptionModel.getThread()).willReturn(THREAD);
+        given(exceptionModel.getType()).willReturn(TYPE);
 
         ErrorReportModel result = underTest.create(HttpStatus.NOT_FOUND, errorResponse, exception);
 
         assertThat(result.getId()).isNull();
         assertThat(result.getCreatedAt()).isEqualTo(CURRENT_DATE);
-        assertThat(result.getMessage()).isEqualTo(MESSAGE);
+        assertThat(result.getMessage()).isEqualTo(String.format("%s on thread %s: %s", TYPE, THREAD, MESSAGE));
         assertThat(result.getResponseStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
         assertThat(result.getResponseBody()).isEqualTo(ERROR_RESPONSE);
-        assertThat(result.getException()).isEqualTo(EXCEPTION);
+        assertThat(result.getException()).isEqualTo(exceptionModel);
     }
 
     @Test

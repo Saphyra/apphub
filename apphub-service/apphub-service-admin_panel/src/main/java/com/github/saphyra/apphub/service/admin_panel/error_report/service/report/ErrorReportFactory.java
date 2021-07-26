@@ -1,16 +1,16 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.service.report;
 
-import java.util.Optional;
-import java.util.function.Supplier;
-
-import org.springframework.stereotype.Component;
-
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
+import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.Optional;
+import java.util.function.Supplier;
 
 @Component
 @RequiredArgsConstructor
@@ -27,6 +27,7 @@ class ErrorReportFactory {
             .responseStatus(model.getResponseStatus())
             .responseBody(model.getResponseBody())
             .exception(model.getException())
+            .status(ErrorReportStatus.UNREAD)
             .build();
     }
 

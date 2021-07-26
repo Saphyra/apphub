@@ -1,0 +1,169 @@
+{
+  "title": "Apphub - Hibajelentések",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Hibajelentések"
+      }
+    ],
+    "search-bar-label": [
+      {
+        "key": "innerHTML",
+        "message": "Keresés"
+      }
+    ],
+    "column-name-timestamp": [
+      {
+        "key": "innerHTML",
+        "message": "Idő"
+      }
+    ],
+    "column-name-status-code": [
+      {
+        "key": "innerHTML",
+        "message": "Válaszkód"
+      }
+    ],
+    "column-name-message": [
+      {
+        "key": "innerHTML",
+        "message": "Üzenet"
+      }
+    ],
+    "search-by-message": [
+      {
+        "key": "placeholder",
+        "message": "Üzenet"
+      }
+    ],
+    "search-by-status-code": [
+      {
+        "key": "placeholder",
+        "message": "Válaszkód"
+      }
+    ],
+    "search-by-start-time-label": [
+      {
+        "key": "innerHTML",
+        "message": "Ettől"
+      }
+    ],
+    "search-by-start-time": [
+      {
+        "key": "placeholder",
+        "message": "ÉÉÉÉ-HH-NN óó:pp:mm"
+      }
+    ],
+    "search-by-end-time-label": [
+      {
+        "key": "innerHTML",
+        "message": "Eddig"
+      }
+    ],
+    "search-by-end-time": [
+      {
+        "key": "placeholder",
+        "message": "ÉÉÉÉ-HH-NN óó:pp:mm"
+      }
+    ],
+    "objects-per-page-label": [
+      {
+        "key": "innerHTML",
+        "message": "Bejegyzés/oldal"
+      }
+    ],
+    "search-by-status-all": [
+      {
+        "key": "innerHTML",
+        "message": "Összes"
+      }
+    ],
+    "search-by-status-marked": [
+      {
+        "key": "innerHTML",
+        "message": "Megjelölt"
+      }
+    ],
+    "search-by-status-read": [
+      {
+        "key": "innerHTML",
+        "message": "Olvasott"
+      }
+    ],
+    "search-by-status-unread": [
+      {
+        "key": "innerHTML",
+        "message": "Olvasatlan"
+      }
+    ],
+    "search-button": [
+      {
+        "key": "innerHTML",
+        "message": "Keresés"
+      }
+    ],
+    "previous-button": [
+      {
+        "key": "innerHTML",
+        "message": "Előző"
+      }
+    ],
+    "next-button": [
+      {
+        "key": "innerHTML",
+        "message": "Következő"
+      }
+    ],
+    "error-report-details-message-label": [
+      {
+        "key": "innerHTML",
+        "message": "Üzenet"
+      }
+    ],
+    "error-report-details-response-label": [
+      {
+        "key": "innerHTML",
+        "message": "Válasz"
+      }
+    ],
+    "error-report-details-exception-label": [
+      {
+        "key": "innerHTML",
+        "message": "Hiba"
+      }
+    ],
+    "error-report-details-delete-report-button": [
+      {
+        "key": "innerHTML",
+        "message": "Törlés"
+      }
+    ],
+    "error-report-details-mark-as-unread-button": [
+      {
+        "key": "innerHTML",
+        "message": "Olvasottnak jelöl"
+      }
+    ],
+    "error-report-details-mark-button": [
+      {
+        "key": "innerHTML",
+        "message": "Megjelöl"
+      }
+    ],
+    "error-report-details-unmark-button": [
+      {
+        "key": "innerHTML",
+        "message": "Jelölés visszavonása"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Vissza"
+      }
+    ]
+  },
+  "additionalContent": {
+  }
+}

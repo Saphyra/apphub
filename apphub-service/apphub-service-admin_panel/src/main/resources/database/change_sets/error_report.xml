@@ -24,4 +24,16 @@
 
         <addPrimaryKey schemaName="admin_panel" tableName="error_report" columnNames="id"/>
     </changeSet>
+
+    <changeSet id="add-column-status-to-error_report" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="admin_panel" tableName="error_report" columnName="status"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="admin_panel" tableName="error_report">
+            <column name="status" type="varchar(255)" defaultValue="UNREAD"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

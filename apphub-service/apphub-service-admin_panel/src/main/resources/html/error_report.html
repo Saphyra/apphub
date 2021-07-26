@@ -1,0 +1,137 @@
+<HTML>
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/admin-panel/css/error_report.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT src="/res/admin-panel/js/error_report/page_controller.js"></SCRIPT>
+</HEAD>
+<BODY>
+<DIV id="error-report-overview" class="main-page">
+    <HEADER>
+        <H1 id="main-title"></H1>
+    </HEADER>
+
+    <MAIN>
+        <FIELDSET id="search-bar" class="centered">
+            <LEGEND id="search-bar-label"></LEGEND>
+
+            <INPUT type="text" id="search-by-message">
+
+            <INPUT type="number" id="search-by-status-code" min="100" max="599" step="1">
+
+            <SPAN class="nowrap">
+                <LABEL>
+                    <SPAN id="search-by-start-time-label"></SPAN>:
+                    <INPUT type="text" id="search-by-start-time">
+                </LABEL>
+                <LABEL>
+                    <SPAN id="search-by-end-time-label"></SPAN>:
+                    <INPUT type="text" id="search-by-end-time">
+                </LABEL>
+            </SPAN>
+
+            <LABEL class="nowrap">
+                <SPAN id="objects-per-page-label"></SPAN>:
+                <SELECT id="objects-per-page">
+                    <OPTION value="10">10</OPTION>
+                    <OPTION value="25" selected>25</OPTION>
+                    <OPTION value="50">50</OPTION>
+                    <OPTION value="100">100</OPTION>
+                </SELECT>
+            </LABEL>
+
+            <SPAN class="nowrap">
+                <LABEL>
+                    <INPUT type="radio" name="status-query" value="" checked>
+                    <SPAN id="search-by-status-all"></SPAN>
+                </LABEL>
+
+                <LABEL>
+                    <INPUT type="radio" name="status-query" value="MARKED">
+                    <SPAN id="search-by-status-marked"></SPAN>
+                </LABEL>
+
+                <LABEL>
+                    <INPUT type="radio" name="status-query" value="READ">
+                    <SPAN id="search-by-status-read"></SPAN>
+                </LABEL>
+
+                <LABEL>
+                    <INPUT type="radio" name="status-query" value="UNREAD">
+                    <SPAN id="search-by-status-unread"></SPAN>
+                </LABEL>
+            </SPAN>
+
+            <BUTTON id="search-button" onclick="reportController.search()"></BUTTON>
+        </FIELDSET>
+
+        <DIV id="page-bar" class="centered">
+            <BUTTON id="previous-button" onclick="reportController.previousPage()" disabled></BUTTON>
+            <SPAN id="page-number"></SPAN>
+            <BUTTON id="next-button" onclick="reportController.nextPage()"></BUTTON>
+        </DIV>
+
+        <TABLE id="content-table" class="formatted-table">
+            <THEAD>
+            <TR>
+                <TD></TD>
+                <TD id="column-name-timestamp"></TD>
+                <TD id="column-name-status-code"></TD>
+                <TD id="column-name-message"></TD>
+                <TD></TD>
+            </TR>
+            </THEAD>
+            <TBODY id="error-reports" class="selectable">
+            </TBODY>
+        </TABLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="back-button" onclick='window.location = "/web/admin-panel"'></BUTTON>
+    </FOOTER>
+</DIV>
+
+<DIV id="error-report-details" class="main-page selectable">
+    <HEADER>
+        <H1>
+            <SPAN id="error-report-id"></SPAN>
+            <SPAN id="error-report-created-at"></SPAN>
+        </H1>
+
+        <BUTTON id="close-error-report-details-button" onclick="reportController.closeDetailsPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN>
+        <FIELDSET>
+            <LEGEND id="error-report-details-message-label"></LEGEND>
+            <DIV id="error-report-message"></DIV>
+        </FIELDSET>
+
+        <FIELDSET>
+            <LEGEND id="error-report-details-response-label"></LEGEND>
+
+            <SPAN id="error-report-response-status"></SPAN>
+            <SPAN id="error-report-response-body"></SPAN>
+        </FIELDSET>
+
+        <FIELDSET>
+            <LEGEND id="error-report-details-exception-label"></LEGEND>
+
+            <DIV id="error-report-exception"></DIV>
+        </FIELDSET>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="error-report-details-delete-report-button"></BUTTON>
+        <BUTTON id="error-report-details-mark-as-unread-button" class="mark-button"></BUTTON>
+        <BUTTON id="error-report-details-mark-button" class="mark-button"></BUTTON>
+        <BUTTON id="error-report-details-unmark-button" class="mark-button"></BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

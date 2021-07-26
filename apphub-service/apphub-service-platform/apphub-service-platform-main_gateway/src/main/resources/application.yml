@@ -83,7 +83,7 @@ spring:
         - id: admin-panel
           uri: http://admin-panel:8080
           predicates:
-            - Path=/api/admi-panel/**
+            - Path=/api/admin-panel/**
         - id: modules
           uri: http://modules:8080
           predicates:

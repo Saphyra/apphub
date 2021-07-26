@@ -1,4 +1,5 @@
 {
   "role-management": "Role management",
-  "disabled-role-management": "Enable / disable roles"
+  "disabled-role-management": "Enable / disable roles",
+  "error-report": "Error reports"
 }

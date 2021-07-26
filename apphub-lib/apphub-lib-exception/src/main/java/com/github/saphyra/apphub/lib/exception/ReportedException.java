@@ -22,4 +22,8 @@ public class ReportedException extends RestException {
     ReportedException(HttpStatus status, String message) {
         super(status, message);
     }
+
+    public ReportedException(HttpStatus status, ErrorCode errorCode, String message, Throwable cause) {
+        super(status, errorCode, message, cause);
+    }
 }

@@ -12,7 +12,8 @@ fi
 #Deploying to develop
 NAMESPACE_NAME="develop"
 ./deploy.sh "$NAMESPACE_NAME"
-./run_tests.sh "$NAMESPACE_NAME"
-echo "Deployment finished."
 
 start ./port_forward.sh $NAMESPACE_NAME
+
+./run_tests.sh "$NAMESPACE_NAME"
+echo "Deployment finished."

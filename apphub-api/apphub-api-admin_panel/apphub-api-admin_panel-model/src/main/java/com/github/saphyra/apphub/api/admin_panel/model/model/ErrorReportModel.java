@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.api.admin_panel.model.model;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,5 +18,6 @@ public class ErrorReportModel {
     private String message;
     private Integer responseStatus;
     private String responseBody;
-    private String exception;
+    private ExceptionModel exception;
+    private String status;
 }

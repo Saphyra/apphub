@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.lib.common_util;
 
 import lombok.experimental.UtilityClass;
 
+import java.time.format.DateTimeFormatter;
+
 @UtilityClass
 public class Constants {
     public final String ACCESS_TOKEN_COOKIE = "access-token";
@@ -21,4 +23,6 @@ public class Constants {
     public final String AUTHORIZATION_HEADER = "auth";
 
     public final String COOKIE_HEADER = "Cookie";
+
+    public final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd hh-mm-ss.nnnnnnnnn");
 }
