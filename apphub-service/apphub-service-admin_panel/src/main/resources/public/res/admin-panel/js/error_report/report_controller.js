@@ -15,6 +15,9 @@
         this.deleteOpenedErrorReport = function(){
             deleteReports([openedErrorReportId]);
         }
+        this.markOpenedErrorReport = function(status){
+            markErrorReports([openedErrorReportId], status);
+        }
     }
 
     $(document).ready(init);
@@ -181,6 +184,14 @@
                 dao.sendRequestAsync(request);
             }
         )
+    }
+
+    function markErrorReports(ids, status){
+        const request = new Request(Mapping.getEndpoint("ERROR_REPORT_MARK_ERRORS", {status: status}), ids);
+            request.processValidResponse = function(){
+                Localization.getAdditionalContent("error-reports-marked");
+            }
+        dao.sendRequestAsync(request);
     }
 
     function displayPageNumber(){

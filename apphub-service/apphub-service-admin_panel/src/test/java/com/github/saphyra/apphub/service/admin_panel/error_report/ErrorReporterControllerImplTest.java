@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
+import com.github.saphyra.apphub.service.admin_panel.error_report.service.MarkErrorReportService;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.details.ErrorReportDetailsQueryService;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.overview.ErrorReportOverviewQueryService;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.report.ReportErrorService;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class ErrorReporterControllerImplTest {
     private static final UUID ID = UUID.randomUUID();
+    private static final String STATUS = "status";
 
     @Mock
     private ReportErrorService reportErrorService;
@@ -37,6 +39,9 @@ public class ErrorReporterControllerImplTest {
 
     @Mock
     private ErrorReportDao errorReportDao;
+
+    @Mock
+    private MarkErrorReportService markErrorReportService;
 
     @InjectMocks
     private ErrorReporterControllerImpl underTest;
@@ -83,5 +88,12 @@ public class ErrorReporterControllerImplTest {
         underTest.deleteErrorReports(Arrays.asList(ID), accessTokenHeader);
 
         verify(errorReportDao).deleteById(ID);
+    }
+
+    @Test
+    public void markErrorReports() {
+        underTest.markErrorReports(Arrays.asList(ID), STATUS, accessTokenHeader);
+
+        verify(markErrorReportService).mark(Arrays.asList(ID), STATUS);
     }
 }

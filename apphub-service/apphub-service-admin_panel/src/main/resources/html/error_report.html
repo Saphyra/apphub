@@ -128,9 +128,9 @@
 
     <FOOTER>
         <BUTTON id="error-report-details-delete-report-button" onclick="reportController.deleteOpenedErrorReport()"></BUTTON>
-        <BUTTON id="error-report-details-mark-as-unread-button" class="mark-button"></BUTTON>
-        <BUTTON id="error-report-details-mark-button" class="mark-button"></BUTTON>
-        <BUTTON id="error-report-details-unmark-button" class="mark-button"></BUTTON>
+        <BUTTON id="error-report-details-mark-as-unread-button" onclick="reportController.markOpenedErrorReport('UNREAD')"></BUTTON>
+        <BUTTON id="error-report-details-mark-button" onclick="reportController.markOpenedErrorReport('MARKED')"></BUTTON>
+        <BUTTON id="error-report-details-unmark-button" onclick="reportController.markOpenedErrorReport('READ')"></BUTTON>
     </FOOTER>
 </DIV>
 </BODY>

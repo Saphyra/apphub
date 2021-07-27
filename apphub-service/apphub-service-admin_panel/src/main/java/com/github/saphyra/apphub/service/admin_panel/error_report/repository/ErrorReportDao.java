@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Component
 @Slf4j
@@ -31,5 +33,11 @@ public class ErrorReportDao extends AbstractDao<ErrorReportEntity, ErrorReport, 
 
     public void deleteById(UUID id) {
         deleteById(uuidConverter.convertDomain(id));
+    }
+
+    public List<ErrorReport> findAllById(List<UUID> ids) {
+        return StreamSupport.stream(repository.findAllById(uuidConverter.convertDomain(ids)).spliterator(), false)
+            .map(converter::convertEntity)
+            .collect(Collectors.toList());
     }
 }

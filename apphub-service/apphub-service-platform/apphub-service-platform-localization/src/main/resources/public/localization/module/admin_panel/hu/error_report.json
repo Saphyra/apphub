@@ -142,7 +142,7 @@
     "error-report-details-mark-as-unread-button": [
       {
         "key": "innerHTML",
-        "message": "Olvasottnak jelöl"
+        "message": "Olvasatlannak jelöl"
       }
     ],
     "error-report-details-mark-button": [
@@ -168,6 +168,7 @@
     "delete-error-reports-confirmation-dialog-title": "Hibajelentések törlésének megerősítése",
     "delete-error-reports-confirmation-dialog-detail": "Biztosan törölni szeretné a következő hibajelentéseket: {ids}?",
     "delete-error-reports-confirmation-dialog-confirm-button": "Törlés",
-    "delete-error-reports-confirmation-dialog-cancel-button": "Mégse"
+    "delete-error-reports-confirmation-dialog-cancel-button": "Mégse",
+    "error-reports-marked": "Hibajekentés(ek) megjelölve.."
   }
 }

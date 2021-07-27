@@ -82,4 +82,15 @@ public class ErrorReportDaoTest {
 
         verify(repository).deleteById(ID_STRING);
     }
+
+    @Test
+    public void findAllById() {
+        given(uuidConverter.convertDomain(Arrays.asList(ID))).willReturn(Arrays.asList(ID_STRING));
+        given(repository.findAllById(Arrays.asList(ID_STRING))).willReturn(Arrays.asList(entity));
+        given(converter.convertEntity(entity)).willReturn(domain);
+
+        List<ErrorReport> result = underTest.findAllById(Arrays.asList(ID));
+
+        assertThat(result).containsExactly(domain);
+    }
 }

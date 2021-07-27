@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
+import com.github.saphyra.apphub.service.admin_panel.error_report.service.MarkErrorReportService;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.details.ErrorReportDetailsQueryService;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.overview.ErrorReportOverviewQueryService;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,7 @@ public class ErrorReporterControllerImpl implements ErrorReporterController {
     private final ErrorReportOverviewQueryService errorReportOverviewQueryService;
     private final ErrorReportDetailsQueryService errorReportDetailsQueryService;
     private final ErrorReportDao errorReportDao;
+    private final MarkErrorReportService markErrorReportService;
 
     @Override
     public void reportError(ErrorReportModel model) {
@@ -44,6 +46,12 @@ public class ErrorReporterControllerImpl implements ErrorReporterController {
     public void deleteErrorReports(List<UUID> ids, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to delete error reports {}}", accessTokenHeader.getUserId(), ids);
         ids.forEach(errorReportDao::deleteById);
+    }
+
+    @Override
+    public void markErrorReports(List<UUID> ids, String status, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to change the status of errorReports {} to {}", accessTokenHeader.getUserId(), ids, status);
+        markErrorReportService.mark(ids, status);
     }
 
     @Override

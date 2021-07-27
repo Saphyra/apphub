@@ -28,6 +28,9 @@ public interface ErrorReporterController {
     @DeleteMapping(Endpoints.ADMIN_PANEL_DELETE_ERROR_REPORTS)
     void deleteErrorReports(@RequestBody List<UUID> ids, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    @PostMapping(Endpoints.ADMIN_PANEL_MARK_ERROR_REPORTS)
+    void markErrorReports(@RequestBody List<UUID> ids, @PathVariable("status") String status, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
     @GetMapping(Endpoints.ADMIN_PANEL_GET_ERROR_REPORT)
     ErrorReportModel getErrorReport(@PathVariable("id") UUID id, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }
