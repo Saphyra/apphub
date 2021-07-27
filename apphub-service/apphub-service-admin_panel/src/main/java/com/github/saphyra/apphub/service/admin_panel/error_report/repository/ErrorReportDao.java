@@ -28,4 +28,8 @@ public class ErrorReportDao extends AbstractDao<ErrorReportEntity, ErrorReport, 
     public Optional<ErrorReport> findById(UUID id) {
         return findById(uuidConverter.convertDomain(id));
     }
+
+    public void deleteById(UUID id) {
+        deleteById(uuidConverter.convertDomain(id));
+    }
 }

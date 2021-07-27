@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.details.ErrorReportDetailsQueryService;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.overview.ErrorReportOverviewQueryService;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.report.ReportErrorService;
@@ -33,6 +34,9 @@ public class ErrorReporterControllerImplTest {
 
     @Mock
     private ErrorReportDetailsQueryService errorReportDetailsQueryService;
+
+    @Mock
+    private ErrorReportDao errorReportDao;
 
     @InjectMocks
     private ErrorReporterControllerImpl underTest;
@@ -72,5 +76,12 @@ public class ErrorReporterControllerImplTest {
         ErrorReportModel result = underTest.getErrorReport(ID, accessTokenHeader);
 
         assertThat(result).isEqualTo(model);
+    }
+
+    @Test
+    public void deleteErrorReports() {
+        underTest.deleteErrorReports(Arrays.asList(ID), accessTokenHeader);
+
+        verify(errorReportDao).deleteById(ID);
     }
 }

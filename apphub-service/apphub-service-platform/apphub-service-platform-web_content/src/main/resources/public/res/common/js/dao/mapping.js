@@ -21,6 +21,7 @@ window.Mapping = new function(){
         CHANGE_USERNAME: new Endpoint("/api/user/account/username", HttpMethod.POST),
         CHECK_SESSION: new Endpoint("/api/user/authentication/session", HttpMethod.GET),
         ERROR_REPORT_GET_ERRORS: new Endpoint("/api/admin-panel/error-report", HttpMethod.POST),
+        ERROR_REPORT_DELETE_ERRORS: new Endpoint("/api/admin-panel/error-report", HttpMethod.DELETE),
         ERROR_REPORT_GET_ERROR: new Endpoint("/api/admin-panel/error-report/{id}", HttpMethod.GET),
 
         CREATE_NOTEBOOK_CATEGORY: new Endpoint("/api/notebook/category", HttpMethod.PUT),

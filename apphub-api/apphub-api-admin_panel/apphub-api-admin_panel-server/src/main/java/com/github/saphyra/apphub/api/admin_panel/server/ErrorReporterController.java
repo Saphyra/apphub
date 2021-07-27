@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Constants;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,9 @@ public interface ErrorReporterController {
 
     @PostMapping(Endpoints.ADMIN_PANEL_GET_ERROR_REPORTS)
     List<ErrorReportOverview> getErrorReports(@RequestBody GetErrorReportsRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @DeleteMapping(Endpoints.ADMIN_PANEL_DELETE_ERROR_REPORTS)
+    void deleteErrorReports(@RequestBody List<UUID> ids, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(Endpoints.ADMIN_PANEL_GET_ERROR_REPORT)
     ErrorReportModel getErrorReport(@PathVariable("id") UUID id, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

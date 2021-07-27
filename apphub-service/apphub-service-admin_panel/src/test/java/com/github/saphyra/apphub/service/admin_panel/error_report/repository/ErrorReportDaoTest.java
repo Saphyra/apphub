@@ -17,6 +17,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ErrorReportDaoTest {
@@ -70,5 +71,15 @@ public class ErrorReportDaoTest {
         Optional<ErrorReport> result = underTest.findById(ID);
 
         assertThat(result).contains(domain);
+    }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(ID)).willReturn(ID_STRING);
+        given(repository.existsById(ID_STRING)).willReturn(true);
+
+        underTest.deleteById(ID);
+
+        verify(repository).deleteById(ID_STRING);
     }
 }

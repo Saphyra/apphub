@@ -1,5 +1,8 @@
 (function ReportController(){
+    scriptLoader.loadScript("/res/common/js/confirmation_service.js");
+
     let pageNumber = 1;
+    let openedErrorReportId = null;
 
     window.reportController = new function(){
         this.search = loadCurrentPage;
@@ -8,6 +11,9 @@
         this.closeDetailsPage = function(){
             loadCurrentPage();
             switchTab("main-page", ids.errorReportOverview);
+        }
+        this.deleteOpenedErrorReport = function(){
+            deleteReports([openedErrorReportId]);
         }
     }
 
@@ -98,6 +104,8 @@
         dao.sendRequestAsync(request);
 
         function displayErrorReport(errorReport){
+            openedErrorReportId = errorReport.id;
+
             document.getElementById(ids.errorReportId).innerText = errorReport.id;
             document.getElementById(ids.errorReportCreatedAt).innerText = errorReport.createdAt;
             document.getElementById(ids.errorReportMessage).innerText = errorReport.message;
@@ -155,6 +163,24 @@
                 }
             }
         }
+    }
+
+    function deleteReports(ids){
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(Localization.getAdditionalContent("delete-error-reports-confirmation-dialog-title"))
+            .withDetail(Localization.getAdditionalContent("delete-error-reports-confirmation-dialog-detail", {ids: ids}))
+            .withConfirmButton(Localization.getAdditionalContent("delete-error-reports-confirmation-dialog-confirm-button"))
+            .withDeclineButton(Localization.getAdditionalContent("delete-error-reports-confirmation-dialog-cancel-button"));
+
+        confirmationService.openDialog(
+            "delete-error-reports-confirmation-dialog",
+            confirmationDialogLocalization,
+            function(){
+                const request = new Request(Mapping.getEndpoint("ERROR_REPORT_DELETE_ERRORS"), ids);
+                    request.processValidResponse = reportController.closeDetailsPage;
+                dao.sendRequestAsync(request);
+            }
+        )
     }
 
     function displayPageNumber(){
