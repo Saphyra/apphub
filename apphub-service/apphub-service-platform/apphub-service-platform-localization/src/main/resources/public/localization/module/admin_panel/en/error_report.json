@@ -169,6 +169,10 @@
     "delete-error-reports-confirmation-dialog-detail": "Are you sure you want to delete reports {ids}?",
     "delete-error-reports-confirmation-dialog-confirm-button": "Delete",
     "delete-error-reports-confirmation-dialog-cancel-button": "Cancel",
-    "error-reports-marked": "Error report(s) is/are marked."
+    "error-reports-marked": "Error report(s) is/are marked.",
+    "delete-error-report-button": "Delete",
+    "mark-error-report-button": "Mark",
+    "mark-error-report-as-unread-button": "Mark as unread",
+    "mark-error-report-as-read-button": "Mark as read"
   }
 }

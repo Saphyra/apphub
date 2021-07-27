@@ -91,12 +91,65 @@
             row.appendChild(messageCell);
 
                 const operationsCell = document.createElement("TD");
+                    addOperationButtons(
+                        errorReport,
+                        operationsCell,
+                        function(newStatus){
+                            row.classList.remove(errorReport.status.toLowerCase());
+                            row.classList.add(newStatus.toLowerCase());
+                        }
+                    );
             row.appendChild(operationsCell);
 
             row.onclick = function(){
                 viewErrorReport(errorReport.id);
             }
             return row;
+
+            function addOperationButtons(errorReport, operationsCell, statusChanger){
+                operationsCell.innerHTML = "";
+
+                const deleteButton = document.createElement("BUTTON");
+                    deleteButton.innerText = Localization.getAdditionalContent("delete-error-report-button");
+                    deleteButton.onclick = function(e){
+                        e.stopPropagation();
+                        deleteReports([errorReport.id]);
+                    }
+                operationsCell.appendChild(deleteButton);
+
+                switch(errorReport.status){
+                    case "READ":
+                        addButton("MARKED", "mark-error-report-button", errorReport, operationsCell, statusChanger);
+                        addButton("UNREAD", "mark-error-report-as-unread-button", errorReport, operationsCell, statusChanger);
+                    break;
+                    case "UNREAD":
+                        addButton("MARKED", "mark-error-report-button", errorReport, operationsCell, statusChanger);
+                        addButton("READ", "mark-error-report-as-read-button", errorReport, operationsCell, statusChanger);
+                    break;
+                    case "MARKED":
+                        addButton("READ", "mark-error-report-as-read-button", errorReport, operationsCell, statusChanger);
+                        addButton("UNREAD", "mark-error-report-as-unread-button", errorReport, operationsCell, statusChanger);
+                    break;
+                    default:
+                        notificationService.showError("Unhandled status: " + errorReport.status);
+                }
+
+                function addButton(newStatus, localizationKey, errorReport, operationsCell, statusChanger){
+                    const button = document.createElement("BUTTON");
+                        button.innerText = Localization.getAdditionalContent(localizationKey);
+                        button.onclick = createChangeStatusFunction(newStatus, errorReport, operationsCell, statusChanger);
+                    operationsCell.appendChild(button);
+                }
+
+                function createChangeStatusFunction(status, errorReport, operationsCell, statusChanger){
+                    return function(e){
+                        e.stopPropagation();
+                        statusChanger(status);
+                        errorReport.status = status;
+                        addOperationButtons(errorReport, operationsCell, statusChanger);
+                    }
+                }
+            }
         }
     }
 
@@ -186,10 +239,14 @@
         )
     }
 
-    function markErrorReports(ids, status){
+    function markErrorReports(ids, status, callback){
         const request = new Request(Mapping.getEndpoint("ERROR_REPORT_MARK_ERRORS", {status: status}), ids);
             request.processValidResponse = function(){
                 Localization.getAdditionalContent("error-reports-marked");
+
+                if(callback){
+                    callback();
+                }
             }
         dao.sendRequestAsync(request);
     }

@@ -169,6 +169,10 @@
     "delete-error-reports-confirmation-dialog-detail": "Biztosan törölni szeretné a következő hibajelentéseket: {ids}?",
     "delete-error-reports-confirmation-dialog-confirm-button": "Törlés",
     "delete-error-reports-confirmation-dialog-cancel-button": "Mégse",
-    "error-reports-marked": "Hibajekentés(ek) megjelölve.."
+    "error-reports-marked": "Hibajekentés(ek) megjelölve.",
+    "delete-error-report-button": "Törlés",
+    "mark-error-report-button": "Megjelöl",
+    "mark-error-report-as-unread-button": "Olvasatlannak jelöl",
+    "mark-error-report-as-read-button": "Olvasottnak jelöl"
   }
 }
