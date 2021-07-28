@@ -5,6 +5,7 @@
     scriptLoader.loadScript("/res/notebook/js/content/checklist/checklist_node_factory.js")
     scriptLoader.loadScript("/res/notebook/js/content/table/table_node_factory.js")
     scriptLoader.loadScript("/res/notebook/js/content/checklist_table/checklist_table_node_factory.js")
+    scriptLoader.loadScript("/res/notebook/js/content/action_button_factory.js")
 
     scriptLoader.loadScript("/res/notebook/js/content/link/link_node_factory.js");
 

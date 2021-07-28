@@ -53,6 +53,8 @@ window.Mapping = new function(){
         NOTEBOOK_ORDER_CHECKLIST_ITEMS: new Endpoint("/api/notebook/checklist/{listItemId}/order", HttpMethod.POST),
         CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE: new Endpoint("/api/notebook/table/{listItemId}/convert-to-checklist-table", HttpMethod.POST),
         CLONE_NOTEBOOK_LIST_ITEM: new Endpoint("/api/notebook/{listItemId}/clone", HttpMethod.POST),
+        NOTEBOOK_PIN_LIST_ITEM: new Endpoint("/api/notebook/item/{listItemId}/pin", HttpMethod.POST),
+        NOTEBOOK_GET_PINNED_ITEMS: new Endpoint("/api/notebook/item/pinned", HttpMethod.GET),
 
         LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),
         LOGOUT: new Endpoint("/api/user/authentication/logout", HttpMethod.POST),

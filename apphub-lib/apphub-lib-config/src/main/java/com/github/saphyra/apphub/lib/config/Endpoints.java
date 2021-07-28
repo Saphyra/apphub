@@ -92,6 +92,8 @@ public class Endpoints {
     public static final String NOTEBOOK_CATEGORY_CONTENT_VIEW = "/web/notebook/content/category";
     public static final String NOTEBOOK_DELETE_LIST_ITEM = "/api/notebook/item/{listItemId}";
     public static final String NOTEBOOK_EDIT_LIST_ITEM = "/api/notebook/item/{listItemId}";
+    public static final String NOTEBOOK_PIN_LIST_ITEM = "/api/notebook/item/{listItemId}/pin";
+    public static final String NOTEBOOK_GET_PINNED_ITEMS = "/api/notebook/item/pinned";
     public static final String NOTEBOOK_GET_TEXT = "/api/notebook/text/{listItemId}";
     public static final String NOTEBOOK_EDIT_TEXT = "/api/notebook/text/{listItemId}";
     public static final String NOTEBOOK_CREATE_LINK = "/api/notebook/link";

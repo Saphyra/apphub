@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.service.category;
+package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
@@ -14,7 +14,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class NotebookViewFactory {
+public class NotebookViewFactory {
     private final ContentDao contentDao;
 
     public NotebookView create(ListItem listItem) {
@@ -24,6 +24,7 @@ class NotebookViewFactory {
             .title(listItem.getTitle())
             .type(listItem.getType().name())
             .value(value)
+            .pinned(listItem.isPinned())
             .build();
     }
 

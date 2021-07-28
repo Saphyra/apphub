@@ -20,4 +20,16 @@
         <addPrimaryKey schemaName="notebook" tableName="list_item" columnNames="list_item_id" constraintName="list_item_pk"/>
     </changeSet>
 
+    <changeSet id="add-column-pinned-to-list_item" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="notebook" tableName="list_item" columnName="pinned"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="notebook" tableName="list_item">
+            <column name="pinned" type="text"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
