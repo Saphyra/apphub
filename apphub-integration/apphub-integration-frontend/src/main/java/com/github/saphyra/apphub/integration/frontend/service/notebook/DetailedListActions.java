@@ -40,4 +40,8 @@ public class DetailedListActions {
     public static void closeEditListItemWindow(WebDriver driver) {
         NotebookPage.closeEditListItemWindowButton(driver).click();
     }
+
+    public static boolean isDisplayed(WebDriver driver) {
+        return NotebookPage.categoryContent(driver).isDisplayed();
+    }
 }

@@ -1,9 +1,13 @@
 package com.github.saphyra.apphub.integration.frontend.model.notebook;
 
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.common.model.ListItemType;
+import com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.frontend.service.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.frontend.service.notebook.NotebookPageActions;
+import com.github.saphyra.apphub.integration.frontend.service.notebook.PinnedItemActions;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,6 +20,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @AllArgsConstructor
+@Slf4j
 public class ListItemDetailsItem {
     private static final String CONFIRMATION_DIALOG_ID = "deletion-confirmation-dialog";
 
@@ -24,6 +29,7 @@ public class ListItemDetailsItem {
     private static final By DELETE_BUTTON = By.cssSelector(":scope .list-item-options-button-list-wrapper .delete-button");
     private static final By EDIT_BUTTON = By.cssSelector(":scope .list-item-options-button-list-wrapper .edit-button");
     private static final By CLONE_BUTTON = By.cssSelector(":scope .list-item-options-button-list-wrapper .clone-button");
+    private static final By PIN_BUTTON = By.cssSelector(":scope .list-item-options-button-list-wrapper .pin-button");
 
     private final WebElement webElement;
 
@@ -85,5 +91,23 @@ public class ListItemDetailsItem {
 
     public String getId() {
         return webElement.getAttribute("id");
+    }
+
+    public void pin(WebDriver driver) {
+        String title = getTitle();
+
+        openOptionsMenu(driver);
+
+        WebElement cloneButton = webElement.findElement(PIN_BUTTON);
+        assertThat(cloneButton.isDisplayed()).isTrue();
+        cloneButton.click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> PinnedItemActions.getPinnedItems(driver).stream().anyMatch(pinnedItem -> pinnedItem.getTitle().equals(title)))
+            .assertTrue(title + " was not pinned.");
+    }
+
+    public boolean isPinned() {
+        return WebElementUtils.getClasses(webElement.findElement(PIN_BUTTON)).contains("pinned");
     }
 }

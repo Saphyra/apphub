@@ -297,4 +297,26 @@ public class NotebookActions {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .post(UrlFactory.create(Endpoints.NOTEBOOK_ORDER_CHECKLIST_ITEMS, "listItemId", listItemId));
     }
+
+    public static Response getPinResponse(Language language, UUID accessTokenId, UUID listItemId, Boolean pinned) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(new OneParamRequest<>(pinned))
+            .post(UrlFactory.create(Endpoints.NOTEBOOK_PIN_LIST_ITEM, "listItemId", listItemId));
+    }
+
+    public static void pin(Language language, UUID accessTokenId, UUID listItemId, Boolean pinned) {
+        Response response = getPinResponse(language, accessTokenId, listItemId, pinned);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static List<NotebookView> getPinnedItems(Language language, UUID accessTokenId) {
+        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_PINNED_ITEMS));
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.stream(response.getBody().as(NotebookView[].class))
+            .collect(Collectors.toList());
+    }
 }

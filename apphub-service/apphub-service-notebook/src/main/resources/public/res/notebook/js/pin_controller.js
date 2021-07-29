@@ -30,7 +30,9 @@
                     node.classList.add("pinned-item");
                     node.classList.add("button");
 
-                    node.innerText = item.title;
+                    const titleNode = document.createElement("SPAN");
+                        titleNode.innerText = item.title;
+                node.appendChild(titleNode);
 
                     switch(item.type){
                         case "CATEGORY":
