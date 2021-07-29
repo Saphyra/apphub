@@ -16,4 +16,5 @@ public class NotebookView {
     private String title;
     private String type;
     private String value;
+    private boolean pinned;
 }

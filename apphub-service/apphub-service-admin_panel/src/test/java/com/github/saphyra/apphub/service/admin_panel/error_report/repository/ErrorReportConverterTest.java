@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.repository;
 
+import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,18 +22,25 @@ public class ErrorReportConverterTest {
     private static final String MESSAGE = "message";
     private static final Integer RESPONSE_STATUS = 325;
     private static final String RESPONSE_BODY = "response-body";
-    private static final String EXCEPTION = "exception";
+    private static final String EXCEPTION_STRING = "exception";
     private static final UUID ID = UUID.randomUUID();
 
     @Mock
     private UuidConverter uuidConverter;
 
+    @Mock
+    private ObjectMapperWrapper objectMapperWrapper;
+
     @InjectMocks
     private ErrorReportConverter underTest;
+
+    @Mock
+    private ExceptionModel exceptionModel;
 
     @Test
     public void convertEntity() {
         given(uuidConverter.convertEntity(ID_STRING)).willReturn(ID);
+        given(objectMapperWrapper.readValue(EXCEPTION_STRING, ExceptionModel.class)).willReturn(exceptionModel);
 
         ErrorReportEntity entity = ErrorReportEntity.builder()
             .id(ID_STRING)
@@ -39,7 +48,8 @@ public class ErrorReportConverterTest {
             .message(MESSAGE)
             .responseStatus(RESPONSE_STATUS)
             .responseBody(RESPONSE_BODY)
-            .exception(EXCEPTION)
+            .exception(EXCEPTION_STRING)
+            .status(ErrorReportStatus.UNREAD.name())
             .build();
 
         ErrorReport result = underTest.convertEntity(entity);
@@ -49,12 +59,14 @@ public class ErrorReportConverterTest {
         assertThat(result.getMessage()).isEqualTo(MESSAGE);
         assertThat(result.getResponseStatus()).isEqualTo(RESPONSE_STATUS);
         assertThat(result.getResponseBody()).isEqualTo(RESPONSE_BODY);
-        assertThat(result.getException()).isEqualTo(EXCEPTION);
+        assertThat(result.getException()).isEqualTo(exceptionModel);
+        assertThat(result.getStatus()).isEqualTo(ErrorReportStatus.UNREAD);
     }
 
     @Test
     public void convertDomain() {
         given(uuidConverter.convertDomain(ID)).willReturn(ID_STRING);
+        given(objectMapperWrapper.writeValueAsString(exceptionModel)).willReturn(EXCEPTION_STRING);
 
         ErrorReport domain = ErrorReport.builder()
             .id(ID)
@@ -62,7 +74,8 @@ public class ErrorReportConverterTest {
             .message(MESSAGE)
             .responseStatus(RESPONSE_STATUS)
             .responseBody(RESPONSE_BODY)
-            .exception(EXCEPTION)
+            .exception(exceptionModel)
+            .status(ErrorReportStatus.UNREAD)
             .build();
 
         ErrorReportEntity result = underTest.convertDomain(domain);
@@ -72,6 +85,7 @@ public class ErrorReportConverterTest {
         assertThat(result.getMessage()).isEqualTo(MESSAGE);
         assertThat(result.getResponseStatus()).isEqualTo(RESPONSE_STATUS);
         assertThat(result.getResponseBody()).isEqualTo(RESPONSE_BODY);
-        assertThat(result.getException()).isEqualTo(EXCEPTION);
+        assertThat(result.getException()).isEqualTo(EXCEPTION_STRING);
+        assertThat(result.getStatus()).isEqualTo(ErrorReportStatus.UNREAD.name());
     }
 }

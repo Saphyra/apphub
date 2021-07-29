@@ -6,5 +6,9 @@
   {
     "id": "disabled-role-management",
     "url": "/web/admin-panel/disabled-role-management"
+  },
+  {
+    "id": "error-report",
+    "url": "/web/admin-panel/error-report"
   }
 ]

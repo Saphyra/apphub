@@ -9,6 +9,7 @@
     scriptLoader.loadScript("/res/notebook/js/content/content_controller.js");
     scriptLoader.loadScript("/res/notebook/js/content/list_item_clone_service.js");
     scriptLoader.loadScript("/res/notebook/js/list_item_edition_service.js");
+    scriptLoader.loadScript("/res/notebook/js/pin_controller.js");
 
     events.OPEN_CREATE_CATEGORY_DIALOG = "OPEN_CREATE_CATEGORY_DIALOG";
     events.OPEN_CREATE_TEXT_DIALOG = "OPEN_CREATE_TEXT_DIALOG";
@@ -21,6 +22,10 @@
     events.OPEN_CREATE_CHECKLIST_DIALOG = "OPEN_CREATE_CHECKLIST_DIALOG";
     events.OPEN_CREATE_TABLE_DIALOG = "OPEN_CREATE_TABLE_DIALOG";
     events.OPEN_CREATE_CHECKLIST_TABLE_DIALOG = "OPEN_CREATE_CHECKLIST_TABLE_DIALOG";
+
+    window.ids = {
+        pinnedItems: "pinned-items"
+    }
 
     $(document).ready(function(){
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "notebook", fileName: "notebook"}));

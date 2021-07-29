@@ -1,0 +1,178 @@
+{
+  "title": "Apphub - Error reports",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Error reports"
+      }
+    ],
+    "search-bar-label": [
+      {
+        "key": "innerHTML",
+        "message": "Search"
+      }
+    ],
+    "column-name-timestamp": [
+      {
+        "key": "innerHTML",
+        "message": "Occurred"
+      }
+    ],
+    "column-name-status-code": [
+      {
+        "key": "innerHTML",
+        "message": "Response code"
+      }
+    ],
+    "column-name-message": [
+      {
+        "key": "innerHTML",
+        "message": "Message"
+      }
+    ],
+    "search-by-message": [
+      {
+        "key": "placeholder",
+        "message": "Message"
+      }
+    ],
+    "search-by-status-code": [
+      {
+        "key": "placeholder",
+        "message": "Response code"
+      }
+    ],
+    "search-by-start-time-label": [
+      {
+        "key": "innerHTML",
+        "message": "Start date"
+      }
+    ],
+    "search-by-start-time": [
+      {
+        "key": "placeholder",
+        "message": "YYYY-MM-DD hh:mm:ss"
+      }
+    ],
+    "search-by-start-end-label": [
+      {
+        "key": "innerHTML",
+        "message": "End date"
+      }
+    ],
+    "search-by-end-time": [
+      {
+        "key": "placeholder",
+        "message": "YYYY-MM-DD hh:mm:ss"
+      }
+    ],
+    "objects-per-page-label": [
+      {
+        "key": "innerHTML",
+        "message": "Objects/page"
+      }
+    ],
+    "search-by-status-all": [
+      {
+        "key": "innerHTML",
+        "message": "All"
+      }
+    ],
+    "search-by-status-marked": [
+      {
+        "key": "innerHTML",
+        "message": "Marked"
+      }
+    ],
+    "search-by-status-read": [
+      {
+        "key": "innerHTML",
+        "message": "Read"
+      }
+    ],
+    "search-by-status-unread": [
+      {
+        "key": "innerHTML",
+        "message": "Unread"
+      }
+    ],
+    "search-button": [
+      {
+        "key": "innerHTML",
+        "message": "Search"
+      }
+    ],
+    "previous-button": [
+      {
+        "key": "innerHTML",
+        "message": "Previous"
+      }
+    ],
+    "next-button": [
+      {
+        "key": "innerHTML",
+        "message": "Next"
+      }
+    ],
+    "error-report-details-message-label": [
+      {
+        "key": "innerHTML",
+        "message": "Message"
+      }
+    ],
+    "error-report-details-response-label": [
+      {
+        "key": "innerHTML",
+        "message": "Response"
+      }
+    ],
+    "error-report-details-exception-label": [
+      {
+        "key": "innerHTML",
+        "message": "Exception"
+      }
+    ],
+    "error-report-details-delete-report-button": [
+      {
+        "key": "innerHTML",
+        "message": "Delete"
+      }
+    ],
+    "error-report-details-mark-as-unread-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mark as unread"
+      }
+    ],
+    "error-report-details-mark-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mark"
+      }
+    ],
+    "error-report-details-unmark-button": [
+      {
+        "key": "innerHTML",
+        "message": "Unmark"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Back"
+      }
+    ]
+  },
+  "additionalContent": {
+    "delete-error-reports-confirmation-dialog-title": "Confirm deleting error reports",
+    "delete-error-reports-confirmation-dialog-detail": "Are you sure you want to delete reports {ids}?",
+    "delete-error-reports-confirmation-dialog-confirm-button": "Delete",
+    "delete-error-reports-confirmation-dialog-cancel-button": "Cancel",
+    "error-reports-marked": "Error report(s) is/are marked.",
+    "delete-error-report-button": "Delete",
+    "mark-error-report-button": "Mark",
+    "mark-error-report-as-unread-button": "Mark as unread",
+    "mark-error-report-as-read-button": "Mark as read"
+  }
+}

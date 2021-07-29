@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.integration.frontend.service.notebook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 
 import java.util.List;
 
@@ -512,5 +511,13 @@ class NotebookPage {
 
     public static WebElement closeCreateTableButton(WebDriver driver) {
         return driver.findElement(By.id("create-table-close-button"));
+    }
+
+    public static List<WebElement> pinnedItems(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#pinned-items .pinned-item"));
+    }
+
+    public static WebElement categoryContent(WebDriver driver) {
+        return driver.findElement(By.id("category-content"));
     }
 }

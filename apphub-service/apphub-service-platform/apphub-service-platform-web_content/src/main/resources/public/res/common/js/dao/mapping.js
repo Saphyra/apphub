@@ -20,8 +20,10 @@ window.Mapping = new function(){
         CHANGE_PASSWORD: new Endpoint("/api/user/account/password", HttpMethod.POST),
         CHANGE_USERNAME: new Endpoint("/api/user/account/username", HttpMethod.POST),
         CHECK_SESSION: new Endpoint("/api/user/authentication/session", HttpMethod.GET),
-        CLONE_NOTEBOOK_LIST_ITEM: new Endpoint("/api/notebook/{listItemId}/clone", HttpMethod.POST),
-        CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE: new Endpoint("/api/notebook/table/{listItemId}/convert-to-checklist-table", HttpMethod.POST),
+        ERROR_REPORT_GET_ERRORS: new Endpoint("/api/admin-panel/error-report", HttpMethod.POST),
+        ERROR_REPORT_DELETE_ERRORS: new Endpoint("/api/admin-panel/error-report", HttpMethod.DELETE),
+        ERROR_REPORT_GET_ERROR: new Endpoint("/api/admin-panel/error-report/{id}", HttpMethod.GET),
+        ERROR_REPORT_MARK_ERRORS: new Endpoint("/api/admin-panel/error-report/mark/{status}", HttpMethod.POST),
 
         CREATE_NOTEBOOK_CATEGORY: new Endpoint("/api/notebook/category", HttpMethod.PUT),
         CREATE_NOTEBOOK_LINK: new Endpoint("/api/notebook/link", HttpMethod.PUT),
@@ -49,6 +51,10 @@ window.Mapping = new function(){
         NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST: new Endpoint("/api/notebook/checklist/{listItemId}/checked", HttpMethod.DELETE),
         NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST_TABLE: new Endpoint("/api/notebook/checklist-table/{listItemId}/checked", HttpMethod.DELETE),
         NOTEBOOK_ORDER_CHECKLIST_ITEMS: new Endpoint("/api/notebook/checklist/{listItemId}/order", HttpMethod.POST),
+        CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE: new Endpoint("/api/notebook/table/{listItemId}/convert-to-checklist-table", HttpMethod.POST),
+        CLONE_NOTEBOOK_LIST_ITEM: new Endpoint("/api/notebook/{listItemId}/clone", HttpMethod.POST),
+        NOTEBOOK_PIN_LIST_ITEM: new Endpoint("/api/notebook/item/{listItemId}/pin", HttpMethod.POST),
+        NOTEBOOK_GET_PINNED_ITEMS: new Endpoint("/api/notebook/item/pinned", HttpMethod.GET),
 
         LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),
         LOGOUT: new Endpoint("/api/user/authentication/logout", HttpMethod.POST),

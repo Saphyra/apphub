@@ -82,7 +82,7 @@ public class ChecklistActions {
             .assertTrue();
     }
 
-    private static Boolean isViewChecklistWindowOpened(WebDriver driver) {
+    public static Boolean isViewChecklistWindowOpened(WebDriver driver) {
         return NotebookPage.viewChecklistWindow(driver).isDisplayed();
     }
 

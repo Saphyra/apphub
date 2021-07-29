@@ -8,6 +8,7 @@ public class Endpoints {
     public static final String ADMIN_PANEL_INDEX_PAGE = "/web/admin-panel";
     public static final String ADMIN_PANEL_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/role-management";
     public static final String ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/disabled-role-management";
+    public static final String ADMIN_PANEL_ERROR_REPORT_PAGE = "/web/admin-panel/error-report";
     public static final String ERROR_PAGE = "/web/error";
     public static final String NOTEBOOK_PAGE = "/web/notebook";
     public static final String SKYXPLORE_MAIN_MENU_PAGE = "/web/skyxplore";
@@ -42,6 +43,11 @@ public class Endpoints {
 
     //ERROR REPORTING
     public static final String ADMIN_PANEL_INTERNAL_REPORT_ERROR = "/internal/admin-panel/report-error";
+
+    public static final String ADMIN_PANEL_GET_ERROR_REPORTS = "/api/admin-panel/error-report";
+    public static final String ADMIN_PANEL_GET_ERROR_REPORT = "/api/admin-panel/error-report/{id}";
+    public static final String ADMIN_PANEL_DELETE_ERROR_REPORTS = "/api/admin-panel/error-report";
+    public static final String ADMIN_PANEL_MARK_ERROR_REPORTS = "/api/admin-panel/error-report/mark/{status}";
 
     //LOGIN
     public static final String LOGIN = "/api/user/authentication/login";
@@ -86,6 +92,8 @@ public class Endpoints {
     public static final String NOTEBOOK_CATEGORY_CONTENT_VIEW = "/web/notebook/content/category";
     public static final String NOTEBOOK_DELETE_LIST_ITEM = "/api/notebook/item/{listItemId}";
     public static final String NOTEBOOK_EDIT_LIST_ITEM = "/api/notebook/item/{listItemId}";
+    public static final String NOTEBOOK_PIN_LIST_ITEM = "/api/notebook/item/{listItemId}/pin";
+    public static final String NOTEBOOK_GET_PINNED_ITEMS = "/api/notebook/item/pinned";
     public static final String NOTEBOOK_GET_TEXT = "/api/notebook/text/{listItemId}";
     public static final String NOTEBOOK_EDIT_TEXT = "/api/notebook/text/{listItemId}";
     public static final String NOTEBOOK_CREATE_LINK = "/api/notebook/link";

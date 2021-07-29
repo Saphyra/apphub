@@ -12,3 +12,8 @@ role:
         - GET
       requiredRoles:
         - ADMIN
+    - pattern: /api/admin-panel/error-report
+      methods:
+        - POST
+      requiredRoles:
+        - ADMIN

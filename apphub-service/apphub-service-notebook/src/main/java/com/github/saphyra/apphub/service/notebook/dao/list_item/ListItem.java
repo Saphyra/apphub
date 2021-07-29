@@ -24,4 +24,6 @@ public class ListItem {
 
     @NonNull
     private String title;
+
+    private boolean pinned;
 }

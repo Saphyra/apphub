@@ -42,4 +42,16 @@ public abstract class RestException extends RuntimeException {
         this.responseStatus = status;
         this.errorMessage = errorMessage;
     }
+
+    public RestException(HttpStatus status, ErrorCode errorCode, Map<String, String> params, String message, Exception cause) {
+        super(message, cause);
+        this.responseStatus = status;
+        this.errorMessage = new ErrorMessage(errorCode, params);
+    }
+
+    public RestException(HttpStatus status, ErrorCode errorCode, String message, Throwable cause) {
+        super(message, cause);
+        this.responseStatus = status;
+        this.errorMessage = new ErrorMessage(errorCode);
+    }
 }

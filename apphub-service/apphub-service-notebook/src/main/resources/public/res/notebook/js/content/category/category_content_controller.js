@@ -3,6 +3,9 @@
 
     window.categoryContentController = new function(){
         this.loadCategoryContent = loadCategoryContent;
+        this.reloadCategoryContent = function(){
+            loadCategoryContent(currentCategoryId, false);
+        }
         this.getCurrentCategoryId = function(){
             return currentCategoryId;
         }

@@ -121,7 +121,7 @@ public class TableActions {
             .assertTrue();
     }
 
-    private static boolean isViewTableWindowOpened(WebDriver driver) {
+    public static boolean isViewTableWindowOpened(WebDriver driver) {
         return NotebookPage.viewTableWindow(driver).isDisplayed();
     }
 

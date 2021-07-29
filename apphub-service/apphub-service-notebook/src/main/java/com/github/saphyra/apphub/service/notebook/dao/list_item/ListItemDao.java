@@ -46,4 +46,8 @@ public class ListItemDao extends AbstractDao<ListItemEntity, ListItem, String, L
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }
+
+    public List<ListItem> getByUserId(UUID userId) {
+        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
+    }
 }

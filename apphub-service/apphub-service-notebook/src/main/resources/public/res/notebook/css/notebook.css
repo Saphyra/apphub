@@ -10,6 +10,16 @@ body{
     background-color: black;
 }
 
+    #left-bar{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: var(--category-list-width);
+        border-right: 3px ridge white;
+        overflow: auto;
+    }
+
      #contents{
         position: absolute;
         top: 0;
@@ -38,7 +48,7 @@ body{
     border-color: rgb(40,40,255);
 }
 
-.checklist{
+.checklist, .pinned{
     border-color: orange;
 }
 
@@ -48,6 +58,14 @@ body{
 
 .checklist-table{
     border-color: purple;
+}
+
+.pin-button{
+    background-image: url(/res/common/images/pin.png);
+    background-size: cover;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-width: 2px;
 }
 
 .no-content{

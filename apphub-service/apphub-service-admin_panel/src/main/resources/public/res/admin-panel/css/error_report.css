@@ -1,0 +1,43 @@
+#search-bar{
+    margin: 0 1rem;
+}
+
+#page-bar{
+    margin: 1rem;
+}
+
+#content-table{
+    margin: 1rem auto;
+}
+
+    #error-reports tr{
+        text-align: center;
+    }
+
+        #error-reports td{
+            cursor: pointer;
+        }
+
+
+    .unread{
+        color: yellow;
+    }
+
+    .marked{
+        color: red;
+    }
+
+#close-error-report-details-button{
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 1.5rem;
+}
+
+#error-report-details fieldset{
+    margin: 1rem;
+}
+
+    .stack-trace-wrapper{
+        padding-left: 2rem;
+    }

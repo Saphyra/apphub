@@ -102,4 +102,23 @@ public class ListItemRepositoryTest {
 
         assertThat(underTest.findAll()).containsExactly(entity1);
     }
+
+    @Test
+    public void getByUserId() {
+        ListItemEntity entity1 = ListItemEntity.builder()
+            .listItemId(LIST_ITEM_ID_1)
+            .userId(USER_ID_1)
+            .parent(PARENT_1)
+            .build();
+        ListItemEntity entity2 = ListItemEntity.builder()
+            .listItemId(LIST_ITEM_ID_2)
+            .userId(USER_ID_2)
+            .parent(PARENT_1)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2));
+
+        List<ListItemEntity> result = underTest.getByUserId(USER_ID_1);
+
+        assertThat(result).containsExactly(entity1);
+    }
 }

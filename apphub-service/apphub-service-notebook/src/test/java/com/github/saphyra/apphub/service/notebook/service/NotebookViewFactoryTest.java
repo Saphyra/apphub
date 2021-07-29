@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.service.category;
+package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
@@ -41,6 +41,7 @@ public class NotebookViewFactoryTest {
             .parent(PARENT)
             .type(ListItemType.CATEGORY)
             .title(TITLE)
+            .pinned(true)
             .build();
 
         NotebookView result = underTest.create(listItem);
@@ -49,6 +50,7 @@ public class NotebookViewFactoryTest {
         assertThat(result.getTitle()).isEqualTo(TITLE);
         assertThat(result.getType()).isEqualTo(ListItemType.CATEGORY.name());
         assertThat(result.getValue()).isNull();
+        assertThat(result.isPinned()).isTrue();
     }
 
     @Test
@@ -59,6 +61,7 @@ public class NotebookViewFactoryTest {
             .parent(PARENT)
             .type(ListItemType.LINK)
             .title(TITLE)
+            .pinned(true)
             .build();
 
         given(contentDao.findByParentValidated(LIST_ITEM_ID)).willReturn(content);
@@ -70,5 +73,6 @@ public class NotebookViewFactoryTest {
         assertThat(result.getTitle()).isEqualTo(TITLE);
         assertThat(result.getType()).isEqualTo(ListItemType.LINK.name());
         assertThat(result.getValue()).isEqualTo(VALUE);
+        assertThat(result.isPinned()).isTrue();
     }
 }

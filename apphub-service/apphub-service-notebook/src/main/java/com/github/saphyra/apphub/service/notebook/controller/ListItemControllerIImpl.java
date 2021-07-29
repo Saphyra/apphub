@@ -1,15 +1,19 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.notebook.model.request.EditListItemRequest;
+import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.api.notebook.server.ListItemController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.ListItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemEditionService;
+import com.github.saphyra.apphub.service.notebook.service.PinService;
 import com.github.saphyra.apphub.service.notebook.service.clone.ListItemCloneService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -19,6 +23,7 @@ class ListItemControllerIImpl implements ListItemController {
     private final ListItemCloneService listItemCloneService;
     private final ListItemDeletionService listItemDeletionService;
     private final ListItemEditionService listItemEditionService;
+    private final PinService pinService;
 
     @Override
     public void deleteListItem(UUID listItemId, AccessTokenHeader accessTokenHeader) {
@@ -36,5 +41,17 @@ class ListItemControllerIImpl implements ListItemController {
     public void cloneListItem(UUID listItemId) {
         log.info("Cloning listItem {}", listItemId);
         listItemCloneService.clone(listItemId);
+    }
+
+    @Override
+    public void pinListItem(UUID listItemId, OneParamRequest<Boolean> pinned, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to change pin status of list item {}", accessTokenHeader.getUserId(), listItemId);
+        pinService.pinListItem(listItemId, pinned.getValue());
+    }
+
+    @Override
+    public List<NotebookView> getPinnedItems(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants wo query his pinned items", accessTokenHeader.getUserId());
+        return pinService.getPinnedItems(accessTokenHeader.getUserId());
     }
 }

@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.StackTraceModel;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
@@ -23,6 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,7 +44,12 @@ public class ErrorReporterControllerImplTestIt_reportError {
     private static final String LOCALIZED_MESSAGE = "localized-message";
     private static final Integer RESPONSE_STATUS = 32;
     private static final String RESPONSE_BODY = "response-body";
-    private static final String EXCEPTION = "exception";
+    private static final String FILE_NAME = "file-name";
+    private static final String CLASS_NAME = "class-name";
+    private static final String METHOD_NAME = "method-name";
+    private static final Integer LINE_NUMBER = 42;
+    private static final String EXCEPTION_TYPE = "exception-type";
+    private static final String EXCEPTION_THREAD = "exception-thread";
 
     @LocalServerPort
     private int serverPort;
@@ -91,11 +99,24 @@ public class ErrorReporterControllerImplTestIt_reportError {
 
     @Test
     public void saveReport() {
+        StackTraceModel stackTraceModel = StackTraceModel.builder()
+            .fileName(FILE_NAME)
+            .className(CLASS_NAME)
+            .methodName(METHOD_NAME)
+            .lineNumber(LINE_NUMBER)
+            .build();
+
+        ExceptionModel exceptionModel = ExceptionModel.builder()
+            .type(EXCEPTION_TYPE)
+            .thread(EXCEPTION_THREAD)
+            .stackTrace(Arrays.asList(stackTraceModel))
+            .build();
+
         ErrorReportModel model = ErrorReportModel.builder()
             .message(MESSAGE)
             .responseStatus(RESPONSE_STATUS)
             .responseBody(RESPONSE_BODY)
-            .exception(EXCEPTION)
+            .exception(exceptionModel)
             .build();
 
         Response response = RequestFactory.createRequest()
@@ -112,6 +133,6 @@ public class ErrorReporterControllerImplTestIt_reportError {
         assertThat(report.getMessage()).isEqualTo(MESSAGE);
         assertThat(report.getResponseStatus()).isEqualTo(RESPONSE_STATUS);
         assertThat(report.getResponseBody()).isEqualTo(RESPONSE_BODY);
-        assertThat(report.getException()).isEqualTo(EXCEPTION);
+        assertThat(report.getException()).isEqualTo(exceptionModel);
     }
 }

@@ -102,4 +102,15 @@ public class ListItemDaoTest {
 
         verify(repository).deleteByUserId(USER_ID_STRING);
     }
+
+    @Test
+    public void getByUserId() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(repository.getByUserId(USER_ID_STRING)).willReturn(Arrays.asList(entity));
+        given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(domain));
+
+        List<ListItem> result = underTest.getByUserId(USER_ID);
+
+        assertThat(result).containsExactly(domain);
+    }
 }

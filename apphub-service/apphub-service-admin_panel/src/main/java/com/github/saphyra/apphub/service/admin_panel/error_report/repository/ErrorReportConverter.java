@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.repository;
 
+import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import org.springframework.stereotype.Component;
 
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 class ErrorReportConverter extends ConverterBase<ErrorReportEntity, ErrorReport> {
     private final UuidConverter uuidConverter;
+    private final ObjectMapperWrapper objectMapperWrapper;
 
     @Override
     protected ErrorReport processEntityConversion(ErrorReportEntity entity) {
@@ -21,7 +24,8 @@ class ErrorReportConverter extends ConverterBase<ErrorReportEntity, ErrorReport>
             .message(entity.getMessage())
             .responseStatus(entity.getResponseStatus())
             .responseBody(entity.getResponseBody())
-            .exception(entity.getException())
+            .exception(objectMapperWrapper.readValue(entity.getException(), ExceptionModel.class))
+            .status(ErrorReportStatus.valueOf(entity.getStatus()))
             .build();
     }
 
@@ -33,7 +37,8 @@ class ErrorReportConverter extends ConverterBase<ErrorReportEntity, ErrorReport>
             .message(domain.getMessage())
             .responseStatus(domain.getResponseStatus())
             .responseBody(domain.getResponseBody())
-            .exception(domain.getException())
+            .exception(objectMapperWrapper.writeValueAsString(domain.getException()))
+            .status(domain.getStatus().name())
             .build();
     }
 }

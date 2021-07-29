@@ -10,4 +10,6 @@ interface ListItemRepository extends CrudRepository<ListItemEntity, String> {
     List<ListItemEntity> getByUserIdAndParent(String userId, String parent);
 
     void deleteByUserId(String userID);
+
+    List<ListItemEntity> getByUserId(String userId);
 }

@@ -1,18 +1,25 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.notebook.model.request.EditListItemRequest;
+import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.ListItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemEditionService;
+import com.github.saphyra.apphub.service.notebook.service.PinService;
 import com.github.saphyra.apphub.service.notebook.service.clone.ListItemCloneService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -30,6 +37,9 @@ public class ListItemControllerIImplTest {
     @Mock
     private ListItemCloneService listItemCloneService;
 
+    @Mock
+    private PinService pinService;
+
     @InjectMocks
     private ListItemControllerIImpl underTest;
 
@@ -39,10 +49,16 @@ public class ListItemControllerIImplTest {
     @Mock
     private EditListItemRequest editListItemRequest;
 
+    @Mock
+    private NotebookView notebookView;
+
+    @Before
+    public void setUp() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+    }
+
     @Test
     public void deleteListItem() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-
         underTest.deleteListItem(LIST_ITEM_ID, accessTokenHeader);
 
         verify(listItemDeletionService).deleteListItem(LIST_ITEM_ID, USER_ID);
@@ -60,5 +76,21 @@ public class ListItemControllerIImplTest {
         underTest.cloneListItem(LIST_ITEM_ID);
 
         verify(listItemCloneService).clone(LIST_ITEM_ID);
+    }
+
+    @Test
+    public void pinListItem() {
+        underTest.pinListItem(LIST_ITEM_ID, new OneParamRequest<>(true), accessTokenHeader);
+
+        verify(pinService).pinListItem(LIST_ITEM_ID, true);
+    }
+
+    @Test
+    public void getPinnedItems() {
+        given(pinService.getPinnedItems(USER_ID)).willReturn(Arrays.asList(notebookView));
+
+        List<NotebookView> result = underTest.getPinnedItems(accessTokenHeader);
+
+        assertThat(result).containsExactly(notebookView);
     }
 }

@@ -79,7 +79,7 @@
 
                         const isOpened = openedCategories.indexOf(createWrapperId(category.categoryId)) > -1;
 
-                        if(isOpened){
+                        if(isOpened || category.categoryId == null){
                             toggleButton.innerHTML = "^";
                         }else{
                             toggleButton.innerHTML = "v";

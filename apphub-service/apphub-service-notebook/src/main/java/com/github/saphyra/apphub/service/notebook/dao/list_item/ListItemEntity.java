@@ -29,4 +29,6 @@ class ListItemEntity {
     private ListItemType type;
 
     private String title;
+
+    private String pinned;
 }
