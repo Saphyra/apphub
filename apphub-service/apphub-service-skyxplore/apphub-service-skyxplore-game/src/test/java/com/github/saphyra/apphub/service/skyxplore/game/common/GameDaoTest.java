@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -71,5 +72,16 @@ public class GameDaoTest {
         underTest.delete(game);
 
         assertThat(underTest.findByUserId(USER_ID)).isEmpty();
+    }
+
+    @Test
+    public void getAll() {
+        underTest.save(game);
+
+        List<Game> result = underTest.getAll();
+
+        assertThat(result).containsExactly(game);
+        result.clear();
+        assertThat(underTest.getAll()).containsExactly(game);
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -28,17 +29,20 @@ public class GameDeletionService implements DeleteByUserIdDao {
     @Transactional
     public void deleteByUserId(UUID userId) {
         log.info("Processing games for deletion of user {}", userId);
-        playerDao.getByUserId(userId)
-            .stream()
-            .peek(playerModel -> playerModel.setAi(true))
-            .peek(playerModel -> playerModel.setUsername(playerModel.getUsername() + " (AI)"))
-            .forEach(playerDao::save);
-
-        gameDao.getByHost(userId)
+        List<UUID> deletedGameIds = gameDao.getByHost(userId)
             .stream()
             .map(GameItem::getGameId)
             .peek(gameId -> log.info("Deleting game by id {} of host {}", gameId, userId))
-            .forEach(this::deleteByGamaId);
+            .peek(this::deleteByGamaId)
+            .collect(Collectors.toList());
+
+        playerDao.getByUserId(userId)
+            .stream()
+            .filter(playerModel -> !deletedGameIds.contains(playerModel.getGameId()))
+            .peek(playerModel -> log.info("Setting player {} to AI", playerModel.getId()))
+            .peek(playerModel -> playerModel.setAi(true))
+            .peek(playerModel -> playerModel.setUsername(playerModel.getUsername() + " (AI)"))
+            .forEach(playerDao::save);
     }
 
     @Transactional

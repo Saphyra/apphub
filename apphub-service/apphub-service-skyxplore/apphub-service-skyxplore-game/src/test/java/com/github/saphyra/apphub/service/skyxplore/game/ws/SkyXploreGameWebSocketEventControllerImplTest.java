@@ -111,13 +111,14 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
         verify(player1).setConnected(true);
 
         verifyMessageSent(WebSocketEventName.SKYXPLORE_GAME_USER_JOINED);
+        verify(game).setMarkedForDeletion(false);
     }
 
     @Test
     public void userLeftGame_connectedMemberLeft() {
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
         given(game.getPlayers()).willReturn(CollectionUtils.toMap(new BiWrapper<>(USER_ID, player1), new BiWrapper<>(UUID.randomUUID(), player2)));
-        given(player2.isConnected()).willReturn(true);
+        given(game.getConnectedPlayers()).willReturn(Arrays.asList(UUID.randomUUID()));
 
         underTest.userLeftGame(USER_ID);
 

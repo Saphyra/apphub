@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -56,5 +58,9 @@ public class GameDao {
 
     public void delete(Game game) {
         repository.remove(game.getGameId());
+    }
+
+    public List<Game> getAll() {
+        return new ArrayList<>(repository.values());
     }
 }

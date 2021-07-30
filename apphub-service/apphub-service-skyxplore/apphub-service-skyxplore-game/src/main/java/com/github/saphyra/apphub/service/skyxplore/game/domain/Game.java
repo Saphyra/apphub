@@ -26,8 +26,17 @@ public class Game {
     private final Map<UUID, Alliance> alliances;
     private final Universe universe;
     private final LocalDateTime lastPlayed;
+    private boolean markedForDeletion;
 
     private final Chat chat;
+
+    public List<UUID> getConnectedPlayers() {
+        return players.values()
+            .stream()
+            .filter(Player::isConnected)
+            .map(Player::getUserId)
+            .collect(Collectors.toList());
+    }
 
     public List<UUID> filterConnectedPlayersFrom(List<UUID> members) {
         return members.stream()
