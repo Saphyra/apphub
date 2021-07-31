@@ -51,4 +51,9 @@ public class PlayerService implements GameItemService {
     public List<PlayerModel> getByParent(UUID parent) {
         return playerDao.getByGameId(parent);
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        playerDao.deleteById(id);
+    }
 }

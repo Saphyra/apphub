@@ -29,4 +29,8 @@ public class SurfaceDao extends AbstractDao<SurfaceEntity, SurfaceModel, String,
     public List<SurfaceModel> getByPlanetId(UUID planetId) {
         return converter.convertEntity(repository.getByPlanetId(uuidConverter.convertDomain(planetId)));
     }
+
+    public void deleteById(UUID surfaceId) {
+        deleteById(uuidConverter.convertDomain(surfaceId));
+    }
 }

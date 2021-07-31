@@ -51,4 +51,9 @@ public class SystemConnectionService implements GameItemService {
     public List<SystemConnectionModel> getByParent(UUID parent) {
         return systemConnectionDao.getByGameId(parent);
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        systemConnectionDao.deleteById(id);
+    }
 }

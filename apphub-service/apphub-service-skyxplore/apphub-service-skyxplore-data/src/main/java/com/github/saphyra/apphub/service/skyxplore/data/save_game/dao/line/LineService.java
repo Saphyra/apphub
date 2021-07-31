@@ -51,4 +51,9 @@ public class LineService implements GameItemService {
     public List<LineModel> getByParent(UUID parent) {
         return lineDao.getByReferenceId(parent);
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        lineDao.deleteById(id);
+    }
 }

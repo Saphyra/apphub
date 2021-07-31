@@ -75,4 +75,11 @@ public class CitizenServiceTest {
 
         assertThat(result).containsExactly(citizen);
     }
+
+    @Test
+    public void deleteById() {
+        underTest.deleteById(CITIZEN_ID);
+
+        verify(citizenDao).deleteById(CITIZEN_ID);
+    }
 }

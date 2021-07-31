@@ -74,4 +74,14 @@ public class LineDaoTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(LINE_ID)).willReturn(LINE_ID_STRING);
+        given(repository.existsById(LINE_ID_STRING)).willReturn(true);
+
+        underTest.deleteById(LINE_ID);
+
+        verify(repository).deleteById(LINE_ID_STRING);
+    }
 }

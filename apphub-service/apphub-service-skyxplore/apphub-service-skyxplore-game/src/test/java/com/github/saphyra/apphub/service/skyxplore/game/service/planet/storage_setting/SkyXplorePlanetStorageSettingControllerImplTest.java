@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageSettingsResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 
@@ -46,7 +46,7 @@ public class SkyXplorePlanetStorageSettingControllerImplTest {
     private StorageSettingsResponse storageSettingsResponse;
 
     @Mock
-    private StorageSettingModel storageSettingModel;
+    private StorageSettingApiModel storageSettingModel;
 
     @Before
     public void setUp() {

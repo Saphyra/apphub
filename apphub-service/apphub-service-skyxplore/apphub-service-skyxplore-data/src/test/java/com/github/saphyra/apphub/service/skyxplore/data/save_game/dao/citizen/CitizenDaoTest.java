@@ -74,4 +74,14 @@ public class CitizenDaoTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(CITIZEN_ID)).willReturn(CITIZEN_ID_STRING);
+        given(repository.existsById(CITIZEN_ID_STRING)).willReturn(true);
+
+        underTest.deleteById(CITIZEN_ID);
+
+        verify(repository).deleteById(CITIZEN_ID_STRING);
+    }
 }

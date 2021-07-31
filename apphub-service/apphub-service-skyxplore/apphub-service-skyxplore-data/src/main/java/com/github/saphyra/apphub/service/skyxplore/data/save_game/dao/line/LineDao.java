@@ -31,4 +31,8 @@ public class LineDao extends AbstractDao<LineEntity, LineModel, String, LineRepo
     public List<LineModel> getByReferenceId(UUID referenceId) {
         return converter.convertEntity(repository.getByReferenceId(uuidConverter.convertDomain(referenceId)));
     }
+
+    public void deleteById(UUID lineId) {
+        deleteById(uuidConverter.convertDomain(lineId));
+    }
 }

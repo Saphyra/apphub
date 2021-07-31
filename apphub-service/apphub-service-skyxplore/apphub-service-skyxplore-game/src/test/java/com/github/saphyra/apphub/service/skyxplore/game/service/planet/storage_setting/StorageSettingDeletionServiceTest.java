@@ -1,11 +1,13 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -25,6 +27,9 @@ public class StorageSettingDeletionServiceTest {
 
     @Mock
     private GameDao gameDao;
+
+    @Mock
+    private GameDataProxy gameDataProxy;
 
     @InjectMocks
     private StorageSettingDeletionService underTest;
@@ -55,5 +60,6 @@ public class StorageSettingDeletionServiceTest {
         underTest.deleteStorageSetting(USER_ID, PLANET_ID, STORAGE_SETTING_ID);
 
         verify(storageSettings).deleteByStorageSettingId(STORAGE_SETTING_ID);
+        verify(gameDataProxy).deleteItem(STORAGE_SETTING_ID, GameItemType.STORAGE_SETTING);
     }
 }

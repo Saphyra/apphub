@@ -65,4 +65,11 @@ public class GameDataProxyTest {
 
         verify(dataGameClient).saveGameData(Arrays.asList(gameItem), LOCALE);
     }
+
+    @Test
+    public void deleteItem() {
+        underTest.deleteItem(ID, GameItemType.PLAYER);
+
+        verify(dataGameClient).deleteGameItem(ID, GameItemType.PLAYER, LOCALE);
+    }
 }

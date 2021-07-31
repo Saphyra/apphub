@@ -1,12 +1,16 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.PriorityModel;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.common.PriorityValidator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.priority.PriorityUpdateService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.PriorityToModelConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
 import org.junit.Test;
@@ -29,12 +33,19 @@ public class PriorityUpdateServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final Integer NEW_PRIORITY = 3421;
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
 
     @Mock
     private PriorityValidator priorityValidator;
+
+    @Mock
+    private PriorityToModelConverter priorityToModelConverter;
+
+    @Mock
+    private GameDataProxy gameDataProxy;
 
     @InjectMocks
     private PriorityUpdateService underTest;
@@ -47,6 +58,9 @@ public class PriorityUpdateServiceTest {
 
     @Mock
     private Planet planet;
+
+    @Mock
+    private PriorityModel model;
 
     @After
     public void validate() {
@@ -67,9 +81,13 @@ public class PriorityUpdateServiceTest {
         given(game.getUniverse()).willReturn(universe);
         given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
         given(planet.getPriorities()).willReturn(priorities);
+        given(game.getGameId()).willReturn(GAME_ID);
+        given(priorityToModelConverter.convert(PriorityType.CONSTRUCTION, NEW_PRIORITY, PLANET_ID, LocationType.PLANET, GAME_ID)).willReturn(model);
 
         underTest.updatePriority(USER_ID, PLANET_ID, PriorityType.CONSTRUCTION.toString(), NEW_PRIORITY);
 
         assertThat(priorities).containsEntry(PriorityType.CONSTRUCTION, NEW_PRIORITY);
+
+        verify(gameDataProxy).saveItem(model);
     }
 }

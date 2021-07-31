@@ -80,4 +80,11 @@ public class UniverseServiceTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        underTest.deleteById(ID);
+
+        verify(universeDao).deleteById(ID);
+    }
 }

@@ -21,13 +21,13 @@ public class PriorityToModelConverter {
     public List<PriorityModel> convert(Map<PriorityType, Integer> priorities, UUID location, LocationType locationType, Game game) {
         return priorities.entrySet()
             .stream()
-            .map(entry -> convert(entry.getKey(), entry.getValue(), location, locationType, game))
+            .map(entry -> convert(entry.getKey(), entry.getValue(), location, locationType, game.getGameId()))
             .collect(Collectors.toList());
     }
 
-    private PriorityModel convert(PriorityType priorityType, Integer value, UUID location, LocationType locationType, Game game) {
+    public PriorityModel convert(PriorityType priorityType, Integer value, UUID location, LocationType locationType, UUID gameId) {
         PriorityModel model = new PriorityModel();
-        model.setGameId(game.getGameId());
+        model.setGameId(gameId);
         model.setType(GameItemType.PRIORITY);
         model.setLocation(location);
         model.setLocationType(locationType.name());

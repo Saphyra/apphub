@@ -30,4 +30,8 @@ public class AllocatedResourceDao extends AbstractDao<AllocatedResourceEntity, A
     public List<AllocatedResourceModel> getByLocation(UUID location) {
         return converter.convertEntity(repository.getByLocation(uuidConverter.convertDomain(location)));
     }
+
+    public void deleteById(UUID allocatedResourceId) {
+        deleteById(uuidConverter.convertDomain(allocatedResourceId));
+    }
 }

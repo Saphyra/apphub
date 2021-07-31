@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;
@@ -33,7 +33,7 @@ public class StorageSettingFactoryTest {
 
     @Test
     public void create() {
-        StorageSettingModel request = StorageSettingModel.builder()
+        StorageSettingApiModel request = StorageSettingApiModel.builder()
             .dataId(DATA_ID)
             .priority(PRIORITY)
             .batchSize(BATCH_SIZE)

@@ -74,4 +74,14 @@ public class StoredResourceDaoTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(STORED_RESOURCE_ID)).willReturn(STORED_RESOURCE_ID_STRING);
+        given(repository.existsById(STORED_RESOURCE_ID_STRING)).willReturn(true);
+
+        underTest.deleteById(STORED_RESOURCE_ID);
+
+        verify(repository).deleteById(STORED_RESOURCE_ID_STRING);
+    }
 }

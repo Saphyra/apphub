@@ -28,4 +28,8 @@ public class BuildingDao extends AbstractDao<BuildingEntity, BuildingModel, Stri
     public Optional<BuildingModel> findBySurfaceId(UUID surfaceId) {
         return converter.convertEntity(repository.findBySurfaceId(uuidConverter.convertDomain(surfaceId)));
     }
+
+    public void deleteById(UUID buildingId) {
+        deleteById(uuidConverter.convertDomain(buildingId));
+    }
 }

@@ -52,4 +52,9 @@ public class AllianceService implements GameItemService {
     public List<AllianceModel> getByParent(UUID parent) {
         return allianceDao.getByGameId(parent);
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        allianceDao.deleteById(id);
+    }
 }

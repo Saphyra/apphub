@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.query;
 
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageSettingsResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -54,7 +54,7 @@ public class StorageSettingsResponseQueryServiceTest {
     private StorageSettings storageSettings;
 
     @Mock
-    private StorageSettingModel storageSettingModel;
+    private StorageSettingApiModel storageSettingModel;
 
     @Test
     public void getStorageSettings() {

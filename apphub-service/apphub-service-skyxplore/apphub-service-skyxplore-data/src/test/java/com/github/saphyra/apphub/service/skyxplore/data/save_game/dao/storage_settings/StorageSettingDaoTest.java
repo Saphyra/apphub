@@ -74,4 +74,14 @@ public class StorageSettingDaoTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(STORAGE_SETTING_ID)).willReturn(STORAGE_SETTING_ID_STRING);
+        given(repository.existsById(STORAGE_SETTING_ID_STRING)).willReturn(true);
+
+        underTest.deleteById(STORAGE_SETTING_ID);
+
+        verify(repository).deleteById(STORAGE_SETTING_ID_STRING);
+    }
 }

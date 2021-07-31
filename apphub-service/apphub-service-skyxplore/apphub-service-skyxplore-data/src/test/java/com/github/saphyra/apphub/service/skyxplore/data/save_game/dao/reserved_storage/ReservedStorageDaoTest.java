@@ -74,4 +74,14 @@ public class ReservedStorageDaoTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(RESERVED_STORAGE_ID)).willReturn(RESERVED_STORAGE_ID_STRING);
+        given(repository.existsById(RESERVED_STORAGE_ID_STRING)).willReturn(true);
+
+        underTest.deleteById(RESERVED_STORAGE_ID);
+
+        verify(repository).deleteById(RESERVED_STORAGE_ID_STRING);
+    }
 }

@@ -51,4 +51,9 @@ public class AllocatedResourceService implements GameItemService {
     public List<AllocatedResourceModel> getByParent(UUID parent) {
         return allocatedResourceDao.getByLocation(parent);
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        allocatedResourceDao.deleteById(id);
+    }
 }

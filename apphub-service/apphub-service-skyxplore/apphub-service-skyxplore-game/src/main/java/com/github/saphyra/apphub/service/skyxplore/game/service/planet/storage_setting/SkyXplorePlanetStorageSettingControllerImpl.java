@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
 import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXplorePlanetStorageSettingController;
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageSettingsResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.query.StorageSettingsResponseQueryService;
@@ -27,7 +27,7 @@ class SkyXplorePlanetStorageSettingControllerImpl implements SkyXplorePlanetStor
     }
 
     @Override
-    public void createStorageSetting(StorageSettingModel request, UUID planetId, AccessTokenHeader accessTokenHeader) {
+    public void createStorageSetting(StorageSettingApiModel request, UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create storageSetting for resource {} on planet {}", accessTokenHeader.getUserId(), request.getDataId(), planetId);
         storageSettingCreationService.createStorageSetting(accessTokenHeader.getUserId(), planetId, request);
     }
@@ -39,8 +39,8 @@ class SkyXplorePlanetStorageSettingControllerImpl implements SkyXplorePlanetStor
     }
 
     @Override
-    public void editStorageSetting(StorageSettingModel request, UUID planetId, AccessTokenHeader accessTokenHeader) {
+    public void editStorageSetting(StorageSettingApiModel request, UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to edit storageSetting {} on planet {}", accessTokenHeader.getUserId(), request.getStorageSettingId(), planetId);
-        storageSettingEditionService.edit(accessTokenHeader.getUserId(), planetId,  request);
+        storageSettingEditionService.edit(accessTokenHeader.getUserId(), planetId, request);
     }
 }

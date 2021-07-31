@@ -29,4 +29,8 @@ public class GameDataProxy {
     public void saveItem(GameItem... model) {
         dataGameClient.saveGameData(Arrays.asList(model), localeProvider.getOrDefault());
     }
+
+    public void deleteItem(UUID id, GameItemType type) {
+        dataGameClient.deleteGameItem(id, type, localeProvider.getOrDefault());
+    }
 }

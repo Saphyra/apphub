@@ -51,4 +51,9 @@ public class CitizenService implements GameItemService {
     public List<CitizenModel> getByParent(UUID parent) {
         return citizenDao.getByLocation(parent);
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        citizenDao.deleteById(id);
+    }
 }

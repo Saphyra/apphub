@@ -51,4 +51,9 @@ public class SurfaceService implements GameItemService {
     public List<SurfaceModel> getByParent(UUID parent) {
         return surfaceDao.getByPlanetId(parent);
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        surfaceDao.deleteById(id);
+    }
 }

@@ -71,4 +71,11 @@ public class SolarSystemServiceTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        underTest.deleteById(ID);
+
+        verify(solarSystemDao).deleteById(ID);
+    }
 }

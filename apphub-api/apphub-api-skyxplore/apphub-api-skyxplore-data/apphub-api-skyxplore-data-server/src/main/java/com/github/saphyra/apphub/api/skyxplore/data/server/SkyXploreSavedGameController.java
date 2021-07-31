@@ -24,6 +24,9 @@ public interface SkyXploreSavedGameController {
     @GetMapping(Endpoints.SKYXPLORE_INTERNAL_LOAD_GAME_ITEM)
     GameItem loadGameItem(@PathVariable("id") UUID id, @PathVariable("type") GameItemType type);
 
+    @DeleteMapping(Endpoints.SKYXPLORE_INTERNAL_DELETE_GAME_ITEM)
+    void deleteGameItem(@PathVariable("id") UUID id, @PathVariable("type") GameItemType type);
+
     @GetMapping(Endpoints.SKYXPLORE_INTERNAL_LOAD_GAME_ITEM_CHILDREN)
     List<? extends GameItem> loadChildrenOfGameItem(@PathVariable("parent") UUID parent, @PathVariable("type") GameItemType type);
 

@@ -71,4 +71,11 @@ public class ReservedStorageServiceTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        underTest.deleteById(ID);
+
+        verify(reservedStorageDao).deleteById(ID);
+    }
 }

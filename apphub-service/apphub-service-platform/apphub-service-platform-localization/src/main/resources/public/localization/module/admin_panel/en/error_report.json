@@ -55,7 +55,7 @@
         "message": "YYYY-MM-DD hh:mm:ss"
       }
     ],
-    "search-by-start-end-label": [
+    "search-by-end-time-label": [
       {
         "key": "innerHTML",
         "message": "End date"

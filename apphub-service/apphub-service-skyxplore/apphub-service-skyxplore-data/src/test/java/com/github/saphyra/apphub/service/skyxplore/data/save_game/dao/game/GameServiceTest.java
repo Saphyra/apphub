@@ -71,4 +71,11 @@ public class GameServiceTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        underTest.deleteById(GAME_ID);
+
+        gameDao.deleteById(GAME_ID);
+    }
 }

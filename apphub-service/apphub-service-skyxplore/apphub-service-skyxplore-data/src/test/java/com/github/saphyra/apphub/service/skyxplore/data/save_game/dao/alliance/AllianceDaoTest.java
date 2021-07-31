@@ -72,4 +72,14 @@ public class AllianceDaoTest {
 
         assertThat(result).contains(model);
     }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(ALLIANCE_ID)).willReturn(ALLIANCE_ID_STRING);
+        given(repository.existsById(ALLIANCE_ID_STRING)).willReturn(true);
+
+        underTest.deleteById(ALLIANCE_ID);
+
+        verify(repository).deleteById(ALLIANCE_ID_STRING);
+    }
 }

@@ -72,4 +72,14 @@ public class SolarSystemDaoTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(SOLAR_SYSTEM_ID)).willReturn(SOLAR_SYSTEM_ID_STRING);
+        given(repository.existsById(SOLAR_SYSTEM_ID_STRING)).willReturn(true);
+
+        underTest.deleteById(SOLAR_SYSTEM_ID);
+
+        verify(repository).deleteById(SOLAR_SYSTEM_ID_STRING);
+    }
 }

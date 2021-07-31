@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -17,14 +18,14 @@ import java.util.stream.Collectors;
 public class StorageSettingToModelConverter {
     public List<StorageSettingModel> convert(List<StorageSetting> storageSettings, Game game) {
         return storageSettings.stream()
-            .map(storageSetting -> convert(storageSetting, game))
+            .map(storageSetting -> convert(storageSetting, game.getGameId()))
             .collect(Collectors.toList());
     }
 
-    private StorageSettingModel convert(StorageSetting storageSetting, Game game) {
+    public StorageSettingModel convert(StorageSetting storageSetting, UUID gameId) {
         StorageSettingModel model = new StorageSettingModel();
         model.setId(storageSetting.getStorageSettingId());
-        model.setGameId(game.getGameId());
+        model.setGameId(gameId);
         model.setType(GameItemType.STORAGE_SETTING);
         model.setLocation(storageSetting.getLocation());
         model.setLocationType(storageSetting.getLocationType().name());

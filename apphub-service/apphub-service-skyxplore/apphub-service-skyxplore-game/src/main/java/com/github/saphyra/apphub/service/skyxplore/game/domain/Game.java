@@ -33,6 +33,7 @@ public class Game {
     public List<UUID> getConnectedPlayers() {
         return players.values()
             .stream()
+            .filter(player -> !player.isAi())
             .filter(Player::isConnected)
             .map(Player::getUserId)
             .collect(Collectors.toList());

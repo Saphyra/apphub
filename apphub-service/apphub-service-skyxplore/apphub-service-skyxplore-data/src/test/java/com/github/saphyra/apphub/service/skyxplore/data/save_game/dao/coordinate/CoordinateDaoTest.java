@@ -74,4 +74,14 @@ public class CoordinateDaoTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(COORDINATE_ID)).willReturn(COORDINATE_ID_STRING);
+        given(repository.existsById(COORDINATE_ID_STRING)).willReturn(true);
+
+        underTest.deleteById(COORDINATE_ID);
+
+        verify(repository).deleteById(COORDINATE_ID_STRING);
+    }
 }

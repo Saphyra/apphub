@@ -23,7 +23,7 @@ public class GameService implements GameItemService {
     @Override
     public void deleteByGameId(UUID gameId) {
         log.info("Deleting {}s by gameId {}", getClass().getSimpleName(), gameId);
-        gameDao.deleteById(gameId);
+        deleteById(gameId);
     }
 
     @Override
@@ -51,5 +51,10 @@ public class GameService implements GameItemService {
     @Override
     public List<GameModel> getByParent(UUID parent) {
         return gameDao.getByHost(parent);
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        gameDao.deleteById(id);
     }
 }

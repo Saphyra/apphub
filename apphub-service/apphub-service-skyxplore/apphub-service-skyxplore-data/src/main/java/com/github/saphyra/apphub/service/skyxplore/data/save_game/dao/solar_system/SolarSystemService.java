@@ -51,4 +51,9 @@ public class SolarSystemService implements GameItemService {
     public List<SolarSystemModel> getByParent(UUID parent) {
         return solarSystemDao.getByGameId(parent);
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        solarSystemDao.deleteById(id);
+    }
 }

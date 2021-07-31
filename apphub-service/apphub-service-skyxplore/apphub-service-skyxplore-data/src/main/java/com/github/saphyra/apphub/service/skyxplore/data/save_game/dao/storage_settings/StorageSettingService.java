@@ -51,4 +51,9 @@ public class StorageSettingService implements GameItemService {
     public List<StorageSettingModel> getByParent(UUID parent) {
         return storageSettingDao.getByLocation(parent);
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        storageSettingDao.deleteById(id);
+    }
 }

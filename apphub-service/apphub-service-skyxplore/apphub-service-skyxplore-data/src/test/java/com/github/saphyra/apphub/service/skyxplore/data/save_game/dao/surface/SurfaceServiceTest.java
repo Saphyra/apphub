@@ -71,4 +71,11 @@ public class SurfaceServiceTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        underTest.deleteById(ID);
+
+        verify(surfaceDao).deleteById(ID);
+    }
 }

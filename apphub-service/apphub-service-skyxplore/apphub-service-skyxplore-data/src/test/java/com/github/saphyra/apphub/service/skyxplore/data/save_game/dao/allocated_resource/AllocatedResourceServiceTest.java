@@ -72,4 +72,11 @@ public class AllocatedResourceServiceTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        underTest.deleteById(ID);
+
+        verify(allocatedResourceDao).deleteById(ID);
+    }
 }

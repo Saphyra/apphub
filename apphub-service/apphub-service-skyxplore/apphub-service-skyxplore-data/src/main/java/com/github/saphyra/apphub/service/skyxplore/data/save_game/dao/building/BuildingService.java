@@ -55,4 +55,9 @@ public class BuildingService implements GameItemService {
             .map(Arrays::asList)
             .orElse(Collections.emptyList());
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        buildingDao.deleteById(id);
+    }
 }

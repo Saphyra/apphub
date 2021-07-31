@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -55,7 +56,7 @@ public class SkyXploreGameAccountDeletedEventControllerTest {
     @Test
     public void hostDeleted() {
         given(game.getHost()).willReturn(USER_ID);
-        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
+        given(game.getConnectedPlayers()).willReturn(Arrays.asList(USER_ID));
 
         underTest.deleteAccountEvent(SendEventRequest.<DeleteAccountEvent>builder().payload(new DeleteAccountEvent(USER_ID)).build());
 

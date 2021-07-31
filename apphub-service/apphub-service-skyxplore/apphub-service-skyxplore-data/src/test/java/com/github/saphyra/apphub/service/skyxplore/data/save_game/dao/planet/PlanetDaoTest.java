@@ -74,4 +74,14 @@ public class PlanetDaoTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(PLANET_ID)).willReturn(PLANET_ID_STRING);
+        given(repository.existsById(PLANET_ID_STRING)).willReturn(true);
+
+        underTest.deleteById(PLANET_ID);
+
+        verify(repository).deleteById(PLANET_ID_STRING);
+    }
 }

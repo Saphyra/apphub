@@ -20,7 +20,7 @@ public class LocaleProvider {
 
     public String getOrDefault() {
         return requestContextProvider.getHttpServletRequestOptional()
-            .map(this::getLocaleValidated)
+            .flatMap(this::getLocale)
             .orElse(commonConfigProperties.getDefaultLocale());
     }
 

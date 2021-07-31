@@ -31,4 +31,8 @@ public class SolarSystemDao extends AbstractDao<SolarSystemEntity, SolarSystemMo
     public List<SolarSystemModel> getByGameId(UUID gameId) {
         return converter.convertEntity(repository.getByGameId(uuidConverter.convertDomain(gameId)));
     }
+
+    public void deleteById(UUID solarSystemId) {
+        deleteById(uuidConverter.convertDomain(solarSystemId));
+    }
 }

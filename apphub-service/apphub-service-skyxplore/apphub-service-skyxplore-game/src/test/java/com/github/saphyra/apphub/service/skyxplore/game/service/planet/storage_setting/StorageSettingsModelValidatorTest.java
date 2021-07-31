@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.PriorityValidator;
@@ -41,7 +41,7 @@ public class StorageSettingsModelValidatorTest {
     private StorageSettingsModelValidator underTest;
 
     @Mock
-    private StorageSettingModel model;
+    private StorageSettingApiModel model;
 
     @Mock
     private Planet planet;
