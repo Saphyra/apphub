@@ -157,6 +157,30 @@
         "message": "Unmark"
       }
     ],
+    "delete-read-button": [
+      {
+        "key": "innerHTML",
+        "message": "Delete read"
+      }
+    ],
+    "mark-checked-as-read-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mark checked as read"
+      }
+    ],
+    "mark-checked-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mark checked"
+      }
+    ],
+    "mark-checked-as-unread-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mark checked as unread"
+      }
+    ],
     "back-button": [
       {
         "key": "innerHTML",
@@ -173,6 +197,11 @@
     "delete-error-report-button": "Delete",
     "mark-error-report-button": "Mark",
     "mark-error-report-as-unread-button": "Mark as unread",
-    "mark-error-report-as-read-button": "Mark as read"
+    "mark-error-report-as-read-button": "Mark as read",
+    "delete-all-read-error-reports-confirmation-dialog-title": "Confirm deleting all read error reports",
+    "delete-all-read-error-reports-confirmation-dialog-detail": "Are you sure you want to delete all error reports?",
+    "delete-all-read-error-reports-confirmation-dialog-confirm-button": "Delete all read",
+    "delete-all-read-error-reports-confirmation-dialog-cancel-button": "Cancel",
+    "all-read-deleted": "All read error reports are deleted."
   }
 }

@@ -93,4 +93,11 @@ public class ErrorReportDaoTest {
 
         assertThat(result).containsExactly(domain);
     }
+
+    @Test
+    public void deleteByStatus() {
+        underTest.deleteByStatus(ErrorReportStatus.READ);
+
+        verify(repository).deleteByStatus(ErrorReportStatus.READ.name());
+    }
 }

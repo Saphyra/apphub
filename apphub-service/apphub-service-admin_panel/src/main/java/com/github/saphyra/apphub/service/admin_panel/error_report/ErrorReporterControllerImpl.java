@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
+import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportStatus;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.MarkErrorReportService;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.details.ErrorReportDetailsQueryService;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.overview.ErrorReportOverviewQueryService;
@@ -58,5 +59,11 @@ public class ErrorReporterControllerImpl implements ErrorReporterController {
     public ErrorReportModel getErrorReport(UUID id, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to query errorReport {}", accessTokenHeader.getUserId(), id);
         return errorReportDetailsQueryService.findById(id);
+    }
+
+    @Override
+    public void deleteReadErrorReports(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to delete read error reports.", accessTokenHeader.getUserId());
+        errorReportDao.deleteByStatus(ErrorReportStatus.READ);
     }
 }

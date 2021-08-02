@@ -49,6 +49,7 @@ public class Endpoints {
     public static final String ADMIN_PANEL_GET_ERROR_REPORT = "/api/admin-panel/error-report/{id}";
     public static final String ADMIN_PANEL_DELETE_ERROR_REPORTS = "/api/admin-panel/error-report";
     public static final String ADMIN_PANEL_MARK_ERROR_REPORTS = "/api/admin-panel/error-report/mark/{status}";
+    public static final String ADMIN_PANEL_DELETE_READ_ERROR_REPORTS = "/api/admin-panel/error-report/read";
 
     //LOGIN
     public static final String LOGIN = "/api/user/authentication/login";

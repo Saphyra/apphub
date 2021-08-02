@@ -24,6 +24,7 @@ window.Mapping = new function(){
         ERROR_REPORT_DELETE_ERRORS: new Endpoint("/api/admin-panel/error-report", HttpMethod.DELETE),
         ERROR_REPORT_GET_ERROR: new Endpoint("/api/admin-panel/error-report/{id}", HttpMethod.GET),
         ERROR_REPORT_MARK_ERRORS: new Endpoint("/api/admin-panel/error-report/mark/{status}", HttpMethod.POST),
+        ERROR_REPORT_DELETE_ALL_READ: new Endpoint("/api/admin-panel/error-report/read", HttpMethod.DELETE),
 
         CREATE_NOTEBOOK_CATEGORY: new Endpoint("/api/notebook/category", HttpMethod.PUT),
         CREATE_NOTEBOOK_LINK: new Endpoint("/api/notebook/link", HttpMethod.PUT),
