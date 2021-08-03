@@ -1,5 +1,6 @@
 (function ChecklistViewController(){
     let openedChecklistId = null;
+    let editingEnabled = false;
 
     window.checklistViewController = new function(){
         this.viewChecklist = viewChecklist;
@@ -39,9 +40,7 @@
         switchTab("view-checklist-button-wrapper", "view-checklist-edit-button-wrapper");
     }
 
-    function createChecklistItem(itemData, editingEnabled){
-        editingEnabled = editingEnabled || false;
-
+    function createChecklistItem(itemData){
         const nodeRow = document.createElement("DIV");
             nodeRow.classList.add("view-checklist-item");
             $(nodeRow).attr("checklist-item-id", itemData.checklistItemId);
@@ -60,6 +59,14 @@
                 contentCell.classList.add("view-checklist-item-content");
                 contentCell.innerHTML = itemData.content;
                 contentCell.contentEditable = editingEnabled;
+                contentCell.onclick = function(){
+                    if(!editingEnabled){
+                        const checked = !checkedBox.checked;
+                        setContentDecoration(contentCell, checked);
+                        updateStatus(itemData.checklistItemId, checked);
+                        checkedBox.checked = checked;
+                    }
+                }
                 setContentDecoration(contentCell, itemData.checked);
         nodeRow.appendChild(contentCell);
 
@@ -125,9 +132,11 @@
         $(".view-checklist-item-edit-button").prop("disabled", false);
         $(".view-checklist-item-content").attr("contenteditable", true);
         switchTab("view-checklist-button-wrapper", "view-checklist-editing-operations-button-wrapper");
+        editingEnabled = true;
     }
 
     function discardChanges(){
+        editingEnabled = false;
         viewChecklist(openedChecklistId);
     }
 
@@ -138,7 +147,7 @@
             checked: false,
         }
 
-        document.getElementById("view-checklist-content").appendChild(createChecklistItem(itemData, true));
+        document.getElementById("view-checklist-content").appendChild(createChecklistItem(itemData));
     }
 
     function saveChanges(){
@@ -166,6 +175,7 @@
         const request = new Request(Mapping.getEndpoint("EDIT_NOTEBOOK_CHECKLIST_ITEM", {listItemId: openedChecklistId}), {title: title, nodes: nodes});
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("checklist-saved"));
+                editingEnabled = false;
                 viewChecklist(openedChecklistId);
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
             }

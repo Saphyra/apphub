@@ -31,3 +31,7 @@
                 .view-checklist-table-checked-cell input[type=checkbox]{
                     transform: scale(2);
                 }
+
+            .view-checklist-table-input-field:not([contenteditable=true]){
+                cursor: pointer;
+            }

@@ -210,6 +210,17 @@
                 rowNode.appendChild(checkedCell);
 
                     new Stream(row.columns)
+                        .peek(function(column){
+                            column.columnNode.onclick = function(){
+                                if(!editingEnabled){
+                                    const newValue = !row.checked;
+                                    setContentDecoration(row.columns, newValue);
+                                    checkedInput.checked = newValue
+                                    row.checked = newValue;
+                                    updateStatus(openedTableId, row.rowIndex, newValue);
+                                }
+                            }
+                        })
                         .forEach(function(column){rowNode.appendChild(column.columnNode)});
 
                 contentNode.appendChild(rowNode);

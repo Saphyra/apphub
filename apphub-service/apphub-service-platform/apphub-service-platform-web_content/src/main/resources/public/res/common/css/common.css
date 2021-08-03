@@ -157,8 +157,13 @@ input:focus, textarea:focus, div[contenteditable='true']:focus{
     outline: none;
 }
 
+input[type='checkbox']{
+    cursor: pointer;
+}
+
 input[type='checkbox']:disabled{
     opacity: 0.5;
+    cursor: default;
 }
 
 input[type=range]{
