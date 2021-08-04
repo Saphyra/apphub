@@ -75,34 +75,46 @@
 
                 const moveUpButton = document.createElement("BUTTON");
                     moveUpButton.classList.add("view-checklist-item-edit-button");
-                    moveUpButton.disabled = !editingEnabled;
                     moveUpButton.innerHTML = "^";
                     moveUpButton.onclick = function(){
                         const sibling = nodeRow.previousSibling;
                         if(sibling){
                             document.getElementById("view-checklist-content").insertBefore(nodeRow, sibling);
+                        }else{
+                            return;
+                        }
+
+                        if(!editingEnabled){
+                            saveChanges();
                         }
                     }
             operationsCell.appendChild(moveUpButton);
 
                 const moveDownButton = document.createElement("BUTTON");
                     moveDownButton.classList.add("view-checklist-item-edit-button");
-                    moveDownButton.disabled = !editingEnabled;
                     moveDownButton.innerHTML = "V";
                     moveDownButton.onclick = function(){
                         const sibling = nodeRow.nextSibling;
                         if(sibling){
                             document.getElementById("view-checklist-content").insertBefore(nodeRow, sibling.nextSibling);
+                        }else{
+                            return;
+                        }
+
+                        if(!editingEnabled){
+                            saveChanges();
                         }
                     }
             operationsCell.appendChild(moveDownButton);
 
                 const removeButton = document.createElement("BUTTON");
                     removeButton.classList.add("view-checklist-item-edit-button");
-                    removeButton.disabled = !editingEnabled;
                     removeButton.innerHTML = "X";
                     removeButton.onclick = function(){
                         document.getElementById("view-checklist-content").removeChild(nodeRow);
+                        if(!editingEnabled){
+                            saveChanges();
+                        }
                     }
             operationsCell.appendChild(removeButton);
         nodeRow.appendChild(operationsCell);
@@ -129,7 +141,6 @@
     
     function enableEditing(){
         document.getElementById("view-checklist-title").contentEditable = true;
-        $(".view-checklist-item-edit-button").prop("disabled", false);
         $(".view-checklist-item-content").attr("contenteditable", true);
         switchTab("view-checklist-button-wrapper", "view-checklist-editing-operations-button-wrapper");
         editingEnabled = true;

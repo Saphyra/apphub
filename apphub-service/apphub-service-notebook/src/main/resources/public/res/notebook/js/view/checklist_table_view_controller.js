@@ -70,7 +70,6 @@
 
         const buttonWrapper = document.createElement("SPAN");
             buttonWrapper.classList.add("view-checklist-table-operations-button-wrapper");
-            buttonWrapper.style.visibility = visibility();
             buttonWrapper.classList.add("table-head-button-wrapper");
 
             const moveLeftButton = document.createElement("BUTTON");
@@ -171,24 +170,32 @@
 
                     const buttonCell = document.createElement("TD");
                         const buttonWrapper = document.createElement("DIV");
-                            buttonWrapper.style.visibility = visibility();
                             buttonWrapper.classList.add("view-checklist-table-operations-button-wrapper");
                             const moveUpButton = document.createElement("BUTTON");
                                 moveUpButton.innerHTML = "^";
                                 moveUpButton.onclick = function(){
-                                    moveRowUp(rowNode.id);
+                                    const notModified = moveRowUp(rowNode.id);
+                                    if(!editingEnabled && !notModified){
+                                        saveChanges();
+                                    }
                                 }
                         buttonWrapper.appendChild(moveUpButton);
                             const moveDownButton = document.createElement("BUTTON");
                                 moveDownButton.innerHTML = "v";
                                 moveDownButton.onclick = function(){
-                                    moveRowDown(rowNode.id);
+                                    const notModified = moveRowDown(rowNode.id);
+                                    if(!editingEnabled && !notModified){
+                                        saveChanges();
+                                    }
                                 }
                         buttonWrapper.appendChild(moveDownButton);
                             const deleteRowButton = document.createElement("BUTTON");
                                 deleteRowButton.innerHTML = "X";
                                 deleteRowButton.onclick = function(){
                                     removeRow(rowNode.id);
+                                    if(!editingEnabled){
+                                        saveChanges();
+                                    }
                                 }
                         buttonWrapper.appendChild(deleteRowButton);
                     buttonCell.appendChild(buttonWrapper);
@@ -249,7 +256,6 @@
         $(".view-checklist-table-input-field").attr("contenteditable", true);
         $(".view-checklist-table-column-title").attr("disabled", false);
         $(".view-checklist-table-item-edit-button").prop("disabled", false);
-        $(".view-checklist-table-operations-button-wrapper").css("visibility", "visible");
         switchTab("view-checklist-table-button-wrapper", "view-checklist-table-editing-operations-button-wrapper");
     }
 
@@ -396,7 +402,7 @@
         const rowIndex = search(rows, function(row){return row.rowNode.id === rowId});
 
         if(rowIndex == 0){
-            return;
+            return true;
         }
 
         const newIndex = rowIndex - 1;
@@ -410,7 +416,7 @@
         const rowIndex = search(rows, function(row){return row.rowNode.id === rowId});
 
         if(rowIndex == rows.length - 1){
-            return;
+            return true;
         }
 
         const newIndex = rowIndex + 1;
@@ -418,10 +424,6 @@
         [rows[rowIndex], rows[newIndex]] = [rows[newIndex], rows[rowIndex]];
 
         displayRows();
-    }
-
-    function visibility(){
-        return editingEnabled ? "visible" : "hidden";
     }
 
     function deleteChecked(){
