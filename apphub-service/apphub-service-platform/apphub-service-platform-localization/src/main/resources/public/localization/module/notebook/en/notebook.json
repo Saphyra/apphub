@@ -468,6 +468,10 @@
     "delete-checked-items-confirmation-confirm-button": "Delete",
     "delete-checked-items-confirmation-cancel-button": "Cancel",
     "checked-items-deleted": "Checked items are successfully deleted.",
-    "checklist-items-ordered": "Items ordered."
+    "checklist-items-ordered": "Items ordered.",
+    "discard-confirmation-dialog-title": "Discard changes?",
+    "discard-confirmation-dialog-detail": "Do you want to discard the changes?",
+    "discard-confirmation-dialog-confirm-button": "Discard",
+    "discard-confirmation-dialog-decline-button": "Cancel"
   }
 }

@@ -206,7 +206,19 @@
     }
 
     function discardChanges(){
-        viewTable(openedTableId);
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(Localization.getAdditionalContent("discard-confirmation-dialog-title"))
+            .withDetail(Localization.getAdditionalContent("discard-confirmation-dialog-detail"))
+            .withConfirmButton(Localization.getAdditionalContent("discard-confirmation-dialog-confirm-button"))
+            .withDeclineButton(Localization.getAdditionalContent("discard-confirmation-dialog-decline-button"));
+
+        confirmationService.openDialog(
+            "discard-confirmation-dialog",
+            confirmationDialogLocalization,
+            function(){
+                viewTable(openedTableId);
+            }
+        )
     }
 
     function addColumn(){

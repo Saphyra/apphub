@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.frontend.service.notebook;
 
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.frontend.service.common.CommonPageActions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -186,6 +187,7 @@ public class TableActions {
     public static void discardChanges(WebDriver driver) {
         assertThat(isEditingEnabled(driver)).isTrue();
         NotebookPage.discardEditTableButton(driver).click();
+        CommonPageActions.confirmConfirmationDialog(driver, "discard-confirmation-dialog");
         AwaitilityWrapper.createDefault()
             .until(() -> !isEditingEnabled(driver));
     }

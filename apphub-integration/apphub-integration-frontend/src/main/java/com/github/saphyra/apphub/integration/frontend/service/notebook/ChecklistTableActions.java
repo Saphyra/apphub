@@ -219,6 +219,7 @@ public class ChecklistTableActions {
     public static void discardChanges(WebDriver driver) {
         assertThat(isEditingEnabled(driver)).isTrue();
         NotebookPage.discardEditChecklistTableButton(driver).click();
+        CommonPageActions.confirmConfirmationDialog(driver, "discard-confirmation-dialog");
         AwaitilityWrapper.createDefault()
             .until(() -> !isEditingEnabled(driver));
     }

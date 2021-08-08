@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.frontend.service.notebook;
 
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.frontend.service.common.CommonPageActions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -115,6 +116,7 @@ public class TextActions {
         WebElement discardButton = NotebookPage.discardEditTextButton(driver);
         assertThat(discardButton.isDisplayed()).isTrue();
         discardButton.click();
+        CommonPageActions.confirmConfirmationDialog(driver, "discard-confirmation-dialog");
     }
 
     public static String getTitle(WebDriver driver) {
