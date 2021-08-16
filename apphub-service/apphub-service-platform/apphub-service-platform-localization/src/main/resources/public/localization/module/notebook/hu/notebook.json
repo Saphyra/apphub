@@ -9,7 +9,7 @@
     ],
     "search-container-title": [
       {
-        "key": "innerHTML",
+        "key": "placeholder",
         "message": "Keresés"
       }
     ],
@@ -466,6 +466,7 @@
     "discard-confirmation-dialog-title": "Módosítások elvetése?",
     "discard-confirmation-dialog-detail": "El akarod vetni a módosításokat?",
     "discard-confirmation-dialog-confirm-button": "Elvetés",
-    "discard-confirmation-dialog-decline-button": "Mégse"
+    "discard-confirmation-dialog-decline-button": "Mégse",
+    "search-result": "Keresés eredménye"
   }
 }

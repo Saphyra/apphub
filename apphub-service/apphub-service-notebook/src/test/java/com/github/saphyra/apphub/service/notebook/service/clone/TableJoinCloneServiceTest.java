@@ -65,7 +65,7 @@ public class TableJoinCloneServiceTest {
 
         given(cloneUtil.clone(LIST_ITEM_ID, originalTableJoin)).willReturn(clonedTableJoin);
         given(contentDao.findByParentValidated(ORIGINAL_TABLE_JOIN_ID)).willReturn(originalContent);
-        given(contentFactory.create(CLONED_TABLE_JOIN_ID, USER_ID, CONTENT)).willReturn(clonedContent);
+        given(contentFactory.create(LIST_ITEM_ID, CLONED_TABLE_JOIN_ID, USER_ID, CONTENT)).willReturn(clonedContent);
 
         underTest.clone(listItem, originalTableJoin);
 

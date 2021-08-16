@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,4 +39,7 @@ public class ContentDao extends AbstractDao<ContentEntity, Content, String, Cont
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }
 
+    public List<Content> getByUserId(UUID userId) {
+        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
+    }
 }

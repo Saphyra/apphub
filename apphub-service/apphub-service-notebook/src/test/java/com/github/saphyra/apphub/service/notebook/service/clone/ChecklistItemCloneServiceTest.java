@@ -66,7 +66,7 @@ public class ChecklistItemCloneServiceTest {
 
         given(clonedChecklistItem.getChecklistItemId()).willReturn(CLONED_CHECKLIST_ITEM_ID);
         given(originalContent.getContent()).willReturn(ORIGINAL_CONTENT);
-        given(contentFactory.create(CLONED_CHECKLIST_ITEM_ID, USER_ID, ORIGINAL_CONTENT)).willReturn(clonedContent);
+        given(contentFactory.create(LIST_ITEM_ID, CLONED_CHECKLIST_ITEM_ID, USER_ID, ORIGINAL_CONTENT)).willReturn(clonedContent);
 
         underTest.clone(clone, originalChecklistItem);
 

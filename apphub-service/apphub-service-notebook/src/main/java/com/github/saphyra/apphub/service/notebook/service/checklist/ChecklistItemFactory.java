@@ -27,7 +27,7 @@ public class ChecklistItemFactory {
             .order(nodeRequest.getOrder())
             .checked(nodeRequest.getChecked())
             .build();
-        Content content = contentFactory.create(checklistItemId, listItem.getUserId(), nodeRequest.getContent());
+        Content content = contentFactory.create(listItem.getListItemId(), checklistItemId, listItem.getUserId(), nodeRequest.getContent());
 
         return new BiWrapper<>(checklistItem, content);
     }

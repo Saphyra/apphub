@@ -10,6 +10,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,16 +30,16 @@ public class ContentDaoTest {
     private UuidConverter uuidConverter;
 
     @Mock
-    private ContentConverter contentConverter;
+    private ContentConverter converter;
 
     @Mock
-    private ContentRepository contentRepository;
+    private ContentRepository repository;
 
     @InjectMocks
     private ContentDao underTest;
 
     @Mock
-    private Content content;
+    private Content domain;
 
     @Mock
     private ContentEntity entity;
@@ -48,13 +50,13 @@ public class ContentDaoTest {
 
         underTest.deleteByParent(PARENT);
 
-        verify(contentRepository).deleteByParent(PARENT_STRING);
+        verify(repository).deleteByParent(PARENT_STRING);
     }
 
     @Test
     public void findByParentValidated_notFound() {
         given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
-        given(contentRepository.findByParent(PARENT_STRING)).willReturn(Optional.empty());
+        given(repository.findByParent(PARENT_STRING)).willReturn(Optional.empty());
 
         Throwable ex = catchThrowable(() -> underTest.findByParentValidated(PARENT));
 
@@ -64,12 +66,12 @@ public class ContentDaoTest {
     @Test
     public void findByParentValidated() {
         given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
-        given(contentRepository.findByParent(PARENT_STRING)).willReturn(Optional.of(entity));
-        given(contentConverter.convertEntity(Optional.of(entity))).willReturn(Optional.of(content));
+        given(repository.findByParent(PARENT_STRING)).willReturn(Optional.of(entity));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
 
         Content result = underTest.findByParentValidated(PARENT);
 
-        assertThat(result).isEqualTo(content);
+        assertThat(result).isEqualTo(domain);
     }
 
     @Test
@@ -78,6 +80,17 @@ public class ContentDaoTest {
 
         underTest.deleteByUserId(USER_ID);
 
-        verify(contentRepository).deleteByUserId(USER_ID_STRING);
+        verify(repository).deleteByUserId(USER_ID_STRING);
+    }
+
+    @Test
+    public void getByUserId() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(repository.getByUserId(USER_ID_STRING)).willReturn(Arrays.asList(entity));
+        given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(domain));
+
+        List<Content> result = underTest.getByUserId(USER_ID);
+
+        assertThat(result).containsExactly(domain);
     }
 }

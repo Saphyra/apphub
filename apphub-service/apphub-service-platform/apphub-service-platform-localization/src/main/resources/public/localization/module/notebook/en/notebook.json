@@ -9,7 +9,7 @@
     ],
     "search-container-title": [
       {
-        "key": "innerHTML",
+        "key": "placeholder",
         "message": "Search"
       }
     ],
@@ -472,6 +472,7 @@
     "discard-confirmation-dialog-title": "Discard changes?",
     "discard-confirmation-dialog-detail": "Do you want to discard the changes?",
     "discard-confirmation-dialog-confirm-button": "Discard",
-    "discard-confirmation-dialog-decline-button": "Cancel"
+    "discard-confirmation-dialog-decline-button": "Cancel",
+    "search-result": "Search result"
   }
 }

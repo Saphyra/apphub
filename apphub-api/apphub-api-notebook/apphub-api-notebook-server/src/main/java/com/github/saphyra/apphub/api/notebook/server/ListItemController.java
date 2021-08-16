@@ -26,4 +26,7 @@ public interface ListItemController {
 
     @GetMapping(Endpoints.NOTEBOOK_GET_PINNED_ITEMS)
     List<NotebookView> getPinnedItems(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.NOTEBOOK_SEARCH)
+    List<NotebookView> search(@RequestBody OneParamRequest<String> query, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

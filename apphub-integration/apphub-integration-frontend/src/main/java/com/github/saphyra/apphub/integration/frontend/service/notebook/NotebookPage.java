@@ -520,4 +520,8 @@ class NotebookPage {
     public static WebElement categoryContent(WebDriver driver) {
         return driver.findElement(By.id("category-content"));
     }
+
+    public static WebElement searchInput(WebDriver driver) {
+        return driver.findElement(By.id("search-container-title"));
+    }
 }

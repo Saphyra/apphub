@@ -24,7 +24,7 @@ class TableJoinCloneService {
         tableJoinDao.save(tableJoinClone);
 
         Content tableJoinContent = contentDao.findByParentValidated(tableJoin.getTableJoinId());
-        Content tableJoinContentClone = contentFactory.create(tableJoinClone.getTableJoinId(), clone.getUserId(), tableJoinContent.getContent());
+        Content tableJoinContentClone = contentFactory.create(clone.getListItemId(), tableJoinClone.getTableJoinId(), clone.getUserId(), tableJoinContent.getContent());
         contentDao.save(tableJoinContentClone);
     }
 }

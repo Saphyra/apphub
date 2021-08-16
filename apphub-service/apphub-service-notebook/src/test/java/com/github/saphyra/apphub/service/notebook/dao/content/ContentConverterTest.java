@@ -28,6 +28,8 @@ public class ContentConverterTest {
     private static final UUID ACCESS_TOKEN_USER_ID = UUID.randomUUID();
     private static final String ACCESS_TOKEN_USER_ID_STRING = "access-token-user-id";
     private static final String DECRYPTED_CONTENT = "decrypted-content";
+    private static final UUID LIST_ITEM_ID = UUID.randomUUID();
+    private static final String LIST_ITEM_ID_STRING = "list-item-id";
 
     @Mock
     private AccessTokenProvider accessTokenProvider;
@@ -57,11 +59,13 @@ public class ContentConverterTest {
             .contentId(TEXT_ID_STRING)
             .userId(USER_ID_STRING)
             .parent(PARENT_STRING)
+            .listItemId(LIST_ITEM_ID_STRING)
             .content(ENCRYPTED_CONTENT)
             .build();
         given(uuidConverter.convertEntity(TEXT_ID_STRING)).willReturn(TEXT_ID);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
         given(uuidConverter.convertEntity(PARENT_STRING)).willReturn(PARENT);
+        given(uuidConverter.convertEntity(LIST_ITEM_ID_STRING)).willReturn(LIST_ITEM_ID);
         given(stringEncryptor.decryptEntity(ENCRYPTED_CONTENT, ACCESS_TOKEN_USER_ID_STRING)).willReturn(DECRYPTED_CONTENT);
 
 
@@ -70,6 +74,7 @@ public class ContentConverterTest {
         assertThat(result.getContentId()).isEqualTo(TEXT_ID);
         assertThat(result.getUserId()).isEqualTo(USER_ID);
         assertThat(result.getParent()).isEqualTo(PARENT);
+        assertThat(result.getListItemId()).isEqualTo(LIST_ITEM_ID);
         assertThat(result.getContent()).isEqualTo(DECRYPTED_CONTENT);
     }
 
@@ -79,11 +84,13 @@ public class ContentConverterTest {
             .contentId(TEXT_ID)
             .userId(USER_ID)
             .parent(PARENT)
+            .listItemId(LIST_ITEM_ID)
             .content(DECRYPTED_CONTENT)
             .build();
         given(uuidConverter.convertDomain(TEXT_ID)).willReturn(TEXT_ID_STRING);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
+        given(uuidConverter.convertDomain(LIST_ITEM_ID)).willReturn(LIST_ITEM_ID_STRING);
         given(stringEncryptor.encryptEntity(DECRYPTED_CONTENT, ACCESS_TOKEN_USER_ID_STRING)).willReturn(ENCRYPTED_CONTENT);
 
 
@@ -92,6 +99,7 @@ public class ContentConverterTest {
         assertThat(result.getContentId()).isEqualTo(TEXT_ID_STRING);
         assertThat(result.getUserId()).isEqualTo(USER_ID_STRING);
         assertThat(result.getParent()).isEqualTo(PARENT_STRING);
+        assertThat(result.getListItemId()).isEqualTo(LIST_ITEM_ID_STRING);
         assertThat(result.getContent()).isEqualTo(ENCRYPTED_CONTENT);
     }
 }

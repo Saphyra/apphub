@@ -29,6 +29,7 @@ public class Endpoints {
     public static final String EVENT_DELETE_ACCOUNT = "/event/delete-account";
     public static final String EVENT_PAGE_VISITED = "/event/page-visited";
     public static final String EVENT_SKYXPLORE_LOBBY_CLEANUP = "/event/skyxplore/lobby/cleanup";
+    public static final String EVENT_SKYXPLORE_GAME_CLEANUP = "/event/skyxplore/game/cleanup";
     public static final String EVENT_MESSAGE_SENDER_PING_REQUEST = "/event/message-sender/ping-request";
     public static final String EVENT_MESSAGE_SENDER_CONNECTION_CLEANUP = "/event/message-sender/connection-cleanup";
     public static final String EVENT_TRIGGER_ACCOUNT_DELETION = "/event/user-data/trigger-account-deletion";
@@ -48,6 +49,7 @@ public class Endpoints {
     public static final String ADMIN_PANEL_GET_ERROR_REPORT = "/api/admin-panel/error-report/{id}";
     public static final String ADMIN_PANEL_DELETE_ERROR_REPORTS = "/api/admin-panel/error-report";
     public static final String ADMIN_PANEL_MARK_ERROR_REPORTS = "/api/admin-panel/error-report/mark/{status}";
+    public static final String ADMIN_PANEL_DELETE_READ_ERROR_REPORTS = "/api/admin-panel/error-report/read";
 
     //LOGIN
     public static final String LOGIN = "/api/user/authentication/login";
@@ -113,6 +115,7 @@ public class Endpoints {
     public static final String NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST = "/api/notebook/checklist/{listItemId}/checked";
     public static final String NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST_TABLE = "/api/notebook/checklist-table/{listItemId}/checked";
     public static final String NOTEBOOK_ORDER_CHECKLIST_ITEMS = "/api/notebook/checklist/{listItemId}/order";
+    public static final String NOTEBOOK_SEARCH = "/api/notebook/item/search";
 
     //UTILS
     public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";
@@ -123,6 +126,7 @@ public class Endpoints {
     public static final String SKYXPLORE_INTERNAL_GET_CHARACTER_BY_USER_ID = "/allowed-internal/skyxplore/character/{userId}";
     public static final String SKYXPLORE_INTERNAL_SAVE_GAME_DATA = "/allowed-internal/skyxplore/game/data";
     public static final String SKYXPLORE_INTERNAL_LOAD_GAME_ITEM = "/internal/skyxplore/game/data/item/{id}/{type}";
+    public static final String SKYXPLORE_INTERNAL_DELETE_GAME_ITEM = "/internal/skyxplore/game/data/item/{id}/{type}";
     public static final String SKYXPLORE_INTERNAL_LOAD_GAME_ITEM_CHILDREN = "/internal/skyxplore/game/data/item/children/{parent}/{type}";
 
     public static final String SKYXPLORE_CREATE_OR_UPDATE_CHARACTER = "/api/skyxplore/character";

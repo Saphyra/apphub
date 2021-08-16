@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -87,5 +88,23 @@ public class ContentRepositoryTest {
         underTest.deleteByUserId(USER_ID_2);
 
         assertThat(underTest.findAll()).containsExactly(entity1);
+    }
+
+    @Test
+    public void getByUserId() {
+        ContentEntity entity1 = ContentEntity.builder()
+            .contentId(TEXT_ID_1)
+            .userId(USER_ID_1)
+            .build();
+        underTest.save(entity1);
+        ContentEntity entity2 = ContentEntity.builder()
+            .contentId(TEXT_ID_2)
+            .userId(USER_ID_2)
+            .build();
+        underTest.save(entity2);
+
+        List<ContentEntity> result = underTest.getByUserId(USER_ID_1);
+
+        assertThat(result).containsExactly(entity1);
     }
 }

@@ -41,6 +41,7 @@ public class ContentFactoryTest {
         assertThat(result.getContentId()).isEqualTo(CONTENT_ID);
         assertThat(result.getUserId()).isEqualTo(USER_ID);
         assertThat(result.getParent()).isEqualTo(LIST_ITEM_ID);
+        assertThat(result.getListItemId()).isEqualTo(LIST_ITEM_ID);
         assertThat(result.getContent()).isEqualTo(CONTENT);
     }
 

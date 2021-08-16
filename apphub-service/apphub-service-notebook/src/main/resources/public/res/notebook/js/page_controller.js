@@ -10,6 +10,7 @@
     scriptLoader.loadScript("/res/notebook/js/content/list_item_clone_service.js");
     scriptLoader.loadScript("/res/notebook/js/list_item_edition_service.js");
     scriptLoader.loadScript("/res/notebook/js/pin_controller.js");
+    scriptLoader.loadScript("/res/notebook/js/search_controller.js");
 
     events.OPEN_CREATE_CATEGORY_DIALOG = "OPEN_CREATE_CATEGORY_DIALOG";
     events.OPEN_CREATE_TEXT_DIALOG = "OPEN_CREATE_TEXT_DIALOG";
@@ -24,7 +25,8 @@
     events.OPEN_CREATE_CHECKLIST_TABLE_DIALOG = "OPEN_CREATE_CHECKLIST_TABLE_DIALOG";
 
     window.ids = {
-        pinnedItems: "pinned-items"
+        pinnedItems: "pinned-items",
+        searchInput: "search-container-title"
     }
 
     $(document).ready(function(){

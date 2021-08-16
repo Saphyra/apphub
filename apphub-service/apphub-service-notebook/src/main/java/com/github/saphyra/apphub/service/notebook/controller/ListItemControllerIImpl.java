@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.service.notebook.service.ListItemDeletionServic
 import com.github.saphyra.apphub.service.notebook.service.ListItemEditionService;
 import com.github.saphyra.apphub.service.notebook.service.PinService;
 import com.github.saphyra.apphub.service.notebook.service.clone.ListItemCloneService;
+import com.github.saphyra.apphub.service.notebook.service.search.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ class ListItemControllerIImpl implements ListItemController {
     private final ListItemDeletionService listItemDeletionService;
     private final ListItemEditionService listItemEditionService;
     private final PinService pinService;
+    private final SearchService searchService;
 
     @Override
     public void deleteListItem(UUID listItemId, AccessTokenHeader accessTokenHeader) {
@@ -53,5 +55,11 @@ class ListItemControllerIImpl implements ListItemController {
     public List<NotebookView> getPinnedItems(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants wo query his pinned items", accessTokenHeader.getUserId());
         return pinService.getPinnedItems(accessTokenHeader.getUserId());
+    }
+
+    @Override
+    public List<NotebookView> search(OneParamRequest<String> query, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to search for item(s).", accessTokenHeader.getUserId());
+        return searchService.search(accessTokenHeader.getUserId(), query.getValue());
     }
 }

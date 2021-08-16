@@ -56,6 +56,7 @@ window.Mapping = new function(){
         CLONE_NOTEBOOK_LIST_ITEM: new Endpoint("/api/notebook/{listItemId}/clone", HttpMethod.POST),
         NOTEBOOK_PIN_LIST_ITEM: new Endpoint("/api/notebook/item/{listItemId}/pin", HttpMethod.POST),
         NOTEBOOK_GET_PINNED_ITEMS: new Endpoint("/api/notebook/item/pinned", HttpMethod.GET),
+        NOTEBOOK_SEARCH: new Endpoint("/api/notebook/item/search", HttpMethod.POST),
 
         LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),
         LOGOUT: new Endpoint("/api/user/authentication/logout", HttpMethod.POST),
