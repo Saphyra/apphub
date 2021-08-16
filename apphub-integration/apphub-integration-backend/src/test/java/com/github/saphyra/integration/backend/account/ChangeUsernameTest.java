@@ -39,7 +39,7 @@ public class ChangeUsernameTest extends BackEndTest {
             .password(userData1.getPassword())
             .build();
         Response tooShortUsernameResponse = AccountActions.getChangeUsernameResponse(language, accessTokenId, tooShortUsernameRequest);
-        verifyBadRequest(language, tooShortUsernameResponse, ErrorCode.USERNAME_TOO_SHORT);
+        verifyInvalidParam(language, tooShortUsernameResponse, "username", "too short");
 
         //Too long username
         ChangeUsernameRequest tooLongUsernameRequest = ChangeUsernameRequest.builder()
@@ -47,7 +47,7 @@ public class ChangeUsernameTest extends BackEndTest {
             .password(userData1.getPassword())
             .build();
         Response tooLongUsernameResponse = AccountActions.getChangeUsernameResponse(language, accessTokenId, tooLongUsernameRequest);
-        verifyBadRequest(language, tooLongUsernameResponse, ErrorCode.USERNAME_TOO_LONG);
+        verifyInvalidParam(language, tooLongUsernameResponse, "username", "too long");
 
         //Username already exists
         RegistrationParameters userData2 = RegistrationParameters.validParameters();

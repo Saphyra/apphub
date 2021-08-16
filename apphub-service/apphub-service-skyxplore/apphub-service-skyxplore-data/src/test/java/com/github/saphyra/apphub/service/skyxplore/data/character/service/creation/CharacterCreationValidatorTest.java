@@ -44,14 +44,14 @@ public class CharacterCreationValidatorTest {
     public void characterNameTooShort() {
         Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, SkyXploreCharacterModel.builder().name("as").build()));
 
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.CHARACTER_NAME_TOO_SHORT);
+        ExceptionValidator.validateInvalidParam(ex, "characterName", "too short");
     }
 
     @Test
     public void characterNameTooLong() {
         Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, SkyXploreCharacterModel.builder().name(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())).build()));
 
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.CHARACTER_NAME_TOO_LONG);
+        ExceptionValidator.validateInvalidParam(ex, "characterName", "too long");
     }
 
     @Test

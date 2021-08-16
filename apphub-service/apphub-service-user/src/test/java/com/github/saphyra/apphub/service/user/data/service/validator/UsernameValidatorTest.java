@@ -42,14 +42,14 @@ public class UsernameValidatorTest {
     public void tooShortUsername() {
         Throwable ex = catchThrowable(() -> underTest.validateUsername("aa"));
 
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.USERNAME_TOO_SHORT);
+        ExceptionValidator.validateInvalidParam(ex, "username", "too short");
     }
 
     @Test
     public void tooLongUsername() {
         Throwable ex = catchThrowable(() -> underTest.validateUsername(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())));
 
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.USERNAME_TOO_LONG);
+        ExceptionValidator.validateInvalidParam(ex, "username", "too long");
     }
 
     @Test

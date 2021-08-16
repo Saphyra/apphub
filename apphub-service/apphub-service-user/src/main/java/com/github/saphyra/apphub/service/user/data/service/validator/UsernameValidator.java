@@ -20,11 +20,11 @@ public class UsernameValidator {
         }
 
         if (username.length() < 3) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.USERNAME_TOO_SHORT, "Username too short.");
+            throw ExceptionFactory.invalidParam("username", "too short");
         }
 
         if (username.length() > 30) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.USERNAME_TOO_LONG, "Username too long.");
+            throw ExceptionFactory.invalidParam("username", "too long");
         }
 
         if (userDao.findByUsername(username).isPresent()) {

@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
@@ -12,7 +11,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.HttpStatus;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -135,7 +133,7 @@ public class GameCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.GAME_NAME_TOO_SHORT);
+        ExceptionValidator.validateInvalidParam(ex, "gameName", "too short");
 
         verify(allianceNameValidator).validate(ALLIANCE_NAME);
     }
@@ -149,7 +147,7 @@ public class GameCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.GAME_NAME_TOO_LONG);
+        ExceptionValidator.validateInvalidParam(ex, "gameName", "too long");
 
         verify(allianceNameValidator).validate(ALLIANCE_NAME);
     }

@@ -14,7 +14,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyBadRequest;
 import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyErrorResponse;
 import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,14 +39,14 @@ public class SkyXploreCharacterTest extends BackEndTest {
             .name("as")
             .build();
         Response create_characterNameTooShortResponse = SkyXploreCharacterActions.getCreateCharacterResponse(language, accessTokenId1, create_characterNameTooShortModel);
-        verifyBadRequest(language, create_characterNameTooShortResponse, ErrorCode.CHARACTER_NAME_TOO_SHORT);
+        verifyInvalidParam(language, create_characterNameTooShortResponse, "characterName", "too short");
 
         //Create - Character name too long
         SkyXploreCharacterModel create_characterNameTooLongModel = SkyXploreCharacterModel.builder()
             .name(Stream.generate(() -> "a").limit(31).collect(Collectors.joining()))
             .build();
         Response create_characterNameTooLongResponse = SkyXploreCharacterActions.getCreateCharacterResponse(language, accessTokenId1, create_characterNameTooLongModel);
-        verifyBadRequest(language, create_characterNameTooLongResponse, ErrorCode.CHARACTER_NAME_TOO_LONG);
+        verifyInvalidParam(language, create_characterNameTooLongResponse, "characterName", "too long");
 
         //Create
         SkyXploreCharacterModel createModel = SkyXploreCharacterModel.valid();

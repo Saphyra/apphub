@@ -13,7 +13,6 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyBadRequest;
 import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyErrorResponse;
 import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,25 +30,25 @@ public class RegistrationTest extends BackEndTest {
         RegistrationRequest usernameTooShortRequest = RegistrationParameters.tooShortUsernameParameters()
             .toRegistrationRequest();
         Response usernameTooShortResponse = IndexPageActions.getRegistrationResponse(language, usernameTooShortRequest);
-        verifyBadRequest(language, usernameTooShortResponse, ErrorCode.USERNAME_TOO_SHORT);
+        verifyInvalidParam(language, usernameTooShortResponse, "username", "too short");
 
         //Username too long
         RegistrationRequest usernameTooLongRequest = RegistrationParameters.tooLongUsernameParameters()
             .toRegistrationRequest();
         Response usernameTooLongResponse = IndexPageActions.getRegistrationResponse(language, usernameTooLongRequest);
-        verifyBadRequest(language, usernameTooLongResponse, ErrorCode.USERNAME_TOO_LONG);
+        verifyInvalidParam(language, usernameTooLongResponse, "username", "too long");
 
         //Password too short
         RegistrationRequest passwordTooShortRequest = RegistrationParameters.tooShortPasswordParameters()
             .toRegistrationRequest();
         Response passwordTooShortResponse = IndexPageActions.getRegistrationResponse(language, passwordTooShortRequest);
-        verifyBadRequest(language, passwordTooShortResponse, ErrorCode.PASSWORD_TOO_SHORT);
+        verifyInvalidParam(language, passwordTooShortResponse, "password", "too short");
 
         //Password too long
         RegistrationRequest passwordTooLongRequest = RegistrationParameters.tooLongPasswordParameters()
             .toRegistrationRequest();
         Response passwordTooLongResponse = IndexPageActions.getRegistrationResponse(language, passwordTooLongRequest);
-        verifyBadRequest(language, passwordTooLongResponse, ErrorCode.PASSWORD_TOO_LONG);
+        verifyInvalidParam(language, passwordTooLongResponse, "password", "too long");
 
         //Existing e-mail
         RegistrationRequest existingUserRequest = RegistrationParameters.validParameters()

@@ -1,11 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation;
 
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import static java.util.Objects.isNull;
@@ -63,11 +61,11 @@ class GameCreationRequestValidator {
         }
 
         if (request.getGameName().length() < 3) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.GAME_NAME_TOO_SHORT, "GameName too short.");
+            throw ExceptionFactory.invalidParam("gameName", "too short");
         }
 
         if (request.getGameName().length() > 30) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.GAME_NAME_TOO_LONG, "GameName too long.");
+            throw ExceptionFactory.invalidParam("gameName", "too long");
         }
     }
 }
