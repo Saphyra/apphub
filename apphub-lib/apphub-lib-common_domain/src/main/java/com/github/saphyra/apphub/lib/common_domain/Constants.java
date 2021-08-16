@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.common_util;
+package com.github.saphyra.apphub.lib.common_domain;
 
 import lombok.experimental.UtilityClass;
 

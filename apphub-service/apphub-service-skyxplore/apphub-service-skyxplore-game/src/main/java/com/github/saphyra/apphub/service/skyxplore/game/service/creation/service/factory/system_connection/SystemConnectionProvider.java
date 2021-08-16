@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.system_connection;
 
-import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.Line;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SystemConnection;

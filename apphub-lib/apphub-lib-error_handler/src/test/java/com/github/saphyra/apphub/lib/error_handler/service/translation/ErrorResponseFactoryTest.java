@@ -3,8 +3,6 @@ package com.github.saphyra.apphub.lib.error_handler.service.translation;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.error_handler.service.translation.ErrorResponseFactory;
-import com.github.saphyra.apphub.lib.error_handler.service.translation.LocalizedMessageProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +24,6 @@ public class ErrorResponseFactoryTest {
     private static final String LOCALE = "locale";
     private static final ErrorCode ERROR_CODE = ErrorCode.GENERAL_ERROR;
     private static final String LOCALIZED_MESSAGE = "localized-message";
-    public static final String LOCALE_NOT_FOUND_ERROR_CODE = "LOCALE_NOT_FOUND";
 
     @Mock
     private CommonConfigProperties commonConfigProperties;

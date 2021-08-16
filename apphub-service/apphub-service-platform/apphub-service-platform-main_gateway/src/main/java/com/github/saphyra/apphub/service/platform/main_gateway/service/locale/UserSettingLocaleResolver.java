@@ -13,7 +13,7 @@ import org.springframework.util.MultiValueMap;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_COOKIE;
+import static com.github.saphyra.apphub.lib.common_domain.Constants.ACCESS_TOKEN_COOKIE;
 
 @RequiredArgsConstructor
 @Slf4j

@@ -4,17 +4,20 @@ import com.github.saphyra.apphub.api.skyxplore.model.game_setting.PlanetSize;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemSize;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
 import com.github.saphyra.apphub.lib.common_domain.Range;
-import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.common_util.Random;
-import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import org.junit.Before;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
@@ -45,11 +48,14 @@ public class SystemPopulationServiceTest {
     @Mock
     private PlanetCoordinateProvider coordinateProvider;
 
-    private final ExecutorServiceBean executorServiceBean = new ExecutorServiceBean(new SleepService());
+    @SuppressWarnings("unused")
+    @Spy
+    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(Mockito.mock(ErrorReporterService.class));
 
     @Mock
     private PlanetFactory planetFactory;
 
+    @InjectMocks
     private SystemPopulationService underTest;
 
     @Mock
@@ -63,17 +69,6 @@ public class SystemPopulationServiceTest {
 
     @Mock
     private Planet planet;
-
-    @Before
-    public void setUp() {
-        underTest = SystemPopulationService.builder()
-            .random(random)
-            .properties(properties)
-            .coordinateProvider(coordinateProvider)
-            .executorServiceBean(executorServiceBean)
-            .planetFactory(planetFactory)
-            .build();
-    }
 
     @Test
     public void create() {

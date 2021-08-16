@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.error_handler.service.error_report;
+package com.github.saphyra.apphub.lib.error_report;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
@@ -68,14 +68,15 @@ public class ErrorReportModelFactoryTest {
     @Test
     public void createForMessage() {
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(exceptionMapper.map(exception)).willReturn(exceptionModel);
 
-        ErrorReportModel result = underTest.create(MESSAGE);
+        ErrorReportModel result = underTest.create(MESSAGE, exception);
 
         assertThat(result.getId()).isNull();
         assertThat(result.getCreatedAt()).isEqualTo(CURRENT_DATE);
         assertThat(result.getMessage()).isEqualTo(MESSAGE);
         assertThat(result.getResponseStatus()).isNull();
         assertThat(result.getResponseBody()).isNull();
-        assertThat(result.getException()).isNull();
+        assertThat(result.getException()).isEqualTo(exceptionModel);
     }
 }

@@ -1,16 +1,15 @@
-package com.github.saphyra.apphub.lib.error_handler.service.error_report;
+package com.github.saphyra.apphub.lib.error_report;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.common_util.converter.NullSafeConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-
-import static com.github.saphyra.apphub.lib.common_util.converter.NullSafeConverter.safeConvert;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -24,7 +23,7 @@ class ErrorReportModelFactory {
         ExceptionModel exceptionModel = exceptionMapper.map(exception);
         return ErrorReportModel.builder()
             .createdAt(dateTimeUtil.getCurrentDate())
-            .message(safeConvert(exception, throwable -> String.format("%s on thread %s: %s", exceptionModel.getType(), exceptionModel.getThread(), throwable.getMessage()), "No message"))
+            .message(NullSafeConverter.safeConvert(exception, throwable -> String.format("%s on thread %s: %s", exceptionModel.getType(), exceptionModel.getThread(), throwable.getMessage()), "No message"))
             .responseStatus(status.value())
             .responseBody(objectMapperWrapper.writeValueAsString(errorResponse))
             .exception(exceptionModel)
@@ -32,9 +31,16 @@ class ErrorReportModelFactory {
     }
 
     ErrorReportModel create(String message) {
+        return create(message, null);
+    }
+
+    public ErrorReportModel create(String message, Throwable exception) {
+        ExceptionModel exceptionModel = NullSafeConverter.safeConvert(exception, exceptionMapper::map);
+
         return ErrorReportModel.builder()
             .createdAt(dateTimeUtil.getCurrentDate())
             .message(message)
+            .exception(exceptionModel)
             .build();
     }
 }

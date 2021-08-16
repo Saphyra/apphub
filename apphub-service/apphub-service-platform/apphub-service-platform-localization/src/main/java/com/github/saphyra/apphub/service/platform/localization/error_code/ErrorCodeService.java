@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.localization.error_code;
 
 import com.github.saphyra.apphub.lib.data.AbstractDataService;
 import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
-import com.github.saphyra.apphub.lib.error_handler.service.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
 

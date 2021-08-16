@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiCli
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
 import com.github.saphyra.apphub.api.user.client.UserDataApiClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import lombok.RequiredArgsConstructor;

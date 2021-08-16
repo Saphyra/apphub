@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
-import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBeanFactory;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
@@ -37,14 +37,15 @@ public class GameCreationService {
         GameFactory gameFactory,
         GameDao gameDao,
         BlockingQueue<SkyXploreGameCreationRequest> requests,
-        GameSaverService gameSaverService
+        GameSaverService gameSaverService,
+        ExecutorServiceBeanFactory executorServiceBeanFactory
     ) {
         this.messageSenderProxy = messageSenderProxy;
         this.gameFactory = gameFactory;
         this.gameDao = gameDao;
         this.requests = requests;
         this.gameSaverService = gameSaverService;
-        executorServiceBean = ExecutorServiceBeanFactory.create(Executors.newFixedThreadPool(3));
+        executorServiceBean = executorServiceBeanFactory.create(Executors.newFixedThreadPool(3));
     }
 
     private void create(SkyXploreGameCreationRequest request) {

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.error_handler.service.error_report;
+package com.github.saphyra.apphub.lib.error_report;
 
 import com.github.saphyra.apphub.api.admin_panel.client.ErrorReporterClient;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;

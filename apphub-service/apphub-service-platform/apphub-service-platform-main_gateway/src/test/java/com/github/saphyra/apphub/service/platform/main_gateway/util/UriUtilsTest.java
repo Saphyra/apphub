@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.util;
 
-import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

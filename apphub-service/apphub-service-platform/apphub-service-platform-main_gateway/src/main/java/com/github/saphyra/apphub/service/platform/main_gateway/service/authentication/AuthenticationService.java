@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.authenti
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
-import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Optional;
 
-import static com.github.saphyra.apphub.lib.common_util.Constants.ACCESS_TOKEN_COOKIE;
+import static com.github.saphyra.apphub.lib.common_domain.Constants.ACCESS_TOKEN_COOKIE;
 
 @Component
 @RequiredArgsConstructor

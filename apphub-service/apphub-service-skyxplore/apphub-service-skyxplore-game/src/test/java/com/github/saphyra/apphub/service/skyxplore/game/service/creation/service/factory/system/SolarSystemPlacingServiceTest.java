@@ -3,15 +3,18 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemAmount;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
-import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SolarSystemNames;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
-import org.junit.Before;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
@@ -35,11 +38,14 @@ public class SolarSystemPlacingServiceTest {
     @Mock
     private SolarSystemNames solarSystemNames;
 
-    private final ExecutorServiceBean executorServiceBean = new ExecutorServiceBean(new SleepService());
+    @SuppressWarnings("unused")
+    @Spy
+    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(Mockito.mock(ErrorReporterService.class));
 
     @Mock
     private SolarSystemFactory solarSystemFactory;
 
+    @InjectMocks
     private SolarSystemPlacingService underTest;
 
     @Mock
@@ -50,16 +56,6 @@ public class SolarSystemPlacingServiceTest {
 
     @Mock
     private CoordinateModel coordinateModel;
-
-    @Before
-    public void setUp() {
-        underTest = SolarSystemPlacingService.builder()
-            .solarSystemCoordinateProvider(solarSystemCoordinateProvider)
-            .solarSystemNames(solarSystemNames)
-            .solarSystemFactory(solarSystemFactory)
-            .executorServiceBean(executorServiceBean)
-            .build();
-    }
 
     @Test
     public void create() {

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.error_handler.service.error_report;
+package com.github.saphyra.apphub.lib.error_report;
 
 import com.github.saphyra.apphub.api.admin_panel.client.ErrorReporterClient;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
@@ -29,6 +29,15 @@ public class ErrorReporterService {
     public void report(String message) {
         try {
             ErrorReportModel model = errorReportFactory.create(message);
+            errorReporterClient.reportError(model, localeProvider.getLocale());
+        } catch (Exception e) {
+            log.error("Failed reporting error", e);
+        }
+    }
+
+    public void report(String message, Throwable exception) {
+        try {
+            ErrorReportModel model = errorReportFactory.create(message, exception);
             errorReporterClient.reportError(model, localeProvider.getLocale());
         } catch (Exception e) {
             log.error("Failed reporting error", e);

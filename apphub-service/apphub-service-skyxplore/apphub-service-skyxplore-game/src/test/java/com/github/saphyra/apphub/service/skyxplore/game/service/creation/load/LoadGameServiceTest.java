@@ -4,15 +4,19 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreLoadGameRequest;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader.GameLoader;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
@@ -37,8 +41,9 @@ public class LoadGameServiceTest {
     @Mock
     private GameLoader gameLoader;
 
-    @Mock
-    private SleepService sleepService;
+    @SuppressWarnings("unused")
+    @Spy
+    private final ExecutorServiceBeanFactory executorServiceBeanFactory = ExecutorServiceBeenTestUtils.createFactory(Mockito.mock(ErrorReporterService.class));
 
     @Mock
     private LoadGameRequestValidator requestValidator;

@@ -1,58 +1,70 @@
-package com.github.saphyra.apphub.lib.common_util;
+package com.github.saphyra.apphub.lib.concurrency;
 
+import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.google.common.collect.Lists;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PACKAGE)
 public class ExecutorServiceBean {
+    @NonNull
     private final ExecutorService executor;
+
+    @NonNull
     private final SleepService sleepService;
 
-    public ExecutorServiceBean(SleepService sleepService) {
-        this.sleepService = sleepService;
-        executor = Executors.newCachedThreadPool();
+    @NonNull
+    private final ErrorReporterService errorReporterService;
+
+    public Future<ExecutionResult<Void>> execute(Runnable command) {
+        return asyncProcess(() -> {
+            command.run();
+            return null;
+        });
     }
 
-    public ExecutorServiceBean(ExecutorService executorService, SleepService sleepService) {
-        this.executor = executorService;
-        this.sleepService = sleepService;
-    }
-
-    public Future<?> execute(Runnable command) {
+    public <T> Future<ExecutionResult<T>> asyncProcess(Callable<T> command) {
         return executor.submit(wrap(command));
     }
 
-    private Runnable wrap(Runnable command) {
+    private <T> Callable<ExecutionResult<T>> wrap(Callable<T> command) {
         return () -> {
             try {
-                command.run();
+                return new ExecutionResult<>(command.call(), null, true);
             } catch (Exception e) {
                 log.error("Unexpected error during processing:", e);
-                throw e;
+                errorReporterService.report("Unexpected error during processing", e);
+                return new ExecutionResult<>(null, e, false);
             }
         };
     }
 
+    //TODO does it have sense? Processing in background just to wait for the result? Unnecessary complexity
     public <I, R> R processWithWait(I input, Function<I, R> mapper) {
-        Future<R> result = executor.submit(() -> mapper.apply(input));
+        Future<ExecutionResult<R>> result = executor.submit(wrap(() -> mapper.apply(input)));
 
         while (!result.isDone()) {
             sleepService.sleep(1);
         }
 
         try {
-            return result.get();
-        } catch (InterruptedException | ExecutionException e) {
+            return result.get().getOrThrow();
+        } catch (Exception e) {
             throw new RuntimeException("Task failed", e);
         }
     }
@@ -72,8 +84,8 @@ public class ExecutorServiceBean {
     public <I, R> List<R> processCollectionWithWait(Collection<I> dataList, Function<I, R> mapper) {
         log.debug("Processing {} items...", dataList.size());
 
-        List<Future<R>> futures = dataList.stream()
-            .map(i -> executor.submit(() -> mapper.apply(i)))
+        List<Future<ExecutionResult<R>>> futures = dataList.stream()
+            .map(i -> executor.submit(wrap(() -> mapper.apply(i))))
             .collect(Collectors.toList());
 
         long inProgress;
@@ -91,7 +103,8 @@ public class ExecutorServiceBean {
         return futures.stream()
             .map(rFuture -> {
                 try {
-                    return rFuture.get();
+                    return rFuture.get()
+                        .getOrThrow();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

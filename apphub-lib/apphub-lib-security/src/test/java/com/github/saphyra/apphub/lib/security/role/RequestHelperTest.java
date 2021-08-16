@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.lib.security.role;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
