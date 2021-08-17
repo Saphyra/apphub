@@ -73,24 +73,6 @@ public class ExecutorServiceBeanTest {
     }
 
     @Test
-    public void processWithWait() {
-        String result = underTest.processWithWait(TEST_RESULT, String::toUpperCase);
-
-        assertThat(result).isEqualTo(TEST_RESULT.toUpperCase());
-    }
-
-    @Test
-    public void processWithWait_reportError() {
-        RuntimeException cause = new RuntimeException("asd");
-        Throwable ex = catchThrowable(() -> underTest.processWithWait(TEST_RESULT, s -> {
-            throw cause;
-        }));
-
-        assertThat(ex.getCause()).isEqualTo(cause);
-        verify(errorReporterService).report(anyString(), eq(cause));
-    }
-
-    @Test
     public void processCollectionWithWait() {
         List<String> result = underTest.processCollectionWithWait(Arrays.asList(TEST_RESULT, TEST_RESULT), String::toUpperCase, 1);
 

@@ -54,21 +54,6 @@ public class ExecutorServiceBean {
         };
     }
 
-    //TODO does it have sense? Processing in background just to wait for the result? Unnecessary complexity
-    public <I, R> R processWithWait(I input, Function<I, R> mapper) {
-        Future<ExecutionResult<R>> result = executor.submit(wrap(() -> mapper.apply(input)));
-
-        while (!result.isDone()) {
-            sleepService.sleep(1);
-        }
-
-        try {
-            return result.get().getOrThrow();
-        } catch (Exception e) {
-            throw new RuntimeException("Task failed", e);
-        }
-    }
-
     public <I, R> List<R> processCollectionWithWait(List<I> dataList, Function<I, R> mapper, int parallelism) {
         if (parallelism < 1) {
             throw ExceptionFactory.reportedException("Parallelism must not be lower than 1. It was " + parallelism);
