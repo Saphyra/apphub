@@ -2,10 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.data;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.config.Endpoints;
-import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreCharacter;
@@ -46,15 +44,8 @@ import static org.mockito.BDDMockito.given;
 @ContextConfiguration(classes = ApiTestConfiguration.class)
 public class SkyXploreDataEventControllerImplTestIt_deleteAccountEvent {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final UUID USER_ID_2 = UUID.randomUUID();
-    private static final AccessTokenHeader ACCESS_TOKEN_HEADER = AccessTokenHeader.builder()
-        .accessTokenId(UUID.randomUUID())
-        .userId(USER_ID)
-        .roles(Arrays.asList("SKYXPLORE"))
-        .build();
     private static final String LOCALIZED_MESSAGE = "localized-message";
     private static final String CHARACTER_NAME = "character-name";
-    private static final String NEW_CHARACTER_NAME = "new-character-name";
 
     @LocalServerPort
     private int serverPort;
@@ -70,9 +61,6 @@ public class SkyXploreDataEventControllerImplTestIt_deleteAccountEvent {
 
     @Autowired
     private FriendRequestDao friendRequestDao;
-
-    @Autowired
-    private AccessTokenHeaderConverter accessTokenHeaderConverter;
 
     @Autowired
     private List<AbstractDao<?, ?, ?, ?>> daos;
