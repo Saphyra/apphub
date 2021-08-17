@@ -20,7 +20,7 @@ public class RootControllerTest {
     private int serverPort;
 
     @Test
-    public void startup() {
+    public void callRoot() {
         int statusCode = RequestFactory.createRequest()
             .get(UrlFactory.create(serverPort, "/api"))
             .getStatusCode();

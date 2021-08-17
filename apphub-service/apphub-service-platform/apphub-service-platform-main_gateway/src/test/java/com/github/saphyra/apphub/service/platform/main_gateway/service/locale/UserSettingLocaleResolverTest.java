@@ -19,7 +19,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserSettingLocaleResolverTest {
@@ -84,5 +87,25 @@ public class UserSettingLocaleResolverTest {
         given(userDataApi.getLanguage(USER_ID, DEFAULT_LOCALE)).willReturn(LOCALE);
 
         assertThat(underTest.getLocale(cookies)).contains(LOCALE);
+        assertThat(underTest.getLocale(cookies)).contains(LOCALE);
+
+        verify(userDataApi, times(1)).getLanguage(any(), any());
+    }
+
+    @Test
+    public void invalidate() {
+        cookies.put(Constants.ACCESS_TOKEN_COOKIE, Arrays.asList(cookie));
+        given(cookie.getValue()).willReturn(ACCESS_TOKEN_ID);
+        given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID)).willReturn(Optional.of(accessTokenResponse));
+        given(accessTokenResponse.getUserId()).willReturn(USER_ID);
+        given(commonConfigProperties.getDefaultLocale()).willReturn(DEFAULT_LOCALE);
+        given(userDataApi.getLanguage(USER_ID, DEFAULT_LOCALE)).willReturn(LOCALE);
+
+        underTest.getLocale(cookies);
+
+        underTest.invalidate(cookies);
+
+        underTest.getLocale(cookies);
+        verify(userDataApi, times(2)).getLanguage(any(), any());
     }
 }

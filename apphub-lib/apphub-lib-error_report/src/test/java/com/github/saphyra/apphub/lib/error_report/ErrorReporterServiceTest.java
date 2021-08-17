@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.lib.error_report;
 import com.github.saphyra.apphub.api.admin_panel.client.ErrorReporterClient;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.apphub.lib.web_utils.CustomLocaleProvider;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -27,7 +27,7 @@ public class ErrorReporterServiceTest {
     private ErrorReportModelFactory errorReportFactory;
 
     @Mock
-    private CustomLocaleProvider localeProvider;
+    private CommonConfigProperties commonConfigProperties;
 
     @InjectMocks
     private ErrorReporterService underTest;
@@ -44,7 +44,7 @@ public class ErrorReporterServiceTest {
     @Test
     public void reportException() {
         given(errorReportFactory.create(HttpStatus.NOT_FOUND, errorResponse, exception)).willReturn(model);
-        given(localeProvider.getLocale()).willReturn(LOCALE);
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
 
         underTest.report(HttpStatus.NOT_FOUND, errorResponse, exception);
 
@@ -64,7 +64,7 @@ public class ErrorReporterServiceTest {
     @Test
     public void reportMessage() {
         given(errorReportFactory.create(MESSAGE)).willReturn(model);
-        given(localeProvider.getLocale()).willReturn(LOCALE);
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
 
         underTest.report(MESSAGE);
 

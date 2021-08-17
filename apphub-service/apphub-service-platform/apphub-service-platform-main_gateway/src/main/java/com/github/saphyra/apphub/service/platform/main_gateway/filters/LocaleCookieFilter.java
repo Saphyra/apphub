@@ -36,6 +36,7 @@ public class LocaleCookieFilter implements GlobalFilter, Ordered {
                 .addCookie(cookie);
         } catch (Exception e) {
             log.error("Failed setting locale cookie", e);
+            //TODO report error
         }
         return result;
     }
