@@ -20,6 +20,7 @@ public class ContentConverter extends ConverterBase<ContentEntity, Content> {
             .contentId(uuidConverter.convertEntity(entity.getContentId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
             .parent(uuidConverter.convertEntity(entity.getParent()))
+            .listItemId(uuidConverter.convertEntity(entity.getListItemId()))
             .content(stringEncryptor.decryptEntity(entity.getContent(), uuidConverter.convertDomain(accessTokenProvider.get().getUserId())))
             .build();
     }
@@ -30,6 +31,7 @@ public class ContentConverter extends ConverterBase<ContentEntity, Content> {
             .contentId(uuidConverter.convertDomain(content.getContentId()))
             .userId(uuidConverter.convertDomain(content.getUserId()))
             .parent(uuidConverter.convertDomain(content.getParent()))
+            .listItemId(uuidConverter.convertDomain(content.getListItemId()))
             .content(stringEncryptor.encryptEntity(content.getContent(), uuidConverter.convertDomain(accessTokenProvider.get().getUserId())))
             .build();
     }

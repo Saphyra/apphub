@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.notebook.service.ListItemDeletionServic
 import com.github.saphyra.apphub.service.notebook.service.ListItemEditionService;
 import com.github.saphyra.apphub.service.notebook.service.PinService;
 import com.github.saphyra.apphub.service.notebook.service.clone.ListItemCloneService;
+import com.github.saphyra.apphub.service.notebook.service.search.SearchService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +28,7 @@ import static org.mockito.Mockito.verify;
 public class ListItemControllerIImplTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final String SEARCH_TEXT = "search-text";
 
     @Mock
     private ListItemDeletionService listItemDeletionService;
@@ -39,6 +41,9 @@ public class ListItemControllerIImplTest {
 
     @Mock
     private PinService pinService;
+
+    @Mock
+    private SearchService searchService;
 
     @InjectMocks
     private ListItemControllerIImpl underTest;
@@ -90,6 +95,15 @@ public class ListItemControllerIImplTest {
         given(pinService.getPinnedItems(USER_ID)).willReturn(Arrays.asList(notebookView));
 
         List<NotebookView> result = underTest.getPinnedItems(accessTokenHeader);
+
+        assertThat(result).containsExactly(notebookView);
+    }
+
+    @Test
+    public void search() {
+        given(searchService.search(USER_ID, SEARCH_TEXT)).willReturn(Arrays.asList(notebookView));
+
+        List<NotebookView> result = underTest.search(new OneParamRequest<>(SEARCH_TEXT), accessTokenHeader);
 
         assertThat(result).containsExactly(notebookView);
     }

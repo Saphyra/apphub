@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.api.skyxplore.response.game.planet;
 
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +13,6 @@ import java.util.List;
 @Data
 @Builder
 public class StorageSettingsResponse {
-    private List<StorageSettingModel> currentSettings;
+    private List<StorageSettingApiModel> currentSettings;
     private List<String> availableResources;
 }

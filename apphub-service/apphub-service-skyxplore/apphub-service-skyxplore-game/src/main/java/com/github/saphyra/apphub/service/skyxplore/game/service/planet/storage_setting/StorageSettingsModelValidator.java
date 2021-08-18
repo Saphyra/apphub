@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
@@ -21,7 +21,7 @@ class StorageSettingsModelValidator {
     private final ResourceDataService resourceDataService;
     private final PriorityValidator priorityValidator;
 
-    void validate(StorageSettingModel model, Planet planet) {
+    void validate(StorageSettingApiModel model, Planet planet) {
         validate(model);
 
         if (planet.getStorageDetails().getStorageSettings().findByDataId(model.getDataId()).isPresent()) {
@@ -29,7 +29,7 @@ class StorageSettingsModelValidator {
         }
     }
 
-    void validate(StorageSettingModel model) {
+    void validate(StorageSettingApiModel model) {
         priorityValidator.validate(model.getPriority());
 
         if (isBlank(model.getDataId())) {

@@ -72,4 +72,14 @@ public class BuildingDaoTest {
 
         assertThat(result).contains(model);
     }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(BUILDING_ID)).willReturn(BUILDING_ID_STRING);
+        given(repository.existsById(BUILDING_ID_STRING)).willReturn(true);
+
+        underTest.deleteById(BUILDING_ID);
+
+        verify(repository).deleteById(BUILDING_ID_STRING);
+    }
 }

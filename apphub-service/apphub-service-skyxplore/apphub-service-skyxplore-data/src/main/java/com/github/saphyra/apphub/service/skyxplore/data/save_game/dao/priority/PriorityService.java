@@ -52,4 +52,9 @@ public class PriorityService implements GameItemService {
     public List<PriorityModel> getByParent(UUID parent) {
         return priorityDao.getByLocation(parent);
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        throw new UnsupportedOperationException("Priority cannot be deleted by uuid");
+    }
 }

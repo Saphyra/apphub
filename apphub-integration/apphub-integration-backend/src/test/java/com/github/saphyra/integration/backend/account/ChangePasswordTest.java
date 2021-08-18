@@ -41,7 +41,7 @@ public class ChangePasswordTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
         Response tooShortNewPasswordResponse = AccountActions.getChangePasswordResponse(language, accessTokenId, tooShortNewPasswordRequest);
-        verifyBadRequest(language, tooShortNewPasswordResponse, ErrorCode.PASSWORD_TOO_SHORT);
+        verifyInvalidParam(language, tooShortNewPasswordResponse, "password", "too short");
 
         //Too long new password
         ChangePasswordRequest tooLongNewPasswordRequest = ChangePasswordRequest.builder()
@@ -49,7 +49,7 @@ public class ChangePasswordTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
         Response tooLongNewPasswordResponse = AccountActions.getChangePasswordResponse(language, accessTokenId, tooLongNewPasswordRequest);
-        verifyBadRequest(language, tooLongNewPasswordResponse, ErrorCode.PASSWORD_TOO_LONG);
+        verifyInvalidParam(language, tooLongNewPasswordResponse, "password", "too long");
 
         //Null password
         ChangePasswordRequest nullPasswordRequest = ChangePasswordRequest.builder()

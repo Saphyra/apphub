@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.query;
 
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,14 +13,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 class CurrentSettingsMapper {
-    List<StorageSettingModel> convert(List<StorageSetting> storageSettings) {
+    List<StorageSettingApiModel> convert(List<StorageSetting> storageSettings) {
         return storageSettings.stream()
             .map(this::convert)
             .collect(Collectors.toList());
     }
 
-    private StorageSettingModel convert(StorageSetting storageSetting) {
-        return StorageSettingModel.builder()
+    private StorageSettingApiModel convert(StorageSetting storageSetting) {
+        return StorageSettingApiModel.builder()
             .storageSettingId(storageSetting.getStorageSettingId())
             .dataId(storageSetting.getDataId())
             .targetAmount(storageSetting.getTargetAmount())

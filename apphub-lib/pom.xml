@@ -57,5 +57,7 @@
         <module>apphub-lib-geometry</module>
         <module>apphub-lib-skyxplore</module>
         <module>apphub-lib-web_utils</module>
+        <module>apphub-lib-error_report</module>
+        <module>apphub-lib-concurrency</module>
     </modules>
 </project>

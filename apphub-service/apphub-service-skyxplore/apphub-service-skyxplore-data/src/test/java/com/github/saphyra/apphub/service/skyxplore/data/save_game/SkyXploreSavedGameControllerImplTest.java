@@ -57,6 +57,9 @@ public class SkyXploreSavedGameControllerImplTest {
     @Mock
     private LoadGameItemService loadGameItemService;
 
+    @Mock
+    private DeleteGameItemService deleteGameItemService;
+
     private SkyXploreSavedGameControllerImpl underTest;
 
     @Mock
@@ -93,7 +96,8 @@ public class SkyXploreSavedGameControllerImplTest {
             objectMapperWrapper,
             gameDao, playerDao, gameDeletionService,
             gameViewForLobbyCreationQueryService,
-            loadGameItemService
+            loadGameItemService,
+            deleteGameItemService
         );
     }
 
@@ -177,5 +181,12 @@ public class SkyXploreSavedGameControllerImplTest {
         List result = underTest.loadChildrenOfGameItem(ID, GameItemType.GAME);
 
         assertThat(result).containsExactly(gameModel);
+    }
+
+    @Test
+    public void deleteItem() {
+        underTest.deleteGameItem(ID, GameItemType.PLAYER);
+
+        verify(deleteGameItemService).deleteItem(ID, GameItemType.PLAYER);
     }
 }

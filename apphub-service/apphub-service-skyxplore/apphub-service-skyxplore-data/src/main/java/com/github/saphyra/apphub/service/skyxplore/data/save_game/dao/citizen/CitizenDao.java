@@ -31,4 +31,8 @@ public class CitizenDao extends AbstractDao<CitizenEntity, CitizenModel, String,
     public List<CitizenModel> getByLocation(UUID location) {
         return converter.convertEntity(repository.getByLocation(uuidConverter.convertDomain(location)));
     }
+
+    public void deleteById(UUID citizenId) {
+        deleteById(uuidConverter.convertDomain(citizenId));
+    }
 }

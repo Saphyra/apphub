@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.query;
 
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,10 +34,10 @@ public class CurrentSettingsMapperTest {
             .priority(PRIORITY)
             .build();
 
-        List<StorageSettingModel> result = underTest.convert(Arrays.asList(storageSetting));
+        List<StorageSettingApiModel> result = underTest.convert(Arrays.asList(storageSetting));
 
         assertThat(result).hasSize(1);
-        StorageSettingModel model = result.get(0);
+        StorageSettingApiModel model = result.get(0);
         assertThat(model.getStorageSettingId()).isEqualTo(STORAGE_SETTING_ID);
         assertThat(model.getDataId()).isEqualTo(DATA_ID);
         assertThat(model.getTargetAmount()).isEqualTo(TARGET_AMOUNT);

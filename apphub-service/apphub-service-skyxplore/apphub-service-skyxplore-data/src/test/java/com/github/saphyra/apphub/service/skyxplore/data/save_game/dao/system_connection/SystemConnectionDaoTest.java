@@ -72,4 +72,14 @@ public class SystemConnectionDaoTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(SYSTEM_CONNECTION_ID)).willReturn(SYSTEM_CONNECTION_ID_STRING);
+        given(repository.existsById(SYSTEM_CONNECTION_ID_STRING)).willReturn(true);
+
+        underTest.deleteById(SYSTEM_CONNECTION_ID);
+
+        verify(repository).deleteById(SYSTEM_CONNECTION_ID_STRING);
+    }
 }

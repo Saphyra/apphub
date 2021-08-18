@@ -38,7 +38,7 @@ public class TableJoinFactory {
             .rowIndex(rowIndex)
             .columnIndex(columnIndex)
             .build();
-        Content content = contentFactory.create(tableJoin.getTableJoinId(), userId, columnContent);
+        Content content = contentFactory.create(listItemId, tableJoin.getTableJoinId(), userId, columnContent);
         return new BiWrapper<>(tableJoin, content);
     }
 }

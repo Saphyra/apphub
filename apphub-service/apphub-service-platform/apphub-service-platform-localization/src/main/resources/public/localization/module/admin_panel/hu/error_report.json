@@ -157,6 +157,30 @@
         "message": "Jelölés visszavonása"
       }
     ],
+    "delete-read-button": [
+      {
+        "key": "innerHTML",
+        "message": "Olvasottak törlése"
+      }
+    ],
+    "mark-checked-as-read-button": [
+      {
+        "key": "innerHTML",
+        "message": "Kijelöltek olvasottnak jelölése"
+      }
+    ],
+    "mark-checked-button": [
+      {
+        "key": "innerHTML",
+        "message": "Kijelöltek megjelölése"
+      }
+    ],
+    "mark-checked-as-unread-button": [
+      {
+        "key": "innerHTML",
+        "message": "Kijelöltek olvasatlannak jelölése"
+      }
+    ],
     "back-button": [
       {
         "key": "innerHTML",
@@ -173,6 +197,11 @@
     "delete-error-report-button": "Törlés",
     "mark-error-report-button": "Megjelöl",
     "mark-error-report-as-unread-button": "Olvasatlannak jelöl",
-    "mark-error-report-as-read-button": "Olvasottnak jelöl"
+    "mark-error-report-as-read-button": "Olvasottnak jelöl",
+    "delete-all-read-error-reports-confirmation-dialog-title": "Olvasott hibajelentések törlésének megerősítése",
+    "delete-all-read-error-reports-confirmation-dialog-detail": "Biztos hogy törölni szeretné az összes olvasott hibajelentést??",
+    "delete-all-read-error-reports-confirmation-dialog-confirm-button": "Összes olvasott törlése",
+    "delete-all-read-error-reports-confirmation-dialog-cancel-button": "Mégse",
+    "all-read-deleted": "Az összes olvasott hibajelentés törölve.."
   }
 }

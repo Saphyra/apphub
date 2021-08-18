@@ -9,6 +9,7 @@
         this.getCurrentCategoryId = function(){
             return currentCategoryId;
         }
+        this.displayCategoryDetails = displayCategoryDetails;
     }
 
     eventProcessor.registerProcessor(new EventProcessor(

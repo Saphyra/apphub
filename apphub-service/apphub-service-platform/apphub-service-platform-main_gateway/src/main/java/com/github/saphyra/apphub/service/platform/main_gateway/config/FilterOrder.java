@@ -9,7 +9,8 @@ public enum FilterOrder {
     PAGE_VISITED_FILTER(AUTHENTICATION_FILTER.getOrder() + 1),
     LOCALE_FILTER(Integer.MIN_VALUE + 1),
     REQUEST_LOGGING_FILTER(Integer.MIN_VALUE),
-    LOCALE_COOKIE_FILTER(0);
+    LOCALE_COOKIE_FILTER(0),
+    CHANGE_LOCALE_FILTER(1);
 
     @Getter
     private final int order;

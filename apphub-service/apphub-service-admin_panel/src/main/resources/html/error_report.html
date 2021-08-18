@@ -79,7 +79,11 @@
         <TABLE id="content-table" class="formatted-table">
             <THEAD>
             <TR>
-                <TD></TD>
+                <TD class="nowrap">
+                    <INPUT type="checkbox" onclick="bulkOperationsController.selectAll(event)" checked>
+                    /
+                    <INPUT type="checkbox" onclick="bulkOperationsController.deselectAll(event)">
+                </TD>
                 <TD id="column-name-timestamp"></TD>
                 <TD id="column-name-status-code"></TD>
                 <TD id="column-name-message"></TD>
@@ -93,6 +97,10 @@
 
     <FOOTER>
         <BUTTON id="back-button" onclick='window.location = "/web/admin-panel"'></BUTTON>
+        <BUTTON id="delete-read-button" onclick="bulkOperationsController.deleteAllRead()"></BUTTON>
+        <BUTTON id="mark-checked-as-read-button" onclick="bulkOperationsController.markAsRead()"></BUTTON>
+        <BUTTON id="mark-checked-button" onclick="bulkOperationsController.mark()"></BUTTON>
+        <BUTTON id="mark-checked-as-unread-button" onclick="bulkOperationsController.markAsUnread()"></BUTTON>
     </FOOTER>
 </DIV>
 

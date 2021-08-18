@@ -18,7 +18,7 @@
         <addPrimaryKey schemaName="notebook" tableName="text" columnNames="text_id" constraintName="text_pk"/>
     </changeSet>
 
-    <changeSet id="rename-table-text-to-content" author="sapgyra">
+    <changeSet id="rename-table-text-to-content" author="saphyra">
         <preConditions onFail="MARK_RAN">
             <tableExists schemaName="notebook" tableName="text"/>
         </preConditions>
@@ -34,12 +34,24 @@
         <renameColumn schemaName="notebook" tableName="content" oldColumnName="text_id" newColumnName="content_id"/>
     </changeSet>
 
-    <changeSet id="rename-constraint-text_pk-to-content_pk" author="Bernat Bonda">
+    <changeSet id="rename-constraint-text_pk-to-content_pk" author="saphyra">
         <preConditions onFail="MARK_RAN">
             <primaryKeyExists schemaName="notebook" primaryKeyName="text_pk"/>
         </preConditions>
 
         <dropPrimaryKey schemaName="notebook" tableName="content"/>
         <addPrimaryKey schemaName="notebook" tableName="content" columnNames="content_id" constraintName="content_pk"/>
+    </changeSet>
+
+    <changeSet id="add-column-lust_item_id-to-content" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="notebook" tableName="content" columnName="list_item_id"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="notebook" tableName="content">
+            <column name="list_item_id" type="varchar(37)"/>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>

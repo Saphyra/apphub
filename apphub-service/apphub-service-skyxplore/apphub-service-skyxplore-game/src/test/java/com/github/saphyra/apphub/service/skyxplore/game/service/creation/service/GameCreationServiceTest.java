@@ -3,8 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
-import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
@@ -15,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.UUID;
@@ -23,6 +25,7 @@ import java.util.concurrent.BlockingQueue;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -43,6 +46,9 @@ public class GameCreationServiceTest {
 
     private final BlockingQueue<SkyXploreGameCreationRequest> requests = new ArrayBlockingQueue<>(1);
 
+    @Mock
+    private ErrorReporterService errorReporterService;
+
     private GameCreationService underTest;
 
     @Mock
@@ -50,9 +56,6 @@ public class GameCreationServiceTest {
 
     @Mock
     private Game game;
-
-    @Mock
-    private ExecutorServiceBean executorServiceBean;
 
     @Before
     public void setUp() {
@@ -62,6 +65,8 @@ public class GameCreationServiceTest {
             .gameDao(gameDao)
             .requests(requests)
             .gameSaverService(gameSaverService)
+            .executorServiceBeanFactory(ExecutorServiceBeenTestUtils.createFactory(Mockito.mock(ErrorReporterService.class)))
+            .errorReporterService(errorReporterService)
             .build();
     }
 
@@ -74,9 +79,7 @@ public class GameCreationServiceTest {
 
         requests.put(request);
 
-        Thread.sleep(1000);
-
-        verify(gameDao).save(game);
+        verify(gameDao, timeout(1000)).save(game);
         ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
         verify(messageSenderProxy).sendToLobby(argumentCaptor.capture());
         WebSocketMessage message = argumentCaptor.getValue();

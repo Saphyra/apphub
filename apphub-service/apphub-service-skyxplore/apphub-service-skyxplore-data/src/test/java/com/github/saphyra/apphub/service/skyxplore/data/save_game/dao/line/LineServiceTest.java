@@ -71,4 +71,11 @@ public class LineServiceTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        underTest.deleteById(ID);
+
+        verify(lineDao).deleteById(ID);
+    }
 }

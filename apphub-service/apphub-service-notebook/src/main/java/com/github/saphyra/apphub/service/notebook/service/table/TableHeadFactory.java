@@ -33,7 +33,7 @@ public class TableHeadFactory {
             .parent(listItemId)
             .columnIndex(columnIndex)
             .build();
-        Content content = contentFactory.create(tableHead.getTableHeadId(), userId, columnName);
+        Content content = contentFactory.create(listItemId, tableHead.getTableHeadId(), userId, columnName);
         return new BiWrapper<>(tableHead, content);
     }
 

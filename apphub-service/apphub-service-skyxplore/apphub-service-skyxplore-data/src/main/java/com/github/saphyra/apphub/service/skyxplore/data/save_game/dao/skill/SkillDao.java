@@ -29,4 +29,8 @@ public class SkillDao extends AbstractDao<SkillEntity, SkillModel, String, Skill
     public List<SkillModel> getByCitizenId(UUID citizenId) {
         return converter.convertEntity(repository.getByCitizenId(uuidConverter.convertDomain(citizenId)));
     }
+
+    public void deleteById(UUID skillId) {
+        deleteById(uuidConverter.convertDomain(skillId));
+    }
 }

@@ -24,7 +24,7 @@ class TableHeadCloneService {
         tableHeadDao.save(tableHeadClone);
 
         Content tableHeadContent = contentDao.findByParentValidated(tableHead.getTableHeadId());
-        Content tableHeadContentClone = contentFactory.create(tableHeadClone.getTableHeadId(), clone.getUserId(), tableHeadContent.getContent());
+        Content tableHeadContentClone = contentFactory.create(clone.getListItemId(), tableHeadClone.getTableHeadId(), clone.getUserId(), tableHeadContent.getContent());
         contentDao.save(tableHeadContentClone);
     }
 }

@@ -73,6 +73,9 @@
                         checkbox.type = "checkbox";
                         checkbox.value = errorReport.id;
                         checkbox.classList.add("error-report-selection");
+                        checkbox.onclick = function(e){
+                            e.stopPropagation();
+                        }
                 checkboxCell.appendChild(checkbox);
             row.appendChild(checkboxCell);
 
@@ -144,9 +147,15 @@
                 function createChangeStatusFunction(status, errorReport, operationsCell, statusChanger){
                     return function(e){
                         e.stopPropagation();
-                        statusChanger(status);
-                        errorReport.status = status;
-                        addOperationButtons(errorReport, operationsCell, statusChanger);
+                        markErrorReports(
+                            [errorReport.id],
+                             status,
+                             function(){
+                                statusChanger(status);
+                                errorReport.status = status;
+                                addOperationButtons(errorReport, operationsCell, statusChanger);
+                             }
+                         )
                     }
                 }
             }
@@ -237,18 +246,6 @@
                 dao.sendRequestAsync(request);
             }
         )
-    }
-
-    function markErrorReports(ids, status, callback){
-        const request = new Request(Mapping.getEndpoint("ERROR_REPORT_MARK_ERRORS", {status: status}), ids);
-            request.processValidResponse = function(){
-                Localization.getAdditionalContent("error-reports-marked");
-
-                if(callback){
-                    callback();
-                }
-            }
-        dao.sendRequestAsync(request);
     }
 
     function displayPageNumber(){

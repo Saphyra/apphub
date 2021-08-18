@@ -74,4 +74,14 @@ public class SurfaceDaoTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(SURFACE_ID)).willReturn(SURFACE_ID_STRING);
+        given(repository.existsById(SURFACE_ID_STRING)).willReturn(true);
+
+        underTest.deleteById(SURFACE_ID);
+
+        verify(repository).deleteById(SURFACE_ID_STRING);
+    }
 }

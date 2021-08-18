@@ -24,7 +24,7 @@ class ChecklistItemCloneService {
         checklistItemDao.save(checklistItemClone);
 
         Content checklistItemContent = contentDao.findByParentValidated(checklistItem.getChecklistItemId());
-        Content checklistItemContentClone = contentFactory.create(checklistItemClone.getChecklistItemId(), clone.getUserId(), checklistItemContent.getContent());
+        Content checklistItemContentClone = contentFactory.create(clone.getListItemId(), checklistItemClone.getChecklistItemId(), clone.getUserId(), checklistItemContent.getContent());
         contentDao.save(checklistItemContentClone);
     }
 }

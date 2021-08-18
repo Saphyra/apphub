@@ -25,7 +25,7 @@ public class UniverseService implements GameItemService {
     @Override
     public void deleteByGameId(UUID gameId) {
         log.info("Deleting {}s by gameId {}", getClass().getSimpleName(), gameId);
-        universeDao.deleteById(gameId);
+        deleteById(gameId);
     }
 
     @Override
@@ -55,5 +55,10 @@ public class UniverseService implements GameItemService {
         return universeDao.findById(parent)
             .map(Arrays::asList)
             .orElse(Collections.emptyList());
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        universeDao.deleteById(id);
     }
 }

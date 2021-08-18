@@ -71,4 +71,11 @@ public class StoredResourceServiceTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        underTest.deleteById(ID);
+
+        verify(storedResourceDao).deleteById(ID);
+    }
 }

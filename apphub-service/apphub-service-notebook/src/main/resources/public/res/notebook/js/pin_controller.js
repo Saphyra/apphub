@@ -10,6 +10,16 @@
 
     $(document).ready(init);
 
+    eventProcessor.registerProcessor(new EventProcessor(
+        function(eventType){
+            return eventType == events.CATEGORY_DELETED
+                || eventType == events.ITEM_DELETED
+        },
+        function(event){
+            loadPinnedItems();
+        },
+    ));
+
     function loadPinnedItems(){
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_PINNED_ITEMS"));
             request.convertResponse = jsonConverter;

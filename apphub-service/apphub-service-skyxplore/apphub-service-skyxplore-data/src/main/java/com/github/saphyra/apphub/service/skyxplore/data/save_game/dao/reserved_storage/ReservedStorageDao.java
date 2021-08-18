@@ -29,4 +29,8 @@ public class ReservedStorageDao extends AbstractDao<ReservedStorageEntity, Reser
     public List<ReservedStorageModel> getByLocation(UUID location) {
         return converter.convertEntity(repository.getByLocation(uuidConverter.convertDomain(location)));
     }
+
+    public void deleteById(UUID reservedStorageId) {
+        deleteById(uuidConverter.convertDomain(reservedStorageId));
+    }
 }

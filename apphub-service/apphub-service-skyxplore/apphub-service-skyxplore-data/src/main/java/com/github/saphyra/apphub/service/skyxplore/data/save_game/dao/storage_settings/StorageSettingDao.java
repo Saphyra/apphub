@@ -29,4 +29,8 @@ public class StorageSettingDao extends AbstractDao<StorageSettingEntity, Storage
     public List<StorageSettingModel> getByLocation(UUID location) {
         return converter.convertEntity(repository.getByLocation(uuidConverter.convertDomain(location)));
     }
+
+    public void deleteById(UUID storageSettingId) {
+        deleteById(uuidConverter.convertDomain(storageSettingId));
+    }
 }

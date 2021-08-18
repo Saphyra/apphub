@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.test.common.rest_assured;
 
-import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import io.restassured.config.DecoderConfig;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.filter.log.ResponseLoggingFilter;

@@ -29,4 +29,8 @@ public class PlanetDao extends AbstractDao<PlanetEntity, PlanetModel, String, Pl
     public List<PlanetModel> getBySolarSystemId(UUID solarSystemId) {
         return converter.convertEntity(repository.getBySolarSystemId(uuidConverter.convertDomain(solarSystemId)));
     }
+
+    public void deleteById(UUID planetId) {
+        deleteById(uuidConverter.convertDomain(planetId));
+    }
 }

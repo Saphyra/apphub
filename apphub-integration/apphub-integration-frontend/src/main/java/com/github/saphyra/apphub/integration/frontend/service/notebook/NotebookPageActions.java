@@ -44,4 +44,8 @@ public class NotebookPageActions {
     public static void verifyEditListItemDialogClosed(WebDriver driver) {
         assertThat(NotebookPage.editListItemDialog(driver).isDisplayed()).isFalse();
     }
+
+    public static void search(WebDriver driver, String searchText) {
+        clearAndFill(NotebookPage.searchInput(driver), searchText);
+    }
 }

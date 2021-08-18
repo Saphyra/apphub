@@ -51,4 +51,9 @@ public class ReservedStorageService implements GameItemService {
     public List<ReservedStorageModel> getByParent(UUID parent) {
         return reservedStorageDao.getByLocation(parent);
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        reservedStorageDao.deleteById(id);
+    }
 }

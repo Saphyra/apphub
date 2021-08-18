@@ -74,4 +74,14 @@ public class AllocatedResourceDaoTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(ALLOCATED_RESOURCE_ID)).willReturn(ALLOCATED_RESOURCE_ID_STRING);
+        given(repository.existsById(ALLOCATED_RESOURCE_ID_STRING)).willReturn(true);
+
+        underTest.deleteById(ALLOCATED_RESOURCE_ID);
+
+        verify(repository).deleteById(ALLOCATED_RESOURCE_ID_STRING);
+    }
 }

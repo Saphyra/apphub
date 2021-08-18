@@ -17,14 +17,18 @@
     }
 
         #search-container-title{
-            text-align: center;
+            width: calc(100% - 4rem);
         }
 
-        #search-container-close-button{
+        #search-container-button-wrapper{
             position: absolute;
-            right: 0;
+            right: 0.5rem;
             top: 0;
         }
+
+            #search-container-button-wrapper button{
+                margin: 0.25rem 0;
+            }
 
     #detailed-page-container{
         position: absolute;

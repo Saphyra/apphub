@@ -74,4 +74,14 @@ public class SkillDaoTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(SKILL_ID)).willReturn(SKILL_ID_STRING);
+        given(repository.existsById(SKILL_ID_STRING)).willReturn(true);
+
+        underTest.deleteById(SKILL_ID);
+
+        verify(repository).deleteById(SKILL_ID_STRING);
+    }
 }

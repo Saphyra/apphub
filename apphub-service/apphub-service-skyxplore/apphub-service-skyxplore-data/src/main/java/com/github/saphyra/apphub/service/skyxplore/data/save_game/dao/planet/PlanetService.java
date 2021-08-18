@@ -52,4 +52,9 @@ public class PlanetService implements GameItemService {
     public List<PlanetModel> getByParent(UUID parent) {
         return planetDao.getBySolarSystemId(parent);
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        planetDao.deleteById(id);
+    }
 }

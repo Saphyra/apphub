@@ -17,4 +17,6 @@ public interface GameItemService {
     Optional<? extends GameItem> findById(UUID id);
 
     List<? extends GameItem> getByParent(UUID parent);
+
+    void deleteById(UUID id);
 }

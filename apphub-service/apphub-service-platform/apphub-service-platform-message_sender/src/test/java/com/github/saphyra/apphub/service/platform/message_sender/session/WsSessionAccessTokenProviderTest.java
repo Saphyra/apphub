@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.message_sender.session;
 
-import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.LoggedException;
 import org.junit.Test;

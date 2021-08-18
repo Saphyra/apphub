@@ -23,8 +23,9 @@
     <build>
 
     </build>
-<modules>  <module>apphub-api-admin_panel-client</module>
-    <module>apphub-api-admin_panel-model</module>
-    <module>apphub-api-admin_panel-server</module>
-  </modules>
+    <modules>
+        <module>apphub-api-admin_panel-client</module>
+        <module>apphub-api-admin_panel-model</module>
+        <module>apphub-api-admin_panel-server</module>
+    </modules>
 </project>

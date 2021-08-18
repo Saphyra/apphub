@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.filters;
 
-import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.main_gateway.config.FilterOrder;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.locale.ApphubLocaleResolver;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class LocaleCookieFilter implements GlobalFilter, Ordered {
     private final ApphubLocaleResolver localeResolver;
+    private final ErrorReporterService errorReporterService;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -36,6 +38,7 @@ public class LocaleCookieFilter implements GlobalFilter, Ordered {
                 .addCookie(cookie);
         } catch (Exception e) {
             log.error("Failed setting locale cookie", e);
+            errorReporterService.report("Failed setting locale cookie", e);
         }
         return result;
     }

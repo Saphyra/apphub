@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.notebook.model.request.EditListItemRequest;
 import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,4 +26,7 @@ public interface ListItemController {
 
     @GetMapping(Endpoints.NOTEBOOK_GET_PINNED_ITEMS)
     List<NotebookView> getPinnedItems(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.NOTEBOOK_SEARCH)
+    List<NotebookView> search(@RequestBody OneParamRequest<String> query, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

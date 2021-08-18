@@ -134,6 +134,7 @@ public class ChecklistActions {
         WebElement discardButton = NotebookPage.editChecklistDiscardButton(driver);
         assertThat(discardButton.isDisplayed()).isTrue();
         discardButton.click();
+        CommonPageActions.confirmConfirmationDialog(driver, "discard-confirmation-dialog");
     }
 
     public static String getTitle(WebDriver driver) {

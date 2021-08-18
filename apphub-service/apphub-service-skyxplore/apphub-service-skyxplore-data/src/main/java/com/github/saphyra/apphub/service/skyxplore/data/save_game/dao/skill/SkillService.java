@@ -51,4 +51,9 @@ public class SkillService implements GameItemService {
     public List<SkillModel> getByParent(UUID parent) {
         return skillDao.getByCitizenId(parent);
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        skillDao.deleteById(id);
+    }
 }

@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGameWebSocke
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.SystemMessage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import lombok.Builder;
@@ -63,6 +62,8 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
                 WebSocketEventName.SKYXPLORE_GAME_USER_JOINED,
                 new SystemMessage(chatRoom.getId(), userName, userId)
             ));
+
+        game.setMarkedForDeletion(false);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
 
             String userName = characterProxy.getCharacterByUserId(userId).getName();
 
-            if (game.getPlayers().values().stream().noneMatch(Player::isConnected)) {
+            if (game.getConnectedPlayers().isEmpty()) {
                 gameDao.delete(game);
                 return;
             }

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.error_handler;
 
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,7 +13,10 @@ import com.github.saphyra.apphub.lib.web_utils.CustomLocaleProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 
 @Configuration
-@ComponentScan(basePackageClasses = ErrorHandlerAdvice.class)
+@ComponentScan(basePackageClasses = {
+    ErrorHandlerAdvice.class,
+    ErrorReporterService.class
+})
 @Import({
     ErrorTranslationConfiguration.class,
     CommonConfigProperties.class

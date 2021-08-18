@@ -36,11 +36,11 @@ class CreateChatRoomRequestValidator {
         }
 
         if (request.getRoomTitle().length() < 3) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.CHAT_ROOM_TITLE_TOO_SHORT, "ChatRoom name too short.");
+            throw ExceptionFactory.invalidParam("roomTitle", "too short");
         }
 
         if (request.getRoomTitle().length() > 20) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.CHAT_ROOM_TITLE_TOO_LONG, "ChatRoom name too long.");
+            throw ExceptionFactory.invalidParam("roomTitle", "too long");
         }
     }
 }

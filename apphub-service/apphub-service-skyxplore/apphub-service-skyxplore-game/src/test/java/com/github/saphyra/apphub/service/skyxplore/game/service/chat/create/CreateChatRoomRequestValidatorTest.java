@@ -97,7 +97,7 @@ public class CreateChatRoomRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request, game));
 
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.CHAT_ROOM_TITLE_TOO_SHORT);
+        ExceptionValidator.validateInvalidParam(ex, "roomTitle", "too short");
     }
 
     @Test
@@ -109,7 +109,7 @@ public class CreateChatRoomRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request, game));
 
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.CHAT_ROOM_TITLE_TOO_LONG);
+        ExceptionValidator.validateInvalidParam(ex, "roomTitle", "too long");
     }
 
     @Test

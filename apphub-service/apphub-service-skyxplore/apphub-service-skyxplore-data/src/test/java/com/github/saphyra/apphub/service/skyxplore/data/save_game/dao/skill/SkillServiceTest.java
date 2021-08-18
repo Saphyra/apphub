@@ -71,4 +71,11 @@ public class SkillServiceTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        underTest.deleteById(ID);
+
+        verify(skillDao).deleteById(ID);
+    }
 }

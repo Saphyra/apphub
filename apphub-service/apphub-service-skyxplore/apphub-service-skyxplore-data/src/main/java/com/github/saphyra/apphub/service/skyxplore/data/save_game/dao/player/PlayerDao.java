@@ -33,4 +33,8 @@ public class PlayerDao extends AbstractDao<PlayerEntity, PlayerModel, String, Pl
     public Optional<PlayerModel> findById(UUID playerId) {
         return findById(uuidConverter.convertDomain(playerId));
     }
+
+    public void deleteById(UUID playerId) {
+        deleteById(uuidConverter.convertDomain(playerId));
+    }
 }

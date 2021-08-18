@@ -12,10 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SkyXploreGameControllerImpl implements SkyXploreGameController {
     private final GameDao gameDao;
+    private final ExpiredGameCleanupService expiredGameCleanupService;
 
     @Override
     public boolean isUserInGame(AccessTokenHeader accessTokenHeader) {
         log.info("Checking if user {} is in game.", accessTokenHeader.getUserId());
         return gameDao.findByUserId(accessTokenHeader.getUserId()).isPresent();
+    }
+
+    @Override
+    public void cleanUpExpiredGames() {
+        expiredGameCleanupService.cleanUp();
     }
 }

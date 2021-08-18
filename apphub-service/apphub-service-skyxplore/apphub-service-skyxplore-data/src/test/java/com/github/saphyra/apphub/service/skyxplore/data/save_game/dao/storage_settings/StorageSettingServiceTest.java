@@ -71,4 +71,11 @@ public class StorageSettingServiceTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        underTest.deleteById(ID);
+
+        verify(storageSettingDao).deleteById(ID);
+    }
 }

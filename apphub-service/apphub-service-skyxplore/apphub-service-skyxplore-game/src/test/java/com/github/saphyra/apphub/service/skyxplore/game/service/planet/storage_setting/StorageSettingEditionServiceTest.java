@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingModel;
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.StorageSettingModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -9,6 +10,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.StorageSettingToModelConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
 import org.junit.Before;
@@ -34,12 +37,19 @@ public class StorageSettingEditionServiceTest {
     private static final int PRIORITY = 234;
     private static final int BATCH_SIZE = 2344;
     private static final Integer NEW_TARGET_AMOUNT = 2456;
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
 
     @Mock
     private StorageSettingsModelValidator storageSettingsModelValidator;
+
+    @Mock
+    private StorageSettingToModelConverter storageSettingToModelConverter;
+
+    @Mock
+    private GameDataProxy gameDataProxy;
 
     @InjectMocks
     private StorageSettingEditionService underTest;
@@ -60,10 +70,13 @@ public class StorageSettingEditionServiceTest {
     private StorageSettings storageSettings;
 
     @Mock
-    private StorageSettingModel storageSettingModel;
+    private StorageSettingApiModel storageSettingModel;
 
     @Mock
     private StorageSetting storageSetting;
+
+    @Mock
+    private StorageSettingModel model;
 
     @Before
     public void setUp() {
@@ -97,10 +110,14 @@ public class StorageSettingEditionServiceTest {
         given(storageSettingModel.getBatchSize()).willReturn(BATCH_SIZE);
         given(storageSettingModel.getTargetAmount()).willReturn(NEW_TARGET_AMOUNT);
 
+        given(game.getGameId()).willReturn(GAME_ID);
+        given(storageSettingToModelConverter.convert(storageSetting, GAME_ID)).willReturn(model);
+
         underTest.edit(USER_ID, PLANET_ID, storageSettingModel);
 
         verify(storageSetting).setPriority(PRIORITY);
         verify(storageSetting).setBatchSize(BATCH_SIZE);
         verify(storageSetting).setTargetAmount(NEW_TARGET_AMOUNT);
+        verify(gameDataProxy).saveItem(model);
     }
 }

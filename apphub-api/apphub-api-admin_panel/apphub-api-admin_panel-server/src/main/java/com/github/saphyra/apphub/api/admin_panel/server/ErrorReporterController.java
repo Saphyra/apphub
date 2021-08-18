@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.api.admin_panel.server;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,4 +33,7 @@ public interface ErrorReporterController {
 
     @GetMapping(Endpoints.ADMIN_PANEL_GET_ERROR_REPORT)
     ErrorReportModel getErrorReport(@PathVariable("id") UUID id, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @DeleteMapping(Endpoints.ADMIN_PANEL_DELETE_READ_ERROR_REPORTS)
+    void deleteReadErrorReports(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

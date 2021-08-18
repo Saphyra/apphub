@@ -1,12 +1,10 @@
 package com.github.saphyra.apphub.service.user.data.service.validator;
 
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.HttpStatus;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,14 +27,14 @@ public class PasswordValidatorTest {
     public void tooShortPassword() {
         Throwable ex = catchThrowable(() -> underTest.validatePassword("aaaaa"));
 
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.PASSWORD_TOO_SHORT);
+        ExceptionValidator.validateInvalidParam(ex, "password", "too short");
     }
 
     @Test
     public void tooLongPassword() {
         Throwable ex = catchThrowable(() -> underTest.validatePassword(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())));
 
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.PASSWORD_TOO_LONG);
+        ExceptionValidator.validateInvalidParam(ex, "password", "too long");
     }
 
     @Test

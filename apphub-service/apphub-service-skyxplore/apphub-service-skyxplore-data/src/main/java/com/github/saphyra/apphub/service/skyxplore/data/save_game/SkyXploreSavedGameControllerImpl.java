@@ -38,6 +38,7 @@ public class SkyXploreSavedGameControllerImpl implements SkyXploreSavedGameContr
     private final GameDeletionService gameDeletionService;
     private final GameViewForLobbyCreationQueryService gameViewForLobbyCreationQueryService;
     private final LoadGameItemService loadGameItemService;
+    private final DeleteGameItemService deleteGameItemService;
 
     public SkyXploreSavedGameControllerImpl(
         List<GameItemService> savers,
@@ -46,7 +47,8 @@ public class SkyXploreSavedGameControllerImpl implements SkyXploreSavedGameContr
         PlayerDao playerDao,
         GameDeletionService gameDeletionService,
         GameViewForLobbyCreationQueryService gameViewForLobbyCreationQueryService,
-        LoadGameItemService loadGameItemService
+        LoadGameItemService loadGameItemService,
+        DeleteGameItemService deleteGameItemService
     ) {
         this.savers = new OptionalHashMap<>(savers.stream()
             .collect(Collectors.toMap(GameItemService::getType, Function.identity())));
@@ -56,6 +58,7 @@ public class SkyXploreSavedGameControllerImpl implements SkyXploreSavedGameContr
         this.gameDeletionService = gameDeletionService;
         this.gameViewForLobbyCreationQueryService = gameViewForLobbyCreationQueryService;
         this.loadGameItemService = loadGameItemService;
+        this.deleteGameItemService = deleteGameItemService;
     }
 
     @Override
@@ -77,6 +80,12 @@ public class SkyXploreSavedGameControllerImpl implements SkyXploreSavedGameContr
         GameItem result = loadGameItemService.loadGameItem(id, type);
         log.debug("GameItem found for id {} and type {}: {}", id, type, result);
         return result;
+    }
+
+    @Override
+    public void deleteGameItem(UUID id, GameItemType type) {
+        log.info("Deleting GameItem {} of type {}", id, type);
+        deleteGameItemService.deleteItem(id, type);
     }
 
     @Override

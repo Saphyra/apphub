@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.filters;
 
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.main_gateway.config.FilterOrder;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.locale.ApphubLocaleResolver;
 import org.junit.Test;
@@ -23,6 +24,8 @@ import java.time.Duration;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -32,6 +35,9 @@ public class LocaleCookieFilterTest {
 
     @Mock
     private ApphubLocaleResolver apphubLocaleResolver;
+
+    @Mock
+    private ErrorReporterService errorReporterService;
 
     @InjectMocks
     private LocaleCookieFilter underTest;
@@ -84,5 +90,16 @@ public class LocaleCookieFilterTest {
         assertThat(responseCookie.isHttpOnly()).isFalse();
         assertThat(responseCookie.getPath()).isEqualTo("/");
         assertThat(responseCookie.getMaxAge()).isEqualTo(Duration.ofSeconds(Integer.MAX_VALUE));
+    }
+
+    @Test
+    public void filter_error() {
+        given(filterChain.filter(exchange)).willReturn(mono);
+        RuntimeException exception = new RuntimeException("swgf");
+        given(exchange.getRequest()).willThrow(exception);
+
+        Mono<Void> result = underTest.filter(exchange, filterChain);
+
+        verify(errorReporterService).report(anyString(), eq(exception));
     }
 }

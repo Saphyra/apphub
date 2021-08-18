@@ -85,4 +85,14 @@ public class PlayerDaoTest {
 
         assertThat(result).contains(model);
     }
+
+    @Test
+    public void deleteById() {
+        given(uuidConverter.convertDomain(PLAYER_ID)).willReturn(PLAYER_ID_STRING);
+        given(repository.existsById(PLAYER_ID_STRING)).willReturn(true);
+
+        underTest.deleteById(PLAYER_ID);
+
+        verify(repository).deleteById(PLAYER_ID_STRING);
+    }
 }

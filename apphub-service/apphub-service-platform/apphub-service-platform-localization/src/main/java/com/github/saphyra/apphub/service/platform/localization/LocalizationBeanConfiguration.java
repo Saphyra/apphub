@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.data.CommonDataConfiguration;
-import com.github.saphyra.apphub.lib.error_handler.service.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.web_utils.CustomLocaleProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;

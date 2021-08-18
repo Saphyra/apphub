@@ -31,4 +31,8 @@ public class CoordinateDao extends AbstractDao<CoordinateEntity, CoordinateModel
     public List<CoordinateModel> getByReferenceId(UUID referenceId) {
         return converter.convertEntity(repository.getByReferenceId(uuidConverter.convertDomain(referenceId)));
     }
+
+    public void deleteById(UUID coordinateId) {
+        deleteById(uuidConverter.convertDomain(coordinateId));
+    }
 }

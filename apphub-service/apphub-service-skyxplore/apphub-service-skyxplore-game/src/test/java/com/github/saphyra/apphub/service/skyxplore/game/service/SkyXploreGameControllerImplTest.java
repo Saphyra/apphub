@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SkyXploreGameControllerImplTest {
@@ -22,6 +23,9 @@ public class SkyXploreGameControllerImplTest {
 
     @Mock
     private GameDao gameDao;
+
+    @Mock
+    private ExpiredGameCleanupService expiredGameCleanupService;
 
     @InjectMocks
     private SkyXploreGameControllerImpl underTest;
@@ -49,5 +53,12 @@ public class SkyXploreGameControllerImplTest {
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.empty());
 
         assertThat(underTest.isUserInGame(accessTokenHeader)).isFalse();
+    }
+
+    @Test
+    public void cleanUpExpiredGames() {
+        underTest.cleanUpExpiredGames();
+
+        verify(expiredGameCleanupService).cleanUp();
     }
 }

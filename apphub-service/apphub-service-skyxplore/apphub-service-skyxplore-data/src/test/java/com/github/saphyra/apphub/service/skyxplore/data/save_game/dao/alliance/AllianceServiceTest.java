@@ -71,4 +71,11 @@ public class AllianceServiceTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        underTest.deleteById(ID);
+
+        verify(allianceDao).deleteById(ID);
+    }
 }

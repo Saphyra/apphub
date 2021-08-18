@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.data.common.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.Friendship;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.FriendshipDao;
+import com.github.saphyra.apphub.service.skyxplore.data.save_game.FriendshipDeletionPlayerProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import java.util.UUID;
 public class FriendshipDeletionService {
     private final FriendshipDao friendshipDao;
     private final MessageSenderProxy messageSenderProxy;
+    private final FriendshipDeletionPlayerProcessor friendshipDeletionPlayerProcessor;
 
     public void removeFriendship(UUID friendshipId, UUID userId) {
         Friendship friendship = friendshipDao.findById(friendshipId)
@@ -31,6 +33,7 @@ public class FriendshipDeletionService {
         }
 
         friendshipDao.delete(friendship);
+        friendshipDeletionPlayerProcessor.processDeletedFriendship(friendship.getFriend1(), friendship.getFriend2());
 
         WebSocketMessage event = WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED, Arrays.asList(friendship.getFriend1(), friendship.getFriend2()));
         messageSenderProxy.sendToMainMenu(event);

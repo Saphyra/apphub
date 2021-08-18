@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.IncomingFriendRequestRes
 import com.github.saphyra.apphub.api.skyxplore.response.SentFriendRequestResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

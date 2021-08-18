@@ -4,8 +4,9 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
-import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBeanFactory;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
@@ -30,6 +31,7 @@ public class GameCreationService {
     private final GameDao gameDao;
     private final BlockingQueue<SkyXploreGameCreationRequest> requests;
     private final GameSaverService gameSaverService;
+    private final ErrorReporterService errorReporterService;
 
     @Builder
     public GameCreationService(
@@ -37,14 +39,17 @@ public class GameCreationService {
         GameFactory gameFactory,
         GameDao gameDao,
         BlockingQueue<SkyXploreGameCreationRequest> requests,
-        GameSaverService gameSaverService
+        GameSaverService gameSaverService,
+        ExecutorServiceBeanFactory executorServiceBeanFactory,
+        ErrorReporterService errorReporterService
     ) {
         this.messageSenderProxy = messageSenderProxy;
         this.gameFactory = gameFactory;
         this.gameDao = gameDao;
         this.requests = requests;
         this.gameSaverService = gameSaverService;
-        executorServiceBean = ExecutorServiceBeanFactory.create(Executors.newFixedThreadPool(3));
+        executorServiceBean = executorServiceBeanFactory.create(Executors.newFixedThreadPool(3));
+        this.errorReporterService = errorReporterService;
     }
 
     private void create(SkyXploreGameCreationRequest request) {
@@ -70,12 +75,14 @@ public class GameCreationService {
     @PostConstruct
     public void createGames() {
         new Thread(() -> {
+            log.info("GameCreation Thread started.");
             while (true) {
                 try {
                     SkyXploreGameCreationRequest request = requests.take();
                     executorServiceBean.execute(() -> create(request));
                 } catch (Exception e) {
                     log.error("Execution failed", e);
+                    errorReporterService.report("GameCreation failed.", e);
                 }
                 //Sleeping is not necessary, because requests.take() blocks the thread until new item is put into the queue
             }

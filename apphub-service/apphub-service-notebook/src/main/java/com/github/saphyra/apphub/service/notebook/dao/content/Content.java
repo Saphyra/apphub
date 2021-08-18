@@ -20,6 +20,8 @@ public class Content {
     @NonNull
     private final UUID parent;
 
+    private final UUID listItemId;
+
     @NonNull
     private String content;
 }

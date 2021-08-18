@@ -29,4 +29,8 @@ public class SystemConnectionDao extends AbstractDao<SystemConnectionEntity, Sys
     public List<SystemConnectionModel> getByGameId(UUID gameId) {
         return converter.convertEntity(repository.getByGameId(uuidConverter.convertDomain(gameId)));
     }
+
+    public void deleteById(UUID systemConnectionId) {
+        deleteById(uuidConverter.convertDomain(systemConnectionId));
+    }
 }

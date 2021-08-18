@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication;
 
-import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import lombok.Data;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.http.server.reactive.ServerHttpRequest;

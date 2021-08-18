@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway.filters;
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.event.PageVisitedEvent;
 import com.github.saphyra.apphub.service.platform.main_gateway.config.FilterOrder;

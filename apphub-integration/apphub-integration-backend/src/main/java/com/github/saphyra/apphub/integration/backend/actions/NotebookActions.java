@@ -319,4 +319,18 @@ public class NotebookActions {
         return Arrays.stream(response.getBody().as(NotebookView[].class))
             .collect(Collectors.toList());
     }
+
+    public static Response getSearchResponse(Language language, UUID accessTokenId, String searchText) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(new OneParamRequest<>(searchText))
+            .post(UrlFactory.create(Endpoints.NOTEBOOK_SEARCH));
+    }
+
+    public static List<NotebookView> search(Language language, UUID accessTokenId, String search) {
+        Response response = getSearchResponse(language, accessTokenId, search);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(NotebookView[].class));
+    }
 }

@@ -71,4 +71,11 @@ public class CoordinateServiceTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        underTest.deleteById(ID);
+
+        verify(coordinateDao).deleteById(ID);
+    }
 }

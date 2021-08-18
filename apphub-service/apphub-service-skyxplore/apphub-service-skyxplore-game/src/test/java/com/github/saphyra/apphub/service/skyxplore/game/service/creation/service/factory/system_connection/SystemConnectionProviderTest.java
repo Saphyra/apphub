@@ -1,14 +1,17 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.system_connection;
 
-import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.Line;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SystemConnection;
-import org.junit.Before;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
@@ -22,7 +25,9 @@ import static org.mockito.BDDMockito.given;
 public class SystemConnectionProviderTest {
     private static final UUID GAME_ID = UUID.randomUUID();
 
-    private final ExecutorServiceBean executorServiceBean = new ExecutorServiceBean(new SleepService());
+    @SuppressWarnings("unused")
+    @Spy
+    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(Mockito.mock(ErrorReporterService.class));
 
     @Mock
     private AllSystemsConnectionProvider allSystemsConnectionProvider;
@@ -42,6 +47,7 @@ public class SystemConnectionProviderTest {
     @Mock
     private SystemConnectionFactory systemConnectionFactory;
 
+    @InjectMocks
     private SystemConnectionProvider underTest;
 
     @Mock
@@ -67,19 +73,6 @@ public class SystemConnectionProviderTest {
 
     @Mock
     private SystemConnection systemConnection2;
-
-    @Before
-    public void setUp() {
-        underTest = SystemConnectionProvider.builder()
-            .executorServiceBean(executorServiceBean)
-            .allSystemsConnectionProvider(allSystemsConnectionProvider)
-            .crossRemovalService(crossRemovalService)
-            .tooShortConnectionRemovalService(tooShortConnectionRemovalService)
-            .connectionOverflowRemovalService(connectionOverflowRemovalService)
-            .lonelySystemConnectionService(lonelySystemConnectionService)
-            .systemConnectionFactory(systemConnectionFactory)
-            .build();
-    }
 
     @Test
     public void getConnections() {

@@ -51,4 +51,9 @@ public class StoredResourceService implements GameItemService {
     public List<StoredResourceModel> getByParent(UUID parent) {
         return storedResourceDao.getByLocation(parent);
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        storedResourceDao.deleteById(id);
+    }
 }

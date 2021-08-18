@@ -24,6 +24,7 @@ window.Mapping = new function(){
         ERROR_REPORT_DELETE_ERRORS: new Endpoint("/api/admin-panel/error-report", HttpMethod.DELETE),
         ERROR_REPORT_GET_ERROR: new Endpoint("/api/admin-panel/error-report/{id}", HttpMethod.GET),
         ERROR_REPORT_MARK_ERRORS: new Endpoint("/api/admin-panel/error-report/mark/{status}", HttpMethod.POST),
+        ERROR_REPORT_DELETE_ALL_READ: new Endpoint("/api/admin-panel/error-report/read", HttpMethod.DELETE),
 
         CREATE_NOTEBOOK_CATEGORY: new Endpoint("/api/notebook/category", HttpMethod.PUT),
         CREATE_NOTEBOOK_LINK: new Endpoint("/api/notebook/link", HttpMethod.PUT),
@@ -55,6 +56,7 @@ window.Mapping = new function(){
         CLONE_NOTEBOOK_LIST_ITEM: new Endpoint("/api/notebook/{listItemId}/clone", HttpMethod.POST),
         NOTEBOOK_PIN_LIST_ITEM: new Endpoint("/api/notebook/item/{listItemId}/pin", HttpMethod.POST),
         NOTEBOOK_GET_PINNED_ITEMS: new Endpoint("/api/notebook/item/pinned", HttpMethod.GET),
+        NOTEBOOK_SEARCH: new Endpoint("/api/notebook/item/search", HttpMethod.POST),
 
         LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),
         LOGOUT: new Endpoint("/api/user/authentication/logout", HttpMethod.POST),

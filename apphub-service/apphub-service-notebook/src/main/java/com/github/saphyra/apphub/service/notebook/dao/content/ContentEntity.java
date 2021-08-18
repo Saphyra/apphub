@@ -20,5 +20,6 @@ public class ContentEntity {
     private String contentId;
     private String userId;
     private String parent;
+    private String listItemId;
     private String content;
 }

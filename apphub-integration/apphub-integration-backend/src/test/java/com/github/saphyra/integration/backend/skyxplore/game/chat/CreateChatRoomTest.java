@@ -12,7 +12,6 @@ import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCh
 import com.github.saphyra.apphub.integration.backend.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.backend.ws.model.WebSocketEventName;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import io.restassured.response.Response;
@@ -25,7 +24,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyErrorResponse;
 import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyForbiddenOperation;
 import static com.github.saphyra.apphub.integration.backend.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -88,7 +86,7 @@ public class CreateChatRoomTest extends BackEndTest {
             .members(Collections.emptyList())
             .build();
         Response roomTitleTooShortResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(language, accessTokenId1, roomTitleTooShortRequest);
-        verifyErrorResponse(language, roomTitleTooShortResponse, 400, ErrorCode.CHAT_ROOM_TITLE_TOO_SHORT);
+        verifyInvalidParam(language, roomTitleTooShortResponse, "roomTitle", "too short");
 
         //Room title too long
         CreateChatRoomRequest roomTitleTooLongRequest = CreateChatRoomRequest.builder()
@@ -96,7 +94,7 @@ public class CreateChatRoomTest extends BackEndTest {
             .members(Collections.emptyList())
             .build();
         Response roomTitleTooLongResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(language, accessTokenId1, roomTitleTooLongRequest);
-        verifyErrorResponse(language, roomTitleTooLongResponse, 400, ErrorCode.CHAT_ROOM_TITLE_TOO_LONG);
+        verifyInvalidParam(language, roomTitleTooLongResponse, "roomTitle", "too long");
 
         //Create
         CreateChatRoomRequest request = CreateChatRoomRequest.builder()

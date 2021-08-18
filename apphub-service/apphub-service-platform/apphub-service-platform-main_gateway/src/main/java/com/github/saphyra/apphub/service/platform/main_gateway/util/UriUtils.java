@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.util;
 
-import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
-import static com.github.saphyra.apphub.lib.common_util.Constants.REQUEST_TYPE_HEADER;
+import static com.github.saphyra.apphub.lib.common_domain.Constants.REQUEST_TYPE_HEADER;
 
 @Component
 @RequiredArgsConstructor

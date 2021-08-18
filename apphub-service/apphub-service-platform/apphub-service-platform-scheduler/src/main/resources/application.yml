@@ -12,6 +12,8 @@ interval:
   skyxplore:
     lobby:
       lobbyCleanup: 300000
+    game:
+      gameCleanup: 300000
   platform:
     messageSender:
       pingRequest: 30000

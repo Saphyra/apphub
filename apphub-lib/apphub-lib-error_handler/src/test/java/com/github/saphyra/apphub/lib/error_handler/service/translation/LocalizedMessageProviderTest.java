@@ -2,9 +2,6 @@ package com.github.saphyra.apphub.lib.error_handler.service.translation;
 
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.error_handler.service.translation.LocalizedMessageProvider;
-import com.github.saphyra.apphub.lib.error_handler.service.translation.MessageAssembler;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

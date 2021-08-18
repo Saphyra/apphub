@@ -51,4 +51,9 @@ public class CoordinateService implements GameItemService {
     public List<CoordinateModel> getByParent(UUID parent) {
         return coordinateDao.getByReferenceId(parent);
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        coordinateDao.deleteById(id);
+    }
 }

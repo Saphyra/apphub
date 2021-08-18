@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.facade.filter;
 
 import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreCharacterDataApiClient;
 import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
-import com.github.saphyra.apphub.lib.common_util.Constants;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;

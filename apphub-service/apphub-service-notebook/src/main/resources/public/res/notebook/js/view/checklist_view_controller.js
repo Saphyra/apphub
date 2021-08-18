@@ -1,5 +1,6 @@
 (function ChecklistViewController(){
     let openedChecklistId = null;
+    let editingEnabled = false;
 
     window.checklistViewController = new function(){
         this.viewChecklist = viewChecklist;
@@ -39,9 +40,7 @@
         switchTab("view-checklist-button-wrapper", "view-checklist-edit-button-wrapper");
     }
 
-    function createChecklistItem(itemData, editingEnabled){
-        editingEnabled = editingEnabled || false;
-
+    function createChecklistItem(itemData){
         const nodeRow = document.createElement("DIV");
             nodeRow.classList.add("view-checklist-item");
             $(nodeRow).attr("checklist-item-id", itemData.checklistItemId);
@@ -60,6 +59,14 @@
                 contentCell.classList.add("view-checklist-item-content");
                 contentCell.innerHTML = itemData.content;
                 contentCell.contentEditable = editingEnabled;
+                contentCell.onclick = function(){
+                    if(!editingEnabled){
+                        const checked = !checkedBox.checked;
+                        setContentDecoration(contentCell, checked);
+                        updateStatus(itemData.checklistItemId, checked);
+                        checkedBox.checked = checked;
+                    }
+                }
                 setContentDecoration(contentCell, itemData.checked);
         nodeRow.appendChild(contentCell);
 
@@ -68,34 +75,46 @@
 
                 const moveUpButton = document.createElement("BUTTON");
                     moveUpButton.classList.add("view-checklist-item-edit-button");
-                    moveUpButton.disabled = !editingEnabled;
                     moveUpButton.innerHTML = "^";
                     moveUpButton.onclick = function(){
                         const sibling = nodeRow.previousSibling;
                         if(sibling){
                             document.getElementById("view-checklist-content").insertBefore(nodeRow, sibling);
+                        }else{
+                            return;
+                        }
+
+                        if(!editingEnabled){
+                            saveChanges();
                         }
                     }
             operationsCell.appendChild(moveUpButton);
 
                 const moveDownButton = document.createElement("BUTTON");
                     moveDownButton.classList.add("view-checklist-item-edit-button");
-                    moveDownButton.disabled = !editingEnabled;
                     moveDownButton.innerHTML = "V";
                     moveDownButton.onclick = function(){
                         const sibling = nodeRow.nextSibling;
                         if(sibling){
                             document.getElementById("view-checklist-content").insertBefore(nodeRow, sibling.nextSibling);
+                        }else{
+                            return;
+                        }
+
+                        if(!editingEnabled){
+                            saveChanges();
                         }
                     }
             operationsCell.appendChild(moveDownButton);
 
                 const removeButton = document.createElement("BUTTON");
                     removeButton.classList.add("view-checklist-item-edit-button");
-                    removeButton.disabled = !editingEnabled;
                     removeButton.innerHTML = "X";
                     removeButton.onclick = function(){
                         document.getElementById("view-checklist-content").removeChild(nodeRow);
+                        if(!editingEnabled){
+                            saveChanges();
+                        }
                     }
             operationsCell.appendChild(removeButton);
         nodeRow.appendChild(operationsCell);
@@ -122,13 +141,26 @@
     
     function enableEditing(){
         document.getElementById("view-checklist-title").contentEditable = true;
-        $(".view-checklist-item-edit-button").prop("disabled", false);
         $(".view-checklist-item-content").attr("contenteditable", true);
         switchTab("view-checklist-button-wrapper", "view-checklist-editing-operations-button-wrapper");
+        editingEnabled = true;
     }
 
     function discardChanges(){
-        viewChecklist(openedChecklistId);
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(Localization.getAdditionalContent("discard-confirmation-dialog-title"))
+            .withDetail(Localization.getAdditionalContent("discard-confirmation-dialog-detail"))
+            .withConfirmButton(Localization.getAdditionalContent("discard-confirmation-dialog-confirm-button"))
+            .withDeclineButton(Localization.getAdditionalContent("discard-confirmation-dialog-decline-button"));
+
+        confirmationService.openDialog(
+            "discard-confirmation-dialog",
+            confirmationDialogLocalization,
+            function(){
+                editingEnabled = false;
+                viewChecklist(openedChecklistId);
+            }
+        )
     }
 
     function addItem(){
@@ -138,7 +170,7 @@
             checked: false,
         }
 
-        document.getElementById("view-checklist-content").appendChild(createChecklistItem(itemData, true));
+        document.getElementById("view-checklist-content").appendChild(createChecklistItem(itemData));
     }
 
     function saveChanges(){
@@ -166,6 +198,7 @@
         const request = new Request(Mapping.getEndpoint("EDIT_NOTEBOOK_CHECKLIST_ITEM", {listItemId: openedChecklistId}), {title: title, nodes: nodes});
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("checklist-saved"));
+                editingEnabled = false;
                 viewChecklist(openedChecklistId);
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
             }

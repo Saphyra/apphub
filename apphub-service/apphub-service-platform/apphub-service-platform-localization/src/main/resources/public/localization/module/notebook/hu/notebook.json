@@ -9,7 +9,7 @@
     ],
     "search-container-title": [
       {
-        "key": "innerHTML",
+        "key": "placeholder",
         "message": "Keresés"
       }
     ],
@@ -462,6 +462,11 @@
     "delete-checked-items-confirmation-confirm-button": "Törlés",
     "delete-checked-items-confirmation-cancel-button": "Mégse",
     "checked-items-deleted": "A kijelölt elemek sikeresen törölve.",
-    "checklist-items-ordered": "Sorba rendezés sikeres."
+    "checklist-items-ordered": "Sorba rendezés sikeres.",
+    "discard-confirmation-dialog-title": "Módosítások elvetése?",
+    "discard-confirmation-dialog-detail": "El akarod vetni a módosításokat?",
+    "discard-confirmation-dialog-confirm-button": "Elvetés",
+    "discard-confirmation-dialog-decline-button": "Mégse",
+    "search-result": "Keresés eredménye"
   }
 }

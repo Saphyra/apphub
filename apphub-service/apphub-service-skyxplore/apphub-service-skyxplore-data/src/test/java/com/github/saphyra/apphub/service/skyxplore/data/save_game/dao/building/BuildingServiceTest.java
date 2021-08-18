@@ -80,4 +80,11 @@ public class BuildingServiceTest {
 
         assertThat(result).containsExactly(model);
     }
+
+    @Test
+    public void deleteById() {
+        underTest.deleteById(ID);
+
+        verify(buildingDao).deleteById(ID);
+    }
 }

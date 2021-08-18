@@ -29,4 +29,8 @@ public class StoredResourceDao extends AbstractDao<StoredResourceEntity, StoredR
     public List<StoredResourceModel> getByLocation(UUID location) {
         return converter.convertEntity(repository.getByLocation(uuidConverter.convertDomain(location)));
     }
+
+    public void deleteById(UUID storedResourceId) {
+        deleteById(uuidConverter.convertDomain(storedResourceId));
+    }
 }

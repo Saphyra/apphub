@@ -66,7 +66,7 @@ public class TableHeadCloneServiceTest {
         given(cloneUtil.clone(LIST_ITEM_ID, originalTableHead)).willReturn(clonedTableHead);
 
         given(contentDao.findByParentValidated(ORIGINAL_TABLE_HEAD_ID)).willReturn(originalContent);
-        given(contentFactory.create(CLONED_TABLE_HEAD_ID, USER_ID, CONTENT)).willReturn(clonedContent);
+        given(contentFactory.create(LIST_ITEM_ID, CLONED_TABLE_HEAD_ID, USER_ID, CONTENT)).willReturn(clonedContent);
 
         underTest.clone(listItem, originalTableHead);
 

@@ -42,7 +42,7 @@ class SkyXploreGameAccountDeletedEventController {
                 .build();
 
             WebSocketMessage message = WebSocketMessage.builder()
-                .recipients(game.getPlayers().keySet())
+                .recipients(game.getConnectedPlayers())
                 .event(event)
                 .build();
             messageSenderProxy.sendToGame(message);

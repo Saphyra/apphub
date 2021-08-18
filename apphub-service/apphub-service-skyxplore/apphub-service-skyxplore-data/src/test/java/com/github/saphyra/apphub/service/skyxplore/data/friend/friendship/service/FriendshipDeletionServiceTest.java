@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.skyxplore.data.common.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.Friendship;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.FriendshipDao;
+import com.github.saphyra.apphub.service.skyxplore.data.save_game.FriendshipDeletionPlayerProcessor;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +35,9 @@ public class FriendshipDeletionServiceTest {
 
     @Mock
     private MessageSenderProxy messageSenderProxy;
+
+    @Mock
+    private FriendshipDeletionPlayerProcessor friendshipDeletionPlayerProcessor;
 
     @InjectMocks
     private FriendshipDeletionService underTest;
@@ -75,5 +79,7 @@ public class FriendshipDeletionServiceTest {
         WebSocketMessage message = argumentCaptor.getValue();
         assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED);
         assertThat(message.getRecipients()).containsExactlyInAnyOrder(FRIEND_ID, USER_ID);
+
+        verify(friendshipDeletionPlayerProcessor).processDeletedFriendship(USER_ID, FRIEND_ID);
     }
 }

@@ -28,11 +28,11 @@ class CharacterCreationValidator {
         }
 
         if (model.getName().length() < 3) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.CHARACTER_NAME_TOO_SHORT, "CharacterName too short.");
+            throw ExceptionFactory.invalidParam("characterName", "too short");
         }
 
         if (model.getName().length() > 30) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.CHARACTER_NAME_TOO_LONG, "CharacterName too long.");
+            throw ExceptionFactory.invalidParam("characterName", "too long");
         }
 
         Optional<SkyXploreCharacter> character = characterDao.findByName(model.getName());

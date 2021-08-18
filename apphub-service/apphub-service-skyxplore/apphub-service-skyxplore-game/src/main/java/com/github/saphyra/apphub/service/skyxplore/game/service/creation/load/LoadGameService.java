@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreLoadGameRequest;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader.GameLoader;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +25,12 @@ public class LoadGameService {
 
     public LoadGameService(
         GameItemLoader gameItemLoader,
-        SleepService sleepService,
         GameLoader gameLoader,
-        LoadGameRequestValidator loadGameRequestValidator) {
+        LoadGameRequestValidator loadGameRequestValidator,
+        ExecutorServiceBeanFactory executorServiceBeanFactory
+    ) {
         this.gameItemLoader = gameItemLoader;
-        executorServiceBean = new ExecutorServiceBean(Executors.newSingleThreadExecutor(), sleepService);
+        executorServiceBean = executorServiceBeanFactory.create(Executors.newSingleThreadExecutor());
         this.gameLoader = gameLoader;
         this.loadGameRequestValidator = loadGameRequestValidator;
     }

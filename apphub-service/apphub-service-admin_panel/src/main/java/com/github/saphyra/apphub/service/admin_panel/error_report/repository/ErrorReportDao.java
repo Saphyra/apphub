@@ -40,4 +40,8 @@ public class ErrorReportDao extends AbstractDao<ErrorReportEntity, ErrorReport, 
             .map(converter::convertEntity)
             .collect(Collectors.toList());
     }
+
+    public void deleteByStatus(ErrorReportStatus status) {
+        repository.deleteByStatus(status.name());
+    }
 }

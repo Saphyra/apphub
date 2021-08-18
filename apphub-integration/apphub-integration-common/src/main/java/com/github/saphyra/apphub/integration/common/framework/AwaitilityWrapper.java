@@ -68,6 +68,14 @@ public class AwaitilityWrapper {
         return helper.getResult(Optional::ofNullable);
     }
 
+    public static <T> Optional<T> getOptionalWithWait(Supplier<Optional<T>> supplier, Predicate<Optional<T>> predicate) {
+        GetWithWaitHelper<Optional<T>> helper = new GetWithWaitHelper<>(supplier, predicate);
+        createDefault()
+            .until(helper::get);
+
+        return helper.getResult(Function.identity());
+    }
+
     public static <T> List<T> getListWithWait(Supplier<List<T>> supplier, Predicate<List<T>> predicate) {
         GetWithWaitHelper<List<T>> helper = new GetWithWaitHelper<>(supplier, predicate);
 

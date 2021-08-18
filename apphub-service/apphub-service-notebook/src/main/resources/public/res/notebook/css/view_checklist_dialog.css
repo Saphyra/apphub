@@ -28,3 +28,7 @@
         padding: 0.5rem;
         font-size: 1.25rem;
     }
+
+    .view-checklist-item-content:not([contenteditable=true]){
+        cursor: pointer;
+    }

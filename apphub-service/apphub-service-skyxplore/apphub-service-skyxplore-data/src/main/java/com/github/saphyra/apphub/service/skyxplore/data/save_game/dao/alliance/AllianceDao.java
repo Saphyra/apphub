@@ -29,4 +29,8 @@ public class AllianceDao extends AbstractDao<AllianceEntity, AllianceModel, Stri
     public Optional<AllianceModel> findById(UUID allianceId) {
         return findById(uuidConverter.convertDomain(allianceId));
     }
+
+    public void deleteById(UUID allianceId) {
+        deleteById(uuidConverter.convertDomain(allianceId));
+    }
 }
