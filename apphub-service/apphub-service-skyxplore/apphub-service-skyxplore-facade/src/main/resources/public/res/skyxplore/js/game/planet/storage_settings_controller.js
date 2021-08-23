@@ -1,5 +1,3 @@
-scriptLoader.loadScript("/res/common/js/confirmation_service.js");
-
 (function StorageSettingsController(){
     window.storageSettingsController = new function(){
         this.viewStorageSettings = viewStorageSettings;

@@ -5,6 +5,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/chat_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/map/map_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/solar_system/solar_system_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
+scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
 (function PageController(){
     window.ids = {
@@ -93,9 +94,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
     window.pageController = new function(){
         this.webSocketConnection = wsConnection;
 
-        this.exitGame = function(){
-            window.location.href = Mapping.SKYXPLORE_PAGE;
-        }
+        this.exitGame = exitGame;
 
         this.showMap = function(){
             switchTab("main-tab", "map");
@@ -114,6 +113,22 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
         const response = dao.sendRequest(request);
 
         return result;
+    }
+
+    function exitGame(){
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(Localization.getAdditionalContent("exit-game-confirmation-dialog-title"))
+            .withDetail(Localization.getAdditionalContent("exit-game-confirmation-dialog-detail"))
+            .withConfirmButton(Localization.getAdditionalContent("exit-game-confirm-button"))
+            .withDeclineButton(Localization.getAdditionalContent("exit-game-decline-button"))
+
+        confirmationService.openDialog(
+            "exit-game-confirmation-dialog",
+            confirmationDialogLocalization,
+            function(){
+                window.location.href = Mapping.SKYXPLORE_PAGE;
+            }
+        );
     }
 
     $(document).ready(function(){

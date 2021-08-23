@@ -243,6 +243,10 @@
     ]
   },
   "additionalContent": {
+    "exit-game-confirmation-dialog-title": "Játék elhagyása",
+    "exit-game-confirmation-dialog-detail": "Ki szeretnél lépni? A többiek esetleg nem találják viccesnek.",
+    "exit-game-confirm-button": "Kilépés",
+    "exit-game-decline-button": "Folytatás",
     "character-joined-to-game": "csatlakozott.",
     "character-left-the-game": "kilépett.",
     "chat-room-title-empty": "A szoba címe nem lehet üres..",
