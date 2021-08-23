@@ -130,6 +130,10 @@ zuul:
       path: /api/skyxplore/game/planet/*/priority
       serviceId: skyxplore-game
       stripPrefix: false
+    get-planet-overview:
+      path: /api/skyxplore/game/planet/*/overview
+      serviceId: skyxplore-game
+      stripPrefix: false
     get-storage-settings:
       path: /api/skyxplore/game/planet/*/storage-settings
       serviceId: skyxplore-game

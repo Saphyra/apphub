@@ -178,6 +178,7 @@ public class Endpoints {
     public static final String SKYXPLORE_GET_SOLAR_SYSTEM = "/api/skyxplore/game/solar-system/{solarSystemId}";
     public static final String SKYXPLORE_PLANET_GET_SURFACE = "/api/skyxplore/game/planet/{planetId}/surface";
     public static final String SKYXPLORE_PLANET_GET_STORAGE = "/api/skyxplore/game/planet/{planetId}/storage";
+    public static final String SKYXPLORE_PLANET_GET_OVERVIEW = "/api/skyxplore/game/planet/{planetId}/overview";
     public static final String SKYXPLORE_PLANET_GET_POPULATION_OVERVIEW = "/api/skyxplore/game/planet/{planetId}/population";
     public static final String SKYXPLORE_PLANET_GET_BUILDING_OVERVIEW = "/api/skyxplore/game/planet/{planetId}/building";
     public static final String SKYXPLORE_PLANET_GET_PRIORITIES = "/api/skyxplore/game/planet/{planetId}/priority";

@@ -99,6 +99,7 @@ window.Mapping = new function(){
         SKYXPLORE_GET_SOLAR_SYSTEM: new Endpoint("/api/skyxplore/game/solar-system/{solarSystemId}", HttpMethod.GET),
         SKYXPLORE_GET_PLANET_SURFACE: new Endpoint("/api/skyxplore/game/planet/{planetId}/surface", HttpMethod.GET),
         SKYXPLORE_GET_PLANET_STORAGE: new Endpoint("/api/skyxplore/game/planet/{planetId}/storage", HttpMethod.GET),
+        SKYXPLORE_GET_PLANET_OVERVIEW: new Endpoint("/api/skyxplore/game/planet/{planetId}/overview", HttpMethod.GET),
         SKYXPLORE_GET_ITEM_DATA: new Endpoint("/api/skyxplore/data/{dataId}", HttpMethod.GET),
         SKYXPLORE_PLANET_GET_POPULATION_OVERVIEW: new Endpoint("/api/skyxplore/game/planet/{planetId}/population", HttpMethod.GET),
         SKYXPLORE_PLANET_GET_BUILDING_OVERVIEW: new Endpoint("/api/skyxplore/game/planet/{planetId}/building", HttpMethod.GET),

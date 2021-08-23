@@ -34,6 +34,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
         //Planet
         planet: "planet",
+        planetName: "planet-name",
         planetSurfaceContainer: "planet-surface-container",
         planetMiddleBar: "planet-middle-bar",
         toggleEnergyDetailsButton: "toggle-energy-details-button",
