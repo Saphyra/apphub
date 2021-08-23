@@ -22,7 +22,7 @@
     ))
 
     function displayModules(){
-        const request = new Request(Mapping.getEndpoint("GET_MODULES"));
+        const request = new Request(Mapping.getEndpoint("MODULES_GET_MODULES_OF_USER"));
             request.convertResponse = responseConverter;
             request.processValidResponse = function(categories){
                 displayAll(categories);
@@ -141,7 +141,7 @@
 
     function createMarkFavoriteFunction(module, value){
         return function(){
-            const request = new Request(Mapping.getEndpoint("MARK_AS_FAVORITE", {module: module.name}), {value: value});
+            const request = new Request(Mapping.getEndpoint("MODULES_SET_FAVORITE", {module: module.name}), {value: value});
                 request.convertResponse = responseConverter;
                 request.processValidResponse = function(categories){
                     displayAll(categories);

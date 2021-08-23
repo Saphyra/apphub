@@ -10,7 +10,7 @@
     ));
 
     function loadRoles(){
-        const request = new Request(Mapping.getEndpoint("DISABLED_ROLES_GET_DISABLED_ROLES"));
+        const request = new Request(Mapping.getEndpoint("USER_DATA_GET_DISABLED_ROLES"));
             request.convertResponse = function(response){
                 return new Stream(JSON.parse(response.body))
                     .peek(function(role){
@@ -60,7 +60,7 @@
             .withConfirmButton(Localization.getAdditionalContent("enable-role"))
             .withDeclineButton(Localization.getAdditionalContent("cancel"));
 
-        promptAndExecute(role, Mapping.getEndpoint("DISABLED_ROLES_ENABLE_ROLE", {role: role.role}), localization, passwordInput, "role-enabled");
+        promptAndExecute(role, Mapping.getEndpoint("USER_DATA_ENABLE_ROLE", {role: role.role}), localization, passwordInput, "role-enabled");
     }
 
     function disableRole(role){
@@ -72,7 +72,7 @@
             .withConfirmButton(Localization.getAdditionalContent("disable-role"))
             .withDeclineButton(Localization.getAdditionalContent("cancel"));
 
-        promptAndExecute(role, Mapping.getEndpoint("DISABLED_ROLES_DISABLE_ROLE", {role: role.role}), localization, passwordInput, "role-disabled");
+        promptAndExecute(role, Mapping.getEndpoint("USER_DATA_DISABLE_ROLE", {role: role.role}), localization, passwordInput, "role-disabled");
     }
 
     function createPasswordInput(){

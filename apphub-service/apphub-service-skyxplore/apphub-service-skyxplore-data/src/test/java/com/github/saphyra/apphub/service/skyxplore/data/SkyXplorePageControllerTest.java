@@ -1,14 +1,14 @@
-package com.github.saphyra.apphub.service.skyxplore.facade;
+package com.github.saphyra.apphub.service.skyxplore.data;
 
-import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreCharacterDataApiClient;
 import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameApiClient;
 import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
-import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
 import com.github.saphyra.apphub.api.user.client.UserDataApiClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
+import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
+import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreCharacter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +37,7 @@ public class SkyXplorePageControllerTest {
     private AccessTokenHeaderConverter accessTokenHeaderConverter;
 
     @Mock
-    private SkyXploreCharacterDataApiClient characterClient;
+    private CharacterDao characterDao;
 
     @Mock
     private SkyXploreLobbyApiClient lobbyClient;
@@ -55,7 +55,7 @@ public class SkyXplorePageControllerTest {
     private AccessTokenHeader accessTokenHeader;
 
     @Mock
-    private SkyXploreCharacterModel characterModel;
+    private SkyXploreCharacter character;
 
     @Mock
     private LobbyViewForPage lobbyViewForPage;
@@ -68,26 +68,25 @@ public class SkyXplorePageControllerTest {
 
     @Test
     public void mainMenu_characterDoesNotExist() {
-        given(characterClient.doesCharacterExistForUser(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(false);
+        given(characterDao.exists(USER_ID)).willReturn(false);
 
-        ModelAndView result = underTest.mainMenu(accessTokenHeader, LOCALE);
+        ModelAndView result = underTest.mainMenu(accessTokenHeader);
 
         assertThat(result.getViewName()).isEqualTo("redirect:" + Endpoints.SKYXPLORE_CHARACTER_PAGE);
     }
 
     @Test
     public void mainMenu() {
-        given(characterClient.doesCharacterExistForUser(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(true);
+        given(characterDao.exists(USER_ID)).willReturn(true);
 
-        ModelAndView result = underTest.mainMenu(accessTokenHeader, LOCALE);
+        ModelAndView result = underTest.mainMenu(accessTokenHeader);
 
         assertThat(result.getViewName()).isEqualTo("main_menu");
     }
 
     @Test
     public void character_notFound() {
-        given(accessTokenHeaderConverter.convertDomain(accessTokenHeader)).willReturn(ACCESS_TOKEN_HEADER_STRING);
-        given(characterClient.doesCharacterExistForUser(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(false);
+        given(characterDao.exists(USER_ID)).willReturn(false);
         given(userDataClient.getUsernameByUserId(USER_ID, LOCALE)).willReturn(USERNAME);
 
         ModelAndView result = underTest.character(accessTokenHeader, LOCALE);
@@ -99,10 +98,9 @@ public class SkyXplorePageControllerTest {
 
     @Test
     public void character() {
-        given(accessTokenHeaderConverter.convertDomain(accessTokenHeader)).willReturn(ACCESS_TOKEN_HEADER_STRING);
-        given(characterClient.doesCharacterExistForUser(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(true);
-        given(characterClient.internalGetCharacterByUserId(USER_ID, LOCALE)).willReturn(characterModel);
-        given(characterModel.getName()).willReturn(CHARACTER_NAME);
+        given(characterDao.exists(USER_ID)).willReturn(true);
+        given(characterDao.findByIdValidated(USER_ID)).willReturn(character);
+        given(character.getName()).willReturn(CHARACTER_NAME);
 
         ModelAndView result = underTest.character(accessTokenHeader, LOCALE);
 

@@ -20,7 +20,7 @@
         columnNames = [];
         rows = [];
 
-        const request = new Request(Mapping.getEndpoint("GET_NOTEBOOK_CHECKLIST_TABLE", {listItemId: listItemId}));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_CHECKLIST_TABLE", {listItemId: listItemId}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body);
             }
@@ -243,7 +243,7 @@
         }
 
         function updateStatus(listItemId, rowIndex,  checked){
-            const request = new Request(Mapping.getEndpoint("UPDATE_NOTEBOOK_CHECKLIST_TABLE_ROW_STATUS", {listItemId: listItemId, rowIndex: rowIndex}), {value: checked});
+            const request = new Request(Mapping.getEndpoint("NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS", {listItemId: listItemId, rowIndex: rowIndex}), {value: checked});
                 request.processValidResponse = function(){
                 }
             dao.sendRequestAsync(request);
@@ -345,7 +345,7 @@
             rows: rowList
         };
 
-        const request = new Request(Mapping.getEndpoint("EDIT_NOTEBOOK_CHECKLIST_TABLE", {listItemId: openedTableId}), body);
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_EDIT_CHECKLIST_TABLE", {listItemId: openedTableId}), body);
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("checklist-table-saved"));
                 viewChecklistTable(openedTableId);

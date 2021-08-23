@@ -49,7 +49,7 @@
 
             $("#ch-username-password-input").val("");
 
-            const request = new Request(Mapping.getEndpoint("CHANGE_USERNAME"), payload);
+            const request = new Request(Mapping.getEndpoint("ACCOUNT_CHANGE_USERNAME"), payload);
                 request.processValidResponse = function(){
                     notificationService.showSuccess(Localization.getAdditionalContent("username-changed"));
                 }

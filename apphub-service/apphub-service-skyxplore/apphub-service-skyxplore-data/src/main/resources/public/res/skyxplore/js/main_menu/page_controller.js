@@ -23,7 +23,7 @@ scriptLoader.loadScript("/res/skyxplore/js/main_menu/games_controller.js");
         games: "games",
     }
 
-    const webSocketConnection = new WebSocketConnection(Mapping.getEndpoint("CONNECTION_SKYXPLORE_MAIN_MENU"));
+    const webSocketConnection = new WebSocketConnection(Mapping.getEndpoint("WS_CONNECTION_SKYXPLORE_MAIN_MENU"));
 
     window.pageController = new function(){
         this.showMainMenu = function(){

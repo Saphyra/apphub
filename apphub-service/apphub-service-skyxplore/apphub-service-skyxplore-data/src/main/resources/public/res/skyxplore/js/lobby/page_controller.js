@@ -30,7 +30,7 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/start_game_controller.js");
         GAME_LOADED: "game-loaded",
     }
 
-    const wsConnection = new WebSocketConnection(Mapping.getEndpoint("CONNECTION_SKYXPLORE_LOBBY"));
+    const wsConnection = new WebSocketConnection(Mapping.getEndpoint("WS_CONNECTION_SKYXPLORE_LOBBY"));
 
     window.pageController = new function(){
         this.webSocketConnection = wsConnection;

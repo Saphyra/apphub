@@ -44,7 +44,7 @@
             return;
         }
 
-        const request = new Request(Mapping.getEndpoint("GET_USER_ROLES"), {value: searchText});
+        const request = new Request(Mapping.getEndpoint("USER_DATA_GET_USER_ROLES"), {value: searchText});
             request.convertResponse = function(response){
                 return JSON.parse(response.body);
             }
@@ -163,7 +163,7 @@
             role: role
         };
 
-        const request = new Request(Mapping.getEndpoint("REMOVE_ROLE"), payload);
+        const request = new Request(Mapping.getEndpoint("USER_DATA_REMOVE_ROLE"), payload);
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("role-removed"));
                 actualRolesCell.removeChild(roleNode);
@@ -181,7 +181,7 @@
             role: role
         };
 
-        const request = new Request(Mapping.getEndpoint("ADD_ROLE"), payload);
+        const request = new Request(Mapping.getEndpoint("USER_DATA_ADD_ROLE"), payload);
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("role-added"));
                 availableRolesCell.removeChild(roleNode);
@@ -194,7 +194,7 @@
     }
 
     function initAvailableRoles(){
-        const request = new Request(Mapping.getEndpoint("AVAILABLE_ROLES"));
+        const request = new Request(Mapping.getEndpoint("ADMIN_PANEL_AVAILABLE_ROLES"));
             request.convertResponse = function(response){
                 return JSON.parse(response.body);
             }

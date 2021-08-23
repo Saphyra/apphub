@@ -37,7 +37,7 @@
             "delete-all-read-error-reports-confirmation-dialog",
             confirmationDialogLocalization,
             function(){
-                const request = new Request(Mapping.getEndpoint("ERROR_REPORT_DELETE_ALL_READ"));
+                const request = new Request(Mapping.getEndpoint("ADMIN_PANEL_DELETE_READ_ERROR_REPORTS"));
                     request.processValidResponse = function(){
                         notificationService.showSuccess(Localization.getAdditionalContent("all-read-deleted"));
                         reportController.search();

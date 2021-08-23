@@ -1,6 +1,5 @@
-package com.github.saphyra.apphub.service.skyxplore.facade;
+package com.github.saphyra.apphub.service.skyxplore.data;
 
-import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreCharacterDataApiClient;
 import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameApiClient;
 import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
@@ -9,6 +8,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
+import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -23,15 +23,15 @@ import java.util.UUID;
 @Slf4j
 public class SkyXplorePageController {
     private final AccessTokenHeaderConverter accessTokenHeaderConverter;
-    private final SkyXploreCharacterDataApiClient characterClient;
+    private final CharacterDao characterDao;
     private final SkyXploreLobbyApiClient lobbyClient;
     private final SkyXploreGameApiClient gameClient;
     private final UserDataApiClient userDataClient;
 
     @GetMapping(Endpoints.SKYXPLORE_MAIN_MENU_PAGE)
-    public ModelAndView mainMenu(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale) {
+    public ModelAndView mainMenu(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
         log.info("Loading SkyXplore main menu for user {}", accessTokenHeader.getUserId());
-        if (characterClient.doesCharacterExistForUser(accessTokenHeaderConverter.convertDomain(accessTokenHeader), locale)) {
+        if (characterDao.exists(accessTokenHeader.getUserId())) {
             return new ModelAndView("main_menu");
         } else {
             log.info("User has no character. Redirecting to character page instead.");
@@ -41,11 +41,11 @@ public class SkyXplorePageController {
 
     @GetMapping(Endpoints.SKYXPLORE_CHARACTER_PAGE)
     public ModelAndView character(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale) {
-        if (characterClient.doesCharacterExistForUser(accessTokenHeaderConverter.convertDomain(accessTokenHeader), locale)) {
+        if (characterDao.exists(accessTokenHeader.getUserId())) {
             log.info("Loading SkyXplore character page.");
             ModelAndView mav = new ModelAndView("character");
             mav.addObject("backUrl", Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
-            mav.addObject("characterName", characterClient.internalGetCharacterByUserId(accessTokenHeader.getUserId(), locale).getName());
+            mav.addObject("characterName", characterDao.findByIdValidated(accessTokenHeader.getUserId()).getName());
             return mav;
         } else {
             ModelAndView mav = new ModelAndView("character");

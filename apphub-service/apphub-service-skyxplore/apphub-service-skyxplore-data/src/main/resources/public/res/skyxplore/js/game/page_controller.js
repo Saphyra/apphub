@@ -90,7 +90,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
     window.surfaceTypeLocalization = new CustomLocalization("skyxplore", "surface_type");
     window.skillTypeLocalization = new CustomLocalization("skyxplore", "skill_type");
 
-    const wsConnection = new WebSocketConnection(Mapping.getEndpoint("CONNECTION_SKYXPLORE_GAME"));
+    const wsConnection = new WebSocketConnection(Mapping.getEndpoint("WS_CONNECTION_SKYXPLORE_GAME"));
 
     window.pageController = new function(){
         this.webSocketConnection = wsConnection;

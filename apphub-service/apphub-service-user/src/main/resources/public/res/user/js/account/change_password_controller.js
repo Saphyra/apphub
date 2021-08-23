@@ -50,7 +50,7 @@
 
             $(".change-password-input").val("");
 
-            const request = new Request(Mapping.getEndpoint("CHANGE_PASSWORD"), payload);
+            const request = new Request(Mapping.getEndpoint("ACCOUNT_CHANGE_PASSWORD"), payload);
                 request.processValidResponse = function(){
                     notificationService.showSuccess(Localization.getAdditionalContent("password-changed"));
                 }

@@ -59,7 +59,7 @@
 
                     $("#delete-account-password-input").val("");
 
-                    const request = new Request(Mapping.getEndpoint("DELETE_ACCOUNT"), payload);
+                    const request = new Request(Mapping.getEndpoint("ACCOUNT_DELETE_ACCOUNT"), payload);
                         request.processValidResponse = function(){
                             sessionStorage.successMessage = "account-deleted";
                             window.location.href = Mapping.INDEX_PAGE;

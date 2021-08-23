@@ -31,7 +31,7 @@ function categoryNodeFactory(parent, itemDetails){
             "deletion-confirmation-dialog",
             confirmationDialogLocalization,
             function(){
-                const request = new Request(Mapping.getEndpoint("DELETE_NOTEBOOK_LIST_ITEM", {listItemId: categoryId}))
+                const request = new Request(Mapping.getEndpoint("NOTEBOOK_DELETE_LIST_ITEM", {listItemId: categoryId}))
                     request.processValidResponse = function(){
                         notificationService.showSuccess(Localization.getAdditionalContent("category-deleted"));
                         eventProcessor.processEvent(new Event(events.CATEGORY_DELETED, categoryId));

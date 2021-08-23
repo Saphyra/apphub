@@ -49,7 +49,7 @@
 
             $("#ch-email-password-input").val("");
 
-            const request = new Request(Mapping.getEndpoint("CHANGE_EMAIL"), payload);
+            const request = new Request(Mapping.getEndpoint("ACCOUNT_CHANGE_EMAIL"), payload);
                 request.processValidResponse = function(){
                     notificationService.showSuccess(Localization.getAdditionalContent("email-changed"));
                 }

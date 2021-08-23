@@ -14,7 +14,7 @@
 
     function viewChecklist(listItemId){
         openedChecklistId = listItemId;
-        const request = new Request(Mapping.getEndpoint("GET_NOTEBOOK_CHECKLIST_ITEM", {listItemId: listItemId}));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_CHECKLIST_ITEM", {listItemId: listItemId}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body);
             }
@@ -133,7 +133,7 @@
     }
 
     function updateStatus(checklistItemId, checked){
-        const request = new Request(Mapping.getEndpoint("UPDATE_NOTEBOOK_CHECKLIST_ITEM_STATUS", {checklistItemId: checklistItemId}), {value: checked});
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS", {checklistItemId: checklistItemId}), {value: checked});
             request.processValidResponse = function(){
             }
         dao.sendRequestAsync(request);
@@ -195,7 +195,7 @@
             nodes.push(nodeData);
         }
 
-        const request = new Request(Mapping.getEndpoint("EDIT_NOTEBOOK_CHECKLIST_ITEM", {listItemId: openedChecklistId}), {title: title, nodes: nodes});
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_EDIT_CHECKLIST_ITEM", {listItemId: openedChecklistId}), {title: title, nodes: nodes});
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("checklist-saved"));
                 editingEnabled = false;

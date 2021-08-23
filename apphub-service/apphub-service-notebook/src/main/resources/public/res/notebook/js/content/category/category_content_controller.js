@@ -24,7 +24,7 @@
 
     function loadCategoryContent(categoryId, shouldSwitchTab){
         currentCategoryId = categoryId;
-        const request = new Request(Mapping.getEndpoint("GET_CHILDREN_OF_NOTEBOOK_CATEGORY", null, {categoryId: categoryId}));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_CHILDREN_OF_CATEGORY", null, {categoryId: categoryId}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body)
             }

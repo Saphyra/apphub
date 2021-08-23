@@ -15,7 +15,7 @@
 
     function loadChildrenOfCategory(categoryId){
         currentCategoryId = categoryId;
-        const request = new Request(Mapping.getEndpoint("GET_CHILDREN_OF_NOTEBOOK_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY"}));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_CHILDREN_OF_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY"}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body)
             }
@@ -75,7 +75,7 @@
             return;
         }
 
-        const request = new Request(Mapping.getEndpoint("CREATE_NOTEBOOK_CATEGORY"), {parent: currentCategoryId, title: value});
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_CATEGORY"), {parent: currentCategoryId, title: value});
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("category-created"));
                 eventProcessor.processEvent(new Event(events.CATEGORY_SAVED));

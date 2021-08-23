@@ -52,7 +52,7 @@
 
             $(".reg-input").val("");
 
-            const request = new Request(Mapping.getEndpoint("REGISTER"), user);
+            const request = new Request(Mapping.getEndpoint("ACCOUNT_REGISTER"), user);
                 request.processValidResponse = function(){
                     sessionStorage.successMessage = "registration-successful";
                     eventProcessor.processEvent(new Event(events.LOGIN_ATTEMPT, user));

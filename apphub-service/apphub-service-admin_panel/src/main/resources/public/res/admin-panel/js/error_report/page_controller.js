@@ -31,7 +31,7 @@ function markErrorReports(ids, status, callback){
         return;
     }
 
-    const request = new Request(Mapping.getEndpoint("ERROR_REPORT_MARK_ERRORS", {status: status}), ids);
+    const request = new Request(Mapping.getEndpoint("ADMIN_PANEL_MARK_ERROR_REPORTS", {status: status}), ids);
         request.processValidResponse = function(){
             Localization.getAdditionalContent("error-reports-marked");
 

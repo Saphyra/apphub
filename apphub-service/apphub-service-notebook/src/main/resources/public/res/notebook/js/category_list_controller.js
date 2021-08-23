@@ -29,7 +29,7 @@
     ));
 
     function loadCategories(){
-        const request = new Request(Mapping.getEndpoint("GET_NOTEBOOK_CATEGORIES"));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_CATEGORY_TREE"));
             request.convertResponse = function(response){
                 return JSON.parse(response.body);
             }

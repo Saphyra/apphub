@@ -16,10 +16,4 @@ class PageController {
         log.info("Notebook page called.");
         return "notebook";
     }
-
-    @GetMapping(Endpoints.NOTEBOOK_CATEGORY_CONTENT_VIEW)
-    String getCategoryContentView() {
-        log.info("getCategoryContentView called.");
-        return "content/category";
-    }
 }
