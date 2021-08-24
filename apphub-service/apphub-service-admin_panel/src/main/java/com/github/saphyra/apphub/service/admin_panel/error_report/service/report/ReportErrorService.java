@@ -27,6 +27,10 @@ public class ReportErrorService {
             throw ExceptionFactory.invalidParam("message", "must not be null or blank");
         }
 
+        if (isBlank(model.getService())) {
+            throw ExceptionFactory.invalidParam("service", "must not be null or blank");
+        }
+
         ErrorReport errorReport = errorReportFactory.create(model);
 
         errorReportDao.save(errorReport);

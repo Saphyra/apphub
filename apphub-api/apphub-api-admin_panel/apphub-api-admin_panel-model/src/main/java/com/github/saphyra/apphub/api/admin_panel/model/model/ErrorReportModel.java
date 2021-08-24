@@ -16,6 +16,7 @@ public class ErrorReportModel {
     private UUID id;
     private LocalDateTime createdAt;
     private String message;
+    private String service;
     private Integer responseStatus;
     private String responseBody;
     private ExceptionModel exception;

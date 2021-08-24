@@ -28,6 +28,7 @@ class ErrorReportFactory {
             .responseBody(model.getResponseBody())
             .exception(model.getException())
             .status(ErrorReportStatus.UNREAD)
+            .service(model.getService())
             .build();
     }
 

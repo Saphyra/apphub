@@ -25,4 +25,5 @@ public class ErrorReportEntity {
     private String responseBody;
     private String exception;
     private String status;
+    private String service;
 }

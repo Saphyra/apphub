@@ -19,6 +19,7 @@ public class ErrorReport {
     private String message;
     private Integer responseStatus;
     private String responseBody;
+    private String service;
     private ExceptionModel exception;
     private ErrorReportStatus status;
 }

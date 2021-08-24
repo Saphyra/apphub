@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.lib.error_report;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import org.junit.Test;
@@ -24,6 +25,7 @@ public class ErrorReportModelFactoryTest {
     private static final String MESSAGE = "message";
     private static final String THREAD = "thread";
     private static final String TYPE = "type";
+    private static final String APPLICATION_NAME = "application-name";
 
     @Mock
     private DateTimeUtil dateTimeUtil;
@@ -33,6 +35,9 @@ public class ErrorReportModelFactoryTest {
 
     @Mock
     private ExceptionMapper exceptionMapper;
+
+    @Mock
+    private CommonConfigProperties commonConfigProperties;
 
     @InjectMocks
     private ErrorReportModelFactory underTest;
@@ -54,6 +59,7 @@ public class ErrorReportModelFactoryTest {
         given(exception.getMessage()).willReturn(MESSAGE);
         given(exceptionModel.getThread()).willReturn(THREAD);
         given(exceptionModel.getType()).willReturn(TYPE);
+        given(commonConfigProperties.getApplicationName()).willReturn(APPLICATION_NAME);
 
         ErrorReportModel result = underTest.create(HttpStatus.NOT_FOUND, errorResponse, exception);
 
@@ -63,12 +69,14 @@ public class ErrorReportModelFactoryTest {
         assertThat(result.getResponseStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
         assertThat(result.getResponseBody()).isEqualTo(ERROR_RESPONSE);
         assertThat(result.getException()).isEqualTo(exceptionModel);
+        assertThat(result.getService()).isEqualTo(APPLICATION_NAME);
     }
 
     @Test
     public void createForMessage() {
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
         given(exceptionMapper.map(exception)).willReturn(exceptionModel);
+        given(commonConfigProperties.getApplicationName()).willReturn(APPLICATION_NAME);
 
         ErrorReportModel result = underTest.create(MESSAGE, exception);
 
@@ -78,5 +86,6 @@ public class ErrorReportModelFactoryTest {
         assertThat(result.getResponseStatus()).isNull();
         assertThat(result.getResponseBody()).isNull();
         assertThat(result.getException()).isEqualTo(exceptionModel);
+        assertThat(result.getService()).isEqualTo(APPLICATION_NAME);
     }
 }

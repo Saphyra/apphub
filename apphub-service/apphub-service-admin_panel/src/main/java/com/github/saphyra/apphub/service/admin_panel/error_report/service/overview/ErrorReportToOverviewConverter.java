@@ -17,6 +17,7 @@ class ErrorReportToOverviewConverter {
             .responseStatus(errorReport.getResponseStatus())
             .message(errorReport.getMessage())
             .status(errorReport.getStatus().name())
+            .service(errorReport.getService())
             .build();
     }
 }

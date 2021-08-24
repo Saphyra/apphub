@@ -24,6 +24,7 @@ class ErrorReportOverviewSpecificationFactory {
             .startTime(parseTime(request.getStartTime()))
             .endTime(parseTime(request.getEndTime()))
             .status(Optional.ofNullable(request.getStatus()).map(ErrorReportStatus::valueOf).orElse(null))
+            .service(request.getService())
             .build();
     }
 

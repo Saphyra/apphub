@@ -19,6 +19,7 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class ReportErrorServiceTest {
     private static final String MESSAGE = "message";
+    private static final String SERVICE = "service";
 
     @Mock
     private ErrorReportFactory errorReportFactory;
@@ -37,6 +38,7 @@ public class ReportErrorServiceTest {
         ErrorReportModel model = ErrorReportModel.builder()
             .id(UUID.randomUUID())
             .message(MESSAGE)
+            .service(SERVICE)
             .build();
 
         Throwable ex = catchThrowable(() -> underTest.saveReport(model));
@@ -48,6 +50,7 @@ public class ReportErrorServiceTest {
     public void blankMessage() {
         ErrorReportModel model = ErrorReportModel.builder()
             .message(" ")
+            .service(SERVICE)
             .build();
 
         Throwable ex = catchThrowable(() -> underTest.saveReport(model));
@@ -56,9 +59,22 @@ public class ReportErrorServiceTest {
     }
 
     @Test
+    public void blankService() {
+        ErrorReportModel model = ErrorReportModel.builder()
+            .service(" ")
+            .message(MESSAGE)
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.saveReport(model));
+
+        ExceptionValidator.validateInvalidParam(ex, "service", "must not be null or blank");
+    }
+
+    @Test
     public void saveReport() {
         ErrorReportModel model = ErrorReportModel.builder()
             .message(MESSAGE)
+            .service(SERVICE)
             .build();
 
         given(errorReportFactory.create(model)).willReturn(errorReport);

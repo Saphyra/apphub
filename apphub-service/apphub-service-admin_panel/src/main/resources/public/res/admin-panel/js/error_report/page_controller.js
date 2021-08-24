@@ -4,6 +4,7 @@ scriptLoader.loadScript("/res/admin-panel/js/error_report/bulk_operations_contro
 
 (function PageController(){
     window.ids = {
+        searchByService: "search-by-service",
         searchByMessage: "search-by-message",
         searchByStatusCode: "search-by-status-code",
         searchByStartTime: "search-by-start-time",
@@ -17,6 +18,7 @@ scriptLoader.loadScript("/res/admin-panel/js/error_report/bulk_operations_contro
         errorReportId: "error-report-id",
         errorReportCreatedAt: "error-report-created-at",
         errorReportMessage: "error-report-message",
+        errorReportService: "error-report-service",
         errorReportResponseStatus: "error-report-response-status",
         errorReportResponseBody: "error-report-response-body",
         errorReportException: "error-report-exception",

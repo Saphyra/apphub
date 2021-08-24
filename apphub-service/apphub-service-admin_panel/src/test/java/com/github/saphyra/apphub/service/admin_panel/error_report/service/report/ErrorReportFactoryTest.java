@@ -25,6 +25,7 @@ public class ErrorReportFactoryTest {
     private static final String MESSAGE = "message";
     private static final Integer RESPONSE_STATUS = 24;
     private static final String RESPONSE_BODY = "response-body";
+    private static final String SERVICE = "service";
 
     @Mock
     private IdGenerator idGenerator;
@@ -47,6 +48,7 @@ public class ErrorReportFactoryTest {
             .responseStatus(RESPONSE_STATUS)
             .responseBody(RESPONSE_BODY)
             .exception(exceptionModel)
+            .service(SERVICE)
             .build();
 
         ErrorReport result = underTest.create(model);
@@ -57,6 +59,7 @@ public class ErrorReportFactoryTest {
         assertThat(result.getResponseStatus()).isEqualTo(RESPONSE_STATUS);
         assertThat(result.getResponseBody()).isEqualTo(RESPONSE_BODY);
         assertThat(result.getException()).isEqualTo(exceptionModel);
+        assertThat(result.getService()).isEqualTo(SERVICE);
         assertThat(result.getStatus()).isEqualTo(ErrorReportStatus.UNREAD);
     }
 
@@ -67,6 +70,7 @@ public class ErrorReportFactoryTest {
             .responseStatus(RESPONSE_STATUS)
             .responseBody(RESPONSE_BODY)
             .exception(exceptionModel)
+            .service(SERVICE)
             .build();
 
         given(idGenerator.randomUuid()).willReturn(ID);
@@ -80,6 +84,7 @@ public class ErrorReportFactoryTest {
         assertThat(result.getResponseStatus()).isEqualTo(RESPONSE_STATUS);
         assertThat(result.getResponseBody()).isEqualTo(RESPONSE_BODY);
         assertThat(result.getException()).isEqualTo(exceptionModel);
+        assertThat(result.getService()).isEqualTo(SERVICE);
         assertThat(result.getStatus()).isEqualTo(ErrorReportStatus.UNREAD);
     }
 }

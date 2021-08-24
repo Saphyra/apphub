@@ -24,6 +24,7 @@ public class ErrorReportConverterTest {
     private static final String RESPONSE_BODY = "response-body";
     private static final String EXCEPTION_STRING = "exception";
     private static final UUID ID = UUID.randomUUID();
+    private static final String SERVICE = "service";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -50,6 +51,7 @@ public class ErrorReportConverterTest {
             .responseBody(RESPONSE_BODY)
             .exception(EXCEPTION_STRING)
             .status(ErrorReportStatus.UNREAD.name())
+            .service(SERVICE)
             .build();
 
         ErrorReport result = underTest.convertEntity(entity);
@@ -60,6 +62,7 @@ public class ErrorReportConverterTest {
         assertThat(result.getResponseStatus()).isEqualTo(RESPONSE_STATUS);
         assertThat(result.getResponseBody()).isEqualTo(RESPONSE_BODY);
         assertThat(result.getException()).isEqualTo(exceptionModel);
+        assertThat(result.getService()).isEqualTo(SERVICE);
         assertThat(result.getStatus()).isEqualTo(ErrorReportStatus.UNREAD);
     }
 
@@ -76,6 +79,7 @@ public class ErrorReportConverterTest {
             .responseBody(RESPONSE_BODY)
             .exception(exceptionModel)
             .status(ErrorReportStatus.UNREAD)
+            .service(SERVICE)
             .build();
 
         ErrorReportEntity result = underTest.convertDomain(domain);
@@ -86,6 +90,7 @@ public class ErrorReportConverterTest {
         assertThat(result.getResponseStatus()).isEqualTo(RESPONSE_STATUS);
         assertThat(result.getResponseBody()).isEqualTo(RESPONSE_BODY);
         assertThat(result.getException()).isEqualTo(EXCEPTION_STRING);
+        assertThat(result.getService()).isEqualTo(SERVICE);
         assertThat(result.getStatus()).isEqualTo(ErrorReportStatus.UNREAD.name());
     }
 }

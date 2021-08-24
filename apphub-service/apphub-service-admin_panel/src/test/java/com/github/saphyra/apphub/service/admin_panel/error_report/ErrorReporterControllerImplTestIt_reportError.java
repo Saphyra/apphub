@@ -50,6 +50,7 @@ public class ErrorReporterControllerImplTestIt_reportError {
     private static final Integer LINE_NUMBER = 42;
     private static final String EXCEPTION_TYPE = "exception-type";
     private static final String EXCEPTION_THREAD = "exception-thread";
+    private static final String SERVICE = "service";
 
     @LocalServerPort
     private int serverPort;
@@ -117,6 +118,7 @@ public class ErrorReporterControllerImplTestIt_reportError {
             .responseStatus(RESPONSE_STATUS)
             .responseBody(RESPONSE_BODY)
             .exception(exceptionModel)
+            .service(SERVICE)
             .build();
 
         Response response = RequestFactory.createRequest()
@@ -133,6 +135,7 @@ public class ErrorReporterControllerImplTestIt_reportError {
         assertThat(report.getMessage()).isEqualTo(MESSAGE);
         assertThat(report.getResponseStatus()).isEqualTo(RESPONSE_STATUS);
         assertThat(report.getResponseBody()).isEqualTo(RESPONSE_BODY);
+        assertThat(report.getService()).isEqualTo(SERVICE);
         assertThat(report.getException()).isEqualTo(exceptionModel);
     }
 }

@@ -19,6 +19,7 @@ class ErrorReportToResponseConverter {
             .responseBody(errorReport.getResponseBody())
             .exception(errorReport.getException())
             .status(errorReport.getStatus().name())
+            .service(errorReport.getService())
             .build();
     }
 }

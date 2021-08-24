@@ -39,6 +39,7 @@
 
     function loadCurrentPage(){
         const payload = {
+            service: nullIfEmpty(document.getElementById(ids.searchByService).value),
             message: nullIfEmpty(document.getElementById(ids.searchByMessage).value),
             statusCode: nullIfEmpty(document.getElementById(ids.searchByStatusCode).value),
             startTime: nullIfEmpty(document.getElementById(ids.searchByStartTime).value),
@@ -85,6 +86,10 @@
                 const responseStatusCell = document.createElement("TD");
                     responseStatusCell.innerText = errorReport.responseStatus;
             row.appendChild(responseStatusCell);
+
+                const serviceCell = document.createElement("TD");
+                    serviceCell.innerText = errorReport.service;
+            row.appendChild(serviceCell);
 
                 const messageCell = document.createElement("TD");
                     messageCell.classList.add("left");
@@ -172,6 +177,7 @@
             document.getElementById(ids.errorReportId).innerText = errorReport.id;
             document.getElementById(ids.errorReportCreatedAt).innerText = errorReport.createdAt;
             document.getElementById(ids.errorReportMessage).innerText = errorReport.message;
+            document.getElementById(ids.errorReportService).innerText = errorReport.service;
             document.getElementById(ids.errorReportResponseStatus).innerText = errorReport.responseStatus;
             document.getElementById(ids.errorReportResponseBody).innerText = errorReport.responseBody;
 

@@ -19,6 +19,12 @@
         "message": "Occurred"
       }
     ],
+    "column-name-service": [
+      {
+        "key": "innerHTML",
+        "message": "Service"
+      }
+    ],
     "column-name-status-code": [
       {
         "key": "innerHTML",
@@ -29,6 +35,12 @@
       {
         "key": "innerHTML",
         "message": "Message"
+      }
+    ],
+    "search-by-service": [
+      {
+        "key": "placeholder",
+        "message": "Service"
       }
     ],
     "search-by-message": [
@@ -113,6 +125,12 @@
       {
         "key": "innerHTML",
         "message": "Next"
+      }
+    ],
+    "error-report-details-service-label": [
+      {
+        "key": "innerHTML",
+        "message": "Service"
       }
     ],
     "error-report-details-message-label": [

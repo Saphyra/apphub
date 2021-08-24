@@ -17,4 +17,5 @@ public class ErrorReportOverview {
     private Integer responseStatus;
     private String message;
     private String status;
+    private String service;
 }

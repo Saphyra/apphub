@@ -20,6 +20,8 @@
         <FIELDSET id="search-bar" class="centered">
             <LEGEND id="search-bar-label"></LEGEND>
 
+            <INPUT type="text" id="search-by-service">
+
             <INPUT type="text" id="search-by-message">
 
             <INPUT type="number" id="search-by-status-code" min="100" max="599" step="1">
@@ -86,6 +88,7 @@
                 </TD>
                 <TD id="column-name-timestamp"></TD>
                 <TD id="column-name-status-code"></TD>
+                <TD id="column-name-service"></TD>
                 <TD id="column-name-message"></TD>
                 <TD></TD>
             </TR>
@@ -115,6 +118,11 @@
     </HEADER>
 
     <MAIN>
+        <FIELDSET>
+            <LEGEND id="error-report-details-service-label"></LEGEND>
+            <DIV id="error-report-service"></DIV>
+        </FIELDSET>
+
         <FIELDSET>
             <LEGEND id="error-report-details-message-label"></LEGEND>
             <DIV id="error-report-message"></DIV>

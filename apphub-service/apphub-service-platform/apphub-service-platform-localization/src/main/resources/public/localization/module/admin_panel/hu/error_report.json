@@ -19,6 +19,12 @@
         "message": "Idő"
       }
     ],
+    "column-name-service": [
+      {
+        "key": "innerHTML",
+        "message": "Kiszolgáló"
+      }
+    ],
     "column-name-status-code": [
       {
         "key": "innerHTML",
@@ -29,6 +35,12 @@
       {
         "key": "innerHTML",
         "message": "Üzenet"
+      }
+    ],
+    "search-by-service": [
+      {
+        "key": "placeholder",
+        "message": "Kiszolgáló"
       }
     ],
     "search-by-message": [
@@ -113,6 +125,12 @@
       {
         "key": "innerHTML",
         "message": "Következő"
+      }
+    ],
+    "error-report-details-service-label": [
+      {
+        "key": "innerHTML",
+        "message": "Kiszolgáló"
       }
     ],
     "error-report-details-message-label": [
