@@ -1,6 +1,4 @@
 (function CharacterController(){
-    scriptLoader.loadScript("/res/common/js/validation_util.js");
-
     events.VALIDATION_ATTEMPT = "validation_attempt";
 
     let submissionAllowed = false;

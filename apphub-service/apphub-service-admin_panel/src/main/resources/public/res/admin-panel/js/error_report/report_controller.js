@@ -1,6 +1,4 @@
 (function ReportController(){
-    scriptLoader.loadScript("/res/common/js/confirmation_service.js");
-
     let pageNumber = 1;
     let openedErrorReportId = null;
 

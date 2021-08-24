@@ -1,5 +1,3 @@
-scriptLoader.loadScript("/res/skyxplore/js/game/map/universe_controller.js");
-
 (function SolarSystemController(){
     window.solarSystemConstants = {
         SOLAR_SYSTEM_BORDER_WIDTH: 10,

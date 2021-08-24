@@ -1,17 +1,30 @@
-(function PageController(){
-    scriptLoader.loadScript("/res/notebook/js/category_list_controller.js");
-    scriptLoader.loadScript("/res/notebook/js/creation/category_creation_controller.js");
-    scriptLoader.loadScript("/res/notebook/js/creation/text_creation_controller.js");
-    scriptLoader.loadScript("/res/notebook/js/creation/link_creation_controller.js");
-    scriptLoader.loadScript("/res/notebook/js/creation/checklist_creation_controller.js");
-    scriptLoader.loadScript("/res/notebook/js/creation/table_creation_controller.js");
-    scriptLoader.loadScript("/res/notebook/js/creation/checklist_table_creation_controller.js");
-    scriptLoader.loadScript("/res/notebook/js/content/content_controller.js");
-    scriptLoader.loadScript("/res/notebook/js/content/list_item_clone_service.js");
-    scriptLoader.loadScript("/res/notebook/js/list_item_edition_service.js");
-    scriptLoader.loadScript("/res/notebook/js/pin_controller.js");
-    scriptLoader.loadScript("/res/notebook/js/search_controller.js");
+scriptLoader.loadScript("/res/common/js/confirmation_service.js");
+scriptLoader.loadScript("/res/notebook/js/category_list_controller.js");
+scriptLoader.loadScript("/res/notebook/js/creation/category_creation_controller.js");
+scriptLoader.loadScript("/res/notebook/js/creation/text_creation_controller.js");
+scriptLoader.loadScript("/res/notebook/js/creation/link_creation_controller.js");
+scriptLoader.loadScript("/res/notebook/js/creation/checklist_creation_controller.js");
+scriptLoader.loadScript("/res/notebook/js/creation/table_creation_controller.js");
+scriptLoader.loadScript("/res/notebook/js/creation/checklist_table_creation_controller.js");
+scriptLoader.loadScript("/res/notebook/js/content/list_item_clone_service.js");
+scriptLoader.loadScript("/res/notebook/js/list_item_edition_service.js");
+scriptLoader.loadScript("/res/notebook/js/pin_controller.js");
+scriptLoader.loadScript("/res/notebook/js/search_controller.js");
+scriptLoader.loadScript("/res/notebook/js/content/category/category_content_controller.js");
+scriptLoader.loadScript("/res/notebook/js/content/category/category_node_factory.js")
+scriptLoader.loadScript("/res/notebook/js/content/checklist/checklist_node_factory.js")
+scriptLoader.loadScript("/res/notebook/js/content/table/table_node_factory.js")
+scriptLoader.loadScript("/res/notebook/js/content/checklist_table/checklist_table_node_factory.js")
+scriptLoader.loadScript("/res/notebook/js/content/action_button_factory.js")
+scriptLoader.loadScript("/res/notebook/js/view/text_view_controller.js");
+scriptLoader.loadScript("/res/notebook/js/content/link/link_node_factory.js");
+scriptLoader.loadScript("/res/notebook/js/view/table_view_controller.js");
+scriptLoader.loadScript("/res/notebook/js/content/text/text_node_factory.js");
+scriptLoader.loadScript("/res/notebook/js/view/checklist_table_view_controller.js");
+scriptLoader.loadScript("/res/notebook/js/view/checklist_view_controller.js");
+scriptLoader.loadScript("/res/notebook/js/content/content_controller.js");
 
+(function PageController(){
     events.OPEN_CREATE_CATEGORY_DIALOG = "OPEN_CREATE_CATEGORY_DIALOG";
     events.OPEN_CREATE_TEXT_DIALOG = "OPEN_CREATE_TEXT_DIALOG";
     events.OPEN_CREATE_LINK_DIALOG = "OPEN_CREATE_LINK_DIALOG";

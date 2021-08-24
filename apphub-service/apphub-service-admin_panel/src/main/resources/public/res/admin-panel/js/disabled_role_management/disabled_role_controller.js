@@ -1,7 +1,4 @@
 (function DisabledRoleController(){
-    scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
-    scriptLoader.loadScript("/res/common/js/confirmation_service.js");
-
     const roleLocalization = new CustomLocalization("admin_panel", "roles");
 
     eventProcessor.registerProcessor(new EventProcessor(

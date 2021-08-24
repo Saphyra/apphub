@@ -1,5 +1,3 @@
-scriptLoader.loadScript("/res/notebook/js/view/checklist_table_view_controller.js");
-
 function checklistTableNodeFactory(parent, itemDetails){
     const node = document.createElement("DIV");
         node.classList.add("list-item-details-item");

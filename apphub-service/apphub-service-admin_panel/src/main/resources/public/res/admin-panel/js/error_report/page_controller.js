@@ -1,7 +1,8 @@
-(function PageController(){
-    scriptLoader.loadScript("/res/admin-panel/js/error_report/report_controller.js");
-    scriptLoader.loadScript("/res/admin-panel/js/error_report/bulk_operations_controller.js");
+scriptLoader.loadScript("/res/common/js/confirmation_service.js");
+scriptLoader.loadScript("/res/admin-panel/js/error_report/report_controller.js");
+scriptLoader.loadScript("/res/admin-panel/js/error_report/bulk_operations_controller.js");
 
+(function PageController(){
     window.ids = {
         searchByMessage: "search-by-message",
         searchByStatusCode: "search-by-status-code",

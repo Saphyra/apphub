@@ -1,6 +1,4 @@
 (function MenuController(){
-    scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
-
     const menuLocalization = new CustomLocalization("admin_panel", "index_menu");
 
     $(document).ready(function(){

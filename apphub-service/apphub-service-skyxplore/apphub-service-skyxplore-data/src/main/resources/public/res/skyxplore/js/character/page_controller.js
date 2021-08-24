@@ -1,3 +1,4 @@
+scriptLoader.loadScript("/res/common/js/validation_util.js");
 scriptLoader.loadScript("/res/skyxplore/js/character/character_loading_service.js");
 scriptLoader.loadScript("/res/skyxplore/js/character/character_controller.js");
 

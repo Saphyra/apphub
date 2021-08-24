@@ -1,6 +1,4 @@
 (function RoleController(){
-    scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
-
     events.SEARCH_USER_ATTEMPT = "search_user_attempt"
 
     const roleLocalization = new CustomLocalization("admin_panel", "roles");

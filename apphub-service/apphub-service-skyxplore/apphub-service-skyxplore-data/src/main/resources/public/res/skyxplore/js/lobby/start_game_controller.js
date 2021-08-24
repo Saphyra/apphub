@@ -1,6 +1,3 @@
-scriptLoader.loadScript("/res/common/js/animation/spinner.js");
-scriptLoader.loadScript("/res/common/js/confirmation_service.js");
-
 (function StartGameController(){
     $(document).ready(init);
 

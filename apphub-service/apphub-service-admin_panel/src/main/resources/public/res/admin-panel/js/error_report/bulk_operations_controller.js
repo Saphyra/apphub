@@ -1,6 +1,4 @@
 (function BulkOperationsController(){
-    scriptLoader.loadScript("/res/common/js/confirmation_service.js");
-
     window.bulkOperationsController = new function(){
         this.selectAll = function(e){
             e.target.checked = true;

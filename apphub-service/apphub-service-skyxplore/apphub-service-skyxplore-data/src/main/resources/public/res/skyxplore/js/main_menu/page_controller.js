@@ -1,4 +1,7 @@
 scriptLoader.loadScript("/res/common/js/web_socket.js");
+scriptLoader.loadScript("/res/common/js/animation/roll.js");
+scriptLoader.loadScript("/res/common/js/confirmation_service.js");
+scriptLoader.loadScript("/res/common/js/validation_util.js");
 scriptLoader.loadScript("/res/skyxplore/js/main_menu/friend_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/main_menu/invitation_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/main_menu/create_lobby_controller.js");

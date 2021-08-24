@@ -1,6 +1,4 @@
 (function ModulesController(){
-    scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
-
     const categoryNames = new CustomLocalization("modules", "module_category");
     const moduleNames = new CustomLocalization("modules", "module_name");
 

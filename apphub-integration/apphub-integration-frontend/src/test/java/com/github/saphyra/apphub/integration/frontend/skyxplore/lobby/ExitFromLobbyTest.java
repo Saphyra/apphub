@@ -82,6 +82,7 @@ public class ExitFromLobbyTest extends SeleniumTest {
             .assertTrue("Invitation is till present.");
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver2.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE));
+            .until(() -> driver2.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+            .assertTrue("Main Menu is not opened.");
     }
 }

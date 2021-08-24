@@ -1,11 +1,20 @@
 scriptLoader.loadScript("/res/common/js/web_socket.js");
 scriptLoader.loadScript("/res/common/js/cache.js");
 scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
+scriptLoader.loadScript("/res/common/js/confirmation_service.js");
+scriptLoader.loadScript("/res/common/js/animation/move_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/chat_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/map/map_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/solar_system/solar_system_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_controller.js");
-scriptLoader.loadScript("/res/common/js/confirmation_service.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/map/universe_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/planet/surface_view_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_storage_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_population_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_building_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_priority_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/planet/storage_settings_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_controller.js");
 
 (function PageController(){
     window.ids = {

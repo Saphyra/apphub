@@ -1,7 +1,4 @@
 (function GamesController(){
-    scriptLoader.loadScript("/res/common/js/animation/roll.js");
-    scriptLoader.loadScript("/res/common/js/confirmation_service.js");
-
     let savedGamesDisplayed = false;
 
     window.gamesController = new function(){

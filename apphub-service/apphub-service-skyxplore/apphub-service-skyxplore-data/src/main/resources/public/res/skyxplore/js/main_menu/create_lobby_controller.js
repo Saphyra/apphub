@@ -1,6 +1,4 @@
 (function CreateLobbyController(){
-    scriptLoader.loadScript("/res/common/js/validation_util.js");
-
     $(document).ready(init);
 
     let submissionAllowed = false;

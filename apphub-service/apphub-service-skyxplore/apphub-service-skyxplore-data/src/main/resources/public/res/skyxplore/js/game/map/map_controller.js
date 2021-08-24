@@ -1,6 +1,3 @@
-scriptLoader.loadScript("/res/common/js/animation/move_controller.js");
-scriptLoader.loadScript("/res/skyxplore/js/game/map/universe_controller.js");
-
 window.mapConstants = {
     X_OFFSET: 90,
     Y_OFFSET: 70,
