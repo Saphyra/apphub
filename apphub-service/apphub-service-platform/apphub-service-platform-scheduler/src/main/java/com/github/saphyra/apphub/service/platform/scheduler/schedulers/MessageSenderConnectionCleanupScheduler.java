@@ -16,7 +16,7 @@ class MessageSenderConnectionCleanupScheduler {
     private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;
 
-    @Scheduled(fixedRateString = "${interval.platform.messageSender.connectionCleanup}")
+    @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.platform.messageSender.connectionCleanup}")
     void pingRequest() {
         String eventName = EmptyEvent.MESSAGE_SENDER_CONNECTION_CLEANUP_EVENT;
         log.info("Sending event with name {}", eventName);

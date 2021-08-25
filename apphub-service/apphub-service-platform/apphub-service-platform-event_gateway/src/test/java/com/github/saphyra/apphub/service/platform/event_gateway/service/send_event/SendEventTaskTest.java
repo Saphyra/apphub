@@ -1,6 +1,9 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service.send_event;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
 import com.github.saphyra.apphub.test.common.TestConstants;
@@ -8,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
@@ -28,6 +32,8 @@ public class SendEventTaskTest {
     @Mock
     private SendEventRequest<String> sendEventRequest;
 
+    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(Mockito.mock(ErrorReporterService.class));
+
     private SendEventTask underTest;
 
     @Before
@@ -37,6 +43,7 @@ public class SendEventTaskTest {
             .eventSender(eventSender)
             .sendEventRequest(sendEventRequest)
             .locale(TestConstants.DEFAULT_LOCALE)
+            .executorServiceBean(executorServiceBean)
             .build();
     }
 

@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service.send_event;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
 import com.github.saphyra.apphub.test.common.TestConstants;
 import org.junit.Test;
@@ -19,6 +20,9 @@ public class SendEventTaskFactoryTest {
     @Mock
     private EventSender eventSender;
 
+    @Mock
+    private ExecutorServiceBean executorServiceBean;
+
     @InjectMocks
     private SendEventTaskFactory underTest;
 
@@ -32,6 +36,7 @@ public class SendEventTaskFactoryTest {
         assertThat(result.getSendEventRequest()).isEqualTo(sendEventRequest);
         assertThat(result.getEventProcessorDao()).isEqualTo(eventProcessorDao);
         assertThat(result.getEventSender()).isEqualTo(eventSender);
+        assertThat(result.getExecutorServiceBean()).isEqualTo(executorServiceBean);
         assertThat(result.getLocale()).isEqualTo(TestConstants.DEFAULT_LOCALE);
     }
 }

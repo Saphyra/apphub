@@ -16,7 +16,7 @@ class MessageSenderPingRequestScheduler {
     private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;
 
-    @Scheduled(fixedRateString = "${interval.platform.messageSender.pingRequest}")
+    @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.platform.messageSender.pingRequest}")
     void pingRequest() {
         String eventName = EmptyEvent.MESSAGE_SENDER_PING_REQUEST_EVENT_NAME;
         log.info("Sending event with name {}", eventName);

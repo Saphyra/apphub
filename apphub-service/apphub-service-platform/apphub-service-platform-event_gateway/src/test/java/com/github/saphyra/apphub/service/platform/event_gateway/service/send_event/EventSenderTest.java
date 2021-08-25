@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.platform.event_gateway.service.send_ev
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
 import com.github.saphyra.apphub.test.common.TestConstants;
@@ -19,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -40,6 +42,9 @@ public class EventSenderTest {
 
     @Mock
     private UrlAssembler urlAssembler;
+
+    @Mock
+    private ErrorReporterService errorReporterService;
 
     @InjectMocks
     private EventSender underTest;
@@ -69,10 +74,12 @@ public class EventSenderTest {
 
     @Test
     public void sendEvent_errorHandled() {
-        given(urlAssembler.assemble(eventProcessor)).willThrow(new RuntimeException());
+        RuntimeException exception = new RuntimeException();
+        given(urlAssembler.assemble(eventProcessor)).willThrow(exception);
 
         underTest.sendEvent(eventProcessor, sendEventRequest, TestConstants.DEFAULT_LOCALE);
 
         verifyNoInteractions(restTemplate, eventProcessorDao, dateTimeUtil);
+        verify(errorReporterService).report(anyString(), eq(exception));
     }
 }

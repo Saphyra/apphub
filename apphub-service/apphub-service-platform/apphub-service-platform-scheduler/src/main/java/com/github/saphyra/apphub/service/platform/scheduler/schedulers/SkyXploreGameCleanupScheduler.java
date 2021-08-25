@@ -16,7 +16,7 @@ public class SkyXploreGameCleanupScheduler {
     private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;
 
-    @Scheduled(fixedRateString = "${interval.skyxplore.game.gameCleanup}")
+    @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.skyxplore.game.gameCleanup}")
     void lobbyCleanup() {
         String eventName = EmptyEvent.SKYXPLORE_GAME_CLEANUP_EVENT_NAME;
         log.info("Sending event with name {}", eventName);

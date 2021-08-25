@@ -4,6 +4,8 @@ spring:
   datasource:
     initialize: false
 
+initialDelay: 30000
+
 interval:
   user:
     authentication:
