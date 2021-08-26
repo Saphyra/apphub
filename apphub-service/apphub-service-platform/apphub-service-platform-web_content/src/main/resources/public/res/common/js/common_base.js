@@ -1,3 +1,6 @@
+const COOKIE_LOCALE = "language";
+const HEADER_BROWSER_LANGUAGE = "BrowserLanguage";
+
 (function ScriptLoader(){
     const date = getDate();
     const loadedScripts = [];
@@ -6,15 +9,13 @@
         this.loadScript = loadScript;
     }
     
-    scriptLoader.loadScript("/res/common/js/constants.js");
     scriptLoader.loadScript("/res/common/js/optional.js");
     scriptLoader.loadScript("/res/common/js/stream.js");
     scriptLoader.loadScript("/res/common/js/utils.js");
     scriptLoader.loadScript("/res/common/js/log_service.js");
+    scriptLoader.loadScript("/res/common/js/dao/dao.js");
     scriptLoader.loadScript("/res/common/js/dao/mapping.js");
     scriptLoader.loadScript("/res/common/js/dao/error_handler.js");
-    scriptLoader.loadScript("/res/common/js/dao/dao.js");
-    scriptLoader.loadScript("/res/common/js/events.js");
     scriptLoader.loadScript("/res/common/js/event_processor.js");
     scriptLoader.loadScript("/res/common/js/notification_service.js");
     

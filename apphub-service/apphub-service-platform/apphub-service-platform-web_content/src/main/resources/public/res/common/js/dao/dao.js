@@ -1,8 +1,6 @@
 (function DAO(){
-    scriptLoader.loadScript("/res/common/js/dao/http_method.js");
     scriptLoader.loadScript("/res/common/js/dao/request.js");
     scriptLoader.loadScript("/res/common/js/dao/response.js");
-    scriptLoader.loadScript("/res/common/js/dao/response_status.js");
 
     window.dao = new function(){
         this.sendRequest = sendRequest;

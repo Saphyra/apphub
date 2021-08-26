@@ -60,7 +60,7 @@
             node.appendChild(buttons);
 
         invitations[invitation.senderId] = node;
-        animationFacade.rollInVertical(node, container, 500);
+        roll.rollInVertical(node, container, 500);
     }
 
     function rejectInvitation(senderId){

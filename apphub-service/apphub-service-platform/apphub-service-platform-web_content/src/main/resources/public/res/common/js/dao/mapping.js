@@ -1,6 +1,4 @@
 window.Mapping = new function(){
-    scriptLoader.loadScript("/res/common/js/dao/http_method.js");
-
     this.INDEX_PAGE = "/web";
     this.MODULES_PAGE = "/web/modules";
     this.SKYXPLORE_PAGE = "/web/skyxplore";
