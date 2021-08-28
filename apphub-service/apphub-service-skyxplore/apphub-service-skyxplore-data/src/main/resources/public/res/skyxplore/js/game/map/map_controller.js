@@ -6,16 +6,11 @@ window.mapConstants = {
 };
 
 (function MapController(){
+    pageLoader.addLoader(function(){addRightClickMove(ids.mapSvgContainer, ids.mapContainer, false)}, "Map add rightClickMove");
+
     window.mapController = new function(){
         this.displayMap = function(){
 
         }
-    }
-
-    $(document).ready(init);
-
-    function init(){
-        universeController.loadUniverse();
-        addRightClickMove(ids.mapSvgContainer, ids.mapContainer, false);
     }
 })();

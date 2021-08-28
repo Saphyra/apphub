@@ -60,3 +60,35 @@ const HEADER_BROWSER_LANGUAGE = "BrowserLanguage";
         return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + "/" + date.getHours() + ":" + date.getMinutes();
     }
 })();
+
+(function PageLoader(){
+    const loaders = [];
+
+    window.pageLoader = new function(){
+        this.addLoader = function(loader, description){
+            if(!hasValue(description)){
+                throwException("IllegalArgument", "Description must not be null or undefined.");
+            }
+
+            loaders.push({loader: loader, description: description});
+        }
+    }
+
+    eventProcessor.registerProcessor(new EventProcessor(
+        function(eventType){return eventType == events.LOCALIZATION_LOADED},
+        function(){
+            logService.logToConsole("Running pageLoaders...");
+            new Stream(loaders)
+                .forEach(function(loader){
+                    setTimeout(function(){
+                        logService.logToConsole("Calling loader: " + loader.description);
+                        loader.loader();
+                    },
+                        0
+                    )
+                });
+        },
+        true,
+        "Page loaders"
+    ));
+})();

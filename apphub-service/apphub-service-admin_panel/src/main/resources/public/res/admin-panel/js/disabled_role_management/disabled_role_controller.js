@@ -1,10 +1,7 @@
 (function DisabledRoleController(){
     const roleLocalization = new CustomLocalization("admin_panel", "roles");
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventName){return eventName == events.LOCALIZATION_LOADED},
-        loadRoles
-    ));
+    pageLoader.addLoader(loadRoles, "Load disabled roles");
 
     function loadRoles(){
         const request = new Request(Mapping.getEndpoint("USER_DATA_GET_DISABLED_ROLES"));

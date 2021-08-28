@@ -1,7 +1,9 @@
 (function MenuController(){
     const menuLocalization = new CustomLocalization("admin_panel", "index_menu");
 
-    $(document).ready(function(){
+    pageLoader.addLoader(loadMainMenu, "Loading MainMenu");
+
+    function loadMainMenu(){
         const request = new Request(Mapping.getEndpoint("ADMIN_PANEL_MENU"));
             request.convertResponse = function(response){
                 return new Stream(JSON.parse(response.body))
@@ -16,14 +18,14 @@
                     .forEach(function(menuNode){menuContainer.appendChild(menuNode)});
             }
         dao.sendRequestAsync(request);
-    });
 
-    function createMenuNode(menuItem){
-        const link = document.createElement("a");
-            link.id = menuItem.id;
-            link.classList.add("menu-item");
-            link.innerHTML = menuLocalization.get(menuItem.id);
-            link.href = menuItem.url;
-        return link;
+        function createMenuNode(menuItem){
+            const link = document.createElement("a");
+                link.id = menuItem.id;
+                link.classList.add("menu-item");
+                link.innerHTML = menuLocalization.get(menuItem.id);
+                link.href = menuItem.url;
+            return link;
+        }
     }
 })();

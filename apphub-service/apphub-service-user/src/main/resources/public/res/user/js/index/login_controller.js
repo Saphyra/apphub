@@ -1,13 +1,13 @@
 (function Login(){
     window.events.LOGIN_ATTEMPT = "login_attempt";
 
-    $(document).ready(function(){
+    pageLoader.addLoader(function(){
         $(".login-input").on("keyup", function(e){
             if(e.which == 13){
                 eventProcessor.processEvent(new Event(events.LOGIN_ATTEMPT));
             }
         });
-    });
+    }, "Login add event listeners");
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.LOGIN_ATTEMPT},

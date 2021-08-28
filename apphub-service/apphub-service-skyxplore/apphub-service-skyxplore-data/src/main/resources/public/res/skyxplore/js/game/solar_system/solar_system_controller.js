@@ -9,14 +9,14 @@
 
     let openedSolarSystemId = null;
 
+    pageLoader.addLoader(function(){addRightClickMove(ids.solarSystemSvgContainer, ids.solarSystemContainer, false)}, "SolarSystem add rightClickMove");
+
     window.solarSystemController = new function(){
         this.viewSolarSystem = viewSolarSystem;
         this.getOpenedSolarSystemId = function(){
             return openedSolarSystemId;
         }
     }
-
-    $(document).ready(init);
 
     function viewSolarSystem(solarSystemId){
         openedSolarSystemId = solarSystemId;
@@ -105,9 +105,5 @@
                 element.innerHTML = planet.planetName;
             return element
         }
-    }
-
-    function init(){
-        addRightClickMove(ids.solarSystemSvgContainer, ids.solarSystemContainer, false);
     }
 })();

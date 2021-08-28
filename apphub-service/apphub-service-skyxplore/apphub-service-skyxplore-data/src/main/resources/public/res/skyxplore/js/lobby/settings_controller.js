@@ -1,4 +1,7 @@
 (function SettingsController(){
+    pageLoader.addLoader(loadGameSettings, "Load game settings");
+    pageLoader.addLoader(setUpSettingInputs, "Set up setting inputs");
+
     window.settingsController = new function(){
         this.createGameSettingsChangedHandler = function(){
             return new WebSocketEventHandler(
@@ -7,8 +10,6 @@
             );
         }
     }
-
-    $(document).ready(init);
 
     function loadGameSettings(){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_LOBBY_GET_GAME_SETTINGS"))
@@ -46,7 +47,7 @@
         pageController.webSocketConnection.sendEvent(event);
     }
 
-    function init(){
+    function setUpSettingInputs(){
         if(window.host != window.userId){
             document.getElementById(ids.universeSizeInput).disabled = "disabled";
             document.getElementById(ids.systemAmountInput).disabled = "disabled";
@@ -60,7 +61,5 @@
             document.getElementById(ids.planetSizeInput).onchange = updateGameSettings;
             document.getElementById(ids.aiPresenceInput).onchange = updateGameSettings;
         }
-
-        loadGameSettings();
     }
 })();

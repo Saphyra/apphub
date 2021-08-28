@@ -12,7 +12,7 @@
     let registrationAllowed = false;
     let validationTimeout = null;
 
-    $(document).ready(function(){
+    pageLoader.addLoader(function(){
         $(".reg-input").on("keyup", function(e){
             if(e.which == 13){
                 eventProcessor.processEvent(new Event(events.REGISTER_ATTEMPT));
@@ -23,7 +23,7 @@
         $(".reg-input").on("focusin", function(){
             eventProcessor.processEvent(new Event(events.VALIDATION_ATTEMPT));
         });
-    });
+    }, "Registration add event listeners");
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.VALIDATION_ATTEMPT},

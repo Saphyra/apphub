@@ -1,6 +1,8 @@
 (function PlanetController(){
     let openedPlanetId;
 
+    pageLoader.addLoader(function(){addRightClickMove(ids.planetSurfaceContainer, ids.planetMiddleBar, false)}, "Planet add rightClickMove");
+
     window.planetController = new function(){
         this.viewPlanet = viewPlanet;
         this.openStorageSettings = openStorageSettings;
@@ -8,8 +10,6 @@
             return openedPlanetId;
         }
     }
-
-    $(document).ready(init);
 
     function viewPlanet(planetId){
         openedPlanetId = planetId;
@@ -37,9 +37,5 @@
 
     function openStorageSettings(){
         storageSettingsController.viewStorageSettings(openedPlanetId);
-    }
-
-    function init(){
-        addRightClickMove(ids.planetSurfaceContainer, ids.planetMiddleBar, false);
     }
 })();

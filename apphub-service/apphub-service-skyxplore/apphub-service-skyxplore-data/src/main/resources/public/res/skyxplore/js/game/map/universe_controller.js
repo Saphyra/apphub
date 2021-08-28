@@ -1,6 +1,7 @@
 (function UniverseController(){
+    pageLoader.addLoader(loadUniverse, "Universe load");
+
     window.universeController = new function(){
-        this.loadUniverse = loadUniverse;
     }
 
     function loadUniverse(){

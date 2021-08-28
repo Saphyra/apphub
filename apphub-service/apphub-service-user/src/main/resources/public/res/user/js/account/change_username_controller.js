@@ -10,7 +10,7 @@
     let submissionAllowed = false;
     let validationTimeout = null;
 
-    $(document).ready(function(){
+    pageLoader.addLoader(function(){
         $(".change-username-input").on("keyup", function(e){
             if(e.which == 13){
                 eventProcessor.processEvent(new Event(events.CHANGE_USERNAME_ATTEMPT));
@@ -21,7 +21,7 @@
         $(".change-username-input").on("focusin", function(){
             eventProcessor.processEvent(new Event(events.CHANGE_USERNAME_VALIDATION_ATTEMPT));
         });
-    });
+    }, "ChangeUsername add event listeners");
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.CHANGE_USERNAME_VALIDATION_ATTEMPT},

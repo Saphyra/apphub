@@ -7,6 +7,9 @@
     let population;
     let orderType = orderTypes.NAME;
 
+    pageLoader.addLoader(setUpEventListeners, "PopulationOverview set up event listeners");
+    pageLoader.addLoader(setUpPopulationFilters, "PopulationOverview set up population filters");
+
     window.populationOverviewController = new function(){
         this.viewPopulationOverview = viewPopulationOverview;
         this.setOrderType = function(o){
@@ -14,8 +17,6 @@
             displayPopulation();
         }
     }
-
-    $(document).ready(init);
 
     function viewPopulationOverview(planetId){
         document.getElementById(ids.closePopulationOverviewButton).onclick = function(){
@@ -165,7 +166,7 @@
         dao.sendRequestAsync(request);
     }
 
-    function init(){
+    function setUpEventListeners(){
         document.getElementById(ids.populationOverviewSkillSelectionToggleButton).onclick = function(){
             $("#" + ids.populationOverviewSkillSelectionContainer).toggle();
         }
@@ -183,7 +184,8 @@
             $(".population-overview-skill-type").prop("checked", false);
             displayPopulation();
         }
-
+    }
+    function setUpPopulationFilters(){
         const skillTypeCheckboxes = document.getElementById(ids.populationOverviewSkillList);
         new Stream(skillTypeLocalization.getKeys())
             .sorted(function(a, b){return skillTypeLocalization.get(a).localeCompare(skillTypeLocalization.get(b))})

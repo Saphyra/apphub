@@ -3,10 +3,8 @@
 
     const languageLocalization = new CustomLocalization("user", "language");
 
-    $(document).ready(function(){
-        loadLanguages();
-        addEventListeners();
-    });
+    pageLoader.addLoader(loadLanguages, "Load languages");
+    pageLoader.addLoader(addEventListeners, "ChangeLanguage add event listeners");
 
     function loadLanguages(){
         const select = document.getElementById("ch-language-input");

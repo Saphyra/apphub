@@ -4,7 +4,8 @@
 
     let activeRoom = null;
 
-    $(document).ready(init);
+    pageLoader.addLoader(setUpEventListeners, "Set up chat event listeners");
+    pageLoader.addLoader(function(){selectRoom(ROOM_GENERAL);}, "Select general chat room");
 
     window.chatController = new function(){
         this.openCreateChatRoomDialog = openCreateChatRoomDialog;
@@ -295,7 +296,7 @@
         return room + "-chat-notification";
     }
 
-    function init(){
+    function setUpEventListeners(){
         document.getElementById(ids.chatButton).onclick = function(){
             $("#" + ids.chatContainer).fadeToggle();
         }
@@ -313,7 +314,5 @@
         document.getElementById(ids.allianceChatButton).onclick = function(){
             selectRoom(ROOM_ALLIANCE);
         }
-
-        selectRoom(ROOM_GENERAL);
     }
 })();

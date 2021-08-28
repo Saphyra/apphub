@@ -1,10 +1,10 @@
 (function StorageSettingsController(){
+    pageLoader.addLoader(setUpEventListeners, "StorageSettings set up event listeners");
+
     window.storageSettingsController = new function(){
         this.viewStorageSettings = viewStorageSettings;
         this.createStorageSettings = createStorageSettings;
     }
-
-    $(document).ready(init);
 
     function viewStorageSettings(planetId){
         document.getElementById(ids.closeStorageSettingsButton).onclick = function(){
@@ -217,7 +217,7 @@
         document.getElementById(ids.storageSettingsPriorityValue).innerHTML = 5;
     }
 
-    function init(){
+    function setUpEventListeners(){
         const priorityInput = document.getElementById(ids.storageSettingsPriorityInput);
             priorityInput.onchange = function(){
                 document.getElementById(ids.storageSettingsPriorityValue).innerHTML = priorityInput.value;

@@ -11,7 +11,7 @@
     let submissionAllowed = false;
     let validationTimeout = null;
 
-    $(document).ready(function(){
+    pageLoader.addLoader(function(){
         $(".delete-account-input").on("keyup", function(e){
             if(e.which == 13){
                 eventProcessor.processEvent(new Event(events.DELETE_ACCOUNT_ATTEMPT));
@@ -22,7 +22,7 @@
         $(".delete-account-input").on("focusin", function(){
             eventProcessor.processEvent(new Event(events.DELETE_ACCOUNT_VALIDATION_ATTEMPT));
         });
-    });
+    }, "DeleteAccount add validation event listeners");
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.DELETE_ACCOUNT_VALIDATION_ATTEMPT},

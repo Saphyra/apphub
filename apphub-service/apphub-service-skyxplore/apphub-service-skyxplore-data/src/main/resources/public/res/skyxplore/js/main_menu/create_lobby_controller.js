@@ -1,5 +1,5 @@
 (function CreateLobbyController(){
-    $(document).ready(init);
+    pageLoader.addLoader(function(){$("#" + ids.lobbyNameInput).on("keyup", function(){validationAttempt()})}, "LobbyName input event listener");
 
     let submissionAllowed = false;
     let validationTimeout = null;
@@ -80,9 +80,5 @@
                 process: createSuccessProcess(ids.invalidLobbyName)
             }
         }
-    }
-
-    function init(){
-        $("#" + ids.lobbyNameInput).on("keyup", function(){validationAttempt()});
     }
 })();

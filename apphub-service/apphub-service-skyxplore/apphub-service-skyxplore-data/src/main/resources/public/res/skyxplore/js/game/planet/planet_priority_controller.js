@@ -6,12 +6,12 @@
         planetPrioritiesConstructionValue: new IdMask("planet-priorities-*-value"),
     }
 
+    pageLoader.addLoader(setUpPriorityInputs, "PlanetPriority set up priority inputs");
+
     window.planetPriorityController = new function(){
         this.loadPriorities = loadPriorities;
     }
     
-    $(document).ready(init);
-
     function loadPriorities(planetId){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_GET_PRIORITIES", {planetId: planetId}));
             request.convertResponse = jsonConverter;
@@ -40,7 +40,7 @@
         dao.sendRequestAsync(request);
     }
 
-    function init(){
+    function setUpPriorityInputs(){
         new Stream(priorityTypes)
             .forEach(function(priorityType){
                 const input = document.getElementById(idMasks.planetPrioritiesConstructionInput.get(priorityType));

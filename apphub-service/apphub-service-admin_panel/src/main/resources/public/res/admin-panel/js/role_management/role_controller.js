@@ -6,10 +6,8 @@
     let searchUserTimeout = null;
     let previousSearchText = "";
 
-    $(document).ready(function(){
-        initAvailableRoles();
-        addEventListeners();
-    });
+    pageLoader.addLoader(initAvailableRoles, "Initializing available roles");
+    pageLoader.addLoader(addEventListeners, "Adding EventListeners");
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.LOCALIZATION_LOADED},
@@ -39,6 +37,7 @@
 
         if(searchText.length < 3){
             displayTooShortSearchText(container);
+            previousSearchText = "";
             return;
         }
 
@@ -101,15 +100,15 @@
             function createUserNode(user){
                 const row = document.createElement("tr");
 
-                    const emailCell = document.createElement("td");
-                        emailCell.innerText = user.email;
-                        emailCell.classList.add("id-cell");
-                row.appendChild(emailCell);
-
                     const usernameCell = document.createElement("td");
                         usernameCell.innerText = user.username;
                         usernameCell.classList.add("id-cell");
                 row.appendChild(usernameCell);
+
+                    const emailCell = document.createElement("td");
+                        emailCell.innerText = user.email;
+                        emailCell.classList.add("id-cell");
+                row.appendChild(emailCell);
 
                     const actualRolesCell = document.createElement("td");
                         actualRolesCell.classList.add("role-cell");

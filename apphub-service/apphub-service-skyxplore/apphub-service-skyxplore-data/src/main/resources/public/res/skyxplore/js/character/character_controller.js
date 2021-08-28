@@ -4,22 +4,12 @@
     let submissionAllowed = false;
     let validationTimeout = null;
 
-    $(document).ready(init);
-
     window.characterController = new function(){
         this.save = save;
     }
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.LOCALIZATION_LOADED},
-        validate,
-        true
-    ).setName("Auto-validator"));
-
-    function init(){
-        $("#" + ids.characterNameInput).on("keyup", function(){eventProcessor.processEvent(new Event(events.VALIDATION_ATTEMPT))});
-        validate();
-    }
+    pageLoader.addLoader(function(){ $("#" + ids.characterNameInput).on("keyup", function(){eventProcessor.processEvent(new Event(events.VALIDATION_ATTEMPT))})}, "CharacterName input event listener");
+    pageLoader.addLoader(validate, "Initial validation");
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.VALIDATION_ATTEMPT},

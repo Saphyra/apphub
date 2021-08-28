@@ -18,7 +18,8 @@
         }
     }
 
-    $(document).ready(init);
+    pageLoader.addLoader(loadCurrentPage, "Loading initial ErrorReport page");
+    pageLoader.addLoader(displayPageNumber, "Displaying initial PageNUmber");
 
     function nextPage(){
         pageNumber++;
@@ -258,10 +259,5 @@
 
     function nullIfEmpty(input){
         return input && input.length > 0 ? input : null;
-    }
-
-    function init(){
-        loadCurrentPage();
-        displayPageNumber();
     }
 })();

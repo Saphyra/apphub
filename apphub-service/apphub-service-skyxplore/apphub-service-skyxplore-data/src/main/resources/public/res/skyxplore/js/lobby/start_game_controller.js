@@ -1,5 +1,11 @@
 (function StartGameController(){
-    $(document).ready(init);
+    if(window.userId != window.host){
+        pageLoader.addLoader(function(){document.getElementById(ids.startGameButton).style.display = "none"}, "Hide gameCreationButton");
+    }
+
+    if(window.gameCreationStarted){
+        pageLoader.addLoader(gameCreationStarted, "GameCreation started");
+    }
 
     window.startGameController = new function(){
         this.createGameCreationInitiatedHandler = function(){
@@ -42,15 +48,5 @@
     function gameCreationStarted(){
         notificationService.showSuccess(Localization.getAdditionalContent("game-started"));
         spinner.open();
-    }
-
-    function init(){
-        if(window.userId != window.host){
-            document.getElementById(ids.startGameButton).style.display = "none";
-        }
-
-        if(window.gameCreationStarted){
-            gameCreationStarted();
-        }
     }
 })();

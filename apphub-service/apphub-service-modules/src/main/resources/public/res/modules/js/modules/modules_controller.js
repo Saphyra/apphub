@@ -4,9 +4,7 @@
 
     let searchTimeout = null;
 
-    window.modulesController = new function(){
-        this.displayModules = displayModules;
-    }
+    pageLoader.addLoader(displayModules, "Displaying modules");
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.SEARCH_ATTEMPT},

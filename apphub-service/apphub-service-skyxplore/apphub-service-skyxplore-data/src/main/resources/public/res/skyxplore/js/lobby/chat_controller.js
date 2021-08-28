@@ -1,4 +1,12 @@
 (function ChatController(){
+    pageLoader.addLoader(function(){
+        document.getElementById("message-input").onkeyup = function(e){
+            if(e.which == 13){
+                sendMessage();
+            }
+        }
+    }, "MessageInput event listener");
+
     window.chatController = new function(){
         this.createChatSendMessageHandler = function(){
             return new WebSocketEventHandler(
@@ -21,8 +29,6 @@
             );
         };
     }
-
-    $(document).ready(init);
 
     function processChatSendMessageEvent(chatEvent){
         const senderId = chatEvent.senderId;
@@ -124,13 +130,5 @@
                 joinMessageNode.innerText = characterName + " " + Localization.getAdditionalContent("character-left-the-lobby");
         messagesContainer.appendChild(joinMessageNode);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-
-    function init(){
-        document.getElementById("message-input").onkeyup = function(e){
-            if(e.which == 13){
-                sendMessage();
-            }
-        }
     }
 })();

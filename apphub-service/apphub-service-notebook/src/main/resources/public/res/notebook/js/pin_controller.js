@@ -8,7 +8,7 @@
         }
     }
 
-    $(document).ready(init);
+    pageLoader.addLoader(loadPinnedItems, "Load Pinned items");
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){
@@ -105,9 +105,5 @@
                 loadPinnedItems();
             }
         dao.sendRequestAsync(request);
-    }
-
-    function init(){
-        loadPinnedItems();
     }
 })();

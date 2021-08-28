@@ -1,9 +1,5 @@
 (function CharacterLoadingService(){
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.LOCALIZATION_LOADED},
-        loadCharacter,
-        true
-    ).setName("CharacterLoader"));
+    pageLoader.addLoader(loadCharacter, "Load character");
 
     function loadCharacter(){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_CHARACTER"));

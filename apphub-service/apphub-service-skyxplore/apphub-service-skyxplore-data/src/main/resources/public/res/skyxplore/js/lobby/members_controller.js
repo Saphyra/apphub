@@ -1,6 +1,8 @@
 (function MembersController(){
     const members = {};
 
+    pageLoader.addLoader(loadMembers, "Load members");
+
     window.membersController = new function(){
         this.createCharacterJoinedHandler = function(){
             return new WebSocketEventHandler(
@@ -39,8 +41,6 @@
                 .noneMatch(function(member){return member.status == "INVITED"});
         }
     }
-
-    $(document).ready(init);
 
     function loadMembers(){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_LOBBY_GET_MEMBERS"));
@@ -226,9 +226,5 @@
         }
 
         members[event.userId].allianceSelectMenu.value = event.alliance;
-    }
-
-    function init(){
-        loadMembers();
     }
 })();

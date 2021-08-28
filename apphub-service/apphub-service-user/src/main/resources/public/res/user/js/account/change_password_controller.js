@@ -11,7 +11,7 @@
     let submissionAllowed = false;
     let validationTimeout = null;
 
-    $(document).ready(function(){
+    pageLoader.addLoader(function(){
         $(".change-password-input").on("keyup", function(e){
             if(e.which == 13){
                 eventProcessor.processEvent(new Event(events.CHANGE_PASSWORD_ATTEMPT));
@@ -22,7 +22,7 @@
         $(".change-password-input").on("focusin", function(){
             eventProcessor.processEvent(new Event(events.CHANGE_PASSWORD_VALIDATION_ATTEMPT));
         });
-    });
+    }, "ChangePassword add event listeners");
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.CHANGE_PASSWORD_VALIDATION_ATTEMPT},

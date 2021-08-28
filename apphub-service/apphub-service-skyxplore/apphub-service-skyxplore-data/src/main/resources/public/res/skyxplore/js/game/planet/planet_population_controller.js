@@ -1,9 +1,9 @@
 (function PlanetPopulationController(){
+    pageLoader.addLoader(setUpEventListeners, "PlanetPopulation set up event listeners");
+
     window.planetPopulationController = new function(){
         this.loadPopulation = loadPopulation;
     }
-
-    $(document).ready(init)
 
     function loadPopulation(planetId){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_GET_POPULATION_OVERVIEW", {planetId: planetId}));
@@ -31,7 +31,7 @@
         document.getElementById(ids.planetPopulationOverviewCapacity).innerHTML = population.capacity;
     }
 
-    function init(){
+    function setUpEventListeners(){
         document.getElementById(ids.planetOpenPopulationOverviewButton).onclick = function(){
             populationOverviewController.viewPopulationOverview(planetController.getOpenedPlanetId());
         }

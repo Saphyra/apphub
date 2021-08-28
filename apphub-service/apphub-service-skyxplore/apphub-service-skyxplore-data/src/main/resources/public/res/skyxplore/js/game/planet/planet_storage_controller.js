@@ -10,6 +10,8 @@
         planetStorageDetailContainer: new IdMask("planet-storage-*-details-container"),
     }
 
+    pageLoader.addLoader(setUpEventListeners, "PlanetStorage set up event listeners");
+
     window.planetStorageController = new function(){
         this.loadStorage = loadStorage;
     }
@@ -23,8 +25,6 @@
             true
         ).setName("planet-storage-reserved-label-filler")
     );
-
-    $(document).ready(init);
 
     function loadStorage(planetId){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_PLANET_STORAGE", {planetId: planetId}));
@@ -110,7 +110,7 @@
         }
     }
 
-    function init(){
+    function setUpEventListeners(){
         document.getElementById(ids.toggleEnergyDetailsButton).onclick = function(){
             $("#" + ids.planetStorageEnergyDetailsContainer).toggle(); //TODO consider using fadeInVertical
         }

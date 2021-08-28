@@ -10,7 +10,7 @@
     let submissionAllowed = false;
     let validationTimeout = null;
 
-    $(document).ready(function(){
+    pageLoader.addLoader(function(){
         $(".change-email-input").on("keyup", function(e){
             if(e.which == 13){
                 eventProcessor.processEvent(new Event(events.CHANGE_EMAIL_ATTEMPT));
@@ -21,7 +21,7 @@
         $(".change-email-input").on("focusin", function(){
             eventProcessor.processEvent(new Event(events.CHANGE_EMAIL_VALIDATION_ATTEMPT));
         });
-    });
+    }, "ChangeEmail add event listeners");
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.CHANGE_EMAIL_VALIDATION_ATTEMPT},

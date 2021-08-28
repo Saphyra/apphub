@@ -1,4 +1,6 @@
 (function FriendsController(){
+    pageLoader.addLoader(loadActiveFriends, "Load active friends");
+
     window.friendsController = new function(){
         this.createCharacterOnlineHandler = function(){
             return new WebSocketEventHandler(
@@ -14,8 +16,6 @@
             );
         };
     }
-
-    $(document).ready(init);
 
     function loadActiveFriends(){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_ACTIVE_FRIENDS"));
@@ -67,9 +67,5 @@
                 notificationService.showSuccess(Localization.getAdditionalContent("friend-invited"));
             }
         dao.sendRequestAsync(request);
-    }
-
-    function init(){
-        loadActiveFriends();
     }
 })();

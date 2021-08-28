@@ -11,12 +11,4 @@ scriptLoader.loadScript("/res/modules/js/modules/modules_controller.js");
             eventProcessor.processEvent(new Event(events.SEARCH_ATTEMPT));
         });
     });
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.LOCALIZATION_LOADED},
-        function(){
-            modulesController.displayModules();
-        },
-        true
-    ));
 })();

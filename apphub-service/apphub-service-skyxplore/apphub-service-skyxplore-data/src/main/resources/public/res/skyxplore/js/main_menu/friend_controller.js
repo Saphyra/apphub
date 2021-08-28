@@ -1,7 +1,8 @@
 (function FriendController(){
     let searchForFriendTimeout = null;
 
-    $(document).ready(init);
+    pageLoader.addLoader(function(){$("#" + ids.searchFriendInput).on("keyup", searchFriendAttempt)}, "SearchFriend input event listener");
+    pageLoader.addLoader(loadFriendData, "Load friend data");
 
     window.friendController = new function(){
         this.createHandlers = function(){
@@ -287,10 +288,5 @@
                 dao.sendRequestAsync(request);
             }
         )
-    }
-
-    function init(){
-        $("#" + ids.searchFriendInput).on("keyup", searchFriendAttempt);
-        loadFriendData();
     }
 })();
