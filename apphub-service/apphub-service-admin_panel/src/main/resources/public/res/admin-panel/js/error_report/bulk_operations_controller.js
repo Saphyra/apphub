@@ -11,6 +11,9 @@
         }
 
         this.deleteAllRead = deleteAllRead;
+        
+        this.deleteChecked = deleteChecked;
+
         this.markAsRead = function(){
             markErrorReports(getCheckedIds(), "READ", reportController.search);
         }
@@ -22,6 +25,12 @@
         this.markAsUnread = function(){
             markErrorReports(getCheckedIds(), "UNREAD", reportController.search);
         }
+    }
+
+    function deleteChecked(){
+        const checkedIds =  getCheckedIds();
+
+        reportController.deleteReports(checkedIds);
     }
 
     function deleteAllRead(){

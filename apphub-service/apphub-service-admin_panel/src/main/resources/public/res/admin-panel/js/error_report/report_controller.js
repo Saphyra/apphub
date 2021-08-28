@@ -13,6 +13,7 @@
         this.deleteOpenedErrorReport = function(){
             deleteReports([openedErrorReportId]);
         }
+        this.deleteReports = deleteReports;
         this.markOpenedErrorReport = function(status){
             markErrorReports([openedErrorReportId], status);
         }

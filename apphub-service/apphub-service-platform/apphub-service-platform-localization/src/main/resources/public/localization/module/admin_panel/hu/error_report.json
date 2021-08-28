@@ -199,6 +199,12 @@
         "message": "Kijelöltek olvasatlannak jelölése"
       }
     ],
+    "delete-checked-button": [
+      {
+        "key": "innerHTML",
+        "message": "Kijelöltek törlése"
+      }
+    ],
     "back-button": [
       {
         "key": "innerHTML",
