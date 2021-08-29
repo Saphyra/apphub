@@ -97,6 +97,11 @@ function clearSelection() {
     document.execCommand('selectAll', false, null);
 }
 
+function isTextSelected(){
+    const selection = window.getSelection();
+    return selection.toString().length > 0;
+}
+
 function getValidationTimeout(){
     const presetTimeout = getCookie("validation-timeout");
     return presetTimeout == null ? 1000 : Number(presetTimeout);

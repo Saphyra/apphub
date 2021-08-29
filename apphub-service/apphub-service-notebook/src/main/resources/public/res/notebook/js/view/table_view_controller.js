@@ -116,6 +116,7 @@
         const cell = document.createElement("TD");
             cell.id = generateRandomId();
             cell.classList.add("table-column");
+            cell.classList.add("selectable");
 
             const contentNode = document.createElement("DIV");
                 contentNode.classList.add("table-column-content");

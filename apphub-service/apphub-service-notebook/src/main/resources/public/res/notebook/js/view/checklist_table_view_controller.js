@@ -123,6 +123,7 @@
             const contentNode = document.createElement("DIV");
                 contentNode.classList.add("table-column-content");
                 contentNode.classList.add("view-checklist-table-input-field");
+                contentNode.classList.add("selectable");
                 if(columnData.tableJoinId) contentNode.id = columnData.tableJoinId;
                 contentNode.contenteditable = editingEnabled;
                 contentNode.innerText = columnData.content;
@@ -233,7 +234,7 @@
                     new Stream(row.columns)
                         .peek(function(column){
                             column.columnNode.onclick = function(){
-                                if(!editingEnabled){
+                                if(!editingEnabled && !isTextSelected()){
                                     const newValue = !row.checked;
                                     setContentDecoration(row.columns, newValue);
                                     checkedInput.checked = newValue

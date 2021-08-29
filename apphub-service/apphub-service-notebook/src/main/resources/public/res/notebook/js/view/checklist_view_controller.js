@@ -57,10 +57,11 @@
 
             const contentCell = document.createElement("DIV");
                 contentCell.classList.add("view-checklist-item-content");
+                contentCell.classList.add("selectable");
                 contentCell.innerHTML = itemData.content;
                 contentCell.contentEditable = editingEnabled;
                 contentCell.onclick = function(){
-                    if(!editingEnabled){
+                    if(!editingEnabled && !isTextSelected()){
                         const checked = !checkedBox.checked;
                         setContentDecoration(contentCell, checked);
                         updateStatus(itemData.checklistItemId, checked);
