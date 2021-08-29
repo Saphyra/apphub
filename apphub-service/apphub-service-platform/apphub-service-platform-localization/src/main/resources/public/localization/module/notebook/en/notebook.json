@@ -473,6 +473,14 @@
     "discard-confirmation-dialog-detail": "Do you want to discard the changes?",
     "discard-confirmation-dialog-confirm-button": "Discard",
     "discard-confirmation-dialog-decline-button": "Cancel",
-    "search-result": "Search result"
+    "search-result": "Search result",
+    "checklist-item-deletion-confirmation-dialog-title": "Delete checklist item",
+    "checklist-item-deletion-confirmation-dialog-detail": "Are you sure you want to delete the checklist item?",
+    "checklist-item-deletion-confirmation-dialog-confirm-button": "Delete",
+    "checklist-item-deletion-confirmation-dialog-decline-button": "Cancel",
+    "checklist-table-item-deletion-confirmation-dialog-title": "Delete checklist table item",
+    "checklist-table-item-deletion-confirmation-dialog-detail": "Are you sure you want to delete the checklist table item?",
+    "checklist-table-item-deletion-confirmation-dialog-confirm-button": "Delete",
+    "checklist-table-item-deletion-confirmation-dialog-decline-button": "Cancel"
   }
 }

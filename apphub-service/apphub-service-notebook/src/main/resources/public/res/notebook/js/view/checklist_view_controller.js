@@ -111,9 +111,23 @@
                     removeButton.classList.add("view-checklist-item-edit-button");
                     removeButton.innerHTML = "X";
                     removeButton.onclick = function(){
-                        document.getElementById("view-checklist-content").removeChild(nodeRow);
                         if(!editingEnabled){
-                            saveChanges();
+                            const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+                                .withTitle(Localization.getAdditionalContent("checklist-item-deletion-confirmation-dialog-title"))
+                                .withDetail(Localization.getAdditionalContent("checklist-item-deletion-confirmation-dialog-detail"))
+                                .withConfirmButton(Localization.getAdditionalContent("checklist-item-deletion-confirmation-dialog-confirm-button"))
+                                .withDeclineButton(Localization.getAdditionalContent("checklist-item-deletion-confirmation-dialog-decline-button"));
+
+                            confirmationService.openDialog(
+                                "checklist-item-deletion-confirmation-dialog",
+                                confirmationDialogLocalization,
+                                function(){
+                                    document.getElementById("view-checklist-content").removeChild(nodeRow);
+                                    saveChanges();
+                                }
+                            )
+                        }else{
+                            document.getElementById("view-checklist-content").removeChild(nodeRow);
                         }
                     }
             operationsCell.appendChild(removeButton);

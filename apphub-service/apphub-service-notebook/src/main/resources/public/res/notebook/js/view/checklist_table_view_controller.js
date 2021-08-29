@@ -192,9 +192,23 @@
                             const deleteRowButton = document.createElement("BUTTON");
                                 deleteRowButton.innerHTML = "X";
                                 deleteRowButton.onclick = function(){
-                                    removeRow(rowNode.id);
                                     if(!editingEnabled){
-                                        saveChanges();
+                                        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+                                            .withTitle(Localization.getAdditionalContent("checklist-table-item-deletion-confirmation-dialog-title"))
+                                            .withDetail(Localization.getAdditionalContent("checklist-table-item-deletion-confirmation-dialog-detail"))
+                                            .withConfirmButton(Localization.getAdditionalContent("checklist-table-item-deletion-confirmation-dialog-confirm-button"))
+                                            .withDeclineButton(Localization.getAdditionalContent("checklist-table-item-deletion-confirmation-dialog-decline-button"));
+
+                                        confirmationService.openDialog(
+                                            "checklist-table-item-deletion-confirmation-dialog",
+                                            confirmationDialogLocalization,
+                                            function(){
+                                                removeRow(rowNode.id);
+                                                saveChanges();
+                                            }
+                                        )
+                                    }else{
+                                        removeRow(rowNode.id);
                                     }
                                 }
                         buttonWrapper.appendChild(deleteRowButton);
