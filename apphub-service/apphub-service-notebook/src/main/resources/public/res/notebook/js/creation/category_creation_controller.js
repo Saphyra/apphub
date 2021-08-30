@@ -1,17 +1,15 @@
 (function CategoryCreationController(){
     let currentCategoryId = null;
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.OPEN_CREATE_CATEGORY_DIALOG},
-        function(){
+    window.categoryCreationController = new function(){
+        this.openCreateCategoryDialog = function(){
             loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
+            document.getElementById("new-category-title").value = "";
+            switchTab("main-page", "create-category");
+            switchTab("button-wrapper", "create-category-buttons");
         }
-    ));
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.SAVE_CATEGORY},
-        saveCategory
-    ));
+        this.save = saveCategory;
+    }
 
     function loadChildrenOfCategory(categoryId){
         currentCategoryId = categoryId;

@@ -1,21 +1,18 @@
 (function Login(){
-    window.events.LOGIN_ATTEMPT = "login_attempt";
-
     pageLoader.addLoader(function(){
         $(".login-input").on("keyup", function(e){
             if(e.which == 13){
-                eventProcessor.processEvent(new Event(events.LOGIN_ATTEMPT));
+                login();
             }
         });
     }, "Login add event listeners");
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.LOGIN_ATTEMPT},
-        login
-    ));
+    window.loginController = new function(){
+        this.login = login;
+    }
     
-    function login(event){
-        const credentials = new Credentials(event.getPayload());
+    function login(userData){
+        const credentials = userData ? new Credentials(userData) : new Credentials();
         $("#login-password").val("");
         
         if(!credentials.isValid()){

@@ -3,25 +3,21 @@
     let columnNames = null;
     let rows = null;
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.OPEN_CREATE_TABLE_DIALOG},
-        init
-    ));
-
     window.tableCreationController = new function(){
         this.save = save;
         this.newColumn = newColumn;
         this.newRow = newRow;
-    }
-
-    function init(){
-        document.getElementById("create-table-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
-        document.getElementById("new-table-title").value = "";
-        loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
-        columnNames = [];
-        rows = [];
-        newColumn();
-        newRow();
+        this.openCreateTableDialog = function(){
+            document.getElementById("create-table-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
+            document.getElementById("new-table-title").value = "";
+            loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
+            columnNames = [];
+            rows = [];
+            newColumn();
+            newRow();
+            switchTab("main-page", "create-table");
+            switchTab("button-wrapper", "create-table-buttons");
+        }
     }
 
     function loadChildrenOfCategory(categoryId){

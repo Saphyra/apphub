@@ -24,7 +24,7 @@
             <INPUT type="email" id="login-email" class="login-input" required autofocus>
             <INPUT type="password" id="login-password" class="login-input" required>
             <INPUT type="checkbox" id="remember-me"><LABEL for="remember-me" id="remember-me-label"></LABEL>
-            <BUTTON id="login-button" onclick="eventProcessor.processEvent(new Event(events.LOGIN_ATTEMPT))"></BUTTON>
+            <BUTTON id="login-button" onclick="loginController.login()"></BUTTON>
         </SECTION>
 
         <SECTION id="registration-container">
@@ -57,7 +57,7 @@
                     </LABEL>
                 </DIV>
 
-                <BUTTON id="registration-button" onclick="eventProcessor.processEvent(new Event(events.REGISTER_ATTEMPT))" disabled></BUTTON>
+                <BUTTON id="registration-button" onclick="registrationController.registerAttempt()" disabled></BUTTON>
             </DIV>
         </SECTION>
     </MAIN>

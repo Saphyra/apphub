@@ -1,17 +1,15 @@
 (function LinkCreationController(){
     let currentCategoryId = null;
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.OPEN_CREATE_LINK_DIALOG},
-        function(){
+    window.linkCreationController = new function(){
+        this.saveLink = saveLink;
+        this.openCreateLinkDialog = function(){
             document.getElementById("new-link-title").value = "";
             document.getElementById("new-link-url").value = "";
             loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
+            switchTab("main-page", "create-link");
+            switchTab("button-wrapper", "create-link-buttons");
         }
-    ));
-
-    window.linkCreationController = new function(){
-        this.saveLink = saveLink;
     }
 
     function loadChildrenOfCategory(categoryId){

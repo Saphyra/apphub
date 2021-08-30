@@ -1,6 +1,8 @@
 (function CategoryContentController(){
     let currentCategoryId = null;
 
+    pageLoader.addLoader(function(){loadCategoryContent(null, false)}, "Load root category content");
+
     window.categoryContentController = new function(){
         this.loadCategoryContent = loadCategoryContent;
         this.reloadCategoryContent = function(){

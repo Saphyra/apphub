@@ -1,21 +1,17 @@
 (function ChecklistCreationController(){
     let currentCategoryId = null;
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.OPEN_CREATE_CHECKLIST_DIALOG},
-        init
-    ));
-
     window.checklistCreationController = new function(){
         this.save = save;
         this.newItem = newItem;
-    }
-
-    function init(){
-        document.getElementById("create-checklist-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
-        document.getElementById("new-checklist-title").value = "";
-        document.getElementById("new-checklist-content-wrapper").innerHTML = "";
-        loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
+        this.openCreateChecklistDialog = function(){
+            document.getElementById("create-checklist-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
+            document.getElementById("new-checklist-title").value = "";
+            document.getElementById("new-checklist-content-wrapper").innerHTML = "";
+            loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
+            switchTab("main-page", "create-checklist");
+            switchTab("button-wrapper", "create-checklist-buttons");
+        }
     }
 
     function loadChildrenOfCategory(categoryId){

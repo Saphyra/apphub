@@ -1,6 +1,4 @@
 (function RoleController(){
-    events.SEARCH_USER_ATTEMPT = "search_user_attempt"
-
     const roleLocalization = new CustomLocalization("admin_panel", "roles");
     const availableRoles = [];
     let searchUserTimeout = null;
@@ -8,23 +6,15 @@
 
     pageLoader.addLoader(initAvailableRoles, "Initializing available roles");
     pageLoader.addLoader(addEventListeners, "Adding EventListeners");
+    pageLoader.addLoader(queryUsers, "Initial query users");
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.LOCALIZATION_LOADED},
-        queryUsers,
-        true
-    ));
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.SEARCH_USER_ATTEMPT},
-        function(){
-            if(searchUserTimeout){
-                clearTimeout(searchUserTimeout);
-            }
-
-            searchUserTimeout = setTimeout(queryUsers, getValidationTimeout());
+    function searchAttempt(){
+        if(searchUserTimeout){
+            clearTimeout(searchUserTimeout);
         }
-    ));
+
+        searchUserTimeout = setTimeout(queryUsers, getValidationTimeout());
+    }
 
     function queryUsers(){
         const searchText = document.getElementById("search-input").value;
@@ -204,7 +194,7 @@
 
     function addEventListeners(){
         $("#search-input").on("keyup", function(){
-            eventProcessor.processEvent(new Event(events.SEARCH_USER_ATTEMPT));
+            searchAttempt();
         });
     }
 })();

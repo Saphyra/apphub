@@ -3,25 +3,21 @@
     let columnNames = null;
     let rows = null;
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.OPEN_CREATE_CHECKLIST_TABLE_DIALOG},
-        init
-    ));
-
     window.checklistTableCreationController = new function(){
         this.save = save;
         this.newColumn = newColumn;
         this.newRow = newRow;
-    }
-
-    function init(){
-        document.getElementById("create-checklist-table-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
-        document.getElementById("new-checklist-table-title").value = "";
-        loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
-        columnNames = [];
-        rows = [];
-        newColumn();
-        newRow();
+        this.openCreateChecklistTableDialog = function(){
+            document.getElementById("create-checklist-table-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
+            document.getElementById("new-checklist-table-title").value = "";
+            loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
+            columnNames = [];
+            rows = [];
+            newColumn();
+            newRow();
+            switchTab("main-page", "create-checklist-table");
+            switchTab("button-wrapper", "create-checklist-table-buttons");
+        }
     }
 
     function loadChildrenOfCategory(categoryId){

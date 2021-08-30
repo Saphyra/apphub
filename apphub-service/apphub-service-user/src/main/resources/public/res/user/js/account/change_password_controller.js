@@ -5,59 +5,54 @@
     const INVALID_CONFIRM_PASSWORD = "#ch-password-invalid-confirm-password";
     const INVALID_PASSWORD = "#ch-password-invalid-password";
 
-    events.CHANGE_PASSWORD_ATTEMPT = "change_password_attempt";
-    events.CHANGE_PASSWORD_VALIDATION_ATTEMPT = "change_password_validation_attempt";
-
     let submissionAllowed = false;
     let validationTimeout = null;
 
     pageLoader.addLoader(function(){
         $(".change-password-input").on("keyup", function(e){
             if(e.which == 13){
-                eventProcessor.processEvent(new Event(events.CHANGE_PASSWORD_ATTEMPT));
+                changePasswordAttempt();
             }else{
-                eventProcessor.processEvent(new Event(events.CHANGE_PASSWORD_VALIDATION_ATTEMPT));
+                changePasswordValidationAttempt();
             }
         });
         $(".change-password-input").on("focusin", function(){
-            eventProcessor.processEvent(new Event(events.CHANGE_PASSWORD_VALIDATION_ATTEMPT));
+            changePasswordValidationAttempt();
         });
     }, "ChangePassword add event listeners");
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.CHANGE_PASSWORD_VALIDATION_ATTEMPT},
-        function(){
-            blockSubmission();
+    window.changePasswordController = new function(){
+        this.changePasswordAttempt = changePasswordAttempt;
+    }
 
-            if(validationTimeout){
-                clearTimeout(validationTimeout);
-            }
-            validationTimeout = setTimeout(validateInputs, getValidationTimeout());
+    function changePasswordValidationAttempt(){
+        blockSubmission();
+
+        if(validationTimeout){
+            clearTimeout(validationTimeout);
         }
-    ));
+        validationTimeout = setTimeout(validateInputs, getValidationTimeout());
+    }
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.CHANGE_PASSWORD_ATTEMPT},
-        function(){
-            if(!submissionAllowed){
-                return;
-            }
-
-            const payload = {
-                newPassword: getNewPassword(),
-                password: getPassword()
-            }
-
-            $(".change-password-input").val("");
-
-            const request = new Request(Mapping.getEndpoint("ACCOUNT_CHANGE_PASSWORD"), payload);
-                request.processValidResponse = function(){
-                    notificationService.showSuccess(Localization.getAdditionalContent("password-changed"));
-                }
-            dao.sendRequestAsync(request);
-            blockSubmission();
+    function changePasswordAttempt(){
+        if(!submissionAllowed){
+            return;
         }
-    ));
+
+        const payload = {
+            newPassword: getNewPassword(),
+            password: getPassword()
+        }
+
+        $(".change-password-input").val("");
+
+        const request = new Request(Mapping.getEndpoint("ACCOUNT_CHANGE_PASSWORD"), payload);
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("password-changed"));
+            }
+        dao.sendRequestAsync(request);
+        blockSubmission();
+    }
 
     function validateInputs(){
         const newPassword = getNewPassword();

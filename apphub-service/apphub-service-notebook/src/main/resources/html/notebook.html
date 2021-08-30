@@ -300,12 +300,12 @@
     <SPAN id="category-content-buttons" class="button-wrapper">
             <DIV id="new-button-wrapper">
                 <DIV id="new-buttons">
-                    <DIV id="new-text-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_TEXT_DIALOG))"></DIV>
-                    <DIV id="new-category-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_CATEGORY_DIALOG))"></DIV>
-                    <DIV id="new-link-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_LINK_DIALOG))"></DIV>
-                    <DIV id="new-checklist-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_CHECKLIST_DIALOG))"></DIV>
-                    <DIV id="new-table-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_TABLE_DIALOG))"></DIV>
-                    <DIV id="new-checklist-table-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_CHECKLIST_TABLE_DIALOG))"></DIV>
+                    <DIV id="new-text-button" class="button" onclick="textCreationController.openCreateTextDialog()"></DIV>
+                    <DIV id="new-category-button" class="button" onclick="categoryCreationController.openCreateCategoryDialog()"></DIV>
+                    <DIV id="new-link-button" class="button" onclick="linkCreationController.openCreateLinkDialog()"></DIV>
+                    <DIV id="new-checklist-button" class="button" onclick="checklistCreationController.openCreateChecklistDialog()"></DIV>
+                    <DIV id="new-table-button" class="button" onclick="tableCreationController.openCreateTableDialog()"></DIV>
+                    <DIV id="new-checklist-table-button" class="button" onclick="checklistTableCreationController.openCreateChecklistTableDialog()"></DIV>
                 </DIV>
 
                 <DIV id="new-button" class="button"></DIV>
@@ -313,7 +313,7 @@
         </SPAN>
 
     <SPAN id="create-category-buttons" class="button-wrapper">
-        <BUTTON id="create-category-button" onclick="eventProcessor.processEvent(new Event(events.SAVE_CATEGORY))"></BUTTON>
+        <BUTTON id="create-category-button" onclick="categoryCreationController.save()"></BUTTON>
     </SPAN>
 
     <SPAN id="create-text-buttons" class="button-wrapper">

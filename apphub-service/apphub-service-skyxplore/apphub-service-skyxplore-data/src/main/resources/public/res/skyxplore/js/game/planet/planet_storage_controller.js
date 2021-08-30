@@ -11,20 +11,11 @@
     }
 
     pageLoader.addLoader(setUpEventListeners, "PlanetStorage set up event listeners");
+    pageLoader.addLoader(function(){$(".planet-storage-reserved-label").text(Localization.getAdditionalContent("planet-storage-reserved-label"))}, "Fill PlanetStorageReservedLabels");
 
     window.planetStorageController = new function(){
         this.loadStorage = loadStorage;
     }
-
-    eventProcessor.registerProcessor(
-        new EventProcessor(
-            function(eventType){return eventType == events.LOCALIZATION_LOADED},
-            function(){
-                $(".planet-storage-reserved-label").text(Localization.getAdditionalContent("planet-storage-reserved-label"));
-            },
-            true
-        ).setName("planet-storage-reserved-label-filler")
-    );
 
     function loadStorage(planetId){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_PLANET_STORAGE", {planetId: planetId}));

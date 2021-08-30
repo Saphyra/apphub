@@ -1,19 +1,15 @@
 (function TextCreationController(){
     let currentCategoryId = null;
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.OPEN_CREATE_TEXT_DIALOG},
-        init
-    ));
-
     window.textCreationController = new function(){
+        this.openCreateTextDialog = function(){
+            document.getElementById("new-text-title").value = "";
+            document.getElementById("new-text-content").value = "";
+            loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
+            switchTab("main-page", "create-text");
+            switchTab("button-wrapper", "create-text-buttons");
+        }
         this.save = save;
-    }
-
-    function init(){
-        document.getElementById("new-text-title").value = "";
-        document.getElementById("new-text-content").value = "";
-        loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
     }
 
     function loadChildrenOfCategory(categoryId){

@@ -1,5 +1,4 @@
 (function CharacterController(){
-    events.VALIDATION_ATTEMPT = "validation_attempt";
 
     let submissionAllowed = false;
     let validationTimeout = null;
@@ -8,20 +7,17 @@
         this.save = save;
     }
 
-    pageLoader.addLoader(function(){ $("#" + ids.characterNameInput).on("keyup", function(){eventProcessor.processEvent(new Event(events.VALIDATION_ATTEMPT))})}, "CharacterName input event listener");
+    pageLoader.addLoader(function(){$("#" + ids.characterNameInput).on("keyup", validationAttempt)}, "CharacterName input event listener");
     pageLoader.addLoader(validate, "Initial validation");
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.VALIDATION_ATTEMPT},
-        function(){
-            blockSubmission();
+    function validationAttempt(){
+        blockSubmission();
 
-            if(validationTimeout){
-                clearTimeout(validationTimeout);
-            }
-            validationTimeout = setTimeout(validate, getValidationTimeout());
+        if(validationTimeout){
+            clearTimeout(validationTimeout);
         }
-    ).setName("FormValidator"));
+        validationTimeout = setTimeout(validate, getValidationTimeout());
+    }
 
     function validate(){
         const name = document.getElementById(ids.characterNameInput).value;

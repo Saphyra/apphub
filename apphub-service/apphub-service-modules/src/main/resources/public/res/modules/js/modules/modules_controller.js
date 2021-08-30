@@ -5,17 +5,15 @@
     let searchTimeout = null;
 
     pageLoader.addLoader(displayModules, "Displaying modules");
+    pageLoader.addLoader(function(){$("#search-field").on("keyup", searchAttempt)}, "Search event listener");
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.SEARCH_ATTEMPT},
-        function(){
-            if(searchTimeout){
-                clearTimeout(searchTimeout);
-            }
-
-            searchTimeout = setTimeout(displayModules, 1000);
+    function searchAttempt(){
+        if(searchTimeout){
+            clearTimeout(searchTimeout);
         }
-    ))
+
+        searchTimeout = setTimeout(displayModules, 1000);
+    }
 
     function displayModules(){
         const request = new Request(Mapping.getEndpoint("MODULES_GET_MODULES_OF_USER"));

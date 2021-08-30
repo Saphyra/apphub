@@ -1,11 +1,7 @@
 (function CategoryListController(){
     let openedCategories = [];
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.LOCALIZATION_LOADED},
-        loadCategories,
-        true
-    ));
+    pageLoader.addLoader(loadCategories, "Load categories");
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.CATEGORY_DELETED},

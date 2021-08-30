@@ -15,16 +15,6 @@
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){
-            return eventType == events.LOCALIZATION_LOADED
-        },
-        function(){
-            categoryContentController.loadCategoryContent(null, false);
-        },
-        true
-    ));
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){
             return eventType == events.CATEGORY_DELETED
                 || eventType == events.ITEM_DELETED
         },
