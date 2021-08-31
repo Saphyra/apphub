@@ -31,12 +31,12 @@
                 return JSON.parse(response.body)
             }
             request.processValidResponse = function(categoryResponse){
-                displayChildrenOfCategory(originalListItemId, categoryId, categoryResponse.parent, categoryResponse.children);
+                displayChildrenOfCategory(originalListItemId, categoryId, categoryResponse.parent, categoryResponse.children, categoryResponse.title);
             }
         dao.sendRequestAsync(request);
     }
 
-    function displayChildrenOfCategory(originalListItemId, categoryId, parent, categories){
+    function displayChildrenOfCategory(originalListItemId, categoryId, parent, categories, title){
         const parentButton = document.getElementById("edit-list-item-parent-selection-parent-button");
             if(categoryId == null){
                 parentButton.classList.add("disabled");
@@ -47,6 +47,8 @@
                     loadChildrenOfCategory(originalListItemId, parent);
                 }
             }
+
+        document.getElementById("edit-list-item-current-category-title").innerText = title || Localization.getAdditionalContent("root-title");
 
         const container = document.getElementById("edit-list-item-parent-selection-category-list");
             container.innerHTML = "";

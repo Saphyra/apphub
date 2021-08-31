@@ -18,12 +18,12 @@
                 return JSON.parse(response.body)
             }
             request.processValidResponse = function(categoryResponse){
-                displayChildrenOfCategory(categoryId, categoryResponse.parent, categoryResponse.children);
+                displayChildrenOfCategory(categoryId, categoryResponse.parent, categoryResponse.children, categoryResponse.title);
             }
         dao.sendRequestAsync(request);
     }
 
-    function displayChildrenOfCategory(categoryId, parent, categories){
+    function displayChildrenOfCategory(categoryId, parent, categories, title){
         const parentButton = document.getElementById("create-category-parent-selection-parent-button");
             if(categoryId == null){
                 parentButton.classList.add("disabled");
@@ -34,6 +34,8 @@
                     loadChildrenOfCategory(parent);
                 }
             }
+
+        document.getElementById("create-category-current-category-title").innerText = title || Localization.getAdditionalContent("root-title");
 
         const container = document.getElementById("create-category-parent-selection-category-list");
             container.innerHTML = "";
