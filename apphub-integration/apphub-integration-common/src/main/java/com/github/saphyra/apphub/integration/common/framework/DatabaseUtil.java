@@ -29,7 +29,7 @@ public class DatabaseUtil {
 
     private static <T> T query(String sql, Mapper<T> mapper) throws ClassNotFoundException, SQLException {
         Class.forName(JDBC_DRIVER);
-        Connection connection = DriverManager.getConnection(String.format(DB_URL, TestBase.DATABASE_PORT), "postgres", "postgres");
+        Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
         ResultSet resultSet = statement.executeQuery(sql);
@@ -44,13 +44,17 @@ public class DatabaseUtil {
 
     private static void execute(String sql) throws ClassNotFoundException, SQLException {
         Class.forName(JDBC_DRIVER);
-        Connection connection = DriverManager.getConnection(String.format(DB_URL, TestBase.DATABASE_PORT), "postgres", "postgres");
+        Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
         statement.execute(sql);
 
         statement.close();
         connection.close();
+    }
+
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(String.format(DB_URL, TestBase.DATABASE_PORT), "postgres", "postgres");
     }
 
     public static void addRoleByEmail(String email, String... roles) {
