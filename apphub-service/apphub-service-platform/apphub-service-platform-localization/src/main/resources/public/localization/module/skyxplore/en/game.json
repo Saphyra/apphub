@@ -1,4 +1,4 @@
- {
+{
   "title": "SkyXplore",
   "staticText": {
     "exit-button": [
@@ -243,6 +243,10 @@
     ]
   },
   "additionalContent": {
+    "exit-game-confirmation-dialog-title": "Exit game",
+    "exit-game-confirmation-dialog-detail": "Do you want to exit the game? Other players might not think it is funny.",
+    "exit-game-confirm-button": "Exit",
+    "exit-game-decline-button": "Resume",
     "character-joined-to-game": "is joined.",
     "character-left-the-game": "has left.",
     "chat-room-title-empty": "Chat room title must not be empty.",

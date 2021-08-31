@@ -1,6 +1,4 @@
 (function ReportController(){
-    scriptLoader.loadScript("/res/common/js/confirmation_service.js");
-
     let pageNumber = 1;
     let openedErrorReportId = null;
 
@@ -15,12 +13,14 @@
         this.deleteOpenedErrorReport = function(){
             deleteReports([openedErrorReportId]);
         }
+        this.deleteReports = deleteReports;
         this.markOpenedErrorReport = function(status){
             markErrorReports([openedErrorReportId], status);
         }
     }
 
-    $(document).ready(init);
+    pageLoader.addLoader(loadCurrentPage, "Loading initial ErrorReport page");
+    pageLoader.addLoader(displayPageNumber, "Displaying initial PageNUmber");
 
     function nextPage(){
         pageNumber++;
@@ -41,6 +41,7 @@
 
     function loadCurrentPage(){
         const payload = {
+            service: nullIfEmpty(document.getElementById(ids.searchByService).value),
             message: nullIfEmpty(document.getElementById(ids.searchByMessage).value),
             statusCode: nullIfEmpty(document.getElementById(ids.searchByStatusCode).value),
             startTime: nullIfEmpty(document.getElementById(ids.searchByStartTime).value),
@@ -50,7 +51,7 @@
             page: pageNumber
         }
 
-        const request = new Request(Mapping.getEndpoint("ERROR_REPORT_GET_ERRORS"), payload);
+        const request = new Request(Mapping.getEndpoint("ADMIN_PANEL_GET_ERROR_REPORTS"), payload);
             request.convertResponse = jsonConverter;
             request.processValidResponse = displayErrors;
         dao.sendRequestAsync(request);
@@ -87,6 +88,10 @@
                 const responseStatusCell = document.createElement("TD");
                     responseStatusCell.innerText = errorReport.responseStatus;
             row.appendChild(responseStatusCell);
+
+                const serviceCell = document.createElement("TD");
+                    serviceCell.innerText = errorReport.service;
+            row.appendChild(serviceCell);
 
                 const messageCell = document.createElement("TD");
                     messageCell.classList.add("left");
@@ -163,7 +168,7 @@
     }
 
     function viewErrorReport(id){
-        const request = new Request(Mapping.getEndpoint("ERROR_REPORT_GET_ERROR", {id: id}));
+        const request = new Request(Mapping.getEndpoint("ADMIN_PANEL_GET_ERROR_REPORT", {id: id}));
             request.convertResponse = jsonConverter;
             request.processValidResponse = displayErrorReport;
         dao.sendRequestAsync(request);
@@ -174,6 +179,7 @@
             document.getElementById(ids.errorReportId).innerText = errorReport.id;
             document.getElementById(ids.errorReportCreatedAt).innerText = errorReport.createdAt;
             document.getElementById(ids.errorReportMessage).innerText = errorReport.message;
+            document.getElementById(ids.errorReportService).innerText = errorReport.service;
             document.getElementById(ids.errorReportResponseStatus).innerText = errorReport.responseStatus;
             document.getElementById(ids.errorReportResponseBody).innerText = errorReport.responseBody;
 
@@ -241,7 +247,7 @@
             "delete-error-reports-confirmation-dialog",
             confirmationDialogLocalization,
             function(){
-                const request = new Request(Mapping.getEndpoint("ERROR_REPORT_DELETE_ERRORS"), ids);
+                const request = new Request(Mapping.getEndpoint("ADMIN_PANEL_DELETE_ERROR_REPORTS"), ids);
                     request.processValidResponse = reportController.closeDetailsPage;
                 dao.sendRequestAsync(request);
             }
@@ -254,10 +260,5 @@
 
     function nullIfEmpty(input){
         return input && input.length > 0 ? input : null;
-    }
-
-    function init(){
-        loadCurrentPage();
-        displayPageNumber();
     }
 })();

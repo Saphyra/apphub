@@ -1,27 +1,23 @@
 (function ChecklistCreationController(){
     let currentCategoryId = null;
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.OPEN_CREATE_CHECKLIST_DIALOG},
-        init
-    ));
-
     window.checklistCreationController = new function(){
         this.save = save;
         this.newItem = newItem;
-    }
-
-    function init(){
-        document.getElementById("create-checklist-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
-        document.getElementById("new-checklist-title").value = "";
-        document.getElementById("new-checklist-content-wrapper").innerHTML = "";
-        loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
+        this.openCreateChecklistDialog = function(){
+            document.getElementById("create-checklist-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
+            document.getElementById("new-checklist-title").value = "";
+            document.getElementById("new-checklist-content-wrapper").innerHTML = "";
+            loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
+            switchTab("main-page", "create-checklist");
+            switchTab("button-wrapper", "create-checklist-buttons");
+        }
     }
 
     function loadChildrenOfCategory(categoryId){
         currentCategoryId = categoryId;
 
-        const request = new Request(Mapping.getEndpoint("GET_CHILDREN_OF_NOTEBOOK_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY"}));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_CHILDREN_OF_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY"}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body)
             }
@@ -145,7 +141,7 @@
             nodes.push(fetchChecklistItemNode(item, i));
         }
 
-        const request = new Request(Mapping.getEndpoint("CREATE_NOTEBOOK_CHECKLIST"), {parent: currentCategoryId, title: title, nodes: nodes});
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_CHECKLIST_ITEM"), {parent: currentCategoryId, title: title, nodes: nodes});
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("checklist-saved"));
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));

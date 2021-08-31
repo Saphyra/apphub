@@ -34,7 +34,7 @@ public class EventSendingService {
 
     public void sendEvent(SendEventRequest<?> sendEventRequest) {
         sendEventRequestValidator.validate(sendEventRequest);
-        Runnable task = sendEventTaskFactory.create(sendEventRequest, localeProvider.getLocaleValidated());
+        SendEventTask task = sendEventTaskFactory.create(sendEventRequest, localeProvider.getLocaleValidated());
         if (backgroundEventSendingEnabled && !sendEventRequest.isBlockingRequest()) {
             executorServiceBean.execute(task);
         } else {

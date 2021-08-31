@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service.send_event;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 class SendEventTaskFactory {
     private final EventProcessorDao eventProcessorDao;
     private final EventSender eventSender;
+    private final ExecutorServiceBean executorServiceBean;
 
     SendEventTask create(SendEventRequest<?> sendEventRequest, String locale) {
         return SendEventTask.builder()
@@ -17,6 +19,7 @@ class SendEventTaskFactory {
             .eventSender(eventSender)
             .sendEventRequest(sendEventRequest)
             .locale(locale)
+            .executorServiceBean(executorServiceBean)
             .build();
     }
 }

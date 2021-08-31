@@ -26,6 +26,7 @@ public class ErrorReportOverviewSpecification implements Specification<ErrorRepo
     private final LocalDateTime startTime;
     private final LocalDateTime endTime;
     private final ErrorReportStatus status;
+    private final String service;
 
     @Override
     public Predicate toPredicate(Root<ErrorReportEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
@@ -49,6 +50,10 @@ public class ErrorReportOverviewSpecification implements Specification<ErrorRepo
 
         if (!isNull(status)) {
             predicates.add(criteriaBuilder.equal(root.get("status"), status.name()));
+        }
+
+        if (!isNull(service)) {
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("service")), "%" + service.toLowerCase() + "%"));
         }
 
         Predicate[] predicateArray = new Predicate[predicates.size()];

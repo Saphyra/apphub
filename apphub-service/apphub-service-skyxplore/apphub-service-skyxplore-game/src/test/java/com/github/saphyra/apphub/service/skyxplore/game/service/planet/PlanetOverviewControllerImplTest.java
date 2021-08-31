@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetPopulationOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
@@ -43,6 +44,9 @@ public class PlanetOverviewControllerImplTest {
     @Mock
     private PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
 
+    @Mock
+    private PlanetOverviewQueryService planetOverviewQueryService;
+
     @InjectMocks
     private PlanetOverviewControllerImpl underTest;
 
@@ -60,6 +64,9 @@ public class PlanetOverviewControllerImplTest {
 
     @Mock
     private PlanetBuildingOverviewResponse planetBuildingOverviewResponse;
+
+    @Mock
+    private PlanetOverviewResponse planetOverviewResponse;
 
     @Before
     public void setUp() {
@@ -100,5 +107,14 @@ public class PlanetOverviewControllerImplTest {
         Map<String, PlanetBuildingOverviewResponse> result = underTest.getBuildingOverview(PLANET_ID, accessTokenHeader);
 
         assertThat(result).containsEntry(SurfaceType.CONCRETE.name(), planetBuildingOverviewResponse);
+    }
+
+    @Test
+    public void getOverview() {
+        given(planetOverviewQueryService.getOverview(USER_ID, PLANET_ID)).willReturn(planetOverviewResponse);
+
+        PlanetOverviewResponse result = underTest.getPlanetOverview(PLANET_ID, accessTokenHeader);
+
+        assertThat(result).isEqualTo(planetOverviewResponse);
     }
 }

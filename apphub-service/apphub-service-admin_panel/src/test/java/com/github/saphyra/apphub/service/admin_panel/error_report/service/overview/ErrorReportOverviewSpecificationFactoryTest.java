@@ -21,6 +21,7 @@ public class ErrorReportOverviewSpecificationFactoryTest {
     private static final String END_TIME_STRING = "end-time";
     private static final LocalDateTime START_TIME = LocalDateTime.now();
     private static final LocalDateTime END_TIME = LocalDateTime.now();
+    private static final String SERVICE = "service";
 
     @Mock
     private CustomLocalDateTimeParser localDateTimeParser;
@@ -36,6 +37,7 @@ public class ErrorReportOverviewSpecificationFactoryTest {
             .startTime(START_TIME_STRING)
             .endTime(END_TIME_STRING)
             .status(ErrorReportStatus.UNREAD.name())
+            .service(SERVICE)
             .build();
 
         given(localDateTimeParser.parse(START_TIME_STRING)).willReturn(START_TIME);
@@ -47,6 +49,7 @@ public class ErrorReportOverviewSpecificationFactoryTest {
         assertThat(result.getStatusCode()).isEqualTo(STATUS_CODE);
         assertThat(result.getStartTime()).isEqualTo(START_TIME);
         assertThat(result.getEndTime()).isEqualTo(END_TIME);
+        assertThat(result.getService()).isEqualTo(SERVICE);
         assertThat(result.getStatus()).isEqualTo(ErrorReportStatus.UNREAD);
     }
 
@@ -58,6 +61,7 @@ public class ErrorReportOverviewSpecificationFactoryTest {
             .startTime(null)
             .endTime(" ")
             .status(null)
+            .service(null)
             .build();
 
         ErrorReportOverviewSpecification result = underTest.create(request);
@@ -67,5 +71,6 @@ public class ErrorReportOverviewSpecificationFactoryTest {
         assertThat(result.getStartTime()).isNull();
         assertThat(result.getEndTime()).isNull();
         assertThat(result.getStatus()).isNull();
+        assertThat(result.getService()).isNull();
     }
 }

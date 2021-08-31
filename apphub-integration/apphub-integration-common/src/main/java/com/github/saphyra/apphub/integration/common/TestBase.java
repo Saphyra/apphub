@@ -13,6 +13,7 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 
 import java.lang.reflect.Method;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -39,7 +40,7 @@ public class TestBase {
     }
 
     @BeforeSuite(alwaysRun = true)
-    public void setUpSuite(ITestContext context) {
+    public void setUpSuite(ITestContext context) throws SQLException {
         SERVER_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("serverPort"), "serverPort is null"));
         log.info("ServerPort: {}", SERVER_PORT);
 
@@ -63,6 +64,8 @@ public class TestBase {
             .split(","));
 
         System.setProperty("testng.show.stack.frames", "true");
+
+        DatabaseUtil.getConnection();
     }
 
     @AfterSuite(alwaysRun = true)

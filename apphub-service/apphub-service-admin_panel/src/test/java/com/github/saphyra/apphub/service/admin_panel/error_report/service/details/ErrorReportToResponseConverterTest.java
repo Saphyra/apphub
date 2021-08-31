@@ -22,6 +22,7 @@ public class ErrorReportToResponseConverterTest {
     private static final String MESSAGE = "message";
     private static final Integer RESPONSE_STATUS = 42;
     private static final String RESPONSE_BODY = "response-body";
+    private static final String SERVICE = "service";
 
     @InjectMocks
     private ErrorReportToResponseConverter underTest;
@@ -39,6 +40,7 @@ public class ErrorReportToResponseConverterTest {
             .responseBody(RESPONSE_BODY)
             .exception(exceptionModel)
             .status(ErrorReportStatus.READ)
+            .service(SERVICE)
             .build();
 
         ErrorReportModel result = underTest.convert(errorReport);
@@ -49,6 +51,7 @@ public class ErrorReportToResponseConverterTest {
         assertThat(result.getResponseStatus()).isEqualTo(RESPONSE_STATUS);
         assertThat(result.getResponseBody()).isEqualTo(RESPONSE_BODY);
         assertThat(result.getException()).isEqualTo(exceptionModel);
+        assertThat(result.getService()).isEqualTo(SERVICE);
         assertThat(result.getStatus()).isEqualTo(ErrorReportStatus.READ.name());
     }
 }

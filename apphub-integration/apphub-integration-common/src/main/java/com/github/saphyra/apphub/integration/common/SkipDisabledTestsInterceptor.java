@@ -6,6 +6,7 @@ import org.testng.IMethodInterceptor;
 import org.testng.ITestContext;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,9 +14,11 @@ import java.util.stream.Collectors;
 public class SkipDisabledTestsInterceptor implements IMethodInterceptor {
     @Override
     public List<IMethodInstance> intercept(List<IMethodInstance> methods, ITestContext context) {
-        return methods.stream()
+        List<IMethodInstance> testsToRun = methods.stream()
             .filter(this::shouldRun)
             .collect(Collectors.toList());
+        Collections.shuffle(testsToRun);
+        return testsToRun;
     }
 
     public boolean shouldRun(IMethodInstance method) {

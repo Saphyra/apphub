@@ -1,6 +1,8 @@
-(function PageController(){
-    scriptLoader.loadScript("/res/admin-panel/js/disabled_role_management/disabled_role_controller.js");
+scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
+scriptLoader.loadScript("/res/common/js/confirmation_service.js");
+scriptLoader.loadScript("/res/admin-panel/js/disabled_role_management/disabled_role_controller.js");
 
+(function PageController(){
     window.ids = {
         roleContainer: "roles",
         confirmationDialogId: "confirm-operation",

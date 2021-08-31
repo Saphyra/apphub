@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.api.skyxplore.game.server;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetPopulationOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
@@ -16,6 +17,9 @@ import java.util.Map;
 import java.util.UUID;
 
 public interface SkyXploreGamePlanetOverviewController {
+    @GetMapping(Endpoints.SKYXPLORE_PLANET_GET_OVERVIEW)
+    PlanetOverviewResponse getPlanetOverview(@PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
     @GetMapping(Endpoints.SKYXPLORE_PLANET_GET_SURFACE)
     List<SurfaceResponse> getSurfaceOfPlanet(@PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 

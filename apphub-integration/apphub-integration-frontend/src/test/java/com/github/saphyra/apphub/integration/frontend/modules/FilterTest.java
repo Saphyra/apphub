@@ -35,6 +35,12 @@ public class FilterTest extends SeleniumTest {
         assertThat(categoryResult.getModules()).hasSize(1);
 
         //Search by module
+        ModulesPageActions.search(driver, "ó");
+        AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getCategories(driver), categories -> categories.size() != 1)
+            .stream()
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("Failed resetting search result."));
+
         ModulesPageActions.search(driver, "ók");
         Category moduleResult = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getCategories(driver), categories -> categories.size() == 1)
             .stream()

@@ -13,3 +13,20 @@
 #create-link-parent-selection-wrapper{
     top: var(--create-link-input-wrapper-height);
 }
+
+    #create-link-current-category-title{
+        text-align: center;
+        font-size: 1.75rem;
+        border: 2px solid white;
+        border-top: none;
+        padding: 0.25rem;
+    }
+
+    #create-link-parent-selection-category-list{
+        position: absolute;
+        top: 5.5rem;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        overflow-y: auto;
+    }

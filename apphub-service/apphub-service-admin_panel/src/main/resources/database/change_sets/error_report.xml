@@ -36,4 +36,16 @@
             <column name="status" type="varchar(255)" defaultValue="UNREAD"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="add-column-service-to-error_report" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="admin_panel" tableName="error_report" columnName="service"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="admin_panel" tableName="error_report">
+            <column name="service" type="text"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

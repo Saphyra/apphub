@@ -4,59 +4,54 @@
     const INVALID_USERNAME = "#ch-username-invalid-new-username";
     const INVALID_PASSWORD = "#ch-username-invalid-password";
 
-    events.CHANGE_USERNAME_ATTEMPT = "change_username_attempt";
-    events.CHANGE_USERNAME_VALIDATION_ATTEMPT = "change_username_validation_attempt";
-
     let submissionAllowed = false;
     let validationTimeout = null;
 
-    $(document).ready(function(){
+    pageLoader.addLoader(function(){
         $(".change-username-input").on("keyup", function(e){
             if(e.which == 13){
-                eventProcessor.processEvent(new Event(events.CHANGE_USERNAME_ATTEMPT));
+                changeUsernameAttempt();
             }else{
-                eventProcessor.processEvent(new Event(events.CHANGE_USERNAME_VALIDATION_ATTEMPT));
+                changeUsernameValidationAttempt();
             }
         });
         $(".change-username-input").on("focusin", function(){
-            eventProcessor.processEvent(new Event(events.CHANGE_USERNAME_VALIDATION_ATTEMPT));
+            changeUsernameValidationAttempt();
         });
-    });
+    }, "ChangeUsername add event listeners");
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.CHANGE_USERNAME_VALIDATION_ATTEMPT},
-        function(){
-            blockSubmission();
+    window.changeUsernameController = new function(){
+        this.changeUsernameAttempt = changeUsernameAttempt;
+    }
 
-            if(validationTimeout){
-                clearTimeout(validationTimeout);
-            }
-            validationTimeout = setTimeout(validateInputs, getValidationTimeout());
+    function changeUsernameValidationAttempt(){
+        blockSubmission();
+
+        if(validationTimeout){
+            clearTimeout(validationTimeout);
         }
-    ));
+        validationTimeout = setTimeout(validateInputs, getValidationTimeout());
+    }
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.CHANGE_USERNAME_ATTEMPT},
-        function(){
-            if(!submissionAllowed){
-                return;
-            }
-
-            const payload = {
-                username: getUsername(),
-                password: getPassword()
-            }
-
-            $("#ch-username-password-input").val("");
-
-            const request = new Request(Mapping.getEndpoint("CHANGE_USERNAME"), payload);
-                request.processValidResponse = function(){
-                    notificationService.showSuccess(Localization.getAdditionalContent("username-changed"));
-                }
-            dao.sendRequestAsync(request);
-            blockSubmission();
+    function changeUsernameAttempt(){
+        if(!submissionAllowed){
+            return;
         }
-    ));
+
+        const payload = {
+            username: getUsername(),
+            password: getPassword()
+        }
+
+        $("#ch-username-password-input").val("");
+
+        const request = new Request(Mapping.getEndpoint("ACCOUNT_CHANGE_USERNAME"), payload);
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("username-changed"));
+            }
+        dao.sendRequestAsync(request);
+        blockSubmission();
+    }
 
     function validateInputs(){
         const username = getUsername();

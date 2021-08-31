@@ -1,6 +1,4 @@
 (function BulkOperationsController(){
-    scriptLoader.loadScript("/res/common/js/confirmation_service.js");
-
     window.bulkOperationsController = new function(){
         this.selectAll = function(e){
             e.target.checked = true;
@@ -13,6 +11,9 @@
         }
 
         this.deleteAllRead = deleteAllRead;
+        
+        this.deleteChecked = deleteChecked;
+
         this.markAsRead = function(){
             markErrorReports(getCheckedIds(), "READ", reportController.search);
         }
@@ -26,6 +27,12 @@
         }
     }
 
+    function deleteChecked(){
+        const checkedIds =  getCheckedIds();
+
+        reportController.deleteReports(checkedIds);
+    }
+
     function deleteAllRead(){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
             .withTitle(Localization.getAdditionalContent("delete-all-read-error-reports-confirmation-dialog-title"))
@@ -37,7 +44,7 @@
             "delete-all-read-error-reports-confirmation-dialog",
             confirmationDialogLocalization,
             function(){
-                const request = new Request(Mapping.getEndpoint("ERROR_REPORT_DELETE_ALL_READ"));
+                const request = new Request(Mapping.getEndpoint("ADMIN_PANEL_DELETE_READ_ERROR_REPORTS"));
                     request.processValidResponse = function(){
                         notificationService.showSuccess(Localization.getAdditionalContent("all-read-deleted"));
                         reportController.search();

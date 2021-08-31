@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.lib.error_report;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.NullSafeConverter;
@@ -18,6 +19,7 @@ class ErrorReportModelFactory {
     private final DateTimeUtil dateTimeUtil;
     private final ObjectMapperWrapper objectMapperWrapper;
     private final ExceptionMapper exceptionMapper;
+    private final CommonConfigProperties commonConfigProperties;
 
     ErrorReportModel create(HttpStatus status, ErrorResponse errorResponse, Throwable exception) {
         ExceptionModel exceptionModel = exceptionMapper.map(exception);
@@ -27,6 +29,7 @@ class ErrorReportModelFactory {
             .responseStatus(status.value())
             .responseBody(objectMapperWrapper.writeValueAsString(errorResponse))
             .exception(exceptionModel)
+            .service(commonConfigProperties.getApplicationName())
             .build();
     }
 
@@ -41,6 +44,7 @@ class ErrorReportModelFactory {
             .createdAt(dateTimeUtil.getCurrentDate())
             .message(message)
             .exception(exceptionModel)
+            .service(commonConfigProperties.getApplicationName())
             .build();
     }
 }

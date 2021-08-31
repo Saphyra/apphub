@@ -1,9 +1,6 @@
 (function RegistrationController(){
     scriptLoader.loadScript("/res/user/js/common/validation_service.js");
 
-    events.REGISTER_ATTEMPT = "register_attempt";
-    events.VALIDATION_ATTEMPT = "validation_attempt";
-
     const INVALID_USERNAME = "#invalid-username";
     const INVALID_EMAIL = "#invalid-email";
     const INVALID_PASSWORD = "#invalid-password";
@@ -12,54 +9,52 @@
     let registrationAllowed = false;
     let validationTimeout = null;
 
-    $(document).ready(function(){
+    pageLoader.addLoader(function(){
         $(".reg-input").on("keyup", function(e){
             if(e.which == 13){
-                eventProcessor.processEvent(new Event(events.REGISTER_ATTEMPT));
+                registerAttempt();
             }else{
-                eventProcessor.processEvent(new Event(events.VALIDATION_ATTEMPT));
+                validationAttempt();
             }
         });
         $(".reg-input").on("focusin", function(){
-            eventProcessor.processEvent(new Event(events.VALIDATION_ATTEMPT));
+            validationAttempt();
         });
-    });
+    }, "Registration add event listeners");
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.VALIDATION_ATTEMPT},
-        function(){
-            blockRegistration();
+    window.registrationController = new function(){
+        this.registerAttempt = registerAttempt;
+    }
 
-            if(validationTimeout){
-                clearTimeout(validationTimeout);
-            }
-            validationTimeout = setTimeout(validateInputs, getValidationTimeout());
+    function validationAttempt(){
+        blockRegistration();
+
+        if(validationTimeout){
+            clearTimeout(validationTimeout);
         }
-    ));
+        validationTimeout = setTimeout(validateInputs, getValidationTimeout());
+    }
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.REGISTER_ATTEMPT},
-        function(){
-            if(!registrationAllowed){
-                return;
-            }
-
-            const user = {
-                username: getUsername(),
-                email: getEmail(),
-                password: getPassword()
-            }
-
-            $(".reg-input").val("");
-
-            const request = new Request(Mapping.getEndpoint("REGISTER"), user);
-                request.processValidResponse = function(){
-                    sessionStorage.successMessage = "registration-successful";
-                    eventProcessor.processEvent(new Event(events.LOGIN_ATTEMPT, user));
-                }
-            dao.sendRequestAsync(request);
+    function registerAttempt(){
+        if(!registrationAllowed){
+            return;
         }
-    ));
+
+        const user = {
+            username: getUsername(),
+            email: getEmail(),
+            password: getPassword()
+        }
+
+        $(".reg-input").val("");
+
+        const request = new Request(Mapping.getEndpoint("ACCOUNT_REGISTER"), user);
+            request.processValidResponse = function(){
+                sessionStorage.successMessage = "registration-successful";
+                loginController.login(user);
+            }
+        dao.sendRequestAsync(request);
+    }
 
     function validateInputs(){
         const username = getUsername();

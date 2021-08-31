@@ -20,7 +20,7 @@
         columnNames = [];
         rows = [];
 
-        const request = new Request(Mapping.getEndpoint("GET_NOTEBOOK_CHECKLIST_TABLE", {listItemId: listItemId}));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_CHECKLIST_TABLE", {listItemId: listItemId}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body);
             }
@@ -123,6 +123,7 @@
             const contentNode = document.createElement("DIV");
                 contentNode.classList.add("table-column-content");
                 contentNode.classList.add("view-checklist-table-input-field");
+                contentNode.classList.add("selectable");
                 if(columnData.tableJoinId) contentNode.id = columnData.tableJoinId;
                 contentNode.contenteditable = editingEnabled;
                 contentNode.innerText = columnData.content;
@@ -192,9 +193,23 @@
                             const deleteRowButton = document.createElement("BUTTON");
                                 deleteRowButton.innerHTML = "X";
                                 deleteRowButton.onclick = function(){
-                                    removeRow(rowNode.id);
                                     if(!editingEnabled){
-                                        saveChanges();
+                                        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+                                            .withTitle(Localization.getAdditionalContent("checklist-table-item-deletion-confirmation-dialog-title"))
+                                            .withDetail(Localization.getAdditionalContent("checklist-table-item-deletion-confirmation-dialog-detail"))
+                                            .withConfirmButton(Localization.getAdditionalContent("checklist-table-item-deletion-confirmation-dialog-confirm-button"))
+                                            .withDeclineButton(Localization.getAdditionalContent("checklist-table-item-deletion-confirmation-dialog-decline-button"));
+
+                                        confirmationService.openDialog(
+                                            "checklist-table-item-deletion-confirmation-dialog",
+                                            confirmationDialogLocalization,
+                                            function(){
+                                                removeRow(rowNode.id);
+                                                saveChanges();
+                                            }
+                                        )
+                                    }else{
+                                        removeRow(rowNode.id);
                                     }
                                 }
                         buttonWrapper.appendChild(deleteRowButton);
@@ -219,7 +234,7 @@
                     new Stream(row.columns)
                         .peek(function(column){
                             column.columnNode.onclick = function(){
-                                if(!editingEnabled){
+                                if(!editingEnabled && !isTextSelected()){
                                     const newValue = !row.checked;
                                     setContentDecoration(row.columns, newValue);
                                     checkedInput.checked = newValue
@@ -243,7 +258,7 @@
         }
 
         function updateStatus(listItemId, rowIndex,  checked){
-            const request = new Request(Mapping.getEndpoint("UPDATE_NOTEBOOK_CHECKLIST_TABLE_ROW_STATUS", {listItemId: listItemId, rowIndex: rowIndex}), {value: checked});
+            const request = new Request(Mapping.getEndpoint("NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS", {listItemId: listItemId, rowIndex: rowIndex}), {value: checked});
                 request.processValidResponse = function(){
                 }
             dao.sendRequestAsync(request);
@@ -345,7 +360,7 @@
             rows: rowList
         };
 
-        const request = new Request(Mapping.getEndpoint("EDIT_NOTEBOOK_CHECKLIST_TABLE", {listItemId: openedTableId}), body);
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_EDIT_CHECKLIST_TABLE", {listItemId: openedTableId}), body);
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("checklist-table-saved"));
                 viewChecklistTable(openedTableId);

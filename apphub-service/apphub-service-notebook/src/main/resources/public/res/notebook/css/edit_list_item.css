@@ -6,7 +6,24 @@
     top: var(--create-link-input-wrapper-height);
 }
 
-#edit-list-item-parent-selection-category-list .category{
-    font-size: 1.25rem;
-    margin: 0.5rem;
-}
+    #edit-list-item-current-category-title{
+        text-align: center;
+        font-size: 1.75rem;
+        border: 2px solid white;
+        border-top: none;
+        padding: 0.25rem;
+    }
+
+    #edit-list-item-parent-selection-category-list{
+        position: absolute;
+        top: 5.5rem;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        overflow-y: auto;
+    }
+
+        #edit-list-item-parent-selection-category-list .category{
+            font-size: 1.25rem;
+            margin: 0.5rem;
+        }

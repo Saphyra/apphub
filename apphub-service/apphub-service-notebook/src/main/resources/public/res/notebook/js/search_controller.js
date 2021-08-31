@@ -6,7 +6,7 @@
         this.resetSearchText = resetSearchText;
     }
 
-    $(document).ready(init);
+    pageLoader.addLoader(function(){document.getElementById(ids.searchInput).onkeyup = search}, "Search onclick event listener");
 
     function search(){
         if(timeout){
@@ -39,9 +39,5 @@
         document.getElementById(ids.searchInput).value = "";
         categoryContentController.reloadCategoryContent();
         shouldReset = false;
-    }
-
-    function init(){
-        document.getElementById(ids.searchInput).onkeyup = search;
     }
 })();

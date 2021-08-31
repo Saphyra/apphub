@@ -26,17 +26,17 @@
 
     function loadChildrenOfCategory(originalListItemId, categoryId){
         selectedCategoryId = categoryId;
-        const request = new Request(Mapping.getEndpoint("GET_CHILDREN_OF_NOTEBOOK_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY", exclude: originalListItemId}));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_CHILDREN_OF_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY", exclude: originalListItemId}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body)
             }
             request.processValidResponse = function(categoryResponse){
-                displayChildrenOfCategory(originalListItemId, categoryId, categoryResponse.parent, categoryResponse.children);
+                displayChildrenOfCategory(originalListItemId, categoryId, categoryResponse.parent, categoryResponse.children, categoryResponse.title);
             }
         dao.sendRequestAsync(request);
     }
 
-    function displayChildrenOfCategory(originalListItemId, categoryId, parent, categories){
+    function displayChildrenOfCategory(originalListItemId, categoryId, parent, categories, title){
         const parentButton = document.getElementById("edit-list-item-parent-selection-parent-button");
             if(categoryId == null){
                 parentButton.classList.add("disabled");
@@ -47,6 +47,8 @@
                     loadChildrenOfCategory(originalListItemId, parent);
                 }
             }
+
+        document.getElementById("edit-list-item-current-category-title").innerText = title || Localization.getAdditionalContent("root-title");
 
         const container = document.getElementById("edit-list-item-parent-selection-category-list");
             container.innerHTML = "";
@@ -99,7 +101,7 @@
             parent: selectedCategoryId
         }
 
-        const request = new Request(Mapping.getEndpoint("EDIT_NOTEBOOK_LIST_ITEM", {listItemId: editedItemDetails.id}), body);
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_EDIT_LIST_ITEM", {listItemId: editedItemDetails.id}), body);
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("item-saved"));
                 eventProcessor.processEvent(new Event(events.CATEGORY_SAVED));

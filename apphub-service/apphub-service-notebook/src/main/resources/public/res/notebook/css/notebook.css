@@ -14,7 +14,7 @@ body{
         position: absolute;
         top: 0;
         left: 0;
-        bottom: 0;
+        bottom: var(--footer-height);
         width: var(--category-list-width);
         border-right: 3px ridge white;
         overflow: auto;

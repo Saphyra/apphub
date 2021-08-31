@@ -1,11 +1,7 @@
 (function CategoryListController(){
     let openedCategories = [];
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.LOCALIZATION_LOADED},
-        loadCategories,
-        true
-    ));
+    pageLoader.addLoader(loadCategories, "Load categories");
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.CATEGORY_DELETED},
@@ -29,7 +25,7 @@
     ));
 
     function loadCategories(){
-        const request = new Request(Mapping.getEndpoint("GET_NOTEBOOK_CATEGORIES"));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_CATEGORY_TREE"));
             request.convertResponse = function(response){
                 return JSON.parse(response.body);
             }

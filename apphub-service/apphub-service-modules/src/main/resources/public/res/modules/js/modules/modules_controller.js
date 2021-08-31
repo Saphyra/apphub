@@ -1,28 +1,22 @@
 (function ModulesController(){
-    scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
-
     const categoryNames = new CustomLocalization("modules", "module_category");
     const moduleNames = new CustomLocalization("modules", "module_name");
 
     let searchTimeout = null;
 
-    window.modulesController = new function(){
-        this.displayModules = displayModules;
+    pageLoader.addLoader(displayModules, "Displaying modules");
+    pageLoader.addLoader(function(){$("#search-field").on("keyup", searchAttempt)}, "Search event listener");
+
+    function searchAttempt(){
+        if(searchTimeout){
+            clearTimeout(searchTimeout);
+        }
+
+        searchTimeout = setTimeout(displayModules, 1000);
     }
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.SEARCH_ATTEMPT},
-        function(){
-            if(searchTimeout){
-                clearTimeout(searchTimeout);
-            }
-
-            searchTimeout = setTimeout(displayModules, 1000);
-        }
-    ))
-
     function displayModules(){
-        const request = new Request(Mapping.getEndpoint("GET_MODULES"));
+        const request = new Request(Mapping.getEndpoint("MODULES_GET_MODULES_OF_USER"));
             request.convertResponse = responseConverter;
             request.processValidResponse = function(categories){
                 displayAll(categories);
@@ -141,7 +135,7 @@
 
     function createMarkFavoriteFunction(module, value){
         return function(){
-            const request = new Request(Mapping.getEndpoint("MARK_AS_FAVORITE", {module: module.name}), {value: value});
+            const request = new Request(Mapping.getEndpoint("MODULES_SET_FAVORITE", {module: module.name}), {value: value});
                 request.convertResponse = responseConverter;
                 request.processValidResponse = function(categories){
                     displayAll(categories);

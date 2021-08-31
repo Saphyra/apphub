@@ -19,6 +19,12 @@
         "message": "Occurred"
       }
     ],
+    "column-name-service": [
+      {
+        "key": "innerHTML",
+        "message": "Service"
+      }
+    ],
     "column-name-status-code": [
       {
         "key": "innerHTML",
@@ -29,6 +35,12 @@
       {
         "key": "innerHTML",
         "message": "Message"
+      }
+    ],
+    "search-by-service": [
+      {
+        "key": "placeholder",
+        "message": "Service"
       }
     ],
     "search-by-message": [
@@ -115,6 +127,12 @@
         "message": "Next"
       }
     ],
+    "error-report-details-service-label": [
+      {
+        "key": "innerHTML",
+        "message": "Service"
+      }
+    ],
     "error-report-details-message-label": [
       {
         "key": "innerHTML",
@@ -181,6 +199,12 @@
         "message": "Mark checked as unread"
       }
     ],
+    "delete-checked-button": [
+      {
+        "key": "innerHTML",
+        "message": "Delete checked"
+      }
+    ],
     "back-button": [
       {
         "key": "innerHTML",
@@ -202,6 +226,9 @@
     "delete-all-read-error-reports-confirmation-dialog-detail": "Are you sure you want to delete all error reports?",
     "delete-all-read-error-reports-confirmation-dialog-confirm-button": "Delete all read",
     "delete-all-read-error-reports-confirmation-dialog-cancel-button": "Cancel",
-    "all-read-deleted": "All read error reports are deleted."
+    "all-read-deleted": "All read error reports are deleted.",
+    "delete-checked-error-reports-confirmation-dialog-title": "Confirm deleting error reports",
+    "delete-checked-error-reports-confirmation-dialog-detail": "Are you sure you want to delete reports {ids}?",
+    ""
   }
 }

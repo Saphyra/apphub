@@ -3,31 +3,27 @@
     let columnNames = null;
     let rows = null;
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.OPEN_CREATE_TABLE_DIALOG},
-        init
-    ));
-
     window.tableCreationController = new function(){
         this.save = save;
         this.newColumn = newColumn;
         this.newRow = newRow;
-    }
-
-    function init(){
-        document.getElementById("create-table-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
-        document.getElementById("new-table-title").value = "";
-        loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
-        columnNames = [];
-        rows = [];
-        newColumn();
-        newRow();
+        this.openCreateTableDialog = function(){
+            document.getElementById("create-table-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
+            document.getElementById("new-table-title").value = "";
+            loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
+            columnNames = [];
+            rows = [];
+            newColumn();
+            newRow();
+            switchTab("main-page", "create-table");
+            switchTab("button-wrapper", "create-table-buttons");
+        }
     }
 
     function loadChildrenOfCategory(categoryId){
         currentCategoryId = categoryId;
 
-        const request = new Request(Mapping.getEndpoint("GET_CHILDREN_OF_NOTEBOOK_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY"}));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_CHILDREN_OF_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY"}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body)
             }
@@ -113,7 +109,7 @@
             columns: rowValues
         }
 
-        const request = new Request(Mapping.getEndpoint("CREATE_NOTEBOOK_TABLE"), body);
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_TABLE"), body);
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("table-saved"));
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));

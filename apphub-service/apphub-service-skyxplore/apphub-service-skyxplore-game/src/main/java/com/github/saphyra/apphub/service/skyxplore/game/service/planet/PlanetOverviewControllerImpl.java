@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
 import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGamePlanetOverviewController;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetPopulationOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
@@ -26,6 +27,13 @@ public class PlanetOverviewControllerImpl implements SkyXploreGamePlanetOverview
     private final PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
     private final SurfaceResponseQueryService surfaceResponseQueryService;
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
+    private final PlanetOverviewQueryService planetOverviewQueryService;
+
+    @Override
+    public PlanetOverviewResponse getPlanetOverview(UUID planetId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to query the overview of planet {}", accessTokenHeader.getUserId(), planetId);
+        return planetOverviewQueryService.getOverview(accessTokenHeader.getUserId(), planetId);
+    }
 
     @Override
     public List<SurfaceResponse> getSurfaceOfPlanet(UUID planetId, AccessTokenHeader accessTokenHeader) {

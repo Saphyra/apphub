@@ -4,59 +4,54 @@
     const INVALID_EMAIL = "#ch-email-invalid-new-email";
     const INVALID_PASSWORD = "#ch-email-invalid-password";
 
-    events.CHANGE_EMAIL_ATTEMPT = "change_email_attempt";
-    events.CHANGE_EMAIL_VALIDATION_ATTEMPT = "change_email_validation_attempt";
-
     let submissionAllowed = false;
     let validationTimeout = null;
 
-    $(document).ready(function(){
+    pageLoader.addLoader(function(){
         $(".change-email-input").on("keyup", function(e){
             if(e.which == 13){
-                eventProcessor.processEvent(new Event(events.CHANGE_EMAIL_ATTEMPT));
+                changeEmailAttempt();
             }else{
-                eventProcessor.processEvent(new Event(events.CHANGE_EMAIL_VALIDATION_ATTEMPT));
+                changeEmailValidationAttempt();
             }
         });
         $(".change-email-input").on("focusin", function(){
-            eventProcessor.processEvent(new Event(events.CHANGE_EMAIL_VALIDATION_ATTEMPT));
+            changeEmailValidationAttempt();
         });
-    });
+    }, "ChangeEmail add event listeners");
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.CHANGE_EMAIL_VALIDATION_ATTEMPT},
-        function(){
-            blockSubmission();
+    window.changeEmailController = new function(){
+        this.changeEmailAttempt = changeEmailAttempt;
+    }
 
-            if(validationTimeout){
-                clearTimeout(validationTimeout);
-            }
-            validationTimeout = setTimeout(validateInputs, getValidationTimeout());
+    function changeEmailValidationAttempt(){
+        blockSubmission();
+
+        if(validationTimeout){
+            clearTimeout(validationTimeout);
         }
-    ));
+        validationTimeout = setTimeout(validateInputs, getValidationTimeout());
+    }
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.CHANGE_EMAIL_ATTEMPT},
-        function(){
-            if(!submissionAllowed){
-                return;
-            }
-
-            const payload = {
-                email: getEmail(),
-                password: getPassword()
-            }
-
-            $("#ch-email-password-input").val("");
-
-            const request = new Request(Mapping.getEndpoint("CHANGE_EMAIL"), payload);
-                request.processValidResponse = function(){
-                    notificationService.showSuccess(Localization.getAdditionalContent("email-changed"));
-                }
-            dao.sendRequestAsync(request);
-            blockSubmission();
+    function changeEmailAttempt(){
+        if(!submissionAllowed){
+            return;
         }
-    ));
+
+        const payload = {
+            email: getEmail(),
+            password: getPassword()
+        }
+
+        $("#ch-email-password-input").val("");
+
+        const request = new Request(Mapping.getEndpoint("ACCOUNT_CHANGE_EMAIL"), payload);
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("email-changed"));
+            }
+        dao.sendRequestAsync(request);
+        blockSubmission();
+    }
 
     function validateInputs(){
         const email = getEmail();

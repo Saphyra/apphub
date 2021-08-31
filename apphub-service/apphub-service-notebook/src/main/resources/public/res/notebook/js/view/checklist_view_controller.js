@@ -14,7 +14,7 @@
 
     function viewChecklist(listItemId){
         openedChecklistId = listItemId;
-        const request = new Request(Mapping.getEndpoint("GET_NOTEBOOK_CHECKLIST_ITEM", {listItemId: listItemId}));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_CHECKLIST_ITEM", {listItemId: listItemId}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body);
             }
@@ -57,10 +57,11 @@
 
             const contentCell = document.createElement("DIV");
                 contentCell.classList.add("view-checklist-item-content");
+                contentCell.classList.add("selectable");
                 contentCell.innerHTML = itemData.content;
                 contentCell.contentEditable = editingEnabled;
                 contentCell.onclick = function(){
-                    if(!editingEnabled){
+                    if(!editingEnabled && !isTextSelected()){
                         const checked = !checkedBox.checked;
                         setContentDecoration(contentCell, checked);
                         updateStatus(itemData.checklistItemId, checked);
@@ -111,9 +112,23 @@
                     removeButton.classList.add("view-checklist-item-edit-button");
                     removeButton.innerHTML = "X";
                     removeButton.onclick = function(){
-                        document.getElementById("view-checklist-content").removeChild(nodeRow);
                         if(!editingEnabled){
-                            saveChanges();
+                            const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+                                .withTitle(Localization.getAdditionalContent("checklist-item-deletion-confirmation-dialog-title"))
+                                .withDetail(Localization.getAdditionalContent("checklist-item-deletion-confirmation-dialog-detail"))
+                                .withConfirmButton(Localization.getAdditionalContent("checklist-item-deletion-confirmation-dialog-confirm-button"))
+                                .withDeclineButton(Localization.getAdditionalContent("checklist-item-deletion-confirmation-dialog-decline-button"));
+
+                            confirmationService.openDialog(
+                                "checklist-item-deletion-confirmation-dialog",
+                                confirmationDialogLocalization,
+                                function(){
+                                    document.getElementById("view-checklist-content").removeChild(nodeRow);
+                                    saveChanges();
+                                }
+                            )
+                        }else{
+                            document.getElementById("view-checklist-content").removeChild(nodeRow);
                         }
                     }
             operationsCell.appendChild(removeButton);
@@ -133,7 +148,7 @@
     }
 
     function updateStatus(checklistItemId, checked){
-        const request = new Request(Mapping.getEndpoint("UPDATE_NOTEBOOK_CHECKLIST_ITEM_STATUS", {checklistItemId: checklistItemId}), {value: checked});
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS", {checklistItemId: checklistItemId}), {value: checked});
             request.processValidResponse = function(){
             }
         dao.sendRequestAsync(request);
@@ -195,7 +210,7 @@
             nodes.push(nodeData);
         }
 
-        const request = new Request(Mapping.getEndpoint("EDIT_NOTEBOOK_CHECKLIST_ITEM", {listItemId: openedChecklistId}), {title: title, nodes: nodes});
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_EDIT_CHECKLIST_ITEM", {listItemId: openedChecklistId}), {title: title, nodes: nodes});
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("checklist-saved"));
                 editingEnabled = false;

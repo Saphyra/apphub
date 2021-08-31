@@ -1,31 +1,29 @@
 (function CategoryCreationController(){
     let currentCategoryId = null;
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.OPEN_CREATE_CATEGORY_DIALOG},
-        function(){
+    window.categoryCreationController = new function(){
+        this.openCreateCategoryDialog = function(){
             loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
+            document.getElementById("new-category-title").value = "";
+            switchTab("main-page", "create-category");
+            switchTab("button-wrapper", "create-category-buttons");
         }
-    ));
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.SAVE_CATEGORY},
-        saveCategory
-    ));
+        this.save = saveCategory;
+    }
 
     function loadChildrenOfCategory(categoryId){
         currentCategoryId = categoryId;
-        const request = new Request(Mapping.getEndpoint("GET_CHILDREN_OF_NOTEBOOK_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY"}));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_CHILDREN_OF_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY"}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body)
             }
             request.processValidResponse = function(categoryResponse){
-                displayChildrenOfCategory(categoryId, categoryResponse.parent, categoryResponse.children);
+                displayChildrenOfCategory(categoryId, categoryResponse.parent, categoryResponse.children, categoryResponse.title);
             }
         dao.sendRequestAsync(request);
     }
 
-    function displayChildrenOfCategory(categoryId, parent, categories){
+    function displayChildrenOfCategory(categoryId, parent, categories, title){
         const parentButton = document.getElementById("create-category-parent-selection-parent-button");
             if(categoryId == null){
                 parentButton.classList.add("disabled");
@@ -36,6 +34,8 @@
                     loadChildrenOfCategory(parent);
                 }
             }
+
+        document.getElementById("create-category-current-category-title").innerText = title || Localization.getAdditionalContent("root-title");
 
         const container = document.getElementById("create-category-parent-selection-category-list");
             container.innerHTML = "";
@@ -75,7 +75,7 @@
             return;
         }
 
-        const request = new Request(Mapping.getEndpoint("CREATE_NOTEBOOK_CATEGORY"), {parent: currentCategoryId, title: value});
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_CATEGORY"), {parent: currentCategoryId, title: value});
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("category-created"));
                 eventProcessor.processEvent(new Event(events.CATEGORY_SAVED));

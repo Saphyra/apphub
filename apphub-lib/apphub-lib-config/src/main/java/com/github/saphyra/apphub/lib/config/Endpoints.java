@@ -23,6 +23,10 @@ public class Endpoints {
     public static final String HEALTH = "/platform/health";
     public static final String TRANSLATE_ERROR_CODE = "/internal/localization/error-code";
 
+    public static final String REGISTER_PROCESSOR = "/platform/event-gateway";
+    public static final String HEARTBEAT = "/platform/event-gateway/{serviceName}";
+    public static final String SEND_EVENT = "/internal/event-gateway";
+
     //EVENTS
     public static final String EVENT_DELETE_EXPIRED_ACCESS_TOKENS = "/event/delete-expired-access-tokens";
     public static final String EVENT_REFRESH_ACCESS_TOKEN_EXPIRATION = "/event/refresh-access-token-expiration";
@@ -71,16 +75,13 @@ public class Endpoints {
     public static final String USER_DATA_INTERNAL_GET_USER_LANGUAGE = "/internal/user/{userId}/data/language";
     public static final String USER_DATA_INTERNAL_GET_LAST_VISITED_PAGE = "/internal/user/authentication/last-visited-page/{userId}";
     public static final String USER_DATA_INTERNAL_USER_GET_USERNAME = "/internal/user/{userId}/data/name";
+
     public static final String USER_DATA_GET_USER_ROLES = "/api/user/data/roles";
     public static final String USER_DATA_ADD_ROLE = "/api/user/data/roles";
     public static final String USER_DATA_REMOVE_ROLE = "/api/user/data/roles";
     public static final String USER_DATA_DISABLE_ROLE = "/api/user/data/roles/{role}";
     public static final String USER_DATA_ENABLE_ROLE = "/api/user/data/roles/{role}";
     public static final String USER_DATA_GET_DISABLED_ROLES = "/api/user/data/roles/disabled";
-
-    public static final String REGISTER_PROCESSOR = "/platform/event-gateway";
-    public static final String HEARTBEAT = "/platform/event-gateway/{serviceName}";
-    public static final String SEND_EVENT = "/internal/event-gateway";
 
     //MODULES
     public static final String MODULES_GET_MODULES_OF_USER = "/api/modules";
@@ -91,7 +92,6 @@ public class Endpoints {
     public static final String NOTEBOOK_CREATE_CATEGORY = "/api/notebook/category";
     public static final String NOTEBOOK_CREATE_TEXT = "/api/notebook/text";
     public static final String NOTEBOOK_GET_CHILDREN_OF_CATEGORY = "/api/notebook/category/children";
-    public static final String NOTEBOOK_CATEGORY_CONTENT_VIEW = "/web/notebook/content/category";
     public static final String NOTEBOOK_DELETE_LIST_ITEM = "/api/notebook/item/{listItemId}";
     public static final String NOTEBOOK_EDIT_LIST_ITEM = "/api/notebook/item/{listItemId}";
     public static final String NOTEBOOK_PIN_LIST_ITEM = "/api/notebook/item/{listItemId}/pin";
@@ -122,34 +122,36 @@ public class Endpoints {
     public static final String UTILS_LOG_FORMATTER_SET_VISIBILITY = "/api/utils/log-formatter/visibility";
 
     //SKYXPLORE-DATA
-    public static final String SKYXPLORE_INTERNAL_IS_CHARACTER_EXISTS = "/internal/skyxplore/character/exists";
-    public static final String SKYXPLORE_INTERNAL_GET_CHARACTER_BY_USER_ID = "/allowed-internal/skyxplore/character/{userId}";
-    public static final String SKYXPLORE_INTERNAL_SAVE_GAME_DATA = "/allowed-internal/skyxplore/game/data";
-    public static final String SKYXPLORE_INTERNAL_LOAD_GAME_ITEM = "/internal/skyxplore/game/data/item/{id}/{type}";
-    public static final String SKYXPLORE_INTERNAL_DELETE_GAME_ITEM = "/internal/skyxplore/game/data/item/{id}/{type}";
-    public static final String SKYXPLORE_INTERNAL_LOAD_GAME_ITEM_CHILDREN = "/internal/skyxplore/game/data/item/children/{parent}/{type}";
+    public static final String SKYXPLORE_INTERNAL_IS_CHARACTER_EXISTS = "/internal/skyxplore/data/character/exists";
+    public static final String SKYXPLORE_INTERNAL_GET_CHARACTER_BY_USER_ID = "/allowed-internal/skyxplore/data/character/{userId}";
+    public static final String SKYXPLORE_INTERNAL_SAVE_GAME_DATA = "/allowed-internal/skyxplore/data/game/data";
+    public static final String SKYXPLORE_INTERNAL_LOAD_GAME_ITEM = "/internal/skyxplore/data/game/data/item/{id}/{type}";
+    public static final String SKYXPLORE_INTERNAL_DELETE_GAME_ITEM = "/internal/skyxplore/data/game-item/{id}/{type}";
+    public static final String SKYXPLORE_INTERNAL_LOAD_GAME_ITEM_CHILDREN = "/internal/skyxplore/data/game-item/children/{parent}/{type}";
 
-    public static final String SKYXPLORE_CREATE_OR_UPDATE_CHARACTER = "/api/skyxplore/character";
-    public static final String SKYXPLORE_GET_GAMES = "/api/skyxplore/saved-game";
-    public static final String SKYXPLORE_DELETE_GAME = "/api/skyxplore/saved-game/{gameId}";
-    public static final String SKYXPLORE_SEARCH_FOR_FRIENDS = "/api/skyxplore/friend/candidate";
-    public static final String SKYXPLORE_ADD_FRIEND = "/api/skyxplore/friend/request";
-    public static final String SKYXPLORE_GET_SENT_FRIEND_REQUEST = "/api/skyxplore/friend/request/sent";
-    public static final String SKYXPLORE_GET_INCOMING_FRIEND_REQUEST = "/api/skyxplore/friend/request/incoming";
-    public static final String SKYXPLORE_CANCEL_FRIEND_REQUEST = "/api/skyxplore/friend/request/{friendRequestId}";
-    public static final String SKYXPLORE_ACCEPT_FRIEND_REQUEST = "/api/skyxplore/friend/request/{friendRequestId}";
-    public static final String SKYXPLORE_GET_FRIENDS = "/api/skyxplore/friend";
-    public static final String SKYXPLORE_REMOVE_FRIEND = "/api/skyxplore/friend/{friendshipId}";
-    public static final String SKYXPLORE_GET_CHARACTER = "/api/skyxplore/character";
-    public static final String SKYXPLORE_GET_ITEM_DATA = "/api/skyxplore/data/{dataId}";
+    public static final String SKYXPLORE_CREATE_OR_UPDATE_CHARACTER = "/api/skyxplore/data/character";
+    public static final String SKYXPLORE_GET_GAMES = "/api/skyxplore/data/saved-game";
+    public static final String SKYXPLORE_DELETE_GAME = "/api/skyxplore/data/saved-game/{gameId}";
+    public static final String SKYXPLORE_SEARCH_FOR_FRIENDS = "/api/skyxplore/data/friend/candidate";
+    public static final String SKYXPLORE_ADD_FRIEND = "/api/skyxplore/data/friend/request";
+    public static final String SKYXPLORE_GET_SENT_FRIEND_REQUEST = "/api/skyxplore/data/friend/request/sent";
+    public static final String SKYXPLORE_GET_INCOMING_FRIEND_REQUEST = "/api/skyxplore/data/friend/request/incoming";
+    public static final String SKYXPLORE_CANCEL_FRIEND_REQUEST = "/api/skyxplore/data/friend/request/{friendRequestId}";
+    public static final String SKYXPLORE_ACCEPT_FRIEND_REQUEST = "/api/skyxplore/data/friend/request/{friendRequestId}";
+    public static final String SKYXPLORE_GET_FRIENDS = "/api/skyxplore/data/friend";
+    public static final String SKYXPLORE_REMOVE_FRIEND = "/api/skyxplore/data/friend/{friendshipId}";
+    public static final String SKYXPLORE_GET_CHARACTER = "/api/skyxplore/data/character";
+    public static final String SKYXPLORE_GET_ITEM_DATA = "/api/skyxplore/data/data/{dataId}";
 
     //SKYXPLORE-LOBBY
-    public static final String SKYXPLORE_INTERNAL_USER_JOINED_TO_LOBBY = "/internal/lobby/{userId}";
-    public static final String SKYXPLORE_INTERNAL_USER_LEFT_LOBBY = "/internal/lobby/{userId}";
     public static final String SKYXPLORE_INTERNAL_LOBBY_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/lobby/{userId}";
-    public static final String SKYXPLORE_INTERNAL_LOBBY_VIEW_FOR_PAGE = "/internal/skyxplore/lobby/page";
     public static final String SKYXPLORE_INTERNAL_LOBBY_PLAYER_ONLINE = "/web-socket-event/skyxplore/lobby/online/{userId}";
     public static final String SKYXPLORE_INTERNAL_LOBBY_PLAYER_OFFLINE = "/web-socket-event/skyxplore/lobby/online/{userId}";
+
+    public static final String SKYXPLORE_INTERNAL_USER_JOINED_TO_LOBBY = "/allowed-internal/skyxplore/lobby/{userId}";
+    public static final String SKYXPLORE_INTERNAL_USER_LEFT_LOBBY = "/allowed-internal/skyxplore/lobby/{userId}";
+    public static final String SKYXPLORE_INTERNAL_LOBBY_VIEW_FOR_PAGE = "/internal/skyxplore/lobby/page";
+
 
     public static final String SKYXPLORE_EXIT_FROM_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_INVITE_TO_LOBBY = "/api/skyxplore/lobby/invite/{friendId}";
@@ -158,7 +160,7 @@ public class Endpoints {
     public static final String SKYXPLORE_CREATE_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_LOBBY_GET_GAME_SETTINGS = "/api/skyxplore/lobby/settings";
     public static final String SKYXPLORE_START_GAME = "/api/skyxplore/lobby/start";
-    public static final String SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS = "/api/skyxplore/friends/active";
+    public static final String SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS = "/api/skyxplore/lobby/friends/active";
     public static final String SKYXPLORE_LOBBY_LOAD_GAME = "/api/skyxplore/lobby/load-game/{gameId}";
 
     //SKYXPLORE-GAME
@@ -178,6 +180,7 @@ public class Endpoints {
     public static final String SKYXPLORE_GET_SOLAR_SYSTEM = "/api/skyxplore/game/solar-system/{solarSystemId}";
     public static final String SKYXPLORE_PLANET_GET_SURFACE = "/api/skyxplore/game/planet/{planetId}/surface";
     public static final String SKYXPLORE_PLANET_GET_STORAGE = "/api/skyxplore/game/planet/{planetId}/storage";
+    public static final String SKYXPLORE_PLANET_GET_OVERVIEW = "/api/skyxplore/game/planet/{planetId}/overview";
     public static final String SKYXPLORE_PLANET_GET_POPULATION_OVERVIEW = "/api/skyxplore/game/planet/{planetId}/population";
     public static final String SKYXPLORE_PLANET_GET_BUILDING_OVERVIEW = "/api/skyxplore/game/planet/{planetId}/building";
     public static final String SKYXPLORE_PLANET_GET_PRIORITIES = "/api/skyxplore/game/planet/{planetId}/priority";

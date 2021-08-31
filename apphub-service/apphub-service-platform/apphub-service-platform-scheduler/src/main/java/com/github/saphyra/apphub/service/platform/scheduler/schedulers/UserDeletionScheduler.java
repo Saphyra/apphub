@@ -16,7 +16,7 @@ class UserDeletionScheduler {
     private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;
 
-    @Scheduled(fixedRateString = "${interval.user.deletion}")
+    @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.user.deletion}")
     void accessTokenCleanup() {
         String eventName = EmptyEvent.TRIGGER_ACCOUNT_DELETION;
         log.info("Sending event with name {}", eventName);

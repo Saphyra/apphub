@@ -1,32 +1,30 @@
 (function LinkCreationController(){
     let currentCategoryId = null;
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.OPEN_CREATE_LINK_DIALOG},
-        function(){
+    window.linkCreationController = new function(){
+        this.saveLink = saveLink;
+        this.openCreateLinkDialog = function(){
             document.getElementById("new-link-title").value = "";
             document.getElementById("new-link-url").value = "";
             loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
+            switchTab("main-page", "create-link");
+            switchTab("button-wrapper", "create-link-buttons");
         }
-    ));
-
-    window.linkCreationController = new function(){
-        this.saveLink = saveLink;
     }
 
     function loadChildrenOfCategory(categoryId){
         currentCategoryId = categoryId;
-        const request = new Request(Mapping.getEndpoint("GET_CHILDREN_OF_NOTEBOOK_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY"}));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_CHILDREN_OF_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY"}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body)
             }
             request.processValidResponse = function(categoryResponse){
-                displayChildrenOfCategory(categoryId, categoryResponse.parent, categoryResponse.children);
+                displayChildrenOfCategory(categoryId, categoryResponse.parent, categoryResponse.children, categoryResponse.title);
             }
         dao.sendRequestAsync(request);
     }
 
-    function displayChildrenOfCategory(categoryId, parent, categories){
+    function displayChildrenOfCategory(categoryId, parent, categories, title){
         const parentButton = document.getElementById("create-link-parent-selection-parent-button");
             if(categoryId == null){
                 parentButton.classList.add("disabled");
@@ -37,6 +35,8 @@
                     loadChildrenOfCategory(parent);
                 }
             }
+
+        document.getElementById("create-link-current-category-title").innerText = title || Localization.getAdditionalContent("root-title");
 
         const container = document.getElementById("create-link-parent-selection-category-list");
             container.innerHTML = "";
@@ -81,7 +81,7 @@
             return;
         }
 
-        const request = new Request(Mapping.getEndpoint("CREATE_NOTEBOOK_LINK"), {parent: currentCategoryId, title: title, url: url});
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_LINK"), {parent: currentCategoryId, title: title, url: url});
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("link-created"));
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));

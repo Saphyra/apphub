@@ -1,25 +1,21 @@
 (function TextCreationController(){
     let currentCategoryId = null;
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.OPEN_CREATE_TEXT_DIALOG},
-        init
-    ));
-
     window.textCreationController = new function(){
+        this.openCreateTextDialog = function(){
+            document.getElementById("new-text-title").value = "";
+            document.getElementById("new-text-content").value = "";
+            loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
+            switchTab("main-page", "create-text");
+            switchTab("button-wrapper", "create-text-buttons");
+        }
         this.save = save;
-    }
-
-    function init(){
-        document.getElementById("new-text-title").value = "";
-        document.getElementById("new-text-content").value = "";
-        loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
     }
 
     function loadChildrenOfCategory(categoryId){
         currentCategoryId = categoryId;
 
-        const request = new Request(Mapping.getEndpoint("GET_CHILDREN_OF_NOTEBOOK_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY"}));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_CHILDREN_OF_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY"}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body)
             }
@@ -84,7 +80,7 @@
             return;
         }
 
-        const request = new Request(Mapping.getEndpoint("CREATE_NOTEBOOK_TEXT"), {parent: currentCategoryId, title: title, content: content});
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_TEXT"), {parent: currentCategoryId, title: title, content: content});
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("text-saved"));
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));

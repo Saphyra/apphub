@@ -19,6 +19,7 @@ public class ErrorReportToOverviewConverterTest {
     private static final LocalDateTime CREATED_AT = LocalDateTime.now();
     private static final Integer RESPONSE_STATUS = 24;
     private static final String MESSAGE = "message";
+    private static final String SERVICE = "service";
 
     @InjectMocks
     private ErrorReportToOverviewConverter underTest;
@@ -31,6 +32,7 @@ public class ErrorReportToOverviewConverterTest {
             .responseStatus(RESPONSE_STATUS)
             .message(MESSAGE)
             .status(ErrorReportStatus.UNREAD)
+            .service(SERVICE)
             .build();
 
         ErrorReportOverview result = underTest.convert(errorReport);
@@ -38,6 +40,7 @@ public class ErrorReportToOverviewConverterTest {
         assertThat(result.getId()).isEqualTo(ID);
         assertThat(result.getCreatedAt()).isEqualTo(CREATED_AT.toString());
         assertThat(result.getMessage()).isEqualTo(MESSAGE);
+        assertThat(result.getService()).isEqualTo(SERVICE);
         assertThat(result.getStatus()).isEqualTo(ErrorReportStatus.UNREAD.name());
     }
 }

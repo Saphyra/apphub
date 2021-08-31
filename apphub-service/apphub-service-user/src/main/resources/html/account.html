@@ -46,7 +46,7 @@
                         <div id="ch-email-invalid-password" class="invalid-input">X</div>
                     </div>
                 </div>
-                <button id="change-email-button" class="submit-button" onclick="eventProcessor.processEvent(new Event(events.CHANGE_EMAIL_ATTEMPT))" disabled></button>
+                <button id="change-email-button" class="submit-button" onclick="changeEmailController.changeEmailAttempt()" disabled></button>
             </div>
         </section>
 
@@ -66,7 +66,7 @@
                         <div id="ch-username-invalid-password" class="invalid-input">X</div>
                     </div>
                 </div>
-                <button id="change-username-button" class="submit-button" onclick="eventProcessor.processEvent(new Event(events.CHANGE_USERNAME_ATTEMPT))" disabled></button>
+                <button id="change-username-button" class="submit-button" onclick="changeUsernameController.changeUsernameAttempt()" disabled></button>
             </div>
         </section>
 
@@ -92,7 +92,7 @@
                         <div id="ch-password-invalid-password" class="invalid-input">X</div>
                     </div>
                 </div>
-                <button id="change-password-button" class="submit-button" onclick="eventProcessor.processEvent(new Event(events.CHANGE_PASSWORD_ATTEMPT))" disabled></button>
+                <button id="change-password-button" class="submit-button" onclick="changePasswordController.changePasswordAttempt()" disabled></button>
             </div>
         </section>
 
@@ -108,7 +108,7 @@
                     </div>
                 </div>
 
-                <button id="delete-account-button" class="submit-button" onclick="eventProcessor.processEvent(new Event(events.DELETE_ACCOUNT_ATTEMPT))" disabled></button>
+                <button id="delete-account-button" class="submit-button" onclick="deleteAccountController.deleteAccountAttempt()" disabled></button>
             </div>
         </section>
     </MAIN>

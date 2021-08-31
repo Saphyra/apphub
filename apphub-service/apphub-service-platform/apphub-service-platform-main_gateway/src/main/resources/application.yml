@@ -33,7 +33,7 @@ spring:
           predicates:
             - Path=/res/utils/**
         - id: skyxplore-resorces
-          uri: http://skyxplore-facade:8080
+          uri: http://skyxplore-data:8080
           predicates:
             - Path=/res/skyxplore/**
 
@@ -67,7 +67,7 @@ spring:
           predicates:
             - Path=/web/utils/**
         - id: skyxplore-pages
-          uri: http://skyxplore-facade:8080
+          uri: http://skyxplore-data:8080
           predicates:
             - Path=/web/skyxplore/**
 
@@ -92,10 +92,18 @@ spring:
           uri: http://utils:8080
           predicates:
             - Path=/api/utils/**
-        - id: skyxplore
-          uri: http://skyxplore-facade:8080
+        - id: skyxplore-data
+          uri: http://skyxplore-data:8080
           predicates:
-            - Path=/api/skyxplore/**
+            - Path=/api/skyxplore/data/**
+        - id: skyxplore-lobby
+          uri: http://skyxplore-lobby:8080
+          predicates:
+            - Path=/api/skyxplore/lobby/**
+        - id: skyxplore-game
+          uri: http://skyxplore-game:8080
+          predicates:
+            - Path=/api/skyxplore/game/**
 
         #PLATFORM
         - id: localization

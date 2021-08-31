@@ -72,7 +72,7 @@ public class SeleniumTest extends TestBase {
         WebDriverFactory.stopDrivers();
     }
 
-    protected static synchronized WebDriver extractDriver() {
+    protected static WebDriver extractDriver() {
         StopWatch stopWatch = StopWatch.createStarted();
         WebDriverWrapper webDriverWrapper;
         try {

@@ -17,4 +17,5 @@ public class GetErrorReportsRequest {
     private Integer pageSize;
     private Integer page;
     private String status;
+    private String service;
 }

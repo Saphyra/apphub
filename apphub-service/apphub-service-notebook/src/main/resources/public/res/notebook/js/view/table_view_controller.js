@@ -20,7 +20,7 @@
         columnNames = [];
         rows = [];
 
-        const request = new Request(Mapping.getEndpoint("GET_NOTEBOOK_TABLE", {listItemId: listItemId}));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_TABLE", {listItemId: listItemId}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body);
             }
@@ -116,6 +116,7 @@
         const cell = document.createElement("TD");
             cell.id = generateRandomId();
             cell.classList.add("table-column");
+            cell.classList.add("selectable");
 
             const contentNode = document.createElement("DIV");
                 contentNode.classList.add("table-column-content");
@@ -287,7 +288,7 @@
             columns: rowList
         };
 
-        const request = new Request(Mapping.getEndpoint("EDIT_NOTEBOOK_TABLE", {listItemId: openedTableId}), body);
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_EDIT_TABLE", {listItemId: openedTableId}), body);
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("table-saved"));
                 viewTable(openedTableId);
@@ -381,7 +382,7 @@
     }
 
     function convertToChecklistTable(){
-        const request = new Request(Mapping.getEndpoint("CONVERT_NOTEBOOK_TABLE_TO_CHECKLIST_TABLE", {listItemId: openedTableId}));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_CONVERT_TABLE_TO_CHECKLIST_TABLE", {listItemId: openedTableId}));
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("table-conversion-successful"));
                 checklistTableViewController.viewChecklistTable(openedTableId);

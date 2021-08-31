@@ -1,5 +1,3 @@
-scriptLoader.loadScript("/res/notebook/js/view/text_view_controller.js");
-
 function textNodeFactory(parent, itemDetails){
     const node = document.createElement("DIV");
         node.classList.add("list-item-details-item");
@@ -32,7 +30,7 @@ function textNodeFactory(parent, itemDetails){
             "deletion-confirmation-dialog",
             confirmationDialogLocalization,
             function(){
-                const request = new Request(Mapping.getEndpoint("DELETE_NOTEBOOK_LIST_ITEM", {listItemId: listItemId}))
+                const request = new Request(Mapping.getEndpoint("NOTEBOOK_DELETE_LIST_ITEM", {listItemId: listItemId}))
                     request.processValidResponse = function(){
                         notificationService.showSuccess(Localization.getAdditionalContent("item-deleted"));
                         eventProcessor.processEvent(new Event(events.ITEM_DELETED, listItemId));

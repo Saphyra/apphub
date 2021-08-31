@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.config;
 
+import com.github.saphyra.apphub.lib.config.thymeleaf.EnableThymeLeaf;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -26,6 +27,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.SkyXploreDataConfig;
 @EnableErrorHandler
 @EnableLiquibase
 @EnableEventProcessor
+@EnableThymeLeaf
 public class SkyXploreDataBeanConfiguration {
     @Bean
     IdGenerator idGenerator() {

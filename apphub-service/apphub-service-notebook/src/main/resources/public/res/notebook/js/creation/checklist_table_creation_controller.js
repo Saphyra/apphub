@@ -3,31 +3,27 @@
     let columnNames = null;
     let rows = null;
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.OPEN_CREATE_CHECKLIST_TABLE_DIALOG},
-        init
-    ));
-
     window.checklistTableCreationController = new function(){
         this.save = save;
         this.newColumn = newColumn;
         this.newRow = newRow;
-    }
-
-    function init(){
-        document.getElementById("create-checklist-table-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
-        document.getElementById("new-checklist-table-title").value = "";
-        loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
-        columnNames = [];
-        rows = [];
-        newColumn();
-        newRow();
+        this.openCreateChecklistTableDialog = function(){
+            document.getElementById("create-checklist-table-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
+            document.getElementById("new-checklist-table-title").value = "";
+            loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
+            columnNames = [];
+            rows = [];
+            newColumn();
+            newRow();
+            switchTab("main-page", "create-checklist-table");
+            switchTab("button-wrapper", "create-checklist-table-buttons");
+        }
     }
 
     function loadChildrenOfCategory(categoryId){
         currentCategoryId = categoryId;
 
-        const request = new Request(Mapping.getEndpoint("GET_CHILDREN_OF_NOTEBOOK_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY"}));
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_CHILDREN_OF_CATEGORY", null, {categoryId: categoryId, type: "CATEGORY"}));
             request.convertResponse = function(response){
                 return JSON.parse(response.body)
             }
@@ -115,7 +111,7 @@
             rows: rowValues
         }
 
-        const request = new Request(Mapping.getEndpoint("CREATE_NOTEBOOK_CHECKLIST_TABLE"), body);
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_CHECKLIST_TABLE"), body);
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("checklist-table-saved"));
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));

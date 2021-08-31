@@ -1,3 +1,9 @@
+window.events = {
+    LOAD_LOCALIZATION: "load_localization",
+    LOCALIZATION_LOADED: "localization_loaded",
+    LOGOUT: "logout"
+};
+
 (function EventProcessor(){
     const processors = [];
     
@@ -42,12 +48,12 @@
     }
 })();
 
-function EventProcessor(canProcessCallback, processEventCallback, onceRunningProcessor){
+function EventProcessor(canProcessCallback, processEventCallback, onceRunningProcessor, processorName){
     const canProcess = canProcessCallback;
     const processEvent = processEventCallback;
     const onceRunning = onceRunningProcessor == null || onceRunningProcessor == undefined ? false : onceRunningProcessor;
 
-    this.name = "Unknown eventProcessor";
+    this.name = processorName || "Unknown eventProcessor";
 
     this.setName = function(name){
         this.name = name;

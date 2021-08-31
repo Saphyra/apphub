@@ -28,4 +28,4 @@ logging:
             service:
               skyxplore:
                 data:
-                  game: DEBUG
+                  game: INFO

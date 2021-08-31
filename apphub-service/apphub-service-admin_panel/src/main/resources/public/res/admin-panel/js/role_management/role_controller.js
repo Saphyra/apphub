@@ -1,34 +1,20 @@
 (function RoleController(){
-    scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
-
-    events.SEARCH_USER_ATTEMPT = "search_user_attempt"
-
     const roleLocalization = new CustomLocalization("admin_panel", "roles");
     const availableRoles = [];
     let searchUserTimeout = null;
     let previousSearchText = "";
 
-    $(document).ready(function(){
-        initAvailableRoles();
-        addEventListeners();
-    });
+    pageLoader.addLoader(initAvailableRoles, "Initializing available roles");
+    pageLoader.addLoader(addEventListeners, "Adding EventListeners");
+    pageLoader.addLoader(queryUsers, "Initial query users");
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.LOCALIZATION_LOADED},
-        queryUsers,
-        true
-    ));
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.SEARCH_USER_ATTEMPT},
-        function(){
-            if(searchUserTimeout){
-                clearTimeout(searchUserTimeout);
-            }
-
-            searchUserTimeout = setTimeout(queryUsers, getValidationTimeout());
+    function searchAttempt(){
+        if(searchUserTimeout){
+            clearTimeout(searchUserTimeout);
         }
-    ));
+
+        searchUserTimeout = setTimeout(queryUsers, getValidationTimeout());
+    }
 
     function queryUsers(){
         const searchText = document.getElementById("search-input").value;
@@ -41,10 +27,11 @@
 
         if(searchText.length < 3){
             displayTooShortSearchText(container);
+            previousSearchText = "";
             return;
         }
 
-        const request = new Request(Mapping.getEndpoint("GET_USER_ROLES"), {value: searchText});
+        const request = new Request(Mapping.getEndpoint("USER_DATA_GET_USER_ROLES"), {value: searchText});
             request.convertResponse = function(response){
                 return JSON.parse(response.body);
             }
@@ -103,15 +90,15 @@
             function createUserNode(user){
                 const row = document.createElement("tr");
 
-                    const emailCell = document.createElement("td");
-                        emailCell.innerText = user.email;
-                        emailCell.classList.add("id-cell");
-                row.appendChild(emailCell);
-
                     const usernameCell = document.createElement("td");
                         usernameCell.innerText = user.username;
                         usernameCell.classList.add("id-cell");
                 row.appendChild(usernameCell);
+
+                    const emailCell = document.createElement("td");
+                        emailCell.innerText = user.email;
+                        emailCell.classList.add("id-cell");
+                row.appendChild(emailCell);
 
                     const actualRolesCell = document.createElement("td");
                         actualRolesCell.classList.add("role-cell");
@@ -163,7 +150,7 @@
             role: role
         };
 
-        const request = new Request(Mapping.getEndpoint("REMOVE_ROLE"), payload);
+        const request = new Request(Mapping.getEndpoint("USER_DATA_REMOVE_ROLE"), payload);
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("role-removed"));
                 actualRolesCell.removeChild(roleNode);
@@ -181,7 +168,7 @@
             role: role
         };
 
-        const request = new Request(Mapping.getEndpoint("ADD_ROLE"), payload);
+        const request = new Request(Mapping.getEndpoint("USER_DATA_ADD_ROLE"), payload);
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("role-added"));
                 availableRolesCell.removeChild(roleNode);
@@ -194,7 +181,7 @@
     }
 
     function initAvailableRoles(){
-        const request = new Request(Mapping.getEndpoint("AVAILABLE_ROLES"));
+        const request = new Request(Mapping.getEndpoint("ADMIN_PANEL_AVAILABLE_ROLES"));
             request.convertResponse = function(response){
                 return JSON.parse(response.body);
             }
@@ -207,7 +194,7 @@
 
     function addEventListeners(){
         $("#search-input").on("keyup", function(){
-            eventProcessor.processEvent(new Event(events.SEARCH_USER_ATTEMPT));
+            searchAttempt();
         });
     }
 })();

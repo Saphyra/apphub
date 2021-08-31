@@ -1,5 +1,5 @@
 (function NotificationService(){
-    scriptLoader.loadScript("/res/common/js/animation/animationfacade.js");
+    scriptLoader.loadScript("/res/common/js/animation/roll.js");
 
     window.notificationService = new function(){
         this.showSuccess = showSuccess;
@@ -43,12 +43,12 @@
                 container.removeChild(messageElement);
             }
             
-            animationFacade.rollInHorizontal(messageElement, container, 300)
+            roll.rollInHorizontal(messageElement, container, 300)
             .then(() => new Promise((resolve, reject) => {
                     setTimeout(function(){resolve();}, 10000)
                 })
             )
-            .then(() => animationFacade.rollOutHorizontal(messageElement, 300))
+            .then(() => roll.rollOutHorizontal(messageElement, 300))
             .then(() => setTimeout(function(){container.removeChild(messageElement)}, 10000));
 
         function createContainer(){

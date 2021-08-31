@@ -26,6 +26,7 @@ class ErrorReportConverter extends ConverterBase<ErrorReportEntity, ErrorReport>
             .responseBody(entity.getResponseBody())
             .exception(objectMapperWrapper.readValue(entity.getException(), ExceptionModel.class))
             .status(ErrorReportStatus.valueOf(entity.getStatus()))
+            .service(entity.getService())
             .build();
     }
 
@@ -39,6 +40,7 @@ class ErrorReportConverter extends ConverterBase<ErrorReportEntity, ErrorReport>
             .responseBody(domain.getResponseBody())
             .exception(objectMapperWrapper.writeValueAsString(domain.getException()))
             .status(domain.getStatus().name())
+            .service(domain.getService())
             .build();
     }
 }

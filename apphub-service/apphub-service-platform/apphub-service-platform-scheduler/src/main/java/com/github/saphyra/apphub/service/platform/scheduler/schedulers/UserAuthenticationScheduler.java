@@ -16,7 +16,7 @@ class UserAuthenticationScheduler {
     private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;
 
-    @Scheduled(fixedRateString = "${interval.user.authentication.accessTokenCleanup}")
+    @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.user.authentication.accessTokenCleanup}")
     void accessTokenCleanup() {
         String eventName = EmptyEvent.DELETE_EXPIRED_ACCESS_TOKENS_EVENT_NAME;
         log.info("Sending event with name {}", eventName);

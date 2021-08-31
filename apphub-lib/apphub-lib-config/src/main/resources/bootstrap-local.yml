@@ -73,10 +73,6 @@ skyxplore-data-friend:
   ribbon:
     listOfServers: localhost:8091
 
-skyxplore-facade:
-  ribbon:
-    listOfServers: localhost:8092
-
 skyxplore-lobby:
   ribbon:
     listOfServers: localhost:8093

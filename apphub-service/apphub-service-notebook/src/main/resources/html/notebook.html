@@ -72,6 +72,7 @@
             </DIV>
 
             <DIV id="create-category-parent-selection-wrapper" class="parent-selection-wrapper">
+                <DIV id="create-category-current-category-title"></DIV>
                 <DIV id="create-category-parent-selection-parent-button" class="button create-item-category"></DIV>
                 <DIV id="create-category-parent-selection-category-list"></DIV>
             </DIV>
@@ -212,6 +213,7 @@
             </DIV>
 
             <DIV id="create-link-parent-selection-wrapper" class="parent-selection-wrapper">
+                <DIV id="create-link-current-category-title"></DIV>
                 <DIV id="create-link-parent-selection-parent-button" class="button create-item-category"></DIV>
                 <DIV id="create-link-parent-selection-category-list"></DIV>
             </DIV>
@@ -220,12 +222,12 @@
 
     <DIV id="view-text" class="main-page">
         <HEADER>
-            <H1><SPAN id="view-text-title"></SPAN></H1>
+            <H1><SPAN id="view-text-title" class="selectable"></SPAN></H1>
             <BUTTON id="view-text-close-button" class="dialog-close-button" onclick="pageController.openMainPage()">X</BUTTON>
         </HEADER>
 
         <MAIN id="view-text-content-wrapper">
-            <TEXTAREA id="view-text-content"></TEXTAREA>
+            <TEXTAREA id="view-text-content" class="selectable"></TEXTAREA>
         </MAIN>
     </DIV>
 
@@ -242,6 +244,7 @@
             </DIV>
 
             <DIV id="edit-list-item-parent-selection-wrapper" class="parent-selection-wrapper">
+                <DIV id="edit-list-item-current-category-title"></DIV>
                 <DIV id="edit-list-item-parent-selection-parent-button" class="button create-item-category"></DIV>
                 <DIV id="edit-list-item-parent-selection-category-list"></DIV>
             </DIV>
@@ -300,12 +303,12 @@
     <SPAN id="category-content-buttons" class="button-wrapper">
             <DIV id="new-button-wrapper">
                 <DIV id="new-buttons">
-                    <DIV id="new-text-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_TEXT_DIALOG))"></DIV>
-                    <DIV id="new-category-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_CATEGORY_DIALOG))"></DIV>
-                    <DIV id="new-link-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_LINK_DIALOG))"></DIV>
-                    <DIV id="new-checklist-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_CHECKLIST_DIALOG))"></DIV>
-                    <DIV id="new-table-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_TABLE_DIALOG))"></DIV>
-                    <DIV id="new-checklist-table-button" class="button" onclick="eventProcessor.processEvent(new Event(events.OPEN_CREATE_CHECKLIST_TABLE_DIALOG))"></DIV>
+                    <DIV id="new-text-button" class="button" onclick="textCreationController.openCreateTextDialog()"></DIV>
+                    <DIV id="new-category-button" class="button" onclick="categoryCreationController.openCreateCategoryDialog()"></DIV>
+                    <DIV id="new-link-button" class="button" onclick="linkCreationController.openCreateLinkDialog()"></DIV>
+                    <DIV id="new-checklist-button" class="button" onclick="checklistCreationController.openCreateChecklistDialog()"></DIV>
+                    <DIV id="new-table-button" class="button" onclick="tableCreationController.openCreateTableDialog()"></DIV>
+                    <DIV id="new-checklist-table-button" class="button" onclick="checklistTableCreationController.openCreateChecklistTableDialog()"></DIV>
                 </DIV>
 
                 <DIV id="new-button" class="button"></DIV>
@@ -313,7 +316,7 @@
         </SPAN>
 
     <SPAN id="create-category-buttons" class="button-wrapper">
-        <BUTTON id="create-category-button" onclick="eventProcessor.processEvent(new Event(events.SAVE_CATEGORY))"></BUTTON>
+        <BUTTON id="create-category-button" onclick="categoryCreationController.save()"></BUTTON>
     </SPAN>
 
     <SPAN id="create-text-buttons" class="button-wrapper">
