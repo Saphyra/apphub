@@ -73,6 +73,13 @@ public class ExecutorServiceBeanTest {
     }
 
     @Test
+    public void forEach() {
+        underTest.forEach(Arrays.asList(helper), Helper::method);
+
+        verify(helper).method();
+    }
+
+    @Test
     public void processCollectionWithWait() {
         List<String> result = underTest.processCollectionWithWait(Arrays.asList(TEST_RESULT, TEST_RESULT), String::toUpperCase, 1);
 
@@ -92,6 +99,7 @@ public class ExecutorServiceBeanTest {
     }
 
     public static class Helper {
+        @SuppressWarnings("UnusedReturnValue")
         public String method() {
             return TEST_RESULT;
         }

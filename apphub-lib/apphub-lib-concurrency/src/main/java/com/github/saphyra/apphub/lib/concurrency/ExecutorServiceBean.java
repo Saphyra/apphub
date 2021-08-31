@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -52,6 +53,13 @@ public class ExecutorServiceBean {
                 return new ExecutionResult<>(null, e, false);
             }
         };
+    }
+
+    public <I> void forEach(List<I> dataList, Consumer<I> mapper) {
+        processCollectionWithWait(dataList, i -> {
+            mapper.accept(i);
+            return null;
+        });
     }
 
     public <I, R> List<R> processCollectionWithWait(List<I> dataList, Function<I, R> mapper, int parallelism) {

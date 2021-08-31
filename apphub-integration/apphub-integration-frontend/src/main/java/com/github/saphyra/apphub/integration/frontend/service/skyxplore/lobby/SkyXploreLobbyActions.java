@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SkyXploreLobbyActions {
     public static void startGameCreation(WebDriver driver) {
         LobbyPage.startGameCreationButton(driver).click();
-        log.info("Game creation started.");
     }
 
     public static void setReady(WebDriver driver) {

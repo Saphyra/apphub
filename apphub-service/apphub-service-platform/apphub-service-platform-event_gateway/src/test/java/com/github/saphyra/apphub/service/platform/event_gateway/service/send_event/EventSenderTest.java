@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
@@ -60,7 +61,8 @@ public class EventSenderTest {
 
     @Test
     public void sendEvent() {
-        given(urlAssembler.assemble(eventProcessor)).willReturn(URL);
+        given(urlAssembler.assemble(eventProcessor)).willThrow(new RuntimeException())
+            .willReturn(URL);
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
 
         underTest.sendEvent(eventProcessor, sendEventRequest, TestConstants.DEFAULT_LOCALE);
@@ -79,6 +81,7 @@ public class EventSenderTest {
 
         underTest.sendEvent(eventProcessor, sendEventRequest, TestConstants.DEFAULT_LOCALE);
 
+        verify(urlAssembler, times(3)).assemble(eventProcessor);
         verifyNoInteractions(restTemplate, eventProcessorDao, dateTimeUtil);
         verify(errorReporterService).report(anyString(), eq(exception));
     }

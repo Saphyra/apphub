@@ -25,17 +25,27 @@ class EventSender {
 
     void sendEvent(EventProcessor processor, SendEventRequest<?> sendEventRequest, String locale) {
         try {
-            String url = urlAssembler.assemble(processor);
-            log.info("Url: {}", url);
+            Exception exception = null;
+            for (int i = 1; i <= 3; i++) {
+                try {
+                    String url = urlAssembler.assemble(processor);
+                    log.info("Url: {}", url);
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(Constants.LOCALE_HEADER, locale);
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.add(Constants.LOCALE_HEADER, locale);
 
-            HttpEntity<SendEventRequest<?>> entity = new HttpEntity<>(sendEventRequest, headers);
-            restTemplate.postForEntity(url, entity, Void.class);
+                    HttpEntity<SendEventRequest<?>> entity = new HttpEntity<>(sendEventRequest, headers);
+                    restTemplate.postForEntity(url, entity, Void.class);
 
-            processor.setLastAccess(dateTimeUtil.getCurrentDate());
-            eventProcessorDao.save(processor);
+                    processor.setLastAccess(dateTimeUtil.getCurrentDate());
+                    eventProcessorDao.save(processor);
+                    return;
+                } catch (Exception e) {
+                    exception = e;
+                    log.warn("Failed sending event {} to processor {} for {} try.", sendEventRequest.getEventName(), processor, i, e);
+                }
+            }
+            throw exception;
         } catch (Exception e) {
             log.warn("Failed sending event with name {} to processor {}", sendEventRequest.getEventName(), processor, e);
             errorReporterService.report("Failed sending event with name " + sendEventRequest.getEventName() + " to processor " + processor, e);

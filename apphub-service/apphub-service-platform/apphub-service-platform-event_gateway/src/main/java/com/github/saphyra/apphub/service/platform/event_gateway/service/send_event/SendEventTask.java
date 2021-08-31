@@ -36,10 +36,7 @@ public class SendEventTask implements Runnable {
     @Override
     public void run() {
         List<EventProcessor> eventProcessors = eventProcessorDao.getByEventName(sendEventRequest.getEventName());
-        executorServiceBean.processCollectionWithWait(eventProcessors, eventProcessor -> {
-            eventSender.sendEvent(eventProcessor, sendEventRequest, locale);
-            return null;
-        });
+        executorServiceBean.forEach(eventProcessors, eventProcessor -> eventSender.sendEvent(eventProcessor, sendEventRequest, locale));
 
         log.info("Event with name {} is sent to the processors.", sendEventRequest.getEventName());
     }
