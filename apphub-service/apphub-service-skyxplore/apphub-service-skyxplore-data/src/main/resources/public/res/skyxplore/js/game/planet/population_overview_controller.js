@@ -1,6 +1,7 @@
 (function PopulationOverviewController(){
     const orderTypes = {
         NAME: "name",
+        STAT: "stat",
         SKILL_LEVEL: "skill_level"
     }
 
@@ -41,6 +42,7 @@
     }
 
     function displayPopulation(){
+        logService.logToConsole("Display population");
         const populationContainer = document.getElementById(ids.populationOverviewCitizenList);
             populationContainer.innerHTML = "";
 
@@ -60,6 +62,11 @@
                     const skillType = document.getElementById(ids.populationOverviewOrderSkillListInput).value;
 
                     return orderValue * (a.skills[skillType].level - b.skills[skillType].level);
+                break;
+                case orderTypes.STAT:
+                    const stat = document.getElementById(ids.populationOverviewOrderStatListInput).value;
+
+                    return orderValue * (a[stat] - b[stat]);
                 break;
                 default:
                     logService.warn("Unknown orderType: " + orderType);
@@ -196,8 +203,15 @@
             skillTypeSelectInput.onchange = displayPopulation;
         new Stream(skillTypeLocalization.getKeys())
             .sorted(function(a, b){return skillTypeLocalization.get(a).localeCompare(skillTypeLocalization.get(b))})
-            .map(createSkillTypeOption)
+            .map(function(skillType){return createOption(skillType, skillTypeLocalization)})
             .forEach(function(node){skillTypeSelectInput.appendChild(node)});
+
+        const statSelectInput = document.getElementById(ids.populationOverviewOrderStatListInput);
+            statSelectInput.onchange = displayPopulation;
+        new Stream(citizenStatLocalization.getKeys())
+            .sorted(function(a, b){return citizenStatLocalization.get(a).localeCompare(citizenStatLocalization.get(b))})
+            .map(function(stat){return createOption(stat, citizenStatLocalization)})
+            .forEach(function(node){statSelectInput.appendChild(node)});
 
         $(".population-overview-order-type").on("change", displayPopulation);
 
@@ -217,10 +231,10 @@
             return node;
         }
 
-        function createSkillTypeOption(skillType){
+        function createOption(key, localization){
             const option = document.createElement("OPTION");
-                option.value = skillType;
-                option.innerHTML = skillTypeLocalization.get(skillType);
+                option.value = key;
+                option.innerHTML = localization.get(key);
             return option;
         }
     }

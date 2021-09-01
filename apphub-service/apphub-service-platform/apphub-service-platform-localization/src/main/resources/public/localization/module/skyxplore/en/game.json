@@ -223,6 +223,12 @@
         "message": "By name"
       }
     ],
+    "population-overview-order-by-stat-button": [
+      {
+        "key": "innerHTML",
+        "message": "By stat"
+      }
+    ],
     "population-overview-order-by-skill-level-button": [
       {
         "key": "innerHTML",

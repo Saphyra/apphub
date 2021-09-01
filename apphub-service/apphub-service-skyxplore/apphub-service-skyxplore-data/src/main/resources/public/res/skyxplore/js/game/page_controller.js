@@ -82,6 +82,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_contr
         populationOverviewOrderContainer: "population-overview-order-container",
         populationOverviewSkillList: "population-overview-skill-list",
         populationOverviewOrderSkillListInput: "population-overview-order-skill-list-input",
+        populationOverviewOrderStatListInput: "population-overview-order-stat-list-input",
         populationOverviewShowAllSkills: "population-overview-show-all-skills",
         populationOverviewHideAllSkills: "population-overview-hide-all-skills",
         populationOverviewCitizenList: "population-overview-citizen-list",
@@ -98,6 +99,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_contr
     window.itemDataNameLocalization = new CustomLocalization("skyxplore", "items");
     window.surfaceTypeLocalization = new CustomLocalization("skyxplore", "surface_type");
     window.skillTypeLocalization = new CustomLocalization("skyxplore", "skill_type");
+    window.citizenStatLocalization = new CustomLocalization("skyxplore", "citizen_stat");
 
     const wsConnection = new WebSocketConnection(Mapping.getEndpoint("WS_CONNECTION_SKYXPLORE_GAME"));
 

@@ -223,6 +223,12 @@
         "message": "Név szerint"
       }
     ],
+    "population-overview-order-by-stat-button": [
+      {
+        "key": "innerHTML",
+        "message": "Tulajdonságok szerint"
+      }
+    ],
     "population-overview-order-by-skill-level-button": [
       {
         "key": "innerHTML",
