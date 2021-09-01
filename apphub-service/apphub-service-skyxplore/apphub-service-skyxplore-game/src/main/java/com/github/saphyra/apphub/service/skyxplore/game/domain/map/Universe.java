@@ -22,6 +22,14 @@ public class Universe {
     private final Map<Coordinate, SolarSystem> systems;
     private final List<SystemConnection> connections;
 
+    public SolarSystem findSolarSystemByIdValidated(UUID solarSystemId) {
+        return systems.values()
+            .stream()
+            .filter(solarSystem -> solarSystem.getSolarSystemId().equals(solarSystemId))
+            .findFirst()
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "SolarSystem not found with id " + solarSystemId));
+    }
+
     public Optional<Planet> findPlanetById(UUID planetId) {
         return systems.values()
             .stream()

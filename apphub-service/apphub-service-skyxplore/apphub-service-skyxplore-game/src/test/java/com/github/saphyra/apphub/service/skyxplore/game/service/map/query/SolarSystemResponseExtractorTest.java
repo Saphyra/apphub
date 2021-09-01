@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.map.query;
 import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.map.MapSolarSystemResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
@@ -24,6 +25,7 @@ import static org.mockito.BDDMockito.given;
 public class SolarSystemResponseExtractorTest {
     private static final UUID SOLAR_SYSTEM_ID = UUID.randomUUID();
     private static final String DEFAULT_SOLAR_SYSTEM_NAME = "default-solar-system-name";
+    private static final UUID USER_ID = UUID.randomUUID();
 
     @InjectMocks
     private SolarSystemResponseExtractor underTest;
@@ -47,11 +49,12 @@ public class SolarSystemResponseExtractorTest {
             .coordinate(coordinateModel)
             .defaultName(DEFAULT_SOLAR_SYSTEM_NAME)
             .planets(CollectionUtils.singleValueMap(UUID.randomUUID(), planet))
+            .customNames(new OptionalHashMap<>())
             .build();
         given(universe.getSystems()).willReturn(CollectionUtils.singleValueMap(coordinate, solarSystem));
         given(coordinateModel.getCoordinate()).willReturn(coordinate);
 
-        List<MapSolarSystemResponse> result = underTest.getSolarSystems(universe);
+        List<MapSolarSystemResponse> result = underTest.getSolarSystems(USER_ID, universe);
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getSolarSystemId()).isEqualTo(SOLAR_SYSTEM_ID);

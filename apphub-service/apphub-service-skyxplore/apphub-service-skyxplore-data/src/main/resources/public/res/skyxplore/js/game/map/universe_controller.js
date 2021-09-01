@@ -2,6 +2,7 @@
     pageLoader.addLoader(loadUniverse, "Universe load");
 
     window.universeController = new function(){
+        this.loadUniverse = loadUniverse;
     }
 
     function loadUniverse(){
@@ -17,6 +18,7 @@
 
     function displayUniverse(universe){
         const svgContainer = document.getElementById(ids.mapSvgContainer);
+            svgContainer.innerHTML = "";
             const mapWidth = universe.universeSize + mapConstants.X_OFFSET * 2;
             const mapHeight = universe.universeSize + mapConstants.Y_OFFSET * 2;
 

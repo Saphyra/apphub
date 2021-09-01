@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,6 +20,7 @@ import static org.mockito.BDDMockito.given;
 @RunWith(MockitoJUnitRunner.class)
 public class UniverseTest {
     private static final UUID PLANET_ID = UUID.randomUUID();
+    private static final UUID SOLAR_SYSTEM_ID = UUID.randomUUID();
 
     private Universe underTest;
 
@@ -30,6 +32,29 @@ public class UniverseTest {
 
     @Mock
     private Planet planet;
+
+    @Test
+    public void findSolarSystemByIdValidated_notFound() {
+        underTest = Universe.builder()
+            .systems(Collections.emptyMap())
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.findSolarSystemByIdValidated(SOLAR_SYSTEM_ID));
+
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
+    }
+
+    @Test
+    public void findSolarSystemByIdValidated() {
+        underTest = Universe.builder()
+            .systems(CollectionUtils.singleValueMap(coordinate, solarSystem))
+            .build();
+        given(solarSystem.getSolarSystemId()).willReturn(SOLAR_SYSTEM_ID);
+
+        SolarSystem result = underTest.findSolarSystemByIdValidated(SOLAR_SYSTEM_ID);
+
+        assertThat(result).isEqualTo(solarSystem);
+    }
 
     @Test
     public void findByPlanetIdValidated_notFound() {

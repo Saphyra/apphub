@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.solar_system;
 import com.github.saphyra.apphub.api.skyxplore.response.game.solar_system.PlanetLocationResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.solar_system.SolarSystemResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -61,9 +62,10 @@ public class SolarSystemResponseQueryServiceTest {
         given(universe.getSystems()).willReturn(CollectionUtils.singleValueMap(new Coordinate(0, 0), solarSystem));
         given(solarSystem.getSolarSystemId()).willReturn(SOLAR_SYSTEM_ID);
         given(solarSystem.getDefaultName()).willReturn(DEFAULT_NAME);
+        given(solarSystem.getCustomNames()).willReturn(new OptionalHashMap<>());
         given(solarSystem.getRadius()).willReturn(RADIUS);
         given(solarSystem.getPlanets()).willReturn(CollectionUtils.singleValueMap(UUID.randomUUID(), planet));
-        given(planetToLocationResponseConverter.mapPlanets(any(), eq(game))).willReturn(Arrays.asList(planetLocationResponse));
+        given(planetToLocationResponseConverter.mapPlanets(eq(USER_ID), any(), eq(game))).willReturn(Arrays.asList(planetLocationResponse));
 
         SolarSystemResponse result = underTest.getSolarSystem(USER_ID, SOLAR_SYSTEM_ID);
 

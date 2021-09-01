@@ -8,8 +8,10 @@
     }
 
     let openedSolarSystemId = null;
+    let currentSolarSystemName;
 
     pageLoader.addLoader(function(){addRightClickMove(ids.solarSystemSvgContainer, ids.solarSystemContainer, false)}, "SolarSystem add rightClickMove");
+    pageLoader.addLoader(solarSystemRenaming, "SolarSystem renaming");
 
     window.solarSystemController = new function(){
         this.viewSolarSystem = viewSolarSystem;
@@ -32,6 +34,7 @@
     }
 
     function displaySolarSystem(solarSystem){
+        let currentSolarSystemName = solarSystem.systemName;
         document.getElementById(ids.solarSystemName).innerText = solarSystem.systemName;
 
         const radius = solarSystem.radius + solarSystemConstants.OFFSET + solarSystemConstants.SOLAR_SYSTEM_BORDER_WIDTH;
@@ -105,5 +108,47 @@
                 element.innerHTML = planet.planetName;
             return element
         }
+    }
+    
+    function solarSystemRenaming(){
+        const solarSystemNameField = document.getElementById(ids.solarSystemName);
+
+        $(solarSystemNameField).on("keyup keypress", function(e){
+            if(e.which == 13){
+                e.preventDefault();
+            }
+        })
+
+        solarSystemNameField.onclick = function(){
+            solarSystemNameField.contentEditable = true;
+            solarSystemNameField.focus();
+        }
+
+        solarSystemNameField.addEventListener("focusin", function(){selectElementText(solarSystemNameField)});
+
+        solarSystemNameField.addEventListener("focusout", function(){
+            const newName = solarSystemNameField.innerHTML;
+
+            if(newName == currentSolarSystemName){
+                solarSystemNameField.contentEditable = false;
+                return;
+            }
+
+            if(isBlank(newName)){
+                solarSystemNameField.innerText = currentSolarSystemName;
+                solarSystemNameField.contentEditable = false;
+            }else{
+                const request = new Request(Mapping.getEndpoint("SKYXPLORE_SOLAR_SYSTEM_RENAME", {solarSystemId: openedSolarSystemId}), {value: newName});
+                    request.processValidResponse = function(){
+                        currentSolarSystemName = newName;
+                        solarSystemNameField.contentEditable = false;
+                    }
+                    request.processInvalidResponse = function(){
+                        solarSystemNameField.innerText = currentSolarSystemName;
+                        solarSystemNameField.contentEditable = false;
+                    }
+                dao.sendRequestAsync(request);
+            }
+        });
     }
 })();

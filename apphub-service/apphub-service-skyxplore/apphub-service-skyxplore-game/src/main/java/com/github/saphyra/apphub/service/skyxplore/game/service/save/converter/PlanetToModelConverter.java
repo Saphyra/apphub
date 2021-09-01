@@ -42,7 +42,7 @@ public class PlanetToModelConverter {
         return result;
     }
 
-    private PlanetModel convert(Planet planet, Game game) {
+    public PlanetModel convert(Planet planet, Game game) {
         PlanetModel model = new PlanetModel();
         model.setId(planet.getPlanetId());
         model.setGameId(game.getGameId());

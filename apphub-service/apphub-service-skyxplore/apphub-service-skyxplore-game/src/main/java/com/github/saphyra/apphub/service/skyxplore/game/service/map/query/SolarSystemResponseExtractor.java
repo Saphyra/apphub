@@ -7,20 +7,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 class SolarSystemResponseExtractor {
-    List<MapSolarSystemResponse> getSolarSystems(Universe universe) {
+    List<MapSolarSystemResponse> getSolarSystems(UUID userId, Universe universe) {
         return universe.getSystems()
             .values()
             .stream()
             .map(solarSystem -> MapSolarSystemResponse.builder()
                 .solarSystemId(solarSystem.getSolarSystemId())
                 .coordinate(solarSystem.getCoordinate().getCoordinate())
-                .solarSystemName(solarSystem.getDefaultName())
+                .solarSystemName(solarSystem.getCustomNames().getOptional(userId).orElse(solarSystem.getDefaultName()))
                 .planetNum(solarSystem.getPlanets().size())
                 .build()
             )

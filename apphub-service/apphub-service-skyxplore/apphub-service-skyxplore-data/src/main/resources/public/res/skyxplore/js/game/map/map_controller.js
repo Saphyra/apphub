@@ -9,8 +9,9 @@ window.mapConstants = {
     pageLoader.addLoader(function(){addRightClickMove(ids.mapSvgContainer, ids.mapContainer, false)}, "Map add rightClickMove");
 
     window.mapController = new function(){
-        this.displayMap = function(){
-
+        this.showMap = function(){
+            universeController.loadUniverse();
+            switchTab("main-tab", "map");
         }
     }
 })();

@@ -35,7 +35,7 @@ public class SolarSystemToModelConverter {
         return result;
     }
 
-    private SolarSystemModel convert(SolarSystem system, Game game) {
+    public SolarSystemModel convert(SolarSystem system, Game game) {
         SolarSystemModel model = new SolarSystemModel();
         model.setId(system.getSolarSystemId());
         model.setGameId(game.getGameId());

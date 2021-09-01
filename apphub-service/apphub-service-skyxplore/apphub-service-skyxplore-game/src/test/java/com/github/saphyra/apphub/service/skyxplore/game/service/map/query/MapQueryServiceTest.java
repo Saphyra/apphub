@@ -41,7 +41,7 @@ public class MapQueryServiceTest {
     public void getMap() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
-        given(universeToMapConverter.convert(universe)).willReturn(mapResponse);
+        given(universeToMapConverter.convert(USER_ID, universe)).willReturn(mapResponse);
 
         MapResponse result = underTest.getMap(USER_ID);
 

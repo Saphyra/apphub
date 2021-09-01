@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -17,8 +18,8 @@ class UniverseToMapConverter {
     private final SolarSystemResponseExtractor solarSystemResponseExtractor;
     private final SolarSystemConnectionResponseExtractor solarSystemConnectionResponseExtractor;
 
-    MapResponse convert(Universe universe) {
-        List<MapSolarSystemResponse> solarSystems = solarSystemResponseExtractor.getSolarSystems(universe);
+    MapResponse convert(UUID userId, Universe universe) {
+        List<MapSolarSystemResponse> solarSystems = solarSystemResponseExtractor.getSolarSystems(userId, universe);
         List<SolarSystemConnectionResponse> connections = solarSystemConnectionResponseExtractor.getConnections(universe);
 
         return MapResponse.builder()

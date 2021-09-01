@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -18,6 +19,8 @@ import static org.mockito.BDDMockito.given;
 @RunWith(MockitoJUnitRunner.class)
 public class UniverseToMapConverterTest {
     private static final int UNIVERSE_SIZE = 123;
+    private static final UUID USER_ID = UUID.randomUUID();
+
     @Mock
     private SolarSystemResponseExtractor solarSystemResponseExtractor;
 
@@ -38,11 +41,11 @@ public class UniverseToMapConverterTest {
 
     @Test
     public void convert() {
-        given(solarSystemResponseExtractor.getSolarSystems(universe)).willReturn(Arrays.asList(solarSystemResponse));
+        given(solarSystemResponseExtractor.getSolarSystems(USER_ID, universe)).willReturn(Arrays.asList(solarSystemResponse));
         given(solarSystemConnectionResponseExtractor.getConnections(universe)).willReturn(Arrays.asList(connectionResponse));
         given(universe.getSize()).willReturn(UNIVERSE_SIZE);
 
-        MapResponse result = underTest.convert(universe);
+        MapResponse result = underTest.convert(USER_ID, universe);
 
         assertThat(result.getUniverseSize()).isEqualTo(UNIVERSE_SIZE);
         assertThat(result.getConnections()).containsExactly(connectionResponse);

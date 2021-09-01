@@ -107,10 +107,6 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_contr
         this.webSocketConnection = wsConnection;
 
         this.exitGame = exitGame;
-
-        this.showMap = function(){
-            switchTab("main-tab", "map");
-        }
     }
 
     function itemDataLoader(itemId){
