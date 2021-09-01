@@ -228,7 +228,6 @@
     "delete-all-read-error-reports-confirmation-dialog-cancel-button": "Cancel",
     "all-read-deleted": "All read error reports are deleted.",
     "delete-checked-error-reports-confirmation-dialog-title": "Confirm deleting error reports",
-    "delete-checked-error-reports-confirmation-dialog-detail": "Are you sure you want to delete reports {ids}?",
-    ""
+    "delete-checked-error-reports-confirmation-dialog-detail": "Are you sure you want to delete reports {ids}?"
   }
 }
