@@ -1,4 +1,5 @@
 {
   "id": "oil",
-  "storageType": "liquid"
+  "storageType": "liquid",
+  "mass": 1
 }

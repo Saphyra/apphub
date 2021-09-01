@@ -1,18 +1,17 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.StorageCalculator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.StorageCalculator;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FreeStorageQueryServiceTest {
@@ -53,8 +52,8 @@ public class FreeStorageQueryServiceTest {
     @Test
     public void getFreeStorage() {
         given(storageCalculator.calculateCapacity(planet, StorageType.BULK)).willReturn(CAPACITY);
-        given(actualResourceAmountQueryService.getActualAmount(planet, StorageType.BULK)).willReturn(ACTUAL_AMOUNT);
-        given(reservedStorageQueryService.getReservedStorageAmount(planet, StorageType.BULK)).willReturn(RESERVED_STORAGE);
+        given(actualResourceAmountQueryService.getActualStorageAmount(planet, StorageType.BULK)).willReturn(ACTUAL_AMOUNT);
+        given(reservedStorageQueryService.getReservedStorageCapacity(planet, StorageType.BULK)).willReturn(RESERVED_STORAGE);
 
         int result = underTest.getFreeStorage(planet, StorageType.BULK);
 

@@ -1,4 +1,5 @@
 {
   "id": "energy",
-  "storageType": "energy"
+  "storageType": "energy",
+  "mass": 1
 }

@@ -1,4 +1,5 @@
 {
   "id": "leather",
-  "storageType": "bulk"
+  "storageType": "bulk",
+  "mass": 1
 }

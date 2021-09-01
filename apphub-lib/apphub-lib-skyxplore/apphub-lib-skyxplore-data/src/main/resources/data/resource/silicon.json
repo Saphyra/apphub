@@ -1,4 +1,5 @@
 {
   "id": "silicon",
-  "storageType": "bulk"
+  "storageType": "bulk",
+  "mass": 1
 }

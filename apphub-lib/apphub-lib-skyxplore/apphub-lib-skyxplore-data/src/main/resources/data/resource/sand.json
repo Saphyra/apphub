@@ -1,4 +1,5 @@
 {
   "id": "sand",
-  "storageType": "bulk"
+  "storageType": "bulk",
+  "mass": 1
 }

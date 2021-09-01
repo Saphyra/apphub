@@ -11,4 +11,5 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ResourceData extends GameDataItem {
     private StorageType storageType;
+    private Integer mass;
 }

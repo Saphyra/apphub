@@ -1,4 +1,5 @@
 {
   "id": "raw_food",
-  "storageType": "bulk"
+  "storageType": "bulk",
+  "mass": 1
 }

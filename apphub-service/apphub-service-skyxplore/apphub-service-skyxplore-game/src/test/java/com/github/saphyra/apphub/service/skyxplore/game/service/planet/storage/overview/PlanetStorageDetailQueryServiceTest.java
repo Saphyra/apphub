@@ -54,7 +54,7 @@ public class PlanetStorageDetailQueryServiceTest {
     @Test
     public void getStorageDetails(){
         given(storageCalculator.calculateCapacity(planet, StorageType.BULK)).willReturn(CAPACITY);
-        given(reservedStorageQueryService.getReservedStorageAmount(planet, StorageType.BULK)).willReturn(RESERVED_STORAGE_AMOUNT);
+        given(reservedStorageQueryService.getReservedAmount(planet, StorageType.BULK)).willReturn(RESERVED_STORAGE_AMOUNT);
         given(actualResourceAmountQueryService.getActualAmount(planet, StorageType.BULK)).willReturn(ACTUAL_AMOUNT);
         given(allocatedResourceAmountQueryService.getAllocatedResourceAmount(planet, StorageType.BULK)).willReturn(ALLOCATED_AMOUNT);
         given(resourceDetailsQueryService.getResourceDetails(planet, StorageType.BULK)).willReturn(Arrays.asList(resourceDetailsResponse));
