@@ -63,6 +63,10 @@
             document.getElementById(createNotificationId(room)).style.display = "inline";
         }
 
+        if(document.getElementById(ids.chatContainer).style.display != "block"){
+            document.getElementById(ids.chatButton).classList.add("new-message");
+        }
+
         function getSenderContainer(messagesContainer, senderId, senderName){
             const childNodes = messagesContainer.childNodes;
             if(childNodes.length && childNodes[childNodes.length - 1].getAttribute("sender-id") == senderId){
@@ -297,8 +301,10 @@
     }
 
     function setUpEventListeners(){
-        document.getElementById(ids.chatButton).onclick = function(){
+        const chatButton = document.getElementById(ids.chatButton);
+        chatButton.onclick = function(){
             $("#" + ids.chatContainer).fadeToggle();
+            chatButton.classList.remove("new-message");
         }
 
         document.getElementById(ids.chatMessageInput).onkeyup = function(e){

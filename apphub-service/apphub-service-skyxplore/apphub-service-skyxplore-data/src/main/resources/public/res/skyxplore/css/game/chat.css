@@ -5,6 +5,9 @@
     height: 2.25rem;
     float: right;
 }
+    .new-message{
+        border-color: red;
+    }
 
 #chat{
     display: none;
