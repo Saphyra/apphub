@@ -47,6 +47,11 @@ class AuthenticationController implements UserAuthenticationController {
     }
 
     @Override
+    public void extendSession(AccessTokenHeader accessToken) {
+        log.debug("Extending session for {}", accessToken.getUserId());
+    }
+
+    @Override
     public void deleteExpiredAccessTokens() {
         log.debug("Deleting expired accessTokens...");
         accessTokenCleanupService.deleteExpiredAccessTokens();

@@ -59,6 +59,7 @@ public class Endpoints {
     public static final String LOGIN = "/api/user/authentication/login";
     public static final String LOGOUT = "/api/user/authentication/logout";
     public static final String CHECK_SESSION = "/api/user/authentication/session";
+    public static final String EXTEND_SESSION = "/api/user/authentication/session";
 
     //ACCOUNT
     public static final String ACCOUNT_REGISTER = "/api/user";

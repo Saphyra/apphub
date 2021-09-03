@@ -22,6 +22,7 @@ window.Mapping = new function(){
         LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),
         LOGOUT: new Endpoint("/api/user/authentication/logout", HttpMethod.POST),
         CHECK_SESSION: new Endpoint("/api/user/authentication/session", HttpMethod.GET),
+        EXTEND_SESSION: new Endpoint("/api/user/authentication/session", HttpMethod.POST),
 
         //Account
         ACCOUNT_REGISTER: new Endpoint("/api/user", HttpMethod.POST),

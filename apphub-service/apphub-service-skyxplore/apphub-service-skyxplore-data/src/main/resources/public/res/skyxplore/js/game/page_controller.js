@@ -17,6 +17,8 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/storage_settings_controll
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_controller.js");
 
 (function PageController(){
+    window.SESSION_EXTENSION_ENABLED = true;
+
     window.ids = {
         mapSvgContainer: "map-svg-container",
         mapContainer: "map-container",
