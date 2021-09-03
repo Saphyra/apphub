@@ -123,7 +123,6 @@ public class Endpoints {
     public static final String UTILS_LOG_FORMATTER_SET_VISIBILITY = "/api/utils/log-formatter/visibility";
 
     //SKYXPLORE-DATA
-    public static final String SKYXPLORE_INTERNAL_IS_CHARACTER_EXISTS = "/internal/skyxplore/data/character/exists";
     public static final String SKYXPLORE_INTERNAL_GET_CHARACTER_BY_USER_ID = "/allowed-internal/skyxplore/data/character/{userId}";
     public static final String SKYXPLORE_INTERNAL_SAVE_GAME_DATA = "/allowed-internal/skyxplore/data/game/data";
     public static final String SKYXPLORE_INTERNAL_LOAD_GAME_ITEM = "/internal/skyxplore/data/game/data/item/{id}/{type}";
