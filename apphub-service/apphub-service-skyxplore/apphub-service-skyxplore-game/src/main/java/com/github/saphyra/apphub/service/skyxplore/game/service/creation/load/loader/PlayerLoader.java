@@ -34,7 +34,7 @@ class PlayerLoader {
             .playerId(model.getId())
             .userId(model.getUserId())
             .allianceId(model.getAllianceId())
-            .username(model.getUsername())
+            .playerName(model.getUsername())
             .ai(model.getAi() || isAi(model, members))
             .build();
     }

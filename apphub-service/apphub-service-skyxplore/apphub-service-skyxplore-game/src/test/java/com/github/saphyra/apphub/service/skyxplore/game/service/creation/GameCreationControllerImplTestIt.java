@@ -86,14 +86,16 @@ public class GameCreationControllerImplTestIt {
             .limit(gameCount)
             .parallel()
             .forEach(s -> {
+                final UUID hostId = UUID.randomUUID();
                 Map<UUID, UUID> members = new HashMap<UUID, UUID>() {{
-                    put(UUID.randomUUID(), null);
+                    put(hostId, null);
                 }};
 
                 SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
-                    .host(UUID.randomUUID())
+                    .host(hostId)
                     .members(members)
                     .alliances(new HashMap<>())
+                    .gameName(GAME_NAME)
                     .settings(SkyXploreGameCreationSettingsRequest.builder()
                         .universeSize(UniverseSize.LARGE)
                         .systemAmount(SystemAmount.COMMON)
@@ -123,7 +125,6 @@ public class GameCreationControllerImplTestIt {
     }
 
     @Test
-    @Ignore //fix: "No empty planet left"
     public void largeGame() throws InterruptedException {
         UUID host = UUID.randomUUID();
         Map<UUID, UUID> members = CollectionUtils.toMap(
@@ -170,7 +171,6 @@ public class GameCreationControllerImplTestIt {
     }
 
     @Test
-    @Ignore //fix: Cannot place enough stars
     public void smallGame() throws InterruptedException {
         UUID playerId = UUID.randomUUID();
         UUID allianceId = UUID.randomUUID();

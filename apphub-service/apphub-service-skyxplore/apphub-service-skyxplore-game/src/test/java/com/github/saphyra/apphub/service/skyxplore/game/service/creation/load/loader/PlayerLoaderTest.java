@@ -61,7 +61,7 @@ public class PlayerLoaderTest {
         Player player = result.get(USER_ID);
         assertThat(player.getPlayerId()).isEqualTo(PLAYER_ID);
         assertThat(player.getUserId()).isEqualTo(USER_ID);
-        assertThat(player.getUsername()).isEqualTo(USERNAME);
+        assertThat(player.getPlayerName()).isEqualTo(USERNAME);
         assertThat(player.getAllianceId()).isEqualTo(ALLIANCE_ID);
         assertThat(player.isAi()).isTrue();
         assertThat(player.isConnected()).isFalse();
@@ -77,7 +77,7 @@ public class PlayerLoaderTest {
         Player player = result.get(USER_ID);
         assertThat(player.getPlayerId()).isEqualTo(PLAYER_ID);
         assertThat(player.getUserId()).isEqualTo(USER_ID);
-        assertThat(player.getUsername()).isEqualTo(USERNAME);
+        assertThat(player.getPlayerName()).isEqualTo(USERNAME);
         assertThat(player.getAllianceId()).isEqualTo(ALLIANCE_ID);
         assertThat(player.isAi()).isFalse();
         assertThat(player.isConnected()).isFalse();
@@ -93,7 +93,7 @@ public class PlayerLoaderTest {
         Player player = result.get(USER_ID);
         assertThat(player.getPlayerId()).isEqualTo(PLAYER_ID);
         assertThat(player.getUserId()).isEqualTo(USER_ID);
-        assertThat(player.getUsername()).isEqualTo(USERNAME);
+        assertThat(player.getPlayerName()).isEqualTo(USERNAME);
         assertThat(player.getAllianceId()).isEqualTo(ALLIANCE_ID);
         assertThat(player.isAi()).isTrue();
         assertThat(player.isConnected()).isFalse();

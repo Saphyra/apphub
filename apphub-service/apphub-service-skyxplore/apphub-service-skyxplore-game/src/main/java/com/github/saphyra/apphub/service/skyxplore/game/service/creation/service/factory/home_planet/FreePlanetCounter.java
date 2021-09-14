@@ -11,12 +11,11 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 public class FreePlanetCounter {
-    long getNumberOfFreePlanets(SolarSystem solarSystem) {
+    public long getNumberOfFreePlanets(SolarSystem solarSystem) {
         return solarSystem.getPlanets()
             .values()
             .stream()
             .filter(planet -> isNull(planet.getOwner()))
             .count();
-
     }
 }

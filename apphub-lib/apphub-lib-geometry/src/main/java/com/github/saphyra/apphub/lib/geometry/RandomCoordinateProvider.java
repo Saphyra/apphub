@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 public class RandomCoordinateProvider {
     private final Random random;
 
-    public Coordinate getCoordinateInCircle(double systemRadius) {
+    public Coordinate getCoordinateInCircle(double radius) {
         double randomDistance = random.randDouble() * 2 * Math.PI;
-        double r = systemRadius * Math.sqrt(random.randDouble());
+        double r = radius * Math.sqrt(random.randDouble());
 
         return new Coordinate(
             Math.floor(Math.cos(randomDistance) * r),
@@ -17,7 +17,7 @@ public class RandomCoordinateProvider {
         );
     }
 
-    public Coordinate getCoordinateInSquare(int universeSize) {
-        return new Coordinate(random.randInt(0, universeSize), random.randInt(0, universeSize));
+    public Coordinate getCoordinateInSquare(int squareSize) {
+        return new Coordinate(random.randInt(0, squareSize), random.randInt(0, squareSize));
     }
 }

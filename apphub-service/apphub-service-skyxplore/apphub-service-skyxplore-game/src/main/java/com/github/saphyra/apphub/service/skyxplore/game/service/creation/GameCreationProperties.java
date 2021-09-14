@@ -22,11 +22,9 @@ import java.util.Map;
 @Configuration
 @Slf4j
 public class GameCreationProperties {
-    private UniverseProperties universe;
     private SolarSystemProperties solarSystem;
     private PlanetProperties planet;
     private SurfaceProperties surface;
-    private SystemConnectionProperties systemConnection;
     private PlayerCreationProperties player;
     private CitizenProperties citizen;
     private SkillProperties skill;
@@ -37,25 +35,17 @@ public class GameCreationProperties {
     }
 
     @Data
-    public static class UniverseProperties {
-        private int baseSize;
-        private Double memberMultiplier;
-        private Map<UniverseSize, Double> settingMultiplier;
-        private double minMultiplier;
-        private double maxMultiplier;
-    }
-
-    @Data
     public static class SolarSystemProperties {
-        private Map<SystemAmount, Double> sizeMultiplier;
-        private int minSolarSystemDistance;
+        private Map<UniverseSize, Double> solarSystemDistanceMultiplier;
+        private Range<Integer> solarSystemDistance;
         private int minPlanetDistance;
+        private Map<SystemAmount, Range<Double>> amountMultiplier;
         private Map<SystemSize, Range<Integer>> radius;
     }
 
     @Data
     public static class PlanetProperties {
-        private Map<SystemSize, Range<Integer>> systemSize;
+        private Map<SystemSize, Range<Integer>> planetsPerSystem;
         private Map<PlanetSize, Range<Integer>> planetSize;
     }
 
@@ -72,14 +62,8 @@ public class GameCreationProperties {
     }
 
     @Data
-    public static class SystemConnectionProperties {
-        private double maxDistanceRate;
-        private int maxNumberOfConnections;
-    }
-
-    @Data
     public static class PlayerCreationProperties {
-        private Map<AiPresence, Integer> spawnChance;
+        private Map<AiPresence, Range<Double>> aiSpawnChance;
     }
 
     @Data

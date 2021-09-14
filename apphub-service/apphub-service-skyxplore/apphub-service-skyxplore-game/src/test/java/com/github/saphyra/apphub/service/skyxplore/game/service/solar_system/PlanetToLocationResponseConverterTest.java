@@ -56,7 +56,7 @@ public class PlanetToLocationResponseConverterTest {
         given(coordinateModel.getCoordinate()).willReturn(coordinate);
         given(planet.getOwner()).willReturn(OWNER);
         given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(OWNER, player));
-        given(player.getUsername()).willReturn(OWNER_NAME);
+        given(player.getPlayerName()).willReturn(OWNER_NAME);
 
         List<PlanetLocationResponse> result = underTest.mapPlanets(USER_ID, Arrays.asList(planet), game);
 

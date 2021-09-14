@@ -1,42 +1,57 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.system;
 
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemAmount;
+import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
+import com.github.saphyra.apphub.lib.geometry.RandomCoordinateProvider;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 class SolarSystemCoordinateProvider {
+    private final GameCreationProperties gameCreationProperties;
     private final Random random;
-    private final SolarSystemCoordinateListProvider solarSystemCoordinateListProvider;
-    private final MaxSystemCountCalculator maxSystemCountCalculator;
+    private final RandomCoordinateProvider randomCoordinateProvider;
+    private final DistanceCalculator distanceCalculator;
 
-    public List<Coordinate> getCoordinates(int memberNum, int universeSize, SystemAmount systemAmount) {
-        log.info("Placing systems...");
-        int maxAllocationTryCount = maxSystemCountCalculator.getMaxAllocationTryCount(universeSize, systemAmount);
+    public Coordinate getCoordinate(List<SolarSystem> solarSystems) {
+        Range<Integer> distanceRange = gameCreationProperties.getSolarSystem()
+            .getSolarSystemDistance();
 
-        return getCoordinates(memberNum, universeSize, maxAllocationTryCount);
-    }
+        for (int i = 0; i < 10000; i++) {
+            Coordinate anchor = solarSystems.isEmpty() ? GameConstants.ORIGO : solarSystems.get(random.randInt(0, solarSystems.size() - 1)).getCoordinate().getCoordinate();
 
-    private List<Coordinate> getCoordinates(int memberNum, int universeSize, int maxAllocationTryCount) {
-        for (int overallTryCount = 0; overallTryCount < 10; overallTryCount++) {
-            log.info("Placing systems. TryCount: {}", overallTryCount);
-            int allocationTryCount = random.randInt(Math.max(memberNum + 1, maxAllocationTryCount / 2), maxAllocationTryCount);
-            log.info("AllocationTryCount: {}. MemberNum: {}, maxAllocationTryCount: {}. UniverseSize: {}", allocationTryCount, memberNum, maxAllocationTryCount, universeSize);
-            List<Coordinate> coordinates = solarSystemCoordinateListProvider.getCoordinates(universeSize, allocationTryCount);
+            Coordinate generated = generateCoordinate(distanceRange)
+                .add(anchor);
 
-            if (coordinates.size() >= memberNum + 1) {
-                log.info("Number of generated systems: {}", coordinates.size());
-                return coordinates;
+            boolean placeable = solarSystems.stream()
+                .mapToDouble(solarSystem -> distanceCalculator.getDistance(generated, solarSystem.getCoordinate().getCoordinate()))
+                .allMatch(value -> value > distanceRange.getMin());
+            if (placeable) {
+                return generated;
             }
         }
-        throw new RuntimeException("Could not generate the expected amount of coordinates.");
+
+        throw new RuntimeException("Failed generating coordinate. It was too close to an other SolarSystem");
+    }
+
+    private Coordinate generateCoordinate(Range<Integer> distanceRange) {
+        for (int i = 0; i < 1000; i++) {
+            Coordinate coordinate = randomCoordinateProvider.getCoordinateInCircle(distanceRange.getMax());
+            if (distanceCalculator.getDistance(coordinate, GameConstants.ORIGO) > distanceRange.getMin()) {
+                return coordinate;
+            }
+        }
+
+        throw new RuntimeException("Failed generating coordinate. It was too close to the anchor SolarSystem");
     }
 }

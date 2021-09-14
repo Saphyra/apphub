@@ -62,4 +62,9 @@ public class CollectionUtils {
         in.forEach((k, vs) -> result.put(k, new ArrayList<>(vs)));
         return result;
     }
+
+    public static <T> List<T> asList(T... items) {
+        List<T> result = new ArrayList<>(Arrays.asList(items));
+        return result;
+    }
 }

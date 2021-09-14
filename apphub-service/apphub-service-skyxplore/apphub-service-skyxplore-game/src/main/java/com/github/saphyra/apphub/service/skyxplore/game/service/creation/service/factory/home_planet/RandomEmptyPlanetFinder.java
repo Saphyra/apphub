@@ -3,11 +3,11 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,10 +19,8 @@ import static java.util.Objects.isNull;
 class RandomEmptyPlanetFinder {
     private final Random random;
 
-    Planet randomEmptyPlanet(Universe universe) {
-        List<Planet> emptyPlanets = universe.getSystems()
-            .values()
-            .stream()
+    Planet randomEmptyPlanet(Collection<SolarSystem> solarSystems) {
+        List<Planet> emptyPlanets = solarSystems.stream()
             .flatMap(solarSystem -> solarSystem.getPlanets().values().stream())
             .filter(planet -> isNull(planet.getOwner()))
             .collect(Collectors.toList());

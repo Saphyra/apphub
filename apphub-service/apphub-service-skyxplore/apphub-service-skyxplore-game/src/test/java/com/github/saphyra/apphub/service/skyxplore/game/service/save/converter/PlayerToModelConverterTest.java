@@ -39,7 +39,7 @@ public class PlayerToModelConverterTest {
         Player player = Player.builder()
             .playerId(PLAYER_ID)
             .userId(USER_ID)
-            .username(USERNAME)
+            .playerName(USERNAME)
             .ai(true)
             .build();
         given(game.getGameId()).willReturn(GAME_ID);

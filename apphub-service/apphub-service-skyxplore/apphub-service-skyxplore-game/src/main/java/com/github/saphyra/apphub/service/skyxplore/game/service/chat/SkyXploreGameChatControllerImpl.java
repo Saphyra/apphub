@@ -33,7 +33,7 @@ public class SkyXploreGameChatControllerImpl implements SkyXploreGameChatControl
             .filter(Player::isConnected)
             .map(player -> SkyXploreCharacterModel.builder()
                 .id(player.getUserId())
-                .name(player.getUsername())
+                .name(player.getPlayerName())
                 .build()
             )
             .collect(Collectors.toList());

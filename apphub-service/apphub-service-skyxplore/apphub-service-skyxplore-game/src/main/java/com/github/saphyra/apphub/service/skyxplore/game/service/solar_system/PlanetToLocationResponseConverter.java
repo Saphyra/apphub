@@ -29,7 +29,7 @@ class PlanetToLocationResponseConverter {
             .planetName(planet.getCustomNames().getOptional(userId).orElse(planet.getDefaultName()))
             .coordinate(planet.getCoordinate().getCoordinate())
             .owner(planet.getOwner())
-            .ownerName(Optional.ofNullable(planet.getOwner()).map(owner -> game.getPlayers().get(owner).getUsername()).orElse(null))
+            .ownerName(Optional.ofNullable(planet.getOwner()).map(owner -> game.getPlayers().get(owner).getPlayerName()).orElse(null))
             .build();
     }
 }

@@ -1,25 +1,32 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.universe;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.UniverseSize;
-import com.github.saphyra.apphub.lib.common_util.Random;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
+import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 class UniverseSizeCalculator {
-    private final GameCreationProperties properties;
-    private final Random random;
+    int calculateUniverseSize(List<SolarSystem> solarSystems) {
+        double maxX = solarSystems.stream()
+            .map(SolarSystem::getCoordinate)
+            .map(CoordinateModel::getCoordinate)
+            .mapToDouble(Coordinate::getX)
+            .max()
+            .orElseThrow(() -> new RuntimeException("No SolarSystems found"));
+        double maxY = solarSystems.stream()
+            .map(SolarSystem::getCoordinate)
+            .map(CoordinateModel::getCoordinate)
+            .mapToDouble(Coordinate::getY)
+            .max()
+            .orElseThrow(() -> new RuntimeException("No SolarSystems found"));
 
-    int calculate(int memberNum, UniverseSize universeSize) {
-        GameCreationProperties.UniverseProperties universeProperties = properties.getUniverse();
-        int baseSize = universeProperties.getBaseSize();
-        double memberMultiplication = universeProperties.getMemberMultiplier();
-        double settingMultiplication = universeProperties.getSettingMultiplier().get(universeSize);
-
-        return (int) Math.ceil(baseSize * Math.pow(memberMultiplication, memberNum) * settingMultiplication * random.randDouble(universeProperties.getMinMultiplier(), universeProperties.getMaxMultiplier()));
+        return (int) Math.max(maxX, maxY);
     }
 }

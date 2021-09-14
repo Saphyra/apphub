@@ -10,7 +10,6 @@ import static java.util.Objects.isNull;
 
 public class SkyXplorePlanetActions {
     public static PlanetLocationResponse getPopulatedPlanet(Language language, UUID accessTokenId) {
-
         return SkyXploreMapActions.getMap(language, accessTokenId)
             .getSolarSystems()
             .stream()

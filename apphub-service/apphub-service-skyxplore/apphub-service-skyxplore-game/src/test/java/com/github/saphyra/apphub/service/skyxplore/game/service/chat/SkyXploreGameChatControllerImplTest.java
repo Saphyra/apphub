@@ -66,7 +66,7 @@ public class SkyXploreGameChatControllerImplTest {
         given(player3.isConnected()).willReturn(true);
 
         given(player3.getUserId()).willReturn(USER_ID_2);
-        given(player3.getUsername()).willReturn(CHARACTER_NAME);
+        given(player3.getPlayerName()).willReturn(CHARACTER_NAME);
 
         given(gameDao.findByUserIdValidated(USER_ID_1)).willReturn(game);
         given(game.getPlayers()).willReturn(CollectionUtils.toMap(
