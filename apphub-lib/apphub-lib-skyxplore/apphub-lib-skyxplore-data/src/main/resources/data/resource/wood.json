@@ -1,4 +1,5 @@
 {
   "id": "wood",
-  "storageType": "bulk"
+  "storageType": "bulk",
+  "mass": 1
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants.STAR_COORDINATE;
+import static com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants.ORIGO;
 
 @Component
 @RequiredArgsConstructor
@@ -25,14 +25,13 @@ class PlanetPlaceService {
         int minDistance = properties.getSolarSystem()
             .getMinPlanetDistance();
 
-        for (int placementTryCount = 0; placementTryCount < 100; placementTryCount++) {
+        for (int placementTryCount = 0; placementTryCount < 1000; placementTryCount++) {
             log.debug("Trying to place a planet... TryCount: {}", placementTryCount);
             Coordinate coordinate = randomCoordinateProvider.getCoordinateInCircle(systemRadius);
 
-            double distanceFromStar = distanceCalculator.getDistance(STAR_COORDINATE, coordinate);
+            double distanceFromStar = distanceCalculator.getDistance(ORIGO, coordinate);
             log.debug("Distance from star: {}", distanceFromStar);
             if (distanceFromStar < minDistance) {
-                log.info("Coordinate {} is too close to the star.", distanceFromStar);
                 continue;
             }
 

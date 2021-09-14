@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
 import com.github.saphyra.apphub.lib.geometry.RandomCoordinateProvider;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +16,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants.STAR_COORDINATE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
@@ -41,10 +41,10 @@ public class PlanetPlaceServiceTest {
     private GameCreationProperties.SolarSystemProperties solarSystemProperties;
 
     @Mock
-    private Coordinate coordinate1;
+    private Coordinate planetCoordinate;
 
     @Mock
-    private Coordinate coordinate2;
+    private Coordinate existingCoordinate;
 
     @Before
     public void setUp() {
@@ -53,9 +53,9 @@ public class PlanetPlaceServiceTest {
     }
 
     @Test
-    public void placePlanet_tooCloseToStar() {
-        given(randomCoordinateProvider.getCoordinateInCircle(SYSTEM_RADIUS)).willReturn(coordinate1);
-        given(distanceCalculator.getDistance(STAR_COORDINATE, coordinate1)).willReturn(MIN_DISTANCE - 1d);
+    public void tooCloseToStar() {
+        given(randomCoordinateProvider.getCoordinateInCircle(SYSTEM_RADIUS)).willReturn(planetCoordinate);
+        given(distanceCalculator.getDistance(GameConstants.ORIGO, planetCoordinate)).willReturn(MIN_DISTANCE - 1d);
 
         Optional<Coordinate> result = underTest.placePlanet(SYSTEM_RADIUS, Collections.emptyList());
 
@@ -63,24 +63,24 @@ public class PlanetPlaceServiceTest {
     }
 
     @Test
-    public void placePlanet_nearbyPlanet() {
-        given(randomCoordinateProvider.getCoordinateInCircle(SYSTEM_RADIUS)).willReturn(coordinate1);
-        given(distanceCalculator.getDistance(STAR_COORDINATE, coordinate1)).willReturn(MIN_DISTANCE + 1d);
-        doReturn(MIN_DISTANCE - 1d).when(distanceCalculator).getDistance(coordinate2, coordinate1);
+    public void placePlanet() {
+        given(randomCoordinateProvider.getCoordinateInCircle(SYSTEM_RADIUS)).willReturn(planetCoordinate);
+        given(distanceCalculator.getDistance(GameConstants.ORIGO, planetCoordinate)).willReturn(MIN_DISTANCE + 1d);
+        doReturn(MIN_DISTANCE + 1d).when(distanceCalculator).getDistance(existingCoordinate, planetCoordinate);
 
-        Optional<Coordinate> result = underTest.placePlanet(SYSTEM_RADIUS, Arrays.asList(coordinate2));
+        Optional<Coordinate> result = underTest.placePlanet(SYSTEM_RADIUS, Arrays.asList(existingCoordinate));
 
-        assertThat(result).isEmpty();
+        assertThat(result).contains(planetCoordinate);
     }
 
     @Test
-    public void placePlanet_placed() {
-        given(randomCoordinateProvider.getCoordinateInCircle(SYSTEM_RADIUS)).willReturn(coordinate1);
-        given(distanceCalculator.getDistance(STAR_COORDINATE, coordinate1)).willReturn(MIN_DISTANCE + 1d);
-        doReturn(MIN_DISTANCE + 1d).when(distanceCalculator).getDistance(coordinate2, coordinate1);
+    public void tooClosePlanet() {
+        given(randomCoordinateProvider.getCoordinateInCircle(SYSTEM_RADIUS)).willReturn(planetCoordinate);
+        given(distanceCalculator.getDistance(GameConstants.ORIGO, planetCoordinate)).willReturn(MIN_DISTANCE + 1d);
+        doReturn(MIN_DISTANCE - 1d).when(distanceCalculator).getDistance(existingCoordinate, planetCoordinate);
 
-        Optional<Coordinate> result = underTest.placePlanet(SYSTEM_RADIUS, Arrays.asList(coordinate2));
+        Optional<Coordinate> result = underTest.placePlanet(SYSTEM_RADIUS, Arrays.asList(existingCoordinate));
 
-        assertThat(result).contains(coordinate1);
+        assertThat(result).isEmpty();
     }
 }

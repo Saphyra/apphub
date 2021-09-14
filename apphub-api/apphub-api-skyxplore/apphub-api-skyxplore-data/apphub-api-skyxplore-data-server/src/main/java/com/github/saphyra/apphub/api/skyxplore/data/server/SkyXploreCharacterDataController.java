@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.UUID;
 
 public interface SkyXploreCharacterDataController {
-    @GetMapping(Endpoints.SKYXPLORE_INTERNAL_IS_CHARACTER_EXISTS)
-    boolean doesCharacterExistForUser(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
-
     @GetMapping(Endpoints.SKYXPLORE_GET_CHARACTER)
     @Deprecated
     ResponseEntity<SkyXploreCharacterModel> getCharacter(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

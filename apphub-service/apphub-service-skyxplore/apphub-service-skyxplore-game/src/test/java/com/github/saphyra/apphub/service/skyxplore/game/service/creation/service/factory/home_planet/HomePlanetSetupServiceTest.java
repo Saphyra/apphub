@@ -1,11 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.home_planet;
 
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.building.BuildingPlacementService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.citizen.PlanetPopulationService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.building.BuildingPlacementService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.citizen.PlanetPopulationService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
@@ -41,17 +41,14 @@ public class HomePlanetSetupServiceTest {
     private Alliance alliance;
 
     @Mock
-    private Universe universe;
-
-    @Mock
     private Planet planet;
 
     @Test
     public void setUpHomePlanet() {
         given(player.getUserId()).willReturn(USER_ID);
-        given(homePlanetSelector.selectPlanet(USER_ID, Arrays.asList(alliance), universe)).willReturn(planet);
+        given(homePlanetSelector.selectPlanet(USER_ID, Arrays.asList(alliance), Collections.emptyMap())).willReturn(planet);
 
-        underTest.setUpHomePlanet(player, Arrays.asList(alliance), universe);
+        underTest.setUpHomePlanet(player, Arrays.asList(alliance), Collections.emptyMap());
 
         verify(planet).setOwner(USER_ID);
         verify(buildingPlacementService).placeDefaultBuildings(planet);

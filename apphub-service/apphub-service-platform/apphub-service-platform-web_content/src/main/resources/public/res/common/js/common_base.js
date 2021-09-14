@@ -17,6 +17,7 @@ const HEADER_BROWSER_LANGUAGE = "BrowserLanguage";
     scriptLoader.loadScript("/res/common/js/dao/mapping.js");
     scriptLoader.loadScript("/res/common/js/dao/error_handler.js");
     scriptLoader.loadScript("/res/common/js/event_processor.js");
+    initPageLoader();
     scriptLoader.loadScript("/res/common/js/notification_service.js");
     
     scriptLoader.loadScript("/res/common/js/localization/localization_loader.js");
@@ -61,7 +62,7 @@ const HEADER_BROWSER_LANGUAGE = "BrowserLanguage";
     }
 })();
 
-(function PageLoader(){
+function initPageLoader(){
     const loaders = [];
 
     window.pageLoader = new function(){
@@ -91,4 +92,4 @@ const HEADER_BROWSER_LANGUAGE = "BrowserLanguage";
         true,
         "Page loaders"
     ));
-})();
+}

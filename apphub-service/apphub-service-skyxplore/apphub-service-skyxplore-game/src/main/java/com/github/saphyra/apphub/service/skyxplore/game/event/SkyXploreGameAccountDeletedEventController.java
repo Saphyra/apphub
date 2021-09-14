@@ -51,7 +51,7 @@ class SkyXploreGameAccountDeletedEventController {
             Player player = game.getPlayers().get(userId);
             player.setAi(true);
             player.setConnected(true);
-            player.setUsername(player.getUsername() + " (AI)");
+            player.setPlayerName(player.getPlayerName() + " (AI)");
         }
     }
 }

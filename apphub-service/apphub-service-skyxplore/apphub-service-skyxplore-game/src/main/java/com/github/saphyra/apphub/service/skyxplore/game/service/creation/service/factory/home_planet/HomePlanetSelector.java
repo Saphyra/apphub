@@ -1,15 +1,17 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.home_planet;
 
+import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -21,8 +23,8 @@ class HomePlanetSelector {
     private final AllianceMemberSystemFinder allianceMemberSystemFinder;
     private final RandomEmptyPlanetFinder randomEmptyPlanetFinder;
 
-    public Planet selectPlanet(UUID userId, Collection<Alliance> alliances, Universe universe) {
-        Optional<Alliance> allianceOptional = Optional.empty(); //findAlliance(userId, alliances); TODO restore when planet finder bug is fixed
+    public Planet selectPlanet(UUID userId, Collection<Alliance> alliances, Map<Coordinate, SolarSystem> solarSystems) {
+        Optional<Alliance> allianceOptional = findAlliance(userId, alliances);
         if (allianceOptional.isPresent()) {
             List<UUID> members = allianceOptional.get()
                 .getMembers()
@@ -31,9 +33,9 @@ class HomePlanetSelector {
                 .map(Player::getUserId)
                 .collect(Collectors.toList());
 
-            return allianceMemberSystemFinder.findAllianceMemberSystem(members, universe);
+            return allianceMemberSystemFinder.findAllianceMemberSystem(members, solarSystems);
         } else {
-            return randomEmptyPlanetFinder.randomEmptyPlanet(universe);
+            return randomEmptyPlanetFinder.randomEmptyPlanet(solarSystems.values());
         }
     }
 

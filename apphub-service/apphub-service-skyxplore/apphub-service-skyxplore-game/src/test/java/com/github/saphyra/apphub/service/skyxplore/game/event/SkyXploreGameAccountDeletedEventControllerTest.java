@@ -77,12 +77,12 @@ public class SkyXploreGameAccountDeletedEventControllerTest {
         given(game.getHost()).willReturn(UUID.randomUUID());
         given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
 
-        given(player.getUsername()).willReturn(USERNAME);
+        given(player.getPlayerName()).willReturn(USERNAME);
 
         underTest.deleteAccountEvent(SendEventRequest.<DeleteAccountEvent>builder().payload(new DeleteAccountEvent(USER_ID)).build());
 
         verify(player).setAi(true);
         verify(player).setConnected(true);
-        verify(player).setUsername(USERNAME + " (AI)");
+        verify(player).setPlayerName(USERNAME + " (AI)");
     }
 }

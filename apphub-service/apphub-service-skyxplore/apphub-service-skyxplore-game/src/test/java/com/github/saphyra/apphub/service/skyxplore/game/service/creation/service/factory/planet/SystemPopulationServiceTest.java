@@ -1,17 +1,16 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.planet;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game_setting.PlanetSize;
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemSize;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
 import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -38,6 +37,7 @@ public class SystemPopulationServiceTest {
     private static final Integer MAX_PLANET_SIZE = 64698;
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final int EXPECTED_PLANET_AMOUNT = 1;
 
     @Mock
     private Random random;
@@ -72,18 +72,15 @@ public class SystemPopulationServiceTest {
 
     @Test
     public void create() {
-        given(settings.getSystemSize()).willReturn(SystemSize.LARGE);
         given(settings.getPlanetSize()).willReturn(PlanetSize.LARGE);
         given(properties.getPlanet()).willReturn(planetProperties);
-        given(planetProperties.getSystemSize()).willReturn(CollectionUtils.singleValueMap(SystemSize.LARGE, new Range<>(MIN_PLANET_AMOUNT, MAX_PLANET_AMOUNT)));
         Range<Integer> planetSizeRange = new Range<>(MIN_PLANET_SIZE, MAX_PLANET_SIZE);
         given(planetProperties.getPlanetSize()).willReturn(CollectionUtils.singleValueMap(PlanetSize.LARGE, planetSizeRange));
-        given(random.randInt(MIN_PLANET_AMOUNT, MAX_PLANET_AMOUNT)).willReturn(1);
         given(coordinateProvider.getCoordinates(1, SYSTEM_RADIUS)).willReturn(Arrays.asList(coordinate));
         given(planetFactory.create(GAME_ID, 0, coordinate, SOLAR_SYSTEM_ID, SYSTEM_NAME, planetSizeRange)).willReturn(planet);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
 
-        Map<UUID, Planet> result = underTest.populateSystemWithPlanets(GAME_ID, SOLAR_SYSTEM_ID, SYSTEM_NAME, SYSTEM_RADIUS, settings);
+        Map<UUID, Planet> result = underTest.populateSystemWithPlanets(GAME_ID, SOLAR_SYSTEM_ID, SYSTEM_NAME, SYSTEM_RADIUS, EXPECTED_PLANET_AMOUNT, settings);
 
         assertThat(result).containsEntry(PLANET_ID, planet);
     }

@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -44,6 +45,12 @@ public class ResourceValidatorTest {
     @Mock
     private ProductionBuilding productionBuilding;
 
+    @Before
+    public void setUp() {
+        given(resourceData.getMass()).willReturn(32);
+        given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
+    }
+
     @After
     public void validate() {
         verify(gameDataItemValidator).validate(resourceData);
@@ -54,6 +61,15 @@ public class ResourceValidatorTest {
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
         given(resourceData.getStorageType()).willReturn(null);
+
+        underTest.validate(map);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void nullMass() {
+        Map<String, ResourceData> map = new HashMap<>();
+        map.put(KEY, resourceData);
+        given(resourceData.getMass()).willReturn(null);
 
         underTest.validate(map);
     }

@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetPopula
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.building_overview.PlanetBuildingOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.PlanetPopulationOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
@@ -28,6 +29,7 @@ public class PlanetOverviewControllerImpl implements SkyXploreGamePlanetOverview
     private final SurfaceResponseQueryService surfaceResponseQueryService;
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
     private final PlanetOverviewQueryService planetOverviewQueryService;
+    private final RenamePlanetService renamePlanetService;
 
     @Override
     public PlanetOverviewResponse getPlanetOverview(UUID planetId, AccessTokenHeader accessTokenHeader) {
@@ -57,5 +59,11 @@ public class PlanetOverviewControllerImpl implements SkyXploreGamePlanetOverview
     public Map<String, PlanetBuildingOverviewResponse> getBuildingOverview(UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the building overview of planet {}", accessTokenHeader.getUserId(), planetId);
         return planetBuildingOverviewQueryService.getBuildingOverview(accessTokenHeader.getUserId(), planetId);
+    }
+
+    @Override
+    public void renamePlanet(OneParamRequest<String> planetName, UUID planetId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to rename planet {}", accessTokenHeader.getUserId(), planetId);
+        renamePlanetService.rename(accessTokenHeader.getUserId(), planetId, planetName.getValue());
     }
 }

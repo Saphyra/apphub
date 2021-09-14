@@ -23,12 +23,6 @@ public class CharacterDataControllerImpl implements SkyXploreCharacterDataContro
     private final SkyXploreCharacterModelConverter characterModelConverter;
 
     @Override
-    public boolean doesCharacterExistForUser(AccessTokenHeader accessTokenHeader) {
-        log.info("Checking if SkyXplore character is present for user {}", accessTokenHeader.getUserId());
-        return characterDao.exists(accessTokenHeader.getUserId());
-    }
-
-    @Override
     public ResponseEntity<SkyXploreCharacterModel> getCharacter(AccessTokenHeader accessTokenHeader) {
         return internalGetCharacterByUserId(accessTokenHeader.getUserId());
     }

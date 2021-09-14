@@ -25,7 +25,7 @@ class PlanetStorageDetailQueryService {
     StorageDetailsResponse getStorageDetails(Planet planet, StorageType storageType) {
         return StorageDetailsResponse.builder()
             .capacity(storageCalculator.calculateCapacity(planet, storageType))
-            .reservedStorageAmount(reservedStorageQueryService.getReservedStorageAmount(planet, storageType))
+            .reservedStorageAmount(reservedStorageQueryService.getReservedAmount(planet, storageType))
             .actualResourceAmount(actualResourceAmountQueryService.getActualAmount(planet, storageType))
             .allocatedResourceAmount(allocatedResourceAmountQueryService.getAllocatedResourceAmount(planet, storageType))
             .resourceDetails(resourceDetailsQueryService.getResourceDetails(planet, storageType))

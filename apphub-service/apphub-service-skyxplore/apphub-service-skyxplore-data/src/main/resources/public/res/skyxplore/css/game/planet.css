@@ -6,6 +6,18 @@
     --planet-bar-title-height: 1.85rem;
 }
 
+#planet-name{
+    font-size: 1.75rem;
+    margin-top: 0.125rem;
+    display: inline-block;
+    cursor: pointer;
+}
+
+    #planet-name:not([contenteditable='true']){
+        border: 3px solid transparent;
+        padding: 0.2rem;
+    }
+
 .planet-bar-title{
     text-align: center;
     font-size: 1.5rem;

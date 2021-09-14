@@ -18,6 +18,6 @@ public class MapQueryService {
 
     public MapResponse getMap(UUID userId) {
         Game game = gameDao.findByUserIdValidated(userId);
-        return universeToMapConverter.convert(game.getUniverse());
+        return universeToMapConverter.convert(userId, game.getUniverse());
     }
 }

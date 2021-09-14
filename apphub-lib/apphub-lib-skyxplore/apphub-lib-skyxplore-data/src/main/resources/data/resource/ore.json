@@ -1,4 +1,5 @@
 {
   "id": "ore",
-  "storageType": "liquid"
+  "storageType": "liquid",
+  "mass": 1
 }

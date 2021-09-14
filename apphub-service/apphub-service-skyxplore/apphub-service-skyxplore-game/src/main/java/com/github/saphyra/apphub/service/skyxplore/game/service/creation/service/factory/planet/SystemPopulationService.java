@@ -30,15 +30,7 @@ public class SystemPopulationService {
     private final ExecutorServiceBean executorServiceBean;
     private final PlanetFactory planetFactory;
 
-    public Map<UUID, Planet> populateSystemWithPlanets(UUID gameId, UUID solarSystemId, String systemName, int systemRadius, SkyXploreGameCreationSettingsRequest settings) {
-        log.debug("Generating planets for system {} with radius {}", systemName, systemRadius);
-        Range<Integer> range = properties.getPlanet()
-            .getSystemSize()
-            .get(settings.getSystemSize());
-
-        int expectedPlanetAmount = random.randInt(range.getMin(), range.getMax());
-        log.debug("Expected planet amount: {}", expectedPlanetAmount);
-
+    public Map<UUID, Planet> populateSystemWithPlanets(UUID gameId, UUID solarSystemId, String systemName, int systemRadius, int expectedPlanetAmount, SkyXploreGameCreationSettingsRequest settings) {
         List<Coordinate> coordinates = coordinateProvider.getCoordinates(expectedPlanetAmount, systemRadius);
         log.debug("Planet coordinates generated.");
 

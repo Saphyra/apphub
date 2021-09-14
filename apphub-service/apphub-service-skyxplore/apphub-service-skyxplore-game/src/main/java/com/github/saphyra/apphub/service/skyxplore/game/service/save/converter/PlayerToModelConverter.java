@@ -21,7 +21,7 @@ class PlayerToModelConverter {
         model.setGameId(game.getGameId());
         model.setType(GameItemType.PLAYER);
         model.setUserId(player.getUserId());
-        model.setUsername(player.getUsername());
+        model.setUsername(player.getPlayerName());
         model.setAi(player.isAi());
         UUID allianceId = game.getAlliances()
             .values()

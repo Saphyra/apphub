@@ -47,15 +47,6 @@ public class CharacterDataControllerImplTest {
     private SkyXploreCharacterModel model;
 
     @Test
-    public void isCharacterExistsForUser() {
-        given(characterDao.exists(USER_ID)).willReturn(true);
-
-        boolean result = underTest.doesCharacterExistForUser(ACCESS_TOKEN_HEADER);
-
-        assertThat(result).isTrue();
-    }
-
-    @Test
     public void createOrUpdateCharacter() {
         underTest.createOrUpdateCharacter(model, ACCESS_TOKEN_HEADER);
 

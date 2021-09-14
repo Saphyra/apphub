@@ -23,7 +23,6 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(skyXploreMainMenuWebSocketHandler, Endpoints.WS_CONNECTION_SKYXPLORE_MAIN_MENU)
             .addHandler(skyXploreLobbyWebSocketHandler, Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY)
-            .addHandler(skyXploreLobbyWebSocketHandler, Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY)
             .addHandler(skyXploreGameConnectionHandler, Endpoints.WS_CONNECTION_SKYXPLORE_GAME)
             .setHandshakeHandler(authenticationHandshakeHandler);
     }

@@ -29,10 +29,10 @@ class SolarSystemResponseQueryService {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("SolarSystem not found with id " + solarSystemId));
 
-        List<PlanetLocationResponse> planets = planetToLocationResponseConverter.mapPlanets(solarSystem.getPlanets().values(), game);
+        List<PlanetLocationResponse> planets = planetToLocationResponseConverter.mapPlanets(userId, solarSystem.getPlanets().values(), game);
         return SolarSystemResponse.builder()
             .solarSystemId(solarSystemId)
-            .systemName(solarSystem.getDefaultName())
+            .systemName(solarSystem.getCustomNames().getOptional(userId).orElse(solarSystem.getDefaultName()))
             .radius(solarSystem.getRadius())
             .planets(planets)
             .build();

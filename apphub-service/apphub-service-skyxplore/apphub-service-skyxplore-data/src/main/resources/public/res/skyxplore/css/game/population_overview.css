@@ -48,7 +48,7 @@
                     border: 1px outset orange;
                 }
 
-                #population-overview-order-skill-list-input{
+                #population-overview-order-skill-list-input, #population-overview-order-stat-list-input{
                     width: 90%;
                     margin: auto;
                     display: block;

@@ -1,64 +1,83 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.system;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-
-import java.util.Arrays;
-import java.util.List;
-
+import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
+import com.github.saphyra.apphub.lib.common_domain.Range;
+import com.github.saphyra.apphub.lib.common_util.Random;
+import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
+import com.github.saphyra.apphub.lib.geometry.RandomCoordinateProvider;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemAmount;
-import com.github.saphyra.apphub.lib.common_util.Random;
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import java.util.Arrays;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SolarSystemCoordinateProviderTest {
-    private static final int UNIVERSE_SIZE = 3145;
-    private static final int MAX_ALLOCATION_TRY_COUNT = 10;
-    private static final int MEMBER_NUM = 1;
-    private static final Integer ALLOCATION_TRY_COUNT = 5;
+    private static final Integer MIN_SOLAR_SYSTEM_DISTANCE = 10;
+    private static final Integer MAX_SOLAR_SYSTEM_DISTANCE = 435;
+    private static final Double DISTANCE = 11d;
+
+    @Mock
+    private GameCreationProperties gameCreationProperties;
 
     @Mock
     private Random random;
 
     @Mock
-    private SolarSystemCoordinateListProvider solarSystemCoordinateListProvider;
+    private RandomCoordinateProvider randomCoordinateProvider;
 
     @Mock
-    private MaxSystemCountCalculator maxSystemCountCalculator;
+    private DistanceCalculator distanceCalculator;
 
     @InjectMocks
     private SolarSystemCoordinateProvider underTest;
 
     @Mock
-    private Coordinate coordinate1;
+    private SolarSystem anchorSolarSystem;
 
     @Mock
-    private Coordinate coordinate2;
+    private GameCreationProperties.SolarSystemProperties solarSystemProperties;
+
+    @Mock
+    private CoordinateModel coordinateModel;
+
+    @Mock
+    private Coordinate anchorCoordinate;
+
+    @Mock
+    private Coordinate generatedCoordinate;
+
+    @Mock
+    private Coordinate modifiedCoordinate;
 
     @Test
     public void getCoordinates() {
-        given(maxSystemCountCalculator.getMaxAllocationTryCount(UNIVERSE_SIZE, SystemAmount.RANDOM)).willReturn(MAX_ALLOCATION_TRY_COUNT);
-        given(random.randInt(MAX_ALLOCATION_TRY_COUNT / 2, MAX_ALLOCATION_TRY_COUNT)).willReturn(ALLOCATION_TRY_COUNT);
-        given(solarSystemCoordinateListProvider.getCoordinates(UNIVERSE_SIZE, ALLOCATION_TRY_COUNT)).willReturn(Arrays.asList(coordinate1))
-            .willReturn(Arrays.asList(coordinate1, coordinate2));
+        given(gameCreationProperties.getSolarSystem()).willReturn(solarSystemProperties);
 
-        List<Coordinate> result = underTest.getCoordinates(MEMBER_NUM, UNIVERSE_SIZE, SystemAmount.RANDOM);
+        given(anchorSolarSystem.getCoordinate()).willReturn(coordinateModel);
+        given(coordinateModel.getCoordinate()).willReturn(anchorCoordinate);
 
-        assertThat(result).containsExactly(coordinate1, coordinate2);
-    }
+        given(solarSystemProperties.getSolarSystemDistance()).willReturn(new Range<>(MIN_SOLAR_SYSTEM_DISTANCE, MAX_SOLAR_SYSTEM_DISTANCE));
+        given(random.randInt(0, 0)).willReturn(0);
 
-    @Test(expected = RuntimeException.class)
-    public void getCoordinates_couldNotPlaceEnough() {
-        given(maxSystemCountCalculator.getMaxAllocationTryCount(UNIVERSE_SIZE, SystemAmount.RANDOM)).willReturn(MAX_ALLOCATION_TRY_COUNT);
-        given(random.randInt(MAX_ALLOCATION_TRY_COUNT / 2, MAX_ALLOCATION_TRY_COUNT)).willReturn(ALLOCATION_TRY_COUNT);
-        given(solarSystemCoordinateListProvider.getCoordinates(UNIVERSE_SIZE, ALLOCATION_TRY_COUNT)).willReturn(Arrays.asList(coordinate1));
+        given(randomCoordinateProvider.getCoordinateInCircle(MAX_SOLAR_SYSTEM_DISTANCE)).willReturn(generatedCoordinate);
+        given(distanceCalculator.getDistance(generatedCoordinate, GameConstants.ORIGO)).willReturn(DISTANCE);
 
-        underTest.getCoordinates(MEMBER_NUM, UNIVERSE_SIZE, SystemAmount.RANDOM);
+        given(generatedCoordinate.add(anchorCoordinate)).willReturn(modifiedCoordinate);
+
+        given(distanceCalculator.getDistance(modifiedCoordinate, anchorCoordinate)).willReturn(DISTANCE);
+
+        Coordinate result = underTest.getCoordinate(Arrays.asList(anchorSolarSystem));
+
+        assertThat(result).isEqualTo(modifiedCoordinate);
     }
 }

@@ -1,19 +1,19 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -32,10 +32,7 @@ public class ActualResourceAmountQueryService {
     }
 
     public int getActualAmount(Planet planet, StorageType storageType) {
-        List<String> dataIdsByStorageType = resourceDataService.getByStorageType(storageType)
-            .stream()
-            .map(GameDataItem::getId)
-            .collect(Collectors.toList());
+        List<String> dataIdsByStorageType = fetchResourceIdsForStorageType(storageType);
 
         return planet.getStorageDetails()
             .getStoredResources()
@@ -44,5 +41,30 @@ public class ActualResourceAmountQueryService {
             .filter(reservedStorage -> dataIdsByStorageType.contains(reservedStorage.getDataId()))
             .mapToInt(StoredResource::getAmount)
             .sum();
+    }
+
+    private List<String> fetchResourceIdsForStorageType(StorageType storageType) {
+        return resourceDataService.getByStorageType(storageType)
+            .stream()
+            .map(GameDataItem::getId)
+            .collect(Collectors.toList());
+    }
+
+    public int getActualStorageAmount(Planet planet, StorageType storageType) {
+        List<String> dataIdsByStorageType = fetchResourceIdsForStorageType(storageType);
+
+        return planet.getStorageDetails()
+            .getStoredResources()
+            .entrySet()
+            .stream()
+            .filter(entry -> dataIdsByStorageType.contains(entry.getKey()))
+            .map(entry -> getActualStorageAmount(entry.getValue()))
+            .mapToInt(Integer::intValue)
+            .sum();
+    }
+
+    private int getActualStorageAmount(StoredResource storedResource) {
+        ResourceData resourceData = resourceDataService.get(storedResource.getDataId());
+        return storedResource.getAmount() * resourceData.getMass();
     }
 }

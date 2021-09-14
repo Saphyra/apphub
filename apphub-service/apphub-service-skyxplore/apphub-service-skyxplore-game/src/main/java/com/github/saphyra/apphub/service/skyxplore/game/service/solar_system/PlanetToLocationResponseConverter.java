@@ -10,25 +10,26 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 class PlanetToLocationResponseConverter {
-    List<PlanetLocationResponse> mapPlanets(Collection<Planet> planets, Game game) {
+    List<PlanetLocationResponse> mapPlanets(UUID userId, Collection<Planet> planets, Game game) {
         return planets.stream()
-            .map(planet -> mapPlanet(planet, game))
+            .map(planet -> mapPlanet(userId, planet, game))
             .collect(Collectors.toList());
     }
 
-    private PlanetLocationResponse mapPlanet(Planet planet, Game game) {
+    private PlanetLocationResponse mapPlanet(UUID userId, Planet planet, Game game) {
         return PlanetLocationResponse.builder()
             .planetId(planet.getPlanetId())
-            .planetName(planet.getDefaultName())
+            .planetName(planet.getCustomNames().getOptional(userId).orElse(planet.getDefaultName()))
             .coordinate(planet.getCoordinate().getCoordinate())
             .owner(planet.getOwner())
-            .ownerName(Optional.ofNullable(planet.getOwner()).map(owner -> game.getPlayers().get(owner).getUsername()).orElse(null))
+            .ownerName(Optional.ofNullable(planet.getOwner()).map(owner -> game.getPlayers().get(owner).getPlayerName()).orElse(null))
             .build();
     }
 }

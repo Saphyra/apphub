@@ -22,6 +22,7 @@ window.Mapping = new function(){
         LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),
         LOGOUT: new Endpoint("/api/user/authentication/logout", HttpMethod.POST),
         CHECK_SESSION: new Endpoint("/api/user/authentication/session", HttpMethod.GET),
+        EXTEND_SESSION: new Endpoint("/api/user/authentication/session", HttpMethod.POST),
 
         //Account
         ACCOUNT_REGISTER: new Endpoint("/api/user", HttpMethod.POST),
@@ -127,6 +128,8 @@ window.Mapping = new function(){
         SKYXPLORE_PLANET_GET_POPULATION: new Endpoint("/api/skyxplore/game/planet/{planetId}/citizen", HttpMethod.GET),
         SKYXPLORE_PLANET_RENAME_CITIZEN: new Endpoint("/api/skyxplore/game/planet/{planetId}/citizen/{citizenId}/rename", HttpMethod.POST),
         SKYXPLORE_PLANET_UPDATE_PRIORITY: new Endpoint("/api/skyxplore/game/planet/{planetId}/priority/{priorityType}", HttpMethod.POST),
+        SKYXPLORE_PLANET_RENAME: new Endpoint("/api/skyxplore/game/planet/{planetId}/name", HttpMethod.POST),
+        SKYXPLORE_SOLAR_SYSTEM_RENAME: new Endpoint("/api/skyxplore/game/solar-system/{solarSystemId}/name", HttpMethod.POST),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

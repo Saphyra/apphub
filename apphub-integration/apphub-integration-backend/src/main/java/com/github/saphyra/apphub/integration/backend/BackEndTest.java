@@ -9,6 +9,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 
+import java.lang.reflect.Method;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -23,30 +24,30 @@ public class BackEndTest extends TestBase {
     }
 
     @BeforeMethod(alwaysRun = true)
-    public void waitForPermit() {
+    public void waitForPermit(Method method) {
         try {
             log.debug("Available permits before acquiring: {}", SEMAPHORE.availablePermits());
             Stopwatch stopwatch = Stopwatch.createStarted();
-            SEMAPHORE.acquire(getNecessaryPermitCount());
-            stopwatch.stop();
-            log.info("Permit acquired in {}ms. Permits left: {}", stopwatch.elapsed(TimeUnit.MILLISECONDS), SEMAPHORE.availablePermits());
+            acquirePermit(method, stopwatch);
         } catch (InterruptedException e) {
             log.error("Thread interrupted.", e);
         }
     }
 
+    private static synchronized void acquirePermit(Method method, Stopwatch stopwatch) throws InterruptedException {
+        SEMAPHORE.acquire(1);
+        stopwatch.stop();
+        log.info("Permit acquired for test {} in {}ms. Permits left: {}", method.getName(), stopwatch.elapsed(TimeUnit.MILLISECONDS), SEMAPHORE.availablePermits());
+    }
+
     @AfterMethod(alwaysRun = true)
-    public void cleanUpWsConnections() {
+    public void cleanUpWsConnections(Method method) {
         try {
             ApphubWsClient.cleanUpConnections();
         } finally {
             log.debug("Available permits before releasing: {}", SEMAPHORE.availablePermits());
-            SEMAPHORE.release(getNecessaryPermitCount());
-            log.debug("Available permits after releasing: {}", SEMAPHORE.availablePermits());
+            SEMAPHORE.release(1);
+            log.info("Available permits after releasing of {}: {}", method.getName(), SEMAPHORE.availablePermits());
         }
-    }
-
-    public int getNecessaryPermitCount() {
-        return 1;
     }
 }

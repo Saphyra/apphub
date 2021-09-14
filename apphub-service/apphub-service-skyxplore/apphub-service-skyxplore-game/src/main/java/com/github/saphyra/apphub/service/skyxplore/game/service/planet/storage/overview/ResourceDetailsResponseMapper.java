@@ -22,7 +22,7 @@ class ResourceDetailsResponseMapper {
     ResourceDetailsResponse createResourceData(ResourceData resourceData, StorageDetails storageDetails) {
         return ResourceDetailsResponse.builder()
             .dataId(resourceData.getId())
-            .reservedStorageAmount(reservedStorageQueryService.getReservedStorageAmount(resourceData.getId(), storageDetails.getReservedStorages()))
+            .reservedStorageAmount(reservedStorageQueryService.getReservedAmount(resourceData.getId(), storageDetails.getReservedStorages()))
             .actualAmount(actualResourceAmountQueryService.getActualAmount(resourceData.getId(), storageDetails.getStoredResources()))
             .allocatedResourceAmount(allocatedResourceAmountQueryService.getAllocatedResourceAmount(resourceData.getId(), storageDetails.getAllocatedResources()))
             .build();

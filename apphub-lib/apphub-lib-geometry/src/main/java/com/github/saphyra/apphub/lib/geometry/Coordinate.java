@@ -15,4 +15,17 @@ public class Coordinate {
         this.x = Double.valueOf(x);
         this.y = Double.valueOf(y);
     }
+
+    public Coordinate(Long x, Long y) {
+        this.x = Double.valueOf(x);
+        this.y = Double.valueOf(y);
+    }
+
+    public Coordinate add(Coordinate coordinate) {
+        return new Coordinate(x + coordinate.x, y + coordinate.y);
+    }
+
+    public Coordinate minus(Coordinate coordinate) {
+        return new Coordinate(x - coordinate.x, y - coordinate.y);
+    }
 }

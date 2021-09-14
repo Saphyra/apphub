@@ -2,40 +2,42 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.system.SolarSystemPlacingService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.system_connection.SystemConnectionProvider;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SystemConnection;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.system.SolarSystemGeneratorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class UniverseFactory {
+    private final SolarSystemGeneratorService solarSystemGeneratorService;
     private final UniverseSizeCalculator universeSizeCalculator;
-    private final SolarSystemPlacingService starSystemFactory;
-    private final SystemConnectionProvider systemConnectionProvider;
 
-    public Universe create(UUID gameId, int memberNum, SkyXploreGameCreationSettingsRequest settings) {
+    public Universe create(UUID gameId, int playerCount, SkyXploreGameCreationSettingsRequest settings) {
         log.info("Creating universe...");
-        int universeSize = universeSizeCalculator.calculate(memberNum, settings.getUniverseSize());
+        List<SolarSystem> solarSystems = solarSystemGeneratorService.generateSolarSystems(gameId, playerCount, settings);
+        int universeSize = universeSizeCalculator.calculateUniverseSize(solarSystems);
         log.info("UniverseSize: {}", universeSize);
 
-        Map<Coordinate, SolarSystem> systems = starSystemFactory.create(gameId, memberNum, universeSize, settings);
-        List<SystemConnection> connections = systemConnectionProvider.getConnections(gameId, systems.keySet());
+        Map<Coordinate, SolarSystem> solarSystemMapping = solarSystems
+            .stream()
+            .collect(Collectors.toMap(solarSystem -> solarSystem.getCoordinate().getCoordinate(), Function.identity()));
 
         log.info("Universe created.");
         return Universe.builder()
             .size(universeSize)
-            .systems(systems)
-            .connections(connections)
+            .systems(solarSystemMapping)
+            .connections(new ArrayList<>())
             .build();
     }
 }

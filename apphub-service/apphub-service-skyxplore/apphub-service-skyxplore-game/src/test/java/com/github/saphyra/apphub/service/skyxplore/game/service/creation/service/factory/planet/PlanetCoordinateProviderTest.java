@@ -41,8 +41,8 @@ public class PlanetCoordinateProviderTest {
         given(planetListPlaceService.placePlanets(EXPECTED_PLANET_AMOUNT, SYSTEM_RADIUS)).willReturn(Collections.emptyList())
             .willReturn(Arrays.asList(coordinate1, coordinate2));
 
-        given(distanceCalculator.getDistance(coordinate1, GameConstants.STAR_COORDINATE)).willReturn(10d);
-        given(distanceCalculator.getDistance(coordinate2, GameConstants.STAR_COORDINATE)).willReturn(3d);
+        given(distanceCalculator.getDistance(coordinate1, GameConstants.ORIGO)).willReturn(10d);
+        given(distanceCalculator.getDistance(coordinate2, GameConstants.ORIGO)).willReturn(3d);
 
         List<Coordinate> result = underTest.getCoordinates(EXPECTED_PLANET_AMOUNT, SYSTEM_RADIUS);
 

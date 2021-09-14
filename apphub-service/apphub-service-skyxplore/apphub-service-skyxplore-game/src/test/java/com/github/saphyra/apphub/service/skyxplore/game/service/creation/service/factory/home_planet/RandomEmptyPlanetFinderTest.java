@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,12 +44,11 @@ public class RandomEmptyPlanetFinderTest {
 
     @Test
     public void randomEmptyPlanet_fromUniverse() {
-        given(universe.getSystems()).willReturn(CollectionUtils.singleValueMap(coordinate, solarSystem));
         given(solarSystem.getPlanets()).willReturn(CollectionUtils.toMap(new BiWrapper<>(UUID.randomUUID(), planet1), new BiWrapper<>(UUID.randomUUID(), planet2)));
         given(planet1.getOwner()).willReturn(UUID.randomUUID());
         given(random.randInt(0, 0)).willReturn(0);
 
-        Planet result = underTest.randomEmptyPlanet(universe);
+        Planet result = underTest.randomEmptyPlanet(Arrays.asList(solarSystem));
 
         assertThat(result).isEqualTo(planet2);
     }

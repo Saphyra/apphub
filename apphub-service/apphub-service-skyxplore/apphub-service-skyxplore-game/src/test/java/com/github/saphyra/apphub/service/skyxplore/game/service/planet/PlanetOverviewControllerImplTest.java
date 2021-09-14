@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetPopula
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.building_overview.PlanetBuildingOverviewQueryService;
@@ -26,11 +27,13 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PlanetOverviewControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
+    private static final String NEW_PLANET_NAME = "new-planet-name";
 
     @Mock
     private PlanetPopulationOverviewQueryService planetPopulationOverviewQueryService;
@@ -46,6 +49,9 @@ public class PlanetOverviewControllerImplTest {
 
     @Mock
     private PlanetOverviewQueryService planetOverviewQueryService;
+
+    @Mock
+    private RenamePlanetService renamePlanetService;
 
     @InjectMocks
     private PlanetOverviewControllerImpl underTest;
@@ -116,5 +122,12 @@ public class PlanetOverviewControllerImplTest {
         PlanetOverviewResponse result = underTest.getPlanetOverview(PLANET_ID, accessTokenHeader);
 
         assertThat(result).isEqualTo(planetOverviewResponse);
+    }
+
+    @Test
+    public void renamePlanet() {
+        underTest.renamePlanet(new OneParamRequest<>(NEW_PLANET_NAME), PLANET_ID, accessTokenHeader);
+
+        verify(renamePlanetService).rename(USER_ID, PLANET_ID, NEW_PLANET_NAME);
     }
 }
