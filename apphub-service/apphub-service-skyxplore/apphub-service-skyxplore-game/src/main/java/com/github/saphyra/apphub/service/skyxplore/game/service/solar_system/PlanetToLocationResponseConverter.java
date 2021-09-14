@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 class PlanetToLocationResponseConverter {
     List<PlanetLocationResponse> mapPlanets(UUID userId, Collection<Planet> planets, Game game) {
         return planets.stream()
+            .filter(planet -> userId.equals(planet.getOwner()))
             .map(planet -> mapPlanet(userId, planet, game))
             .collect(Collectors.toList());
     }

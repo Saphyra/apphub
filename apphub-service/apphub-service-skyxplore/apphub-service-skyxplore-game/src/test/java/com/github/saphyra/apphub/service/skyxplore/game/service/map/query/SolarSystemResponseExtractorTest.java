@@ -53,6 +53,7 @@ public class SolarSystemResponseExtractorTest {
             .build();
         given(universe.getSystems()).willReturn(CollectionUtils.singleValueMap(coordinate, solarSystem));
         given(coordinateModel.getCoordinate()).willReturn(coordinate);
+        given(planet.getOwner()).willReturn(USER_ID);
 
         List<MapSolarSystemResponse> result = underTest.getSolarSystems(USER_ID, universe);
 
