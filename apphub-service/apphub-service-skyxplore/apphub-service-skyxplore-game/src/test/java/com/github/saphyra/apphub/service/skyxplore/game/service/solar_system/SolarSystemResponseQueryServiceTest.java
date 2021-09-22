@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.service.visibility.VisibilityFacade;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -30,6 +31,9 @@ public class SolarSystemResponseQueryServiceTest {
     private static final UUID SOLAR_SYSTEM_ID = UUID.randomUUID();
     private static final String DEFAULT_NAME = "default-name";
     private static final Integer RADIUS = 235;
+
+    @Mock
+    private VisibilityFacade visibilityFacade;
 
     @Mock
     private GameDao gameDao;

@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
+import com.github.saphyra.apphub.service.skyxplore.game.service.visibility.VisibilityFacade;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -29,6 +30,9 @@ public class PlanetToLocationResponseConverterTest {
     private static final String OWNER_NAME = "owner-name";
     private static final UUID USER_ID = UUID.randomUUID();
 
+    @Mock
+    private VisibilityFacade visibilityFacade;
+
     @InjectMocks
     private PlanetToLocationResponseConverter underTest;
 
@@ -37,6 +41,9 @@ public class PlanetToLocationResponseConverterTest {
 
     @Mock
     private Planet planet;
+
+    @Mock
+    private Planet filteredPlanet;
 
     @Mock
     private Player player;
@@ -57,9 +64,12 @@ public class PlanetToLocationResponseConverterTest {
         given(planet.getOwner()).willReturn(OWNER);
         given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(OWNER, player));
         given(player.getPlayerName()).willReturn(OWNER_NAME);
+        given(visibilityFacade.isVisible(USER_ID, planet)).willReturn(true);
+        given(visibilityFacade.isVisible(USER_ID, filteredPlanet)).willReturn(false);
 
-        List<PlanetLocationResponse> result = underTest.mapPlanets(USER_ID, Arrays.asList(planet), game);
+        List<PlanetLocationResponse> result = underTest.mapPlanets(USER_ID, Arrays.asList(planet, filteredPlanet), game);
 
+        assertThat(result).hasSize(1);
         assertThat(result.get(0).getPlanetId()).isEqualTo(PLANET_ID);
         assertThat(result.get(0).getPlanetName()).isEqualTo(DEFAULT_NAME);
         assertThat(result.get(0).getCoordinate()).isEqualTo(coordinate);
