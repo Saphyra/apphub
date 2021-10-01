@@ -1,0 +1,109 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Bevezetés - HTML - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">HTML - Bevezetés</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/html.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Mi az a HTML?</H2>
+
+            <P>
+            <UL>
+                <LI>Habár egyszerűsége miatt sokan nem ismerik el annak, a HTML egy programozási nyelv.</LI>
+                <LI>Elnevezése a Hyper Text Markup Language angol szavak kezdőbetűiből áll.</LI>
+                <LI>Weboldalak készítéséhez használják. Leírja a tartalom szerkezetét.</LI>
+                <LI>A tartalmat úgynevezett 'HTML Tag'-ek egészítik ki, 'címkézik fel' (-> Markup).</LI>
+                <LI>Ezeket a tageket a böngésző nem jeleníti meg, hanem feldolgozza, és felhasználja az oldal megjelenítéséhez.</LI>
+                <LI>Minden tagnek egyedi jelentése van, amelyet a böngésző értelmez, és annak megfelelően jelenít meg.</LI>
+            </UL>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Egy egyszerű példa</H2>
+
+            <PRE th:replace="/example/html/introduction.html :: a_simple_example"></PRE>
+            <P>
+                <A href='/web/training/html/sample/a_simple_example' target='_blank'>Megtekintés</A>
+            </P>
+
+            <P>
+            <H3>Magyarázat:</H3>
+
+            <UL>
+                <LI><SPAN class='codepart'>&lt;!DOCTYPE html></SPAN>: Megadja a dokumentum típusát. Mindig a legelső sorba kerül.</LI>
+                <LI><SPAN class='codepart'>&lt;html></SPAN>: Az oldal gyökere. Csak egy lehet belőle oldalanként.</LI>
+                <LI><SPAN class='codepart'>&lt;head></SPAN>: Meta-információkat tartalmaz az oldalról. (Olyan adatok, amik nem jelennek meg a képernyőn, de segíthetik a működést.</LI>
+                <LI><SPAN class='codepart'>&lt;title></SPAN>: Az oldal címe. (A böngésző fejlécén / fülön megjelenő szöveg)</LI>
+                <LI><SPAN class='codepart'>&lt;body></SPAN>: A fő tartalom gyökere. Az ebben a tagben levő tartalom jelenik meg a képernyőn.</LI>
+                <LI><SPAN class='codepart'>&lt;h1></SPAN>: Nagy címsor</LI>
+                <LI><SPAN class='codepart'>&lt;p></SPAN>: Bekezdés</LI>
+            </UL>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Szintaktika</H2>
+
+            <P><SPAN class='codepart'>&lt;tag tulajdonsag="ertek">Tartalom&lt;/tag></SPAN></P>
+
+            <P>
+            <UL>
+                <LI>Tag &lt; karakterrel kezdődik, és > karakterrel végződik</LI>
+                <LI>A legtöbb taget be kell zárni. A záró tag hasonló a nyitó taghez, csak egy / jel van az elején.<BR>
+                    Például: Nyitó: <SPAN class='codepart'>&lt;div></SPAN>, záró: <SPAN class='codepart'>&lt;/div></SPAN>
+                </LI>
+                <LI>
+                    A tageket a nyitási sorrenddel ellentétes sorrendben kell bezárni. (Amit legutoljára nyitottál meg, azt zárod be először.)<BR>
+                    Jó: <SPAN class='codepart'>&lt;div>&lt;span>&lt;/span>&lt;/div></SPAN><BR>
+                    Rossz: <SPAN class='linethrough codepart'>&lt;div>&lt;span>&lt;/div>&lt;/span></SPAN>
+                </LI>
+                <LI>Egy tag több tulajdonságot is tartalmazhat (vagy épp egyet sem) <SPAN class='codepart'>&lt;tag tulajdonsag1="ertek1" tulajdonsag2="ertek2"></SPAN> formában</LI>
+                <LI>A HTML alapjában nem különbözteti meg a kis és nagy betűket, de célszerű egy oldalon egy féle írásmódot alkalmazni.</LI>
+                <LI>
+                    Kommentek: A kommenteket a böngésző figyelmen kívül hagyja a megjelenítés során.<BR>
+                    Komment blokk létrehozása: <SPAN class='codepart'>&lt;!-- Komment szövege --></SPAN><BR>
+                    Komment blokk lehet több soros, is, de nem ágyazódhatnak egymásba.
+                </LI>
+            </UL>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Forráskód megtekintése</H2>
+
+            <P>
+                Ha kíváncsiak vagyunk egy oldal szerkezetére, a HTML forráskód megtekintésére több lehetőség is rendelkezésre áll:
+            <UL>
+                <LI>Nyomjuk meg a böngészőben a <SPAN class='codepart'>Ctrl + U</SPAN> billentyűkombinációt</LI>
+                <LI>A weboldalon jobb klikk után a menüből válasszuk a 'Forrás megtekintése' opciót</LI>
+                <LI>Chrome böngészőt használva a Jobb klikk -> 'Vizsgálat' gombra kattintva annak a tagnek a forrását tekinthetjük meg, amelyikre rá kattintottunk.</LI>
+                <LI>A
+                    <SPAN class='codepart'>Ctrl + S</SPAN> billentyűkombináció megnyomásával a saját számítógépünkre is letölthetjük az adott oldal forrását, így bármilyen szövegszerkesztő programmal meg tudjuk nézni a kódot.
+                </LI>
+            </UL>
+            Különböző böngészők további módszereket is tartalmazhatnak a forráskód megtekintésére.
+            </P>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/html/002'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>
