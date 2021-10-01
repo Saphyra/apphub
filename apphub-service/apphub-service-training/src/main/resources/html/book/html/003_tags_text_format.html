@@ -1,0 +1,129 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/training/js/common.js"></SCRIPT>
+
+    <TITLE>Tagek / Szöveg formázás - HTML - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">HTML - Tagek / Szöveg formázás</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/html.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Címsorok</H2>
+
+            <P>A HTML 6 különböző méretű címsort különböztet meg, <SPAN class='codepart'>&lt;h1></SPAN>-től a <SPAN class='codepart'>&lt;h6></SPAN>-ig.</P>
+            <P>A <SPAN class='codepart'>&lt;h1></SPAN> a legnagyobb, míg a <SPAN class='codepart'>&lt;h6></SPAN> a legkisebb méretű címsor.</P>
+            <iframe src="/web/training/html/sample/headers" onload="resizeIFrameToFitContent(this)"></iframe>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Bekezdés</H2>
+
+            <P>Bekezdést a <SPAN class='codepart'>&lt;p></SPAN> taggel lehet létrehozni.</P>
+            <P>Minden bekezdés új sorba kerül.</P>
+            <iframe src="/web/training/html/sample/paragraph" onload="resizeIFrameToFitContent(this)"></iframe>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Sortörés</H2>
+
+            <P>A HTML a megjelenítés közben figyelmen kívül hagyja a sortöréseket (szóközzel helyettesíti), így ha mégis azt szeretnénk, hogy a szöveg új sorban folytatódjon, akkor az erre a célra fenntartott
+                <SPAN class='codepart'>&lt;br></SPAN> taget kell használnunk.</P>
+            <P>A <SPAN class='codepart'>&lt;br></SPAN> tagnek nincs záró párja.</P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Vízszintes vonal</H2>
+
+            <P>Egy vízszintes vonal felhasználható például az oldal tartalmi egységeinek elválasztására.</P>
+            <P>A vonalat a <SPAN class='codepart'>&lt;hr></SPAN> taggel lehet létrehozni.</P>
+            <P>A tagnek nincs záró párja.</P>
+            <P>A vonal vastagségát a <SPAN class='codepart'>size="5px"</SPAN> attribútummal lehet beállítani.</P>
+            <P>
+                Példák:
+            <Ul>
+                <LI>Egyszerű vonal:
+                    <HR>
+                </LI>
+                <LI>Egy kicsit vastagabb vonnal:
+                    <HR size=10px>
+                </LI>
+            </UL>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Listák</H2>
+
+            <P>Számozott listát az <SPAN class='codepart'>&lt;ol></SPAN>, míg 'pöttyös' listát az <SPAN class='codepart'>&lt;ul></SPAN> taggel lehet létrehozni.</P>
+            <P>A listához új elemet a <SPAN class='codepart'>&lt;li></SPAN> taggel lehet adni.</P>
+            <P>A listákat egymásba is lehet ágyazni.</P>
+            <iframe src="/web/training/html/sample/lists" onload="resizeIFrameToFitContent(this)"></iframe>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Előre formázott szöveg megjelenítése</H2>
+
+            <P>
+                A böngésző figyelmen kívül hagyja a forráskódban használt sortöréseket, és többszörös szóközöket.
+                De mi van akkor, ha például egy több száz soros verset szeretnénk megjeleníteni a weboldalunkon? Minden egyes sor végére rakjunk egy <SPAN class='codepart'>&lt;br></SPAN> taget?
+                Ember legyen a talpán, akinek van hozzá türelme.
+            </P>
+            <P>A fenti problémára nyújt megoldást a
+                <SPAN class='codepart'>&lt;pre></SPAN> tag. Az ebbe a tagbe foglalt kódot a böngésző egyszerű szövegként kezeli (habár a HTML tageket továbbra is feldolgozza), meghagyja a sortöréseket és az extra szóközöket is.
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Sorközi formázások</H2>
+
+            <P>Az eddig bemutatott tagek a sorok elhelyezkedését módosították, most vessünk egy pillantást a kisebb szövegrészletek formázására:</P>
+            <P>
+            <UL>
+                <LI>A <SPAN class='codepart'>&lt;b></SPAN> és <SPAN class='codepart'>&lt;strong></SPAN> tagek <B>félkövérré</B> és
+                    <STRONG>fontosnak jelöltté</STRONG> teszik a szöveget. (Habár gyakran egyfromán néznek ki, szemantikailag mást jelentenek. A
+                    <SPAN class='codepart'>&lt;b></SPAN> egyszerűen csak félkövérré teszi, míg a <SPAN class='codepart'>&lt;strong></SPAN> különös fontosságúnak jelöli a közbezárt szövegrészletet.)
+                </LI>
+                <LI>A <SPAN class='codepart'>&lt;i></SPAN> és <SPAN class='codepart'>&lt;em></SPAN> tagek <I>dőltté</I> illetve
+                    <EM>kiemeltté</EM> teszik a szöveget. Ugyanúgy, mint fentebb, a kinézet megegyezhet, de szemantikai különbségek is jelen vannak.
+                </LI>
+                <LI>Szöveget
+                    <MARK>kiemelni</MARK>
+                    a <SPAN class='codepart'>&lt;mark></SPAN> taggel lehet.
+                </LI>
+                <LI>A <SPAN class='codepart'>&lt;small></SPAN> taggel <SMALL>kisebbé</SMALL>, a <SPAN class='codepart'>&lt;big></SPAN> taggel pedig
+                    <BIG>nagyobbá</BIG> lehet változtatni a közbezárt részt.
+                </LI>
+                <LI>A <SPAN class='codepart'>&lt;del></SPAN> taggal
+                    <DEL>áthúzott</DEL>
+                    , az <SPAN class='codepart'>&lt;u></SPAN> illetve <SPAN class='codepart'>&lt;ins></SPAN> tagekkel pedig
+                    <INS>aláhúzott</INS>
+                    szöveget lehet készíteni.
+                </LI>
+                <LI>A <SPAN class='codepart'>&lt;sub></SPAN> <SUB>alsó</SUB>, a <SPAN class='codepart'>&lt;sup></SPAN> tag pedig <SUP>felső</SUP> indexbe helyezi a kijelölt szövegrészletet.</LI>
+                <LI>A <SPAN class='codepart'>&lt;q></SPAN> tag <Q>idézőjelek közé</Q> teszi a szöveget.</LI>
+            </UL>
+            </P>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/html/002_development'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/html/004_tags_content'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

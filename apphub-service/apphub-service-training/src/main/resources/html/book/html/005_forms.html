@@ -1,0 +1,247 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/training/js/common.js"></SCRIPT>
+
+    <TITLE>Űrlapok - HTML - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">HTML - Űrlapok</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/html.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Űrlap létrehozása</H2>
+
+            <P>Ha a felhasználótól valamilyen adatot szeretnénk elkérni, akkor azt űrlapokkal tehetjük meg.</P>
+            <P>Űrlapot a <SPAN class='codepart'>&lt;form></SPAN> taggel lehet létrehozni.</P>
+            <P>
+                A <SPAN class='codepart'>&lt;form></SPAN> tagnek két fontos attribútuma van:
+            <UL>
+                <LI><SPAN class='codepart'>action="target_url"</SPAN> azt a webcímet tartalmazza, ahova a küldés gomb megnyomásakor a bevitt aadatokat elküldi a böngésző</LI>
+                <LI>
+                    <SPAN class='codepart'>method="http_method"</SPAN> az adat küldés típusát határozza meg. A leggyakrabban használt HTTP methodok:
+                    <UL>
+                        <LI>GET: adatok lekérésére</LI>
+                        <LI>POST vagy PUT: adatok küldésére</LI>
+                        <LI>DELETE: adatok törlésére</LI>
+                    </UL>
+                </LI>
+            </UL>
+            Megjegyzés: a szerver határozza meg, hogy milyen metódusokat képes kezelni, illetve a megadott metódusra milyen műveletet hajt végre.
+            </P>
+            <P>A megnyitás helyére vonatkozó beállítások (új fülön, azonos oldalon, stb) a <SPAN class='codepart'>target=""</SPAN> attribútummal állíthatók, mint a linkeknél.</P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Beviteli mezők</H2>
+
+            <P>
+                Az űrlaphoz adat beviteli mezőket kell hozzá adni. Minden adat típusnak külön mezője van, de van, ami (majdnem) mindegyikben közös:
+            <UL>
+                <LI>Az <SPAN class='codepart'>&lt;input></SPAN> taggel kell létrehozni. (Nincs záró párja)</LI>
+                <LI>
+                    Az <SPAN class='codepart'>&lt;input></SPAN> tag <SPAN class='codepart'>type="tipus"</SPAN> attribútuma határozza meg, hogy milyen típusú adat bevitelére képes:
+                    <UL>
+                        <LI><SPAN class='codepart'>type="text"</SPAN>: szöveg</LI>
+                        <LI><SPAN class='codepart'>type="password"</SPAN>: jelszó</LI>
+                        <LI><SPAN class='codepart'>type="submit"</SPAN>: küldés gomb</LI>
+                        <LI><SPAN class='codepart'>type="reset"</SPAN>: gomb, melynek hatására minden, az adott űrlapban található beviteli mező az eredeti értékre áll vissza</LI>
+                        <LI><SPAN class='codepart'>type="radio"</SPAN>: választó gomb (<INPUT type='radio'>)</LI>
+                        <LI><SPAN class='codepart'>type="checkbox"</SPAN>: jelölő négyzet (<INPUT type='checkbox'>)</LI>
+                        <LI><SPAN class='codepart'>type="color"</SPAN>: szín</LI>
+                        <LI><SPAN class='codepart'>type="date"</SPAN>: dátum</LI>
+                        <LI><SPAN class='codepart'>type="tima"</SPAN>: idő</LI>
+                        <LI><SPAN class='codepart'>type="datetime-local"</SPAN>: dátum és idő (helyi időzóna szerint)</LI>
+                        <LI><SPAN class='codepart'>type="email"</SPAN>: email cím</LI>
+                        <LI><SPAN class='codepart'>type="file"</SPAN>: fájl</LI>
+                        <LI><SPAN class='codepart'>type="month"</SPAN>: év és hónap</LI>
+                        <LI><SPAN class='codepart'>type="number"</SPAN>: szám</LI>
+                        <LI><SPAN class='codepart'>type="hidden"</SPAN>: nem látható</LI>
+                        <LI><SPAN class='codepart'>type="range"</SPAN>: csúszka</LI>
+                        <LI><SPAN class='codepart'>type="url"</SPAN>: URL</LI>
+                        <LI><SPAN class='codepart'>type="week"</SPAN>: hét (az adott év x-edik hete)</LI>
+                    </UL>
+                </LI>
+                <LI>
+                    (Többé-kevésbé) közös attribútumok:
+                    <UL>
+                        <LI><SPAN class='codepart'>disabled</SPAN>: a beviteli mező nem szerkeszthető, és nem kerül küldésre az űrlap elküldésekor</LI>
+                        <LI><SPAN class='codepart'>readonly</SPAN>: a beviteli mező nem szerkeszthető, de küldésre kerül az űrlap elküldésekor</LI>
+                        <LI><SPAN class='codepart'>max</SPAN>: a kiválasztható legnagyobb érték</LI>
+                        <LI><SPAN class='codepart'>maxlength</SPAN>: begépelhető karakterek száma</LI>
+                        <LI><SPAN class='codepart'>min</SPAN>: a kiválasztható legkisebb érték</LI>
+                        <LI><SPAN class='codepart'>size</SPAN>: a beviteli mező mérete</LI>
+                        <LI><SPAN class='codepart'>required</SPAN>: a mező kitöltése kötelező (különben az űrlap nem küldhető el)</LI>
+                        <LI><SPAN class='codepart'>step</SPAN>: lépték (szám bevitelnél)</LI>
+                        <LI><SPAN class='codepart'>value</SPAN>: kezdőérték</LI>
+                        <LI><SPAN class='codepart'>name</SPAN>: a beviteli mező neve (beviteli mezőnként egyedi, kivéve választó gomb)</LI>
+                        <LI><SPAN class='codepart'>placeholder</SPAN>: segítő szöveg (ami addig jelenik meg, amíg üres a mező)</LI>
+                        <LI><SPAN class='codepart'>checked</SPAN>: a választó gomb / jelölő négyzet kiválasztott állapotban van</LI>
+                        <LI><SPAN class='codepart'>autofocus</SPAN>: az oldal betöltésekor automatikusan ebbe a beviteli mezőbe állítja a kurzort</LI>
+                        <LI><SPAN class='codepart'>autocomplete</SPAN>: megadja, hogy a böngésző megpróbálja-e magától kitölteni a beviteli mezőt (pl. felhasználónév és jelszó automatikus kitöltése)
+                        </LI>
+                    </UL>
+                </LI>
+            </UL>
+            </P>
+
+            <iframe src="/web/training/html/sample/inputs" onload="resizeIFrameToFitContent(this)"></iframe>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Választó gombok</H2>
+
+            <P>
+                Ahogy fentebb is említettem, választó gombokat az <SPAN class='codepart'>&lt;input type="radio"></SPAN> taggel lehet létrehozni:<BR>
+            <DIV>
+                Neme:<BR>
+                <INPUT type='radio' value='ferfi'> Férfi<BR>
+                <INPUT type='radio' value='no'> Nő
+            </DIV>
+            Viszont van egy kis probléma: A fenti gombok nem éppen úgy működnek, ahogyan azt elvárhatnánk. A "normális" választó gombok egyszerre csak egy gomb kiválasztását teszik lehetővé.
+            </P>
+            <P>
+                Ahhoz, hogy a választó gombok tényleg választási lehetőséget adjanak, ahhoz csoportba kell foglalni őket. Ehhez azonos nevet kell adni nekik, tehát az egy csoportba tartozó gombok
+                <SPAN class='codepart'>name</SPAN> attribútumának egyenlő értéket kell adni. Például:<BR>
+
+            <PRE th:replace="/example/html/forms.html :: radio"></PRE>
+
+            <DIV>
+                Neme:<BR>
+                <INPUT type='radio' name='nem' value='ferfi'> Férfi<BR>
+                <INPUT type='radio' name='nem' value='no'> Nő
+            </DIV>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Címkék</H2>
+
+            <P>
+                Vegyük az előző példát, egy egyszerű nem választást:
+            <DIV>
+                Neme:<BR>
+                <INPUT type='radio' name='nem' value='ferfi'> Férfi<BR>
+                <INPUT type='radio' name='nem' value='no'> Nő
+            </DIV>
+            Ugye, hogy milyen nehéz eltalálni azokat az apró pöttyöket?
+            </P>
+            <P>
+                Na és most?
+            <DIV>
+                Neme:<BR>
+                <LABEL><INPUT type='radio' name='nem' value='ferfi'> Férfi</LABEL><BR>
+                <LABEL><INPUT type='radio' name='nem' value='no'> Nő</LABEL>
+            </DIV>
+            (Kis segítség: próbálj mind a két esetben a feliratra kattintani a golyó helyett!)
+            </P>
+            <P>Bármely <SPAN class='codepart'>&lt;input></SPAN> taget egy
+                <SPAN class='codepart'>&lt;label></SPAN> tagbe foglalva egy olyan feliratot adhatunk hozzá a beviteli mezőhöz, amelyre kattintva a böngésző a közbezárt beviteli mezőre irányítja a fókuszt.<BR>
+            </P>
+            <P>Nézd csak meg a legelső példát kicsit 'felturbózva'!</P>
+            <iframe src="/web/training/html/sample/label" onload="resizeIFrameToFitContent(this)"></iframe>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Beviteli mezők csoportosítása</H2>
+
+            <P>Ha túl sok adatot kell bekérni a felhasználótól, könnyen egy nagy kavalkáddá változhat az oldal. Ilyenkor nem árt csoportokba rendezni a mezőket a jobb áttekinthetőség érdekében.</P>
+            <P>Erre ad a kezünkbe egy hasznos eszközt a <SPAN class='codepart'>&lt;fieldset></SPAN> tag. (Lásd a példa forráskódját)</P>
+            <P>A fieldseteknek nevet is lehet adni, mégpedig a <SPAN class='codepart'>&lt;legend></SPAN> taggel.</P>
+            <iframe src="/web/training/html/sample/fieldset" onload="resizeIFrameToFitContent(this)"></iframe>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Több soros szöveg</H2>
+
+            <P>
+                Több soros szöveget a <SPAN class='codepart'>&lt;textarea></SPAN> taggel lehet létrehozni, a következő módon:<BR>
+                <SPAN class='codepart'>&lt;textarea name="szoveg">Alapértelmezett tartalom&lt;/textarea></SPAN><BR>
+            <FORM action='/web/training/sample' method='POST' target='_blank'>
+                <TEXTAREA name="szoveg">Alapértelmezett tartalom</TEXTAREA>
+                <INPUT type='submit'>
+            </FORM>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Legördülő menü</H2>
+
+            <P>Legördíthető menüt a <SPAN class='codepart'>&lt;select></SPAN> taggel lehet létrehozni.</P>
+            <P>A menühöz választható elemeket az <SPAN class='codepart'>&lt;option></SPAN> taggel lehet hozzáadni a következőképp:</P>
+
+            <PRE th:replace="/example/html/forms.html :: select"></PRE>
+
+            <P>Mint ahogy a fenti példában is látható, alapértelmezett elemet az <SPAN class='codepart'>&lt;option></SPAN> tag <SPAN class='codepart'>selected</SPAN> attribútumával lehet beállítani.
+            </P>
+
+            <FORM action='/web/training/sample' method='POST' , target='_blank'>
+                <SELECT name='select_menu'>
+                    <OPTION value='ertek1'>Érték 1</OPTION>
+                    <OPTION value='ertek2' selected>Érték 2</OPTION>
+                </SELECT>
+                <INPUT type='submit'>
+            </FORM>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Kiválasztó menü</H2>
+
+            <P>
+                Kiválasztó menü létrehozásának a módja ugyanaz, mint a legördülő menüé, egy apró különbséggel:<BR>
+                A <SPAN class='codepart'>&lt;select></SPAN> taghez egy extra attribútumot kell adni, mégpedig a
+                <SPAN class='codepart'>size</SPAN>-t, egy 1-nél nagyobb szám értékkel. (Az érték azt adja meg, hogy egyszerre hány elem látszódjon a listából.)
+            </P>
+
+            <PRE th:replace="/example/html/forms.html :: multi-select"></PRE>
+
+            <FORM action='/web/training/sample' method='POST' target='_blank'>
+                <SELECT name='select_menu' size='2'>
+                    <OPTION value='ertek1'>Érték 1</OPTION>
+                    <OPTION value='ertek2' selected>Érték 2</OPTION>
+                    <OPTION value='ertek3'>Érték 3</OPTION>
+                </SELECT>
+                <INPUT type='submit'>
+            </FORM>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Szerkeszthető legördülő menü</H2>
+
+            <P>A legördülő menünél kissé kötetlenebb megoldást nyújt a szerkeszthető legördülő menü, ahol a felhasználó egy listából választhatja ki a megfelelő elemet, de saját értéket is megadahat.</P>
+            <P>Elkészítése a következőképp lehetséges:</P>
+
+            <PRE th:replace="/example/html/forms.html :: datalist"></PRE>
+
+            <P>
+            <FORM action='/web/training/sample' method='POST' target='_blank'>
+                <INPUT list="adatlista" name="ertek">
+                <DATALIST id='adatlista'>
+                    <OPTION value='ertek1'>Érték 1</OPTION>
+                    <OPTION value='ertek2'>Érték 2</OPTION>
+                    <OPTION value='ertek3'>Egyéb</OPTION>
+                </DATALIST>
+                <INPUT type='submit'>
+            </FORM>
+            </P>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/html/004_tags_content'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

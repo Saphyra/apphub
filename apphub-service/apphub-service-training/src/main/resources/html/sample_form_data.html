@@ -1,0 +1,13 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <TITLE>Elküldött adatok</TITLE>
+</HEAD>
+<BODY>
+<H1>Elküldött adatok:</H1>
+<DIV th:each="element : ${variables}">
+    <SPAN th:text="${element.key}"></SPAN>
+    <SPAN> = </SPAN>
+    <SPAN th:text="${element.value}"></SPAN>
+</DIV>
+</BODY>
+</HTML>

@@ -57,6 +57,22 @@ main{
             line-height: 1.3;
         }
 
+        article img{
+            display: block;
+            margin: auto;
+            width: 75%;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        article iframe{
+            margin: 0.75rem auto;
+            display: block;
+            border: 2px ridge white;
+            border-radius: 10px;
+            width: 70%;
+        }
+
         pre{
             padding: 0.25rem;
             font-family: monospace;

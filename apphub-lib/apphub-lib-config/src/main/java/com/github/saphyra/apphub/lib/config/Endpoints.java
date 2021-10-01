@@ -19,8 +19,11 @@ public class Endpoints {
     public static final String UTILS_LOG_FORMATTER_PAGE = "/web/utils/log-formatter";
     public static final String UTILS_BASE64_ENCODER_PAGE = "/web/utils/base64";
     public static final String TRAINING_INDEX_PAGE = "/web/training";
+
+    //Training
     public static final String TRAINING_BOOK_PAGE = "/web/training/{book}/{chapter}";
     public static final String TRAINING_SAMPLE_PAGE = "/web/training/{book}/sample/{sample}";
+    public static final String TRAINING_SAMPLE_ENDPOINT = "/web/training/sample";
 
     //PLATFORM
     public static final String HEALTH = "/platform/health";
