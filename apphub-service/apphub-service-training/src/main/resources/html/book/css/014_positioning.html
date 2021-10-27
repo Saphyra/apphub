@@ -1,0 +1,269 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Megjelenés és elhelyezés - CSS - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">CSS - Megjelenés és elhelyezés</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/css.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Elem láthatatlanná tétele</H2>
+
+            <P>
+                Gyakran előfordul, hogy valamilyen tartalmat nem szeretnénk láthatóvá tenni (például egy menü gombjai, amíg rá nem kattintanak egy gombra...).<BR>
+                HTML tageket több módon lehet eltüntetni a felhasználó szeme elől, nézzük ebből a két legáltalánosabbat:
+            </P>
+
+            <P>
+                Az egyik ilyen megoldás, ha az elemet egyszerűen nem jelenítjük meg, mintha ott sem lenne. Ezta következő paranccsal lehet megtenni: <SPAN class="codepart">display: none</SPAN><BR>
+                Példa:
+            <PRE th:replace="/example/css/positioning.html :: display_none"></PRE>
+
+
+            <DIV style="width: 250px; height: 100px; border: 3px solid red;">
+                Egyszer volt hol nem volt <SPAN style="display: none">Nem vagyok itt</SPAN> volt egyszer egy semmi.
+            </DIV>
+
+            <U>Megjegyzés:</U> az elem újbóli megjelenítéséhez a <SPAN class="codepart">display</SPAN> tulajdonságnak más értéket kell adni (például
+            <SPAN class="codepart">display: block</SPAN>. Ennek lehetőségeiről a későbbiekben lesz szó.
+            </P>
+
+            <P>
+                A másik megoldás abban különbözik az elsőtől, hogy az eltüntetett rész tárolójának a helye megmarad, és csak a tartalma nem jelenik meg. Erre a
+                <SPAN class="codepart">visibility: hidden</SPAN> parancs való.<BR>
+                Példa:
+            <PRE th:replace="/example/css/positioning.html :: visibility_hidden"></PRE>
+
+            <DIV style="width: 250px; height: 100px; border: 3px solid red;">
+                Egyszer volt hol nem volt <SPAN style="visibility: hidden">Nem vagyok itt</SPAN> volt egyszer egy semmi.
+            </DIV>
+
+            <U>Megjegyzés:</U> az elem újbóli megjelenítéséhez a tulajdonság értékét a következpőképpen kell módosítani:
+            <SPAN class="codepart">visibility: visible</SPAN>. Ennek lehetőségeiről a későbbiekben lesz szó.
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Elem eltolása</H2>
+
+            <P>A jól kinéző weboldalnak gyakran feltétele az a lehetőség, hogy a tárolóinkat oda helyezzük, ahová szeretnénk. Ezt (többek közt) a
+                <SPAN class="codepart">position</SPAN> tulajdonsággal érhetjük el.</P>
+            <DIV>
+                Lehetséges értékek (az egyes értékek működéséről lejjebb részletesen is szó lesz):
+                <UL>
+                    <LI><SPAN class="codepart">static</SPAN> - (alapértelmezett)</LI>
+                    <LI><SPAN class="codepart">relative</SPAN></LI>
+                    <LI><SPAN class="codepart">absolute</SPAN></LI>
+                    <LI><SPAN class="codepart">fixed</SPAN></LI>
+                </UL>
+            </DIV>
+
+            <DIV>
+                Az elem eltolásának mértékét úgy adhatjuk meg, hogy a következő tulajdonságokkal megmondjuk, hogy az adott irányból mekkora távolsággal történjen az eltolás / mekkora helyet hagyjon:
+                <UL>
+                    <LI><SPAN class="codepart">top</SPAN> - felülről</LI>
+                    <LI><SPAN class="codepart">right</SPAN> - jobbról</LI>
+                    <LI><SPAN class="codepart">bottom</SPAN> - alulról</LI>
+                    <LI><SPAN class="codepart">left</SPAN> - balról</LI>
+                </UL>
+
+                <U>Megjegyzés:</U> ha egyszerre két ellentétes oldalt is megadunk, akkor manipulálhatjuk a tároló méretét. Ha pedig negatív értéket adunk meg, akkor az ellenkező irányba fog eltolódni az elem.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>position: static</H2>
+
+            <P>A
+                <SPAN class="codepart">static</SPAN> érték, mint alapértelmezett, nem változtatja meg az elem helyzetét. A 'static' szó arra utal, hogy az elem nem változtatja meg az oldal folytonosságát.
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>position: relative</H2>
+
+            <P>A <SPAN class="codepart">relative</SPAN> értékkel az elem eredeti helyéhez képest lehet eltolni a tárolót. De inkábbnézzünk rá példát!</P>
+
+            <DIV>
+                Először nézzünk egy példát az eltolás nélkül:
+                <PRE th:replace="/example/css/positioning.html :: relative_default"></PRE>
+
+                <DIV style="width: 250px; height: 250px; border: 3px solid red;">
+                    Egyszer volt hol nem volt <SPAN style="border: 1px solid red;">eltolandó szöveg</SPAN> volt egyszer egy fa.
+                </DIV>
+            </DIV>
+
+            <DIV>
+                És egy olyan példát, ahol az elem el is lett tolva:
+                <PRE th:replace="/example/css/positioning.html :: relative_moved"></PRE>
+
+
+                <DIV style="width: 250px; height: 250px; border: 3px solid red;">
+                    Egyszer volt hol nem volt <SPAN style="border: 1px solid red; position: relative; top: 30px; left: 40px;">eltolt szöveg</SPAN> volt egyszer egy fa.
+                </DIV>
+            </DIV>
+
+            <P>Mint látható, a <SPAN class="codepart">static</SPAN>-hoz hasonlóan a
+                <SPAN class="codepart">relative</SPAN> érték sem változtatja meg az oldal folytonosságát, elfoglalja a neki járó helyet, csak éppen elcsúszik belőle.</P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>position: absolute</H2>
+
+            <P>Az
+                <SPAN class="codepart">absolute</SPAN> érték hatására két dolog történik: az elem kikerül az oldal folytonos megjelenítéséből, és az elem pozicionálása már nem az eredeti helyéhez képest, hanem az első olyan szülő tárolóhoz képest történik, melynek
+                <SPAN class="codepart">position</SPAN> értéke NEM <SPAN class="codepart">static</SPAN>.</P>
+
+            <DIV>
+                Példa 1:
+
+                <PRE th:replace="/example/css/positioning.html :: absolute"></PRE>
+                <DIV style="width: 250px; height: 250px; border: 3px solid red; position: relative;">
+                    Egyszer volt hol nem volt <SPAN style="border: 1px solid red; position: absolute;bottom: 10px; right: 20px;">eltolt szöveg</SPAN> volt egyszer egy fa.
+                </DIV>
+
+                A példában látható, hogy a folyó szövegben nem maradt meg az eltolt tároló helye, valamint az is, hogy az eltolás a tároló jobb alsó sarkához képest lett kiszámolva.
+            </DIV>
+
+            <DIV>
+                Példa 2:
+                <PRE th:replace="/example/css/positioning.html :: absolute_boxed"></PRE>
+
+                <DIV style="width: 250px; height: 250px; border: 3px solid red; position: relative;">
+                    Egyszer volt hol nem volt
+                    <DIV style="width: 200px; height: 150px; border: 1px solid black;">
+                        <SPAN style="border: 1px solid red; position: absolute;bottom: 10px; right: 20px;">eltolt szöveg</SPAN>
+                        volt egyszer egy fa.
+                    </DIV>
+                </DIV>
+
+                Ebben a példában pedig az látható, hogy hiába csomagoltuk be az eltolt elemet egy <SPAN class="codepart">&lt;div></SPAN>-be, mivel annak a
+                <SPAN class="codepart">position</SPAN> értéke alapértemezetten <SPAN class="codepart">static</SPAN>, ezért nem ahhoz viszonyítja a helyzetét, hanem a külső,
+                <SPAN class="codepart">relative</SPAN> értékű tárolóhoz.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>position: fixed</H2>
+
+            <P>Ezzel az értékkel a tárolónkat annak kódbeli elhelyezkedésétől függetlenül a képernyő egy adott pontjára szögezhetjük.</P>
+
+            <IFRAME src="/web/training/css/sample/position_fixed" style='display: block; width: 250px; height: 250px;'></IFRAME>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>position: sticky</H2>
+
+            <P>Ez a tulajdonság átmenetet képet a <SPAN class="codepart">relative</SPAN> és
+                <SPAN class="codepart">absolute</SPAN> értékek között, ugyanis egészen addig a helyén marad, amíg a felhasználó tovább nem görget, mert ebben az esetben
+                <SPAN class="codepart">absolute</SPAN>-ként kezd el viselkedni.</P>
+
+            <DIV>
+                Példa:
+
+                <DIV style="position: relative; width: 250px; height: 150px; border: 3px solid red; overflow: auto;">
+                    <DIV>Sor 1</DIV>
+                    <DIV>Sor 3</DIV>
+                    <DIV style="position: sticky; top: 10px; background-color: red;">Vigyázz, ragadok!</DIV>
+                    <DIV>Sor 4</DIV>
+                    <DIV>Sor 5</DIV>
+                    <DIV>Sor 6</DIV>
+                    <DIV>Sor 7</DIV>
+                    <DIV>Sor 8</DIV>
+                    <DIV>Sor 9</DIV>
+                    <DIV>Sor 10</DIV>
+                    <DIV>Sor 11</DIV>
+                    <DIV>Sor 12</DIV>
+                    <DIV>Sor 13</DIV>
+                    <DIV>Sor 14</DIV>
+                    <DIV>Sor 15</DIV>
+                    <DIV>Sor 16</DIV>
+                    <DIV>Sor 17</DIV>
+                    <DIV>Sor 18</DIV>
+                    <DIV>Sor 19</DIV>
+                    <DIV>Sor 20</DIV>
+                </DIV>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Float</H2>
+
+            <P>A <SPAN class="codepart">float</SPAN> tulajdonsággal olyan dobozokat tudunk csinálni, melyet körülölel a szöveg.</P>
+
+            <DIV>
+                Példák:<BR>
+
+                <DIV style="width: 250px; height: 250px; border: 3px solid red; text-align: justify;">
+                    <DIV style="float: left; width: 6rem; height: 2rem; background: blue;">Lebeg</DIV>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </DIV>
+
+                <DIV style="width: 250px; height: 250px; border: 3px solid red; text-align: justify;">
+                    <DIV style="float: right; width: 6rem; height: 2rem; background: blue;">Lebeg</DIV>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </DIV>
+
+                <DIV style="width: 350px; height: 250px; border: 3px solid red; text-align: justify;">
+                    <DIV style="float: right; width: 6rem; height: 2rem; background: blue;">Lebeg</DIV>
+                    <DIV style="float: left; width: 6rem; height: 2rem; background: blue;">Lebeg</DIV>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </DIV>
+
+                <DIV style="width: 350px; border: 3px solid red; text-align: justify;">
+                    <DIV style="float: left; width: 6rem; height: 2rem; background: blue;">Lebeg</DIV>
+                    <DIV style="float: left; width: 6rem; height: 2rem; background: blue;">Lebeg</DIV>
+                    <DIV style="float: left; width: 6rem; height: 2rem; background: blue;">Lebeg</DIV>
+                    <DIV style="float: left; width: 6rem; height: 2rem; background: blue;">Lebeg</DIV>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    <DIV style="float: right; width: 6rem; height: 2rem; background: blue;">Lebeg</DIV>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </DIV>
+            </DIV>
+
+            <P>Ahogy a példákban látszik, lebegő doboz lehet a tároló bal és jobb oldalán is (vagy épp mindkettő), attól függően, hogy a <SPAN class="codepart">float</SPAN> tulajdonságnak az értékét
+                <SPAN class="codepart">left</SPAN>-re (bal), vagy <SPAN class="codepart">right</SPAN>-ra (jobb) állítjuk.</P>
+            <P>Valamint ahogy a negyedik példa mutatja, több lebegő doboz is követheti egymást, és lebegő doboz elhelyezhető folyó szöveg közben is. Utóbbi esetben a szöveg három oldalról veszi körbe a lebegő dobozunkat.</P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Átlátszóság</H2>
+
+            <P>Elem átlátszóságát az <CODE>opacity</CODE> tuéajdonsággal állíthatjuk. Ez egy tört számot vár, és minél kisebb ez az érték, annál inkább átlátszó az elem.</P>
+
+            <DIV style="opacity: 1; width: 250px; border: 3px solid red; display: inline-block;">
+                <IMG src="/res/training/img/css/sample_background.jpg" style="width: 100%;">
+            </DIV>
+
+            <DIV style="opacity: 0.5; width: 250px; border: 3px solid red; display: inline-block;">
+                <IMG src="/res/training/img/css/sample_background.jpg" style="width: 100%;">
+            </DIV>
+
+            <DIV style="opacity: 0.2; width: 250px; border: 3px solid red; display: inline-block;">
+                <IMG src="/res/training/img/css/sample_background.jpg" style="width: 100%;">
+            </DIV>
+
+            <P>Az <CODE>opacity</CODE> tulajdonság értéke balról jobbra: 1, 0.5, 0.2</P>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/css/013_tables'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/css/015_overflow'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

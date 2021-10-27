@@ -1,0 +1,176 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Szöveg formázás - CSS - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">CSS - Szöveg formázás</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/css.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Szöveg szín</H2>
+
+            <P>
+                Szöveg színét a <SPAN class='codepart'>color</SPAN> tulajdonsággal tudjuk állítani:<BR>
+                <SPAN class="codepart">color: green;</SPAN> - <SPAN style='color: green;'>Példa</SPAN>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Szöveg elhelyezése</H2>
+
+            <P>
+                Szöveg vízszintes elhelyezésére szolgál a <SPAN class='codepart'>text-align</SPAN> tulajdonság, melynek értéke lehet:
+            <UL>
+                <LI><SPAN class='codepart'>left</SPAN>: balra igazítás (alapértelmezett)</LI>
+                <LI><SPAN class='codepart'>right</SPAN>: jobbra igazítás</LI>
+                <LI><SPAN class='codepart'>center</SPAN>: középre igazítás</LI>
+                <LI><SPAN class='codepart'>justify</SPAN>: sorkizárt (folyó szövegnél minden sor kitölti a tároló szélességét)</LI>
+            </UL>
+            </P>
+
+            <P>
+                Példa:
+            <DIV style='text-align: right'>Jobbra igazított szöveg</DIV>
+            <DIV style='text-align: center'>Középre igazított szöveg</DIV>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Húzások</H2>
+
+            <P>
+                A szövegünket kiegészíthetjük kölönféle vonalakkal, melyeket a <SPAN class='codepart'>text-decoration</SPAN> tulajdonsággal adhatunk meg:
+
+            <UL>
+                <LI><SPAN class='codepart'>none</SPAN>: nincs vonal (alapértelmezett)</LI>
+                <LI><SPAN class='codepart'>overline</SPAN>: <SPAN style='text-decoration: overline;'>föléhúzott</SPAN> szöveg</LI>
+                <LI><SPAN class='codepart'>underline</SPAN>: <SPAN style='text-decoration: underline'>aláhúzott</SPAN> szöveg</LI>
+                <LI><SPAN class='codepart'>line-through</SPAN>: <SPAN style='text-decoration: line-through'>áthúzott</SPAN> szöveg</LI>
+            </UL>
+            </P>
+
+            <P>
+                Egyszerre több vonalat is hozzá lehet adni, ehhez csak fel kell sorolni a kiválasztott típusokat:<BR>
+                <SPAN class='codepart'>text-decoration: underline overline</SPAN>: <SPAN style='text-decoration: underline overline'>fölé és aláhúzott</SPAN> szöveg
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Szöveg átalakítás</H2>
+
+            <P>
+                A megjelenítendő szöveg kis/nagybetűs megjelenítéséért felel a <SPAN class='codepart'>text-transform</SPAN> tulajdonság, a következő lehetséges értékekkel:
+            <UL>
+                <LI><SPAN class='codepart'>none</SPAN>: nincs átalakítás (alapértelmezett)</LI>
+                <LI><SPAN class='codepart'>uppercase</SPAN>: <SPAN style='text-transform: uppercase;'>nagybetűs</SPAN> szöveg</LI>
+                <LI><SPAN class='codepart'>lowercase</SPAN>: <SPAN style='text-transform: lowercase;'>KISBETŰS</SPAN> szöveg</LI>
+                <LI><SPAN class='codepart'>capitalize</SPAN>: <SPAN style='text-transform: capitalize;'>a szöveg minden szava nagybetűvel kezdődik</SPAN></LI>
+            </UL>
+            <P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Behúzás</H2>
+
+            <P>Bekezdések első sorát kicsit beljebb szokás kezdeni (BEkezdés). Ezért a <SPAN class='codepart'>text-indent</SPAN> tulajdonság felel.</P>
+            <P>
+                Példa:
+            <DIV style='text-indent: 50px; max-width: 750px;'>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</DIV>
+            <DIV style='text-indent: 50px; max-width: 750px;'>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</DIV>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Betűköz</H2>
+
+            <P>A betűk közti távolságot a
+                <SPAN class='codepart'>letter-spacing</SPAN> tulajdonsággal lehet állítani. Alapértelmezett érték a 0, ha negatív értéket adunk meg akkor közelebb, ha pozitívat akkor pedig távolabb kerülnek egymástól a betűk.
+            </P>
+            <P>
+                Példa:
+            <DIV style='letter-spacing: -3px'>Negatív betűköz</DIV>
+            <DIV style='letter-spacing: 3px'>Pozitív betűköz</DIV>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Sormagasság / sortávolság</H2>
+
+            <P>Hosszú folyó szöveget elég nehéz olvasni, ha összefolynak a sorok, ezért érdemesebb a sorok között egy kicsit nagyobb távolságot hagyni. Ezt az értéket a
+                <SPAN class='codepart'>line-height</SPAN> tulajdonsággal állíthatjuk. Minél kisebbre állítjuk, annál közelebb lesznek egymáshoz a sorok, minél nagyobbra, annál messzebb. (Az ideális értékek 1 és 2 körül szoktak mozogni)
+            </P>
+
+            <P>
+                Példa:
+            <DIV style='line-height: 0.7; max-width: 750px; border: 1px solid red;'>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</DIV>
+            <DIV style='line-height: 1.8; max-width: 750px; border: 1px solid red;'>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</DIV>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Szóköz</H2>
+
+            <P>A szavak közti távolságot a
+                <SPAN class='codepart'>word-spacing</SPAN> tulajdonság érétke határozza meg. Itt is a negatív érték jelenti a szokásosnál kisebb, a pozitívat pedig a nagyobb értéket.</P>
+
+            <P>
+                Példa:
+            <DIV style='word-spacing: -5px'>A normálnál kisebb szóköz</DIV>
+            <DIV style='word-spacing: 10px'>A normálnál nagyobb szóköz</DIV>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Árnyékolás</H2>
+
+            <P>
+                Szövegnek árnyékot <SPAN class='codepart'>text-shadow</SPAN> tulajdonsággal lehet adni, ami három értéket vár, sorrendben:
+            <OL>
+                <LI>Vízszintes eltolás</LI>
+                <LI>Függőleges eltolás</LI>
+                <LI>Árnyék színe</LI>
+            </OL>
+
+            Vagy:
+            <OL>
+                <LI>Vízszintes eltolás</LI>
+                <LI>Függőleges eltolás</LI>
+                <LI>Elmosódottság</LI>
+                <LI>Árnyék színe</LI>
+            </OL>
+            </P>
+
+            <DIV>
+                Példák:
+                <P>
+                    <SPAN class='codepart'>text-shadow: 5px 10px red;</SPAN>
+                <DIV style='text-shadow: 5px 10px red;'>Árnyékolt szöveg</DIV>
+                </P>
+
+                <P>
+                    <SPAN class='codepart'>text-shadow: 5px 10px 2px red;</SPAN>
+                <DIV style='text-shadow: 5px 10px 2px red;'>Árnyékolt szöveg</DIV>
+                </P>
+            </DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/css/009_box_model'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/css/011_character_style'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

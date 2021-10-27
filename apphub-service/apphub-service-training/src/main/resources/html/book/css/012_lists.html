@@ -1,0 +1,66 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Listák - CSS - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">CSS - Listák</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/css.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Lista stílus</H2>
+
+            <P>
+                A listák elemei előtt megjelenő jelet a <SPAN class='codepart'>list-style-type</SPAN> tulajdonsággal állíthatjuk:
+            <UL th:replace="/example/css/lists.html :: list_style_type"></UL>
+
+            <A href='https://www.w3schools.com/cssref/tryit.asp?filename=trycss_list-style-type_all' target='_blank'>Bővített lista</A>
+            </P>
+            <P><U>Megjegyzés:</U> a <SPAN class='codepart'>list-style-type</SPAN> megváltoztathatja a lista visekledését, és rendezett listából is lehet rendezetlen, és fordítva.</P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Kép beállítása a listaelemek előtt</H2>
+
+            <P>
+                Erre a <SPAN class='codepart'>list-style-image</SPAN> tulajdonság szolgál:
+            <PRE>list-style-image: url("/img/css/sample_background.jpg")</PRE>
+            Példa:
+            <UL th:replace="/example/css/lists.html :: image_background"></UL>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Listaelem jelzők elhelyezkedése</H2>
+
+            <P>
+                Alapértelmezetten a listaelem jelző a teljes listaelem előtt helyezkedik el:
+            <DIV th:replace="/example/css/lists.html :: list_style_position_outside"></DIV>
+            </P>
+
+            <P>
+                Ez azért van, mert a <SPAN class='codepart'>list-style-position</SPAN> tulajdonság alapértelmezett értéke <SPAN class="codepart">outside</SPAN>.<BR>
+                Amennyiben ezt az értéket <SPAN class='codepart'>inside</SPAN>ra állítjuk, a jelzők beleolvadnak a listaelembe:
+            <DIV th:replace="/example/css/lists.html :: list_style_position_inside"></DIV>
+            </P>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/css/011_character_style'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/css/013_tables'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

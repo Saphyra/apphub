@@ -1,0 +1,29 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<PRE th:fragment="original_example">
+&lt;div style='width: 250px; height: 250px; border: 3px solid red; background: yellow;'>
+    &lt;div style='width: 250px; height: 100px; background: green;'>
+        Tartalom
+    &lt;/div>
+&lt;/div>
+</PRE>
+
+<PRE th:fragment="with_padding_and_border">
+&lt;div style='width: 250px; height: 250px; border: 3px solid red; background: yellow;'>
+    &lt;div style='width: 250px; height: 100px; background: green; <SPAN class='codepart'>padding: 30px; border: 20px solid black;</SPAN>'>
+        Tartalom
+    &lt;/div>
+&lt;/div>
+</PRE>
+
+<PRE th:fragment="border_box">
+&lt;div style='width: 250px; height: 250px; border: 3px solid red; background: yellow;'>
+    &lt;div style='width: 250px; height: 100px; background: green; padding: 30px; border: 20px solid black; <SPAN class='codepart'>box-sizing: borer-box</SPAN>'>
+        Tartalom
+    &lt;/div>
+&lt;/div>
+</PRE>
+
+</BODY>
+</HTML>

@@ -1,0 +1,99 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Átmenet - CSS - Oktatás - Apphub</TITLE>
+
+    <STYLE>
+        .transitionable{
+            width: 250px;
+            height: 250px;
+            border: 3px solid red;
+            transition: width 4s, height 2s;
+        }
+
+        .transitionable:hover{
+            width: 100%;
+            height: 150px;
+        }
+
+    </STYLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">CSS - Átmenet</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/css.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Mi is ez?</H2>
+
+            <P>Korábbi fejezetekben megtanultuk, hogy a CSS segítségével bizonyos felhasználói beavatkozás hatására megváltozhatnak az elemek tulajdonságai (<CODE>:hover</CODE> kiválasztó például).
+            </P>
+
+            <P>A <CODE>transition</CODE> tulajdonság abban segít, hogy ezek a változások ne ugrásszerűen, hanem fokozatosan jussanak érvényre.</P>
+
+            <P>Ez a tulajdonság értékül egy másik tulajdonságot vár (azt, amelyiknek a változását gördülékennyé szeretnénk tenni), valamint egy idő értéket, hogy ez az átalakulás mennyi idő alatt menjen végbe.</P>
+
+            <DIV>
+                Például:
+                <PRE th:replace="/example/css/transition.html :: transition"></PRE>
+
+
+                <DIV class="transitionable"></DIV>
+            </DIV>
+
+            <P>Ahogyan a példában látható, egyszerre több tulajdonságra is lehet átmenetet beállítani, ekkor a különböző értékeket vesszővel elválasztva soroljuk fel egymás mögött.</P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Átmenet sebességének a módja</H2>
+
+            <P>A <CODE>transition-timing-function</CODE> azt a metódust adja meg, hogy az átmenet sebessége az átalakulás során hogyan változzon.</P>
+
+            <DIV>
+                Lehetséges értékek:
+                <UL>
+                    <LI><CODE>ease</CODE> - lassú kezdés, aztán gyorsul, majd megint lassul. (alapértelmezett)</LI>
+                    <LI><CODE>linear</CODE> - állandó sebesség</LI>
+                    <LI><CODE>ease-in</CODE> - lassú kezdés</LI>
+                    <LI><CODE>ease-out</CODE> - lassú befejezés</LI>
+                    <LI><CODE>ease-in-out</CODE> - lassú kezdés és befejezés</LI>
+                </UL>
+            </DIV>
+
+            <DIV>
+                Példák:
+                <DIV class="transitionable" style="transition-timing-function: linear">linear</DIV>
+                <DIV class="transitionable" style="transition-timing-function: ease-in">ease-in</DIV>
+                <DIV class="transitionable" style="transition-timing-function: ease-in-out">ease-in-out</DIV>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Átmenet késleltetése</H2>
+
+            <P>A <CODE>transition-delay</CODE> tulajdonsággal azt adhatjuk meg, hogy az átmenet mennyivel az eseményt kiváltó ok után keződjön el.</P>
+
+            <DIV>
+                Példa: <CODE>transition-delay: 2s;</CODE>
+                <DIV class="transitionable" style="transition-delay: 2s;">Az átmenet csak két másodperc múlva fog elkezdődni.</DIV>
+            </DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/css/020_attribute_selectors'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/css/022_responsivity'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

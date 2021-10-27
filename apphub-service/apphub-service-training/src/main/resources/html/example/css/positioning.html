@@ -1,0 +1,44 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+<PRE th:fragment="display_none">
+&lt;div>
+    Egyszer volt hol nem volt &lt;span style="display: none">Nem vagyok itt&lt;/span> volt egyszer egy semmi.
+&lt;/div>
+</PRE>
+
+<PRE th:fragment="visibility_hidden">
+&lt;div>
+    Egyszer volt hol nem volt &lt;span style="visibility: hidden">Nem vagyok itt&lt;/span> volt egyszer egy semmi.
+&lt;/div>
+</PRE>
+
+<PRE th:fragment="relative_default">
+&lt;div>
+    Egyszer volt hol nem volt &lt;span>eltolandó szöveg&lt;/span> volt egyszer egy fa.
+&lt;/div>
+</PRE>
+
+<PRE th:fragment="relative_moved">
+&lt;div>
+    Egyszer volt hol nem volt &lt;span style="<SPAN class="codepart">position: relative; top: 30px; left: 40px;</SPAN>">eltolandó szöveg&lt;/span> volt egyszer egy fa.
+&lt;/div>
+</PRE>
+
+<PRE th:fragment="absolute">
+&lt;div style="position: relative;">
+    Egyszer volt hol nem volt &lt;span style="<SPAN class="codepart">position: absolute; bottom: 10px; right: 20px;</SPAN>">eltolt szöveg&lt;/span> volt egyszer egy fa.
+&lt;/div>
+</PRE>
+
+<PRE th:fragment="absolute_boxed">
+&lt;div style="position: relative;">
+    Egyszer volt hol nem volt
+    &lt;div style="width: 200px; height: 150px; border: 1px solid black;">
+        &lt;span style="position: absolute; bottom: 10px; right: 20px;">eltolt szöveg&lt;/span>
+        volt egyszer egy fa.
+    &lt;/div>
+&lt;/div>
+</PRE>
+
+</BODY>
+</HTML>

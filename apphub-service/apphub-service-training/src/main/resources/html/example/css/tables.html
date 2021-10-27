@@ -1,0 +1,141 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<PRE th:fragment="simple_table">
+&lt;table>
+    &lt;tr>
+        &lt;th>Fejléc 1&lt;/th>
+        &lt;th>Fejléc 2&lt;/th>
+    &lt;/tr>
+    &lt;tr>
+        &lt;td>Adat 1&lt;/td>
+        &lt;td>Adat 2&lt;/td>
+    &lt;tr>
+&lt;/table>
+</PRE>
+
+<DIV th:fragment="simple_table_result" style="width: 250px; height: 250px; border: 3px solid red; padding: 0.5rem;">
+    <TABLE>
+        <TR>
+            <TH>Fejléc 1</TH>
+            <TH>Fejléc 2</TH>
+        </TR>
+        <TR>
+            <TD>Adat 1</TD>
+            <TD>Adat 2</TD>
+        </TR>
+    </TABLE>
+</DIV>
+
+<DIV th:fragment="set_border_failure" style="width: 250px; height: 250px; border: 3px solid red; padding: 0.5rem;">
+    <TABLE style="border: 1px solid white;">
+        <TR>
+            <TH>Fejléc 1</TH>
+            <TH>Fejléc 2</TH>
+        </TR>
+        <TR>
+            <TD>Adat 1</TD>
+            <TD>Adat 2</TD>
+        </TR>
+    </TABLE>
+</DIV>
+
+<PRE th:fragment="set_border">
+table {border: 1px solid white;}
+th {border: 1px solid white;}
+td {border: 1px solid white;}
+</PRE>
+
+<DIV th:fragment="set_border_result" style="width: 250px; height: 250px; border: 3px solid red; padding: 0.5rem;">
+    <TABLE style="border: 1px solid white; border-collapse: initial; border-spacing: 2px;">
+        <TR>
+            <TH style="border: 1px solid white;">Fejléc 1</TH>
+            <TH style="border: 1px solid white;">Fejléc 2</TH>
+        </TR>
+        <TR>
+            <TD style="border: 1px solid white;">Adat 1</TD>
+            <TD style="border: 1px solid white;">Adat 2</TD>
+        </TR>
+    </TABLE>
+</DIV>
+
+<PRE th:fragment="border_spacing">
+table {
+    border: 1px solid white;
+    <SPAN class="codepart">border-spacing: 10px;</SPAN>
+}
+th {border: 1px solid white;}
+td {border: 1px solid white;}
+</PRE>
+
+<DIV th:fragment="border_spacing_result" style="width: 250px; height: 250px; border: 3px solid red; padding: 0.5rem;">
+    <TABLE style="border: 1px solid white; border-collapse: initial; border-spacing: 10px;">
+        <TR>
+            <TH style="border: 1px solid white;">Fejléc 1</TH>
+            <TH style="border: 1px solid white;">Fejléc 2</TH>
+        </TR>
+        <TR>
+            <TD style="border: 1px solid white;">Adat 1</TD>
+            <TD style="border: 1px solid white;">Adat 2</TD>
+        </TR>
+    </TABLE>
+</DIV>
+
+<TABLE th:fragment="border_spacing_collapse" style="width: 100%; text-align: center;">
+    <TR>
+        <TD style="border: 3px ridge white; padding: 0.5rem;">
+            Ebben a példában a <SPAN class="codepart">border-spacing</SPAN> tulajdonságot állítjuk 0 értékre.
+            <DIV style="width: 250px; height: 250px; border: 3px solid red; padding: 0.5rem; margin: auto;">
+                <TABLE style="border: 10px solid white; border-collapse: initial; border-spacing: 0px;">
+                    <TR>
+                        <TH style="border: 10px solid white;">Fejléc 1</TH>
+                        <TH style="border: 10px solid white;">Fejléc 2</TH>
+                    </TR>
+                    <TR>
+                        <TD style="border: 10px solid white;">Adat 1</TD>
+                        <TD style="border: 10px solid white;">Adat 2</TD>
+                    </TR>
+                </TABLE>
+            </DIV>
+        </TD>
+        <TD style="border: 3px ridge white; padding: 0.5rem;">
+            Ebben a példában a <SPAN class="codepart">border-collapse</SPAN> tulajdonságot állítjuk <SPAN class="codeaprt">collapse</SPAN> értékre.
+            <DIV style="width: 250px; height: 250px; border: 3px solid red; padding: 0.5rem; margin: auto;">
+                <TABLE style="border: 10px solid white; border-collapse: collapse;">
+                    <TR>
+                        <TH style="border: 10px solid white;">Fejléc 1</TH>
+                        <TH style="border: 10px solid white;">Fejléc 2</TH>
+                    </TR>
+                    <TR>
+                        <TD style="border: 10px solid white;">Adat 1</TD>
+                        <TD style="border: 10px solid white;">Adat 2</TD>
+                    </TR>
+                </TABLE>
+            </DIV>
+        </TD>
+    </TR>
+</TABLE>
+
+<PRE th:fragment="vertical_align">
+&lt;table>
+    &lt;tr>
+        &lt;th style="height 100px; vertical-align: bottom;">Fejléc&lt;/th>
+    &lt;/tr>
+    &lt;tr>
+        &lt;td style="height: 100px; vertical align: middle;">Adat&lt;/td>
+    &lt;/tr>
+&lt;/table>
+</PRE>
+
+<DIV th:fragment="vertical_align_result" style="width: 250px; height: 250px; border: 3px solid red; padding: 0.5rem;">
+    <TABLE style="border: 1px solid white; width: 100%">
+        <TR>
+            <TH style="border: 1px solid white; height: 100px; vertical-align: bottom;">Fejléc</TH>
+        </TR>
+        <TR>
+            <TD style="border: 1px solid white; height: 100px; vertical-align: middle;">Adat</TD>
+        </TR>
+    </TABLE>
+</DIV>
+</BODY>
+</HTML>
