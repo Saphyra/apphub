@@ -26,7 +26,6 @@ import static org.mockito.BDDMockito.given;
 public class PlanetToLocationResponseConverterTest {
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final String DEFAULT_NAME = "default-name";
-    private static final UUID OWNER = UUID.randomUUID();
     private static final String OWNER_NAME = "owner-name";
     private static final UUID USER_ID = UUID.randomUUID();
 
@@ -61,8 +60,8 @@ public class PlanetToLocationResponseConverterTest {
         given(planet.getCustomNames()).willReturn(new OptionalHashMap<>());
         given(planet.getCoordinate()).willReturn(coordinateModel);
         given(coordinateModel.getCoordinate()).willReturn(coordinate);
-        given(planet.getOwner()).willReturn(OWNER);
-        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(OWNER, player));
+        given(planet.getOwner()).willReturn(USER_ID);
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
         given(player.getPlayerName()).willReturn(OWNER_NAME);
         given(visibilityFacade.isVisible(USER_ID, planet)).willReturn(true);
         given(visibilityFacade.isVisible(USER_ID, filteredPlanet)).willReturn(false);
@@ -73,7 +72,7 @@ public class PlanetToLocationResponseConverterTest {
         assertThat(result.get(0).getPlanetId()).isEqualTo(PLANET_ID);
         assertThat(result.get(0).getPlanetName()).isEqualTo(DEFAULT_NAME);
         assertThat(result.get(0).getCoordinate()).isEqualTo(coordinate);
-        assertThat(result.get(0).getOwner()).isEqualTo(OWNER);
+        assertThat(result.get(0).getOwner()).isEqualTo(USER_ID);
         assertThat(result.get(0).getOwnerName()).isEqualTo(OWNER_NAME);
     }
 }
