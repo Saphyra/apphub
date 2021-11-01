@@ -17,7 +17,6 @@ public class Endpoints {
     public static final String UTILS_JSON_FORMATTER_PAGE = "/web/utils/json-formatter";
     public static final String UTILS_LOG_FORMATTER_PAGE = "/web/utils/log-formatter";
     public static final String UTILS_BASE64_ENCODER_PAGE = "/web/utils/base64";
-    public static final String TRAINING_INDEX_PAGE = "/web/training";
 
     //Training
     public static final String TRAINING_BOOK_PAGE = "/web/training/{book}/{chapter}";

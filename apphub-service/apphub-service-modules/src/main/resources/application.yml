@@ -48,10 +48,6 @@ modules:
         url: /web/utils/base64
         allowedByDefault: true
         mobileAllowed: true
-      - name: training
-        url: /web/training
-        allowedByDefault: true
-        mobileAllowed: true
     game:
       - name: skyxplore
         url: /web/skyxplore
@@ -59,3 +55,12 @@ modules:
         mobileAllowed: false
         roles:
           - SKYXPLORE
+    training:
+      - name: html
+        url: /web/training/html/001_introduction
+        allowedByDefault: true
+        mobileAllowed: true
+      - name: css
+        url: /web/training/css/001_introduction
+        allowedByDefault: true
+        mobileAllowed: true
