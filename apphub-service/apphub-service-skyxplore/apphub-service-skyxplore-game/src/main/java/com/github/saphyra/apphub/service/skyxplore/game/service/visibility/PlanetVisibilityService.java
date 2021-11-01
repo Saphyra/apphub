@@ -10,7 +10,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class PlanetVisibilityService {
     boolean isVisible(UUID userId, Planet planet) {
         return userId.equals(planet.getOwner());
