@@ -37,7 +37,6 @@ public class Endpoints {
     public static final String EVENT_DELETE_EXPIRED_ACCESS_TOKENS = "/event/delete-expired-access-tokens";
     public static final String EVENT_REFRESH_ACCESS_TOKEN_EXPIRATION = "/event/refresh-access-token-expiration";
     public static final String EVENT_DELETE_ACCOUNT = "/event/delete-account";
-    public static final String EVENT_PAGE_VISITED = "/event/page-visited";
     public static final String EVENT_SKYXPLORE_LOBBY_CLEANUP = "/event/skyxplore/lobby/cleanup";
     public static final String EVENT_SKYXPLORE_GAME_CLEANUP = "/event/skyxplore/game/cleanup";
     public static final String EVENT_MESSAGE_SENDER_PING_REQUEST = "/event/message-sender/ping-request";
@@ -80,7 +79,6 @@ public class Endpoints {
     //USER-DATA
     public static final String USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";
     public static final String USER_DATA_INTERNAL_GET_USER_LANGUAGE = "/internal/user/{userId}/data/language";
-    public static final String USER_DATA_INTERNAL_GET_LAST_VISITED_PAGE = "/internal/user/authentication/last-visited-page/{userId}";
     public static final String USER_DATA_INTERNAL_USER_GET_USERNAME = "/internal/user/{userId}/data/name";
 
     public static final String USER_DATA_GET_USER_ROLES = "/api/user/data/roles";

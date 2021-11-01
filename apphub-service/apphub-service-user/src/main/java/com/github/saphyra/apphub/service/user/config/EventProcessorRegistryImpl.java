@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.platform.event_gateway.model.request.Regist
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.event.EmptyEvent;
-import com.github.saphyra.apphub.lib.event.PageVisitedEvent;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import com.github.saphyra.apphub.lib.event.processor.EventProcessorRegistry;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,11 +39,6 @@ public class EventProcessorRegistryImpl implements EventProcessorRegistry {
                 .serviceName(serviceName)
                 .eventName(DeleteAccountEvent.EVENT_NAME)
                 .url(Endpoints.EVENT_DELETE_ACCOUNT)
-                .build(),
-            RegisterProcessorRequest.builder()
-                .serviceName(serviceName)
-                .eventName(PageVisitedEvent.EVENT_NAME)
-                .url(Endpoints.EVENT_PAGE_VISITED)
                 .build(),
             RegisterProcessorRequest.builder()
                 .serviceName(serviceName)

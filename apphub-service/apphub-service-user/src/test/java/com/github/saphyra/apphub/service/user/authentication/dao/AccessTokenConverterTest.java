@@ -35,7 +35,6 @@ public class AccessTokenConverterTest {
             .userId(USER_ID_STRING)
             .persistent(true)
             .lastAccess(LAST_ACCESS)
-            .lastVisitedPage(LAST_VISITED_PAGE)
             .build();
 
         given(uuidConverter.convertEntity(ACCESS_TOKEN_ID_STRING)).willReturn(ACCESS_TOKEN_ID);
@@ -47,7 +46,6 @@ public class AccessTokenConverterTest {
         assertThat(result.getUserId()).isEqualTo(USER_ID);
         assertThat(result.isPersistent()).isTrue();
         assertThat(result.getLastAccess()).isEqualTo(LAST_ACCESS);
-        assertThat(result.getLastVisitedPage()).isEqualTo(LAST_VISITED_PAGE);
     }
 
     @Test
@@ -57,7 +55,6 @@ public class AccessTokenConverterTest {
             .userId(USER_ID)
             .persistent(true)
             .lastAccess(LAST_ACCESS)
-            .lastVisitedPage(LAST_VISITED_PAGE)
             .build();
 
         given(uuidConverter.convertDomain(ACCESS_TOKEN_ID)).willReturn(ACCESS_TOKEN_ID_STRING);
@@ -69,6 +66,5 @@ public class AccessTokenConverterTest {
         assertThat(result.getUserId()).isEqualTo(USER_ID_STRING);
         assertThat(result.isPersistent()).isTrue();
         assertThat(result.getLastAccess()).isEqualTo(LAST_ACCESS);
-        assertThat(result.getLastVisitedPage()).isEqualTo(LAST_VISITED_PAGE);
     }
 }

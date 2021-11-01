@@ -66,7 +66,6 @@ public class SolarSystemResponseExtractorTest {
         given(visibilityFacade.isVisible(USER_ID, filteredSolarSystem)).willReturn(false);
         given(visibilityFacade.isVisible(USER_ID, solarSystem)).willReturn(true);
         given(coordinateModel.getCoordinate()).willReturn(coordinate1);
-        given(planet.getOwner()).willReturn(USER_ID);
 
         List<MapSolarSystemResponse> result = underTest.getSolarSystems(USER_ID, universe);
 
