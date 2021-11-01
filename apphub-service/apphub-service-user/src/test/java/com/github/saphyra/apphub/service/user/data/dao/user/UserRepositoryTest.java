@@ -108,7 +108,7 @@ public class UserRepositoryTest {
             .username("ad")
             .email("adaSD@as.vfwr")
             .markedForDeletion(true)
-            .markedForDeletionAt(LocalDateTime.now())
+            .markedForDeletionAt(LocalDateTime.now().withNano(0))
             .build();
         UserEntity entity3 = UserEntity.builder()
             .userId(USER_ID_3)
@@ -120,7 +120,7 @@ public class UserRepositoryTest {
             .username("ad")
             .email("adaSD@as.vfwr")
             .markedForDeletion(true)
-            .markedForDeletionAt(LocalDateTime.now().minusSeconds(1))
+            .markedForDeletionAt(LocalDateTime.now().minusSeconds(1).withNano(0))
             .build();
         underTest.saveAll(Arrays.asList(entity1, entity2, entity3, entity4));
 

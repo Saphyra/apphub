@@ -80,12 +80,12 @@ public class UserEventControllerImplTestIt {
         AccessToken accessToken1 = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)
             .userId(USER_ID_1)
-            .lastAccess(LocalDateTime.now())
+            .lastAccess(LocalDateTime.now().withNano(0))
             .build();
         AccessToken accessToken2 = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_2)
             .userId(USER_ID_2)
-            .lastAccess(LocalDateTime.now())
+            .lastAccess(LocalDateTime.now().withNano(0))
             .build();
         accessTokenDao.saveAll(Arrays.asList(accessToken1, accessToken2));
 

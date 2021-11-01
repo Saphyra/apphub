@@ -41,8 +41,12 @@ public class Planet {
     private final StorageDetails storageDetails = StorageDetails.builder().build();
 
     @Builder.Default
-    private final Map<PriorityType, Integer> priorities = Arrays.stream(PriorityType.values())
-        .collect(Collectors.toMap(Function.identity(), priorityType -> 5));
+    private final Map<PriorityType, Integer> priorities = getDefaultPriorities();
+
+    private static Map<PriorityType, Integer> getDefaultPriorities() {
+        return Arrays.stream(PriorityType.values())
+            .collect(Collectors.toMap(Function.identity(), priorityType -> 5));
+    }
 
     public List<Building> getBuildings() {
         return surfaces.values()
