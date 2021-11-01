@@ -214,7 +214,7 @@
   },
   "additionalContent": {
     "delete-error-reports-confirmation-dialog-title": "Hibajelentések törlésének megerősítése",
-    "delete-error-reports-confirmation-dialog-detail": "Biztosan törölni szeretné a következő hibajelentéseket: {ids}?",
+    "delete-error-reports-confirmation-dialog-detail": "Biztosan törölni szeretné a következő hibajelentéseket: <SPAN class='red'>{ids}</SPAN>?",
     "delete-error-reports-confirmation-dialog-confirm-button": "Törlés",
     "delete-error-reports-confirmation-dialog-cancel-button": "Mégse",
     "error-reports-marked": "Hibajekentés(ek) megjelölve.",

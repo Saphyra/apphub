@@ -14,10 +14,13 @@
         text-align: center;
     }
 
+        #content-table input[type=checkbox]{
+            transform: scale(1.5);
+        }
+
         #error-reports td{
             cursor: pointer;
         }
-
 
     .unread{
         color: yellow;

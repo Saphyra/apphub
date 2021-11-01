@@ -214,7 +214,7 @@
   },
   "additionalContent": {
     "delete-error-reports-confirmation-dialog-title": "Confirm deleting error reports",
-    "delete-error-reports-confirmation-dialog-detail": "Are you sure you want to delete reports {ids}?",
+    "delete-error-reports-confirmation-dialog-detail": "Are you sure you want to delete reports <SPAN class='red'>{ids}</SPAN>?",
     "delete-error-reports-confirmation-dialog-confirm-button": "Delete",
     "delete-error-reports-confirmation-dialog-cancel-button": "Cancel",
     "error-reports-marked": "Error report(s) is/are marked.",

@@ -20,7 +20,7 @@ public class PinTest extends BackEndTest {
     private static final String TITLE = "title";
 
     @Test(dataProvider = "languageDataProvider")
-    public void editListITem(Language language) {
+    public void editListItem(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 

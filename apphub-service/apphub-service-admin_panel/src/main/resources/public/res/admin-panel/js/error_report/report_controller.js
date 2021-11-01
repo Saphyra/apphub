@@ -239,7 +239,7 @@
     function deleteReports(ids){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
             .withTitle(Localization.getAdditionalContent("delete-error-reports-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("delete-error-reports-confirmation-dialog-detail", {ids: ids}))
+            .withDetail(Localization.getAdditionalContent("delete-error-reports-confirmation-dialog-detail", {ids: ids.join(", ")}))
             .withConfirmButton(Localization.getAdditionalContent("delete-error-reports-confirmation-dialog-confirm-button"))
             .withDeclineButton(Localization.getAdditionalContent("delete-error-reports-confirmation-dialog-cancel-button"));
 
