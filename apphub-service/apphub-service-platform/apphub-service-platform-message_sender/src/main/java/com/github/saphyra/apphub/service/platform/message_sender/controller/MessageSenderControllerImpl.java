@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.message_sender.controller;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.platform.message_sender.server.MessageSenderController;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -26,10 +25,10 @@ public class MessageSenderControllerImpl implements MessageSenderController {
     }
 
     @Override
-    public List<UUID> sendMessage(MessageGroup group, WebSocketMessage message) {
+    public void sendMessage(MessageGroup group, WebSocketMessage message) {
         WebSocketHandler webSocketHandler = connectionGroups.getOptional(group)
             .orElseThrow(() -> ExceptionFactory.reportedException("ConnectionGroup not found for MessageGroup " + group));
 
-        return webSocketHandler.sendEvent(message);
+        webSocketHandler.sendEvent(message);
     }
 }

@@ -3,6 +3,8 @@ function WebSocketConnection(ep){
     const host = window.location.host;
     const handlers = [new PingWebSocketHandler(this), new RedirectWebSocketHandler(this)];
 
+    let reconnectionTryCount = 1;
+
     let connection = null;
 
     this.addHandler = function(handler){
@@ -19,7 +21,9 @@ function WebSocketConnection(ep){
         return this;
     }
 
-    this.connect = function(){
+    this.connect = connect
+
+    function connect(){
         if(connection){
             throwException("IllegalState", "Connection already established.");
         }
@@ -29,9 +33,16 @@ function WebSocketConnection(ep){
         connection = new WebSocket(url);
 
         connection.onmessage = handleMessage;
+        connection.onerror = function(err){
+            console.log("WebSocket encountered error: ", err.message, "Closing connection");
+        };
+        connection.onclose = reconnect;
     }
 
     this.close = function(){
+        if(!connection){
+            throwException("IllegalState", "Connection is not established.");
+        }
         connection.close();
     }
 
@@ -44,6 +55,7 @@ function WebSocketConnection(ep){
     }
 
     function handleMessage(event){
+        reconnectionTryCount = 1;
         const payload = JSON.parse(event.data);
 
         const eventName = payload.eventName;
@@ -54,6 +66,13 @@ function WebSocketConnection(ep){
             .peek(function(handler){handler.handle(eventData, eventName)})
             .findFirst()
             .ifNotPresent(function(){logService.logToConsole("No WebSocketHandler found for eventName " + eventName)});
+    }
+
+    function reconnect(){
+        console.log("Connection lost. Reconnecting... Retry count: " + reconnectionTryCount);
+        connection = null;
+        setTimeout(connect, reconnectionTryCount * 1000);
+        reconnectionTryCount++;
     }
 
     function PingWebSocketHandler(c){
@@ -69,16 +88,16 @@ function WebSocketConnection(ep){
     }
 
     function RedirectWebSocketHandler(c){
-            const wsConnection = c;
+        const wsConnection = c;
 
-            this.canHandle = function(eventName){
-                return eventName == "redirect";
-            }
-
-            this.handle = function(redirectUrl){
-                window.location.href = event.eventName;
-            }
+        this.canHandle = function(eventName){
+            return eventName == "redirect";
         }
+
+        this.handle = function(redirectUrl){
+            window.location.href = event.eventName;
+        }
+    }
 }
 
 function WebSocketEventHandler(ch, h){

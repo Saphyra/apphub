@@ -24,10 +24,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Vector;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -92,12 +94,16 @@ public class DefaultWebSocketHandlerTest {
     }
 
     @Test
-    public void afterConnectionEstablished() {
+    public void afterConnectionEstablished() throws IOException {
+        underTest.getRetryEvents().put(USER_ID, new Vector<>(Arrays.asList(webSocketEvent)));
+        given(objectMapperWrapper.writeValueAsString(any())).willReturn(MESSAGE_PAYLOAD);
+
         underTest.afterConnectionEstablished(session);
 
         verify(templateMethods).afterConnection(USER_ID);
 
         assertThat(underTest.getSessionMap()).containsEntry(USER_ID, SessionWrapper.builder().session(session).lastUpdate(CURRENT_DATE).build());
+        verify(session, times(1)).sendMessage(any());
     }
 
     @Test
@@ -145,7 +151,6 @@ public class DefaultWebSocketHandlerTest {
         assertThat(textMessageArgumentCaptor.getValue().getPayload()).isEqualTo(MESSAGE_PAYLOAD);
 
         verify(sessionWrapper).setLastUpdate(CURRENT_DATE);
-        verify(templateMethods).handleExpiredConnections(Arrays.asList(userId));
     }
 
     @Test
@@ -166,7 +171,7 @@ public class DefaultWebSocketHandlerTest {
     }
 
     @Test
-    public void sendEvent() {
+    public void sendEvent() throws IOException {
         Map<UUID, SessionWrapper> sessionMap = underTest.getSessionMap();
         sessionMap.put(USER_ID, sessionWrapper);
         UUID userId = UUID.randomUUID();
@@ -180,12 +185,12 @@ public class DefaultWebSocketHandlerTest {
             .event(webSocketEvent)
             .build();
 
-        List<UUID> result = underTest.sendEvent(webSocketMessage);
+        underTest.sendEvent(webSocketMessage);
 
-        assertThat(result).containsExactly(userId);
+        verify(session, times(1)).sendMessage(any());
 
-        assertThat(sessionMap).hasSize(1);
-        assertThat(sessionMap).containsEntry(USER_ID, sessionWrapper);
+        assertThat(underTest.getRetryEvents()).containsKey(userId);
+        assertThat(underTest.getRetryEvents().get(userId)).containsExactly(webSocketEvent);
     }
 
     private static class DefaultWebSocketHandlerImpl extends DefaultWebSocketHandler {
