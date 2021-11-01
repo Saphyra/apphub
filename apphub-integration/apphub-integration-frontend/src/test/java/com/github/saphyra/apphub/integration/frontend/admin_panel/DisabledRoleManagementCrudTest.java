@@ -27,9 +27,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         driver.navigate().refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.ADMIN_PANEL);
-
-        AdminPanelPageActions.openDisabledRoleManagementPage(driver);
+        ModulesPageActions.openModule(driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
 
         //Initial check
         DisabledRole initialRole = AdminPanelPageActions.getDisabledRoles(driver)

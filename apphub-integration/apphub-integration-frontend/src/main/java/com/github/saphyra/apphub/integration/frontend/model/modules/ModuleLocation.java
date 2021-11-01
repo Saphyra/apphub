@@ -10,7 +10,8 @@ import java.util.function.Predicate;
 @Getter
 @RequiredArgsConstructor
 public enum ModuleLocation {
-    ADMIN_PANEL("accounts", "admin-panel", Endpoints.ADMIN_PANEL_INDEX_PAGE),
+    DISABLED_ROLE_MANAGEMENT("admin-panel", "disabled-role-management", Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE),
+    ROLE_MANAGEMENT("admin-panel", "role-management", Endpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE),
     MANAGE_ACCOUNT("accounts", "account", Endpoints.ACCOUNT_PAGE),
     NOTEBOOK("office", "notebook", Endpoints.NOTEBOOK_PAGE),
     SKYXPLORE("game", "skyxplore", Endpoints.SKYXPLORE_CHARACTER_PAGE, driver -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_CHARACTER_PAGE) || driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE));

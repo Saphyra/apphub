@@ -7,16 +7,27 @@ liquibase:
 
 modules:
   modules:
+    admin-panel:
+      - name: error-report
+        url: /web/admin-panel/error-report
+        allowedByDefault: false
+        roles:
+          - ADMIN
+      - name: role-management
+        url: /web/admin-panel/role-management
+        allowedByDefault: false
+        roles:
+          - ADMIN
+      - name: disabled-role-management
+        url: /web/admin-panel/disabled-role-management
+        allowedByDefault: false
+        roles:
+          - ADMIN
     accounts:
       - name: account
         url: /web/user/account
         allowedByDefault: true
         mobileAllowed: true
-      - name: admin-panel
-        url: /web/admin-panel
-        allowedByDefault: false
-        roles:
-          - ADMIN
     office:
       - name: notebook
         url: /web/notebook

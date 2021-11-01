@@ -28,10 +28,4 @@ public class PageController {
         log.info("DisabledRoleManagement page called.");
         return "disabled_role_management";
     }
-
-    @GetMapping(Endpoints.ADMIN_PANEL_INDEX_PAGE)
-    public String adminPanelIndexPage() {
-        log.info("Admin panel index page called.");
-        return "index";
-    }
 }
