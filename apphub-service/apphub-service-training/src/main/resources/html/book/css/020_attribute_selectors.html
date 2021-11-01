@@ -1,0 +1,74 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Tulajdonság kiválasztók - CSS - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">CSS - Tulajdonság kiválasztók</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/css.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Megadott tulajdonsággal rendelkező elemek kiválasztása</H2>
+
+            <P><CODE>[tulajdonsag]</CODE> - kiválasztja azokat a tageket, melyeknek <CODE>tulajdonsag</CODE> attribútuma meg van adva.</P>
+            <P>Például: <CODE>[title]</CODE> - azok a tagek, melyeknek a <CODE>title</CODE> tulajdonsága meg van adva (<CODE>&lt;div title="ertek">&lt;/div>).</CODE></P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Tulajdonság ér érték alapú kiválasztás</H2>
+
+            <P><CODE>[tulajdonsag="ertek"]</CODE> - kiválasztja azokat az elemeket, melyeknek <CODE>tulajdonsag</CODE> attribútuma meg van adva, és ennek értéke <CODE>ertek</CODE></P>
+            <P>Például: <CODE>[target="_blank"]</CODE> - azok a tagek, melyeknek <CODE>target</CODE> tulajdonsága meg van ada, és ennek értéke
+                <CODE>_blank</CODE> (<CODE>&lt;a target="_blank">&lt;/a></CODE>).</P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Az érték tartalmazza...</H2>
+
+            <P><CODE>[tulajdonsag*="ertek"]</CODE> vagy <CODE>[tulajdonsag~="ertek"]</CODE> - kiválasztja azokat az elemeket, melyeknek
+                <CODE>tulajdonsag</CODE> attribútuma meg van adva, és ennek az értéke tartalmazza az <CODE>ertek</CODE> szót</P>
+            <P>A különbség a kettő között annyi, hogy a második megoldásnál <CODE>ertek</CODE>-nek külön szónak kell lennie.</P>
+            <P>Például: <CODE>[title*="kutya"]</CODE> - azok a tagek, melyeknek <CODE>title</CODE> tulajdonsága meg van adva, és az értéke tartalmazza a
+                <CODE>kutya</CODE> szót. (<CODE>&lt;span title="kiskutya fürdik">&lt;/span></CODE>).</P>
+            <P>Például: <CODE>[title~="kutya"]</CODE> - azok a tagek, melyeknek <CODE>title</CODE> tulajdonsága meg van adva, és az értéke tartalmazza a
+                <CODE>kutya</CODE> szót, melynek egész szónak kell lennie.(<CODE>&lt;span title="kis kutya fürdik">&lt;/span></CODE>).</P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Az érték kezdődik...</H2>
+            <P><CODE>[tulajdonsag^="ertek"]</CODE> vagy <CODE>[tulajdonsag|="ertek"]</CODE> - kiválasztja azokat az elemeket, melyeknek
+                <CODE>tulajdonsag</CODE> atribútuma meg van adva, és ennek értéke <CODE>ertek</CODE>-kel kezdődik.</P>
+            <P>A különbség a kettő között annyi, hogy a második megoldásnál <CODE>ertek</CODE>-nek külön szónak kell lennie, vagy <CODE>-</CODE>-nek (kötőjelnek) kell követnie.</P>
+            <P>Például: <CODE>[title^="kutya"]</CODE> - azok a tagek, melyeknek <CODE>title</CODE> tulajdonsága meg van adva, és az értéke
+                <CODE>kutya</CODE>-val kezdődik (<CODE>&lt;span title="kutyafül">&lt;/span></CODE>).</P>
+            <P>Például: <CODE>[title|="kutya"]</CODE> - azok a tagek, melyeknek <CODE>title</CODE> tulajdonsága meg van adva, és az értéke
+                <CODE>kutya</CODE>-val kezdődik , és szóközzel, vagy kötőjellel folytatódik.(<CODE>&lt;span title="kutya-fül">&lt;/span></CODE>).</P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Az érték végződik...</H2>
+
+            <P><CODE>[tulajdonsag$="ertek"]</CODE> - kiválasztja azokat az elemeket, melyeknek <CODE>tulajdonsag</CODE> attribútuma meg van adva, és ennek az értéke <CODE>ertek</CODE>-re végződik.</P>
+            <P>Például: <CODE>[title$="ház"]</CODE> - azok a tagek, melyeknek <CODE>title</CODE> tulajdnsága meg van adva, és az értéke
+                <CODE>ház</CODE>-ra végződik (<CODE>&lt;span title="kutyaház">&lt;/span></CODE>).</P>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/css/019_content_manipulation'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/css/021_transition'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

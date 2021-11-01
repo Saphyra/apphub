@@ -1,0 +1,65 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+<PRE th:fragment="non_compliant">
+div{
+    background-color: red;
+}
+
+span{
+    background-color: red;
+}
+</PRE>
+
+<PRE th:fragment="multiple_selection">
+div, span{
+    background-color: red;
+}
+</PRE>
+
+<PRE th:fragment="descendant_selector">
+#doboz .bekezdes{
+    background-color: lightblue;
+}
+
+&lt;DIV id="doboz">
+    &lt;P>Bekezdés&lt;/P>
+    &lt;P class="bekezdes">Bekezdés "bekezdes" osztállyal&lt;/P>
+    &lt;DIV>
+        Ez csak egy DIV
+        &lt;P class="bekezdes">"bekezdes" osztályú span egy DIV-ben&lt;/P>
+    &lt;/DIV>
+&lt;/DIV>
+</PRE>
+
+<PRE th:fragment="child_selector">
+#doboz <SPAN class="codepart">></SPAN> .bekezdes{
+    background-color: lightblue;
+}
+</PRE>
+
+<PRE th:fragment="general_sibling_selector">
+div ~ p{
+    background-color: lightblue;
+}
+
+&lt;P>Bekezdés&lt;/P>
+&lt;DIV>DIV&lt;/DIV>
+&lt;P>Még egy bekezdés&lt;/P>
+&lt;SPAN>SPAN&lt;/SPAN>
+&lt;P>Harmadik bekezdés&lt;/P>
+</PRE>
+
+<PRE th:fragment="adjacent_sibling_selector">
+div + p{
+    background-color: lightblue;
+}
+
+&lt;P>Bekezdés&lt;/P>
+&lt;DIV>DIV&lt;/DIV>
+&lt;P>Még egy bekezdés&lt;/P>
+&lt;P>Harmadik bekezdés&lt;/P>
+&lt;SPAN>SPAN&lt;/SPAN>
+&lt;P>Negyedik bekezdés&lt;/P>
+</PRE>
+</BODY>
+</HTML>

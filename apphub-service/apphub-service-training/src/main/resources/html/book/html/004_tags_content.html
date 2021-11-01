@@ -1,0 +1,109 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/training/js/common.js"></SCRIPT>
+
+    <TITLE>Tagek / Tartalom - HTML - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">HTML - Tagek / Tartalom</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/html.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Linkek</H2>
+
+            <P>
+                Linket az <SPAN class='codepart'>&lt;a></SPAN> taggel lehet létrehozni a következő módon:<BR>
+                <SPAN class='codepart'>&lt;a href="url">Link szövege&lt;/a></SPAN>
+            </P>
+            <P>Ha azt szeretnénk, hogy a link egy új böngésző fülön nyíljon meg, használjuk a <SPAN class='codepart'>target="_blank"</SPAN> attribútumot.</P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Kép beszúrása</H2>
+
+            <P>Képet az <SPAN class='codepart'>&lt;img></SPAN> taggel lehet beszúrni.</P>
+            <P><SPAN class='codepart'>&lt;img src="a_kep_url-je"></SPAN></P>
+            <P>Az <SPAN class='codepart'>&lt;img></SPAN> tagnek nincs záró párja.</P>
+            <P>
+                Attribútumok:
+            <UL>
+                <LI>
+                    Méretezés:
+                    <UL>
+                        <LI>A kép szélességét a <SPAN class='codepart'>width="100px"</SPAN>,</LI>
+                        <LI>A magasságát pedig a <SPAN class='codepart'>height="100px"</SPAN> attribútimmal lehet beállítani.</LI>
+                        <LI>Ha nem adunk meg méretet, akkor a kép az eredeti méretében fog megjelenni.</LI>
+                        <LI>Ha csak az egyik méretet adjuk meg, akkor a másik méret az arány megtartásával auutomatikusan módosul.</LI>
+                    </UL>
+                </LI>
+                <LI>Az <SPAN class='codepart'>alt="Alternatív szöveg"</SPAN> attribútum a kép helyett jelenik meg, amennyiben a böngésző valamilyen okból nem tudja betölteni a képet.</LI>
+            </UL>
+            </P>
+            <iframe src="/web/training/html/sample/img" onload="resizeIFrameToFitContent(this)"></iframe>
+        </ARTICLE>
+
+        <ARTICLE id="tables">
+            <H2>Táblázatok</H2>
+
+            <P>
+                Táblázat létrehozásához használt tagek:
+            <UL>
+                <LI><SPAN class='codepart'>&lt;table></SPAN> - táblázat létrehozása</LI>
+                <LI><SPAN class='codepart'>&lt;tr></SPAN> - új sor beszúrása</LI>
+                <LI><SPAN class='codepart'>&lt;th></SPAN> - fejléc cella</LI>
+                <LI><SPAN class='codepart'>&lt;td></SPAN> - új cella</LI>
+            </UL>
+            </P>
+            <P>
+                Attribútumok:
+            <UL>
+                <LI><SPAN class='codepart'>&lt;table border="3"></SPAN> - szegély hozzáadása a táblázathoz</LI>
+                <LI><SPAN class='codepart'>&lt;td colspan="2"></SPAN> - cellák összevonása</LI>
+                <LI><SPAN class='codepart'>&lt;td rowspan="2"></SPAN> - sorok összevonása</LI>
+            </UL>
+            </P>
+            <iframe src="/web/training/html/sample/tables" onload="resizeIFrameToFitContent(this)"></iframe>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Weboldal a weboldalban - iframe</H2>
+
+            <P>A HTML lehetőséget kínál más oldalak megnyitására az aktuális oldalon belül. Ezt az <SPAN class='codepart'>&lt;iframe></SPAN> taggel lehet megtenni.</P>
+            <P>
+                Példa:<BR>
+                <SPAN class='codepart'>&lt;iframe src="/web/training/html/001_introduction" width="100%" height="400px"></SPAN>
+
+                <iframe src="/web/training/html/001_introduction" width="100%" height="400px"></iframe>
+            </P>
+
+            <P>
+                Link megnyitása az iframe-ben: a <SPAN class='codepart'>name="frame_name"</SPAN> és <SPAN class='codepart'>target="frame_name"</SPAN> attribútumokkal</BR>
+                <SPAN class='codepart'>&lt;iframe name="target_iframe" src="/web/training/html/001_introduction" width="100%" height="400px"></SPAN><BR>
+                <SPAN class='codepart'>&lt;a href="/web/training/html/002_development" target="target_iframe"></SPAN>
+
+                <iframe src="/web/training/html/001_introduction" name="target_iframe" width="100%" height="400px"></iframe>
+                <A href="/web/training/html/002_development" target="target_iframe">Nyomj erre a kipróbáláshoz!</A>
+            </P>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/html/003_tags_text_format'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/html/005_forms'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

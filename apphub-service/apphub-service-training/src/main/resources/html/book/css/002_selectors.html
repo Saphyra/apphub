@@ -1,0 +1,104 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Kiválasztók - CSS - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">CSS - Kiválasztók</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/css.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Mik azok a CSS kiválasztók (selectorok)?</H2>
+
+            <P>
+                A CSS felépítése két fő részből áll:
+            <OL>
+                <LI>A (megjelenési) szabályok</LI>
+                <LI>Azok a kód részletek, melyek megmondják, mely HTML elemekre legyenek érvényesek az egyes szabályok</LI>
+            </OL>
+            Ez utóbbit hívjuk kiválasztóknak, mert "Kiválasztják azokat az elemeket (HTML tageket), amelyekre az alattuk felsorolt szabályok érvényre jutnak".
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Kiválasztók típusai</H2>
+
+            <P>
+                <UL>
+                    <LI>
+                        <H3>Mindent kiválasztó kiválasztó</H3>
+
+            <P>A <SPAN class="codepart">*</SPAN> jel minden taget kiválaszt.</P>
+            </LI>
+            <LI>
+                <H3>HTML tag kiválasztása</H3>
+
+                <DIV>Ha konkrét HTML tageket akarunk kiválasztani, akkor egyszerűen írjuk a kiválasztó helyére a HTML tag nevét.</DIV>
+                <DIV>
+                    Például:<BR>
+                    <SPAN class='codepart'>i {}</SPAN>: Kiválasztja az összes <SPAN class='codepart'>&lt;i></SPAN> taget.
+                </DIV>
+            </LI>
+            <LI>
+                <H3>ID kiválasztása</H3>
+
+                <DIV>
+                    Megadott ID-jú (azonosítójú) tag kiválasztásához két dolgot kell tenni:
+                    <OL>
+                        <LI>
+                            A kiválasztandó HTML taget fel kell ruházni az <SPAN class='codepart'>id</SPAN> attribútummal:<BR>
+                            <SPAN class='codepart'>&lt;b id="egyedi_azonosito"></SPAN>
+                        </LI>
+                        <LI>
+                            Meg kell írni a CSS kiválasztót, ami #-el kezdődik, és a kiválasztandó HTML tag
+                            <SPAN class='codepart'>id</SPAN> attribútumának értékével folytatódik (<SPAN class='codepart'>#egyedi_azonosito</SPAN>)<BR>
+                            Ez a kiválasztó (szabvány szerint) legfeljebb egy taget választhat ki.
+                        </LI>
+                    </OL>
+                    Megjegyzés: szabvány szerint minden HTML tag
+                    <SPAN class='codepart'>id</SPAN> attribútumának különbözőnek kell lenni (ha van), ezért egyedi azonosító. Ellenben a gyakorlat azt mutatja, hogy (egyes böngészők esetében) a CSS szempontjából az ID-k egyedisége nem befolyásolja a működést.
+                </DIV>
+            </LI>
+            <LI>
+                <H3>Osztály kiválasztása</H3>
+
+                <DIV>
+                    Megadott osztállyal rendelkező tagek kiválasztásakor a teendő hasonló, mint
+                    <SPAN class='codepart'>id</SPAN> alapú kiválasztáskor, először is a megfelelő HTML tag(ek)et kell felruházni ez esetben a <SPAN class='codepart'>class</SPAN> attribútummal:<BR>
+                    <SPAN class='codepart'>&lt;sup class='osztalynev'><BR>&lt;del class='osztalynev'></SPAN><BR>
+                    Mint látható, azonos osztály név többször is előfordulhat a dokumentumban, és a tageknek sem kell azonosnak lenniük.
+                </DIV>
+                <DIV>
+                    A selector is hasonló felépítésű, mint az <SPAN class='codepart'>id</SPAN> kiválasztásánál, csak itt a # helyére egy
+                    <SPAN class='codepart'>. (pont)</SPAN> kerül, majd utána a kiválasztandó osztály neve:<BR>
+                    <SPAN class='codepart'>.osztalynev</SPAN>: kiválasztja az összes olyan taget, amelynek az osztálya <SPAN class='codepart'>osztalynev</SPAN>
+                </DIV>
+                <DIV>
+                    Megjegyzés: egy tag több osztálynak is tagja lehet. Ilyenkor a
+                    <SPAN class='codepart'>class</SPAN> attribútumba szóközökkel elválasztva kell felsorolni az összes osztályt, melynek tagja az adott tag.<BR>
+                    Például: <SPAN class='codepart'>&lt;ins class="osztaly1 osztaly2 osztaly3"></SPAN>
+                </DIV>
+            </LI>
+            </UL>
+            </P>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/css/001_introduction'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/css/003_colors'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

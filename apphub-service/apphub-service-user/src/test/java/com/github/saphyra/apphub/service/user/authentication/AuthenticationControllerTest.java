@@ -3,11 +3,9 @@ package com.github.saphyra.apphub.service.user.authentication;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.user.model.request.LoginRequest;
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
-import com.github.saphyra.apphub.api.user.model.response.LastVisitedPageResponse;
 import com.github.saphyra.apphub.api.user.model.response.LoginResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
-import com.github.saphyra.apphub.lib.exception.NotLoggedException;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenCleanupService;
@@ -25,8 +23,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -152,25 +148,5 @@ public class AuthenticationControllerTest {
         ResponseEntity<InternalAccessTokenResponse> result = underTest.getAccessTokenById(ACCESS_TOKEN_ID);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-    }
-
-    @Test(expected = NotLoggedException.class)
-    public void getLastVisitedPage_notFound() {
-        given(accessTokenDao.getByUserId(USER_ID)).willReturn(Collections.emptyList());
-
-        underTest.getLastVisitedPage(USER_ID);
-    }
-
-    @Test
-    public void getLastVisitedPage() {
-        given(accessTokenDao.getByUserId(USER_ID)).willReturn(Arrays.asList(accessToken1, accessToken2));
-        given(accessToken1.getLastAccess()).willReturn(LAST_ACCESS);
-        given(accessToken2.getLastAccess()).willReturn(LAST_ACCESS.plusSeconds(1));
-        given(accessToken2.getLastVisitedPage()).willReturn(LAST_VISITED_PAGE);
-
-        LastVisitedPageResponse result = underTest.getLastVisitedPage(USER_ID);
-
-        assertThat(result.getLastAccess()).isEqualTo(LAST_ACCESS.plusSeconds(1));
-        assertThat(result.getPageUrl()).isEqualTo(LAST_VISITED_PAGE);
     }
 }

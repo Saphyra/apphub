@@ -1,0 +1,93 @@
+<HTML>
+<HEAD>
+    <TITLE>Reszponzív menü</TITLE>
+
+    <STYLE>
+            .menu_item{
+                margin: 5px;
+                background: gray;
+                padding: 10px;
+                cursor: pointer;
+            }
+            
+            .menu_item:hover{
+                text-shadow: 2px 2px 2px blue;
+                box-shadow: 2px 2px 2px blue;
+                background: lightblue;
+            }
+            
+            #landscape, #portrait{
+                display: none;
+            }
+        
+            @media only screen and (orientation: landscape) {
+                #menu_container{
+                    background: green;
+                }
+                
+                .menu_item{
+                    display: inline-block;
+                }
+                
+                #landscape{
+                    display: initial;
+                }
+            }
+
+            @media only screen and (orientation: portrait) {
+                #menu_container{
+                    background: url("/res/training/img/css/menu.png");
+                    background-position: top left;
+                    background-repeat: no-repeat;
+                    background-size: 50px 50px;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    min-height: 50px;
+                    min-width: 50px;
+                }
+                
+                .menu_item{
+                    display: none;
+                    margin: 0;
+                }
+                
+                #menu_container:hover{
+                    padding-top: 50px;
+                    background-color: green;
+                }
+                
+                #menu_container:hover .menu_item{
+                    display: block;
+                }
+                
+                .menu_item:not(:last-child){
+                    margin-bottom: 5px;
+                }
+                
+                #portrait{
+                    display: initial;
+                }
+                
+                p:first-of-type{
+                    margin-top: 75px;
+                }
+            }
+
+    </STYLE>
+</HEAD>
+<BODY>
+<DIV id='menu_container'>
+    <DIV class='menu_item'>Menu 1</DIV>
+    <DIV class='menu_item'>Menu 2</DIV>
+    <DIV class='menu_item'>Menu 3</DIV>
+    <DIV class='menu_item'>Menu 4</DIV>
+</DIV>
+
+<P>Húzd össze az ablakot! Amint a magassága nagyobb lesz, mint a szélessége, a media query szabályai érvényre jutnak, és megváltoztatják a menü megjelenését.</P>
+<P id='landscape'>A képernyő szélessége nagyobb, mint a magassága.
+<P>
+<P id='portrait'>A képernyő szélessége kisebb, mint a magassága.
+<P>
+</BODY>
+</HTML>

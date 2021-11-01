@@ -1,0 +1,97 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Színek - CSS - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">CSS - Színek</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/css.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Színek megadása</H2>
+
+            <P>A CSS több szín formátum felismerésére képes. Csak értékül kell adni a kiválasztott tulajdonságnak, és már működik is!</P>
+            <P>Például: <SPAN class='codepart'>color: green;</SPAN></P>
+            <P>A következőkben a színek megadásának lehetőségeit fogjuk vizsgálni.</P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Szín megadása annak nevével</H2>
+
+            <P>Színt a legegyszerűbb annak angol nevével megadni:</P>
+            <P><SPAN class='codepart'>color: red;</SPAN></P>
+            <P><U>Megjegyzés</U>: nem minden böngésző ismeri fel az összes színt név alapján. Az általánosan támogatott színek listája megtekinthető
+                <A href="https://www.w3schools.com/colors/colors_names.asp" target="_blank">itt</A>.</P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Szín megadása RGB színkóddal</H2>
+
+            <P>A színek nevekkel történő megadása nagyon hasznos és egyszerű, de mi van, ha például a szürke 50 árnyalatát szeretnénk ki listázni a képernyőre?</P>
+            <P>Ebben az esetben saját kezűleg kell kikevernünk a színeket. Erre nyújt lehetőséget az RGB kód:</P>
+            <P><SPAN class='codepart'>background: rgb(32, 45, 74);</SPAN></P>
+            <P style='background: rgb(32,45,74);'>Példa</P>
+            <P>
+                Az RGB jelentése:
+            <UL>
+                <LI>R = Red = Piros</LI>
+                <LI>G = Green = Zöld</LI>
+                <LI>B = Blue = Kék</LI>
+            </UL>
+            </P>
+            <P>Az egyes "helyiértékek" azt jelölik, hogy az adott színből hány egységnyi kerüljön a "vödörbe".</P>
+            <P>Például az rgb(32, 45, 74) azt jelenti, hogy: Összekeverünk 32 egység piros, 45 egység zöld, és 74 egység kék festéket, hogy megkapjuk a kívánt színt.</P>
+            <P>Minden helyiértékre 0-tól 255-ig terjedő szám kerülhet. Ez összesen 16.581.375 szín.</P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Szín átlátszóságának megadása</H2>
+
+            <P>Ahhoz, hogy hátterünk áttetsző legyen, csak kisebb módosításokat kell végeznünk az RGB-s színmegadáson:</P>
+            <P>
+                <SPAN class='codepart'>rgb</SPAN> helyett <SPAN class='codepart'>rgba</SPAN>-val kezdődik a tulajdonság értéke, valamint három helyett négy "helyiértéket" kell megadni.<BR>
+                A negyedik számjegy egy 0-tól 1-ig terjedő (tört) szám, mely megadja az átlátszóság arányát.
+            </P>
+            <P>
+                Például: <SPAN class='codepart'>background: rgba(32, 45, 74, 0.5);</SPAN>: az előbbi példában szereplő szín 50%-os átlátszósággal.
+            <P style='background: rgba(32,45,74,0.5);'>Példa</P>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Szín megadása hexadecimális kóddal</H2>
+
+            <P>Én meg beszéljek magyarul... Az elv megegyezik az RGB szín megadással, csak itt a helyiértékeket 16-os számrendszer beli számok jelzik.</P>
+            <P>
+                És megint... A 16-os számrendszer annyiban különbözik a 10-estől (amit általánosságban használunk), hogy 10 helyett 16 'számjegyet' tartalmaz.<BR>
+                Így 9 után nem 10 jön, ahogy megszokhattuk, hanem 'a', majd 'b' egészen 'f'-ig (ami a 15-nek felel meg).
+            </P>
+            <P>
+                A 256 érték eléréséhez pedig két hexadecimális számjegy szükséges (16 x 16 = 256).<BR>
+                A fenti példában szereplő színt hexadecimális színkódja a következő: <SPAN class='codepart'>202d4a</SPAN>
+            </P>
+            <P>
+                A CSS-ben a hexadecimális színmegadáshoz a színkód elé egy #-t kell írni:<BR>
+                <SPAN class='codepart'>color: #202d4a;</SPAN>
+            </P>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/css/002_selectors'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/css/004_backgrounds'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

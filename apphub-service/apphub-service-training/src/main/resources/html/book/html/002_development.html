@@ -1,0 +1,73 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Weblap szerkesztése - HTML - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">HTML - Weblap szerkesztése</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/html.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Szerkesztő program</H2>
+
+            <P>
+                HTML kódot gyakorlatilag bármilyen szövegszerkesztő programmal lehet írni, habár vannak olyan szerkesztők is, melyek segítik a fejlesztőt a gyorsabb kódolásban:
+            <UL>
+                <LI><SPAN class='link' onclick='window.open("https://notepad-plus-plus.org/download/")'>Notepad++</SPAN> ingyenes, egyszerű, gyors, és számos programozási nyelvhez nyújt támogatást.
+                </LI>
+                <LI>A <SPAN class='link' onclick='window.open("http://brackets.io/")'>Brackets</SPAN> egy ingyenes IDE (Integrált fejlesztői környezet) elsősorban weboldalak fejlesztéséhez kialakítva.
+                </LI>
+            </UL>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Készítsük el első HTML oldalunk!</H2>
+
+            <OL>
+                <LI>Hozzunk létre egy új fájlt <SPAN class='codepart'>elso.html</SPAN> néven!</LI>
+                <LI>Nyissuk meg ezt a fájlt az általunk választott szövegszerkesztő programban! (Én a Notepad++-t fogom használni)</LI>
+                <LI>
+                    Adjuk meg a dookumentum típusát!
+                    <IMG src='/res/training/img/html/my_first_webpage/001.jpg'>
+                </LI>
+                <LI>
+                    Hozzuk létre az oldal alap struktúráját!<BR>
+                    Minden HTML oldalnak egyetlen gyökere lehet, ami a <SPAN class='codepart'>&lt;html></SPAN> tag.<BR>
+                    Ebbe kerül a fejléc (<SPAN class='codepart'>&lt;head></SPAN>) és a törzs (<SPAN class='codepart'>&lt;body></SPAN>).<BR>
+                    Ne felejtsük el a tageket a megfelelő helyen lezárni!
+                    <IMG src='/res/training/img/html/my_first_webpage/002.jpg'>
+                    Megjegyzés: Érdemes a tagek gyermekeit egy kicsit beljebb tolni, így a kód sokkal olvashatóbbá válik. Az extra szóközök, vagy tabulátorok amúgy sem jelennek meg a böngészőben.
+                </LI>
+                <LI>
+                    Az így létrehozott oldalunkat töltsük fel tartalommal!<BR>
+                    Adjunk neki egy címet (<SPAN class='codepart'>&lt;title></SPAN>), készítsünk egy főcímet (<SPAN class='codepart'>&lt;h1></SPAN>), és egy bekezdést (<SPAN class='codepart'>&lt;p></SPAN>)!
+                    <IMG src='/res/training/img/html/my_first_webpage/003.jpg'>
+                </LI>
+                <LI>
+                    Legvégül pedig nyissuk meg az első weblapunkat egy böngészőben! (Dupla klikk a fájlra, vagy jobb klikk -> társítás -> és válasszuk ki a böngészőt.)
+                    <IMG src='/res/training/img/html/my_first_webpage/004.jpg'>
+                    Ahogy a képen is látszik, az általunk beírt tagek nem jelentek meg a képernyőn, viszont megváltoztatták a tartalom kinézetét. (A böngészőfülben megjelent az oldal címe, a címsor pedig nagyobb lett.)
+                </LI>
+            </OL>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/html/001_introduction'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/html/003_tags_text_format'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

@@ -1,0 +1,29 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+<PRE th:fragment="link">
+a:link{
+    color: red;
+}
+a:visited{
+    color: yellow;
+}
+a:active{
+    font-size: 4rem;
+}
+</PRE>
+
+<PRE th:fragment="hover">
+#hover_test_hidden{
+    display:none;
+}
+#hover_test span:hover + div{
+    display: block;
+}
+
+&lt;DIV id="hover_test">
+    &lt;SPAN style="border: 1px solid red">Húzd fölém az egeret!&lt;/SPAN>
+    &lt;DIV id="hover_test_hidden">Azt hitted, hogy nem vagyok itt, hahaha!&lt;/DIV>
+&lt;/DIV>
+</PRE>
+</BODY>
+</HTML>

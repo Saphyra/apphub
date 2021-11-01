@@ -21,6 +21,4 @@ public class AccessToken {
 
     @NonNull
     private LocalDateTime lastAccess;
-
-    private String lastVisitedPage;
 }

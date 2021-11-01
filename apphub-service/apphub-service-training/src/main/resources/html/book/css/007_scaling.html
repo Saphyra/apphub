@@ -1,0 +1,133 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Méretezés - CSS - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">CSS - Méretezés</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/css.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Bevezetés - Block és inline tagek</H2>
+
+            <P>Egészségemre... Pedig igazán egyszerű (annak, aki érti...). Szóval: <SPAN class='codepart'>block</SPAN> tag az, amelyik előtt és után megtörik a folyó szöveg,
+                <SPAN class='codepart'>inline</SPAN> pedig az, amelyet sortörések nélkül is be lehet illeszteni a folyó szövegbe. De inkább nézzünk néhány példát:</P>
+            <P>
+                Block tag például a <SPAN class='codepart'>&lt;div></SPAN> tag. Ez egy egyszerű dobozt hoz létre, minden formázás nélkül. Ha folyó szövegbe illesztjük, akkor a tartalma új sorba kerül:<BR>
+            <DIV style='width: 350px; border: 3px solid red;'>
+                Egyszer volt hol nem volt
+                <DIV style='margin: initial;'>Div tartalma</DIV>
+                még az óperencián is túl volt.
+            </DIV>
+            </P>
+            <P>
+                Inline tagre példa a
+                <SPAN class='codepart'>&lt;span></SPAN> tag. Ez szintén egy egyszerű dobozt hoz létre, azzal a különbséggel, hogy nem töri a folyó szöveget (természetesen a sor hosszából eredő sortörések ugyanúgy érvényesülnek):<BR>
+            <DIV style='width: 350px; border: 3px solid red;'>
+                Egyszer volt hol nem volt <SPAN>Span tartalma</SPAN> még az óperencián is túl volt.
+            </DIV>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Block / inline beállítás: display tulajdonság</H2>
+
+            <P>Mint szinte bármire, a CSS arra is lehetőséget nyújt, hogy a tagek block/inline tulajdonságát tetszés szerint módosítjuk, sőt, még extra lehetőségeket is ad mellé.</P>
+            <P>
+                A block/inline tulajdonságokat a <SPAN class='codepart'>display</SPAN> tulajdonsággal lehet állítani.<BR>
+                Például ha azt írjuk, hogy <SPAN class='codepart'>div {display: inline;}</SPAN>, akkor az összes <SPAN class='codepart'>&lt;div></SPAN> tag, ami alapértelmezetten
+                <SPAN class='codepart'>block</SPAN> tag lenne, <SPAN class='codepart'>inline</SPAN> tagként fog viselkedni.<BR>
+                Ez fordítva is érvényes, ha egy <SPAN class='codepart'>inline</SPAN> taget állítunk <SPAN class='codepart'>block</SPAN>-ra, akkor azok a tagek is törni fogják a sorokat.
+            </P>
+            <P>
+                Fontos különbség, hogy míg a <SPAN class='codepart'>block</SPAN> tageknek a méretét szabadon állíthatjuk, addig az
+                <SPAN class='codepart'>inline</SPAN> tagek mérete nem szabható meg.<BR>
+                A kettő közti átmenetet az
+                <SPAN class='codepart'>inline-block</SPAN> érték jelenti, ami ötvözi a két előbbi érték tulajdonságát, és létrehoz egy olyan dobozt, ami szabadon méretezhető, de nem töri a sorokat:
+            <DIV style='width: 550px; border: 3px solid red;'>
+                Egyszer volt hol nem volt <SPAN style='display: inline-block; border: 1px solid black; width: 250px; height: 3rem;'>Inline-block tartalma</SPAN> még az óperencián is túl volt.
+            </DIV>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Tárolók méretezése</H2>
+
+            <P>A tárolók szélességét a <SPAN class='codepart'>width</SPAN>, magasságát pedig a
+                <SPAN class='codepart'>heigth</SPAN> tulajdonsággal lehet beállítani. Értékül pedig az előző fejezetben mértékegységek bármelyikét meg lehet adni.</P>
+            <P>
+                Példa: <SPAN class="codepart">&lt;div style='height: 100px; width: 50px; border: 3px solid red;'>&lt;/div></SPAN>
+            <DIV style='height: 100px; width: 50px; border: 3px solid red;'></DIV>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Minimum és maximum méretek</H2>
+
+            <P>
+                Képzeljük el a következő helyzetet: csináltunk egy navigációs menüt a böngésző bal oldalára (mint ezen az oldalon a fejezetek listája), és azt szeretnénk, hogy ez mindig a böngészőablak egy bizonyos arányát foglalja el (például a böngésző szélességének mondjuk 30%-át).<BR>
+                Ebben az esetben ha a a böngészőt túl kicsire húzzák össze, elképzelhető, hogy a menü tartalma már nem fog kiférni.<BR>
+                Vagy pont fordítva, kihúzzák két képernyőnyire, akkor meg túl nagyra nő a navigációs menü, és fölöslegesen foglalja a helyet a tartalom elől.
+            </P>
+            <P>
+                A fenti problémákra nyújtanak megoldást a <SPAN class='codepart'>min-width</SPAN>, <SPAN class='codepart'>max-width</SPAN>, <SPAN class='codepart'>min-height</SPAN> és
+                <SPAN class='codepart'>max height</SPAN> tulajdonságok, melyekkel megszabhatjuk, hogy az adott tároló mekkora lehet maximum vagy minimum.
+            </P>
+
+            <P>
+                Példa 1: <SPAN class="codepart">&lt;div style='width: 50%; min-width: 75px; max-width: 175px; height: 100px; background: black;'>&lt;/div></SPAN>
+            <DIV style='width: 250px; resize: horizontal; border: 3px solid red; overflow: auto;'>
+                <DIV style='width: 50%; min-width: 75px; max-width: 175px; height: 100px; background: black; margin: initial;'></DIV>
+            </DIV>
+
+            Próbáld változtatni a tároló szélességét (jobb alsó sarkára kattintva húzhatóvá válik)! Jól látszik, hogy a fekete téglalap mérete egy ideig együtt változik a tároló szélességével, de egy bizonyos pont után fix marad.
+            </P>
+            <P>
+                Példa 2: <SPAN class="codepart">&lt;div style='width: 125px; min-width: 30%; max-width: 70%; height: 100px; background: black;'>&lt;/div></SPAN>
+            <DIV style='width: 250px; resize: horizontal; border: 3px solid red; overflow: auto;'>
+                <DIV style='width: 125px; min-width: 30%; max-width: 70%; height: 100px; background: black; margin: initial;'></DIV>
+            </DIV>
+
+            Próbáld változtatni a tároló szélességét! Jól látszik, hogy a fekete téglalap mérete egy ideig változatlan marad, de egy pont után a szélessége elkezd a tároló szélességével együtt változni.
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Elem átméretezésének engedélyezése</H2>
+
+            <P>Gyakran megesik, hogy az oldal fejlesztésekor nem tudjuk pontosan, hogy a felhasználónak mekkora területre lesz szüksége, hogy kényelmesen tudjon böngészni. A
+                <CODE>resize</CODE> tuéajdonsággal megengedhetjük a felhasználónak, hogy kedve szerint méretezhesse át a dobozokat.</P>
+
+            <DIV>
+                Lehetséges értékek:
+
+                <Ul>
+                    <LI><CODE>none</CODE> - nem átméretezhető (alapértelmezett)</LI>
+                    <LI><CODE>horizontal</CODE> - csak vízszintesen átméretezhető</LI>
+                    <LI><CODE>vertical</CODE> - csak függőlegesen átméretezhető</LI>
+                    <LI><CODE>both</CODE> - minden irányban átméretezhető</LI>
+                </Ul>
+            </DIV>
+
+            <P>Példa az előző cikk végén!</P>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/css/006_units'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/css/008_margins'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

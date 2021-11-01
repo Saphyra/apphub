@@ -88,3 +88,7 @@ skyxplore-game-creation:
 message-sender:
   ribbon:
     listOfServers: localhost:8094
+
+training:
+  ribbon:
+    listOfServers: localhost:8095

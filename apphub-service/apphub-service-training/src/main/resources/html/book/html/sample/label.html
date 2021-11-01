@@ -1,0 +1,42 @@
+<HTML>
+<HEAD>
+    <TITLE>Űrlapok - példa</TITLE>
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+</HEAD>
+<BODY style="overflow: hidden; color: white">
+<FORM action="/web/training/sample" method="POST" target="_blank">
+    <LABEL>Felhasználónév: <INPUT type="text" name="username" placeholder="Felhasználónév" maxlength="3" required></LABEL><BR>
+    <LABEL>Jelszó: <INPUT type="password" name="password" placeholder="Jelszó" required></LABEL><BR>
+    <LABEL>E-mail cím: <INPUT type="email" name="email" placeholder="E-mail cím"></LABEL><BR>
+    <LABEL>Életkor: <INPUT type="number" name="age" min="1" max="100" value="18"></LABEL><BR>
+
+    <LABEL>Profilkép: <INPUT type="file" name="profile_picture"></LABEL><BR>
+
+    <LABEL>Nem: <INPUT type="radio" name="gender" value="male" checked> Férfi</LABEL> / <LABEL><INPUT type="radio" name="gender" value="woman"> Nő</LABEL><BR>
+    <LABEL>Születési idő: <INPUT type="datetime-local" name="birth"></LABEL><BR>
+
+    <LABEL>Az adatvédedlmi nyilatkozatot elfogadom: <INPUT type="checkbox" name="policy_accepted"></LABEL><BR>
+
+    <INPUT type="reset">
+    <INPUT type="submit">
+</FORM>
+<PRE>
+&lt;FORM action="/web/training/sample" method="POST" target="_blank">
+    &lt;LABEL>Felhasználónév: &lt;INPUT type="text" name="username" placeholder="Felhasználónév" maxlength="3" required>&lt;/LABEL>&lt;BR>
+    &lt;LABEL>Jelszó: &lt;INPUT type="password" name="password" placeholder="Jelszó" required>&lt;/LABEL>&lt;BR>
+    &lt;LABEL>E-mail cím: &lt;INPUT type="email" name="email" placeholder="E-mail cím">&lt;/LABEL>&lt;BR>
+    &lt;LABEL>Életkor: &lt;INPUT type="number" name="age" min="1" max="100" value="18">&lt;/LABEL>&lt;BR>
+    
+    &lt;LABEL>Profilkép: &lt;INPUT type="file" name="profile_picture">&lt;/LABEL>&lt;BR>
+    
+    &lt;LABEL>Nem: &lt;INPUT type="radio" name="gender" value="male" checked> Férfi&lt;/LABEL> / &lt;LABEL>&lt;INPUT type="radio" name="gender" value="woman"> Nő&lt;/LABEL>&lt;BR>
+    &lt;LABEL>Születési idő: &lt;INPUT type="datetime-local" name="birth">&lt;/LABEL>&lt;BR>
+    
+    &lt;LABEL>Az adatvédedlmi nyilatkozatot elfogadom: &lt;INPUT type="checkbox" name="policy_accepted">&lt;/LABEL>&lt;BR>
+    
+    &lt;INPUT type="reset">
+    &lt;INPUT type="submit">
+&lt;/FORM>
+    </PRE>
+</BODY>
+</HTML>

@@ -1,0 +1,166 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Szegélyek - CSS - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">CSS - Szegélyek</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/css.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Szegély megadása</H2>
+
+            <P>Szegélyt a <SPAN class='codepart'>border</SPAN>rel kezdődő tulajdonságokkal lehet létrehozni.</P>
+            <P>
+                A tulajdonság 3 értéket vár:
+            <OL>
+                <LI>A szegély vastagsága</LI>
+                <LI>A szegély típusa (Lásd: Szegélytípusok)</LI>
+                <LI>A szegély színe</LI>
+            </OL>
+            Például: <SPAN class='codepart'>border: 3px solid red;</SPAN> - létrehoz egy 3 pixel vastag, pirols, folyamatos vonalból álló szegélyt a tároló köré.<BR>
+            <SPAN style='border: 3px solid red; margin-top: 1rem; display: inline-block;'>Példa</SPAN>
+            <P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Szegély megadása a tároló bizonyos oldalaira</H2>
+
+            <P>A CSS lehetőséget ad a tároló oldalainak szegélyeit külön-külön beállítani.</P>
+            <P>
+                Ezt ugyanúgy lehet megtenni, mint a körkörös szegélynél, csak a tulajdonság végéhez hozzá fűzzük, hogy melyik oldal szegélyét szeretnénk állítani (top: felső, right: jobb oldal, bottom: alsó, left: bal oldal).<BR>
+                Például: <SPAN class='codepart'>border-bottom: 3px solid red;</SPAN> - Az előző szegély csak az alsó oldalra alkalmazva.<BR>
+                <SPAN style='border-bottom: 3px solid red; margin-top: 1rem; display: inline-block;'>Példa</SPAN>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>A szegély tulajdonságainak külön történő megadása</H2>
+
+            <P>
+                A szegély tulajdonságit meg lehet adni külön-külön is, például <SPAN class='codepart'>border-color: red;</SPAN>, vagy csak az adott oldalra:
+                <SPAN class='codepart'>border-bottom-color: red;</SPAN><BR>
+                Az így beállítható tulajdonságok:
+            <UL>
+                <LI><SPAN class='codepart'>border-color</SPAN>: szegély szín</LI>
+                <LI><SPAN class='codepart'>border-style</SPAN>: szegély stílus</LI>
+                <LI><SPAN class='codepart'>border-width</SPAN>: szegély vastagság</LI>
+            </UL>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Szegély típusok</H2>
+
+            <P>
+            <UL>
+                <LI><SPAN class='codepart'>dotted</SPAN>: <SPAN style='border: 3px dotted red;'>pontozott</SPAN></LI>
+                <LI><SPAN class='codepart'>dashed</SPAN>: <SPAN style='border: 3px dashed red;'>szaggatott vonal</SPAN></LI>
+                <LI><SPAN class='codepart'>solid</SPAN>: <SPAN style='border: 3px solid red;'>egyszerű vonal</SPAN></LI>
+                <LI><SPAN class='codepart'>double</SPAN>: <SPAN style='border: 3px double red;'>dupla vonal</SPAN></LI>
+                <LI><SPAN class='codepart'>groove</SPAN>: <SPAN style='border: 5px groove red;'>groove</SPAN></LI>
+                <LI><SPAN class='codepart'>ridge</SPAN>: <SPAN style='border: 5px ridge red;'>ridge</SPAN></LI>
+                <LI><SPAN class='codepart'>inset</SPAN>: <SPAN style='border: 5px inset red;'>inset</SPAN></LI>
+                <LI><SPAN class='codepart'>outset</SPAN>: <SPAN style='border: 5px outset red;'>outset</SPAN></LI>
+                <LI><SPAN class='codepart'>none</SPAN>: <SPAN style='border: 3px none red;'>nincs szegély</SPAN></LI>
+                <LI><SPAN class='codepart'>hidden</SPAN>: <SPAN style='border: 3px hidden red;'>láthatatlan szegély</SPAN></LI>
+            </UL>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Lekerekítés</H2>
+
+            <P>A szegély lekerekítését a <SPAN class='codepart'>border-radius</SPAN> tulajdonsággal lehet állítani.</P>
+            <P>
+                <SPAN class='codepart'>border-radius: 15px;</SPAN><BR>
+                <SPAN style='border: 3px solid red; border-radius: 15px; margin-top: 1rem; display: inline-block;'>Példa</SPAN>
+            </P>
+            <P>
+                Sarkonként különböző lekerekítés megadása: A
+                <SPAN class='codepart'>border-radius</SPAN> tulajdonságnak 4 értéket adunk egymás után, a bal felső sarokból indulva az óramutató járásának megfelelően:<BR>
+                <SPAN class='codepart'>border-radius: 10px 15px 20px 25px;</SPAN>
+            <DIV style="width: 50px; height: 50px; background: red; border: 5px solid black; border-radius: 10px 15px 20px 25px"></DIV>
+            </P>
+            <P>
+                Ha csak egy saroknak szeretnénk módosítani a lekerekítését, akkor azt a sarok megnevezésével is megtehetjük.<BR>
+                Például a bal alsó sarok szegélyét a <SPAN class='codepart'>border-bottom-left-radius</SPAN> tulajdonsággal állíthatjuk.
+            </P>
+            <P>
+                <U>Megjegyzés:</U> a
+                <SPAN class='codepart'>border-radius</SPAN> tulajdonság használható bármilyen tároló lekerekítésére, akár szegély nélkül is. Állítsuk az értékét 50%-ra a teljesen kerek forma eléréséhez!
+            <DIV style="width: 250px; height: 250px;background: red; border-radius: 50%;"></DIV>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Kép beállítása szegélyként</H2>
+
+            <DIV>
+                Lehetőségünk van egyéni képet is beállítani szegélyként. Ehhez a következő tulajdonságokat kell használnunk:
+                <UL>
+                    <LI><CODE>border-image-source: url(kep.jpg)</CODE> - a felhasználni kívánt kép URL-je (Alapértelmezett érték: <CODE>none</CODE>, tehát nincs</LI>
+                    <LI><CODE>border-image-slice: ertek</CODE> - a szegélynek használt kép vágási tulajdonságait adja meg. Az érték lehet: szám, %,
+                        <CODE>fill</CODE>. Két érték megadása esetén a szemköszti oldalak páronként külön állíthatóak. <CODE>fill</CODE> érték hozzáadása esetén a szegély a tartalom mögé is bekerül.
+                    </LI>
+                    <LI><CODE>border-image-width: ertek</CODE> - a szegélynek használt kép szélességét adja meg</LI>
+                    <LI><CODE>border-image-outset: ertek</CODE> - a szegély és szöveg közötti távolságot adja meg</LI>
+                    <LI>
+                        <CODE>border-image-repeat: ertek</CODE> - a kép ismétlődésének módját határozza meg:<BR>
+                        Értéke lehet
+                        <UL>
+                            <LI><CODE>stretch</CODE> - a kép közepét akkorára nyújtja, hogy kitöltse az adott oldalt (alapértelmezett)</LI>
+                            <LI><CODE>repeat</CODE> - a kép középső részét addig ismétli, míg az kitölti az adott oldald</LI>
+                            <LI><CODE>round</CODE> - a kép középső részét úgy ismétli, hogy <B>pontosan </B> kitöltse az adott oldalt</LI>
+                        </UL>
+                    </LI>
+                </UL>
+            </DIV>
+
+            <DIV>
+                Példák:
+                <DIV>
+                    <DIV style="display: inline-block; min-width: 250px; height: 250px; border: 30px solid transparent; border-image-source: url(/res/training/img/css/border.png); border-image-slice: 30; border-image-repeat: stretch;">
+                        border: 30px solid transparent;<BR>
+                        border-image-source: url(/res/training/img/css/border.png);<BR>
+                        border-image-slice: 30;<BR>
+                        border-image-repeat: <CODE>stretch;</CODE>
+                    </DIV>
+
+                    <DIV style="display: inline-block; min-width: 250px; height: 250px; border: 30px solid transparent; border-image-source: url(/res/training/img/css/border.png); border-image-slice: 30; border-image-repeat: repeat;">
+                        border: 30px solid transparent;<BR>
+                        border-image-source: url(/res/training/img/css/border.png);<BR>
+                        border-image-slice: 30;<BR>
+                        border-image-repeat: <CODE>repeat</CODE>;
+                    </DIV>
+
+                    <DIV style="display: inline-block; min-width: 250px; height: 250px; border: 30px solid transparent; border-image-source: url(/res/training/img/css/border.png); border-image-slice: 30; border-image-repeat: round;">
+                        border: 30px solid transparent;<BR>
+                        border-image-source: url(/res/training/img/css/border.png);<BR>
+                        border-image-slice: 30;<BR>
+                        border-image-repeat: <CODE>round</CODE>;
+                    </DIV>
+                </DIV>
+
+            </DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/css/004_backgrounds'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/css/006_units'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

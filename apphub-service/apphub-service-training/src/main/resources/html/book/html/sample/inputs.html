@@ -1,0 +1,42 @@
+<HTML>
+<HEAD>
+    <TITLE>Űrlapok - példa</TITLE>
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+</HEAD>
+<BODY style="overflow: hidden; color: white">
+<FORM action="/web/training/sample" method="POST" target="_blank">
+    <INPUT type="text" name="username" placeholder="Felhasználónév" maxlength="3" required><BR>
+    <INPUT type="password" name="password" placeholder="Jelszó" required><BR>
+    <INPUT type="email" name="email" placeholder="E-mail cím"><BR>
+    Életkor: <INPUT type="number" name="age" min="1" max="100" value="18"><BR>
+
+    Profilkép: <INPUT type="file" name="profile_picture"><BR>
+
+    Nem: <INPUT type="radio" name="gender" value="male" checked> Férfi / <INPUT type="radio" name="gender" value="woman"> Nő<BR>
+    Születési idő: <INPUT type="datetime-local" name="birth"><BR>
+
+    Az adatvédedlmi nyilatkozatot elfogadom: <INPUT type="checkbox" name="policy_accepted"><BR>
+
+    <INPUT type="reset">
+    <INPUT type="submit">
+</FORM>
+<PRE>
+&lt;FORM action="/web/training/sample" method="POST" target="_blank">
+    &lt;INPUT type="text" name="username" placeholder="Felhasználónév" maxlength="3" required>&lt;BR>
+    &lt;INPUT type="password" name="password" placeholder="Jelszó" required>&lt;BR>
+    &lt;INPUT type="email" name="email" placeholder="E-mail cím">&lt;BR>
+    Életkor: &lt;INPUT type="number" name="age" min="1" max="100" value="18">&lt;BR>
+    
+    Profilkép: &lt;INPUT type="file" name="profile_picture">&lt;BR>
+    
+    Nem: &lt;INPUT type="radio" name="gender" value="male" checked> Férfi / &lt;INPUT type="radio" name="gender" value="woman"> Nő&lt;BR>
+    Születési idő: &lt;INPUT type="datetime-local" name="birth">&lt;BR>
+    
+    Az adatvédedlmi nyilatkozatot elfogadom: &lt;INPUT type="checkbox" name="policy_accepted">&lt;BR>
+    
+    &lt;INPUT type="reset">
+    &lt;INPUT type="submit">
+&lt;/FORM>
+    </PRE>
+</BODY>
+</HTML>

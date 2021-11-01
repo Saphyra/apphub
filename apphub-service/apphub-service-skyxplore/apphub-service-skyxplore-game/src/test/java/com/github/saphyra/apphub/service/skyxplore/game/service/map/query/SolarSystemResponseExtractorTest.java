@@ -2,12 +2,14 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.map.query;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.map.MapSolarSystemResponse;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.service.visibility.VisibilityFacade;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -27,6 +29,9 @@ public class SolarSystemResponseExtractorTest {
     private static final String DEFAULT_SOLAR_SYSTEM_NAME = "default-solar-system-name";
     private static final UUID USER_ID = UUID.randomUUID();
 
+    @Mock
+    private VisibilityFacade visibilityFacade;
+
     @InjectMocks
     private SolarSystemResponseExtractor underTest;
 
@@ -37,10 +42,16 @@ public class SolarSystemResponseExtractorTest {
     private CoordinateModel coordinateModel;
 
     @Mock
-    private Coordinate coordinate;
+    private Coordinate coordinate1;
+
+    @Mock
+    private Coordinate coordinate2;
 
     @Mock
     private Planet planet;
+
+    @Mock
+    private SolarSystem filteredSolarSystem;
 
     @Test
     public void getSolarSystems() {
@@ -51,15 +62,16 @@ public class SolarSystemResponseExtractorTest {
             .planets(CollectionUtils.singleValueMap(UUID.randomUUID(), planet))
             .customNames(new OptionalHashMap<>())
             .build();
-        given(universe.getSystems()).willReturn(CollectionUtils.singleValueMap(coordinate, solarSystem));
-        given(coordinateModel.getCoordinate()).willReturn(coordinate);
-        given(planet.getOwner()).willReturn(USER_ID);
+        given(universe.getSystems()).willReturn(CollectionUtils.toMap(new BiWrapper<>(coordinate1, solarSystem), new BiWrapper<>(coordinate2, filteredSolarSystem)));
+        given(visibilityFacade.isVisible(USER_ID, filteredSolarSystem)).willReturn(false);
+        given(visibilityFacade.isVisible(USER_ID, solarSystem)).willReturn(true);
+        given(coordinateModel.getCoordinate()).willReturn(coordinate1);
 
         List<MapSolarSystemResponse> result = underTest.getSolarSystems(USER_ID, universe);
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getSolarSystemId()).isEqualTo(SOLAR_SYSTEM_ID);
-        assertThat(result.get(0).getCoordinate()).isEqualTo(coordinate);
+        assertThat(result.get(0).getCoordinate()).isEqualTo(coordinate1);
         assertThat(result.get(0).getPlanetNum()).isEqualTo(1);
         assertThat(result.get(0).getSolarSystemName()).isEqualTo(DEFAULT_SOLAR_SYSTEM_NAME);
     }

@@ -1,0 +1,99 @@
+:root{
+    --navbar-width: 15rem;
+}
+
+nav{
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    width: var(--navbar-width);
+    bottom: var(--footer-height);
+    overflow: auto;
+    border-right: 3px ridge white;
+}
+
+    nav a{
+        display: block;
+        margin: 0.5rem;
+        text-align: left;
+    }
+
+main{
+    left: var(--navbar-width);
+    padding: 0;
+}
+
+    main * {
+        -webkit-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
+    }
+
+    article{
+        border: 3px outset white;
+        border-radius: 10px;
+        margin: 0.5rem;
+        background-color: rgb(70,70,70);
+        font-size: 1.35rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        overflow: auto;
+    }
+
+        article > *{
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+
+            article > *:first-child{
+                margin-top: 0;
+            }
+
+        article h2{
+            text-align: center;
+            border-bottom: 3px ridge white;
+            padding: 0.25rem;
+        }
+
+        article a{
+            font-size: 1rem;
+        }
+
+        article ul, #article ol{
+            line-height: 1.7;
+        }
+
+        article img{
+            display: block;
+            margin: auto;
+            width: 75%;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        article iframe{
+            margin: 0.75rem auto;
+            display: block;
+            border: 2px ridge white;
+            border-radius: 10px;
+            width: 70%;
+        }
+
+        pre{
+            padding: 0.25rem;
+            font-family: monospace;
+            background: rgb(50,50,50);
+            overflow: auto;
+        }
+
+code, .codepart{
+    background: rgb(75, 0, 0);
+    font-family: monospace;
+    white-space: nowrap;
+}
+
+.linethrough{
+    text-decoration: line-through;
+}

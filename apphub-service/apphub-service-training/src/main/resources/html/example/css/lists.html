@@ -1,0 +1,97 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<UL th:fragment="list_style_type">
+    <LI>
+        <SPAN class='codepart'>none</SPAN> - nincs
+        <UL style='list-style-type: none;'>
+            <LI>Példa 1</LI>
+            <LI>Példa 2</LI>
+        </UL>
+    </LI>
+    <LI>
+        <SPAN class='codepart'>decimal</SPAN> - számok (a rendezett listánál alapértelmezett)
+        <UL style='list-style-type: decimal;'>
+            <LI>Példa 1</LI>
+            <LI>Példa 2</LI>
+        </UL>
+    </LI>
+    <LI>
+        <SPAN class='codepart'>decimal-leading-zero</SPAN> - 0-val kezdődő számok
+        <UL style='list-style-type: decimal-leading-zero;'>
+            <LI>Példa 1</LI>
+            <LI>Példa 2</LI>
+        </UL>
+    </LI>
+    <LI>
+        <SPAN class='codepart'>lower-alpha</SPAN> - kis betűk
+        <UL style='list-style-type: lower-alpha;'>
+            <LI>Példa 1</LI>
+            <LI>Példa 2</LI>
+        </UL>
+    </LI>
+    <LI>
+        <SPAN class='codepart'>lower-latin</SPAN> - kis római számok
+        <UL style='list-style-type: lower-latin;'>
+            <LI>Példa 1</LI>
+            <LI>Példa 2</LI>
+        </UL>
+    </LI>
+    <LI>
+        <SPAN class='codepart'>upper-alpha</SPAN> - nagy betűk
+        <UL style='list-style-type: upper-alpha;'>
+            <LI>Példa 1</LI>
+            <LI>Példa 2</LI>
+        </UL>
+    </LI>
+    <LI>
+        <SPAN class='codepart'>upper-roman</SPAN> - nagy arab számok
+        <UL style='list-style-type: upper-roman;'>
+            <LI>Példa 1</LI>
+            <LI>Példa 2</LI>
+        </UL>
+    </LI>
+    <LI>
+        <SPAN class='codepart'>disc</SPAN> - pötty (rendezetlen listánál alapértelmezett)
+        <UL style='list-style-type: circle;'>
+            <LI>Példa 1</LI>
+            <LI>Példa 2</LI>
+        </UL>
+    </LI>
+    <LI>
+        <SPAN class='codepart'>square</SPAN> - négyzet
+        <UL style='list-style-type: square;'>
+            <LI>Példa 1</LI>
+            <LI>Példa 2</LI>
+        </UL>
+    </LI>
+    <LI>
+        <SPAN class='codepart'>circle</SPAN> - kör
+        <UL style='list-style-type: circle;'>
+            <LI>Példa 1</LI>
+            <LI>Példa 2</LI>
+        </UL>
+    </LI>
+</UL>
+
+<UL th:fragment="image_background" style='list-style-image: url("/res/training/img/css/sample_background.jpg")'>
+    <LI>Példa 1</LI>
+    <LI>Példa 2</LI>
+</UL>
+
+<DIV th:fragment="list_style_position_outside" style='width: 250px;'>
+    <UL>
+        <LI>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</LI>
+        <LI>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</LI>
+    </UL>
+</DIV>
+
+<DIV th:fragment="list_style_position_inside" style='width: 250px;'>
+    <UL style='list-style-position: inside;'>
+        <LI>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</LI>
+        <LI>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</LI>
+    </UL>
+</DIV>
+
+</BODY>
+</HTML>

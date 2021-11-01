@@ -36,6 +36,10 @@ spring:
           uri: http://skyxplore-data:8080
           predicates:
             - Path=/res/skyxplore/**
+        - id: training-resorces
+          uri: http://training:8080
+          predicates:
+            - Path=/res/training/**
 
         #PAGES
         - id: error-page
@@ -70,6 +74,10 @@ spring:
           uri: http://skyxplore-data:8080
           predicates:
             - Path=/web/skyxplore/**
+        - id: training-pages
+          uri: http://training:8080
+          predicates:
+            - Path=/web/training/**
 
         #MODULES
         - id: user
@@ -104,6 +112,10 @@ spring:
           uri: http://skyxplore-game:8080
           predicates:
             - Path=/api/skyxplore/game/**
+        - id: training
+          uri: http://training:8080
+          predicates:
+            - Path=/api/training/**
 
         #PLATFORM
         - id: localization

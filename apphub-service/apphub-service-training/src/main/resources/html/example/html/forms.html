@@ -1,0 +1,33 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+<PRE th:fragment="radio">
+Neme:&lt;BR>
+&lt;input type="radio" name="nem" value="ferfi"> Férfi&lt;BR>
+&lt;input type="radio" name="nem" value="no"> Nő
+</PRE>
+
+<PRE th:fragment="select">
+&lt;select name='select_menu'>
+    &lt;option value='ertek1'>Érték 1&lt;/option>
+    &lt;option value='ertek2' selected>Érték 2&lt;/option>
+&lt;/select>
+</PRE>
+
+<PRE th:fragment="multi-select">
+&lt;select name='select_menu' size='2'>
+    &lt;OPTION value='ertek1'>Érték 1&lt;/OPTION>
+    &lt;OPTION value='ertek2' selected>Érték 2&lt;/OPTION>
+    &lt;OPTION value='ertek3'>Érték 3&lt;/OPTION>
+&lt;/select>
+</PRE>
+
+<PRE th:fragment="datalist">
+&lt;input list="adatlista" name="ertek">
+&lt;datalist id="adatlista">
+    &lt;option value='ertek1'>Érték 1&lt;/option>
+    &lt;option value='ertek2'>Érték 2&lt;/option>
+    &lt;option value='ertek3'>Egyéb&lt;/option>
+&lt;/datalist>
+</PRE>
+</BODY>
+</HTML>

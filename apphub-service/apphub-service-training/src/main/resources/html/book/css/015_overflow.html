@@ -1,0 +1,95 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Túlfolyás - CSS - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">CSS - Túlfolyás</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/css.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>A túlfolyás kontrollálása</H2>
+
+            <P>El tudunk képzelni két dobozt, egy kicsit és egy nagyot. Tegyük őket egymásba! Ezt a feladatot minden (épeszű) ember úgy oldaná meg, hogy fogja a kis dobozt, és beleteszi a nagyba.</P>
+            <P>Na de a HTML világában nem ilyen egyszerű a helyzet. Bármikor előfordulhat, hogy a kis dobozba kell beletenni a nagyot.</P>
+            <P>Ebben az esetben lépnek érvényre a túlfolyást szabályozó beállítások.</P>
+
+            <DIV>
+                Név szerint:
+                <UL>
+                    <LI><SPAN class="codepart">overflow</SPAN> - túlfolyás állítása minden irányban</LI>
+                    <LI><SPAN class="codepart">overflow-x</SPAN> - vízszintes túlfolyás állítása</LI>
+                    <LI><SPAN class="codepart">overflow-y</SPAN> - függőleges túlfolyás állítása</LI>
+                </UL>
+                Mindhárom tulajdonságnak ugyanazokat az értékeket lehet beállítani, ezekről az értékekről pedig a következőkben lesz szó.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>overflow: visible (alapértelmezett)</H2>
+
+            <P>Alap esetben a tárolóba be nem férő tartalom a tárolón kívül kerül megjelenítésre:</P>
+
+            <DIV style="width: 250px; height: 250px; border: 3px solid red; padding: 1rem;">
+                <DIV style="width: 350px; height: 230px; background: blue; border: 3px solid black;">Belső doboz</DIV>
+            </DIV>
+
+            <BR>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>overflow: hidden</H2>
+
+            <P>Ebben az esetben a nagy dobozból kilógó rész nem jelenítődik meg:</P>
+
+            <DIV style="overflow: hidden; width: 250px; height: 250px; border: 3px solid red; padding: 1rem;">
+                <DIV style="width: 350px; height: 230px; background: blue; border: 3px solid black;">Belső doboz</DIV>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>overflow: scroll</H2>
+
+            <P>Ebben az esetben görgethetővé válik a tároló, így abba bele fér a tartalom, a saját mérete pedig mégsem lesz nagyobb.</P>
+
+            <DIV style="display: inline-block; overflow: scroll; width: 250px; height: 250px; border: 3px solid red; padding: 1rem;">
+                <DIV style="width: 350px; height: 230px; background: blue; border: 3px solid black;">Belső doboz</DIV>
+            </DIV>
+
+            <DIV style="display: inline-block; overflow: scroll; width: 250px; height: 250px; border: 3px solid red; padding: 1rem;">
+                <DIV style="width: 150px; height: 150px; background: blue; border: 3px solid black;">Belső doboz</DIV>
+            </DIV>
+
+            <P><U>Megjegyzés:</U> ahogyan a második példán látszik, a görgő sávok akkor is megjelennek, ha a tartalom egyébként bele férne a dobozba.</P>
+        </ARTICLE>
+
+        <ARTICLE id="fix_size">
+            <H2>overflow: auto</H2>
+
+            <P>És ez az igazi segítség a túlfolyás kezelésére. Ennél az értéknél a görgősávok csak akkor jelennek meg, ha a tartaom nem fér el a dobozában.</P>
+            <P>Csökkentsd le a tároló méretét, és figyeld a görgősávok megjelenését!</P>
+
+            <DIV style="overflow: auto; width: 300px; height: 250px; border: 3px solid red; padding: 1rem; resize: both;">
+                <DIV style="width: 250px; height: 150px; background: blue; border: 3px solid black;">Belső doboz</DIV>
+            </DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/css/014_positioning'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/css/016_combinators'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

@@ -1,0 +1,121 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+<PRE th:fragment="first_last_child">
+div p:first-child{
+    color: red;
+}
+
+div p:last-child{
+    color: blue
+}
+
+&lt;DIV>
+    &lt;P>Első bekezdés&lt;/P>
+    &lt;P>Második bekezdés&lt;/P>
+    &lt;P>Harmadik bekezdés&lt;/P>
+    &lt;P>Negyedik bekezdés&lt;/P>
+&lt;/DIV>
+</PRE>
+
+<PRE th:fragment="all_last_child">
+div p:first-child{
+    color: red;
+}
+
+div <CODE>:last-child</CODE>{
+    color: blue
+}
+
+&lt;DIV>
+    &lt;span>Első bekezdés&lt;/span>
+    &lt;P>Második bekezdés&lt;/P>
+    &lt;P>Harmadik bekezdés&lt;/P>
+    &lt;span>Negyedik bekezdés&lt;/span>
+&lt;/DIV>
+</PRE>
+
+<PRE th:fragment="first_last_of_type">
+div p:<CODE>first-of-type</CODE>{
+    color: red;
+}
+
+div <CODE>:last-of-type</CODE>{
+    color: blue
+}
+
+&lt;DIV>
+    &lt;span>Első bekezdés&lt;/span>
+    &lt;P>Második bekezdés&lt;/P>
+    &lt;P>Harmadik bekezdés&lt;/P>
+    &lt;span>Negyedik bekezdés&lt;/span>
+&lt;/DIV>
+</PRE>
+
+<PRE th:fragment="only">
+div :empty{
+    width: 3rem;
+    height: 1rem;
+    background: green;
+}
+
+div :only-child{
+    color: red;
+}
+
+div :only-of-type{
+    border: 2px solid black;
+}
+
+&lt;DIV>
+    &lt;DIV>&lt;/DIV>
+
+    &lt;DIV>
+        &lt;SPAN>DIV-be foglalt SPAN&lt;/SPAN>
+    &lt;/DIV>
+
+    &lt;P>Bekezdés&lt;/P>
+&lt;/DIV>
+</PRE>
+
+<PRE th:fragment="nth_child">
+div :nth-child(3){
+    color: red;
+}
+
+&lt;DIV>
+    &lt;P>Első bekezdés&lt;/P>
+    &lt;P>Második bekezdés&lt;/P>
+    &lt;P>Harmadik bekezdés&lt;/P>
+    &lt;P>Negyedik bekezdés&lt;/P>
+&lt;/DIV>
+</PRE>
+
+<PRE th:fragment="nth_child_repetitive">
+tr:nth-child(2n){
+    color: red;
+}
+
+tr:nth-child(2n + 1){
+    color: blue;
+}
+
+tr:nth-child(3n + 2){
+    background-color: lightgreen;
+}
+</PRE>
+
+<PRE th:fragment="not">
+div :not(p){
+    color: red;
+}
+
+&lt;DIV>
+    &lt;P>Bekezdés 1&lt;/P>
+    &lt;DIV>DIV vagyok.&lt;/DIV>
+    &lt;P>Bekezdés 2&lt;/P>
+    &lt;SPAN>Nem vagyok bekezdés, SPAN vagyok&lt;/SPAN>
+    &lt;P>Bekezdés 3&lt;/P>
+&lt;/DIV>
+</PRE>
+</BODY>
+</HTML>

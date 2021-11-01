@@ -1,0 +1,139 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Bevezetés - CSS - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">CSS - Bevezetés</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/css.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Mi az a CSS?</H2>
+
+            <P>
+            <UL>
+                <LI>A Cascading Style Sheets rövidítése</LI>
+                <LI>A HTML oldalak megjelenését leíró programozási nyelv</LI>
+            </UL>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>CSS beépítése a weboldalba</H2>
+
+            <P>
+                CSS kódot 3 módon lehet hozzáadni a HTML oldalhoz:
+            <OL>
+                <LI>
+                    HTML tag attribútumaként:<BR>
+                    <SPAN class='codepart'>&lt;tag style="CSS kod helye"></SPAN><BR>
+
+                    Előnyei:
+                    <UL>
+                        <LI>Egyszerű</LI>
+                        <LI>(Majdnem) mindig érvényre jut (lásd később)</LI>
+                    </UL>
+
+                    Hátrányai:
+                    <UL>
+                        <LI>Csak egyetlen tagre van hatása</LI>
+                        <LI>Hosszú CSS kód olvashatatlanná teszi a HTML-t</LI>
+                    </UL>
+                </LI>
+                <LI>
+                    Oldal fejlécében (<SPAN class='codepart'>&lt;head></SPAN>)
+                    <PRE th:replace="/example/css/introduction.html :: in_head"></PRE>
+
+                    Előnyei:
+                    <UL>
+                        <LI>Biztosítja a CSS összes lehetőségét</LI>
+                        <LI>Egy szabályt több tagre is lehet alkalmazni</LI>
+                    </UL>
+
+                    Hátrányai:
+                    <UL>
+                        <LI>Csak az adott oldalra érvényes</LI>
+                        <LI>Hosszú CSS kód olvashatatlanná teszi a HTML-t</LI>
+                    </UL>
+                </LI>
+                <LI>
+                    Külső fájlban
+
+                    <OL>
+                        <LI>Egy <SPAN class='codepart'>.css</SPAN> fájl tartalmazza a CSS szabályokat</LI>
+                        <LI>Ezt a fájlt a weboldal fejlécében beimportáljuk a <SPAN class='codepart'>&lt;link rel="stylesheet" href="css_fajl.css"></SPAN> tag segítségével.
+                    </OL>
+
+                    Előnyei:
+                    <UL>
+                        <LI>A CSS szabályok elkülönülnek a HTML-től</LI>
+                        <LI>Ugyanazt a .css fájlt több oldal is használhatja</LI>
+                    </UL>
+
+                    Hátrányai:
+                    <UL>
+                        <LI>Ha a CSS fájl valamilyen okból nem elérhető, akkor az oldal rosszul jelenik meg</LI>
+                    </UL>
+                </LI>
+            </OL>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Versenyhelyzetek</H2>
+
+            <P>Egy weblap több helyen is tartalmazhat CSS kódot: tag attribútumaként, az oldal fejlécében elhelyezett blokkokban és importált külső fájlokban.</P>
+            <P>
+                Vegyünk egy egyszerű példát:<BR>
+                Van egy oldalunk, aminek a háttérszínét szeretnénk módosítani. A
+                <SPAN class='codepart'>&lt;body></SPAN> tag tulajdonságában megadjuk, hogy a háttér színe legyen zöld, a fejlécben azt mondjuk, hogy legyen sárga, míg a beimportált css fájl inkább kékre állítaná.<BR>
+                Na de akkor mi lesz a végeredmény?
+            </P>
+            <P>
+                A fentebb említett versenyhelyzetekben a következő szerint lépnek érvénybe a szabályok:
+            <OL>
+                <LI>A <SPAN class='codepart'>!important</SPAN> (fontosnak jelölt) szabályok</LI>
+                <LI>A tag attribútumában megadott szabályok</LI>
+                <LI>Amelyik később töltődött be (az importálás és fejlécbe helyezett blokkok sorrendje szerint a legutolsó)</LI>
+                <LI>Böngésző beépített szabályai (User Agent Stylesheet)</LI>
+            </OL>
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Szintaktika</H2>
+
+            <PRE class="codepart" th:replace="/example/css/introduction.html :: syntax"></PRE>
+
+            <P>A kiválasztókról és tulajdonságokról a későbbi fejezetekben lesz szó.</P>
+            <P>
+                Példa:
+            <PRE class="codepart" th:replace="/example/css/introduction.html :: example"></PRE>
+            (A <SPAN class='codepart'>&lt;body></SPAN> háttérszínét pirosra, a betűméretét pedig 20 pixelesre állítja.)
+            </P>
+
+            <P>
+                <B>Kommentek:</B> A kommenteket a böngésző figyelmen kívül hagyja a megjelenítés során.<BR>
+                Komment blokk létrehozása: <SPAN class='codepart'>/*Komment szövege*/</SPAN><BR>
+                Komment blokk lehet több soros, is, de nem ágyazódhatnak egymásba.
+            </P>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/css/002_selectors'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

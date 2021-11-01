@@ -1,0 +1,25 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<PRE th:fragment="example">
+body {
+    background: red;
+}
+</PRE>
+
+<PRE th:fragment="background_image">
+body{
+    background: url("a_kep_cime.jpg");
+}
+</PRE>
+
+<PRE th:fragment="combined_background">
+body{
+    background-color: blue;
+    background-image: url("/img/css/sample_background.jpg");
+    background-repeat: no-repeat;
+}
+</PRE>
+
+</BODY>
+</HTML>

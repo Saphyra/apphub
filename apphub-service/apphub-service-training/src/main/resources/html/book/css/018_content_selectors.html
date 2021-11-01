@@ -1,0 +1,284 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Tartalom kiválasztók - CSS - Oktatás - Apphub</TITLE>
+
+    <STYLE>
+        .example_first_child p:first-child{
+            color: red;
+        }
+
+        .example_first_child p:last-child{
+            color: blue
+        }
+
+        .example_first_child :last-child{
+            color: blue
+        }
+
+        .example_first_of_type p:first-of-type{
+            color: red;
+        }
+
+        .example_first_of_type :last-of-type{
+            color: blue;
+        }
+
+        .example_only_child :empty{
+            width: 3rem;
+            height: 1rem;
+            background: green;
+        }
+
+        .example_only_child :only-child{
+            color: red;
+        }
+
+        .example_only_child :only-of-type{
+            border: 2px solid black;
+        }
+
+        .example_nth_child :nth-child(3){
+            color: red;
+        }
+
+        .example_nth_child_table td{
+            border: 1px solid black;
+        }
+
+        .example_nth_child_table tr:nth-child(2n){
+            color: red;
+        }
+        .example_nth_child_table tr:nth-child(2n + 1){
+            color: blue;
+        }
+        .example_nth_child_table tr:nth-child(3n + 2){
+            background-color: lightgreen;
+        }
+
+        .example_not :not(p){
+            color: red;
+        }
+
+    </STYLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">CSS - Tartalom kiválasztók</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/css.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <P>A tartalom kiválasztók tovább segítik a megfelelő elemek kiválasztását, valamint további lehetőségeket adnak a tárolók tartalmának formázásához.</P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Első / utolsó gyermek</H2>
+
+            <P><CODE>div span:first-child</CODE> - a <CODE>&lt;div></CODE>-ekben található <CODE>&lt;span></CODE>, ha az a tárolójuk legelső eleme.</P>
+            <P><CODE>div span:last-child</CODE> - a <CODE>&lt;div></CODE>-ekben található <CODE>&lt;span></CODE>, ha az a tárolójuk legutolsó eleme.</P>
+
+            <DIV>
+                <PRE th:replace="/example/css/content_selectors.html :: first_last_child"></PRE>
+
+
+                <DIV class="example_first_child" style="width: 250px; height: 250px; border: 3px solid red;">
+                    <P>Első bekezdés</P>
+                    <P>Második bekezdés</P>
+                    <P>Harmadik bekezdés</P>
+                    <P>Negyedik bekezdés</P>
+                </DIV>
+            </DIV>
+
+            <DIV>
+                Figyeljük meg, hogy ha a tároló első eleme nem felel meg a kritériumoknak (nem
+                <CODE>&lt;p></CODE>), akkor a beállítétt szabályok nem jutnak érvényre. Ha nem szeretnénk kritériumokat hagyni, akkor azokat el lehet hagyni (mint ahogy a
+                <CODE>:last-child</CODE> előtt sincs megadva, milyen taget szeretnénk kiválasztani)
+                <PRE th:replace="/example/css/content_selectors.html :: all_last_child"></PRE>
+
+                <DIV class="example_first_child" style="width: 250px; height: 250px; border: 3px solid red;">
+                    <SPAN>Első bekezdés</SPAN>
+                    <P>Második bekezdés</P>
+                    <P>Harmadik bekezdés</P>
+                    <SPAN>Negyedik bekezdés</SPAN>
+                </DIV>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Első / utolsó a típusából</H2>
+
+            <P>Ezek a kiválasztók hasonlóképpen működnek, mint a <CODE>first-child</CODE> és <CODE>last-child</CODE>, de az azonos típusú tagekből választja ki a legelső / legutolsó elemet.</P>
+
+            <DIV>
+                <UL>
+                    <LI><CODE>div:first-of-type</CODE> - a "legidősebb testvér" <CODE>&lt;div></CODE>-ek. (Azok a <CODE>&lt;div></CODE>-ek, amelyek az azonos típusú testvéreik közül a legelsőek.)</LI>
+                    <LI><CODE>last-of-type</CODE> - a "legfiatalabb testvér" tagek. (Azok a tagek, amelyek az azonos típusú testvéreik közül a legutolsóak.)</LI>
+                </UL>
+            </DIV>
+
+            <DIV>
+                A legutóbbi példát a következőképpen módosítva:
+                <PRE th:replace="/example/css/content_selectors.html :: first_last_of_type"></PRE>
+
+                <DIV class="example_first_of_type" style="width: 250px; height: 250px; border: 3px solid red;">
+                    <SPAN>Első bekezdés</SPAN>
+                    <P>Második bekezdés</P>
+                    <P>Harmadik bekezdés</P>
+                    <SPAN>Negyedik bekezdés</SPAN>
+                </DIV>
+            </DIV>
+
+            <P>
+                <U>Magyarázat:</U><BR>
+                A <CODE>div p:first-of-type</CODE> kiválasztó kiválasztja azokat a <CODE>&lt;p></CODE> tageket, amik
+                <CODE>&lt;div></CODE>-en belül vannak, és az azonos típusú testvéreik közül a legelsőek. Ez jelen esetben csak a "Második bekezdés" szöveget tartalmazó
+                <CODE>&lt;p></CODE> tag, mert a tároló <CODE>&lt;div></CODE>-ben összesen van két <CODE>&lt;p></CODE> tag, és ebből a
+                <CODE>:first-of-type</CODE> kiválasztó a legelső testvérre szűkíti a találatok listáját.<BR>
+                A
+                <CODE>div :last-of-type</CODE> kiválasztó ezzel szemben egyaránt hat a "Negyedik bekezdés"-re és a "Harmadik bekezdés"-re is, mert nem adtuk meg, hogy milyen típusú tageket válasszon ki. "A
+                <CODE>&lt;div></CODE>-en belüli azonos típusú tageknek a legutolsó tagja. A <CODE>&lt;div></CODE>-en belül van 2 <CODE>&lt;p></CODE> és két
+                <CODE>&lt;span></CODE> tag, és mindkét tag csoportból azt az egy taget választotta ki, amely később helyezkedett el az oldalon.
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>További gyermek kiválasztók</H2>
+
+            <P>Az <CODE>:only-of-type</CODE> azokat az elemeket választja ki, melynek nincs azonos típusú testvére.</P>
+            <P>Az <CODE>:only-child</CODE> azokat az elemeket választja ki, melynek nincs testvére.</P>
+            <P>Az <CODE>:empty</CODE> azokat az elemeket választja ki, melyek üresek.</P>
+
+            <DIV>
+                Példák:
+                <PRE th:replace="/example/css/content_selectors.html :: only"></PRE>
+
+
+                <DIV class="example_only_child" style="width: 250px; height: 250px; border: 3px solid red;">
+                    <DIV></DIV>
+
+                    <DIV>
+                        <SPAN>DIV-be foglalt SPAN</SPAN>
+                    </DIV>
+
+                    <P>Bekezdés</P>
+                </DIV>
+
+                <P>Jól látszik, hogy a CSS az üres <CODE>&lt;div></CODE>-nek átállította a méretét, és háttérszínét.</P>
+                <P>A <CODE>&lt;span></CODE> szövegének színe piros lett, mert nincs testvére, így az <CODE>:only-child</CODE> kiválasztó alatt megadott szabályok érvényre jutottak.</P>
+                <P>Az <CODE>:only-of-type</CODE> kiválasztó alatti szabályok a <CODE>&lt;span></CODE>-ra, és a
+                    <CODE>&lt;p></CODE>-re is érvényre jutottak, mert egyik tagnek sincs azonos típusú testvére.</P>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>n-edik elem</H2>
+
+            <P>Egy tároló meghatározott sorszámú gyermekét a <CODE>:nth-child(n)</CODE> kiválasztóval tudjuk kiválasztani, ahol n a gyermek sorszáma.</P>
+
+            <DIV>
+                Példa:
+                <PRE th:replace="/example/css/content_selectors.html :: nth_child"></PRE>
+
+                <DIV class="example_nth_child" style="width: 250px; height: 250px; border: 3px solid red;">
+                    <P>Első bekezdés</P>
+                    <P>Második bekezdés</P>
+                    <P>Harmadik bekezdés</P>
+                    <P>Negyedik bekezdés</P>
+                </DIV>
+            </DIV>
+
+            <P>Ha hátulró szeretnénk számolni, akkor használjuk a <CODE>:nth-last-child(n)</CODE> kiválasztót!</P>
+            <P>Hasonló logika alapján működik az <CODE>:nth-of-type(n)</CODE> és
+                <CODE>:nth-last-of-type(n)</CODE> kiválasztó, amely az azonos típusú elemek csoportosított listájából választja ki az elölről / hátulról n-edik elemet, típusonként.</P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Páros / páratlan sorszámú gyermekek kiválasztása</H2>
+
+            <P>Gondolom, találkoztál már zebra csíkos táblázattal, ahol minden második sornak eltérő háttérszíne volt. Természetesen ezt is CSS-el valósították meg, még pedig a fent bemutatott
+                <CODE>:nth-child(n)</CODE> kiválasztóval. A trükk annyi, hogy n helyére nem egy számot, hanem egy függvényt írtak.</P>
+            <P>Például: <CODE>tr:nth-child(2n){background-color: green}</CODE> - minden második sor háttérszínét zöldre állítja.</P>
+            <P>A fentinél kicsit bonyolultabb függvényeket is meg lehet adni:
+                <CODE>:nth-child(3n + 2)</CODE>. A CSS úgy dolgozik, hogy az n helyére elkezd számokat behelyettesíteni egyesével léptetve, majd kiszámolja a beírt függvény eredményét, és a kijött eredmény alapján megkeresi az adott sorszámú elemet. Az előbbi függvény alapján a második, majd ötödik, majd nyolcadik, és így tovább... elem tulajdonságait fogja megváltoztatni.
+            </P>
+
+            <DIV>
+                Példa:
+                <PRE th:replace="/example/css/content_selectors.html :: nth_child_repetitive"></PRE>
+
+                <TABLE class="example_nth_child_table">
+                    <TR>
+                        <TD>1. sor</TD>
+                    </TR>
+                    <TR>
+                        <TD>2. sor</TD>
+                    </TR>
+                    <TR>
+                        <TD>3. sor</TD>
+                    </TR>
+                    <TR>
+                        <TD>4. sor</TD>
+                    </TR>
+                    <TR>
+                        <TD>5. sor</TD>
+                    </TR>
+                    <TR>
+                        <TD>6. sor</TD>
+                    </TR>
+                    <TR>
+                        <TD>7. sor</TD>
+                    </TR>
+                    <TR>
+                        <TD>8. sor</TD>
+                    </TR>
+                    <TR>
+                        <TD>9. sor</TD>
+                    </TR>
+                </TABLE>
+            </DIV>
+
+            <P>A táblázat minden páratlan sora kék, míg a páros sorok piros betűszínt kaptak, valamint a 2. 5. és 8. sorok háttérszíne zöldre változott.</P>
+            <P><U>Megjegyzés:</U> a páros sorokat így is ki lehet vélasztani: <CODE>:nth-child(odd)</CODE>, míg a páratlanokat így: <CODE>:nth-child(even)</CODE></P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Tagadó kiválasztás</H2>
+
+            <P>Vannak esetek, amikor egyszerűbb inkább azt megmondani, hogy mely tageket NEM szeretnénk kiválasztani, ahelyett, hogy melyeket igen.</P>
+
+            <P>Ezt a <CODE>:not(kivalaszto)</CODE> kombinációval tehetjük meg, ahol azok a tagek lesznek kiválasztva, melyek kivalaszto-nak nem felelnek meg.</P>
+
+            <DIV>
+                Példa:
+                <PRE th:replace="/example/css/content_selectors.html :: not"></PRE>
+
+                <DIV class="example_not" style="width: 250px; height: 250px; border: 3px solid red;">
+                    <P>Bekezdés 1</P>
+                    <DIV>DIV vagyok.</DIV>
+                    <P>Bekezdés 2</P>
+                    <SPAN>Nem vagyok bekezdés, SPAN vagyok</SPAN>
+                    <P>Bekezdés 3</P>
+                </DIV>
+            </DIV>
+
+            <P>Jelen esetben minden olyan tag kiválasztásra kerül (a <CODE>&lt;div></CODE>-en belül), amelyik nem <CODE>&lt;p></CODE>.</P>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/css/017_pseudo_classes'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/css/019_content_manipulation'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

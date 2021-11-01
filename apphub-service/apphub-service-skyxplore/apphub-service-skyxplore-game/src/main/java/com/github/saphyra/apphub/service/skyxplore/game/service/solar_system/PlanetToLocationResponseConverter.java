@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.solar_system;
 import com.github.saphyra.apphub.api.skyxplore.response.game.solar_system.PlanetLocationResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.service.visibility.VisibilityFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,9 +18,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 class PlanetToLocationResponseConverter {
+    private final VisibilityFacade visibilityFacade;
+
     List<PlanetLocationResponse> mapPlanets(UUID userId, Collection<Planet> planets, Game game) {
         return planets.stream()
-            .filter(planet -> userId.equals(planet.getOwner()))
+            .filter(planet -> visibilityFacade.isVisible(userId, planet))
             .map(planet -> mapPlanet(userId, planet, game))
             .collect(Collectors.toList());
     }

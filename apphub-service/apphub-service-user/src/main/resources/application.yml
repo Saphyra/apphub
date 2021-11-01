@@ -18,6 +18,7 @@ registration:
 rolesCanBeDisabled:
   - NOTEBOOK
   - SKYXPLORE
+  - TRAINING
   - TEST
 
 role:

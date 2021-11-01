@@ -229,10 +229,13 @@
 
                 table.appendChild(createTableHeads(columns));
 
-                new Stream(processedRecords)
-                    .map(function(record){return createRecordRow(columns, record)})
-                    .forEach(function(recordRow){table.appendChild(recordRow)});
+                const tableBody = document.createElement("TBODY");
 
+                    new Stream(processedRecords)
+                        .map(function(record){return createRecordRow(columns, record)})
+                        .forEach(function(recordRow){tableBody.appendChild(recordRow)});
+
+                table.appendChild(tableBody);
             return table;
 
             function createTableHeads(columns){

@@ -34,4 +34,8 @@
             <column name="last_visited_page" type="text"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="remove-column-last_visited_page-to-access_token" author="saphyra">
+        <dropColumn schemaName="apphub_user" tableName="access_token" columnName="last_visited_page"/>
+    </changeSet>
 </databaseChangeLog>

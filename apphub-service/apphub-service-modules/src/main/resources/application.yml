@@ -37,6 +37,10 @@ modules:
         url: /web/utils/base64
         allowedByDefault: true
         mobileAllowed: true
+      - name: training
+        url: /web/training
+        allowedByDefault: true
+        mobileAllowed: true
     game:
       - name: skyxplore
         url: /web/skyxplore

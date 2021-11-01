@@ -1,0 +1,95 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Reszponzivitás - CSS - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">CSS - Reszponzivitás</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/css.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Mi az a reszponzivitás?</H2>
+
+            <P>
+                Valószínűleg minden ember találkozott már olyan oldallal, ami telefonon másképpen jelent meg, mint egy számítógép kijelzőjén.
+                Ennek az oka a következő: Egy telefon általában sokkal nagyobb képpont sűrűséggel rendelkezik, mint egy asztali monitor (telefon: 2000 képpont 15-20 centire sűrítve, mig egy monitoron ugyanennyi képpontra 30-50 centi is jut, ha nem több).
+                Ez azzal jár, hogy a telefonokon a 16 pixeles betűméret sokkal kisebbként jelenik meg, mint az asztali gépek esetében. Másik példa, míg a telefonokat legtöbbször állított helyzetben bámuljuk, addig asztali gépek szinte mindig fektetve vannak.
+                Így könnyen előfordulhat, hogy ami a számítógépünkön szépen és olvashatóan jelenik meg, ugyanaz a weboldal telefonon el van csúszva, nem fér ki, vagy éppen olvashatatlanul kicsi a szöveg.
+            </P>
+
+            <P>Ha egy weboldal érzékeli a kijelző paramétereit, és ennek függvényében jeleníti meg a tartalmat, akkor azt reszponzív weboldalnak tekinthetjük.</P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Hogyan legyünk reszponzívak?</H2>
+
+            <P>
+                Alap szintű reszponzivitást a legkönnyebb relatív mértékegységek használatával, és a tárolók méretének minimum és maximum értékeinek meghatározásával elérni.
+                Természetesen a CSS ennél sokkal kifinomultabb és precízebb megoldásokat is nyújt. Ezek közül az egyiket <CODE>media query</CODE>-nek hívjuk.
+            </P>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>media queryk</H2>
+
+            <P>A media queryk olyan szabályokat foglalnak magukban, melyek csak akkor jutnak érvényre, hogyha a képernyő bizonyos feltételeknek megfelel.</P>
+
+            <DIV>
+                Szintaktika: <CODE>@media not/only megjelenito and (feltetel) and (feltetel) ... { szabályok }</CODE>
+
+                <UL>
+                    <LI>@media: media query létrehozása</LI>
+                    <LI>
+                        not/only megjelenito: Szűrés kijelzőtípusra.<BR>
+                        Az első szó a szűrés típusát adja meg:
+                        <UL>
+                            <LI>not: minden kijelzőtípus, kivéve a paraméterként megadott</LI>
+                            <LI>only: csak a paraméterként megadott kijelzőtípus</LI>
+                        </UL>
+
+                        A második szó a kijelző típusát adja meg, ami lehet:
+                        <Ul>
+                            <LI>print: nyomtató</LI>
+                            <LI>screen: kijelző</LI>
+                            <LI>speech: felolvasó program (látássérülteknek például)</LI>
+                        </Ul>
+                    </LI>
+                    <LI>and (feltetel): további feltételek</LI>
+                </UL>
+
+                Ha a megadott feltételek mindegyike teljesül, akkor érvényre jutnak a media queryben foglalt szabályok.
+            </DIV>
+
+            <DIV>
+                Példa:
+                <PRE th:replace="/example/css/responsivity.html :: media_query"></PRE>
+
+                Ha a megjelenítő típusa kijelző (képernyők, monitorok...), és az minimum 600, maximum 1000 pixel széles, akkor a háttér színét pirosra állítja.<BR>
+
+                <IFRAME src="/web/training/css/sample/media_query" style='display: block; width: 250px; height: 250px; resize: horizontal; background: white;'></IFRAME>
+            </DIV>
+
+            <P>Példa egy menü reszponzívvé tételére:</P>
+            <IFRAME src="/web/training/css/sample/responsive_menu" style='display: block; width: 600px; height: 250px; resize: horizontal; background: white;'></IFRAME>
+
+            <PRE th:replace="/example/css/responsivity.html :: responsive_menu"></PRE>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/css/021_transition'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training'">Kezdőlap</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>
