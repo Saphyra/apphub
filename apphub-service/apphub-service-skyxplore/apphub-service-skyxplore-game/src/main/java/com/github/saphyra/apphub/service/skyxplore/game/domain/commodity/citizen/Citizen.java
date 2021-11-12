@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.domain.commodity;
+package com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
@@ -21,4 +21,5 @@ public class Citizen {
     private int morale;
     private int satiety;
     private final Map<SkillType, Skill> skills;
+    private final SoldierData soldierData;
 }

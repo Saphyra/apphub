@@ -10,5 +10,6 @@ public enum SkillType {
     MELEE_FIGHTING,
     MINING,
     PILOTING,
-    SUPPLYING
+    SUPPLYING,
+    STAMINA
 }

@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 class CitizenLoader {
     private final GameItemLoader gameItemLoader;
     private final SkillLoader skillLoader;
+    private final SoldierDataLoader soldierDataLoader;
 
     public OptionalMap<UUID, Citizen> load(UUID location) {
         List<CitizenModel> models = gameItemLoader.loadChildren(location, GameItemType.CITIZEN, CitizenModel[].class);
@@ -41,6 +42,7 @@ class CitizenLoader {
             .morale(model.getMorale())
             .satiety(model.getSatiety())
             .skills(skillLoader.load(model.getId()))
+            .soldierData(soldierDataLoader.load(model.getId(), model.getWeaponDataId(), model.getMeleeWeaponDataId()))
             .build();
     }
 }

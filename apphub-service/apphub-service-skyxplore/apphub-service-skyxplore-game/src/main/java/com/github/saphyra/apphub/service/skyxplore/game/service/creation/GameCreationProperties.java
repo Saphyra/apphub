@@ -70,6 +70,7 @@ public class GameCreationProperties {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CitizenProperties {
+        private int hitPointsPerStamina;
         private int defaultMorale;
         private int defaultSatiety;
     }

@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 public class CitizenServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID CITIZEN_ID = UUID.randomUUID();
-    private static final UUID PARENT = UUID.randomUUID();
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
     private CitizenDao citizenDao;
@@ -35,8 +35,6 @@ public class CitizenServiceTest {
     @Mock
     private CitizenModel model;
 
-    @Mock
-    private CitizenModel citizen;
 
     @Test
     public void deleteByGameId() {
@@ -60,20 +58,20 @@ public class CitizenServiceTest {
 
     @Test
     public void findById() {
-        given(citizenDao.findById(CITIZEN_ID)).willReturn(Optional.of(citizen));
+        given(citizenDao.findById(CITIZEN_ID)).willReturn(Optional.of(model));
 
         Optional<CitizenModel> result = underTest.findById(CITIZEN_ID);
 
-        assertThat(result).contains(citizen);
+        assertThat(result).contains(model);
     }
 
     @Test
     public void getByParent() {
-        given(citizenDao.getByLocation(PARENT)).willReturn(Arrays.asList(citizen));
+        given(citizenDao.getByLocation(LOCATION)).willReturn(Arrays.asList(model));
 
-        List<CitizenModel> result = underTest.getByParent(PARENT);
+        List<CitizenModel> result = underTest.getByParent(LOCATION);
 
-        assertThat(result).containsExactly(citizen);
+        assertThat(result).containsExactly(model);
     }
 
     @Test

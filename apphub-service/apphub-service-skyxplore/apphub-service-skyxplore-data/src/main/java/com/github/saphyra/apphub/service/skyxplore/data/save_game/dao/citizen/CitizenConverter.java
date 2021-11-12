@@ -25,6 +25,8 @@ class CitizenConverter extends ConverterBase<CitizenEntity, CitizenModel> {
         model.setName(entity.getName());
         model.setMorale(entity.getMorale());
         model.setSatiety(entity.getSatiety());
+        model.setWeaponDataId(entity.getWeaponDataId());
+        model.setMeleeWeaponDataId(entity.getMeleeWeaponDataId());
         return model;
     }
 
@@ -38,6 +40,8 @@ class CitizenConverter extends ConverterBase<CitizenEntity, CitizenModel> {
             .name(domain.getName())
             .morale(domain.getMorale())
             .satiety(domain.getSatiety())
+            .weaponDataId(domain.getWeaponDataId())
+            .meleeWeaponDataId(domain.getMeleeWeaponDataId())
             .build();
     }
 }

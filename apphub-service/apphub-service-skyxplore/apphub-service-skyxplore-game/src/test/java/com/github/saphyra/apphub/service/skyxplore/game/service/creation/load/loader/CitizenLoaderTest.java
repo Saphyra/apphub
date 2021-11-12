@@ -5,8 +5,9 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Skill;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Skill;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,12 +29,17 @@ public class CitizenLoaderTest {
     private static final String NAME = "name";
     private static final Integer MORALE = 245;
     private static final Integer SATIETY = 351;
+    private static final String WEAPON_DATA_ID = "weapon-data-id";
+    private static final String MELEE_WEAPON_DATA_ID = "melee-weapon-data-id";
 
     @Mock
     private GameItemLoader gameItemLoader;
 
     @Mock
     private SkillLoader skillLoader;
+
+    @Mock
+    private SoldierDataLoader soldierDataLoader;
 
     @InjectMocks
     private CitizenLoader underTest;
@@ -43,6 +49,9 @@ public class CitizenLoaderTest {
 
     @Mock
     private Skill skill;
+
+    @Mock
+    private SoldierData soldierData;
 
     @Test
     public void load() {
@@ -54,8 +63,11 @@ public class CitizenLoaderTest {
         given(citizenModel.getName()).willReturn(NAME);
         given(citizenModel.getMorale()).willReturn(MORALE);
         given(citizenModel.getSatiety()).willReturn(SATIETY);
+        given(citizenModel.getWeaponDataId()).willReturn(WEAPON_DATA_ID);
+        given(citizenModel.getMeleeWeaponDataId()).willReturn(MELEE_WEAPON_DATA_ID);
 
         given(skillLoader.load(CITIZEN_ID)).willReturn(CollectionUtils.singleValueMap(SkillType.AIMING, skill));
+        given(soldierDataLoader.load(CITIZEN_ID, WEAPON_DATA_ID, MELEE_WEAPON_DATA_ID)).willReturn(soldierData);
 
         Map<UUID, Citizen> result = underTest.load(LOCATION);
 
@@ -68,5 +80,6 @@ public class CitizenLoaderTest {
         assertThat(citizen.getMorale()).isEqualTo(MORALE);
         assertThat(citizen.getSatiety()).isEqualTo(SATIETY);
         assertThat(citizen.getSkills()).containsEntry(SkillType.AIMING, skill);
+        assertThat(citizen.getSoldierData()).isEqualTo(soldierData);
     }
 }

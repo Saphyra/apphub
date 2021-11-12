@@ -26,6 +26,8 @@ public class CitizenConverterTest {
     private static final String CITIZEN_ID_STRING = "citizen-id";
     private static final String GAME_ID_STRING = "game-id";
     private static final String LOCATION_STRING = "location";
+    private static final String WEAPON_DATA_ID = "weapon-data-id";
+    private static final String MELEE_WEAPON_DATA_ID = "melee-weapon-data-id";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -43,6 +45,8 @@ public class CitizenConverterTest {
         model.setName(NAME);
         model.setMorale(MORALE);
         model.setSatiety(SATIETY);
+        model.setWeaponDataId(WEAPON_DATA_ID);
+        model.setMeleeWeaponDataId(MELEE_WEAPON_DATA_ID);
 
         given(uuidConverter.convertDomain(CITIZEN_ID)).willReturn(CITIZEN_ID_STRING);
         given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
@@ -57,6 +61,8 @@ public class CitizenConverterTest {
         assertThat(result.getName()).isEqualTo(NAME);
         assertThat(result.getMorale()).isEqualTo(MORALE);
         assertThat(result.getSatiety()).isEqualTo(SATIETY);
+        assertThat(result.getWeaponDataId()).isEqualTo(WEAPON_DATA_ID);
+        assertThat(result.getMeleeWeaponDataId()).isEqualTo(MELEE_WEAPON_DATA_ID);
     }
 
     @Test
@@ -69,6 +75,8 @@ public class CitizenConverterTest {
             .name(NAME)
             .satiety(SATIETY)
             .morale(MORALE)
+            .weaponDataId(WEAPON_DATA_ID)
+            .meleeWeaponDataId(MELEE_WEAPON_DATA_ID)
             .build();
 
         given(uuidConverter.convertEntity(CITIZEN_ID_STRING)).willReturn(CITIZEN_ID);
@@ -85,5 +93,7 @@ public class CitizenConverterTest {
         assertThat(result.getName()).isEqualTo(NAME);
         assertThat(result.getMorale()).isEqualTo(MORALE);
         assertThat(result.getSatiety()).isEqualTo(SATIETY);
+        assertThat(result.getWeaponDataId()).isEqualTo(WEAPON_DATA_ID);
+        assertThat(result.getMeleeWeaponDataId()).isEqualTo(MELEE_WEAPON_DATA_ID);
     }
 }

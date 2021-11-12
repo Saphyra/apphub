@@ -41,4 +41,5 @@
     <include file="database/change_sets/stored_resource.xml"/>
     <include file="database/change_sets/storage_setting.xml"/>
     <include file="database/change_sets/priority.xml"/>
+    <include file="database/change_sets/durability_item.xml"/>
 </databaseChangeLog>

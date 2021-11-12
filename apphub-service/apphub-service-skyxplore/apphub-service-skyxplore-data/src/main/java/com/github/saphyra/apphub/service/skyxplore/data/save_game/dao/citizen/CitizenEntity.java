@@ -24,4 +24,6 @@ class CitizenEntity {
     private String name;
     private int morale;
     private int satiety;
+    private String weaponDataId;
+    private String meleeWeaponDataId;
 }
