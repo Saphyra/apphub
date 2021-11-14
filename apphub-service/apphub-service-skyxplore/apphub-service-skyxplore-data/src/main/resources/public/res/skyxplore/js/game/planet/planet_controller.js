@@ -69,7 +69,11 @@
             if(isBlank(newName)){
                 planetNameField.innerText = currentPlanetName;
                 planetNameField.contentEditable = false;
-            }else{
+            } else if(newName.length > 30){
+                planetNameField.innerText = currentPlanetName;
+                planetNameField.contentEditable = false;
+                notificationService.showError(Localization.getAdditionalContent("new-planet-name-too-long"));
+            } else{
                 const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_RENAME", {planetId: openedPlanetId}), {value: newName});
                     request.processValidResponse = function(){
                         currentPlanetName = newName;

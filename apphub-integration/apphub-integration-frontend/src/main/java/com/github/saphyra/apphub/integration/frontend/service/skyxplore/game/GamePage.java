@@ -159,4 +159,28 @@ class GamePage {
     public static WebElement exitButton(WebDriver driver) {
         return driver.findElement(By.id("exit-button"));
     }
+
+    public static WebElement solarSystemName(WebDriver driver) {
+        return driver.findElement(By.id("solar-system-name"));
+    }
+
+    public static WebElement solarSystemSvg(WebDriver driver) {
+        return driver.findElement(By.id("solar-system-svg-container"));
+    }
+
+    public static WebElement closeSolarSystemButton(WebDriver driver) {
+        return driver.findElement(By.id("close-solar-system-button"));
+    }
+
+    public static WebElement planetName(WebDriver driver) {
+        return driver.findElement(By.id("planet-name"));
+    }
+
+    public static WebElement planetMiddleBar(WebDriver driver) {
+        return driver.findElement(By.id("planet-middle-bar"));
+    }
+
+    public static WebElement closePlanetButton(WebDriver driver) {
+        return driver.findElement(By.id("close-planet-button"));
+    }
 }

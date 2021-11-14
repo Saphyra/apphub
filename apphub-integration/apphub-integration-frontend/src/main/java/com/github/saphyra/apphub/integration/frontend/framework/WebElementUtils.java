@@ -19,7 +19,7 @@ public class WebElementUtils {
         webElement.sendKeys(text);
     }
 
-    public static void clearAndFill(WebDriver driver, WebElement webElement, String text) {
+    public static void clearAndFillContentEditable(WebDriver driver, WebElement webElement, String text) {
         Actions navigator = new Actions(driver);
         navigator.click(webElement)
             .sendKeys(Keys.END)

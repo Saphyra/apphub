@@ -17,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -58,6 +60,13 @@ public class RenameSolarSystemServiceTest {
         Throwable ex = catchThrowable(() -> underTest.rename(USER_ID, SOLAR_SYSTEM_ID, " "));
 
         ExceptionValidator.validateInvalidParam(ex, "newName", "must not be null or blank");
+    }
+
+    @Test
+    public void tooLongName() {
+        Throwable ex = catchThrowable(() -> underTest.rename(USER_ID, SOLAR_SYSTEM_ID, Stream.generate(() -> "a").limit(31).collect(Collectors.joining())));
+
+        ExceptionValidator.validateInvalidParam(ex, "newName", "too long");
     }
 
     @Test

@@ -34,7 +34,7 @@
     }
 
     function displaySolarSystem(solarSystem){
-        let currentSolarSystemName = solarSystem.systemName;
+        currentSolarSystemName = solarSystem.systemName;
         document.getElementById(ids.solarSystemName).innerText = solarSystem.systemName;
 
         const radius = solarSystem.radius + solarSystemConstants.OFFSET + solarSystemConstants.SOLAR_SYSTEM_BORDER_WIDTH;
@@ -137,7 +137,11 @@
             if(isBlank(newName)){
                 solarSystemNameField.innerText = currentSolarSystemName;
                 solarSystemNameField.contentEditable = false;
-            }else{
+            } else if(newName.length > 30){
+                solarSystemNameField.innerText = currentSolarSystemName;
+                solarSystemNameField.contentEditable = false;
+                notificationService.showError(Localization.getAdditionalContent("new-solar-system-name-too-long"));
+            } else{
                 const request = new Request(Mapping.getEndpoint("SKYXPLORE_SOLAR_SYSTEM_RENAME", {solarSystemId: openedSolarSystemId}), {value: newName});
                     request.processValidResponse = function(){
                         currentSolarSystemName = newName;

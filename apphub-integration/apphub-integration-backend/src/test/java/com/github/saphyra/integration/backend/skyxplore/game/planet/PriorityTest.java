@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.integration.backend.BackEndTest;
 import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreFlow;
-import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplorePriorityActions;
+import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.PlanetLocationResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.Player;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.PriorityType;
@@ -38,7 +38,7 @@ public class PriorityTest extends BackEndTest {
         SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId1, userId1))
             .get(accessTokenId1);
 
-        PlanetLocationResponse planet = SkyXplorePlanetActions.getPopulatedPlanet(language, accessTokenId1);
+        PlanetLocationResponse planet = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId1);
 
         //Get
         Response getResponse = SkyXplorePriorityActions.getPrioritiesResponse(language, accessTokenId1, planet.getPlanetId());

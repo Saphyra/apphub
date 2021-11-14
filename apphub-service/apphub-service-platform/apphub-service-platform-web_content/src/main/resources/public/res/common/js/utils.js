@@ -133,7 +133,7 @@ function bulkReplaceAll(text, replacements){
 }
 
 function isBlank(str) {
-    return (!str || /^\s*$/.test(str));
+    return "&nbsp;" == str || (!str || /^\s*$/.test(str));
 }
 
 window.Base64 = {
