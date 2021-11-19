@@ -29,7 +29,7 @@ class RenameCitizenService {
 
         gameDao.findByUserIdValidated(userId)
             .getUniverse()
-            .findPlanetByIdValidated(planetId)
+            .findPlanetByIdAndOwnerValidated(userId, planetId)
             .getPopulation()
             .getOptional(citizenId)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR, "Citizen not found with id " + citizenId))

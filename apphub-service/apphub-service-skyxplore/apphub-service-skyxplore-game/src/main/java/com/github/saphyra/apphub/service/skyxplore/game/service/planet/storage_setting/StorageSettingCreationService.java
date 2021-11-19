@@ -29,7 +29,7 @@ public class StorageSettingCreationService {
         Game game = gameDao.findByUserIdValidated(userId);
         Planet planet = game
             .getUniverse()
-            .findPlanetByIdValidated(planetId);
+            .findPlanetByIdAndOwnerValidated(userId, planetId);
 
         storageSettingsModelValidator.validate(request, planet);
 

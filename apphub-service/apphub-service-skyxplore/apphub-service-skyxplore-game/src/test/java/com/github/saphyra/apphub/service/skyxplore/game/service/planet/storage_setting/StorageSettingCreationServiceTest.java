@@ -79,7 +79,7 @@ public class StorageSettingCreationServiceTest {
 
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
+        given(universe.findPlanetByIdAndOwnerValidated(USER_ID, PLANET_ID)).willReturn(planet);
 
         given(storageSettingFactory.create(apiModel, TARGET_AMOUNT, PLANET_ID, LocationType.PLANET)).willReturn(storageSetting);
         given(storageDetails.getStorageSettings()).willReturn(storageSettings);

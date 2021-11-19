@@ -33,7 +33,7 @@ public class PriorityUpdateService {
 
         Game game = gameDao.findByUserIdValidated(userId);
         game.getUniverse()
-            .findPlanetByIdValidated(planetId)
+            .findPlanetByIdAndOwnerValidated(userId, planetId)
             .getPriorities()
             .put(priorityType, newPriority);
 

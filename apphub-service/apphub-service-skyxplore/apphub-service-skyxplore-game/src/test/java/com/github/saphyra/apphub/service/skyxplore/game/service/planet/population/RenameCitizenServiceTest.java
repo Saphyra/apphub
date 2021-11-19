@@ -67,7 +67,7 @@ public class RenameCitizenServiceTest {
     public void citizenNotFound() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
+        given(universe.findPlanetByIdAndOwnerValidated(USER_ID, PLANET_ID)).willReturn(planet);
         given(planet.getPopulation()).willReturn(new OptionalHashMap<>());
 
         Throwable ex = catchThrowable(() -> underTest.renameCitizen(USER_ID, PLANET_ID, CITIZEN_ID, NEW_NAME));
@@ -79,7 +79,7 @@ public class RenameCitizenServiceTest {
     public void renameCitizen() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
+        given(universe.findPlanetByIdAndOwnerValidated(USER_ID, PLANET_ID)).willReturn(planet);
         given(planet.getPopulation()).willReturn(new OptionalHashMap<>(CollectionUtils.singleValueMap(CITIZEN_ID, citizen)));
 
         underTest.renameCitizen(USER_ID, PLANET_ID, CITIZEN_ID, NEW_NAME);

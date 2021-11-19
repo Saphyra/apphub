@@ -53,7 +53,7 @@ public class StorageSettingDeletionServiceTest {
     public void deleteStorageSetting() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
+        given(universe.findPlanetByIdAndOwnerValidated(USER_ID, PLANET_ID)).willReturn(planet);
         given(planet.getStorageDetails()).willReturn(storageDetails);
         given(storageDetails.getStorageSettings()).willReturn(storageSettings);
 
