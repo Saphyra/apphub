@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
 import com.github.saphyra.apphub.api.skyxplore.response.SavedGameResponse;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.game.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.player.PlayerDao;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +20,16 @@ import java.util.stream.Collectors;
 class SavedGameQueryService {
     private final GameDao gameDao;
     private final PlayerDao playerDao;
+    private final DateTimeUtil dateTimeUtil;
 
     List<SavedGameResponse> getSavedGames(UUID userId) {
-
         return gameDao.getByHost(userId)
             .stream()
             .map(gameModel -> SavedGameResponse.builder()
                 .gameId(gameModel.getGameId())
                 .gameName(gameModel.getName())
                 .players(getPlayers(gameModel))
-                .lastPlayed(gameModel.getLastPlayed())
+                .lastPlayed(dateTimeUtil.toEpochSecond(gameModel.getLastPlayed()))
                 .build())
             .collect(Collectors.toList());
     }

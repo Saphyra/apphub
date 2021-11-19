@@ -55,7 +55,9 @@
                     gameItem.classList.add("game-item");
                     gameItem.classList.add("button");
 
-                    gameItem.title = Localization.getAdditionalContent("additional-players") + ": " + game.players + "\n" + Localization.getAdditionalContent("last-played") + ": " + game.lastPlayed;
+                    const lastPlayed = new Date(0);
+                        lastPlayed.setUTCSeconds(game.lastPlayed);
+                    gameItem.title = Localization.getAdditionalContent("additional-players") + ": " + game.players + "\n" + Localization.getAdditionalContent("last-played") + ": " + formatDate(lastPlayed);
 
                     gameItem.innerText = game.gameName;
 

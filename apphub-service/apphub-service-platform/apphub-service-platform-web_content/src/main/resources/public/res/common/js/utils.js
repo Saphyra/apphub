@@ -1,3 +1,7 @@
+function formatDate(date){
+    return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + " " + date.toLocaleTimeString(getLocale());
+}
+
 function hasValue(obj){
     return obj != undefined && obj != null;
 }
