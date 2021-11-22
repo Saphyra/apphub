@@ -42,6 +42,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_contr
         //SolarSystem
         solarSystemSvgContainer: "solar-system-svg-container",
         solarSystemContainer: "solar-system-container",
+        solarSystemWrapper: "solar-system-wrapper",
         solarSystem: "solar-system",
         solarSystemName: "solar-system-name",
         closePlanetButton: "close-planet-button",
@@ -50,6 +51,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_contr
         planet: "planet",
         planetName: "planet-name",
         planetSurfaceContainer: "planet-surface-container",
+        planetSurfaceWrapper: "planet-surface-wrapper",
         planetMiddleBar: "planet-middle-bar",
         toggleEnergyDetailsButton: "toggle-energy-details-button",
         toggleLiquidDetailsButton: "toggle-liquid-details-button",

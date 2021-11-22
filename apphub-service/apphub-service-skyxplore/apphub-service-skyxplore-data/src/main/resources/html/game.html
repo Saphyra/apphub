@@ -47,7 +47,14 @@
         </HEADER>
 
         <MAIN id="solar-system-container">
-            <SVG id="solar-system-svg-container"></SVG>
+            <DIV id="solar-system-wrapper" class="zoom-content-wrapper">
+                <SVG id="solar-system-svg-container"></SVG>
+            </DIV>
+
+            <DIV class="zoom-button-container">
+                <BUTTON class="zoom-in-button" onclick="solarSystemController.zoomIn()"></BUTTON>
+                <BUTTON class="zoom-out-button" onclick="solarSystemController.zoomOut()"></BUTTON>
+            </DIV>
         </MAIN>
     </DIV>
 
@@ -182,7 +189,14 @@
                 </DIV>
             </DIV>
             <DIV id="planet-middle-bar">
-                <DIV id="planet-surface-container"></DIV>
+                <DIV id="planet-surface-wrapper" class="zoom-content-wrapper">
+                    <DIV id="planet-surface-container"></DIV>
+                </DIV>
+
+                <DIV class="zoom-button-container">
+                    <BUTTON class="zoom-in-button" onclick="planetController.zoomIn()"></BUTTON>
+                    <BUTTON class="zoom-out-button" onclick="planetController.zoomOut()"></BUTTON>
+                </DIV>
             </DIV>
             <DIV id="planet-right-bar">
                 <DIV id="planet-right-bar-title" class="planet-bar-title"></DIV>

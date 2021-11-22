@@ -24,7 +24,7 @@
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_GAMES"));
             request.convertResponse = function(response){
                 return new Stream(JSON.parse(response.body))
-                    .sorted(function(a, b){return -1 * a.lastPlayed.localeCompare(b.lastPlayed)})
+                    .sorted(function(a, b){return -1 * (a.lastPlayed - b.lastPlayed)})
                     .toList();
             }
             request.processValidResponse = function(games){

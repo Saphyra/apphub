@@ -1,15 +1,24 @@
 (function PlanetController(){
     let openedPlanetId;
     let currentPlanetName;
+    let zoomContainer;
 
-    pageLoader.addLoader(function(){addRightClickMove(ids.planetSurfaceContainer, ids.planetMiddleBar, false)}, "Planet add rightClickMove");
+    pageLoader.addLoader(function(){addRightClickMove(ids.planetSurfaceContainer, ids.planetSurfaceWrapper, false)}, "Planet add rightClickMove");
     pageLoader.addLoader(planetRenaming, "Planet renaming");
+    pageLoader.addLoader(function(){zoomController  = new ZoomController(ids.planetSurfaceContainer, 1, 0.125, 0.125, 3)}, "Add Planet Zoom controller");
 
     window.planetController = new function(){
         this.viewPlanet = viewPlanet;
         this.openStorageSettings = openStorageSettings;
         this.getOpenedPlanetId = function(){
             return openedPlanetId;
+        }
+        this.zoomIn = function(){
+            zoomController.zoomIn();
+        }
+
+        this.zoomOut = function(){
+            zoomController.zoomOut();
         }
     }
 
