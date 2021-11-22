@@ -3,6 +3,7 @@ scriptLoader.loadScript("/res/common/js/cache.js");
 scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/common/js/animation/move_controller.js");
+scriptLoader.loadScript("/res/common/js/animation/zoom_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/chat_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/map/map_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/solar_system/solar_system_controller.js");
@@ -20,8 +21,10 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_contr
     window.SESSION_EXTENSION_ENABLED = true;
 
     window.ids = {
+        //Map
         mapSvgContainer: "map-svg-container",
         mapContainer: "map-container",
+        mapWrapper: "map-wrapper",
 
         //Chat
         chatButton: "chat-button",
