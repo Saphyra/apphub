@@ -35,10 +35,12 @@
 
     #order-by-buttons-container{
         text-align: center;
+        overflow: auto;
     }
 
     #display-field-buttons-container{
         text-align: center;
+        overflow: auto;
     }
 
         .visibility-button{
