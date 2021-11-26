@@ -8,9 +8,7 @@ window.mapConstants = {
 (function MapController(){
     pageLoader.addLoader(function(){addRightClickMove(ids.mapSvgContainer, ids.mapWrapper, false)}, "Map add rightClickMove");
 
-    let zoomController;
-
-    pageLoader.addLoader(function(){zoomController  = new ZoomController(ids.mapSvgContainer, 1, 0.125, 0.125, 3)}, "Add Map Zoom controller");
+    pageLoader.addLoader(function(){mapController.zoomController  = new ZoomController(ids.mapSvgContainer, 1, 0.125, 0.125, 3)}, "Add Map Zoom controller");
 
     window.mapController = new function(){
         this.showMap = function(){
@@ -19,11 +17,11 @@ window.mapConstants = {
         }
 
         this.zoomIn = function(){
-            zoomController.zoomIn();
+            this.zoomController.zoomIn();
         }
 
         this.zoomOut = function(){
-            zoomController.zoomOut();
+            this.zoomController.zoomOut();
         }
     }
 })();

@@ -9,11 +9,10 @@
 
     let openedSolarSystemId = null;
     let currentSolarSystemName;
-    let zoomContainer;
 
     pageLoader.addLoader(function(){addRightClickMove(ids.solarSystemSvgContainer, ids.solarSystemWrapper, false)}, "SolarSystem add rightClickMove");
     pageLoader.addLoader(solarSystemRenaming, "SolarSystem renaming");
-    pageLoader.addLoader(function(){zoomController  = new ZoomController(ids.solarSystemSvgContainer, 1, 0.125, 0.125, 3)}, "Add SolarSystem Zoom controller");
+    pageLoader.addLoader(function(){solarSystemController.zoomController  = new ZoomController(ids.solarSystemSvgContainer, 1, 0.125, 0.125, 3)}, "Add SolarSystem Zoom controller");
 
     window.solarSystemController = new function(){
         this.viewSolarSystem = viewSolarSystem;
@@ -21,11 +20,11 @@
             return openedSolarSystemId;
         }
         this.zoomIn = function(){
-            zoomController.zoomIn();
+            this.zoomController.zoomIn();
         }
 
         this.zoomOut = function(){
-            zoomController.zoomOut();
+            this.zoomController.zoomOut();
         }
     }
 
