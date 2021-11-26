@@ -283,6 +283,8 @@
     "citizen-name-too-short": "Name too short (Min. 3 characters).",
     "citizen-name-too-long": "Name too long (Max. 30 characters).",
     "citizen-renamed": "Rename successful.",
-    "planet-priority-updated": "Priority updated."
+    "planet-priority-updated": "Priority updated.",
+    "new-solar-system-name-too-long": "Solar System name too long (Max. 30 characters).",
+    "new-planet-name-too-long": "Planet name too long (Max. 30 characters)."
   }
 }

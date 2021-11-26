@@ -79,7 +79,7 @@ public class PriorityUpdateServiceTest {
         Map<PriorityType, Integer> priorities = new HashMap<>();
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
+        given(universe.findPlanetByIdAndOwnerValidated(USER_ID, PLANET_ID)).willReturn(planet);
         given(planet.getPriorities()).willReturn(priorities);
         given(game.getGameId()).willReturn(GAME_ID);
         given(priorityToModelConverter.convert(PriorityType.CONSTRUCTION, NEW_PRIORITY, PLANET_ID, LocationType.PLANET, GAME_ID)).willReturn(model);

@@ -1,9 +1,10 @@
 package com.github.saphyra.integration.backend.skyxplore.game.planet;
 
 import com.github.saphyra.apphub.integration.backend.BackEndTest;
+import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreFlow;
-import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplorePlanetActions;
+import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreStorageSettingActions;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.PlanetLocationResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.Player;
@@ -12,7 +13,6 @@ import com.github.saphyra.apphub.integration.backend.model.skyxplore.StorageSett
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.StorageSettingsResponse;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.backend.actions.IndexPageActions;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationKey;
 import com.github.saphyra.apphub.integration.common.framework.localization.LocalizationProperties;
@@ -40,7 +40,7 @@ public class StorageSettingCrudTest extends BackEndTest {
         SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId1, userId1))
             .get(accessTokenId1);
 
-        PlanetLocationResponse planet = SkyXplorePlanetActions.getPopulatedPlanet(language, accessTokenId1);
+        PlanetLocationResponse planet = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId1);
 
         //Create - Validation
         create_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().priority(null).build(), "priority", "must not be null");

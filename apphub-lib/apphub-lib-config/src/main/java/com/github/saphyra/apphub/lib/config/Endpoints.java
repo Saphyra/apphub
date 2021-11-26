@@ -5,7 +5,6 @@ public class Endpoints {
     public static final String INDEX_PAGE = "/web";
     public static final String ACCOUNT_PAGE = "/web/user/account";
     public static final String MODULES_PAGE = "/web/modules";
-    public static final String ADMIN_PANEL_INDEX_PAGE = "/web/admin-panel";
     public static final String ADMIN_PANEL_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/role-management";
     public static final String ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/disabled-role-management";
     public static final String ADMIN_PANEL_ERROR_REPORT_PAGE = "/web/admin-panel/error-report";
@@ -18,7 +17,6 @@ public class Endpoints {
     public static final String UTILS_JSON_FORMATTER_PAGE = "/web/utils/json-formatter";
     public static final String UTILS_LOG_FORMATTER_PAGE = "/web/utils/log-formatter";
     public static final String UTILS_BASE64_ENCODER_PAGE = "/web/utils/base64";
-    public static final String TRAINING_INDEX_PAGE = "/web/training";
 
     //Training
     public static final String TRAINING_BOOK_PAGE = "/web/training/{book}/{chapter}";

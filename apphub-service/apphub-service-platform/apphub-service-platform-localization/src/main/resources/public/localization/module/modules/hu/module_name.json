@@ -7,5 +7,9 @@
   "base64": "Base64 kódoló",
   "mobile-messages": "Mobile Messages",
   "skyxplore": "SkyXplore",
-  "training": "Oktatás"
+  "error-report": "Hibajelentések",
+  "role-management": "Jobosultságok kezelése",
+  "disabled-role-management": "Jogosultságok letiltása / engedélyezése",
+  "html": "01 - HTML",
+  "css": "02 - CSS"
 }

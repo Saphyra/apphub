@@ -28,6 +28,10 @@ class RenamePlanetService {
             throw ExceptionFactory.invalidParam("newName", "must not be null or blank");
         }
 
+        if (newName.length() > 20) {
+            throw ExceptionFactory.invalidParam("newName", "too long");
+        }
+
         Game game = gameDao.findByUserIdValidated(userId);
         Planet planet = game
             .getUniverse()

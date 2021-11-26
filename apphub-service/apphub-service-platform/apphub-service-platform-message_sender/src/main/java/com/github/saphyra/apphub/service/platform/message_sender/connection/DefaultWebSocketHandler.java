@@ -19,16 +19,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @RequiredArgsConstructor
 @Slf4j
 abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements WebSocketHandler {
     @Getter(value = AccessLevel.PACKAGE)
     private final Map<UUID, SessionWrapper> sessionMap = new ConcurrentHashMap<>();
+
+    @Getter(value = AccessLevel.PACKAGE)
+    private final Map<UUID, Vector<WebSocketEvent>> retryEvents = new ConcurrentHashMap<>();
 
     private final WebSocketHandlerContext context;
 
@@ -45,6 +50,7 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
             .build();
         sessionMap.put(userId, sessionWrapper);
         afterConnection(userId);
+        retryEvents(userId);
     }
 
     protected void afterConnection(UUID userId) {
@@ -56,6 +62,7 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
         UUID userId = getUserId(session);
         log.info("User {} disconnected from messageGroup {}", userId, getGroup());
         sessionMap.remove(userId);
+        retryEvents.remove(userId);
         afterDisconnection(userId);
     }
 
@@ -92,13 +99,8 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
         WebSocketEvent event = WebSocketEvent.builder()
             .eventName(WebSocketEventName.PING)
             .build();
-        List<UUID> disconnected = sessionMap.keySet()
-            .stream()
-            .map(userId -> sendEvent(userId, event))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .collect(Collectors.toList());
-        handleExpiredConnections(disconnected);
+        sessionMap.keySet()
+            .forEach(userId -> sendEvent(userId, event));
     }
 
     @Override
@@ -110,7 +112,10 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
             .map(Map.Entry::getKey)
             .collect(Collectors.toList());
 
-        expiredSessions.forEach(sessionMap::remove);
+        expiredSessions.forEach(userId -> {
+            sessionMap.remove(userId);
+            retryEvents.remove(userId);
+        });
 
         handleExpiredConnections(expiredSessions);
     }
@@ -129,19 +134,17 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
     }
 
     @Override
-    public List<UUID> sendEvent(WebSocketMessage message) {
+    public void sendEvent(WebSocketMessage message) {
         log.info("Sending {} event in messageGroup {} to {} number of recipients", message.getEvent().getEventName(), getGroup(), message.getRecipients().size());
         log.debug("Recipients: {}", message.getRecipients());
-        return message.getRecipients()
+        message.getRecipients()
             .stream()
             .filter(sessionMap::containsKey)
-            .map(recipient -> sendEvent(recipient, message.getEvent()))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .collect(Collectors.toList());
+            .filter(recipient -> !sendEvent(recipient, message.getEvent()))
+            .forEach(disconnectedRecipient -> addToRetryEvents(disconnectedRecipient, message.getEvent()));
     }
 
-    private Optional<UUID> sendEvent(UUID recipient, WebSocketEvent event) {
+    private boolean sendEvent(UUID recipient, WebSocketEvent event) {
         log.debug("Sending {} event to recipient {} for messageGroup {}", event.getEventName(), recipient, getGroup());
         try {
             SessionWrapper sessionWrapper = sessionMap.get(recipient);
@@ -152,11 +155,23 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
             TextMessage textMessage = new TextMessage(context.getObjectMapperWrapper().writeValueAsString(event));
             session.sendMessage(textMessage);
             sessionWrapper.setLastUpdate(context.getDateTimeUtil().getCurrentDate());
-            return Optional.empty();
+            return true;
         } catch (Exception e) {
             log.info("Failed to send {} event to {} in messageGroup {}", event.getEventName(), recipient, getGroup(), e);
-            sessionMap.remove(recipient);
-            return Optional.of(recipient);
+            return false;
+        }
+    }
+
+    private void addToRetryEvents(UUID recipient, WebSocketEvent event) {
+        log.info("Adding event with name {} to retryEvents for recipient {}", event.getEventName(), recipient);
+        Vector<WebSocketEvent> list = retryEvents.computeIfAbsent(recipient, r -> new Vector<>());
+        list.add(event);
+    }
+
+    private void retryEvents(UUID userId) {
+        Vector<WebSocketEvent> retryEvents = this.retryEvents.get(userId);
+        if (nonNull(retryEvents)) {
+            retryEvents.removeIf(event -> sendEvent(userId, event));
         }
     }
 

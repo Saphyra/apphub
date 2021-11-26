@@ -1,3 +1,7 @@
+function formatDate(date){
+    return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + " " + date.toLocaleTimeString(getLocale());
+}
+
 function hasValue(obj){
     return obj != undefined && obj != null;
 }
@@ -133,7 +137,7 @@ function bulkReplaceAll(text, replacements){
 }
 
 function isBlank(str) {
-    return (!str || /^\s*$/.test(str));
+    return "&nbsp;" == str || (!str || /^\s*$/.test(str));
 }
 
 window.Base64 = {

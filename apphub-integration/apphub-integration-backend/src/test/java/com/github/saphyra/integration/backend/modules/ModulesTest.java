@@ -49,6 +49,18 @@ public class ModulesTest extends BackEndTest {
             .build();
         assertThat(result.get("office")).containsExactly(expectedModuleNotebook);
 
+        ModulesResponse expectedModuleHtmlTraining = ModulesResponse.builder()
+            .name("html")
+            .url("/web/training/html/001_introduction")
+            .favorite(false)
+            .build();
+        ModulesResponse expectedModuleCssTraining = ModulesResponse.builder()
+            .name("css")
+            .url("/web/training/css/001_introduction")
+            .favorite(false)
+            .build();
+        assertThat(result.get("training")).containsExactlyInAnyOrder(expectedModuleHtmlTraining, expectedModuleCssTraining);
+
         ModulesResponse expectedModuleLogFormatter = ModulesResponse.builder()
             .name("log-formatter")
             .url("/web/utils/log-formatter")
@@ -64,12 +76,7 @@ public class ModulesTest extends BackEndTest {
             .url("/web/utils/base64")
             .favorite(false)
             .build();
-        ModulesResponse expectedModuleTraining = ModulesResponse.builder()
-            .name("training")
-            .url("/web/training")
-            .favorite(false)
-            .build();
-        assertThat(result.get("development-utils")).containsExactlyInAnyOrder(expectedModuleLogFormatter, expectedModuleJsonFormatter, expectedModuleBase64Encoder, expectedModuleTraining);
+        assertThat(result.get("development-utils")).containsExactlyInAnyOrder(expectedModuleLogFormatter, expectedModuleJsonFormatter, expectedModuleBase64Encoder);
 
         if (!DISABLED_TEST_GROUPS.contains("skyxplore")) {
             assertThat(result).containsKey("game");

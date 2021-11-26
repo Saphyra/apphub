@@ -7,13 +7,19 @@ liquibase:
 
 role:
   settings:
-    - pattern: /web/admin-panel
+    - pattern: /web/admin-panel/**
       methods:
         - GET
+        - POST
+        - DELETE
+        - PUT
       requiredRoles:
         - ADMIN
-    - pattern: /api/admin-panel/error-report
+    - pattern: /api/admin-panel/**
       methods:
+        - GET
         - POST
+        - DELETE
+        - PUT
       requiredRoles:
         - ADMIN

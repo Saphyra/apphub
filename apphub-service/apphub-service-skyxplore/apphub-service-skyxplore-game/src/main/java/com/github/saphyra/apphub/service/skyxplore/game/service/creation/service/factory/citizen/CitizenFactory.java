@@ -5,8 +5,8 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.RandomNameProvider;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Skill;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Skill;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,6 +26,7 @@ class CitizenFactory {
     private final RandomNameProvider randomNameProvider;
     private final SkillFactory skillFactory;
     private final GameCreationProperties properties;
+    private final SoldierDataFactory soldierDataFactory;
 
     Citizen create(UUID planetId) {
         GameCreationProperties.CitizenProperties citizenProperties = properties.getCitizen();
@@ -39,6 +40,7 @@ class CitizenFactory {
             .morale(citizenProperties.getDefaultMorale())
             .satiety(citizenProperties.getDefaultSatiety())
             .skills(createSkills(citizenId))
+            .soldierData(soldierDataFactory.create())
             .build();
     }
 

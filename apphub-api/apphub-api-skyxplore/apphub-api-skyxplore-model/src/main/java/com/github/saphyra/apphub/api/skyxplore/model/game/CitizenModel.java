@@ -17,4 +17,6 @@ public class CitizenModel extends GameItem {
     private String name;
     private Integer morale;
     private Integer satiety;
+    private String weaponDataId;
+    private String meleeWeaponDataId;
 }

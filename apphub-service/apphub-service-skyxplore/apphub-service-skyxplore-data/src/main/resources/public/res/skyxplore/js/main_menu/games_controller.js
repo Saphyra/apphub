@@ -24,7 +24,7 @@
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_GAMES"));
             request.convertResponse = function(response){
                 return new Stream(JSON.parse(response.body))
-                    .sorted(function(a, b){return -1 * a.lastPlayed.localeCompare(b.lastPlayed)})
+                    .sorted(function(a, b){return -1 * (a.lastPlayed - b.lastPlayed)})
                     .toList();
             }
             request.processValidResponse = function(games){
@@ -55,7 +55,9 @@
                     gameItem.classList.add("game-item");
                     gameItem.classList.add("button");
 
-                    gameItem.title = Localization.getAdditionalContent("additional-players") + ": " + game.players + "\n" + Localization.getAdditionalContent("last-played") + ": " + game.lastPlayed;
+                    const lastPlayed = new Date(0);
+                        lastPlayed.setUTCSeconds(game.lastPlayed);
+                    gameItem.title = Localization.getAdditionalContent("additional-players") + ": " + game.players + "\n" + Localization.getAdditionalContent("last-played") + ": " + formatDate(lastPlayed);
 
                     gameItem.innerText = game.gameName;
 

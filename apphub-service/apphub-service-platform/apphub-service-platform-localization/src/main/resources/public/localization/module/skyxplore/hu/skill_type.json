@@ -8,5 +8,6 @@
   "MELEE_FIGHTING": "Közelharc",
   "MINING": "Bányászat",
   "PILOTING": "Vezetés",
-  "SUPPLYING": "Ellátás"
+  "SUPPLYING": "Ellátás",
+  "STAMINA": "Állóképesség"
 }

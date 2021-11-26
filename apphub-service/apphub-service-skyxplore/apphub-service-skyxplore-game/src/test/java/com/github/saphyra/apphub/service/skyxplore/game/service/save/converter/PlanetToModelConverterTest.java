@@ -12,7 +12,7 @@ import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.PriorityType;

@@ -2,5 +2,7 @@
   "accounts": "Accounts",
   "office": "Office",
   "development-utils": "Development utils",
-  "game": "Game"
+  "game": "Game",
+  "admin-panel": "Admin panel",
+  "training": "Training"
 }

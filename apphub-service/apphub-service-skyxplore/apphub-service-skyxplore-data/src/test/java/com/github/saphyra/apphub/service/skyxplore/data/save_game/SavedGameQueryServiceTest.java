@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
 import com.github.saphyra.apphub.api.skyxplore.response.SavedGameResponse;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.game.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.player.PlayerDao;
 import org.junit.Test;
@@ -25,12 +26,16 @@ public class SavedGameQueryServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final String GAME_NAME = "game-name";
     private static final LocalDateTime LAST_PLAYED = LocalDateTime.now();
+    private static final long LAST_PLAYED_EPOCH_SECONDS = 134L;
 
     @Mock
     private GameDao gameDao;
 
     @Mock
     private PlayerDao playerDao;
+
+    @Mock
+    private DateTimeUtil dateTimeUtil;
 
     @InjectMocks
     private SavedGameQueryService underTest;
@@ -58,6 +63,7 @@ public class SavedGameQueryServiceTest {
         given(gameModel.getGameId()).willReturn(GAME_ID);
         given(gameModel.getName()).willReturn(GAME_NAME);
         given(gameModel.getLastPlayed()).willReturn(LAST_PLAYED);
+        given(dateTimeUtil.toEpochSecond(LAST_PLAYED)).willReturn(LAST_PLAYED_EPOCH_SECONDS);
 
         given(playerDao.getByGameId(GAME_ID)).willReturn(Arrays.asList(player2, player1, hostPlayer, aiPlayer));
         given(player1.getAi()).willReturn(false);
@@ -79,7 +85,7 @@ public class SavedGameQueryServiceTest {
         SavedGameResponse response = result.get(0);
         assertThat(response.getGameId()).isEqualTo(GAME_ID);
         assertThat(response.getGameName()).isEqualTo(GAME_NAME);
-        assertThat(response.getLastPlayed()).isEqualTo(LAST_PLAYED);
+        assertThat(response.getLastPlayed()).isEqualTo(LAST_PLAYED_EPOCH_SECONDS);
         assertThat(response.getPlayers()).isEqualTo("player-name-1, player-name-2");
     }
 }

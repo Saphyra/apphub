@@ -7,5 +7,9 @@
   "base64": "Base64 Encoder",
   "mobile-messages": "Mobile Messages",
   "skyxplore": "SkyXplore",
-  "training": "Training"
+  "error-report": "Error report",
+  "role-management": "Role management",
+  "disabled-role-management": "Disabled role management",
+  "html": "01 - HTML",
+  "css": "02 - CSS"
 }

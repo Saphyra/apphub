@@ -108,25 +108,25 @@ public class AuthenticationControllerTestIt {
             .accessTokenId(ACCESS_TOKEN_ID_1)
             .userId(USER_ID)
             .persistent(false)
-            .lastAccess(referenceDate.minusDays(1))
+            .lastAccess(referenceDate.minusDays(1).withNano(0))
             .build();
         AccessToken validNonPersistentAccessToken = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_2)
             .userId(USER_ID)
             .persistent(false)
-            .lastAccess(referenceDate.plusHours(1))
+            .lastAccess(referenceDate.plusHours(1).withNano(0))
             .build();
         AccessToken expiredPersistentAccessToken = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_3)
             .userId(USER_ID)
             .persistent(true)
-            .lastAccess(referenceDate.minusYears(3))
+            .lastAccess(referenceDate.minusYears(3).withNano(0))
             .build();
         AccessToken validPersistentAccessToken = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_4)
             .userId(USER_ID)
             .persistent(true)
-            .lastAccess(referenceDate.minusMonths(2))
+            .lastAccess(referenceDate.minusMonths(2).withNano(0))
             .build();
         accessTokenDao.saveAll(Arrays.asList(expiredNonPersistentAccessToken, validNonPersistentAccessToken, expiredPersistentAccessToken, validPersistentAccessToken));
 

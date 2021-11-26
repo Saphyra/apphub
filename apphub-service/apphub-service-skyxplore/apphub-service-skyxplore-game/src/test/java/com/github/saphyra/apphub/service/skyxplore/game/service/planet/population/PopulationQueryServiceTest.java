@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
 import org.junit.Test;

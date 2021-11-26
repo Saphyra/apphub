@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -41,8 +41,12 @@ public class Planet {
     private final StorageDetails storageDetails = StorageDetails.builder().build();
 
     @Builder.Default
-    private final Map<PriorityType, Integer> priorities = Arrays.stream(PriorityType.values())
-        .collect(Collectors.toMap(Function.identity(), priorityType -> 5));
+    private final Map<PriorityType, Integer> priorities = getDefaultPriorities();
+
+    private static Map<PriorityType, Integer> getDefaultPriorities() {
+        return Arrays.stream(PriorityType.values())
+            .collect(Collectors.toMap(Function.identity(), priorityType -> 5));
+    }
 
     public List<Building> getBuildings() {
         return surfaces.values()

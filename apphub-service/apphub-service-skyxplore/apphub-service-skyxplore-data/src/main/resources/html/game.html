@@ -27,7 +27,14 @@
 <DIV class="main-page">
     <DIV id="map" class="main-tab">
         <MAIN id="map-container" class="headless">
-            <SVG id="map-svg-container"></SVG>
+            <DIV id="map-wrapper" class="zoom-content-wrapper">
+                <SVG id="map-svg-container"></SVG>
+            </DIV>
+
+            <DIV class="zoom-button-container">
+                <BUTTON class="zoom-in-button" onclick="mapController.zoomIn()"></BUTTON>
+                <BUTTON class="zoom-out-button" onclick="mapController.zoomOut()"></BUTTON>
+            </DIV>
         </MAIN>
     </DIV>
 
@@ -35,12 +42,19 @@
         <HEADER>
             <H1>
                 <SPAN id="solar-system-name"></SPAN>
-                <BUTTON class="window-close-button" onclick="mapController.showMap()">X</BUTTON>
+                <BUTTON id="close-solar-system-button" class="window-close-button" onclick="mapController.showMap()">X</BUTTON>
             </H1>
         </HEADER>
 
         <MAIN id="solar-system-container">
-            <SVG id="solar-system-svg-container"></SVG>
+            <DIV id="solar-system-wrapper" class="zoom-content-wrapper">
+                <SVG id="solar-system-svg-container"></SVG>
+            </DIV>
+
+            <DIV class="zoom-button-container">
+                <BUTTON class="zoom-in-button" onclick="solarSystemController.zoomIn()"></BUTTON>
+                <BUTTON class="zoom-out-button" onclick="solarSystemController.zoomOut()"></BUTTON>
+            </DIV>
         </MAIN>
     </DIV>
 
@@ -175,7 +189,14 @@
                 </DIV>
             </DIV>
             <DIV id="planet-middle-bar">
-                <DIV id="planet-surface-container"></DIV>
+                <DIV id="planet-surface-wrapper" class="zoom-content-wrapper">
+                    <DIV id="planet-surface-container"></DIV>
+                </DIV>
+
+                <DIV class="zoom-button-container">
+                    <BUTTON class="zoom-in-button" onclick="planetController.zoomIn()"></BUTTON>
+                    <BUTTON class="zoom-out-button" onclick="planetController.zoomOut()"></BUTTON>
+                </DIV>
             </DIV>
             <DIV id="planet-right-bar">
                 <DIV id="planet-right-bar-title" class="planet-bar-title"></DIV>

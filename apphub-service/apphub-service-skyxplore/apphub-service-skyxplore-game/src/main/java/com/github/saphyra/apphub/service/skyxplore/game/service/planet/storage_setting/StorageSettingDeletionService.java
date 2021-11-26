@@ -20,7 +20,7 @@ public class StorageSettingDeletionService {
     public void deleteStorageSetting(UUID userId, UUID planetId, UUID storageSettingId) {
         StorageDetails storageDetails = gameDao.findByUserIdValidated(userId)
             .getUniverse()
-            .findPlanetByIdValidated(planetId)
+            .findPlanetByIdAndOwnerValidated(userId, planetId)
             .getStorageDetails();
 
         storageDetails.getStorageSettings()

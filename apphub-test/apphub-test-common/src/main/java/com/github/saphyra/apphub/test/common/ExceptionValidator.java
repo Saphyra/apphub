@@ -52,4 +52,8 @@ public class ExceptionValidator {
         assertThat(ex).isInstanceOf(NotLoggedException.class);
         assertThat(((RestException) ex).getResponseStatus()).isEqualTo(status);
     }
+
+    public static void validateForbiddenOperation(Throwable ex) {
+        validateNotLoggedException(ex, HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
+    }
 }

@@ -10,13 +10,21 @@
     let openedSolarSystemId = null;
     let currentSolarSystemName;
 
-    pageLoader.addLoader(function(){addRightClickMove(ids.solarSystemSvgContainer, ids.solarSystemContainer, false)}, "SolarSystem add rightClickMove");
+    pageLoader.addLoader(function(){addRightClickMove(ids.solarSystemSvgContainer, ids.solarSystemWrapper, false)}, "SolarSystem add rightClickMove");
     pageLoader.addLoader(solarSystemRenaming, "SolarSystem renaming");
+    pageLoader.addLoader(function(){solarSystemController.zoomController  = new ZoomController(ids.solarSystemSvgContainer, 1, 0.125, 0.125, 3)}, "Add SolarSystem Zoom controller");
 
     window.solarSystemController = new function(){
         this.viewSolarSystem = viewSolarSystem;
         this.getOpenedSolarSystemId = function(){
             return openedSolarSystemId;
+        }
+        this.zoomIn = function(){
+            this.zoomController.zoomIn();
+        }
+
+        this.zoomOut = function(){
+            this.zoomController.zoomOut();
         }
     }
 
@@ -34,7 +42,7 @@
     }
 
     function displaySolarSystem(solarSystem){
-        let currentSolarSystemName = solarSystem.systemName;
+        currentSolarSystemName = solarSystem.systemName;
         document.getElementById(ids.solarSystemName).innerText = solarSystem.systemName;
 
         const radius = solarSystem.radius + solarSystemConstants.OFFSET + solarSystemConstants.SOLAR_SYSTEM_BORDER_WIDTH;
@@ -137,7 +145,11 @@
             if(isBlank(newName)){
                 solarSystemNameField.innerText = currentSolarSystemName;
                 solarSystemNameField.contentEditable = false;
-            }else{
+            } else if(newName.length > 30){
+                solarSystemNameField.innerText = currentSolarSystemName;
+                solarSystemNameField.contentEditable = false;
+                notificationService.showError(Localization.getAdditionalContent("new-solar-system-name-too-long"));
+            } else{
                 const request = new Request(Mapping.getEndpoint("SKYXPLORE_SOLAR_SYSTEM_RENAME", {solarSystemId: openedSolarSystemId}), {value: newName});
                     request.processValidResponse = function(){
                         currentSolarSystemName = newName;

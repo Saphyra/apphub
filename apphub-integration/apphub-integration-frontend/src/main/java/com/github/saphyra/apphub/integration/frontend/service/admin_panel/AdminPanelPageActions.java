@@ -10,16 +10,8 @@ import java.util.stream.Collectors;
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
 
 public class AdminPanelPageActions {
-    public static void openRoleManagementPage(WebDriver driver) {
-        AdminPanelPage.roleManagementPageLink(driver).click();
-    }
-
     public static void back(WebDriver driver) {
         AdminPanelPage.back(driver).click();
-    }
-
-    public static void openDisabledRoleManagementPage(WebDriver driver) {
-        AdminPanelPage.disabledRoleManagementPageLink(driver).click();
     }
 
     public static List<DisabledRole> getDisabledRoles(WebDriver driver) {

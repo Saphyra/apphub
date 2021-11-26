@@ -63,4 +63,8 @@ public class ExceptionFactory {
     public RestException invalidType(String message) {
         return notLoggedException(HttpStatus.UNPROCESSABLE_ENTITY, ErrorCode.INVALID_TYPE, message);
     }
+
+    public RestException forbiddenOperation(String message) {
+        return notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, message);
+    }
 }

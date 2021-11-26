@@ -24,7 +24,7 @@ public class EventProcessorRepositoryTest {
     private static final String SERVICE_NAME_2 = "service-name-2";
     private static final String EVENT_NAME_1 = "event-name-1";
     private static final String EVENT_NAME_2 = "event-name-2";
-    private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
+    private static final LocalDateTime CURRENT_DATE = LocalDateTime.now().withNano(0);
     private static final LocalDateTime BEFORE_DATE = CURRENT_DATE.minusSeconds(1);
     private static final LocalDateTime AFTER_DATE = CURRENT_DATE.plusSeconds(1);
 

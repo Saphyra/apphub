@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.domain.commodity;
+package com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import lombok.AccessLevel;

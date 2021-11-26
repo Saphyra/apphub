@@ -42,4 +42,14 @@ public class Universe {
         return findPlanetById(planetId)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Planet not found with id " + planetId));
     }
+
+    public Planet findPlanetByIdAndOwnerValidated(UUID owner, UUID planetId) {
+        Planet planet = findPlanetByIdValidated(planetId);
+
+        if (!planet.getOwner().equals(owner)) {
+            throw ExceptionFactory.forbiddenOperation(owner + " has no access to planet " + planetId);
+        }
+
+        return planet;
+    }
 }

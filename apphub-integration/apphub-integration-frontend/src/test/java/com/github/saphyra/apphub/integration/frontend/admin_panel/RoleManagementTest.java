@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.integration.frontend.framework.Navigation;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.frontend.model.admin_panel.role_management.RoleManagementUser;
 import com.github.saphyra.apphub.integration.frontend.model.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.frontend.service.admin_panel.AdminPanelPageActions;
 import com.github.saphyra.apphub.integration.frontend.service.admin_panel.role_management.RoleManagementPageActions;
 import com.github.saphyra.apphub.integration.frontend.service.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.frontend.service.modules.ModulesPageActions;
@@ -32,9 +31,7 @@ public class RoleManagementTest extends SeleniumTest {
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         driver.navigate().refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.ADMIN_PANEL);
-
-        AdminPanelPageActions.openRoleManagementPage(driver);
+        ModulesPageActions.openModule(driver, ModuleLocation.ROLE_MANAGEMENT);
 
         //Add role
         RoleManagementUser user = RoleManagementPageActions.searchForUser(driver, testUserData.getEmail());

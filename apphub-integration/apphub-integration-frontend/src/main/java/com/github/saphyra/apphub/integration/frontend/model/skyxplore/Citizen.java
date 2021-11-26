@@ -1,12 +1,11 @@
 package com.github.saphyra.apphub.integration.frontend.model.skyxplore;
 
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
+import com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
 
 @RequiredArgsConstructor
 public class Citizen {
@@ -23,7 +22,7 @@ public class Citizen {
     public void setName(WebDriver driver, String newName) {
         WebElement nameInput = getCitizenNameInput();
         nameInput.click();
-        clearAndFill(driver, nameInput, newName);
+        WebElementUtils.clearAndFillContentEditable(driver, nameInput, newName);
         webElement.click();
 
         NotificationUtil.verifySuccessNotification(driver, "Átnevezés sikeres.");

@@ -28,6 +28,10 @@ class RenameSolarSystemService {
             throw ExceptionFactory.invalidParam("newName", "must not be null or blank");
         }
 
+        if (newName.length() > 30) {
+            throw ExceptionFactory.invalidParam("newName", "too long");
+        }
+
         Game game = gameDao.findByUserIdValidated(userId);
         SolarSystem planet = game
             .getUniverse()

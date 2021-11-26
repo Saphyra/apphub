@@ -2,14 +2,22 @@
     let openedPlanetId;
     let currentPlanetName;
 
-    pageLoader.addLoader(function(){addRightClickMove(ids.planetSurfaceContainer, ids.planetMiddleBar, false)}, "Planet add rightClickMove");
+    pageLoader.addLoader(function(){addRightClickMove(ids.planetSurfaceContainer, ids.planetSurfaceWrapper, false)}, "Planet add rightClickMove");
     pageLoader.addLoader(planetRenaming, "Planet renaming");
+    pageLoader.addLoader(function(){planetController.zoomController  = new ZoomController(ids.planetSurfaceContainer, 1, 0.125, 0.125, 3)}, "Add Planet Zoom controller");
 
     window.planetController = new function(){
         this.viewPlanet = viewPlanet;
         this.openStorageSettings = openStorageSettings;
         this.getOpenedPlanetId = function(){
             return openedPlanetId;
+        }
+        this.zoomIn = function(){
+            this.zoomController.zoomIn();
+        }
+
+        this.zoomOut = function(){
+            this.zoomController.zoomOut();
         }
     }
 
@@ -69,7 +77,11 @@
             if(isBlank(newName)){
                 planetNameField.innerText = currentPlanetName;
                 planetNameField.contentEditable = false;
-            }else{
+            } else if(newName.length > 30){
+                planetNameField.innerText = currentPlanetName;
+                planetNameField.contentEditable = false;
+                notificationService.showError(Localization.getAdditionalContent("new-planet-name-too-long"));
+            } else{
                 const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_RENAME", {planetId: openedPlanetId}), {value: newName});
                     request.processValidResponse = function(){
                         currentPlanetName = newName;

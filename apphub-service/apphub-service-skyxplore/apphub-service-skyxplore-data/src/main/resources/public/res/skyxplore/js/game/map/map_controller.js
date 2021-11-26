@@ -6,12 +6,22 @@ window.mapConstants = {
 };
 
 (function MapController(){
-    pageLoader.addLoader(function(){addRightClickMove(ids.mapSvgContainer, ids.mapContainer, false)}, "Map add rightClickMove");
+    pageLoader.addLoader(function(){addRightClickMove(ids.mapSvgContainer, ids.mapWrapper, false)}, "Map add rightClickMove");
+
+    pageLoader.addLoader(function(){mapController.zoomController  = new ZoomController(ids.mapSvgContainer, 1, 0.125, 0.125, 3)}, "Add Map Zoom controller");
 
     window.mapController = new function(){
         this.showMap = function(){
             universeController.loadUniverse();
             switchTab("main-tab", "map");
+        }
+
+        this.zoomIn = function(){
+            this.zoomController.zoomIn();
+        }
+
+        this.zoomOut = function(){
+            this.zoomController.zoomOut();
         }
     }
 })();

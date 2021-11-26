@@ -3,6 +3,7 @@ scriptLoader.loadScript("/res/common/js/cache.js");
 scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/common/js/animation/move_controller.js");
+scriptLoader.loadScript("/res/common/js/animation/zoom_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/chat_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/map/map_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/solar_system/solar_system_controller.js");
@@ -20,8 +21,10 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_contr
     window.SESSION_EXTENSION_ENABLED = true;
 
     window.ids = {
+        //Map
         mapSvgContainer: "map-svg-container",
         mapContainer: "map-container",
+        mapWrapper: "map-wrapper",
 
         //Chat
         chatButton: "chat-button",
@@ -39,6 +42,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_contr
         //SolarSystem
         solarSystemSvgContainer: "solar-system-svg-container",
         solarSystemContainer: "solar-system-container",
+        solarSystemWrapper: "solar-system-wrapper",
         solarSystem: "solar-system",
         solarSystemName: "solar-system-name",
         closePlanetButton: "close-planet-button",
@@ -47,6 +51,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_contr
         planet: "planet",
         planetName: "planet-name",
         planetSurfaceContainer: "planet-surface-container",
+        planetSurfaceWrapper: "planet-surface-wrapper",
         planetMiddleBar: "planet-middle-bar",
         toggleEnergyDetailsButton: "toggle-energy-details-button",
         toggleLiquidDetailsButton: "toggle-liquid-details-button",

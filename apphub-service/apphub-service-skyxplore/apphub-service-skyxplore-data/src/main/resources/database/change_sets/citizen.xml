@@ -20,4 +20,28 @@
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="citizen" columnNames="citizen_id" constraintName="citizen_pk"/>
     </changeSet>
+
+    <changeSet id="add-weapon_data_id-to-citizen" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="citizen" columnName="weapon_data_id"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="citizen">
+            <column name="weapon_data_id" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-melee_weapon_data_id-to-citizen" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="citizen" columnName="melee_weapon_data_id"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="citizen">
+            <column name="melee_weapon_data_id" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

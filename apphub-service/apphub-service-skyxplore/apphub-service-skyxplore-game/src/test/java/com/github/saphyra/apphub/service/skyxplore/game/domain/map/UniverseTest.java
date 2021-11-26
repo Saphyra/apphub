@@ -21,6 +21,7 @@ import static org.mockito.BDDMockito.given;
 public class UniverseTest {
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID SOLAR_SYSTEM_ID = UUID.randomUUID();
+    private static final UUID OWNER = UUID.randomUUID();
 
     private Universe underTest;
 
@@ -78,6 +79,34 @@ public class UniverseTest {
         given(planet.getPlanetId()).willReturn(PLANET_ID);
 
         Planet result = underTest.findPlanetByIdValidated(PLANET_ID);
+
+        assertThat(result).isEqualTo(planet);
+    }
+
+    @Test
+    public void findPlanetByIdAndOwnerValidated_notOwner() {
+        underTest = Universe.builder()
+            .systems(CollectionUtils.singleValueMap(coordinate, solarSystem))
+            .build();
+        given(solarSystem.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet));
+        given(planet.getPlanetId()).willReturn(PLANET_ID);
+        given(planet.getOwner()).willReturn(UUID.randomUUID());
+
+        Throwable ex = catchThrowable(() -> underTest.findPlanetByIdAndOwnerValidated(OWNER, PLANET_ID));
+
+        ExceptionValidator.validateForbiddenOperation(ex);
+    }
+
+    @Test
+    public void findPlanetByIdAndOwnerValidated() {
+        underTest = Universe.builder()
+            .systems(CollectionUtils.singleValueMap(coordinate, solarSystem))
+            .build();
+        given(solarSystem.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet));
+        given(planet.getPlanetId()).willReturn(PLANET_ID);
+        given(planet.getOwner()).willReturn(OWNER);
+
+        Planet result = underTest.findPlanetByIdAndOwnerValidated(OWNER, PLANET_ID);
 
         assertThat(result).isEqualTo(planet);
     }

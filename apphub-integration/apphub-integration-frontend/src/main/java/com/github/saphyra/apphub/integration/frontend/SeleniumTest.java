@@ -63,6 +63,7 @@ public class SeleniumTest extends TestBase {
     @BeforeSuite
     public void startDrivers() throws Exception {
         if (Boolean.parseBoolean(System.getProperty("preCreateDrivers"))) {
+            log.info("Caching all drivers...");
             WebDriverFactory.startDrivers();
         }
     }

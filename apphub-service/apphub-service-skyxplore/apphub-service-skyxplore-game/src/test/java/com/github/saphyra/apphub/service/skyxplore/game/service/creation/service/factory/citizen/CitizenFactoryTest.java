@@ -2,11 +2,12 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.RandomNameProvider;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Skill;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Skill;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -42,13 +43,19 @@ public class CitizenFactoryTest {
     @Mock
     private GameCreationProperties properties;
 
+    @Mock
+    private SoldierDataFactory soldierDataFactory;
+
     @InjectMocks
     private CitizenFactory underTest;
 
     @Mock
     private Skill skill;
 
-    private final GameCreationProperties.CitizenProperties citizenProperties = new GameCreationProperties.CitizenProperties(DEFAULT_MORALE, DEFAULT_SATIETY);
+    @Mock
+    private SoldierData soldierData;
+
+    private final GameCreationProperties.CitizenProperties citizenProperties = new GameCreationProperties.CitizenProperties(0, DEFAULT_MORALE, DEFAULT_SATIETY);
 
     @Test
     public void create() {
@@ -56,6 +63,7 @@ public class CitizenFactoryTest {
         given(randomNameProvider.getRandomName(Collections.emptyList())).willReturn(CITIZEN_NAME);
         given(skillFactory.create(any(), eq(CITIZEN_ID))).willReturn(skill);
         given(properties.getCitizen()).willReturn(citizenProperties);
+        given(soldierDataFactory.create()).willReturn(soldierData);
 
         Citizen citizen = underTest.create(PLANET_ID);
 
@@ -65,6 +73,7 @@ public class CitizenFactoryTest {
         assertThat(citizen.getLocationType()).isEqualTo(LocationType.PLANET);
         assertThat(citizen.getMorale()).isEqualTo(DEFAULT_MORALE);
         assertThat(citizen.getSatiety()).isEqualTo(DEFAULT_SATIETY);
+        assertThat(citizen.getSoldierData()).isEqualTo(soldierData);
 
         assertThat(citizen.getSkills()).hasSize(1);
 

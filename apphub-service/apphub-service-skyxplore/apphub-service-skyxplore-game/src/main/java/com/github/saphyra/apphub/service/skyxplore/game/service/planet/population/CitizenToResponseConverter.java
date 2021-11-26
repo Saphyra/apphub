@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.population;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

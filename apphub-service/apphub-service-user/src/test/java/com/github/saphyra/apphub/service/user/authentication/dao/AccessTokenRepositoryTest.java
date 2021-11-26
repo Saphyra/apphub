@@ -21,7 +21,7 @@ public class AccessTokenRepositoryTest {
     private static final String ACCESS_TOKEN_ID_1 = "access-token-id-1";
     private static final String ACCESS_TOKEN_ID_2 = "access-token-id-2";
     private static final String ACCESS_TOKEN_ID_3 = "access-token-id-3";
-    private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
+    private static final LocalDateTime CURRENT_DATE = LocalDateTime.now().withNano(0);
     private static final String USER_ID_1 = "user-id-1";
     private static final String USER_ID_2 = "user-id-2";
 

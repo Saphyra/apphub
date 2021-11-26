@@ -65,7 +65,9 @@ public class RedirectionTest extends SeleniumTest {
 
         IndexPageActions.registerUser(driver, RegistrationParameters.validParameters());
 
-        Navigation.toAdminPanel(driver);
+        String url = UrlFactory.create(Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE);
+
+        driver.navigate().to(url);
 
         assertThat(driver.getCurrentUrl()).startsWith(UrlFactory.create(Endpoints.ERROR_PAGE));
 

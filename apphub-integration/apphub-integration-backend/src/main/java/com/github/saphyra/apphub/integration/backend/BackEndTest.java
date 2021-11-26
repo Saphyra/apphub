@@ -18,7 +18,7 @@ public class BackEndTest extends TestBase {
     public static final int AVAILABLE_PERMITS = 15;
     private static final Semaphore SEMAPHORE = new Semaphore(AVAILABLE_PERMITS);
 
-    @DataProvider(name = "languageDataProvider")
+    @DataProvider(name = "languageDataProvider", parallel = true)
     public Object[] languageDataProvider() {
         return Language.values();
     }

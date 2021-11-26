@@ -32,3 +32,35 @@ body{
     right: 0;
     top: 0;
 }
+
+.zoom-content-wrapper{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+}
+
+.zoom-button-container{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+    .zoom-in-button, .zoom-out-button{
+        background-color: transparent;
+        border-width: 3px;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        background-size: cover;
+    }
+
+    .zoom-in-button{
+        background-image: url("/res/common/images/zoom_in.png");
+    }
+
+    .zoom-out-button{
+        background-image: url("/res/common/images/zoom_out.png");
+    }
