@@ -62,6 +62,6 @@ class LocaleMandatoryFilter extends OncePerRequestFilter {
 
         return localeMandatoryFilterConfiguration.getWhiteListedEndpoints()
             .stream()
-            .anyMatch(whiteListedEndpoint -> antPathMatcher.match(whiteListedEndpoint.getPath(), requestUri) && whiteListedEndpoint.getMethod().equals(method));
+            .anyMatch(whiteListedEndpoint -> antPathMatcher.match(whiteListedEndpoint.getPattern(), requestUri) && whiteListedEndpoint.getMethod().equals(method));
     }
 }

@@ -4,22 +4,3 @@ spring:
 
 liquibase:
   schema: admin_panel
-
-role:
-  settings:
-    - pattern: /web/admin-panel/**
-      methods:
-        - GET
-        - POST
-        - DELETE
-        - PUT
-      requiredRoles:
-        - ADMIN
-    - pattern: /api/admin-panel/**
-      methods:
-        - GET
-        - POST
-        - DELETE
-        - PUT
-      requiredRoles:
-        - ADMIN

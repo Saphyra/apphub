@@ -8,6 +8,7 @@ public class Constants {
 
     public final String LOCALE_COOKIE = "language";
 
+    public final String ROLE_ACCESS = "ACCESS";
     public final String ROLE_ADMIN = "ADMIN";
     public final String ROLE_NOTEBOOK = "NOTEBOOK";
     public final String ROLE_SKYXPLORE = "SKYXPLORE";

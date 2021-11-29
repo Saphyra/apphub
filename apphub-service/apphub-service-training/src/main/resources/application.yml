@@ -1,11 +1,3 @@
 spring:
   application:
     name: training
-
-role:
-  settings:
-    - pattern: /web/training/**
-      methods:
-        - GET
-      requiredRoles:
-        - TRAINING

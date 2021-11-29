@@ -4,19 +4,3 @@ spring:
 
 liquibase:
   schema: notebook
-
-role:
-  settings:
-    - pattern: /web/notebook
-      methods:
-        - GET
-      requiredRoles:
-        - NOTEBOOK
-    - pattern: /api/notebook/**
-      methods:
-        - GET
-        - DELETE
-        - POST
-        - PUT
-      requiredRoles:
-        - NOTEBOOK

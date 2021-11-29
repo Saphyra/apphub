@@ -31,7 +31,7 @@ class UserActiveNotificationService {
     void sendEvent(UUID userId, WebSocketEventName eventName) {
         AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
             .userId(userId)
-            .roles(Arrays.asList("SKYXPLORE"))
+            .roles(Arrays.asList("SKYXPLORE", "ACCESS"))
             .build();
         List<UUID> recipients = skyXploreDataProxy.getFriends(accessTokenHeader)
             .stream()

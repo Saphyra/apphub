@@ -60,7 +60,7 @@ public class SkyXploreLobbyWebSocketHandler extends DefaultWebSocketHandler {
         try {
             AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
                 .userId(userId)
-                .roles(Arrays.asList("SKYXPLORE"))
+                .roles(Arrays.asList("SKYXPLORE", "ACCESS"))
                 .build();
             String accessTokenHeaderString = accessTokenHeaderConverter.convertDomain(accessTokenHeader);
             lobbyClient.exitFromLobby(accessTokenHeaderString, commonConfigProperties.getDefaultLocale());

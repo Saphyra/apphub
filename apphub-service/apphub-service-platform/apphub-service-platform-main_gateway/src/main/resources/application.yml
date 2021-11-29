@@ -130,5 +130,5 @@ spring:
             - Path=/api/message-sender/**
 
 nonSessionExtendingUris:
-  - path: /api/user/authentication/session
+  - pattern: /api/user/authentication/session
     method: GET

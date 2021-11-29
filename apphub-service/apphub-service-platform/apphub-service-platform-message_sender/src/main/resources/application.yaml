@@ -7,9 +7,9 @@ webSocketSession:
 
 locale-mandatory-filter:
   whiteListedEndpoints:
-    - path: /api/message-sender/skyxplore/main-menu
+    - pattern: /api/message-sender/skyxplore/main-menu
       method: GET
-    - path: /api/message-sender/skyxplore/lobby
+    - pattern: /api/message-sender/skyxplore/lobby
       method: GET
-    - path: /api/message-sender/skyxplore/game
+    - pattern: /api/message-sender/skyxplore/game
       method: GET
