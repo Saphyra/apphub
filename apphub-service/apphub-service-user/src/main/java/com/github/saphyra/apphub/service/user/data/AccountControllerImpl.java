@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.api.user.server.AccountController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
-import com.github.saphyra.apphub.service.user.data.service.account.BanService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangeEmailService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangePasswordService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangeUsernameService;
@@ -30,7 +29,6 @@ class AccountControllerImpl implements AccountController {
     private final DeleteAccountService deleteAccountService;
     private final RegistrationService registrationService;
     private final UserDao userDao;
-    private final BanService banService;
 
     @Override
     public void changeEmail(AccessTokenHeader accessTokenHeader, ChangeEmailRequest request) {
@@ -67,12 +65,5 @@ class AccountControllerImpl implements AccountController {
         log.info("Querying name of user {}", userId);
         return userDao.findByIdValidated(userId)
             .getUsername();
-    }
-
-    @Override
-    //TODO API test
-    public void banUser(OneParamRequest<String> password, UUID userId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to ban user {}", accessTokenHeader.getUserId(), userDao);
-        banService.banUser(accessTokenHeader.getUserId(), password.getValue(), userId);
     }
 }

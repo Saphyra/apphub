@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEv
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
+import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
 import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -44,6 +45,9 @@ public class UserEventControllerImplTest {
     @Mock
     private LocaleProvider localeProvider;
 
+    @Mock
+    private BanDao banDao;
+
     @InjectMocks
     private UserEventControllerImpl underTest;
 
@@ -65,6 +69,7 @@ public class UserEventControllerImplTest {
         verify(accessTokenDao).deleteByUserId(USER_ID);
         verify(userDao).deleteById(USER_ID);
         verify(roleDao).deleteByUserId(USER_ID);
+        verify(banDao).deleteByUserId(USER_ID);
     }
 
     @Test

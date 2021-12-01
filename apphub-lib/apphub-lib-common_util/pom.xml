@@ -54,6 +54,12 @@
             <artifactId>jackson-databind</artifactId>
             <version>${versions.jackson-core}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-test-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

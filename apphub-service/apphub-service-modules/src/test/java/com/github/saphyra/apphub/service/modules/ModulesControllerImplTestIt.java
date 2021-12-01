@@ -16,6 +16,7 @@ import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.modules.dao.favorite.Favorite;
 import com.github.saphyra.apphub.service.modules.dao.favorite.FavoriteDao;
+import com.github.saphyra.apphub.test.common.TestConstants;
 import com.github.saphyra.apphub.test.common.api.AccessTokenProtectedOperation;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
@@ -120,7 +121,7 @@ public class ModulesControllerImplTestIt {
         AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
             .accessTokenId(UUID.randomUUID())
             .userId(USER_ID)
-            .roles(Arrays.asList(ROLE))
+            .roles(Arrays.asList(ROLE, TestConstants.ROLE_ACCESS))
             .build();
 
         Favorite favorite = Favorite.builder()
@@ -138,7 +139,7 @@ public class ModulesControllerImplTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        TypeReference<Map<String, List<ModuleResponse>>> responseReference = new TypeReference<Map<String, List<ModuleResponse>>>() {
+        TypeReference<Map<String, List<ModuleResponse>>> responseReference = new TypeReference<>() {
         };
         Map<String, List<ModuleResponse>> moduleResponses = objectMapperWrapper.readValue(response.getBody().asString(), responseReference);
 
@@ -161,6 +162,7 @@ public class ModulesControllerImplTestIt {
         AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
             .accessTokenId(UUID.randomUUID())
             .userId(USER_ID)
+            .roles(List.of(TestConstants.ROLE_ACCESS))
             .build();
 
         OneParamRequest<Boolean> request = new OneParamRequest<>(true);
@@ -187,6 +189,7 @@ public class ModulesControllerImplTestIt {
         AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
             .accessTokenId(UUID.randomUUID())
             .userId(USER_ID)
+            .roles(List.of(TestConstants.ROLE_ACCESS))
             .build();
 
         OneParamRequest<Boolean> request = new OneParamRequest<>(null);
@@ -213,7 +216,7 @@ public class ModulesControllerImplTestIt {
         AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
             .accessTokenId(UUID.randomUUID())
             .userId(USER_ID)
-            .roles(Arrays.asList(ROLE))
+            .roles(Arrays.asList(ROLE, TestConstants.ROLE_ACCESS))
             .build();
 
         OneParamRequest<Boolean> request = new OneParamRequest<>(true);
@@ -228,7 +231,7 @@ public class ModulesControllerImplTestIt {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        TypeReference<Map<String, List<ModuleResponse>>> responseReference = new TypeReference<Map<String, List<ModuleResponse>>>() {
+        TypeReference<Map<String, List<ModuleResponse>>> responseReference = new TypeReference<>() {
         };
         Map<String, List<ModuleResponse>> moduleResponses = objectMapperWrapper.readValue(response.getBody().asString(), responseReference);
 

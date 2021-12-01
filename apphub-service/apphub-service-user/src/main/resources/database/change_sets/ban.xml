@@ -1,0 +1,28 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-table-ban" author="saphyra">
+        <preConditions>
+            <not>
+                <tableExists schemaName="apphub_user" tableName="ban"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="apphub_user" tableName="ban">
+            <column name="id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(37)"/>
+            <column name="banned_role" type="varchar(255)"/>
+            <column name="expiration" type="datetime"/>
+            <column name="permanent" type="boolean"/>
+            <column name="reason" type="text"/>
+            <column name="banned_by" type="varchar(37)"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="apphub_user" tableName="ban" columnNames="id" constraintName="ban-pk"/>
+    </changeSet>
+</databaseChangeLog>

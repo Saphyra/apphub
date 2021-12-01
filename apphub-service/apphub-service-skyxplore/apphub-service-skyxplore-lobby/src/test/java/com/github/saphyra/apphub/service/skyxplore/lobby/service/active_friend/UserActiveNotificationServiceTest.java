@@ -77,7 +77,7 @@ public class UserActiveNotificationServiceTest {
         verify(skyXploreDataProxy).getFriends(accessTokenHeaderArgumentCaptor.capture());
         AccessTokenHeader accessTokenHeader = accessTokenHeaderArgumentCaptor.getValue();
         assertThat(accessTokenHeader.getUserId()).isEqualTo(USER_ID);
-        assertThat(accessTokenHeader.getRoles()).containsExactly("SKYXPLORE");
+        assertThat(accessTokenHeader.getRoles()).containsExactlyInAnyOrder("SKYXPLORE", "ACCESS");
 
         ArgumentCaptor<WebSocketMessage> webSocketMessageArgumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
         verify(messageSenderProxy).sendToLobby(webSocketMessageArgumentCaptor.capture());

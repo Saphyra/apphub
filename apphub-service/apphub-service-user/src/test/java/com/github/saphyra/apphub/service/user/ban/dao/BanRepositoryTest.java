@@ -1,0 +1,66 @@
+package com.github.saphyra.apphub.service.user.ban.dao;
+
+import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.transaction.Transactional;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = RepositoryTestConfiguration.class)
+public class BanRepositoryTest {
+    private static final String BAN_ID_1 = "ban-id-1";
+    private static final String BAN_ID_2 = "ban-id-2";
+    private static final String USER_ID_1 = "user-id-1";
+    private static final String USER_ID_2 = "user-id-2";
+
+    @Autowired
+    private BanRepository underTest;
+
+    @After
+    public void clear() {
+        underTest.deleteAll();
+    }
+
+    @Test
+    @Transactional
+    public void deleteByUserId() {
+        BanEntity entity1 = BanEntity.builder()
+            .id(BAN_ID_1)
+            .userId(USER_ID_1)
+            .build();
+        BanEntity entity2 = BanEntity.builder()
+            .id(BAN_ID_2)
+            .userId(USER_ID_2)
+            .build();
+        underTest.saveAll(List.of(entity1, entity2));
+
+        underTest.deleteByUserId(USER_ID_2);
+
+        assertThat(underTest.findAll()).containsExactly(entity1);
+    }
+
+    @Test
+    public void getByUserId() {
+        BanEntity entity1 = BanEntity.builder()
+            .id(BAN_ID_1)
+            .userId(USER_ID_1)
+            .build();
+        BanEntity entity2 = BanEntity.builder()
+            .id(BAN_ID_2)
+            .userId(USER_ID_2)
+            .build();
+        underTest.saveAll(List.of(entity1, entity2));
+
+        List<BanEntity> result = underTest.getByUserId(USER_ID_1);
+
+        assertThat(result).containsExactly(entity1);
+    }
+}

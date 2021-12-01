@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
-import com.github.saphyra.apphub.service.user.data.service.account.BanService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangeEmailService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangePasswordService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangeUsernameService;
@@ -72,9 +71,6 @@ public class AccountControllerImplTest {
     private ChangePasswordRequest changePasswordRequest;
 
     @Mock
-    private BanService banService;
-
-    @Mock
     private User user;
 
     @Before
@@ -125,12 +121,5 @@ public class AccountControllerImplTest {
         String result = underTest.getUsernameByUserId(USER_ID_1);
 
         assertThat(result).isEqualTo(USERNAME);
-    }
-
-    @Test
-    public void banUser() {
-        underTest.banUser(new OneParamRequest<>(PASSWORD), USER_ID_2, accessTokenHeader);
-
-        verify(banService).banUser(USER_ID_1, PASSWORD, USER_ID_2);
     }
 }

@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.user.server.UserEventController;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
+import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
 import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -25,6 +26,7 @@ class UserEventControllerImpl implements UserEventController {
     private final UserDao userDao;
     private final EventGatewayApiClient eventGatewayClient;
     private final LocaleProvider localeProvider;
+    private final BanDao banDao;
 
     @Override
     @Transactional
@@ -35,6 +37,7 @@ class UserEventControllerImpl implements UserEventController {
         accessTokenDao.deleteByUserId(userId);
         roleDao.deleteByUserId(userId);
         userDao.deleteById(userId);
+        banDao.deleteByUserId(userId);
     }
 
     @Override
