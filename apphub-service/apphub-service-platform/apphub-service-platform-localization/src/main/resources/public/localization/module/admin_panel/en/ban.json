@@ -203,6 +203,13 @@
   "additionalContent": {
     "select-role": "Select role",
     "true": "Yes",
-    "false": "No"
+    "false": "No",
+    "select-banned-role": "Select role to ban!",
+    "duration-too-low": "Duration too low (min. 1)",
+    "select-chrono-unit": "Select time unit!",
+    "blank-reason": "Reason must not be blank.",
+    "blank-password": "Password must not be blank",
+    "user-banned": "User banned.",
+    "revoke-button": "Revoke"
   }
 }

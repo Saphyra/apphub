@@ -35,6 +35,7 @@ window.Mapping = new function(){
 
         //Ban
         ACCOUNT_GET_BANS: new Endpoint("/api/user/ban/{userId}", HttpMethod.GET),
+        ACCOUNT_BAN_USER: new Endpoint("/api/user/ban/", HttpMethod.PUT),
 
         //User data
         USER_DATA_GET_USER_ROLES: new Endpoint("/api/user/data/roles", HttpMethod.POST),

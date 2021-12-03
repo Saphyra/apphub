@@ -83,9 +83,11 @@
                 row.appendChild(bannedRoleCell);
 
                     const expirationCell = document.createElement("TD");
-                        const date = new Date(0);
-                            date.setUTCSeconds(ban.expiration);
-                        expirationCell.innerText = formatDate(date);
+                        if(ban.expiration != null){
+                            const date = new Date(0);
+                                date.setUTCSeconds(ban.expiration);
+                            expirationCell.innerText = formatDate(date);
+                        }
                 row.appendChild(expirationCell);
 
                     const permanentCell = document.createElement("TD");
@@ -95,14 +97,23 @@
                     const reasonCell = document.createElement("TD");
                         const reasonArea = document.createElement("TEXTAREA");
                             reasonArea.value = ban.reason;
+                            reasonArea.disabled = true;
                         reasonCell.appendChild(reasonArea);
-                row.appendChild(bannedRoleCell);
-
+                row.appendChild(reasonCell);
 
                     const bannedByCell = document.createElement("TD");
                         bannedByCell.innerText = [ban.bannedById, ban.bannedByUsername, ban.bannedByEmail]
                             .join(" ");
                 row.appendChild(bannedByCell);
+
+                    const revokeCell = document.createElement("TD");
+                        const revokeButton = document.createElement("BUTTON");
+                            revokeButton.innerHTML = Localization.getAdditionalContent("revoke-button");
+                            revokeButton.onclick = function(){
+                                revokeBan(ban.id);
+                            }
+                    revokeCell.appendChild(revokeButton);
+                row.appendChild(revokeCell);
                 return row;
             }
         }
@@ -123,6 +134,61 @@
     }
 
     function createBan(){
+        const bannedRole = document.getElementById(ids.bannableRoles).value;
+        if(bannedRole.length == 0){
+            notificationService.showError(Localization.getAdditionalContent("select-banned-role"));
+            return;
+        }
+
+        const permanent = document.getElementById(ids.permanent).checked;
+        let duration = null;
+        let chronoUnit = null;
+        if(!permanent){
+            duration = document.getElementById(ids.duration).value;
+            if(duration <= 0){
+                notificationService.showError(Localization.getAdditionalContent("duration-too-low"));
+                return;
+            }
+
+            chronoUnit = document.getElementById(chronoUnit).value;
+            if(chronoUnit.length == 0){
+                notificationService.showError(Localization.getAdditionalContent("select-chrono-unit"));
+                return;
+            }
+        }
+
+        const reason = document.getElementById(ids.reason).value;
+        if(isBlank(reason)){
+            notificationService.showError(Localization.getAdditionalContent("blank-reason"));
+            return;
+        }
+
+        const password = document.getElementById(ids.password).value;
+        if(password.length == 0){
+            notificationService.showError(Localization.getAdditionalContent("blank-password"));
+            return;
+        }
+
+        const payload = {
+            bannedUserId: openedUserId,
+            bannedRole: bannedRole,
+            permanent: permanent,
+            duration: duration,
+            chronoUnit: chronoUnit,
+            reason: reason,
+            password: password
+        };
+
+        const request = new Request(Mapping.getEndpoint("ACCOUNT_BAN_USER"), payload);
+            request.processValidResponse = function(){
+                notificationService.showSuccess(Localization.getAdditionalContent("user-banned"));
+                openUser(openedUserId);
+            }
+        dao.sendRequestAsync(request);
+    }
+
+    function revokeBan(banId){
+        console.log(banId);
         //TODO implement
     }
 

@@ -203,6 +203,13 @@
   "additionalContent": {
     "select-role": "Válassz jogosultságot",
     "true": "Igen",
-    "false": "Nem"
+    "false": "Nem",
+    "select-banned-role": "Válaszd ki a kitiltandó jogosultságot!",
+    "duration-too-low": "Időtartam túl kevés (minimum 1)",
+    "select-chrono-unit": "Válassz időegységet!",
+    "blank-reason": "A kitiltás oka nem lehet üres.",
+    "blank-password": "A jelszó nem lehet üres.",
+    "user-banned": "Felhasználó kitiltva.",
+    "revoke-button": "Visszavon"
   }
 }
