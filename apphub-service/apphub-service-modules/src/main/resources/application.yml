@@ -23,6 +23,11 @@ modules:
         allowedByDefault: false
         roles:
           - ADMIN
+      - name: ban
+        url: /web/admin-panel/ban
+        allowedByDefault: false
+        roles:
+          - ADMIN
     accounts:
       - name: account
         url: /web/user/account

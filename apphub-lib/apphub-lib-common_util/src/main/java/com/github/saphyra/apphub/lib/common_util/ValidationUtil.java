@@ -28,4 +28,11 @@ public class ValidationUtil {
             throw ExceptionFactory.invalidParam(fieldName, "invalid value");
         }
     }
+
+    public static void minLength(String value, int minLength, String field) {
+        notNull(value, field);
+        if (value.length() < minLength) {
+            throw ExceptionFactory.invalidParam(field, "too short");
+        }
+    }
 }

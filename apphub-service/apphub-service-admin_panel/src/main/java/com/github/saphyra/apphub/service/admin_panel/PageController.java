@@ -28,4 +28,10 @@ public class PageController {
         log.info("DisabledRoleManagement page called.");
         return "disabled_role_management";
     }
+
+    @GetMapping(Endpoints.ADMIN_PANEL_BAN_PAGE)
+    public String banPage() {
+        log.info("Ban page called.");
+        return "ban";
+    }
 }

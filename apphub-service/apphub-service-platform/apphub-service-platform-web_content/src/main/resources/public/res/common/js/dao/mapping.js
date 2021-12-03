@@ -33,6 +33,9 @@ window.Mapping = new function(){
         ACCOUNT_DELETE_ACCOUNT: new Endpoint("/api/user/account", HttpMethod.DELETE),
         ACCOUNT_GET_LANGUAGES: new Endpoint("/api/user/data/languages", HttpMethod.GET),
 
+        //Ban
+        ACCOUNT_GET_BANS: new Endpoint("/api/user/ban/{userId}", HttpMethod.GET),
+
         //User data
         USER_DATA_GET_USER_ROLES: new Endpoint("/api/user/data/roles", HttpMethod.POST),
         USER_DATA_ADD_ROLE: new Endpoint("/api/user/data/roles", HttpMethod.PUT),
@@ -40,6 +43,7 @@ window.Mapping = new function(){
         USER_DATA_DISABLE_ROLE: new Endpoint("/api/user/data/roles/{role}", HttpMethod.PUT),
         USER_DATA_ENABLE_ROLE: new Endpoint("/api/user/data/roles/{role}", HttpMethod.DELETE),
         USER_DATA_GET_DISABLED_ROLES: new Endpoint("/api/user/data/roles/disabled", HttpMethod.GET),
+        USER_DATA_SEARCH_ACCOUNT: new Endpoint("/api/user/accounts", HttpMethod.POST),
 
         //Modules
         MODULES_GET_MODULES_OF_USER: new Endpoint("/api/modules", HttpMethod.GET),

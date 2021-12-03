@@ -8,6 +8,7 @@ public class Endpoints {
     public static final String ADMIN_PANEL_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/role-management";
     public static final String ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/disabled-role-management";
     public static final String ADMIN_PANEL_ERROR_REPORT_PAGE = "/web/admin-panel/error-report";
+    public static final String ADMIN_PANEL_BAN_PAGE = "/web/admin-panel/ban";
     public static final String ERROR_PAGE = "/web/error";
     public static final String NOTEBOOK_PAGE = "/web/notebook";
     public static final String SKYXPLORE_MAIN_MENU_PAGE = "/web/skyxplore";
@@ -72,6 +73,7 @@ public class Endpoints {
     public static final String ACCOUNT_CHANGE_PASSWORD = "/api/user/account/password";
     public static final String ACCOUNT_DELETE_ACCOUNT = "/api/user/account";
     public static final String ACCOUNT_GET_LANGUAGES = "/api/user/data/languages";
+    public static final String USER_DATA_SEARCH_ACCOUNT = "/api/user/accounts";
 
     //BAN USER
     public static final String ACCOUNT_BAN_USER = "/api/user/ban";

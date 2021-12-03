@@ -1,0 +1,104 @@
+<HTML>
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/admin-panel/css/ban.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT src="/res/admin-panel/js/ban/page_controller.js"></SCRIPT>
+</HEAD>
+<BODY>
+<DIV id="user-list" class="main-page">
+    <HEADER>
+        <H1 id="main-title"></H1>
+    </HEADER>
+
+    <MAIN>
+        <DIV id="search-container">
+            <INPUT type="text" id="search">
+            <BUTTON id="search-button" onclick="searchController.search()"></BUTTON>
+        </DIV>
+
+        <DIV id="user-list-container">
+            <DIV id="no-result" class="search-result"></DIV>
+            <DIV id="search-text-too-short" class="search-result"></DIV>
+            <TABLE id="search-result" class="search-result formatted-table">
+                <THEAD>
+                <TH id="column-user-id"></TH>
+                <TH id="column-email"></TH>
+                <TH id="column-username"></TH>
+                </THEAD>
+                <TBODY id="search-result-content"></TBODY>
+            </TABLE>
+        </DIV>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="back-button" onclick='window.location = "/web/modules"'></BUTTON>
+    </FOOTER>
+</DIV>
+
+<DIV id="user-details" class="main-page">
+    <HEADER>
+        <H1 id="user-details-title"></H1>
+    </HEADER>
+
+    <MAIN>
+        <FIELDSET>
+            <LEGEND id="user-details-container-title"></LEGEND>
+
+            <SPAN id="user-details-user-id"></SPAN>
+            <SPAN id="user-details-username"></SPAN>
+            <SPAN id="user-details-email"></SPAN>
+        </FIELDSET>
+
+        <TABLE>
+            <THEAD>
+            <TR>
+                <TH id="current-bans-ban-id"></TH>
+                <TH id="current-bans-banned-role"></TH>
+                <TH id="current-bans-expiration"></TH>
+                <TH id="current-bans-permanent"></TH>
+                <TH id="current-bans-reason"></TH>
+                <TH id="current-bans-banned-by"></TH>
+            </TR>
+            </THEAD>
+            <TBODY id="current-bans" class="current-bans-result"></TBODY>
+            <TFOOT id="no-current-bans">
+            <TR>
+                <TD id="no-current-bans-text" class="current-bans-result" colspan="6"></TD>
+            </TR>
+            </TFOOT>
+        </TABLE>
+
+        <DIV id="add-ban-container">
+            <SELECT id="bannable-roles"></SELECT>
+
+            <FIELDSET>
+                <LEGEND id="duration-title"></LEGEND>
+                <LABEL><INPUT type="checkbox" id="permanent"><SPAN id="permanent-ban"></SPAN></LABEL>
+                <INPUT type="number" id="duration" min="0" step="0">
+                <SELECT id="chrono-unit">
+                    <OPTION id="select-chrono-unit" value=""></OPTION>
+                    <OPTION id="chrono-unit-minutes" value="MINUTES"></OPTION>
+                    <OPTION id="chrono-unit-days" value="DAYS"></OPTION>
+                    <OPTION id="chrono-unit-weeks" value="WEEKS"></OPTION>
+                    <OPTION id="chrono-unit-months" value="MONTHS"></OPTION>
+                </SELECT>
+            </FIELDSET>
+
+            <INPUT type="text" id="reason">
+            <INPUT type="password" id="password">
+            <BUTTON id="create-ban-button" onclick="banController.createBan()"></BUTTON>
+        </DIV>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="close-user-details-button" onclick='banController.close()'></BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.user.model.request.ChangeEmailRequest;
 import com.github.saphyra.apphub.api.user.model.request.ChangePasswordRequest;
 import com.github.saphyra.apphub.api.user.model.request.ChangeUsernameRequest;
 import com.github.saphyra.apphub.api.user.model.request.RegistrationRequest;
+import com.github.saphyra.apphub.api.user.model.response.AccountResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
@@ -13,6 +14,7 @@ import com.github.saphyra.apphub.service.user.data.service.account.ChangePasswor
 import com.github.saphyra.apphub.service.user.data.service.account.ChangeUsernameService;
 import com.github.saphyra.apphub.service.user.data.service.account.DeleteAccountService;
 import com.github.saphyra.apphub.service.user.data.service.register.RegistrationService;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,19 +22,22 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AccountControllerImplTest {
-    private static final UUID USER_ID_1 = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
     private static final String LOCALE = "locale";
     private static final String PASSWORD = "password";
     private static final String USERNAME = "username";
-    private static final UUID USER_ID_2 = UUID.randomUUID();
+    private static final String SEARCH_TEXT = "search-text";
+    private static final String EMAIL = "email";
 
     @Mock
     private ChangeEmailService changeEmailService;
@@ -75,35 +80,35 @@ public class AccountControllerImplTest {
 
     @Before
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void changeEmail() {
         underTest.changeEmail(accessTokenHeader, changeEmailRequest);
 
-        verify(changeEmailService).changeEmail(USER_ID_1, changeEmailRequest);
+        verify(changeEmailService).changeEmail(USER_ID, changeEmailRequest);
     }
 
     @Test
     public void changeUsername() {
         underTest.changeUsername(accessTokenHeader, changeUsernameRequest);
 
-        verify(changeUsernameService).changeUsername(USER_ID_1, changeUsernameRequest);
+        verify(changeUsernameService).changeUsername(USER_ID, changeUsernameRequest);
     }
 
     @Test
     public void changePassword() {
         underTest.changePassword(accessTokenHeader, changePasswordRequest);
 
-        verify(changePasswordService).changePassword(USER_ID_1, changePasswordRequest);
+        verify(changePasswordService).changePassword(USER_ID, changePasswordRequest);
     }
 
     @Test
     public void deleteAccount() {
         underTest.deleteAccount(accessTokenHeader, new OneParamRequest<>(PASSWORD));
 
-        verify(deleteAccountService).deleteAccount(USER_ID_1, PASSWORD);
+        verify(deleteAccountService).deleteAccount(USER_ID, PASSWORD);
     }
 
     @Test
@@ -115,11 +120,34 @@ public class AccountControllerImplTest {
 
     @Test
     public void getUsernameByUserId() {
-        given(userDao.findByIdValidated(USER_ID_1)).willReturn(user);
+        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
         given(user.getUsername()).willReturn(USERNAME);
 
-        String result = underTest.getUsernameByUserId(USER_ID_1);
+        String result = underTest.getUsernameByUserId(USER_ID);
 
         assertThat(result).isEqualTo(USERNAME);
+    }
+
+    @Test
+    public void searchAccounts_tooShort() {
+        Throwable ex = catchThrowable(() -> underTest.searchAccount(new OneParamRequest<>("as"), accessTokenHeader));
+
+        ExceptionValidator.validateInvalidParam(ex, "value", "too short");
+    }
+
+    @Test
+    public void searchAccounts() {
+        given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user));
+        given(user.getUserId()).willReturn(USER_ID);
+        given(user.getEmail()).willReturn(EMAIL);
+        given(user.getUsername()).willReturn(USERNAME);
+
+        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), accessTokenHeader);
+
+        assertThat(result).hasSize(1);
+        AccountResponse response = result.get(0);
+        assertThat(response.getUserId()).isEqualTo(USER_ID);
+        assertThat(response.getEmail()).isEqualTo(EMAIL);
+        assertThat(response.getUsername()).isEqualTo(USERNAME);
     }
 }

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.ban.service;
 
+import com.github.saphyra.apphub.api.user.model.response.BanDetailsResponse;
 import com.github.saphyra.apphub.api.user.model.response.BanResponse;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
@@ -22,22 +23,27 @@ public class BanResponseQueryService {
     private final BanDao banDao;
     private final UserDao userDao;
 
-    public List<BanResponse> getBans(UUID bannedUserId) {
-        return banDao.getByUserId(bannedUserId)
+    public BanResponse getBans(UUID bannedUserId) {
+        User bannedUser = userDao.findByIdValidated(bannedUserId);
+
+        List<BanDetailsResponse> bans = banDao.getByUserId(bannedUserId)
             .stream()
             .map(this::map)
             .collect(Collectors.toList());
-    }
-
-    private BanResponse map(Ban ban) {
-        User bannedUser = userDao.findByIdValidated(ban.getUserId());
-        User bannedByUser = userDao.findByIdValidated(ban.getBannedBy());
 
         return BanResponse.builder()
-            .id(ban.getId())
-            .userId(ban.getUserId())
+            .userId(bannedUserId)
             .username(bannedUser.getUsername())
             .email(bannedUser.getEmail())
+            .bans(bans)
+            .build();
+    }
+
+    private BanDetailsResponse map(Ban ban) {
+        User bannedByUser = userDao.findByIdValidated(ban.getBannedBy());
+
+        return BanDetailsResponse.builder()
+            .id(ban.getId())
             .bannedRole(ban.getBannedRole())
             .expiration(Optional.ofNullable(ban.getExpiration()).map(localDateTime -> localDateTime.toEpochSecond(ZoneOffset.UTC)).orElse(null))
             .permanent(ban.getPermanent())

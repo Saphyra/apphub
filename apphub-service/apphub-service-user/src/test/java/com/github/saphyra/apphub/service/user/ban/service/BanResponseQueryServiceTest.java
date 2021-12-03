@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.ban.service;
 
+import com.github.saphyra.apphub.api.user.model.response.BanDetailsResponse;
 import com.github.saphyra.apphub.api.user.model.response.BanResponse;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
@@ -66,14 +67,15 @@ public class BanResponseQueryServiceTest {
         given(bannedByUser.getEmail()).willReturn(BANNED_BY_USER_EMAIL);
         given(bannedByUser.getUsername()).willReturn(BANNED_BY_USER_USERNAME);
 
-        List<BanResponse> result = underTest.getBans(BANNED_USER_ID);
+        BanResponse result = underTest.getBans(BANNED_USER_ID);
 
-        assertThat(result).hasSize(1);
-        BanResponse response = result.get(0);
+        assertThat(result.getUserId()).isEqualTo(BANNED_USER_ID);
+        assertThat(result.getUsername()).isEqualTo(BANNED_USER_USERNAME);
+        assertThat(result.getEmail()).isEqualTo(BANNED_USER_EMAIL);
+
+        assertThat(result.getBans()).hasSize(1);
+        BanDetailsResponse response = result.getBans().get(0);
         assertThat(response.getId()).isEqualTo(BAN_ID);
-        assertThat(response.getUserId()).isEqualTo(BANNED_USER_ID);
-        assertThat(response.getUsername()).isEqualTo(BANNED_USER_USERNAME);
-        assertThat(response.getEmail()).isEqualTo(BANNED_USER_EMAIL);
         assertThat(response.getBannedRole()).isEqualTo(BANNED_ROLE);
         assertThat(response.getExpiration()).isEqualTo(EXPIRATION.toEpochSecond(ZoneOffset.UTC));
         assertThat(response.getPermanent()).isTrue();

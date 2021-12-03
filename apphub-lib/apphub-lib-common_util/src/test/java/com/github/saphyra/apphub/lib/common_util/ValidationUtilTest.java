@@ -51,6 +51,25 @@ public class ValidationUtilTest {
         ValidationUtil.enumElementExists(TestEnum.ELEMENT.name(), TestEnum::valueOf, FIELD);
     }
 
+    @Test
+    public void minLength_null() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.minLength(null, 1, FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+    }
+
+    @Test
+    public void minLength_tooShort() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.minLength("asd", 10, FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "too short");
+    }
+
+    @Test
+    public void minLength() {
+        ValidationUtil.minLength("asd", 3, FIELD);
+    }
+
     enum TestEnum {
         ELEMENT
     }

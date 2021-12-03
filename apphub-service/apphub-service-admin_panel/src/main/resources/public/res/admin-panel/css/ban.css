@@ -1,0 +1,46 @@
+:root{
+    --search-container-height: 2.5rem;
+    --search-button-width: 10rem;
+}
+
+#search-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--search-container-height);
+    border-bottom: 3px ridge white;
+    text-align: center;
+}
+
+    #search{
+        width: calc(90% - var(--search-button-width));
+    }
+
+    #search-button{
+        width: var(--search-button-width);
+    }
+
+#user-list-container{
+    position: absolute;
+    top: var(--search-container-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    padding: 1rem;
+}
+
+     #no-result, #search-text-too-short{
+        margin-top: 1rem;
+        font-size: 1.5rem;
+        text-align: center;
+     }
+
+     #search-result{
+        margin: auto;
+     }
+
+        #search-result-content tr *{
+            cursor: pointer;
+        }

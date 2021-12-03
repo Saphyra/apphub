@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -36,7 +35,7 @@ public class BanControllerImpl implements BanController {
     }
 
     @Override
-    public List<BanResponse> getBans(UUID bannedUserId, AccessTokenHeader accessTokenHeader) {
+    public BanResponse getBans(UUID bannedUserId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the bans of user {}", accessTokenHeader.getUserId(), bannedUserId);
         return banResponseQueryService.getBans(bannedUserId);
     }
