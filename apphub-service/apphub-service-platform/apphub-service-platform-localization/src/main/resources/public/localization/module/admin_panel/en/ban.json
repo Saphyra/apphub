@@ -105,7 +105,7 @@
     ],
     "password": [
       {
-        "key": "innerHTML",
+        "key": "placeholder",
         "message": "Password"
       }
     ],
@@ -155,6 +155,48 @@
       {
         "key": "innerHTML",
         "message": "Ban user"
+      }
+    ],
+    "user-details-container-title": [
+      {
+        "key": "innerHTML",
+        "message": "Selected user"
+      }
+    ],
+    "user-details-user-id-title": [
+      {
+        "key": "innerHTML",
+        "message": "User ID"
+      }
+    ],
+    "user-details-username-title": [
+      {
+        "key": "innerHTML",
+        "message": "Username"
+      }
+    ],
+    "user-details-email-title": [
+      {
+        "key": "innerHTML",
+        "message": "Email"
+      }
+    ],
+    "no-current-bans-text": [
+      {
+        "key": "innerHTML",
+        "message": "User is not banned."
+      }
+    ],
+    "close-user-details-button": [
+      {
+        "key": "innerHTML",
+        "message": "Close"
+      }
+    ],
+    "user-details-title": [
+      {
+        "key": "innerHTML",
+        "message": "Bans of user"
       }
     ]
   },

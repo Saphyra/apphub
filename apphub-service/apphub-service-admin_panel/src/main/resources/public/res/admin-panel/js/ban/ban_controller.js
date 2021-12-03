@@ -10,22 +10,21 @@
         this.openUser = openUser;
         this.createBan = createBan;
         this.close = function(){
-            switchTab("main-tab", ids.userList);
+            switchTab("main-page", ids.userList);
         }
     }
 
     function openUser(userId){
         const request = new Request(Mapping.getEndpoint("ACCOUNT_GET_BANS", {userId: userId}));
-            request.convertPayload = jsonConverter;
+            request.convertResponse = jsonConverter;
             request.processValidResponse = function(response){
-                console.log(response);
                 setUserData(response);
                 displayCurrentBans(response.userId, response.bans);
                 setBannableRoles(getBannedRoles(response.bans));
                 resetInputFields();
 
                 openedUserId = userId;
-                switchTab("main-tab", ids.userDetails);
+                switchTab("main-page", ids.userDetails);
             }
         dao.sendRequestAsync(request);
 
@@ -37,10 +36,10 @@
         }
 
         function setBannableRoles(bannedRoles){
-            const selectMenu = document.getElementById(ids.bannedRoles);
+            const selectMenu = document.getElementById(ids.bannableRoles);
                 selectMenu.innerHTML = "";
 
-                const selectOption = document.createElement(OPTION);
+                const selectOption = document.createElement("OPTION");
                     selectOption.value = "";
                     selectOption.innerText = Localization.getAdditionalContent("select-role");
                     selectOption.selected = true;
@@ -51,7 +50,7 @@
                 .sorted(function(a, b){return roleLocalization.get(a).localeCompare(roleLocalization.get(b))})
                 .map(function(role){
                     const option = document.createElement("OPTION");
-                        option.value = role;ű
+                        option.value = role;
                         option.innerText = roleLocalization.get(role);
                     return option;
                 }).forEach(function(node){selectMenu.appendChild(node)});
@@ -63,6 +62,7 @@
 
                 if(bans.length == 0){
                     switchTab("current-bans-result", ids.noCurrentBans);
+                    return;
                 }
 
                 new Stream(bans)

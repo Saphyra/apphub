@@ -14,6 +14,7 @@ scriptLoader.loadScript("/res/admin-panel/js/ban/ban_controller.js");
         userDetailsEmail: "user-details-email",
         permanent: "permanent",
         duration: "duration",
+        chronoUnit: "chrono-unit",
         reason: "reason",
         password: "password",
         currentBans: "current-bans",

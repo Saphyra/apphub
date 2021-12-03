@@ -47,32 +47,42 @@
     </HEADER>
 
     <MAIN>
-        <FIELDSET>
-            <LEGEND id="user-details-container-title"></LEGEND>
+        <DIV id="user-details-container">
+            <FIELDSET>
+                <LEGEND id="user-details-container-title"></LEGEND>
 
-            <SPAN id="user-details-user-id"></SPAN>
-            <SPAN id="user-details-username"></SPAN>
-            <SPAN id="user-details-email"></SPAN>
-        </FIELDSET>
+                <DIV>
+                    <SPAN id="user-details-user-id-title"></SPAN>: <SPAN id="user-details-user-id"></SPAN>
+                </DIV>
+                <DIV>
+                    <SPAN id="user-details-username-title"></SPAN>: <SPAN id="user-details-username"></SPAN>
+                </DIV>
+                <DIV>
+                    <SPAN id="user-details-email-title"></SPAN>: <SPAN id="user-details-email"></SPAN>
+                </DIV>
+            </FIELDSET>
+        </DIV>
 
-        <TABLE>
-            <THEAD>
-            <TR>
-                <TH id="current-bans-ban-id"></TH>
-                <TH id="current-bans-banned-role"></TH>
-                <TH id="current-bans-expiration"></TH>
-                <TH id="current-bans-permanent"></TH>
-                <TH id="current-bans-reason"></TH>
-                <TH id="current-bans-banned-by"></TH>
-            </TR>
-            </THEAD>
-            <TBODY id="current-bans" class="current-bans-result"></TBODY>
-            <TFOOT id="no-current-bans">
-            <TR>
-                <TD id="no-current-bans-text" class="current-bans-result" colspan="6"></TD>
-            </TR>
-            </TFOOT>
-        </TABLE>
+        <DIV id="current-bans-container">
+            <TABLE id="current-bans-table" class="formatted-table">
+                <THEAD>
+                <TR>
+                    <TH id="current-bans-ban-id"></TH>
+                    <TH id="current-bans-banned-role"></TH>
+                    <TH id="current-bans-expiration"></TH>
+                    <TH id="current-bans-permanent"></TH>
+                    <TH id="current-bans-reason"></TH>
+                    <TH id="current-bans-banned-by"></TH>
+                </TR>
+                </THEAD>
+                <TBODY id="current-bans" class="current-bans-result"></TBODY>
+                <TFOOT id="no-current-bans" class="current-bans-result">
+                <TR>
+                    <TD id="no-current-bans-text" colspan="6"></TD>
+                </TR>
+                </TFOOT>
+            </TABLE>
+        </DIV>
 
         <DIV id="add-ban-container">
             <SELECT id="bannable-roles"></SELECT>
@@ -90,9 +100,15 @@
                 </SELECT>
             </FIELDSET>
 
-            <INPUT type="text" id="reason">
-            <INPUT type="password" id="password">
-            <BUTTON id="create-ban-button" onclick="banController.createBan()"></BUTTON>
+            <TEXTAREA id="reason"></TEXTAREA>
+
+            <DIV>
+                <INPUT type="password" id="password">
+            </DIV>
+
+            <DIV>
+                <BUTTON id="create-ban-button" onclick="banController.createBan()"></BUTTON>
+            </DIV>
         </DIV>
     </MAIN>
 
