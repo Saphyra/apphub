@@ -110,7 +110,7 @@
                         const revokeButton = document.createElement("BUTTON");
                             revokeButton.innerHTML = Localization.getAdditionalContent("revoke-button");
                             revokeButton.onclick = function(){
-                                revokeBan(ban.id);
+                                revokeBan(ban.id, ban.bannedRole);
                             }
                     revokeCell.appendChild(revokeButton);
                 row.appendChild(revokeCell);
@@ -187,9 +187,46 @@
         dao.sendRequestAsync(request);
     }
 
-    function revokeBan(banId){
-        console.log(banId);
-        //TODO implement
+    function revokeBan(banId, bannedRole){
+        const passwordInput = document.createElement("INPUT");
+            passwordInput.type = "password";
+            passwordInput.placeholder = Localization.getAdditionalContent("password");
+
+        const localization = new ConfirmationDialogLocalization()
+            .withTitle(Localization.getAdditionalContent("confirm-revoke-ban-confirmation-dialog-title"))
+            .withDetail(createDetail(passwordInput, bannedRole))
+            .withConfirmButton(Localization.getAdditionalContent("revoke-ban"))
+            .withDeclineButton(Localization.getAdditionalContent("cancel"));
+
+        confirmationService.openDialog("confirm-revoke-ban", localization, function(){sendRevokeBanRequest(banId, passwordInput.value)});
+
+        function createDetail(passwordInput, bannedRole){
+            const container = document.createElement("DIV");
+
+                const detail = document.createElement("DIV");
+                    detail.innerHTML = Localization.getAdditionalContent("confirm-revoke-ban-confirmation-dialog-detail", {bannedRole: roleLocalization.get(bannedRole)});
+            container.appendChild(detail);
+
+                const passwordContainer = document.createElement("DIV");
+                    passwordContainer.id = "revoke-role-confirm-password-container";
+                    passwordContainer.appendChild(passwordInput);
+            container.appendChild(passwordContainer);
+            return container;
+        }
+
+        function sendRevokeBanRequest(banId, password){
+            if(password.length == 0){
+                notificationService.showError(Localization.getAdditionalContent("blank-password"));
+                return;
+            }
+
+            const request = new Request(Mapping.getEndpoint("ACCOUNT_REMOVE_BAN", {banId: banId}), {value: password});
+                request.processValidResponse = function(){
+                    notificationService.showSuccess(Localization.getAdditionalContent("ban-revoked"));
+                    openUser(openedUserId);
+                }
+            dao.sendRequestAsync(request);
+        }
     }
 
     function initAvailableRoles(){

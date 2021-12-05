@@ -210,6 +210,12 @@
     "blank-reason": "Reason must not be blank.",
     "blank-password": "Password must not be blank",
     "user-banned": "User banned.",
-    "revoke-button": "Revoke"
+    "revoke-button": "Revoke",
+    "confirm-revoke-ban-confirmation-dialog-title": "Confirm revoke ban",
+    "confirm-revoke-ban-confirmation-dialog-detail": "Are you sure you want to revoke ban of role <SPAN class='red'>{bannedRole}</SPAN>?",
+    "password": "Password",
+    "revoke-ban": "Revoke ban",
+    "cancel": "Cancel",
+    "ban-revoked": "Ban revoked."
   }
 }

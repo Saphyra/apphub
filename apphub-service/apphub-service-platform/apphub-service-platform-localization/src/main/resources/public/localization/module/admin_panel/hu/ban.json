@@ -210,6 +210,12 @@
     "blank-reason": "A kitiltás oka nem lehet üres.",
     "blank-password": "A jelszó nem lehet üres.",
     "user-banned": "Felhasználó kitiltva.",
-    "revoke-button": "Visszavon"
+    "revoke-button": "Visszavon",
+    "confirm-revoke-ban-confirmation-dialog-title": "Tiltás visszavonásának megerősítése",
+    "confirm-revoke-ban-confirmation-dialog-detail": "Biztosan vissza akarod vonni a(z) <SPAN class='red'>{bannedRole}</SPAN> jogosultság tiltását?",
+    "password": "Jelszó",
+    "revoke-ban": "Tiltás visszavonása",
+    "cancel": "Mégse",
+    "ban-revoked": "Tiltás visszavonva."
   }
 }
