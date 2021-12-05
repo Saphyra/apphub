@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ public class BanDaoTest {
     private static final String USER_ID_STRING = "user-id";
     private static final UUID BAN_ID = UUID.randomUUID();
     private static final String BAN_ID_STRING = "ban-id";
+    private static final LocalDateTime EXPIRATION = LocalDateTime.now();
 
     @Mock
     private BanConverter converter;
@@ -67,5 +69,12 @@ public class BanDaoTest {
         List<Ban> result = underTest.getByUserId(USER_ID);
 
         assertThat(result).containsExactly(domain);
+    }
+
+    @Test
+    public void deleteExpired() {
+        underTest.deleteExpired(EXPIRATION);
+
+        verify(repository).deleteExpired(EXPIRATION);
     }
 }

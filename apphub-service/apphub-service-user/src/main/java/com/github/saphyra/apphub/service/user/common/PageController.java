@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.user;
+package com.github.saphyra.apphub.service.user.common;
 
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import lombok.extern.slf4j.Slf4j;

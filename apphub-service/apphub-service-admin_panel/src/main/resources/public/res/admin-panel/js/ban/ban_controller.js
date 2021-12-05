@@ -150,7 +150,7 @@
                 return;
             }
 
-            chronoUnit = document.getElementById(chronoUnit).value;
+            chronoUnit = document.getElementById(ids.chronoUnit).value;
             if(chronoUnit.length == 0){
                 notificationService.showError(Localization.getAdditionalContent("select-chrono-unit"));
                 return;

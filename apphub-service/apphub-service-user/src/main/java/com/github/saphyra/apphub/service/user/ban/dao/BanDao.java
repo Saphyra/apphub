@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,5 +29,9 @@ public class BanDao extends AbstractDao<BanEntity, Ban, String, BanRepository> {
 
     public List<Ban> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
+    }
+
+    public void deleteExpired(LocalDateTime expiration) {
+        repository.deleteExpired(expiration);
     }
 }

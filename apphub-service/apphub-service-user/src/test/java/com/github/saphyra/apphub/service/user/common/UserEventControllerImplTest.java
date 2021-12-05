@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.user.data;
+package com.github.saphyra.apphub.service.user.common;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
+import com.github.saphyra.apphub.service.user.ban.service.RevokeBanService;
 import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -48,6 +49,9 @@ public class UserEventControllerImplTest {
     @Mock
     private BanDao banDao;
 
+    @Mock
+    private RevokeBanService revokeBanService;
+
     @InjectMocks
     private UserEventControllerImpl underTest;
 
@@ -85,5 +89,12 @@ public class UserEventControllerImplTest {
         SendEventRequest<DeleteAccountEvent> event = argumentCaptor.getValue();
         assertThat(event.getEventName()).isEqualTo(DeleteAccountEvent.EVENT_NAME);
         assertThat(event.getPayload().getUserId()).isEqualTo(USER_ID);
+    }
+
+    @Test
+    public void triggerRevokeExpiredBans() {
+        underTest.triggerRevokeExpiredBans();
+
+        verify(revokeBanService).revokeExpiredBans();
     }
 }

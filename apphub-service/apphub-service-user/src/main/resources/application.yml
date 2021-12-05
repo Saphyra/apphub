@@ -15,6 +15,7 @@ registration:
     - NOTEBOOK
     - SKYXPLORE
     - ACCESS
+    - TRAINING
 
 rolesCanBeDisabled:
   - NOTEBOOK

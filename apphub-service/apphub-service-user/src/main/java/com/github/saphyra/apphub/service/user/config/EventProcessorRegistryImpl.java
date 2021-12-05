@@ -44,6 +44,11 @@ public class EventProcessorRegistryImpl implements EventProcessorRegistry {
                 .serviceName(serviceName)
                 .eventName(EmptyEvent.TRIGGER_ACCOUNT_DELETION)
                 .url(Endpoints.EVENT_TRIGGER_ACCOUNT_DELETION)
+                .build(),
+            RegisterProcessorRequest.builder()
+                .serviceName(serviceName)
+                .eventName(EmptyEvent.TRIGGER_REVOKE_EXPIRED_BANS)
+                .url(Endpoints.EVENT_TRIGGER_REVOKE_EXPIRED_BANS)
                 .build()
         );
     }

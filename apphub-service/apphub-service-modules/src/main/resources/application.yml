@@ -37,7 +37,7 @@ modules:
       - name: notebook
         url: /web/notebook
         allowedByDefault: false
-        mobileAllowed: true
+        mobileAllowed: false
         roles:
           - NOTEBOOK
     development-utils:
@@ -63,9 +63,13 @@ modules:
     training:
       - name: html
         url: /web/training/html/001_introduction
-        allowedByDefault: true
+        allowedByDefault: false
         mobileAllowed: true
+        roles:
+          - TRAINING
       - name: css
         url: /web/training/css/001_introduction
-        allowedByDefault: true
+        allowedByDefault: false
         mobileAllowed: true
+        roles:
+          - TRAINING

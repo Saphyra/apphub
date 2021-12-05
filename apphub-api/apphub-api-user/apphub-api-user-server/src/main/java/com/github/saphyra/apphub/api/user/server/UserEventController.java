@@ -14,4 +14,7 @@ public interface UserEventController {
 
     @PostMapping(Endpoints.EVENT_TRIGGER_ACCOUNT_DELETION)
     void triggerAccountDeletion();
+
+    @PostMapping(Endpoints.EVENT_TRIGGER_REVOKE_EXPIRED_BANS)
+    void triggerRevokeExpiredBans();
 }
