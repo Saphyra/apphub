@@ -79,10 +79,11 @@
                 row.appendChild(banIdCell);
 
                     const bannedRoleCell = document.createElement("TD");
-                        bannedRoleCell.innerText = ban.bannedRole;
+                        bannedRoleCell.innerText = roleLocalization.get(ban.bannedRole);
                 row.appendChild(bannedRoleCell);
 
                     const expirationCell = document.createElement("TD");
+                        expirationCell.classList.add("nowrap");
                         if(ban.expiration != null){
                             const date = new Date(0);
                                 date.setUTCSeconds(ban.expiration);

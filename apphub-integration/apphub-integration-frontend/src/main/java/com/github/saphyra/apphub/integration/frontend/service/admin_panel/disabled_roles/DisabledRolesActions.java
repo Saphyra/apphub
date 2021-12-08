@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.frontend.service.admin_panel;
+package com.github.saphyra.apphub.integration.frontend.service.admin_panel.disabled_roles;
 
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.model.admin_panel.disabled_role_management.DisabledRole;
@@ -9,27 +9,27 @@ import java.util.stream.Collectors;
 
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFill;
 
-public class AdminPanelPageActions {
+public class DisabledRolesActions {
     public static void back(WebDriver driver) {
-        AdminPanelPage.back(driver).click();
+        DisabledRolesPage.back(driver).click();
     }
 
     public static List<DisabledRole> getDisabledRoles(WebDriver driver) {
-        return AwaitilityWrapper.getListWithWait(() -> AdminPanelPage.disabledRoles(driver), webElements -> !webElements.isEmpty())
+        return AwaitilityWrapper.getListWithWait(() -> DisabledRolesPage.disabledRoles(driver), webElements -> !webElements.isEmpty())
             .stream()
             .map(DisabledRole::new)
             .collect(Collectors.toList());
     }
 
     public static boolean isToggleDisabledRoleConfirmationDialogOpened(WebDriver driver) {
-        return AdminPanelPage.toggleDisabledRoleConfirmationDialog(driver).isDisplayed();
+        return DisabledRolesPage.toggleDisabledRoleConfirmationDialog(driver).isDisplayed();
     }
 
     public static void enterPasswordToDisabledRoleToggleConfirmationDialog(WebDriver driver, String password) {
-        clearAndFill(AdminPanelPage.toggleDisabledRoleConfirmationDialogPassword(driver), password);
+        clearAndFill(DisabledRolesPage.toggleDisabledRoleConfirmationDialogPassword(driver), password);
     }
 
     public static void confirmDisabledRoleToggleConfirmationDialog(WebDriver driver) {
-        AdminPanelPage.toggleDisabledRoleConfirmationDialogConfirmButton(driver).click();
+        DisabledRolesPage.toggleDisabledRoleConfirmationDialogConfirmButton(driver).click();
     }
 }
