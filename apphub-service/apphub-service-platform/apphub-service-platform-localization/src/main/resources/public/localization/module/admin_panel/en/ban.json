@@ -208,7 +208,7 @@
     "duration-too-low": "Duration too low (min. 1)",
     "select-chrono-unit": "Select time unit!",
     "blank-reason": "Reason must not be blank.",
-    "blank-password": "Password must not be blank",
+    "blank-password": "Password must not be empty",
     "user-banned": "User banned.",
     "revoke-button": "Revoke",
     "confirm-revoke-ban-confirmation-dialog-title": "Confirm revoke ban",

@@ -28,6 +28,11 @@ modules:
         allowedByDefault: false
         roles:
           - ADMIN
+      - name: roles-for-all
+        url: /web/admin-panel/roles-for-all
+        allowedByDefault: false
+        roles:
+          - ADMIN
     accounts:
       - name: account
         url: /web/user/account

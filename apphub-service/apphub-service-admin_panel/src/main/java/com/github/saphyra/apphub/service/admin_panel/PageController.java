@@ -34,4 +34,10 @@ public class PageController {
         log.info("Ban page called.");
         return "ban";
     }
+
+    @GetMapping(Endpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE)
+    public String rolesForAllPage() {
+        log.info("RolesForAll page called.");
+        return "roles_for_all";
+    }
 }

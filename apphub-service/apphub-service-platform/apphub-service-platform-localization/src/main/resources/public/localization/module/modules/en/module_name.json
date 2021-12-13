@@ -12,5 +12,6 @@
   "disabled-role-management": "Disabled role management",
   "html": "01 - HTML",
   "css": "02 - CSS",
-  "ban": "Ban users"
+  "ban": "Ban users",
+  "roles-for-all": "Roles for all"
 }

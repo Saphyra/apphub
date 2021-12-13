@@ -246,6 +246,12 @@ role:
         - GET
       requiredRoles:
         - ADMIN
+    - pattern: /api/user/data/roles/all
+      methods:
+        - POST
+        - DELETE
+      requiredRoles:
+        - ADMIN
     - pattern: /api/user/data/ban/*
       methods:
         - POST

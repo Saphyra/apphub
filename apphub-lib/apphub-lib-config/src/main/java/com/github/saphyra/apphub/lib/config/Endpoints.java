@@ -9,6 +9,7 @@ public class Endpoints {
     public static final String ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/disabled-role-management";
     public static final String ADMIN_PANEL_ERROR_REPORT_PAGE = "/web/admin-panel/error-report";
     public static final String ADMIN_PANEL_BAN_PAGE = "/web/admin-panel/ban";
+    public static final String ADMIN_PANEL_ROLES_FOR_ALL_PAGE = "/web/admin-panel/roles-for-all";
     public static final String ERROR_PAGE = "/web/error";
     public static final String NOTEBOOK_PAGE = "/web/notebook";
     public static final String SKYXPLORE_MAIN_MENU_PAGE = "/web/skyxplore";
@@ -92,6 +93,9 @@ public class Endpoints {
     public static final String USER_DATA_DISABLE_ROLE = "/api/user/data/roles/{role}";
     public static final String USER_DATA_ENABLE_ROLE = "/api/user/data/roles/{role}";
     public static final String USER_DATA_GET_DISABLED_ROLES = "/api/user/data/roles/disabled";
+    public static final String USER_DATA_ADD_ROLE_TO_ALL = "/api/user/data/roles/all/{role}";
+    public static final String USER_DATA_REMOVE_ROLE_FROM_ALL = "/api/user/data/roles/all/{role}";
+    public static final String USER_DATA_ROLES_FOR_ALL_RESTRICTED = "/api/user/data/roles/restricted";
 
     //MODULES
     public static final String MODULES_GET_MODULES_OF_USER = "/api/modules";

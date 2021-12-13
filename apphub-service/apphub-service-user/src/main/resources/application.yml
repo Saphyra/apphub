@@ -22,3 +22,8 @@ rolesCanBeDisabled:
   - SKYXPLORE
   - TRAINING
   - TEST
+
+add-role-to-all:
+  restrictedRoles:
+    - ACCESS
+    - ADMIN

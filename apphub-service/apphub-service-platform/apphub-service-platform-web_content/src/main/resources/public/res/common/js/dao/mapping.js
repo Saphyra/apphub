@@ -46,6 +46,9 @@ window.Mapping = new function(){
         USER_DATA_ENABLE_ROLE: new Endpoint("/api/user/data/roles/{role}", HttpMethod.DELETE),
         USER_DATA_GET_DISABLED_ROLES: new Endpoint("/api/user/data/roles/disabled", HttpMethod.GET),
         USER_DATA_SEARCH_ACCOUNT: new Endpoint("/api/user/accounts", HttpMethod.POST),
+        USER_DATA_ROLES_FOR_ALL_RESTRICTED: new Endpoint("/api/user/data/roles/restricted", HttpMethod.GET),
+        USER_DATA_ADD_ROLE_TO_ALL: new Endpoint("/api/user/data/roles/all/{role}", HttpMethod.POST),
+        USER_DATA_REMOVE_ROLE_FROM_ALL: new Endpoint("/api/user/data/roles/all/{role}", HttpMethod.DELETE),
 
         //Modules
         MODULES_GET_MODULES_OF_USER: new Endpoint("/api/modules", HttpMethod.GET),

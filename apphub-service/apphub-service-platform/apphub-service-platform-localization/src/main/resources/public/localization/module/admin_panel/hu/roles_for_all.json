@@ -1,0 +1,32 @@
+{
+  "title": "Apphub - Jogosultság mindenkinek",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Jogosultság mindenkinek"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Vissza"
+      }
+    ]
+  },
+  "additionalContent": {
+    "add-role-to-all": "Hozzáadás mindenkinek",
+    "remove-role-from-all": "Eltávolítás mindenkitől",
+    "password": "Jelszó",
+    "confirm-add-to-all-title": "Biztos vagy benne?",
+    "add-to-all-button": "Hozzáadás mindenkinek",
+    "cancel": "Mégse",
+    "confirm-add-to-all-detail": "Biztos hogy hozzá akarod adni a(z) <SPAN class='red'>{role}</SPAN> jogosultságot az összes felhasználóhoz?",
+    "empty-password": "A jelszó nem lehet üres.",
+    "role-added-to-all": "Jogosultság hozzá adva az összes felhasználóhoz.",
+    "confirm-remove-from-all-title": "Biztos vagy benne?",
+    "remove-from-all-button": "Eltávolítás mindenkitől",
+    "confirm-remove-from-all-detail": "Biztos hogy hozzá el akarod távolítani a(z) <SPAN class='red'>{role}</SPAN> jogosultságot az összes felhasználótól?",
+    "role-removed-from-all": "Jogosultság eltávolítva az összes felhasználótól."
+  }
+}
