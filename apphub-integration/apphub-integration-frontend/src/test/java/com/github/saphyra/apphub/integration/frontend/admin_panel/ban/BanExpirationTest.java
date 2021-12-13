@@ -71,7 +71,7 @@ public class BanExpirationTest extends SeleniumTest {
 
         AwaitilityWrapper.create(180, 10)
             .until(() -> {
-                log.info("Checking is user unlocked...");
+                log.info("Checking if user unlocked...");
                 testDriver.navigate()
                     .to(UrlFactory.create(Endpoints.MODULES_PAGE));
                 return AwaitilityWrapper.create(5, 1)
