@@ -66,6 +66,9 @@ user-authentication:
 user-data:
   ribbon:
     listOfServers: user:8080
+user-data-ban:
+  ribbon:
+    listOfServers: user:8080
 notebook:
   ribbon:
     listOfServers: notebook:8080

@@ -28,6 +28,7 @@ public class Endpoints {
     //PLATFORM
     public static final String HEALTH = "/platform/health";
     public static final String TRANSLATE_ERROR_CODE = "/internal/localization/error-code";
+    public static final String TRANSLATE_KEY = "/internal/localization/key";
 
     public static final String REGISTER_PROCESSOR = "/platform/event-gateway";
     public static final String HEARTBEAT = "/platform/event-gateway/{serviceName}";

@@ -30,9 +30,9 @@ public class ErrorCodeServiceTest {
     @Before
 
     public void setUp() {
-        ErrorCodeLocalization errorCodeLocalization = new ErrorCodeLocalization();
-        errorCodeLocalization.put(ERROR_CODE, TRANSLATION);
-        underTest.put(LOCALE, errorCodeLocalization);
+        Localization localization = new Localization();
+        localization.put(ERROR_CODE, TRANSLATION);
+        underTest.put(LOCALE, localization);
     }
 
     @Test
@@ -47,7 +47,7 @@ public class ErrorCodeServiceTest {
         String result = underTest.getByLocaleAndErrorCode("error-codes", LOCALE);
 
         assertThat(result).isEqualTo("error-codes could not be translated.");
-        verify(errorReporterService).report("Localization not found for errorCode error-codes and locale " + LOCALE);
+        verify(errorReporterService).report("ErrorCode localization not found for errorCode error-codes and locale " + LOCALE);
     }
 
     @Test

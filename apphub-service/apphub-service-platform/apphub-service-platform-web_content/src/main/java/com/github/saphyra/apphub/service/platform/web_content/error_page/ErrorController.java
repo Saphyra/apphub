@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.platform.web_content;
+package com.github.saphyra.apphub.service.platform.web_content.error_page;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.config.Endpoints;
@@ -12,16 +12,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
+import java.util.UUID;
+
+import static java.util.Objects.nonNull;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
-public class ErrorController {
+class ErrorController {
     private final LocaleProvider localeProvider;
     private final LocalizedMessageProvider localizedMessageProvider;
+    private final UserBannedDescriptionResolver userBannedDescriptionResolver;
 
     @GetMapping(Endpoints.ERROR_PAGE)
-    public ModelAndView errorPage(@RequestParam(name = "error_code", required = false) String errorCode) {
+    ModelAndView errorPage(
+        @RequestParam(name = "error_code", required = false) String errorCode,
+        @RequestParam(name = "user_id", required = false) UUID userId,
+        @RequestParam(name = "required_roles", required = false) String requiredRoles
+    ) {
         log.info("Error page called with errorCode {}", errorCode);
         ModelAndView mav = new ModelAndView("err");
         ErrorCode ec = Optional.ofNullable(errorCode)
@@ -30,6 +38,9 @@ public class ErrorController {
         String localizedMessage = localizedMessageProvider.getLocalizedMessage(localeProvider.getLocaleValidated(), ec);
         mav.addObject("message", localizedMessage);
         mav.addObject("error_code", ec);
+        if (nonNull(userId) && nonNull(requiredRoles)) {
+            mav.addObject("description", userBannedDescriptionResolver.resolve(userId, requiredRoles));
+        }
         return mav;
     }
 }

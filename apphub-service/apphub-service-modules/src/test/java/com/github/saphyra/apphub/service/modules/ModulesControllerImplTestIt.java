@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.modules;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.saphyra.apphub.api.modules.model.response.ModuleResponse;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
+import com.github.saphyra.apphub.api.platform.localization.client.LocalizationClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
@@ -71,7 +71,7 @@ public class ModulesControllerImplTestIt {
     private ObjectMapperWrapper objectMapperWrapper;
 
     @MockBean
-    public LocalizationApiClient localizationApi;
+    public LocalizationClient localizationApi;
 
     private AccessTokenProtectedOperation accessTokenProtectedOperation;
 

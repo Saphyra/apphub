@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
+import com.github.saphyra.apphub.api.platform.localization.client.LocalizationClient;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
@@ -51,7 +51,7 @@ public class SkyXploreDataEventControllerImplTestIt_deleteAccountEvent {
     private int serverPort;
 
     @MockBean
-    private LocalizationApiClient localizationApiClient;
+    private LocalizationClient localizationClient;
 
     @Autowired
     private CharacterDao characterDao;
@@ -67,7 +67,7 @@ public class SkyXploreDataEventControllerImplTestIt_deleteAccountEvent {
 
     @Before
     public void setUp() {
-        given(localizationApiClient.translate(anyString(), eq(TestConstants.DEFAULT_LOCALE))).willReturn(LOCALIZED_MESSAGE);
+        given(localizationClient.translate(anyString(), eq(TestConstants.DEFAULT_LOCALE))).willReturn(LOCALIZED_MESSAGE);
     }
 
     @After

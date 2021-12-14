@@ -26,7 +26,8 @@ public abstract class AbstractDataService<K, V> extends HashMap<K, V> implements
     }
 
     protected void load(Class<V> clazz) {
-        contentLoaderFactory.getInstance(clazz, this).load();
+        contentLoaderFactory.getInstance(clazz, this)
+            .load();
     }
 
     public abstract void init();

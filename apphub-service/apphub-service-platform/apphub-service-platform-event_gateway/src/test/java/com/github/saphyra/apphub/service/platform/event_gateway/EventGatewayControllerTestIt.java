@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
+import com.github.saphyra.apphub.api.platform.localization.client.LocalizationClient;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
@@ -77,7 +77,7 @@ public class EventGatewayControllerTestIt {
     private RestTemplate restTemplate;
 
     @MockBean
-    private LocalizationApiClient localizationApiClient;
+    private LocalizationClient localizationClient;
 
     @LocalServerPort
     private int serverPort;
@@ -87,7 +87,7 @@ public class EventGatewayControllerTestIt {
 
     @Before
     public void setUp() {
-        given(localizationApiClient.translate("INVALID_PARAM", "hu")).willReturn(INVALID_PARAM_LOCALIZED_MESSAGE);
+        given(localizationClient.translate("INVALID_PARAM", "hu")).willReturn(INVALID_PARAM_LOCALIZED_MESSAGE);
     }
 
     @After
