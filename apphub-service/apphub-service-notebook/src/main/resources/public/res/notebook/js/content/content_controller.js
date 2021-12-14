@@ -21,6 +21,8 @@
         function(event){
             document.getElementById("category-content-list").removeChild(document.getElementById(createListItemId(event.getPayload())));
         },
+        false,
+        "Remove item from categroy content"
     ));
 
     function createListItemId(listItemId){

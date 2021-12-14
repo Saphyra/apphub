@@ -10,7 +10,8 @@
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType === events.LOCALIZATION_LOADED},
         printStoredMessages,
-        true
+        true,
+        "Print stored notifications"
     ));
     /*
     Shows a success message.

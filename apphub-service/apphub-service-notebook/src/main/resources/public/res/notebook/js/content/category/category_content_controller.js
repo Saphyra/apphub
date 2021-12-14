@@ -18,10 +18,12 @@
         function(eventType){
             return eventType == events.CATEGORY_SAVED
                 || eventType == events.LIST_ITEM_SAVED
-            },
-            function(){
-                loadCategoryContent(currentCategoryId, false);
-            }
+        },
+        function(){
+            loadCategoryContent(currentCategoryId, false);
+        },
+        false,
+        "Reload category content"
     ));
 
     function loadCategoryContent(categoryId, shouldSwitchTab){

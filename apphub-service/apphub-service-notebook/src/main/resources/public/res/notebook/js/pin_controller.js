@@ -18,6 +18,8 @@
         function(event){
             loadPinnedItems();
         },
+        false,
+        "Reload pinned items after deletion"
     ));
 
     function loadPinnedItems(){

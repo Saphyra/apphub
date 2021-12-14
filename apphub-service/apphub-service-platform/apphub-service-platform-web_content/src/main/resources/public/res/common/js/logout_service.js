@@ -3,7 +3,9 @@
 
     eventProcessor.registerProcessor(new EventProcessor(
             function(eventType){return eventType === events.LOGOUT},
-            logout
+            logout,
+            false,
+            "Logout"
         ));
     
     function logout(){

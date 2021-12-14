@@ -53,7 +53,7 @@ function EventProcessor(canProcessCallback, processEventCallback, onceRunningPro
     const processEvent = processEventCallback;
     const onceRunning = onceRunningProcessor == null || onceRunningProcessor == undefined ? false : onceRunningProcessor;
 
-    this.name = processorName || "Unknown eventProcessor";
+    this.name = processorName || throwException("IllegalArgument", "processorName must be defined.");
 
     this.setName = function(name){
         this.name = name;
