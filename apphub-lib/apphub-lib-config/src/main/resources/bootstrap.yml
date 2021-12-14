@@ -278,6 +278,11 @@ role:
       requiredRoles:
         - ADMIN
     #SkyXplore
+    - pattern: /web/skyxplore/**
+      methods:
+        - GET
+      requiredRoles:
+        - SKYXPLORE
     - pattern: /api/skyxplore/**
       methods:
         - GET
@@ -286,3 +291,17 @@ role:
         - PUT
       requiredRoles:
         - SKYXPLORE
+    #Utils
+    - pattern: /web/utils/**
+      methods:
+        - GET
+      requiredRoles:
+        - UTILS
+    - pattern: /api/utils/**
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - UTILS

@@ -4,5 +4,6 @@
   "NOTEBOOK": "Notebook",
   "SKYXPLORE": "SkyXplore",
   "TRAINING": "Training",
-  "TEST": "Test"
+  "TEST": "Test",
+  "UTILS": "Development utils"
 }

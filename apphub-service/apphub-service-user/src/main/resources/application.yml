@@ -16,12 +16,14 @@ registration:
     - SKYXPLORE
     - ACCESS
     - TRAINING
+    - UTILS
 
 rolesCanBeDisabled:
   - NOTEBOOK
   - SKYXPLORE
   - TRAINING
   - TEST
+  - UTILS
 
 add-role-to-all:
   restrictedRoles:
