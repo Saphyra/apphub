@@ -22,6 +22,11 @@ public class AccessTokenProvider {
         return Optional.ofNullable(STORAGE.get());
     }
 
+    public Optional<String> getAsStringOptional() {
+        return Optional.ofNullable(STORAGE.get())
+            .map(accessTokenHeaderConverter::convertDomain);
+    }
+
     public AccessTokenHeader get() {
         return getOptional().orElseThrow(() -> new IllegalStateException("AccessTokenHeader is not available for the current thread."));
     }

@@ -12,6 +12,12 @@
         "key": "innerHTML",
         "message": "Home"
       }
+    ],
+    "logout-button": [
+      {
+        "key": "innerHTML",
+        "message": "Logout"
+      }
     ]
   },
   "additionalContent": {

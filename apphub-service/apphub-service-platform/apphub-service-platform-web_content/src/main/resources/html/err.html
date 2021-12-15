@@ -31,6 +31,7 @@
 
     <FOOTER>
         <BUTTON id="home-button" onclick="window.location = '/web'"></BUTTON>
+        <BUTTON id="logout-button" onclick="logoutService.logout()" th:class="${display_logout_button} ? '' : hidden"></BUTTON>
     </FOOTER>
 </DIV>
 </BODY>
