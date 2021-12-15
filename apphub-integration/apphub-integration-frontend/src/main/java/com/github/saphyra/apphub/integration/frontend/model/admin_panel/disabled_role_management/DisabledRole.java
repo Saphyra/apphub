@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.frontend.model.admin_panel.disabled_role_management;
 
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.frontend.service.admin_panel.AdminPanelPageActions;
+import com.github.saphyra.apphub.integration.frontend.service.admin_panel.disabled_roles.DisabledRolesActions;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -27,7 +27,7 @@ public class DisabledRole {
         getCheckbox().click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> AdminPanelPageActions.isToggleDisabledRoleConfirmationDialogOpened(driver))
+            .until(() -> DisabledRolesActions.isToggleDisabledRoleConfirmationDialogOpened(driver))
             .assertTrue("Confirmation dialog is not opened.");
     }
 }

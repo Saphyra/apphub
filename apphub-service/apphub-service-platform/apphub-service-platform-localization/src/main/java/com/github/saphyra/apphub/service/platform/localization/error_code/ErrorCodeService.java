@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @Component
-public class ErrorCodeService extends AbstractDataService<String, ErrorCodeLocalization> {
+public class ErrorCodeService extends AbstractDataService<String, Localization> {
     private static final String ERROR_CODE_NOT_FOUND_MESSAGE = "%s could not be translated.";
 
     private final ErrorReporterService errorReporterService;
@@ -22,22 +22,22 @@ public class ErrorCodeService extends AbstractDataService<String, ErrorCodeLocal
     @Override
     @PostConstruct
     public void init() {
-        super.load(ErrorCodeLocalization.class);
+        super.load(Localization.class);
     }
 
     @Override
-    public void addItem(ErrorCodeLocalization content, String fileName) {
+    public void addItem(Localization content, String fileName) {
         put(FilenameUtils.removeExtension(fileName), content);
     }
 
     public String getByLocaleAndErrorCode(String errorCode, String locale) {
         return getOptional(locale)
-            .flatMap(errorCodeLocalization -> errorCodeLocalization.getOptional(errorCode))
+            .flatMap(localization -> localization.getOptional(errorCode))
             .orElseGet(() -> getDefault(locale, errorCode));
     }
 
     private String getDefault(String locale, String errorCode) {
-        errorReporterService.report("Localization not found for errorCode " + errorCode + " and locale " + locale);
+        errorReporterService.report("ErrorCode localization not found for errorCode " + errorCode + " and locale " + locale);
         return String.format(ERROR_CODE_NOT_FOUND_MESSAGE, errorCode);
     }
 }

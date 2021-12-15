@@ -1,1 +1,0 @@
-mvn -pl :"$1" -am clean package

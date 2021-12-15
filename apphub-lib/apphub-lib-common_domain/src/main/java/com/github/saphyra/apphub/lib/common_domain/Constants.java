@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.lib.common_domain;
 
 import lombok.experimental.UtilityClass;
 
+import java.util.UUID;
+
 @UtilityClass
 public class Constants {
     public final String ACCESS_TOKEN_COOKIE = "access-token";
@@ -19,4 +21,5 @@ public class Constants {
     public final String AUTHORIZATION_HEADER = "auth";
 
     public final String COOKIE_HEADER = "Cookie";
+    public final UUID SERVICE_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 }

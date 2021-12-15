@@ -7,4 +7,5 @@ public class EmptyEvent {
     public static final String MESSAGE_SENDER_PING_REQUEST_EVENT_NAME = "message-sender-ping-request-event";
     public static final String MESSAGE_SENDER_CONNECTION_CLEANUP_EVENT = "message-sender-connection-cleanup";
     public static final String TRIGGER_ACCOUNT_DELETION = "user-data-trigger-deletion";
+    public static final String TRIGGER_REVOKE_EXPIRED_BANS = "user-data-trigger-revoke-expired-bans";
 }

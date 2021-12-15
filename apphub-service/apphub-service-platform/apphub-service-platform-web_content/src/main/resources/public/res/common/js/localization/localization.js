@@ -29,7 +29,8 @@
 
             loadLocalization(payload.module, payload.fileName, callback);
         },
-        true
+        true,
+        "Load localization"
     ));
     
     function fillPageWithText(content){

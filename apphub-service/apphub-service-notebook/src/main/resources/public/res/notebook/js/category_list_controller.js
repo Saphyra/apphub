@@ -8,6 +8,8 @@
         function(event){
             document.getElementById(createWrapperId(event.getPayload())).remove();
         },
+        false,
+        "Delete category from category tree"
     ));
 
     eventProcessor.registerProcessor(new EventProcessor(
@@ -21,7 +23,9 @@
                 .map(function(node){return node.id})
                 .toList();
             loadCategories();
-        }
+        },
+        false,
+        "Reload category tree"
     ));
 
     function loadCategories(){

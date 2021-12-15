@@ -1,7 +1,9 @@
 [
+  "ACCESS",
   "ADMIN",
   "NOTEBOOK",
   "SKYXPLORE",
   "TRAINING",
-  "TEST"
+  "TEST",
+  "UTILS"
 ]

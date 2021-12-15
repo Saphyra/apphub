@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.error_handler.service.translation;
 
-import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
+import com.github.saphyra.apphub.api.platform.localization.client.LocalizationClient;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +20,7 @@ public class LocalizedMessageProviderTest {
     private static final String LOCALIZED_MESSAGE = "localized-message";
 
     @Mock
-    private LocalizationApiClient localizationApi;
+    private LocalizationClient localizationApi;
 
     @Mock
     private MessageAssembler messageAssembler;

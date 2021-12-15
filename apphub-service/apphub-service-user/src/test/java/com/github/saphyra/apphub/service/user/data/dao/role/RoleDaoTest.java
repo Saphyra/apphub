@@ -27,7 +27,7 @@ public class RoleDaoTest {
     private RoleConverter converter;
 
     @Mock
-    private RoleRepository roleRepository;
+    private RoleRepository repository;
 
     @Mock
     private UuidConverter uuidConverter;
@@ -44,7 +44,7 @@ public class RoleDaoTest {
     @Test
     public void findByUserIdAndRole() {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(roleRepository.findByUserIdAndRole(USER_ID_STRING, ROLE)).willReturn(Optional.of(entity));
+        given(repository.findByUserIdAndRole(USER_ID_STRING, ROLE)).willReturn(Optional.of(entity));
         given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(role));
 
         Optional<Role> result = underTest.findByUserIdAndRole(USER_ID, ROLE);
@@ -55,7 +55,7 @@ public class RoleDaoTest {
     @Test
     public void getByUserId() {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(roleRepository.getByUserId(USER_ID_STRING)).willReturn(Arrays.asList(entity));
+        given(repository.getByUserId(USER_ID_STRING)).willReturn(Arrays.asList(entity));
         given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(role));
 
         List<Role> result = underTest.getByUserId(USER_ID);
@@ -69,6 +69,13 @@ public class RoleDaoTest {
 
         underTest.deleteByUserId(USER_ID);
 
-        verify(roleRepository).deleteByUserId(USER_ID_STRING);
+        verify(repository).deleteByUserId(USER_ID_STRING);
+    }
+
+    @Test
+    public void deleteByRole() {
+        underTest.deleteByRole(ROLE);
+
+        verify(repository).deleteByRole(ROLE);
     }
 }

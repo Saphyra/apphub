@@ -11,12 +11,14 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class SkipDisabledTestsInterceptor implements IMethodInterceptor {
+    private static final int TIME_OUT_MILLIS = 1000 * 60 * 5; //5 minutes
+
     @Override
     public List<IMethodInstance> intercept(List<IMethodInstance> methods, ITestContext context) {
-        List<IMethodInstance> testsToRun = methods.stream()
+        return methods.stream()
             .filter(this::shouldRun)
+            .peek(iMethodInstance -> iMethodInstance.getMethod().setTimeOut(TIME_OUT_MILLIS))
             .collect(Collectors.toList());
-        return testsToRun;
     }
 
     public boolean shouldRun(IMethodInstance method) {

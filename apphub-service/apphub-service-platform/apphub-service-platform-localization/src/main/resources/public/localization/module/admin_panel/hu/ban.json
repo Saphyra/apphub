@@ -1,0 +1,221 @@
+{
+  "title": "Apphub - Felhasználók tiltása",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználók tiltása"
+      }
+    ],
+    "search": [
+      {
+        "key": "placeholder",
+        "message": "Felhasználónév vagy e-mail cím"
+      }
+    ],
+    "search-button": [
+      {
+        "key": "innerHTML",
+        "message": "Keresés"
+      }
+    ],
+    "no-result": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználó nem található"
+      }
+    ],
+    "search-text-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "Szöveg túl rövid (Minimum 3 karakter)"
+      }
+    ],
+    "column-user-id": [
+      {
+        "key": "innerHTML",
+        "message": "Azonosító"
+      }
+    ],
+    "column-email": [
+      {
+        "key": "innerHTML",
+        "message": "E-mail Cím"
+      }
+    ],
+    "column-username": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználónév"
+      }
+    ],
+    "duration-title": [
+      {
+        "key": "innerHTML",
+        "message": "Időtartam"
+      }
+    ],
+    "permanent-ban": [
+      {
+        "key": "innerHTML",
+        "message": "Végleges"
+      }
+    ],
+    "duration": [
+      {
+        "key": "placeholder",
+        "message": "Időtartam"
+      }
+    ],
+    "select-chrono-unit": [
+      {
+        "key": "innerHTML",
+        "message": "Kiválasztás"
+      }
+    ],
+    "chrono-unit-minutes": [
+      {
+        "key": "innerHTML",
+        "message": "Perc"
+      }
+    ],
+    "chrono-unit-days": [
+      {
+        "key": "innerHTML",
+        "message": "Nap"
+      }
+    ],
+    "chrono-unit-weeks": [
+      {
+        "key": "innerHTML",
+        "message": "Hét"
+      }
+    ],
+    "chrono-unit-months": [
+      {
+        "key": "innerHTML",
+        "message": "Hónap"
+      }
+    ],
+    "reason": [
+      {
+        "key": "placeholder",
+        "message": "Kitiltás oka"
+      }
+    ],
+    "password": [
+      {
+        "key": "placeholder",
+        "message": "Jelszó"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Vissza"
+      }
+    ],
+    "current-bans-ban-id": [
+      {
+        "key": "innerHTML",
+        "message": "Azonosító"
+      }
+    ],
+    "current-bans-banned-role": [
+      {
+        "key": "innerHTML",
+        "message": "Jogosultság"
+      }
+    ],
+    "current-bans-expiration": [
+      {
+        "key": "innerHTML",
+        "message": "Lejárat"
+      }
+    ],
+    "current-bans-permanent": [
+      {
+        "key": "innerHTML",
+        "message": "Végleges"
+      }
+    ],
+    "current-bans-reason": [
+      {
+        "key": "innerHTML",
+        "message": "Kitiltás oka"
+      }
+    ],
+    "current-bans-banned-by": [
+      {
+        "key": "innerHTML",
+        "message": "Létrehozta"
+      }
+    ],
+    "create-ban-button": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználó tiltása"
+      }
+    ],
+    "user-details-container-title": [
+      {
+        "key": "innerHTML",
+        "message": "Kiválasztott felhasználó"
+      }
+    ],
+    "user-details-user-id-title": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználó azonosító"
+      }
+    ],
+    "user-details-username-title": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználónév"
+      }
+    ],
+    "user-details-email-title": [
+      {
+        "key": "innerHTML",
+        "message": "Email"
+      }
+    ],
+    "no-current-bans-text": [
+      {
+        "key": "innerHTML",
+        "message": "A felhasználó nincs kitiltva."
+      }
+    ],
+    "close-user-details-button": [
+      {
+        "key": "innerHTML",
+        "message": "Bezárás"
+      }
+    ],
+    "user-details-title": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználó tiltásai"
+      }
+    ]
+  },
+  "additionalContent": {
+    "select-role": "Válassz jogosultságot",
+    "true": "Igen",
+    "false": "Nem",
+    "select-banned-role": "Válaszd ki a kitiltandó jogosultságot!",
+    "duration-too-low": "Időtartam túl kevés (minimum 1)",
+    "select-chrono-unit": "Válassz időegységet!",
+    "blank-reason": "A kitiltás oka nem lehet üres.",
+    "blank-password": "A jelszó nem lehet üres.",
+    "user-banned": "Felhasználó kitiltva.",
+    "revoke-button": "Visszavon",
+    "confirm-revoke-ban-confirmation-dialog-title": "Tiltás visszavonásának megerősítése",
+    "confirm-revoke-ban-confirmation-dialog-detail": "Biztosan vissza akarod vonni a(z) <SPAN class='red'>{bannedRole}</SPAN> jogosultság tiltását?",
+    "password": "Jelszó",
+    "revoke-ban": "Tiltás visszavonása",
+    "cancel": "Mégse",
+    "ban-revoked": "Tiltás visszavonva."
+  }
+}

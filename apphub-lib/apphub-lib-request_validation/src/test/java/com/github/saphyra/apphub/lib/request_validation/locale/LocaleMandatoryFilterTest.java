@@ -115,7 +115,7 @@ public class LocaleMandatoryFilterTest {
         given(request.getMethod()).willReturn(HttpMethod.POST.name());
 
         WhiteListedEndpoint whiteListedEndpoint = WhiteListedEndpoint.builder()
-            .path(WHITELISTED_PATTERN)
+            .pattern(WHITELISTED_PATTERN)
             .method(HttpMethod.POST.name())
             .build();
         given(localeMandatoryFilterConfiguration.getWhiteListedEndpoints()).willReturn(Arrays.asList(whiteListedEndpoint));

@@ -1,0 +1,8 @@
+#roles-table{
+    margin: 10% auto;
+}
+
+#add-to-all-password-container, #remove-from-all-password-container{
+    text-align: center;
+    margin: 1rem;
+}

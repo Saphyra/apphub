@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.integration.frontend.framework.Navigation;
 import com.github.saphyra.apphub.integration.frontend.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.frontend.model.admin_panel.disabled_role_management.DisabledRole;
 import com.github.saphyra.apphub.integration.frontend.model.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.frontend.service.admin_panel.AdminPanelPageActions;
+import com.github.saphyra.apphub.integration.frontend.service.admin_panel.disabled_roles.DisabledRolesActions;
 import com.github.saphyra.apphub.integration.frontend.service.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.frontend.service.modules.ModulesPageActions;
 import org.openqa.selenium.WebDriver;
@@ -30,7 +30,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
 
         //Initial check
-        DisabledRole initialRole = AdminPanelPageActions.getDisabledRoles(driver)
+        DisabledRole initialRole = DisabledRolesActions.getDisabledRoles(driver)
             .stream()
             .filter(disabledRole -> disabledRole.getRole().equals(Constants.TEST_ROLE_NAME))
             .findFirst()
@@ -40,16 +40,16 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         //Disable role
         initialRole.toggle(driver);
 
-        AdminPanelPageActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
-        AdminPanelPageActions.confirmDisabledRoleToggleConfirmationDialog(driver);
+        DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
+        DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
         NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
-        assertThat(AdminPanelPageActions.isToggleDisabledRoleConfirmationDialogOpened(driver)).isTrue();
+        assertThat(DisabledRolesActions.isToggleDisabledRoleConfirmationDialogOpened(driver)).isTrue();
 
-        AdminPanelPageActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, userData.getPassword());
-        AdminPanelPageActions.confirmDisabledRoleToggleConfirmationDialog(driver);
+        DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, userData.getPassword());
+        DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
         NotificationUtil.verifySuccessNotification(driver, "Jogosultság letiltva.");
 
-        DisabledRole disabledRole = AdminPanelPageActions.getDisabledRoles(driver)
+        DisabledRole disabledRole = DisabledRolesActions.getDisabledRoles(driver)
             .stream()
             .filter(role -> role.getRole().equals(Constants.TEST_ROLE_NAME))
             .findFirst()
@@ -61,16 +61,16 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         //Enable role
         disabledRole.toggle(driver);
 
-        AdminPanelPageActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
-        AdminPanelPageActions.confirmDisabledRoleToggleConfirmationDialog(driver);
+        DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
+        DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
         NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
-        assertThat(AdminPanelPageActions.isToggleDisabledRoleConfirmationDialogOpened(driver)).isTrue();
+        assertThat(DisabledRolesActions.isToggleDisabledRoleConfirmationDialogOpened(driver)).isTrue();
 
-        AdminPanelPageActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, userData.getPassword());
-        AdminPanelPageActions.confirmDisabledRoleToggleConfirmationDialog(driver);
+        DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, userData.getPassword());
+        DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
         NotificationUtil.verifySuccessNotification(driver, "Jogosultság engedélyezve.");
 
-        DisabledRole enabledRole = AdminPanelPageActions.getDisabledRoles(driver)
+        DisabledRole enabledRole = DisabledRolesActions.getDisabledRoles(driver)
             .stream()
             .filter(role -> role.getRole().equals(Constants.TEST_ROLE_NAME))
             .findFirst()

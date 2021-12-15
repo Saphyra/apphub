@@ -35,6 +35,7 @@ public class LogFormatterControllerImplTestIt {
     private static final AccessTokenHeader ACCESS_TOKEN_HEADER = AccessTokenHeader.builder()
         .accessTokenId(UUID.randomUUID())
         .userId(USER_ID)
+        .roles(Arrays.asList("ACCESS", "UTILS"))
         .build();
     private static final String PARAMETER = "parameter";
 

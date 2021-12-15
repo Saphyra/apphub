@@ -1,9 +1,11 @@
 package com.github.saphyra.apphub.lib.security.role;
 
+import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.lib.error_handler.service.translation.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
+import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -25,6 +29,7 @@ class RoleFilter extends OncePerRequestFilter {
     private final MatchingRoleProvider matchingRoleProvider;
     private final RequestHelper requestHelper;
     private final RequiredRoleChecker requiredRoleChecker;
+    private final AccessTokenProvider accessTokenProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -38,9 +43,24 @@ class RoleFilter extends OncePerRequestFilter {
             if (requestHelper.isRestCall(request)) {
                 sendRestError(request, response);
             } else {
-                response.sendRedirect(String.format("%s?error_code=%s", Endpoints.ERROR_PAGE, ErrorCode.MISSING_ROLE.name()));
+                String redirectUrl = getRedirectUrl(roleSettings);
+                response.sendRedirect(redirectUrl);
             }
         }
+    }
+
+    private String getRedirectUrl(List<RoleSetting> matchingSettings) {
+        String redirectUrl = String.format("%s?error_code=%s", Endpoints.ERROR_PAGE, ErrorCode.MISSING_ROLE.name());
+        Optional<AccessTokenHeader> accessTokenHeader = accessTokenProvider.getOptional();
+        if (accessTokenHeader.isPresent()) {
+            redirectUrl += "&user_id=" + accessTokenHeader.get()
+                .getUserId();
+            redirectUrl += "&required_roles=" + matchingSettings.stream()
+                .flatMap(roleSetting -> roleSetting.getRequiredRoles().stream())
+                .distinct()
+                .collect(Collectors.joining(","));
+        }
+        return redirectUrl;
     }
 
     private void sendRestError(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -23,7 +23,7 @@ public class NonSessionExtendingUriProperties {
         requireNonNull(nonSessionExtendingUris, "nonSessionExtendingUris must not be null.");
 
         nonSessionExtendingUris.forEach(nonSessionExtendingUri -> {
-            requireNonNull(nonSessionExtendingUri.getPath(), "uri must not be null.");
+            requireNonNull(nonSessionExtendingUri.getPattern(), "uri must not be null.");
             requireNonNull(nonSessionExtendingUri.getMethod(), "method must not be null.");
         });
     }

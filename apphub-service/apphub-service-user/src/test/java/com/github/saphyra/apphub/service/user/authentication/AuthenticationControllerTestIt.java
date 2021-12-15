@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.user.authentication;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
+import com.github.saphyra.apphub.api.platform.localization.client.LocalizationClient;
 import com.github.saphyra.apphub.api.user.model.request.LoginRequest;
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.api.user.model.response.LoginResponse;
@@ -89,7 +89,7 @@ public class AuthenticationControllerTestIt {
     private UserDao userDao;
 
     @MockBean
-    private LocalizationApiClient localizationApi;
+    private LocalizationClient localizationApi;
 
     private final ObjectMapperWrapper objectMapperWrapper = new ObjectMapperWrapper(new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS));
 

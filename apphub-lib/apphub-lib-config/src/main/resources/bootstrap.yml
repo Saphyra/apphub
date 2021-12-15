@@ -66,6 +66,9 @@ user-authentication:
 user-data:
   ribbon:
     listOfServers: user:8080
+user-data-ban:
+  ribbon:
+    listOfServers: user:8080
 notebook:
   ribbon:
     listOfServers: notebook:8080
@@ -147,25 +150,25 @@ endpoint:
   whitelisting:
     whiteListedEndpoints:
       resources:
-        path: /res/**
+        pattern: /res/**
         method: GET
       localization:
-        path: /localization/**
+        pattern: /localization/**
         method: GET
       root:
-        path: /
+        pattern: /
         method: GET
       indexPage:
-        path: /web
+        pattern: /web
         method: GET
       login:
-        path: /api/user/authentication/login
+        pattern: /api/user/authentication/login
         method: POST
       register:
-        path: /api/user
+        pattern: /api/user
         method: POST
       errorPage:
-        path: /web/error
+        pattern: /web/error
         method: GET
 logging:
   level:
@@ -176,3 +179,129 @@ logging:
             lib:
               security:
                 role: warn
+
+role:
+  settings:
+    #Global
+    - pattern: /web/**
+      methods:
+        - GET
+      requiredRoles:
+        - ACCESS
+      whitelistedEndpoints:
+        - pattern: /web/error
+          method: GET
+        - pattern: /web
+          method: GET
+    - pattern: /api/**
+      methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+      requiredRoles:
+        - ACCESS
+      whitelistedEndpoints:
+        - pattern: /api/user/authentication/login
+          method: POST
+        - pattern: /api/user/authentication/logout
+          method: POST
+        - pattern: /api/user/authentication/session
+          method: GET
+        - pattern: /api/user
+          method: POST
+    #Training
+    - pattern: /web/training/**
+      methods:
+        - GET
+      requiredRoles:
+        - TRAINING
+    #Notebook
+    - pattern: /web/notebook
+      methods:
+        - GET
+      requiredRoles:
+        - NOTEBOOK
+    - pattern: /api/notebook/**
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - NOTEBOOK
+    #User
+    - pattern: /api/user/data/roles
+      methods:
+        - POST
+        - PUT
+        - DELETE
+      requiredRoles:
+        - ADMIN
+    - pattern: /api/user/data/roles/*
+      methods:
+        - PUT
+        - DELETE
+      requiredRoles:
+        - ADMIN
+    - pattern: /api/user/data/roles/disabled
+      methods:
+        - GET
+      requiredRoles:
+        - ADMIN
+    - pattern: /api/user/data/roles/all
+      methods:
+        - POST
+        - DELETE
+      requiredRoles:
+        - ADMIN
+    - pattern: /api/user/data/ban/*
+      methods:
+        - POST
+      requiredRoles:
+        - ADMIN
+    #Admin-panel
+    - pattern: /web/admin-panel/**
+      methods:
+        - GET
+        - POST
+        - DELETE
+        - PUT
+      requiredRoles:
+        - ADMIN
+    - pattern: /api/admin-panel/**
+      methods:
+        - GET
+        - POST
+        - DELETE
+        - PUT
+      requiredRoles:
+        - ADMIN
+    #SkyXplore
+    - pattern: /web/skyxplore/**
+      methods:
+        - GET
+      requiredRoles:
+        - SKYXPLORE
+    - pattern: /api/skyxplore/**
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - SKYXPLORE
+    #Utils
+    - pattern: /web/utils/**
+      methods:
+        - GET
+      requiredRoles:
+        - UTILS
+    - pattern: /api/utils/**
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - UTILS

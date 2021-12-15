@@ -96,16 +96,17 @@ public class AwaitilityWrapper {
     public AwaitResult until(Callable<Boolean> callable) {
         try {
             conditionFactory.until(callable);
-            return new AwaitResult(true);
+            return new AwaitResult(true, null);
         } catch (ConditionTimeoutException e) {
-            log.info("Condition failed.", e);
-            return new AwaitResult(false);
+            return new AwaitResult(false, e);
         }
     }
 
     @RequiredArgsConstructor
+    @Getter
     public static class AwaitResult {
         private final boolean result;
+        private final Throwable cause;
 
         public void assertTrue() {
             assertThat(result).isTrue();
@@ -113,7 +114,7 @@ public class AwaitilityWrapper {
 
         public void assertTrue(String message) {
             if (!result) {
-                throw new IllegalStateException(message);
+                throw new IllegalStateException(message, cause);
             }
         }
     }

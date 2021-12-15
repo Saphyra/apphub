@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Data
@@ -12,11 +13,14 @@ import java.util.Objects;
 @AllArgsConstructor
 @Builder
 public class WhiteListedEndpoint {
-    private String path;
+    @NotNull
+    private String pattern;
+
+    @NotNull
     private String method;
 
     public void validate() {
-        Objects.requireNonNull(path, "path is null for " + this);
+        Objects.requireNonNull(pattern, "pattern is null for " + this);
         Objects.requireNonNull(method, "method is null for " + this);
     }
 }

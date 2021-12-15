@@ -24,7 +24,7 @@ class AccessTokenExpirationUpdateService {
         boolean isNonSessionExtendingEndpoint = nonSessionExtendingUriProperties.getNonSessionExtendingUris()
             .stream()
             .filter(nonSessionExtendingUri -> nonSessionExtendingUri.getMethod().equalsIgnoreCase(requestMethod))
-            .anyMatch(nonSessionExtendingUri -> antPathMatcher.match(nonSessionExtendingUri.getPath(), requestUri));
+            .anyMatch(nonSessionExtendingUri -> antPathMatcher.match(nonSessionExtendingUri.getPattern(), requestUri));
 
         if (isNonSessionExtendingEndpoint) {
             log.debug("{} - {} is a non-session-extending uri.", requestMethod, requestUri);

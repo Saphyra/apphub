@@ -11,5 +11,7 @@
   "role-management": "Jobosultságok kezelése",
   "disabled-role-management": "Jogosultságok letiltása / engedélyezése",
   "html": "01 - HTML",
-  "css": "02 - CSS"
+  "css": "02 - CSS",
+  "ban": "Felhasználók tiltása",
+  "roles-for-all": "Jogosultságok mindenkinek"
 }

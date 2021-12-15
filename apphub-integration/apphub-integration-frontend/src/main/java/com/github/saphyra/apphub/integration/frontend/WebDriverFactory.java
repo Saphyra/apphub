@@ -48,7 +48,6 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
 
     @NotNull
     private WebDriverWrapper createNewDriver() {
-
         Future<WebDriver> future = EXECUTOR.submit(this::createDriver);
         return new WebDriverWrapper(future);
     }
@@ -88,6 +87,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
 
                 driver = new ChromeDriver(options);
                 log.info("Driver created: {}", driver);
+                driver.navigate().to(UrlFactory.create(Endpoints.ERROR_PAGE));
                 return driver;
             } catch (Exception e) {
                 log.error("Could not create driver", e);
@@ -133,7 +133,10 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
 
     @Override
     public boolean validateObject(PooledObject<WebDriverWrapper> p) {
-        return true;
+        return p.getObject()
+            .getDriver()
+            .getCurrentUrl()
+            .contains(Endpoints.ERROR_PAGE);
     }
 
     @Override

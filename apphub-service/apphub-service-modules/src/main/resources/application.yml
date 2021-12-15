@@ -10,57 +10,58 @@ modules:
     admin-panel:
       - name: error-report
         url: /web/admin-panel/error-report
-        allowedByDefault: false
         roles:
           - ADMIN
       - name: role-management
         url: /web/admin-panel/role-management
-        allowedByDefault: false
         roles:
           - ADMIN
       - name: disabled-role-management
         url: /web/admin-panel/disabled-role-management
-        allowedByDefault: false
+        roles:
+          - ADMIN
+      - name: ban
+        url: /web/admin-panel/ban
+        roles:
+          - ADMIN
+      - name: roles-for-all
+        url: /web/admin-panel/roles-for-all
         roles:
           - ADMIN
     accounts:
       - name: account
         url: /web/user/account
-        allowedByDefault: true
         mobileAllowed: true
     office:
       - name: notebook
         url: /web/notebook
-        allowedByDefault: false
-        mobileAllowed: true
+        mobileAllowed: false
         roles:
           - NOTEBOOK
     development-utils:
       - name: json-formatter
         url: /web/utils/json-formatter
-        allowedByDefault: true
         mobileAllowed: true
       - name: log-formatter
         url: /web/utils/log-formatter
-        allowedByDefault: true
         mobileAllowed: true
       - name: base64
         url: /web/utils/base64
-        allowedByDefault: true
         mobileAllowed: true
     game:
       - name: skyxplore
         url: /web/skyxplore
-        allowedByDefault: false
         mobileAllowed: false
         roles:
           - SKYXPLORE
     training:
       - name: html
         url: /web/training/html/001_introduction
-        allowedByDefault: true
         mobileAllowed: true
+        roles:
+          - TRAINING
       - name: css
         url: /web/training/css/001_introduction
-        allowedByDefault: true
         mobileAllowed: true
+        roles:
+          - TRAINING

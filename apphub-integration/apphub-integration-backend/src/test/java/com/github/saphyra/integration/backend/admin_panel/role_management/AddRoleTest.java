@@ -70,6 +70,6 @@ public class AddRoleTest extends BackEndTest {
             .build();
         RoleManagementActions.addRole(language, accessTokenId, addRoleRequest);
         List<UserRoleResponse> responses = RoleManagementActions.getRoles(language, accessTokenId, testUser.getUsername());
-        assertThat(responses.get(0).getRoles()).containsExactlyInAnyOrder(Constants.ROLE_TEST, Constants.ROLE_NOTEBOOK, Constants.ROLE_SKYXPLORE);
+        assertThat(responses.get(0).getRoles()).contains(Constants.ROLE_TEST);
     }
 }

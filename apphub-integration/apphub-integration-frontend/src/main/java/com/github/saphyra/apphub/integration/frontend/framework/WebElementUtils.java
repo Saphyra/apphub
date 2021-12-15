@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.framework;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -33,6 +34,18 @@ public class WebElementUtils {
         }
 
         navigator.perform();
+    }
+
+    public static void selectOption(WebElement selectMenu, String value) {
+        selectMenu.click();
+        selectMenu.findElement(By.cssSelector(String.format(":scope option[value=\"%s\"]", value)))
+            .click();
+    }
+
+    public static void setCheckboxState(WebElement webElement, boolean shouldBeChecked) {
+        if (!webElement.isSelected() == shouldBeChecked) {
+            webElement.click();
+        }
     }
 
     public static void verifyInvalidFieldState(WebElement inputValid, boolean shouldBeVisible, String errorMessage) {

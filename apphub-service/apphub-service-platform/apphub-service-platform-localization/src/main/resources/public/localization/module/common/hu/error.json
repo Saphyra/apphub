@@ -12,6 +12,12 @@
         "key": "innerHTML",
         "message": "Kezdőlap"
       }
+    ],
+    "logout-button": [
+      {
+        "key": "innerHTML",
+        "message": "Kijelentkezés"
+      }
     ]
   },
   "additionalContent": {

@@ -51,7 +51,7 @@ public class AuthenticatedFilter implements GlobalFilter, Ordered {
         return endpointProperties.getWhiteListedEndpoints()
             .values()
             .stream()
-            .filter(whiteListedEndpoint -> antPathMatcher.match(whiteListedEndpoint.getPath(), requestUri))
+            .filter(whiteListedEndpoint -> antPathMatcher.match(whiteListedEndpoint.getPattern(), requestUri))
             .anyMatch(whiteListedEndpoint -> whiteListedEndpoint.getMethod().equalsIgnoreCase(requestMethod));
     }
 

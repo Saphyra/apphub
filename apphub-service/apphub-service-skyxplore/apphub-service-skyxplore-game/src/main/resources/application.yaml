@@ -111,14 +111,3 @@ game:
       defaultSatiety: 100
     skill:
       initialNextLevel: 1000
-
-role:
-  settings:
-    - pattern: /api/skyxplore/**
-      methods:
-        - GET
-        - DELETE
-        - POST
-        - PUT
-      requiredRoles:
-        - SKYXPLORE

@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.admin_panel.error_report;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
 import com.github.saphyra.apphub.api.admin_panel.model.model.StackTraceModel;
-import com.github.saphyra.apphub.api.platform.localization.client.LocalizationApiClient;
+import com.github.saphyra.apphub.api.platform.localization.client.LocalizationClient;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
@@ -56,14 +56,14 @@ public class ErrorReporterControllerImplTestIt_reportError {
     private int serverPort;
 
     @MockBean
-    private LocalizationApiClient localizationApiClient;
+    private LocalizationClient localizationClient;
 
     @Autowired
     private ErrorReportDao errorReportDao;
 
     @Before
     public void setUp() {
-        given(localizationApiClient.translate(anyString(), eq(DEFAULT_LOCALE))).willReturn(LOCALIZED_MESSAGE);
+        given(localizationClient.translate(anyString(), eq(DEFAULT_LOCALE))).willReturn(LOCALIZED_MESSAGE);
     }
 
     @After

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,8 +22,7 @@ public class Module {
     @NotNull
     private String url;
 
-    private boolean allowedByDefault;
     private boolean mobileAllowed;
 
-    private List<String> roles;
+    private List<String> roles = new ArrayList<>();
 }

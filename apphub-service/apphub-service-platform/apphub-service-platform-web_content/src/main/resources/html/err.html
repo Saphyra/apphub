@@ -2,6 +2,7 @@
 <HEAD>
     <script>
         window.SESSION_CHECK_DISABLED = true;
+
     </script>
     <META charset="UTF-8">
 
@@ -24,11 +25,13 @@
             <SPAN th:text="${error_code}"></SPAN>
             <SPAN> - </SPAN>
             <SPAN th:text="${message}"></SPAN>
+            <DIV id="description" th:if="${description != null}" th:text="${description}"></DIV>
         </DIV>
     </MAIN>
 
     <FOOTER>
         <BUTTON id="home-button" onclick="window.location = '/web'"></BUTTON>
+        <BUTTON id="logout-button" onclick="logoutService.logout()" th:class="${display_logout_button} ? '' : hidden"></BUTTON>
     </FOOTER>
 </DIV>
 </BODY>

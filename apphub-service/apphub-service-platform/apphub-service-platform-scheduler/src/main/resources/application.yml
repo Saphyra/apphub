@@ -11,6 +11,7 @@ interval:
     authentication:
       accessTokenCleanup: 60000
     deletion: 5000
+    revoke-ban: 60000
   skyxplore:
     lobby:
       lobbyCleanup: 300000

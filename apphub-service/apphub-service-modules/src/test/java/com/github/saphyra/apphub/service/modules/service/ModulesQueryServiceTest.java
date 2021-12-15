@@ -14,11 +14,13 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -58,16 +60,15 @@ public class ModulesQueryServiceTest {
 
         Map<String, List<Module>> modules = new HashMap<>();
         modules.put(CATEGORY_1, Arrays.asList(
-            createModule(MODULE_1, true),
-            createModule(MODULE_2, true)
+            createModule(MODULE_1),
+            createModule(MODULE_2)
         ));
         modules.put(CATEGORY_2, Arrays.asList(
-            createModule(MODULE_1, false),
-            createModule(MODULE_1, true).toBuilder().mobileAllowed(false).build()
+            createModule(MODULE_1).toBuilder().mobileAllowed(false).build()
         ));
         modules.put(CATEGORY_3, Arrays.asList(
-            createModule(MODULE_3, false, ROLE_1),
-            createModule(MODULE_4, false, ROLE_2)
+            createModule(MODULE_3, ROLE_1),
+            createModule(MODULE_4, ROLE_2)
         ));
         given(modulesProperties.getModules()).willReturn(modules);
 
@@ -83,16 +84,15 @@ public class ModulesQueryServiceTest {
         );
     }
 
-    private Module createModule(String module, boolean allowedByDefault) {
-        return createModule(module, allowedByDefault, null);
+    private Module createModule(String module) {
+        return createModule(module, null);
     }
 
-    private Module createModule(String moduleName, boolean allowedByDefault, String role) {
+    private Module createModule(String moduleName, String role) {
         return Module.builder()
             .name(moduleName)
-            .allowedByDefault(allowedByDefault)
             .mobileAllowed(true)
-            .roles(Arrays.asList(role))
+            .roles(isNull(role) ? Collections.emptyList() : Arrays.asList(role))
             .build();
     }
 }

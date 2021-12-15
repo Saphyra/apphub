@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.message_sender.session;
 
-import com.github.saphyra.apphub.api.user.client.UserAuthenticationApiClient;
+import com.github.saphyra.apphub.api.user.client.UserAuthenticationClient;
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +23,7 @@ public class WsSessionUserIdProviderTest {
     private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
-    private UserAuthenticationApiClient userAuthenticationApi;
+    private UserAuthenticationClient userAuthenticationApi;
 
     @Mock
     private WsSessionLocaleProvider localeProvider;

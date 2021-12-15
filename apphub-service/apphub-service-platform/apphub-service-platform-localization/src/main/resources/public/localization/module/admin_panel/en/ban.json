@@ -1,0 +1,221 @@
+{
+  "title": "Apphub - Ban users",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Ban users"
+      }
+    ],
+    "search": [
+      {
+        "key": "placeholder",
+        "message": "Username or E-mail address"
+      }
+    ],
+    "search-button": [
+      {
+        "key": "innerHTML",
+        "message": "Search"
+      }
+    ],
+    "no-result": [
+      {
+        "key": "innerHTML",
+        "message": "Search input too short (Min. 3 characters)"
+      }
+    ],
+    "search-text-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "No user found"
+      }
+    ],
+    "column-user-id": [
+      {
+        "key": "innerHTML",
+        "message": "User ID"
+      }
+    ],
+    "column-email": [
+      {
+        "key": "innerHTML",
+        "message": "E-mail Address"
+      }
+    ],
+    "column-username": [
+      {
+        "key": "innerHTML",
+        "message": "Username"
+      }
+    ],
+    "duration-title": [
+      {
+        "key": "innerHTML",
+        "message": "Duration"
+      }
+    ],
+    "permanent-ban": [
+      {
+        "key": "innerHTML",
+        "message": "Permanent"
+      }
+    ],
+    "duration": [
+      {
+        "key": "placeholder",
+        "message": "Duration"
+      }
+    ],
+    "select-chrono-unit": [
+      {
+        "key": "innerHTML",
+        "message": "Select"
+      }
+    ],
+    "chrono-unit-minutes": [
+      {
+        "key": "innerHTML",
+        "message": "Minutes"
+      }
+    ],
+    "chrono-unit-days": [
+      {
+        "key": "innerHTML",
+        "message": "Days"
+      }
+    ],
+    "chrono-unit-weeks": [
+      {
+        "key": "innerHTML",
+        "message": "Weeks"
+      }
+    ],
+    "chrono-unit-months": [
+      {
+        "key": "innerHTML",
+        "message": "Months"
+      }
+    ],
+    "reason": [
+      {
+        "key": "placeholder",
+        "message": "Reason of ban"
+      }
+    ],
+    "password": [
+      {
+        "key": "placeholder",
+        "message": "Password"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Back"
+      }
+    ],
+    "current-bans-ban-id": [
+      {
+        "key": "innerHTML",
+        "message": "Ban ID"
+      }
+    ],
+    "current-bans-banned-role": [
+      {
+        "key": "innerHTML",
+        "message": "Banned role"
+      }
+    ],
+    "current-bans-expiration": [
+      {
+        "key": "innerHTML",
+        "message": "Expiration"
+      }
+    ],
+    "current-bans-permanent": [
+      {
+        "key": "innerHTML",
+        "message": "Permanent"
+      }
+    ],
+    "current-bans-reason": [
+      {
+        "key": "innerHTML",
+        "message": "Reason"
+      }
+    ],
+    "current-bans-banned-by": [
+      {
+        "key": "innerHTML",
+        "message": "Banned by"
+      }
+    ],
+    "create-ban-button": [
+      {
+        "key": "innerHTML",
+        "message": "Ban user"
+      }
+    ],
+    "user-details-container-title": [
+      {
+        "key": "innerHTML",
+        "message": "Selected user"
+      }
+    ],
+    "user-details-user-id-title": [
+      {
+        "key": "innerHTML",
+        "message": "User ID"
+      }
+    ],
+    "user-details-username-title": [
+      {
+        "key": "innerHTML",
+        "message": "Username"
+      }
+    ],
+    "user-details-email-title": [
+      {
+        "key": "innerHTML",
+        "message": "Email"
+      }
+    ],
+    "no-current-bans-text": [
+      {
+        "key": "innerHTML",
+        "message": "User is not banned."
+      }
+    ],
+    "close-user-details-button": [
+      {
+        "key": "innerHTML",
+        "message": "Close"
+      }
+    ],
+    "user-details-title": [
+      {
+        "key": "innerHTML",
+        "message": "Bans of user"
+      }
+    ]
+  },
+  "additionalContent": {
+    "select-role": "Select role",
+    "true": "Yes",
+    "false": "No",
+    "select-banned-role": "Select role to ban!",
+    "duration-too-low": "Duration too low (min. 1)",
+    "select-chrono-unit": "Select time unit!",
+    "blank-reason": "Reason must not be blank.",
+    "blank-password": "Password must not be empty",
+    "user-banned": "User banned.",
+    "revoke-button": "Revoke",
+    "confirm-revoke-ban-confirmation-dialog-title": "Confirm revoke ban",
+    "confirm-revoke-ban-confirmation-dialog-detail": "Are you sure you want to revoke ban of role <SPAN class='red'>{bannedRole}</SPAN>?",
+    "password": "Password",
+    "revoke-ban": "Revoke ban",
+    "cancel": "Cancel",
+    "ban-revoked": "Ban revoked."
+  }
+}

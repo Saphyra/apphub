@@ -50,6 +50,8 @@ scriptLoader.loadScript("/res/notebook/js/content/content_controller.js");
         function(eventType){
             return eventType == events.CATEGORY_SAVED
         },
-        pageController.openMainPage
+        pageController.openMainPage,
+        false,
+        "Open main page after category saved"
     ));
 })();

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.message_sender.session;
 
-import com.github.saphyra.apphub.api.user.client.UserAuthenticationApiClient;
+import com.github.saphyra.apphub.api.user.client.UserAuthenticationClient;
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 class WsSessionUserIdProvider {
-    private final UserAuthenticationApiClient userAuthenticationApi;
+    private final UserAuthenticationClient userAuthenticationApi;
     private final WsSessionLocaleProvider localeProvider;
     private final WsSessionAccessTokenProvider accessTokenProvider;
     private final WsSessionCookieParser cookieParser;

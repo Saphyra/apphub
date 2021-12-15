@@ -1,11 +1,8 @@
 (function LogoutService(){
-    events.LOGOUT = "logout";
+    window.logoutService = new function(){
+        this.logout = logout;
+    }
 
-    eventProcessor.registerProcessor(new EventProcessor(
-            function(eventType){return eventType === events.LOGOUT},
-            logout
-        ));
-    
     function logout(){
         const request = new Request(Mapping.getEndpoint("LOGOUT"));
             request.processValidResponse = function(){

@@ -8,17 +8,6 @@ spring:
 liquibase:
   schema: skyxplore
 
-role:
-  settings:
-    - pattern: /api/skyxplore/**
-      methods:
-        - GET
-        - DELETE
-        - POST
-        - PUT
-      requiredRoles:
-        - SKYXPLORE
-
 logging:
   level:
     com:

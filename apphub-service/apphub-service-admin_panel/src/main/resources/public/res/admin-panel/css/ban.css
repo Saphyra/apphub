@@ -1,0 +1,106 @@
+:root{
+    --search-container-height: 2.5rem;
+    --search-button-width: 10rem;
+    --user-details-container-height: 11rem;
+    --add-ban-container-height: 18rem;
+}
+
+#search-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--search-container-height);
+    border-bottom: 3px ridge white;
+    text-align: center;
+}
+
+    #search{
+        width: calc(90% - var(--search-button-width));
+    }
+
+    #search-button{
+        width: var(--search-button-width);
+    }
+
+#user-list-container{
+    position: absolute;
+    top: var(--search-container-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    padding: 1rem;
+}
+
+     #no-result, #search-text-too-short{
+        margin-top: 1rem;
+        font-size: 1.5rem;
+        text-align: center;
+     }
+
+     #search-result{
+        margin: auto;
+     }
+
+        #search-result-content tr *{
+            cursor: pointer;
+        }
+
+#user-details-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--user-details-container-height);
+    font-size: 1.5rem;
+    line-height: 1.25;
+    padding: 1rem;
+}
+
+#current-bans-container{
+    position: absolute;
+    top: var(--user-details-container-height);
+    left: 0;
+    right: 0;
+    bottom: var(--add-ban-container-height);
+    overflow: auto;
+}
+
+    #current-bans-table{
+        margin: auto;
+    }
+
+        #current-bans textarea{
+            background: transparent;
+            border: none;
+            margin: 0;
+        }
+
+#add-ban-container{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--add-ban-container-height);
+    border-top: 3px ridge white;
+    padding: 0.5rem 1rem;
+}
+
+    #no-current-bans-text{
+        text-align: center;
+        font-size: 2rem;
+        padding: 1rem;
+    }
+
+    #reason{
+        margin: 1rem 0;
+        display: block;
+        width: 100%;
+        height: 4rem;
+    }
+
+#revoke-role-confirm-password-container{
+    text-align: center;
+    margin: 1rem;
+}

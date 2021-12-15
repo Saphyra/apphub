@@ -1,0 +1,4 @@
+{
+  "USER_PERMANENTLY_BANNED": "You are permanently banned. Please contact support if you have any questions.",
+  "USER_BANNED": "You are banned until {expiration}. Please contact support if you have any questions."
+}

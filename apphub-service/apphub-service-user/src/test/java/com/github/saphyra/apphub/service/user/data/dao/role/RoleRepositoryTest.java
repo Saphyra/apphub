@@ -22,7 +22,8 @@ public class RoleRepositoryTest {
     private static final String ROLE_ID_2 = "role-id-2";
     private static final String USER_ID_1 = "user-id-1";
     private static final String USER_ID_2 = "user-id-2";
-    private static final String ROLE = "role";
+    private static final String ROLE_1 = "role-1";
+    private static final String ROLE_2 = "role-2";
 
     @Autowired
     private RoleRepository underTest;
@@ -37,16 +38,16 @@ public class RoleRepositoryTest {
         RoleEntity entity1 = RoleEntity.builder()
             .roleId(ROLE_ID_1)
             .userId(USER_ID_1)
-            .role(ROLE)
+            .role(ROLE_1)
             .build();
         RoleEntity entity2 = RoleEntity.builder()
             .roleId(ROLE_ID_2)
             .userId(USER_ID_2)
-            .role(ROLE)
+            .role(ROLE_1)
             .build();
         underTest.saveAll(Arrays.asList(entity1, entity2));
 
-        Optional<RoleEntity> result = underTest.findByUserIdAndRole(USER_ID_1, ROLE);
+        Optional<RoleEntity> result = underTest.findByUserIdAndRole(USER_ID_1, ROLE_1);
 
         assertThat(result).contains(entity1);
     }
@@ -56,12 +57,12 @@ public class RoleRepositoryTest {
         RoleEntity entity1 = RoleEntity.builder()
             .roleId(ROLE_ID_1)
             .userId(USER_ID_1)
-            .role(ROLE)
+            .role(ROLE_1)
             .build();
         RoleEntity entity2 = RoleEntity.builder()
             .roleId(ROLE_ID_2)
             .userId(USER_ID_2)
-            .role(ROLE)
+            .role(ROLE_1)
             .build();
         underTest.saveAll(Arrays.asList(entity1, entity2));
 
@@ -76,17 +77,37 @@ public class RoleRepositoryTest {
         RoleEntity entity1 = RoleEntity.builder()
             .roleId(ROLE_ID_1)
             .userId(USER_ID_1)
-            .role(ROLE)
+            .role(ROLE_1)
             .build();
         RoleEntity entity2 = RoleEntity.builder()
             .roleId(ROLE_ID_2)
             .userId(USER_ID_2)
-            .role(ROLE)
+            .role(ROLE_1)
             .build();
         underTest.saveAll(Arrays.asList(entity1, entity2));
 
         underTest.deleteByUserId(USER_ID_2);
 
         assertThat(underTest.findAll()).containsExactly(entity1);
+    }
+
+    @Test
+    @Transactional
+    public void deleteByRole() {
+        RoleEntity entity1 = RoleEntity.builder()
+            .roleId(ROLE_ID_1)
+            .userId(USER_ID_1)
+            .role(ROLE_1)
+            .build();
+        RoleEntity entity2 = RoleEntity.builder()
+            .roleId(ROLE_ID_2)
+            .userId(USER_ID_2)
+            .role(ROLE_2)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2));
+
+        underTest.deleteByRole(ROLE_1);
+
+        assertThat(underTest.findAll()).containsExactly(entity2);
     }
 }

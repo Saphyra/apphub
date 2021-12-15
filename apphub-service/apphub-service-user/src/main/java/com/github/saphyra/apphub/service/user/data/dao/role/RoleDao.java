@@ -28,4 +28,8 @@ public class RoleDao extends AbstractDao<RoleEntity, Role, String, RoleRepositor
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }
+
+    public void deleteByRole(String role) {
+        repository.deleteByRole(role);
+    }
 }

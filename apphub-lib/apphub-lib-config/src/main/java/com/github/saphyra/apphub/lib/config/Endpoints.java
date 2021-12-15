@@ -8,6 +8,8 @@ public class Endpoints {
     public static final String ADMIN_PANEL_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/role-management";
     public static final String ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/disabled-role-management";
     public static final String ADMIN_PANEL_ERROR_REPORT_PAGE = "/web/admin-panel/error-report";
+    public static final String ADMIN_PANEL_BAN_PAGE = "/web/admin-panel/ban";
+    public static final String ADMIN_PANEL_ROLES_FOR_ALL_PAGE = "/web/admin-panel/roles-for-all";
     public static final String ERROR_PAGE = "/web/error";
     public static final String NOTEBOOK_PAGE = "/web/notebook";
     public static final String SKYXPLORE_MAIN_MENU_PAGE = "/web/skyxplore";
@@ -26,6 +28,7 @@ public class Endpoints {
     //PLATFORM
     public static final String HEALTH = "/platform/health";
     public static final String TRANSLATE_ERROR_CODE = "/internal/localization/error-code";
+    public static final String TRANSLATE_KEY = "/internal/localization/key";
 
     public static final String REGISTER_PROCESSOR = "/platform/event-gateway";
     public static final String HEARTBEAT = "/platform/event-gateway/{serviceName}";
@@ -40,6 +43,7 @@ public class Endpoints {
     public static final String EVENT_MESSAGE_SENDER_PING_REQUEST = "/event/message-sender/ping-request";
     public static final String EVENT_MESSAGE_SENDER_CONNECTION_CLEANUP = "/event/message-sender/connection-cleanup";
     public static final String EVENT_TRIGGER_ACCOUNT_DELETION = "/event/user-data/trigger-account-deletion";
+    public static final String EVENT_TRIGGER_REVOKE_EXPIRED_BANS = "/event/user-data/trigger-remove-expired-bans";
 
     //WEB-SOCKET-MESSAGING
     public static final String WEB_SOCKET_SEND_MESSAGE = "/internal/message/{group}";
@@ -72,7 +76,12 @@ public class Endpoints {
     public static final String ACCOUNT_CHANGE_PASSWORD = "/api/user/account/password";
     public static final String ACCOUNT_DELETE_ACCOUNT = "/api/user/account";
     public static final String ACCOUNT_GET_LANGUAGES = "/api/user/data/languages";
-    public static final String ACCOUNT_BAN_USER = "/api/user/data/ban/{userId}";
+    public static final String USER_DATA_SEARCH_ACCOUNT = "/api/user/accounts";
+
+    //BAN USER
+    public static final String ACCOUNT_BAN_USER = "/api/user/ban";
+    public static final String ACCOUNT_REMOVE_BAN = "/api/user/ban/{banId}";
+    public static final String ACCOUNT_GET_BANS = "/api/user/ban/{userId}";
 
     //USER-DATA
     public static final String USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";
@@ -85,6 +94,9 @@ public class Endpoints {
     public static final String USER_DATA_DISABLE_ROLE = "/api/user/data/roles/{role}";
     public static final String USER_DATA_ENABLE_ROLE = "/api/user/data/roles/{role}";
     public static final String USER_DATA_GET_DISABLED_ROLES = "/api/user/data/roles/disabled";
+    public static final String USER_DATA_ADD_ROLE_TO_ALL = "/api/user/data/roles/all/{role}";
+    public static final String USER_DATA_REMOVE_ROLE_FROM_ALL = "/api/user/data/roles/all/{role}";
+    public static final String USER_DATA_ROLES_FOR_ALL_RESTRICTED = "/api/user/data/roles/restricted";
 
     //MODULES
     public static final String MODULES_GET_MODULES_OF_USER = "/api/modules";
