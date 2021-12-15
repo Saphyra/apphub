@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.integration.backend;
 
 import com.github.saphyra.apphub.integration.backend.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.common.TestBase;
+import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -41,13 +43,14 @@ public class BackEndTest extends TestBase {
     }
 
     @AfterMethod(alwaysRun = true)
-    public void cleanUpWsConnections(Method method) {
-        try {
-            ApphubWsClient.cleanUpConnections();
-        } finally {
-            log.debug("Available permits before releasing: {}", SEMAPHORE.availablePermits());
-            SEMAPHORE.release(1);
-            log.info("Available permits after releasing of {}: {}", method.getName(), SEMAPHORE.availablePermits());
-        }
+    public synchronized void cleanUpWsConnections(Method method) {
+        Future<?> result = EXECUTOR_SERVICE.submit(ApphubWsClient::cleanUpConnections);
+
+        AwaitilityWrapper.createDefault()
+            .until(result::isDone);
+
+        log.debug("Available permits before releasing: {}", SEMAPHORE.availablePermits());
+        SEMAPHORE.release(1);
+        log.info("Available permits after releasing of {}: {}", method.getName(), SEMAPHORE.availablePermits());
     }
 }

@@ -79,7 +79,7 @@ public class TestBase {
     }
 
     @AfterMethod(alwaysRun = true)
-    public void tearDownMethod() {
+    public synchronized void tearDownMethod() {
         deleteTestUsers();
 
         EMAIL_DOMAIN.remove();

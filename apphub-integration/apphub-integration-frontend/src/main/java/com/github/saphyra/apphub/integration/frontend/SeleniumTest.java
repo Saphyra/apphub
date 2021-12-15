@@ -35,7 +35,7 @@ public class SeleniumTest extends TestBase {
     private static final ThreadLocal<List<WebDriverWrapper>> driverWrappers = new ThreadLocal<>();
 
     @AfterMethod(alwaysRun = true)
-    public void afterMethod(ITestResult testResult) {
+    public synchronized void afterMethod(ITestResult testResult) {
         driverWrappers.get()
             .forEach(webDriverWrapper -> {
                 WebDriver driver = webDriverWrapper.getDriver();
