@@ -71,5 +71,7 @@ public class CancelFriendRequestTest extends BackEndTest {
 
         assertThat(senderClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_DELETED)).isPresent();
         assertThat(friendClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_DELETED)).isPresent();
+
+        ApphubWsClient.cleanUpConnections();
     }
 }

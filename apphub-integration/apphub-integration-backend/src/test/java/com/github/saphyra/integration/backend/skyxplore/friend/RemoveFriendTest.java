@@ -79,5 +79,7 @@ public class RemoveFriendTest extends BackEndTest {
 
         assertThat(senderClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED)).isPresent();
         assertThat(friendClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED)).isPresent();
+
+        ApphubWsClient.cleanUpConnections();
     }
 }

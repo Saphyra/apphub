@@ -104,5 +104,7 @@ public class CreateAndDeleteGameTest extends BackEndTest {
 
         savedGames = SkyXploreSavedGameActions.getSavedGames(language, accessTokenId1);
         assertThat(savedGames).isEmpty();
+
+        ApphubWsClient.cleanUpConnections();
     }
 }

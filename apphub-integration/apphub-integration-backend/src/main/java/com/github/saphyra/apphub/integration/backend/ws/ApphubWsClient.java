@@ -16,7 +16,6 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,7 +24,7 @@ import java.util.function.Predicate;
 
 @Slf4j
 public class ApphubWsClient extends WebSocketClient {
-    private static final ThreadLocal<List<WebSocketClient>> WS_CONNECTIONS = ThreadLocal.withInitial(ArrayList::new);
+    private static final ThreadLocal<List<WebSocketClient>> WS_CONNECTIONS = ThreadLocal.withInitial(Vector::new);
 
     private final List<WebSocketEvent> messages = new Vector<>();
 
@@ -76,10 +75,14 @@ public class ApphubWsClient extends WebSocketClient {
         }
     }
 
+    public static List<WebSocketClient> getClients() {
+        return WS_CONNECTIONS.get();
+    }
+
     public void send(WebSocketEvent event) {
         AwaitilityWrapper.createDefault()
             .until(this::isOpen)
-            .assertTrue("WebSocket is not connected.");
+            .assertTrue("WebSocket is not connected. Failed sending event " + event.getPayload());
         send(TestBase.OBJECT_MAPPER_WRAPPER.writeValueAsString(event));
     }
 
@@ -114,9 +117,12 @@ public class ApphubWsClient extends WebSocketClient {
     }
 
     public static void cleanUpConnections() {
+        log.debug("Cleaning up connections...");
         WS_CONNECTIONS.get()
+            .stream()
+            .filter(WebSocketClient::isOpen)
             .forEach(WebSocketClient::close);
-        WS_CONNECTIONS.get().clear();
+        WS_CONNECTIONS.remove();
     }
 
     public Optional<WebSocketEvent> awaitForEvent(WebSocketEventName eventName) {

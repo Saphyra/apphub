@@ -24,7 +24,7 @@ public class AcceptInvitationTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
     @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
-    public void forbiddenOperation(Language language) {
+    public void acceptInvitation(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);

@@ -50,5 +50,7 @@ public class UserDeletedDuringTheGameTest extends BackEndTest {
             .orElseThrow(() -> new RuntimeException("Redirect event not arrived"));
 
         assertThat(event.getPayload()).isEqualTo(Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
+
+        ApphubWsClient.cleanUpConnections();
     }
 }

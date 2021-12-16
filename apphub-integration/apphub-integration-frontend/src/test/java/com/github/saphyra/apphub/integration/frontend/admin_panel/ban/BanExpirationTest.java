@@ -26,7 +26,7 @@ import java.util.concurrent.Future;
 public class BanExpirationTest extends SeleniumTest {
     private static final String REASON = "reason";
 
-    @Test
+    @Test(priority = -1)
     public void userCanAccessApplicationWhenBanExpired() {
         WebDriver testDriver = extractDriver();
         WebDriver adminDriver = extractDriver();

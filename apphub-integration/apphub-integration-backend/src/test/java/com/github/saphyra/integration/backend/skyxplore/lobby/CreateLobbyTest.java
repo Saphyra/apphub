@@ -24,7 +24,7 @@ public class CreateLobbyTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
     @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
-    public void validation(Language language) {
+    public void createLobby(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);

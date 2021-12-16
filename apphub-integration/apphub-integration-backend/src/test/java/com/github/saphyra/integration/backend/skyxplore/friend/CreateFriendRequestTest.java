@@ -70,5 +70,7 @@ public class CreateFriendRequestTest extends BackEndTest {
         SkyXploreFriendActions.acceptFriendRequest(language, accessTokenId2, friendRequestId);
         Response friendshipAlreadyExistsResponse = SkyXploreFriendActions.getCreateFriendRequestResponse(language, accessTokenId, userId2);
         verifyErrorResponse(language, friendshipAlreadyExistsResponse, 409, ErrorCode.FRIENDSHIP_ALREADY_EXISTS);
+
+        ApphubWsClient.cleanUpConnections();
     }
 }

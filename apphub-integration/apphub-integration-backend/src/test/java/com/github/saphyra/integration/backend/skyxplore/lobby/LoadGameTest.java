@@ -111,5 +111,7 @@ public class LoadGameTest extends BackEndTest {
         //Check game loading process
         hostLobbyClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED)
             .orElseThrow(() -> new RuntimeException("Game not loaded."));
+
+        ApphubWsClient.cleanUpConnections();
     }
 }

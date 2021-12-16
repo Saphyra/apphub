@@ -79,6 +79,7 @@ public class LeaveChatRoomTest extends BackEndTest {
         assertThat(message.getUserId()).isEqualTo(userId1);
         assertThat(message.getCharacterName()).isEqualTo(characterModel1.getName());
         assertThat(message.getRoom()).isEqualTo(roomId);
-    }
 
+        ApphubWsClient.cleanUpConnections();
+    }
 }

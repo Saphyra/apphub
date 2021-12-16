@@ -46,5 +46,7 @@ public class GetActiveFriendsTest extends BackEndTest {
         List<ActiveFriendResponse> activeFriends = SkyXploreFriendActions.getActiveFriends(language, accessTokenId1);
         assertThat(activeFriends).hasSize(1);
         assertThat(activeFriends).containsExactly(ActiveFriendResponse.builder().friendId(userId2).friendName(characterModel2.getName()).build());
+
+        ApphubWsClient.cleanUpConnections();
     }
 }

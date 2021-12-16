@@ -40,7 +40,7 @@
                 <version>${versions.maven-surefire-plugin}</version>
                 <configuration>
                     <parallel>methods</parallel>
-                    <threadCount>30</threadCount>
+                    <threadCount>15</threadCount>
                 </configuration>
             </plugin>
         </plugins>

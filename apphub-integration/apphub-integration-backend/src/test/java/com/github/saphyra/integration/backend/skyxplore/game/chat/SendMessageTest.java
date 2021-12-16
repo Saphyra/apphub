@@ -61,5 +61,7 @@ public class SendMessageTest extends BackEndTest {
             .build();
         assertThat(hostClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_CHAT_SEND_MESSAGE).map(event -> event.getPayloadAs(OutgoingChatWsMessageForGame.class))).contains(expectedMessage);
         assertThat(memberClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_CHAT_SEND_MESSAGE).map(event -> event.getPayloadAs(OutgoingChatWsMessageForGame.class))).contains(expectedMessage);
+
+        ApphubWsClient.cleanUpConnections();
     }
 }

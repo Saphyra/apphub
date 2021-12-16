@@ -106,5 +106,7 @@ public class ExitFromLobbyTest extends BackEndTest {
         rejectInvitationEvent = mainMenuClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION)
             .orElseThrow(() -> new RuntimeException("RejectInvitation event did not arrive."));
         assertThat(rejectInvitationEvent.getPayload()).isEqualTo(userId2.toString());
+
+        ApphubWsClient.cleanUpConnections();
     }
 }

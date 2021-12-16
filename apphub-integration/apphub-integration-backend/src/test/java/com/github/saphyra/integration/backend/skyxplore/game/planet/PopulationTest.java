@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.integration.backend.model.skyxplore.Player;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkillResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkillType;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.integration.backend.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
@@ -72,6 +73,8 @@ public class PopulationTest extends BackEndTest {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Citizen not found with id " + citizen.getCitizenId()));
         assertThat(modifiedCitizen.getName()).isEqualTo(NEW_NAME);
+
+        ApphubWsClient.cleanUpConnections();
     }
 
     private void validate(CitizenResponse citizenResponse) {
