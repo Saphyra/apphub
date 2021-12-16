@@ -120,7 +120,7 @@ public class ApphubWsClient extends WebSocketClient {
         log.debug("Cleaning up connections...");
         WS_CONNECTIONS.get()
             .stream()
-            .filter(WebSocketClient::isOpen)
+            .parallel()
             .forEach(WebSocketClient::close);
         WS_CONNECTIONS.remove();
     }
