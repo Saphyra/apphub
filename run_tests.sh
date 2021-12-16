@@ -11,6 +11,13 @@ cd apphub-integration || exit
 mvn -DargLine="-DserverPort=$SERVER_PORT -DdatabasePort=$DATABASE_PORT -Dheadless=$HEADLESS -DpreCreateDrivers=true -DretryEnabled=true -DrestLoggingEnabled=false -DdisabledGroups=$DISABLED_GROUPS" clean test
 if [[ "$TEST_RESULT" -ne 0 ]]; then
   echo "Tests failed"
+  cd .. || exit
+
+  ./release_port.sh $SERVER_PORT
+  ./release_port.sh $DATABASE_PORT
+
+  taskkill //F //IM chromedriver.exe //T
+  exit
 else
   echo "Tests passed successfully"
 fi
