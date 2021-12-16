@@ -109,5 +109,7 @@ public class CreateChatRoomTest extends BackEndTest {
             .map(webSocketEvent -> webSocketEvent.orElseThrow(() -> new RuntimeException("ChatRoomCreated message has not arrived")))
             .map(event -> event.getPayloadAs(ChatRoomCreatedMessage.class))
             .forEach(chatRoomCreatedMessage -> assertThat(chatRoomCreatedMessage.getTitle()).isEqualTo(ROOM_TITLE));
+
+        ApphubWsClient.cleanUpConnections();
     }
 }

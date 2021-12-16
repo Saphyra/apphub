@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.integration.backend.model.skyxplore.PlanetLocat
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.Player;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.PriorityType;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.integration.backend.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.StringIntMap;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -65,5 +66,7 @@ public class PriorityTest extends BackEndTest {
         assertThat(updateResponse.getStatusCode()).isEqualTo(200);
         Map<String, Integer> modifiedPriorities = SkyXplorePriorityActions.getPriorities(language, accessTokenId1, planet.getPlanetId());
         assertThat(modifiedPriorities).containsEntry(PriorityType.CONSTRUCTION.name().toLowerCase(), 7);
+
+        ApphubWsClient.cleanUpConnections();
     }
 }

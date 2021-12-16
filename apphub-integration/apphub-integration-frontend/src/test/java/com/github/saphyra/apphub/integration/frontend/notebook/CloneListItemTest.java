@@ -40,7 +40,7 @@ public class CloneListItemTest extends SeleniumTest {
     private static final String CHECKLIST_TABLE_COLUMN_NAME = "checklist-table-column-name";
     private static final String CHECKLIST_TABLE_COLUMN_VALUE = "checklist-table-column-value";
 
-    @Test
+    @Test(priority = -1)
     public void cloneListItem() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

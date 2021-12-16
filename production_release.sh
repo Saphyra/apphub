@@ -25,6 +25,4 @@ NAMESPACE_NAME="production"
 
 echo "Deployment finished."
 
-taskkill //F //IM chromedriver.exe //T
-
 start ./pp.sh

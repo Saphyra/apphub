@@ -92,6 +92,8 @@ public class GetPlayersTest extends BackEndTest {
 
         assertThat(characters).hasSize(1);
         assertThat(characters.get(0).getName()).isEqualTo(characterModel2.getName());
+
+        ApphubWsClient.cleanUpConnections();
     }
 
     private void acceptInvitation(Language language, UUID accessTokenId, ApphubWsClient wsClient) {

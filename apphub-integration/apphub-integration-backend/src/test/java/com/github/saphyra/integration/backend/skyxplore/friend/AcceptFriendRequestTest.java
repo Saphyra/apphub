@@ -77,5 +77,7 @@ public class AcceptFriendRequestTest extends BackEndTest {
 
         assertThat(senderClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_ACCEPTED)).isPresent();
         assertThat(friendClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_ACCEPTED)).isPresent();
+
+        ApphubWsClient.cleanUpConnections();
     }
 }

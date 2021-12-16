@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.integration.backend.model.skyxplore.MapSolarSys
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.PlanetLocationResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.Player;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.integration.backend.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
@@ -73,5 +74,7 @@ public class RenameSolarSystemAndPlanet extends BackEndTest {
         SkyXplorePlanetActions.renamePlanet(language, accessTokenId1, planetLocationResponse.getPlanetId(), NEW_PLANET_NAME);
 
         assertThat(SkyXploreSolarSystemActions.findPlanet(language, accessTokenId1, solarSystemResponse.getSolarSystemId(), planetLocationResponse.getPlanetId()).getPlanetName()).isEqualTo(NEW_PLANET_NAME);
+
+        ApphubWsClient.cleanUpConnections();
     }
 }

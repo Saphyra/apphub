@@ -17,10 +17,10 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetFriendCandidatesTest extends BackEndTest {
-    private static final String CHARACTER_IDENTIFIER = UUID.randomUUID().toString().substring(0, 6);
-
     @Test(groups = "skyxplore")
     public void getFriendCandidates() {
+        String characterIdentifier = UUID.randomUUID().toString().substring(0, 6);
+
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -37,16 +37,16 @@ public class GetFriendCandidatesTest extends BackEndTest {
         UUID accessTokenId4 = IndexPageActions.registerAndLogin(language, userData4);
         UUID userId4 = DatabaseUtil.getUserIdByEmail(userData4.getEmail());
 
-        SkyXploreCharacterModel model = SkyXploreCharacterModel.valid(CHARACTER_IDENTIFIER);
+        SkyXploreCharacterModel model = SkyXploreCharacterModel.valid(characterIdentifier);
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
 
-        SkyXploreCharacterModel model2 = SkyXploreCharacterModel.valid(CHARACTER_IDENTIFIER);
+        SkyXploreCharacterModel model2 = SkyXploreCharacterModel.valid(characterIdentifier);
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model2);
 
-        SkyXploreCharacterModel model3 = SkyXploreCharacterModel.valid(CHARACTER_IDENTIFIER);
+        SkyXploreCharacterModel model3 = SkyXploreCharacterModel.valid(characterIdentifier);
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId3, model3);
 
-        SkyXploreCharacterModel model4 = SkyXploreCharacterModel.valid(CHARACTER_IDENTIFIER);
+        SkyXploreCharacterModel model4 = SkyXploreCharacterModel.valid(characterIdentifier);
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId4, model4);
 
         SkyXploreFriendActions.createFriendRequest(language, accessTokenId, userId2);
@@ -60,7 +60,7 @@ public class GetFriendCandidatesTest extends BackEndTest {
             .orElseThrow(() -> new RuntimeException("FriendRequest not found"));
         SkyXploreFriendActions.acceptFriendRequest(language, accessTokenId3, friendRequestId);
 
-        List<SkyXploreCharacterModel> result = SkyXploreFriendActions.getFriendCandidates(language, accessTokenId, CHARACTER_IDENTIFIER.toUpperCase());
+        List<SkyXploreCharacterModel> result = SkyXploreFriendActions.getFriendCandidates(language, accessTokenId, characterIdentifier.toUpperCase());
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getId()).isEqualTo(userId4);

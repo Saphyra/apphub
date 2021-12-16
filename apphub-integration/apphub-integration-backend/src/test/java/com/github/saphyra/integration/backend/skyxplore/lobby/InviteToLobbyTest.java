@@ -28,7 +28,7 @@ public class InviteToLobbyTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
     @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
-    public void invite(Language language) {
+    public void inviteToLobby(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);
@@ -84,5 +84,7 @@ public class InviteToLobbyTest extends BackEndTest {
         payload = event.getPayloadAs(LobbyInvitationWsMessage.class);
         assertThat(payload.getSenderId()).isEqualTo(userId3);
         assertThat(payload.getSenderName()).isEqualTo(characterModel3.getName());
+
+        ApphubWsClient.cleanUpConnections();
     }
 }

@@ -79,14 +79,15 @@ public class TestBase {
     }
 
     @AfterMethod(alwaysRun = true)
-    public synchronized void tearDownMethod() {
-        deleteTestUsers();
+    public void tearDownMethod(Method method) {
+        deleteTestUsers(method.getName());
 
         EMAIL_DOMAIN.remove();
+        log.debug("Test {} completed", method.getName());
     }
 
-    private static void deleteTestUsers() {
-        log.debug("Deleting testUsers...");
+    private synchronized static void deleteTestUsers(String method) {
+        log.debug("Deleting testUsers for method {}...", method);
         DatabaseUtil.setMarkedForDeletionByEmailLike(getEmailDomain());
     }
 }

@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.integration.backend.model.skyxplore.Player;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.StorageSettingModel;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.StorageSettingsResponse;
+import com.github.saphyra.apphub.integration.backend.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -112,6 +113,8 @@ public class StorageSettingCrudTest extends BackEndTest {
         SkyXploreStorageSettingActions.deleteStorageSetting(language, accessTokenId1, planet.getPlanetId(), storageSettingId);
         StorageSettingsResponse storageSettingsResponse = SkyXploreStorageSettingActions.getStorageSettings(language, accessTokenId1, planet.getPlanetId());
         assertThat(storageSettingsResponse.getCurrentSettings()).isEmpty();
+
+        ApphubWsClient.cleanUpConnections();
     }
 
     private void create_runValidationTest(Language language, UUID accessTokenId, UUID planetId, StorageSettingModel model, String key, String value) {
