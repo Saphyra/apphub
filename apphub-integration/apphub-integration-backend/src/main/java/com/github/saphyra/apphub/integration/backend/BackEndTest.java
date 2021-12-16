@@ -42,8 +42,9 @@ public class BackEndTest extends TestBase {
         boolean wsConnectionsCleaned = ApphubWsClient.getClients().isEmpty();
         if (!wsConnectionsCleaned) {
             log.error("WsConnections not cleaned for method {}", method.getName(), new RuntimeException());
+            ApphubWsClient.cleanUpConnections();
         }
-        assertThat(wsConnectionsCleaned).isTrue();
+        assertThat(ApphubWsClient.getClients().isEmpty()).isTrue();
 
         log.debug("Available permits before releasing: {}", SEMAPHORE.availablePermits());
         SEMAPHORE.release(1);
