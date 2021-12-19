@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.integration.frontend;
 
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
+import com.github.saphyra.apphub.integration.common.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +27,11 @@ import static java.util.Objects.isNull;
 @Slf4j
 class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
     private static final int BROWSER_STARTUP_LIMIT = 3;
-    private static final int MAX_DRIVER_COUNT = 15;
+    private static final int MAX_DRIVER_COUNT = 50;
+    private static final int PRE_CREATE_COUNT = 15;
 
     private static final GenericObjectPoolConfig<WebDriverWrapper> DRIVER_POOL_CONFIG = new GenericObjectPoolConfig<>();
+
 
     static {
         DRIVER_POOL_CONFIG.setMaxTotal(MAX_DRIVER_COUNT);
@@ -39,7 +42,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
     private static final GenericObjectPool<WebDriverWrapper> DRIVER_POOL = new GenericObjectPool<>(new WebDriverFactory(), DRIVER_POOL_CONFIG);
 
     public static void startDrivers() throws Exception {
-        DRIVER_POOL.addObjects(MAX_DRIVER_COUNT);
+        DRIVER_POOL.addObjects(PRE_CREATE_COUNT);
     }
 
     public static WebDriverWrapper getDriver() throws Exception {
@@ -87,6 +90,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
 
                 driver = new ChromeDriver(options);
                 log.info("Driver created: {}", driver);
+                SleepUtil.sleep(1000);
                 driver.navigate().to(UrlFactory.create(Endpoints.ERROR_PAGE));
                 return driver;
             } catch (Exception e) {
