@@ -1,8 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service;
 
-import com.github.saphyra.apphub.api.user.client.UserAuthenticationClient;
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
-import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -19,16 +17,12 @@ import static org.mockito.BDDMockito.given;
 public class AccessTokenQueryServiceTest {
     private static final String ACCESS_TOKEN_ID_STRING = "access-token-id";
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
-    private static final String LOCALE = "locale";
 
     @Mock
     private AccessTokenIdConverter accessTokenIdConverter;
 
     @Mock
-    private CommonConfigProperties commonConfigProperties;
-
-    @Mock
-    private UserAuthenticationClient authenticationApi;
+    private AccessTokenCache accessTokenCache;
 
     @InjectMocks
     private AccessTokenQueryService underTest;
@@ -39,8 +33,7 @@ public class AccessTokenQueryServiceTest {
     @Test
     public void getAccessToken() {
         given(accessTokenIdConverter.convertAccessTokenId(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.of(ACCESS_TOKEN_ID));
-        given(authenticationApi.getAccessTokenById(ACCESS_TOKEN_ID, LOCALE)).willReturn(accessTokenResponse);
-        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
+        given(accessTokenCache.get(ACCESS_TOKEN_ID)).willReturn(Optional.of(accessTokenResponse));
 
         assertThat(underTest.getAccessToken(ACCESS_TOKEN_ID_STRING)).contains(accessTokenResponse);
     }
@@ -48,8 +41,7 @@ public class AccessTokenQueryServiceTest {
     @Test
     public void error() {
         given(accessTokenIdConverter.convertAccessTokenId(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.of(ACCESS_TOKEN_ID));
-        given(authenticationApi.getAccessTokenById(ACCESS_TOKEN_ID, LOCALE)).willThrow(new RuntimeException());
-        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
+        given(accessTokenCache.get(ACCESS_TOKEN_ID)).willReturn(Optional.empty());
 
         assertThat(underTest.getAccessToken(ACCESS_TOKEN_ID_STRING)).isEmpty();
     }

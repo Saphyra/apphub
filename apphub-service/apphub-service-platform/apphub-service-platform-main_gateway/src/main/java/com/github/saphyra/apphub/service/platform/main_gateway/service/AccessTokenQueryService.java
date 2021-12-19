@@ -1,8 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service;
 
-import com.github.saphyra.apphub.api.user.client.UserAuthenticationClient;
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
-import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,8 +13,7 @@ import java.util.UUID;
 @Slf4j
 public class AccessTokenQueryService {
     private final AccessTokenIdConverter accessTokenIdConverter;
-    private final CommonConfigProperties commonConfigProperties;
-    private final UserAuthenticationClient authenticationApi;
+    private final AccessTokenCache accessTokenCache;
 
     public Optional<InternalAccessTokenResponse> getAccessToken(String accessTokenId) {
         return accessTokenIdConverter.convertAccessTokenId(accessTokenId)
@@ -25,7 +22,7 @@ public class AccessTokenQueryService {
 
     private Optional<InternalAccessTokenResponse> getAccessToken(UUID accessTokenId) {
         try {
-            return Optional.of(authenticationApi.getAccessTokenById(accessTokenId, commonConfigProperties.getDefaultLocale()));
+            return accessTokenCache.get(accessTokenId);
         } catch (Exception e) {
             log.debug("Failed to query accessToken by accessTokenId {}: {}", accessTokenId, e.getMessage());
             return Optional.empty();
