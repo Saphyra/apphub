@@ -5,8 +5,10 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.game.config.CommonSkyXploreConfiguration;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
@@ -21,6 +23,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
@@ -37,6 +40,8 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String USERNAME = "username";
     private static final String ROOM_ID = "room-id";
+    private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
+    private static final Integer ABANDONED_GAME_EXPIRATION_SECONDS = 34;
 
     @Mock
     private GameDao gameDao;
@@ -49,6 +54,12 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
 
     @Mock
     private MessageSenderProxy messageSenderProxy;
+
+    @Mock
+    private DateTimeUtil dateTimeUtil;
+
+    @Mock
+    private CommonSkyXploreConfiguration configuration;
 
     private SkyXploreGameWebSocketEventControllerImpl underTest;
 
@@ -80,6 +91,8 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
             .characterProxy(characterProxy)
             .handlers(Arrays.asList(webSocketEventHandler))
             .messageSenderProxy(messageSenderProxy)
+            .dateTimeUtil(dateTimeUtil)
+            .configuration(configuration)
             .build();
 
         given(characterProxy.getCharacterByUserId(USER_ID)).willReturn(SkyXploreCharacterModel.builder().name(USERNAME).build());
@@ -111,7 +124,7 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
         verify(player1).setConnected(true);
 
         verifyMessageSent(WebSocketEventName.SKYXPLORE_GAME_USER_JOINED);
-        verify(game).setMarkedForDeletion(false);
+        verify(game).setExpiresAt(null);
     }
 
     @Test
@@ -131,11 +144,13 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
     public void userLeftGame_noMoreConnectedMembers() {
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
         given(game.getPlayers()).willReturn(CollectionUtils.toMap(new BiWrapper<>(USER_ID, player1)));
+        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(configuration.getAbandonedGameExpirationSeconds()).willReturn(ABANDONED_GAME_EXPIRATION_SECONDS);
 
         underTest.userLeftGame(USER_ID);
 
         verify(player1).setConnected(false);
-        verify(gameDao).delete(game);
+        verify(game).setExpiresAt(CURRENT_DATE.plusSeconds(ABANDONED_GAME_EXPIRATION_SECONDS));
 
         verifyNoInteractions(messageSenderProxy);
     }

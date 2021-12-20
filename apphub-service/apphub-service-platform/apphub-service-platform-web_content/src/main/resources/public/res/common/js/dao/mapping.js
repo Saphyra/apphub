@@ -139,6 +139,7 @@ window.Mapping = new function(){
         SKYXPLORE_PLANET_UPDATE_PRIORITY: new Endpoint("/api/skyxplore/game/planet/{planetId}/priority/{priorityType}", HttpMethod.POST),
         SKYXPLORE_PLANET_RENAME: new Endpoint("/api/skyxplore/game/planet/{planetId}/name", HttpMethod.POST),
         SKYXPLORE_SOLAR_SYSTEM_RENAME: new Endpoint("/api/skyxplore/game/solar-system/{solarSystemId}/name", HttpMethod.POST),
+        SKYXPLORE_EXIT_GAME: new Endpoint("/api/skyxplore/game", HttpMethod.DELETE),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

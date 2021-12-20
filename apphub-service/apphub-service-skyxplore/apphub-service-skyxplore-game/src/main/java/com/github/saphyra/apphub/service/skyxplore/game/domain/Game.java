@@ -26,7 +26,7 @@ public class Game {
     private final Map<UUID, Alliance> alliances;
     private final Universe universe;
     private final LocalDateTime lastPlayed;
-    private boolean markedForDeletion;
+    private LocalDateTime expiresAt;
 
     private final Chat chat;
 

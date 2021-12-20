@@ -141,7 +141,11 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_contr
             "exit-game-confirmation-dialog",
             confirmationDialogLocalization,
             function(){
-                window.location.href = Mapping.SKYXPLORE_PAGE;
+                const request = new Request(Mapping.getEndpoint("SKYXPLORE_EXIT_GAME"));
+                    request.processValidResponse = function(){
+                        window.location.href = Mapping.SKYXPLORE_PAGE;
+                    }
+                dao.sendRequestAsync(request);
             }
         );
     }
