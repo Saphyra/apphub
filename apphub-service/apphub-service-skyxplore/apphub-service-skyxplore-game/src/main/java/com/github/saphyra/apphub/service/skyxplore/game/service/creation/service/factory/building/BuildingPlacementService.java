@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingDa
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.BuildingFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

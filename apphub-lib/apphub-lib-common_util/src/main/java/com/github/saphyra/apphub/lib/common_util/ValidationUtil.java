@@ -35,4 +35,24 @@ public class ValidationUtil {
             throw ExceptionFactory.invalidParam(field, "too short");
         }
     }
+
+    public static void atLeast(Integer value, int minValue, String field) {
+        notNull(value, field);
+        if (value < minValue) {
+            throw ExceptionFactory.invalidParam(field, "too low");
+        }
+    }
+
+    public static void maximum(Integer value, Integer max, String field) {
+        notNull(value, field);
+        if (value > max) {
+            throw ExceptionFactory.invalidParam(field, "too high");
+        }
+    }
+
+    public static void betweenInclusive(Integer value, int min, int max, String field) {
+        notNull(value, field);
+        atLeast(value, min, field);
+        maximum(value, max, field);
+    }
 }

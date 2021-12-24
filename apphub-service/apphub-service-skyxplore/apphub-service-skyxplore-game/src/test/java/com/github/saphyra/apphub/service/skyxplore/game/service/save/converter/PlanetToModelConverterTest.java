@@ -17,6 +17,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -98,7 +99,7 @@ public class PlanetToModelConverterTest {
             .coordinate(coordinateModel)
             .size(SIZE)
             .population(new OptionalHashMap<>(CollectionUtils.singleValueMap(UUID.randomUUID(), citizen)))
-            .surfaces(CollectionUtils.singleValueMap(COORDINATE, surface))
+            .surfaces(new SurfaceMap(CollectionUtils.singleValueMap(COORDINATE, surface)))
             .storageDetails(storageDetails)
             .priorities(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION, PRIORITY))
             .owner(OWNER)

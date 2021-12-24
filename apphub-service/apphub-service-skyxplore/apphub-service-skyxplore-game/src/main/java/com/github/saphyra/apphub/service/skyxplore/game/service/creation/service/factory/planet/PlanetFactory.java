@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.common.CoordinateModelFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.surface.SurfaceFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,7 @@ class PlanetFactory {
             .coordinate(coordinateModelFactory.create(coordinate, gameId, planetId))
             .defaultName(String.format("%s %s", systemName, ALPHABET.charAt(planetIndex)))
             .size(planetSize)
-            .surfaces(surfaces)
+            .surfaces(new SurfaceMap(surfaces))
             .build();
     }
 }

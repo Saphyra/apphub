@@ -13,12 +13,7 @@ import org.springframework.stereotype.Component;
 public class FreeStorageQueryService {
     private final StorageCalculator storageCalculator;
     private final ActualResourceAmountQueryService actualResourceAmountQueryService;
-    private final AllocatedResourceAmountQueryService allocatedResourceAmountQueryService;
     private final ReservedStorageQueryService reservedStorageQueryService;
-
-    public int getUsableStoredResourceAmount(String dataId, Planet planet) {
-        return actualResourceAmountQueryService.getActualAmount(dataId, planet) - allocatedResourceAmountQueryService.getAllocatedResourceAmount(dataId, planet);
-    }
 
     public int getFreeStorage(Planet planet, StorageType storageType) {
         return storageCalculator.calculateCapacity(planet, storageType) - actualResourceAmountQueryService.getActualStorageAmount(planet, storageType) - reservedStorageQueryService.getReservedStorageCapacity(planet, storageType);

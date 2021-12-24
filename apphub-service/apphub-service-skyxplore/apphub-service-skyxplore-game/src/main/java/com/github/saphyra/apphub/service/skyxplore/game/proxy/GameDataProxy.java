@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -27,7 +28,11 @@ public class GameDataProxy {
     }
 
     public void saveItem(GameItem... model) {
-        dataGameClient.saveGameData(Arrays.asList(model), localeProvider.getOrDefault());
+        saveItems(Arrays.asList(model));
+    }
+
+    public void saveItems(List<GameItem> model) {
+        dataGameClient.saveGameData(model, localeProvider.getOrDefault());
     }
 
     public void deleteItem(UUID id, GameItemType type) {

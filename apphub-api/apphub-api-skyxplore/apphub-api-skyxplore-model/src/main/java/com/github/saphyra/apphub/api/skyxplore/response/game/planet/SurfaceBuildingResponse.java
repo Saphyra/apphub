@@ -15,4 +15,5 @@ public class SurfaceBuildingResponse {
     private UUID buildingId;
     private String dataId;
     private int level;
+    private ConstructionResponse construction;
 }

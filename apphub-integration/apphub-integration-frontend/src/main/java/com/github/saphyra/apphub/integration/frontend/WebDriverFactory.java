@@ -116,6 +116,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
                 log.error("Could not stop driver", e);
             }
         }
+        log.info("Driver {} is stopped.", webDriverWrapper.getId());
     }
 
     @Override

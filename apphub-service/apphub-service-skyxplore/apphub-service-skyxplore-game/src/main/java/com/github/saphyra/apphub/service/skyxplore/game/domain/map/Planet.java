@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.map;
 import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import lombok.AccessLevel;
@@ -31,7 +31,7 @@ public class Planet {
     private final OptionalMap<UUID, String> customNames = new OptionalHashMap<>();
     private final CoordinateModel coordinate;
     private final int size;
-    private final Map<Coordinate, Surface> surfaces;
+    private final SurfaceMap surfaces;
     private UUID owner;
 
     @Builder.Default
@@ -45,7 +45,7 @@ public class Planet {
 
     private static Map<PriorityType, Integer> getDefaultPriorities() {
         return Arrays.stream(PriorityType.values())
-            .collect(Collectors.toMap(Function.identity(), priorityType -> 5));
+            .collect(Collectors.toMap(Function.identity(), priorityType -> GameConstants.DEFAULT_PRIORITY));
     }
 
     public List<Building> getBuildings() {

@@ -15,9 +15,7 @@ import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FreeStorageQueryServiceTest {
-    private static final String DATA_ID = "data-id";
     private static final Integer ACTUAL_AMOUNT = 4325;
-    private static final Integer ALLOCATED_AMOUNT = 23;
     private static final Integer CAPACITY = 324234;
     private static final Integer RESERVED_STORAGE = 234;
 
@@ -28,9 +26,6 @@ public class FreeStorageQueryServiceTest {
     private ActualResourceAmountQueryService actualResourceAmountQueryService;
 
     @Mock
-    private AllocatedResourceAmountQueryService allocatedResourceAmountQueryService;
-
-    @Mock
     private ReservedStorageQueryService reservedStorageQueryService;
 
     @InjectMocks
@@ -38,16 +33,6 @@ public class FreeStorageQueryServiceTest {
 
     @Mock
     private Planet planet;
-
-    @Test
-    public void getUsableStoredResourceAmount() {
-        given(actualResourceAmountQueryService.getActualAmount(DATA_ID, planet)).willReturn(ACTUAL_AMOUNT);
-        given(allocatedResourceAmountQueryService.getAllocatedResourceAmount(DATA_ID, planet)).willReturn(ALLOCATED_AMOUNT);
-
-        int result = underTest.getUsableStoredResourceAmount(DATA_ID, planet);
-
-        assertThat(result).isEqualTo(ACTUAL_AMOUNT - ALLOCATED_AMOUNT);
-    }
 
     @Test
     public void getFreeStorage() {

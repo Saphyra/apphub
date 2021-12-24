@@ -23,6 +23,7 @@
   "MISSING_ROLE": "Ehhez a művelethez nincs jogosultságod.",
   "NO_SESSION_AVAILABLE": "Jelentkezz be újra!",
   "NON_TRANSLATED_ERROR": "${key}",
+  "NOT_ENOUGH_STORAGE": "Nincs elég {storageType} kapacitás.",
   "ROLE_ALREADY_EXISTS": "A felhasználó már rendelkezik a kiválasztott jogosultsággal.",
   "ROLE_NOT_FOUND": "A felhasználó nem rendelkezik a kiválasztott jogosultsággal.",
   "TOO_FREQUENT_INVITATIONS": "Ezt a játékost nem rég hívtad meg. Várj pár másodpercet, mielőtt újra próbálkozhatsz!",

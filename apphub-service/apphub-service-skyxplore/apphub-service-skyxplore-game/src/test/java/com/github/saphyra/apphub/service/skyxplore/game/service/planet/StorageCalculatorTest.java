@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.St
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -54,11 +55,13 @@ public class StorageCalculatorTest {
 
     @Test
     public void calculateCapacity() {
-        given(planet.getSurfaces()).willReturn(CollectionUtils.toMap(
-            new BiWrapper<>(new Coordinate(0, 0), emptySurface),
-            new BiWrapper<>(new Coordinate(0, 1), notStorageSurface),
-            new BiWrapper<>(new Coordinate(0, 2), storageSurface)
-        ));
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(
+            CollectionUtils.toMap(
+                new BiWrapper<>(new Coordinate(0, 0), emptySurface),
+                new BiWrapper<>(new Coordinate(0, 1), notStorageSurface),
+                new BiWrapper<>(new Coordinate(0, 2), storageSurface)
+            ))
+        );
 
         given(notStorageSurface.getBuilding()).willReturn(notStorageBuilding);
         given(storageSurface.getBuilding()).willReturn(storageBuilding);

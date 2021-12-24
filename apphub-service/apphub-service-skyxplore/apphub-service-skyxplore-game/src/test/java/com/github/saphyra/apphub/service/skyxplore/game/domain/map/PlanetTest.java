@@ -26,7 +26,7 @@ public class PlanetTest {
     @Test
     public void getBuildings() {
         Planet underTest = Planet.builder()
-            .surfaces(CollectionUtils.singleValueMap(coordinate, surface))
+            .surfaces(new SurfaceMap(CollectionUtils.singleValueMap(coordinate, surface)))
             .build();
         given(surface.getBuilding()).willReturn(building);
 

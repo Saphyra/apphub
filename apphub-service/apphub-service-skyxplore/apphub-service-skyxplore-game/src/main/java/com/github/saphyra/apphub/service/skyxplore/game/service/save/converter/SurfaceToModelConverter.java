@@ -34,7 +34,7 @@ public class SurfaceToModelConverter {
         result.add(convert(surface, game));
         result.add(surface.getCoordinate());
         if (!isNull(surface.getBuilding())) {
-            result.add(buildingConverter.convert(surface.getBuilding(), game));
+            result.add(buildingConverter.convert(surface.getBuilding(), game.getGameId()));
         }
         return result;
     }

@@ -2,18 +2,15 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BuildingToModelConverterTest {
@@ -26,9 +23,6 @@ public class BuildingToModelConverterTest {
     @InjectMocks
     private BuildingToModelConverter underTest;
 
-    @Mock
-    private Game game;
-
     @Test
     public void convert() {
         Building building = Building.builder()
@@ -38,9 +32,7 @@ public class BuildingToModelConverterTest {
             .surfaceId(SURFACE_ID)
             .build();
 
-        given(game.getGameId()).willReturn(GAME_ID);
-
-        BuildingModel result = underTest.convert(building, game);
+        BuildingModel result = underTest.convert(building, GAME_ID);
 
         assertThat(result.getId()).isEqualTo(BUILDING_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);

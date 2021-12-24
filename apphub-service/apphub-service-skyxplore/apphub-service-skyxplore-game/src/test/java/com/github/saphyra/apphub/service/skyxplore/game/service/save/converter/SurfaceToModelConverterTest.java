@@ -49,7 +49,7 @@ public class SurfaceToModelConverterTest {
     @Test
     public void convertDeep() {
         given(game.getGameId()).willReturn(GAME_ID);
-        given(buildingToModelConverter.convert(building, game)).willReturn(buildingModel);
+        given(buildingToModelConverter.convert(building, GAME_ID)).willReturn(buildingModel);
 
         Surface surface = Surface.builder()
             .surfaceId(SURFACE_ID)

@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorag
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.building_overview.PlanetBuildingOverviewQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.PlanetPopulationOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceResponseQueryService;
