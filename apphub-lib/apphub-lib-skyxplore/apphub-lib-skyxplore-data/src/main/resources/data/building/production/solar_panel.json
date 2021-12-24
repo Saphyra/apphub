@@ -27,6 +27,14 @@
         "iron": 1,
         "water": 1
       }
+    },
+    "2": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 10,
+        "iron": 10,
+        "water": 10
+      }
     }
   }
 }
