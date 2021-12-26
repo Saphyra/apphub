@@ -1,0 +1,29 @@
+#available-buildings{
+
+}
+
+    .available-building{
+        margin: 1rem;
+        text-align: center;
+        border: 3px ridge white;
+        border-radius: 10px;
+        padding-bottom: 0.5rem;
+    }
+
+        .available-building-title{
+            border-bottom: 3px ridge white;
+            font-size: 2rem;
+            padding: 0.5rem;
+        }
+
+        .available-building-description{
+            margin: 0.5rem;
+        }
+
+        .available-building-effect{
+
+        }
+
+        .available-building-construction-requirements{
+            margin: 1rem auto;
+        }

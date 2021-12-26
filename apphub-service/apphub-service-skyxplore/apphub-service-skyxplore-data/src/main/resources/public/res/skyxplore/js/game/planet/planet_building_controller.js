@@ -19,7 +19,7 @@
             container.innerHTML = "";
 
         new MapStream(buildingOverviews)
-            .sorted(function(e1, e2){return surfaceTypeLocalization.get(e1.getKey()).localeCompare(surfaceTypeLocalization.get(e2.getKey()))})
+            .sorted(function(e1, e2){return dataCaches.surfaceTypeLocalization.get(e1.getKey()).localeCompare(dataCaches.surfaceTypeLocalization.get(e2.getKey()))})
             .map(createSurfaceBuildingOverview)
             .toListStream()
             .forEach(function(node){container.appendChild(node)});
@@ -48,7 +48,7 @@
 
                 const labels = document.createElement("DIV");
                     const surfaceTypeLabel = document.createElement("SPAN");
-                        surfaceTypeLabel.innerHTML = surfaceTypeLocalization.get(surfaceType);
+                        surfaceTypeLabel.innerHTML = dataCaches.surfaceTypeLocalization.get(surfaceType);
                 labels.appendChild(surfaceTypeLabel);
 
                     const separatorLabel = document.createElement("SPAN");
@@ -91,7 +91,7 @@
                 detailsTable.appendChild(headRow);
 
                 new Stream(buildingOverview.buildingDetails)
-                    .sorted(function(a, b){return itemDataNameLocalization.get(a.dataId).localeCompare(itemDataNameLocalization.get(b.dataId))})
+                    .sorted(function(a, b){return dataCaches.itemDataNames.get(a.dataId).localeCompare(dataCaches.itemDataNames.get(b.dataId))})
                     .map(createRow)
                     .forEach(function(node){detailsTable.appendChild(node)});
 
@@ -106,7 +106,7 @@
             function createRow(buildingDetails){
                 const row = document.createElement("TR");
                     const buildingName = document.createElement("TD");
-                        buildingName.innerHTML = itemDataNameLocalization.get(buildingDetails.dataId);
+                        buildingName.innerHTML = dataCaches.itemDataNames.get(buildingDetails.dataId);
                 row.appendChild(buildingName);
 
                     const levelSum = document.createElement("TD");

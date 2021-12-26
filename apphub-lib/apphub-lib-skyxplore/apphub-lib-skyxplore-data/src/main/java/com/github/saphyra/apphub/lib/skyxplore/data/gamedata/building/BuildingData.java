@@ -21,4 +21,8 @@ public abstract class BuildingData extends GameDataItem {
     public abstract List<SurfaceType> getPlaceableSurfaceTypes();
 
     public abstract SurfaceType getPrimarySurfaceType();
+
+    public int getMaxLevel() {
+        return constructionRequirements.size();
+    }
 }

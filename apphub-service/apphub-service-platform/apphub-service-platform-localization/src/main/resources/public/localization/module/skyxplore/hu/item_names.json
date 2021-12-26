@@ -27,5 +27,8 @@
   "stone": "Kő",
   "water": "Víz",
   "wheat": "Gabona",
-  "wood": "Fa"
+  "wood": "Fa",
+  "farm": "Farm",
+  "oil_rig": "Fúrótorony",
+  "geothermic_power_plant": "Geotermikus erőmű"
 }

@@ -64,7 +64,7 @@
                     container.innerHTML = "";
 
                     new Stream(resourceDetails)
-                        .sorted(function(a, b){itemDataNameLocalization.get(a.dataId).localeCompare(itemDataNameLocalization.get(b.dataId))})
+                        .sorted(function(a, b){caches.itemDataNames.get(a.dataId).localeCompare(dataCaches.itemDataNames.get(b.dataId))})
                         .map(createResourceDetailsNode)
                         .forEach(function(node){container.appendChild(node)});
 
@@ -73,7 +73,7 @@
                         node.classList.add("planet-storage-storage-details-item");
 
                         const resourceName = document.createElement("DIV");
-                            resourceName.innerHTML = itemDataNameLocalization.get(resourceDetail.dataId);
+                            resourceName.innerHTML = dataCaches.itemDataNames.get(resourceDetail.dataId);
                     node.appendChild(resourceName);
 
                         const detailsContainer = document.createElement("UL");

@@ -144,12 +144,12 @@
             }
 
             function sortSkills(a, b){
-                return skillTypeLocalization.get(a.getKey()).localeCompare(skillTypeLocalization.get(b.getKey()));
+                return dataCaches.skillTypeLocalization.get(a.getKey()).localeCompare(dataCaches.skillTypeLocalization.get(b.getKey()));
             }
 
             function createSkillProgressBar(skillType, skill){
                 const percentage = skill.experience / skill.nextLevel * 100;
-                const label = skillTypeLocalization.get(skillType) + " - lvl " + skill.level + " (" + Math.floor(percentage) + "%)";
+                const label = dataCaches.skillTypeLocalization.get(skillType) + " - lvl " + skill.level + " (" + Math.floor(percentage) + "%)";
                 return createProgressBar(percentage, label);
             }
         }
@@ -194,23 +194,23 @@
     }
     function setUpPopulationFilters(){
         const skillTypeCheckboxes = document.getElementById(ids.populationOverviewSkillList);
-        new Stream(skillTypeLocalization.getKeys())
-            .sorted(function(a, b){return skillTypeLocalization.get(a).localeCompare(skillTypeLocalization.get(b))})
+        new Stream(dataCaches.skillTypeLocalization.getKeys())
+            .sorted(function(a, b){return dataCaches.skillTypeLocalization.get(a).localeCompare(dataCaches.skillTypeLocalization.get(b))})
             .map(createSkillTypeCheckbox)
             .forEach(function(node){skillTypeCheckboxes.appendChild(node)});
 
         const skillTypeSelectInput = document.getElementById(ids.populationOverviewOrderSkillListInput);
             skillTypeSelectInput.onchange = displayPopulation;
-        new Stream(skillTypeLocalization.getKeys())
-            .sorted(function(a, b){return skillTypeLocalization.get(a).localeCompare(skillTypeLocalization.get(b))})
-            .map(function(skillType){return createOption(skillType, skillTypeLocalization)})
+        new Stream(dataCaches.skillTypeLocalization.getKeys())
+            .sorted(function(a, b){return dataCaches.skillTypeLocalization.get(a).localeCompare(dataCaches.skillTypeLocalization.get(b))})
+            .map(function(skillType){return createOption(skillType, dataCaches.skillTypeLocalization)})
             .forEach(function(node){skillTypeSelectInput.appendChild(node)});
 
         const statSelectInput = document.getElementById(ids.populationOverviewOrderStatListInput);
             statSelectInput.onchange = displayPopulation;
-        new Stream(citizenStatLocalization.getKeys())
-            .sorted(function(a, b){return citizenStatLocalization.get(a).localeCompare(citizenStatLocalization.get(b))})
-            .map(function(stat){return createOption(stat, citizenStatLocalization)})
+        new Stream(dataCaches.citizenStatLocalization.getKeys())
+            .sorted(function(a, b){return dataCaches.citizenStatLocalization.get(a).localeCompare(dataCaches.citizenStatLocalization.get(b))})
+            .map(function(stat){return createOption(stat, dataCaches.citizenStatLocalization)})
             .forEach(function(node){statSelectInput.appendChild(node)});
 
         $(".population-overview-order-type").on("change", displayPopulation);
@@ -226,7 +226,7 @@
                 node.appendChild(checkbox);
 
                 const label = document.createElement("SPAN");
-                    label.innerHTML = skillTypeLocalization.get(skillType);
+                    label.innerHTML = dataCaches.skillTypeLocalization.get(skillType);
             node.appendChild(label);
             return node;
         }

@@ -30,7 +30,7 @@
                 resourceSelectMenu.innerHTML = "";
 
                 new Stream(storageSettings.availableResources)
-                    .sorted(function(a, b){return itemDataNameLocalization.get(a).localeCompare(itemDataNameLocalization.get(b))})
+                    .sorted(function(a, b){return dataCaches.itemDataNames.get(a).localeCompare(dataCaches.itemDataNames.get(b))})
                     .map(createOption)
                     .forEach(function(node){resourceSelectMenu.appendChild(node)})
 
@@ -41,7 +41,7 @@
             function createOption(dataId){
                 const option = document.createElement("OPTION");
                 option.value = dataId;
-                option.innerHTML = itemDataNameLocalization.get(dataId);
+                option.innerHTML = dataCaches.itemDataNames.get(dataId);
                 return option;
             }
         }
@@ -54,19 +54,19 @@
                 container.innerHTML = "";
 
                 new Stream(storageSettings.currentSettings)
-                    .sorted(function(a, b){return itemDataNameLocalization.get(a.dataId).localeCompare(itemDataNameLocalization.get(b.dataId))})
+                    .sorted(function(a, b){return dataCaches.itemDataNames.get(a.dataId).localeCompare(dataCaches.itemDataNames.get(b.dataId))})
                     .map(createStorageSetting)
                     .forEach(function(node){container.appendChild(node)});
 
             function createStorageSetting(storageSetting){
                 const dataId = storageSetting.dataId;
-                const storageType = itemData.get(dataId).storageType;
+                const storageType = dataCaches.itemData.get(dataId).storageType;
 
                 const node = document.createElement("DIV");
                     node.classList.add("storage-setting");
 
                     const title = document.createElement("H3");
-                        title.innerHTML = itemDataNameLocalization.get(storageSetting.dataId);
+                        title.innerHTML = dataCaches.itemDataNames.get(storageSetting.dataId);
                 node.appendChild(title);
 
                     const inputContainer = document.createElement("DIV");
@@ -163,7 +163,7 @@
     function deleteStorageSetting(storageSettingId, dataId){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
             .withTitle(Localization.getAdditionalContent("delete-storage-setting-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("delete-storage-setting-confirmation-dialog-detail", {resource: itemDataNameLocalization.get(dataId)}))
+            .withDetail(Localization.getAdditionalContent("delete-storage-setting-confirmation-dialog-detail", {resource: dataCaches.itemDataNames.get(dataId)}))
             .withConfirmButton(Localization.getAdditionalContent("delete-storage-setting-confirm-button"))
             .withDeclineButton(Localization.getAdditionalContent("delete-storage-setting-decline-button"))
 

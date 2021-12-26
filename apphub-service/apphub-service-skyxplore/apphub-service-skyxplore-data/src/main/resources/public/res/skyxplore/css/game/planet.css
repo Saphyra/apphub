@@ -95,6 +95,15 @@
     border-right: 3px ridge white;
 }
 
+    .planet-left-bar .progress-bar-container{
+        margin: 0.125rem;
+    }
+
+        .planet-left-bar .progress-bar-text{
+            margin: 0.25rem;
+            border: 1px solid white;
+        }
+
     .planet-storage-summary-container{
         height: 1.5rem;
         position: relative;
@@ -214,6 +223,10 @@
             background-size: cover;
         }
 
+            .empty-surface-content{
+                background: transparent;
+            }
+
             .surface-header{
                 text-align: center;
                 opacity: 0.75;
@@ -233,7 +246,7 @@
                 left: 0;
                 right: 0;
                 bottom: 0;
-                min-height: 1rem;
+                height: 1.5rem;
             }
 
                 .surface-footer .build-button{

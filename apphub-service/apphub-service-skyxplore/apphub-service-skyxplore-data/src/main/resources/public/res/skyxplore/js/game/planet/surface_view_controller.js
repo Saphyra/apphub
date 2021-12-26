@@ -1,4 +1,4 @@
-(function SurfaceViewController(){
+(function SurfaceViewController() {
     window.surfaceViewController = new function(){
         this.loadSurface = loadSurface;
     }
@@ -9,12 +9,12 @@
                 return JSON.parse(response.body);
             }
             request.processValidResponse = function(surfaces){
-                displaySurfaces(surfaces);
+                displaySurfaces(planetId, surfaces);
             }
         dao.sendRequestAsync(request);
     }
 
-    function displaySurfaces(surfaces){
+    function displaySurfaces(planetId, surfaces){
         const surfaceContainer = document.getElementById(ids.planetSurfaceContainer);
             surfaceContainer.innerHTML = "";
 
@@ -34,7 +34,9 @@
                         surfaceNode.classList.add("surface-type-" + surface.surfaceType.toLowerCase());
 
                         if(surface.building){
-                            surfaceNode.appendChild(createBuilding(surface.building));
+                            surfaceNode.appendChild(createBuilding(planetId, surface.building));
+                        }else{
+                            surfaceNode.appendChild(createEmptySurface(surface.surfaceId, surface.surfaceType));
                         }
                     rowNode.appendChild(surfaceNode);
                 }
@@ -57,7 +59,7 @@
             return result;
         }
 
-        function createBuilding(building){
+        function createBuilding(planetId, building){
             const content = document.createElement("DIV");
                 content.classList.add("building-" + building.dataId);
                 content.classList.add("surface-content");
@@ -67,23 +69,79 @@
                     levelCell.classList.add("surface-header");
             content.appendChild(levelCell);
 
-                if(building.level < building.maxLevel){ //TODO load BuildingData
+                if(building.construction){
+                    content.appendChild(createConstructionFooter(planetId, building.buildingId, building.construction, building.dataId));
+                }else if(building.level < dataCaches.itemData.get(building.dataId).maxLevel){
                     const footer = document.createElement("DIV");
                         footer.classList.add("surface-footer");
-                        footer.appendChild(createFooterContent(building));
+                        footer.appendChild(createUpgradeBuildingFooter(planetId, building));
                     content.appendChild(footer);
                 }
 
             return content;
 
-            function createFooterContent(building){
+            function createConstructionFooter(planetId, buildingId, construction, dataId){
+                const footer = document.createElement("DIV");
+                    footer.classList.add("surface-footer");
+
+                    const progressBar = document.createElement("DIV");
+                        progressBar.classList.add("progress-bar-container");
+
+                        const progressBarBackground = document.createElement("DIV");
+                            progressBarBackground.classList.add("progress-bar-background");
+                            progressBarBackground.style.width = (construction.currentWorkPoints / construction.requiredWorkPoints * 100) + "%";
+                    progressBar.appendChild(progressBarBackground);
+
+                        const progressBarContent = document.createElement("DIV");
+                            progressBarContent.classList.add("progress-bar-text");
+
+                            const cancelConstructionButton = document.createElement("BUTTON");
+                                cancelConstructionButton.innerText = "-";
+                                cancelConstructionButton.onclick = function(){
+                                    constructionController.cancelConstruction(planetId, buildingId, dataId);
+                                }
+                        progressBarContent.appendChild(cancelConstructionButton);
+                    progressBar.appendChild(progressBarContent);
+                footer.appendChild(progressBar);
+                return footer;
+            }
+
+            function createUpgradeBuildingFooter(planetId, building){
                 const upgradeButton = document.createElement("button");
                     upgradeButton.innerHTML = Localization.getAdditionalContent("upgrade");
                     upgradeButton.onclick = function(){
-                        upgradeBuilding(building.buildingId);
+                        constructionController.upgradeBuilding(planetId, building.buildingId);
                     }
                 return upgradeButton;
             }
         }
+
+        function createEmptySurface(surfaceId, surfaceType){
+            const content = document.createElement("DIV");
+                content.classList.add("empty-surface-content");
+                content.classList.add("surface-content");
+
+                const footer = document.createElement("DIV");
+                    footer.classList.add("surface-footer");
+
+                    const buildButton = document.createElement("button");
+                        buildButton.innerHTML = "+";
+                        buildButton.onclick = function(){
+                            constructionController.openConstructNewBuildingWindow(planetController.getOpenedPlanetId(), surfaceType, surfaceId);
+                        }
+                footer.appendChild(buildButton);
+
+                    const terraformButton = document.createElement("button");
+                        terraformButton.innerHTML = "T" //TODO proper terraform background icon
+                        terraformButton.onclick = function(){
+                            terraformingController.openTerraformWindow(planetController.getOpenedPlanetId(), surfaceType, surfaceId);
+                        }
+                footer.appendChild(terraformButton);
+            content.appendChild(footer);
+
+            return content;
+        }
     }
+
+
 })();

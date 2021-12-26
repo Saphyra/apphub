@@ -104,6 +104,7 @@ public class CancelConstructionServiceTest {
     @Test
     public void cancelConstruction() {
         given(building.getConstruction()).willReturn(construction);
+        given(building.getLevel()).willReturn(0);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(planet.getStorageDetails()).willReturn(storageDetails);
 
@@ -127,5 +128,8 @@ public class CancelConstructionServiceTest {
         assertThat(allocatedResources).isEmpty();
 
         verify(gameDataProxy).deleteItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+
+        verify(surface).setBuilding(null);
+        verify(gameDataProxy).deleteItem(BUILDING_ID, GameItemType.BUILDING);
     }
 }

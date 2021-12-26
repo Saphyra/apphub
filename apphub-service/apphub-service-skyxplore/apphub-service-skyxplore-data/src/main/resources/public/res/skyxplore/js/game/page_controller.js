@@ -4,6 +4,7 @@ scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/common/js/animation/move_controller.js");
 scriptLoader.loadScript("/res/common/js/animation/zoom_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/caches.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/chat_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/map/map_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/solar_system/solar_system_controller.js");
@@ -16,6 +17,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_building_controlle
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_priority_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/storage_settings_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/planet/construction_controller.js");
 
 (function PageController(){
     window.SESSION_EXTENSION_ENABLED = true;
@@ -93,6 +95,11 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_contr
         populationOverviewShowAllSkills: "population-overview-show-all-skills",
         populationOverviewHideAllSkills: "population-overview-hide-all-skills",
         populationOverviewCitizenList: "population-overview-citizen-list",
+
+        //Construction
+        construction: "construction",
+        closeConstructionButton: "close-construction-button",
+        availableBuildings: "available-buildings",
     }
 
     window.webSocketEvents = {
@@ -102,32 +109,12 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_contr
         CHAT_ROOM_CREATED: "skyxplore-game-chat-room-created",
     }
 
-    window.itemData = new Cache(itemDataLoader);
-    window.itemDataNameLocalization = new CustomLocalization("skyxplore", "items");
-    window.surfaceTypeLocalization = new CustomLocalization("skyxplore", "surface_type");
-    window.skillTypeLocalization = new CustomLocalization("skyxplore", "skill_type");
-    window.citizenStatLocalization = new CustomLocalization("skyxplore", "citizen_stat");
-
     const wsConnection = new WebSocketConnection(Mapping.getEndpoint("WS_CONNECTION_SKYXPLORE_GAME"));
 
     window.pageController = new function(){
         this.webSocketConnection = wsConnection;
 
         this.exitGame = exitGame;
-    }
-
-    function itemDataLoader(itemId){
-        let result;
-
-        const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_ITEM_DATA", {dataId: itemId}));
-            request.processValidResponse = function(response){
-                const parsed = JSON.parse(response.body);
-                logService.logToConsole("Item loaded with id " + itemId, parsed);
-                result = parsed;
-            };
-        const response = dao.sendRequest(request);
-
-        return result;
     }
 
     function exitGame(){

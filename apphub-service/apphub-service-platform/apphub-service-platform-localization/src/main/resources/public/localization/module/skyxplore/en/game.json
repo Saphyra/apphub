@@ -246,6 +246,12 @@
         "key": "innerHTML",
         "message": "Descending"
       }
+    ],
+    "construction-title": [
+      {
+        "key": "innerHTML",
+        "message": "Construct new building"
+      }
     ]
   },
   "additionalContent": {
@@ -285,6 +291,12 @@
     "citizen-renamed": "Rename successful.",
     "planet-priority-updated": "Priority updated.",
     "new-solar-system-name-too-long": "Solar System name too long (Max. 30 characters).",
-    "new-planet-name-too-long": "Planet name too long (Max. 30 characters)."
+    "new-planet-name-too-long": "Planet name too long (Max. 30 characters).",
+    "construction-requirements": "Construction cost",
+    "construct-new-building": "Build",
+    "cancel-construction-confirmation-dialog-title": "Confirm cancelling construction",
+    "cancel-construction-confirmation-dialog-detail": "Are you sure you want to cancel construction of building <SPAN class='red'>{buildingName}</SPAN>?",
+    "cancel-construction-confirm-button": "Cancel construction",
+    "cancel-construction-cancel-button": "Back"
   }
 }

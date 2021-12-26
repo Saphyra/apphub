@@ -27,5 +27,8 @@
   "stone": "Stone",
   "water": "Water",
   "wheat": "Wheat",
-  "wood": "Wood"
+  "wood": "Wood",
+  "farm": "Farm",
+  "oil_rig": "Oil rig",
+  "geothermic_power_plant": "Geothermic power plant"
 }

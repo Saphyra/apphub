@@ -3,6 +3,11 @@ package com.github.saphyra.apphub.service.skyxplore.data.game_data;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.data.AbstractDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingData;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.miscellaneous.MiscellaneousBuilding;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuilding;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -20,6 +26,8 @@ import static org.mockito.BDDMockito.given;
 @RunWith(MockitoJUnitRunner.class)
 public class GameDataControllerImplTest {
     private static final String DATA_ID = "data-id";
+    private static final String BUILDING_DATA_ID = "building-data-id";
+    private static final String MISC_BUILDING_DATA_ID = "misc-building-data-id";
 
     private final AbstractDataService<String, GameDataItem> dataService = new DummyDataService();
 
@@ -48,6 +56,35 @@ public class GameDataControllerImplTest {
         Object result = underTest.getGameData(DATA_ID);
 
         assertThat(result).isEqualTo(gameDataItem);
+    }
+
+    @Test
+    public void availableBuildings_invalidSurfaceType() {
+        Throwable ex = catchThrowable(() -> underTest.getAvailableBuildings("asd"));
+
+        ExceptionValidator.validateInvalidParam(ex, "surfaceType", "invalid value");
+    }
+
+    @Test
+    public void availableBuildings() {
+        BuildingData buildingData = new StorageBuilding();
+        buildingData.setId(BUILDING_DATA_ID);
+
+        MiscellaneousBuilding miscellaneousBuilding = new MiscellaneousBuilding();
+        miscellaneousBuilding.setId(MISC_BUILDING_DATA_ID);
+        miscellaneousBuilding.setPlaceableSurfaceTypes(List.of(SurfaceType.LAKE));
+
+        GameDataItem gameDataItem = new ResourceData();
+
+        dataService.put(BUILDING_DATA_ID, buildingData);
+        dataService.put(MISC_BUILDING_DATA_ID, miscellaneousBuilding);
+        dataService.put(DATA_ID, gameDataItem);
+
+        underTest = new GameDataControllerImpl(List.of(dataService));
+
+        List<Object> result = underTest.getAvailableBuildings(SurfaceType.CONCRETE.name());
+
+        assertThat(result).containsExactly(BUILDING_DATA_ID);
     }
 
     private static class DummyDataService extends AbstractDataService<String, GameDataItem> {

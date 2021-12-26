@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +34,9 @@ public class CancelConstructionService {
         Planet planet = gameDao.findByUserIdValidated(userId)
             .getUniverse()
             .findPlanetByIdAndOwnerValidated(userId, planetId);
-        Building building = planet.getSurfaces()
-            .findByBuildingIdValidated(buildingId)
+        Surface surface = planet.getSurfaces()
+            .findByBuildingIdValidated(buildingId);
+        Building building = surface
             .getBuilding();
 
         Construction construction = building.getConstruction();
@@ -62,6 +64,11 @@ public class CancelConstructionService {
                 .collect(Collectors.toList());
             storageDetails.getAllocatedResources()
                 .removeAll(allocatedResources);
+
+            if (building.getLevel() == 0) {
+                surface.setBuilding(null);
+                gameDataProxy.deleteItem(buildingId, GameItemType.BUILDING);
+            }
         }
 
         gameDataProxy.deleteItem(constructionId, GameItemType.CONSTRUCTION);
