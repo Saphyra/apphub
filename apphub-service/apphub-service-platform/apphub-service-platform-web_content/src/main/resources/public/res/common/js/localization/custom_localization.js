@@ -8,7 +8,7 @@ function CustomLocalization(module, fileName){
     this.get = function(key){
         return localization[key] || function(){
             const message = "Localization not found with key " + key + " in file " + fileName;
-            logService.log(message, "warn", "IllegalArgument");
+            console.error(message);
             return message;
         }()
     }

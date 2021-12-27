@@ -32,6 +32,7 @@
 
             const container = document.createElement("DIV");
                 container.classList.add("available-building");
+                container.id = dataId;
 
                 const title = document.createElement("DIV");
                     title.classList.add("available-building-title");
@@ -47,6 +48,7 @@
                 container.appendChild(createConstructionRequirements(itemData.constructionRequirements));
 
                 const buildButton = document.createElement("BUTTON");
+                    buildButton.classList.add("construct-new-building-button");
                     buildButton.innerText = Localization.getAdditionalContent("construct-new-building");
                     buildButton.onclick = function(){
                         constructNewBuilding(planetId, surfaceId, dataId);

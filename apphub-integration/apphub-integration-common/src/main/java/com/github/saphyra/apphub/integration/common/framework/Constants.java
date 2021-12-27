@@ -23,4 +23,5 @@ public class Constants {
     public final String DATA_ID_SOLAR_PANEL = "solar_panel";
     public final String SURFACE_TYPE_LAKE = "LAKE";
     public final String DATA_ID_BATTERY = "battery";
+    public final String DATA_ID_WATER_PUMP = "water_pump";
 }

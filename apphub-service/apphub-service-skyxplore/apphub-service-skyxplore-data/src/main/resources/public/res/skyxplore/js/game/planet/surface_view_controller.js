@@ -32,6 +32,7 @@
                     const surfaceNode = document.createElement("SPAN");
                         surfaceNode.classList.add("surface-table-cell");
                         surfaceNode.classList.add("surface-type-" + surface.surfaceType.toLowerCase());
+                        surfaceNode.id = surface.surfaceId;
 
                         if(surface.building){
                             surfaceNode.appendChild(createBuilding(planetId, surface.building));
@@ -96,6 +97,7 @@
                             progressBarContent.classList.add("progress-bar-text");
 
                             const cancelConstructionButton = document.createElement("BUTTON");
+                                cancelConstructionButton.classList.add("cancel-construction-button");
                                 cancelConstructionButton.innerText = "-";
                                 cancelConstructionButton.onclick = function(){
                                     constructionController.cancelConstruction(planetId, buildingId, dataId);
@@ -108,6 +110,7 @@
 
             function createUpgradeBuildingFooter(planetId, building){
                 const upgradeButton = document.createElement("button");
+                    upgradeButton.classList.add("upgrade-building-button");
                     upgradeButton.innerHTML = Localization.getAdditionalContent("upgrade");
                     upgradeButton.onclick = function(){
                         constructionController.upgradeBuilding(planetId, building.buildingId);
@@ -125,6 +128,7 @@
                     footer.classList.add("surface-footer");
 
                     const buildButton = document.createElement("button");
+                        buildButton.classList.add("empty-surface-construct-new-building-button");
                         buildButton.innerHTML = "+";
                         buildButton.onclick = function(){
                             constructionController.openConstructNewBuildingWindow(planetController.getOpenedPlanetId(), surfaceType, surfaceId);
@@ -132,6 +136,7 @@
                 footer.appendChild(buildButton);
 
                     const terraformButton = document.createElement("button");
+                        terraformButton.classList.add("empty-surface-terraform-button");
                         terraformButton.innerHTML = "T" //TODO proper terraform background icon
                         terraformButton.onclick = function(){
                             terraformingController.openTerraformWindow(planetController.getOpenedPlanetId(), surfaceType, surfaceId);
