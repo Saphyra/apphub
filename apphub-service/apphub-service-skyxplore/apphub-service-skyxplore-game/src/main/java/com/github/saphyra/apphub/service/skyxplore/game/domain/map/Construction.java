@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.map;
 
-import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +12,9 @@ import java.util.UUID;
 @Builder
 public class Construction {
     private final UUID constructionId;
-    private final UUID location;
-    private final LocationType locationType;
+    private final UUID externalReference;
     private final int requiredWorkPoints;
+    private final String data;
     private int currentWorkPoints;
     private int priority;
 }

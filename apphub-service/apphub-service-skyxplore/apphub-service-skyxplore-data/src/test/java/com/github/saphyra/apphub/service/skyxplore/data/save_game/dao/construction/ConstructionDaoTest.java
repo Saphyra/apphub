@@ -62,9 +62,9 @@ public class ConstructionDaoTest {
     }
 
     @Test
-    public void getByLocation() {
+    public void getByExternalReference() {
         given(uuidConverter.convertDomain(ID)).willReturn(ID_STRING);
-        given(repository.getByLocation(ID_STRING)).willReturn(List.of(entity));
+        given(repository.getByExternalReference(ID_STRING)).willReturn(List.of(entity));
         given(converter.convertEntity(List.of(entity))).willReturn(List.of(model));
 
         List<ConstructionModel> result = underTest.getByLocation(ID);

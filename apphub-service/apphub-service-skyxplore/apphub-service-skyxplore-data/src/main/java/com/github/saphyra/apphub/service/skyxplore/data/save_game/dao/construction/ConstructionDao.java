@@ -27,7 +27,7 @@ public class ConstructionDao extends AbstractDao<ConstructionEntity, Constructio
     }
 
     public List<ConstructionModel> getByLocation(UUID location) {
-        return converter.convertEntity(repository.getByLocation(uuidConverter.convertDomain(location)));
+        return converter.convertEntity(repository.getByExternalReference(uuidConverter.convertDomain(location)));
     }
 
     public void deleteById(UUID constructionId) {

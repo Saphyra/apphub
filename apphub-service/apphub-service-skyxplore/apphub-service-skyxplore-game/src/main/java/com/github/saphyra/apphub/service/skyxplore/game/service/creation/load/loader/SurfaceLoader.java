@@ -26,6 +26,7 @@ class SurfaceLoader {
     private final CoordinateLoader coordinateLoader;
     private final BuildingLoader buildingLoader;
     private final ExecutorServiceBean executorServiceBean;
+    private final ConstructionLoader constructionLoader;
 
     SurfaceMap load(UUID planetId) {
         List<SurfaceModel> models = gameItemLoader.loadChildren(planetId, GameItemType.SURFACE, SurfaceModel[].class);
@@ -43,6 +44,7 @@ class SurfaceLoader {
             .coordinate(coordinateLoader.loadOneByReferenceId(model.getId()))
             .surfaceType(SurfaceType.valueOf(model.getSurfaceType()))
             .building(buildingLoader.load(model.getId()))
+            .terraformation(constructionLoader.load(model.getId()))
             .build();
     }
 }

@@ -16,8 +16,7 @@ class ConstructionModelValidator {
     void validate(ConstructionModel model) {
         gameItemValidator.validate(model);
 
-        ValidationUtil.notNull(model.getLocation(), "location");
-        ValidationUtil.notBlank(model.getLocationType(), "locationType");
+        ValidationUtil.notNull(model.getExternalReference(), "externalReference");
         ValidationUtil.notNull(model.getRequiredWorkPoints(), "requiredWorkPoints");
         ValidationUtil.notNull(model.getCurrentWorkPoints(), "currentWorkPoints");
         ValidationUtil.notNull(model.getPriority(), "priority");

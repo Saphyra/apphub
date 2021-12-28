@@ -12,9 +12,9 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ConstructionModel extends GameItem {
-    private UUID location;
-    private String locationType;
+    private UUID externalReference;
     private Integer requiredWorkPoints;
     private Integer currentWorkPoints;
     private Integer priority;
+    private String data;
 }

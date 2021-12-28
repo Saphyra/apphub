@@ -18,4 +18,5 @@ public class Surface {
     private final CoordinateModel coordinate;
     private SurfaceType surfaceType;
     private Building building;
+    private Construction terraformation;
 }

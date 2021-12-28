@@ -8,6 +8,9 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingData;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilities;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilitiesService;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,11 +26,16 @@ import java.util.stream.Collectors;
 public class GameDataControllerImpl implements SkyXploreGameDataController {
     private final Map<String, ? extends GameDataItem> items;
     private final Map<String, ? extends BuildingData> buildings;
+    private final TerraformingPossibilitiesService terraformingPossibilitiesService;
 
-    public GameDataControllerImpl(List<AbstractDataService<?, ? extends GameDataItem>> dataServices) {
+    public GameDataControllerImpl(
+        List<AbstractDataService<?, ? extends GameDataItem>> dataServices,
+        TerraformingPossibilitiesService terraformingPossibilitiesService
+    ) {
         this.items = dataServices.stream()
             .flatMap(dataService -> dataService.values().stream())
             .collect(Collectors.toMap(GameDataItem::getId, Function.identity()));
+        this.terraformingPossibilitiesService = terraformingPossibilitiesService;
 
         this.buildings = items.values()
             .stream()
@@ -44,17 +52,27 @@ public class GameDataControllerImpl implements SkyXploreGameDataController {
     }
 
     @Override
-    public List<Object> getAvailableBuildings(String surfaceTypeString) {
+    public List<String> getAvailableBuildings(String surfaceTypeString) {
         log.info("Querying available buildings for surfaceType {}", surfaceTypeString);
 
-        ValidationUtil.enumElementExists(surfaceTypeString, SurfaceType::valueOf, "surfaceType");
-
-        SurfaceType surfaceType = SurfaceType.valueOf(surfaceTypeString);
+        SurfaceType surfaceType = ValidationUtil.convertToEnumChecked(surfaceTypeString, SurfaceType::valueOf, "surfaceType");
 
         return buildings.values()
             .stream()
             .filter(buildingData -> buildingData.getPlaceableSurfaceTypes().contains(surfaceType))
             .map(GameDataItem::getId)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getTerraformingPossibilities(String surfaceTypeString) {
+        SurfaceType surfaceType = ValidationUtil.convertToEnumChecked(surfaceTypeString, SurfaceType::valueOf, "surfaceType");
+
+        return terraformingPossibilitiesService.getOptional(surfaceType)
+            .orElse(new TerraformingPossibilities())
+            .stream()
+            .map(TerraformingPossibility::getSurfaceType)
+            .map(SurfaceType::name)
             .collect(Collectors.toList());
     }
 }

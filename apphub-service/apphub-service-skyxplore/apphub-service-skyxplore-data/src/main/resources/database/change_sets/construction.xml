@@ -11,11 +11,12 @@
                 <constraints nullable="false"/>
             </column>
             <column name="game_id" type="varchar(37)"/>
-            <column name="location" type="varchar(37)"/>
+            <column name="external_reference" type="varchar(37)"/>
             <column name="location_type" type="varchar(255)"/>
             <column name="required_work_points" type="integer"/>
             <column name="current_work_points" type="integer"/>
             <column name="priority" type="integer"/>
+            <column name="data" type="text"/>
         </createTable>
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="construction" columnNames="construction_id" constraintName="construction_pk"/>

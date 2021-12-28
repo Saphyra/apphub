@@ -32,7 +32,7 @@ public class StorageSettingEditionService {
         Game game = gameDao.findByUserIdValidated(userId);
         Planet planet = game
             .getUniverse()
-            .findPlanetByIdAndOwnerValidated(userId, planetId);
+            .findByOwnerAndPlanetIdValidated(userId, planetId);
 
         StorageSetting storageSetting = planet.getStorageDetails()
             .getStorageSettings()

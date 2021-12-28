@@ -15,6 +15,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.BuildingFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceConsumptionService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.BuildingToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
@@ -52,7 +53,7 @@ public class ConstructNewBuildingService {
         Game game = gameDao.findByUserIdValidated(userId);
         Planet planet = game
             .getUniverse()
-            .findPlanetByIdAndOwnerValidated(userId, planetId);
+            .findByOwnerAndPlanetIdValidated(userId, planetId);
         Surface surface = planet.getSurfaces()
             .findByIdValidated(surfaceId);
 

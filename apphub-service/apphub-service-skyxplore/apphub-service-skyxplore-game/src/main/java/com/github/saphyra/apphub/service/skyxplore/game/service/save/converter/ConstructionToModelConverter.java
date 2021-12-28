@@ -18,11 +18,11 @@ public class ConstructionToModelConverter {
         model.setId(construction.getConstructionId());
         model.setGameId(gameId);
         model.setType(GameItemType.CONSTRUCTION);
-        model.setLocation(construction.getLocation());
-        model.setLocationType(construction.getLocationType().name());
+        model.setExternalReference(construction.getExternalReference());
         model.setRequiredWorkPoints(construction.getRequiredWorkPoints());
         model.setCurrentWorkPoints(construction.getCurrentWorkPoints());
         model.setPriority(construction.getPriority());
+        model.setData(construction.getData());
         return model;
     }
 }

@@ -34,21 +34,21 @@ public class ValidationUtilTest {
 
     @Test
     public void enumElementExists_null() {
-        Throwable ex = catchThrowable(() -> ValidationUtil.enumElementExists((String) null, TestEnum::valueOf, FIELD));
+        Throwable ex = catchThrowable(() -> ValidationUtil.convertToEnumChecked((String) null, TestEnum::valueOf, FIELD));
 
         ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
     }
 
     @Test
     public void enumElementExists_elementDoesNotExist() {
-        Throwable ex = catchThrowable(() -> ValidationUtil.enumElementExists("asd", TestEnum::valueOf, FIELD));
+        Throwable ex = catchThrowable(() -> ValidationUtil.convertToEnumChecked("asd", TestEnum::valueOf, FIELD));
 
         ExceptionValidator.validateInvalidParam(ex, FIELD, "invalid value");
     }
 
     @Test
     public void enumElementExists() {
-        ValidationUtil.enumElementExists(TestEnum.ELEMENT.name(), TestEnum::valueOf, FIELD);
+        ValidationUtil.convertToEnumChecked(TestEnum.ELEMENT.name(), TestEnum::valueOf, FIELD);
     }
 
     @Test

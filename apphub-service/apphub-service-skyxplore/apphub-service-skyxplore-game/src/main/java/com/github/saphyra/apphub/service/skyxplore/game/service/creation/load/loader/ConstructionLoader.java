@@ -17,8 +17,8 @@ import java.util.UUID;
 class ConstructionLoader {
     private final GameItemLoader gameItemLoader;
 
-    public Construction load(UUID buildingId) {
-        return gameItemLoader.loadChildren(buildingId, GameItemType.CONSTRUCTION, ConstructionModel[].class)
+    public Construction load(UUID externalReference) {
+        return gameItemLoader.loadChildren(externalReference, GameItemType.CONSTRUCTION, ConstructionModel[].class)
             .stream()
             .findFirst()
             .map(this::convert)
@@ -28,11 +28,11 @@ class ConstructionLoader {
     private Construction convert(ConstructionModel model) {
         return Construction.builder()
             .constructionId(model.getId())
-            .location(model.getLocation())
-            .locationType(LocationType.valueOf(model.getLocationType()))
+            .externalReference(model.getExternalReference())
             .requiredWorkPoints(model.getRequiredWorkPoints())
             .currentWorkPoints(model.getCurrentWorkPoints())
             .priority(model.getPriority())
+            .data(model.getData())
             .build();
     }
 }

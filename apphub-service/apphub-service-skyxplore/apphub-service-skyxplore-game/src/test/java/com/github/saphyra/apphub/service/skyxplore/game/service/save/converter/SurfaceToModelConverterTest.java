@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
@@ -8,6 +9,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.SurfaceModel;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +33,9 @@ public class SurfaceToModelConverterTest {
     @Mock
     private BuildingToModelConverter buildingToModelConverter;
 
+    @Mock
+    private ConstructionToModelConverter constructionToModelConverter;
+
     @InjectMocks
     private SurfaceToModelConverter underTest;
 
@@ -46,10 +51,17 @@ public class SurfaceToModelConverterTest {
     @Mock
     private CoordinateModel coordinateModel;
 
+    @Mock
+    private Construction construction;
+
+    @Mock
+    private ConstructionModel constructionModel;
+
     @Test
     public void convertDeep() {
         given(game.getGameId()).willReturn(GAME_ID);
         given(buildingToModelConverter.convert(building, GAME_ID)).willReturn(buildingModel);
+        given(constructionToModelConverter.convert(construction, GAME_ID)).willReturn(constructionModel);
 
         Surface surface = Surface.builder()
             .surfaceId(SURFACE_ID)
@@ -57,6 +69,7 @@ public class SurfaceToModelConverterTest {
             .coordinate(coordinateModel)
             .surfaceType(SurfaceType.DESERT)
             .building(building)
+            .terraformation(construction)
             .build();
 
         List<GameItem> result = underTest.convertDeep(Arrays.asList(surface), game);
@@ -68,6 +81,6 @@ public class SurfaceToModelConverterTest {
         expected.setPlanetId(PLANET_ID);
         expected.setSurfaceType(SurfaceType.DESERT.name());
 
-        assertThat(result).containsExactlyInAnyOrder(expected, buildingModel, coordinateModel);
+        assertThat(result).containsExactlyInAnyOrder(expected, buildingModel, coordinateModel, constructionModel);
     }
 }

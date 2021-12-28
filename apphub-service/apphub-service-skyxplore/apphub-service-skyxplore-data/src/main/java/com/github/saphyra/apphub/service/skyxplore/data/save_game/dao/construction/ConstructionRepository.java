@@ -13,5 +13,5 @@ interface ConstructionRepository extends CrudRepository<ConstructionEntity, Stri
     @Query("DELETE FROM ConstructionEntity e WHERE e.gameId = :gameId")
     void deleteByGameId(@Param("gameId") String gameId);
 
-    List<ConstructionEntity> getByLocation(String location);
+    List<ConstructionEntity> getByExternalReference(String location);
 }

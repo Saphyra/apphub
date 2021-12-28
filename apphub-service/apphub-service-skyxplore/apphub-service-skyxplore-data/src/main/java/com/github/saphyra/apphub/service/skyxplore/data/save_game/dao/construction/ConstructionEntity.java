@@ -19,9 +19,9 @@ class ConstructionEntity {
     @Id
     private String constructionId;
     private String gameId;
-    private String location;
-    private String locationType;
+    private String externalReference;
     private Integer requiredWorkPoints;
     private Integer currentWorkPoints;
     private Integer priority;
+    private String data;
 }

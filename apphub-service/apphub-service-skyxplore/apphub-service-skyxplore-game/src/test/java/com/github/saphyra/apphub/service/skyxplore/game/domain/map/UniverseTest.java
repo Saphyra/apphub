@@ -92,7 +92,7 @@ public class UniverseTest {
         given(planet.getPlanetId()).willReturn(PLANET_ID);
         given(planet.getOwner()).willReturn(UUID.randomUUID());
 
-        Throwable ex = catchThrowable(() -> underTest.findPlanetByIdAndOwnerValidated(OWNER, PLANET_ID));
+        Throwable ex = catchThrowable(() -> underTest.findByOwnerAndPlanetIdValidated(OWNER, PLANET_ID));
 
         ExceptionValidator.validateForbiddenOperation(ex);
     }
@@ -106,7 +106,7 @@ public class UniverseTest {
         given(planet.getPlanetId()).willReturn(PLANET_ID);
         given(planet.getOwner()).willReturn(OWNER);
 
-        Planet result = underTest.findPlanetByIdAndOwnerValidated(OWNER, PLANET_ID);
+        Planet result = underTest.findByOwnerAndPlanetIdValidated(OWNER, PLANET_ID);
 
         assertThat(result).isEqualTo(planet);
     }

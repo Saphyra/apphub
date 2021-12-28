@@ -8,6 +8,9 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingDa
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.miscellaneous.MiscellaneousBuilding;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuilding;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilities;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilitiesService;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibility;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +21,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -31,17 +35,23 @@ public class GameDataControllerImplTest {
 
     private final AbstractDataService<String, GameDataItem> dataService = new DummyDataService();
 
+    @Mock
+    private TerraformingPossibilitiesService terraformingPossibilitiesService;
+
     private GameDataControllerImpl underTest;
 
     @Mock
     private GameDataItem gameDataItem;
+
+    @Mock
+    private TerraformingPossibility terraformingPossibility;
 
     @Before
     public void setUp() {
         given(gameDataItem.getId()).willReturn(DATA_ID);
         dataService.put(DATA_ID, gameDataItem);
 
-        underTest = new GameDataControllerImpl(Arrays.asList(dataService));
+        underTest = new GameDataControllerImpl(Arrays.asList(dataService), terraformingPossibilitiesService);
     }
 
     @Test
@@ -80,11 +90,30 @@ public class GameDataControllerImplTest {
         dataService.put(MISC_BUILDING_DATA_ID, miscellaneousBuilding);
         dataService.put(DATA_ID, gameDataItem);
 
-        underTest = new GameDataControllerImpl(List.of(dataService));
+        underTest = new GameDataControllerImpl(List.of(dataService), terraformingPossibilitiesService);
 
-        List<Object> result = underTest.getAvailableBuildings(SurfaceType.CONCRETE.name());
+        List<String> result = underTest.getAvailableBuildings(SurfaceType.CONCRETE.name());
 
         assertThat(result).containsExactly(BUILDING_DATA_ID);
+    }
+
+    @Test
+    public void getTerraformingPossibilities_surfaceTypeCannotBeTerraformed() {
+        given(terraformingPossibilitiesService.getOptional(SurfaceType.CONCRETE)).willReturn(Optional.empty());
+
+        List<String> result = underTest.getTerraformingPossibilities(SurfaceType.CONCRETE.name());
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    public void getTerraformingPossibilities() {
+        given(terraformingPossibilitiesService.getOptional(SurfaceType.CONCRETE)).willReturn(Optional.of(new TerraformingPossibilities(List.of(terraformingPossibility))));
+        given(terraformingPossibility.getSurfaceType()).willReturn(SurfaceType.DESERT);
+
+        List<String> result = underTest.getTerraformingPossibilities(SurfaceType.CONCRETE.name());
+
+        assertThat(result).containsExactly(SurfaceType.DESERT.name());
     }
 
     private static class DummyDataService extends AbstractDataService<String, GameDataItem> {

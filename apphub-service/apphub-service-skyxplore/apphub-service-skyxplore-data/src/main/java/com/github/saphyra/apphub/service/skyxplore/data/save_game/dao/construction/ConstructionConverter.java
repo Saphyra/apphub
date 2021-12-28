@@ -20,11 +20,11 @@ class ConstructionConverter extends ConverterBase<ConstructionEntity, Constructi
         model.setId(uuidConverter.convertEntity(entity.getConstructionId()));
         model.setGameId(uuidConverter.convertEntity(entity.getGameId()));
         model.setType(GameItemType.CONSTRUCTION);
-        model.setLocation(uuidConverter.convertEntity(entity.getLocation()));
-        model.setLocationType(entity.getLocationType());
+        model.setExternalReference(uuidConverter.convertEntity(entity.getExternalReference()));
         model.setRequiredWorkPoints(entity.getRequiredWorkPoints());
         model.setCurrentWorkPoints(entity.getCurrentWorkPoints());
         model.setPriority(entity.getPriority());
+        model.setData(entity.getData());
         return model;
     }
 
@@ -33,11 +33,11 @@ class ConstructionConverter extends ConverterBase<ConstructionEntity, Constructi
         return ConstructionEntity.builder()
             .constructionId(uuidConverter.convertDomain(domain.getId()))
             .gameId(uuidConverter.convertDomain(domain.getGameId()))
-            .location(uuidConverter.convertDomain(domain.getLocation()))
-            .locationType(domain.getLocationType())
+            .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
             .requiredWorkPoints(domain.getRequiredWorkPoints())
             .currentWorkPoints(domain.getCurrentWorkPoints())
             .priority(domain.getPriority())
+            .data(domain.getData())
             .build();
     }
 }

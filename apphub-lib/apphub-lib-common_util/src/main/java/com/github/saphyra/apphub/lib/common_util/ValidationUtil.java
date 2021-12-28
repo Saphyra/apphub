@@ -20,10 +20,10 @@ public class ValidationUtil {
         }
     }
 
-    public static <T, R> void enumElementExists(T value, Function<T, R> mapper, String fieldName) {
+    public static <T, R> R convertToEnumChecked(T value, Function<T, R> mapper, String fieldName) {
         try {
             notNull(value, fieldName);
-            mapper.apply(value);
+            return mapper.apply(value);
         } catch (IllegalArgumentException e) {
             throw ExceptionFactory.invalidParam(fieldName, "invalid value");
         }
