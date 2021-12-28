@@ -87,7 +87,7 @@ public class CancelTerraformationServiceTest {
 
         underTest.cancelTerraformation(USER_ID, PLANET_ID, SURFACE_ID);
 
-        verify(cancelAllocationsService).cancelAllocations(planet, CONSTRUCTION_ID);
+        verify(cancelAllocationsService).cancelAllocationsAndReservations(planet, CONSTRUCTION_ID);
         verify(surface).setTerraformation(null);
         verify(gameDataProxy).deleteItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
     }

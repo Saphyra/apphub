@@ -38,7 +38,7 @@ class CancelTerraformationService {
             throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Terraformation not found on planet " + planetId + " and surface " + surfaceId);
         }
 
-        cancelAllocationsService.cancelAllocations(planet, construction.getConstructionId());
+        cancelAllocationsService.cancelAllocationsAndReservations(planet, construction.getConstructionId());
 
         surface.setTerraformation(null);
         gameDataProxy.deleteItem(construction.getConstructionId(), GameItemType.CONSTRUCTION);

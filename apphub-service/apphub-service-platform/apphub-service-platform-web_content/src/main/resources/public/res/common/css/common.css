@@ -326,8 +326,9 @@ textarea{
             top: var(--confirmation-dialog-header-height);
             left: 0;
             right: 0;
-            bottom: (--confirmation-dialog-footer-height);
+            bottom: var(--confirmation-dialog-footer-height);
             font-size: 1.25rem;
+            overflow: auto;
         }
 
         .confirmation-dialog-button-container{

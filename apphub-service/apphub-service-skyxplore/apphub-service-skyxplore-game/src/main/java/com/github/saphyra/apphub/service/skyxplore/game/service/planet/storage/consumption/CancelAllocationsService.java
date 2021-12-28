@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class CancelAllocationsService {
     private final GameDataProxy gameDataProxy;
 
-    public void cancelAllocations(Planet planet, UUID externalReference) {
+    public void cancelAllocationsAndReservations(Planet planet, UUID externalReference) {
         StorageDetails storageDetails = planet.getStorageDetails();
         synchronized (storageDetails) {
             List<ReservedStorage> reservedStorages = storageDetails.getReservedStorages()

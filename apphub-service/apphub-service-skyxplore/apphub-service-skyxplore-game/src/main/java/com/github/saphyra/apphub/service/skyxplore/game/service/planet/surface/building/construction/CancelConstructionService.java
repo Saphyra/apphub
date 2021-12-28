@@ -44,7 +44,7 @@ public class CancelConstructionService {
         UUID constructionId = construction.getConstructionId();
         building.setConstruction(null);
 
-        cancelAllocationsService.cancelAllocations(planet, constructionId);
+        cancelAllocationsService.cancelAllocationsAndReservations(planet, constructionId);
 
         if (building.getLevel() == 0) {
             surface.setBuilding(null);

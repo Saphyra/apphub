@@ -102,6 +102,6 @@ public class CancelConstructionServiceTest {
 
         verify(surface).setBuilding(null);
         verify(gameDataProxy).deleteItem(BUILDING_ID, GameItemType.BUILDING);
-        verify(cancelAllocationsService).cancelAllocations(planet, CONSTRUCTION_ID);
+        verify(cancelAllocationsService).cancelAllocationsAndReservations(planet, CONSTRUCTION_ID);
     }
 }

@@ -61,7 +61,7 @@ public class CancelAllocationsServiceTest {
         given(reservedStorage.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(reservedStorage.getReservedStorageId()).willReturn(RESERVED_STORAGE_ID);
 
-        underTest.cancelAllocations(planet, EXTERNAL_REFERENCE);
+        underTest.cancelAllocationsAndReservations(planet, EXTERNAL_REFERENCE);
 
         assertThat(allocatedResources).isEmpty();
         assertThat(reservedStorages).isEmpty();

@@ -69,6 +69,21 @@ public class UpgradeBuildingTest extends BackEndTest {
         Response inProgressResponse = SkyXploreBuildingActions.getUpgradeBuildingResponse(language, accessTokenId, planetId, upgradableBuildingId);
 
         ResponseValidator.verifyErrorResponse(language, inProgressResponse, 409, ErrorCode.ALREADY_EXISTS);
+
+        //Cancel
+        SkyXploreBuildingActions.cancelConstruction(language, accessTokenId, planetId, upgradableBuildingId);
+
+        assertThat(findByBuildingId(language, accessTokenId, planetId, upgradableBuildingId).getConstruction()).isNull();
+    }
+
+    private SurfaceBuildingResponse findByBuildingId(Language language, UUID accessTokenId, UUID planetId, UUID buildingId) {
+        return SkyXplorePlanetActions.getSurfaces(language, accessTokenId, planetId)
+            .stream()
+            .filter(surfaceResponse -> !isNull(surfaceResponse.getBuilding()))
+            .map(SurfaceResponse::getBuilding)
+            .filter(surfaceBuildingResponse -> surfaceBuildingResponse.getBuildingId().equals(buildingId))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Building not found by buildingId " + buildingId));
     }
 
     private UUID findBuilding(Language language, UUID accessTokenId, UUID planetId, String dataId) {
