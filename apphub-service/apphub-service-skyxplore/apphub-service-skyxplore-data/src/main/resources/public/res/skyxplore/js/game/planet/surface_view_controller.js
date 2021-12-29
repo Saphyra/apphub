@@ -36,6 +36,8 @@
 
                         if(surface.building){
                             surfaceNode.appendChild(createBuilding(planetId, surface.building));
+                        }else if(surface.terraformation){
+                            surfaceNode.appendChild(createTerraformation(planetId, surface.surfaceId, surface.terraformation));
                         }else{
                             surfaceNode.appendChild(createEmptySurface(surface.surfaceId, surface.surfaceType));
                         }
@@ -119,6 +121,38 @@
             }
         }
 
+        function createTerraformation(planetId, surfaceId, terraformation){
+            const content = document.createElement("DIV");
+                content.classList.add("empty-surface-content");
+                content.classList.add("surface-content");
+
+                const footer = document.createElement("DIV");
+                    footer.classList.add("surface-footer");
+
+                    const progressBar = document.createElement("DIV");
+                        progressBar.classList.add("progress-bar-container");
+
+                        const progressBarBackground = document.createElement("DIV");
+                            progressBarBackground.classList.add("progress-bar-background");
+                            progressBarBackground.style.width = (terraformation.currentWorkPoints / terraformation.requiredWorkPoints * 100) + "%";
+                    progressBar.appendChild(progressBarBackground);
+
+                        const progressBarContent = document.createElement("DIV");
+                            progressBarContent.classList.add("progress-bar-text");
+
+                            const cancelTerraformationButton = document.createElement("BUTTON");
+                                cancelTerraformationButton.classList.add("cancel-terraformation-button");
+                                cancelTerraformationButton.innerText = "-";
+                                cancelTerraformationButton.onclick = function(){
+                                    terraformationController.cancelTerraformation(planetId, surfaceId);
+                                }
+                        progressBarContent.appendChild(cancelTerraformationButton);
+                    progressBar.appendChild(progressBarContent);
+                footer.appendChild(progressBar);
+            content.appendChild(footer);
+            return content;
+        }
+
         function createEmptySurface(surfaceId, surfaceType){
             const content = document.createElement("DIV");
                 content.classList.add("empty-surface-content");
@@ -135,18 +169,18 @@
                         }
                 footer.appendChild(buildButton);
 
+                if(dataCaches.terraformingPossibilities.get(surfaceType).length > 0){
                     const terraformButton = document.createElement("button");
                         terraformButton.classList.add("empty-surface-terraform-button");
                         terraformButton.innerHTML = "T" //TODO proper terraform background icon
                         terraformButton.onclick = function(){
-                            terraformingController.openTerraformWindow(planetController.getOpenedPlanetId(), surfaceType, surfaceId);
+                            terraformationController.openTerraformWindow(planetController.getOpenedPlanetId(), surfaceId, surfaceType);
                         }
-                footer.appendChild(terraformButton);
-            content.appendChild(footer);
+                    footer.appendChild(terraformButton);
+                }
 
+            content.appendChild(footer);
             return content;
         }
     }
-
-
 })();

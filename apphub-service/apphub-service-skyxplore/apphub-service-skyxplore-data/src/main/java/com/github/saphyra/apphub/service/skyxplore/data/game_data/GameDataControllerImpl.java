@@ -10,11 +10,11 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilities;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilitiesService;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -65,14 +65,10 @@ public class GameDataControllerImpl implements SkyXploreGameDataController {
     }
 
     @Override
-    public List<String> getTerraformingPossibilities(String surfaceTypeString) {
+    public List<Object> getTerraformingPossibilities(String surfaceTypeString) {
         SurfaceType surfaceType = ValidationUtil.convertToEnumChecked(surfaceTypeString, SurfaceType::valueOf, "surfaceType");
 
-        return terraformingPossibilitiesService.getOptional(surfaceType)
-            .orElse(new TerraformingPossibilities())
-            .stream()
-            .map(TerraformingPossibility::getSurfaceType)
-            .map(SurfaceType::name)
-            .collect(Collectors.toList());
+        return new ArrayList<>(terraformingPossibilitiesService.getOptional(surfaceType)
+            .orElse(new TerraformingPossibilities()));
     }
 }

@@ -101,7 +101,7 @@ public class GameDataControllerImplTest {
     public void getTerraformingPossibilities_surfaceTypeCannotBeTerraformed() {
         given(terraformingPossibilitiesService.getOptional(SurfaceType.CONCRETE)).willReturn(Optional.empty());
 
-        List<String> result = underTest.getTerraformingPossibilities(SurfaceType.CONCRETE.name());
+        List<Object> result = underTest.getTerraformingPossibilities(SurfaceType.CONCRETE.name());
 
         assertThat(result).isEmpty();
     }
@@ -109,11 +109,10 @@ public class GameDataControllerImplTest {
     @Test
     public void getTerraformingPossibilities() {
         given(terraformingPossibilitiesService.getOptional(SurfaceType.CONCRETE)).willReturn(Optional.of(new TerraformingPossibilities(List.of(terraformingPossibility))));
-        given(terraformingPossibility.getSurfaceType()).willReturn(SurfaceType.DESERT);
 
-        List<String> result = underTest.getTerraformingPossibilities(SurfaceType.CONCRETE.name());
+        List<Object> result = underTest.getTerraformingPossibilities(SurfaceType.CONCRETE.name());
 
-        assertThat(result).containsExactly(SurfaceType.DESERT.name());
+        assertThat(result).containsExactly(terraformingPossibility);
     }
 
     private static class DummyDataService extends AbstractDataService<String, GameDataItem> {

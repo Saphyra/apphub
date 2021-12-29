@@ -18,6 +18,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/planet_priority_controlle
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/storage_settings_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/construction_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/planet/terraformation_controller.js");
 
 (function PageController(){
     window.SESSION_EXTENSION_ENABLED = true;
@@ -100,6 +101,11 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/construction_controller.j
         construction: "construction",
         closeConstructionButton: "close-construction-button",
         availableBuildings: "available-buildings",
+
+        //Terraforming
+        terraformingPossibilities: "terraforming-possibilities",
+        closeTerraformationButton: "close-terraformation-button",
+        terraformation: "terraformation",
     }
 
     window.webSocketEvents = {

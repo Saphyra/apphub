@@ -6,10 +6,6 @@
     }
 
     function openConstructNewBuildingWindow(planetId, surfaceType, surfaceId){
-        const closeFunction = function(){
-            planetController.viewPlanet(planetId);
-        }
-
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_DATA_AVAILABLE_BUILDINGS", {surfaceType: surfaceType}));
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(availableBuildings){
@@ -22,7 +18,9 @@
                         .forEach(function(node){container.appendChild(node)});
 
 
-                document.getElementById(ids.closeConstructionButton).onclick = closeFunction;
+                document.getElementById(ids.closeConstructionButton).onclick = function(){
+                    planetController.viewPlanet(planetId);
+                };
                 switchTab("main-tab", ids.construction);
             }
         dao.sendRequestAsync(request);

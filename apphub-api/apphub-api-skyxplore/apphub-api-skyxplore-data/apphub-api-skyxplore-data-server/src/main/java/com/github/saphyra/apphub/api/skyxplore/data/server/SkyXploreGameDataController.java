@@ -14,5 +14,5 @@ public interface SkyXploreGameDataController {
     List<String> getAvailableBuildings(@PathVariable("surfaceType") String surfaceType);
 
     @GetMapping(Endpoints.SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES)
-    List<String> getTerraformingPossibilities(@PathVariable("surfaceType") String surfaceType);
+    List<Object> getTerraformingPossibilities(@PathVariable("surfaceType") String surfaceType);
 }

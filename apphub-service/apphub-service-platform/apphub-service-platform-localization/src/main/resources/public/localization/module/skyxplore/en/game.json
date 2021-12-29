@@ -297,6 +297,11 @@
     "cancel-construction-confirmation-dialog-title": "Confirm cancelling construction",
     "cancel-construction-confirmation-dialog-detail": "Are you sure you want to cancel construction of building <SPAN class='red'>{buildingName}</SPAN>?",
     "cancel-construction-confirm-button": "Cancel construction",
-    "cancel-construction-cancel-button": "Back"
+    "cancel-construction-cancel-button": "Back",
+    "start-terraformation": "Start terraformation",
+    "cancel-terraformation-confirmation-dialog-title": "Confirm cancelling terraformation",
+    "cancel-terraformation-confirmation-dialog-detail": "Are you sure you want to cancel terraformation?",
+    "cancel-terraformation-confirm-button": "Cancel terraformation",
+    "cancel-terraformation-cancel-button": "Back"
   }
 }
