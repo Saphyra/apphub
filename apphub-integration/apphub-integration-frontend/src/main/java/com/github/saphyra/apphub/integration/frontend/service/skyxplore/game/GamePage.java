@@ -195,4 +195,12 @@ class GamePage {
     public static List<WebElement> availableBuildings(WebDriver driver) {
         return driver.findElements(By.cssSelector("#available-buildings .available-building"));
     }
+
+    public static WebElement terraformationWindow(WebDriver driver) {
+        return driver.findElement(By.id("terraformation"));
+    }
+
+    public static List<WebElement> terraformingPossibilities(WebDriver driver) {
+        return driver.findElements(By.cssSelector(".terraforming-possibility"));
+    }
 }

@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.frontend.service.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.game.SkyXploreConstructionActions;
+import com.github.saphyra.apphub.integration.frontend.service.skyxplore.game.SkyXploreTerraformationActions;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -112,6 +113,38 @@ public class Surface {
         getFooter()
             .findElement(By.cssSelector(":scope .upgrade-building-button"))
             .click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> WebElementUtils.isStale(webElement))
+            .assertTrue("Planet surface was not reloaded.");
+    }
+
+    public void openTerraformationWindow(WebDriver driver) {
+        assertThat(isEmpty()).isTrue();
+
+        getContent()
+            .findElement(By.cssSelector(":scope .surface-footer .empty-surface-terraform-button"))
+            .click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXploreTerraformationActions.isDisplayed(driver))
+            .assertTrue("Construct new building window is not displayed.");
+    }
+
+    public boolean isTerraformationInProgress() {
+        return getFooter()
+            .findElements(By.cssSelector(":scope .cancel-terraformation-button"))
+            .size() == 1;
+    }
+
+    public void cancelTerraformation(WebDriver driver) {
+        assertThat(isTerraformationInProgress()).isTrue();
+
+        getFooter()
+            .findElement(By.cssSelector(":scope .cancel-terraformation-button"))
+            .click();
+
+        CommonPageActions.confirmConfirmationDialog(driver, "cancel-terraformation-confirmation-dialog");
 
         AwaitilityWrapper.createDefault()
             .until(() -> WebElementUtils.isStale(webElement))

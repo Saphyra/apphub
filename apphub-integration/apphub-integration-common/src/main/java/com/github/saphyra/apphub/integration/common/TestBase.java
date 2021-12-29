@@ -65,7 +65,7 @@ public class TestBase {
 
         System.setProperty("testng.show.stack.frames", "true");
 
-        DatabaseUtil.getConnection();
+        DatabaseUtil.getConnection(); //Checking if database is accessible
     }
 
     @AfterSuite(alwaysRun = true)
