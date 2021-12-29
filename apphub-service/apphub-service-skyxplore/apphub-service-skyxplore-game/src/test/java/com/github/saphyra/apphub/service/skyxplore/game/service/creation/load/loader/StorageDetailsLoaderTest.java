@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.l
 
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResources;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSettings;
@@ -14,7 +15,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.UUID;
-import java.util.Vector;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -53,7 +53,7 @@ public class StorageDetailsLoaderTest {
 
     @Test
     public void load() {
-        given(allocatedResourceLoader.load(LOCATION)).willReturn(new Vector<>(Arrays.asList(allocatedResource)));
+        given(allocatedResourceLoader.load(LOCATION)).willReturn(new AllocatedResources(Arrays.asList(allocatedResource)));
         given(reservedStorageLoader.load(LOCATION)).willReturn(reservedStorages);
         given(storedResourceLoader.load(LOCATION)).willReturn(CollectionUtils.singleValueMap(DATA_ID, storedResource));
         given(storageSettingLoader.load(LOCATION)).willReturn(storageSettings);

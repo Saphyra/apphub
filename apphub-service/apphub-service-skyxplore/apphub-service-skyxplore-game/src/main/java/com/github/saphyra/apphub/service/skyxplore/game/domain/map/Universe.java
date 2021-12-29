@@ -43,7 +43,7 @@ public class Universe {
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Planet not found with id " + planetId));
     }
 
-    public Planet findPlanetByIdAndOwnerValidated(UUID owner, UUID planetId) {
+    public Planet findByOwnerAndPlanetIdValidated(UUID owner, UUID planetId) {
         Planet planet = findPlanetByIdValidated(planetId);
 
         if (!planet.getOwner().equals(owner)) {

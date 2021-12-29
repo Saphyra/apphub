@@ -246,6 +246,12 @@
         "key": "innerHTML",
         "message": "Csökkenő"
       }
+    ],
+    "construction-title": [
+      {
+        "key": "innerHTML",
+        "message": "Új épület építése"
+      }
     ]
   },
   "additionalContent": {
@@ -285,6 +291,17 @@
     "citizen-renamed": "Átnevezés sikeres.",
     "planet-priority-updated": "Prioritás beállítva.",
     "new-solar-system-name-too-long": "Csillagrendszer név túl hosszú (Maximum 30 karakter).",
-    "new-planet-name-too-long": "Bolygó név túl hosszú (Maximum 30 karakter)."
+    "new-planet-name-too-long": "Bolygó név túl hosszú (Maximum 30 karakter).",
+    "construction-requirements": "Építési költség",
+    "construct-new-building": "Megépít",
+    "cancel-construction-confirmation-dialog-title": "Építkezés visszavonásának megerősítése",
+    "cancel-construction-confirmation-dialog-detail": "Biztosan vissza akarod vonni a(z) <SPAN class='red'>{buildingName}</SPAN> építését?",
+    "cancel-construction-confirm-button": "Építkezés visszavonása",
+    "cancel-construction-cancel-button": "Mégse",
+    "start-terraformation": "Terraformálás megkezdése",
+    "cancel-terraform-confirmation-dialog-title": "Terraformálás visszavonásának megerősítése",
+    "cancel-terraform-confirmation-dialog-detail": "Biztosan vissza akarod vonni terraformálást?",
+    "cancel-terraform-confirm-button": "Terraformálás visszavonása",
+    "cancel-terraform-cancel-button": "Mégse"
   }
 }

@@ -27,7 +27,7 @@ class BanRequestValidator {
                 throw ExceptionFactory.invalidParam("duration", "too low");
             }
 
-            ValidationUtil.enumElementExists(request.getChronoUnit(), ChronoUnit::valueOf, "chronoUnit");
+            ValidationUtil.convertToEnumChecked(request.getChronoUnit(), ChronoUnit::valueOf, "chronoUnit");
         }
     }
 }

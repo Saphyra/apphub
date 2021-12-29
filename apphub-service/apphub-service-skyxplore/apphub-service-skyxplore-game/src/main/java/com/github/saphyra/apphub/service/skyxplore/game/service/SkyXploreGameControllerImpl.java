@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SkyXploreGameControllerImpl implements SkyXploreGameController {
     private final GameDao gameDao;
     private final ExpiredGameCleanupService expiredGameCleanupService;
+    private final ExitFromGameService exitFromGameService;
 
     @Override
     public boolean isUserInGame(AccessTokenHeader accessTokenHeader) {
@@ -23,5 +24,11 @@ public class SkyXploreGameControllerImpl implements SkyXploreGameController {
     @Override
     public void cleanUpExpiredGames() {
         expiredGameCleanupService.cleanUp();
+    }
+
+    @Override
+    public void exitGame(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to leave the game.", accessTokenHeader.getUserId());
+        exitFromGameService.exitFromGame(accessTokenHeader.getUserId());
     }
 }

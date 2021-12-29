@@ -4,7 +4,9 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGameWebSocketEventController;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.game.config.CommonSkyXploreConfiguration;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.SystemMessage;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
@@ -27,6 +29,8 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
     private final CharacterProxy characterProxy;
     private final List<WebSocketEventHandler> handlers;
     private final MessageSenderProxy messageSenderProxy;
+    private final DateTimeUtil dateTimeUtil;
+    private final CommonSkyXploreConfiguration configuration;
 
     @Override
     public void processWebSocketEvent(UUID from, WebSocketEvent event) {
@@ -63,7 +67,7 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
                 new SystemMessage(chatRoom.getId(), userName, userId)
             ));
 
-        game.setMarkedForDeletion(false);
+        game.setExpiresAt(null);
     }
 
     @Override
@@ -75,7 +79,7 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
             String userName = characterProxy.getCharacterByUserId(userId).getName();
 
             if (game.getConnectedPlayers().isEmpty()) {
-                gameDao.delete(game);
+                game.setExpiresAt(dateTimeUtil.getCurrentDate().plusSeconds(configuration.getAbandonedGameExpirationSeconds()));
                 return;
             }
 

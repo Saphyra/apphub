@@ -35,7 +35,7 @@ public class AuthenticationService {
         Optional<String> accessTokenIdStringOptional = Optional.ofNullable(request.getCookies().getFirst(ACCESS_TOKEN_COOKIE))
             .map(HttpCookie::getValue);
 
-        if (!accessTokenIdStringOptional.isPresent()) {
+        if (accessTokenIdStringOptional.isEmpty()) {
             log.debug("AccessToken cookie not present. Checking Auth header...");
             accessTokenIdStringOptional = Optional.ofNullable(request.getHeaders().getFirst(Constants.AUTHORIZATION_HEADER));
         }
@@ -43,13 +43,13 @@ public class AuthenticationService {
         String locale = Optional.ofNullable(request.getHeaders().getFirst(Constants.LOCALE_HEADER))
             .orElseThrow(() -> new IllegalStateException("Locale header not found."));
 
-        if (!accessTokenIdStringOptional.isPresent()) {
+        if (accessTokenIdStringOptional.isEmpty()) {
             log.debug("accessTokenCookie is not present. Sending error...");
             return authenticationResultHandlerFactory.unauthorized(request.getHeaders(), createErrorResponse(locale));
         }
 
         Optional<InternalAccessTokenResponse> accessTokenResponseOptional = accessTokenQueryService.getAccessToken(accessTokenIdStringOptional.get());
-        if (!accessTokenResponseOptional.isPresent()) {
+        if (accessTokenResponseOptional.isEmpty()) {
             log.debug("AccessToken not found. Sending error...");
             return authenticationResultHandlerFactory.unauthorized(request.getHeaders(), createErrorResponse(locale));
         }

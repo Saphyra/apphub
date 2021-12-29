@@ -106,6 +106,7 @@ window.Mapping = new function(){
         SKYXPLORE_REMOVE_FRIEND: new Endpoint("/api/skyxplore/data/friend/{friendshipId}", HttpMethod.DELETE),
         SKYXPLORE_GET_CHARACTER: new Endpoint("/api/skyxplore/data/character", HttpMethod.GET),
         SKYXPLORE_GET_ITEM_DATA: new Endpoint("/api/skyxplore/data/data/{dataId}", HttpMethod.GET),
+        SKYXPLORE_DATA_AVAILABLE_BUILDINGS: new Endpoint("/api/skyxplore/data/data/{surfaceType}/buildings", HttpMethod.GET),
 
         //SkyXplore lobby
         SKYXPLORE_EXIT_FROM_LOBBY: new Endpoint("/api/skyxplore/lobby", HttpMethod.DELETE),
@@ -139,6 +140,13 @@ window.Mapping = new function(){
         SKYXPLORE_PLANET_UPDATE_PRIORITY: new Endpoint("/api/skyxplore/game/planet/{planetId}/priority/{priorityType}", HttpMethod.POST),
         SKYXPLORE_PLANET_RENAME: new Endpoint("/api/skyxplore/game/planet/{planetId}/name", HttpMethod.POST),
         SKYXPLORE_SOLAR_SYSTEM_RENAME: new Endpoint("/api/skyxplore/game/solar-system/{solarSystemId}/name", HttpMethod.POST),
+        SKYXPLORE_EXIT_GAME: new Endpoint("/api/skyxplore/game", HttpMethod.DELETE),
+        SKYXPLORE_BUILDING_CONSTRUCT_NEW: new Endpoint("/api/skyxplore/game/building/{planetId}/{surfaceId}", HttpMethod.PUT),
+        SKYXPLORE_BUILDING_UPGRADE: new Endpoint("/api/skyxplore/game/building/{planetId}/{buildingId}", HttpMethod.POST),
+        SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION: new Endpoint("/api/skyxplore/game/building/{planetId}/{buildingId}", HttpMethod.DELETE),
+        SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES: new Endpoint("/api/skyxplore/data/{surfaceType}/terraforming-possibilities", HttpMethod.GET),
+        SKYXPLORE_GAME_TERRAFORM_SURFACE: new Endpoint("/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform", HttpMethod.POST),
+        SKYXPLORE_GAME_CANCEL_TERRAFORMATION: new Endpoint("/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform", HttpMethod.DELETE),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

@@ -11,10 +11,10 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class AccessTokenIdConverter {
+public class AccessTokenIdConverter {
     private final UuidConverter uuidConverter;
 
-    Optional<UUID> convertAccessTokenId(String accessTokenIdString) {
+    public Optional<UUID> convertAccessTokenId(String accessTokenIdString) {
         try {
             return uuidConverter.convertEntity(Optional.of(accessTokenIdString));
         } catch (Exception ex) {

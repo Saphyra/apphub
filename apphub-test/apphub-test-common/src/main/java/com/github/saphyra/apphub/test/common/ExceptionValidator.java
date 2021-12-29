@@ -1,11 +1,14 @@
 package com.github.saphyra.apphub.test.common;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.LoggedException;
 import com.github.saphyra.apphub.lib.exception.NotLoggedException;
 import com.github.saphyra.apphub.lib.exception.ReportedException;
 import com.github.saphyra.apphub.lib.exception.RestException;
 import org.springframework.http.HttpStatus;
+
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,9 +28,22 @@ public class ExceptionValidator {
         validateRestException((RestException) ex, status, errorCode);
     }
 
+    @SafeVarargs
+    public static void validateNotLoggedException(Throwable ex, HttpStatus status, ErrorCode errorCode, BiWrapper<String, String>... params) {
+        assertThat(ex).isInstanceOf(NotLoggedException.class);
+        validateRestException((RestException) ex, status, errorCode, params);
+    }
+
     public static void validateNotLoggedException(Throwable ex, HttpStatus status, ErrorCode errorCode, String field, String value) {
         assertThat(ex).isInstanceOf(NotLoggedException.class);
         validateRestException((RestException) ex, status, errorCode, field, value);
+    }
+
+    @SafeVarargs
+    public static void validateRestException(RestException ex, HttpStatus status, ErrorCode errorCode, BiWrapper<String, String>... params) {
+        Arrays.stream(params)
+            .forEach(param -> assertThat(ex.getErrorMessage().getParams()).containsEntry(param.getEntity1(), param.getEntity2()));
+        validateRestException(ex, status, errorCode);
     }
 
     private static void validateRestException(RestException ex, HttpStatus status, ErrorCode errorCode, String field, String value) {

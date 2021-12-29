@@ -21,6 +21,7 @@ import static java.util.Objects.isNull;
 @Slf4j
 public class SurfaceToModelConverter {
     private final BuildingToModelConverter buildingConverter;
+    private final ConstructionToModelConverter constructionToModelConverter;
 
     public List<GameItem> convertDeep(Collection<Surface> surfaces, Game game) {
         return surfaces.stream()
@@ -34,7 +35,10 @@ public class SurfaceToModelConverter {
         result.add(convert(surface, game));
         result.add(surface.getCoordinate());
         if (!isNull(surface.getBuilding())) {
-            result.add(buildingConverter.convert(surface.getBuilding(), game));
+            result.add(buildingConverter.convert(surface.getBuilding(), game.getGameId()));
+        }
+        if (!isNull(surface.getTerraformation())) {
+            result.add(constructionToModelConverter.convert(surface.getTerraformation(), game.getGameId()));
         }
         return result;
     }

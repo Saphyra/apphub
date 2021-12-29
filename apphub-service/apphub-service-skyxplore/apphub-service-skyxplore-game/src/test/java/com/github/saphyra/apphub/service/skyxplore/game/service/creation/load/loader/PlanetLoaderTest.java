@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import org.junit.Test;
@@ -97,7 +98,7 @@ public class PlanetLoaderTest {
         given(planetModel.getOwner()).willReturn(OWNER);
 
         given(coordinateLoader.loadOneByReferenceId(PLANET_ID)).willReturn(coordinateModel);
-        given(surfaceLoader.load(PLANET_ID)).willReturn(CollectionUtils.singleValueMap(coordinate, surface));
+        given(surfaceLoader.load(PLANET_ID)).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(coordinate, surface)));
         given(citizenLoader.load(PLANET_ID)).willReturn(new OptionalHashMap<>(CollectionUtils.singleValueMap(CITIZEN_ID, citizen)));
         given(storageDetailsLoader.load(PLANET_ID)).willReturn(storageDetails);
         given(priorityLoader.load(PLANET_ID)).willReturn(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION, PRIORITY));

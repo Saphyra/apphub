@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,7 +55,7 @@ public class SurfaceResponseQueryServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
         given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(CollectionUtils.singleValueMap(new Coordinate(0, 0), surface));
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(new Coordinate(0, 0), surface)));
         given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
 
         List<SurfaceResponse> result = underTest.getSurfaceOfPlanet(USER_ID, PLANET_ID);

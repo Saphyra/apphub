@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,13 +26,15 @@ class SurfaceLoader {
     private final CoordinateLoader coordinateLoader;
     private final BuildingLoader buildingLoader;
     private final ExecutorServiceBean executorServiceBean;
+    private final ConstructionLoader constructionLoader;
 
-    Map<Coordinate, Surface> load(UUID planetId) {
+    SurfaceMap load(UUID planetId) {
         List<SurfaceModel> models = gameItemLoader.loadChildren(planetId, GameItemType.SURFACE, SurfaceModel[].class);
 
-        return executorServiceBean.processCollectionWithWait(models, this::convert, 8)
+        Map<Coordinate, Surface> surfaces = executorServiceBean.processCollectionWithWait(models, this::convert, 8)
             .stream()
             .collect(Collectors.toMap(surface -> surface.getCoordinate().getCoordinate(), Function.identity()));
+        return new SurfaceMap(surfaces);
     }
 
     private Surface convert(SurfaceModel model) {
@@ -41,6 +44,7 @@ class SurfaceLoader {
             .coordinate(coordinateLoader.loadOneByReferenceId(model.getId()))
             .surfaceType(SurfaceType.valueOf(model.getSurfaceType()))
             .building(buildingLoader.load(model.getId()))
+            .terraformation(constructionLoader.load(model.getId()))
             .build();
     }
 }

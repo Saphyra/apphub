@@ -11,13 +11,16 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class BuildingToResponseConverter {
-    SurfaceBuildingResponse convert(Building building) {
+public class BuildingToResponseConverter {
+    private final ConstructionToResponseConverter constructionToResponseConverter;
+
+    public SurfaceBuildingResponse convert(Building building) {
         return Optional.ofNullable(building)
             .map(b -> SurfaceBuildingResponse.builder()
                 .buildingId(b.getBuildingId())
                 .dataId(b.getDataId())
                 .level(b.getLevel())
+                .construction(Optional.ofNullable(building.getConstruction()).map(constructionToResponseConverter::convert).orElse(null))
                 .build())
             .orElse(null);
     }

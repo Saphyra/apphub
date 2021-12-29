@@ -176,6 +176,11 @@ function MapStream(i){
         return new MapStream(values);
     }
 
+    this.peek = function(consumer){
+        this.forEach(consumer);
+        return this;
+    }
+
     this.sorted = function(comparator){
         return new Stream(entryList(items))
             .sorted(comparator)
@@ -196,6 +201,16 @@ function MapStream(i){
             return new Stream(arr);
         }else{
             return new Stream(Object.values(items));
+        }
+    }
+
+    this.toList = function(mapper){
+        if(mapper){
+            const arr = [];
+            this.forEach(function(key, value){arr.push(mapper(key, value))});
+            return arr;
+        }else{
+            return Object.values(items);
         }
     }
 

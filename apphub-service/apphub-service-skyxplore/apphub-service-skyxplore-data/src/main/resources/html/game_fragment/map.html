@@ -1,0 +1,18 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<DIV id="map" class="main-tab" th:fragment="map">
+    <MAIN id="map-container" class="headless">
+        <DIV id="map-wrapper" class="zoom-content-wrapper">
+            <SVG id="map-svg-container"></SVG>
+        </DIV>
+
+        <DIV class="zoom-button-container">
+            <BUTTON class="zoom-in-button" onclick="mapController.zoomIn()"></BUTTON>
+            <BUTTON class="zoom-out-button" onclick="mapController.zoomOut()"></BUTTON>
+        </DIV>
+    </MAIN>
+</DIV>
+
+</BODY>
+</HTML>

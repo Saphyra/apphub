@@ -1,26 +1,26 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-
-import java.util.Arrays;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ResourceDetailsResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResources;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.ActualResourceAmountQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocatedResourceAmountQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.ReservedStorageQueryService;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.Arrays;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ResourceDetailsResponseMapperTest {
@@ -61,7 +61,7 @@ public class ResourceDetailsResponseMapperTest {
         given(resourceData.getId()).willReturn(DATA_ID);
         given(storageDetails.getReservedStorages()).willReturn(reservedStorages);
         given(storageDetails.getStoredResources()).willReturn(CollectionUtils.singleValueMap(DATA_ID, storedResource));
-        given(storageDetails.getAllocatedResources()).willReturn(Arrays.asList(allocatedResource));
+        given(storageDetails.getAllocatedResources()).willReturn(new AllocatedResources(Arrays.asList(allocatedResource)));
 
         given(reservedStorageQueryService.getReservedAmount(DATA_ID, reservedStorages)).willReturn(RESERVED_STORAGE_AMOUNT);
         given(actualResourceAmountQueryService.getActualAmount(DATA_ID, CollectionUtils.singleValueMap(DATA_ID, storedResource))).willReturn(ACTUAL_AMOUNT);

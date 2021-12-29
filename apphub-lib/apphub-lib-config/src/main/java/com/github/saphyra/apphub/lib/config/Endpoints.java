@@ -156,6 +156,7 @@ public class Endpoints {
     public static final String SKYXPLORE_REMOVE_FRIEND = "/api/skyxplore/data/friend/{friendshipId}";
     public static final String SKYXPLORE_GET_CHARACTER = "/api/skyxplore/data/character";
     public static final String SKYXPLORE_GET_ITEM_DATA = "/api/skyxplore/data/data/{dataId}";
+    public static final String SKYXPLORE_DATA_AVAILABLE_BUILDINGS = "/api/skyxplore/data/data/{surfaceType}/buildings";
 
     //SKYXPLORE-LOBBY
     public static final String SKYXPLORE_INTERNAL_LOBBY_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/lobby/{userId}";
@@ -207,4 +208,13 @@ public class Endpoints {
     public static final String SKYXPLORE_PLANET_UPDATE_PRIORITY = "/api/skyxplore/game/planet/{planetId}/priority/{priorityType}";
     public static final String SKYXPLORE_PLANET_RENAME = "/api/skyxplore/game/planet/{planetId}/name";
     public static final String SKYXPLORE_SOLAR_SYSTEM_RENAME = "/api/skyxplore/game/solar-system/{solarSystemId}/name";
+    public static final String SKYXPLORE_EXIT_GAME = "/api/skyxplore/game";
+
+    public static final String SKYXPLORE_BUILDING_CONSTRUCT_NEW = "/api/skyxplore/game/building/{planetId}/{surfaceId}";
+    public static final String SKYXPLORE_BUILDING_UPGRADE = "/api/skyxplore/game/building/{planetId}/{buildingId}";
+    public static final String SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION = "/api/skyxplore/game/building/{planetId}/{buildingId}";
+
+    public static final String SKYXPLORE_GAME_TERRAFORM_SURFACE = "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform";
+    public static final String SKYXPLORE_GAME_CANCEL_TERRAFORMATION = "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform";
+    public static final String SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES = "/api/skyxplore/data/{surfaceType}/terraforming-possibilities";
 }

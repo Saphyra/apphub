@@ -15,4 +15,5 @@ public class Building {
     private final UUID buildingId;
     private final String dataId;
     private int level;
+    private Construction construction;
 }

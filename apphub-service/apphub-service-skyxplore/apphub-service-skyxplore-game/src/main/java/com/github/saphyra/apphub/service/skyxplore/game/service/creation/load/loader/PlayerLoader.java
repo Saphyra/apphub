@@ -39,6 +39,7 @@ class PlayerLoader {
             .build();
     }
 
+    //Set players, who are not in the lobby to AI
     private boolean isAi(PlayerModel model, List<UUID> members) {
         if (members.contains(model.getUserId())) {
             return false;

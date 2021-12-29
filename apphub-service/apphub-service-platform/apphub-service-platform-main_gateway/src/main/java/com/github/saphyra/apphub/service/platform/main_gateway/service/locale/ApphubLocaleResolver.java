@@ -22,11 +22,11 @@ public class ApphubLocaleResolver {
     public String getLocale(HttpHeaders headers, MultiValueMap<String, HttpCookie> cookies) {
         Optional<String> locale = userSettingLocaleResolver.getLocale(cookies);
 
-        if (!locale.isPresent()) {
+        if (locale.isEmpty()) {
             locale = cookieLocaleResolver.getLocale(cookies);
         }
 
-        if (!locale.isPresent()) {
+        if (locale.isEmpty()) {
             locale = browserLanguageLocaleResolver.getLocale(headers);
         }
 

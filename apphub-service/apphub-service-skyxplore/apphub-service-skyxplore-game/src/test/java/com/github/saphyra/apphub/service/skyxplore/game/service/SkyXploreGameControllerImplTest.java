@@ -27,6 +27,9 @@ public class SkyXploreGameControllerImplTest {
     @Mock
     private ExpiredGameCleanupService expiredGameCleanupService;
 
+    @Mock
+    private ExitFromGameService exitFromGameService;
+
     @InjectMocks
     private SkyXploreGameControllerImpl underTest;
 
@@ -60,5 +63,12 @@ public class SkyXploreGameControllerImplTest {
         underTest.cleanUpExpiredGames();
 
         verify(expiredGameCleanupService).cleanUp();
+    }
+
+    @Test
+    public void exitGame() {
+        underTest.exitGame(accessTokenHeader);
+
+        verify(exitFromGameService).exitFromGame(USER_ID);
     }
 }

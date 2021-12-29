@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
@@ -40,6 +41,9 @@ public class SurfaceLoaderTest {
     @Mock
     private BuildingLoader buildingLoader;
 
+    @Mock
+    private ConstructionLoader constructionLoader;
+
     @SuppressWarnings("unused")
     @Spy
     private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(Mockito.mock(ErrorReporterService.class));
@@ -59,6 +63,9 @@ public class SurfaceLoaderTest {
     @Mock
     private Coordinate coordinate;
 
+    @Mock
+    private Construction construction;
+
     @Test
     public void load() {
         given(gameItemLoader.loadChildren(PLANET_ID, GameItemType.SURFACE, SurfaceModel[].class)).willReturn(Arrays.asList(surfaceModel));
@@ -69,6 +76,7 @@ public class SurfaceLoaderTest {
         given(surfaceModel.getSurfaceType()).willReturn(SurfaceType.CONCRETE.name());
         given(buildingLoader.load(SURFACE_ID)).willReturn(building);
         given(coordinateModel.getCoordinate()).willReturn(coordinate);
+        given(constructionLoader.load(SURFACE_ID)).willReturn(construction);
 
         Map<Coordinate, Surface> result = underTest.load(PLANET_ID);
 
@@ -79,5 +87,6 @@ public class SurfaceLoaderTest {
         assertThat(surface.getCoordinate()).isEqualTo(coordinateModel);
         assertThat(surface.getSurfaceType()).isEqualTo(SurfaceType.CONCRETE);
         assertThat(surface.getBuilding()).isEqualTo(building);
+        assertThat(surface.getTerraformation()).isEqualTo(construction);
     }
 }

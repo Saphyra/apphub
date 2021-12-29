@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.integration.frontend.admin_panel;
 
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.common.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.frontend.SeleniumTest;
 import com.github.saphyra.apphub.integration.frontend.framework.Navigation;
@@ -30,6 +31,7 @@ public class RoleManagementTest extends SeleniumTest {
         IndexPageActions.registerUser(driver, userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
+        SleepUtil.sleep(3000);
         driver.navigate().refresh();
         ModulesPageActions.openModule(driver, ModuleLocation.ROLE_MANAGEMENT);
 

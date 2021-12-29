@@ -1,0 +1,43 @@
+package com.github.saphyra.apphub.service.skyxplore.game.service;
+
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketEventControllerImpl;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+
+@RunWith(MockitoJUnitRunner.class)
+public class ExitFromGameServiceTest {
+    private static final UUID USER_ID = UUID.randomUUID();
+
+    @Mock
+    private SkyXploreGameWebSocketEventControllerImpl wsEventController;
+
+    @Mock
+    private GameDao gameDao;
+
+    @InjectMocks
+    private ExitFromGameService underTest;
+
+    @Mock
+    private Game game;
+
+    @Test
+    public void exitFromGame() {
+        given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
+
+        underTest.exitFromGame(USER_ID);
+
+        verify(wsEventController).userLeftGame(USER_ID);
+        verify(gameDao).delete(game);
+    }
+}

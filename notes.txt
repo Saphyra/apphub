@@ -1,0 +1,6 @@
+TERRAFORMING
+    After implementing surface terraforming, a check should be added to construct new building service, what blocks the new construction, if the terraforming is already in progress.
+
+DISPLAY QUEUE
+    After implementing display queue feature, it should be updated with the new items automatically. Construct new building service and upgrade building service should send a WS event about the new item in the queue.
+    After implementing display queue feature, it should be updated with the new items automatically. Cancel construction service should send a WS event about item was removed from the queue

@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -17,14 +18,14 @@ import java.util.stream.Collectors;
 public class AllocatedResourceToModelConverter {
     public List<AllocatedResourceModel> convert(List<AllocatedResource> allocatedResources, Game game) {
         return allocatedResources.stream()
-            .map(allocatedResource -> convert(allocatedResource, game))
+            .map(allocatedResource -> convert(allocatedResource, game.getGameId()))
             .collect(Collectors.toList());
     }
 
-    private AllocatedResourceModel convert(AllocatedResource allocatedResource, Game game) {
+    public AllocatedResourceModel convert(AllocatedResource allocatedResource, UUID gameId) {
         AllocatedResourceModel model = new AllocatedResourceModel();
         model.setId(allocatedResource.getAllocatedResourceId());
-        model.setGameId(game.getGameId());
+        model.setGameId(gameId);
         model.setType(GameItemType.ALLOCATED_RESOURCE);
         model.setLocation(allocatedResource.getLocation());
         model.setLocationType(allocatedResource.getLocationType().name());

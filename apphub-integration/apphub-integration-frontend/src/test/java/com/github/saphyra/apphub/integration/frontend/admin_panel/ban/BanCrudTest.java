@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
+import com.github.saphyra.apphub.integration.common.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.common.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
 import com.github.saphyra.apphub.integration.frontend.SeleniumTest;
@@ -42,6 +43,7 @@ public class BanCrudTest extends SeleniumTest {
         Navigation.toIndexPage(adminDriver);
         IndexPageActions.registerUser(adminDriver, adminUserData);
         DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
+        SleepUtil.sleep(3000);
         adminDriver.navigate().refresh();
         ModulesPageActions.openModule(adminDriver, ModuleLocation.BAN);
 
@@ -70,6 +72,7 @@ public class BanCrudTest extends SeleniumTest {
         BanActions.submitBanForm(adminDriver);
         NotificationUtil.verifySuccessNotification(adminDriver, "Felhasználó kitiltva.");
 
+        SleepUtil.sleep(3000);
         testDriver.navigate().refresh();
         AwaitilityWrapper.createDefault()
             .until(() -> testDriver.getCurrentUrl().contains(Endpoints.ERROR_PAGE))

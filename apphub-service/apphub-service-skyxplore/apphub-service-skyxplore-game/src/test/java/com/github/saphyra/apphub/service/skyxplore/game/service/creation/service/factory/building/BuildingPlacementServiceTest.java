@@ -8,6 +8,8 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingDa
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
+import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.BuildingFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,7 +79,8 @@ public class BuildingPlacementServiceTest {
         surfaceMap.put(randomCoordinate(), mountainSurface);
         surfaceMap.put(randomCoordinate(), oreFieldSurface);
 
-        given(planet.getSurfaces()).willReturn(surfaceMap);
+        SurfaceMap surfaces = new SurfaceMap(surfaceMap);
+        given(planet.getSurfaces()).willReturn(surfaces);
 
         given(concreteSurface.getSurfaceId()).willReturn(CONCRETE_SURFACE_ID);
         given(mountainSurface.getSurfaceId()).willReturn(MOUNTAIN_SURFACE_ID);
@@ -87,9 +90,9 @@ public class BuildingPlacementServiceTest {
 
         given(buildingData.getPrimarySurfaceType()).willReturn(SurfaceType.CONCRETE);
 
-        given(emptySurfaceProvider.getEmptySurfaceForType(SurfaceType.CONCRETE, surfaceMap.values())).willReturn(concreteSurface);
-        given(emptySurfaceProvider.getEmptySurfaceForType(SurfaceType.MOUNTAIN, surfaceMap.values())).willReturn(mountainSurface);
-        given(emptySurfaceProvider.getEmptySurfaceForType(SurfaceType.ORE_FIELD, surfaceMap.values())).willReturn(oreFieldSurface);
+        given(emptySurfaceProvider.getEmptySurfaceForType(SurfaceType.CONCRETE, surfaces.values())).willReturn(concreteSurface);
+        given(emptySurfaceProvider.getEmptySurfaceForType(SurfaceType.MOUNTAIN, surfaces.values())).willReturn(mountainSurface);
+        given(emptySurfaceProvider.getEmptySurfaceForType(SurfaceType.ORE_FIELD, surfaces.values())).willReturn(oreFieldSurface);
 
         given(buildingFactory.create(DATA_ID, CONCRETE_SURFACE_ID)).willReturn(building);
         given(buildingFactory.create("excavator", MOUNTAIN_SURFACE_ID)).willReturn(building);

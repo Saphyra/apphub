@@ -183,4 +183,24 @@ class GamePage {
     public static WebElement closePlanetButton(WebDriver driver) {
         return driver.findElement(By.id("close-planet-button"));
     }
+
+    public static List<WebElement> surfacesOfPlanet(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#planet-surface-container .surface-table-cell"));
+    }
+
+    public static WebElement constructionWindow(WebDriver driver) {
+        return driver.findElement(By.id("construction"));
+    }
+
+    public static List<WebElement> availableBuildings(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#available-buildings .available-building"));
+    }
+
+    public static WebElement terraformationWindow(WebDriver driver) {
+        return driver.findElement(By.id("terraformation"));
+    }
+
+    public static List<WebElement> terraformingPossibilities(WebDriver driver) {
+        return driver.findElements(By.cssSelector(".terraforming-possibility"));
+    }
 }

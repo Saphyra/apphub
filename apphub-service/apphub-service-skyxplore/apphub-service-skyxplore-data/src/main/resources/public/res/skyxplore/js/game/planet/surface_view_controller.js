@@ -1,4 +1,4 @@
-(function SurfaceViewController(){
+(function SurfaceViewController() {
     window.surfaceViewController = new function(){
         this.loadSurface = loadSurface;
     }
@@ -9,12 +9,12 @@
                 return JSON.parse(response.body);
             }
             request.processValidResponse = function(surfaces){
-                displaySurfaces(surfaces);
+                displaySurfaces(planetId, surfaces);
             }
         dao.sendRequestAsync(request);
     }
 
-    function displaySurfaces(surfaces){
+    function displaySurfaces(planetId, surfaces){
         const surfaceContainer = document.getElementById(ids.planetSurfaceContainer);
             surfaceContainer.innerHTML = "";
 
@@ -32,9 +32,14 @@
                     const surfaceNode = document.createElement("SPAN");
                         surfaceNode.classList.add("surface-table-cell");
                         surfaceNode.classList.add("surface-type-" + surface.surfaceType.toLowerCase());
+                        surfaceNode.id = surface.surfaceId;
 
                         if(surface.building){
-                            surfaceNode.appendChild(createBuilding(surface.building));
+                            surfaceNode.appendChild(createBuilding(planetId, surface.building));
+                        }else if(surface.terraformation){
+                            surfaceNode.appendChild(createTerraformation(planetId, surface.surfaceId, surface.terraformation));
+                        }else{
+                            surfaceNode.appendChild(createEmptySurface(surface.surfaceId, surface.surfaceType));
                         }
                     rowNode.appendChild(surfaceNode);
                 }
@@ -57,7 +62,7 @@
             return result;
         }
 
-        function createBuilding(building){
+        function createBuilding(planetId, building){
             const content = document.createElement("DIV");
                 content.classList.add("building-" + building.dataId);
                 content.classList.add("surface-content");
@@ -67,23 +72,115 @@
                     levelCell.classList.add("surface-header");
             content.appendChild(levelCell);
 
-                if(building.level < building.maxLevel){ //TODO load BuildingData
+                if(building.construction){
+                    content.appendChild(createConstructionFooter(planetId, building.buildingId, building.construction, building.dataId));
+                }else if(building.level < dataCaches.itemData.get(building.dataId).maxLevel){
                     const footer = document.createElement("DIV");
                         footer.classList.add("surface-footer");
-                        footer.appendChild(createFooterContent(building));
+                        footer.appendChild(createUpgradeBuildingFooter(planetId, building));
                     content.appendChild(footer);
                 }
 
             return content;
 
-            function createFooterContent(building){
+            function createConstructionFooter(planetId, buildingId, construction, dataId){
+                const footer = document.createElement("DIV");
+                    footer.classList.add("surface-footer");
+
+                    const progressBar = document.createElement("DIV");
+                        progressBar.classList.add("progress-bar-container");
+
+                        const progressBarBackground = document.createElement("DIV");
+                            progressBarBackground.classList.add("progress-bar-background");
+                            progressBarBackground.style.width = (construction.currentWorkPoints / construction.requiredWorkPoints * 100) + "%";
+                    progressBar.appendChild(progressBarBackground);
+
+                        const progressBarContent = document.createElement("DIV");
+                            progressBarContent.classList.add("progress-bar-text");
+
+                            const cancelConstructionButton = document.createElement("BUTTON");
+                                cancelConstructionButton.classList.add("cancel-construction-button");
+                                cancelConstructionButton.innerText = "-";
+                                cancelConstructionButton.onclick = function(){
+                                    constructionController.cancelConstruction(planetId, buildingId, dataId);
+                                }
+                        progressBarContent.appendChild(cancelConstructionButton);
+                    progressBar.appendChild(progressBarContent);
+                footer.appendChild(progressBar);
+                return footer;
+            }
+
+            function createUpgradeBuildingFooter(planetId, building){
                 const upgradeButton = document.createElement("button");
+                    upgradeButton.classList.add("upgrade-building-button");
                     upgradeButton.innerHTML = Localization.getAdditionalContent("upgrade");
                     upgradeButton.onclick = function(){
-                        upgradeBuilding(building.buildingId);
+                        constructionController.upgradeBuilding(planetId, building.buildingId);
                     }
                 return upgradeButton;
             }
+        }
+
+        function createTerraformation(planetId, surfaceId, terraformation){
+            const content = document.createElement("DIV");
+                content.classList.add("empty-surface-content");
+                content.classList.add("surface-content");
+
+                const footer = document.createElement("DIV");
+                    footer.classList.add("surface-footer");
+
+                    const progressBar = document.createElement("DIV");
+                        progressBar.classList.add("progress-bar-container");
+
+                        const progressBarBackground = document.createElement("DIV");
+                            progressBarBackground.classList.add("progress-bar-background");
+                            progressBarBackground.style.width = (terraformation.currentWorkPoints / terraformation.requiredWorkPoints * 100) + "%";
+                    progressBar.appendChild(progressBarBackground);
+
+                        const progressBarContent = document.createElement("DIV");
+                            progressBarContent.classList.add("progress-bar-text");
+
+                            const cancelTerraformationButton = document.createElement("BUTTON");
+                                cancelTerraformationButton.classList.add("cancel-terraformation-button");
+                                cancelTerraformationButton.innerText = "-";
+                                cancelTerraformationButton.onclick = function(){
+                                    terraformationController.cancelTerraformation(planetId, surfaceId);
+                                }
+                        progressBarContent.appendChild(cancelTerraformationButton);
+                    progressBar.appendChild(progressBarContent);
+                footer.appendChild(progressBar);
+            content.appendChild(footer);
+            return content;
+        }
+
+        function createEmptySurface(surfaceId, surfaceType){
+            const content = document.createElement("DIV");
+                content.classList.add("empty-surface-content");
+                content.classList.add("surface-content");
+
+                const footer = document.createElement("DIV");
+                    footer.classList.add("surface-footer");
+
+                    const buildButton = document.createElement("button");
+                        buildButton.classList.add("empty-surface-construct-new-building-button");
+                        buildButton.innerHTML = "+";
+                        buildButton.onclick = function(){
+                            constructionController.openConstructNewBuildingWindow(planetController.getOpenedPlanetId(), surfaceType, surfaceId);
+                        }
+                footer.appendChild(buildButton);
+
+                if(dataCaches.terraformingPossibilities.get(surfaceType).length > 0){
+                    const terraformButton = document.createElement("button");
+                        terraformButton.classList.add("empty-surface-terraform-button");
+                        terraformButton.innerHTML = "T" //TODO proper terraform background icon
+                        terraformButton.onclick = function(){
+                            terraformationController.openTerraformWindow(planetController.getOpenedPlanetId(), surfaceId, surfaceType);
+                        }
+                    footer.appendChild(terraformButton);
+                }
+
+            content.appendChild(footer);
+            return content;
         }
     }
 })();

@@ -2,6 +2,8 @@ spring:
   application:
     name: skyxplore-game
 
+abandonedGameExpirationSeconds: 300
+
 game:
   saver:
     maxChunkSize: 500

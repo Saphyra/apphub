@@ -1,0 +1,152 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<DIV id="planet" class="main-tab" th:fragment="planet">
+    <HEADER>
+        <H1>
+            <SPAN id="planet-name"></SPAN>
+            <BUTTON id="close-planet-button" class="window-close-button">X</BUTTON>
+        </H1>
+    </HEADER>
+
+    <MAIN>
+        <DIV id="planet-left-bar">
+            <DIV id="planet-left-bar-title" class="planet-bar-title"></DIV>
+            <DIV id="planet-left-bar-content" class="planet-bar-content">
+                <DIV class="planet-bar-container">
+                    <DIV id="planet-storage-header" class="planet-bar-container-header"></DIV>
+
+                    <DIV class="planet-bar-list-item">
+                        <DIV class="planet-storage-summary-container">
+                            <DIV id="planet-storage-energy-actual-progress-bar" class="progress-bar-background planet-actual-progress-bar-background"></DIV>
+                            <DIV id="planet-storage-energy-allocated-progress-bar" class="progress-bar-background planet-allocated-progress-bar-background"></DIV>
+                            <DIV id="planet-storage-energy-reserved-progress-bar" class="progress-bar-background planet-reserved-progress-bar-background"></DIV>
+                            <DIV class="progress-bar-text planet-storage-progress-bar-text">
+                                <SPAN id="planet-storage-energy-label"></SPAN>
+                                :
+                                <SPAN id="planet-storage-energy-actual-value"></SPAN>
+                                (<SPAN id="planet-storage-energy-allocated-value"></SPAN>)
+                                /
+                                <SPAN id="planet-storage-energy-capacity"></SPAN>
+                                -
+                                <SPAN class="planet-storage-reserved-label"></SPAN>
+                                :
+                                <SPAN id="planet-storage-energy-reserved-value"></SPAN>
+                            </DIV>
+                            <BUTTON id="toggle-energy-details-button" class="window-close-button">+</BUTTON>
+                        </DIV>
+                        <DIV id="planet-storage-energy-details-container" class="planet-storage-details-container"></DIV>
+                    </DIV>
+
+                    <DIV class="planet-bar-list-item">
+                        <DIV class="planet-storage-summary-container">
+                            <DIV id="planet-storage-liquid-actual-progress-bar" class="progress-bar-background planet-actual-progress-bar-background"></DIV>
+                            <DIV id="planet-storage-liquid-allocated-progress-bar" class="progress-bar-background planet-allocated-progress-bar-background"></DIV>
+                            <DIV id="planet-storage-liquid-reserved-progress-bar" class="progress-bar-background planet-reserved-progress-bar-background"></DIV>
+                            <DIV class="progress-bar-text planet-storage-progress-bar-text">
+                                <SPAN id="planet-storage-liquid-label"></SPAN>
+                                :
+                                <SPAN id="planet-storage-liquid-actual-value"></SPAN>
+                                (<SPAN id="planet-storage-liquid-allocated-value"></SPAN>)
+                                /
+                                <SPAN id="planet-storage-liquid-capacity"></SPAN>
+                                -
+                                <SPAN class="planet-storage-reserved-label"></SPAN>
+                                :
+                                <SPAN id="planet-storage-liquid-reserved-value"></SPAN>
+                            </DIV>
+                            <BUTTON id="toggle-liquid-details-button" class="window-close-button">+</BUTTON>
+                        </DIV>
+                        <DIV id="planet-storage-liquid-details-container" class="planet-storage-details-container"></DIV>
+                    </DIV>
+
+                    <DIV class="planet-bar-list-item">
+                        <DIV class="planet-storage-summary-container">
+                            <DIV id="planet-storage-bulk-actual-progress-bar" class="progress-bar-background planet-actual-progress-bar-background"></DIV>
+                            <DIV id="planet-storage-bulk-allocated-progress-bar" class="progress-bar-background planet-allocated-progress-bar-background"></DIV>
+                            <DIV id="planet-storage-bulk-reserved-progress-bar" class="progress-bar-background planet-reserved-progress-bar-background"></DIV>
+                            <DIV class="progress-bar-text planet-storage-progress-bar-text">
+                                <SPAN id="planet-storage-bulk-label"></SPAN>:
+                                <SPAN id="planet-storage-bulk-actual-value"></SPAN>
+                                (<SPAN id="planet-storage-bulk-allocated-value"></SPAN>)
+                                /
+                                <SPAN id="planet-storage-bulk-capacity"></SPAN>
+                                -
+                                <SPAN class="planet-storage-reserved-label"></SPAN>
+                                :
+                                <SPAN id="planet-storage-bulk-reserved-value"></SPAN>
+                            </DIV>
+                            <BUTTON id="toggle-bulk-details-button" class="window-close-button">+</BUTTON>
+                        </DIV>
+                        <DIV id="planet-storage-bulk-details-container" class="planet-storage-details-container"></DIV>
+                    </DIV>
+
+                    <DIV id="planet-storage-settings-button" class="button" onclick="planetController.openStorageSettings()"></DIV>
+                </DIV>
+
+                <DIV class="planet-bar-container">
+                    <DIV id="planet-population-header" class="planet-bar-container-header"></DIV>
+                    <DIV class="progress-bar-container">
+                        <DIV id="planet-population-overview-progress-bar-background" class="progress-bar-background"></DIV>
+                        <DIV id="planet-population-overview-bar-text" class="progress-bar-text">
+                            <SPAN id="planet-population-overview-actual"></SPAN>
+                            /
+                            <SPAN id="planet-population-overview-capacity"></SPAN>
+                        </DIV>
+                    </DIV>
+                    <DIV id="planet-open-population-overview-button" class="button"></DIV>
+                </DIV>
+
+                <DIV class="planet-bar-container">
+                    <DIV id="planet-buildings-header" class="planet-bar-container-header"></DIV>
+                    <DIV id="planet-buildings-container"></DIV>
+                    <DIV class="planet-bar-list-item">
+                        <SPAN id="planet-buildings-total-label"></SPAN><SPAN>: </SPAN>
+                        <SPAN id="planet-buildings-total-used-slots"></SPAN>
+                        <SPAN>/</SPAN>
+                        <SPAN id="planet-buildings-total-slots"></SPAN>
+                        <SPAN>(<SPAN id="planet-buildings-total-level-label"></SPAN>: <SPAN id="planet-buildings-total-level"></SPAN>)</SPAN>
+                    </DIV>
+                </DIV>
+
+                <DIV class="planet-bar-container">
+                    <DIV id="planet-priorities-header" class="planet-bar-container-header"></DIV>
+                    <DIV class="planet-bar-list-item">
+                        <SPAN id="planet-priorities-construction-label"></SPAN>
+                        <INPUT type="range" id="planet-priorities-construction-input" min="1" max="10" step="1">
+                        <SPAN id="planet-priorities-construction-value"></SPAN>
+                    </DIV>
+
+                    <DIV class="planet-bar-list-item">
+                        <SPAN id="planet-priorities-manufacturing-label"></SPAN>
+                        <INPUT type="range" id="planet-priorities-manufacturing-input" min="1" max="10" step="1">
+                        <SPAN id="planet-priorities-manufacturing-value"></SPAN>
+                    </DIV>
+
+                    <DIV class="planet-bar-list-item">
+                        <SPAN id="planet-priorities-extraction-label"></SPAN>
+                        <INPUT type="range" id="planet-priorities-extraction-input" min="1" max="10" step="1">
+                        <SPAN id="planet-priorities-extraction-value"></SPAN>
+                    </DIV>
+                </DIV>
+            </DIV>
+        </DIV>
+        <DIV id="planet-middle-bar">
+            <DIV id="planet-surface-wrapper" class="zoom-content-wrapper">
+                <DIV id="planet-surface-container"></DIV>
+            </DIV>
+
+            <DIV class="zoom-button-container">
+                <BUTTON class="zoom-in-button" onclick="planetController.zoomIn()"></BUTTON>
+                <BUTTON class="zoom-out-button" onclick="planetController.zoomOut()"></BUTTON>
+            </DIV>
+        </DIV>
+        <DIV id="planet-right-bar">
+            <DIV id="planet-right-bar-title" class="planet-bar-title"></DIV>
+            <DIV id="planet-right-bar-content" class="planet-bar-content"></DIV>
+        </DIV>
+    </MAIN>
+</DIV>
+
+</BODY>
+</HTML>

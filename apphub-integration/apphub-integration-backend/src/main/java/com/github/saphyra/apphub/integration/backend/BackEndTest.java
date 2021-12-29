@@ -22,8 +22,8 @@ public class BackEndTest extends TestBase {
 
     @DataProvider(name = "languageDataProvider", parallel = true)
     public Object[] languageDataProvider() {
-        //return Language.values();
-        return new Object[]{Language.HUNGARIAN};
+        return Language.values();
+//        return new Object[]{Language.HUNGARIAN};
     }
 
     @BeforeMethod(alwaysRun = true)
@@ -41,7 +41,7 @@ public class BackEndTest extends TestBase {
 
         boolean wsConnectionsCleaned = ApphubWsClient.getClients().isEmpty();
         if (!wsConnectionsCleaned) {
-            log.error("WsConnections not cleaned for method {}", method.getName(), new RuntimeException());
+            log.debug("WsConnections not cleaned for method {}", method.getName(), new RuntimeException());
             ApphubWsClient.cleanUpConnections();
         }
         assertThat(ApphubWsClient.getClients().isEmpty()).isTrue();

@@ -54,7 +54,7 @@ public class NotificationUtil {
             .peek(webElement -> log.debug("Notification found with message {}", webElement.findElement(NOTIFICATION_TEXT_LOCATOR).getText()))
             .filter(webElement -> webElement.findElement(NOTIFICATION_TEXT_LOCATOR).getText().equals(notificationMessage))
             .findAny();
-        if (!matchingNotification.isPresent()) {
+        if (matchingNotification.isEmpty()) {
             throw new AssertionError("No notification matches notificationMessage " + notificationMessage);
         }
         return matchingNotification;

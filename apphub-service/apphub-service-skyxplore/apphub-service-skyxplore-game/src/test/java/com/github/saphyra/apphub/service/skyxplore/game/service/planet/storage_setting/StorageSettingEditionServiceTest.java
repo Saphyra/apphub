@@ -82,7 +82,7 @@ public class StorageSettingEditionServiceTest {
     public void setUp() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdAndOwnerValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
         given(planet.getStorageDetails()).willReturn(storageDetails);
         given(storageDetails.getStorageSettings()).willReturn(storageSettings);
 

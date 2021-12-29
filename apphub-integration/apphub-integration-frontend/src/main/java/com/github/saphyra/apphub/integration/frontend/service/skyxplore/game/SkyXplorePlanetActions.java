@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.service.skyxplore.game;
 
+import com.github.saphyra.apphub.integration.frontend.model.skyxplore.Surface;
 import org.openqa.selenium.WebDriver;
 
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFillContentEditable;
@@ -28,5 +29,33 @@ public class SkyXplorePlanetActions {
 
     public static void closePlanet(WebDriver driver) {
         GamePage.closePlanetButton(driver).click();
+    }
+
+    public static Surface findEmptySurface(WebDriver driver, String surfaceType) {
+        return GamePage.surfacesOfPlanet(driver)
+            .stream()
+            .map(Surface::new)
+            .filter(surface -> surface.getSurfaceType().equalsIgnoreCase(surfaceType))
+            .filter(Surface::isEmpty)
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Empty surface not found with type " + surfaceType));
+    }
+
+    public static Surface findBySurfaceId(WebDriver driver, String surfaceId) {
+        return GamePage.surfacesOfPlanet(driver)
+            .stream()
+            .map(Surface::new)
+            .filter(surface -> surface.getSurfaceId().equals(surfaceId))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Surface not found with id " + surfaceId));
+    }
+
+    public static Surface findSurfaceWithUpgradableBuilding(WebDriver driver) {
+        return GamePage.surfacesOfPlanet(driver)
+            .stream()
+            .map(Surface::new)
+            .filter(Surface::canUpgradeBuilding)
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("No surface with upgradable building"));
     }
 }

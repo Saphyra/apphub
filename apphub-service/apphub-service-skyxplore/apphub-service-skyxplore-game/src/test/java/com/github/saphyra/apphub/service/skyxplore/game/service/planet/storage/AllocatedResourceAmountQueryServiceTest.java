@@ -1,10 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-
-import java.util.Arrays;
-
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResources;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,12 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResource;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
+import java.util.Arrays;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AllocatedResourceAmountQueryServiceTest {
@@ -53,7 +53,7 @@ public class AllocatedResourceAmountQueryServiceTest {
 
     @Test
     public void byDataIdAndPlanet() {
-        given(storageDetails.getAllocatedResources()).willReturn(Arrays.asList(allocatedResource1, allocatedResource2));
+        given(storageDetails.getAllocatedResources()).willReturn(new AllocatedResources(Arrays.asList(allocatedResource1, allocatedResource2)));
         given(allocatedResource1.getDataId()).willReturn(DATA_ID_1);
         given(allocatedResource2.getDataId()).willReturn(DATA_ID_2);
         given(allocatedResource1.getAmount()).willReturn(AMOUNT);
@@ -65,7 +65,7 @@ public class AllocatedResourceAmountQueryServiceTest {
 
     @Test
     public void byPlanetAndStorageType() {
-        given(storageDetails.getAllocatedResources()).willReturn(Arrays.asList(allocatedResource1, allocatedResource2));
+        given(storageDetails.getAllocatedResources()).willReturn(new AllocatedResources(Arrays.asList(allocatedResource1, allocatedResource2)));
         given(resourceDataService.getByStorageType(StorageType.BULK)).willReturn(Arrays.asList(resourceData));
         given(resourceData.getId()).willReturn(DATA_ID_1);
 

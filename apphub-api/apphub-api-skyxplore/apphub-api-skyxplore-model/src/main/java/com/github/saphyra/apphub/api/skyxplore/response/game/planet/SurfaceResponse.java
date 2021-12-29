@@ -17,4 +17,5 @@ public class SurfaceResponse {
     private Coordinate coordinate;
     private String surfaceType;
     private SurfaceBuildingResponse building;
+    private ConstructionResponse terraformation;
 }

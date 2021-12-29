@@ -64,7 +64,7 @@
                     container.innerHTML = "";
 
                     new Stream(resourceDetails)
-                        .sorted(function(a, b){itemDataNameLocalization.get(a.dataId).localeCompare(itemDataNameLocalization.get(b.dataId))})
+                        .sorted(function(a, b){dataCaches.itemDataNames.get(a.dataId).localeCompare(dataCaches.itemDataNames.get(b.dataId))})
                         .map(createResourceDetailsNode)
                         .forEach(function(node){container.appendChild(node)});
 
@@ -73,15 +73,12 @@
                         node.classList.add("planet-storage-storage-details-item");
 
                         const resourceName = document.createElement("DIV");
-                            resourceName.innerHTML = itemDataNameLocalization.get(resourceDetail.dataId);
+                            resourceName.innerHTML = dataCaches.itemDataNames.get(resourceDetail.dataId);
                     node.appendChild(resourceName);
 
                         const detailsContainer = document.createElement("UL");
                             const storedAmount = document.createElement("LI");
-                                storedAmount.innerHTML = Localization.getAdditionalContent("stored-amount-label") + " (" + resourceDetail.allocatedResourceAmount + ")";
-                                const storedAmountLabel = document.createElement("SPAN");
-                                    storedAmountLabel.innerHTML = Localization.getAdditionalContent("stored-amount-label") + ": ";
-                            storedAmount.appendChild(storedAmountLabel);
+                                storedAmount.innerHTML = Localization.getAdditionalContent("stored-amount-label") + " (" + resourceDetail.allocatedResourceAmount + ") / ";
                                 const storedAmountValue = document.createElement("SPAN");
                                     storedAmountValue.innerHTML = resourceDetail.actualAmount;
                             storedAmount.appendChild(storedAmountValue);
@@ -95,6 +92,7 @@
                                     reservedAmountValue.innerHTML = resourceDetail.reservedStorageAmount;
                             reservedAmount.appendChild(reservedAmountValue);
                         detailsContainer.appendChild(reservedAmount);
+                    node.appendChild(detailsContainer);
                     return node;
                 }
             }
