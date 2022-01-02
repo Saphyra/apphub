@@ -4,6 +4,7 @@ scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/common/js/animation/move_controller.js");
 scriptLoader.loadScript("/res/common/js/animation/zoom_controller.js");
+scriptLoader.loadScript("/res/common/js/sync_engine.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/caches.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/chat_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/map/map_controller.js");
@@ -19,6 +20,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/storage_settings_controll
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/construction_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/terraformation_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/planet/queue_controller.js");
 
 (function PageController(){
     window.SESSION_EXTENSION_ENABLED = true;
@@ -106,6 +108,9 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/terraformation_controller
         terraformingPossibilities: "terraforming-possibilities",
         closeTerraformationButton: "close-terraformation-button",
         terraformation: "terraformation",
+
+        //Queue
+        queue: "planet-right-bar-content",
     }
 
     window.webSocketEvents = {
@@ -115,11 +120,10 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/terraformation_controller
         CHAT_ROOM_CREATED: "skyxplore-game-chat-room-created",
     }
 
-    const wsConnection = new WebSocketConnection(Mapping.getEndpoint("WS_CONNECTION_SKYXPLORE_GAME"));
+    window.wsConnection = new WebSocketConnection(Mapping.getEndpoint("WS_CONNECTION_SKYXPLORE_GAME"))
+        .connect();
 
     window.pageController = new function(){
-        this.webSocketConnection = wsConnection;
-
         this.exitGame = exitGame;
     }
 
@@ -145,11 +149,6 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/terraformation_controller
 
     $(document).ready(function(){
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "skyxplore", fileName: "game"}));
-        wsConnection.addHandler(chatController.createChatSendMessageHandler())
-            .addHandler(chatController.createUserJoinedHandler())
-            .addHandler(chatController.createUserLeftHandler())
-            .addHandler(chatController.createChatRoomCreatedHandler())
-            .connect();
         //document.addEventListener('contextmenu', event => event.preventDefault()); //TODO restore when development is finished
     });
 })();
@@ -161,4 +160,20 @@ function IdMask(m){
         const result = mask.replace("*", replacement);
         return result;
     }
+}
+
+function createProgressBar(progress, content){
+    const progressBarContainer = document.createElement("DIV");
+            progressBarContainer.classList.add("progress-bar-container");
+
+            const progressBarBackground = document.createElement("DIV");
+                progressBarBackground.classList.add("progress-bar-background");
+                progressBarBackground.style.width = status + "%";
+        progressBarContainer.appendChild(progressBarBackground);
+
+            const progressBarText = document.createElement("DIV");
+                progressBarText.classList.add("progress-bar-text");
+                progressBarText.innerHTML = content;
+        progressBarContainer.appendChild(progressBarText);
+    return progressBarContainer;
 }

@@ -51,6 +51,6 @@ public class TerraformationControllerTest {
     public void cancelTerraformation() {
         underTest.cancelTerraformation(PLANET_ID, SURFACE_ID, accessTokenHeader);
 
-        verify(cancelTerraformationService).cancelTerraformation(USER_ID, PLANET_ID, SURFACE_ID);
+        verify(cancelTerraformationService).cancelTerraformationOfSurface(USER_ID, PLANET_ID, SURFACE_ID);
     }
 }

@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -33,8 +34,6 @@ public class CancelConstructionServiceTest {
     private static final UUID BUILDING_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
-    private static final UUID RESERVED_STORAGE_ID = UUID.randomUUID();
-    private static final UUID ALLOCATED_RESOURCE_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
@@ -77,24 +76,44 @@ public class CancelConstructionServiceTest {
         given(planet.getSurfaces()).willReturn(surfaceMap);
         given(surfaceMap.findByBuildingIdValidated(BUILDING_ID)).willReturn(surface);
         given(surface.getBuilding()).willReturn(building);
+        given(building.getBuildingId()).willReturn(BUILDING_ID);
     }
 
     @Test
-    public void constructionNotFound() {
+    public void cancelConstructionOfConstruction() {
+        given(surface.getBuilding()).willReturn(building);
+        given(building.getConstruction()).willReturn(construction);
+        given(building.getLevel()).willReturn(0);
+        given(surfaceMap.values()).willReturn(List.of(surface));
+        given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
+
+        underTest.cancelConstructionOfConstruction(USER_ID, PLANET_ID, CONSTRUCTION_ID);
+
+        verify(building).setConstruction(null);
+
+        verify(gameDataProxy).deleteItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+
+        verify(surface).setBuilding(null);
+        verify(gameDataProxy).deleteItem(BUILDING_ID, GameItemType.BUILDING);
+        verify(cancelAllocationsService).cancelAllocationsAndReservations(planet, CONSTRUCTION_ID);
+    }
+
+    @Test
+    public void cancelConstructionOfBuilding_constructionNotFound() {
         given(building.getConstruction()).willReturn(null);
 
-        Throwable ex = catchThrowable(() -> underTest.cancelConstruction(USER_ID, PLANET_ID, BUILDING_ID));
+        Throwable ex = catchThrowable(() -> underTest.cancelConstructionOfBuilding(USER_ID, PLANET_ID, BUILDING_ID));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
 
     @Test
-    public void cancelConstruction() {
+    public void cancelConstructionOfBuilding() {
         given(building.getConstruction()).willReturn(construction);
         given(building.getLevel()).willReturn(0);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
 
-        underTest.cancelConstruction(USER_ID, PLANET_ID, BUILDING_ID);
+        underTest.cancelConstructionOfBuilding(USER_ID, PLANET_ID, BUILDING_ID);
 
         verify(building).setConstruction(null);
 

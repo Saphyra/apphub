@@ -28,6 +28,7 @@
         planetPopulationController.loadPopulation(planetId);
         planetBuildingController.loadBuildings(planetId);
         planetPriorityController.loadPriorities(planetId);
+        queueController.loadQueue(planetId);
         loadPlanetOverview(planetId);
 
         document.getElementById(ids.closePlanetButton).onclick = function(){

@@ -25,6 +25,6 @@ public class TerraformationController implements SkyXploreSurfaceTerraformationC
     @Override
     public void cancelTerraformation(UUID planetId, UUID surfaceId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to cancel terraformation on planet {} and surface {}", accessTokenHeader.getUserId(), planetId, surfaceId);
-        cancelTerraformationService.cancelTerraformation(accessTokenHeader.getUserId(), planetId, surfaceId);
+        cancelTerraformationService.cancelTerraformationOfSurface(accessTokenHeader.getUserId(), planetId, surfaceId);
     }
 }

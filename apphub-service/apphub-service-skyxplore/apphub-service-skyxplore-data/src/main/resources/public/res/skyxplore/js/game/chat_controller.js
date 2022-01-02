@@ -5,39 +5,12 @@
     let activeRoom = null;
 
     pageLoader.addLoader(setUpEventListeners, "Set up chat event listeners");
-    pageLoader.addLoader(function(){selectRoom(ROOM_GENERAL);}, "Select general chat room");
+    pageLoader.addLoader(function(){selectRoom(ROOM_GENERAL)}, "Select general chat room");
+    pageLoader.addLoader(function(){addHandlers()}, "Add WS handlers");
 
     window.chatController = new function(){
         this.openCreateChatRoomDialog = openCreateChatRoomDialog;
         this.createChatRoom = createChatRoom;
-
-        this.createChatSendMessageHandler = function(){
-            return new WebSocketEventHandler(
-                function(eventName){return webSocketEvents.CHAT_SEND_MESSAGE == eventName},
-                processMessageSentEvent
-            );
-        }
-
-        this.createUserJoinedHandler = function(){
-            return new WebSocketEventHandler(
-                function(eventName){return webSocketEvents.USER_JOINED == eventName},
-                processUserJoinedEvent
-            );
-        }
-
-        this.createUserLeftHandler = function(){
-            return new WebSocketEventHandler(
-                function(eventName){return webSocketEvents.USER_LEFT == eventName},
-                processUserLeftEvent
-            );
-        }
-
-        this.createChatRoomCreatedHandler = function(){
-            return new WebSocketEventHandler(
-                function(eventName){return webSocketEvents.CHAT_ROOM_CREATED == eventName},
-                processChatRoomCreatedEvent
-            );
-        }
     }
 
     function processMessageSentEvent(chatEvent){
@@ -273,7 +246,7 @@
 
         const event = new WebSocketEvent(webSocketEvents.CHAT_SEND_MESSAGE, payload);
 
-        pageController.webSocketConnection.sendEvent(event);
+        wsConnection.sendEvent(event);
 
         inputField.value = "";
     }
@@ -320,5 +293,27 @@
         document.getElementById(ids.allianceChatButton).onclick = function(){
             selectRoom(ROOM_ALLIANCE);
         }
+    }
+
+    function addHandlers(){
+        wsConnection.addHandler(new WebSocketEventHandler(
+            function(eventName){return webSocketEvents.CHAT_SEND_MESSAGE == eventName},
+            processMessageSentEvent
+        ));
+
+        wsConnection.addHandler(new WebSocketEventHandler(
+            function(eventName){return webSocketEvents.USER_JOINED == eventName},
+            processUserJoinedEvent
+        ));
+
+        wsConnection.addHandler(new WebSocketEventHandler(
+            function(eventName){return webSocketEvents.USER_LEFT == eventName},
+            processUserLeftEvent
+        ));
+
+        wsConnection.addHandler(new WebSocketEventHandler(
+            function(eventName){return webSocketEvents.CHAT_ROOM_CREATED == eventName},
+            processChatRoomCreatedEvent
+        ));
     }
 })();

@@ -37,6 +37,6 @@ public class BuildingController implements SkyXploreGameBuildingController {
     @Override
     public void cancelConstruction(UUID planetId, UUID buildingId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to cancel construction of building {} on planet {}", accessTokenHeader.getUserId(), buildingId, planetId);
-        cancelConstructionService.cancelConstruction(accessTokenHeader.getUserId(), planetId, buildingId);
+        cancelConstructionService.cancelConstructionOfBuilding(accessTokenHeader.getUserId(), planetId, buildingId);
     }
 }

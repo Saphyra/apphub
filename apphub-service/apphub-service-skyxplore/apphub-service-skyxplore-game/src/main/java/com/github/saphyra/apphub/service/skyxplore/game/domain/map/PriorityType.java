@@ -3,9 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.map;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum PriorityType {
-    CONSTRUCTION,
-    MANUFACTURING,
-    EXTRACTION;
+    CONSTRUCTION, //Building new buildings/terraformation
+    MANUFACTURING, //Producing ships, and equipment
+    EXTRACTION; //Mining, producing basic materials
 
     @JsonCreator
     public static PriorityType fromValue(String value) {

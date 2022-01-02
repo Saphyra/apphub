@@ -1,6 +1,6 @@
-package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.terraform;
+package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.terraformation;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
@@ -12,7 +12,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.CancelAllocationsService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,11 +29,12 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CancelTerraformationServiceTest {
+public class TerraformationQueueItemPriorityUpdateServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
-    private static final UUID SURFACE_ID = UUID.randomUUID();
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
+    private static final Integer PRIORITY = 5;
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
@@ -42,10 +43,10 @@ public class CancelTerraformationServiceTest {
     private GameDataProxy gameDataProxy;
 
     @Mock
-    private CancelAllocationsService cancelAllocationsService;
+    private ConstructionToModelConverter constructionToModelConverter;
 
     @InjectMocks
-    private CancelTerraformationService underTest;
+    private TerraformationQueueItemPriorityUpdateService underTest;
 
     @Mock
     private Game game;
@@ -62,45 +63,50 @@ public class CancelTerraformationServiceTest {
     @Mock
     private Construction construction;
 
+    @Mock
+    private ConstructionModel constructionModel;
+
     @Before
     public void setUp() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getGameId()).willReturn(GAME_ID);
         given(game.getUniverse()).willReturn(universe);
         given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
         given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
-        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
     }
 
     @Test
-    public void cancelTerraformationOfConstruction() {
-        given(surface.getTerraformation()).willReturn(construction);
-        given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
+    public void priorityTooLow() {
+        Throwable ex = catchThrowable(() -> underTest.updatePriority(USER_ID, PLANET_ID, CONSTRUCTION_ID, 0));
 
-        underTest.cancelTerraformationOfConstruction(USER_ID, PLANET_ID, CONSTRUCTION_ID);
-
-        verify(cancelAllocationsService).cancelAllocationsAndReservations(planet, CONSTRUCTION_ID);
-        verify(surface).setTerraformation(null);
-        verify(gameDataProxy).deleteItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+        ExceptionValidator.validateInvalidParam(ex, "priority", "too low");
     }
 
     @Test
-    public void terraformationNotInProgress() {
+    public void priorityTooHigh() {
+        Throwable ex = catchThrowable(() -> underTest.updatePriority(USER_ID, PLANET_ID, CONSTRUCTION_ID, 11));
+
+        ExceptionValidator.validateInvalidParam(ex, "priority", "too high");
+    }
+
+    @Test
+    public void surfaceNotFound() {
         given(surface.getTerraformation()).willReturn(null);
 
-        Throwable ex = catchThrowable(() -> underTest.cancelTerraformationOfSurface(USER_ID, PLANET_ID, SURFACE_ID));
+        Throwable ex = catchThrowable(() -> underTest.updatePriority(USER_ID, PLANET_ID, CONSTRUCTION_ID, PRIORITY));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
 
     @Test
-    public void cancelTerraformationOfSurface() {
+    public void updatePriority() {
         given(surface.getTerraformation()).willReturn(construction);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
+        given(constructionToModelConverter.convert(construction, GAME_ID)).willReturn(constructionModel);
 
-        underTest.cancelTerraformationOfSurface(USER_ID, PLANET_ID, SURFACE_ID);
+        underTest.updatePriority(USER_ID, PLANET_ID, CONSTRUCTION_ID, PRIORITY);
 
-        verify(cancelAllocationsService).cancelAllocationsAndReservations(planet, CONSTRUCTION_ID);
-        verify(surface).setTerraformation(null);
-        verify(gameDataProxy).deleteItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+        verify(construction).setPriority(PRIORITY);
+        verify(gameDataProxy).saveItem(constructionModel);
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
@@ -27,7 +28,25 @@ public class CancelConstructionService {
     private final GameDataProxy gameDataProxy;
     private final CancelAllocationsService cancelAllocationsService;
 
-    public void cancelConstruction(UUID userId, UUID planetId, UUID buildingId) {
+    public void cancelConstructionOfConstruction(UUID userId, UUID planetId, UUID constructionId) {
+        Planet planet = gameDao.findByUserIdValidated(userId)
+            .getUniverse()
+            .findByOwnerAndPlanetIdValidated(userId, planetId);
+        Surface surface = planet.getSurfaces()
+            .values()
+            .stream()
+            .filter(s -> nonNull(s.getBuilding()))
+            .filter(s -> nonNull(s.getBuilding().getConstruction()))
+            .filter(s -> s.getBuilding().getConstruction().getConstructionId().equals(constructionId))
+            .findFirst()
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Construction not found with id " + constructionId));
+        Building building = surface
+            .getBuilding();
+
+        processCancellation(planet, surface, building);
+    }
+
+    public void cancelConstructionOfBuilding(UUID userId, UUID planetId, UUID buildingId) {
         Planet planet = gameDao.findByUserIdValidated(userId)
             .getUniverse()
             .findByOwnerAndPlanetIdValidated(userId, planetId);
@@ -36,9 +55,13 @@ public class CancelConstructionService {
         Building building = surface
             .getBuilding();
 
+        processCancellation(planet, surface, building);
+    }
+
+    private void processCancellation(Planet planet, Surface surface, Building building) {
         Construction construction = building.getConstruction();
         if (isNull(construction)) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Construction not found on planet " + planetId + " and building " + buildingId);
+            throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Construction not found on planet " + planet.getPlanetId() + " and building " + building.getBuildingId());
         }
 
         UUID constructionId = construction.getConstructionId();
@@ -48,7 +71,7 @@ public class CancelConstructionService {
 
         if (building.getLevel() == 0) {
             surface.setBuilding(null);
-            gameDataProxy.deleteItem(buildingId, GameItemType.BUILDING);
+            gameDataProxy.deleteItem(building.getBuildingId(), GameItemType.BUILDING);
         }
 
         gameDataProxy.deleteItem(constructionId, GameItemType.CONSTRUCTION);

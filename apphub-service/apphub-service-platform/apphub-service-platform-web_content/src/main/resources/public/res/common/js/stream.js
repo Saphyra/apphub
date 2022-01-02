@@ -2,7 +2,7 @@ function Stream(a){
     if(a == null || a == undefined){
         throwException("IllegalArgument", "Input must not be null or undefined.");
     }
-    const array = a;
+    const array = copyArray(a);
 
     this.allMatch = function(predicate){
         for(let i in array){
@@ -80,6 +80,10 @@ function Stream(a){
         });
 
         return new MapStream(result);
+    }
+
+    this.join = function(separator){
+        return array.join(separator);
     }
 
     this.map = function(mapper){

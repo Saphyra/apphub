@@ -17,25 +17,45 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class CancelTerraformationService {
+public class CancelTerraformationService {
     private final GameDao gameDao;
     private final GameDataProxy gameDataProxy;
     private final CancelAllocationsService cancelAllocationsService;
 
-    void cancelTerraformation(UUID userId, UUID planetId, UUID surfaceId) {
+    public void cancelTerraformationOfConstruction(UUID userId, UUID planetId, UUID constructionId) {
+        Planet planet = gameDao.findByUserIdValidated(userId)
+            .getUniverse()
+            .findByOwnerAndPlanetIdValidated(userId, planetId);
+        Surface surface = planet.getSurfaces()
+            .values()
+            .stream()
+            .filter(s -> nonNull(s.getTerraformation()))
+            .filter(s -> s.getTerraformation().getConstructionId().equals(constructionId))
+            .findFirst()
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Surface not found by terraformation constructionId " + constructionId));
+
+        processCancellation(planet, surface);
+    }
+
+    void cancelTerraformationOfSurface(UUID userId, UUID planetId, UUID surfaceId) {
         Planet planet = gameDao.findByUserIdValidated(userId)
             .getUniverse()
             .findByOwnerAndPlanetIdValidated(userId, planetId);
         Surface surface = planet.getSurfaces()
             .findByIdValidated(surfaceId);
 
+        processCancellation(planet, surface);
+    }
+
+    private void processCancellation(Planet planet, Surface surface) {
         Construction construction = surface.getTerraformation();
         if (isNull(construction)) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Terraformation not found on planet " + planetId + " and surface " + surfaceId);
+            throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Terraformation not found on planet " + planet.getPlanetId() + " and surface " + surface.getSurfaceId());
         }
 
         cancelAllocationsService.cancelAllocationsAndReservations(planet, construction.getConstructionId());
