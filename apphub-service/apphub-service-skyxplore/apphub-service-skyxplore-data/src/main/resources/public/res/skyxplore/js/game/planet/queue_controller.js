@@ -125,7 +125,7 @@
                 "cancel-queue-item-confirmation-dialog",
                 confirmationDialogLocalization,
                 function(){
-                    const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_CANCEL_QUEUE_PRIORITY", {planetId: planetId, type: type, itemId: itemId}));
+                    const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM", {planetId: planetId, type: type, itemId: itemId}));
                         request.processValidResponse = function(){
                             planetController.viewPlanet(planetId);
                         }

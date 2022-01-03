@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplore
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplorePlanetStorageActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreSolarSystemActions;
+import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.PlanetStorageResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.Player;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
@@ -45,7 +46,7 @@ public class BuildNewBuildingTest extends BackEndTest {
             .getPlanetId();
 
         //Invalid dataId
-        UUID emptyDesertSurfaceId = findEmptySurface(language, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
+        UUID emptyDesertSurfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
         Response invalidDataIdResponse = SkyXploreBuildingActions.getConstructNewBuildingResponse(language, accessTokenId, planetId, emptyDesertSurfaceId, "asd");
 
@@ -59,7 +60,7 @@ public class BuildNewBuildingTest extends BackEndTest {
         ResponseValidator.verifyErrorResponse(language, buildingAlreadyExistsResponse, 409, ErrorCode.ALREADY_EXISTS);
 
         //Incompatible surfaceType
-        UUID emptyLakeSurfaceId = findEmptySurface(language, accessTokenId, planetId, Constants.SURFACE_TYPE_LAKE);
+        UUID emptyLakeSurfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_LAKE);
 
         Response incompatibleSurfaceTypeResponse = SkyXploreBuildingActions.getConstructNewBuildingResponse(language, accessTokenId, planetId, emptyLakeSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
 
@@ -98,15 +99,6 @@ public class BuildNewBuildingTest extends BackEndTest {
             .orElseThrow(() -> new RuntimeException("Surface not found by surfaceId " + surfaceId));
     }
 
-    private UUID findEmptySurface(Language language, UUID accessTokenId, UUID planetId, String surfaceType) {
-        return SkyXplorePlanetActions.getSurfaces(language, accessTokenId, planetId)
-            .stream()
-            .filter(surfaceResponse -> isNull(surfaceResponse.getBuilding()))
-            .filter(surfaceResponse -> surfaceResponse.getSurfaceType().equals(surfaceType))
-            .findFirst()
-            .map(SurfaceResponse::getSurfaceId)
-            .orElseThrow(() -> new RuntimeException("Empty Desert not found on planet " + planetId));
-    }
 
     private UUID findOccupiedDesert(Language language, UUID accessTokenId, UUID planetId) {
         return SkyXplorePlanetActions.getSurfaces(language, accessTokenId, planetId)

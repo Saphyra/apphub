@@ -220,5 +220,5 @@ public class Endpoints {
 
     public static final String SKYXPLORE_PLANET_GET_QUEUE = "/api/skyxplore/game/{planetId}/queue";
     public static final String SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY = "/api/skyxplore/game/{planetId}/{type}/{itemId}/priority";
-    public static final String SKYXPLORE_PLANET_CANCEL_QUEUE_PRIORITY = "/api/skyxplore/game/{planetId}/{type}/{itemId}";
+    public static final String SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM = "/api/skyxplore/game/{planetId}/{type}/{itemId}";
 }

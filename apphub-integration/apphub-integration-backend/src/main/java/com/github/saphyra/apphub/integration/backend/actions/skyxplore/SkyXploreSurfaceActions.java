@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.backend.actions.skyxplore;
 
+import com.github.saphyra.apphub.integration.backend.model.skyxplore.SurfaceResponse;
 import com.github.saphyra.apphub.integration.common.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.common.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.common.framework.Endpoints;
@@ -11,6 +12,7 @@ import io.restassured.response.Response;
 
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreSurfaceActions {
@@ -31,5 +33,15 @@ public class SkyXploreSurfaceActions {
             .delete(UrlFactory.create(Endpoints.SKYXPLORE_GAME_CANCEL_TERRAFORMATION, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("surfaceId", surfaceId))));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static UUID findEmptySurfaceId(Language language, UUID accessTokenId, UUID planetId, String surfaceType) {
+        return SkyXplorePlanetActions.getSurfaces(language, accessTokenId, planetId)
+            .stream()
+            .filter(surfaceResponse -> isNull(surfaceResponse.getBuilding()))
+            .filter(surfaceResponse -> surfaceResponse.getSurfaceType().equals(surfaceType))
+            .findFirst()
+            .map(SurfaceResponse::getSurfaceId)
+            .orElseThrow(() -> new RuntimeException("Empty Desert not found on planet " + planetId));
     }
 }

@@ -22,6 +22,6 @@ public interface SkyXplorePlanetQueueController {
     @PostMapping(Endpoints.SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY)
     void setItemPriority(@RequestBody OneParamRequest<Integer> priority, @PathVariable("planetId") UUID planetId, @PathVariable("type") String type, @PathVariable("itemId") UUID itemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @DeleteMapping(Endpoints.SKYXPLORE_PLANET_CANCEL_QUEUE_PRIORITY)
+    @DeleteMapping(Endpoints.SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM)
     void cancelItem(@PathVariable("planetId") UUID planetId, @PathVariable("type") String type, @PathVariable("itemId") UUID itemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

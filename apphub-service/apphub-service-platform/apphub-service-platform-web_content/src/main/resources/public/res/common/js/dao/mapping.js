@@ -149,7 +149,7 @@ window.Mapping = new function(){
         SKYXPLORE_GAME_CANCEL_TERRAFORMATION: new Endpoint("/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform", HttpMethod.DELETE),
         SKYXPLORE_PLANET_GET_QUEUE: new Endpoint("/api/skyxplore/game/{planetId}/queue", HttpMethod.GET),
         SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY: new Endpoint("/api/skyxplore/game/{planetId}/{type}/{itemId}/priority", HttpMethod.POST),
-        SKYXPLORE_PLANET_CANCEL_QUEUE_PRIORITY: new Endpoint("/api/skyxplore/game/{planetId}/{type}/{itemId}", HttpMethod.DELETE),
+        SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM: new Endpoint("/api/skyxplore/game/{planetId}/{type}/{itemId}", HttpMethod.DELETE),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){
