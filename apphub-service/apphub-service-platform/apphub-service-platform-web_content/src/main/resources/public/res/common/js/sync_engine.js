@@ -1,21 +1,34 @@
-function SyncEngine(cId, cnMethod, unMethod, sMethod, initialValues, idPref, aUpdate){
-    logService.logToConsole("Creating new SyncEngine with containerId: " + cId + ", createNodeMethod: " + cnMethod + ", updateNodeMethod: " + unMethod + ", shortMethod: " + sMethod + ", idPrefix: " + idPref + ", allowUpdate: " + allowUpdate + ", and initialValues " + mapToString(initialValues));
+function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, idPref, aUpdate){
+    logService.logToConsole("Creating new SyncEngine with containerId: " + cId + ", createNodeMethod: " + cnMethod + ", updateNodeMethod: " + unMethod + ", shortMethod: " + sMethod + ", idPrefix: " + idPref + ", allowUpdate: " + aUpdate + ", and initialValues " + mapToString(initialValues));
 
-    const nodeCache = {};
-    const cache = initialValues ? setInitialValues(initialValues) : {};
+    let nodeCache = {};
+    let cache = initialValues ? setInitialValues(initialValues) : {};
     const containerId = cId || throwException("IllegalArgument", "containerId is not defined");
     const idPrefix = idPref || "";
     const allowUpdate = aUpdate || false;
+    const getKeyMethod = keyMethod || throwException("IllegalArgument", "getKeyMethod is not defined");
     const createNodeMethod = cnMethod || throwException("IllegalArgument", "createNodeMethod is not defined");
     const updateNodeMethod = unMethod || null;
     const sortMethod = sMethod || function(a, b){return 0;};
     let order = getOrder();
 
-    render();
+    if(Object.keys(cache).length > 0){
+        render();
+    }
 
     this.render = render;
 
-    this.add = function(key, item){
+    this.addAll = function(items){
+        const addFunction = this.add;
+
+        new Stream(items)
+            .forEach(function(item){addFunction(item, true)});
+
+        render();
+    }
+
+    this.add = function(item, skipRender){
+        const key = getKeyMethod(item);
         cache[key] = item;
 
         if(key in cache && allowUpdate){
@@ -27,26 +40,62 @@ function SyncEngine(cId, cnMethod, unMethod, sMethod, initialValues, idPref, aUp
                 render();
             }
         }else{
-            nodeCache[key] = createNodeMethod(key);
+            nodeCache[key] = createNode(item);
             order = getOrder();
             render();
         }
     }
 
-    this.remove = function(id){
-        document.getElementById(containerId).removeChild(document.getElementById(createId(id)));
+    this.clear = function(){
+        console.log("Clear...");
 
-        delete cache[id];
-        delete nodeCache[id];
+        cache = {};
+        nodeCache = {};
+        order = [];
+        render();
     }
 
-    function render(){
+    this.get = function(key){
+        return cache[key];
+    }
+
+    this.remove = function(key){
+        document.getElementById(containerId).removeChild(document.getElementById(createId(key)));
+
+        delete cache[key];
+        delete nodeCache[key];
+    }
+
+    this.reload = function(){
+        console.log("Reload");
+
+        nodeCache = {};
+        order = getOrder();
+
+        new MapStream(cache)
+            .forEach(function(key, item){
+                nodeCache[key] = createNode(item);
+            });
+        render(order);
+    }
+
+    this.resort = function(){
+        console.log("Resort");
+
+        order = getOrder();
+        render();
+    }
+
+    function render(order){
+        console.log("Render", order);
+
+        order = order || getOrder();
         const container = document.getElementById(containerId);
             container.innerHTML = "";
 
             new Stream(order)
                 .map((key) => {return nodeCache[key]})
-                .forEach(node => {container.appendChild(nodeCache[key])});
+                .forEach(node => {container.appendChild(node)});
     }
 
     function getOrder(){
@@ -57,8 +106,14 @@ function SyncEngine(cId, cnMethod, unMethod, sMethod, initialValues, idPref, aUp
 
     function setInitialValues(initialValues){
         return new MapStream(initialValues)
-            .peek((key, value) => {nodeCache[key] = createNodeMethod(value)})
+            .peek((key, item) => {nodeCache[key] = createNode(item)})
             .toMap();
+    }
+
+    function createNode(item){
+        const node = createNodeMethod(item);
+            node.id = createId(getKeyMethod(item));
+        return node;
     }
 
     function createId(id){
@@ -73,13 +128,14 @@ function SyncEngineBuilder(){
     this.containerId = null;
     this.initialValues = {};
     this.allowUpdate = false;
+    this.getKeyMethod = null;
     this.createNodeMethod = null;
     this.updateNodeMethod = null;
-    this.shortMethod = null;
+    this.sortMethod = null;
     this.idPrefix = "";
 
     this.withContainerId = function(cId){
-        this.containerId = null;
+        this.containerId = cId;
         return this;
     }
 
@@ -93,6 +149,11 @@ function SyncEngineBuilder(){
         return this;
     }
 
+    this.withGetKeyMethod = function(method){
+        this.getKeyMethod = method;
+        return this;
+    }
+
     this.withCreateNodeMethod = function(method){
         this.createNodeMethod = method;
         return this;
@@ -103,8 +164,8 @@ function SyncEngineBuilder(){
         return this;
     }
 
-    this.withShortMethod = function(method){
-        this.shortMethod = method;
+    this.withSortMethod = function(method){
+        this.sortMethod = method;
         return this;
     }
 
@@ -114,7 +175,15 @@ function SyncEngineBuilder(){
     }
 
     this.build = function(){
-        return new  SyncEngine(containerId, createNodeMethod, updateNodeMethod, shortMethod, initialValues, idPrefix, allowUpdate)
+        return new  SyncEngine(
+            this.containerId,
+            this.getKeyMethod,
+            this.createNodeMethod,
+            this.updateNodeMethod,
+            this.sortMethod,
+            this.initialValues,
+            this.idPrefix,
+            this.allowUpdate
+        );
     }
-
 }

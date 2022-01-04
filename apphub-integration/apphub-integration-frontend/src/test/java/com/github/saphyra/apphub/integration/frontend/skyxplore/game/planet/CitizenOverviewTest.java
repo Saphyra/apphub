@@ -63,7 +63,7 @@ public class CitizenOverviewTest extends SeleniumTest {
         SkyXplorePlanetActions.openPopulationOverview(driver);
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetPopulationOverviewActions.isLoaded(driver))
-            .assertTrue("StorageSettings is not opened.");
+            .assertTrue("PopulationOverview is not opened.");
 
         //Rename citizens
         List<String> citizenNames = SkyXplorePlanetPopulationOverviewActions.getCitizens(driver)

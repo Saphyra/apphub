@@ -37,7 +37,7 @@ public class CitizenToModelConverter {
 
     private List<GameItem> convertDeep(Citizen citizen, Game game) {
         List<GameItem> result = new ArrayList<>();
-        result.add(convert(citizen, game));
+        result.add(convert(citizen, game.getGameId()));
         result.addAll(skillConverter.convert(citizen.getSkills().values(), game));
         SoldierEnergyShield energyShield = citizen.getSoldierData().getEnergyShield();
         if (nonNull(energyShield)) {
@@ -48,10 +48,10 @@ public class CitizenToModelConverter {
         return result;
     }
 
-    private GameItem convert(Citizen citizen, Game game) {
+    public GameItem convert(Citizen citizen, UUID gameId) {
         CitizenModel model = new CitizenModel();
         model.setId(citizen.getCitizenId());
-        model.setGameId(game.getGameId());
+        model.setGameId(gameId);
         model.setType(GameItemType.CITIZEN);
         model.setLocation(citizen.getLocation());
         model.setLocationType(citizen.getLocationType().name());
