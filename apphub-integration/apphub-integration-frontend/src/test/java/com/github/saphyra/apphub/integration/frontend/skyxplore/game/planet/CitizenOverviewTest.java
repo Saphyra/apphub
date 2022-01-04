@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.frontend.skyxplore.game;
+package com.github.saphyra.apphub.integration.frontend.skyxplore.game.planet;
 
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;

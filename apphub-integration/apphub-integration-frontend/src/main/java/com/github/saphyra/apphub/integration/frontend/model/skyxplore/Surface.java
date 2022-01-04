@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.frontend.service.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.game.SkyXploreConstructionActions;
-import com.github.saphyra.apphub.integration.frontend.service.skyxplore.game.SkyXploreTerraformationActions;
+import com.github.saphyra.apphub.integration.frontend.service.skyxplore.game.SkyXploreSurfaceActions;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -127,7 +127,7 @@ public class Surface {
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreTerraformationActions.isDisplayed(driver))
+            .until(() -> SkyXploreSurfaceActions.isDisplayed(driver))
             .assertTrue("Construct new building window is not displayed.");
     }
 

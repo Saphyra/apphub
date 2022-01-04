@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.frontend.skyxplore.game;
+package com.github.saphyra.apphub.integration.frontend.skyxplore.game.planet;
 
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
@@ -15,7 +15,7 @@ import com.github.saphyra.apphub.integration.frontend.service.skyxplore.game.Sky
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.game.SkyXploreMapActions;
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.game.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.game.SkyXploreSolarSystemActions;
-import com.github.saphyra.apphub.integration.frontend.service.skyxplore.game.SkyXploreTerraformationActions;
+import com.github.saphyra.apphub.integration.frontend.service.skyxplore.game.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.frontend.service.skyxplore.lobby.SkyXploreLobbyActions;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
@@ -54,18 +54,18 @@ public class TerraformationTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not opened.");
 
-        //Construct new building
+        //Start terraformation
         Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_DESERT);
         String surfaceId = surface.getSurfaceId();
         surface.openTerraformationWindow(driver);
 
-        SkyXploreTerraformationActions.startTerraformation(driver, Constants.SURFACE_TYPE_LAKE);
+        SkyXploreSurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_LAKE);
 
         surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
 
         assertThat(surface.isTerraformationInProgress()).isTrue();
 
-        //Cancel construction
+        //Cancel terraformation
         surface.cancelTerraformation(driver);
 
         surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);

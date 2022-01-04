@@ -1,7 +1,11 @@
 package com.github.saphyra.apphub.integration.frontend.service.skyxplore.game;
 
+import com.github.saphyra.apphub.integration.frontend.model.skyxplore.PlanetQueueItem;
 import com.github.saphyra.apphub.integration.frontend.model.skyxplore.Surface;
 import org.openqa.selenium.WebDriver;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.github.saphyra.apphub.integration.frontend.framework.WebElementUtils.clearAndFillContentEditable;
 
@@ -57,5 +61,12 @@ public class SkyXplorePlanetActions {
             .filter(Surface::canUpgradeBuilding)
             .findFirst()
             .orElseThrow(() -> new RuntimeException("No surface with upgradable building"));
+    }
+
+    public static List<PlanetQueueItem> getQueue(WebDriver driver) {
+        return GamePage.planetQueue(driver)
+            .stream()
+            .map(PlanetQueueItem::new)
+            .collect(Collectors.toList());
     }
 }
