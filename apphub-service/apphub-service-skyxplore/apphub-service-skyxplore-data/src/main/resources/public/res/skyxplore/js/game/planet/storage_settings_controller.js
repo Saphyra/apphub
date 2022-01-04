@@ -1,4 +1,6 @@
 (function StorageSettingsController(){
+    const PAGE_NAME = "PLANET_STORAGE_SETTINGS";
+
     pageLoader.addLoader(setUpEventListeners, "StorageSettings set up event listeners");
 
     window.storageSettingsController = new function(){
@@ -19,6 +21,7 @@
         dao.sendRequestAsync(request);
 
         switchTab("main-tab", ids.storageSettings);
+        wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, PAGE_NAME))
     }
 
     function displayStorageSettings(storageSettings){

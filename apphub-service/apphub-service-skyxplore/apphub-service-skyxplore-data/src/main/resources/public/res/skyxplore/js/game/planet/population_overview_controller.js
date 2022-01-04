@@ -1,4 +1,5 @@
 (function PopulationOverviewController(){
+    const PAGE_NAME = "PLANET_POPULATION_OVERVIEW";
     const orderTypes = {
         NAME: "name",
         STAT: "stat",
@@ -34,6 +35,7 @@
 
         reset();
         switchTab("main-tab", ids.populationOverview);
+        wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, PAGE_NAME))
     }
 
     function reset(){

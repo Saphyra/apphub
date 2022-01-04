@@ -28,6 +28,7 @@ public enum WebSocketEventName {
     SKYXPLORE_LOBBY_GAME_CREATION_INITIATED("game-creation-initiated"),
     SKYXPLORE_LOBBY_GAME_LOADED("game-loaded"),
 
+    SKYXPLORE_GAME_PAGE_OPENED("skyxplore-game-page-opened"),
     SKYXPLORE_GAME_CHAT_SEND_MESSAGE("skyxplore-game-chat-send-message"),
     SKYXPLORE_GAME_USER_JOINED("skyxplore-game-user-joined"),
     SKYXPLORE_GAME_USER_LEFT("skyxplore-game-user-left"),

@@ -1,4 +1,6 @@
 (function ConstructionController(){
+    const PAGE_NAME = "PLANET_CONSTRUCTION";
+
     window.constructionController = new function(){
         this.openConstructNewBuildingWindow = openConstructNewBuildingWindow;
         this.cancelConstruction = cancelConstruction;
@@ -22,6 +24,7 @@
                     planetController.viewPlanet(planetId);
                 };
                 switchTab("main-tab", ids.construction);
+                wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, PAGE_NAME))
             }
         dao.sendRequestAsync(request);
 

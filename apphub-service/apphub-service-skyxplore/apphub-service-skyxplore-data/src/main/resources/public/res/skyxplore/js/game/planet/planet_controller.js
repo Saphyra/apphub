@@ -1,4 +1,6 @@
 (function PlanetController(){
+    const PAGE_NAME = "PLANET";
+
     let openedPlanetId;
     let currentPlanetName;
 
@@ -35,6 +37,7 @@
             solarSystemController.viewSolarSystem(solarSystemController.getOpenedSolarSystemId());
         };
         switchTab("main-tab", ids.planet);
+        wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, PAGE_NAME))
     }
 
     function loadPlanetOverview(planetId){

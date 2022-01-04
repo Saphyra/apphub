@@ -118,6 +118,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/queue_controller.js");
         USER_JOINED: "skyxplore-game-user-joined",
         USER_LEFT: "skyxplore-game-user-left",
         CHAT_ROOM_CREATED: "skyxplore-game-chat-room-created",
+        PAGE_OPENED: "skyxplore-game-page-opened",
     }
 
     window.wsConnection = new WebSocketConnection(Mapping.getEndpoint("WS_CONNECTION_SKYXPLORE_GAME"))

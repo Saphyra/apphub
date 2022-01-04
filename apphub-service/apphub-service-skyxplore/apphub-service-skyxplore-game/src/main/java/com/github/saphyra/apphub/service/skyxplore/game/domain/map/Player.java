@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.map;
 
+import com.github.saphyra.apphub.service.skyxplore.game.domain.OpenedPage;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,4 +18,6 @@ public class Player {
     private UUID allianceId;
     private boolean ai;
     private boolean connected;
+    @Builder.Default
+    private OpenedPage openedPage = OpenedPage.NONE;
 }

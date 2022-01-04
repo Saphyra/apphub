@@ -1,4 +1,6 @@
 (function TerraformationController(){
+    const PAGE_NAME = "PLANET_TERRAFORMATION";
+
     window.terraformationController = new function(){
         this.openTerraformWindow = openTerraformWindow;
         this.cancelTerraformation = cancelTerraformation;
@@ -17,6 +19,7 @@
             planetController.viewPlanet(planetId);
         };
         switchTab("main-tab", ids.terraformation);
+        wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, PAGE_NAME))
 
         function createNode(planetId, surfaceId, terraformingPossibility){
             const container = document.createElement("DIV");
