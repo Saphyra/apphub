@@ -126,7 +126,7 @@
     function upgradeBuilding(planetId, buildingId){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_UPGRADE", {planetId: planetId, buildingId: buildingId}));
             request.processValidResponse = function(){
-                planetController.viewPlanet(planetId);
+                planetController.viewPlanet(planetId); //TODO Use WS event
             }
         dao.sendRequestAsync(request);
     }
@@ -144,7 +144,7 @@
             function(){
                 const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION", {planetId: planetId, buildingId: buildingId}));
                     request.processValidResponse = function(){
-                        planetController.viewPlanet(planetId);
+                        planetController.viewPlanet(planetId); //TODO use WS event
                     }
                 dao.sendRequestAsync(request);
             }

@@ -17,11 +17,10 @@
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(storageSettings){
                 displayStorageSettings(storageSettings);
+                switchTab("main-tab", ids.storageSettings);
+                wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, PAGE_NAME));
             }
         dao.sendRequestAsync(request);
-
-        switchTab("main-tab", ids.storageSettings);
-        wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, PAGE_NAME))
     }
 
     function displayStorageSettings(storageSettings){
@@ -158,7 +157,7 @@
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_EDIT_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId()}), payload);
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("storage-setting-saved"));
-                viewStorageSettings(planetController.getOpenedPlanetId());
+                viewStorageSettings(planetController.getOpenedPlanetId()); //TODO use syncEngine
             }
         dao.sendRequestAsync(request);
     }
@@ -178,7 +177,7 @@
                 const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_DELETE_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId(), storageSettingId: storageSettingId}));
                     request.processValidResponse = function(){
                         notificationService.showSuccess(Localization.getAdditionalContent("storage-setting-deleted"));
-                        viewStorageSettings(planetController.getOpenedPlanetId());
+                        viewStorageSettings(planetController.getOpenedPlanetId()); //TODO use syncEngine
                     }
                 dao.sendRequestAsync(request);
             }
@@ -206,7 +205,7 @@
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_CREATE_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId()}), payload);
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("storage-setting-created"));
-                viewStorageSettings(planetController.getOpenedPlanetId());
+                viewStorageSettings(planetController.getOpenedPlanetId()); //TODO use syncEngine
             }
         dao.sendRequestAsync(request);
     }

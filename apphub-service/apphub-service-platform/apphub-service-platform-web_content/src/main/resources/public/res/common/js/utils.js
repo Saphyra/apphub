@@ -1,3 +1,27 @@
+function Switch(aFunc, bFunc){
+    let counter = 0;
+    const aFunction = aFunc || throwException("IllegalArgument", "function1 is not defined");
+    const bFunction = bFunc || throwException("IllegalArgument", "function2 is not defined");
+
+    if(!isFunction(aFunction)){
+        throwException("IllegalArgument", "function1 is not a function");
+    }
+
+    if(!isFunction(bFunction)){
+        throwException("IllegalArgument", "function2 is not a function");
+    }
+
+    this.apply = function(){
+        if(counter % 2 == 0){
+            aFunction();
+        }else{
+            bFunction();
+        }
+
+        counter++;
+    }
+}
+
 function arraysEqual(arr1, arr2){
     if(arr1.length != arr2.length){
         return false;

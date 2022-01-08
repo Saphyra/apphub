@@ -109,7 +109,7 @@
         function updatePriority(planetId, type, itemId, priority){
             const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY", {planetId: planetId, type: type, itemId: itemId}), {value: priority});
                 request.processValidResponse = function(){
-                    loadQueue(planetId);
+                    loadQueue(planetId); //TODO use WS event
                 }
             dao.sendRequestAsync(request);
         }
@@ -127,7 +127,7 @@
                 function(){
                     const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM", {planetId: planetId, type: type, itemId: itemId}));
                         request.processValidResponse = function(){
-                            planetController.viewPlanet(planetId);
+                            planetController.viewPlanet(planetId); //TODO use WS event
                         }
                     dao.sendRequestAsync(request);
                 }

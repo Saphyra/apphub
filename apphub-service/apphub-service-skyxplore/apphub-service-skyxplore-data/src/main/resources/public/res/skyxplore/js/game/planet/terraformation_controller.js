@@ -85,7 +85,7 @@
     function startTerraformation(planetId, surfaceId, surfaceType){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_GAME_TERRAFORM_SURFACE", {planetId: planetId, surfaceId: surfaceId}), {value: surfaceType});
             request.processValidResponse = function(){
-                planetController.viewPlanet(planetId);
+                planetController.viewPlanet(planetId); //TODO use syncEngine
             }
         dao.sendRequestAsync(request);
     }
@@ -103,7 +103,7 @@
             function(){
                 const request = new Request(Mapping.getEndpoint("SKYXPLORE_GAME_CANCEL_TERRAFORMATION", {planetId: planetId, surfaceId: surfaceId}));
                     request.processValidResponse = function(){
-                        planetController.viewPlanet(planetId);
+                        planetController.viewPlanet(planetId); //TODO use syncEngine
                     }
                 dao.sendRequestAsync(request);
             }
