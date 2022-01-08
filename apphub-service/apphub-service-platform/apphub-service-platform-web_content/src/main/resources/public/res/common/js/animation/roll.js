@@ -95,7 +95,6 @@
                 {height: 0},
                 time,
                 function(){
-                    console.log("Callback run");
                     element.style.display = "none";
                     resolve();
                 }

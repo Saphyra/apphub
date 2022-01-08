@@ -100,14 +100,50 @@
     }
 
     function setUpEventListeners(){
-        document.getElementById(ids.toggleEnergyDetailsButton).onclick = function(){
-            $("#" + ids.planetStorageEnergyDetailsContainer).toggle(); //TODO consider using fadeInVertical
+        setUpEnergy();
+        setUpLiquid();
+        setUpBulk();
+
+        function setUpEnergy(){
+            const container = document.getElementById(ids.planetStorageEnergyDetailsContainerWrapper);
+            const element = document.getElementById(ids.planetStorageEnergyDetailsContainer);
+
+            const sw = new Switch(
+                () => roll.rollInVertical(element, container),
+                () => roll.rollOutVertical(element)
+            );
+
+            document.getElementById(ids.toggleEnergyDetailsButton).onclick = function(){
+                sw.apply();
+            }
         }
-        document.getElementById(ids.toggleLiquidDetailsButton).onclick = function(){
-            $("#" + ids.planetStorageLiquidDetailsContainer).toggle(); //TODO consider using fadeInVertical
+
+        function setUpLiquid(){
+            const container = document.getElementById(ids.planetStorageLiquidDetailsContainerWrapper);
+            const element = document.getElementById(ids.planetStorageLiquidDetailsContainer);
+
+            const sw = new Switch(
+                () => roll.rollInVertical(element, container),
+                () => roll.rollOutVertical(element)
+            );
+
+            document.getElementById(ids.toggleLiquidDetailsButton).onclick = function(){
+                sw.apply();
+            }
         }
-        document.getElementById(ids.toggleBulkDetailsButton).onclick = function(){
-            $("#" + ids.planetStorageBulkDetailsContainer).toggle(); //TODO consider using fadeInVertical
+
+        function setUpBulk(){
+            const container = document.getElementById(ids.planetStorageBulkDetailsContainerWrapper);
+            const element = document.getElementById(ids.planetStorageBulkDetailsContainer);
+
+            const sw = new Switch(
+                () => roll.rollInVertical(element, container),
+                () => roll.rollOutVertical(element)
+            );
+
+            document.getElementById(ids.toggleBulkDetailsButton).onclick = function(){
+                sw.apply();
+            }
         }
     }
 })();
