@@ -14,21 +14,16 @@
                 - Optional. Default: body.
     */
     function getElementWidth(element, parent){
-        try{
-            parent = parent || document.body;
-            
-            const testElement = element.cloneNode(true);
-                testElement.style.visibility = "hidden";
-                testElement.style.position = "absolute";
-            parent.appendChild(testElement);
-            
-            const width = testElement.offsetWidth;
-            parent.removeChild(testElement);
-            return width;
-        }catch(err){
-            const message = arguments.callee.name + " - " + err.name + ": " + err.message;
-            logService.log(message, "error");
-        }
+        parent = parent || document.body;
+
+        const testElement = element.cloneNode(true);
+            testElement.style.visibility = "hidden";
+            testElement.style.position = "absolute";
+        parent.appendChild(testElement);
+
+        const width = testElement.offsetWidth;
+        parent.removeChild(testElement);
+        return width;
     }
 
     function getElementHeight(element, parent){
