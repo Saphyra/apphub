@@ -27,9 +27,9 @@ class SkyXplorePlanetStorageSettingControllerImpl implements SkyXplorePlanetStor
     }
 
     @Override
-    public void createStorageSetting(StorageSettingApiModel request, UUID planetId, AccessTokenHeader accessTokenHeader) {
+    public StorageSettingApiModel createStorageSetting(StorageSettingApiModel request, UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create storageSetting for resource {} on planet {}", accessTokenHeader.getUserId(), request.getDataId(), planetId);
-        storageSettingCreationService.createStorageSetting(accessTokenHeader.getUserId(), planetId, request);
+        return storageSettingCreationService.createStorageSetting(accessTokenHeader.getUserId(), planetId, request);
     }
 
     @Override
@@ -39,8 +39,8 @@ class SkyXplorePlanetStorageSettingControllerImpl implements SkyXplorePlanetStor
     }
 
     @Override
-    public void editStorageSetting(StorageSettingApiModel request, UUID planetId, AccessTokenHeader accessTokenHeader) {
+    public StorageSettingApiModel editStorageSetting(StorageSettingApiModel request, UUID planetId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to edit storageSetting {} on planet {}", accessTokenHeader.getUserId(), request.getStorageSettingId(), planetId);
-        storageSettingEditionService.edit(accessTokenHeader.getUserId(), planetId, request);
+        return storageSettingEditionService.edit(accessTokenHeader.getUserId(), planetId, request);
     }
 }

@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.StorageSettingToApiModelMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -33,7 +34,7 @@ public class StorageSettingsResponseQueryServiceTest {
     private AvailableResourcesMapper availableResourcesMapper;
 
     @Mock
-    private CurrentSettingsMapper currentSettingsMapper;
+    private StorageSettingToApiModelMapper storageSettingToApiModelMapper;
 
     @InjectMocks
     private StorageSettingsResponseQueryService underTest;
@@ -64,7 +65,7 @@ public class StorageSettingsResponseQueryServiceTest {
         given(planet.getStorageDetails()).willReturn(storageDetails);
         given(storageDetails.getStorageSettings()).willReturn(storageSettings);
 
-        given(currentSettingsMapper.convert(storageSettings)).willReturn(Arrays.asList(storageSettingModel));
+        given(storageSettingToApiModelMapper.convert(storageSettings)).willReturn(Arrays.asList(storageSettingModel));
         given(availableResourcesMapper.getAvailableResources(storageSettings)).willReturn(Arrays.asList(AVAILABLE_RESOURCE_ID));
 
         StorageSettingsResponse result = underTest.getStorageSettings(USER_ID, PLANET_ID);

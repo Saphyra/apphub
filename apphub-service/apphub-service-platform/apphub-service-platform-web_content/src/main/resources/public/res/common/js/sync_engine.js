@@ -86,6 +86,10 @@ function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, 
         render();
     }
 
+    this.size = function(){
+        return Object.keys(cache).length;
+    }
+
     function render(order){
         console.log("Render", order);
 

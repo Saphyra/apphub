@@ -25,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -50,6 +51,9 @@ public class StorageSettingEditionServiceTest {
 
     @Mock
     private GameDataProxy gameDataProxy;
+
+    @Mock
+    private StorageSettingToApiModelMapper storageSettingToApiModelMapper;
 
     @InjectMocks
     private StorageSettingEditionService underTest;
@@ -77,6 +81,9 @@ public class StorageSettingEditionServiceTest {
 
     @Mock
     private StorageSettingModel model;
+
+    @Mock
+    private StorageSettingApiModel responseModel;
 
     @Before
     public void setUp() {
@@ -113,7 +120,11 @@ public class StorageSettingEditionServiceTest {
         given(game.getGameId()).willReturn(GAME_ID);
         given(storageSettingToModelConverter.convert(storageSetting, GAME_ID)).willReturn(model);
 
-        underTest.edit(USER_ID, PLANET_ID, storageSettingModel);
+        given(storageSettingToApiModelMapper.convert(storageSetting)).willReturn(responseModel);
+
+        StorageSettingApiModel result = underTest.edit(USER_ID, PLANET_ID, storageSettingModel);
+
+        assertThat(result).isEqualTo(responseModel);
 
         verify(storageSetting).setPriority(PRIORITY);
         verify(storageSetting).setBatchSize(BATCH_SIZE);

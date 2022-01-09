@@ -25,8 +25,9 @@ public class StorageSettingEditionService {
     private final StorageSettingsModelValidator storageSettingsModelValidator;
     private final StorageSettingToModelConverter storageSettingToModelConverter;
     private final GameDataProxy gameDataProxy;
+    private final StorageSettingToApiModelMapper storageSettingToApiModelMapper;
 
-    public void edit(UUID userId, UUID planetId, StorageSettingApiModel request) {
+    public StorageSettingApiModel edit(UUID userId, UUID planetId, StorageSettingApiModel request) {
         storageSettingsModelValidator.validate(request);
 
         Game game = gameDao.findByUserIdValidated(userId);
@@ -46,5 +47,7 @@ public class StorageSettingEditionService {
 
         StorageSettingModel model = storageSettingToModelConverter.convert(storageSetting, game.getGameId());
         gameDataProxy.saveItem(model);
+
+        return storageSettingToApiModelMapper.convert(storageSetting);
     }
 }

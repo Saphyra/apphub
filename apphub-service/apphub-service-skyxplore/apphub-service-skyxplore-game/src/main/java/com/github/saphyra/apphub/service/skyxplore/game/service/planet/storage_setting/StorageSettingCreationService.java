@@ -24,8 +24,9 @@ public class StorageSettingCreationService {
     private final StorageSettingFactory storageSettingFactory;
     private final StorageSettingToModelConverter storageSettingToModelConverter;
     private final GameDataProxy gameDataProxy;
+    private final StorageSettingToApiModelMapper storageSettingToApiModelMapper;
 
-    public void createStorageSetting(UUID userId, UUID planetId, StorageSettingApiModel request) {
+    public StorageSettingApiModel createStorageSetting(UUID userId, UUID planetId, StorageSettingApiModel request) {
         Game game = gameDao.findByUserIdValidated(userId);
         Planet planet = game
             .getUniverse()
@@ -42,5 +43,7 @@ public class StorageSettingCreationService {
 
         StorageSettingModel model = storageSettingToModelConverter.convert(storageSetting, game.getGameId());
         gameDataProxy.saveItem(model);
+
+        return storageSettingToApiModelMapper.convert(storageSetting);
     }
 }
