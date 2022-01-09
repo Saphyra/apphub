@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
@@ -10,6 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.CancelAllocationsService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,7 @@ public class CancelConstructionService {
     private final GameDao gameDao;
     private final GameDataProxy gameDataProxy;
     private final CancelAllocationsService cancelAllocationsService;
+    private final SurfaceToResponseConverter surfaceToResponseConverter;
 
     public void cancelConstructionOfConstruction(UUID userId, UUID planetId, UUID constructionId) {
         Planet planet = gameDao.findByUserIdValidated(userId)
@@ -46,7 +49,7 @@ public class CancelConstructionService {
         processCancellation(planet, surface, building);
     }
 
-    public void cancelConstructionOfBuilding(UUID userId, UUID planetId, UUID buildingId) {
+    public SurfaceResponse cancelConstructionOfBuilding(UUID userId, UUID planetId, UUID buildingId) {
         Planet planet = gameDao.findByUserIdValidated(userId)
             .getUniverse()
             .findByOwnerAndPlanetIdValidated(userId, planetId);
@@ -56,6 +59,8 @@ public class CancelConstructionService {
             .getBuilding();
 
         processCancellation(planet, surface, building);
+
+        return surfaceToResponseConverter.convert(surface);
     }
 
     private void processCancellation(Planet planet, Surface surface, Building building) {

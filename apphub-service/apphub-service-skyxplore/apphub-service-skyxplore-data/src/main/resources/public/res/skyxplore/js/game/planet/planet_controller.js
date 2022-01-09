@@ -10,6 +10,7 @@
 
     window.planetController = new function(){
         this.viewPlanet = viewPlanet;
+        this.openPlanetWindow = openPlanetWindow;
         this.openStorageSettings = openStorageSettings;
         this.getOpenedPlanetId = function(){
             return openedPlanetId;
@@ -36,8 +37,11 @@
         document.getElementById(ids.closePlanetButton).onclick = function(){
             solarSystemController.viewSolarSystem(solarSystemController.getOpenedSolarSystemId());
         };
+        openPlanetWindow();
+    }
+
+    function openPlanetWindow(){
         switchTab("main-tab", ids.planet);
-        wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, PAGE_NAME))
     }
 
     function loadPlanetOverview(planetId){

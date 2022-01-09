@@ -13,7 +13,6 @@ import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplore
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.PlanetStorageResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.Player;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.backend.model.skyxplore.SurfaceBuildingResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SurfaceResponse;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
@@ -67,11 +66,11 @@ public class BuildNewBuildingTest extends BackEndTest {
         ResponseValidator.verifyForbiddenOperation(language, incompatibleSurfaceTypeResponse);
 
         //Build
-        SurfaceBuildingResponse newBuilding = SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
+        SurfaceResponse modifiedSurface = SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
 
-        assertThat(newBuilding.getDataId()).isEqualTo(Constants.DATA_ID_SOLAR_PANEL);
-        assertThat(newBuilding.getLevel()).isEqualTo(0);
-        assertThat(newBuilding.getConstruction().getCurrentWorkPoints()).isEqualTo(0);
+        assertThat(modifiedSurface.getBuilding().getDataId()).isEqualTo(Constants.DATA_ID_SOLAR_PANEL);
+        assertThat(modifiedSurface.getBuilding().getLevel()).isEqualTo(0);
+        assertThat(modifiedSurface.getBuilding().getConstruction().getCurrentWorkPoints()).isEqualTo(0);
 
         PlanetStorageResponse storageResponse = SkyXplorePlanetStorageActions.getStorageOverview(language, accessTokenId, planetId);
 
@@ -80,7 +79,9 @@ public class BuildNewBuildingTest extends BackEndTest {
         assertThat(storageResponse.getLiquid().getReservedStorageAmount()).isEqualTo(1);
 
         //Cancel
-        SkyXploreBuildingActions.cancelConstruction(language, accessTokenId, planetId, newBuilding.getBuildingId());
+        modifiedSurface = SkyXploreBuildingActions.cancelConstruction(language, accessTokenId, planetId, modifiedSurface.getBuilding().getBuildingId());
+
+        assertThat(modifiedSurface.getBuilding()).isNull();
 
         storageResponse = SkyXplorePlanetStorageActions.getStorageOverview(language, accessTokenId, planetId);
 

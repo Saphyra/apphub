@@ -26,7 +26,7 @@
 
     function viewStorageSettings(planetId){
         document.getElementById(ids.closeStorageSettingsButton).onclick = function(){
-            planetController.viewPlanet(planetId);
+            planetController.openPlanetWindow(); //TODO move to pageLoader
         }
 
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_GET_STORAGE_SETTINGS", {planetId: planetId}));
@@ -34,7 +34,6 @@
             request.processValidResponse = function(storageSettings){
                 displayStorageSettings(storageSettings);
                 switchTab("main-tab", ids.storageSettings);
-                wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, PAGE_NAME));
             }
         dao.sendRequestAsync(request);
     }

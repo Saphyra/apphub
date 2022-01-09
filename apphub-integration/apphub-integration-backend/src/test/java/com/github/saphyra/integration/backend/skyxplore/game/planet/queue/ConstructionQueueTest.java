@@ -12,7 +12,7 @@ import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplore
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.Player;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.QueueResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.backend.model.skyxplore.SurfaceBuildingResponse;
+import com.github.saphyra.apphub.integration.backend.model.skyxplore.SurfaceResponse;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.localization.Language;
@@ -44,16 +44,16 @@ public class ConstructionQueueTest extends BackEndTest {
 
         UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
-        SurfaceBuildingResponse newBuilding = SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, surfaceId, Constants.DATA_ID_SOLAR_PANEL);
+        SurfaceResponse newBuilding = SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, surfaceId, Constants.DATA_ID_SOLAR_PANEL);
 
         //Get queue
         List<QueueResponse> queue = SkyXplorePlanetQueueActions.getQueue(language, accessTokenId, planetId);
 
         assertThat(queue).hasSize(1);
         QueueResponse queueResponse = queue.get(0);
-        assertThat(queueResponse.getItemId()).isEqualTo(newBuilding.getConstruction().getConstructionId());
+        assertThat(queueResponse.getItemId()).isEqualTo(newBuilding.getBuilding().getConstruction().getConstructionId());
         assertThat(queueResponse.getType()).isEqualTo(Constants.QUEUE_TYPE_CONSTRUCTION);
-        assertThat(queueResponse.getRequiredWorkPoints()).isEqualTo(newBuilding.getConstruction().getRequiredWorkPoints());
+        assertThat(queueResponse.getRequiredWorkPoints()).isEqualTo(newBuilding.getBuilding().getConstruction().getRequiredWorkPoints());
         assertThat(queueResponse.getOwnPriority()).isEqualTo(Constants.DEFAULT_PRIORITY);
         assertThat(queueResponse.getData()).containsEntry("dataId", Constants.DATA_ID_SOLAR_PANEL);
         assertThat(queueResponse.getData()).containsEntry("currentLevel", 0);

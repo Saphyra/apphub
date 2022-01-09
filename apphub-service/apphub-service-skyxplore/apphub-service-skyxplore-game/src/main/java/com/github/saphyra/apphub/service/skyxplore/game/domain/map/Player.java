@@ -19,5 +19,5 @@ public class Player {
     private boolean ai;
     private boolean connected;
     @Builder.Default
-    private OpenedPage openedPage = OpenedPage.NONE;
+    private OpenedPage openedPage = OpenedPage.DEFAULT_PAGE;
 }

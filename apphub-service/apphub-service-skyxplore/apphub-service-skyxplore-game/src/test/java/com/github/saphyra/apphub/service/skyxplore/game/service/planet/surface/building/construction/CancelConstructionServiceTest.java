@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -12,6 +13,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.CancelAllocationsService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -43,6 +46,9 @@ public class CancelConstructionServiceTest {
 
     @Mock
     private CancelAllocationsService cancelAllocationsService;
+
+    @Mock
+    private SurfaceToResponseConverter surfaceToResponseConverter;
 
     @InjectMocks
     private CancelConstructionService underTest;
@@ -67,6 +73,9 @@ public class CancelConstructionServiceTest {
 
     @Mock
     private Surface surface;
+
+    @Mock
+    private SurfaceResponse surfaceResponse;
 
     @Before
     public void setUp() {
@@ -112,8 +121,11 @@ public class CancelConstructionServiceTest {
         given(building.getConstruction()).willReturn(construction);
         given(building.getLevel()).willReturn(0);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
+        given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
 
-        underTest.cancelConstructionOfBuilding(USER_ID, PLANET_ID, BUILDING_ID);
+        SurfaceResponse result = underTest.cancelConstructionOfBuilding(USER_ID, PLANET_ID, BUILDING_ID);
+
+        assertThat(result).isEqualTo(surfaceResponse);
 
         verify(building).setConstruction(null);
 

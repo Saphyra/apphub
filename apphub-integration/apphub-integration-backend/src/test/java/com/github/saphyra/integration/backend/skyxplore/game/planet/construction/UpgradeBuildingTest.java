@@ -9,7 +9,6 @@ import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplore
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplorePlanetStorageActions;
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreSolarSystemActions;
-import com.github.saphyra.apphub.integration.backend.model.skyxplore.ConstructionResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.PlanetStorageResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.Player;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
@@ -55,9 +54,9 @@ public class UpgradeBuildingTest extends BackEndTest {
         //Upgrade building
         UUID upgradableBuildingId = findBuilding(language, accessTokenId, planetId, Constants.DATA_ID_SOLAR_PANEL);
 
-        ConstructionResponse constructionResponse = SkyXploreBuildingActions.upgradeBuilding(language, accessTokenId, planetId, upgradableBuildingId);
+        SurfaceResponse modifiedSurface = SkyXploreBuildingActions.upgradeBuilding(language, accessTokenId, planetId, upgradableBuildingId);
 
-        assertThat(constructionResponse.getCurrentWorkPoints()).isEqualTo(0);
+        assertThat(modifiedSurface.getBuilding().getConstruction().getCurrentWorkPoints()).isEqualTo(0);
 
         PlanetStorageResponse storageResponse = SkyXplorePlanetStorageActions.getStorageOverview(language, accessTokenId, planetId);
 
@@ -71,7 +70,9 @@ public class UpgradeBuildingTest extends BackEndTest {
         ResponseValidator.verifyErrorResponse(language, inProgressResponse, 409, ErrorCode.ALREADY_EXISTS);
 
         //Cancel
-        SkyXploreBuildingActions.cancelConstruction(language, accessTokenId, planetId, upgradableBuildingId);
+        modifiedSurface = SkyXploreBuildingActions.cancelConstruction(language, accessTokenId, planetId, upgradableBuildingId);
+
+        assertThat(modifiedSurface.getBuilding().getConstruction()).isNull();
 
         assertThat(findByBuildingId(language, accessTokenId, planetId, upgradableBuildingId).getConstruction()).isNull();
     }

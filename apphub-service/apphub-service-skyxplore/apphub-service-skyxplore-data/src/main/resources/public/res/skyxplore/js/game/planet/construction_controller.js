@@ -1,6 +1,4 @@
 (function ConstructionController(){
-    const PAGE_NAME = "PLANET_CONSTRUCTION";
-
     window.constructionController = new function(){
         this.openConstructNewBuildingWindow = openConstructNewBuildingWindow;
         this.cancelConstruction = cancelConstruction;
@@ -21,10 +19,9 @@
 
 
                 document.getElementById(ids.closeConstructionButton).onclick = function(){
-                    planetController.viewPlanet(planetId);
+                    planetController.openPlanetWindow(); //TODO move to loader
                 };
                 switchTab("main-tab", ids.construction);
-                wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, PAGE_NAME))
             }
         dao.sendRequestAsync(request);
 
@@ -118,17 +115,20 @@
     function constructNewBuilding(planetId, surfaceId, dataId){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_CONSTRUCT_NEW", {planetId: planetId, surfaceId: surfaceId}), {value: dataId});
             request.processValidResponse = function(){
-                planetController.viewPlanet(planetId);
+                planetController.viewPlanet(planetId); //TODO
             }
         dao.sendRequestAsync(request);
     }
 
     function upgradeBuilding(planetId, buildingId){
-        const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_UPGRADE", {planetId: planetId, buildingId: buildingId}));
-            request.processValidResponse = function(){
-                planetController.viewPlanet(planetId); //TODO Use WS event
-            }
-        dao.sendRequestAsync(request);
+        return new Promise((resolve, reject) => {
+            const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_UPGRADE", {planetId: planetId, buildingId: buildingId}));
+                request.convertResponse = jsonConverter;
+                request.processValidResponse = function(surface){
+                    resolve(surface);
+                }
+            dao.sendRequestAsync(request);
+        });
     }
 
     function cancelConstruction(planetId, buildingId, dataId){
@@ -138,16 +138,19 @@
             .withConfirmButton(Localization.getAdditionalContent("cancel-construction-confirm-button"))
             .withDeclineButton(Localization.getAdditionalContent("cancel-construction-cancel-button"));
 
-        confirmationService.openDialog(
-            "cancel-construction-confirmation-dialog",
-            confirmationDialogLocalization,
-            function(){
-                const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION", {planetId: planetId, buildingId: buildingId}));
-                    request.processValidResponse = function(){
-                        planetController.viewPlanet(planetId); //TODO use WS event
-                    }
-                dao.sendRequestAsync(request);
-            }
-        );
+        return new Promise((resolve, reject) => {
+            confirmationService.openDialog(
+                "cancel-construction-confirmation-dialog",
+                confirmationDialogLocalization,
+                function(){
+                    const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION", {planetId: planetId, buildingId: buildingId}));
+                        request.convertResponse = jsonConverter;
+                        request.processValidResponse = function(surface){
+                            resolve(surface);
+                        }
+                    dao.sendRequestAsync(request);
+                }
+            );
+        });
     }
 })();

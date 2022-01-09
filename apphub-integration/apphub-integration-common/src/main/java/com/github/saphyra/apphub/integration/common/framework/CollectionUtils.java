@@ -9,12 +9,14 @@ import java.util.Map;
 import java.util.Set;
 
 public class CollectionUtils {
+    @SafeVarargs
     public static <T> Set<T> toSet(T... elements) {
         Set<T> result = new HashSet<>();
         Collections.addAll(result, elements);
         return result;
     }
 
+    @SafeVarargs
     public static <T> List<T> toList(T... elements) {
         List<T> list = new ArrayList<>();
         Collections.addAll(list, elements);

@@ -16,7 +16,7 @@ window.mapConstants = {
         this.showMap = function(){
             universeController.loadUniverse();
             switchTab("main-tab", "map");
-            wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, PAGE_NAME));
+            wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, {pageType: PAGE_NAME}));
         }
 
         this.zoomIn = function(){

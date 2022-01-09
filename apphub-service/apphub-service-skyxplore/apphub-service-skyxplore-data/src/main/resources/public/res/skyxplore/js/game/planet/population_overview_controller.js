@@ -28,7 +28,7 @@
 
     function viewPopulationOverview(planetId){
         document.getElementById(ids.closePopulationOverviewButton).onclick = function(){
-            planetController.viewPlanet(planetId);
+            planetController.openPlanetWindow(); //TODO
         }
 
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_GET_POPULATION", {planetId: planetId}));
@@ -37,7 +37,7 @@
                 syncEngine.clear();
                 syncEngine.addAll(citizens);
                 switchTab("main-tab", ids.populationOverview);
-                wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, PAGE_NAME));
+                wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, {pageType: PAGE_NAME, pageId: planetId}));
             };
         dao.sendRequestAsync(request);
 

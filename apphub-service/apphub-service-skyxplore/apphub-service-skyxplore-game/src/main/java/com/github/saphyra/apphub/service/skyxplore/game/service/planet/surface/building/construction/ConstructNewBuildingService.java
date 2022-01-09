@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceBuildingResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
@@ -17,7 +17,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.BuildingFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceConsumptionService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.BuildingToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
 import lombok.RequiredArgsConstructor;
@@ -42,9 +42,9 @@ public class ConstructNewBuildingService {
     private final GameDataProxy gameDataProxy;
     private final BuildingToModelConverter buildingToModelConverter;
     private final ConstructionToModelConverter constructionToModelConverter;
-    private final BuildingToResponseConverter buildingToResponseConverter;
+    private final SurfaceToResponseConverter surfaceToResponseConverter;
 
-    public SurfaceBuildingResponse constructNewBuilding(UUID userId, String dataId, UUID planetId, UUID surfaceId) {
+    public SurfaceResponse constructNewBuilding(UUID userId, String dataId, UUID planetId, UUID surfaceId) {
         Optional<BuildingData> maybeBuildingData = allBuildingService.getOptional(dataId);
         if (maybeBuildingData.isEmpty()) {
             throw ExceptionFactory.invalidParam("dataId", "invalid value");
@@ -82,6 +82,6 @@ public class ConstructNewBuildingService {
             constructionToModelConverter.convert(construction, game.getGameId())
         );
 
-        return buildingToResponseConverter.convert(building);
+        return surfaceToResponseConverter.convert(surface);
     }
 }

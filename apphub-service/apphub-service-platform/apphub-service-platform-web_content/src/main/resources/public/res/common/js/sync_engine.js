@@ -1,5 +1,5 @@
 function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, idPref, aUpdate){
-    logService.logToConsole("Creating new SyncEngine with containerId: " + cId + ", createNodeMethod: " + cnMethod + ", updateNodeMethod: " + unMethod + ", shortMethod: " + sMethod + ", idPrefix: " + idPref + ", allowUpdate: " + aUpdate + ", and initialValues " + mapToString(initialValues));
+    logService.logToConsole("Creating new SyncEngine with containerId: " + cId + "and idPrefix: " + idPref);
 
     let nodeCache = {};
     let cache = initialValues ? setInitialValues(initialValues) : {};
@@ -37,12 +37,16 @@ function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, 
             const newOrder = getOrder();
             if(!arraysEqual(order, newOrder)){
                 order = newOrder;
-                render();
+                if(!skipRender){
+                    render();
+                }
             }
         }else{
             nodeCache[key] = createNode(item);
             order = getOrder();
-            render();
+            if(!skipRender){
+                render();
+            }
         }
     }
 

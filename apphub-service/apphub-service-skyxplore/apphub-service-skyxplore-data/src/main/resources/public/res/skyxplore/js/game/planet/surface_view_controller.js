@@ -1,4 +1,14 @@
 (function SurfaceViewController() {
+    const syncEngine = new SyncEngineBuilder()
+        .withContainerId(ids.planetSurfaceContainer)
+        .withGetKeyMethod(surface => {return surface.surfaceId})
+        .withCreateNodeMethod(createSurface)
+        .withSortMethod(sortSurfaces)
+        .withIdPrefix("surface")
+        .build();
+
+    let currentPlanetId = null;
+
     window.surfaceViewController = new function(){
         this.loadSurface = loadSurface;
     }
@@ -9,58 +19,36 @@
                 return JSON.parse(response.body);
             }
             request.processValidResponse = function(surfaces){
-                displaySurfaces(planetId, surfaces);
+                currentPlanetId = planetId;
+                syncEngine.clear();
+                syncEngine.addAll(surfaces);
+                document.getElementById(ids.planetSurfaceContainer).style.gridTemplateColumns = "repeat(" + Math.sqrt(surfaces.length) + ", var(--surface-table-cell-size))";
             }
         dao.sendRequestAsync(request);
     }
 
-    function displaySurfaces(planetId, surfaces){
-        const surfaceContainer = document.getElementById(ids.planetSurfaceContainer);
-            surfaceContainer.innerHTML = "";
-
-        const coordinateMapping = createCoordinateMapping(surfaces);
-
-        for(let rowIndex in coordinateMapping){
-            const rowNode = document.createElement("DIV");
-                rowNode.classList.add("surface-table-row");
-
-                const row = coordinateMapping[rowIndex];
-
-                for(let columnIndex in row){
-                    const surface = row[columnIndex];
-
-                    const surfaceNode = document.createElement("SPAN");
-                        surfaceNode.classList.add("surface-table-cell");
-                        surfaceNode.classList.add("surface-type-" + surface.surfaceType.toLowerCase());
-                        surfaceNode.id = surface.surfaceId;
-
-                        if(surface.building){
-                            surfaceNode.appendChild(createBuilding(planetId, surface.building));
-                        }else if(surface.terraformation){
-                            surfaceNode.appendChild(createTerraformation(planetId, surface.surfaceId, surface.terraformation));
-                        }else{
-                            surfaceNode.appendChild(createEmptySurface(surface.surfaceId, surface.surfaceType));
-                        }
-                    rowNode.appendChild(surfaceNode);
-                }
-            surfaceContainer.appendChild(rowNode);
+    function sortSurfaces(a, b){
+        if(a.coordinate.x == b.coordinate.x){
+            return a.coordinate.y - b.coordinate.y;
         }
 
-        function createCoordinateMapping(surfaces){
-            const result = {};
+        return a.coordinate.x - b.coordinate.x;
+    }
 
-            for(let index in surfaces){
-                const surface = surfaces[index];
-                const coordinate = surface.coordinate;
-                if(result[coordinate.x] == undefined){
-                    result[coordinate.x] = {};
-                }
+    function createSurface(surface){
+        const surfaceNode = document.createElement("DIV");
+            surfaceNode.classList.add("surface-table-cell");
+            surfaceNode.classList.add("surface-type-" + surface.surfaceType.toLowerCase());
+            surfaceNode.id = surface.surfaceId;
 
-                result[coordinate.x][coordinate.y] = surface;
+            if(surface.building){
+                surfaceNode.appendChild(createBuilding(currentPlanetId, surface.building));
+            }else if(surface.terraformation){
+                surfaceNode.appendChild(createTerraformation(currentPlanetId, surface.surfaceId, surface.terraformation));
+            }else{
+                surfaceNode.appendChild(createEmptySurface(surface.surfaceId, surface.surfaceType));
             }
-
-            return result;
-        }
+        return surfaceNode;
 
         function createBuilding(planetId, building){
             const content = document.createElement("DIV");
@@ -102,7 +90,8 @@
                                 cancelConstructionButton.classList.add("cancel-construction-button");
                                 cancelConstructionButton.innerText = "-";
                                 cancelConstructionButton.onclick = function(){
-                                    constructionController.cancelConstruction(planetId, buildingId, dataId);
+                                    constructionController.cancelConstruction(planetId, buildingId, dataId)
+                                        .then((surface)=>{syncEngine.add(surface)});
                                 }
                         progressBarContent.appendChild(cancelConstructionButton);
                     progressBar.appendChild(progressBarContent);
@@ -115,7 +104,8 @@
                     upgradeButton.classList.add("upgrade-building-button");
                     upgradeButton.innerHTML = Localization.getAdditionalContent("upgrade");
                     upgradeButton.onclick = function(){
-                        constructionController.upgradeBuilding(planetId, building.buildingId);
+                        constructionController.upgradeBuilding(planetId, building.buildingId)
+                            .then((surface)=>{syncEngine.add(surface)});
                     }
                 return upgradeButton;
             }
