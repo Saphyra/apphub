@@ -6,9 +6,11 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum WebSocketEventName {
+    //Platform
     PING("ping"),
     REDIRECT("redirect"),
 
+    //SkyXplore MainMenu
     SKYXPLORE_MAIN_MENU_INVITATION("invitation"),
     SKYXPLORE_MAIN_MENU_CANCEL_INVITATION("skyxplore-main-menu-cancel-invitation"),
     SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_ACCEPTED("skyxplore-main-menu-friend-request-accepted"),
@@ -16,6 +18,7 @@ public enum WebSocketEventName {
     SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_DELETED("skyxplore-main-menu-friend-request-deleted"),
     SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED("skyxplore-main-menu-friendship-deleted"),
 
+    //SkyXplore Lobby
     SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE("chat-send-message"),
     SKYXPLORE_LOBBY_JOIN_TO_LOBBY("join-to-lobby"),
     SKYXPLORE_LOBBY_EXIT_FROM_LOBBY("exit-from-lobby"),
@@ -28,10 +31,18 @@ public enum WebSocketEventName {
     SKYXPLORE_LOBBY_GAME_CREATION_INITIATED("game-creation-initiated"),
     SKYXPLORE_LOBBY_GAME_LOADED("game-loaded"),
 
+    //SkyXplore GamePlatform
+    SKYXPLORE_GAME_PAGE_OPENED("skyxplore-game-page-opened"),
     SKYXPLORE_GAME_CHAT_SEND_MESSAGE("skyxplore-game-chat-send-message"),
     SKYXPLORE_GAME_USER_JOINED("skyxplore-game-user-joined"),
     SKYXPLORE_GAME_USER_LEFT("skyxplore-game-user-left"),
-    SKYXPLORE_GAME_CHAT_ROOM_CREATED("skyxplore-game-chat-room-created");
+    SKYXPLORE_GAME_CHAT_ROOM_CREATED("skyxplore-game-chat-room-created"),
+
+    //SkyXplore GameEvent
+    SKYXPLORE_GAME_PLANET_QUEUE_ITEM_MODIFIED("skyxplore-game-planet-queue-item-modified"),
+    SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED("skyxplore-game-planet-queue-item-deleted"),
+    SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED("skyxplore-game-planet-surface-modified"),
+    ;
 
     private final String eventName;
 

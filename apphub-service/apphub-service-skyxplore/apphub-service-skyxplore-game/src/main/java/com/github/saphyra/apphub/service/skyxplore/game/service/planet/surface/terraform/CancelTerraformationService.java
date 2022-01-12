@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.terraform;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
@@ -9,6 +10,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.CancelAllocationsService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,8 @@ public class CancelTerraformationService {
     private final GameDao gameDao;
     private final GameDataProxy gameDataProxy;
     private final CancelAllocationsService cancelAllocationsService;
+    private final WsMessageSender messageSender;
+    private final SurfaceToResponseConverter surfaceToResponseConverter;
 
     public void cancelTerraformationOfConstruction(UUID userId, UUID planetId, UUID constructionId) {
         Planet planet = gameDao.findByUserIdValidated(userId)
@@ -40,9 +45,11 @@ public class CancelTerraformationService {
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Surface not found by terraformation constructionId " + constructionId));
 
         processCancellation(planet, surface);
+        SurfaceResponse surfaceResponse = surfaceToResponseConverter.convert(surface);
+        messageSender.planetSurfaceModified(userId, planetId, surfaceResponse);
     }
 
-    void cancelTerraformationOfSurface(UUID userId, UUID planetId, UUID surfaceId) {
+    SurfaceResponse cancelTerraformationOfSurface(UUID userId, UUID planetId, UUID surfaceId) {
         Planet planet = gameDao.findByUserIdValidated(userId)
             .getUniverse()
             .findByOwnerAndPlanetIdValidated(userId, planetId);
@@ -50,6 +57,7 @@ public class CancelTerraformationService {
             .findByIdValidated(surfaceId);
 
         processCancellation(planet, surface);
+        return surfaceToResponseConverter.convert(surface);
     }
 
     private void processCancellation(Planet planet, Surface surface) {
@@ -62,5 +70,6 @@ public class CancelTerraformationService {
 
         surface.setTerraformation(null);
         gameDataProxy.deleteItem(construction.getConstructionId(), GameItemType.CONSTRUCTION);
+        messageSender.planetQueueItemDeleted(planet.getOwner(), planet.getPlanetId(), construction.getConstructionId());
     }
 }

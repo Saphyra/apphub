@@ -12,8 +12,12 @@ import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXplore
 import com.github.saphyra.apphub.integration.backend.actions.skyxplore.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.PlanetStorageResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.Player;
+import com.github.saphyra.apphub.integration.backend.model.skyxplore.QueueResponse;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.backend.model.skyxplore.SurfaceResponse;
+import com.github.saphyra.apphub.integration.backend.ws.ApphubWsClient;
+import com.github.saphyra.apphub.integration.backend.ws.WsActions;
+import com.github.saphyra.apphub.integration.backend.ws.model.WebSocketEventName;
 import com.github.saphyra.apphub.integration.common.framework.Constants;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.common.framework.ErrorCode;
@@ -38,11 +42,12 @@ public class BuildNewBuildingTest extends BackEndTest {
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId, userId1))
+        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId, userId1))
             .get(accessTokenId);
 
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId)
             .getPlanetId();
+        WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
 
         //Invalid dataId
         UUID emptyDesertSurfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
@@ -78,6 +83,16 @@ public class BuildNewBuildingTest extends BackEndTest {
         assertThat(storageResponse.getBulk().getReservedStorageAmount()).isEqualTo(1);
         assertThat(storageResponse.getLiquid().getReservedStorageAmount()).isEqualTo(1);
 
+        QueueResponse queueItemModifiedEvent = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_MODIFIED)
+            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_MODIFIED + " event not arrived"))
+            .getPayloadAs(QueueResponse.class);
+
+        UUID constructionId = modifiedSurface.getBuilding().getConstruction().getConstructionId();
+        assertThat(queueItemModifiedEvent.getItemId()).isEqualTo(constructionId);
+        assertThat(queueItemModifiedEvent.getType()).isEqualTo(Constants.QUEUE_TYPE_CONSTRUCTION);
+        assertThat(queueItemModifiedEvent.getData()).containsEntry("dataId", Constants.DATA_ID_SOLAR_PANEL);
+        assertThat(queueItemModifiedEvent.getData()).containsEntry("currentLevel", 0);
+
         //Cancel
         modifiedSurface = SkyXploreBuildingActions.cancelConstruction(language, accessTokenId, planetId, modifiedSurface.getBuilding().getBuildingId());
 
@@ -90,6 +105,12 @@ public class BuildNewBuildingTest extends BackEndTest {
         assertThat(storageResponse.getLiquid().getReservedStorageAmount()).isEqualTo(0);
 
         assertThat(findBySurfaceId(language, accessTokenId, planetId, emptyDesertSurfaceId).getBuilding()).isNull();
+
+        UUID payload = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED)
+            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED + " event not arrived"))
+            .getPayloadAs(UUID.class);
+
+        assertThat(payload).isEqualTo(constructionId);
     }
 
     private SurfaceResponse findBySurfaceId(Language language, UUID accessTokenId, UUID planetId, UUID surfaceId) {

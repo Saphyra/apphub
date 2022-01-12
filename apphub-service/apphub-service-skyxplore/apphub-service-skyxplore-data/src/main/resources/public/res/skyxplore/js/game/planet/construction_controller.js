@@ -1,4 +1,6 @@
 (function ConstructionController(){
+    pageLoader.addLoader(() => {document.getElementById(ids.closeConstructionButton).onclick = function(){planetController.openPlanetWindow()}}, "Close construction button");
+
     window.constructionController = new function(){
         this.openConstructNewBuildingWindow = openConstructNewBuildingWindow;
         this.cancelConstruction = cancelConstruction;
@@ -18,9 +20,6 @@
                         .forEach(function(node){container.appendChild(node)});
 
 
-                document.getElementById(ids.closeConstructionButton).onclick = function(){
-                    planetController.openPlanetWindow(); //TODO move to loader
-                };
                 switchTab("main-tab", ids.construction);
             }
         dao.sendRequestAsync(request);
@@ -89,7 +88,6 @@
 
                     const tbody = document.createElement("TBODY");
                         new MapStream(constructionRequirements["1"].requiredResources)
-                            .peek(function(resourceDataId, amount){console.log(resourceDataId + " - " + amount)})
                             .sorted(function(a, b){return dataCaches.itemDataNames.get(a.getKey()).localeCompare(dataCaches.itemDataNames.get(b.getKey()))})
                             .toListStream(createRow)
                             .forEach(function(node){tbody.appendChild(node)});
@@ -114,8 +112,10 @@
 
     function constructNewBuilding(planetId, surfaceId, dataId){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_CONSTRUCT_NEW", {planetId: planetId, surfaceId: surfaceId}), {value: dataId});
-            request.processValidResponse = function(){
-                planetController.viewPlanet(planetId); //TODO
+            request.convertResponse = jsonConverter;
+            request.processValidResponse = function(surface){
+                surfaceViewController.updateSurface(surface);
+                planetController.openPlanetWindow();
             }
         dao.sendRequestAsync(request);
     }

@@ -66,6 +66,7 @@ public class BanExpirationTest extends SeleniumTest {
         BanActions.submitBanForm(adminDriver);
         NotificationUtil.verifySuccessNotification(adminDriver, "Felhasználó kitiltva.");
 
+        SleepUtil.sleep(3000);
         testDriver.navigate().refresh();
         AwaitilityWrapper.createDefault()
             .until(() -> testDriver.getCurrentUrl().contains(Endpoints.ERROR_PAGE))

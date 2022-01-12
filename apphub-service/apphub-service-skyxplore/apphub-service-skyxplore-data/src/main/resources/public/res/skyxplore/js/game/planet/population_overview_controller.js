@@ -17,6 +17,7 @@
 
     pageLoader.addLoader(setUpEventListeners, "PopulationOverview set up event listeners");
     pageLoader.addLoader(setUpPopulationFilters, "PopulationOverview set up population filters");
+    pageLoader.addLoader(()=>{document.getElementById(ids.closePopulationOverviewButton).onclick = function(){planetController.openPlanetWindow()}}, "Close population overview button");
 
     window.populationOverviewController = new function(){
         this.viewPopulationOverview = viewPopulationOverview;
@@ -27,10 +28,6 @@
     }
 
     function viewPopulationOverview(planetId){
-        document.getElementById(ids.closePopulationOverviewButton).onclick = function(){
-            planetController.openPlanetWindow(); //TODO
-        }
-
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_GET_POPULATION", {planetId: planetId}));
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(citizens){

@@ -18,6 +18,7 @@
         .build();
 
     pageLoader.addLoader(setUpEventListeners, "StorageSettings set up event listeners");
+    pageLoader.addLoader(()=>{document.getElementById(ids.closeStorageSettingsButton).onclick = function(){planetController.openPlanetWindow()}}, "Close storage settings");
 
     window.storageSettingsController = new function(){
         this.viewStorageSettings = viewStorageSettings;
@@ -25,10 +26,6 @@
     }
 
     function viewStorageSettings(planetId){
-        document.getElementById(ids.closeStorageSettingsButton).onclick = function(){
-            planetController.openPlanetWindow(); //TODO move to pageLoader
-        }
-
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_GET_STORAGE_SETTINGS", {planetId: planetId}));
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(storageSettings){

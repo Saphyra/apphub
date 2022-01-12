@@ -28,7 +28,7 @@ class SkyXploreGamePageOpenedWebSocketHandler implements WebSocketEventHandler {
     public void handle(UUID from, WebSocketEvent event) {
         OpenedPage openedPage = objectMapperWrapper.convertValue(event.getPayload(), OpenedPage.class);
 
-        ValidationUtil.notNull(openedPage.getOpenedPageType(), "pageType");
+        ValidationUtil.notNull(openedPage.getPageType(), "pageType");
         log.info("{} opened page {}", from, openedPage);
 
         gameDao.findByUserIdValidated(from)

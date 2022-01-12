@@ -72,6 +72,7 @@ function WebSocketConnection(ep){
         const payload = JSON.parse(event.data);
 
         const eventName = payload.eventName;
+        console.log("Handling event " + eventName);
         const eventData = payload.payload;
 
         new Stream(handlers)

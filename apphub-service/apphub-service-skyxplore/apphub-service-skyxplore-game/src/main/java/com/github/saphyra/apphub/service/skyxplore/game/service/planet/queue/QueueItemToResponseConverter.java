@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class QueueItemToResponseConverter {
+public class QueueItemToResponseConverter {
     public QueueResponse convert(QueueItem queueItem, Planet planet) {
         return QueueResponse.builder()
             .itemId(queueItem.getItemId())

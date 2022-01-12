@@ -56,7 +56,6 @@
 
                     const tbody = document.createElement("TBODY");
                         new MapStream(constructionRequirements.requiredResources)
-                            .peek(function(resourceDataId, amount){console.log(resourceDataId + " - " + amount)})
                             .sorted(function(a, b){return dataCaches.itemDataNames.get(a.getKey()).localeCompare(dataCaches.itemDataNames.get(b.getKey()))})
                             .toListStream(createRow)
                             .forEach(function(node){tbody.appendChild(node)});
@@ -81,8 +80,10 @@
 
     function startTerraformation(planetId, surfaceId, surfaceType){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_GAME_TERRAFORM_SURFACE", {planetId: planetId, surfaceId: surfaceId}), {value: surfaceType});
-            request.processValidResponse = function(){
-                planetController.viewPlanet(planetId); //TODO use syncEngine
+            request.convertResponse = jsonConverter;
+            request.processValidResponse = function(surface){
+                surfaceViewController.updateSurface(surface);
+                planetController.openPlanetWindow();
             }
         dao.sendRequestAsync(request);
     }
@@ -94,16 +95,19 @@
             .withConfirmButton(Localization.getAdditionalContent("cancel-terraformation-confirm-button"))
             .withDeclineButton(Localization.getAdditionalContent("cancel-terraformation-cancel-button"));
 
-        confirmationService.openDialog(
-            "cancel-terraformation-confirmation-dialog",
-            confirmationDialogLocalization,
-            function(){
-                const request = new Request(Mapping.getEndpoint("SKYXPLORE_GAME_CANCEL_TERRAFORMATION", {planetId: planetId, surfaceId: surfaceId}));
-                    request.processValidResponse = function(){
-                        planetController.viewPlanet(planetId); //TODO use syncEngine
-                    }
-                dao.sendRequestAsync(request);
-            }
-        );
+        return new Promise((resolve, reject)=>{
+            confirmationService.openDialog(
+                "cancel-terraformation-confirmation-dialog",
+                confirmationDialogLocalization,
+                function(){
+                    const request = new Request(Mapping.getEndpoint("SKYXPLORE_GAME_CANCEL_TERRAFORMATION", {planetId: planetId, surfaceId: surfaceId}));
+                        request.convertResponse = jsonConverter;
+                        request.processValidResponse = function(surface){
+                            resolve(surface);
+                        }
+                    dao.sendRequestAsync(request);
+                }
+            );
+        })
     }
 })();

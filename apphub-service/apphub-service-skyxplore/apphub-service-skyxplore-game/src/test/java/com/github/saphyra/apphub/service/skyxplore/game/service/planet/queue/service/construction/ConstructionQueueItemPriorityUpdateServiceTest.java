@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
@@ -13,7 +14,10 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,6 +50,15 @@ public class ConstructionQueueItemPriorityUpdateServiceTest {
     @Mock
     private ConstructionToModelConverter constructionToModelConverter;
 
+    @Mock
+    private WsMessageSender messageSender;
+
+    @Mock
+    private BuildingConstructionToQueueItemConverter buildingConstructionToQueueItemConverter;
+
+    @Mock
+    private QueueItemToResponseConverter queueItemToResponseConverter;
+
     @InjectMocks
     private ConstructionQueueItemPriorityUpdateService underTest;
 
@@ -69,6 +82,12 @@ public class ConstructionQueueItemPriorityUpdateServiceTest {
 
     @Mock
     private ConstructionModel constructionModel;
+
+    @Mock
+    private QueueItem queueItem;
+
+    @Mock
+    private QueueResponse queueResponse;
 
     @Before
     public void setUp() {
@@ -109,9 +128,13 @@ public class ConstructionQueueItemPriorityUpdateServiceTest {
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(constructionToModelConverter.convert(construction, GAME_ID)).willReturn(constructionModel);
 
+        given(buildingConstructionToQueueItemConverter.convert(building)).willReturn(queueItem);
+        given(queueItemToResponseConverter.convert(queueItem, planet)).willReturn(queueResponse);
+
         underTest.updatePriority(USER_ID, PLANET_ID, CONSTRUCTION_ID, PRIORITY);
 
         verify(construction).setPriority(PRIORITY);
         verify(gameDataProxy).saveItem(constructionModel);
+        verify(messageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);
     }
 }

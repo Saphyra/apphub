@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.CancelAllocationsService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,6 +51,9 @@ public class CancelConstructionServiceTest {
     @Mock
     private SurfaceToResponseConverter surfaceToResponseConverter;
 
+    @Mock
+    private WsMessageSender messageSender;
+
     @InjectMocks
     private CancelConstructionService underTest;
 
@@ -79,6 +83,8 @@ public class CancelConstructionServiceTest {
 
     @Before
     public void setUp() {
+        given(planet.getPlanetId()).willReturn(PLANET_ID);
+        given(planet.getOwner()).willReturn(USER_ID);
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
         given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
@@ -95,6 +101,7 @@ public class CancelConstructionServiceTest {
         given(building.getLevel()).willReturn(0);
         given(surfaceMap.values()).willReturn(List.of(surface));
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
+        given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
 
         underTest.cancelConstructionOfConstruction(USER_ID, PLANET_ID, CONSTRUCTION_ID);
 
@@ -105,6 +112,8 @@ public class CancelConstructionServiceTest {
         verify(surface).setBuilding(null);
         verify(gameDataProxy).deleteItem(BUILDING_ID, GameItemType.BUILDING);
         verify(cancelAllocationsService).cancelAllocationsAndReservations(planet, CONSTRUCTION_ID);
+        verify(messageSender).planetSurfaceModified(USER_ID, PLANET_ID, surfaceResponse);
+        verify(messageSender).planetQueueItemDeleted(USER_ID, PLANET_ID, CONSTRUCTION_ID);
     }
 
     @Test
@@ -134,5 +143,6 @@ public class CancelConstructionServiceTest {
         verify(surface).setBuilding(null);
         verify(gameDataProxy).deleteItem(BUILDING_ID, GameItemType.BUILDING);
         verify(cancelAllocationsService).cancelAllocationsAndReservations(planet, CONSTRUCTION_ID);
+        verify(messageSender).planetQueueItemDeleted(USER_ID, PLANET_ID, CONSTRUCTION_ID);
     }
 }

@@ -12,8 +12,8 @@ import java.util.UUID;
 @Builder
 @Data
 public class OpenedPage {
-    public static final OpenedPage DEFAULT_PAGE = builder().openedPageType(OpenedPageType.NONE).build();
+    public static final OpenedPage DEFAULT_PAGE = builder().pageType(OpenedPageType.NONE).build();
 
-    private OpenedPageType openedPageType;
+    private OpenedPageType pageType;
     private UUID pageId;
 }

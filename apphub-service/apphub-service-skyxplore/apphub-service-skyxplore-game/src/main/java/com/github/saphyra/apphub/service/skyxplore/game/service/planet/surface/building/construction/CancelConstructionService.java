@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.CancelAllocationsService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,7 @@ public class CancelConstructionService {
     private final GameDataProxy gameDataProxy;
     private final CancelAllocationsService cancelAllocationsService;
     private final SurfaceToResponseConverter surfaceToResponseConverter;
+    private final WsMessageSender messageSender;
 
     public void cancelConstructionOfConstruction(UUID userId, UUID planetId, UUID constructionId) {
         Planet planet = gameDao.findByUserIdValidated(userId)
@@ -47,6 +49,9 @@ public class CancelConstructionService {
             .getBuilding();
 
         processCancellation(planet, surface, building);
+
+        SurfaceResponse surfaceResponse = surfaceToResponseConverter.convert(surface);
+        messageSender.planetSurfaceModified(userId, planet.getPlanetId(), surfaceResponse);
     }
 
     public SurfaceResponse cancelConstructionOfBuilding(UUID userId, UUID planetId, UUID buildingId) {
@@ -80,5 +85,6 @@ public class CancelConstructionService {
         }
 
         gameDataProxy.deleteItem(constructionId, GameItemType.CONSTRUCTION);
+        messageSender.planetQueueItemDeleted(planet.getOwner(), planet.getPlanetId(), constructionId);
     }
 }

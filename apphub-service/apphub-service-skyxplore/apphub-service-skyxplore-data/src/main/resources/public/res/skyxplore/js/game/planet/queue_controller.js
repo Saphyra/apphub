@@ -1,4 +1,16 @@
 (function QueueController(){
+    const syncEngine = new SyncEngineBuilder()
+        .withContainerId(ids.queue)
+        .withGetKeyMethod(function(queueItem){return queueItem.itemId})
+        .withCreateNodeMethod(createQueueItem)
+        .withSortMethod((a, b) => {return a.totalPriority - b.totalPriority})
+        .withIdPrefix("queue-item")
+        .build();
+
+    let openedPlanetId = null;
+
+    pageLoader.addLoader(addHandlers, "QueueController WS event handlers");
+
     window.queueController = new function(){
         this.loadQueue = loadQueue;
     }
@@ -7,37 +19,29 @@
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_GET_QUEUE", {planetId: planetId}));
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(queue){
-                displayQueue(planetId, queue);
+                openedPlanetId = planetId;
+                syncEngine.clear();
+                syncEngine.addAll(queue);
             }
         dao.sendRequestAsync(request);
     }
 
-    function displayQueue(planetId, queue){
-        const container = document.getElementById(ids.queue);
-            container.innerHTML = "";
-
-            new Stream(queue)
-                .sorted((a, b) => {return a.totalPriority - b.totalPriority})
-                .map(function(item){return createNode(planetId, item)})
-                .forEach(node => {container.appendChild(node)});
-
-        function createNode(planetId, item){
-            const node = document.createElement("DIV");
-                node.classList.add('queue-item');
-            switch(item.type){
-                case "CONSTRUCTION":
-                    fillForConstruction(planetId, node, item);
-                break;
-                case "TERRAFORMATION":
-                    fillForTerraformation(planetId, node, item);
-                break;
-                default:
-                    node.innerText = "Not implemented type: " + item.type;
-                break;
-            }
-
-            return node;
+    function createQueueItem(item){
+        const node = document.createElement("DIV");
+            node.classList.add('queue-item');
+        switch(item.type){
+            case "CONSTRUCTION":
+                fillForConstruction(openedPlanetId, node, item);
+            break;
+            case "TERRAFORMATION":
+                fillForTerraformation(openedPlanetId, node, item);
+            break;
+            default:
+                throwException("IllegalArgument", "Not implemented type: " + item.type);
+            break;
         }
+
+        return node;
 
         function fillForConstruction(planetId, node, item){
             const title = document.createElement("DIV");
@@ -105,33 +109,41 @@
                 }
             return cancelButton;
         }
+    }
 
-        function updatePriority(planetId, type, itemId, priority){
-            const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY", {planetId: planetId, type: type, itemId: itemId}), {value: priority});
-                request.processValidResponse = function(){
-                    loadQueue(planetId); //TODO use WS event
-                }
-            dao.sendRequestAsync(request);
-        }
+    function updatePriority(planetId, type, itemId, priority){
+        const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY", {planetId: planetId, type: type, itemId: itemId}), {value: priority});
+        dao.sendRequestAsync(request);
+    }
 
-        function cancelItem(planetId, type, itemId){
-            const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-                .withTitle(Localization.getAdditionalContent("cancel-queue-item-confirmation-dialog-title"))
-                .withDetail(Localization.getAdditionalContent("cancel-queue-item-confirmation-dialog-detail"))
-                .withConfirmButton(Localization.getAdditionalContent("cancel-queue-item-confirm-button"))
-                .withDeclineButton(Localization.getAdditionalContent("cancel-queue-item-cancel-button"));
+    function cancelItem(planetId, type, itemId){
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(Localization.getAdditionalContent("cancel-queue-item-confirmation-dialog-title"))
+            .withDetail(Localization.getAdditionalContent("cancel-queue-item-confirmation-dialog-detail"))
+            .withConfirmButton(Localization.getAdditionalContent("cancel-queue-item-confirm-button"))
+            .withDeclineButton(Localization.getAdditionalContent("cancel-queue-item-cancel-button"));
 
-            confirmationService.openDialog(
-                "cancel-queue-item-confirmation-dialog",
-                confirmationDialogLocalization,
-                function(){
-                    const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM", {planetId: planetId, type: type, itemId: itemId}));
-                        request.processValidResponse = function(){
-                            planetController.viewPlanet(planetId); //TODO use WS event
-                        }
-                    dao.sendRequestAsync(request);
-                }
-            );
-        }
+        confirmationService.openDialog(
+            "cancel-queue-item-confirmation-dialog",
+            confirmationDialogLocalization,
+            function(){
+                const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM", {planetId: planetId, type: type, itemId: itemId}));
+                    request.processValidResponse = function(){
+                    }
+                dao.sendRequestAsync(request);
+            }
+        );
+    }
+
+    function addHandlers(){
+        wsConnection.addHandler(new WebSocketEventHandler(
+            function(eventName){return webSocketEvents.PLANET_QUEUE_ITEM_MODIFIED == eventName},
+            queueItem => {syncEngine.add(queueItem)}
+        ));
+
+        wsConnection.addHandler(new WebSocketEventHandler(
+            function(eventName){return webSocketEvents.PLANET_QUEUE_ITEM_DELETED == eventName},
+            itemId => {syncEngine.remove(itemId)}
+        ));
     }
 })();

@@ -9,8 +9,13 @@
 
     let currentPlanetId = null;
 
+    pageLoader.addLoader(addHandlers, "SurfaceViewController add WS event handlers");
+
     window.surfaceViewController = new function(){
         this.loadSurface = loadSurface;
+        this.updateSurface = function(surface){
+            syncEngine.add(surface);
+        }
     }
 
     function loadSurface(planetId){
@@ -134,7 +139,8 @@
                                 cancelTerraformationButton.classList.add("cancel-terraformation-button");
                                 cancelTerraformationButton.innerText = "-";
                                 cancelTerraformationButton.onclick = function(){
-                                    terraformationController.cancelTerraformation(planetId, surfaceId);
+                                    terraformationController.cancelTerraformation(planetId, surfaceId)
+                                        .then((surface)=>{syncEngine.add(surface)});
                                 }
                         progressBarContent.appendChild(cancelTerraformationButton);
                     progressBar.appendChild(progressBarContent);
@@ -172,5 +178,12 @@
             content.appendChild(footer);
             return content;
         }
+    }
+
+    function addHandlers(){
+        wsConnection.addHandler(new WebSocketEventHandler(
+            function(eventName){return webSocketEvents.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED == eventName},
+            surface => {syncEngine.add(surface)}
+        ));
     }
 })();

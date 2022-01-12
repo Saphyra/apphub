@@ -38,4 +38,7 @@ public class Constants {
 
     //Etc
     public final int DEFAULT_PRIORITY = 5;
+
+    //OpenedPageType
+    public final String PAGE_TYPE_PLANET = "PLANET";
 }

@@ -47,7 +47,7 @@ public class SkyXploreGamePageOpenedWebSocketHandlerTest {
     @Test
     public void invalidValue() {
         given(objectMapperWrapper.convertValue(PAYLOAD, OpenedPage.class)).willReturn(openedPage);
-        given(openedPage.getOpenedPageType()).willReturn(null);
+        given(openedPage.getPageType()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.handle(USER_ID, WebSocketEvent.builder().payload(PAYLOAD).build()));
 
@@ -59,7 +59,7 @@ public class SkyXploreGamePageOpenedWebSocketHandlerTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
         given(objectMapperWrapper.convertValue(PAYLOAD, OpenedPage.class)).willReturn(openedPage);
-        given(openedPage.getOpenedPageType()).willReturn(OpenedPageType.PLANET);
+        given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET);
 
         underTest.handle(USER_ID, WebSocketEvent.builder().payload(PAYLOAD).build());
 

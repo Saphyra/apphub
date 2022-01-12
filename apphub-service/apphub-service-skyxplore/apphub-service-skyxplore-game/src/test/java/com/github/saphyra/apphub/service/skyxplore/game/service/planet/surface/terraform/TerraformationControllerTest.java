@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.terraform;
 
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import lombok.ToString;
@@ -12,8 +13,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @ToString
 @RunWith(MockitoJUnitRunner.class)
@@ -35,6 +36,9 @@ public class TerraformationControllerTest {
     @Mock
     private AccessTokenHeader accessTokenHeader;
 
+    @Mock
+    private SurfaceResponse surfaceResponse;
+
     @Before
     public void setUp() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
@@ -42,15 +46,19 @@ public class TerraformationControllerTest {
 
     @Test
     public void terraformSurface() {
-        underTest.terraformSurface(new OneParamRequest<>(SURFACE_TYPE), PLANET_ID, SURFACE_ID, accessTokenHeader);
+        given(terraformationService.terraform(USER_ID, PLANET_ID, SURFACE_ID, SURFACE_TYPE)).willReturn(surfaceResponse);
 
-        verify(terraformationService).terraform(USER_ID, PLANET_ID, SURFACE_ID, SURFACE_TYPE);
+        SurfaceResponse result = underTest.terraformSurface(new OneParamRequest<>(SURFACE_TYPE), PLANET_ID, SURFACE_ID, accessTokenHeader);
+
+        assertThat(result).isEqualTo(result);
     }
 
     @Test
     public void cancelTerraformation() {
-        underTest.cancelTerraformation(PLANET_ID, SURFACE_ID, accessTokenHeader);
+        given(cancelTerraformationService.cancelTerraformationOfSurface(USER_ID, PLANET_ID, SURFACE_ID)).willReturn(surfaceResponse);
 
-        verify(cancelTerraformationService).cancelTerraformationOfSurface(USER_ID, PLANET_ID, SURFACE_ID);
+        SurfaceResponse result = underTest.cancelTerraformation(PLANET_ID, SURFACE_ID, accessTokenHeader);
+
+        assertThat(result).isEqualTo(result);
     }
 }
