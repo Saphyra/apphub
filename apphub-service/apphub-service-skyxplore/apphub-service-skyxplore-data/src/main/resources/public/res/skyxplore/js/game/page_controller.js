@@ -100,6 +100,7 @@ const webSocketEvents = {
     PLANET_QUEUE_ITEM_MODIFIED: "skyxplore-game-planet-queue-item-modified",
     PLANET_QUEUE_ITEM_DELETED: "skyxplore-game-planet-queue-item-deleted",
     SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED: "skyxplore-game-planet-surface-modified",
+    SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED: "skyxplore-game-planet-storage-modified",
 }
 
 scriptLoader.loadScript("/res/common/js/web_socket.js");

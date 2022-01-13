@@ -160,6 +160,15 @@ public class ConstructNewBuildingServiceTest {
     }
 
     @Test
+    public void terraformationInProgress() {
+        given(surface.getTerraformation()).willReturn(construction);
+
+        Throwable ex = catchThrowable(() -> underTest.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID));
+
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS);
+    }
+
+    @Test
     public void surfaceAlreadyOccupied() {
         given(surface.getBuilding()).willReturn(building);
 

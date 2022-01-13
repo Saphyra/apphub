@@ -64,6 +64,10 @@ public class ConstructNewBuildingService {
         Surface surface = planet.getSurfaces()
             .findByIdValidated(surfaceId);
 
+        if (nonNull(surface.getTerraformation())) {
+            throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, "Cannot build on surface under terraformation on planet " + planet + " and surface " + surfaceId);
+        }
+
         if (nonNull(surface.getBuilding())) {
             throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, "Building already exists on planet " + planetId + " and surface " + surfaceId);
         }

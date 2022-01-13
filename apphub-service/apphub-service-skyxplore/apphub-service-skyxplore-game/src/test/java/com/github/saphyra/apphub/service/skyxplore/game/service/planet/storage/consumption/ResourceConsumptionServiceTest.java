@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
@@ -14,8 +15,10 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.AllocatedResourceToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ReservedStorageToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,6 +42,8 @@ public class ResourceConsumptionServiceTest {
     private static final String DATA_ID = "data-id";
     private static final Integer REQUIRED_AMOUNT = 34;
     private static final Integer REQUIRED_STORAGE = 235;
+    private static final UUID PLANET_ID = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
     private FreeStorageQueryService freeStorageQueryService;
@@ -57,6 +62,12 @@ public class ResourceConsumptionServiceTest {
 
     @Mock
     private RequiredEmptyStorageCalculator requiredEmptyStorageCalculator;
+
+    @Mock
+    private PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
+
+    @Mock
+    private WsMessageSender messageSender;
 
     @InjectMocks
     private ResourceConsumptionService underTest;
@@ -87,6 +98,9 @@ public class ResourceConsumptionServiceTest {
 
     @Mock
     private ReservedStorageModel reservedStorageModel;
+
+    @Mock
+    private PlanetStorageResponse storageResponse;
 
     @Before
     public void setUp() {
@@ -119,11 +133,16 @@ public class ResourceConsumptionServiceTest {
         given(storageDetails.getAllocatedResources()).willReturn(allocatedResources);
         given(allocatedResourceToModelConverter.convert(allocatedResource, GAME_ID)).willReturn(allocatedResourceModel);
         given(reservedStorageToModelConverter.convert(reservedStorage, GAME_ID)).willReturn(reservedStorageModel);
+        given(planetStorageOverviewQueryService.getStorage(planet)).willReturn(storageResponse);
+
+        given(planet.getOwner()).willReturn(USER_ID);
+        given(planet.getPlanetId()).willReturn(PLANET_ID);
 
         underTest.processResourceRequirements(GAME_ID, planet, LocationType.PLANET, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT));
 
         verify(reservedStorages).add(reservedStorage);
         verify(allocatedResources).add(allocatedResource);
         verify(gameDataProxy).saveItems(List.of(allocatedResourceModel, reservedStorageModel));
+        verify(messageSender).planetStorageModified(USER_ID, PLANET_ID, storageResponse);
     }
 }

@@ -22,8 +22,8 @@ public class BackEndTest extends TestBase {
 
     @DataProvider(name = "languageDataProvider", parallel = true)
     public Object[] languageDataProvider() {
-        //return Language.values();
-        return new Object[]{Language.HUNGARIAN};
+        return Language.values();
+        //return new Object[]{Language.HUNGARIAN}; //TODO restore
     }
 
     @BeforeMethod(alwaysRun = true)

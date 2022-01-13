@@ -93,7 +93,11 @@ public class BuildNewBuildingTest extends BackEndTest {
         assertThat(queueItemModifiedEvent.getData()).containsEntry("dataId", Constants.DATA_ID_SOLAR_PANEL);
         assertThat(queueItemModifiedEvent.getData()).containsEntry("currentLevel", 0);
 
+        gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED)
+            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED + " event not arrived"));
+
         //Cancel
+        gameWsClient.clearMessages();
         modifiedSurface = SkyXploreBuildingActions.cancelConstruction(language, accessTokenId, planetId, modifiedSurface.getBuilding().getBuildingId());
 
         assertThat(modifiedSurface.getBuilding()).isNull();
@@ -111,6 +115,16 @@ public class BuildNewBuildingTest extends BackEndTest {
             .getPayloadAs(UUID.class);
 
         assertThat(payload).isEqualTo(constructionId);
+
+        gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED)
+            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED + " event not arrived"));
+
+        //Terraformation in progress
+        SkyXploreSurfaceActions.getTerraformResponse(language, accessTokenId, planetId, emptyDesertSurfaceId, Constants.SURFACE_TYPE_LAKE);
+
+        Response terraformationInProgressResponse = SkyXploreBuildingActions.getConstructNewBuildingResponse(language, accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
+
+        ResponseValidator.verifyErrorResponse(language, terraformationInProgressResponse, 409, ErrorCode.ALREADY_EXISTS);
     }
 
     private SurfaceResponse findBySurfaceId(Language language, UUID accessTokenId, UUID planetId, UUID surfaceId) {

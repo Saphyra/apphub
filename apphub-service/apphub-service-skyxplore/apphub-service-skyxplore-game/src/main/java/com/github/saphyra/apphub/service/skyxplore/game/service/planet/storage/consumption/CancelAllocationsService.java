@@ -6,6 +6,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,6 +21,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CancelAllocationsService {
     private final GameDataProxy gameDataProxy;
+    private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
+    private final WsMessageSender messageSender;
 
     public void cancelAllocationsAndReservations(Planet planet, UUID externalReference) {
         StorageDetails storageDetails = planet.getStorageDetails();
@@ -38,6 +42,7 @@ public class CancelAllocationsService {
                 .collect(Collectors.toList());
             storageDetails.getAllocatedResources()
                 .removeAll(allocatedResources);
+            messageSender.planetStorageModified(planet.getOwner(), planet.getPlanetId(), planetStorageOverviewQueryService.getStorage(planet));
         }
     }
 }

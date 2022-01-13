@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.ws;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
@@ -55,6 +56,9 @@ public class WsMessageSenderTest {
     @Mock
     private SurfaceResponse surfaceResponse;
 
+    @Mock
+    private PlanetStorageResponse storageResponse;
+
     @Before
     public void setUp() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
@@ -96,6 +100,18 @@ public class WsMessageSenderTest {
         ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
         verify(messageSenderProxy).sendToGame(argumentCaptor.capture());
         verifyMessageSent(argumentCaptor.getValue(), WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, surfaceResponse);
+    }
+
+    @Test
+    public void planetStorageModified() {
+        given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET);
+        given(openedPage.getPageId()).willReturn(PLANET_ID);
+
+        underTest.planetStorageModified(USER_ID, PLANET_ID, storageResponse);
+
+        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
+        verify(messageSenderProxy).sendToGame(argumentCaptor.capture());
+        verifyMessageSent(argumentCaptor.getValue(), WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED, storageResponse);
     }
 
     private void verifyMessageSent(WebSocketMessage webSocketMessage, WebSocketEventName eventName, Object payload) {

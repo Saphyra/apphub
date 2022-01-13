@@ -12,6 +12,7 @@
 
     pageLoader.addLoader(setUpEventListeners, "PlanetStorage set up event listeners");
     pageLoader.addLoader(function(){$(".planet-storage-reserved-label").text(Localization.getAdditionalContent("planet-storage-reserved-label"))}, "Fill PlanetStorageReservedLabels");
+    pageLoader.addLoader(addHandlers, "PlanetStorageController add WS event handlers");
 
     window.planetStorageController = new function(){
         this.loadStorage = loadStorage;
@@ -145,5 +146,12 @@
                 sw.apply();
             }
         }
+    }
+
+    function addHandlers(){
+        wsConnection.addHandler(new WebSocketEventHandler(
+            function(eventName){return webSocketEvents.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED == eventName},
+            displayStorage
+        ));
     }
 })();

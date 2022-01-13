@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.ws;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
@@ -38,6 +39,10 @@ public class WsMessageSender {
 
     public void planetSurfaceModified(UUID userId, UUID planetId, SurfaceResponse surfaceResponse) {
         sendIfProperPageIsOpened(userId, WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, PLANET_PAGE_TYPE_GROUP, planetId, surfaceResponse);
+    }
+
+    public void planetStorageModified(UUID userId, UUID planetId, PlanetStorageResponse storage) {
+        sendIfProperPageIsOpened(userId, WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED, PLANET_PAGE_TYPE_GROUP, planetId, storage);
     }
 
     private void sendIfProperPageIsOpened(UUID userId, WebSocketEventName eventName, List<OpenedPageType> requiredPageTypes, UUID pageId, Object payload) {
