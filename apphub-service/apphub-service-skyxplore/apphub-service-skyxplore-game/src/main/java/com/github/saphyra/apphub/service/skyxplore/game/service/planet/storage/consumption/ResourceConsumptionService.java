@@ -10,8 +10,10 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.AllocatedResourceToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ReservedStorageToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -35,6 +37,8 @@ public class ResourceConsumptionService {
     private final ConsumptionCalculator consumptionCalculator;
     private final GameDataProxy gameDataProxy;
     private final RequiredEmptyStorageCalculator requiredEmptyStorageCalculator;
+    private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
+    private final WsMessageSender messageSender;
 
     public void processResourceRequirements(UUID gameId, Planet planet, LocationType locationType, UUID externalReference, Map<String, Integer> requiredResources) {
         StorageDetails storageDetails = planet.getStorageDetails();
@@ -67,6 +71,8 @@ public class ResourceConsumptionService {
                 ))
                 .collect(Collectors.toList());
             gameDataProxy.saveItems(items);
+
+            messageSender.planetStorageModified(planet.getOwner(), planet.getPlanetId(), planetStorageOverviewQueryService.getStorage(planet));
         }
     }
 }

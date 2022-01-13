@@ -302,6 +302,12 @@
     "cancel-terraformation-confirmation-dialog-title": "Confirm cancelling terraformation",
     "cancel-terraformation-confirmation-dialog-detail": "Are you sure you want to cancel terraformation?",
     "cancel-terraformation-confirm-button": "Cancel terraformation",
-    "cancel-terraformation-cancel-button": "Back"
+    "cancel-terraformation-cancel-button": "Back",
+    "cancel-production": "Cancel",
+    "priority": "Priority",
+    "cancel-queue-item-confirmation-dialog-title": "Confirm cancelling production",
+    "cancel-queue-item-confirmation-dialog-detail": "Are you sure you want to cancel the production?",
+    "cancel-queue-item-confirm-button": "Cancel production",
+    "cancel-queue-item-cancel-button": "Back"
   }
 }

@@ -56,14 +56,19 @@ public class StorageSettingCrudTest extends BackEndTest {
 
         //Create
         StorageSettingModel createModel = StorageSettingModel.valid();
-        SkyXploreStorageSettingActions.createStorageSetting(language, accessTokenId1, planet.getPlanetId(), createModel);
+        StorageSettingModel created = SkyXploreStorageSettingActions.createStorageSetting(language, accessTokenId1, planet.getPlanetId(), createModel);
+        assertThat(created.getDataId()).isEqualTo(createModel.getDataId());
+        assertThat(created.getTargetAmount()).isEqualTo(createModel.getTargetAmount());
+        assertThat(created.getBatchSize()).isEqualTo(createModel.getBatchSize());
+        assertThat(created.getPriority()).isEqualTo(createModel.getPriority());
+        assertThat(created.getStorageSettingId()).isNotNull();
 
         //Get
         List<StorageSettingModel> createModels = SkyXploreStorageSettingActions.getStorageSettings(language, accessTokenId1, planet.getPlanetId())
             .getCurrentSettings();
 
         assertThat(createModels).hasSize(1);
-        StorageSettingModel created = createModels.get(0);
+        created = createModels.get(0);
         assertThat(created.getDataId()).isEqualTo(createModel.getDataId());
         assertThat(created.getTargetAmount()).isEqualTo(createModel.getTargetAmount());
         assertThat(created.getBatchSize()).isEqualTo(createModel.getBatchSize());
@@ -97,12 +102,17 @@ public class StorageSettingCrudTest extends BackEndTest {
             .priority(2)
             .dataId(createModel.getDataId())
             .build();
-        Response response = SkyXploreStorageSettingActions.getEditStorageSettingResponse(language, accessTokenId1, planet.getPlanetId(), editModel);
-        assertThat(response.getStatusCode()).isEqualTo(200);
+        StorageSettingModel edited = SkyXploreStorageSettingActions.editStorageSetting(language, accessTokenId1, planet.getPlanetId(), editModel);
+        assertThat(edited.getDataId()).isEqualTo(editModel.getDataId());
+        assertThat(edited.getTargetAmount()).isEqualTo(editModel.getTargetAmount());
+        assertThat(edited.getBatchSize()).isEqualTo(editModel.getBatchSize());
+        assertThat(edited.getPriority()).isEqualTo(editModel.getPriority());
+        assertThat(edited.getStorageSettingId()).isEqualTo(editModel.getStorageSettingId());
+
         List<StorageSettingModel> editModels = SkyXploreStorageSettingActions.getStorageSettings(language, accessTokenId1, planet.getPlanetId())
             .getCurrentSettings();
         assertThat(editModels).hasSize(1);
-        StorageSettingModel edited = editModels.get(0);
+        edited = editModels.get(0);
         assertThat(edited.getDataId()).isEqualTo(editModel.getDataId());
         assertThat(edited.getTargetAmount()).isEqualTo(editModel.getTargetAmount());
         assertThat(edited.getBatchSize()).isEqualTo(editModel.getBatchSize());

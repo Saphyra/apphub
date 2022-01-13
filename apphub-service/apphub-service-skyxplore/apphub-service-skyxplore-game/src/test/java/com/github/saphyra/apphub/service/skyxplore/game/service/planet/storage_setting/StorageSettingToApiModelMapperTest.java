@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.query;
+package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
 import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;
@@ -14,7 +14,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CurrentSettingsMapperTest {
+public class StorageSettingToApiModelMapperTest {
     private static final UUID STORAGE_SETTING_ID = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
     private static final int TARGET_AMOUNT = 123;
@@ -22,7 +22,7 @@ public class CurrentSettingsMapperTest {
     private static final int PRIORITY = 36;
 
     @InjectMocks
-    private CurrentSettingsMapper underTest;
+    private StorageSettingToApiModelMapper underTest;
 
     @Test
     public void convert() {

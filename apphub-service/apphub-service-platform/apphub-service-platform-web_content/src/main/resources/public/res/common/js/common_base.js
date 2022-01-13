@@ -67,8 +67,13 @@ function initPageLoader(){
 
     window.pageLoader = new function(){
         this.addLoader = function(loader, description){
+            console.log("Adding loader " + description);
             if(!hasValue(description)){
                 throwException("IllegalArgument", "Description must not be null or undefined.");
+            }
+
+            if(!isFunction(loader)){
+                throwException("IllegalArgument", "Loader is not a function.");
             }
 
             loaders.push({loader: loader, description: description});
@@ -78,16 +83,18 @@ function initPageLoader(){
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.LOCALIZATION_LOADED},
         function(){
-            logService.logToConsole("Running pageLoaders...");
             new Stream(loaders)
-                .forEach(function(loader){
-                    setTimeout(function(){
-                        logService.logToConsole("Calling loader: " + loader.description);
-                        loader.loader();
-                    },
-                        0
-                    )
-                });
+                .forEach(
+                    function(loader){
+                        setTimeout(
+                            function(){
+                                logService.logToConsole("Calling loader: " + loader.description);
+                                loader.loader();
+                            },
+                            0
+                        )
+                    }
+                );
         },
         true,
         "Page loaders"

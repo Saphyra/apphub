@@ -1,0 +1,26 @@
+.queue-item{
+    margin: 0.25rem;
+    border: 3px ridge white;
+    border-radius: 10px;
+}
+
+    .queue-item-title{
+        padding: 0.125rem;
+        text-align: center;
+        border-bottom: 1px ridge white;
+    }
+
+    .queue-item .progress-bar-container{
+        border: 1px solid white;
+        margin: 0.25rem;
+    }
+
+        .queue-item .progress-bar-container .progress-bar-text{
+            text-align: center;
+        }
+
+    .cancel-queue-item-button{
+        display: block;
+        margin: auto;
+            margin: 0.25rem auto;
+    }

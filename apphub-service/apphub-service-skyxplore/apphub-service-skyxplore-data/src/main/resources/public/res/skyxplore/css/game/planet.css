@@ -1,8 +1,7 @@
 :root{
     --planet-left-bar-width: 33rem;
     --planet-right-bar-width: 17rem;
-    --surface-table-cell-size: 6vw;
-    --min-surface-table-cell-size: 6rem;
+    --surface-table-cell-size: 6rem;
     --planet-bar-title-height: 1.85rem;
 }
 
@@ -151,22 +150,15 @@
 }
 
     #planet-surface-container{
-        white-space: nowrap;
+        display: grid;
         margin: 1rem;
-    }
-
-    .surface-table-row{
-        text-align: center;
     }
 
     .surface-table-cell{
         border: 2px outset white;
         width: var(--surface-table-cell-size);
         height: var(--surface-table-cell-size);
-        min-width: var(--min-surface-table-cell-size);
-        min-height: var(--min-surface-table-cell-size);
         position: relative;
-        display: inline-block;
         background-position: center;
         background-size: cover;
     }

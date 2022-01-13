@@ -2,7 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceBuildingResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
@@ -22,10 +23,14 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.BuildingFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction.BuildingConstructionToQueueItemConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceConsumptionService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.BuildingToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -81,7 +86,16 @@ public class ConstructNewBuildingServiceTest {
     private ConstructionToModelConverter constructionToModelConverter;
 
     @Mock
-    private BuildingToResponseConverter buildingToResponseConverter;
+    private SurfaceToResponseConverter surfaceToResponseConverter;
+
+    @Mock
+    private BuildingConstructionToQueueItemConverter buildingConstructionToQueueItemConverter;
+
+    @Mock
+    private QueueItemToResponseConverter queueItemToResponseConverter;
+
+    @Mock
+    private WsMessageSender messageSender;
 
     @InjectMocks
     private ConstructNewBuildingService underTest;
@@ -117,7 +131,13 @@ public class ConstructNewBuildingServiceTest {
     private ConstructionModel constructionModel;
 
     @Mock
-    private SurfaceBuildingResponse surfaceBuildingResponse;
+    private SurfaceResponse surfaceResponse;
+
+    @Mock
+    private QueueItem queueItem;
+
+    @Mock
+    private QueueResponse queueResponse;
 
     @Before
     public void setUp() {
@@ -137,6 +157,15 @@ public class ConstructNewBuildingServiceTest {
         Throwable ex = catchThrowable(() -> underTest.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID));
 
         ExceptionValidator.validateInvalidParam(ex, "dataId", "invalid value");
+    }
+
+    @Test
+    public void terraformationInProgress() {
+        given(surface.getTerraformation()).willReturn(construction);
+
+        Throwable ex = catchThrowable(() -> underTest.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID));
+
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS);
     }
 
     @Test
@@ -170,15 +199,19 @@ public class ConstructNewBuildingServiceTest {
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());
         given(buildingToModelConverter.convert(building, GAME_ID)).willReturn(buildingModel);
         given(constructionToModelConverter.convert(construction, GAME_ID)).willReturn(constructionModel);
-        given(buildingToResponseConverter.convert(building)).willReturn(surfaceBuildingResponse);
+        given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
+        given(buildingConstructionToQueueItemConverter.convert(building)).willReturn(queueItem);
+        given(queueItemToResponseConverter.convert(queueItem, planet)).willReturn(queueResponse);
 
-        SurfaceBuildingResponse result = underTest.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID);
+        SurfaceResponse result = underTest.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID);
+
+        assertThat(result).isEqualTo(surfaceResponse);
 
         verify(building).setConstruction(construction);
         verify(surface).setBuilding(building);
         verify(resourceConsumptionService).processResourceRequirements(GAME_ID, planet, LocationType.PLANET, CONSTRUCTION_ID, Collections.emptyMap());
         verify(gameDataProxy).saveItem(buildingModel, constructionModel);
+        verify(messageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);
 
-        assertThat(result).isEqualTo(surfaceBuildingResponse);
     }
 }

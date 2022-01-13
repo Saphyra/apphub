@@ -44,7 +44,7 @@
                 container.removeChild(messageElement);
             }
             
-            roll.rollInHorizontal(messageElement, container, 300)
+            roll.rollInHorizontal(messageElement, container, "inline-block", 300)
             .then(() => new Promise((resolve, reject) => {
                     setTimeout(function(){resolve();}, 10000)
                 })

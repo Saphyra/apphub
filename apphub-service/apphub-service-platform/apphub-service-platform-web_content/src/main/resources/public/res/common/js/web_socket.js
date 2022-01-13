@@ -1,23 +1,35 @@
 function WebSocketConnection(ep){
     const endpoint = ep;
     const host = window.location.host;
-    const handlers = [new PingWebSocketHandler(this), new RedirectWebSocketHandler(this)];
+    const handlers = [];
 
     let reconnectionTryCount = 1;
 
     let connection = null;
 
     this.addHandler = function(handler){
-        console.log("Adding eventHandler", handler.canHandle);
+        console.log("Adding eventHandler", handler);
+
+        if(!handler instanceof WebSocketEventHandler){
+            throwException("IllegalArgument", "Handler is not a WebSocketEventHandler");
+        }
+        if(!isFunction(handler.canHandle)){
+            throwException("IllegalArgument", "canHandle is not defined.");
+        }
+        if(!isFunction(handler.handle)){
+            throwException("IllegalArgument", "handle is not defined.");
+        }
         handlers.push(handler);
         return this;
     }
 
+    //Default handlers
+    this.addHandler(createPingWebSocketHandler(this));
+    this.addHandler(createRedirectWebSocketHandler());
+
     this.addHandlers = function(h){
-        console.log(h)
         new Stream(h)
-            .peek(function(handler){console.log("Adding eventHandler", handler.canHandle)})
-            .forEach(function(handler){handlers.push(handler)});
+            .forEach(this.addHandler);
         return this;
     }
 
@@ -37,6 +49,7 @@ function WebSocketConnection(ep){
             console.log("WebSocket encountered error: ", err.message, "Closing connection");
         };
         connection.onclose = reconnect;
+        return this;
     }
 
     this.close = function(){
@@ -59,6 +72,7 @@ function WebSocketConnection(ep){
         const payload = JSON.parse(event.data);
 
         const eventName = payload.eventName;
+        console.log("Handling event " + eventName);
         const eventData = payload.payload;
 
         new Stream(handlers)
@@ -75,28 +89,18 @@ function WebSocketConnection(ep){
         reconnectionTryCount++;
     }
 
-    function PingWebSocketHandler(c){
-        const wsConnection = c;
-
-        this.canHandle = function(eventName){
-            return eventName == "ping";
-        }
-
-        this.handle = function(){
-            wsConnection.sendEvent(new WebSocketEvent("ping"));
-        }
+    function createPingWebSocketHandler(wsConnection){
+        return new WebSocketEventHandler(
+            function(eventName){return eventName == "ping"},
+            function(){wsConnection.sendEvent(new WebSocketEvent("ping"))}
+        );
     }
 
-    function RedirectWebSocketHandler(c){
-        const wsConnection = c;
-
-        this.canHandle = function(eventName){
-            return eventName == "redirect";
-        }
-
-        this.handle = function(redirectUrl){
-            window.location.href = event.eventName;
-        }
+    function createRedirectWebSocketHandler(){
+        return new WebSocketEventHandler(
+            function(eventName){return eventName == "redirect"},
+            function(){window.location.href = event.eventName}
+        );
     }
 }
 

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.frontend.skyxplore.game;
+package com.github.saphyra.apphub.integration.frontend.skyxplore.game.planet;
 
 import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.common.model.RegistrationParameters;
@@ -63,7 +63,7 @@ public class CitizenOverviewTest extends SeleniumTest {
         SkyXplorePlanetActions.openPopulationOverview(driver);
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetPopulationOverviewActions.isLoaded(driver))
-            .assertTrue("StorageSettings is not opened.");
+            .assertTrue("PopulationOverview is not opened.");
 
         //Rename citizens
         List<String> citizenNames = SkyXplorePlanetPopulationOverviewActions.getCitizens(driver)

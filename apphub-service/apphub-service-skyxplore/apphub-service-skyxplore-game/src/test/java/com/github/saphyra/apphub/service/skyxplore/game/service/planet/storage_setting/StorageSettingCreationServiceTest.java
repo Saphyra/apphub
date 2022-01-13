@@ -20,6 +20,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -46,6 +47,9 @@ public class StorageSettingCreationServiceTest {
     @Mock
     private GameDataProxy gameDataProxy;
 
+    @Mock
+    private StorageSettingToApiModelMapper storageSettingToApiModelMapper;
+
     @InjectMocks
     private StorageSettingCreationService underTest;
 
@@ -70,6 +74,9 @@ public class StorageSettingCreationServiceTest {
     @Mock
     private StorageSettingModel model;
 
+    @Mock
+    private StorageSettingApiModel apiModel;
+
     @Test
     public void createStorageSetting() {
         StorageSettingApiModel apiModel = StorageSettingApiModel.builder()
@@ -88,7 +95,11 @@ public class StorageSettingCreationServiceTest {
         given(game.getGameId()).willReturn(GAME_ID);
         given(storageSettingToModelConverter.convert(storageSetting, GAME_ID)).willReturn(model);
 
-        underTest.createStorageSetting(USER_ID, PLANET_ID, apiModel);
+        given(storageSettingToApiModelMapper.convert(storageSetting)).willReturn(apiModel);
+
+        StorageSettingApiModel result = underTest.createStorageSetting(USER_ID, PLANET_ID, apiModel);
+
+        assertThat(result).isEqualTo(apiModel);
 
         verify(storageSettingsModelValidator).validate(apiModel, planet);
         verify(storageSettings).add(storageSetting);

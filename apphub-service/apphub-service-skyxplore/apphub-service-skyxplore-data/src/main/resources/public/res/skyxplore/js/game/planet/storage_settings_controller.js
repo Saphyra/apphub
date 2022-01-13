@@ -1,5 +1,24 @@
 (function StorageSettingsController(){
+    const PAGE_NAME = "PLANET_STORAGE_SETTINGS";
+
+    const availableResourcesSyncEngine = new SyncEngineBuilder()
+        .withContainerId(ids.storageSettingsResourceInput)
+        .withGetKeyMethod(availableResource => {return availableResource})
+        .withCreateNodeMethod(createAvailableResourceOption)
+        .withSortMethod((a, b) => {return dataCaches.itemDataNames.get(a).localeCompare(dataCaches.itemDataNames.get(b))})
+        .withIdPrefix("available-resource")
+        .build();
+
+    const storageSettingsSyncEngine = new SyncEngineBuilder()
+        .withContainerId(ids.currentStorageSettingsContainer)
+        .withGetKeyMethod(storageSetting => {return storageSetting.storageSettingId})
+        .withCreateNodeMethod(createStorageSetting)
+        .withSortMethod((a, b) => {return dataCaches.itemDataNames.get(a.dataId).localeCompare(dataCaches.itemDataNames.get(b.dataId))})
+        .withIdPrefix("storage-setting")
+        .build();
+
     pageLoader.addLoader(setUpEventListeners, "StorageSettings set up event listeners");
+    pageLoader.addLoader(()=>{document.getElementById(ids.closeStorageSettingsButton).onclick = function(){planetController.openPlanetWindow()}}, "Close storage settings");
 
     window.storageSettingsController = new function(){
         this.viewStorageSettings = viewStorageSettings;
@@ -7,135 +26,112 @@
     }
 
     function viewStorageSettings(planetId){
-        document.getElementById(ids.closeStorageSettingsButton).onclick = function(){
-            planetController.viewPlanet(planetId);
-        }
-
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_GET_STORAGE_SETTINGS", {planetId: planetId}));
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(storageSettings){
                 displayStorageSettings(storageSettings);
+                switchTab("main-tab", ids.storageSettings);
             }
         dao.sendRequestAsync(request);
-
-        switchTab("main-tab", ids.storageSettings);
     }
 
     function displayStorageSettings(storageSettings){
-        setUpCreatePanel(storageSettings);
-        displayCurrentSettings(storageSettings);
+        availableResourcesSyncEngine.addAll(storageSettings.availableResources);
+        storageSettingsSyncEngine.addAll(storageSettings.currentSettings);
+        resetPanels();
+    }
+    
+    function resetPanels(){
+        const display = storageSettingsSyncEngine.size() > 0 ? "none" : "block";
+            document.getElementById(ids.noStorageSettings).style.display = display;
+        setBachSize();
+        setPriority();
+        $(".create-storage-setting-input").prop("disabled", availableResourcesSyncEngine.size() == 0);
+    }
 
-        function setUpCreatePanel(storageSettings){
-            const resourceSelectMenu = document.getElementById(ids.storageSettingsResourceInput);
-                resourceSelectMenu.innerHTML = "";
+    function createAvailableResourceOption(dataId){
+        const option = document.createElement("OPTION");
+        option.value = dataId;
+        option.innerHTML = dataCaches.itemDataNames.get(dataId);
+        return option;
+    }
 
-                new Stream(storageSettings.availableResources)
-                    .sorted(function(a, b){return dataCaches.itemDataNames.get(a).localeCompare(dataCaches.itemDataNames.get(b))})
-                    .map(createOption)
-                    .forEach(function(node){resourceSelectMenu.appendChild(node)})
+    function createStorageSetting(storageSetting){
+        const dataId = storageSetting.dataId;
+        const storageType = dataCaches.itemData.get(dataId).storageType;
 
-            setBachSize();
-            setPriority();
-            $(".create-storage-setting-input").prop("disabled", storageSettings.availableResources.length == 0);
+        const node = document.createElement("DIV");
+            node.classList.add("storage-setting");
 
-            function createOption(dataId){
-                const option = document.createElement("OPTION");
-                option.value = dataId;
-                option.innerHTML = dataCaches.itemDataNames.get(dataId);
-                return option;
+            const title = document.createElement("H3");
+                title.innerHTML = dataCaches.itemDataNames.get(storageSetting.dataId);
+        node.appendChild(title);
+
+            const inputContainer = document.createElement("DIV");
+                const amountLabel = document.createElement("LABEL");
+                    const amountTitle = document.createElement("SPAN");
+                        amountTitle.innerHTML = Localization.getAdditionalContent("storage-setting-amount") + ": ";
+                amountLabel.appendChild(amountTitle);
+                    const amountInput = document.createElement("INPUT");
+                        amountInput.type = "number";
+                        amountInput.step = 1;
+                        amountInput.value = storageSetting.targetAmount;
+                amountLabel.appendChild(amountInput);
+            inputContainer.appendChild(amountLabel);
+
+                const batchSizeLabel = document.createElement("LABEL");
+                    const batchSizeTitle = document.createElement("SPAN");
+                        batchSizeTitle.innerHTML = Localization.getAdditionalContent("storage-setting-batch-size") + ": ";
+                batchSizeLabel.appendChild(batchSizeTitle);
+                    const batchSizeInput = document.createElement("INPUT");
+                        batchSizeInput.type = "number";
+                        batchSizeInput.min = 1;
+                        batchSizeInput.step = 1;
+                        batchSizeInput.value = storageSetting.batchSize;
+                batchSizeLabel.appendChild(batchSizeInput);
+            inputContainer.appendChild(batchSizeLabel);
+
+                const priorityLabel = document.createElement("LABEL");
+                    const priorityTitle = document.createElement("SPAN");
+                        priorityTitle.innerHTML = Localization.getAdditionalContent("storage-setting-priority") + ": ";
+                priorityLabel.appendChild(priorityTitle);
+                    const priorityInput = document.createElement("INPUT");
+                        priorityInput.type = "range";
+                        priorityInput.min = 1;
+                        priorityInput.max = 10;
+                        priorityInput.step = 1;
+                        priorityInput.value = storageSetting.priority;
+                priorityLabel.appendChild(priorityInput);
+                    const priorityValue = document.createElement("SPAN");
+                        priorityValue.innerHTML = storageSetting.priority;
+                priorityLabel.appendChild(priorityValue);
+            inputContainer.appendChild(priorityLabel);
+        node.appendChild(inputContainer);
+
+            const buttonContainer = document.createElement("DIV");
+                const saveButton = document.createElement("BUTTON");
+                    saveButton.innerHTML = Localization.getAdditionalContent("save-storage-setting");
+            buttonContainer.appendChild(saveButton);
+
+                const deleteButton = document.createElement("BUTTON");
+                    deleteButton.innerHTML = Localization.getAdditionalContent("delete-storage-setting");
+            buttonContainer.appendChild(deleteButton);
+        node.appendChild(buttonContainer);
+
+        amountInput.onchange = function(){
+            if(amountInput.value > maxAmount){
+                amountInput.value = maxAmount;
             }
         }
 
-        function displayCurrentSettings(storageSettings){
-            const display = Object.keys(storageSettings.currentSettings).length ? "none" : "block";
-                document.getElementById(ids.noStorageSettings).style.display = display;
-
-            const container = document.getElementById(ids.currentStorageSettingsContainer);
-                container.innerHTML = "";
-
-                new Stream(storageSettings.currentSettings)
-                    .sorted(function(a, b){return dataCaches.itemDataNames.get(a.dataId).localeCompare(dataCaches.itemDataNames.get(b.dataId))})
-                    .map(createStorageSetting)
-                    .forEach(function(node){container.appendChild(node)});
-
-            function createStorageSetting(storageSetting){
-                const dataId = storageSetting.dataId;
-                const storageType = dataCaches.itemData.get(dataId).storageType;
-
-                const node = document.createElement("DIV");
-                    node.classList.add("storage-setting");
-
-                    const title = document.createElement("H3");
-                        title.innerHTML = dataCaches.itemDataNames.get(storageSetting.dataId);
-                node.appendChild(title);
-
-                    const inputContainer = document.createElement("DIV");
-                        const amountLabel = document.createElement("LABEL");
-                            const amountTitle = document.createElement("SPAN");
-                                amountTitle.innerHTML = Localization.getAdditionalContent("storage-setting-amount") + ": ";
-                        amountLabel.appendChild(amountTitle);
-                            const amountInput = document.createElement("INPUT");
-                                amountInput.type = "number";
-                                amountInput.step = 1;
-                                amountInput.value = storageSetting.targetAmount;
-                        amountLabel.appendChild(amountInput);
-                    inputContainer.appendChild(amountLabel);
-
-                        const batchSizeLabel = document.createElement("LABEL");
-                            const batchSizeTitle = document.createElement("SPAN");
-                                batchSizeTitle.innerHTML = Localization.getAdditionalContent("storage-setting-batch-size") + ": ";
-                        batchSizeLabel.appendChild(batchSizeTitle);
-                            const batchSizeInput = document.createElement("INPUT");
-                                batchSizeInput.type = "number";
-                                batchSizeInput.min = 1;
-                                batchSizeInput.step = 1;
-                                batchSizeInput.value = storageSetting.batchSize;
-                        batchSizeLabel.appendChild(batchSizeInput);
-                    inputContainer.appendChild(batchSizeLabel);
-
-                        const priorityLabel = document.createElement("LABEL");
-                            const priorityTitle = document.createElement("SPAN");
-                                priorityTitle.innerHTML = Localization.getAdditionalContent("storage-setting-priority") + ": ";
-                        priorityLabel.appendChild(priorityTitle);
-                            const priorityInput = document.createElement("INPUT");
-                                priorityInput.type = "range";
-                                priorityInput.min = 1;
-                                priorityInput.max = 10;
-                                priorityInput.step = 1;
-                                priorityInput.value = storageSetting.priority;
-                        priorityLabel.appendChild(priorityInput);
-                            const priorityValue = document.createElement("SPAN");
-                                priorityValue.innerHTML = storageSetting.priority;
-                        priorityLabel.appendChild(priorityValue);
-                    inputContainer.appendChild(priorityLabel);
-                node.appendChild(inputContainer);
-
-                    const buttonContainer = document.createElement("DIV");
-                        const saveButton = document.createElement("BUTTON");
-                            saveButton.innerHTML = Localization.getAdditionalContent("save-storage-setting");
-                    buttonContainer.appendChild(saveButton);
-
-                        const deleteButton = document.createElement("BUTTON");
-                            deleteButton.innerHTML = Localization.getAdditionalContent("delete-storage-setting");
-                    buttonContainer.appendChild(deleteButton);
-                node.appendChild(buttonContainer);
-
-                amountInput.onchange = function(){
-                    if(amountInput.value > maxAmount){
-                        amountInput.value = maxAmount;
-                    }
-                }
-
-                priorityInput.onchange = function(){
-                    priorityValue.innerHTML = priorityInput.value;
-                }
-
-                saveButton.onclick = function(){updateStorageSetting(dataId, storageSetting.storageSettingId, amountInput.value, batchSizeInput.value, priorityInput.value)};
-                deleteButton.onclick = function(){deleteStorageSetting(storageSetting.storageSettingId, storageSetting.dataId)};
-
-                return node;
-            }
+        priorityInput.onchange = function(){
+            priorityValue.innerHTML = priorityInput.value;
         }
+
+        saveButton.onclick = function(){updateStorageSetting(dataId, storageSetting.storageSettingId, amountInput.value, batchSizeInput.value, priorityInput.value)};
+        deleteButton.onclick = function(){deleteStorageSetting(storageSetting.storageSettingId, storageSetting.dataId)};
+
+        return node;
     }
 
     function updateStorageSetting(dataId, storageSettingId, targetAmount, batchSize, priority){
@@ -153,9 +149,11 @@
         }
 
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_EDIT_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId()}), payload);
-            request.processValidResponse = function(){
+            request.convertResponse = jsonConverter;
+            request.processValidResponse = function(storageSetting){
                 notificationService.showSuccess(Localization.getAdditionalContent("storage-setting-saved"));
-                viewStorageSettings(planetController.getOpenedPlanetId());
+                storageSettingsSyncEngine.add(storageSetting);
+                resetPanels();
             }
         dao.sendRequestAsync(request);
     }
@@ -167,7 +165,6 @@
             .withConfirmButton(Localization.getAdditionalContent("delete-storage-setting-confirm-button"))
             .withDeclineButton(Localization.getAdditionalContent("delete-storage-setting-decline-button"))
 
-
         confirmationService.openDialog(
             "delete-storage-setting-confirmation-dialog",
             confirmationDialogLocalization,
@@ -175,7 +172,9 @@
                 const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_DELETE_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId(), storageSettingId: storageSettingId}));
                     request.processValidResponse = function(){
                         notificationService.showSuccess(Localization.getAdditionalContent("storage-setting-deleted"));
-                        viewStorageSettings(planetController.getOpenedPlanetId());
+                        storageSettingsSyncEngine.remove(storageSettingId);
+                        availableResourcesSyncEngine.add(dataId);
+                        resetPanels();
                     }
                 dao.sendRequestAsync(request);
             }
@@ -201,9 +200,12 @@
         }
 
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_CREATE_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId()}), payload);
-            request.processValidResponse = function(){
+            request.convertResponse = jsonConverter;
+            request.processValidResponse = function(storageSetting){
                 notificationService.showSuccess(Localization.getAdditionalContent("storage-setting-created"));
-                viewStorageSettings(planetController.getOpenedPlanetId());
+                storageSettingsSyncEngine.add(storageSetting);
+                availableResourcesSyncEngine.remove(storageSetting.dataId);
+                resetPanels();
             }
         dao.sendRequestAsync(request);
     }

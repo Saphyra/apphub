@@ -6,14 +6,17 @@ window.mapConstants = {
 };
 
 (function MapController(){
-    pageLoader.addLoader(function(){addRightClickMove(ids.mapSvgContainer, ids.mapWrapper, false)}, "Map add rightClickMove");
+    const PAGE_NAME = "MAP";
 
-    pageLoader.addLoader(function(){mapController.zoomController  = new ZoomController(ids.mapSvgContainer, 1, 0.125, 0.125, 3)}, "Add Map Zoom controller");
+    pageLoader.addLoader(function(){addRightClickMove(ids.mapSvgContainer, ids.mapWrapper, false)}, "Map add rightClickMove");
+    pageLoader.addLoader(function(){mapController.showMap()}, "Load map");
+    pageLoader.addLoader(function(){mapController.zoomController = new ZoomController(ids.mapSvgContainer, 1, 0.125, 0.125, 3)}, "Add Map Zoom controller");
 
     window.mapController = new function(){
         this.showMap = function(){
             universeController.loadUniverse();
             switchTab("main-tab", "map");
+            wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, {pageType: PAGE_NAME}));
         }
 
         this.zoomIn = function(){

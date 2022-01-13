@@ -77,4 +77,6 @@
             .population-overview-citizen-progress-bar{
                 width: 16rem;
                 display: inline-block;
+                margin: 0.5rem;
+                border: 1px solid white;
             }

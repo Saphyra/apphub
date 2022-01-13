@@ -1,4 +1,6 @@
 (function PlanetController(){
+    const PAGE_NAME = "PLANET";
+
     let openedPlanetId;
     let currentPlanetName;
 
@@ -8,6 +10,7 @@
 
     window.planetController = new function(){
         this.viewPlanet = viewPlanet;
+        this.openPlanetWindow = openPlanetWindow;
         this.openStorageSettings = openStorageSettings;
         this.getOpenedPlanetId = function(){
             return openedPlanetId;
@@ -28,12 +31,18 @@
         planetPopulationController.loadPopulation(planetId);
         planetBuildingController.loadBuildings(planetId);
         planetPriorityController.loadPriorities(planetId);
+        queueController.loadQueue(planetId);
         loadPlanetOverview(planetId);
 
         document.getElementById(ids.closePlanetButton).onclick = function(){
             solarSystemController.viewSolarSystem(solarSystemController.getOpenedSolarSystemId());
         };
+        openPlanetWindow();
+    }
+
+    function openPlanetWindow(){
         switchTab("main-tab", ids.planet);
+        wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, {pageType: PAGE_NAME, pageId: openedPlanetId}));
     }
 
     function loadPlanetOverview(planetId){

@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.common.framework.AwaitilityWrapper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class SkyXploreTerraformationActions {
+public class SkyXploreSurfaceActions {
     public static boolean isDisplayed(WebDriver driver) {
         return GamePage.terraformationWindow(driver).isDisplayed();
     }

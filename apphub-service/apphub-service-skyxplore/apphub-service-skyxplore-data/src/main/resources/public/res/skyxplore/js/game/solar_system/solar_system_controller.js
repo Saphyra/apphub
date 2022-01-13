@@ -1,4 +1,5 @@
 (function SolarSystemController(){
+    const PAGE_NAME = "SOLAR_SYSTEM";
     window.solarSystemConstants = {
         SOLAR_SYSTEM_BORDER_WIDTH: 10,
         OFFSET: 70,
@@ -83,6 +84,7 @@
 
 
         switchTab("main-tab", ids.solarSystem);
+        wsConnection.sendEvent(new WebSocketEvent(webSocketEvents.PAGE_OPENED, {pageType: PAGE_NAME, pageId: solarSystem.solarSystemId}));
 
         const solarSystemContainer = document.getElementById(ids.solarSystemContainer);
         solarSystemContainer.scrollTop = (solarSystemContainer.scrollHeight - window.innerHeight) / 2;

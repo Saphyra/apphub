@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ConstructionResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
@@ -15,10 +16,13 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction.BuildingConstructionToQueueItemConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceConsumptionService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.ConstructionToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -40,9 +44,12 @@ public class UpgradeBuildingService {
     private final GameDataProxy gameDataProxy;
     private final BuildingToModelConverter buildingToModelConverter;
     private final ConstructionToModelConverter constructionToModelConverter;
-    private final ConstructionToResponseConverter constructionToResponseConverter;
+    private final SurfaceToResponseConverter surfaceToResponseConverter;
+    private final BuildingConstructionToQueueItemConverter buildingConstructionToQueueItemConverter;
+    private final QueueItemToResponseConverter queueItemToResponseConverter;
+    private final WsMessageSender messageSender;
 
-    public ConstructionResponse upgradeBuilding(UUID userId, UUID planetId, UUID buildingId) {
+    public SurfaceResponse upgradeBuilding(UUID userId, UUID planetId, UUID buildingId) {
         Game game = gameDao.findByUserIdValidated(userId);
         Planet planet = game
             .getUniverse()
@@ -75,6 +82,9 @@ public class UpgradeBuildingService {
             constructionToModelConverter.convert(construction, game.getGameId())
         );
 
-        return constructionToResponseConverter.convert(construction);
+        QueueResponse queueResponse = queueItemToResponseConverter.convert(buildingConstructionToQueueItemConverter.convert(building), planet);
+        messageSender.planetQueueItemModified(userId, planetId, queueResponse);
+
+        return surfaceToResponseConverter.convert(surface);
     }
 }

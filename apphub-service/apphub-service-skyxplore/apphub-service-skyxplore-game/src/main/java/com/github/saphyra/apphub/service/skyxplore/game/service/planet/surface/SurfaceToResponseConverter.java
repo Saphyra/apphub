@@ -11,11 +11,11 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class SurfaceToResponseConverter {
+public class SurfaceToResponseConverter {
     private final BuildingToResponseConverter buildingToResponseConverter;
     private final ConstructionToResponseConverter constructionToResponseConverter;
 
-    SurfaceResponse convert(Surface surface) {
+    public SurfaceResponse convert(Surface surface) {
         return SurfaceResponse.builder()
             .surfaceId(surface.getSurfaceId())
             .coordinate(surface.getCoordinate().getCoordinate())

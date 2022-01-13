@@ -1,11 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-
-import java.util.UUID;
-
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageSettingsResponse;
+import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.query.StorageSettingsResponseQueryService;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,9 +11,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageSettingsResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SkyXplorePlanetStorageSettingControllerImplTest {
@@ -64,9 +63,11 @@ public class SkyXplorePlanetStorageSettingControllerImplTest {
 
     @Test
     public void createStorageSetting() {
-        underTest.createStorageSetting(storageSettingModel, PLANET_ID, accessTokenHeader);
+        given(storageSettingCreationService.createStorageSetting(USER_ID, PLANET_ID, storageSettingModel)).willReturn(storageSettingModel);
 
-        verify(storageSettingCreationService).createStorageSetting(USER_ID, PLANET_ID, storageSettingModel);
+        StorageSettingApiModel result = underTest.createStorageSetting(storageSettingModel, PLANET_ID, accessTokenHeader);
+
+        assertThat(result).isEqualTo(storageSettingModel);
     }
 
     @Test
@@ -78,8 +79,10 @@ public class SkyXplorePlanetStorageSettingControllerImplTest {
 
     @Test
     public void editStorageSetting() {
-        underTest.editStorageSetting(storageSettingModel, PLANET_ID, accessTokenHeader);
+        given(storageSettingEditionService.edit(USER_ID, PLANET_ID, storageSettingModel)).willReturn(storageSettingModel);
 
-        verify(storageSettingEditionService).edit(USER_ID, PLANET_ID, storageSettingModel);
+        StorageSettingApiModel result = underTest.editStorageSetting(storageSettingModel, PLANET_ID, accessTokenHeader);
+
+        assertThat(result).isEqualTo(storageSettingModel);
     }
 }

@@ -97,8 +97,13 @@
 
             container.appendChild(detailsTable);
 
+            const methodSwitch = new Switch(
+                function(){roll.rollInVertical(detailsTable, container)},
+                function(){roll.rollOutVertical(detailsTable)}
+            );
+
             expandButton.onclick = function(){
-                $(detailsTable).toggle(); //TODO consider using fadeVertical
+                methodSwitch.apply();
             }
 
             return container;

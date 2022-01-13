@@ -15,10 +15,12 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreStorageSettingActions {
-    public static void createStorageSetting(Language language, UUID accessTokenId, UUID planetId, StorageSettingModel model) {
+    public static StorageSettingModel createStorageSetting(Language language, UUID accessTokenId, UUID planetId, StorageSettingModel model) {
         Response response = getCreateStorageSettingResponse(language, accessTokenId, planetId, model);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().as(StorageSettingModel.class);
     }
 
     public static Response getCreateStorageSettingResponse(Language language, UUID accessTokenId, UUID planetId, StorageSettingModel model) {
@@ -41,6 +43,14 @@ public class SkyXploreStorageSettingActions {
             .delete(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_DELETE_STORAGE_SETTING, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("storageSettingId", storageSettingId))));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static StorageSettingModel editStorageSetting(Language language, UUID accessTokenId, UUID planetId, StorageSettingModel model) {
+        Response response = getEditStorageSettingResponse(language, accessTokenId, planetId, model);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().as(StorageSettingModel.class);
     }
 
     public static Response getEditStorageSettingResponse(Language language, UUID accessTokenId, UUID planetId, StorageSettingModel model) {

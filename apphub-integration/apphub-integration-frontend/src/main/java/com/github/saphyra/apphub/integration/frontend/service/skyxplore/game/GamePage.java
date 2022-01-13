@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.service.skyxplore.game;
 
+import com.github.saphyra.apphub.integration.frontend.model.skyxplore.PlanetQueueItem;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -202,5 +203,9 @@ class GamePage {
 
     public static List<WebElement> terraformingPossibilities(WebDriver driver) {
         return driver.findElements(By.cssSelector(".terraforming-possibility"));
+    }
+
+    public static List<WebElement> planetQueue(WebDriver driver) {
+        return driver.findElements(By.cssSelector(".queue-item"));
     }
 }

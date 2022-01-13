@@ -31,4 +31,14 @@ public class Constants {
     public final String DATA_ID_SOLAR_PANEL = "solar_panel";
     public final String DATA_ID_BATTERY = "battery";
     public final String DATA_ID_WATER_PUMP = "water_pump";
+
+    //QueueTypes
+    public final String QUEUE_TYPE_CONSTRUCTION = "CONSTRUCTION";
+    public final String QUEUE_TYPE_TERRAFORMATION = "TERRAFORMATION";
+
+    //Etc
+    public final int DEFAULT_PRIORITY = 5;
+
+    //OpenedPageType
+    public final String PAGE_TYPE_PLANET = "PLANET";
 }

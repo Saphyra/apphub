@@ -147,6 +147,9 @@ window.Mapping = new function(){
         SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES: new Endpoint("/api/skyxplore/data/{surfaceType}/terraforming-possibilities", HttpMethod.GET),
         SKYXPLORE_GAME_TERRAFORM_SURFACE: new Endpoint("/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform", HttpMethod.POST),
         SKYXPLORE_GAME_CANCEL_TERRAFORMATION: new Endpoint("/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform", HttpMethod.DELETE),
+        SKYXPLORE_PLANET_GET_QUEUE: new Endpoint("/api/skyxplore/game/{planetId}/queue", HttpMethod.GET),
+        SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY: new Endpoint("/api/skyxplore/game/{planetId}/{type}/{itemId}/priority", HttpMethod.POST),
+        SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM: new Endpoint("/api/skyxplore/game/{planetId}/{type}/{itemId}", HttpMethod.DELETE),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){
