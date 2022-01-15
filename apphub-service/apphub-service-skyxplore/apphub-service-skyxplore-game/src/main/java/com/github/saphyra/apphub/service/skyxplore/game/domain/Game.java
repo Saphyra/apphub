@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ScheduledFuture;
 import java.util.stream.Collectors;
 
 @Data
@@ -29,6 +30,8 @@ public class Game {
     private LocalDateTime expiresAt;
 
     private final Chat chat;
+
+    private ScheduledFuture<?> tickScheduler;
 
     public List<UUID> getConnectedPlayers() {
         return players.values()

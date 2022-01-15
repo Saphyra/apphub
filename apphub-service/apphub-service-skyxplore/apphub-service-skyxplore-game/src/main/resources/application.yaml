@@ -5,6 +5,9 @@ spring:
 abandonedGameExpirationSeconds: 300
 
 game:
+  tick:
+    delaySeconds: 5
+    schedulerThreadCount: 4
   saver:
     maxChunkSize: 500
   creation:

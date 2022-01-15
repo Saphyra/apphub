@@ -30,6 +30,14 @@ public class ExecutorServiceBeanFactory {
             .build();
     }
 
+    public ScheduledExecutorServiceBean createScheduled(int threadCount) {
+        return ScheduledExecutorServiceBean.builder()
+            .sleepService(sleepService)
+            .errorReporterService(errorReporterService)
+            .executor(Executors.newScheduledThreadPool(threadCount))
+            .build();
+    }
+
     private static synchronized ExecutorService defaultExecutor() {
         if (isNull(DEFAULT_EXECUTOR)) {
             DEFAULT_EXECUTOR = Executors.newCachedThreadPool();

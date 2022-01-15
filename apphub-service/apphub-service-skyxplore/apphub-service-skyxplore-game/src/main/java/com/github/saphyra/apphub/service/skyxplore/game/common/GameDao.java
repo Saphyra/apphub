@@ -57,6 +57,9 @@ public class GameDao {
     }
 
     public void delete(Game game) {
+        log.info("Deleting game {} from cache", game.getGameId());
+        Optional.ofNullable(game.getTickScheduler())
+            .ifPresent(scheduledFuture -> scheduledFuture.cancel(false));
         repository.remove(game.getGameId());
     }
 
