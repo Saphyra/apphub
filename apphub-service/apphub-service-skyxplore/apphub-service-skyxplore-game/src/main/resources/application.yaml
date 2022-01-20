@@ -111,8 +111,16 @@ game:
           min: 1
           max: 3
     citizen:
-      hitPointsPerStamina: 1000
-      defaultMorale: 100
-      defaultSatiety: 100
+      hitPointsPerStamina: ${game.citizen.skill.experiencePerLevel}
+      defaultMorale: ${game.citizen.maxMorale}
+      defaultSatiety: 1000
     skill:
       initialNextLevel: 1000
+  citizen:
+    maxMorale: 1600
+    moraleEfficiencyDropUnder: 800
+    minMoraleEfficiency: 0.25
+    skillLevelMultiplier: 0.1
+    workPointsPerTick: 100
+    skill:
+      experiencePerLevel: 1000

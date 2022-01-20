@@ -31,6 +31,9 @@ public class Game {
 
     private final Chat chat;
 
+    @Builder.Default
+    private volatile boolean gamePaused = true;
+
     private ScheduledFuture<?> tickScheduler;
 
     public List<UUID> getConnectedPlayers() {

@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ResourceConsumptionService {
+public class ResourceAllocationService {
     private final FreeStorageQueryService freeStorageQueryService;
     private final AllocatedResourceToModelConverter allocatedResourceToModelConverter;
     private final ReservedStorageToModelConverter reservedStorageToModelConverter;

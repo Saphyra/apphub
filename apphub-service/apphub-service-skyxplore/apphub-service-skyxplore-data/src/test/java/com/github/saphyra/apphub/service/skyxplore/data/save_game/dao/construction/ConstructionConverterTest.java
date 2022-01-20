@@ -26,6 +26,7 @@ public class ConstructionConverterTest {
     private static final String GAME_ID_STRING = "game-id";
     private static final String LOCATION_STRING = "location";
     private static final String DATA = "data";
+    private static final Integer PARALLEL_WORKERS = 6435;
 
     @Mock
     private UuidConverter uuidConverter;
@@ -39,6 +40,7 @@ public class ConstructionConverterTest {
         model.setId(CONSTRUCTION_ID);
         model.setGameId(GAME_ID);
         model.setExternalReference(EXTERNAL_REFERENCE);
+        model.setParallelWorkers(PARALLEL_WORKERS);
         model.setRequiredWorkPoints(REQUIRED_WORK_POINTS);
         model.setCurrentWorkPoints(CURRENT_WORK_POINTS);
         model.setPriority(PRIORITY);
@@ -53,6 +55,7 @@ public class ConstructionConverterTest {
         assertThat(result.getConstructionId()).isEqualTo(CONSTRUCTION_ID_STRING);
         assertThat(result.getGameId()).isEqualTo(GAME_ID_STRING);
         assertThat(result.getExternalReference()).isEqualTo(LOCATION_STRING);
+        assertThat(result.getParallelWorkers()).isEqualTo(PARALLEL_WORKERS);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
         assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
@@ -65,6 +68,7 @@ public class ConstructionConverterTest {
         entity.setConstructionId(CONSTRUCTION_ID_STRING);
         entity.setGameId(GAME_ID_STRING);
         entity.setExternalReference(LOCATION_STRING);
+        entity.setParallelWorkers(PARALLEL_WORKERS);
         entity.setRequiredWorkPoints(REQUIRED_WORK_POINTS);
         entity.setCurrentWorkPoints(CURRENT_WORK_POINTS);
         entity.setPriority(PRIORITY);
@@ -80,6 +84,7 @@ public class ConstructionConverterTest {
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getType()).isEqualTo(GameItemType.CONSTRUCTION);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
+        assertThat(result.getParallelWorkers()).isEqualTo(PARALLEL_WORKERS);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
         assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);

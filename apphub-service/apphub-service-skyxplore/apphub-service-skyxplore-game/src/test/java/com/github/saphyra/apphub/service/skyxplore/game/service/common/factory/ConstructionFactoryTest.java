@@ -19,6 +19,7 @@ public class ConstructionFactoryTest {
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final Integer REQUIRED_WORK_POINTS = 4567;
+    private static final int PARALLEL_WORKERS = 254;
 
     @Mock
     private IdGenerator idGenerator;
@@ -30,10 +31,11 @@ public class ConstructionFactoryTest {
     public void create() {
         given(idGenerator.randomUuid()).willReturn(CONSTRUCTION_ID);
 
-        Construction result = underTest.create(EXTERNAL_REFERENCE, REQUIRED_WORK_POINTS);
+        Construction result = underTest.create(EXTERNAL_REFERENCE, PARALLEL_WORKERS, REQUIRED_WORK_POINTS);
 
         assertThat(result.getConstructionId()).isEqualTo(CONSTRUCTION_ID);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
+        assertThat(result.getParallelWorkers()).isEqualTo(PARALLEL_WORKERS);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
         assertThat(result.getCurrentWorkPoints()).isEqualTo(0);
         assertThat(result.getPriority()).isEqualTo(GameConstants.DEFAULT_PRIORITY);

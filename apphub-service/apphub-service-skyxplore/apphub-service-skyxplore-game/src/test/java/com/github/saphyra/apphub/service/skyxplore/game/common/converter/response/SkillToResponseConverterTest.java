@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.service.planet.population;
+package com.github.saphyra.apphub.service.skyxplore.game.common.converter.response;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SkillResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
@@ -20,6 +20,7 @@ public class SkillToResponseConverterTest {
     private static final Integer EXPERIENCE = 1243;
     private static final Integer LEVEL = 41;
     private static final Integer NEXT_LEVEL = 413;
+
     @InjectMocks
     private SkillToResponseConverter underTest;
 

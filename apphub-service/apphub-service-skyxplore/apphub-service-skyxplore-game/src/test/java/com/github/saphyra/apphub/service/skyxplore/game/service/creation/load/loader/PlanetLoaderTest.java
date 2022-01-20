@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.PriorityType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.ProductionOrder;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
@@ -25,6 +26,7 @@ import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -61,6 +63,9 @@ public class PlanetLoaderTest {
     @Mock
     private StorageDetailsLoader storageDetailsLoader;
 
+    @Mock
+    private ProductionOrderLoader productionOrderLoader;
+
     @SuppressWarnings("unused")
     @Spy
     private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(Mockito.mock(ErrorReporterService.class));
@@ -86,6 +91,9 @@ public class PlanetLoaderTest {
     @Mock
     private StorageDetails storageDetails;
 
+    @Mock
+    private ProductionOrder productionOrder;
+
     @Test
     public void load() {
         given(gameItemLoader.loadChildren(SOLAR_SYSTEM_ID, GameItemType.PLANET, PlanetModel[].class)).willReturn(Arrays.asList(planetModel));
@@ -102,6 +110,7 @@ public class PlanetLoaderTest {
         given(citizenLoader.load(PLANET_ID)).willReturn(new OptionalHashMap<>(CollectionUtils.singleValueMap(CITIZEN_ID, citizen)));
         given(storageDetailsLoader.load(PLANET_ID)).willReturn(storageDetails);
         given(priorityLoader.load(PLANET_ID)).willReturn(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION, PRIORITY));
+        given(productionOrderLoader.load(PLANET_ID)).willReturn(List.of(productionOrder));
 
         Map<UUID, Planet> result = underTest.load(SOLAR_SYSTEM_ID);
 
@@ -118,5 +127,6 @@ public class PlanetLoaderTest {
         assertThat(planet.getPopulation()).containsEntry(CITIZEN_ID, citizen);
         assertThat(planet.getStorageDetails()).isEqualTo(storageDetails);
         assertThat(planet.getPriorities()).containsEntry(PriorityType.CONSTRUCTION, PRIORITY);
+        assertThat(planet.getOrders()).containsExactly(productionOrder);
     }
 }

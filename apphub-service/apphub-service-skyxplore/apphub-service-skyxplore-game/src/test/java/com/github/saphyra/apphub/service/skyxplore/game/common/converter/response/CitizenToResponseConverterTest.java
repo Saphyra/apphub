@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.service.planet.population;
+package com.github.saphyra.apphub.service.skyxplore.game.common.converter.response;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SkillResponse;

@@ -18,6 +18,7 @@
     pageLoader.addLoader(setUpEventListeners, "PopulationOverview set up event listeners");
     pageLoader.addLoader(setUpPopulationFilters, "PopulationOverview set up population filters");
     pageLoader.addLoader(()=>{document.getElementById(ids.closePopulationOverviewButton).onclick = function(){planetController.openPlanetWindow()}}, "Close population overview button");
+    pageLoader.addLoader(addHandlers, "PopulationOverviewController add WS event handlers");
 
     window.populationOverviewController = new function(){
         this.viewPopulationOverview = viewPopulationOverview;
@@ -233,5 +234,12 @@
                 option.innerHTML = localization.get(key);
             return option;
         }
+    }
+
+    function addHandlers(){
+        wsConnection.addHandler(new WebSocketEventHandler(
+            function(eventName){return webSocketEvents.SKYXPLORE_GAME_PLANET_CITIZEN_MODIFIED == eventName},
+            citizen => {syncEngine.add(citizen)}
+        ));
     }
 })();

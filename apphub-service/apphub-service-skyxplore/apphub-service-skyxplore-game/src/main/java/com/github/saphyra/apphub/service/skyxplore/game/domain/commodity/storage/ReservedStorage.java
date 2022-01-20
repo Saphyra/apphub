@@ -17,4 +17,9 @@ public class ReservedStorage {
     private final UUID externalReference;
     private final String dataId;
     private int amount;
+
+    public ReservedStorage reduceAmount(int amount) {
+        this.amount -= amount;
+        return this;
+    }
 }

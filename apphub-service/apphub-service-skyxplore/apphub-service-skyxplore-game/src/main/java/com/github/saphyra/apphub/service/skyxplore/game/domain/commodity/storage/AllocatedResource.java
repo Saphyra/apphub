@@ -17,4 +17,9 @@ public class AllocatedResource {
     private final UUID externalReference;
     private final String dataId;
     private int amount;
+
+    public AllocatedResource increaseAmount(int amount) {
+        this.amount += amount;
+        return this;
+    }
 }

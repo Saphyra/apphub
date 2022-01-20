@@ -25,6 +25,7 @@ public enum GameItemType {
     PRIORITY(PriorityModel.class),
     COORDINATE(CoordinateModel.class),
     LINE(LineModel.class),
+    PRODUCTION_ORDER(ProductionOrderModel.class),
     DURABILITY_ITEM_MODEL(DurabilityItemModel.class);
 
     private final Class<? extends GameItem> modelType;

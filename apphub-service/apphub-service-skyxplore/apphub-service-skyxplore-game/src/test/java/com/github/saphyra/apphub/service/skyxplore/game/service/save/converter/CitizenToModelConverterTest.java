@@ -99,7 +99,7 @@ public class CitizenToModelConverterTest {
             .build();
 
         given(game.getGameId()).willReturn(GAME_ID);
-        given(skillToModelConverter.convert(any(), eq(game))).willReturn(Arrays.asList(skillModel));
+        given(skillToModelConverter.convert(any(), eq(GAME_ID))).willReturn(Arrays.asList(skillModel));
         given(energyShieldConverter.convert(CITIZEN_ID, GAME_ID, energyShield)).willReturn(energyShieldModel);
         given(soldierArmorPieceConverter.convert(CITIZEN_ID, GAME_ID, armor)).willReturn(List.of(armorModel));
 

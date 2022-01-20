@@ -28,6 +28,7 @@ public class ProductionDataValidator implements DataValidator<Map<String, Produc
     private void validate(String resourceId, ProductionData productionData) {
         try {
             requireNonNull(productionData, "Production must not be null.");
+            requireNonNull(productionData.getMaxBatchSize(), "MaxBatchSize must not be null.");
             requireNonNull(productionData.getPlaced(), "Placed must not be null");
             if (isEmpty(productionData.getPlaced())) {
                 throw new IllegalStateException("Production has to be placed somewhere.");
@@ -37,7 +38,6 @@ public class ProductionDataValidator implements DataValidator<Map<String, Produc
                 throw new NullPointerException("Placed contains null.");
             }
 
-            requireNonNull(productionData.getAmount(), "Amount must not be null.");
             requireNonNull(productionData.getRequiredSkill(), "RequiredSkill must not be null.");
 
             requireNonNull(productionData.getConstructionRequirements(), "ConstructionRequirements must not be null.");

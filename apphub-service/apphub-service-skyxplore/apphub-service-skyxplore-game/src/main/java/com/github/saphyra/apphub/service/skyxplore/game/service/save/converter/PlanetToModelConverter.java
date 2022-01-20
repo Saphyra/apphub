@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.common.converter.model.ProductionOrderToModelConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,6 +24,7 @@ public class PlanetToModelConverter {
     private final CitizenToModelConverter citizenConverter;
     private final PriorityToModelConverter priorityConverter;
     private final StorageDetailsToModelConverter storageDetailsConverter;
+    private final ProductionOrderToModelConverter productionOrderToModelConverter;
 
     public List<GameItem> convertDeep(Collection<Planet> planets, Game game) {
         return planets.stream()
@@ -38,6 +40,7 @@ public class PlanetToModelConverter {
         result.addAll(citizenConverter.convertDeep(planet.getPopulation().values(), game));
         result.addAll(storageDetailsConverter.convertDeep(planet.getStorageDetails(), game));
         result.addAll(priorityConverter.convert(planet.getPriorities(), planet.getPlanetId(), LocationType.PLANET, game));
+        result.addAll(productionOrderToModelConverter.convert(planet.getOrders(), game.getGameId()));
         result.add(planet.getCoordinate());
         return result;
     }

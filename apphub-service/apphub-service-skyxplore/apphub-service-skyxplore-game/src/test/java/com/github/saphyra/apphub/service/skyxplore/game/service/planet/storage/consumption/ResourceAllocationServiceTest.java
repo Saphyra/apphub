@@ -36,7 +36,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ResourceConsumptionServiceTest {
+public class ResourceAllocationServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
@@ -70,7 +70,7 @@ public class ResourceConsumptionServiceTest {
     private WsMessageSender messageSender;
 
     @InjectMocks
-    private ResourceConsumptionService underTest;
+    private ResourceAllocationService underTest;
 
     @Mock
     private StorageDetails storageDetails;

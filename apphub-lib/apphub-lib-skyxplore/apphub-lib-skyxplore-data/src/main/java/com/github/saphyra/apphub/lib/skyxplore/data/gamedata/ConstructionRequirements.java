@@ -12,6 +12,8 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConstructionRequirements {
+    @Builder.Default
+    private Integer parallelWorkers = 1;
     private Integer requiredWorkPoints;
     private Map<String, Integer> requiredResources;
 }

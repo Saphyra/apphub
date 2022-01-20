@@ -43,6 +43,7 @@ public enum WebSocketEventName {
     SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED("skyxplore-game-planet-queue-item-deleted"),
     SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED("skyxplore-game-planet-surface-modified"),
     SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED("skyxplore-game-planet-storage-modified"),
+    SKYXPLORE_GAME_PLANET_CITIZEN_MODIFIED("skyxplore-game-planet-citizen-modified"),
     ;
 
     private final String eventName;

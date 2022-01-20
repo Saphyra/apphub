@@ -13,6 +13,7 @@ import java.util.UUID;
 public class Construction {
     private final UUID constructionId;
     private final UUID externalReference;
+    private final int parallelWorkers;
     private final int requiredWorkPoints;
     private final String data;
     private int currentWorkPoints;

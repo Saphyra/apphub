@@ -80,8 +80,8 @@ public class PopulationTest extends BackEndTest {
     private void validate(CitizenResponse citizenResponse) {
         assertThat(citizenResponse.getCitizenId()).isNotNull();
         assertThat(citizenResponse.getName()).isNotNull();
-        assertThat(citizenResponse.getMorale()).isEqualTo(100);
-        assertThat(citizenResponse.getSatiety()).isEqualTo(100);
+        assertThat(citizenResponse.getMorale()).isEqualTo(1600);
+        assertThat(citizenResponse.getSatiety()).isEqualTo(1000);
 
         assertThat(citizenResponse.getSkills()).hasSize(SkillType.values().length);
 

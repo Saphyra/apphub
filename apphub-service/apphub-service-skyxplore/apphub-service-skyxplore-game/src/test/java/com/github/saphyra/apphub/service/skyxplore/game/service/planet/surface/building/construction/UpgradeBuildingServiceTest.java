@@ -24,7 +24,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.C
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction.BuildingConstructionToQueueItemConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceConsumptionService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
@@ -57,6 +57,7 @@ public class UpgradeBuildingServiceTest {
     private static final Integer REQUIRED_WORK_POINTS = 324;
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
+    private static final int PARALLEL_WORKERS = 245;
 
     @Mock
     private GameDao gameDao;
@@ -68,7 +69,7 @@ public class UpgradeBuildingServiceTest {
     private ConstructionFactory constructionFactory;
 
     @Mock
-    private ResourceConsumptionService resourceConsumptionService;
+    private ResourceAllocationService resourceAllocationService;
 
     @Mock
     private GameDataProxy gameDataProxy;
@@ -171,7 +172,8 @@ public class UpgradeBuildingServiceTest {
         given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.singleValueMap(LEVEL + 1, constructionRequirements));
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());
-        given(constructionFactory.create(BUILDING_ID, REQUIRED_WORK_POINTS)).willReturn(construction);
+        given(constructionRequirements.getParallelWorkers()).willReturn(PARALLEL_WORKERS);
+        given(constructionFactory.create(BUILDING_ID, PARALLEL_WORKERS, REQUIRED_WORK_POINTS)).willReturn(construction);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
 
         given(game.getGameId()).willReturn(GAME_ID);
@@ -187,7 +189,7 @@ public class UpgradeBuildingServiceTest {
 
         assertThat(result).isEqualTo(surfaceResponse);
 
-        verify(resourceConsumptionService).processResourceRequirements(GAME_ID, planet, LocationType.PLANET, CONSTRUCTION_ID, Collections.emptyMap());
+        verify(resourceAllocationService).processResourceRequirements(GAME_ID, planet, LocationType.PLANET, CONSTRUCTION_ID, Collections.emptyMap());
         verify(building).setConstruction(construction);
         verify(gameDataProxy).saveItem(buildingModel, constructionModel);
         verify(messageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);

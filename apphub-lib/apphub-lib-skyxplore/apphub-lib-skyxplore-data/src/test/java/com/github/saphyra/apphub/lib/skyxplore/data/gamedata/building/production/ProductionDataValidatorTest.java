@@ -53,6 +53,15 @@ public class ProductionDataValidatorTest {
     }
 
     @Test(expected = IllegalStateException.class)
+    public void nullMaxBatchSize() {
+        Map<String, ProductionData> map = new HashMap<>();
+        map.put(KEY, productionData);
+        given(productionData.getMaxBatchSize()).willReturn(null);
+
+        underTest.validate(map);
+    }
+
+    @Test(expected = IllegalStateException.class)
     public void nullPlaced() {
         Map<String, ProductionData> map = new HashMap<>();
         map.put(KEY, productionData);
@@ -80,21 +89,10 @@ public class ProductionDataValidatorTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void nullAmount() {
-        Map<String, ProductionData> map = new HashMap<>();
-        map.put(KEY, productionData);
-        given(productionData.getPlaced()).willReturn(Arrays.asList(SurfaceType.CONCRETE));
-        given(productionData.getAmount()).willReturn(null);
-
-        underTest.validate(map);
-    }
-
-    @Test(expected = IllegalStateException.class)
     public void nullRequiredSkill() {
         Map<String, ProductionData> map = new HashMap<>();
         map.put(KEY, productionData);
         given(productionData.getPlaced()).willReturn(Arrays.asList(SurfaceType.CONCRETE));
-        given(productionData.getAmount()).willReturn(1);
         given(productionData.getRequiredSkill()).willReturn(null);
 
         underTest.validate(map);
@@ -105,7 +103,6 @@ public class ProductionDataValidatorTest {
         Map<String, ProductionData> map = new HashMap<>();
         map.put(KEY, productionData);
         given(productionData.getPlaced()).willReturn(Arrays.asList(SurfaceType.CONCRETE));
-        given(productionData.getAmount()).willReturn(1);
         given(productionData.getRequiredSkill()).willReturn(SkillType.AIMING);
         given(productionData.getConstructionRequirements()).willReturn(null);
 
@@ -117,7 +114,6 @@ public class ProductionDataValidatorTest {
         Map<String, ProductionData> map = new HashMap<>();
         map.put(KEY, productionData);
         given(productionData.getPlaced()).willReturn(Arrays.asList(SurfaceType.CONCRETE));
-        given(productionData.getAmount()).willReturn(1);
         given(productionData.getRequiredSkill()).willReturn(SkillType.AIMING);
         given(productionData.getConstructionRequirements()).willReturn(constructionRequirements);
 

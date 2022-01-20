@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Vector;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -42,6 +43,9 @@ public class Planet {
 
     @Builder.Default
     private final Map<PriorityType, Integer> priorities = getDefaultPriorities();
+
+    @Builder.Default
+    private final List<ProductionOrder> orders = new Vector<>();
 
     private static Map<PriorityType, Integer> getDefaultPriorities() {
         return Arrays.stream(PriorityType.values())

@@ -19,7 +19,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.terraformation.SurfaceToQueueItemConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceConsumptionService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
@@ -38,7 +38,7 @@ import static java.util.Objects.nonNull;
 class TerraformationService {
     private final TerraformingPossibilitiesService terraformingPossibilitiesService;
     private final GameDao gameDao;
-    private final ResourceConsumptionService resourceConsumptionService;
+    private final ResourceAllocationService resourceAllocationService;
     private final ConstructionFactory constructionFactory;
     private final GameDataProxy gameDataProxy;
     private final ConstructionToModelConverter constructionToModelConverter;
@@ -72,9 +72,9 @@ class TerraformationService {
             .orElseThrow(() -> ExceptionFactory.forbiddenOperation(surface.getSurfaceType() + " cannot be terraformed to " + surfaceType))
             .getConstructionRequirements();
 
-        Construction construction = constructionFactory.create(surfaceId, constructionRequirements.getRequiredWorkPoints(), surfaceTypeString);
+        Construction construction = constructionFactory.create(surfaceId, constructionRequirements.getParallelWorkers(), constructionRequirements.getRequiredWorkPoints(), surfaceTypeString);
 
-        resourceConsumptionService.processResourceRequirements(game.getGameId(), planet, LocationType.PLANET, construction.getConstructionId(), constructionRequirements.getRequiredResources());
+        resourceAllocationService.processResourceRequirements(game.getGameId(), planet, LocationType.PLANET, construction.getConstructionId(), constructionRequirements.getRequiredResources());
 
         surface.setTerraformation(construction);
 
