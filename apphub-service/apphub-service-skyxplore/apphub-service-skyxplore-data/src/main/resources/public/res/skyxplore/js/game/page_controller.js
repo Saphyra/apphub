@@ -1,6 +1,10 @@
 const SESSION_EXTENSION_ENABLED = true;
 
 const ids = {
+    //Platform
+    pauseGameButton: "pause-game-button",
+    resumeGameButton: "resume-game-button",
+
     //Map
     mapSvgContainer: "map-svg-container",
     mapContainer: "map-container",
@@ -102,6 +106,7 @@ const webSocketEvents = {
     SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED: "skyxplore-game-planet-surface-modified",
     SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED: "skyxplore-game-planet-storage-modified",
     SKYXPLORE_GAME_PLANET_CITIZEN_MODIFIED: "skyxplore-game-planet-citizen-modified",
+    SKYXPLORE_GAME_PAUSED: "skyxplore-game-paused",
 }
 
 scriptLoader.loadScript("/res/common/js/web_socket.js");
@@ -130,10 +135,18 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/queue_controller.js");
 
 (function PageController(){
     window.wsConnection = new WebSocketConnection(Mapping.getEndpoint("WS_CONNECTION_SKYXPLORE_GAME"))
-        .connect();
+        .addHandler(new WebSocketEventHandler(
+            (eventName)=>{return eventName == webSocketEvents.SKYXPLORE_GAME_PAUSED},
+            setPausedStatus
+        ));
 
     window.pageController = new function(){
         this.exitGame = exitGame;
+        this.pauseGame = function(paused){
+            const request = new Request(Mapping.getEndpoint("SKYXPLORE_GAME_PAUSE"), {value: paused});
+                request.processValidResponse = function(){};
+            dao.sendRequestAsync(request);
+        }
     }
 
     function exitGame(){
@@ -156,7 +169,22 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/queue_controller.js");
         );
     }
 
+    function setPausedStatus(pausedStatus){
+        const id = pausedStatus ? ids.resumeGameButton : ids.pauseGameButton;
+        switchTab("pause-button", id)
+    }
+
     $(document).ready(function(){
+        eventProcessor.registerProcessor(new EventProcessor(
+            (eventType) => {return eventType == events.PAGE_LOADERS_COMPLETED},
+            () => {
+                wsConnection.connect();
+                wsConnection.waitForConnection(()=>{mapController.showMap()});
+            },
+            true,
+            "Connect to WebSocket"
+        ));
+
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "skyxplore", fileName: "game"}));
         //document.addEventListener('contextmenu', event => event.preventDefault()); //TODO restore when development is finished
     });

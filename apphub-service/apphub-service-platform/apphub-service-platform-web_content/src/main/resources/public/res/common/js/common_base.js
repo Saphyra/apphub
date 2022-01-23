@@ -76,25 +76,47 @@ function initPageLoader(){
                 throwException("IllegalArgument", "Loader is not a function.");
             }
 
-            loaders.push({loader: loader, description: description});
+            loaders.push({load: loader, description: description});
         }
     }
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.LOCALIZATION_LOADED},
         function(){
-            new Stream(loaders)
+            let counter = 0;
+
+            const promises = new Stream(loaders)
                 .forEach(
                     function(loader){
-                        setTimeout(
-                            function(){
-                                logService.logToConsole("Calling loader: " + loader.description);
-                                loader.loader();
-                            },
-                            0
-                        )
+                        new Promise((resolve, reject) => {
+                            setTimeout(
+                                function(){
+                                    logService.logToConsole("Calling loader: " + loader.description);
+                                    try{
+                                        loader.load();
+                                    }catch(e){
+                                        reject();
+                                        throw e;
+                                    }
+                                    resolve();
+                                },
+                                0
+                            )
+                        })
+                        .then(()=>counter++, ()=>counter++);
                     }
                 );
+
+            const interval = setInterval(
+                function(){
+                    console.log("Number of loaders: " + loaders.length + ", completed: " + counter);
+                    if(counter == loaders.length){
+                        clearInterval(interval);
+                        eventProcessor.processEvent(new Event(events.PAGE_LOADERS_COMPLETED));
+                    }
+                },
+                100
+            )
         },
         true,
         "Page loaders"

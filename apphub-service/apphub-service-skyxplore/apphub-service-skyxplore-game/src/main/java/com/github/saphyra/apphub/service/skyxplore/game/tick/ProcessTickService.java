@@ -41,14 +41,15 @@ class ProcessTickService {
 
     private boolean shouldProcessTick(Game game) {
         if (game.isGamePaused()) {
-            log.info("Game is paused.");
+            log.info("Game {} is paused.", game.getGameId());
             return false;
         }
 
         if (game.getPlayers().values().stream().anyMatch(player -> !player.isConnected())) {
-            log.info("Not all players connected");
+            log.info("Not all players connected to game {}", game.getGameId());
             return false;
         }
+        log.info("Processing tick for game {}", game.getGameId());
         return true;
     }
 

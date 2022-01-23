@@ -26,7 +26,7 @@ done
 
 echo ""
 echo "Waiting for pods to start..."
-sleep 20
+sleep 10
 
 ./infra/deployment/script/wait_for_pods_ready.sh "$NAMESPACE_NAME" 60 2
 STARTUP_RESULT=$?

@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -45,8 +46,9 @@ public class Game {
             .collect(Collectors.toList());
     }
 
-    public List<UUID> filterConnectedPlayersFrom(List<UUID> members) {
+    public List<UUID> filterConnectedPlayersFrom(Collection<UUID> members) {
         return members.stream()
+            .filter(userId -> !players.get(userId).isAi())
             .filter(userId -> players.get(userId).isConnected())
             .collect(Collectors.toList());
     }

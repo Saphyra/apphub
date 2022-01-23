@@ -34,6 +34,19 @@ function WebSocketConnection(ep){
     }
 
     this.connect = connect
+    this.waitForConnection = function(callback){
+        console.log("Waiting for WebSocket connection...");
+        if(connection && connection.readyState == 1){
+            console.log("WebSocket connection established.");
+            callback();
+        }else{
+            console.log("WebSocket connection is not established yet.");
+            let timeout = setTimeout(
+                ()=>{this.waitForConnection(callback)},
+                100
+            )
+        }
+    }
 
     function connect(){
         if(connection){

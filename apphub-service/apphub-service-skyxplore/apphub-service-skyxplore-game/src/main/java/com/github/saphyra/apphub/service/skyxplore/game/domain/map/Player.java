@@ -17,7 +17,7 @@ public class Player {
     private String playerName;
     private UUID allianceId;
     private boolean ai;
-    private boolean connected;
+    private volatile boolean connected;
     @Builder.Default
     private OpenedPage openedPage = OpenedPage.DEFAULT_PAGE;
 }

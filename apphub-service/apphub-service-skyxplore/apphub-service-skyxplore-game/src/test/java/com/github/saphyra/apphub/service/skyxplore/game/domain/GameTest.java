@@ -35,13 +35,15 @@ public class GameTest {
         Game underTest = Game.builder()
             .players(CollectionUtils.toMap(
                 new BiWrapper<>(USER_ID_1, player1),
-                new BiWrapper<>(USER_ID_2, player2)
+                new BiWrapper<>(USER_ID_2, player2),
+                new BiWrapper<>(USER_ID_3, player3)
             ))
             .build();
 
         given(player2.isConnected()).willReturn(true);
+        given(player3.isAi()).willReturn(true);
 
-        List<UUID> result = underTest.filterConnectedPlayersFrom(Arrays.asList(USER_ID_1, USER_ID_2));
+        List<UUID> result = underTest.filterConnectedPlayersFrom(Arrays.asList(USER_ID_1, USER_ID_2, USER_ID_3));
 
         assertThat(result).containsExactly(USER_ID_2);
     }
