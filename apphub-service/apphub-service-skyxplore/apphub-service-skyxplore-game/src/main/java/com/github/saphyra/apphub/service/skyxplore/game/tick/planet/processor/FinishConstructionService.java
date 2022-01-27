@@ -29,9 +29,12 @@ class FinishConstructionService {
     private final WsMessageSender messageSender;
 
     void finishConstruction(UUID gameId, Planet planet, Surface surface) {
+        log.debug("Construction finished on {} in game {}", surface, gameId);
         Building building = surface.getBuilding();
         building.setLevel(building.getLevel() + 1);
         Construction construction = building.getConstruction();
+        building.setConstruction(null);
+        log.debug("Upgraded {} in game {}", building, gameId);
 
         GameItemCache gameItemCache = tickCache.get(gameId)
             .getGameItemCache();

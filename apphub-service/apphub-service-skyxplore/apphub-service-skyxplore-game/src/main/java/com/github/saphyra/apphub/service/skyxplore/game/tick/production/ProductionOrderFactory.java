@@ -17,7 +17,7 @@ class ProductionOrderFactory {
     private final IdGenerator idGenerator;
 
     ProductionOrder create(UUID externalReference, UUID location, LocationType locationType, String dataId, int amount) {
-        return ProductionOrder.builder()
+        ProductionOrder result = ProductionOrder.builder()
             .productionOrderId(idGenerator.randomUuid())
             .location(location)
             .locationType(locationType)
@@ -26,5 +26,7 @@ class ProductionOrderFactory {
             .amount(amount)
             .currentWorkPoints(0)
             .build();
+        log.debug("{} is created.", result);
+        return result;
     }
 }

@@ -37,12 +37,15 @@ class AssignBuildingToOrderService {
      */
     void assignOrder(UUID gameId, Planet planet, ProductionOrder order, ProductionOrderProcessingService productionOrderProcessingService) {
         Optional<Building> maybeBuilding = productionBuildingFinder.findProducer(planet, order.getDataId());
+        log.debug("Assigning {} to {} in game {}", order, maybeBuilding, gameId);
         if (maybeBuilding.isPresent()) {
             Building building = maybeBuilding.get();
             ProductionBuilding productionBuilding = productionBuildingService.get(building.getDataId());
             ProductionData productionData = productionBuilding.getGives()
                 .get(order.getDataId());
-            int batchSize = Math.min(productionData.getMaxBatchSize(), order.getAmount());
+            int originallyRequestedAmount = order.getAmount();
+            int batchSize = Math.min(productionData.getMaxBatchSize(), originallyRequestedAmount);
+            log.debug("BatchSize for {}: {} in game {}", order, batchSize, gameId);
 
             order.setRequiredWorkPoints(productionData.getConstructionRequirements().getRequiredWorkPoints() * batchSize);
             order.setAssignee(building.getBuildingId());
@@ -56,6 +59,7 @@ class AssignBuildingToOrderService {
                 .entrySet()
                 .stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, o -> o.getValue() * batchSize));
+            log.debug("Required resources for {}: {} in game {}", order, requiredResources, gameId);
 
             silentResourceAllocationService.allocateResources(gameId, planet, order.getProductionOrderId(), requiredResources)
                 .stream()
@@ -67,8 +71,10 @@ class AssignBuildingToOrderService {
                 )
                 .forEach(productionOrder -> productionOrderProcessingService.processOrder(gameId, planet, productionOrder));
 
-            if (order.getAmount() > batchSize) {
-                ProductionOrder newOrder = productionOrderFactory.create(order.getExternalReference(), planet.getPlanetId(), LocationType.PLANET, order.getDataId(), order.getAmount() - batchSize);
+            if (originallyRequestedAmount > batchSize) {
+                log.debug("Required amount {} is greater than max batchSize {} in game {}", originallyRequestedAmount, batchSize, gameId);
+                int remainingAmount = order.getAmount() - batchSize;
+                ProductionOrder newOrder = productionOrderFactory.create(order.getExternalReference(), planet.getPlanetId(), LocationType.PLANET, order.getDataId(), remainingAmount);
                 planet.getOrders().add(newOrder);
                 productionOrderProcessingService.processOrder(gameId, planet, newOrder);
                 tickCache.get(gameId)

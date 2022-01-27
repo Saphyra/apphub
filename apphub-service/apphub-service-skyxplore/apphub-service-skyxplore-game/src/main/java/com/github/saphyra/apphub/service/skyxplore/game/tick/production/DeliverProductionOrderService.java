@@ -20,6 +20,8 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -36,10 +38,20 @@ class DeliverProductionOrderService {
     Putting the newly produced resource to the storage, and assigning it if there is reservedStorage.
      */
     void deliverOrder(UUID gameId, Planet planet, ProductionOrder order) {
+        log.debug("Delivering {} in game {}", order, gameId);
         StoredResource storedResource = planet.getStorageDetails()
             .getStoredResources()
-            .getOrDefault(order.getDataId(), storedResourceFactory.create(planet.getPlanetId(), LocationType.PLANET, order.getDataId(), 0))
-            .increaseAmount(order.getAmount());
+            .get(order.getDataId());
+
+        if (isNull(storedResource)) {
+            storedResource = storedResourceFactory.create(planet.getPlanetId(), LocationType.PLANET, order.getDataId(), 0);
+            log.debug("{} created. for planet {} in game {}", storedResource, planet.getPlanetId(), gameId);
+            planet.getStorageDetails()
+                .getStoredResources()
+                .put(storedResource.getDataId(), storedResource);
+        }
+        storedResource.increaseAmount(order.getAmount());
+        log.debug("{} after delivering {} in game {}", storedResource, order, gameId);
 
         TickCacheItem tickCacheItem = tickCache.get(gameId);
         GameItemCache gameItemCache = tickCacheItem.getGameItemCache();

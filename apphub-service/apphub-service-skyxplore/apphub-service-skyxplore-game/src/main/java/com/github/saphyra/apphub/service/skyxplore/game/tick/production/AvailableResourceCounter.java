@@ -27,6 +27,8 @@ class AvailableResourceCounter {
             .mapToInt(AllocatedResource::getAmount)
             .sum();
 
-        return storedAmount - allocatedAmount;
+        int result = storedAmount - allocatedAmount;
+        log.debug("There are {} available amount of {}", allocatedAmount, dataId);
+        return result;
     }
 }

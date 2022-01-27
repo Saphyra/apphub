@@ -16,7 +16,7 @@ public class AllocatedResourceFactory {
     private final IdGenerator idGenerator;
 
     public AllocatedResource create(UUID location, LocationType locationType, UUID externalReference, String dataId, int amount) {
-        return AllocatedResource.builder()
+        AllocatedResource result = AllocatedResource.builder()
             .allocatedResourceId(idGenerator.randomUuid())
             .location(location)
             .locationType(locationType)
@@ -24,5 +24,7 @@ public class AllocatedResourceFactory {
             .dataId(dataId)
             .amount(amount)
             .build();
+        log.debug("{} is created.", result);
+        return result;
     }
 }

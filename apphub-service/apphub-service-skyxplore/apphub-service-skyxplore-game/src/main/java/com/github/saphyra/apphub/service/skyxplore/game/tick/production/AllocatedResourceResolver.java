@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.isNull;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -34,6 +36,7 @@ public class AllocatedResourceResolver {
     Removing resource from the storage allocated for the order
      */
     public void resolveAllocations(UUID gameId, Planet planet, UUID externalReference) {
+        log.debug("Resolving allocations for externalReference {} in game {}. {}", externalReference, gameId, planet.getStorageDetails());
         List<UUID> reservedStorageIds = planet.getStorageDetails()
             .getReservedStorages()
             .stream()
@@ -41,13 +44,22 @@ public class AllocatedResourceResolver {
             .peek(reservedStorage -> tickCache.get(gameId).getGameItemCache().delete(reservedStorage.getReservedStorageId(), GameItemType.RESERVED_STORAGE))
             .map(ReservedStorage::getReservedStorageId)
             .collect(Collectors.toList());
-        reservedStorageIds.forEach(uuid -> planet.getStorageDetails().getReservedStorages().removeIf(reservedStorage -> reservedStorageIds.contains(reservedStorage.getReservedStorageId())));
+        log.debug("ReservedStorageIds found for externalReference {}: {} in game {}", externalReference, reservedStorageIds, gameId);
+        reservedStorageIds.forEach(uuid -> planet.getStorageDetails()
+            .getReservedStorages()
+            .removeIf(reservedStorage -> reservedStorageIds.contains(reservedStorage.getReservedStorageId()))
+        );
 
-        planet.getStorageDetails()
+        List<UUID> allocatedResourceIds = planet.getStorageDetails()
             .getAllocatedResources()
             .stream()
             .filter(allocatedResource -> allocatedResource.getExternalReference().equals(externalReference))
-            .forEach(allocatedResource -> resolveAllocation(gameId, planet, allocatedResource));
+            .peek(allocatedResource -> resolveAllocation(gameId, planet, allocatedResource))
+            .map(AllocatedResource::getAllocatedResourceId)
+            .collect(Collectors.toList());
+        planet.getStorageDetails()
+            .getAllocatedResources()
+            .removeIf(allocatedResource -> allocatedResourceIds.contains(allocatedResource.getAllocatedResourceId()));
 
         tickCache.get(gameId)
             .getMessageCache()
@@ -64,17 +76,18 @@ public class AllocatedResourceResolver {
     }
 
     private void resolveAllocation(UUID gameId, Planet planet, AllocatedResource allocatedResource) {
+        log.debug("Resolving {} in game {}", allocatedResource, gameId);
         StoredResource storedResource = planet.getStorageDetails()
             .getStoredResources()
-            .get(allocatedResource.getDataId())
-            .reduceAmount(allocatedResource.getAmount());
+            .get(allocatedResource.getDataId());
+        if (isNull(storedResource)) {
+            throw new NullPointerException("StoredResource not found for dataId " + allocatedResource.getDataId());
+        }
+        storedResource.reduceAmount(allocatedResource.getAmount());
         tickCache.get(gameId)
             .getGameItemCache()
             .save(storedResourceToModelConverter.convert(storedResource, gameId));
 
-        planet.getStorageDetails()
-            .getAllocatedResources()
-            .remove(allocatedResource);
         tickCache.get(gameId)
             .getGameItemCache()
             .delete(allocatedResource.getAllocatedResourceId(), GameItemType.ALLOCATED_RESOURCE);

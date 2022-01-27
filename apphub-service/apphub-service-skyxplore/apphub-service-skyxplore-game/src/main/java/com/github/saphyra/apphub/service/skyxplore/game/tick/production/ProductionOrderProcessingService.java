@@ -21,10 +21,12 @@ class ProductionOrderProcessingService {
 
     void processOrder(UUID gameId, Planet planet, ProductionOrder order) {
         if (isNull(order.getAssignee())) {
+            log.debug("{} is not assigned. Assigning to building in game {}", order, gameId);
             assignBuildingToOrderService.assignOrder(gameId, planet, order, this);
         }
 
         if (nonNull(order.getAssignee())) {
+            log.debug("{} is assigned in game {}", order, gameId);
             workOnOrderService.workOnOrder(gameId, planet, order, this);
         }
     }

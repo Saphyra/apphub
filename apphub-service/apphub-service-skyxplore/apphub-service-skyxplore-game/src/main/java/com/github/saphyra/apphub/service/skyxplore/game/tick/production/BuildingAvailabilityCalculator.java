@@ -17,6 +17,7 @@ class BuildingAvailabilityCalculator {
 
     double calculateBuildingAvailability(Planet planet, Building building, String dataId) {
         ProductionBuilding buildingData = productionBuildingService.get(building.getDataId());
+        log.debug("{} found for {}", buildingData, building);
 
         Integer workPointsPerResource = buildingData.getGives().get(dataId).getConstructionRequirements().getRequiredWorkPoints();
         double availabilityPerTick = buildingData.getWorkers() * building.getLevel() / (double) workPointsPerResource;
@@ -27,6 +28,8 @@ class BuildingAvailabilityCalculator {
             .mapToInt(productionOrder -> productionOrder.getRequiredWorkPoints() - productionOrder.getCurrentWorkPoints())
             .sum();
 
-        return availabilityPerTick / queuedAvailability;
+        double result = availabilityPerTick / queuedAvailability;
+        log.debug("availabilityPerTick: {}, queuedAvailability: {}, buildingAvailability: {}", availabilityPerTick, queuedAvailability, result);
+        return result;
     }
 }

@@ -124,3 +124,14 @@ game:
     workPointsPerTick: 100
     skill:
       experiencePerLevel: 1000
+
+logging:
+  level:
+    com:
+      github:
+        saphyra:
+          apphub:
+            service:
+              skyxplore:
+                game:
+                  tick: DEBUG #TODO Restore to info

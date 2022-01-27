@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.converter.respons
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Skill;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.CitizenToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.SkillToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.GameItemCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.MessageCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCache;
@@ -25,25 +26,29 @@ class UseCitizenWorkPointsService {
     private final CitizenToResponseConverter citizenToResponseConverter;
     private final WsMessageSender messageSender;
     private final CitizenToModelConverter citizenToModelConverter;
+    private final SkillToModelConverter skillToModelConverter;
 
     public UseCitizenWorkPointsService(
         @Value("${game.citizen.skill.experiencePerLevel}") int experiencePerLevel,
         TickCache tickCache,
         CitizenToResponseConverter citizenToResponseConverter,
         WsMessageSender messageSender,
-        CitizenToModelConverter citizenToModelConverter
+        CitizenToModelConverter citizenToModelConverter,
+        SkillToModelConverter skillToModelConverter
     ) {
         this.experiencePerLevel = experiencePerLevel;
         this.tickCache = tickCache;
         this.citizenToResponseConverter = citizenToResponseConverter;
         this.messageSender = messageSender;
         this.citizenToModelConverter = citizenToModelConverter;
+        this.skillToModelConverter = skillToModelConverter;
     }
 
     /*
     Making citizens tired, and more experienced
      */
     void useWorkPoints(UUID gameId, UUID userId, UUID planetId, Citizen citizen, int workPointsUsed, SkillType skillType) {
+        log.debug("Citizen {} in game {} used {} workPoints of skill {}", citizen, gameId, workPointsUsed, skillType);
         citizen.setMorale(citizen.getMorale() - workPointsUsed);
 
         Skill skill = citizen.getSkills()
@@ -51,6 +56,7 @@ class UseCitizenWorkPointsService {
 
         skill.setExperience(skill.getExperience() + workPointsUsed);
         if (skill.getExperience() >= skill.getNextLevel()) {
+            log.debug("Skill {} level earned for citizen {} in game {}", skillType, citizen.getCitizenId(), gameId);
             skill.setLevel(skill.getLevel() + 1);
             skill.setExperience(skill.getExperience() - skill.getNextLevel());
             skill.setNextLevel(skill.getLevel() * experiencePerLevel);
@@ -58,7 +64,8 @@ class UseCitizenWorkPointsService {
 
         GameItemCache gameItemCache = tickCache.get(gameId)
             .getGameItemCache();
-        gameItemCache.saveAll(citizenToModelConverter.convertDeep(citizen, gameId));
+        gameItemCache.save(skillToModelConverter.convert(skill, gameId));
+        gameItemCache.save(citizenToModelConverter.convert(citizen, gameId));
 
         MessageCache messageCache = tickCache.get(gameId)
             .getMessageCache();

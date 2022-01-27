@@ -14,11 +14,13 @@ import java.util.UUID;
 //TODO unit test
 class ProductionOrderRequirementsMetCalculator {
     boolean areRequirementsMet(Planet planet, UUID externalReference) {
-        return planet.getStorageDetails()
+        boolean result = planet.getStorageDetails()
             .getReservedStorages()
             .stream()
             .filter(productionOrder -> productionOrder.getExternalReference().equals(externalReference))
             .mapToInt(ReservedStorage::getAmount)
-            .sum() == 0;
+            .sum() <= 0;
+        log.debug("Are requirements met for externalReference {}: {}. ReservedStorages: {}", externalReference, result, planet.getStorageDetails().getReservedStorages());
+        return result;
     }
 }

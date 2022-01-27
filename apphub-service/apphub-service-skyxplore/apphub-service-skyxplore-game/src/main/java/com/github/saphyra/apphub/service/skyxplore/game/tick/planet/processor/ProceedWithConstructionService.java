@@ -44,20 +44,29 @@ class ProceedWithConstructionService {
     Assigning citizens to work on the construction
      */
     void proceedWithConstruction(UUID gameId, Planet planet, Surface surface, Construction construction) {
+        log.debug("Proceeding with construction {} in game {}", construction, gameId);
+
         Map<UUID, Assignment> citizenAssignments = tickCache.get(gameId).getCitizenAssignments();
 
         for (int i = 0; i < construction.getParallelWorkers() && construction.getCurrentWorkPoints() < construction.getRequiredWorkPoints(); i++) {
-            Optional<Citizen> maybeUnemployedCitizen = availableCitizenProvider.findMostCapableUnemployedCitizen(citizenAssignments.keySet(), planet.getPopulation().values(), SkillType.BUILDING);
+            log.debug("Employing Citizen #{} out of {}", i + 1, construction.getParallelWorkers());
+            Optional<Citizen> maybeUnemployedCitizen = availableCitizenProvider.findMostCapableUnemployedCitizen(citizenAssignments, planet.getPopulation().values(), construction.getConstructionId(), SkillType.BUILDING);
+            log.debug("Unemployed citizen: {} in game {}", maybeUnemployedCitizen, gameId);
             if (maybeUnemployedCitizen.isPresent()) {
                 Citizen citizen = maybeUnemployedCitizen.get();
                 Assignment assignment = assignCitizenService.assignCitizen(gameId, citizen, construction.getConstructionId());
 
-                int completedWork = makeCitizenWorkService.requestWork(gameId, planet.getOwner(), planet.getPlanetId(), assignment, construction.getRequiredWorkPoints() - construction.getCurrentWorkPoints(), SkillType.BUILDING);
+                int requestedWorkPoints = construction.getRequiredWorkPoints() - construction.getCurrentWorkPoints();
+                int completedWork = makeCitizenWorkService.requestWork(gameId, planet.getOwner(), planet.getPlanetId(), assignment, requestedWorkPoints, SkillType.BUILDING);
+                log.debug("{} work completed out of requested {} in game {}", completedWork, requestedWorkPoints, gameId);
                 construction.setCurrentWorkPoints(construction.getCurrentWorkPoints() + completedWork);
             } else {
+                log.debug("No unemployed citizen found to proceed with {} in game {}", construction, gameId);
                 break;
             }
         }
+
+        log.debug("Work completed on {} in game {}", construction, gameId);
 
         tickCache.get(gameId)
             .getGameItemCache()

@@ -22,7 +22,7 @@ class ProductionBuildingFinder {
     private final BuildingAvailabilityCalculator buildingAvailabilityCalculator;
 
     Optional<Building> findProducer(Planet planet, String dataId) {
-        return planet.getSurfaces()
+        Optional<Building> result = planet.getSurfaces()
             .values()
             .stream()
             .filter(surface -> nonNull(surface.getBuilding()))
@@ -30,5 +30,7 @@ class ProductionBuildingFinder {
             .filter(building -> productionBuildingService.containsKey(building.getDataId()))
             .filter(building -> productionBuildingService.get(building.getDataId()).getGives().containsKey(dataId))
             .max(Comparator.comparing(building -> buildingAvailabilityCalculator.calculateBuildingAvailability(planet, building, dataId)));
+        log.debug("Producer for {} on planet {}: {}", dataId, planet.getPlanetId(), result);
+        return result;
     }
 }

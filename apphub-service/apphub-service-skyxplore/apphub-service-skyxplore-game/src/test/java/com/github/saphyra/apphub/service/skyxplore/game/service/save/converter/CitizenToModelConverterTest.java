@@ -27,7 +27,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyCollection;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
@@ -99,7 +99,7 @@ public class CitizenToModelConverterTest {
             .build();
 
         given(game.getGameId()).willReturn(GAME_ID);
-        given(skillToModelConverter.convert(any(), eq(GAME_ID))).willReturn(Arrays.asList(skillModel));
+        given(skillToModelConverter.convert(anyCollection(), eq(GAME_ID))).willReturn(Arrays.asList(skillModel));
         given(energyShieldConverter.convert(CITIZEN_ID, GAME_ID, energyShield)).willReturn(energyShieldModel);
         given(soldierArmorPieceConverter.convert(CITIZEN_ID, GAME_ID, armor)).willReturn(List.of(armorModel));
 

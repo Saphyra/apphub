@@ -30,6 +30,7 @@ public class AssignCitizenService {
             .location(location)
             .workPointsLeft(workPointsPerTick)
             .build();
+        log.debug("{} created for game {}", assignment, gameId);
 
         tickCache.get(gameId)
             .getCitizenAssignments()

@@ -27,6 +27,7 @@ class ProcessTickService {
 
     void processTick(Game game) {
         if (shouldProcessTick(game)) {
+            log.debug("TickProcession started for game {}", game.getGameId());
             tickCache.put(game.getGameId(), new TickCacheItem());
 
             game.getUniverse().getSystems()
@@ -36,17 +37,19 @@ class ProcessTickService {
                 .forEach(planet -> processPlanet(game.getGameId(), planet));
 
             tickCache.process(game.getGameId(), gameDataProxy, executorServiceBean);
+
+            log.debug("TickProcession finished for game {}", game.getGameId());
         }
     }
 
     private boolean shouldProcessTick(Game game) {
         if (game.isGamePaused()) {
-            log.info("Game {} is paused.", game.getGameId());
+            log.debug("Game {} is paused.", game.getGameId());
             return false;
         }
 
         if (game.getPlayers().values().stream().anyMatch(player -> !player.isConnected())) {
-            log.info("Not all players connected to game {}", game.getGameId());
+            log.debug("Not all players connected to game {}", game.getGameId());
             return false;
         }
         log.info("Processing tick for game {}", game.getGameId());
@@ -54,10 +57,10 @@ class ProcessTickService {
     }
 
     private void processPlanet(UUID gameId, Planet planet) {
-        log.debug("Processing tick for planet {}", planet.getPlanetId());
         try {
             synchronized (planet) {
                 planetTickProcessor.processForPlanet(gameId, planet);
+                log.debug("{} after processing tick in game {}", planet, gameId);
             }
         } catch (RuntimeException e) {
             errorReporterService.report("Failed processing tick for planet " + planet.getPlanetId(), e);

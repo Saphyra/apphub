@@ -25,15 +25,21 @@ public class ConstructionTickProcessor {
 
     public void process(UUID gameId, Planet planet, Surface surface) {
         Construction construction = surface.getBuilding().getConstruction();
+        log.debug("Working on {} in game {}", construction, gameId);
         if (!allResourcesPresent(planet.getStorageDetails(), construction.getConstructionId())) {
+            log.debug("There are missing resources to start working on {} in game {}", construction, gameId);
             produceResourcesService.produceResources(gameId, planet, construction);
         }
 
         if (allResourcesPresent(planet.getStorageDetails(), construction.getConstructionId())) {
+            log.debug("Resources are present to work on {} in game {}", construction, gameId);
+
             if (construction.getCurrentWorkPoints() == 0) {
+                log.debug("Working on {} is not started yet in game {}", construction, gameId);
                 allocatedResourceResolver.resolveAllocations(gameId, planet, construction.getConstructionId());
             }
 
+            log.debug("Proceeding with {} in game {}", construction, gameId);
             proceedWithConstructionService.proceedWithConstruction(gameId, planet, surface, construction);
         }
 

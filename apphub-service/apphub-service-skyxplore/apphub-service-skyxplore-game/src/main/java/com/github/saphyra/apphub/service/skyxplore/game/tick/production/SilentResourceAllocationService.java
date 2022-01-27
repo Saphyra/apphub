@@ -48,11 +48,15 @@ class SilentResourceAllocationService {
     }
 
     private ReservedStorage allocateResource(UUID gameId, Planet planet, UUID externalReference, String dataId, Integer amount) {
+        log.debug("Allocating {} amount of {} for externalReference {} in game {}", amount, dataId, externalReference, gameId);
+
         int availableAmount = availableResourceCounter.getAvailableAmount(planet.getStorageDetails(), dataId);
         int allocatedAmount = Math.min(amount, availableAmount);
+        int reservedAmount = amount - allocatedAmount;
 
         AllocatedResource allocatedResource = allocatedResourceFactory.create(planet.getPlanetId(), LocationType.PRODUCTION, externalReference, dataId, allocatedAmount);
-        ReservedStorage reservedStorage = reservedStorageFactory.create(planet.getPlanetId(), LocationType.PRODUCTION, externalReference, dataId, amount - allocatedAmount);
+        ReservedStorage reservedStorage = reservedStorageFactory.create(planet.getPlanetId(), LocationType.PRODUCTION, externalReference, dataId, reservedAmount);
+        log.debug("{} amount of {} is available in storage, so {} is allocated, and {} storage is reserved.", availableAmount, dataId, allocatedAmount, reservedAmount);
 
         planet.getStorageDetails()
             .getAllocatedResources()

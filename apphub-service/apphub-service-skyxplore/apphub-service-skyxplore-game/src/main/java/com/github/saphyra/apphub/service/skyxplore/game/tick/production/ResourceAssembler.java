@@ -26,6 +26,8 @@ class ResourceAssembler {
             .findFirst()
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Building not found with id " + order.getAssignee()));
 
+        log.debug("{} is working on {} in game {}", building, order, gameId);
+
         productionBuildingOrderProcessor.processOrderByAssignedBuilding(gameId, planet, building, order);
     }
 }

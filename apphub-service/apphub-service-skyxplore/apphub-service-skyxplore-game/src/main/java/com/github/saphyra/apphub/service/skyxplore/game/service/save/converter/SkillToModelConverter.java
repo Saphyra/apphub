@@ -22,7 +22,7 @@ public class SkillToModelConverter {
             .collect(Collectors.toList());
     }
 
-    private SkillModel convert(Skill skill, UUID gameId) {
+    public SkillModel convert(Skill skill, UUID gameId) {
         SkillModel model = new SkillModel();
         model.setId(skill.getSkillId());
         model.setGameId(gameId);

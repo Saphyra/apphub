@@ -28,6 +28,7 @@ public class NewlyProducedResourceAllocationService {
     Increase the allocated amount.
      */
     void allocateNewlyProducedResource(UUID gameId, Planet planet, ProductionOrder order, ReservedStorage reservedStorage) {
+        log.debug("{} before finishing {} in game {}", reservedStorage, order, gameId);
         reservedStorage.reduceAmount(order.getAmount());
 
         GameItemCache gameItemCache = tickCache.get(gameId)
@@ -38,6 +39,8 @@ public class NewlyProducedResourceAllocationService {
             .getAllocatedResources()
             .findByExternalReferenceAndDataIdValidated(reservedStorage.getExternalReference(), reservedStorage.getDataId())
             .increaseAmount(order.getAmount());
+
+        log.debug("{}, {} after finishing {} in game {}", allocatedResource, reservedStorage, order, gameId);
 
         gameItemCache.save(allocatedResourceToModelConverter.convert(allocatedResource, gameId));
     }

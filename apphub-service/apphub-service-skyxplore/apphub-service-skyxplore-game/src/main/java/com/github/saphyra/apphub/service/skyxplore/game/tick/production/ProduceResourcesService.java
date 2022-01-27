@@ -31,9 +31,10 @@ public class ProduceResourcesService {
             .getReservedStorages()
             .stream()
             .filter(reservedStorage -> reservedStorage.getExternalReference().equals(construction.getConstructionId()))
+            .peek(reservedStorage -> log.debug("{} found for construction {} in game {}", reservedStorage, construction.getConstructionId(), gameId))
             .map(ReservedStorage::getReservedStorageId)
             .collect(Collectors.toList());
-
+        log.debug("ReservedStorageIds for construction {}: {} in game {}", construction.getConstructionId(), reservedStorageIds, gameId);
 
         reservedStorageIds.stream()
             .map(reservedStorageId -> planet.getStorageDetails().getReservedStorages().findById(reservedStorageId))
@@ -43,13 +44,16 @@ public class ProduceResourcesService {
     }
 
     private void placeAndProcessOrder(UUID gameId, Planet planet, ReservedStorage reservedStorage) {
+        log.debug("Placing order for {}", reservedStorage);
         List<ProductionOrder> orders = planet.getOrders()
             .stream()
             .filter(productionOrder -> productionOrder.getExternalReference().equals(reservedStorage.getReservedStorageId()))
+            .peek(productionOrder -> log.debug("{} found for {} in game {}", productionOrder, reservedStorage, gameId))
             .collect(Collectors.toList());
 
         //Creating order if not present for the given reservedStorage (Probably the processing has not started yet)
         if (orders.isEmpty()) {
+            log.info("No ProductionOrder found for {} in game {}", reservedStorage, gameId);
             ProductionOrder newOrder = productionOrderFactory.create(reservedStorage.getReservedStorageId(), planet.getPlanetId(), LocationType.PLANET, reservedStorage.getDataId(), reservedStorage.getAmount());
             planet.getOrders().add(newOrder);
             orders.add(newOrder);
