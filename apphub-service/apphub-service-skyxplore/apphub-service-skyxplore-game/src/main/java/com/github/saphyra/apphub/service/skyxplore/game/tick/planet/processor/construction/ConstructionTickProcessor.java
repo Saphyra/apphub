@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.tick.planet.processor;
+package com.github.saphyra.apphub.service.skyxplore.game.tick.planet.processor.construction;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
@@ -16,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ConstructionTickProcessor {
     private final FinishConstructionService finishConstructionService;
     private final ProceedWithConstructionService proceedWithConstructionService;
@@ -24,7 +23,8 @@ public class ConstructionTickProcessor {
     private final AllocatedResourceResolver allocatedResourceResolver;
 
     public void process(UUID gameId, Planet planet, Surface surface) {
-        Construction construction = surface.getBuilding().getConstruction();
+        Construction construction = surface.getBuilding()
+            .getConstruction();
         log.debug("Working on {} in game {}", construction, gameId);
         if (!allResourcesPresent(planet.getStorageDetails(), construction.getConstructionId())) {
             log.debug("There are missing resources to start working on {} in game {}", construction, gameId);
@@ -52,6 +52,7 @@ public class ConstructionTickProcessor {
         return storageDetails.getReservedStorages()
             .stream()
             .filter(reservedStorage -> reservedStorage.getExternalReference().equals(constructionId))
+            .peek(reservedStorage -> log.debug("ReservedStorage found for constructionId {}: {}", constructionId, reservedStorage))
             .mapToInt(ReservedStorage::getAmount)
             .sum() == 0;
     }

@@ -12,12 +12,11 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class AvailableResourceCounter {
     /*
     Calculating the not-assigned resource present in the storage
      */
-    int getAvailableAmount(StorageDetails storageDetails, String dataId) {
+    int countAvailableAmount(StorageDetails storageDetails, String dataId) {
         int storedAmount = Optional.ofNullable(storageDetails.getStoredResources().get(dataId))
             .map(StoredResource::getAmount)
             .orElse(0);

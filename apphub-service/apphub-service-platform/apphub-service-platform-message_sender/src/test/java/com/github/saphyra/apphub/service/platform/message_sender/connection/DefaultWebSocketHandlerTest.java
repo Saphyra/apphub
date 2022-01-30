@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMess
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +29,9 @@ import java.util.Vector;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -51,6 +54,9 @@ public class DefaultWebSocketHandlerTest {
 
     @Mock
     private DateTimeUtil dateTimeUtil;
+
+    @Mock
+    private ErrorReporterService errorReporterService;
 
     private DefaultWebSocketHandlerImpl underTest;
 
@@ -76,6 +82,7 @@ public class DefaultWebSocketHandlerTest {
             .uuidConverter(uuidConverter)
             .dateTimeUtil(dateTimeUtil)
             .webSocketSessionExpirationSeconds(WEB_SOCKET_SESSION_EXPIRATION_SECONDS)
+            .errorReporterService(errorReporterService)
             .build();
 
         underTest = new DefaultWebSocketHandlerImpl(context, templateMethods);
@@ -191,6 +198,29 @@ public class DefaultWebSocketHandlerTest {
 
         assertThat(underTest.getRetryEvents()).containsKey(userId);
         assertThat(underTest.getRetryEvents().get(userId)).containsExactly(webSocketEvent);
+    }
+
+    @Test
+    public void sendEvent_error() throws IOException {
+        Map<UUID, SessionWrapper> sessionMap = underTest.getSessionMap();
+        sessionMap.put(USER_ID, sessionWrapper);
+        UUID userId = UUID.randomUUID();
+        sessionMap.put(userId, SessionWrapper.builder().lastUpdate(CURRENT_DATE.minusSeconds(WEB_SOCKET_SESSION_EXPIRATION_SECONDS + 1)).build());
+
+        given(objectMapperWrapper.writeValueAsString(any())).willReturn(MESSAGE_PAYLOAD);
+        given(sessionWrapper.getSession()).willReturn(session);
+
+        WebSocketMessage webSocketMessage = WebSocketMessage.builder()
+            .recipients(Arrays.asList(USER_ID, userId))
+            .event(webSocketEvent)
+            .build();
+
+        RuntimeException exception = new RuntimeException();
+        doThrow(exception).when(session).sendMessage(any());
+
+        underTest.sendEvent(webSocketMessage);
+
+        verify(errorReporterService).report(any(), eq(exception));
     }
 
     private static class DefaultWebSocketHandlerImpl extends DefaultWebSocketHandler {

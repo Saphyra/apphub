@@ -14,7 +14,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class PlanetTickProcessor {
     private final List<PlanetTickTaskCollector> taskCollectors;
     private final ErrorReporterService errorReporterService;
@@ -31,6 +30,7 @@ public class PlanetTickProcessor {
             .forEach(this::process);
 
         log.info("Tick processing finished for planet {} in game {}", planet.getPlanetId(), gameId);
+        log.debug("Planet after tickProcessing finished: {}", planet);
     }
 
     private void process(TickTask tickTask) {

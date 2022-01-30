@@ -17,7 +17,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class NewlyProducedResourceAllocationService {
     private final TickCache tickCache;
     private final ReservedStorageToModelConverter reservedStorageToModelConverter;
@@ -37,8 +36,8 @@ public class NewlyProducedResourceAllocationService {
 
         AllocatedResource allocatedResource = planet.getStorageDetails()
             .getAllocatedResources()
-            .findByExternalReferenceAndDataIdValidated(reservedStorage.getExternalReference(), reservedStorage.getDataId())
-            .increaseAmount(order.getAmount());
+            .findByExternalReferenceAndDataIdValidated(reservedStorage.getExternalReference(), reservedStorage.getDataId());
+        allocatedResource.increaseAmount(order.getAmount());
 
         log.debug("{}, {} after finishing {} in game {}", allocatedResource, reservedStorage, order, gameId);
 

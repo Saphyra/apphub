@@ -205,7 +205,7 @@ function createProgressBar(progress, content){
 
             const progressBarBackground = document.createElement("DIV");
                 progressBarBackground.classList.add("progress-bar-background");
-                progressBarBackground.style.width = status + "%";
+                progressBarBackground.style.width = progress + "%";
         progressBarContainer.appendChild(progressBarBackground);
 
             const progressBarText = document.createElement("DIV");

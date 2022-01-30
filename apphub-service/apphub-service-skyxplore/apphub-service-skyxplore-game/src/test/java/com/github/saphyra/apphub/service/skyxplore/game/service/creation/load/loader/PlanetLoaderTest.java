@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
@@ -16,7 +17,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.ProductionOrd
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -26,8 +26,8 @@ import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -110,7 +110,7 @@ public class PlanetLoaderTest {
         given(citizenLoader.load(PLANET_ID)).willReturn(new OptionalHashMap<>(CollectionUtils.singleValueMap(CITIZEN_ID, citizen)));
         given(storageDetailsLoader.load(PLANET_ID)).willReturn(storageDetails);
         given(priorityLoader.load(PLANET_ID)).willReturn(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION, PRIORITY));
-        given(productionOrderLoader.load(PLANET_ID)).willReturn(List.of(productionOrder));
+        given(productionOrderLoader.load(PLANET_ID)).willReturn(Set.of(productionOrder));
 
         Map<UUID, Planet> result = underTest.load(SOLAR_SYSTEM_ID);
 

@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.proxy;
 import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreSavedGameClient;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,5 +73,12 @@ public class GameDataProxyTest {
         underTest.deleteItem(ID, GameItemType.PLAYER);
 
         verify(dataGameClient).deleteGameItem(ID, GameItemType.PLAYER, LOCALE);
+    }
+
+    @Test
+    public void deleteItems() {
+        underTest.deleteItems(List.of(new BiWrapper<>(ID, GameItemType.ALLIANCE)));
+
+        verify(dataGameClient).deleteGameItem(ID, GameItemType.ALLIANCE, LOCALE);
     }
 }

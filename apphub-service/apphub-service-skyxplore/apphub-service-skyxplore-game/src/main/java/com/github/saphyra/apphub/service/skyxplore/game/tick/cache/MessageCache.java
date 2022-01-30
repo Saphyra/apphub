@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-//TODO unit test
 @Slf4j
 public class MessageCache extends ConcurrentHashMap<BiWrapper<UUID, BiWrapper<WebSocketEventName, Object>>, Runnable> {
     public void add(UUID recipient, WebSocketEventName eventName, Object id, Runnable method) {

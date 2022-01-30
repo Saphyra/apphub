@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-//TODO test
 interface ProductionOrderRepository extends CrudRepository<ProductionOrderEntity, String> {
     @Modifying
     @Query("DELETE FROM ProductionOrderEntity e WHERE e.gameId = :gameId")

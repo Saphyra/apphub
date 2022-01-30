@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.tick.planet.processor;
+package com.github.saphyra.apphub.service.skyxplore.game.tick.planet.processor.construction;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
@@ -21,7 +21,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class FinishConstructionService {
     private final TickCache tickCache;
     private final BuildingToModelConverter buildingToModelConverter;

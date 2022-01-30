@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.tick.planet.task_collec
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.tick.planet.processor.ConstructionTickProcessor;
+import com.github.saphyra.apphub.service.skyxplore.game.tick.planet.processor.construction.ConstructionTickProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

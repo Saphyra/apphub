@@ -29,6 +29,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -115,7 +116,7 @@ public class PlanetToModelConverterTest {
             .storageDetails(storageDetails)
             .priorities(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION, PRIORITY))
             .owner(OWNER)
-            .orders(List.of(productionOrder))
+            .orders(Set.of(productionOrder))
             .build();
 
         given(game.getGameId()).willReturn(GAME_ID);
@@ -123,7 +124,7 @@ public class PlanetToModelConverterTest {
         given(citizenConverter.convertDeep(any(), eq(game))).willReturn(Arrays.asList(citizenModel));
         given(storageDetailsConverter.convertDeep(storageDetails, game)).willReturn(Arrays.asList(storageDetailsItem));
         given(priorityConverter.convert(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION, PRIORITY), PLANET_ID, LocationType.PLANET, game)).willReturn(Arrays.asList(priorityModel));
-        given(productionOrderToModelConverter.convert(List.of(productionOrder), GAME_ID)).willReturn(List.of(productionOrderModel));
+        given(productionOrderToModelConverter.convert(Set.of(productionOrder), GAME_ID)).willReturn(List.of(productionOrderModel));
 
         List<GameItem> result = underTest.convertDeep(Arrays.asList(planet), game);
 

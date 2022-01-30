@@ -2,5 +2,7 @@ TODO Recharge citizen's morale if not all workPoints were used in a tick
 TODO Delete corresponding orders from planet when reservedStorage is deleted
 TODO Make citizens hungry
 TODO remove orders, and the storage allocation tree if construction / terraformation is canceled during the process
+TODO BuildingAvailabilityCalculator should consider resource supply when calculating availability (E.g. if there is no coal available, do not use Coal power plant)
 
 TODO api/fe test for game pause/resume
+TODO api/fe test for construction

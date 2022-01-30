@@ -4,6 +4,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -12,8 +14,8 @@ import java.util.UUID;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
-//TODO unit test
 @Slf4j
+@Getter(AccessLevel.PACKAGE)
 public class GameItemCache {
     private final Map<UUID, GameItem> items = new ConcurrentHashMap<>();
     private final List<BiWrapper<UUID, GameItemType>> deletedItems = new Vector<>();

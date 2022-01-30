@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -14,9 +15,8 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ProductionOrderToModelConverter {
-    public List<ProductionOrderModel> convert(List<ProductionOrder> orders, UUID gameId) {
+    public List<ProductionOrderModel> convert(Collection<ProductionOrder> orders, UUID gameId) {
         return orders.stream()
             .map(productionOrder -> convert(productionOrder, gameId))
             .collect(Collectors.toList());

@@ -25,6 +25,7 @@ public class ConstructionLoaderTest {
     private static final Integer PRIORITY = 564;
     private static final UUID BUILDING_ID = UUID.randomUUID();
     private static final String DATA = "data";
+    private static final Integer PARALLEL_WORKERS = 245;
 
     @Mock
     private GameItemLoader gameItemLoader;
@@ -41,6 +42,7 @@ public class ConstructionLoaderTest {
         model.setCurrentWorkPoints(CURRENT_WORK_POINTS);
         model.setPriority(PRIORITY);
         model.setData(DATA);
+        model.setParallelWorkers(PARALLEL_WORKERS);
 
         given(gameItemLoader.loadChildren(BUILDING_ID, GameItemType.CONSTRUCTION, ConstructionModel[].class)).willReturn(List.of(model));
 
@@ -52,5 +54,6 @@ public class ConstructionLoaderTest {
         assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
         assertThat(result.getData()).isEqualTo(DATA);
+        assertThat(result.getParallelWorkers()).isEqualTo(PARALLEL_WORKERS);
     }
 }

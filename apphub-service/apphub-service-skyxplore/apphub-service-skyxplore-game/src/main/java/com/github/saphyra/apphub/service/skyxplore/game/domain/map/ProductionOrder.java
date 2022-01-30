@@ -10,7 +10,6 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @Builder
-//TODO save to database
 public class ProductionOrder {
     private final UUID productionOrderId;
     private final UUID location;

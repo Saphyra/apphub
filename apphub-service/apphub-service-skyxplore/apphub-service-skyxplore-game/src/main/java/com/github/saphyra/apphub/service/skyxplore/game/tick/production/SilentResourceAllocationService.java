@@ -50,7 +50,7 @@ class SilentResourceAllocationService {
     private ReservedStorage allocateResource(UUID gameId, Planet planet, UUID externalReference, String dataId, Integer amount) {
         log.debug("Allocating {} amount of {} for externalReference {} in game {}", amount, dataId, externalReference, gameId);
 
-        int availableAmount = availableResourceCounter.getAvailableAmount(planet.getStorageDetails(), dataId);
+        int availableAmount = availableResourceCounter.countAvailableAmount(planet.getStorageDetails(), dataId);
         int allocatedAmount = Math.min(amount, availableAmount);
         int reservedAmount = amount - allocatedAmount;
 

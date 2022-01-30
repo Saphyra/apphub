@@ -25,7 +25,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class DeliverProductionOrderService {
     private final TickCache tickCache;
     private final StoredResourceFactory storedResourceFactory;
@@ -60,7 +59,7 @@ class DeliverProductionOrderService {
 
         Optional<ReservedStorage> maybeReservedStorage = planet.getStorageDetails()
             .getReservedStorages()
-            .findById(order.getExternalReference());
+            .findById(order.getExternalReference()); //Searching the parent of the completed order
         maybeReservedStorage.ifPresent(reservedStorage -> newlyProducedResourceAllocationService.allocateNewlyProducedResource(gameId, planet, order, reservedStorage));
 
         planet.getOrders().remove(order);

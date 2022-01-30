@@ -12,9 +12,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class TickCache extends ConcurrentHashMap<UUID, TickCacheItem> {
-    public void process(UUID gameId, GameDataProxy gameDataProxy, ExecutorServiceBean executorServiceBean) {
+    private final GameDataProxy gameDataProxy;
+    private final ExecutorServiceBean executorServiceBean;
+
+    public void process(UUID gameId) {
         get(gameId)
             .process(gameDataProxy, executorServiceBean);
     }

@@ -9,22 +9,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ProductionOrderLoader {
     private final GameItemLoader gameItemLoader;
 
-    public List<ProductionOrder> load(UUID planetId) {
+    Set<ProductionOrder> load(UUID planetId) {
         return gameItemLoader.loadChildren(planetId, GameItemType.PRODUCTION_ORDER, ProductionOrderModel[].class)
             .stream()
             .map(this::convert)
-            .collect(Collectors.toList());
+            .collect(Collectors.toSet());
     }
 
     private ProductionOrder convert(ProductionOrderModel model) {

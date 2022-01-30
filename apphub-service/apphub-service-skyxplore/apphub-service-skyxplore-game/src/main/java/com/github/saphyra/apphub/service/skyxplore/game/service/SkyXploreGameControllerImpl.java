@@ -35,7 +35,6 @@ public class SkyXploreGameControllerImpl implements SkyXploreGameController {
     }
 
     @Override
-    //TODO unit test
     public void pauseGame(OneParamRequest<Boolean> paused, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to pause game: {}", accessTokenHeader.getUserId(), paused.getValue());
         pauseGameService.setPausedStatus(accessTokenHeader.getUserId(), paused.getValue());

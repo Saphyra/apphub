@@ -1,10 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.tick;
 
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCacheItem;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.planet.PlanetTickProcessor;
@@ -21,8 +19,6 @@ import java.util.UUID;
 class ProcessTickService {
     private final TickCache tickCache;
     private final PlanetTickProcessor planetTickProcessor;
-    private final GameDataProxy gameDataProxy;
-    private final ExecutorServiceBean executorServiceBean;
     private final ErrorReporterService errorReporterService;
 
     void processTick(Game game) {
@@ -36,7 +32,7 @@ class ProcessTickService {
                 .flatMap(solarSystem -> solarSystem.getPlanets().values().stream())
                 .forEach(planet -> processPlanet(game.getGameId(), planet));
 
-            tickCache.process(game.getGameId(), gameDataProxy, executorServiceBean);
+            tickCache.process(game.getGameId());
 
             log.debug("TickProcession finished for game {}", game.getGameId());
         }

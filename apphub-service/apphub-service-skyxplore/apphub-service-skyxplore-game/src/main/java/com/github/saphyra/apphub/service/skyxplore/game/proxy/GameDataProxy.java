@@ -42,7 +42,6 @@ public class GameDataProxy {
         dataGameClient.deleteGameItem(id, type, localeProvider.getOrDefault());
     }
 
-    //TODO unit test
     public void deleteItems(List<BiWrapper<UUID, GameItemType>> deletedItems) {
         deletedItems.forEach(biWrapper -> deleteItem(biWrapper.getEntity1(), biWrapper.getEntity2()));
     }

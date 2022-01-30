@@ -15,7 +15,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class PauseGameService {
     private final GameDao gameDao;
     private final WebSocketMessageFactory messageFactory;

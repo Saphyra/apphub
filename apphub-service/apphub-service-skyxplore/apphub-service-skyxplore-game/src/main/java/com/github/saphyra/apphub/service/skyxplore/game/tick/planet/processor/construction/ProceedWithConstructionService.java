@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.tick.planet.processor;
+package com.github.saphyra.apphub.service.skyxplore.game.tick.planet.processor.construction;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.C
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.Assignment;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.MessageCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCache;
+import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCacheItem;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.work.AssignCitizenService;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.work.AvailableCitizenProvider;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.work.MakeCitizenWorkService;
@@ -28,7 +29,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ProceedWithConstructionService {
     private final AvailableCitizenProvider availableCitizenProvider;
     private final TickCache tickCache;
@@ -46,11 +46,17 @@ class ProceedWithConstructionService {
     void proceedWithConstruction(UUID gameId, Planet planet, Surface surface, Construction construction) {
         log.debug("Proceeding with construction {} in game {}", construction, gameId);
 
-        Map<UUID, Assignment> citizenAssignments = tickCache.get(gameId).getCitizenAssignments();
+        TickCacheItem tickCacheItem = tickCache.get(gameId);
+        Map<UUID, Assignment> citizenAssignments = tickCacheItem.getCitizenAssignments();
 
         for (int i = 0; i < construction.getParallelWorkers() && construction.getCurrentWorkPoints() < construction.getRequiredWorkPoints(); i++) {
             log.debug("Employing Citizen #{} out of {}", i + 1, construction.getParallelWorkers());
-            Optional<Citizen> maybeUnemployedCitizen = availableCitizenProvider.findMostCapableUnemployedCitizen(citizenAssignments, planet.getPopulation().values(), construction.getConstructionId(), SkillType.BUILDING);
+            Optional<Citizen> maybeUnemployedCitizen = availableCitizenProvider.findMostCapableUnemployedCitizen(
+                citizenAssignments,
+                planet.getPopulation().values(),
+                construction.getConstructionId(),
+                SkillType.BUILDING
+            );
             log.debug("Unemployed citizen: {} in game {}", maybeUnemployedCitizen, gameId);
             if (maybeUnemployedCitizen.isPresent()) {
                 Citizen citizen = maybeUnemployedCitizen.get();
@@ -68,11 +74,10 @@ class ProceedWithConstructionService {
 
         log.debug("Work completed on {} in game {}", construction, gameId);
 
-        tickCache.get(gameId)
-            .getGameItemCache()
+        tickCacheItem.getGameItemCache()
             .save(constructionToModelConverter.convert(construction, gameId));
 
-        MessageCache messageCache = tickCache.get(gameId)
+        MessageCache messageCache = tickCacheItem
             .getMessageCache();
         messageCache.add(
             planet.getOwner(),
@@ -84,10 +89,11 @@ class ProceedWithConstructionService {
             planet.getOwner(),
             WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_MODIFIED,
             construction.getConstructionId(),
-            () -> messageSender.planetQueueItemModified(planet.getOwner(), planet.getPlanetId(), queueItemToResponseConverter.convert(
-                buildingConstructionToQueueItemConverter.convert(surface.getBuilding()),
-                planet
-            ))
+            () -> messageSender.planetQueueItemModified(
+                planet.getOwner(),
+                planet.getPlanetId(),
+                queueItemToResponseConverter.convert(buildingConstructionToQueueItemConverter.convert(surface.getBuilding()), planet)
+            )
         );
     }
 }

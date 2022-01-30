@@ -17,7 +17,6 @@ import static java.util.Objects.nonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ConstructionTaskCollector implements PlanetTickTaskCollector {
     private final ConstructionTickTaskFactory constructionTickTaskFactory;
 

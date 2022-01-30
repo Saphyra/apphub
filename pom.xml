@@ -47,6 +47,7 @@
         <versions.tomcat-util>8.5.23</versions.tomcat-util>
         <versions.guava>30.1-jre</versions.guava>
         <versions.openfeign>11.5</versions.openfeign>
+        <versions.gson>2.8.9</versions.gson>
 
         <!-- Plugin Versions -->
         <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>

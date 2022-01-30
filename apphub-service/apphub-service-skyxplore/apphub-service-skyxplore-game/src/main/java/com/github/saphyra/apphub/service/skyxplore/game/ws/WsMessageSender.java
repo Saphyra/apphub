@@ -31,6 +31,9 @@ public class WsMessageSender {
     private final MessageSenderProxy messageSenderProxy;
 
     public void planetQueueItemModified(UUID userId, UUID planetId, QueueResponse queueResponse) {
+        if (isNull(queueResponse)) {
+            return; //TODO unit test
+        }
         sendIfProperPageIsOpened(userId, WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_MODIFIED, PLANET_PAGE_TYPE_GROUP, planetId, queueResponse);
     }
 

@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.ProductionOrder;
+import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.GameItemCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,14 +22,12 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class AssignBuildingToOrderService {
     private final ProductionOrderFactory productionOrderFactory;
     private final SilentResourceAllocationService silentResourceAllocationService;
     private final ProductionBuildingService productionBuildingService;
     private final TickCache tickCache;
     private final ProductionOrderToModelConverter productionOrderToModelConverter;
-
     private final ProductionBuildingFinder productionBuildingFinder;
 
     /*
@@ -50,9 +49,9 @@ class AssignBuildingToOrderService {
             order.setRequiredWorkPoints(productionData.getConstructionRequirements().getRequiredWorkPoints() * batchSize);
             order.setAssignee(building.getBuildingId());
             order.setAmount(batchSize);
-            tickCache.get(gameId)
-                .getGameItemCache()
-                .save(productionOrderToModelConverter.convert(order, gameId));
+            GameItemCache gameItemCache = tickCache.get(gameId)
+                .getGameItemCache();
+            gameItemCache.save(productionOrderToModelConverter.convert(order, gameId));
 
             Map<String, Integer> requiredResources = productionData.getConstructionRequirements()
                 .getRequiredResources()
@@ -63,12 +62,15 @@ class AssignBuildingToOrderService {
 
             silentResourceAllocationService.allocateResources(gameId, planet, order.getProductionOrderId(), requiredResources)
                 .stream()
-                .map(reservedStorage -> productionOrderFactory.create(reservedStorage.getReservedStorageId(), planet.getPlanetId(), LocationType.PLANET, reservedStorage.getDataId(), reservedStorage.getAmount()))
+                .map(reservedStorage -> productionOrderFactory.create(
+                    reservedStorage.getReservedStorageId(),
+                    planet.getPlanetId(),
+                    LocationType.PLANET,
+                    reservedStorage.getDataId(),
+                    reservedStorage.getAmount()
+                ))
                 .peek(productionOrder -> planet.getOrders().add(productionOrder))
-                .peek(productionOrder -> tickCache.get(gameId)
-                    .getGameItemCache()
-                    .save(productionOrderToModelConverter.convert(productionOrder, gameId))
-                )
+                .peek(productionOrder -> gameItemCache.save(productionOrderToModelConverter.convert(productionOrder, gameId)))
                 .forEach(productionOrder -> productionOrderProcessingService.processOrder(gameId, planet, productionOrder));
 
             if (originallyRequestedAmount > batchSize) {
@@ -77,9 +79,7 @@ class AssignBuildingToOrderService {
                 ProductionOrder newOrder = productionOrderFactory.create(order.getExternalReference(), planet.getPlanetId(), LocationType.PLANET, order.getDataId(), remainingAmount);
                 planet.getOrders().add(newOrder);
                 productionOrderProcessingService.processOrder(gameId, planet, newOrder);
-                tickCache.get(gameId)
-                    .getGameItemCache()
-                    .save(productionOrderToModelConverter.convert(newOrder, gameId));
+                gameItemCache.save(productionOrderToModelConverter.convert(newOrder, gameId));
             }
         }
     }

@@ -96,8 +96,8 @@
         node.appendChild(citizenName);
 
             const baseStatContainer = document.createElement("DIV");
-                baseStatContainer.appendChild(createProgressBar(citizen.morale, Localization.getAdditionalContent("morale") + ": " + citizen.morale));
-                baseStatContainer.appendChild(createProgressBar(citizen.satiety, Localization.getAdditionalContent("satiety") + ": " + citizen.satiety));
+                baseStatContainer.appendChild(createProgressBar(citizen.morale / 1600 * 100, Localization.getAdditionalContent("morale") + ": " + citizen.morale)); //TODO query game settings (MaxMorale) from BE
+                baseStatContainer.appendChild(createProgressBar(citizen.satiety / 1000 * 100, Localization.getAdditionalContent("satiety") + ": " + citizen.satiety)); //TODO query game settings (MaxSatiety) from BE
         node.appendChild(baseStatContainer);
 
             const displayableSkills = [];

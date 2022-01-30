@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class ProductionOrderDao extends AbstractDao<ProductionOrderEntity, ProductionOrderModel, String, ProductionOrderRepository> {
     private final UuidConverter uuidConverter;
 
@@ -23,15 +22,15 @@ public class ProductionOrderDao extends AbstractDao<ProductionOrderEntity, Produ
         repository.deleteByGameId(uuidConverter.convertDomain(gameId));
     }
 
-    public Optional<ProductionOrderModel> findById(UUID planetId) {
-        return findById(uuidConverter.convertDomain(planetId));
+    public Optional<ProductionOrderModel> findById(UUID productionOrderId) {
+        return findById(uuidConverter.convertDomain(productionOrderId));
     }
 
-    public List<ProductionOrderModel> getByLocation(UUID solarSystemId) {
-        return converter.convertEntity(repository.getByLocation(uuidConverter.convertDomain(solarSystemId)));
+    public List<ProductionOrderModel> getByLocation(UUID location) {
+        return converter.convertEntity(repository.getByLocation(uuidConverter.convertDomain(location)));
     }
 
-    public void deleteById(UUID planetId) {
-        deleteById(uuidConverter.convertDomain(planetId));
+    public void deleteById(UUID productionOrderId) {
+        deleteById(uuidConverter.convertDomain(productionOrderId));
     }
 }

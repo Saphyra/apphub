@@ -31,6 +31,7 @@ public class ProduceResourcesService {
             .getReservedStorages()
             .stream()
             .filter(reservedStorage -> reservedStorage.getExternalReference().equals(construction.getConstructionId()))
+            .filter(reservedStorage -> reservedStorage.getAmount() > 0)
             .peek(reservedStorage -> log.debug("{} found for construction {} in game {}", reservedStorage, construction.getConstructionId(), gameId))
             .map(ReservedStorage::getReservedStorageId)
             .collect(Collectors.toList());

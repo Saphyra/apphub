@@ -23,7 +23,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class AllocatedResourceResolver {
     private final StoredResourceToModelConverter storedResourceToModelConverter;
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;

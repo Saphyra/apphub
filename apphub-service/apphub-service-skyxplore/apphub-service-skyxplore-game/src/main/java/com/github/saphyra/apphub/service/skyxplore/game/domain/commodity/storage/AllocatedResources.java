@@ -10,7 +10,6 @@ import java.util.UUID;
 import java.util.Vector;
 
 @NoArgsConstructor
-//TODO unit test
 public class AllocatedResources extends Vector<AllocatedResource> {
     public AllocatedResources(Collection<AllocatedResource> allocatedResources) {
         addAll(allocatedResources);

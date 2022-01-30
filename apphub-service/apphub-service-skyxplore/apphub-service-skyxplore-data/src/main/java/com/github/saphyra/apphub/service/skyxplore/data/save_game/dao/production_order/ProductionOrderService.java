@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ProductionOrderService implements GameItemService {
     private final ProductionOrderDao productionOrderDao;
     private final ProductionOrderModelValidator productionOrderModelValidator;

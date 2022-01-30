@@ -51,8 +51,6 @@ function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, 
     }
 
     this.clear = function(){
-        console.log("Clear...");
-
         cache = {};
         nodeCache = {};
         order = [];
@@ -71,8 +69,6 @@ function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, 
     }
 
     this.reload = function(){
-        console.log("Reload");
-
         nodeCache = {};
         order = getOrder();
 
@@ -84,8 +80,6 @@ function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, 
     }
 
     this.resort = function(){
-        console.log("Resort");
-
         order = getOrder();
         render();
     }
@@ -95,8 +89,6 @@ function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, 
     }
 
     function render(order){
-        console.log("Render", order);
-
         order = order || getOrder();
         const container = document.getElementById(containerId);
             container.innerHTML = "";

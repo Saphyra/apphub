@@ -20,18 +20,18 @@ public class CitizenEfficiencyCalculator {
         int skillLevel = citizen.getSkills().get(skillType).getLevel();
         double skillMultiplier = 1 + skillLevel * properties.getSkillLevelMultiplier();
         double result = moraleMultiplier * skillMultiplier;
-        log.debug("Efficiency of citizen {} is: {}", citizen, result);
+        log.trace("Efficiency of citizen {} is: {}", citizen, result);
         return result;
     }
 
     private double calculateMoraleMultiplier(int morale) {
         if (morale > properties.getMoraleEfficiencyDropUnder()) {
-            log.debug("Citizen has {} morale, what is enough for 100% work efficiency", morale);
+            log.trace("Citizen has {} morale, what is enough for 100% work efficiency", morale);
             return 1;
         }
 
         double result = properties.getMinMoraleEfficiency() * morale / properties.getMoraleEfficiencyDropUnder();
-        log.debug("Citizen has {} morale, so the efficiency is {}", morale, result);
+        log.trace("Citizen has {} morale, so the efficiency is {}", morale, result);
         return result;
     }
 

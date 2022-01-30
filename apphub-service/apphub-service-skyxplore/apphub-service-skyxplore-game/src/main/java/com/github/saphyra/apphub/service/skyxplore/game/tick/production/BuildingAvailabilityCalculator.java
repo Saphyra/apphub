@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class BuildingAvailabilityCalculator {
     private final ProductionBuildingService productionBuildingService;
 
@@ -19,7 +18,10 @@ class BuildingAvailabilityCalculator {
         ProductionBuilding buildingData = productionBuildingService.get(building.getDataId());
         log.debug("{} found for {}", buildingData, building);
 
-        Integer workPointsPerResource = buildingData.getGives().get(dataId).getConstructionRequirements().getRequiredWorkPoints();
+        Integer workPointsPerResource = buildingData.getGives()
+            .get(dataId)
+            .getConstructionRequirements()
+            .getRequiredWorkPoints();
         double availabilityPerTick = buildingData.getWorkers() * building.getLevel() / (double) workPointsPerResource;
 
         int queuedAvailability = 1 + planet.getOrders()

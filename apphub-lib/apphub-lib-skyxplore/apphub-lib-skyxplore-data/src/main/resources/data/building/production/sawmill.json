@@ -6,11 +6,11 @@
       "placed": [
         "forest"
       ],
-      "maxBatchSize": 1,
+      "maxBatchSize": 50,
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {
-          "energy": 1
+          "energy": 5
         }
       },
       "requiredSkill": "ENGINEERING"

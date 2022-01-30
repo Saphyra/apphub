@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.tick.planet.task_collec
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.TickTask;
-import com.github.saphyra.apphub.service.skyxplore.game.tick.planet.processor.ConstructionTickProcessor;
+import com.github.saphyra.apphub.service.skyxplore.game.tick.planet.processor.construction.ConstructionTickProcessor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,6 @@ import java.util.UUID;
 @Builder
 @RequiredArgsConstructor
 @Data
-//TODO unit test
 class ConstructionTickTask implements TickTask {
     @NotNull
     private final UUID gameId;
@@ -25,7 +24,6 @@ class ConstructionTickTask implements TickTask {
     @NotNull
     private final Surface surface;
 
-    @NotNull
     private final int priority;
 
     @NotNull
