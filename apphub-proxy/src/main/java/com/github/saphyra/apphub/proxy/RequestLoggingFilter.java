@@ -24,7 +24,7 @@ public class RequestLoggingFilter implements GlobalFilter {
         Mono<Void> result = chain.filter(exchange);
         ServerHttpResponse response = exchange.getResponse();
         if (!response.getStatusCode().is2xxSuccessful()) {
-            log.info("Response ststus of {} - {}: {}", method, uri, response.getStatusCode());
+            log.info("Response status of {} - {}: {}", method, uri, response.getStatusCode());
         }
         return result;
     }
