@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.common.converter.model;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProductionOrderModel;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.ProductionOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +23,7 @@ public class ProductionOrderToModelConverterTest {
     private static final int REQUIRED_WORK_PINTS = 6537;
     private static final int CURRENT_WORK_POINTS = 26;
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @InjectMocks
     private ProductionOrderToModelConverter underTest;
@@ -30,6 +32,8 @@ public class ProductionOrderToModelConverterTest {
     public void convert() {
         ProductionOrder order = ProductionOrder.builder()
             .productionOrderId(PRODUCTION_ORDER_ID)
+            .location(LOCATION)
+            .locationType(LocationType.PRODUCTION)
             .assignee(ASSIGNEE)
             .externalReference(EXTERNAL_REFERENCE)
             .dataId(DATA_ID)
@@ -43,6 +47,8 @@ public class ProductionOrderToModelConverterTest {
         assertThat(result.getId()).isEqualTo(PRODUCTION_ORDER_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getType()).isEqualTo(GameItemType.PRODUCTION_ORDER);
+        assertThat(result.getLocation()).isEqualTo(LOCATION);
+        assertThat(result.getLocationType()).isEqualTo(LocationType.PRODUCTION.name());
         assertThat(result.getAssignee()).isEqualTo(ASSIGNEE);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);

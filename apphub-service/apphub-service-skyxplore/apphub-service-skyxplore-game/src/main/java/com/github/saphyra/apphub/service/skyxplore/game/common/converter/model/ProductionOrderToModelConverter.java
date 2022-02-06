@@ -27,6 +27,8 @@ public class ProductionOrderToModelConverter {
         model.setId(order.getProductionOrderId());
         model.setGameId(gameId);
         model.setType(GameItemType.PRODUCTION_ORDER);
+        model.setLocation(order.getLocation());
+        model.setLocationType(order.getLocationType().name());
         model.setAssignee(order.getAssignee());
         model.setExternalReference(order.getExternalReference());
         model.setDataId(order.getDataId());

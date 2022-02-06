@@ -36,7 +36,6 @@ public class BackEndTest extends TestBase {
 
     @AfterMethod(alwaysRun = true)
     public void cleanup(Method method) {
-
         String methodName = method.getName();
 
         boolean wsConnectionsCleaned = ApphubWsClient.getClients().isEmpty();
