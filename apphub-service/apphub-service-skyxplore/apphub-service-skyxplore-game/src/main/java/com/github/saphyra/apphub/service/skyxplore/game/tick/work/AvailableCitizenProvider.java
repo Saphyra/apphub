@@ -19,13 +19,9 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class AvailableCitizenProvider {
     private final CitizenEfficiencyCalculator citizenEfficiencyCalculator;
 
-    /*
-    Finding the most efficient citizen for the given task
-     */
     public Optional<Citizen> findMostCapableUnemployedCitizen(Map<UUID, Assignment> employedCitizens, Collection<Citizen> citizens, @Nullable UUID location, SkillType skillType) {
         Optional<Citizen> result = citizens.stream()
             .filter(citizen -> citizen.getMorale() > 0)

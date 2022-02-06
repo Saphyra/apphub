@@ -168,7 +168,7 @@
                 if(dataCaches.terraformingPossibilities.get(surfaceType).length > 0){
                     const terraformButton = document.createElement("button");
                         terraformButton.classList.add("empty-surface-terraform-button");
-                        terraformButton.innerHTML = "T" //TODO proper terraform background icon
+                        terraformButton.innerHTML = "T";
                         terraformButton.onclick = function(){
                             terraformationController.openTerraformWindow(planetController.getOpenedPlanetId(), surfaceId, surfaceType);
                         }

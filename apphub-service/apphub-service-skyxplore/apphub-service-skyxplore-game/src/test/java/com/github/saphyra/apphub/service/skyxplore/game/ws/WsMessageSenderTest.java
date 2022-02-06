@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.ws;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
@@ -25,6 +26,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WsMessageSenderTest {
@@ -59,11 +61,21 @@ public class WsMessageSenderTest {
     @Mock
     private PlanetStorageResponse storageResponse;
 
+    @Mock
+    private CitizenResponse citizenResponse;
+
     @Before
     public void setUp() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
         given(player.getOpenedPage()).willReturn(openedPage);
+    }
+
+    @Test
+    public void planetQueueItemModified_nullQueueResponse() {
+        underTest.planetQueueItemModified(USER_ID, PLANET_ID, null);
+
+        verifyNoInteractions(messageSenderProxy);
     }
 
     @Test
@@ -112,6 +124,18 @@ public class WsMessageSenderTest {
         ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
         verify(messageSenderProxy).sendToGame(argumentCaptor.capture());
         verifyMessageSent(argumentCaptor.getValue(), WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED, storageResponse);
+    }
+
+    @Test
+    public void planetCitizenModified() {
+        given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET_POPULATION_OVERVIEW);
+        given(openedPage.getPageId()).willReturn(PLANET_ID);
+
+        underTest.planetCitizenModified(USER_ID, PLANET_ID, citizenResponse);
+
+        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
+        verify(messageSenderProxy).sendToGame(argumentCaptor.capture());
+        verifyMessageSent(argumentCaptor.getValue(), WebSocketEventName.SKYXPLORE_GAME_PLANET_CITIZEN_MODIFIED, citizenResponse);
     }
 
     private void verifyMessageSent(WebSocketMessage webSocketMessage, WebSocketEventName eventName, Object payload) {

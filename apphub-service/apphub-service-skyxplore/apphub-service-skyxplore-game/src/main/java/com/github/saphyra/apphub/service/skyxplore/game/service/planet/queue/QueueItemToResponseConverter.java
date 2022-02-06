@@ -14,7 +14,7 @@ import static java.util.Objects.isNull;
 public class QueueItemToResponseConverter {
     public QueueResponse convert(QueueItem queueItem, Planet planet) {
         if (isNull(queueItem)) {
-            return null; //TODO unit test
+            return null;
         }
 
         return QueueResponse.builder()

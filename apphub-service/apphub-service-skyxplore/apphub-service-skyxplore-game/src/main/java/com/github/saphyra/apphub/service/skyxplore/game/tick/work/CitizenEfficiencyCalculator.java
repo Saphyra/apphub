@@ -11,13 +11,14 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CitizenEfficiencyCalculator {
     private final CompetencyProperties properties;
 
     public double calculateEfficiency(Citizen citizen, SkillType skillType) {
         double moraleMultiplier = calculateMoraleMultiplier(citizen.getMorale());
-        int skillLevel = citizen.getSkills().get(skillType).getLevel();
+        int skillLevel = citizen.getSkills()
+            .get(skillType)
+            .getLevel();
         double skillMultiplier = 1 + skillLevel * properties.getSkillLevelMultiplier();
         double result = moraleMultiplier * skillMultiplier;
         log.trace("Efficiency of citizen {} is: {}", citizen, result);

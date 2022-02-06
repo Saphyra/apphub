@@ -34,6 +34,13 @@ public class BuildingConstructionToQueueItemConverterTest {
     private Construction construction;
 
     @Test
+    public void convertNull() {
+        given(building.getConstruction()).willReturn(null);
+
+        assertThat(underTest.convert(building)).isNull();
+    }
+
+    @Test
     public void convert() {
         given(building.getConstruction()).willReturn(construction);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);

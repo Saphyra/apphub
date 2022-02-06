@@ -24,7 +24,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ProductionBuildingOrderProcessor {
     private final ProductionBuildingService productionBuildingService;
     private final AllocatedResourceResolver allocatedResourceResolver;
@@ -43,7 +42,8 @@ class ProductionBuildingOrderProcessor {
 
         ProductionBuilding productionBuilding = productionBuildingService.get(building.getDataId());
         log.debug("{} found for dataId {}", productionBuilding, building.getDataId());
-        ProductionData productionData = productionBuilding.getGives().get(order.getDataId());
+        ProductionData productionData = productionBuilding.getGives()
+            .get(order.getDataId());
         log.debug("{} found for dataId {}", productionData, order.getDataId());
         int parallelism = Math.min(productionBuilding.getWorkers(), productionData.getConstructionRequirements().getParallelWorkers());
 
@@ -51,7 +51,12 @@ class ProductionBuildingOrderProcessor {
 
         for (int i = 0; i < parallelism && order.getCurrentWorkPoints() < order.getRequiredWorkPoints(); i++) {
             log.debug("Employing #{} citizen out of {} in game {}", i + 1, parallelism, gameId);
-            Optional<Citizen> maybeUnemployedCitizen = availableCitizenProvider.findMostCapableUnemployedCitizen(citizenAssignments, planet.getPopulation().values(), building.getBuildingId(), productionData.getRequiredSkill());
+            Optional<Citizen> maybeUnemployedCitizen = availableCitizenProvider.findMostCapableUnemployedCitizen(
+                citizenAssignments,
+                planet.getPopulation().values(),
+                building.getBuildingId(),
+                productionData.getRequiredSkill()
+            );
             log.debug("unemployedCitizen: {} in game {}", maybeUnemployedCitizen, gameId);
             if (maybeUnemployedCitizen.isPresent()) {
                 Citizen citizen = maybeUnemployedCitizen.get();
@@ -60,7 +65,14 @@ class ProductionBuildingOrderProcessor {
                 log.debug("Assignment for order {}: {} in game {}", order, assignment, gameId);
 
                 int requestedWorkPoints = order.getRequiredWorkPoints() - order.getCurrentWorkPoints();
-                int completedWork = makeCitizenWorkService.requestWork(gameId, planet.getOwner(), planet.getPlanetId(), assignment, requestedWorkPoints, productionData.getRequiredSkill());
+                int completedWork = makeCitizenWorkService.requestWork(
+                    gameId,
+                    planet.getOwner(),
+                    planet.getPlanetId(),
+                    assignment,
+                    requestedWorkPoints,
+                    productionData.getRequiredSkill()
+                );
                 log.debug("{} work is completed out of {}. Remaining workPoint for assignment: {}", completedWork, requestedWorkPoints, assignment.getWorkPointsLeft());
                 order.setCurrentWorkPoints(order.getCurrentWorkPoints() + completedWork);
             } else {

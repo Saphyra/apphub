@@ -186,7 +186,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/queue_controller.js");
         ));
 
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "skyxplore", fileName: "game"}));
-        //document.addEventListener('contextmenu', event => event.preventDefault()); //TODO restore when development is finished
+        //document.addEventListener('contextmenu', event => event.preventDefault());
     });
 })();
 

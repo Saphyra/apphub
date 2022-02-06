@@ -7,9 +7,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.tick.planet.processor.construction.ConstructionTickProcessor;
-import com.github.saphyra.apphub.service.skyxplore.game.tick.planet.processor.construction.FinishConstructionService;
-import com.github.saphyra.apphub.service.skyxplore.game.tick.planet.processor.construction.ProceedWithConstructionService;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.production.AllocatedResourceResolver;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.production.ProduceResourcesService;
 import org.junit.Before;
@@ -83,7 +80,7 @@ public class ConstructionTickProcessorTest {
 
         underTest.process(GAME_ID, planet, surface);
 
-        verify(produceResourcesService).produceResources(GAME_ID, planet, construction);
+        verify(produceResourcesService).produceResources(GAME_ID, planet, CONSTRUCTION_ID);
         verifyNoInteractions(allocatedResourceResolver);
         verifyNoInteractions(proceedWithConstructionService);
         verifyNoInteractions(finishConstructionService);

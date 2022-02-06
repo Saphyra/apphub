@@ -28,7 +28,7 @@ public class ConstructionTickProcessor {
         log.debug("Working on {} in game {}", construction, gameId);
         if (!allResourcesPresent(planet.getStorageDetails(), construction.getConstructionId())) {
             log.debug("There are missing resources to start working on {} in game {}", construction, gameId);
-            produceResourcesService.produceResources(gameId, planet, construction);
+            produceResourcesService.produceResources(gameId, planet, construction.getConstructionId());
         }
 
         if (allResourcesPresent(planet.getStorageDetails(), construction.getConstructionId())) {

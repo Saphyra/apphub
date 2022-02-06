@@ -19,7 +19,7 @@ public class BuildingConstructionToQueueItemConverter {
     public QueueItem convert(Building building) {
         Construction construction = building.getConstruction();
         if (isNull(construction)) {
-            return null; //TODO unit test
+            return null;
         }
         log.info("After update: {}", construction);
 

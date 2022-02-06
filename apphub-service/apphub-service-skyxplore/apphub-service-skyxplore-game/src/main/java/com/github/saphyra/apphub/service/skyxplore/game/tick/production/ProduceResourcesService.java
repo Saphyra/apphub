@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.tick.production;
 import com.github.saphyra.apphub.service.skyxplore.game.common.converter.model.ProductionOrderToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.ProductionOrder;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCache;
@@ -19,23 +18,22 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ProduceResourcesService {
     private final ProductionOrderFactory productionOrderFactory;
     private final ProductionOrderProcessingService productionOrderProcessingService;
     private final TickCache tickCache;
     private final ProductionOrderToModelConverter productionOrderToModelConverter;
 
-    public void produceResources(UUID gameId, Planet planet, Construction construction) {
+    public void produceResources(UUID gameId, Planet planet, UUID externalReference) {
         List<UUID> reservedStorageIds = planet.getStorageDetails()
             .getReservedStorages()
             .stream()
-            .filter(reservedStorage -> reservedStorage.getExternalReference().equals(construction.getConstructionId()))
+            .filter(reservedStorage -> reservedStorage.getExternalReference().equals(externalReference))
             .filter(reservedStorage -> reservedStorage.getAmount() > 0)
-            .peek(reservedStorage -> log.debug("{} found for construction {} in game {}", reservedStorage, construction.getConstructionId(), gameId))
+            .peek(reservedStorage -> log.debug("{} found for externalReference {} in game {}", reservedStorage, externalReference, gameId))
             .map(ReservedStorage::getReservedStorageId)
             .collect(Collectors.toList());
-        log.debug("ReservedStorageIds for construction {}: {} in game {}", construction.getConstructionId(), reservedStorageIds, gameId);
+        log.debug("ReservedStorageIds for externalReference {}: {} in game {}", externalReference, reservedStorageIds, gameId);
 
         reservedStorageIds.stream()
             .map(reservedStorageId -> planet.getStorageDetails().getReservedStorages().findById(reservedStorageId))
@@ -55,7 +53,13 @@ public class ProduceResourcesService {
         //Creating order if not present for the given reservedStorage (Probably the processing has not started yet)
         if (orders.isEmpty()) {
             log.info("No ProductionOrder found for {} in game {}", reservedStorage, gameId);
-            ProductionOrder newOrder = productionOrderFactory.create(reservedStorage.getReservedStorageId(), planet.getPlanetId(), LocationType.PLANET, reservedStorage.getDataId(), reservedStorage.getAmount());
+            ProductionOrder newOrder = productionOrderFactory.create(
+                reservedStorage.getReservedStorageId(),
+                planet.getPlanetId(),
+                LocationType.PLANET,
+                reservedStorage.getDataId(),
+                reservedStorage.getAmount()
+            );
             planet.getOrders().add(newOrder);
             orders.add(newOrder);
             tickCache.get(gameId)

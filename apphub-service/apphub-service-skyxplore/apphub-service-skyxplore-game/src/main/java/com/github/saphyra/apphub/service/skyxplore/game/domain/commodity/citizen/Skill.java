@@ -18,4 +18,12 @@ public class Skill {
     private int level;
     private int experience;
     private int nextLevel;
+
+    public void increaseExperience(int workPointsUsed) {
+        experience += workPointsUsed;
+    }
+
+    public void increaseLevel(int levelEarned) {
+        level++;
+    }
 }

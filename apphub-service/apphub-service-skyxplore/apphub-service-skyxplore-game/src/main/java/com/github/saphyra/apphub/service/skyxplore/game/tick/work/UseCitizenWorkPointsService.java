@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.GameItemCache
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.MessageCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCache;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO unit test
+@Builder
 class UseCitizenWorkPointsService {
     private final int experiencePerLevel;
     private final TickCache tickCache;
@@ -49,15 +50,15 @@ class UseCitizenWorkPointsService {
      */
     void useWorkPoints(UUID gameId, UUID userId, UUID planetId, Citizen citizen, int workPointsUsed, SkillType skillType) {
         log.debug("Citizen {} in game {} used {} workPoints of skill {}", citizen, gameId, workPointsUsed, skillType);
-        citizen.setMorale(citizen.getMorale() - workPointsUsed);
+        citizen.reduceMorale(workPointsUsed);
 
         Skill skill = citizen.getSkills()
             .get(skillType);
 
-        skill.setExperience(skill.getExperience() + workPointsUsed);
+        skill.increaseExperience(workPointsUsed);
         if (skill.getExperience() >= skill.getNextLevel()) {
             log.debug("Skill {} level earned for citizen {} in game {}", skillType, citizen.getCitizenId(), gameId);
-            skill.setLevel(skill.getLevel() + 1);
+            skill.increaseLevel(1);
             skill.setExperience(skill.getExperience() - skill.getNextLevel());
             skill.setNextLevel(skill.getLevel() * experiencePerLevel);
         }

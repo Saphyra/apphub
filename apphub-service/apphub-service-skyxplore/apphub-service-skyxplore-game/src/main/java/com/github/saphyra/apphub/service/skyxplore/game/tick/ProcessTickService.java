@@ -15,16 +15,16 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ProcessTickService {
     private final TickCache tickCache;
     private final PlanetTickProcessor planetTickProcessor;
     private final ErrorReporterService errorReporterService;
+    private final TickCacheItemFactory tickCacheItemFactory;
 
     void processTick(Game game) {
         if (shouldProcessTick(game)) {
             log.debug("TickProcession started for game {}", game.getGameId());
-            tickCache.put(game.getGameId(), new TickCacheItem());
+            tickCache.put(game.getGameId(), tickCacheItemFactory.create());
 
             game.getUniverse().getSystems()
                 .values()
@@ -60,6 +60,13 @@ class ProcessTickService {
             }
         } catch (RuntimeException e) {
             errorReporterService.report("Failed processing tick for planet " + planet.getPlanetId(), e);
+        }
+    }
+
+    @Component
+    static class TickCacheItemFactory {
+        TickCacheItem create() {
+            return new TickCacheItem();
         }
     }
 }

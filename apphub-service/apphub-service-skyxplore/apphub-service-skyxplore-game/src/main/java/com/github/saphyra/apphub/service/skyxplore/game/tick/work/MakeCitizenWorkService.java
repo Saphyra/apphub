@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class MakeCitizenWorkService {
     private final CitizenEfficiencyCalculator citizenEfficiencyCalculator;
     private final UseCitizenWorkPointsService useCitizenWorkPointsService;
@@ -31,7 +30,7 @@ public class MakeCitizenWorkService {
         log.debug("requestedWorkPoints: {}, workPointsToComplete: {}", requestedWorkPoints, workPointsToComplete);
 
         int workPointsUsed = (int) Math.round(workPointsToComplete / citizenEfficiency);
-        assignment.setWorkPointsLeft(assignment.getWorkPointsLeft() - workPointsUsed);
+        assignment.reduceWorkPoints(workPointsUsed);
 
         useCitizenWorkPointsService.useWorkPoints(gameId, userId, planetId, citizen, workPointsUsed, skillType);
 

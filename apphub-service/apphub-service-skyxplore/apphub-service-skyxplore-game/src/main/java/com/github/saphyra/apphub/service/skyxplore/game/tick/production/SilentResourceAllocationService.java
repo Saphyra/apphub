@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.o
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.AllocatedResourceToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ReservedStorageToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCache;
+import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCacheItem;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class SilentResourceAllocationService {
     private final AllocatedResourceFactory allocatedResourceFactory;
     private final AvailableResourceCounter availableResourceCounter;
@@ -65,15 +65,15 @@ class SilentResourceAllocationService {
             .getReservedStorages()
             .add(reservedStorage);
 
-        tickCache.get(gameId)
-            .getGameItemCache()
+        TickCacheItem tickCacheItem = tickCache.get(gameId);
+
+        tickCacheItem.getGameItemCache()
             .saveAll(List.of(
                 reservedStorageToModelConverter.convert(reservedStorage, gameId),
                 allocatedResourceToModelConverter.convert(allocatedResource, gameId)
             ));
 
-        tickCache.get(gameId)
-            .getMessageCache()
+        tickCacheItem.getMessageCache()
             .add(
                 planet.getOwner(),
                 WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED,

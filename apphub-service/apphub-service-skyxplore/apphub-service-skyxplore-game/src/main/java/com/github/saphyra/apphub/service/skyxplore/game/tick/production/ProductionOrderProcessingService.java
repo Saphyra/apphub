@@ -14,7 +14,6 @@ import static java.util.Objects.nonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ProductionOrderProcessingService {
     private final AssignBuildingToOrderService assignBuildingToOrderService;
     private final WorkOnOrderService workOnOrderService;

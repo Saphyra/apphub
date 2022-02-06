@@ -59,13 +59,10 @@
 
                     switch(itemData.buildingType){
                         case "miscellaneous":
-                            //TODO
                         break;
                         case "storage":
-                            //TODO
                         break;
                         case "production":
-                            //TODO
                         break;
                     }
 

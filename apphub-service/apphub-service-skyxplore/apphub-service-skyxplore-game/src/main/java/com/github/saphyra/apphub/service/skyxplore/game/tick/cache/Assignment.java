@@ -14,4 +14,8 @@ public class Assignment {
     private final Citizen citizen;
     private final UUID location;
     private int workPointsLeft;
+
+    public void reduceWorkPoints(int workPointsUsed) {
+        workPointsLeft -= workPointsUsed;
+    }
 }

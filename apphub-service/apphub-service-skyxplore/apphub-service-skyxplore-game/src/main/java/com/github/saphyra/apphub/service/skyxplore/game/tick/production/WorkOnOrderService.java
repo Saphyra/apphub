@@ -11,7 +11,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class WorkOnOrderService {
     private final ProcessProductionOrderRequirementsService processProductionOrderRequirementsService;
     private final ProductionOrderRequirementsMetCalculator productionOrderRequirementsMetCalculator;

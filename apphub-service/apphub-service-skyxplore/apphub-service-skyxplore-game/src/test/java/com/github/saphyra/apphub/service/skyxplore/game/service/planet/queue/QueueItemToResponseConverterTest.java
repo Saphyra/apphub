@@ -32,6 +32,11 @@ public class QueueItemToResponseConverterTest {
     private Planet planet;
 
     @Test
+    public void convertNull() {
+        assertThat(underTest.convert(null, planet)).isNull();
+    }
+
+    @Test
     public void convert() {
         Map<String, Object> data = CollectionUtils.singleValueMap("asd", "dsa");
 

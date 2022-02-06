@@ -11,7 +11,6 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO unit test
 public class AssignCitizenService {
     private final TickCache tickCache;
     private final int workPointsPerTick;
