@@ -106,6 +106,7 @@
     .planet-storage-summary-container{
         height: 1.5rem;
         position: relative;
+        overflow: hidden;
     }
 
     .planet-storage-details-container{

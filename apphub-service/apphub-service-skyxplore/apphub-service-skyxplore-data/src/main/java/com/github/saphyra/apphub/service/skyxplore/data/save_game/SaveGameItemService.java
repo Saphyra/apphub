@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,11 +23,13 @@ import static java.util.Objects.isNull;
 class SaveGameItemService {
     private final OptionalMap<GameItemType, GameItemService> savers;
     private final ObjectMapperWrapper objectMapperWrapper;
+    private final ErrorReporterService errorReporterService;
 
-    SaveGameItemService(List<GameItemService> savers, ObjectMapperWrapper objectMapperWrapper) {
+    SaveGameItemService(List<GameItemService> savers, ObjectMapperWrapper objectMapperWrapper, ErrorReporterService errorReporterService) {
         this.savers = new OptionalHashMap<>(savers.stream()
             .collect(Collectors.toMap(GameItemService::getType, Function.identity())));
         this.objectMapperWrapper = objectMapperWrapper;
+        this.errorReporterService = errorReporterService;
     }
 
     void save(List<Object> items) {
@@ -61,6 +64,7 @@ class SaveGameItemService {
             gameItemService.save(models);
         } catch (Exception e) {
             log.error("Failed to save gameItem {}", gameItemType, e);
+            errorReporterService.report("Failed to save gameItem " + gameItemType, e);
         }
     }
 }

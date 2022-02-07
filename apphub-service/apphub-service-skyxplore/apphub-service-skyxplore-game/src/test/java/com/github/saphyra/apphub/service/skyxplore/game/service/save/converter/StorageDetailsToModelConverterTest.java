@@ -20,12 +20,15 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StorageDetailsToModelConverterTest {
+    private static final UUID GAME_ID = UUID.randomUUID();
+
     @Mock
     private AllocatedResourceToModelConverter allocatedResourceConverter;
 
@@ -72,7 +75,7 @@ public class StorageDetailsToModelConverterTest {
     public void convertDeep() {
         given(allocatedResourceConverter.convert(Arrays.asList(allocatedResource), game)).willReturn(Arrays.asList(allocatedResourceModel));
         given(reservedStorageConverter.convert(Arrays.asList(reservedStorage), game)).willReturn(Arrays.asList(reservedStorageModel));
-        given(storedResourceConverter.convert(CollectionUtils.singleValueMap("", storedResource), game)).willReturn(Arrays.asList(storedResourceModel));
+        given(storedResourceConverter.convert(CollectionUtils.singleValueMap("", storedResource), GAME_ID)).willReturn(Arrays.asList(storedResourceModel));
         given(storageSettingConverter.convert(Arrays.asList(storageSetting), game)).willReturn(Arrays.asList(storageSettingModel));
 
         StorageDetails storageDetails = StorageDetails.builder().build();
@@ -80,6 +83,8 @@ public class StorageDetailsToModelConverterTest {
         storageDetails.getReservedStorages().add(reservedStorage);
         storageDetails.getStorageSettings().add(storageSetting);
         storageDetails.getStoredResources().put("", storedResource);
+
+        given(game.getGameId()).willReturn(GAME_ID);
 
         List<GameItem> result = underTest.convertDeep(storageDetails, game);
 

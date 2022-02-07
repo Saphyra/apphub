@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.l
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +32,7 @@ class ConstructionLoader {
             .currentWorkPoints(model.getCurrentWorkPoints())
             .priority(model.getPriority())
             .data(model.getData())
+            .parallelWorkers(model.getParallelWorkers())
             .build();
     }
 }

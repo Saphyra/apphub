@@ -15,14 +15,15 @@ import java.util.UUID;
 public class ConstructionFactory {
     private final IdGenerator idGenerator;
 
-    public Construction create(UUID externalReference, Integer requiredWorkPoints) {
-        return create(externalReference, requiredWorkPoints, null);
+    public Construction create(UUID externalReference, int parallelWorkers, int requiredWorkPoints) {
+        return create(externalReference, parallelWorkers, requiredWorkPoints, null);
     }
 
-    public Construction create(UUID externalReference, Integer requiredWorkPoints, String data) {
+    public Construction create(UUID externalReference, int parallelWorkers, int requiredWorkPoints, String data) {
         return Construction.builder()
             .constructionId(idGenerator.randomUuid())
             .externalReference(externalReference)
+            .parallelWorkers(parallelWorkers)
             .requiredWorkPoints(requiredWorkPoints)
             .currentWorkPoints(0)
             .priority(GameConstants.DEFAULT_PRIORITY)

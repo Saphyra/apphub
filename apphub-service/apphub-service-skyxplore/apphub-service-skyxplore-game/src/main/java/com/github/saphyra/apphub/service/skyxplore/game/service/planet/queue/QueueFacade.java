@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @Builder
-class QueueFacade {
+public class QueueFacade {
     private final GameDao gameDao;
     private final List<QueueService> services;
     private final QueueItemToResponseConverter converter;
@@ -31,9 +31,15 @@ class QueueFacade {
         Planet planet = gameDao.findByUserIdValidated(userId)
             .getUniverse()
             .findByOwnerAndPlanetIdValidated(userId, planetId);
+        return getQueueOfPlanet(planet)
+            .stream()
+            .map(queueItem -> converter.convert(queueItem, planet))
+            .collect(Collectors.toList());
+    }
+
+    public List<QueueItem> getQueueOfPlanet(Planet planet) {
         return services.stream()
             .flatMap(queueService -> queueService.getQueue(planet).stream())
-            .map(queueItem -> converter.convert(queueItem, planet))
             .collect(Collectors.toList());
     }
 

@@ -43,4 +43,5 @@
     <include file="database/change_sets/priority.xml"/>
     <include file="database/change_sets/durability_item.xml"/>
     <include file="database/change_sets/construction.xml"/>
+    <include file="database/change_sets/production_order.xml"/>
 </databaseChangeLog>

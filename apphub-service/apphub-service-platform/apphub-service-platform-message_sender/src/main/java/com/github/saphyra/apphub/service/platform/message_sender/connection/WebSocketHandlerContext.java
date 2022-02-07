@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.platform.message_sender.connection;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ public class WebSocketHandlerContext {
     private final ObjectMapperWrapper objectMapperWrapper;
     private final UuidConverter uuidConverter;
     private final DateTimeUtil dateTimeUtil;
+    private final ErrorReporterService errorReporterService;
 
     private final int webSocketSessionExpirationSeconds;
 
@@ -22,11 +24,13 @@ public class WebSocketHandlerContext {
         ObjectMapperWrapper objectMapperWrapper,
         UuidConverter uuidConverter,
         DateTimeUtil dateTimeUtil,
+        ErrorReporterService errorReporterService,
         @Value("${webSocketSession.expirationSeconds}") int webSocketSessionExpirationSeconds
     ) {
         this.objectMapperWrapper = objectMapperWrapper;
         this.uuidConverter = uuidConverter;
         this.dateTimeUtil = dateTimeUtil;
+        this.errorReporterService = errorReporterService;
         this.webSocketSessionExpirationSeconds = webSocketSessionExpirationSeconds;
     }
 }

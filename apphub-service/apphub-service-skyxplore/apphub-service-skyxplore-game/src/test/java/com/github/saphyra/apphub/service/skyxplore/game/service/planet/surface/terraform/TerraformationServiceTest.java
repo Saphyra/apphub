@@ -25,7 +25,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.C
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.terraformation.SurfaceToQueueItemConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceConsumptionService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
@@ -56,6 +56,7 @@ public class TerraformationServiceTest {
     private static final Integer REQUIRED_WORK_POINTS = 436;
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
+    private static final int PARALLEL_WORKERS = 254;
 
     @Mock
     private TerraformingPossibilitiesService terraformingPossibilitiesService;
@@ -64,7 +65,7 @@ public class TerraformationServiceTest {
     private GameDao gameDao;
 
     @Mock
-    private ResourceConsumptionService resourceConsumptionService;
+    private ResourceAllocationService resourceAllocationService;
 
     @Mock
     private ConstructionFactory constructionFactory;
@@ -185,9 +186,10 @@ public class TerraformationServiceTest {
         given(terraformingPossibility.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(terraformingPossibility.getConstructionRequirements()).willReturn(constructionRequirements);
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
-        given(constructionFactory.create(SURFACE_ID, REQUIRED_WORK_POINTS, SurfaceType.CONCRETE.name())).willReturn(construction);
+        given(constructionFactory.create(SURFACE_ID, PARALLEL_WORKERS, REQUIRED_WORK_POINTS, SurfaceType.CONCRETE.name())).willReturn(construction);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());
+        given(constructionRequirements.getParallelWorkers()).willReturn(PARALLEL_WORKERS);
         given(constructionToModelConverter.convert(construction, GAME_ID)).willReturn(constructionModel);
         given(surfaceToQueueItemConverter.convert(surface)).willReturn(queueItem);
         given(queueItemToResponseConverter.convert(queueItem, planet)).willReturn(queueResponse);
@@ -197,7 +199,7 @@ public class TerraformationServiceTest {
 
         assertThat(result).isEqualTo(surfaceResponse);
 
-        verify(resourceConsumptionService).processResourceRequirements(GAME_ID, planet, LocationType.PLANET, CONSTRUCTION_ID, Collections.emptyMap());
+        verify(resourceAllocationService).processResourceRequirements(GAME_ID, planet, LocationType.PLANET, CONSTRUCTION_ID, Collections.emptyMap());
         verify(surface).setTerraformation(construction);
         verify(gameDataProxy).saveItem(constructionModel);
         verify(wsMessageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);

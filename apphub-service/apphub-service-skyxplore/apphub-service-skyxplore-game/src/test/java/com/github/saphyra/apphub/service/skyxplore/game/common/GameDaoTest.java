@@ -16,11 +16,14 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ScheduledFuture;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 @RunWith(MockitoJUnitRunner.class)
 public class GameDaoTest {
     private static final UUID GAME_ID = UUID.randomUUID();
@@ -34,6 +37,9 @@ public class GameDaoTest {
 
     @Mock
     private Player player;
+
+    @Mock
+    private ScheduledFuture scheduledFuture;
 
     @Before
     public void setUp() {
@@ -68,10 +74,12 @@ public class GameDaoTest {
     @Test
     public void delete() {
         underTest.save(game);
+        given(game.getTickScheduler()).willReturn(scheduledFuture);
 
         underTest.delete(game);
 
         assertThat(underTest.findByUserId(USER_ID)).isEmpty();
+        verify(scheduledFuture).cancel(false);
     }
 
     @Test

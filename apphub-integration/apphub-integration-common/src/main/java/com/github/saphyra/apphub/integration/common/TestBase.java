@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.integration.common;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.integration.common.framework.CustomObjectMapper;
 import com.github.saphyra.apphub.integration.common.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.common.framework.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
@@ -88,6 +89,18 @@ public class TestBase {
 
     private synchronized static void deleteTestUsers(String method) {
         log.debug("Deleting testUsers for method {}...", method);
-        DatabaseUtil.setMarkedForDeletionByEmailLike(getEmailDomain());
+        Exception ex = null;
+        for (int i = 1; i <= 5; i++) {
+            try {
+                DatabaseUtil.setMarkedForDeletionByEmailLike(getEmailDomain());
+                return;
+            } catch (Exception e) {
+                log.error("Failed deleting testUsers for try #{}", i, e);
+                ex = e;
+                SleepUtil.sleep(1000);
+            }
+        }
+
+        throw new RuntimeException("Failed deleting testUsers", ex);
     }
 }

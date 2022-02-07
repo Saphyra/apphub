@@ -16,6 +16,8 @@ public class FreeStorageQueryService {
     private final ReservedStorageQueryService reservedStorageQueryService;
 
     public int getFreeStorage(Planet planet, StorageType storageType) {
-        return storageCalculator.calculateCapacity(planet, storageType) - actualResourceAmountQueryService.getActualStorageAmount(planet, storageType) - reservedStorageQueryService.getReservedStorageCapacity(planet, storageType);
+        return storageCalculator.calculateCapacity(planet, storageType)
+            - actualResourceAmountQueryService.getActualStorageAmount(planet, storageType)
+            - reservedStorageQueryService.getReservedStorageCapacity(planet, storageType);
     }
 }

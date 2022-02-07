@@ -22,7 +22,13 @@ public class SkyXploreLobbyWebSocketHandler extends DefaultWebSocketHandler {
     private final SkyXploreLobbyWsApiClient lobbyWsClient;
     private final CommonConfigProperties commonConfigProperties;
 
-    public SkyXploreLobbyWebSocketHandler(WebSocketHandlerContext context, AccessTokenHeaderConverter accessTokenHeaderConverter, SkyXploreLobbyApiClient lobbyClient, SkyXploreLobbyWsApiClient lobbyWsClient, CommonConfigProperties commonConfigProperties) {
+    public SkyXploreLobbyWebSocketHandler(
+        WebSocketHandlerContext context,
+        AccessTokenHeaderConverter accessTokenHeaderConverter,
+        SkyXploreLobbyApiClient lobbyClient,
+        SkyXploreLobbyWsApiClient lobbyWsClient,
+        CommonConfigProperties commonConfigProperties
+    ) {
         super(context);
         this.accessTokenHeaderConverter = accessTokenHeaderConverter;
         this.lobbyClient = lobbyClient;

@@ -19,17 +19,17 @@ import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -61,6 +61,9 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
     @Mock
     private CommonSkyXploreConfiguration configuration;
 
+    @Mock
+    private WebSocketMessageFactory webSocketMessageFactory;
+
     private SkyXploreGameWebSocketEventControllerImpl underTest;
 
     @Mock
@@ -84,6 +87,12 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
     @Mock
     private ChatRoom otherChatRoom;
 
+    @Mock
+    private WebSocketMessage gamePausedMessage;
+
+    @Mock
+    private WebSocketMessage chatMessage;
+
     @Before
     public void setUp() {
         underTest = SkyXploreGameWebSocketEventControllerImpl.builder()
@@ -93,6 +102,7 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
             .messageSenderProxy(messageSenderProxy)
             .dateTimeUtil(dateTimeUtil)
             .configuration(configuration)
+            .webSocketMessageFactory(webSocketMessageFactory)
             .build();
 
         given(characterProxy.getCharacterByUserId(USER_ID)).willReturn(SkyXploreCharacterModel.builder().name(USERNAME).build());
@@ -101,7 +111,7 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
         given(chatRoom.getMembers()).willReturn(Arrays.asList(USER_ID, FROM));
         given(chatRoom.getId()).willReturn(ROOM_ID);
         given(otherChatRoom.getMembers()).willReturn(Collections.emptyList());
-        given(game.filterConnectedPlayersFrom(Arrays.asList(USER_ID, FROM))).willReturn(Arrays.asList(USER_ID));
+        given(game.filterConnectedPlayersFrom(any())).willReturn(Arrays.asList(USER_ID));
     }
 
     @Test
@@ -118,26 +128,37 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
     public void userJoinedToGame() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player1));
+        given(game.isGamePaused()).willReturn(true);
+
+        given(webSocketMessageFactory.create(USER_ID, WebSocketEventName.SKYXPLORE_GAME_PAUSED, true)).willReturn(gamePausedMessage);
+        given(webSocketMessageFactory.create(List.of(USER_ID), WebSocketEventName.SKYXPLORE_GAME_USER_JOINED, new SystemMessage(ROOM_ID, USERNAME, USER_ID))).willReturn(chatMessage);
 
         underTest.userJoinedToGame(USER_ID);
 
         verify(player1).setConnected(true);
 
-        verifyMessageSent(WebSocketEventName.SKYXPLORE_GAME_USER_JOINED);
+        verify(messageSenderProxy).sendToGame(gamePausedMessage);
+        verify(messageSenderProxy).sendToGame(chatMessage);
         verify(game).setExpiresAt(null);
     }
 
     @Test
     public void userLeftGame_connectedMemberLeft() {
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
-        given(game.getPlayers()).willReturn(CollectionUtils.toMap(new BiWrapper<>(USER_ID, player1), new BiWrapper<>(UUID.randomUUID(), player2)));
+        given(game.getPlayers()).willReturn(CollectionUtils.toMap(new BiWrapper<>(USER_ID, player1), new BiWrapper<>(FROM, player2)));
         given(game.getConnectedPlayers()).willReturn(Arrays.asList(UUID.randomUUID()));
+        given(game.isGamePaused()).willReturn(true);
+
+        given(webSocketMessageFactory.create(List.of(USER_ID), WebSocketEventName.SKYXPLORE_GAME_PAUSED, true)).willReturn(gamePausedMessage);
+        given(webSocketMessageFactory.create(List.of(USER_ID), WebSocketEventName.SKYXPLORE_GAME_USER_LEFT, new SystemMessage(ROOM_ID, USERNAME, USER_ID))).willReturn(chatMessage);
 
         underTest.userLeftGame(USER_ID);
 
         verify(player1).setConnected(false);
+        verify(game).setGamePaused(true);
 
-        verifyMessageSent(WebSocketEventName.SKYXPLORE_GAME_USER_LEFT);
+        verify(messageSenderProxy).sendToGame(gamePausedMessage);
+        verify(messageSenderProxy).sendToGame(chatMessage);
     }
 
     @Test
@@ -155,19 +176,4 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
         verifyNoInteractions(messageSenderProxy);
     }
 
-    private void verifyMessageSent(WebSocketEventName eventName) {
-        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToGame(argumentCaptor.capture());
-
-        WebSocketMessage message = argumentCaptor.getValue();
-        assertThat(message.getRecipients()).containsExactly(USER_ID);
-
-        WebSocketEvent event = message.getEvent();
-        assertThat(event.getEventName()).isEqualTo(eventName);
-
-        SystemMessage systemMessage = (SystemMessage) event.getPayload();
-        assertThat(systemMessage.getRoom()).isEqualTo(ROOM_ID);
-        assertThat(systemMessage.getCharacterName()).isEqualTo(USERNAME);
-        assertThat(systemMessage.getUserId()).isEqualTo(USER_ID);
-    }
 }

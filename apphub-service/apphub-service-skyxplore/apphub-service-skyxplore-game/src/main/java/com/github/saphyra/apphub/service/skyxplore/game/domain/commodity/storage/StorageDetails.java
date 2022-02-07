@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage;
 
+import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,4 +23,9 @@ public class StorageDetails {
 
     @Builder.Default
     private final StorageSettings storageSettings = new StorageSettings();
+
+    @Override
+    public String toString() {
+        return String.format("StorageDetails(%s)", new Gson().toJson(this));
+    }
 }

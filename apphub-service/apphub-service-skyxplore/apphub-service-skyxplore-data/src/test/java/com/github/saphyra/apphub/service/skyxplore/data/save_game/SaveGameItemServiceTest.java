@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.UniverseModel;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -24,6 +26,9 @@ public class SaveGameItemServiceTest {
 
     @Mock
     private GameItemService gameItemService;
+
+    @Mock
+    private ErrorReporterService errorReporterService;
 
     private SaveGameItemService underTest;
 
@@ -36,9 +41,22 @@ public class SaveGameItemServiceTest {
 
         underTest = new SaveGameItemService(
             Arrays.asList(gameItemService),
-            objectMapperWrapper
+            objectMapperWrapper,
+            errorReporterService
         );
     }
+
+    @Test
+    public void error() {
+        given(objectMapperWrapper.convertValue(universeModel, GameItem.class)).willReturn(universeModel);
+        given(universeModel.getType()).willReturn(GameItemType.UNIVERSE);
+        given(objectMapperWrapper.convertValue(universeModel, UniverseModel.class)).willThrow(new RuntimeException());
+
+        underTest.save(Arrays.asList(universeModel));
+
+        verify(errorReporterService).report(any(), any());
+    }
+
 
     @Test
     public void saveGameData() {

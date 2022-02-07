@@ -30,12 +30,14 @@ class PlayerLoader {
     }
 
     private Player convert(PlayerModel model, List<UUID> members) {
+        boolean ai = model.getAi() || isAi(model, members);
         return Player.builder()
             .playerId(model.getId())
             .userId(model.getUserId())
             .allianceId(model.getAllianceId())
             .playerName(model.getUsername())
-            .ai(model.getAi() || isAi(model, members))
+            .ai(ai)
+            .connected(ai)
             .build();
     }
 

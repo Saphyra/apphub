@@ -6,14 +6,17 @@ import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
+import com.google.gson.Gson;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -43,6 +46,9 @@ public class Planet {
     @Builder.Default
     private final Map<PriorityType, Integer> priorities = getDefaultPriorities();
 
+    @Builder.Default
+    private final Set<ProductionOrder> orders = new HashSet<>();
+
     private static Map<PriorityType, Integer> getDefaultPriorities() {
         return Arrays.stream(PriorityType.values())
             .collect(Collectors.toMap(Function.identity(), priorityType -> GameConstants.DEFAULT_PRIORITY));
@@ -54,5 +60,10 @@ public class Planet {
             .filter(surface -> !isNull(surface.getBuilding()))
             .map(Surface::getBuilding)
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Planet(%s)", new Gson().toJson(this));
     }
 }

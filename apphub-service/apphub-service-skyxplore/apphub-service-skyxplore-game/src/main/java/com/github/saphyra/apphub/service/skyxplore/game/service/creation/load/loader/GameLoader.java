@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.ChatFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.tick.TickSchedulerService;
 import com.google.common.base.Stopwatch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,7 @@ public class GameLoader {
     private final UniverseLoader universeLoader;
     private final GameDataProxy gameDataProxy;
     private final MessageSenderProxy messageSenderProxy;
+    private final TickSchedulerService tickSchedulerService;
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -60,5 +62,7 @@ public class GameLoader {
             .event(WebSocketEvent.builder().eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED).build())
             .build();
         messageSenderProxy.sendToLobby(message);
+
+        tickSchedulerService.addGame(game);
     }
 }

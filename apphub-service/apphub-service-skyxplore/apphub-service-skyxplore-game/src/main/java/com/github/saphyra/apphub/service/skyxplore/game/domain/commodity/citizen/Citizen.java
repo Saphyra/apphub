@@ -22,4 +22,8 @@ public class Citizen {
     private int satiety;
     private final Map<SkillType, Skill> skills;
     private final SoldierData soldierData;
+
+    public void reduceMorale(int workPointsUsed) {
+        morale -= workPointsUsed;
+    }
 }

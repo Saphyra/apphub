@@ -19,7 +19,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.B
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction.BuildingConstructionToQueueItemConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceConsumptionService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
@@ -42,7 +42,7 @@ public class ConstructNewBuildingService {
     private final AllBuildingService allBuildingService;
     private final BuildingFactory buildingFactory;
     private final ConstructionFactory constructionFactory;
-    private final ResourceConsumptionService resourceConsumptionService;
+    private final ResourceAllocationService resourceAllocationService;
     private final GameDataProxy gameDataProxy;
     private final BuildingToModelConverter buildingToModelConverter;
     private final ConstructionToModelConverter constructionToModelConverter;
@@ -81,10 +81,10 @@ public class ConstructNewBuildingService {
         }
 
         Building building = buildingFactory.create(dataId, surfaceId, 0);
-        Construction construction = constructionFactory.create(building.getBuildingId(), constructionRequirements.getRequiredWorkPoints());
+        Construction construction = constructionFactory.create(building.getBuildingId(), constructionRequirements.getParallelWorkers(), constructionRequirements.getRequiredWorkPoints());
         building.setConstruction(construction);
 
-        resourceConsumptionService.processResourceRequirements(game.getGameId(), planet, LocationType.PLANET, construction.getConstructionId(), constructionRequirements.getRequiredResources());
+        resourceAllocationService.processResourceRequirements(game.getGameId(), planet, LocationType.PLANET, construction.getConstructionId(), constructionRequirements.getRequiredResources());
 
         surface.setBuilding(building);
 

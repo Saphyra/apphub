@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class BackEndTest extends TestBase {
-    private static final int AVAILABLE_PERMITS = 15;
+    private static final int AVAILABLE_PERMITS = 30;
     private static final Semaphore SEMAPHORE = new Semaphore(AVAILABLE_PERMITS);
 
     @DataProvider(name = "languageDataProvider", parallel = true)
@@ -36,7 +36,6 @@ public class BackEndTest extends TestBase {
 
     @AfterMethod(alwaysRun = true)
     public void cleanup(Method method) {
-
         String methodName = method.getName();
 
         boolean wsConnectionsCleaned = ApphubWsClient.getClients().isEmpty();

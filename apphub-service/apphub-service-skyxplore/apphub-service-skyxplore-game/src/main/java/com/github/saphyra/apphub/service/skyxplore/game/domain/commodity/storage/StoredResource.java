@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage;
 
-import java.util.UUID;
-
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -16,4 +16,14 @@ public class StoredResource {
     private final LocationType locationType;
     private final String dataId;
     private int amount;
+
+    public StoredResource reduceAmount(int amount) {
+        this.amount -= amount;
+        return this;
+    }
+
+    public StoredResource increaseAmount(int amount) {
+        this.amount += amount;
+        return this;
+    }
 }

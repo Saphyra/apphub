@@ -21,6 +21,7 @@ public class ConstructionToModelConverterTest {
     private static final int PRIORITY = 12;
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final String DATA = "data";
+    private static final int PARALLEL_WORKERS = 345;
 
     @InjectMocks
     private ConstructionToModelConverter underTest;
@@ -30,6 +31,7 @@ public class ConstructionToModelConverterTest {
         Construction construction = Construction.builder()
             .constructionId(CONSTRUCTION_ID)
             .externalReference(EXTERNAL_REFERENCE)
+            .parallelWorkers(PARALLEL_WORKERS)
             .requiredWorkPoints(REQUIRED_WORK_POINTS)
             .currentWorkPoints(CURRENT_WORK_POINTS)
             .priority(PRIORITY)
@@ -42,6 +44,7 @@ public class ConstructionToModelConverterTest {
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getType()).isEqualTo(GameItemType.CONSTRUCTION);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
+        assertThat(result.getParallelWorkers()).isEqualTo(PARALLEL_WORKERS);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
         assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);

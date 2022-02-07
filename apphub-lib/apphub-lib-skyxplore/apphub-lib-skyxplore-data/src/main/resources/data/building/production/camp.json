@@ -7,7 +7,7 @@
         "forest",
         "mountain"
       ],
-      "amount": 1,
+      "maxBatchSize": 1,
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {
@@ -20,7 +20,7 @@
         "forest",
         "mountain"
       ],
-      "amount": 1,
+      "maxBatchSize": 1,
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {
@@ -33,10 +33,10 @@
   "defaultBuilding": true,
   "constructionRequirements": {
     "1": {
-      "requiredWorkPoints": 1,
+      "requiredWorkPoints": 1000,
       "requiredResources": {
-        "energy": 1,
-        "wood": 1
+        "energy": 200,
+        "wood": 500
       }
     }
   }

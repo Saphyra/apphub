@@ -30,21 +30,21 @@ public class CitizenToModelConverter {
 
     public List<GameItem> convertDeep(Collection<Citizen> citizens, Game game) {
         return citizens.stream()
-            .map(citizen -> convertDeep(citizen, game))
+            .map(citizen -> convertDeep(citizen, game.getGameId()))
             .flatMap(Collection::stream)
             .collect(Collectors.toList());
     }
 
-    private List<GameItem> convertDeep(Citizen citizen, Game game) {
+    public List<GameItem> convertDeep(Citizen citizen, UUID gameId) {
         List<GameItem> result = new ArrayList<>();
-        result.add(convert(citizen, game.getGameId()));
-        result.addAll(skillConverter.convert(citizen.getSkills().values(), game));
+        result.add(convert(citizen, gameId));
+        result.addAll(skillConverter.convert(citizen.getSkills().values(), gameId));
         SoldierEnergyShield energyShield = citizen.getSoldierData().getEnergyShield();
         if (nonNull(energyShield)) {
-            result.add(energyShieldConverter.convert(citizen.getCitizenId(), game.getGameId(), energyShield));
+            result.add(energyShieldConverter.convert(citizen.getCitizenId(), gameId, energyShield));
         }
-        result.addAll(soldierArmorPieceConverter.convert(citizen.getCitizenId(), game.getGameId(), citizen.getSoldierData().getArmor()));
-        result.add(convertSoldierData(citizen, game.getGameId()));
+        result.addAll(soldierArmorPieceConverter.convert(citizen.getCitizenId(), gameId, citizen.getSoldierData().getArmor()));
+        result.add(convertSoldierData(citizen, gameId));
         return result;
     }
 

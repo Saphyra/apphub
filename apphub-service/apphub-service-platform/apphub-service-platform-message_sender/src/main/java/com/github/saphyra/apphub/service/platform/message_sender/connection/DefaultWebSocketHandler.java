@@ -153,11 +153,15 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
                 throw new RuntimeException(recipient + " is not connected to " + getGroup());
             }
             TextMessage textMessage = new TextMessage(context.getObjectMapperWrapper().writeValueAsString(event));
-            session.sendMessage(textMessage);
+            synchronized (session) {
+                session.sendMessage(textMessage);
+            }
             sessionWrapper.setLastUpdate(context.getDateTimeUtil().getCurrentDate());
             return true;
         } catch (Exception e) {
             log.info("Failed to send {} event to {} in messageGroup {}", event.getEventName(), recipient, getGroup(), e);
+            context.getErrorReporterService()
+                .report(String.format("Failed to send %s event to %s in messageGroup %s", event.getEventName(), recipient, getGroup()), e);
             return false;
         }
     }

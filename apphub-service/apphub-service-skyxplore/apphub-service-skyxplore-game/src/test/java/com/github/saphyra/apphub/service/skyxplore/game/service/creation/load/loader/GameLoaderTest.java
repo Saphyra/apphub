@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.ChatFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.tick.TickSchedulerService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -63,6 +64,9 @@ public class GameLoaderTest {
 
     @Mock
     private MessageSenderProxy messageSenderProxy;
+
+    @Mock
+    private TickSchedulerService tickSchedulerService;
 
     @InjectMocks
     private GameLoader underTest;
@@ -119,5 +123,7 @@ public class GameLoaderTest {
         WebSocketMessage message = messageArgumentCaptor.getValue();
         assertThat(message.getRecipients()).containsExactly(MEMBER_ID);
         assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED);
+
+        verify(tickSchedulerService).addGame(game);
     }
 }

@@ -252,6 +252,18 @@
         "key": "innerHTML",
         "message": "Új épület építése"
       }
+    ],
+    "pause-game-button": [
+      {
+        "key": "innerHTML",
+        "message": "Játék megállítása"
+      }
+    ],
+    "resume-game-button": [
+      {
+        "key": "innerHTML",
+        "message": "Játék folytatása"
+      }
     ]
   },
   "additionalContent": {

@@ -26,6 +26,7 @@ class PlanetLoader {
     private final CitizenLoader citizenLoader;
     private final PriorityLoader priorityLoader;
     private final StorageDetailsLoader storageDetailsLoader;
+    private final ProductionOrderLoader productionOrderLoader;
     private final ExecutorServiceBean executorServiceBean;
 
     Map<UUID, Planet> load(UUID solarSystemId) {
@@ -49,6 +50,7 @@ class PlanetLoader {
             .population(citizenLoader.load(model.getId()))
             .storageDetails(storageDetailsLoader.load(model.getId()))
             .priorities(priorityLoader.load(model.getId()))
+            .orders(productionOrderLoader.load(model.getId()))
             .build();
     }
 }

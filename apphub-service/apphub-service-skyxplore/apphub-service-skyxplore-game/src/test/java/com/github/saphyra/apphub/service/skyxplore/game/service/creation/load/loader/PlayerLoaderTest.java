@@ -64,7 +64,7 @@ public class PlayerLoaderTest {
         assertThat(player.getPlayerName()).isEqualTo(USERNAME);
         assertThat(player.getAllianceId()).isEqualTo(ALLIANCE_ID);
         assertThat(player.isAi()).isTrue();
-        assertThat(player.isConnected()).isFalse();
+        assertThat(player.isConnected()).isTrue();
     }
 
     @Test
@@ -96,7 +96,7 @@ public class PlayerLoaderTest {
         assertThat(player.getPlayerName()).isEqualTo(USERNAME);
         assertThat(player.getAllianceId()).isEqualTo(ALLIANCE_ID);
         assertThat(player.isAi()).isTrue();
-        assertThat(player.isConnected()).isFalse();
+        assertThat(player.isConnected()).isTrue();
 
         verify(model).setAi(true);
         verify(gameDataProxy).saveItem(model);

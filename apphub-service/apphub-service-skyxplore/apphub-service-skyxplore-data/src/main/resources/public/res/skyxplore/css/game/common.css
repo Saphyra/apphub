@@ -35,3 +35,7 @@
         bottom: 0;
         font-size: 1.25rem;
     }
+
+#resume-game-button{
+    border-color: yellow;
+}

@@ -21,4 +21,16 @@
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="construction" columnNames="construction_id" constraintName="construction_pk"/>
     </changeSet>
+
+    <changeSet id="add-column-parallel_workers-to-construction" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="construction" columnName="parallel_workers"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="construction">
+            <column name="parallel_workers" type="integer"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

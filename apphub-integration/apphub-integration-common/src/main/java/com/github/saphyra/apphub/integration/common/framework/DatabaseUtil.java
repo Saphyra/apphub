@@ -154,6 +154,7 @@ public class DatabaseUtil {
         try {
             execute(sql);
         } catch (ClassNotFoundException | SQLException e) {
+            log.error("setMarkedForDeletionByEmailLike failed", e);
             throw new RuntimeException("Failed setting markedForDeletion", e);
         }
     }

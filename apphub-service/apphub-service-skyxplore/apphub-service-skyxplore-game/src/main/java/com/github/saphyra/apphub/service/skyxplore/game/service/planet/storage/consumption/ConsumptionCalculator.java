@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.AllocatedResourceFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ReservedStorageFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -17,6 +17,16 @@ public class ConstructionRequirementsValidatorTest {
     private ConstructionRequirementsValidator underTest;
 
     @Test(expected = NullPointerException.class)
+    public void nullParallelWorkers() {
+        ConstructionRequirements constructionRequirements = validConstructionRequirements()
+            .toBuilder()
+            .parallelWorkers(null)
+            .build();
+
+        underTest.validate(constructionRequirements);
+    }
+
+    @Test(expected = NullPointerException.class)
     public void nullRequiredWorkPoints() {
         ConstructionRequirements constructionRequirements = validConstructionRequirements()
             .toBuilder()
@@ -48,7 +58,7 @@ public class ConstructionRequirementsValidatorTest {
 
     @Test(expected = NullPointerException.class)
     public void requiredResourcesContainsNull() {
-        Map<String, Integer> requiredResources = new HashMap<String, Integer>() {{
+        Map<String, Integer> requiredResources = new HashMap<>() {{
             put(REQUIRED_RESOURCE, null);
         }};
         ConstructionRequirements constructionRequirements = validConstructionRequirements()
@@ -65,7 +75,7 @@ public class ConstructionRequirementsValidatorTest {
     }
 
     private ConstructionRequirements validConstructionRequirements() {
-        HashMap<String, Integer> requiredResources = new HashMap<String, Integer>() {{
+        HashMap<String, Integer> requiredResources = new HashMap<>() {{
             put(REQUIRED_RESOURCE, 0);
         }};
         return ConstructionRequirements.builder()

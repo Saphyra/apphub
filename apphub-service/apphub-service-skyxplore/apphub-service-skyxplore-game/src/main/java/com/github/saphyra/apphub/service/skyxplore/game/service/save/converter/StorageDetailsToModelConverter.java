@@ -23,7 +23,7 @@ class StorageDetailsToModelConverter {
         List<GameItem> result = new ArrayList<>();
         result.addAll(allocatedResourceConverter.convert(storageDetails.getAllocatedResources(), game));
         result.addAll(reservedStorageConverter.convert(storageDetails.getReservedStorages(), game));
-        result.addAll(storedResourceConverter.convert(storageDetails.getStoredResources(), game));
+        result.addAll(storedResourceConverter.convert(storageDetails.getStoredResources(), game.getGameId()));
         result.addAll(storageSettingConverter.convert(storageDetails.getStorageSettings(), game));
         return result;
     }

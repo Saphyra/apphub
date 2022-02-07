@@ -37,12 +37,14 @@ public enum WebSocketEventName {
     SKYXPLORE_GAME_USER_JOINED("skyxplore-game-user-joined"),
     SKYXPLORE_GAME_USER_LEFT("skyxplore-game-user-left"),
     SKYXPLORE_GAME_CHAT_ROOM_CREATED("skyxplore-game-chat-room-created"),
+    SKYXPLORE_GAME_PAUSED("skyxplore-game-paused"),
 
     //SkyXplore GameEvent
     SKYXPLORE_GAME_PLANET_QUEUE_ITEM_MODIFIED("skyxplore-game-planet-queue-item-modified"),
     SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED("skyxplore-game-planet-queue-item-deleted"),
     SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED("skyxplore-game-planet-surface-modified"),
     SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED("skyxplore-game-planet-storage-modified"),
+    SKYXPLORE_GAME_PLANET_CITIZEN_MODIFIED("skyxplore-game-planet-citizen-modified"),
     ;
 
     private final String eventName;

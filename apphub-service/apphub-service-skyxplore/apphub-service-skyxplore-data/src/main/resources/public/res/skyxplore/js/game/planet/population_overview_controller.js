@@ -18,6 +18,7 @@
     pageLoader.addLoader(setUpEventListeners, "PopulationOverview set up event listeners");
     pageLoader.addLoader(setUpPopulationFilters, "PopulationOverview set up population filters");
     pageLoader.addLoader(()=>{document.getElementById(ids.closePopulationOverviewButton).onclick = function(){planetController.openPlanetWindow()}}, "Close population overview button");
+    pageLoader.addLoader(addHandlers, "PopulationOverviewController add WS event handlers");
 
     window.populationOverviewController = new function(){
         this.viewPopulationOverview = viewPopulationOverview;
@@ -95,8 +96,8 @@
         node.appendChild(citizenName);
 
             const baseStatContainer = document.createElement("DIV");
-                baseStatContainer.appendChild(createProgressBar(citizen.morale, Localization.getAdditionalContent("morale") + ": " + citizen.morale));
-                baseStatContainer.appendChild(createProgressBar(citizen.satiety, Localization.getAdditionalContent("satiety") + ": " + citizen.satiety));
+                baseStatContainer.appendChild(createProgressBar(citizen.morale / 1600 * 100, Localization.getAdditionalContent("morale") + ": " + citizen.morale)); //TODO query game settings (MaxMorale) from BE
+                baseStatContainer.appendChild(createProgressBar(citizen.satiety / 1000 * 100, Localization.getAdditionalContent("satiety") + ": " + citizen.satiety)); //TODO query game settings (MaxSatiety) from BE
         node.appendChild(baseStatContainer);
 
             const displayableSkills = [];
@@ -233,5 +234,12 @@
                 option.innerHTML = localization.get(key);
             return option;
         }
+    }
+
+    function addHandlers(){
+        wsConnection.addHandler(new WebSocketEventHandler(
+            function(eventName){return webSocketEvents.SKYXPLORE_GAME_PLANET_CITIZEN_MODIFIED == eventName},
+            citizen => {syncEngine.add(citizen)}
+        ));
     }
 })();

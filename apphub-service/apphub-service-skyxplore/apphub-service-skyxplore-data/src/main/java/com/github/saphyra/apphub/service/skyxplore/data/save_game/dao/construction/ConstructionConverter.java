@@ -21,6 +21,7 @@ class ConstructionConverter extends ConverterBase<ConstructionEntity, Constructi
         model.setGameId(uuidConverter.convertEntity(entity.getGameId()));
         model.setType(GameItemType.CONSTRUCTION);
         model.setExternalReference(uuidConverter.convertEntity(entity.getExternalReference()));
+        model.setParallelWorkers(entity.getParallelWorkers());
         model.setRequiredWorkPoints(entity.getRequiredWorkPoints());
         model.setCurrentWorkPoints(entity.getCurrentWorkPoints());
         model.setPriority(entity.getPriority());
@@ -34,6 +35,7 @@ class ConstructionConverter extends ConverterBase<ConstructionEntity, Constructi
             .constructionId(uuidConverter.convertDomain(domain.getId()))
             .gameId(uuidConverter.convertDomain(domain.getGameId()))
             .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
+            .parallelWorkers(domain.getParallelWorkers())
             .requiredWorkPoints(domain.getRequiredWorkPoints())
             .currentWorkPoints(domain.getCurrentWorkPoints())
             .priority(domain.getPriority())

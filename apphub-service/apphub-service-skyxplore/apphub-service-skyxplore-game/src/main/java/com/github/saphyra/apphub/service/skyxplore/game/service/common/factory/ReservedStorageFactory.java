@@ -17,7 +17,7 @@ class ReservedStorageFactory {
     private final IdGenerator idGenerator;
 
     public ReservedStorage create(UUID location, LocationType locationType, UUID externalReference, String dataId, int amount) {
-        return ReservedStorage.builder()
+        ReservedStorage result = ReservedStorage.builder()
             .reservedStorageId(idGenerator.randomUuid())
             .location(location)
             .locationType(locationType)
@@ -25,5 +25,7 @@ class ReservedStorageFactory {
             .dataId(dataId)
             .amount(amount)
             .build();
+        log.debug("{} is created.", result);
+        return result;
     }
 }

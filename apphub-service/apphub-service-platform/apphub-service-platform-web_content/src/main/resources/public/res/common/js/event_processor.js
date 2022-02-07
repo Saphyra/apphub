@@ -1,6 +1,7 @@
 window.events = {
     LOAD_LOCALIZATION: "load_localization",
     LOCALIZATION_LOADED: "localization_loaded",
+    PAGE_LOADERS_COMPLETED: "page_loaders_completed",
     LOGOUT: "logout"
 };
 

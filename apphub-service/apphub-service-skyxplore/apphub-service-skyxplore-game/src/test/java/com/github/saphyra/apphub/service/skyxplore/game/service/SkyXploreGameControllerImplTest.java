@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service;
 
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import org.junit.Before;
@@ -29,6 +30,9 @@ public class SkyXploreGameControllerImplTest {
 
     @Mock
     private ExitFromGameService exitFromGameService;
+
+    @Mock
+    private PauseGameService pauseGameService;
 
     @InjectMocks
     private SkyXploreGameControllerImpl underTest;
@@ -70,5 +74,12 @@ public class SkyXploreGameControllerImplTest {
         underTest.exitGame(accessTokenHeader);
 
         verify(exitFromGameService).exitFromGame(USER_ID);
+    }
+
+    @Test
+    public void pauseGame() {
+        underTest.pauseGame(new OneParamRequest<>(true), accessTokenHeader);
+
+        verify(pauseGameService).setPausedStatus(USER_ID, true);
     }
 }
