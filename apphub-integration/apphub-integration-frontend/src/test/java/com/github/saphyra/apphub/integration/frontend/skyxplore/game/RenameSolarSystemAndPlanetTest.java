@@ -77,7 +77,9 @@ public class RenameSolarSystemAndPlanetTest extends SeleniumTest {
             .orElseThrow(() -> new RuntimeException("Planet name not loaded."));
 
         SkyXplorePlanetActions.renamePlanet(driver, " ");
-        assertThat(SkyXplorePlanetActions.getPlanetName(driver)).isEqualTo(oldPlanetName);
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXplorePlanetActions.getPlanetName(driver).equals(oldPlanetName))
+            .assertTrue("Planet name changed.");
 
         //Planet - Too long
         SkyXplorePlanetActions.renamePlanet(driver, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));

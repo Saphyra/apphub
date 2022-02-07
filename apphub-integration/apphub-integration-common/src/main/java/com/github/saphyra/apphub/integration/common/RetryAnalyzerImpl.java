@@ -6,7 +6,7 @@ import org.testng.ITestResult;
 
 @Slf4j
 public class RetryAnalyzerImpl implements IRetryAnalyzer {
-    private static final int MAX_RETRY_COUNT = 2;
+    private static final int MAX_RETRY_COUNT = 3;
 
     private int retryCount = 0;
 
