@@ -19,8 +19,10 @@ function __pods_ready() {
 function __wait-until-pods-ready() {
   local period interval i pods namespace
 
-  if [[ $# != 3 ]]; then
+  if [[ $# -lt 3 ]]; then
+    echo ""
     echo "Usage: wait-until-pods-ready NAMESPACE PERIOD INTERVAL" >&2
+    echo "Current params: $1 $2 $3 $4"
     echo "" >&2
     echo "This script waits for all pods to be ready in the current namespace." >&2
 
@@ -30,6 +32,11 @@ function __wait-until-pods-ready() {
   namespace="$1"
   period="$2"
   interval="$3"
+  delaySeconds="${4:-0}"
+
+  echo ""
+  echo "Waiting $delaySeconds seconds for pods to start..."
+  sleep "$delaySeconds"
 
   for ((i = 0; i < $period; i += 1)); do
     pods="$(kubectl -n "$namespace" get po -o 'jsonpath={.items[*].metadata.name}')"
