@@ -18,6 +18,7 @@ interval:
     game:
       gameCleanup: 300000
   platform:
+    memoryStatusUpdateTrigger: 1000
     messageSender:
       pingRequest: 30000
       connectionCleanup: 600000

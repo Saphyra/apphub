@@ -1,63 +1,110 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
+
         <artifactId>apphub</artifactId>
+
         <groupId>com.github.saphyra</groupId>
+
         <version>0.0.1-SNAPSHOT</version>
+
     </parent>
 
     <artifactId>apphub-lib</artifactId>
+
     <version>0.0.1-SNAPSHOT</version>
 
     <name>apphub-lib</name>
+
     <packaging>pom</packaging>
 
     <properties>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
     </properties>
 
     <dependencies>
+
         <dependency>
+
             <groupId>junit</groupId>
+
             <artifactId>junit</artifactId>
+
             <version>${versions.junit}</version>
+
             <scope>test</scope>
+
         </dependency>
 
         <dependency>
+
             <groupId>org.mockito</groupId>
+
             <artifactId>mockito-core</artifactId>
+
             <version>${versions.mockito-core}</version>
+
             <scope>test</scope>
+
         </dependency>
 
         <dependency>
+
             <groupId>org.assertj</groupId>
+
             <artifactId>assertj-core</artifactId>
+
             <version>${versions.assertj-core}</version>
+
             <scope>test</scope>
+
         </dependency>
+
     </dependencies>
 
     <build>
 
     </build>
+
     <modules>
+
         <module>apphub-lib-common_util</module>
+
         <module>apphub-lib-config</module>
+
         <module>apphub-lib-common_domain</module>
+
         <module>apphub-lib-event</module>
+
         <module>apphub-lib-data</module>
+
         <module>apphub-lib-error_handler</module>
+
         <module>apphub-lib-security</module>
+
         <module>apphub-lib-request_validation</module>
+
         <module>apphub-lib-exception</module>
+
         <module>apphub-lib-encryption</module>
+
         <module>apphub-lib-geometry</module>
+
         <module>apphub-lib-skyxplore</module>
+
         <module>apphub-lib-web_utils</module>
+
         <module>apphub-lib-error_report</module>
+
         <module>apphub-lib-concurrency</module>
+
+        <module>apphub-lib-monitoring</module>
+
     </modules>
+
 </project>
