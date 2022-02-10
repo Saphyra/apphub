@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.data.CommonDataConfiguration;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.web_utils.CustomLocaleProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Import;
 @EnableHealthCheck
 @EnableLocaleMandatoryRequestValidation
 @ComponentScan(basePackageClasses = ErrorReporterService.class)
+@EnableMemoryMonitoring
 public class LocalizationBeanConfiguration {
     @Bean
     DateTimeUtil dateTimeUtil() {

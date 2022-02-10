@@ -23,6 +23,7 @@ class UserEntity {
     private String username;
     private String password;
     private String language;
+    @Builder.Default
     private Boolean markedForDeletion = false;
     private LocalDateTime markedForDeletionAt;
 }

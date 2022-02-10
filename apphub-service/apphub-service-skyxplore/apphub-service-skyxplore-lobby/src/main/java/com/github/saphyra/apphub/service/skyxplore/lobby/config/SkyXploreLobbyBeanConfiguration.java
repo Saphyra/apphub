@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.config;
 
+import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,7 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.controller.filter.Lobby
 @EnableLocaleMandatoryRequestValidation
 @EnableErrorHandler
 @EnableEventProcessor
+@EnableMemoryMonitoring
 public class SkyXploreLobbyBeanConfiguration {
     @Bean
     FilterRegistrationBean<LobbyLastAccessInterceptorFilter> metricsFilterFilterRegistrationBean(LobbyLastAccessInterceptorFilter filter) {

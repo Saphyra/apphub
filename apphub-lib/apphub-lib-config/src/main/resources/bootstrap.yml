@@ -43,6 +43,12 @@ feign:
         connectTimeout: 30000
         readTimeout: 30000
 
+main-gateway:
+  ribbon:
+    listOfServers: main-gateway:8080
+scheduler:
+  ribbon:
+    listOfServers: scheduler:8080
 web-content:
   ribbon:
     listOfServers: web-content:8080

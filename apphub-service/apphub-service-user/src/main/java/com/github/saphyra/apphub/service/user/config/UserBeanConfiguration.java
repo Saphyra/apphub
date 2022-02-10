@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.user.config;
 
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
+import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -47,6 +48,7 @@ import lombok.extern.slf4j.Slf4j;
 @EnableEventProcessor
 @EnableHealthCheck
 @EnableLocaleMandatoryRequestValidation
+@EnableMemoryMonitoring
 class UserBeanConfiguration {
     @Bean
     @ConditionalOnMissingBean(LocaleProvider.class)
@@ -76,6 +78,7 @@ class UserBeanConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(SleepService.class)
     SleepService sleepService() {
         return new SleepService();
     }

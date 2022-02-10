@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.platform.scheduler;
 
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
+import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -18,5 +19,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableHealthCheck
 @EnableLocaleMandatoryRequestValidation
 @EnableScheduling
+@EnableMemoryMonitoring
 public class SchedulerBeanConfiguration {
 }

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.platform.message_sender.config;
 
+import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -23,6 +24,7 @@ import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConf
 @EnableErrorHandler
 @EnableWebSocket
 @EnableEventProcessor
+@EnableMemoryMonitoring
 class MessageSenderBeanConfiguration {
     @Bean
     UuidConverter uuidConverter() {

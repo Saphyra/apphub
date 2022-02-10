@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.lib.config.common.FeignClientConfiguration;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.whitelist.EnableWhiteListedEndpointProperties;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
@@ -34,6 +35,7 @@ import org.springframework.util.AntPathMatcher;
 @ComponentScan(basePackageClasses = {
     ErrorReporterService.class
 })
+@EnableMemoryMonitoring
 public class MainGatewayBeanConfiguration {
     private final ObjectFactory<HttpMessageConverters> messageConverters = HttpMessageConverters::new;
 

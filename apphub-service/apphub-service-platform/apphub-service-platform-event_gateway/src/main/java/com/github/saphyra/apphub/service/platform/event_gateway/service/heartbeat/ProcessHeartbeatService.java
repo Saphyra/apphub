@@ -13,7 +13,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class HeartbeatService {
+public class ProcessHeartbeatService {
     private final EventProcessorDao eventProcessorDao;
     private final DateTimeUtil dateTimeUtil;
 

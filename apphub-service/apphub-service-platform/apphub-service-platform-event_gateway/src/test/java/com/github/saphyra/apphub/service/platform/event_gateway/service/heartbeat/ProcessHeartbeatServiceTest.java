@@ -16,7 +16,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class HeartbeatServiceTest {
+public class ProcessHeartbeatServiceTest {
     private static final String SERVICE_NAME = "service-name";
     private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
 
@@ -27,7 +27,7 @@ public class HeartbeatServiceTest {
     private DateTimeUtil dateTimeUtil;
 
     @InjectMocks
-    private HeartbeatService underTest;
+    private ProcessHeartbeatService underTest;
 
     @Mock
     private EventProcessor eventProcessor;

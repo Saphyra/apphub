@@ -29,10 +29,8 @@ echo ""
 kubectl create namespace "$NAMESPACE_NAME"
 echo ""
 
-#Scale down existing pods before starting new services to save up memory
-#kubectl -n "$NAMESPACE_NAME" scale deployments --replicas=0 --all
-#sleep 5
-#./infra/deployment/script/wait_for_pods_ready.sh "$NAMESPACE_NAME" 30 1
+kubectl -n "$NAMESPACE_NAME" scale deployments --replicas=0 --all
+./infra/deployment/script/wait_for_pods_ready.sh "$NAMESPACE_NAME" 60 1 5
 
 ./infra/deployment/script/setup_namespace.sh "$NAMESPACE_NAME"
 
