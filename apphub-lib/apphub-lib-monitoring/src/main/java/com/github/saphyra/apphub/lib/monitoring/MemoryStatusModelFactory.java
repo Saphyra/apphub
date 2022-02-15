@@ -1,15 +1,20 @@
 package com.github.saphyra.apphub.lib.monitoring;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.MemoryStatusModel;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.time.ZoneOffset;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
 public class MemoryStatusModelFactory {
+    private final DateTimeUtil dateTimeUtil;
+
     public MemoryStatusModel create(String serviceName) {
         Runtime runtime = Runtime.getRuntime();
         long totalMemory = runtime.totalMemory();
@@ -21,6 +26,7 @@ public class MemoryStatusModelFactory {
             .availableMemoryBytes(maxMemory)
             .allocatedMemoryBytes(totalMemory)
             .usedMemoryBytes(totalMemory - freeMemory)
+            .epochSeconds(dateTimeUtil.getCurrentDate().toEpochSecond(ZoneOffset.UTC))
             .build();
     }
 }

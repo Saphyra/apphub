@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.admin_panel.config;
 
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenConfiguration;
@@ -40,7 +41,7 @@ public class AdminPanelBeanConfiguration {
     }
 
     @Bean
-    MemoryStatusModelFactory memoryStatusModelFactory() {
-        return new MemoryStatusModelFactory();
+    MemoryStatusModelFactory memoryStatusModelFactory(DateTimeUtil dateTimeUtil) {
+        return new MemoryStatusModelFactory(dateTimeUtil);
     }
 }

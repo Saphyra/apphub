@@ -30,9 +30,8 @@ kubectl create namespace "$NAMESPACE_NAME"
 echo ""
 
 kubectl -n "$NAMESPACE_NAME" scale deployments --replicas=0 --all
-./infra/deployment/script/wait_for_pods_ready.sh "$NAMESPACE_NAME" 60 1 5
-
 ./infra/deployment/script/setup_namespace.sh "$NAMESPACE_NAME"
+sleep 5
 
 deployByDirectory "./infra/deployment/service/$SCRIPT_DIR_NAME/platform/*"
 deployByDirectory "./infra/deployment/service/$SCRIPT_DIR_NAME/service/*"

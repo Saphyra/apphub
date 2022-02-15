@@ -13,5 +13,6 @@
   "html": "01 - HTML",
   "css": "02 - CSS",
   "ban": "Felhasználók tiltása",
-  "roles-for-all": "Jogosultságok mindenkinek"
+  "roles-for-all": "Jogosultságok mindenkinek",
+  "memory-monitoring": "Memória felügyelet"
 }

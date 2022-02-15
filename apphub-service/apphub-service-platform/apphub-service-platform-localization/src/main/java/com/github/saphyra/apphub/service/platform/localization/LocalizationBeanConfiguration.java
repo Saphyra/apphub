@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.web_utils.CustomLocaleProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,7 @@ import org.springframework.context.annotation.Import;
 @EnableMemoryMonitoring
 public class LocalizationBeanConfiguration {
     @Bean
+    @ConditionalOnMissingBean(DateTimeUtil.class)
     DateTimeUtil dateTimeUtil() {
         return new DateTimeUtil();
     }

@@ -34,7 +34,6 @@ public class MemoryMonitoringEventController {
 
     @PostMapping(Endpoints.EVENT_MEMORY_MONITORING)
     public void sendMemoryStatus() {
-
         monitoringClient.reportMemoryStatus(memoryStatusModelFactory.create(serviceName), commonConfigProperties.getDefaultLocale());
     }
 }

@@ -28,6 +28,10 @@ modules:
         url: /web/admin-panel/roles-for-all
         roles:
           - ADMIN
+      - name: memory-monitoring
+        url: /web/admin-panel/memory-monitoring
+        roles:
+          - ADMIN
     accounts:
       - name: account
         url: /web/user/account

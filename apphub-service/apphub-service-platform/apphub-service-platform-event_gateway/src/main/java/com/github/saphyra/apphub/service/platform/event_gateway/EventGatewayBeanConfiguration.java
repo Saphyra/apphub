@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.platform.event_gateway;
 
 import com.github.saphyra.apphub.api.admin_panel.client.MonitoringClient;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -77,8 +78,8 @@ class EventGatewayBeanConfiguration {
     }
 
     @Bean
-    MemoryStatusModelFactory memoryStatusModelFactory() {
-        return new MemoryStatusModelFactory();
+    MemoryStatusModelFactory memoryStatusModelFactory(DateTimeUtil dateTimeUtil) {
+        return new MemoryStatusModelFactory(dateTimeUtil);
     }
 
     @Bean

@@ -14,4 +14,5 @@ public class MemoryStatusModel {
     private Long availableMemoryBytes;
     private Long allocatedMemoryBytes;
     private Long usedMemoryBytes;
+    private Long epochSeconds;
 }
