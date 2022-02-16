@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @Builder
-//TODO unit test
 public class MemoryMonitoringEventController {
     private final CommonConfigProperties commonConfigProperties;
     private final MonitoringClient monitoringClient;

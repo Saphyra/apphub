@@ -11,7 +11,6 @@ import java.time.ZoneOffset;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class MemoryStatusModelFactory {
     private final DateTimeUtil dateTimeUtil;
 

@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO unit test
 public class AdminPanelMonitoringWebSocketHandler extends DefaultWebSocketHandler {
     private final CommonConfigProperties commonConfigProperties;
     private final AdminPanelWsClient adminPanelWsClient;

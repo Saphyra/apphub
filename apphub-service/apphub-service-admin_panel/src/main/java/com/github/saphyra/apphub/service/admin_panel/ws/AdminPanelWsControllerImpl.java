@@ -12,7 +12,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class AdminPanelWsControllerImpl implements AdminPanelWsController {
     private final ConnectedWsClients connectedWsClients;
     private final List<WebSocketEventHandler> handlers;

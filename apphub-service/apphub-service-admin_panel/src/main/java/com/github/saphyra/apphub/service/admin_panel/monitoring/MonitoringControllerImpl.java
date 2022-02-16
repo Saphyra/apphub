@@ -11,13 +11,14 @@ import com.github.saphyra.apphub.service.admin_panel.proxy.EventGatewayProxy;
 import com.github.saphyra.apphub.service.admin_panel.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.admin_panel.ws.ConnectedWsClients;
 import com.github.saphyra.apphub.service.admin_panel.ws.WebSocketMessageFactory;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RestController;
 
+@Builder
 @RestController
 @Slf4j
-//TODO unit test
 public class MonitoringControllerImpl implements MonitoringController {
     private final MessageSenderProxy messageSenderProxy;
     private final ConnectedWsClients connectedWsClients;
@@ -46,7 +47,11 @@ public class MonitoringControllerImpl implements MonitoringController {
     public void reportMemoryStatus(MemoryStatusModel memoryStatus) {
         log.info("Memory status report: {}", memoryStatus);
 
-        WebSocketMessage message = webSocketMessageFactory.create(connectedWsClients, WebSocketEventName.ADMIN_PANEL_MONITORING_MEMORY_STATUS, memoryStatus);
+        WebSocketMessage message = webSocketMessageFactory.create(
+            connectedWsClients,
+            WebSocketEventName.ADMIN_PANEL_MONITORING_MEMORY_STATUS,
+            memoryStatus
+        );
         messageSenderProxy.sendToMonitoring(message);
     }
 
