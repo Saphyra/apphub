@@ -24,7 +24,6 @@
         #adjacent_sibling_example div + p{
            background-color: darkblue;
         }
-
     </STYLE>
 </HEAD>
 <BODY>
@@ -39,8 +38,9 @@
         <ARTICLE>
             <H2>Több kiválasztó hozzá rendelése a blokkokhoz</H2>
 
-            <P>Azt már megtanultuk, hogyan lehet kiválasztókat írni, és ezek a kiválasztók által megjelölt elemekhez szabályokat rendelni. De mi van akkor, ha ugyanazokat a szabályokat több kiválasztó által kiválasztott elemekhez is hozzá szeretnénk rendelni? Például az összes
-                <SPAN class="codepart">&lt;div></SPAN>-nek, és <SPAN class="codepart">&lt;span</SPAN>-nak ugyanazt a háttérszínt szeretnénk beállítani?</P>
+            <DIV>Azt már megtanultuk, hogyan lehet kiválasztókat írni, és ezek a kiválasztók által megjelölt elemekhez szabályokat rendelni. De mi van akkor, ha ugyanazokat a szabályokat több kiválasztó által kiválasztott elemekhez is hozzá szeretnénk rendelni? Például az összes
+                <CODE>&lt;div></CODE>-nek, és <CODE>&lt;span></CODE>-nak ugyanazt a háttérszínt szeretnénk beállítani?
+            </DIV>
             <DIV>
                 A kóduk valahogy így nézne ki:
                 <PRE th:replace="/example/css/combinators.html :: non_compliant"></PRE>
@@ -58,23 +58,23 @@
         <ARTICLE>
             <H2>Kiválasztók kombinálása</H2>
 
-            <P>Az eddig megismert 3 kiválasztási mód (tag, id, osztály) sok mindenre elég, de néha szükség van bonyolultabb kiválasztókat is használni, ha másért nem, hát a HTML olvashatóságáért, és a fejlesztés gyorsításáért. (Mondjuk nem kell minden taghez osztályt rendelni.)</P>
-            <P>Több egyszerű kiválasztót egy bonyolultabbá úgynevezett kombinátorokkal kapcsolhatunk össze. Ezeket azután a végtelenségig bővíthetjük (kérdés, hogy megéri-e...).</P>
+            <DIV>Az eddig megismert 3 kiválasztási mód (tag, id, osztály) sok mindenre elég, de néha szükség van bonyolultabb kiválasztókat is használni, ha másért nem, hát a HTML olvashatóságáért, és a fejlesztés gyorsításáért. (Mondjuk nem kell minden taghez osztályt rendelni.)</DIV>
+            <DIV>Több egyszerű kiválasztót egy bonyolultabbá úgynevezett kombinátorokkal kapcsolhatunk össze. Ezeket azután a végtelenségig bővíthetjük (kérdés, hogy megéri-e...).</DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Leszármazott kombinátor</H2>
 
-            <P>A leszármazott kombinátor által összekapcsolt kiválasztó kiválasztja a szülő elem összes olyan leszármazottját, amely a kapcsolt kiválasztónak megfelel.</P>
+            <DIV>A leszármazott kombinátor által összekapcsolt kiválasztó kiválasztja a szülő elem összes olyan leszármazottját, amely a kapcsolt kiválasztónak megfelel.</DIV>
             <DIV>
                 Ez kicsit bonyolultnak hangzik, nézzünk inkább rá néhány példát!
 
                 <UL>
-                    <LI><SPAN class="codepart">div span{}</SPAN> - az összes olyan <SPAN class="codepart">&lt;span></SPAN> tag, amely
-                        <SPAN class="codepart">&lt;div></SPAN> tagen belül helyezkedik el (végtelen mélyséig).
+                    <LI><CODE>div span{}</CODE> - az összes olyan <CODE>&lt;span></CODE> tag, amely
+                        <CODE>&lt;div></CODE> tagen belül helyezkedik el (végtelen mélyséig).
                     </LI>
-                    <LI><SPAN class="codepart">#doboz .bekezdes{}</SPAN> - az összes olyan <SPAN class="codepart">bekezdes</SPAN> osztályú tag, amely a
-                        <SPAN class="codepart">doboz</SPAN> id-vel ellátott tagen belül van (végtelen mélységig).
+                    <LI><CODE>#doboz .bekezdes{}</CODE> - az összes olyan <CODE>bekezdes</CODE> osztályú tag, amely a
+                        <CODE>doboz</CODE> id-vel ellátott tagen belül van (végtelen mélységig).
                     </LI>
                 </UL>
             </DIV>
@@ -85,13 +85,11 @@
 
                 <DIV style="border: 3px solid red; display: inline-block" id="descendant_example">
                     <DIV id="doboz_1">
-                        <P>Bekezdés</P>
-                        <P class="bekezdes">Bekezdés "bekezdes" osztállyal</P>
-                        <DIV>
-                            Ez csak egy DIV
-                            <P class="bekezdes">"bekezdes" osztályú span egy DIV-ben</P>
-                        </DIV>
-                    </DIV>
+                        <DIV>Bekezdés</DIV>
+                        <P class="bekezdes">Bekezdés "bekezdes" osztállyal</DIV>
+                    <DIV>
+                        Ez csak egy DIV
+                        <P class="bekezdes">"bekezdes" osztályú span egy DIV-ben</DIV>
                 </DIV>
             </DIV>
         </ARTICLE>
@@ -99,9 +97,10 @@
         <ARTICLE>
             <H2>A gyermek kombinátor</H2>
 
-            <P>Ez a kombinátor hasonlóképpen működik, mint a fent említett leszármazott kombinátor, azzal a különbséggel, hogy ez csak a közvetlen gyermekeket választja ki.</P>
-            <P>Például: <SPAN class="codepart">#doboz > .bekezdes</SPAN> - azok a <SPAN class="codepart">bekezdes</SPAN> osztállyal ellátott tagek, melyek közvetlenül a
-                <SPAN class="codepart">doboz</SPAN> azonosítójú elem alatt vannak. </P>
+            <DIV>Ez a kombinátor hasonlóképpen működik, mint a fent említett leszármazott kombinátor, azzal a különbséggel, hogy ez csak a közvetlen gyermekeket választja ki.</DIV>
+            <DIV>Például: <CODE>#doboz > .bekezdes</CODE> - azok a <CODE>bekezdes</CODE> osztállyal ellátott tagek, melyek közvetlenül a
+                <CODE>doboz</CODE> azonosítójú elem alatt vannak.
+            </DIV>
 
             <DIV>
                 Az előbbi példa a következő CSS kiválasztóval:
@@ -109,31 +108,30 @@
 
                 <DIV style="border: 3px solid red; display: inline-block" id="child_example">
                     <DIV id="doboz_2">
-                        <P>Bekezdés</P>
-                        <P class="bekezdes">Bekezdés "bekezdes" osztállyal</P>
-                        <DIV>
-                            Ez csak egy DIV
-                            <P class="bekezdes">"bekezdes" osztályú span egy DIV-ben</P>
-                        </DIV>
-                    </DIV>
+                        <DIV>Bekezdés</DIV>
+                        <P class="bekezdes">Bekezdés "bekezdes" osztállyal</DIV>
+                    <DIV>
+                        Ez csak egy DIV
+                        <P class="bekezdes">"bekezdes" osztályú span egy DIV-ben</DIV>
                 </DIV>
+            </DIV>
 
-                <P>Láthaó, hogy a <SPAN class="codepart">&lt;div></SPAN> tagben levő <SPAN class="codepart">bekezdes</SPAN> osztályú elemre nem hatott a szabály, mert az nem közvetlen leszrmazottja a
-                    <SPAN class="codepart">doboz</SPAN>-nak.</P>
+            <DIV>Láthaó, hogy a <CODE>&lt;div></CODE> tagben levő <CODE>bekezdes</CODE> osztályú elemre nem hatott a szabály, mert az nem közvetlen leszrmazottja a
+                <CODE>doboz</CODE>-nak.
             </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Kistestvér kombinátor</H2>
 
-            <P>A <SPAN class="codepart">~</SPAN> kombinátor (magyar billentyűzeten AltGr + 1) azokat az elemeket választja ki, melyek az elem testvérei, és az elem mögött helyezkednek el.</P>
+            <DIV>A <CODE>~</CODE> kombinátor (magyar billentyűzeten AltGr + 1) azokat az elemeket választja ki, melyek az elem testvérei, és az elem mögött helyezkednek el.</DIV>
 
             <DIV>
                 Például:
                 <UL>
-                    <LI><SPAN class="codepart">.focim ~ *</SPAN> - az összes olyan tag, amely <SPAN class="codepart">focim</SPAN> osztályú taget követ, és azzal egy szinten van.</LI>
-                    <LI><SPAN class="codepart">.focim ~ p</SPAN> - azok a <SPAN class="codepart">&lt;p></SPAN> tagek, amelyek
-                        <SPAN class="codepart">focim</SPAN> osztályú taget követnek, és azzal egy szinten vannak.
+                    <LI><CODE>.focim ~ *</CODE> - az összes olyan tag, amely <CODE>focim</CODE> osztályú taget követ, és azzal egy szinten van.</LI>
+                    <LI><CODE>.focim ~ p</CODE> - azok a <CODE>&lt;p></CODE> tagek, amelyek
+                        <CODE>focim</CODE> osztályú taget követnek, és azzal egy szinten vannak.
                     </LI>
                 </UL>
             </DIV>
@@ -155,9 +153,10 @@
         <ARTICLE>
             <H2>Közvetlen kistestvér kombinátor</H2>
 
-            <P>A közvetlen kistestvér kombinátor annyiban különbözik a fentitől, hogy csak azt az egy elemet választja ki, amely közvetkenül az elem után helyezkedik el. Ennek a kombinátornak a jele a
-                <SPAN class="codepart">+</SPAN> (összeadás) jel.</P>
-            <P><CODE>div + p</CODE> - azok a <CODE>&lt;p></CODE> tagek, melyek közvetlenül egy <CODE>&lt;div></CODE> tag után helyezkednek el.</P>
+            <DIV>A közvetlen kistestvér kombinátor annyiban különbözik a fentitől, hogy csak azt az egy elemet választja ki, amely közvetkenül az elem után helyezkedik el. Ennek a kombinátornak a jele a
+                <CODE>+</CODE> (összeadás) jel.
+            </DIV>
+            <DIV><CODE>div + p</CODE> - azok a <CODE>&lt;p></CODE> tagek, melyek közvetlenül egy <CODE>&lt;div></CODE> tag után helyezkednek el.</DIV>
 
             <DIV>
                 Működés közben:

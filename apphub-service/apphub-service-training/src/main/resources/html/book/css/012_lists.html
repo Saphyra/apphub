@@ -20,39 +20,39 @@
         <ARTICLE>
             <H2>Lista stílus</H2>
 
-            <P>
-                A listák elemei előtt megjelenő jelet a <SPAN class='codepart'>list-style-type</SPAN> tulajdonsággal állíthatjuk:
-            <UL th:replace="/example/css/lists.html :: list_style_type"></UL>
+            <DIV>
+                A listák elemei előtt megjelenő jelet a <CODE>list-style-type</CODE> tulajdonsággal állíthatjuk:
+                <UL th:replace="/example/css/lists.html :: list_style_type"></UL>
 
-            <A href='https://www.w3schools.com/cssref/tryit.asp?filename=trycss_list-style-type_all' target='_blank'>Bővített lista</A>
-            </P>
-            <P><U>Megjegyzés:</U> a <SPAN class='codepart'>list-style-type</SPAN> megváltoztathatja a lista visekledését, és rendezett listából is lehet rendezetlen, és fordítva.</P>
+                <A href='https://www.w3schools.com/cssref/tryit.asp?filename=trycss_list-style-type_all' target='_blank'>Bővített lista</A>
+            </DIV>
+            <DIV><U>Megjegyzés:</U> a <CODE>list-style-type</CODE> megváltoztathatja a lista visekledését, és rendezett listából is lehet rendezetlen, és fordítva.</DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Kép beállítása a listaelemek előtt</H2>
 
-            <P>
-                Erre a <SPAN class='codepart'>list-style-image</SPAN> tulajdonság szolgál:
-            <PRE>list-style-image: url("/img/css/sample_background.jpg")</PRE>
-            Példa:
-            <UL th:replace="/example/css/lists.html :: image_background"></UL>
-            </P>
+            <DIV>
+                Erre a <CODE>list-style-image</CODE> tulajdonság szolgál:
+                <PRE>list-style-image: url("/img/css/sample_background.jpg")</PRE>
+                Példa:
+                <UL th:replace="/example/css/lists.html :: image_background"></UL>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Listaelem jelzők elhelyezkedése</H2>
 
-            <P>
+            <DIV>
                 Alapértelmezetten a listaelem jelző a teljes listaelem előtt helyezkedik el:
-            <DIV th:replace="/example/css/lists.html :: list_style_position_outside"></DIV>
-            </P>
+                <DIV th:replace="/example/css/lists.html :: list_style_position_outside"></DIV>
+            </DIV>
 
-            <P>
-                Ez azért van, mert a <SPAN class='codepart'>list-style-position</SPAN> tulajdonság alapértelmezett értéke <SPAN class="codepart">outside</SPAN>.<BR>
-                Amennyiben ezt az értéket <SPAN class='codepart'>inside</SPAN>ra állítjuk, a jelzők beleolvadnak a listaelembe:
-            <DIV th:replace="/example/css/lists.html :: list_style_position_inside"></DIV>
-            </P>
+            <DIV>
+                Ez azért van, mert a <CODE>list-style-position</CODE> tulajdonság alapértelmezett értéke <CODE>outside</CODE>.<BR>
+                Amennyiben ezt az értéket <CODE>inside</CODE>ra állítjuk, a jelzők beleolvadnak a listaelembe:
+                <DIV th:replace="/example/css/lists.html :: list_style_position_inside"></DIV>
+            </DIV>
         </ARTICLE>
     </MAIN>
 

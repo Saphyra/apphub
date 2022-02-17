@@ -88,7 +88,7 @@ main{
             overflow: auto;
         }
 
-code, .codepart{
+code{
     background: rgb(75, 0, 0);
     font-family: monospace;
     white-space: nowrap;

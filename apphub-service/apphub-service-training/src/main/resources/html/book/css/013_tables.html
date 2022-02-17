@@ -20,92 +20,92 @@
         <ARTICLE>
             <H2>Táblázatok szegélye</H2>
 
-            <P>A táblázatok több összetevőből álló, komplex objektumok, így a megjelenésük is sokféle lehet. Vessük is bele magunk a szegélyek megadásába!</P>
-            <P>
+            <DIV>A táblázatok több összetevőből álló, komplex objektumok, így a megjelenésük is sokféle lehet. Vessük is bele magunk a szegélyek megadásába!</DIV>
+            <DIV>
                 Kezdésként hozzunk létre egy egyszerű táblázatot, aminek aztán a stílusát állítani tudjuk:
-            <PRE th:replace="/example/css/tables.html :: simple_table"></PRE>
+                <PRE th:replace="/example/css/tables.html :: simple_table"></PRE>
 
-            Eredmény:
-            <DIV th:replace="/example/css/tables.html :: simple_table_result"></DIV>
-            </P>
+                Eredmény:
+                <DIV th:replace="/example/css/tables.html :: simple_table_result"></DIV>
+            </DIV>
 
-            <P>
-                Ahogy arról a HTML könyvben szó volt, HTML-ben a táblázathoz úgy lehet szegélyt adni, hogy attribútumként felvesszük a <SPAN class="codepart">border=1</SPAN> utasítást:
+            <DIV>
+                Ahogy arról a HTML könyvben szó volt, HTML-ben a táblázathoz úgy lehet szegélyt adni, hogy attribútumként felvesszük a <CODE>border=1</CODE> utasítást:
 
-            <PRE>&lt;table border="1"></PRE>
-            <BUTTON onclick="window.open('/web/training/html/004_tags_content#tables')">Példa</BUTTON>
-            </P>
-            <P>
+                <PRE>&lt;table border="1"></PRE>
+                <BUTTON onclick="window.open('/web/training/html/004_tags_content#tables')">Példa</BUTTON>
+            </DIV>
+            <DIV>
                 Ebből gondolhatnánk, hogy ha a szegélyt CSS-ből szeretnénk megadni, akkor kiválasztjuk a
-                <SPAN class="codepart">&lt;table></SPAN> taget, és el van intézve a dolog. De az eredmény mégis más:
+                <CODE>&lt;table></CODE> taget, és el van intézve a dolog. De az eredmény mégis más:
 
-            <PRE>table {border: 1px solid black;}</PRE>
-            <DIV th:replace="/example/css/tables.html :: set_border_failure"></DIV>
+                <PRE>table {border: 1px solid black;}</PRE>
+                <DIV th:replace="/example/css/tables.html :: set_border_failure"></DIV>
 
-            És az eredmény mégis más. Mivel csak a
-            <SPAN class="codepart">&lt;table></SPAN> taget választottuk ki, így csak a táblázat köré került szegély. A kívánt eredmény elérése érdekében a táblázat, és a benne levő cellák köré is szegélyt kell rakni:
+                És az eredmény mégis más. Mivel csak a
+                <CODE>&lt;table></CODE> taget választottuk ki, így csak a táblázat köré került szegély. A kívánt eredmény elérése érdekében a táblázat, és a benne levő cellák köré is szegélyt kell rakni:
 
-            <PRE th:replace="/example/css/tables.html :: set_border"></PRE>
-            <DIV th:replace="/example/css/tables.html :: set_border_result"></DIV>
-            </P>
+                <PRE th:replace="/example/css/tables.html :: set_border"></PRE>
+                <DIV th:replace="/example/css/tables.html :: set_border_result"></DIV>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Szegélytávolság</H2>
 
-            <P>
+            <DIV>
                 Adott egy táblázatunk, melyhez sikeresen hozzáadtuk a kívánt szegélyt. Viszont szeretnénk egy kis teret hagyni a táblázat elemei között, de a
-                <SPAN class="codepart">margin</SPAN> tulajdonság cellák esetében nem működik.<BR>
-                Kétségbeesésre semmi ok, megment minket a <SPAN class="codepart">border-spacing</SPAN> tulajdonság, mely a két cella szegélye közti távolságot adja meg:
+                <CODE>margin</CODE> tulajdonság cellák esetében nem működik.<BR>
+                Kétségbeesésre semmi ok, megment minket a <CODE>border-spacing</CODE> tulajdonság, mely a két cella szegélye közti távolságot adja meg:
 
-            <PRE th:replace="/example/css/tables.html :: border_spacing"></PRE>
-            <DIV th:replace="/example/css/tables.html :: border_spacing_result"></DIV>
+                <PRE th:replace="/example/css/tables.html :: border_spacing"></PRE>
+                <DIV th:replace="/example/css/tables.html :: border_spacing_result"></DIV>
 
 
-            <U>Megjegyzés:</U> a <SPAN class="codepart">border-spacing</SPAN> tulajdonsághoz két értéket rendelve az első a vízszintes, a második a függőleges térközt adja meg:
-            <SPAN class="codepart">border-spacing: 10px 20px</SPAN>
-            </P>
+                <U>Megjegyzés:</U> a <CODE>border-spacing</CODE> tulajdonsághoz két értéket rendelve az első a vízszintes, a második a függőleges térközt adja meg:
+                <CODE>border-spacing: 10px 20px</CODE>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Közös szegélyek</H2>
 
-            <P>
+            <DIV>
                 Most képzeljük el az ellenkező esetet: El szeretnénk tüntetni a cellák közti távolságot. Erre szolgál a
-                <SPAN class="codeapart">border-collapse</SPAN> tulajdonság, a következő értékekkel:
-            <UL>
-                <LI><SPAN class="codepart">separate</SPAN> - cellák között a <SPAN class="codepart">border-spacing</SPAN> tulajdonságban meghatározott távolság lesz</LI>
-                <LI><SPAN class="codepart">collapse</SPAN> - cellák között nincs távolság, és a szegélyeik közös.</LI>
-            </UL>
-            </P>
+                <CODE>border-collapse</CODE> tulajdonság, a következő értékekkel:
+                <UL>
+                    <LI><CODE>separate</CODE> - cellák között a <CODE>border-spacing</CODE> tulajdonságban meghatározott távolság lesz</LI>
+                    <LI><CODE>collapse</CODE> - cellák között nincs távolság, és a szegélyeik közös.</LI>
+                </UL>
+            </DIV>
 
-            <P>
+            <DIV>
                 Példák:<BR>
                 Mindkét példában egy 10 pixel széles szegélyt alkalmazunk a táblázatra, és annak elemeire.
 
-            <TABLE th:replace="/example/css/tables.html :: border_spacing_collapse"></TABLE>
+                <TABLE th:replace="/example/css/tables.html :: border_spacing_collapse"></TABLE>
 
-            Jól látható, hogy az első példában egy eléggé csúnyácska, 20 pixel vastag szegély választja el egymástól a cellákat, míg a másodikban ez összeolvad, és csak 10 pixel széles lesz.
-            </P>
+                Jól látható, hogy az első példában egy eléggé csúnyácska, 20 pixel vastag szegély választja el egymástól a cellákat, míg a másodikban ez összeolvad, és csak 10 pixel széles lesz.
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Tartalom függőleges elhelyezése</H2>
 
-            <P>
-                Megoldás: <SPAN class="codepart">vertical-align</SPAN> tulajdonság. Értékek:
-            <UL>
-                <LI><SPAN class="codepart">top</SPAN> - felülre (alapértelmezett)</LI>
-                <LI><SPAN class="codepart">bottom</SPAN> - alulra</LI>
-                <LI><SPAN class="codepart">middle</SPAN> - középre</LI>
-            </UL>
-            </P>
+            <DIV>
+                Megoldás: <CODE>vertical-align</CODE> tulajdonság. Értékek:
+                <UL>
+                    <LI><CODE>top</CODE> - felülre (alapértelmezett)</LI>
+                    <LI><CODE>bottom</CODE> - alulra</LI>
+                    <LI><CODE>middle</CODE> - középre</LI>
+                </UL>
+            </DIV>
 
-            <P>
+            <DIV>
                 Példa:
-            <PRE th:replace="/example/css/tables.html :: vertical_align"></PRE>
-            <DIV th:replace="/example/css/tables.html :: vertical_align_result"></DIV>
-            </P>
+                <PRE th:replace="/example/css/tables.html :: vertical_align"></PRE>
+                <DIV th:replace="/example/css/tables.html :: vertical_align_result"></DIV>
+            </DIV>
         </ARTICLE>
     </MAIN>
 

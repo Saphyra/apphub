@@ -25,7 +25,6 @@
         #hover_test span:hover + div{
             display: block;
         }
-
     </STYLE>
 </HEAD>
 <BODY>
@@ -40,25 +39,25 @@
         <ARTICLE>
             <H2>Állapot kiválasztókról általában</H2>
 
-            <P>A HTML tageknek lehetnek bizonyos, felhasználói beavatkozástól függő állapotai. És elég gyakran előfordul, hogy bizonyos szabályokat csak akkor szeretnénk alkalmazni, ha ezek a z állapotok fennállnak.</P>
-            <P>Szintaktika: <SPAN class="codepart">kivalaszto:allapotkivalaszto</SPAN></P>
+            <DIV>A HTML tageknek lehetnek bizonyos, felhasználói beavatkozástól függő állapotai. És elég gyakran előfordul, hogy bizonyos szabályokat csak akkor szeretnénk alkalmazni, ha ezek a z állapotok fennállnak.</DIV>
+            <DIV>Szintaktika: <CODE>kivalaszto:allapotkivalaszto</CODE></DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Linkek állapotai</H2>
 
-            <P>Bizonyára feltűnt neked is, hogy a Google keresőjében (és sok más helyen) azok a linkek, amelyeket már meglátogattál, másképp néznek ki. Ezt a hatás nagyon jó példa az állapot kiválasztók működésére.</P>
-            <P>Amikor egy linkre rákattintanak, akkor annak az állapota megváltozik, és ha van ezt a változást figyelő CSS kód (alapértelmezetten van), akkor az az állapotváltozás következtében érvényre jut, és megváltoztatja a link tulajdonságait (alapértelmezetten a színét).</P>
+            <DIV>Bizonyára feltűnt neked is, hogy a Google keresőjében (és sok más helyen) azok a linkek, amelyeket már meglátogattál, másképp néznek ki. Ezt a hatás nagyon jó példa az állapot kiválasztók működésére.</DIV>
+            <DIV>Amikor egy linkre rákattintanak, akkor annak az állapota megváltozik, és ha van ezt a változást figyelő CSS kód (alapértelmezetten van), akkor az az állapotváltozás következtében érvényre jut, és megváltoztatja a link tulajdonságait (alapértelmezetten a színét).</DIV>
 
             <DIV>
                 Linkek állapotai, és kiválasztói:
                 <UL>
-                    <LI><SPAN class="codepart">:link</SPAN> - az a link, amelyet még nem látogattak meg</LI>
-                    <LI><SPAN class="codepart">:visited</SPAN> - meglátogatott link</LI>
-                    <LI><SPAN class="codepart">:active</SPAN> - az a link, amelyre éppen rákattintottak (kattintás effekt)</LI>
+                    <LI><CODE>:link</CODE> - az a link, amelyet még nem látogattak meg</LI>
+                    <LI><CODE>:visited</CODE> - meglátogatott link</LI>
+                    <LI><CODE>:active</CODE> - az a link, amelyre éppen rákattintottak (kattintás effekt)</LI>
                 </UL>
 
-                Használata: <SPAN class="codepart">a:visited {}</SPAN>
+                Használata: <CODE>a:visited {}</CODE>
             </DIV>
 
             <DIV>
@@ -73,7 +72,7 @@
         <ARTICLE>
             <H2>Hover effect</H2>
 
-            <P>A <CODE>:hover</CODE> állapot kiválasztó abban az esetben jut érvényre, hogyha az egér a kiválasztott elem fölé kerül.</P>
+            <DIV>A <CODE>:hover</CODE> állapot kiválasztó abban az esetben jut érvényre, hogyha az egér a kiválasztott elem fölé kerül.</DIV>
             <DIV>
                 Ezzel nagyon látványos és hasznos trükköket lehet csinálni:
                 <PRE th:replace="/example/css/pseudo_classes.html :: hover"></PRE>
@@ -86,16 +85,17 @@
                 </DIV>
             </DIV>
 
-            <P><U>Magyarázat:</U> a <CODE>hover_test_hidden</CODE> azonosítójú elemet elrejtjük a képernyőről. Viszont a
+            <DIV><U>Magyarázat:</U> a <CODE>hover_test_hidden</CODE> azonosítójú elemet elrejtjük a képernyőről. Viszont a
                 <CODE>#hover_test span:hover + div</CODE> kiválasztó kombinációval (válaszd ki azt a <CODE>&lt;div></CODE> taget, amely KÖZVETLENÜL egy olyan
                 <CODE>&lt;span></CODE> mögött helyezkedik el, amely
-                <CODE>hover_test</CODE> azonosítújú elemen belül helyezkedik el, és éppen fölötte van az egér) megjelenítjük, de csak abban az esetben, ha a megfelelő elem fölött van az egér.</P>
+                <CODE>hover_test</CODE> azonosítújú elemen belül helyezkedik el, és éppen fölötte van az egér) megjelenítjük, de csak abban az esetben, ha a megfelelő elem fölött van az egér.
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Beviteli mezők állapotai</H2>
 
-            <P>A beviteli mezők a bevitt értéktől (is) függően több állapotot vehetnek fel:</P>
+            <DIV>A beviteli mezők a bevitt értéktől (is) függően több állapotot vehetnek fel:</DIV>
 
             <DIV>
                 <UL>

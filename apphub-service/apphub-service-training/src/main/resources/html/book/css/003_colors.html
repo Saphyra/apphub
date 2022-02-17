@@ -20,70 +20,71 @@
         <ARTICLE>
             <H2>Színek megadása</H2>
 
-            <P>A CSS több szín formátum felismerésére képes. Csak értékül kell adni a kiválasztott tulajdonságnak, és már működik is!</P>
-            <P>Például: <SPAN class='codepart'>color: green;</SPAN></P>
-            <P>A következőkben a színek megadásának lehetőségeit fogjuk vizsgálni.</P>
+            <DIV>A CSS több szín formátum felismerésére képes. Csak értékül kell adni a kiválasztott tulajdonságnak, és már működik is!</DIV>
+            <DIV>Például: <CODE>color: green;</CODE></DIV>
+            <DIV>A következőkben a színek megadásának lehetőségeit fogjuk vizsgálni.</DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Szín megadása annak nevével</H2>
 
-            <P>Színt a legegyszerűbb annak angol nevével megadni:</P>
-            <P><SPAN class='codepart'>color: red;</SPAN></P>
-            <P><U>Megjegyzés</U>: nem minden böngésző ismeri fel az összes színt név alapján. Az általánosan támogatott színek listája megtekinthető
-                <A href="https://www.w3schools.com/colors/colors_names.asp" target="_blank">itt</A>.</P>
+            <DIV>Színt a legegyszerűbb annak angol nevével megadni:</DIV>
+            <DIV><CODE>color: red;</CODE></DIV>
+            <DIV><U>Megjegyzés</U>: nem minden böngésző ismeri fel az összes színt név alapján. Az általánosan támogatott színek listája megtekinthető
+                <A href="https://www.w3schools.com/colors/colors_names.asp" target="_blank">itt</A>.
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Szín megadása RGB színkóddal</H2>
 
-            <P>A színek nevekkel történő megadása nagyon hasznos és egyszerű, de mi van, ha például a szürke 50 árnyalatát szeretnénk ki listázni a képernyőre?</P>
-            <P>Ebben az esetben saját kezűleg kell kikevernünk a színeket. Erre nyújt lehetőséget az RGB kód:</P>
-            <P><SPAN class='codepart'>background: rgb(32, 45, 74);</SPAN></P>
-            <P style='background: rgb(32,45,74);'>Példa</P>
-            <P>
+            <DIV>A színek nevekkel történő megadása nagyon hasznos és egyszerű, de mi van, ha például a szürke 50 árnyalatát szeretnénk ki listázni a képernyőre?</DIV>
+            <DIV>Ebben az esetben saját kezűleg kell kikevernünk a színeket. Erre nyújt lehetőséget az RGB kód:</DIV>
+            <DIV><CODE>background: rgb(32, 45, 74);</CODE></DIV>
+            <DIV style='background: rgb(32,45,74);'>Példa</DIV>
+            <DIV>
                 Az RGB jelentése:
-            <UL>
-                <LI>R = Red = Piros</LI>
-                <LI>G = Green = Zöld</LI>
-                <LI>B = Blue = Kék</LI>
-            </UL>
-            </P>
-            <P>Az egyes "helyiértékek" azt jelölik, hogy az adott színből hány egységnyi kerüljön a "vödörbe".</P>
-            <P>Például az rgb(32, 45, 74) azt jelenti, hogy: Összekeverünk 32 egység piros, 45 egység zöld, és 74 egység kék festéket, hogy megkapjuk a kívánt színt.</P>
-            <P>Minden helyiértékre 0-tól 255-ig terjedő szám kerülhet. Ez összesen 16.581.375 szín.</P>
+                <UL>
+                    <LI>R = Red = Piros</LI>
+                    <LI>G = Green = Zöld</LI>
+                    <LI>B = Blue = Kék</LI>
+                </UL>
+            </DIV>
+            <DIV>Az egyes "helyiértékek" azt jelölik, hogy az adott színből hány egységnyi kerüljön a "vödörbe".</DIV>
+            <DIV>Például az rgb(32, 45, 74) azt jelenti, hogy: Összekeverünk 32 egység piros, 45 egység zöld, és 74 egység kék festéket, hogy megkapjuk a kívánt színt.</DIV>
+            <DIV>Minden helyiértékre 0-tól 255-ig terjedő szám kerülhet. Ez összesen 16.581.375 szín.</DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Szín átlátszóságának megadása</H2>
 
-            <P>Ahhoz, hogy hátterünk áttetsző legyen, csak kisebb módosításokat kell végeznünk az RGB-s színmegadáson:</P>
-            <P>
-                <SPAN class='codepart'>rgb</SPAN> helyett <SPAN class='codepart'>rgba</SPAN>-val kezdődik a tulajdonság értéke, valamint három helyett négy "helyiértéket" kell megadni.<BR>
+            <DIV>Ahhoz, hogy hátterünk áttetsző legyen, csak kisebb módosításokat kell végeznünk az RGB-s színmegadáson:</DIV>
+            <DIV>
+                <CODE>rgb</CODE> helyett <CODE>rgba</CODE>-val kezdődik a tulajdonság értéke, valamint három helyett négy "helyiértéket" kell megadni.<BR>
                 A negyedik számjegy egy 0-tól 1-ig terjedő (tört) szám, mely megadja az átlátszóság arányát.
-            </P>
-            <P>
-                Például: <SPAN class='codepart'>background: rgba(32, 45, 74, 0.5);</SPAN>: az előbbi példában szereplő szín 50%-os átlátszósággal.
-            <P style='background: rgba(32,45,74,0.5);'>Példa</P>
-            </P>
+            </DIV>
+            <DIV>
+                Például: <CODE>background: rgba(32, 45, 74, 0.5);</CODE>: az előbbi példában szereplő szín 50%-os átlátszósággal.
+                <DIV style='background: rgba(32,45,74,0.5);'>Példa</DIV>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Szín megadása hexadecimális kóddal</H2>
 
-            <P>Én meg beszéljek magyarul... Az elv megegyezik az RGB szín megadással, csak itt a helyiértékeket 16-os számrendszer beli számok jelzik.</P>
-            <P>
+            <DIV>Én meg beszéljek magyarul... Az elv megegyezik az RGB szín megadással, csak itt a helyiértékeket 16-os számrendszer beli számok jelzik.</DIV>
+            <DIV>
                 És megint... A 16-os számrendszer annyiban különbözik a 10-estől (amit általánosságban használunk), hogy 10 helyett 16 'számjegyet' tartalmaz.<BR>
                 Így 9 után nem 10 jön, ahogy megszokhattuk, hanem 'a', majd 'b' egészen 'f'-ig (ami a 15-nek felel meg).
-            </P>
-            <P>
+            </DIV>
+            <DIV>
                 A 256 érték eléréséhez pedig két hexadecimális számjegy szükséges (16 x 16 = 256).<BR>
-                A fenti példában szereplő színt hexadecimális színkódja a következő: <SPAN class='codepart'>202d4a</SPAN>
-            </P>
-            <P>
+                A fenti példában szereplő színt hexadecimális színkódja a következő: <CODE>202d4a</CODE>
+            </DIV>
+            <DIV>
                 A CSS-ben a hexadecimális színmegadáshoz a színkód elé egy #-t kell írni:<BR>
-                <SPAN class='codepart'>color: #202d4a;</SPAN>
-            </P>
+                <CODE>color: #202d4a;</CODE>
+            </DIV>
         </ARTICLE>
     </MAIN>
 

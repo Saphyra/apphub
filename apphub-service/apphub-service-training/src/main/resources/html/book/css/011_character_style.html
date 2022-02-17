@@ -20,22 +20,22 @@
         <ARTICLE>
             <H2>Betűtípus</H2>
 
-            <P>
-                Betűtípust a <SPAN class="codepart">font-family</SPAN> tulajdonsággal tudjuk állítani. Ez a megadott értéktől függően több értéket is felvehet.
-            </P>
+            <DIV>
+                Betűtípust a <CODE>font-family</CODE> tulajdonsággal tudjuk állítani. Ez a megadott értéktől függően több értéket is felvehet.
+            </DIV>
 
             <UL>
-                <LI>Meg tudjuk adni a betűtípus konkrét nevét: <SPAN class="codepart">font-family: "Times New Roman"</SPAN>. (Fontos: ha a betűtípus neve többb szóból áll, akkor "-ok közé kell tenni.)
+                <LI>Meg tudjuk adni a betűtípus konkrét nevét: <CODE>font-family: "Times New Roman"</CODE>. (Fontos: ha a betűtípus neve többb szóból áll, akkor "-ok közé kell tenni.)
                 </LI>
                 <LI>Vannak olyan betűtípusok, melyeket nem minden böngésző ismer fel. Erre az esetre nyújt megoldást, ha töb betűtípust adunk meg egymás után, és a böngésző balól jobbra haladva addig lépdes a megadott betűtípusok közül, amíg nem talál egy olyat, amit ismer:
-                    <SPAN class="codepart">font-family: "Times New Roman", Arial, monospace</SPAN></LI>
+                    <CODE>font-family: "Times New Roman", Arial, monospace</CODE></LI>
                 <LI>
                     Betűtípus állítására egy megoldás annak családjára történő hivatkozás. Ilyenkor a böngésző kiválasztja az adott betűcsaládhoz tartzozó saját betűtípusát.<BR>
                     Betűcsalűdok:
                     <UL>
-                        <LI><SPAN class="codepart">serif</SPAN>: talpas betűtípusok</LI>
-                        <LI><SPAN class="codepart">sans-serif</SPAN>: talp nélküli betűtípusok</LI>
-                        <LI><SPAN class="codepart">monospace</SPAN>: olyan betűtípusok, melyek minden karaktere azonos szélességű (főeg programozásban használják)</LI>
+                        <LI><CODE>serif</CODE>: talpas betűtípusok</LI>
+                        <LI><CODE>sans-serif</CODE>: talp nélküli betűtípusok</LI>
+                        <LI><CODE>monospace</CODE>: olyan betűtípusok, melyek minden karaktere azonos szélességű (főeg programozásban használják)</LI>
                     </UL>
                 </LI>
             </UL>
@@ -44,55 +44,55 @@
         <ARTICLE>
             <H2>Dőlt karakterek</H2>
 
-            <P>
-                A szöveg dőltségét a <SPAN class="codepart">font-style</SPAN> tulajdonsággal állíthatjuk, melynek értéke lehet:
-            <UL>
-                <LI><SPAN class="codepart">normal</SPAN>: normál szöveg (alapértelmezett)</LI>
-                <LI><SPAN class="codepart">italic</SPAN>: <SPAN style="font-style: italic">dőlt</SPAN> szöveg</LI>
-            </UL>
-            </P>
+            <DIV>
+                A szöveg dőltségét a <CODE>font-style</CODE> tulajdonsággal állíthatjuk, melynek értéke lehet:
+                <UL>
+                    <LI><CODE>normal</CODE>: normál szöveg (alapértelmezett)</LI>
+                    <LI><CODE>italic</CODE>: <SPAN style="font-style: italic">dőlt</SPAN> szöveg</LI>
+                </UL>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Betűméret</H2>
 
-            <P>Betűméret állítására szolgál a <SPAN style="codepart">font-size</SPAN> tulajdonság.</P>
-            <P>
-                Például: <SPAN class="codepart">font-size: 32px;</SPAN> - 32 pixeles betűméret:
-            <DIV style="font-size: 32px">Példa</DIV>
+            <DIV>Betűméret állítására szolgál a <SPAN style="codepart">font-size</SPAN> tulajdonság.</DIV>
+            <DIV>
+                Például: <CODE>font-size: 32px;</CODE> - 32 pixeles betűméret:
+                <DIV style="font-size: 32px">Példa</DIV>
 
-            <SPAN class="codepart">font-size: 2em;</SPAN> - a szülő betűméreténél 2x nagyobb betűméret:
-            <DIV style="font-size: 2em">Példa</DIV>
+                <CODE>font-size: 2em;</CODE> - a tároló betűméreténél 2x nagyobb betűméret:
+                <DIV style="font-size: 2em">Példa</DIV>
 
-            <SPAN class="codepart">font-size: 2rem;</SPAN> - a body betűméreténél 2x nagyobb betűméret:
-            <DIV style="font-size: 2rem">Példa</DIV>
-            </P>
+                <CODE>font-size: 2rem;</CODE> - a body betűméreténél 2x nagyobb betűméret:
+                <DIV style="font-size: 2rem">Példa</DIV>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Félkövér karakterek</H2>
 
-            <P>A betűk vastagságát a <SPAN class="codepart">font-weight</SPAN> tulajdosággal lehet állítani.</P>
-            <P>
+            <DIV>A betűk vastagságát a <CODE>font-weight</CODE> tulajdosággal lehet állítani.</DIV>
+            <DIV>
                 Értékek:
-            <UL>
-                <LI><SPAN class="codepart">normal</SPAN>: normál (alapértelmezett)</LI>
-                <LI><SPAN class="codepart">bold</SPAN>: <SPAN style="font-weight: bold;">félkövér</SPAN></LI>
-            </UL>
-            </P>
+                <UL>
+                    <LI><CODE>normal</CODE>: normál (alapértelmezett)</LI>
+                    <LI><CODE>bold</CODE>: <SPAN style="font-weight: bold;">félkövér</SPAN></LI>
+                </UL>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Kis-nagybetűs betűstílus</H2>
 
-            <P>
+            <DIV>
                 Ebben a betűtípusban a nagy betűk nem változnak, viszont a kis betűk úgy néznek ki, mint a nagyok, csak kisebb méretben.
-            <DIV style="font-variant: small-caps">Példa: Sándor József Benedek</DIV>
-            </P>
+                <DIV style="font-variant: small-caps">Példa: Sándor József Benedek</DIV>
+            </DIV>
 
-            <P>
-                És a hozzá tartozó tulajdonság: <SPAN class="codepart">font-variant: small caps;</SPAN>. (A <SPAN class="codepart">normal</SPAN> az alapértelmezett itt is)
-            </P>
+            <DIV>
+                És a hozzá tartozó tulajdonság: <CODE>font-variant: small caps;</CODE>. (A <CODE>normal</CODE> az alapértelmezett itt is)
+            </DIV>
         </ARTICLE>
     </MAIN>
 

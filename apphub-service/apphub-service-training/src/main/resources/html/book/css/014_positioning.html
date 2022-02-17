@@ -20,62 +20,63 @@
         <ARTICLE>
             <H2>Elem láthatatlanná tétele</H2>
 
-            <P>
+            <DIV>
                 Gyakran előfordul, hogy valamilyen tartalmat nem szeretnénk láthatóvá tenni (például egy menü gombjai, amíg rá nem kattintanak egy gombra...).<BR>
                 HTML tageket több módon lehet eltüntetni a felhasználó szeme elől, nézzük ebből a két legáltalánosabbat:
-            </P>
-
-            <P>
-                Az egyik ilyen megoldás, ha az elemet egyszerűen nem jelenítjük meg, mintha ott sem lenne. Ezta következő paranccsal lehet megtenni: <SPAN class="codepart">display: none</SPAN><BR>
-                Példa:
-            <PRE th:replace="/example/css/positioning.html :: display_none"></PRE>
-
-
-            <DIV style="width: 250px; height: 100px; border: 3px solid red;">
-                Egyszer volt hol nem volt <SPAN style="display: none">Nem vagyok itt</SPAN> volt egyszer egy semmi.
             </DIV>
 
-            <U>Megjegyzés:</U> az elem újbóli megjelenítéséhez a <SPAN class="codepart">display</SPAN> tulajdonságnak más értéket kell adni (például
-            <SPAN class="codepart">display: block</SPAN>. Ennek lehetőségeiről a későbbiekben lesz szó.
-            </P>
+            <DIV>
+                Az egyik ilyen megoldás, ha az elemet egyszerűen nem jelenítjük meg, mintha ott sem lenne. Ezt a következő paranccsal lehet megtenni: <CODE>display: none</CODE><BR>
+                Példa:
+                <PRE th:replace="/example/css/positioning.html :: display_none"></PRE>
 
-            <P>
+
+                <DIV style="width: 250px; height: 100px; border: 3px solid red;">
+                    Egyszer volt hol nem volt <SPAN style="display: none">Nem vagyok itt</SPAN> volt egyszer egy semmi.
+                </DIV>
+
+                <U>Megjegyzés:</U> az elem újbóli megjelenítéséhez a <CODE>display</CODE> tulajdonságnak más értéket kell adni (például
+                <CODE>display: block</CODE>. Ennek lehetőségeiről a későbbiekben lesz szó).
+            </DIV>
+
+            <DIV>
                 A másik megoldás abban különbözik az elsőtől, hogy az eltüntetett rész tárolójának a helye megmarad, és csak a tartalma nem jelenik meg. Erre a
-                <SPAN class="codepart">visibility: hidden</SPAN> parancs való.<BR>
+                <CODE>visibility: hidden</CODE> parancs való.<BR>
                 Példa:
-            <PRE th:replace="/example/css/positioning.html :: visibility_hidden"></PRE>
+                <PRE th:replace="/example/css/positioning.html :: visibility_hidden"></PRE>
 
-            <DIV style="width: 250px; height: 100px; border: 3px solid red;">
-                Egyszer volt hol nem volt <SPAN style="visibility: hidden">Nem vagyok itt</SPAN> volt egyszer egy semmi.
+                <DIV style="width: 250px; height: 100px; border: 3px solid red;">
+                    Egyszer volt hol nem volt <SPAN style="visibility: hidden">Nem vagyok itt</SPAN> volt egyszer egy semmi.
+                </DIV>
+
+                <U>Megjegyzés:</U> az elem újbóli megjelenítéséhez a tulajdonság értékét a következpőképpen kell módosítani:
+                <CODE>visibility: visible</CODE>. Ennek lehetőségeiről a későbbiekben lesz szó.
             </DIV>
-
-            <U>Megjegyzés:</U> az elem újbóli megjelenítéséhez a tulajdonság értékét a következpőképpen kell módosítani:
-            <SPAN class="codepart">visibility: visible</SPAN>. Ennek lehetőségeiről a későbbiekben lesz szó.
-            </P>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Elem eltolása</H2>
 
-            <P>A jól kinéző weboldalnak gyakran feltétele az a lehetőség, hogy a tárolóinkat oda helyezzük, ahová szeretnénk. Ezt (többek közt) a
-                <SPAN class="codepart">position</SPAN> tulajdonsággal érhetjük el.</P>
+            <DIV>A jól kinéző weboldalnak gyakran feltétele az a lehetőség, hogy a tárolóinkat oda helyezzük, ahová szeretnénk. Ezt (többek közt) a
+                <CODE>position</CODE> tulajdonsággal érhetjük el.
+            </DIV>
             <DIV>
                 Lehetséges értékek (az egyes értékek működéséről lejjebb részletesen is szó lesz):
                 <UL>
-                    <LI><SPAN class="codepart">static</SPAN> - (alapértelmezett)</LI>
-                    <LI><SPAN class="codepart">relative</SPAN></LI>
-                    <LI><SPAN class="codepart">absolute</SPAN></LI>
-                    <LI><SPAN class="codepart">fixed</SPAN></LI>
+                    <LI><CODE>static</CODE> - (alapértelmezett)</LI>
+                    <LI><CODE>relative</CODE></LI>
+                    <LI><CODE>absolute</CODE></LI>
+                    <LI><CODE>fixed</CODE></LI>
                 </UL>
             </DIV>
 
             <DIV>
                 Az elem eltolásának mértékét úgy adhatjuk meg, hogy a következő tulajdonságokkal megmondjuk, hogy az adott irányból mekkora távolsággal történjen az eltolás / mekkora helyet hagyjon:
                 <UL>
-                    <LI><SPAN class="codepart">top</SPAN> - felülről</LI>
-                    <LI><SPAN class="codepart">right</SPAN> - jobbról</LI>
-                    <LI><SPAN class="codepart">bottom</SPAN> - alulról</LI>
-                    <LI><SPAN class="codepart">left</SPAN> - balról</LI>
+                    <LI><CODE>top</CODE> - felülről</LI>
+                    <LI><CODE>right</CODE> - jobbról</LI>
+                    <LI><CODE>bottom</CODE> - alulról</LI>
+                    <LI><CODE>left</CODE> - balról</LI>
                 </UL>
 
                 <U>Megjegyzés:</U> ha egyszerre két ellentétes oldalt is megadunk, akkor manipulálhatjuk a tároló méretét. Ha pedig negatív értéket adunk meg, akkor az ellenkező irányba fog eltolódni az elem.
@@ -85,15 +86,15 @@
         <ARTICLE>
             <H2>position: static</H2>
 
-            <P>A
-                <SPAN class="codepart">static</SPAN> érték, mint alapértelmezett, nem változtatja meg az elem helyzetét. A 'static' szó arra utal, hogy az elem nem változtatja meg az oldal folytonosságát.
-            </P>
+            <DIV>A
+                <CODE>static</CODE> érték, mint alapértelmezett, nem változtatja meg az elem helyzetét. A 'static' szó arra utal, hogy az elem nem változtatja meg az oldal folytonosságát.
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>position: relative</H2>
 
-            <P>A <SPAN class="codepart">relative</SPAN> értékkel az elem eredeti helyéhez képest lehet eltolni a tárolót. De inkábbnézzünk rá példát!</P>
+            <DIV>A <CODE>relative</CODE> értékkel az elem eredeti helyéhez képest lehet eltolni a tárolót. De inkábbnézzünk rá példát!</DIV>
 
             <DIV>
                 Először nézzünk egy példát az eltolás nélkül:
@@ -114,16 +115,18 @@
                 </DIV>
             </DIV>
 
-            <P>Mint látható, a <SPAN class="codepart">static</SPAN>-hoz hasonlóan a
-                <SPAN class="codepart">relative</SPAN> érték sem változtatja meg az oldal folytonosságát, elfoglalja a neki járó helyet, csak éppen elcsúszik belőle.</P>
+            <DIV>Mint látható, a <CODE>static</CODE>-hoz hasonlóan a
+                <CODE>relative</CODE> érték sem változtatja meg az oldal folytonosságát, elfoglalja a neki járó helyet, csak éppen elcsúszik belőle.
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>position: absolute</H2>
 
-            <P>Az
-                <SPAN class="codepart">absolute</SPAN> érték hatására két dolog történik: az elem kikerül az oldal folytonos megjelenítéséből, és az elem pozicionálása már nem az eredeti helyéhez képest, hanem az első olyan szülő tárolóhoz képest történik, melynek
-                <SPAN class="codepart">position</SPAN> értéke NEM <SPAN class="codepart">static</SPAN>.</P>
+            <DIV>Az
+                <CODE>absolute</CODE> érték hatására két dolog történik: az elem kikerül az oldal folytonos megjelenítéséből, és az elem pozicionálása már nem az eredeti helyéhez képest, hanem az első olyan szülő tárolóhoz képest történik, melynek
+                <CODE>position</CODE> értéke NEM <CODE>static</CODE>.
+            </DIV>
 
             <DIV>
                 Példa 1:
@@ -148,16 +151,16 @@
                     </DIV>
                 </DIV>
 
-                Ebben a példában pedig az látható, hogy hiába csomagoltuk be az eltolt elemet egy <SPAN class="codepart">&lt;div></SPAN>-be, mivel annak a
-                <SPAN class="codepart">position</SPAN> értéke alapértemezetten <SPAN class="codepart">static</SPAN>, ezért nem ahhoz viszonyítja a helyzetét, hanem a külső,
-                <SPAN class="codepart">relative</SPAN> értékű tárolóhoz.
+                Ebben a példában pedig az látható, hogy hiába csomagoltuk be az eltolt elemet egy <CODE>&lt;div></CODE>-be, mivel annak a
+                <CODE>position</CODE> értéke alapértemezetten <CODE>static</CODE>, ezért nem ahhoz viszonyítja a helyzetét, hanem a külső,
+                <CODE>relative</CODE> értékű tárolóhoz.
             </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>position: fixed</H2>
 
-            <P>Ezzel az értékkel a tárolónkat annak kódbeli elhelyezkedésétől függetlenül a képernyő egy adott pontjára szögezhetjük.</P>
+            <DIV>Ezzel az értékkel a tárolónkat annak kódbeli elhelyezkedésétől függetlenül a képernyő egy adott pontjára szögezhetjük.</DIV>
 
             <IFRAME src="/web/training/css/sample/position_fixed" style='display: block; width: 250px; height: 250px;'></IFRAME>
         </ARTICLE>
@@ -165,9 +168,10 @@
         <ARTICLE>
             <H2>position: sticky</H2>
 
-            <P>Ez a tulajdonság átmenetet képet a <SPAN class="codepart">relative</SPAN> és
-                <SPAN class="codepart">absolute</SPAN> értékek között, ugyanis egészen addig a helyén marad, amíg a felhasználó tovább nem görget, mert ebben az esetben
-                <SPAN class="codepart">absolute</SPAN>-ként kezd el viselkedni.</P>
+            <DIV>Ez a tulajdonság átmenetet képet a <CODE>relative</CODE> és
+                <CODE>absolute</CODE> értékek között, ugyanis egészen addig a helyén marad, amíg a felhasználó tovább nem görget, mert ebben az esetben
+                <CODE>absolute</CODE>-ként kezd el viselkedni.
+            </DIV>
 
             <DIV>
                 Példa:
@@ -198,9 +202,9 @@
         </ARTICLE>
 
         <ARTICLE>
-            <H2>Float</H2>
+            <H2>Float (lebegés)</H2>
 
-            <P>A <SPAN class="codepart">float</SPAN> tulajdonsággal olyan dobozokat tudunk csinálni, melyet körülölel a szöveg.</P>
+            <DIV>A <CODE>float</CODE> tulajdonsággal olyan dobozokat tudunk csinálni, melyet körülölel a szöveg.</DIV>
 
             <DIV>
                 Példák:<BR>
@@ -233,15 +237,16 @@
                 </DIV>
             </DIV>
 
-            <P>Ahogy a példákban látszik, lebegő doboz lehet a tároló bal és jobb oldalán is (vagy épp mindkettő), attól függően, hogy a <SPAN class="codepart">float</SPAN> tulajdonságnak az értékét
-                <SPAN class="codepart">left</SPAN>-re (bal), vagy <SPAN class="codepart">right</SPAN>-ra (jobb) állítjuk.</P>
-            <P>Valamint ahogy a negyedik példa mutatja, több lebegő doboz is követheti egymást, és lebegő doboz elhelyezhető folyó szöveg közben is. Utóbbi esetben a szöveg három oldalról veszi körbe a lebegő dobozunkat.</P>
+            <DIV>Ahogy a példákban látszik, lebegő doboz lehet a tároló bal és jobb oldalán is (vagy épp mindkettő), attól függően, hogy a <CODE>float</CODE> tulajdonságnak az értékét
+                <CODE>left</CODE>-re (bal), vagy <CODE>right</CODE>-ra (jobb) állítjuk.
+            </DIV>
+            <DIV>Valamint ahogy a negyedik példa mutatja, több lebegő doboz is követheti egymást, és lebegő doboz elhelyezhető folyó szöveg közben is. Utóbbi esetben a szöveg három oldalról veszi körbe a lebegő dobozunkat.</DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Átlátszóság</H2>
 
-            <P>Elem átlátszóságát az <CODE>opacity</CODE> tuéajdonsággal állíthatjuk. Ez egy tört számot vár, és minél kisebb ez az érték, annál inkább átlátszó az elem.</P>
+            <DIV>Elem átlátszóságát az <CODE>opacity</CODE> tuéajdonsággal állíthatjuk. Ez egy tört számot vár, és minél kisebb ez az érték, annál inkább átlátszó az elem.</DIV>
 
             <DIV style="opacity: 1; width: 250px; border: 3px solid red; display: inline-block;">
                 <IMG src="/res/training/img/css/sample_background.jpg" style="width: 100%;">
@@ -255,7 +260,7 @@
                 <IMG src="/res/training/img/css/sample_background.jpg" style="width: 100%;">
             </DIV>
 
-            <P>Az <CODE>opacity</CODE> tulajdonság értéke balról jobbra: 1, 0.5, 0.2</P>
+            <DIV>Az <CODE>opacity</CODE> tulajdonság értéke balról jobbra: 1, 0.5, 0.2</DIV>
         </ARTICLE>
     </MAIN>
 
