@@ -2,13 +2,15 @@ package com.github.saphyra.apphub.lib.event.processor;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
+import com.github.saphyra.apphub.lib.common_util.SleepService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -19,6 +21,8 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EventProcessorRegisterServiceTest {
+    private static final int REGISTRATION_FAILURE_DELAY = 1;
+
     @Mock
     private EventProcessorProperties eventProcessorProperties;
 
@@ -28,11 +32,23 @@ public class EventProcessorRegisterServiceTest {
     @Mock
     private EventGatewayApiClient eventGatewayApi;
 
-    @InjectMocks
+    @Mock
+    private SleepService sleepService;
+
     private EventProcessorRegisterService underTest;
 
     @Mock
     private RegisterProcessorRequest request;
+
+    @Before
+    public void setUp() {
+        underTest = EventProcessorRegisterService.builder()
+            .eventGatewayApi(eventGatewayApi)
+            .registries(List.of(registry))
+            .eventProcessorProperties(eventProcessorProperties)
+            .sleepService(sleepService)
+            .build();
+    }
 
     @Test
     public void registerProcessors() {
@@ -48,11 +64,12 @@ public class EventProcessorRegisterServiceTest {
         given(registry.getRequests()).willReturn(Arrays.asList(request));
         RuntimeException e = new RuntimeException("Asd");
         doThrow(e).when(eventGatewayApi).registerProcessor(request);
-        given(eventProcessorProperties.getRegistrationFailureRetryDelay()).willReturn(1);
+        given(eventProcessorProperties.getRegistrationFailureRetryDelay()).willReturn(REGISTRATION_FAILURE_DELAY);
 
         Throwable ex = catchThrowable(() -> underTest.registerProcessors());
 
         assertThat(ex).isEqualTo(e);
         verify(eventGatewayApi, times(3)).registerProcessor(request);
+        verify(sleepService, times(3)).sleep(REGISTRATION_FAILURE_DELAY);
     }
 }

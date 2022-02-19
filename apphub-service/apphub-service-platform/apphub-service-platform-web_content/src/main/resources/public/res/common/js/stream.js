@@ -86,6 +86,36 @@ function Stream(a){
         return array.join(separator);
     }
 
+    this.limit = function(limit){
+        if(array.length < limit){
+            return this;
+        }
+
+        return new Stream(array.slice(0, limit));
+    }
+
+    this.max = function(){
+        let currentMax = Number.MIN_VALUE;
+        this.forEach((value)=>{
+            if(value > currentMax){
+                currentMax = value;
+            }
+        });
+
+        return currentMax;
+    }
+
+    this.min = function(){
+        let currentMin = Number.MAX_VALUE;
+        this.forEach((value)=>{
+            if(value < currentMin){
+                currentMin = value;
+            }
+        });
+
+        return currentMin;
+    }
+
     this.map = function(mapper){
         const buff = [];
 

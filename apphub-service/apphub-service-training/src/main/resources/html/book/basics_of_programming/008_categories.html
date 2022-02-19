@@ -1,0 +1,205 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Nyelvek és kategóriák - A programozás alapja - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">A programozás alapja - Nyelvek és kategóriák</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/basics_of_programming.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Mi mire való?</H2>
+
+            <DIV>Most, hogy a legtöbb programozási nyelvre jellemző tudással (nagyjából) tisztában vagyunk, ideje mélyebben bele ásni magunkat egy konkrét nyelvben.</DIV>
+            <DIV>De ahhoz, hogy ezt a döntést meg tudjuk hozni, tudnunk kell, hogy az egyes nyelvek alkalmasak-e egyáltalán arra a feladatra, amire szánjuk, valamint mennyire egyszerű az elsajátításuk. (Egy számológépet a legtöbb programmal meg lehet írni, de nem árt, ha egy ilyen aránylag egyszerű feladathoz nem a legbonyolultabb nyelvet választjuk, ellenben van olyan feladat, ami teljesítéséhez több nyelv együttes használata szükséges.)</DIV>
+            <DIV>
+                Szóval íme, a teljesség igénye nélkül:
+                <UL>
+                    <LI>
+                        <CODE>SQL</CODE>: Adatbázisok kezelése, adatok tárolása, lekérdezése, összesítése. Mivel másra nem alkalmas, ezt csak akkor válasszuk, ha tényleg csak ennyire van szükségünk, ismerete viszont szinte nélkülözhetetlen, ha relációs adatbázisokkal kell dolgoznunk.
+                    </LI>
+                    <LI>
+                        <CODE>JavaScript (Natív)</CODE>: Dinamikus weboldalak létrehozása. Elengedhetetlen modern webalkalmazások készítéséhez, használható minden egyéb olyan feladathoz, amihez nem szükséges központi adat tárolás (adatbázis) illetve fájl elérés (olvasáson kívül).
+                    </LI>
+                    <LI>
+                        <CODE>PHP</CODE>: Könnyen tanulható, könnyen telepíthető, kiválóan alkalmas egyszerűbb weboldalak kiszolgálására, fájl műveletekre, adatbázis elérésére. Kevésbé alkalmas nagy teljesítményt igénylő feladatok (nagy méretű adat feldolhozása, párhuzamos feladatvégzés (multithreading) végrehajtása) elvégzésére.
+                    </LI>
+                    <LI>
+                        <CODE>Java</CODE>: Széleskörű keretrendszer támogatás, elterjedt. Alkalmas weboldalak/egyéb kliensek kiszolgálására, komplex alkalmazások létrehozására, nagy teljesítményt igénylő feladatok végrehajtására. Egyszerű adatbázis elérés, bonyolultabb fájl műveletek. Inkább azoknak ajánlanám, akik szereztek már némi gyakorlatot más nyelvek használatával.
+                    </LI>
+                    <LI>
+                        <CODE>AutoIt</CODE>: Kifejezetten számítógép automatizálási célokra, ha lusták vagyunk órákon át ugyanazt az ismétlődő folyamatot végig kattintgatni.
+                    </LI>
+                </UL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Típusos / típus nélküli</H2>
+
+            <DIV>A típusos nyelvekben a változók létrehozásakor meghatározzuk, hogy abba a változóba mik kerülhetnek, míg egy típus nélküli nyelvben egy változóba azt tehetünk, amit csak szeretnénk, sőt, még meg is változtathatjuk egy adott változó típusát, ha más típusú értéket rakunk bele, mint az eredeti értéke volt.</DIV>
+            <DIV>Ezt úgy képzeljük el, hogy egy típus nélküli nyelvben a változót jelképező dobozba azt teszünk, amit csak akarunk, míg egy típusos nyelvben ezt a dobozt egy felirattal látjuk el, és csak a feliratnak megfelelő típusú értéket tehetjük bele. (Például ha egy dobozra azt írjuk, hogy "kutya" akkor abba nem tehetünk bele kisautót, csak és kizárólag kutyákat.)</DIV>
+
+            <UL>
+                <LI>
+                    Típusos nyelv például a Java, a C#, és a TypeScript. Egy Java példa:
+                    <PRE th:replace="/example/basics_of_programming/categories.html :: typed_language"></PRE>
+                </LI>
+                <LI>
+                    Típus nélküli nyelvek közé tartozik a JavaScript, a PHP, és az AutoIt. Egy PHP példa:
+                    <PRE th:replace="/example/basics_of_programming/categories.html :: typeless_language"></PRE>
+                </LI>
+            </UL>
+
+            <DIV>A típusos nyelvek általában komplexebbek, és nehezebben tanulhatóak, de ezen kívül semmi hátrányuk sincs. Az pedig, hogy szeretnénk-e, hogy megkössük magunkat a típusok használatával, az egyéni preferencia.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Objektum orientált / funkcionális</H2>
+
+            <DIV>Objektum orientált nyelvekben is lehet funkcionálisan programozni, ellenben csak funkcionális nyelvben nem lehet objektum orientált kódot írni.</DIV>
+            <DIV>Egy objektum orientált nyelvben lehetőségünk van saját adattípusokat (osztályokat) létrehozni, és azokhoz funkciókat társítani. A funkcionális nyelvekben erre nincs lehetőség, ott csak primitív adattípusok, és funkciók vannak.</DIV>
+            <DIV>A funkcionális programozás alkalmasabb kis méretű programok írására, míg az objektum orientált nyelvek (jobb esetben) átláthatóbbá teszik a nagyobb alkalmazásokat.</DIV>
+
+            <DIV>
+                Funkcionális programozás:
+                <PRE th:replace="/example/basics_of_programming/categories.html :: functional_language"></PRE>
+            </DIV>
+
+            <DIV>
+                Objektum orientált programozás:
+                <PRE th:replace="/example/basics_of_programming/categories.html :: object_oriented_language"></PRE>
+            </DIV>
+
+            <UL>
+                <LI>Funkcionális nyelvek: AutoIt, PHP</LI>
+                <LI>Objektum orientált nyelvek: PHP (újabb verziók), Java</LI>
+            </UL>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Párhuzamos munkavégzés (multithreading) támogatása</H2>
+
+            <DIV>A párhuzamos munkavégzésre képes programok az adott feladatot fel tudják bontani egymástól függetlenül futtatható részfeladatokra, és ezeket a részfeladatokat egy időben, a számítógép processzorának több feldolgozó szálát kihasználva végzik el, így gyorsítva a futást.</DIV>
+            <DIV>A párhuzamos munkavégzésre nem alkalmas programok egyszerre csak egy művelet végrehajtására képesek (legalább is nem arra vannak kitalálva, hogy több szálon hajtsák végre a feladatot). Ez nem azt jelenti, hogy ez az alkalmazás egyszerre csak egy feladatot képes végrehajtani, csak azt, hogy az adott feladatot nem tudja több szál bevonásával feldolgozni.</DIV>
+            <DIV>Amennyiben ezt a könyvet olvasod, valószínűleg vagy már tisztában vagy a multithreading fogalmával, vagy még csak most ismerkedsz a programozással, utóbbi esetben aligha lesz rá szükséged a közeljövőben.</DIV>
+
+            <UL>
+                <LI>Egy szálas nyelvek: JavaScript, PHP, AutoIt</LI>
+                <LI>Párhuzamosítható nyelvek: Java, C#</LI>
+            </UL>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Fordított / Értelmező nyelv</H2>
+
+            <DIV>A fordított nyelveknél a forráskódot annak futtatása előtt a számítógép által feldolgozható bájtkódra kell fordítani.</DIV>
+            <DIV>Az értelmező nyelveknél a számítógép a program futása közben alakítja át a forráskódot a számítógép által végre hajtható utasításokká, és azonnal végre is hajtja őket.</DIV>
+
+            <DIV>
+                Fordított nyelvek tulajdonságai:
+                <UL>
+                    <LI>A forráskód kipróbálása időt vesz igénybe, mivel a futtatás előtt le kell fordítani azt.</LI>
+                    <LI>A fordító program még futás előtt jelzi a forráskód hibáit</LI>
+                    <LI>Mivel a számítógépnek a futtatás során nem kell még a fordítással is foglalkoznia, így a kód gyorsabban lefut, mint értelmező társai.</LI>
+                </UL>
+            </DIV>
+
+            <DIV>
+                Értelmező nyelvek tulajdonságai:
+                <UL>
+                    <LI>Mivel a forráskód az írása után rögtön futtatható, gyorsabban ki lehet próbálni.</LI>
+                    <LI>A program futása lassabb, mivel a futás során a végrehajtás előtt a forráskódot futtathatóvá kell alakítani</LI>
+                    <LI>Nincs fordító program, ami a futás előtt jelezné a hibákat, így azok (forráskód elemző programok használata nélkül) csak a futás során derülnek ki</LI>
+                </UL>
+            </DIV>
+
+            <DIV>
+                <UL>
+                    <LI>Értelmező nyelvek: JavaScript, PHP</LI>
+                    <LI>Fordított nyelvek: Java, AutoIt</LI>
+                </UL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Erőforrásigény szerint</H2>
+
+            <DIV>A kiválasztott feladatra alkalmas nyelvek közül érdemes azt kiválasztani, amely a legkevesebb erőforrással (Processzor, memória, tárhely, stb) is beéri, mind a fejlesztés, mind a futás alatt.</DIV>
+
+            <DIV>
+                <UL>
+                    <LI>
+                        Alacsony erőforrásigényű nyelvek:
+                        <UL>
+                            <LI>JavaScript: Fejlesztéséhez elég egy notepad, vagy egy egyszerűbb IDE, futtatásához pedig egy böngésző, ami amúgy is van a számítógépre telepítve.</LI>
+                            <LI>Bash: Parancssori utasítások sorozata. Használatához semmilyen extra program nem szükséges, csak az operációs rendszer saját parancssora</LI>
+                        </UL>
+                    </LI>
+                    <LI>
+                        Közepes erőforrásigényű nyelvek:
+                        <UL>
+                            <LI>SQL: Használatához egy adatbázis, és adatbáziskezelő program megléte szükséges</LI>
+                            <LI>PHP: Fejlesztéséhez elég egy notepad, vagy egy egyszerűbb IDE, futtatásához viszont fel kell telepíteni az értelmező programot.</LI>
+                            <LI>AutoIt: Fejlesztéséhez a saját IDE-je telepítése elengedhetetlen, ami viszont tartalmazza a fordító programot is.</LI>
+                        </UL>
+                    </LI>
+                    <LI>
+                        Magas erőforrásigényű nyelvek:
+                        <UL>
+                            <LI>Java, C#: Fejlesztéséhez ajánlott a nyelvhez dedikált IDE-t használni (Eclipse / IntelliJ Idea, Microsoft Visual Studio). Fordító program telepítése szükséges. A futtatáshoz szükséges program telepítése szükséges. Kiszolgálóként történő használat során a program folyamatosan fut, így memóriaigénye magas.</LI>
+                        </UL>
+                    </LI>
+                </UL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Elterjedtség szerint</H2>
+
+            <DIV>Egy többek által ismert nyelvhez könnyebb az interneten segítséget, illetve különböző feladatok ellátására szolgáló, már készen levő könyvtárakat találni.</DIV>
+
+            <DIV>
+                <UL>
+                    <LI>
+                        Kevésbé elterjedt nyelvek:
+                        <Ul>
+                            <LI>AutoIt - Mivel gyakorlatilag csak célszoftverek létrehozására alkalmas, elég kevesen használják.</LI>
+                        </Ul>
+                    </LI>
+                    <LI>
+                        Közepesen elterjedt nyelvek:
+                        <UL>
+                            <LI>PHP - Sok elérhető anyag található az interneten, viszont kevés szoftverfejlesztő cég használja, így PHP fejlesztőként nehezebb munkát találni.</LI>
+                        </UL>
+                    </LI>
+                    <LI>
+                        Elterjedt nyelvek:
+                        <UL>
+                            <LI>JavaScript - Manapság a weboldalak létrehozásához elengedhetetlen.</LI>
+                            <LI>SQL - A legtöbb relációs adatbázis kezeléséhez szükséges nyelv.</LI>
+                            <LI>Java - Sokcélúsága és biztonsága miatt igen elterjedt az üzleti szférában.</LI>
+                        </UL>
+                    </LI>
+                </UL>
+            </DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/basics_of_programming/007_loops'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

@@ -86,9 +86,10 @@ main{
             font-family: monospace;
             background: rgb(50,50,50);
             overflow: auto;
+            white-space: pre-wrap;
         }
 
-code, .codepart{
+code{
     background: rgb(75, 0, 0);
     font-family: monospace;
     white-space: nowrap;

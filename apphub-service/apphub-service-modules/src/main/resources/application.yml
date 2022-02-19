@@ -28,6 +28,10 @@ modules:
         url: /web/admin-panel/roles-for-all
         roles:
           - ADMIN
+      - name: memory-monitoring
+        url: /web/admin-panel/memory-monitoring
+        roles:
+          - ADMIN
     accounts:
       - name: account
         url: /web/user/account
@@ -62,6 +66,11 @@ modules:
           - TRAINING
       - name: css
         url: /web/training/css/001_introduction
+        mobileAllowed: true
+        roles:
+          - TRAINING
+      - name: basics-of-programming
+        url: /web/training/basics_of_programming/001_introduction
         mobileAllowed: true
         roles:
           - TRAINING

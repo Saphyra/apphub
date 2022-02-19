@@ -134,4 +134,4 @@ logging:
             service:
               skyxplore:
                 game:
-                  tick: DEBUG #TODO Restore to info
+                  tick: INFO

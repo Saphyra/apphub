@@ -20,87 +20,87 @@
         <ARTICLE>
             <H2>Szegély megadása</H2>
 
-            <P>Szegélyt a <SPAN class='codepart'>border</SPAN>rel kezdődő tulajdonságokkal lehet létrehozni.</P>
-            <P>
+            <DIV>Szegélyt a <CODE>border</CODE>rel kezdődő tulajdonságokkal lehet létrehozni.</DIV>
+            <DIV>
                 A tulajdonság 3 értéket vár:
-            <OL>
-                <LI>A szegély vastagsága</LI>
-                <LI>A szegély típusa (Lásd: Szegélytípusok)</LI>
-                <LI>A szegély színe</LI>
-            </OL>
-            Például: <SPAN class='codepart'>border: 3px solid red;</SPAN> - létrehoz egy 3 pixel vastag, pirols, folyamatos vonalból álló szegélyt a tároló köré.<BR>
-            <SPAN style='border: 3px solid red; margin-top: 1rem; display: inline-block;'>Példa</SPAN>
-            <P>
+                <OL>
+                    <LI>A szegély vastagsága</LI>
+                    <LI>A szegély típusa (Lásd: Szegélytípusok)</LI>
+                    <LI>A szegély színe</LI>
+                </OL>
+                Például: <CODE>border: 3px solid red;</CODE> - létrehoz egy 3 pixel vastag, pirols, folyamatos vonalból álló szegélyt a tároló köré.<BR>
+                <SPAN style='border: 3px solid red; margin-top: 1rem; display: inline-block;'>Példa</SPAN>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Szegély megadása a tároló bizonyos oldalaira</H2>
 
-            <P>A CSS lehetőséget ad a tároló oldalainak szegélyeit külön-külön beállítani.</P>
-            <P>
+            <DIV>A CSS lehetőséget ad a tároló oldalainak szegélyeit külön-külön beállítani.</DIV>
+            <DIV>
                 Ezt ugyanúgy lehet megtenni, mint a körkörös szegélynél, csak a tulajdonság végéhez hozzá fűzzük, hogy melyik oldal szegélyét szeretnénk állítani (top: felső, right: jobb oldal, bottom: alsó, left: bal oldal).<BR>
-                Például: <SPAN class='codepart'>border-bottom: 3px solid red;</SPAN> - Az előző szegély csak az alsó oldalra alkalmazva.<BR>
+                Például: <CODE>border-bottom: 3px solid red;</CODE> - Az előző szegély csak az alsó oldalra alkalmazva.<BR>
                 <SPAN style='border-bottom: 3px solid red; margin-top: 1rem; display: inline-block;'>Példa</SPAN>
-            </P>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>A szegély tulajdonságainak külön történő megadása</H2>
 
-            <P>
-                A szegély tulajdonságit meg lehet adni külön-külön is, például <SPAN class='codepart'>border-color: red;</SPAN>, vagy csak az adott oldalra:
-                <SPAN class='codepart'>border-bottom-color: red;</SPAN><BR>
+            <DIV>
+                A szegély tulajdonságit meg lehet adni külön-külön is, például <CODE>border-color: red;</CODE>, vagy csak az adott oldalra:
+                <CODE>border-bottom-color: red;</CODE><BR>
                 Az így beállítható tulajdonságok:
-            <UL>
-                <LI><SPAN class='codepart'>border-color</SPAN>: szegély szín</LI>
-                <LI><SPAN class='codepart'>border-style</SPAN>: szegély stílus</LI>
-                <LI><SPAN class='codepart'>border-width</SPAN>: szegély vastagság</LI>
-            </UL>
-            </P>
+                <UL>
+                    <LI><CODE>border-color</CODE>: szegély szín</LI>
+                    <LI><CODE>border-style</CODE>: szegély stílus</LI>
+                    <LI><CODE>border-width</CODE>: szegély vastagság</LI>
+                </UL>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
-            <H2>Szegély típusok</H2>
+            <H2>Szegély stílusok</H2>
 
-            <P>
-            <UL>
-                <LI><SPAN class='codepart'>dotted</SPAN>: <SPAN style='border: 3px dotted red;'>pontozott</SPAN></LI>
-                <LI><SPAN class='codepart'>dashed</SPAN>: <SPAN style='border: 3px dashed red;'>szaggatott vonal</SPAN></LI>
-                <LI><SPAN class='codepart'>solid</SPAN>: <SPAN style='border: 3px solid red;'>egyszerű vonal</SPAN></LI>
-                <LI><SPAN class='codepart'>double</SPAN>: <SPAN style='border: 3px double red;'>dupla vonal</SPAN></LI>
-                <LI><SPAN class='codepart'>groove</SPAN>: <SPAN style='border: 5px groove red;'>groove</SPAN></LI>
-                <LI><SPAN class='codepart'>ridge</SPAN>: <SPAN style='border: 5px ridge red;'>ridge</SPAN></LI>
-                <LI><SPAN class='codepart'>inset</SPAN>: <SPAN style='border: 5px inset red;'>inset</SPAN></LI>
-                <LI><SPAN class='codepart'>outset</SPAN>: <SPAN style='border: 5px outset red;'>outset</SPAN></LI>
-                <LI><SPAN class='codepart'>none</SPAN>: <SPAN style='border: 3px none red;'>nincs szegély</SPAN></LI>
-                <LI><SPAN class='codepart'>hidden</SPAN>: <SPAN style='border: 3px hidden red;'>láthatatlan szegély</SPAN></LI>
-            </UL>
-            </P>
+            <DIV>
+                <UL>
+                    <LI><CODE>dotted</CODE>: <SPAN style='border: 3px dotted red;'>pontozott</SPAN></LI>
+                    <LI><CODE>dashed</CODE>: <SPAN style='border: 3px dashed red;'>szaggatott vonal</SPAN></LI>
+                    <LI><CODE>solid</CODE>: <SPAN style='border: 3px solid red;'>egyszerű vonal</SPAN></LI>
+                    <LI><CODE>double</CODE>: <SPAN style='border: 3px double red;'>dupla vonal</SPAN></LI>
+                    <LI><CODE>groove</CODE>: <SPAN style='border: 5px groove red;'>groove</SPAN></LI>
+                    <LI><CODE>ridge</CODE>: <SPAN style='border: 5px ridge red;'>ridge</SPAN></LI>
+                    <LI><CODE>inset</CODE>: <SPAN style='border: 5px inset red;'>inset</SPAN></LI>
+                    <LI><CODE>outset</CODE>: <SPAN style='border: 5px outset red;'>outset</SPAN></LI>
+                    <LI><CODE>none</CODE>: <SPAN style='border: 3px none red;'>nincs szegély</SPAN></LI>
+                    <LI><CODE>hidden</CODE>: <SPAN style='border: 3px hidden red;'>láthatatlan szegély</SPAN></LI>
+                </UL>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Lekerekítés</H2>
 
-            <P>A szegély lekerekítését a <SPAN class='codepart'>border-radius</SPAN> tulajdonsággal lehet állítani.</P>
-            <P>
-                <SPAN class='codepart'>border-radius: 15px;</SPAN><BR>
+            <DIV>A szegély lekerekítését a <CODE>border-radius</CODE> tulajdonsággal lehet állítani.</DIV>
+            <DIV>
+                <CODE>border-radius: 15px;</CODE><BR>
                 <SPAN style='border: 3px solid red; border-radius: 15px; margin-top: 1rem; display: inline-block;'>Példa</SPAN>
-            </P>
-            <P>
+            </DIV>
+            <DIV>
                 Sarkonként különböző lekerekítés megadása: A
-                <SPAN class='codepart'>border-radius</SPAN> tulajdonságnak 4 értéket adunk egymás után, a bal felső sarokból indulva az óramutató járásának megfelelően:<BR>
-                <SPAN class='codepart'>border-radius: 10px 15px 20px 25px;</SPAN>
-            <DIV style="width: 50px; height: 50px; background: red; border: 5px solid black; border-radius: 10px 15px 20px 25px"></DIV>
-            </P>
-            <P>
+                <CODE>border-radius</CODE> tulajdonságnak 4 értéket adunk egymás után, a bal felső sarokból indulva az óramutató járásának megfelelően:<BR>
+                <CODE>border-radius: 10px 15px 20px 25px;</CODE>
+                <DIV style="width: 50px; height: 50px; background: red; border: 5px solid black; border-radius: 10px 15px 20px 25px"></DIV>
+            </DIV>
+            <DIV>
                 Ha csak egy saroknak szeretnénk módosítani a lekerekítését, akkor azt a sarok megnevezésével is megtehetjük.<BR>
-                Például a bal alsó sarok szegélyét a <SPAN class='codepart'>border-bottom-left-radius</SPAN> tulajdonsággal állíthatjuk.
-            </P>
-            <P>
+                Például a bal alsó sarok szegélyét a <CODE>border-bottom-left-radius</CODE> tulajdonsággal állíthatjuk.
+            </DIV>
+            <DIV>
                 <U>Megjegyzés:</U> a
-                <SPAN class='codepart'>border-radius</SPAN> tulajdonság használható bármilyen tároló lekerekítésére, akár szegély nélkül is. Állítsuk az értékét 50%-ra a teljesen kerek forma eléréséhez!
-            <DIV style="width: 250px; height: 250px;background: red; border-radius: 50%;"></DIV>
-            </P>
+                <CODE>border-radius</CODE> tulajdonság használható bármilyen tároló lekerekítésére, akár szegély nélkül is. Állítsuk az értékét 50%-ra a teljesen kerek forma eléréséhez!
+                <DIV style="width: 250px; height: 250px;background: red; border-radius: 50%;"></DIV>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>

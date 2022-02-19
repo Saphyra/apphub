@@ -20,88 +20,91 @@
         <ARTICLE>
             <H2>Mire jók a margók?</H2>
 
-            <P>Margók beállításával a tárolóink egymáshoz képesti helyzetét tudjuk meghatározni.</P>
+            <DIV>Margók beállításával a tárolóink egymáshoz képesti helyzetét tudjuk meghatározni.</DIV>
 
-            <P>
+            <DIV>
                 Például vegyünk egy nagy dobozt, amibe bele rakunk egy kisebbet úgy, hogy annak egy meghatározott távolságra kell lennie a nagy doboz sarkától. Ezt a távolságot adja meg a margó:<BR>
 
-                <SPAN class='codepart'>margin: 20px;</SPAN>: Egy 20 px széles területet foglal le a tároló körül.
+                <CODE>margin: 20px;</CODE>: Egy 20 px széles területet foglal le a tároló körül.
 
-            <PRE class="codepart" th:replace="/example/css/margins.html :: example"></PRE>
+                <PRE th:replace="/example/css/margins.html :: example"></PRE>
 
-            <DIV style='background: red; width: 250px; height: 250px;'>
-                Tároló
-                <DIV style='background: green; margin: 20px;'>Doboz margóval</DIV>
-                <DIV style='background: orange;'>Margó nélküli doboz</DIV>
+                <DIV style='background: red; width: 250px; height: 250px;'>
+                    Tároló
+                    <DIV style='background: green; margin: 20px;'>Doboz margóval</DIV>
+                    <DIV style='background: orange;'>Margó nélküli doboz</DIV>
+                </DIV>
             </DIV>
-            </P>
 
-            <P>Ahogy a példában látható, a margóval ellátott doboz körül létrejött egy 20 pixel vastag üres tér.</P>
+            <DIV>Ahogy a példában látható, a margóval ellátott doboz körül létrejött egy 20 pixel vastag üres tér.</DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Oldalanként különböző margó megadása</H2>
 
-            <P>Természetesen a CSS megengedi, hogy minden oldalra külön margót állítsunk be, vagy csak adott oldalaknak adjunk meg értéket.</P>
-            <P>
+            <DIV>Természetesen a CSS megengedi, hogy minden oldalra külön margót állítsunk be, vagy csak adott oldalaknak adjunk meg értéket.</DIV>
+            <DIV>
                 Első lehetőséget szintén a
-                <SPAN class="codepart">margin</SPAN> tulajdonsággal érhetjük el, csak ebben az esetben 4 értéket kell megadni neki. (Felső, jobb oldali, alsó, bal oldali sorrendben)<BR>
-                <SPAN class="codepart">margin: 20px 30px 40px 50px;</SPAN><BR>
+                <CODE>margin</CODE> tulajdonsággal érhetjük el, csak ebben az esetben 4 értéket kell megadni neki. (Felső, jobb oldali, alsó, bal oldali sorrendben)<BR>
+                <CODE>margin: 20px 30px 40px 50px;</CODE><BR>
 
-            <DIV style='background: red; display: inline-block;'>
-                Tároló
-                <DIV style='background: green; margin: 20px 30px 40px 50px;'>Doboz margóval</DIV>
-                <DIV style='background: orange; margin: 0;'>Margó nélküli doboz</DIV>
+                <DIV style='background: red; display: inline-block;'>
+                    Tároló
+                    <DIV style='background: green; margin: 20px 30px 40px 50px;'>Doboz margóval</DIV>
+                    <DIV style='background: orange; margin: 0;'>Margó nélküli doboz</DIV>
+                </DIV>
             </DIV>
-            </P>
-            <P>
-                Ha csak egy adott oldal margóját szeretnénk beállítani, azt a <SPAN class='codepart'>margin-top</SPAN>, <SPAN class='codepart'>margin-right</SPAN>,
-                <SPAN class='codepart'>margin-bottom</SPAN> és <SPAN class='codepart'>margin-left</SPAN> tulajdonságokkal tehetjük meg.<BR>
-                Például ha csak a jobb oldali margót szeretnénk állítani, akkor: <SPAN class='codepart'>margin-right: 100px;</SPAN><BR>
+            <DIV>
+                Ha csak egy adott oldal margóját szeretnénk beállítani, azt a <CODE>margin-top</CODE>, <CODE>margin-right</CODE>,
+                <CODE>margin-bottom</CODE> és <CODE>margin-left</CODE> tulajdonságokkal tehetjük meg.<BR>
+                Például ha csak a jobb oldali margót szeretnénk állítani, akkor: <CODE>margin-right: 100px;</CODE><BR>
 
-            <DIV style='background: red; display: inline-block;'>
-                Tároló
-                <DIV style='background: green; margin-right: 100px;'>Doboz margóval</DIV>
-                <DIV style='background: orange; margin: 0;'>Margó nélküli doboz</DIV>
+                <DIV style='background: red; display: inline-block;'>
+                    Tároló
+                    <DIV style='background: green; margin-right: 100px;'>Doboz margóval</DIV>
+                    <DIV style='background: orange; margin: 0;'>Margó nélküli doboz</DIV>
+                </DIV>
             </DIV>
-            </P>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Tároló középre helyezése</H2>
 
-            <P>
+            <DIV>
                 A
-                <SPAN class='codepart'>margin</SPAN> tulajdonság még egy, elég hasznos lehetőséget ad a kezünkbe: egyszerű módot nyújt a tárolók vízszintesen történő középre helyezésére. Ehhez csak annyit kell tenni, hogy értéknek az
-                <SPAN class='codepart'>auto</SPAN>-t adjuk meg:<BR>
-                <SPAN class='codepart'>margin: auto;</SPAN><BR>
+                <CODE>margin</CODE> tulajdonság még egy, elég hasznos lehetőséget ad a kezünkbe: egyszerű módot nyújt a tárolók vízszintesen történő középre helyezésére. Ehhez csak annyit kell tenni, hogy értéknek az
+                <CODE>auto</CODE>-t adjuk meg:<BR>
+                <CODE>margin: auto;</CODE><BR>
 
-            <DIV style='background: red; width: 250px;'>
-                Tároló
-                <DIV style='background: green; width: 150px; margin: auto;'>Doboz margóval</DIV>
-                <DIV style='background: orange; margin: 0;'>Margó nélküli doboz</DIV>
+                <DIV style='background: red; width: 250px;'>
+                    Tároló
+                    <DIV style='background: green; width: 150px; margin: auto;'>Doboz margóval</DIV>
+                    <DIV style='background: orange; margin: 0;'>Margó nélküli doboz</DIV>
+                </DIV>
             </DIV>
-            </P>
 
-            <P><U>Megjegyzés:</U> A felső és alsó margók a középre helyezéstől függetlenül állíthatóak a <SPAN class='codepart'>margin-top</SPAN> és
-                <SPAN class='codepart'>margin-bottom</SPAN> tulajdonságokkal.</P>
+            <DIV><U>Megjegyzés:</U> A felső és alsó margók a középre helyezéstől függetlenül állíthatóak a <CODE>margin-top</CODE> és
+                <CODE>margin-bottom</CODE> tulajdonságokkal.
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Belső margó</H2>
 
-            <P>
+            <DIV>
                 A szegély (ha van - ha nincs, akkor a tároló széle) és a tartalom közötti területet nevezik belső margónak. Ezt a távolságot a
-                <SPAN class='codepart'>padding</SPAN> tulajdonsággal lehet állítani.<BR>
+                <CODE>padding</CODE> tulajdonsággal lehet állítani.<BR>
                 Működése nagyjából megegyezik a
-                <SPAN class='codepart'>maring</SPAN>éval (nincs auto érték). Meg lehet adni egyforma értéket minden oldalra (<SPAN class='codepart'>padding: 20px;</SPAN>), oldalanként különböző értéket (<SPAN class='codepart'>padding: 20px 30px 40px 50px;</SPAN>) és lehetőség van csak bizonyos oldalakat megadni (<SPAN class='codepart'>padding-top: 25px;</SPAN>, stb).
-            <P>
+                <CODE>maring</CODE>éval (nincs auto érték). Meg lehet adni egyforma értéket minden oldalra (<CODE>padding: 20px;</CODE>), oldalanként különböző értéket (<CODE>padding: 20px 30px 40px 50px;</CODE>) és lehetőség van csak bizonyos oldalakat megadni (<CODE>padding-top: 25px;</CODE>, stb).
+                <DIV>
 
-            <P>
-                Példa:
-                <SPAN class='codepart'>padding: 20px 30px 40px 50px; border: 3px solid red;</SPAN>
-            <DIV style='display: inline-block; padding: 20px 30px 40px 50px; border: 3px solid red;'>Tartalom</DIV>
-            </P>
+                    <DIV>
+                        Példa:
+                        <CODE>padding: 20px 30px 40px 50px; border: 3px solid red;</CODE>
+                        <DIV style='display: inline-block; padding: 20px 30px 40px 50px; border: 3px solid red;'>Tartalom</DIV>
+                    </DIV>
+                </DIV>
+            </DIV>
         </ARTICLE>
     </MAIN>
 

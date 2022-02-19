@@ -1,0 +1,142 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Feltételek, döntéshozás - A programozás alapja - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">A programozás alapja - Feltételek, döntéshozás</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/basics_of_programming.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <DIV>Mit ér a program, ha nem tud "gondolkodni"? Nem sokat.</DIV>
+            <DIV>De szerencsére a programozási nyelvek képesek feltételeket vizsgálni, és ez alapján eldönteni, hogy az egyik, vagy másik kód részlet fusson le.</DIV>
+            <DIV>A szintaktika eltérhet a különböző programozási nyelveknél, úgyhogy az egyszerűség kedvéért a példák PHP nyelvben lesznek írva.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>If (Ha)</H2>
+
+            <DIV>Egy boolean (igaz/hamis) értéket vár, és ha az érték igaz, akkor le futtatja az utána következő kód blokkot:</DIV>
+            <PRE th:replace="/example/basics_of_programming/conditions.html :: if"></PRE>
+
+            <DIV>Az adott boolean változó értékét "meg lehet fordítani" a <CODE>!</CODE> jel segítségével:</DIV>
+            <PRE th:replace="/example/basics_of_programming/conditions.html :: negated_if"></PRE>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Feltételek</H2>
+
+            <DIV>Egy feltétel lehet bármilyen olyan utasítás, aminek az eredménye boolean (igaz/hamis)</DIV>
+
+            <DIV>
+                Példák:
+                <UL>
+                    <LI>Egyezőség vizsgálat a <CODE>==</CODE> segítségével:
+                        <CODE>$eredmeny = $valtozo1 == $valtozo2</CODE> (az "eredmeny" nevű változó értéke true (igaz), ha "valtozo1" és "valtozo2" értéke megegyezik.
+                    </LI>
+                    <LI>Különbözőség vizsgálat a <CODE>!=</CODE> segítségével:
+                        <CODE>$eredmeny = $valtozo1 != $valtozo2</CODE> (az "eredmeny" nevű változó értéke true (igaz), ha "valtozo1" és "valtozo2" értéke különbözik.
+                    </LI>
+                    <LI>Kisebb / nagyobb vizsgálat: <CODE>$eredmeny = $szam1 < $szam2</CODE> ("eredmeny nevű változó értéke true (igaz), ha "szam1" értéke kisebb, mint "szam2)</LI>
+                    <LI>Kisebb vagy egyenlő / nagyobb vagy egyenlő vizsgálat:
+                        <CODE>$eredmeny = $szam1 >= $szam2</CODE> ("eredmeny nevű változó értéke true (igaz), ha "szam1" értéke nagyobb, vagy egyenlő, mint "szam2)
+                    </LI>
+                </UL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Összetett feltételek</H2>
+
+            <DIV>Összetett feltétel esetén több feltételt kötünk össze "és" vagy "vagy" kapcsolattal.</DIV>
+            <DIV><CODE>$eredmeny = feltetel1 && feltetel2</CODE> - "$eredmeny" igaz, ha "feletel1" <CODE>ÉS</CODE> "feltetel2" is igaz.</DIV>
+            <DIV><CODE>$eredmeny = feltetel1 || feltetel2</CODE> - "$eredmeny" igaz, ha "feletel1" <CODE>VAGY</CODE> "feltetel2" is igaz.</DIV>
+
+            <DIV>
+                A <CODE>&&</CODE> és
+                <CODE>||</CODE> jelek rövidre záróan működnek. Ez azt jelenti, hogy ha tudjuk, hogy az összetett feltétel eredménye már biztos, akkor a további feltételeket nem számolja ki a program.
+                Tehát:
+                <UL>
+                    <LI><CODE>&&</CODE> (és) esetében ha az első feltétel hamis, akkor a második feltétel nem kerül kiszámításra, hiszen az eredmény biztosan hamis lesz.</LI>
+                    <LI><CODE>||</CODE> (vagy) esetében ha az első feltétel igaz, akkor a második feltétel nem kerül kiszámításra, hiszen az eredmény biztosan igaz lesz.</LI>
+                </UL>
+                Ha azt szeretnénk, hogy az összes feltétel kiszámításra kerüljön az eredmény biztosságától függetlenül, akkor használhatjuk a <CODE>&</CODE> és <CODE>|</CODE> műveleteket.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Else (Egyébként)</H2>
+
+            <DIV>Az <CODE>if...else</CODE> páros segítségével el tudjuk dönteni, hogy 2 lehetőség közül melyik kód részlet fusson le.</DIV>
+            <DIV>Ha az <CODE>if</CODE>-nek "igaz" értéket adunk, akkor az <CODE>if</CODE>-be foglalt kód fog lefutni, ha pedig az <CODE>if</CODE>-nek "hamis" értéket adunk, akkor az
+                <CODE>else</CODE>-be foglalt kód fog lefutni.
+            </DIV>
+            <PRE th:replace="/example/basics_of_programming/conditions.html :: if_else"></PRE>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Else if (Egyébként ha)</H2>
+
+            <DIV>Az <CODE>if...else</CODE> párost további feltételekkel kibővítve összetett kondíciókat hozhatunk létre.</DIV>
+            <DIV>
+                Ebben az esetben a futás sorrendje a következő:
+                <LI>Az <CODE>if</CODE> feltételének vizsgálata, ha ez hamis, akkor</LI>
+                <LI>Az <CODE>else if</CODE>(-ek) feltételeinek vizsgálata sorrendben, ha az összes hamis, akkor</LI>
+                <LI>A <CODE>else</CODE>-be foglalt kód futtatása.</LI>
+                Tehát fentről lefelé haladva az első igaz feltételhez tartozó kód fog lefutni, ha ilyen nincs, akkor az <CODE>else</CODE>-hez tartozó kód.
+            </DIV>
+
+            <PRE th:replace="/example/basics_of_programming/conditions.html :: else_if"></PRE>
+
+            <DIV><U>Megjegyzés</U>: Az <CODE>else</CODE> elhagyható.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Switch (Kapcsoló)</H2>
+
+            <DIV>Az <CODE>if...else if...else</CODE> kombinációval mindent le lehet fedni, viszont egyes esetekben szebb megoldás a <CODE>switch</CODE> használata.</DIV>
+            <DIV>Erre akkor szokott sor kerülni, ha nem igaz értékeket vizsgálunk, hanem például egy szöveg/szám értékétől függően szeretnénk eldönteni, hogy melyik kód részlet fusson le.</DIV>
+            <DIV>A
+                <CODE>switch</CODE> egy (nem boolean) értéket vár, majd megkeresi az alatta felsorolt esetekből (<CODE>case</CODE>-k) azt, amelyik egyezik ezzel az értékkel, és végre hajtja a hozzá tartozó kódot.
+            </DIV>
+            <DIV>Ha nincs egyezés, akkor az elhagyható <CODE>default</CODE>-ban levő kód fog lefutni.</DIV>
+
+            <PRE th:replace="/example/basics_of_programming/conditions.html :: switch"></PRE>
+
+            <DIV>Ugyanez <CODE>if...else if...else</CODE>-el:</DIV>
+            <PRE th:replace="/example/basics_of_programming/conditions.html :: switch_replacement"></PRE>
+
+            <DIV>Ha egy <CODE>case</CODE> végére nem teszünk <CODE>break</CODE> parancsot, akkor a következő <CODE>case</CODE> kódja is le fog futni attól függetlenül, hogy a második
+                <CODE>case</CODE> értéke különböző a bemeneti értéktől, egészen addig, amíg a futás nem érkezik el egy <CODE>break</CODE> parancsig (vagy vége a <CODE>switch</CODE>-nek).
+            </DIV>
+            <PRE th:replace="/example/basics_of_programming/conditions.html :: breakless_switch"></PRE>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Tenary Operator / Hármas operátor</H2>
+
+            <DIV>Ez egy olyan művelet, amiben egy feltétel alapján két lehetőség közül választjuk ki az egyiket.</DIV>
+            <DIV>Szintaktika: <CODE>$eredmeny = $feltetel ? "igaz" : "hamis";</CODE></DIV>
+            <DIV>Ha a "feltetel" nevű változó értéke true (igaz), akkor az "eredmeny" nevű változó értéke "igaz" lesz. Ha "feltetel" false (hamis), akkor az "eredmeny" értéke "hamis" lesz.</DIV>
+            <DIV>Ez a megoldás alkalmas az egyszerű <CODE>if...else</CODE> formulák helyettesítésére, viszont sokak szerint nehezen olvashatóvá teszi a kódot.</DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/basics_of_programming/003_operations'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/basics_of_programming/005_functions'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

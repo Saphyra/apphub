@@ -37,7 +37,7 @@ spec:
             failureThreshold: 4
           resources:
             limits:
-              memory: 1000Mi
+              memory: 500Mi
 ---
 apiVersion: v1
 kind: Service

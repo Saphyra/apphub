@@ -40,4 +40,10 @@ public class PageController {
         log.info("RolesForAll page called.");
         return "roles_for_all";
     }
+
+    @GetMapping(Endpoints.ADMIN_PANEL_MEMORY_MONITORING_PAGE)
+    public String memoryMonitoringPage() {
+        log.info("RolesForAll page called.");
+        return "memory_monitoring";
+    }
 }

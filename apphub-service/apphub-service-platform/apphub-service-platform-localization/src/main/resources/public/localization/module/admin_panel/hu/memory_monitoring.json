@@ -1,0 +1,58 @@
+{
+  "title": "Apphub - Memória felügyelet",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Memória felügyelet"
+      }
+    ],
+    "30-seconds": [
+      {
+        "key": "innerHTML",
+        "message": "30 másodperc"
+      }
+    ],
+    "1-minute": [
+      {
+        "key": "innerHTML",
+        "message": "1 perc"
+      }
+    ],
+    "5-minutes": [
+      {
+        "key": "innerHTML",
+        "message": "5 perc"
+      }
+    ],
+    "10-minutes": [
+      {
+        "key": "innerHTML",
+        "message": "10 perc"
+      }
+    ],
+    "20-minutes": [
+      {
+        "key": "innerHTML",
+        "message": "20 perc"
+      }
+    ],
+    "30-minutes": [
+      {
+        "key": "innerHTML",
+        "message": "30 perc"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Vissza"
+      }
+    ]
+  },
+  "additionalContent": {
+    "available-memory": "Elérhető: {memory} MB",
+    "allocated-memory": "Lefoglalt: {memory} MB",
+    "used-memory": "Felhasznált: {memory} MB"
+  }
+}

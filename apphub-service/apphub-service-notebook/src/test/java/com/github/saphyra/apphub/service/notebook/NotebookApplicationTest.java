@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(SpringRunner.class)
@@ -37,6 +38,6 @@ public class NotebookApplicationTest {
 
         assertThat(statusCode).isEqualTo(HttpStatus.OK.value());
 
-        verify(eventGatewayApiClient).registerProcessor(any());
+        verify(eventGatewayApiClient, times(2)).registerProcessor(any());
     }
 }

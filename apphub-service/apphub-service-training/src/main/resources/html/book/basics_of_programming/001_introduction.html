@@ -1,0 +1,69 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Bevezetés - A programozás alapja - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">A programozás alapja - Bevezetés</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/basics_of_programming.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Miről szól ez a könyv?</H2>
+
+            <DIV>Rengeteg programozási nyelv létezik különböző célokra, de nagyon sok a közös dolog bennük.</DIV>
+            <DIV>Ez a könyv elősorban ezekre az általános dolgokra fókuszál, az egyes programozási nyelvekről külön-külön az adott nyelvnek dedikált könyv fog készülni.</DIV>
+            <DIV>Végig fogjuk venni az alapvető műveleteket, logikai egységeket, kategorizálni fogjuk a különböző programozási nyelveket, valamint összehasonlítjuk ezeket a kategóriákat</DIV>
+            <DIV>A könyv végén megemlítek majd néhány programozási nyelvet, és hogy az adott nyelvek mire valók, mit lehet velük elérni.</DIV>
+            <DIV>A könyv első olvasásra bonyolultnak tűnhet, de hasznos lehet utána elolvasni egy konkrét programozási nyelv könyvét, és az ott elsajátított tudás alapján kipróbálni az itt megemlített dolgokat.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>A programozásról általában</H2>
+
+            <DIV>Nagyon leegyszerűsítve egy program két részből áll: Az adat, és az adaton elvégzendő műveletek.</DIV>
+            <DIV>Az adat lehet egy szám, szöveg, kép, videó, stb, a műveletek pedig azok az utasítások sorozata, amit a számítógép végrehajt (Összeadás / kivonás, szövegrész keresése, stb)</DIV>
+            <DIV>A programozási nyelvek pedig azok a nyelvek, amikkel a program fejlesztője "el tudja mondani" a számítógépnek, hogy milyen utasításokat szeretne végrehajtatni.</DIV>
+            <DIV>Mint amikor a főnök beszél a tolmáccsal, hogy mondja el a külföldi vendégmunkásnak, hogy "Fogja meg a kannát, töltse meg vízzel, majd locsolja meg a virágokat". Ez esetben a főnök a fejleszt, a tolmács a programozási nyelv, a munkás a számítógép, a kanna, a víz és a virágok az adat, a locsolás pedig az elvégzendő művelet.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>A programozási nyelvek összetétele</H2>
+
+            <DIV>
+                Az általános programozási nyelv a következő részekből áll:
+                <UL>
+                    <LI>Szintaktika - nyelvtan, meghatározza, hogy hogyan kell megadni az utasításokat, hogy a számítógép fel tudja őket dolgozni</LI>
+                    <LI>Funkciókészlet - az adott nyelv beépített utasításai</LI>
+                    <LI>Opcionális: Fordító - az a program, amely gépi kódra (bájtkódra) fordítja a forráskódot (amit aztán a futtató környezet feldolgoz)</LI>
+                    <LI>Futtató környezet - az a program, amely feldolgozza és végre hajtja a megírt kódot</LI>
+                </UL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Mire van szükségem, ha programot szeretnék írni?</H2>
+
+            <DIV>HTML és CSS írásához elég volt egy jegyzettömb, és maga a böngésző. Bonyolultabb programok írásához ennél többre is szükség lehet.</DIV>
+            <DIV>Egyes programozási nyelvek futtathatóvá tételéhez fel kell telepíteni az adott nyelvhez tartozó fordító programot.</DIV>
+            <DIV>Egyes programozási nyelvek futtatásához fel szükséges telepíteni az annak futtatására szolgáló programot.</DIV>
+            <DIV>A programozást nagyban segíti az IDE-k (Integrated Developer Environment - Integrált fejlesztői környezet) használata. Ezek lehetnek nyelv-specifikusak, de támogathatnak egyszerre több nyelvet is</DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/basics_of_programming/002_variables'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

@@ -64,7 +64,6 @@
         .example_not :not(p){
             color: red;
         }
-
     </STYLE>
 </HEAD>
 <BODY>
@@ -77,18 +76,19 @@
 
     <MAIN>
         <ARTICLE>
-            <P>A tartalom kiválasztók tovább segítik a megfelelő elemek kiválasztását, valamint további lehetőségeket adnak a tárolók tartalmának formázásához.</P>
+            <H2>Mire jók a tartalom kiválasztók?</H2>
+
+            <DIV>A tartalom kiválasztók tovább segítik a megfelelő elemek kiválasztását, valamint további lehetőségeket adnak a tárolók tartalmának formázásához.</DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Első / utolsó gyermek</H2>
 
-            <P><CODE>div span:first-child</CODE> - a <CODE>&lt;div></CODE>-ekben található <CODE>&lt;span></CODE>, ha az a tárolójuk legelső eleme.</P>
-            <P><CODE>div span:last-child</CODE> - a <CODE>&lt;div></CODE>-ekben található <CODE>&lt;span></CODE>, ha az a tárolójuk legutolsó eleme.</P>
+            <DIV><CODE>div span:first-child</CODE> - a <CODE>&lt;div></CODE>-ekben található <CODE>&lt;span></CODE>, ha az a tárolójuk legelső eleme.</DIV>
+            <DIV><CODE>div span:last-child</CODE> - a <CODE>&lt;div></CODE>-ekben található <CODE>&lt;span></CODE>, ha az a tárolójuk legutolsó eleme.</DIV>
 
             <DIV>
                 <PRE th:replace="/example/css/content_selectors.html :: first_last_child"></PRE>
-
 
                 <DIV class="example_first_child" style="width: 250px; height: 250px; border: 3px solid red;">
                     <P>Első bekezdés</P>
@@ -116,7 +116,7 @@
         <ARTICLE>
             <H2>Első / utolsó a típusából</H2>
 
-            <P>Ezek a kiválasztók hasonlóképpen működnek, mint a <CODE>first-child</CODE> és <CODE>last-child</CODE>, de az azonos típusú tagekből választja ki a legelső / legutolsó elemet.</P>
+            <DIV>Ezek a kiválasztók hasonlóképpen működnek, mint a <CODE>first-child</CODE> és <CODE>last-child</CODE>, de az azonos típusú tagekből választja ki a legelső / legutolsó elemet.</DIV>
 
             <DIV>
                 <UL>
@@ -137,7 +137,7 @@
                 </DIV>
             </DIV>
 
-            <P>
+            <DIV>
                 <U>Magyarázat:</U><BR>
                 A <CODE>div p:first-of-type</CODE> kiválasztó kiválasztja azokat a <CODE>&lt;p></CODE> tageket, amik
                 <CODE>&lt;div></CODE>-en belül vannak, és az azonos típusú testvéreik közül a legelsőek. Ez jelen esetben csak a "Második bekezdés" szöveget tartalmazó
@@ -147,15 +147,15 @@
                 <CODE>div :last-of-type</CODE> kiválasztó ezzel szemben egyaránt hat a "Negyedik bekezdés"-re és a "Harmadik bekezdés"-re is, mert nem adtuk meg, hogy milyen típusú tageket válasszon ki. "A
                 <CODE>&lt;div></CODE>-en belüli azonos típusú tageknek a legutolsó tagja. A <CODE>&lt;div></CODE>-en belül van 2 <CODE>&lt;p></CODE> és két
                 <CODE>&lt;span></CODE> tag, és mindkét tag csoportból azt az egy taget választotta ki, amely később helyezkedett el az oldalon.
-            </P>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>További gyermek kiválasztók</H2>
 
-            <P>Az <CODE>:only-of-type</CODE> azokat az elemeket választja ki, melynek nincs azonos típusú testvére.</P>
-            <P>Az <CODE>:only-child</CODE> azokat az elemeket választja ki, melynek nincs testvére.</P>
-            <P>Az <CODE>:empty</CODE> azokat az elemeket választja ki, melyek üresek.</P>
+            <DIV>Az <CODE>:only-of-type</CODE> azokat az elemeket választja ki, melynek nincs azonos típusú testvére.</DIV>
+            <DIV>Az <CODE>:only-child</CODE> azokat az elemeket választja ki, melynek nincs testvére.</DIV>
+            <DIV>Az <CODE>:empty</CODE> azokat az elemeket választja ki, melyek üresek.</DIV>
 
             <DIV>
                 Példák:
@@ -172,17 +172,18 @@
                     <P>Bekezdés</P>
                 </DIV>
 
-                <P>Jól látszik, hogy a CSS az üres <CODE>&lt;div></CODE>-nek átállította a méretét, és háttérszínét.</P>
-                <P>A <CODE>&lt;span></CODE> szövegének színe piros lett, mert nincs testvére, így az <CODE>:only-child</CODE> kiválasztó alatt megadott szabályok érvényre jutottak.</P>
-                <P>Az <CODE>:only-of-type</CODE> kiválasztó alatti szabályok a <CODE>&lt;span></CODE>-ra, és a
-                    <CODE>&lt;p></CODE>-re is érvényre jutottak, mert egyik tagnek sincs azonos típusú testvére.</P>
+                <DIV>Jól látszik, hogy a CSS az üres <CODE>&lt;div></CODE>-nek átállította a méretét, és háttérszínét.</DIV>
+                <DIV>A <CODE>&lt;span></CODE> szövegének színe piros lett, mert nincs testvére, így az <CODE>:only-child</CODE> kiválasztó alatt megadott szabályok érvényre jutottak.</DIV>
+                <DIV>Az <CODE>:only-of-type</CODE> kiválasztó alatti szabályok a <CODE>&lt;span></CODE>-ra, és a
+                    <CODE>&lt;p></CODE>-re is érvényre jutottak, mert egyik tagnek sincs azonos típusú testvére.
+                </DIV>
             </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>n-edik elem</H2>
 
-            <P>Egy tároló meghatározott sorszámú gyermekét a <CODE>:nth-child(n)</CODE> kiválasztóval tudjuk kiválasztani, ahol n a gyermek sorszáma.</P>
+            <DIV>Egy tároló meghatározott sorszámú gyermekét a <CODE>:nth-child(n)</CODE> kiválasztóval tudjuk kiválasztani, ahol n a gyermek sorszáma.</DIV>
 
             <DIV>
                 Példa:
@@ -196,20 +197,22 @@
                 </DIV>
             </DIV>
 
-            <P>Ha hátulró szeretnénk számolni, akkor használjuk a <CODE>:nth-last-child(n)</CODE> kiválasztót!</P>
-            <P>Hasonló logika alapján működik az <CODE>:nth-of-type(n)</CODE> és
-                <CODE>:nth-last-of-type(n)</CODE> kiválasztó, amely az azonos típusú elemek csoportosított listájából választja ki az elölről / hátulról n-edik elemet, típusonként.</P>
+            <DIV>Ha hátulró szeretnénk számolni, akkor használjuk a <CODE>:nth-last-child(n)</CODE> kiválasztót!</DIV>
+            <DIV>Hasonló logika alapján működik az <CODE>:nth-of-type(n)</CODE> és
+                <CODE>:nth-last-of-type(n)</CODE> kiválasztó, amely az azonos típusú elemek csoportosított listájából választja ki az elölről / hátulról n-edik elemet, típusonként.
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Páros / páratlan sorszámú gyermekek kiválasztása</H2>
 
-            <P>Gondolom, találkoztál már zebra csíkos táblázattal, ahol minden második sornak eltérő háttérszíne volt. Természetesen ezt is CSS-el valósították meg, még pedig a fent bemutatott
-                <CODE>:nth-child(n)</CODE> kiválasztóval. A trükk annyi, hogy n helyére nem egy számot, hanem egy függvényt írtak.</P>
-            <P>Például: <CODE>tr:nth-child(2n){background-color: green}</CODE> - minden második sor háttérszínét zöldre állítja.</P>
-            <P>A fentinél kicsit bonyolultabb függvényeket is meg lehet adni:
+            <DIV>Gondolom, találkoztál már zebra csíkos táblázattal, ahol minden második sornak eltérő háttérszíne volt. Természetesen ezt is CSS-el valósították meg, még pedig a fent bemutatott
+                <CODE>:nth-child(n)</CODE> kiválasztóval. A trükk annyi, hogy n helyére nem egy számot, hanem egy függvényt írtak.
+            </DIV>
+            <DIV>Például: <CODE>tr:nth-child(2n){background-color: green}</CODE> - minden második sor háttérszínét zöldre állítja.</DIV>
+            <DIV>A fentinél kicsit bonyolultabb függvényeket is meg lehet adni:
                 <CODE>:nth-child(3n + 2)</CODE>. A CSS úgy dolgozik, hogy az n helyére elkezd számokat behelyettesíteni egyesével léptetve, majd kiszámolja a beírt függvény eredményét, és a kijött eredmény alapján megkeresi az adott sorszámú elemet. Az előbbi függvény alapján a második, majd ötödik, majd nyolcadik, és így tovább... elem tulajdonságait fogja megváltoztatni.
-            </P>
+            </DIV>
 
             <DIV>
                 Példa:
@@ -246,16 +249,16 @@
                 </TABLE>
             </DIV>
 
-            <P>A táblázat minden páratlan sora kék, míg a páros sorok piros betűszínt kaptak, valamint a 2. 5. és 8. sorok háttérszíne zöldre változott.</P>
-            <P><U>Megjegyzés:</U> a páros sorokat így is ki lehet vélasztani: <CODE>:nth-child(odd)</CODE>, míg a páratlanokat így: <CODE>:nth-child(even)</CODE></P>
+            <DIV>A táblázat minden páratlan sora kék, míg a páros sorok piros betűszínt kaptak, valamint a 2. 5. és 8. sorok háttérszíne zöldre változott.</DIV>
+            <DIV><U>Megjegyzés:</U> a páros sorokat így is ki lehet vélasztani: <CODE>:nth-child(odd)</CODE>, míg a páratlanokat így: <CODE>:nth-child(even)</CODE></DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Tagadó kiválasztás</H2>
 
-            <P>Vannak esetek, amikor egyszerűbb inkább azt megmondani, hogy mely tageket NEM szeretnénk kiválasztani, ahelyett, hogy melyeket igen.</P>
+            <DIV>Vannak esetek, amikor egyszerűbb inkább azt megmondani, hogy mely tageket NEM szeretnénk kiválasztani, ahelyett, hogy melyeket igen.</DIV>
 
-            <P>Ezt a <CODE>:not(kivalaszto)</CODE> kombinációval tehetjük meg, ahol azok a tagek lesznek kiválasztva, melyek kivalaszto-nak nem felelnek meg.</P>
+            <DIV>Ezt a <CODE>:not(kivalaszto)</CODE> kombinációval tehetjük meg, ahol azok a tagek lesznek kiválasztva, melyek kivalaszto-nak nem felelnek meg.</DIV>
 
             <DIV>
                 Példa:
@@ -270,7 +273,7 @@
                 </DIV>
             </DIV>
 
-            <P>Jelen esetben minden olyan tag kiválasztásra kerül (a <CODE>&lt;div></CODE>-en belül), amelyik nem <CODE>&lt;p></CODE>.</P>
+            <DIV>Jelen esetben minden olyan tag kiválasztásra kerül (a <CODE>&lt;div></CODE>-en belül), amelyik nem <CODE>&lt;p></CODE>).</DIV>
         </ARTICLE>
     </MAIN>
 

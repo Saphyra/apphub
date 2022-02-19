@@ -25,7 +25,6 @@
         .example_before span::before{
             content: "Ez a(z) ";
         }
-
     </STYLE>
 </HEAD>
 <BODY>
@@ -40,7 +39,7 @@
         <ARTICLE>
             <H2>Szöveg első sorának kiválasztása</H2>
 
-            <P>A <CODE>::first-line</CODE> kiválasztóval a folyó szöveg első sorát lehet kiválasztani:</P>
+            <DIV>A <CODE>::first-line</CODE> kiválasztóval a folyó szöveg első sorát lehet kiválasztani:</DIV>
 
             <DIV class="example_first_line" style="width: 250px; border: 3px solid red;">
                 At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
@@ -50,7 +49,7 @@
         <ARTICLE>
             <H2>Első karakter kiválasztása</H2>
 
-            <P>A <CODE>::first-letter</CODE> kiválasztó a fentihez hasonlóan működik, csak a sor helyett a legelső betűt választja ki.</P>
+            <DIV>A <CODE>::first-letter</CODE> kiválasztó a fentihez hasonlóan működik, csak a sor helyett a legelső betűt választja ki.</DIV>
 
             <DIV class="example_first_letter" style="width: 250px; height: 150px; border: 3px solid red;">
                 Én vagyok a szöveg
@@ -60,19 +59,19 @@
         <ARTICLE>
             <H2>A felhasználó kijelölésének kiválasztása</H2>
 
-            <P>A CSS a <CODE>::selection</CODE> kiválasztóval lehetőséget biztosít a felhasználó által kijelölt tartalom stílusának módosítására:</P>
+            <DIV>A CSS a <CODE>::selection</CODE> kiválasztóval lehetőséget biztosít a felhasználó által kijelölt tartalom stílusának módosítására:</DIV>
 
             <DIV class="example_selection" style="width: 250px; height: 250px; border: 3px solid red;">
                 Jelölj ki! Jelölj ki! Jelölj ki! Jelölj ki! Jelölj ki! Jelölj ki! Jelölj ki! Jelölj ki! Jelölj ki! Jelölj ki! Jelölj ki! Jelölj ki! Jelölj ki! Jelölj ki!
             </DIV>
 
-            <P>A példában látszik, hogy a kijelölés színe a szokásos kék-fehér helyett a tárolóban sárga-piros.</P>
+            <DIV>A példában látszik, hogy a kijelölés színe a szokásos kék-fehér helyett a tárolóban sárga-piros.</DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Extra tartalom beszúrása</H2>
 
-            <P>A CSS arra is jó, hogy bizonyos elemek elé / mögé extra szöveget szúrjunk be. Ezt a <CODE>::before</CODE> és <CODE>::after</CODE> kiválasztókkal lehet megtenni, a következőképp:</P>
+            <DIV>A CSS arra is jó, hogy bizonyos elemek elé / mögé extra szöveget szúrjunk be. Ezt a <CODE>::before</CODE> és <CODE>::after</CODE> kiválasztókkal lehet megtenni, a következőképp:</DIV>
             <DIV>
                 <PRE th:replace="/example/css/content_manipulation.html :: before"></PRE>
 

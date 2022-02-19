@@ -11,10 +11,12 @@ import com.github.saphyra.apphub.lib.config.common.FeignClientConfiguration;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.whitelist.EnableWhiteListedEndpointProperties;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
 import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.support.SpringDecoder;
 import org.springframework.cloud.openfeign.support.SpringEncoder;
@@ -34,10 +36,12 @@ import org.springframework.util.AntPathMatcher;
 @ComponentScan(basePackageClasses = {
     ErrorReporterService.class
 })
+@EnableMemoryMonitoring
 public class MainGatewayBeanConfiguration {
     private final ObjectFactory<HttpMessageConverters> messageConverters = HttpMessageConverters::new;
 
     @Bean
+    @ConditionalOnMissingBean(DateTimeUtil.class)
     DateTimeUtil dateTimeUtil() {
         return new DateTimeUtil();
     }

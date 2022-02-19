@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.platform.event_gateway;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.platform.event_gateway.server.EventGatewayApiServer;
-import com.github.saphyra.apphub.service.platform.event_gateway.service.heartbeat.HeartbeatService;
+import com.github.saphyra.apphub.service.platform.event_gateway.service.heartbeat.ProcessHeartbeatService;
 import com.github.saphyra.apphub.service.platform.event_gateway.service.register.RegisterProcessorService;
 import com.github.saphyra.apphub.service.platform.event_gateway.service.send_event.EventSendingService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class EventGatewayController implements EventGatewayApiServer {
     private final EventSendingService eventSendingService;
-    private final HeartbeatService heartbeatService;
+    private final ProcessHeartbeatService processHeartbeatService;
     private final RegisterProcessorService registerProcessorService;
 
     @Override
@@ -27,7 +27,7 @@ public class EventGatewayController implements EventGatewayApiServer {
     @Override
     public void heartbeat(String serviceName) {
         log.info("Heartbeat arrived from {}", serviceName);
-        heartbeatService.heartbeat(serviceName);
+        processHeartbeatService.heartbeat(serviceName);
     }
 
     @Override

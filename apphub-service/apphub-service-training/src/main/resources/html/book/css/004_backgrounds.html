@@ -20,153 +20,156 @@
         <ARTICLE>
             <H2>Háttérszín beálíltása</H2>
 
-            <P>A háttér színét a <SPAN class='codepart'>background</SPAN> vagy a <SPAN class='codepart'>background-color</SPAN> tulajdonsággal lehet beállítani.</P>
-            <P>
+            <DIV>A háttér színét a <CODE>background</CODE> vagy a <CODE>background-color</CODE> tulajdonsággal lehet beállítani.</DIV>
+            <DIV>
                 Például:
-            <PRE class="codepart" th:replace="/example/css/backgrounds.html :: example"></PRE>
+                <PRE th:replace="/example/css/backgrounds.html :: example"></PRE>
 
-            (A <SPAN class='codepart'>&lt;body></SPAN> tag hátterének a színét pirosra állítja.)
-            </P>
+                (A <CODE>&lt;body></CODE> tag hátterének a színét pirosra állítja.)
+            </DIV>
 
-            <P><U>Megjegyzés:</U> ha a <SPAN class='codepart'>background</SPAN> tulajdonsággal állítjuk be a háttér színét, akkor ugyanannak a tagnek nem lehet háttérképet is beállítani.</P>
+            <DIV><U>Megjegyzés:</U> ha a <CODE>background</CODE> tulajdonsággal állítjuk be a háttér színét, akkor ugyanannak a tagnek nem lehet háttérképet is beállítani.</DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Háttérkép beállítása</H2>
 
-            <P>Háttérképet a <SPAN class='codepart'>background</SPAN> vagy a
-                <SPAN class='codepart'>background-image</SPAN> tulajdonsággal lehet beállítani, csak itt színkód helyett a kép címét kell megadni értéknek:</P>
-            <P>
-            <PRE class="codepart" th:replace="/example/css/backgrounds.html :: background_image"></PRE>
-            </P>
+            <DIV>Háttérképet a <CODE>background</CODE> vagy a
+                <CODE>background-image</CODE> tulajdonsággal lehet beállítani, csak itt színkód helyett a kép címét kell megadni értéknek:
+            </DIV>
+            <DIV>
+                <PRE th:replace="/example/css/backgrounds.html :: background_image"></PRE>
+            </DIV>
 
-            <P><U>Megjegyzés:</U> ha a <SPAN class='codepart'>background</SPAN> tulajdonsággal állítjuk be a háttérképet, akkor ugyanannak a tagnek nem lehet háttérszínt is beállítani.</P>
-            <P>
+            <DIV><U>Megjegyzés:</U> ha a <CODE>background</CODE> tulajdonsággal állítjuk be a háttérképet, akkor ugyanannak a tagnek nem lehet háttérszínt is beállítani.</DIV>
+            <DIV>
                 Példa:
-            <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); border: 3px solid red;'></DIV>
-            </P>
+                <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); border: 3px solid red;'></DIV>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Háttérkép ismétlődésének beállítása</H2>
 
-            <P>Ahogy az előző példában is látszódik, ha a háttérkép kisebb, mint a tárolója, akkor addig ismétlődik, amíg ki nem tölti a teret. Ezt az ismétlődést szabályozni lehet, mégpedig a
-                <SPAN class='codepart'>background-repeat</SPAN> tulajdonsággal.</P>
-            <P>
-                A <SPAN class='codepart'>background-repeat</SPAN> tulajdonság értékei:
-            <UL>
-                <LI><SPAN class='codepart'>repeat</SPAN>: addig ismétlődik a kép, amíg ki nem tölti a képernyőt (alapértelmezett)</LI>
-                <LI>
-                    <SPAN class='codepart'>no-repeat</SPAN>: a háttérkép nem ismétlődik
-                    <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-repeat: no-repeat; border: 3px solid red;'></DIV>
-                </LI>
-                <LI>
-                    <SPAN class='codepart'>repeat-x</SPAN>: a háttérkép csak vízszintesen ismétlődik
-                    <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-repeat: repeat-x; border: 3px solid red;'></DIV>
-                </LI>
-                <LI>
-                    <SPAN class='codepart'>repeat-y</SPAN>: a háttérkép csak függőlegesen ismétlődik
-                    <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-repeat: repeat-y; border: 3px solid red;'></DIV>
-                </LI>
-                <LI>
-                    <SPAN class='codepart'>space</SPAN>: a háttérkép ismétlődik, de annyi hézag lesz közöttük, hogy a szélső képek ne lógjanak ki a képből
-                    <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-repeat: space; border: 3px solid red;'></DIV>
-                </LI>
-                <LI>
-                    <SPAN class='codepart'>round</SPAN>: a háttérkép ismétlődik, és akkora lesz a kép mérete, hogy a szélső képek ne lógjanak ki a képből
-                    <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-repeat: round; border: 3px solid red;'></DIV>
-                </LI>
-            </Ul>
-            </P>
+            <DIV>Ahogy az előző példában is látszódik, ha a háttérkép kisebb, mint a tárolója, akkor addig ismétlődik, amíg ki nem tölti a teret. Ezt az ismétlődést szabályozni lehet, mégpedig a
+                <CODE>background-repeat</CODE> tulajdonsággal.
+            </DIV>
+            <DIV>
+                A <CODE>background-repeat</CODE> tulajdonság értékei:
+                <UL>
+                    <LI><CODE>repeat</CODE>: addig ismétlődik a kép, amíg ki nem tölti a képernyőt (alapértelmezett)</LI>
+                    <LI>
+                        <CODE>no-repeat</CODE>: a háttérkép nem ismétlődik
+                        <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-repeat: no-repeat; border: 3px solid red;'></DIV>
+                    </LI>
+                    <LI>
+                        <CODE>repeat-x</CODE>: a háttérkép csak vízszintesen ismétlődik
+                        <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-repeat: repeat-x; border: 3px solid red;'></DIV>
+                    </LI>
+                    <LI>
+                        <CODE>repeat-y</CODE>: a háttérkép csak függőlegesen ismétlődik
+                        <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-repeat: repeat-y; border: 3px solid red;'></DIV>
+                    </LI>
+                    <LI>
+                        <CODE>space</CODE>: a háttérkép ismétlődik, de annyi hézag lesz közöttük, hogy a szélső képek ne lógjanak ki a képből
+                        <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-repeat: space; border: 3px solid red;'></DIV>
+                    </LI>
+                    <LI>
+                        <CODE>round</CODE>: a háttérkép ismétlődik, és akkora lesz a kép mérete, hogy a szélső képek ne lógjanak ki a képből
+                        <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-repeat: round; border: 3px solid red;'></DIV>
+                    </LI>
+                </Ul>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Háttérkép elhelyezése</H2>
 
-            <P>Ha a háttérkép ismétlődését kikapcsoljuk, lehetőségünk van megmondani, hogy a háttérkép a tárolójának melyik részén helyezkedjen el.</P>
-            <P>
-                Ezt a <SPAN class='codepart'>background-position</SPAN> tulajdonsággal állíthatjuk, a következő képpen:
+            <DIV>Ha a háttérkép ismétlődését kikapcsoljuk, lehetőségünk van megmondani, hogy a háttérkép a tárolójának melyik részén helyezkedjen el.</DIV>
+            <DIV>
+                Ezt a <CODE>background-position</CODE> tulajdonsággal állíthatjuk, a következő képpen:
 
-            <UL>
-                <LI>
-                    A <SPAN class='codepart'>left / center / right</SPAN> kulcsszavakkal a vízszintes, a
-                    <SPAN class='codepart'>top / center / bottom</SPAN> kulcsszavakkal pedig a függőleges elhelyezést lehet megadni.<BR>
-                    Például a <SPAN class='codepart'>background-position: center bottom;</SPAN> parancs vízszintesen középre, függőlegesen pedig a tároló aljára helyezi a háttérképet:
-                    <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-repeat: no-repeat; border: 3px solid red; background-position: center bottom;'></DIV>
-                </LI>
-                <LI>
-                    A megfelelő méreteket különböző mértékegységekkel is meg lehet adni.<BR>
-                    Például a <SPAN class='codepart'>background-position: 30px 10%;</SPAN> parancs a tároló bal felső sarkától 30 pixellel jobbra, és 10%-nyival lefelé tolja el:
-                    <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-repeat: no-repeat; border: 3px solid red; background-position: 30px 10%;'></DIV>
+                <UL>
+                    <LI>
+                        A <CODE>left / center / right</CODE> kulcsszavakkal a vízszintes, a
+                        <CODE>top / center / bottom</CODE> kulcsszavakkal pedig a függőleges elhelyezést lehet megadni.<BR>
+                        Például a <CODE>background-position: center bottom;</CODE> parancs vízszintesen középre, függőlegesen pedig a tároló aljára helyezi a háttérképet:
+                        <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-repeat: no-repeat; border: 3px solid red; background-position: center bottom;'></DIV>
+                    </LI>
+                    <LI>
+                        A megfelelő méreteket különböző mértékegységekkel is meg lehet adni.<BR>
+                        Például a <CODE>background-position: 30px 10%;</CODE> parancs a tároló bal felső sarkától 30 pixellel jobbra, és 10%-nyival lefelé tolja el:
+                        <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-repeat: no-repeat; border: 3px solid red; background-position: 30px 10%;'></DIV>
 
-                </LI>
-            </UL>
-            </P>
+                    </LI>
+                </UL>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Háttérkép rögzítése</H2>
 
-            <P>
+            <DIV>
                 Alapértelmezetten a háttérkép együtt gördül a tartalommal:
                 <IFRAME src="/web/training/css/sample/background_attachment_scroll" style='display: block; width: 250px; height: 250px;'></IFRAME>
-            </P>
-            <P>
-                Ha viszont azt szeretnénk, hogy a háttérkép ne gördüljön, akkor a <SPAN class='codepart'>background-attachment</SPAN> tulajdonság értékét
-                <SPAN class='codepart'>fixed</SPAN>-re kell állítani:
+            </DIV>
+            <DIV>
+                Ha viszont azt szeretnénk, hogy a háttérkép ne gördüljön, akkor a <CODE>background-attachment</CODE> tulajdonság értékét
+                <CODE>fixed</CODE>-re kell állítani:
                 <IFRAME src="/web/training/css/sample/background_attachment_fixed" style='display: block; width: 250px; height: 250px;'></IFRAME>
-            </P>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Háttérkép méretezése</H2>
 
-            <P>A háttérkép méretének beállítására szolgál a <SPAN class='codepart'>background-size</SPAN> tulajdonság.</P>
-            <P>
+            <DIV>A háttérkép méretének beállítására szolgál a <CODE>background-size</CODE> tulajdonság.</DIV>
+            <DIV>
                 Lehetséges értékek:
-            <UL>
-                <LI><SPAN class='codepart'>auto</SPAN>: a lép megőrzi eredeti méretét (alapértelmezett)</LI>
-                <LI>
-                    Hossz mértékegységek, például <SPAN class='codepart'>background-size: 50px 30%;</SPAN>: A kép 50px széles és 30% magas lesz.
-                    <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-size: 50px 30%; border: 3px solid red;'></DIV>
-                </LI>
-                <LI>
-                    <SPAN class='codepart'>cover</SPAN>: a háttérkép kitölti a képernyőt. (A kilógó részt levágja)
-                    <DIV style='width: 500px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-size: cover; border: 3px solid red;'></DIV>
-                </LI>
-                <LI>
-                    <SPAN class='codepart'>contain</SPAN>: a háttérképet akkorára méretezi, hogy beleférjen a tárolóba
-                    <DIV style='width: 300px; height: 400px; background: url("/res/training/img/css/sample_background.jpg"); background-size: contain; border: 3px solid red;'></DIV>
-                </LI>
-            </UL>
-            </P>
+                <UL>
+                    <LI><CODE>auto</CODE>: a lép megőrzi eredeti méretét (alapértelmezett)</LI>
+                    <LI>
+                        Hossz mértékegységek, például <CODE>background-size: 50px 30%;</CODE>: A kép 50px széles és 30% magas lesz.
+                        <DIV style='width: 250px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-size: 50px 30%; border: 3px solid red;'></DIV>
+                    </LI>
+                    <LI>
+                        <CODE>cover</CODE>: a háttérkép kitölti a képernyőt. (A kilógó részt levágja)
+                        <DIV style='width: 500px; height: 250px; background: url("/res/training/img/css/sample_background.jpg"); background-size: cover; border: 3px solid red;'></DIV>
+                    </LI>
+                    <LI>
+                        <CODE>contain</CODE>: a háttérképet akkorára méretezi, hogy beleférjen a tárolóba
+                        <DIV style='width: 300px; height: 400px; background: url("/res/training/img/css/sample_background.jpg"); background-size: contain; border: 3px solid red;'></DIV>
+                    </LI>
+                </UL>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Háttérszín és háttérkép együttes használata</H2>
 
-            <P>Adódhatnak olyan helyzetek, amikor a háttérkép nem tölti ki az egész tárolót, és a fennmaradó részt más színűre szeretnénk festeni. Ebben az esetben nem használható a
-                <SPAN class='codepart'>background</SPAN> tulajdonság a háttér beálíltására, mert az csak színt, vagy csak képet támogat.</P>
-            <P>Ebben az esetben szükséges a <SPAN class='codepart'>background-color</SPAN> és <SPAN class='codepart'>background-image</SPAN> tulajdonságok együttes használata.</P>
-            <P>
+            <DIV>Adódhatnak olyan helyzetek, amikor a háttérkép nem tölti ki az egész tárolót, és a fennmaradó részt más színűre szeretnénk festeni. Ebben az esetben nem használható a
+                <CODE>background</CODE> tulajdonság a háttér beálíltására, mert az csak színt, vagy csak képet támogat.
+            </DIV>
+            <DIV>Ebben az esetben szükséges a <CODE>background-color</CODE> és <CODE>background-image</CODE> tulajdonságok együttes használata.</DIV>
+            <DIV>
                 Például:
-            <PRE class="codepart" th:replace="/example/css/backgrounds.html :: combined_background"></PRE>
-            <DIV style='width: 250px; height: 250px; background-color: blue; background-image: url("/res/training/img/css/sample_background.jpg"); background-repeat: no-repeat; border: 3px solid red;'></DIV>
-            </P>
+                <PRE th:replace="/example/css/backgrounds.html :: combined_background"></PRE>
+                <DIV style='width: 250px; height: 250px; background-color: blue; background-image: url("/res/training/img/css/sample_background.jpg"); background-repeat: no-repeat; border: 3px solid red;'></DIV>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Több háttérkép használata</H2>
 
-            <P>A CSS lehetőséget nyújt több háttérkép együttes használatára. Ehhez csak az egyes képek címét fel kell sorolni egymás mögött, vesszővel elválasztva. (A sorban legelső két lesz a felhasználóhoz legközelebbi rétegen, a többi a sorrendnek megfelelően egymás alatt)</P>
+            <DIV>A CSS lehetőséget nyújt több háttérkép együttes használatára. Ehhez csak az egyes képek címét fel kell sorolni egymás mögött, vesszővel elválasztva. (A sorban legelső két lesz a felhasználóhoz legközelebbi rétegen, a többi a sorrendnek megfelelően egymás alatt)</DIV>
 
-            <P>Példa: <CODE>background-image: url(hatter_1.jpg, url(hatter_2.jpg);</CODE></P>
+            <DIV>Példa: <CODE>background-image: url(hatter_1.jpg, url(hatter_2.jpg);</CODE></DIV>
 
-            <P>Az egyes hátterek tulajdonságai külön-külön állíthatóak, hasonló módon:</P>
+            <DIV>Az egyes hátterek tulajdonságai külön-külön állíthatóak, hasonló módon:</DIV>
 
-            <P><CODE>background-repeat: repeat, no-repeat</CODE></P>
+            <DIV><CODE>background-repeat: repeat, no-repeat</CODE></DIV>
 
-            <P>A felsorolt értékek a sorrendben velük egyező helyen levő háttérképre fognak érvényesülni.</P>
+            <DIV>A felsorolt értékek a sorrendben velük egyező helyen levő háttérképre fognak érvényesülni.</DIV>
         </ARTICLE>
     </MAIN>
 

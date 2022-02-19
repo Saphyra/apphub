@@ -18,83 +18,83 @@
 
     <MAIN>
         <ARTICLE>
-            <H2>Mi az a box model?</H2>
+            <H2>Mi az a box (doboz) model?</H2>
 
-            <P>
+            <DIV>
                 A HTML-ben a tageket, tárolókat legegyszerűbb egy dobozként elképzelni. Ezeknek a dobozoknak van tartalma, és ahogy arról a korábbi fejezetekben szó volt, lehet külső/belső margója, szegélye, és meg lehet adni a szélességét / magasságát.
                 Ez viszont felvet egy problémát, amit a következő példa szemléltet:<BR>
-            </P>
+            </DIV>
 
-            <P>
+            <DIV>
                 Képzeljük el, hogy van egy 250 pixel széles tárolónk, amit szeretnénk tartalommal feltölteni. Ezért bele rakunk egy 250 pixel széles dobozt, amibe a tartalmat rakjuk:
 
-            <PRE class="codepart" th:replace="/example/css/box_model.html :: original_example"></PRE>
-            <DIV style='width: 250px; height: 250px; border: 3px solid red; background: yellow; box-sizing: content-box;'>
-                <DIV style='width: 250px; height: 100px; background: green; margin: 0; box-sizing: content-box;'>
-                    Tartalom
+                <PRE th:replace="/example/css/box_model.html :: original_example"></PRE>
+                <DIV style='width: 250px; height: 250px; border: 3px solid red; background: yellow; box-sizing: content-box;'>
+                    <DIV style='width: 250px; height: 100px; background: green; margin: 0; box-sizing: content-box;'>
+                        Tartalom
+                    </DIV>
                 </DIV>
+
+                Eddig semmi kirívót nem látunk, igaz? Akkor most adjunk egy kis paddingot, és szegélyt a tartalom dobozához! (A belső <CODE>&lt;div></CODE>-hez)
+                <PRE th:replace="/example/css/box_model.html :: with_padding_and_border"></PRE>
+
+                <DIV style='width: 250px; height: 250px; border: 3px solid red; background: yellow; box-sizing: content-box;'>
+                    <DIV style='width: 250px; height: 100px; background: green; margin: 0; padding: 30px; border: 20px solid black; box-sizing: content-box;'>
+                        Tartalom
+                    </DIV>
+                </DIV>
+
+                És a szemünk szúrja, ki, hogy a 250 pixel széles dobozba hogyan nem fér bele egy másik doboz, aminek a szélességét szintén 250 pixelre állítottuk?
             </DIV>
 
-            Eddig semmi kirívót nem látunk, igaz? Akkor most adjunk egy kis paddingot, és szegélyt a tartalom dobozához! (A belső <SPAN class='codepart'>&lt;div></SPAN>-hez)
-            <PRE class="codepart" th:replace="/example/css/box_model.html :: with_padding_and_border"></PRE>
-
-            <DIV style='width: 250px; height: 250px; border: 3px solid red; background: yellow; box-sizing: content-box;'>
-                <DIV style='width: 250px; height: 100px; background: green; margin: 0; padding: 30px; border: 20px solid black; box-sizing: content-box;'>
-                    Tartalom
-                </DIV>
-            </DIV>
-
-            És a szemünk szúrja, ki, hogy a 250 pixel széles dobozba hogyan nem fér bele egy másik doboz, aminek a szélességét szintén 250 pixelre állítottuk?
-            </P>
-
-            <P>
+            <DIV>
                 A megoldást a következő ábra mutatja:
 
                 <IMG src='/res/training/img/css/box_model.png'>
 
                 A belső
-                <SPAN class='codepart'>&lt;div></SPAN> szélességének megadásával a tartalom (content) szélességét határoztuk meg. Az abszólút szélességhez ezen felül hozzá adódik a padding és a szegély szélessége.<BR>
+                <CODE>&lt;div></CODE> szélességének megadásával a tartalom (content) szélességét határoztuk meg. Az abszólút szélességhez ezen felül hozzá adódik a padding és a szegély szélessége.<BR>
                 Ennek tudatában könnyű kiszámolni, hogy 250px + 2 x 30px + 2 x 20px = 350px, ami jóval nagyobb, mint a külső tárolónak megadott 250 px szélesség.<BR>
 
                 Ha pedig margót is adtunk volna meg, akkor az még tovább növelné az abszolút szélességet.
-            </P>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Doboz méretezés</H2>
 
-            <P>
+            <DIV>
                 A fentiek alapján kiderült, hogy ha egy tárolónak szélességet adunk meg, azzal valójában a tartalom szélességét állítjuk be, ehhez hozzá adódik a padding és a szegély.<BR>
                 Viszont minden esetben, ha bele kell férni egy dobozba, álljunk neki számolgatni a paddingokat is? Informatikusok vagyunk, nem matematikusok! Ezért van lehetőség megváltoztatni a méretezés tulajdonságait a következő módon:<BR>
-            </P>
-
-            <P>
-                Ha az előbbi példát kiegészítjük a <SPAN class='codepart'>box-sizing: border-box</SPAN> tulajdonsággal, megváltozik a működés is: (referenciaként mellé raktam az előző példát is)
-
-            <PRE class="codepart" th:replace="/example/css/box_model.html :: border_box"></PRE>
-            <DIV>
-                <DIV style='display: inline-block; width: 250px; height: 250px; border: 3px solid red; background: yellow; box-sizing: content-box;'>
-                    <DIV style='width: 250px; height: 100px; background: green; margin: 0; padding: 30px; border: 20px solid black; box-sizing: border-box;'>
-                        Tartalom
-                    </DIV>
-                </DIV>
             </DIV>
 
-            Mint látható, e tulajdonság megadásával máris bele fértünk a tárolóba, viszont a content terület kisebb lett. Ennek az az oka, hogy a
-            <SPAN class='codepart'>box-sizing: border-box</SPAN> tulajdonság hatására a szélesség megadás magába foglalja a padding és szegély szélességét is. Ezért viszont a tartalom számára fenntartott terület csökken.<BR>
-            250px - 2 x 30px - 2 x 20px = 150px szélességű terület marad a tartalomnak.
-            </P>
+            <DIV>
+                Ha az előbbi példát kiegészítjük a <CODE>box-sizing: border-box</CODE> tulajdonsággal, megváltozik a működés is:
 
-            <P>
-                A <SPAN class='codepart'>box-sizing</SPAN> tulajdonság lehetséges értékei:
+                <PRE th:replace="/example/css/box_model.html :: border_box"></PRE>
+                <DIV>
+                    <DIV style='display: inline-block; width: 250px; height: 250px; border: 3px solid red; background: yellow; box-sizing: content-box;'>
+                        <DIV style='width: 250px; height: 100px; background: green; margin: 0; padding: 30px; border: 20px solid black; box-sizing: border-box;'>
+                            Tartalom
+                        </DIV>
+                    </DIV>
+                </DIV>
 
-            <UL>
-                <LI><SPAN class='codepart'>content-box</SPAN>: (alapértelmezett) a megadott szélesség / magasság a tartalom méretét határozza meg, a padding és szegély nélkül.</LI>
-                <LI><SPAN class='codepart'>border-box</SPAN>: a megadott szélesség / magasság a tartalom, a padding és a szegély összesített méretét határozza meg.</LI>
-            </UL>
+                Mint látható, e tulajdonság megadásával máris bele fértünk a tárolóba, viszont a content terület kisebb lett. Ennek az az oka, hogy a
+                <CODE>box-sizing: border-box</CODE> tulajdonság hatására a szélesség megadás magába foglalja a padding és szegély szélességét is. Ezért viszont a tartalom számára fenntartott terület csökken.<BR>
+                250px - 2 x 30px - 2 x 20px = 150px szélességű terület marad a tartalomnak.
+            </DIV>
 
-            <IMG src='/res/training/img/css/box_model_extended.png'>
-            </P>
+            <DIV>
+                A <CODE>box-sizing</CODE> tulajdonság lehetséges értékei:
+
+                <UL>
+                    <LI><CODE>content-box</CODE>: (alapértelmezett) a megadott szélesség / magasság a tartalom méretét határozza meg, a padding és szegély nélkül.</LI>
+                    <LI><CODE>border-box</CODE>: a megadott szélesség / magasság a tartalom, a padding és a szegély összesített méretét határozza meg.</LI>
+                </UL>
+
+                <IMG src='/res/training/img/css/box_model_extended.png'>
+            </DIV>
         </ARTICLE>
     </MAIN>
 

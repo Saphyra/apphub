@@ -1,0 +1,193 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Ciklusok - A programozás alapja - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">A programozás alapja - Ciklusok</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/basics_of_programming.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Mire jók a ciklusok?</H2>
+
+            <DIV>Ha egy kódrészletet többször szeretnénk lefuttatni, akkor kiszervezzük egy metódusba, és a metódust meg tudjuk hívni többször is. De mit csinálunk akkor, ha ugyanazt a kódrészletet több százszor, több ezerszer, vagy esetleg nem tudjuk, hogy hányszor szeretnénk lefuttatni?</DIV>
+            <DIV>Ezt a célt szolgálják a különböző ciklusok: Egy megadott kód részlet többszöri futtatása bizonyos feltétel alapján.</DIV>
+            <DIV>
+                A következő ciklusokat használjuk rendszeresen:
+                <UL>
+                    <LI>For loop: Ciklusok számának számolása, Gyűjtemény elemein műveletek elvégzése</LI>
+                    <LI>While loop: Ciklus végrehajtása amíg egy feltétel igaz</LI>
+                    <LI>Do...while loop: Kód részlet futtatása, majd ciklikus ismétlése, amíg egy feltétel igaz</LI>
+                    <LI>ForEach loop: Gyűjtemény elemein műveletek elvégzése</LI>
+                </UL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>A For loop</H2>
+
+            <DIV>Szintaktika a következő: <CODE>for([Számláló inicializálás]; [Feltétel]; [Számláló léptetés]){//Ciklus kódja}</CODE></DIV>
+
+            <PRE th:replace="/example/basics_of_programming/loops.html :: for"></PRE>
+
+            <DIV>
+                A következő történik:
+                <OL>
+                    <LI>Létre hozunk egy változót "index" néven, és hozzá rendeljük a "0" értéket. Ezt a változót fogja használni a program az iterációk számolásához.</LI>
+                    <LI>Megadjuk a feltételt: Ha "index" aktuális értéke kisebb, mint 10, akkor fusson le a következő iteráció.</LI>
+                    <LI>Minden iteráció végén megnöveljük "index" értékét 1-el.</LI>
+                </OL>
+            </DIV>
+
+            <DIV>
+                A for loop használata egy tömb elemein való végig járásra:
+                <PRE th:replace="/example/basics_of_programming/loops.html :: for_array"></PRE>
+                Feltételként azt adjuk meg, hogy addig hajtsa végre az egyes iterációkat, amíg a számláló el nem jut a tömb méretéig. "index" változó értéke minden iteráció után változik, így az iterációk során mindig a tömb következő elemét veszi ki:
+                <OL>
+                    <LI>Első iteráció során "index" értéke "0". A futás során kivesszük "tomb" tömb 0 indexű (tehát első) elemét, majd végre hajtjuk vele a kívánt műveletet</LI>
+                    <LI>Az iteráció végén "index" értéke megnövekedik egyel...</LI>
+                    <LI>Így a második iteráció során "index" értéke "1" lesz, tehát a futás során már a tömb 1 indexű (tehát második) elemét fogjuk kivenni.</LI>
+                    <LI>Az iteráció végén "index" értéke megnövekedik egyel...</LI>
+                    <LI>És így tovább egészen addig, amíg az összes elemen végre nem hajtjuk a megadott műveletet.</Li>
+                </OL>
+                <U>Megjegyzés</U>: A tömb méretének meghatározására az adott programozási nyelvek különböző megoldásokat biztosítanak.
+            </DIV>
+
+            <DIV>
+                A for loop meghatározása során az egyes lépések elhagyhatóak (például ha nem akarunk feltételt meghatározni:
+                <CODE>for(var index = 0; ; index++){}</CODE>, vagy nem akarjuk a változó értékét minden iteráció után változtatni
+                <CODE>for(var i = 0; i < 100; ){}</CODE>. Ezekben az esetekben ügyelni kell arra, hogy a cikluson belül változtassuk meg a változó értékét, vagy feltétel hiányában szakítsuk meg a ciklust (erről majd később) ezzel elkerülve a végtelen ciklusra futást.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>A while loop</H2>
+
+            <DIV>Szintaktika: <CODE>while(feltetel){//Ciklus kódja}</CODE></DIV>
+            <DIV>A while loop minden iteráció előtt megnézi, hogy a megadott feltétel igaz-e, és ha a feltétel igaz, lefuttatja a ciklus kódját. Ha a feltétel az első futás előtt már hamis, akkor a ciklus kódja egyszer sem fog lefutni.</DIV>
+            <DIV>
+                Példa:
+                <PRE th:replace="/example/basics_of_programming/loops.html :: while"></PRE>
+                <U>Magyarázat</U>: Képzeljünk el egy teherautót, ami megérkezik egy raktárba. A rakodómunkás megnézi, hogy van-e hely a teherautóban, és ha igen, akkor berakodja a következő csomagot. A rakodás során a teherautó telítettsége változik, így a következő csomag berakodása előtt a rakodómunkás újda megnézi, hogy maradt-e hely a teherautóban, és ez egészen addig ismétlődik, amíg a raktér teljesen meg nem telik.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>A do...while loop</H2>
+
+            <DIV>A do...while loop hasonlóképpen működik, mint a while loop azzal a különbséggel, hogy a ciklus kódja egyszer garantáltan le fog futni, és csak a futás után ellenőrzi, hogy szükség van-e következő iterációra.</DIV>
+            <DIV>Szintaktika: <CODE>do{//Ciklus kódja}while(feltetel);</CODE></DIV>
+
+            <DIV>
+                Példa:
+                <PRE th:replace="/example/basics_of_programming/loops.html :: do_while"></PRE>
+                <U>Magyarázat</U>: Itt a rakodómunkás biztos abban, hogy az érkező teherautón van szabad hely, ezért azonnal berakodja a csomagot, és csak ez után nézi meg, hogy maradt-e hely a második, majd harmadik ... csomagnak.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Foreach loop</H2>
+
+            <DIV>A foreach loopok kifejezetten azért jöttek létre, hogy megkönnyítsék a különböző gyűjtemények elemein történő végig iterálást. Ennek szintaktikája programozási nyelvenként eltérő lehet. Íme néhány példa:</DIV>
+            <UL>
+                <LI>
+                    Iterálás tömb elemein PHP-ban:
+                    <PRE th:replace="/example/basics_of_programming/loops.html :: foreach_array_php"></PRE>
+                </LI>
+                <LI>
+                    Iterálás asszociatív tömb elemein PHP-ban:
+                    <PRE th:replace="/example/basics_of_programming/loops.html :: foreach_associative_array_php"></PRE>
+                </LI>
+                <LI>
+                    Iterálás tömb vagy objektum elemein JavaScriptben:
+                    <PRE th:replace="/example/basics_of_programming/loops.html :: foreach_array_javascript"></PRE>
+                </LI>
+                <LI>
+                    Iterálás tömb elemein Javaban:
+                    <PRE th:replace="/example/basics_of_programming/loops.html :: foreach_array_java"></PRE>
+                </LI>
+            </UL>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Iteráció megszakítása</H2>
+
+            <DIV>Ha valamilyen okból egy iterációt nem szeretnénk végre hajtani, akkor használjuk a
+                <CODE>continue</CODE> kulcsszót. Ez a parancs befejezi az adott iteráció futását, majd (a megadott feltételnek megfelelően) a következő iterációra ugrik.
+            </DIV>
+
+            <PRE th:replace="/example/basics_of_programming/loops.html :: continue"></PRE>
+
+            <DIV>A fenti ciklus futása során az iteráció kezdetekor megvizsgáljuk, hogy az adott iteráció indexe osztható-e kettővel. Amennyiben igen, az adott iterációt átugorjuk. Amennyiben az adott index páratlan, az iteráció futása folytatódik.</DIV>
+
+            <DIV><U>Megjegyzés</U>: Ajánlott csak alapos indok esetén használni ezt a megoldást az iterációk átugrására. A sorok közötti ugrálás megnehezíti a kód olvasását. Alternatíva:</DIV>
+            <PRE th:replace="/example/basics_of_programming/loops.html :: avoid_continue"></PRE>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Ciklus megszakítása</H2>
+
+            <DIV>A <CODE>break</CODE> kulcsszó segítségével a teljes ciklust át tudjuk ugrani.</DIV>
+            <PRE th:replace="/example/basics_of_programming/loops.html :: break"></PRE>
+            <DIV>Lehet, hogy a teherautónk rakterébe még férne rakomány, de ha a rakomány súlya túl nagy, akkor hamarabb meg kell szakítanunk a rakodást.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Hasznos formulák</H2>
+
+            <DIV>
+                Egy tömbben található legkisebb érték megkeresése:
+                <PRE th:replace="/example/basics_of_programming/loops.html :: lowest_value"></PRE>
+                <U>Magyarázat</U>:
+                <OL>
+                    <LI>Felveszünk egy változót, ami tartalmazza az eddig talált legkisebb értéket. Alapértelmezetten ennek értékül a létező legnagyobb számot adjuk meg, hiszen annál az összes többi szám kisebb.</LI>
+                    <LI>Végig iterálunk az összes számon a tömbben, valamely erre alkalmas ciklus segítségével</LI>
+                    <LI>Minden számot össze vetjük az eddig talált legkisebb számmal. Ha ez kisebb, mint az eddigi legkisebb, akkor felül írjuk az eddig talált legkisebb értéket az új értékkel</LI>
+                    <LI>Miután elfogytak a vizsgálandó számok, meg is van az eredmény.</LI>
+                </OL>
+                Jelen esetben a futás a következőképpen zajlik:
+                <OL>
+                    <LI>iteráció: 5 kisebb, mint Integer.MAX_VALUE? Igen. "legkisebbErtek"-be bele helyezzük az 5-öt.</LI>
+                    <LI>iteráció: 2 kisebb, mint 5? Igen. "legkisebbErtek"-be bele helyezzük a 2-t.</LI>
+                    <LI>iteráció: 7 kisebb, mint 2? Nem. Megyünk tovább.</LI>
+                    <LI>iteráció: 1 kisebb, mint 2? Igen. "legkisebbErtek"-be bele helyezzük az 1-et.</LI>
+                    <LI>iteráció: 6 kisebb, mint 1? Nem. Megyünk tovább.</LI>
+                    <LI>Nincs több szám, tehát az eredmény maradt az 1.</LI>
+                </OL>
+            </DIV>
+
+            <DIV>
+                Egy tömbben található legkisebb érték megkeresése:
+                <PRE th:replace="/example/basics_of_programming/loops.html :: highest_value"></PRE>
+                <U>Magyarázat</U>: A művelet nagyon hasonlít a legkisebb szám kereséséhez, csak itt a létező legkisebb számot mentjük el ideiglenesen, és ha ennél nagyobb számot találunk, akkor írjuk felül a változó értékét.
+                Jelen esetben a futás a következőképpen zajlik:
+                <OL>
+                    <LI>iteráció: 5 nagyobb, mint Integer.MIN_VALUE? Igen. "legnagyobbErtek"-be bele helyezzük az 5-öt.</LI>
+                    <LI>iteráció: 2 nagyobb, mint 5? Nem. Megyünk tovább.</LI>
+                    <LI>iteráció: 7 nagyobb, mint 5? Igen. "legnagyobbErtek"-be bele helyezzük a 7-et.</LI>
+                    <LI>iteráció: 1 nagyobb, mint 7? Nem. Megyünk tovább.</LI>
+                    <LI>iteráció: 6 nagyobb, mint 7? Nem. Megyünk tovább.</LI>
+                    <LI>Nincs több szám, tehát az eredmény 7.</LI>
+                </OL>
+            </DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/basics_of_programming/006_collections'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/basics_of_programming/008_categories'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

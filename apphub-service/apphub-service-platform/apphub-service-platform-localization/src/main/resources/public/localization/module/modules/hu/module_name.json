@@ -12,6 +12,8 @@
   "disabled-role-management": "Jogosultságok letiltása / engedélyezése",
   "html": "01 - HTML",
   "css": "02 - CSS",
+  "basics-of-programming": "03 - A programozás alapja",
   "ban": "Felhasználók tiltása",
-  "roles-for-all": "Jogosultságok mindenkinek"
+  "roles-for-all": "Jogosultságok mindenkinek",
+  "memory-monitoring": "Memória felügyelet"
 }

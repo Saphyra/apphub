@@ -43,10 +43,12 @@ feign:
         connectTimeout: 30000
         readTimeout: 30000
 
-admin-panel-error-reporter:
+main-gateway:
   ribbon:
-    listOfServers: admin-panel:8080
-
+    listOfServers: main-gateway:8080
+scheduler:
+  ribbon:
+    listOfServers: scheduler:8080
 web-content:
   ribbon:
     listOfServers: web-content:8080
@@ -81,6 +83,15 @@ modules:
     listOfServers: modules:8080
 
 admin-panel:
+  ribbon:
+    listOfServers: admin-panel:8080
+admin-panel-error-reporter:
+  ribbon:
+    listOfServers: admin-panel:8080
+admin-panel-monitoring:
+  ribbon:
+    listOfServers: admin-panel:8080
+admin-panel-ws-client:
   ribbon:
     listOfServers: admin-panel:8080
 

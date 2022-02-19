@@ -1,0 +1,113 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<PRE th:fragment="for">
+for(var index = 0; index < 10; index++){
+    //Kód
+}
+</PRE>
+
+<PRE th:fragment="for_array">
+for(var index = 0; index < tombMerete; index++){
+    var ertek = tomb[index];
+    //Műveletek a tömb értékével
+}
+</PRE>
+
+<PRE th:fragment="while">
+var rakterAllapot = 10;
+while(rakterAllapot < 100){
+    rakterAllapot += bepakol();
+}
+</PRE>
+
+<PRE th:fragment="do_while">
+var rakterAllapot = 10;
+do{
+    rakterAllapot += bepakol();
+}while(rakterAllapot < 100);
+</PRE>
+
+<PRE th:fragment="foreach_array_php">
+foreach($tomb as $ertek){
+    //Művelet a tömb adott elemével
+}
+</PRE>
+
+<PRE th:fragment="foreach_associative_array_php">
+foreach($tomb as $nev => $ertek){
+    //Művelet az asszociatív tömb adott kulcsával / elemével
+}
+</PRE>
+
+<PRE th:fragment="foreach_array_javascript">
+for(var index in tomb){
+    var ertek = tomb[index];
+    //Művelet a tömb/objecktum adott elemével
+}
+</PRE>
+
+<PRE th:fragment="foreach_array_java">
+for(String ertek : tomb){
+    //Művelet a tömb elemével
+}
+</PRE>
+
+<PRE th:fragment="continue">
+for(var index = 0; index < 100; index++){
+    if(index % 2 == 0){
+        continue;
+    }
+
+    //Művelet a páratlan számokkal
+}
+</PRE>
+
+<PRE th:fragment="avoid_continue">
+for(var index = 0; index < 100; index++){
+    if(index % 2 != 0){
+        //Művelet a páratlan számokkal
+    }
+    //Páros szám esetén nem csinálunk semmit, hagyjuk, hogy a ciklus magától lépjen a következő iterációba.
+}
+</PRE>
+
+<PRE th:fragment="break">
+var rakterAllapot = 10;
+while(rakterAllapot < 100){
+    if(teherautoSulya() > 10000){
+        break;
+    }
+    rakterAllapot += bepakol();
+}
+</PRE>
+
+<PRE th:fragment="lowest_value">
+var tomb = [5, 2, 7, 1, 6];
+var legkisebbErtek = Integer.MAX_VALUE;
+
+for(var index in tomb){
+    var ertek = tomb[index];
+    if(ertek < legkisebbErtek){
+        legkisebbErtek = ertek;
+    }
+}
+
+return legkisebbErtek;
+</PRE>
+
+<PRE th:fragment="highest_value">
+var tomb = [5, 2, 7, 1, 6];
+var legnagyobbErtek = Integer.MIN_VALUE;
+
+for(var index in tomb){
+    var ertek = tomb[index];
+    if(ertek > legnagyobbErtek){
+        legnagyobbErtek = ertek;
+    }
+}
+
+return legnagyobbErtek;
+</PRE>
+</BODY>
+</HTML>

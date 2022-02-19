@@ -20,29 +20,29 @@
         <ARTICLE>
             <H2>Mi az a reszponzivitás?</H2>
 
-            <P>
+            <DIV>
                 Valószínűleg minden ember találkozott már olyan oldallal, ami telefonon másképpen jelent meg, mint egy számítógép kijelzőjén.
                 Ennek az oka a következő: Egy telefon általában sokkal nagyobb képpont sűrűséggel rendelkezik, mint egy asztali monitor (telefon: 2000 képpont 15-20 centire sűrítve, mig egy monitoron ugyanennyi képpontra 30-50 centi is jut, ha nem több).
-                Ez azzal jár, hogy a telefonokon a 16 pixeles betűméret sokkal kisebbként jelenik meg, mint az asztali gépek esetében. Másik példa, míg a telefonokat legtöbbször állított helyzetben bámuljuk, addig asztali gépek szinte mindig fektetve vannak.
+                Ez azzal jár, hogy a telefonokon a 16 pixeles betűméret sokkal kisebbként jelenik meg, mint az asztali gépek esetében. Másik példa, míg a telefonokat legtöbbször állított helyzetben bámuljuk, addig asztali gépek vagy laptopok kijelzői szinte mindig fektetve vannak.
                 Így könnyen előfordulhat, hogy ami a számítógépünkön szépen és olvashatóan jelenik meg, ugyanaz a weboldal telefonon el van csúszva, nem fér ki, vagy éppen olvashatatlanul kicsi a szöveg.
-            </P>
+            </DIV>
 
-            <P>Ha egy weboldal érzékeli a kijelző paramétereit, és ennek függvényében jeleníti meg a tartalmat, akkor azt reszponzív weboldalnak tekinthetjük.</P>
+            <DIV>Ha egy weboldal érzékeli a kijelző paramétereit, és ennek függvényében jeleníti meg a tartalmat, akkor azt reszponzív weboldalnak tekinthetjük.</DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>Hogyan legyünk reszponzívak?</H2>
 
-            <P>
+            <DIV>
                 Alap szintű reszponzivitást a legkönnyebb relatív mértékegységek használatával, és a tárolók méretének minimum és maximum értékeinek meghatározásával elérni.
                 Természetesen a CSS ennél sokkal kifinomultabb és precízebb megoldásokat is nyújt. Ezek közül az egyiket <CODE>media query</CODE>-nek hívjuk.
-            </P>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
             <H2>media queryk</H2>
 
-            <P>A media queryk olyan szabályokat foglalnak magukban, melyek csak akkor jutnak érvényre, hogyha a képernyő bizonyos feltételeknek megfelel.</P>
+            <DIV>A media queryk olyan szabályokat foglalnak magukban, melyek csak akkor jutnak érvényre, hogyha a képernyő bizonyos feltételeknek megfelel.</DIV>
 
             <DIV>
                 Szintaktika: <CODE>@media not/only megjelenito and (feltetel) and (feltetel) ... { szabályok }</CODE>
@@ -79,7 +79,7 @@
                 <IFRAME src="/web/training/css/sample/media_query" style='display: block; width: 250px; height: 250px; resize: horizontal; background: white;'></IFRAME>
             </DIV>
 
-            <P>Példa egy menü reszponzívvé tételére:</P>
+            <DIV>Példa egy menü reszponzívvé tételére:</DIV>
             <IFRAME src="/web/training/css/sample/responsive_menu" style='display: block; width: 600px; height: 250px; resize: horizontal; background: white;'></IFRAME>
 
             <PRE th:replace="/example/css/responsivity.html :: responsive_menu"></PRE>
