@@ -15,7 +15,7 @@
 
         <!-- Platform Versions -->
         <versions.maven-surefire-plugin>3.0.0-M4</versions.maven-surefire-plugin>
-        <versions.postgresql-connector>42.2.10</versions.postgresql-connector>
+        <versions.postgresql-connector>42.3.3</versions.postgresql-connector>
 
         <!-- Saphyra Versions -->
         <versions.saphyra.util>1.5.1</versions.saphyra.util>
