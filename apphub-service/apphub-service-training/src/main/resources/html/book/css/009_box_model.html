@@ -28,7 +28,7 @@
             <DIV>
                 Képzeljük el, hogy van egy 250 pixel széles tárolónk, amit szeretnénk tartalommal feltölteni. Ezért bele rakunk egy 250 pixel széles dobozt, amibe a tartalmat rakjuk:
 
-                <PRE class="codepart" th:replace="/example/css/box_model.html :: original_example"></PRE>
+                <PRE th:replace="/example/css/box_model.html :: original_example"></PRE>
                 <DIV style='width: 250px; height: 250px; border: 3px solid red; background: yellow; box-sizing: content-box;'>
                     <DIV style='width: 250px; height: 100px; background: green; margin: 0; box-sizing: content-box;'>
                         Tartalom
@@ -36,7 +36,7 @@
                 </DIV>
 
                 Eddig semmi kirívót nem látunk, igaz? Akkor most adjunk egy kis paddingot, és szegélyt a tartalom dobozához! (A belső <CODE>&lt;div></CODE>-hez)
-                <PRE class="codepart" th:replace="/example/css/box_model.html :: with_padding_and_border"></PRE>
+                <PRE th:replace="/example/css/box_model.html :: with_padding_and_border"></PRE>
 
                 <DIV style='width: 250px; height: 250px; border: 3px solid red; background: yellow; box-sizing: content-box;'>
                     <DIV style='width: 250px; height: 100px; background: green; margin: 0; padding: 30px; border: 20px solid black; box-sizing: content-box;'>
@@ -71,7 +71,7 @@
             <DIV>
                 Ha az előbbi példát kiegészítjük a <CODE>box-sizing: border-box</CODE> tulajdonsággal, megváltozik a működés is:
 
-                <PRE class="codepart" th:replace="/example/css/box_model.html :: border_box"></PRE>
+                <PRE th:replace="/example/css/box_model.html :: border_box"></PRE>
                 <DIV>
                     <DIV style='display: inline-block; width: 250px; height: 250px; border: 3px solid red; background: yellow; box-sizing: content-box;'>
                         <DIV style='width: 250px; height: 100px; background: green; margin: 0; padding: 30px; border: 20px solid black; box-sizing: border-box;'>

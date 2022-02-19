@@ -1,0 +1,93 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Funkciók / metódusok - A programozás alapja - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">A programozás alapja - Funkciók / metódusok</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/basics_of_programming.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Mik azok a funkciók / metódusok?</H2>
+
+            <DIV>Először is: egymás szinonimái. Senki ne lepődjön meg, ha egyszer funkciónak hívom őket, máskor pedig metódusnak, ugyanarra az egy dologra gondolok.</DIV>
+            <DIV>Ez az egy dolog alatt pedig az olyan kód részleteket értem, amik névvel vannak ellátva, valamint bemeneti paraméterrel és visszatérési értékkel rendelkezhetnek.</DIV>
+            <DIV>Ezek a kódrészletek nem futnak le azonnal, hanem csak akkor, amikor meghívják őket.</DIV>
+            <DIV>Példa továbbra is PHP-ban:</DIV>
+
+            <PRE th:replace="/example/basics_of_programming/functions.html :: example"></PRE>
+
+            <DIV>
+                Itt a következő dolgok történtek:
+
+                <OL>
+                    <LI>Létre hozunk egy metódust a <CODE>function</CODE> kulcsszó segítségével (a kulcsszó / a metódus létrehozásának módja programozási nyelvenként eltérhet)</LI>
+                    <LI>Ezt a metódust elneveztük "funkcioNev"-nek.</LI>
+                    <LI>Megadtuk, hogy a metódus két paramétert vár ("$paraneter1" és "$parameter2"). A paraméterek egyszerű változóként viselkednek a metóduson belül.</LI>
+                    <LI>A metódus blokkjában (a "{}" közötti rész) megadtuk, hogy mit csináljon a metódus</LI>
+                    <LI>A <CODE>return</CODE> kulcsszó segítségével megadtuk, hogy a metódusunk a "visszateresiErtek" értéket adja vissza a hívó félnek</LI>
+                    <LI>A
+                        <CODE>funkcioNev("ertek1", "ertek2")</CODE> kódrészlet hívja meg a "funkcioNev" nevű metódust, és a "$parameter1" paraméter változónak az "ertek1", míg a "$parameter2" paraméter változónak az "ertek" értéket adja
+                    </LI>
+                    <LI>A "funkcioNev" metódus visszatérési értékét elmentjük a "$visszateresiErtek" változóba.</LI>
+                </OL>
+            </DIV>
+
+            <DIV>A funkciók két fontos célja:
+                <UL>
+                    <LI>A kódismétlés elkerülése - Ha ugyanazt a kódot többször szeretnénk lefuttatni, akkor érdemes az ismétlődő kód részletet metódusokba kiszervezni, így ahelyett, hogy 20-szor másolnánk be ugyanazt a 100 soros kód részletet, elég csak egyszer megírni, majd utána a nevével hivatkozva meghívni</LI>
+                    <LI>Hosszabb kódrészletek feldarabolása kisebb, névvel ellátott, jobban érthető részekre.</LI>
+                </UL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <DIV>
+                Vannak paraméter nélküli metódusok is:
+
+                <PRE th:replace="/example/basics_of_programming/functions.html :: 0_param_function"></PRE>
+            </DIV>
+
+            <DIV>
+                A metódusoknak nem kötelező visszatérési értéket megadni:
+
+                <PRE th:replace="/example/basics_of_programming/functions.html :: no_return_value_function"></PRE>
+            </DIV>
+
+            <DIV>
+                A metódus futása közben is vissza lehet térni:
+
+                <PRE th:replace="/example/basics_of_programming/functions.html :: middle_return"></PRE>
+
+                <U>Magyarázat</U>: Ha a "$szam" paraméter értékének a hívó "0"-t ad meg, akkor a "Nem lehet nulla" értékkel tér vissza, és a metódus futása megszakad. Ha a "$szam" nem nulla, akkor a 10-et elosztjuk az adott számmal, és az lesz a visszatérési eredmény.
+            </DIV>
+
+            <DIV>Az adott metódus mindig az első <CODE>return</CODE> értékig fut. (Vagy amíg vége nem lesz a metódusnak)</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Egyéb hasznos infók</H2>
+
+            <DIV>Minden programozási nyelvnek megvan a saját funkció készlete, amit bátran használhatunk. Ezekről részletesebben az adott nyelvről szóló könyv fog beszámolni.</DIV>
+            <DIV>A nem típusos nyelveknél (erről majd később) mindig van visszatérési érték, még akkor is, ha mi nem adtuk meg. Ennek konkrét értéke programozási nyelvtől függ.</DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/basics_of_programming/004_conditions'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/basics_of_programming/006_collections'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

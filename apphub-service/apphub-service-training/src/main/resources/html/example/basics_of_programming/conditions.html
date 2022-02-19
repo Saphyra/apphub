@@ -1,0 +1,100 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<PRE th:fragment="if">
+$boolean = true;
+if($boolean){
+    //Le fog futni a kód, hiszen a "boolean" nevű változó értéke true (igaz)
+}
+
+$boolean = false;
+if($boolean){
+    //Nem fog lefutni a kód, hiszen a "boolean" nevű változó értéke false (hamis)
+}
+</PRE>
+
+<PRE th:fragment="negated_if">
+$boolean = true;
+if(<CODE>!</CODE>$boolean){
+    //Nem fog lefutni a kód, hiszen a "boolean" nevű változó értéke true (igaz), és a "!" miatt ez érték ellentétét vesszük, tehát az if-nek már a false (hamis) értéket adjuk át.
+}
+
+$boolean = false;
+if(<CODE>!</CODE>$boolean){
+    //Le fog futni a kód, hiszen a "boolean" nevű változó értéke false (hamis), és a "!" miatt ez érték ellentétét vesszük, tehát az if-nek már a true (igaz) értéket adjuk át.
+}
+</PRE>
+
+<PRE th:fragment="if_else">
+$boolean = true;
+if($boolean){
+    //Le fog futni a kód, hiszen a "boolean" nevű változó értéke true (igaz)
+}else{
+    //Nem fog lefutni a kód, hiszen a "boolean" nevű változó értéke true (igaz), tehát az if-ben foglalt kód fut le ez helyett.
+}
+
+$boolean = false;
+if($boolean){
+    //Nem fog lefutni a kód, hiszen a "boolean" nevű változó értéke false (hamis)
+}else{
+    //Le fog futni a kód, hiszen a "boolean" nevű változó értéke false (hamis), így az if-ben foglalt kód helyett ez fog lefutni.
+}
+</PRE>
+
+<PRE th:fragment="else_if">
+$boolean = false;
+$masikBoolean = true
+if($boolean){
+    //Nem fog lefutni a kód, hiszen a "boolean" nevű változó értéke false (hamis)
+} else if($masikBoolean){
+    //Le fog futni a kód, hiszen a "boolean" nevű változó értéke false (hamis), viszont a "masikBoolean" nevű változó értéke true (igaz)
+} else{
+    //Nem fog lefutni a kód, hiszen a "masikBoolean" nevű változó értéke true (igaz), tehát az else if-ben foglalt kód fut le ez helyett.
+}
+</PRE>
+
+<PRE th:fragment="switch">
+$bemenet = "alma";
+
+switch($bemenet){
+    case "körte":
+        //Ez a kód nem fog lefutni, mert a "bemenet" nevű változó értéke nem "körte".
+    break;
+    case "alma":
+        //Ez a kód fog lefutni, mert a "bemenet" nevű változó értéke "alma"
+    break;
+    default:
+        //Ez a kód nem fog lefutni, hiszen volt olyan <CODE>case</CODE>, aminek az értéke egyezett a "bemenet" nevű változó értékével.
+}
+</PRE>
+
+<PRE th:fragment="switch_replacement">
+$bemenet = "alma";
+
+if($bemenet == "körte"){
+    //Ez a kód nem fog lefutni, mert a "bemenet" nevű változó értéke nem "körte".
+} else if($bemenet == "alma"){
+    //Ez a kód fog lefutni, mert a "bemenet" nevű változó értéke "alma"
+} else{
+    //Ez a kód nem fog lefutni, hiszen volt olyan <CODE>case</CODE>, aminek az értéke egyezett a "bemenet" nevű változó értékével.
+}
+</PRE>
+
+<PRE th:fragment="breakless_switch">
+$bemenet = "körte";
+
+switch($bemenet){
+    case "körte":
+        //Ez a kód le fog futni, mert a "bemenet" nevű változó értéke "körte".
+    case "alma":
+        //Ez a kód fog lefutni, mert az előző <CODE>case</CODE> nem végőzött <CODE>break</CODE> paranccsal.
+    break;
+    case "banán":
+        //Ez a kód nem fog lefutni, mert a "bemenet" nevű változó értéke nem "banán".
+    break;
+    default:
+        //Ez a kód nem fog lefutni, hiszen volt olyan <CODE>case</CODE>, aminek az értéke egyezett a "bemenet" nevű változó értékével.
+}
+</PRE>
+</BODY>
+</HTML>

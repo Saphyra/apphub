@@ -23,7 +23,7 @@
             <DIV>A háttér színét a <CODE>background</CODE> vagy a <CODE>background-color</CODE> tulajdonsággal lehet beállítani.</DIV>
             <DIV>
                 Például:
-                <PRE class="codepart" th:replace="/example/css/backgrounds.html :: example"></PRE>
+                <PRE th:replace="/example/css/backgrounds.html :: example"></PRE>
 
                 (A <CODE>&lt;body></CODE> tag hátterének a színét pirosra állítja.)
             </DIV>
@@ -38,7 +38,7 @@
                 <CODE>background-image</CODE> tulajdonsággal lehet beállítani, csak itt színkód helyett a kép címét kell megadni értéknek:
             </DIV>
             <DIV>
-                <PRE class="codepart" th:replace="/example/css/backgrounds.html :: background_image"></PRE>
+                <PRE th:replace="/example/css/backgrounds.html :: background_image"></PRE>
             </DIV>
 
             <DIV><U>Megjegyzés:</U> ha a <CODE>background</CODE> tulajdonsággal állítjuk be a háttérképet, akkor ugyanannak a tagnek nem lehet háttérszínt is beállítani.</DIV>
@@ -153,7 +153,7 @@
             <DIV>Ebben az esetben szükséges a <CODE>background-color</CODE> és <CODE>background-image</CODE> tulajdonságok együttes használata.</DIV>
             <DIV>
                 Például:
-                <PRE class="codepart" th:replace="/example/css/backgrounds.html :: combined_background"></PRE>
+                <PRE th:replace="/example/css/backgrounds.html :: combined_background"></PRE>
                 <DIV style='width: 250px; height: 250px; background-color: blue; background-image: url("/res/training/img/css/sample_background.jpg"); background-repeat: no-repeat; border: 3px solid red;'></DIV>
             </DIV>
         </ARTICLE>

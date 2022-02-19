@@ -1,0 +1,45 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<PRE th:fragment="typed_language">
+    String valtozo = "alma";
+
+    valtozo = "körte"; //Működik, mert egy szöveg típusú változóba egy másik szöveget rakunk
+
+    valtozo = 4; //Hibás, mert egy szöveg típusú változóba egy számot akarunk rakni
+</PRE>
+
+<PRE th:fragment="typeless_language">
+    $valtozo = "alma";
+
+    $valtozo = "körte";
+
+    $valtozo = 4; //Működik, hiszen a változónak nincs típusa, ami megmondaná, hogy mit lehet bele tenni.
+</PRE>
+
+<PRE th:fragment="functional_language">
+    $auto = [];
+    $auto["sebesseg"] = 0;
+
+    gyorsit($auto, 20);
+
+    function gyorsit($auto, $sebesseg){ //Az autó nem képes magától menni, egy külön funkciót kell írni rá.
+        $auto["sebesseg"] += $sebesseg;
+    }
+</PRE>
+
+<PRE th:fragment="object_oriented_language">
+    class Auto { //Típus létrehozása
+        $sebesseg = 0;
+
+        function gyorsit($seb){ //Az autó feladata, hogy tudjon gyorsítani
+            $sebesseg += $seb;
+        }
+    }
+
+    $auto = new Auto();
+    auto.gyorsit(20);
+</PRE>
+
+</BODY>
+</HTML>

@@ -113,12 +113,12 @@
         <ARTICLE>
             <H2>Szintaktika</H2>
 
-            <PRE class="codepart" th:replace="/example/css/introduction.html :: syntax"></PRE>
+            <PRE th:replace="/example/css/introduction.html :: syntax"></PRE>
 
             <DIV>A kiválasztókról és tulajdonságokról a későbbi fejezetekben lesz szó.</DIV>
             <DIV>
                 Példa:
-                <PRE class="codepart" th:replace="/example/css/introduction.html :: example"></PRE>
+                <PRE th:replace="/example/css/introduction.html :: example"></PRE>
                 (A <CODE>&lt;body></CODE> háttérszínét pirosra, a betűméretét pedig 20 pixelesre állítja.)
             </DIV>
 
@@ -128,6 +128,7 @@
                     <LI>A kommenteket a böngésző figyelmen kívül hagyja a megjelenítés során.</LI>
                     <LI>Komment blokk létrehozása: <CODE>/*Komment szövege*/</CODE></LI>
                     <LI>Komment blokk lehet több soros, is, de nem ágyazódhatnak egymásba.</LI>
+                </UL>
             </DIV>
         </ARTICLE>
     </MAIN>

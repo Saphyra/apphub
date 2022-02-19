@@ -1,0 +1,134 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Változók - A programozás alapja - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">A programozás alapja - Változók</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/basics_of_programming.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Mik azok a változók?</H2>
+
+            <DIV>Ahogy a bevezetésben említettem, a programok egyik fő része az "adat". Ezeket az adatokat a program változókban tárolja.</DIV>
+            <DIV>Képzeljünk el egy dobozt! Ebbe a dobozba bele tudunk tenni dolgokat, és ki is tudjuk venni belőle. A változók pont ugyanígy működnek. Egy virtuális doboz, amiben lehet valamilyen adat, vagy lehetnek éppen üresek.</DIV>
+            <DIV>A változók gyakorlatilag név-érték párok. Van egy nevük, amin keresztül a program írása során hivatkozunk rájuk, valamint van (vagy épp nincs) egy értékük.</DIV>
+            <DIV>Pontosabban fogalmazva: A változó annak a memória területnek a neve, amiben a változó értéke el lett tárolva.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Változó létrehozása</H2>
+
+            <DIV>Egy változót először deklarálni kell, magyarul megmondani a számítógépnek, hogy "vegyél egy dobozt, és ragaszd rá ezt a címkét". A változónak ilyenkor még nincs értéke, és csak arra lehet használni, hogy bele rakjunk valamit.</DIV>
+            <DIV>
+                Például:
+                <UL>
+                    <LI>JavaScript: <CODE>var valtozonev;</CODE></LI>
+                    <LI>Java: <CODE>String valtozonev;</CODE></LI>
+                    <LI>PHP: <CODE>$valtozonev;</CODE></LI>
+                </UL>
+            </DIV>
+            <DIV>A deklarálás során kell megadni a változó tulajdonságait (adott nyelvtől függ, például típus, láthatóság, változtatható-e, stb)</DIV>
+
+            <DIV>Ez után a változónak értéket kell adni:</DIV>
+            <DIV>
+                <UL>
+                    <LI>Java és JavaScript: <CODE>valtozonev = "érték";</CODE></LI>
+                    <LI>PHP: <CODE>$valtozonev = "érték";</CODE></LI>
+                </UL>
+            </DIV>
+
+            <DIV>Természetesen az érték nem csak szöveg lehet, hanem bármi egyéb is, amire éppen szükség van.</DIV>
+
+            <DIV>A változó deklarálása és az érték adás történhet egyszerre is:</DIV>
+            <DIV>
+                <UL>
+                    <LI>JavaScript: <CODE>var valtozonev = "érték";</CODE></LI>
+                    <LI>Java: <CODE>String valtozonev = "érték;</CODE></LI>
+                    <LI>PHP: <CODE>$valtozonev = "érték";</CODE></LI>
+                </UL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Változó használata</H2>
+
+            <DIV>A változónkat létre hoztuk, értéket is adtunk neki, már csak fel kell használnuk.</DIV>
+            <DIV>
+                Például:
+                <UL>
+                    <LI>JavaScript:
+                        <PRE th:replace="/example/basics_of_programming/variables.html :: use_variable_js"></PRE>
+                    </LI>
+                    <LI>Java:
+                        <PRE th:replace="/example/basics_of_programming/variables.html :: use_variable_java"></PRE>
+                    </LI>
+                    <LI>PHP:
+                        <PRE th:replace="/example/basics_of_programming/variables.html :: use_variable_php"></PRE>
+                    </LI>
+                </UL>
+                <U>Magyarázat:</U> Létrehozunk egy változót "valtozonev" néven, és értékül adjuk neki a "4"-et. Ez után létrehozunk egy változót "eredmeny" néven, és értékól adjuk neki a "valtozonev" változó értéke + 1-et. Tehát az "eredmény" nevű változó értéke 5 lesz.
+            </DIV>
+
+            <DIV>Ha az adott változót nem jelöltük "írásvédettnek", akkor annak a változónak többször is lehet értéket adni. Ilyenkor a változó eddigi értéke felül íródik az új értékkel.</DIV>
+            <DIV>
+                Például:
+                <UL>
+                    <LI>JavaScript:
+                        <PRE th:replace="/example/basics_of_programming/variables.html :: overwrite_variable_js"></PRE>
+                    </LI>
+                    <LI>Java:
+                        <PRE th:replace="/example/basics_of_programming/variables.html :: overwrite_variable_java"></PRE>
+                    </LI>
+                    <LI>PHP:
+                        <PRE th:replace="/example/basics_of_programming/variables.html :: overwrite_variable_php"></PRE>
+                    </LI>
+                </UL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Adat típusok</H2>
+
+            <DIV>A változóba helyezhető értékeket szintén különböző kategóriákba, típusokba sorolhatjuk:</DIV>
+            <UL>
+                <LI><CODE>boolean</CODE>: Értéke lehet true/false (igen/nem)</LI>
+                <LI><CODE>byte</CODE>: Értéke egy szám -128 és 127 között (1 byte = 8 bit = 256 lehetőség)</LI>
+                <LI>
+                    Valamilyen szám:
+                    <UL>
+                        <LI><CODE>short</CODE>: Eész szám -32,768 és 32,767 között (2 bájt)</LI>
+                        <LI><CODE>int/integer</CODE>: Eész szám -2,147,483,648 és 2,147,483,647 között (4 bájt)</LI>
+                        <LI><CODE>long</CODE>: Eész szám -9,223,372,036,854,775,808 és 9,223,372,036,854,775,807 között (8 bájt)</LI>
+                        <LI><CODE>float</CODE>: Tört szám 6-7 helyiérték között (4 bájt)</LI>
+                        <LI><CODE>double</CODE>: Tört szám 15 helyiértékig (8 bájt)</LI>
+                    </UL>
+                </LI>
+                <LI><CODE>char</CODE>: Egy karakter, vagy ASCII érték (2 bájt)</LI>
+                <LI><CODE>String</CODE>: Karakterlánc, szöveg. (Nem számít primitív adattípusnak, hiszen ez már több dologból áll össze, char-ok sorrendjéből.)</LI>
+                <LI>Egyéb nyelv specifikus objektumok, a programozó(k) által definiált egyedi adat típusok</LI>
+                <LI><CODE>null</CODE>: Az adott változónak nincs értéke. (Olyan változó, amelynek neve van, de nincs megadva memóriaterület, amire mutat)</LI>
+            </UL>
+
+            <DIV>Az adott nyelv határozza meg, hogy a fentiek közül melyik konkrét típusokat használja.</DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/basics_of_programming/001_introduction'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/basics_of_programming/003_operations'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

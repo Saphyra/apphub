@@ -1,0 +1,38 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<PRE th:fragment="example">
+function funkcioNev($parameter1, $parameter2){
+    //Funkció kódja
+    return "visszateresiErtek";
+}
+
+$visszateresiErtek = funkcioNev("ertek1", "ertek");
+</PRE>
+
+<PRE th:fragment="0_param_function">
+function funkcioNev(){
+    //Funkció kódja
+    return "visszateresiErtek";
+}
+</PRE>
+
+<PRE th:fragment="no_return_value_function">
+function funkcioNev(){
+    //Funkció kódja
+    return;
+}
+</PRE>
+
+<PRE th:fragment="middle_return">
+function funkcioNev($szam){
+    if($szam == 0){
+        return "Nem lehet nulla";
+    }
+
+    return 10 / $szam;
+}
+</PRE>
+
+</BODY>
+</HTML>

@@ -69,3 +69,8 @@ modules:
         mobileAllowed: true
         roles:
           - TRAINING
+      - name: basics-of-programming
+        url: /web/training/basics_of_programming/001_introduction
+        mobileAllowed: true
+        roles:
+          - TRAINING

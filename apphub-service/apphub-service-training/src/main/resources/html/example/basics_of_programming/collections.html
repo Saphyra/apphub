@@ -1,0 +1,39 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<PRE th:fragment="sum_of_2_numbers">
+function ketSzamOsszege($szam1, $szam2){
+    return $szam1 + $szam2;
+}
+</PRE>
+
+<PRE th:fragment="sum_of_20_numbers">
+function huszSzamOsszege($szam1, $szam2, $szam3, $szam4, ... $szam20){
+    return $szam1 + $szam2 + $szam3 + $szam4 + ... + $szam20;
+}
+</PRE>
+
+<PRE th:fragment="associative_array_php">
+$asszociativTomb = []; //Létrehozás
+$asszociativTomb["nev"] = "ertek"; //Érték behelyezés
+$ertek = $asszociativTomb["nev"]; //Érték kivétel
+</PRE>
+
+<PRE th:fragment="data_object_javascript">
+var obj = {}; //Létrehozás
+
+obj["nev"] = "ertek"; //Érték behelyezés 1
+obj.nev = "ertek"; //Érték behelyezés 2
+
+var ertek = obj["nev"]; //Érték kivétel 1
+var ertek = obj.nev; //Érték kivétel 2
+</PRE>
+
+<PRE th:fragment="map_java">
+Map&lt;String, String> map = new HashMap&lt;String, String>(); //Létrehozás
+map.put("nev", "ertek"); //Érték behelyezés
+String ertek = map.get("nev"); //Érték kivétel
+</PRE>
+
+</BODY>
+</HTML>

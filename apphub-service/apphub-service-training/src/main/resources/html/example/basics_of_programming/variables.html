@@ -1,0 +1,35 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<PRE th:fragment="use_variable_js">
+var valtozonev = 4;
+var eredmeny = valtozonev + 1;
+</PRE>
+
+<PRE th:fragment="use_variable_java">
+int valtozonev = 4;
+int eredmeny = valtozonev + 1;
+</PRE>
+
+<PRE th:fragment="use_variable_php">
+$valtozonev = 4;
+$eredmeny = $valtozonev + 1;
+</PRE>
+
+<PRE th:fragment="overwrite_variable_js">
+var valtozonev = 4;
+valtozonev = "alma";
+</PRE>
+
+<PRE th:fragment="overwrite_variable_java">
+int valtozonev = 4;
+valtozonev = 6;
+</PRE>
+
+<PRE th:fragment="overwrite_variable_php">
+$valtozonev = 4;
+$valtozonev = "alma";
+</PRE>
+
+</BODY>
+</HTML>

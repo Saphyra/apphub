@@ -1,0 +1,75 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <TITLE>Műveletek - A programozás alapja - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">A programozás alapja - Műveletek</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/basics_of_programming.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <DIV>A programozás másik fő része az "adaton elvégzendő műveletek".</DIV>
+            <DIV>A legegyszerűbb adat típusok a számok, illetve karakterek/karakterláncok (szöveg). Minden összetettebb adatstruktúra ezekből az építőelemekből áll.</DIV>
+            <DIV>Ezért az összes programozási nyelvnek képesnek kell lennie műveleteket elvégezni ezekkel az adatokkal.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Műveletek számokkal</H2>
+
+            <DIV>Természetesen egy programnak képesnek kell lennie összeadni (<CODE>+</CODE>), kivonni (<CODE>-</CODE>), szorozni (<CODE>*</CODE>) és osztani (<CODE>/</CODE>).</DIV>
+            <DIV>Például: <CODE>var eredmeny = 4 + 6 / 2 - 2 * 2</CODE></DIV>
+            <DIV>A programok is jártak iskolába, és tisztában vannak a műveleti sorrenddel, így az "eredmeny" nevű változó értéke 3 lesz.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <DIV>Gyakran előfordul, hogy egy számot tartalmazó változó értékét úgy szeretnénk felhasználni, hogy az eredményt ugyanabba a változóba helyezzük el:
+                <CODE>szam = szam + 1</CODE> ("szam" nevű változó értékét növeljük meg 1-el, és ez eredményt tároljuk el a "szam" nevű változóban).
+            </DIV>
+
+            <DIV>A programozók nem szeretnek sokat gépelni, ezért a fenti műveletet sokkal egyszerűbben is meg lehet oldani:
+                <CODE>szam += 1</CODE> (a "szam" nevű változó értékét növeljük meg 1-el). Ugyanígy működik a <CODE>-=</CODE>, <CODE>*=</CODE> és <CODE>/=</CODE> műveletekkel.
+            </DIV>
+
+            <DIV>De a programozók még ennél is lustábbak, így ha egy változó értékét csak 1-el szeretnék megnövelni / csökkenteni, akkor használják a <CODE>szam++</CODE> illetve a
+                <CODE>szam--</CODE> műveleteket (növeld / csökkentsd a "szam" nevű változó értékét 1-el).
+            </DIV>
+
+            <DIV>Maradékos osztás a <CODE>%</CODE> segítségével: <CODE>$eredmeny = 26 % 4;</CODE> - "eredmeny" nevű változó értéke 2 lesz, mivel 26-ban a 4 megvan 6-szor, MARADÉK A 2</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Műveletek szöveggel</H2>
+
+            <DIV>A szöveg műveletek pontos módja (például keresés a szövegben, karakterek kicserélése egy másik karakterre, feldarabolás, stb) függ a konkrét programozási nyelvtől, de amit minden nyelvnek tudnia kell, az a szöveg összefűzése.</DIV>
+            <DIV>
+                Például:
+                <UL>
+                    <LI>Java, JavaScript: <CODE>"szöveg 1" + "szöveg 2"</CODE></LI>
+                    <LI>PHP: <CODE>"szöveg 1" . "szöveg 2"</CODE></LI>
+                </UL>
+            </DIV>
+
+            <DIV>Egy adott változó tartalmához hozzá fűzni egy szöveget ugyanúgy lehet, mintha számot adnánk hozzá:
+                <CODE>szoveg += "másik szöveg"</CODE> (A "szöveg" nevű változó értékéhez hozzá fűzzük a "másik szöveg" értéket.
+            </DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/basics_of_programming/002_variables'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/basics_of_programming/004_conditions'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>
