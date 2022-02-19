@@ -42,9 +42,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: web-content
+  name: scheduler
   labels:
-    app: web-content
+    app: scheduler
 spec:
   type: ClusterIP
   ports:
