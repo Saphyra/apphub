@@ -27,7 +27,6 @@ public class PingService {
             log.info("Ping successful");
         } catch (Exception e) {
             log.error("Connection lost.", e);
-            System.exit(0);
         }
     }
 }
