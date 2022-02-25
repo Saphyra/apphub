@@ -16,7 +16,7 @@ scriptLoader.loadScript("/res/admin-panel/js/error_report/bulk_operations_contro
         errorReportDetails: "error-report-details",
         errorReportOverview: "error-report-overview",
         errorReportId: "error-report-id",
-        errorReportCreatedAt: "error-report-created-at",
+        errorReportTimestamp: "error-report-timestamp",
         errorReportMessage: "error-report-message",
         errorReportService: "error-report-service",
         errorReportResponseStatus: "error-report-response-status",

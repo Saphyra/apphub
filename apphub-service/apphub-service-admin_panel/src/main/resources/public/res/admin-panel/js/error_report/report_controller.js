@@ -177,7 +177,7 @@
             openedErrorReportId = errorReport.id;
 
             document.getElementById(ids.errorReportId).innerText = errorReport.id;
-            document.getElementById(ids.errorReportCreatedAt).innerText = errorReport.createdAt;
+            document.getElementById(ids.errorReportTimestamp).innerText = errorReport.createdAt;
             document.getElementById(ids.errorReportMessage).innerText = errorReport.message;
             document.getElementById(ids.errorReportService).innerText = errorReport.service;
             document.getElementById(ids.errorReportResponseStatus).innerText = errorReport.responseStatus;

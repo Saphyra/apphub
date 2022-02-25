@@ -127,6 +127,12 @@
         "message": "Következő"
       }
     ],
+    "error-report-details-timestamp-label": [
+      {
+        "key": "innerHTML",
+        "message": "Időbélyeg"
+      }
+    ],
     "error-report-details-service-label": [
       {
         "key": "innerHTML",
