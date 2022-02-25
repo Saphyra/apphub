@@ -207,4 +207,12 @@ class GamePage {
     public static List<WebElement> planetQueue(WebDriver driver) {
         return driver.findElements(By.cssSelector(".queue-item"));
     }
+
+    public static WebElement resumeGameButton(WebDriver driver) {
+        return driver.findElement(By.id("resume-game-button"));
+    }
+
+    public static WebElement pauseGameButton(WebDriver driver) {
+        return driver.findElement(By.id("pause-game-button"));
+    }
 }

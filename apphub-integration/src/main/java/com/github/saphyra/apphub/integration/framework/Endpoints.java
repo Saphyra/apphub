@@ -8,7 +8,9 @@ public class Endpoints {
     public static final String ADMIN_PANEL_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/role-management";
     public static final String ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/disabled-role-management";
     public static final String ADMIN_PANEL_ERROR_REPORT_PAGE = "/web/admin-panel/error-report";
+    public static final String ADMIN_PANEL_MEMORY_MONITORING_PAGE = "/web/admin-panel/memory-monitoring";
     public static final String ADMIN_PANEL_BAN_PAGE = "/web/admin-panel/ban";
+    public static final String ADMIN_PANEL_ROLES_FOR_ALL_PAGE = "/web/admin-panel/roles-for-all";
     public static final String ERROR_PAGE = "/web/error";
     public static final String NOTEBOOK_PAGE = "/web/notebook";
     public static final String SKYXPLORE_MAIN_MENU_PAGE = "/web/skyxplore";
@@ -27,12 +29,15 @@ public class Endpoints {
     //PLATFORM
     public static final String HEALTH = "/platform/health";
     public static final String TRANSLATE_ERROR_CODE = "/internal/localization/error-code";
+    public static final String TRANSLATE_KEY = "/internal/localization/key";
 
     public static final String REGISTER_PROCESSOR = "/platform/event-gateway";
     public static final String HEARTBEAT = "/platform/event-gateway/{serviceName}";
     public static final String SEND_EVENT = "/internal/event-gateway";
 
     //EVENTS
+    public static final String EVENT_TRIGGER_MEMORY_STATUS_UPDATE = "/event/trigger-memory-monitoring";
+    public static final String EVENT_MEMORY_MONITORING = "/event/memory-monitoring";
     public static final String EVENT_DELETE_EXPIRED_ACCESS_TOKENS = "/event/delete-expired-access-tokens";
     public static final String EVENT_REFRESH_ACCESS_TOKEN_EXPIRATION = "/event/refresh-access-token-expiration";
     public static final String EVENT_DELETE_ACCOUNT = "/event/delete-account";
@@ -47,9 +52,15 @@ public class Endpoints {
     public static final String WEB_SOCKET_SEND_MESSAGE = "/internal/message/{group}";
 
     //CONNECTION SUBSCRIPTIONS
+    public static final String WS_CONNECTION_ADMIN_PANEL_MONITORING = "/api/message-sender/admin-panel/monitoring";
     public static final String WS_CONNECTION_SKYXPLORE_MAIN_MENU = "/api/message-sender/skyxplore/main-menu";
     public static final String WS_CONNECTION_SKYXPLORE_LOBBY = "/api/message-sender/skyxplore/lobby";
     public static final String WS_CONNECTION_SKYXPLORE_GAME = "/api/message-sender/skyxplore/game";
+
+    //ADMIN-PANEL WEB-SOCKET MESSAGING
+    public static final String ADMIN_PANEL_WEB_SOCKET_USER_CONNECTED = "/internal/api/admin-panel/ws/{userId}";
+    public static final String ADMIN_PANEL_WEB_SOCKET_USER_DISCONNECTED = "/internal/api/admin-panel/ws/{userId}";
+    public static final String ADMIN_PANEL_INTERNAL_LOBBY_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/admin-panel/{userId}";
 
     //ERROR REPORTING
     public static final String ADMIN_PANEL_INTERNAL_REPORT_ERROR = "/internal/admin-panel/report-error";
@@ -59,6 +70,9 @@ public class Endpoints {
     public static final String ADMIN_PANEL_DELETE_ERROR_REPORTS = "/api/admin-panel/error-report";
     public static final String ADMIN_PANEL_MARK_ERROR_REPORTS = "/api/admin-panel/error-report/mark/{status}";
     public static final String ADMIN_PANEL_DELETE_READ_ERROR_REPORTS = "/api/admin-panel/error-report/read";
+
+    //MONITORING
+    public static final String ADMIN_PANEL_REPORT_MEMORY_STATUS = "/internal/api/admin-panel/monitoring/memory";
 
     //LOGIN
     public static final String LOGIN = "/api/user/authentication/login";
@@ -92,6 +106,9 @@ public class Endpoints {
     public static final String USER_DATA_DISABLE_ROLE = "/api/user/data/roles/{role}";
     public static final String USER_DATA_ENABLE_ROLE = "/api/user/data/roles/{role}";
     public static final String USER_DATA_GET_DISABLED_ROLES = "/api/user/data/roles/disabled";
+    public static final String USER_DATA_ADD_ROLE_TO_ALL = "/api/user/data/roles/all/{role}";
+    public static final String USER_DATA_REMOVE_ROLE_FROM_ALL = "/api/user/data/roles/all/{role}";
+    public static final String USER_DATA_ROLES_FOR_ALL_RESTRICTED = "/api/user/data/roles/restricted";
 
     //MODULES
     public static final String MODULES_GET_MODULES_OF_USER = "/api/modules";
@@ -151,6 +168,7 @@ public class Endpoints {
     public static final String SKYXPLORE_REMOVE_FRIEND = "/api/skyxplore/data/friend/{friendshipId}";
     public static final String SKYXPLORE_GET_CHARACTER = "/api/skyxplore/data/character";
     public static final String SKYXPLORE_GET_ITEM_DATA = "/api/skyxplore/data/data/{dataId}";
+    public static final String SKYXPLORE_DATA_AVAILABLE_BUILDINGS = "/api/skyxplore/data/data/{surfaceType}/buildings";
 
     //SKYXPLORE-LOBBY
     public static final String SKYXPLORE_INTERNAL_LOBBY_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/lobby/{userId}";
@@ -182,6 +200,7 @@ public class Endpoints {
     public static final String SKYXPLORE_INTERNAL_IS_USER_IN_GAME = "/internal/skyxplore/game";
     public static final String SKYXPLORE_INTERNAL_GET_GAME_FOR_LOBBY_CREATION = "/internal/skyxplore/game/{gameId}/load-preview";
 
+    public static final String SKYXPLORE_GAME_PAUSE = "/api/skyxplore/game/pause";
     public static final String SKYXPLORE_GAME_MAP = "/api/skyxplore/game/universe";
     public static final String SKYXPLORE_GAME_GET_PLAYERS = "/api/skyxplore/game/player";
     public static final String SKYXPLORE_GAME_CREATE_CHAT_ROOM = "/api/skyxplore/game/chat/room";
@@ -202,6 +221,7 @@ public class Endpoints {
     public static final String SKYXPLORE_PLANET_UPDATE_PRIORITY = "/api/skyxplore/game/planet/{planetId}/priority/{priorityType}";
     public static final String SKYXPLORE_PLANET_RENAME = "/api/skyxplore/game/planet/{planetId}/name";
     public static final String SKYXPLORE_SOLAR_SYSTEM_RENAME = "/api/skyxplore/game/solar-system/{solarSystemId}/name";
+    public static final String SKYXPLORE_EXIT_GAME = "/api/skyxplore/game";
 
     public static final String SKYXPLORE_BUILDING_CONSTRUCT_NEW = "/api/skyxplore/game/building/{planetId}/{surfaceId}";
     public static final String SKYXPLORE_BUILDING_UPGRADE = "/api/skyxplore/game/building/{planetId}/{buildingId}";

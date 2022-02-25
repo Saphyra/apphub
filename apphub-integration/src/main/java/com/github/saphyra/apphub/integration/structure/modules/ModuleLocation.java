@@ -13,6 +13,7 @@ public enum ModuleLocation {
     BAN("admin-panel", "ban", Endpoints.ADMIN_PANEL_BAN_PAGE),
     DISABLED_ROLE_MANAGEMENT("admin-panel", "disabled-role-management", Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE),
     ROLE_MANAGEMENT("admin-panel", "role-management", Endpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE),
+    MEMORY_MONITORING("admin-panel", "memory-monitoring", Endpoints.ADMIN_PANEL_MEMORY_MONITORING_PAGE),
     MANAGE_ACCOUNT("accounts", "account", Endpoints.ACCOUNT_PAGE),
     NOTEBOOK("office", "notebook", Endpoints.NOTEBOOK_PAGE),
     SKYXPLORE("game", "skyxplore", Endpoints.SKYXPLORE_CHARACTER_PAGE, driver -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_CHARACTER_PAGE) || driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE));

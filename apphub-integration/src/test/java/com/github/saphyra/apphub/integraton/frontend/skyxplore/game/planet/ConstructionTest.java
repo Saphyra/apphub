@@ -15,10 +15,13 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.structure.skyxplore.PlanetQueueItem;
 import com.github.saphyra.apphub.integration.structure.skyxplore.Surface;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -87,6 +90,63 @@ public class ConstructionTest extends SeleniumTest {
         surface.cancelConstruction(driver);
 
         surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
+        assertThat(surface.isConstructionInProgress()).isFalse();
+    }
+
+    @Test(groups = "skyxplore")
+    public void finishConstruction() {
+        WebDriver driver = extractDriver();
+        RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
+        Navigation.toIndexPage(driver);
+        IndexPageActions.registerUser(driver, registrationParameters);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
+
+        SkyXploreCharacterActions.createCharacter(driver);
+        SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyActions.setReady(driver);
+        SkyXploreLobbyActions.startGameCreation(driver);
+
+        AwaitilityWrapper.create(60, 1)
+            .until(() -> SkyXploreGameActions.isGameLoaded(driver))
+            .assertTrue("Game not loaded.");
+
+        SkyXploreMapActions.getSolarSystem(driver).click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXploreSolarSystemActions.isOpened(driver))
+            .assertTrue("SolarSystem is not opened.");
+
+        SkyXploreSolarSystemActions.getPlanet(driver).click();
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXplorePlanetActions.isLoaded(driver))
+            .assertTrue("Planet is not opened.");
+
+        Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_FOREST);
+        String surfaceId = surface.getSurfaceId();
+        surface.openConstructNewBuildingWindow(driver);
+
+        SkyXploreConstructionActions.constructBuilding(driver, Constants.DATA_ID_CAMP);
+
+        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
+        assertThat(surface.isEmpty()).isFalse();
+        assertThat(surface.getBuildingDataId()).isEqualTo(Constants.DATA_ID_CAMP);
+        assertThat(surface.getBuildingLevel()).isZero();
+        assertThat(surface.isConstructionInProgress()).isTrue();
+
+        List<PlanetQueueItem> queueItems = SkyXplorePlanetActions.getQueue(driver);
+        assertThat(queueItems).hasSize(1);
+
+        SkyXploreGameActions.resumeGame(driver);
+
+        AwaitilityWrapper.create(120, 5)
+            .until(() -> SkyXplorePlanetActions.getQueue(driver).isEmpty())
+            .assertTrue("Construction is not finished.");
+
+        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
+        assertThat(surface.isEmpty()).isFalse();
+        assertThat(surface.getBuildingDataId()).isEqualTo(Constants.DATA_ID_CAMP);
+        assertThat(surface.getBuildingLevel()).isEqualTo(1);
         assertThat(surface.isConstructionInProgress()).isFalse();
     }
 }
