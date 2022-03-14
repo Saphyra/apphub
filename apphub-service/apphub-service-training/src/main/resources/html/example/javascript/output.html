@@ -1,0 +1,25 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<PRE th:fragment="console">
+console.log("Hello World!");
+</PRE>
+
+<PRE th:fragment="document_write">
+document.write("Hello World!");
+</PRE>
+
+<PRE th:fragment="alert">
+alert("Hello World!");
+</PRE>
+
+<PRE th:fragment="inner_html">
+document.getElementById("eredmeny").innerHTML = "&lt;B>Hello World!&lt;/B>"
+</PRE>
+
+<PRE th:fragment="inner_text">
+document.getElementById("eredmeny").innerText = "&lt;B>Hello World!&lt;/B>"
+</PRE>
+
+</BODY>
+</HTML>

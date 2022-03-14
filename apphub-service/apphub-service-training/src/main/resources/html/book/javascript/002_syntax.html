@@ -1,0 +1,186 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT>eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));</SCRIPT>
+
+    <TITLE>Szintaktika - JavaScript - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">JavaScript - Szintaktika</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/javascript.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Általános nyelvtan</H2>
+
+            <DIV>A sorok végére
+                <CODE>;</CODE>-t (pontosvesszőt) kell tenni. Ennek hiánya nem okoz különösebb problémát, de ki tudja - a programozás világában az "ajánlott" általában egyen értékű a "kötelező"-vel.
+            </DIV>
+            <DIV>Kis-nagybetű érzékeny - kutyahaz nem egyenlő kutyaHaz-zal.</DIV>
+            <DIV>Az elnevezések során a CamelCase-t szokás használni. (Első betű kisbetű (kivéve típusok), utána minden szó első betűje nagybetű. (Például: kutyahazakSzama)</DIV>
+            <DIV>
+                Megjegyzéseket a következő módon tudunk a kódunkhoz adni:
+                <UL>
+                    <LI>
+                        A <CODE>//</CODE> (dupla osztás) segítségével egy soros megjegyzést tudunk létrehozni:
+                        <PRE th:replace="/example/javascript/syntax.html :: one_line_comment"></PRE>
+                    </LI>
+                    <LI>A <CODE>/*</CODE> és <CODE>*/</CODE> jel kombinációk közé több soros megjegyzés írható:</LI>
+                    <PRE th:replace="/example/javascript/syntax.html :: multi_line_comment"></PRE>
+                </UL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>JavaScript kód hozzá adása a weboldalunkhoz</H2>
+
+            <DIV>JavaScript kódpt a <CODE>&lt;SCRIPT></CODE> taggel tudunk a HTML kódhoz adni, két féle módon:</DIV>
+
+            <DIV>
+                <UL>
+                    <LI>
+                        A JavaScript kódot lehet magába a <CODE>&lt;SCRIPT></CODE> tagbe is írni:
+                        <PRE th:replace="/example/javascript/syntax.html :: inline_js"></PRE>
+                    </LI>
+                    <LI>
+                        Illetve a kódot lehet külső fájlból beimportálni:
+                        <PRE th:replace="/example/javascript/syntax.html :: import_js"></PRE>
+                    </LI>
+                </UL>
+            </DIV>
+
+            <DIV>Magát a <CODE>&lt;SCRIPT></CODE> taget a <CODE>&lt;HEAD></CODE>-en és <CODE>&lt;BODY></CODE>-n belül bárhová helyezhetjük, de ajánlott egy helyen tartani a különböző kód részleteket.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Változók létrehozása</H2>
+
+            <DIV>Változókat a <CODE>var</CODE>, <CODE>let</CODE> és <CODE>const</CODE> kulcsszavakkal tudunk létre hozni.
+            </DIV>
+
+            <DIV>
+                <UL>
+                    <LI>
+                        <CODE>var</CODE>: <CODE>var szoveg = "alma";</CODE> - Elavult, nem használják, egyes esetelben használata "furcsa problémákhoz" vezethet.
+                    </LI>
+                    <LI>
+                        <CODE>const</CODE>: <CODE>const szoveg = "alma";</CODE> - Írásvédett változó létrehozása. Értékét a létrehozásakor meg kel adni, és utána nem módosítható.
+                        <PRE th:replace="/example/javascript/syntax.html :: const"></PRE>
+                    </LI>
+                    <LI>
+                        <CODE>let</CODE>: <CODE>let szoveg = "alma"</CODE> - Többször írható változó létrehozása.
+                        <PRE th:replace="/example/javascript/syntax.html :: let"></PRE>
+                    </LI>
+                </UL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Adattípusok</H2>
+
+            <DIV>
+                A JavaScript a következő adattípusokat különbözteti meg:
+
+                <UL>
+                    <LI><CODE>string</CODE> - szöveg</LI>
+                    <LI><CODE>number</CODE> - szám</LI>
+                    <LI><CODE>boolean</CODE> - igaz/hamis</LI>
+                    <LI><CODE>object</CODE> - objektum</LI>
+                    <LI><CODE>function</CODE> - funkció</LI>
+                    <LI><CODE>undefined</CODE></LI>
+                </UL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Speciális változó értékek</H2>
+
+            <DIV>A változónk az általunk meghatározott értékeken felül felvehet <CODE>null</CODE>-t értékül. Ebben az esetben a változónak nincs konkrét értéke.</DIV>
+
+            <DIV>
+                A <CODE>null</CODE>hoz hasonló érték az <CODE>undefined</CODE>, ami két esetben fordul elő:
+                <UL>
+                    <LI>
+                        A változónkat létre hoztuk, de még nem kapott értéket:
+                        <PRE th:replace="/example/javascript/syntax.html :: undefined_variable"></PRE>
+                    </LI>
+                    <LI>
+                        A funkciók alapértelmezett visszatérési értéke
+                        <PRE th:replace="/example/javascript/syntax.html :: undefined_function_return_value"></PRE>
+                    </LI>
+                </UL>
+            </DIV>
+
+            <DIV>Hibás matematikai műveletek (például boolean-t akarunk osztani object-el) eredménye a <CODE>NaN</CODE> (Not a Number - nem szám)</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Funkciók</H2>
+
+            <DIV>
+                Funkció létrehozásának két módja:
+                <UL>
+                    <LI><CODE>function funkcioNev(parameter1, parameter2){}</CODE> - Létre hozzuk "funkcioNev" funkciót, mely két paramétert vár ("parameter1" és "parameter2).</LI>
+                    <LI><CODE>const funkcioNev = function(parameter1, parameter2){}</CODE> - Létre hozzuk "funkcioNev" változót, aminek értékül adjuk az utána létre hozott névtelen funkciót.</LI>
+                </UL>
+                A fenti két megoldás használatában nem tér el egymástól.
+            </DIV>
+
+            <DIV>Funkció meghívása: <CODE>const visszateresiErtek = funkcioNev(param);</CODE></DIV>
+            <DIV>
+                <U>Megjegyzés</U>: Hiába vár egy funkció paraméter(eke)t, azokat nem kötelező kitölteni. Ebben az esetben a funkción belül a meg nem adott paraméterek értéke
+                <CODE>undefined</CODE> lesz. Ezt a jelenséget kihasználhatjuk opcionális metódus paraméterek létrehozására is.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Gyűjtemények</H2>
+
+            <DIV>Technikailag a JavaScript-ben létezik az objektum, és ennyi. A gyakorlatban viszont ugyanúgy jelen vannak a tömbök, csak ezek nehezen elkülöníthetőek az objektumoktól, hiszen a tömbök "csak számmal indexelt objektumok".</DIV>
+            <DIV>Tömb létrehozása: <CODE>const array = ["elem1", "elem2"];</CODE></DIV>
+            <DIV>Objektum létrehozása: <CODE>const obj = {kulcs1: "ertek1", kulcs2: "ertek2"};</CODE></DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Ciklusok:</H2>
+
+            <DIV>
+                <UL>
+                    <LI>
+                        Tömb elemein végig lépkedés <CODE>for</CODE> ciklussal:
+                        <PRE th:replace="/example/javascript/syntax.html :: for"></PRE>
+                    </LI>
+                    <LI><CODE>while</CODE> ciklus: <CODE>while(feltetel){//Ciklus kódja}</CODE></LI>
+                    <LI><CODE>do...while</CODE> ciklus: <CODE>do{//Ciklus kódja}while(feltetel);</CODE></LI>
+                    <LI>
+                        <CODE>foreach</CODE> ciklus használata tömb:
+                        <PRE th:replace="/example/javascript/syntax.html :: foreach_array"></PRE>
+                        és objektum
+                        <PRE th:replace="/example/javascript/syntax.html :: foreach_object"></PRE>
+                        elemein történő végig iterálásra.
+                    </LI>
+                </UL>
+            </DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/javascript/001_introduction'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/javascript/003_project'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

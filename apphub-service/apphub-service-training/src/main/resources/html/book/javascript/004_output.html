@@ -1,0 +1,166 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT>eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));</SCRIPT>
+
+    <TITLE>Kimenet - JavaScript - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">JavaScript - Kimenet</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/javascript.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <DIV>Ha sikerül rá venni a számítógépet, hogy számoljon ki nekünk valamit, akkor nem ártana látni az eredményt.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Konzol</H2>
+
+            <DIV>Adatot legegszerűbben a <CODE>console.log(adat);</CODE> metódus hívásával tudunk adatot megjeleníteni.</DIV>
+            <DIV>Na de mi is az a konzol? Ez elsősorban egy szöveges kimenet, ahova a program fejlesztők olyan adatokat írnak ki, amik segítségével nyomon tudják követni a program futását, de ezek az adatok a felhasználó számára értéktelenek, és zavaróak.</DIV>
+            <DIV>
+                A konzolt a következőképpen lehet elérni: Nyissuk meg a böngészőnk "DevTools" ablakát vagy az <CODE>F12</CODE> gomb megnyomásával, vagy a
+                <CODE>Jobb klikk -> Vizsgálat</CODE> menüpont használatával, majd az így megjelent menüben válasszuk ki a <CODE>Console</CODE> fület.
+                <IMG src='/res/training/img/javascript/console.png'>
+            </DIV>
+
+            <DIV>
+                Példa:
+                <OL>
+                    <LI>
+                        Másoljuk a következő kódot a <CODE>head.js</CODE> fájlunkba:
+                        <PRE th:replace="/example/javascript/output.html :: console"></PRE>
+                    </LI>
+                    <LI>Nyissuk meg az <CODE>index.html</CODE> fájlunkat a böngészőben</LI>
+                    <LI>Nyissuk meg a konzolt a fent említett megoldások valamelyikével</LI>
+                    <LI>Töltsük újra a weboldalt ("F5" billentyű)</LI>
+                </OL>
+
+                Eredmény:
+                <IMG src='/res/training/img/javascript/console_result.png'>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>document.write</H2>
+
+            <DIV>A konzol használatával saját magunkkal tudunk, a felhasználó számára alap esetben láthatatlan adatokat közölni. Ha azonban az adatokat a felhasználóval is meg szeretnénk osztani, akkor módosítanunk kell a HTML-t a JavaScript segítségével.</DIV>
+            <DIV>Erre egy lehetőség a <CODE>document.write(adat);</CODE> funkció használata. Ez a metódus közvetlenül a <CODE>&lt;BODY></CODE>-ba illeszti a paraméterben kapott adatot.</DIV>
+
+            <DIV>
+                Példa:
+                <OL>
+                    <LI>
+                        Másoljuk a következő kódpt a <CODE>head.js</CODE> fájlunkba:
+                        <PRE th:replace="/example/javascript/output.html :: document_write"></PRE>
+                    </LI>
+                    <LI>Nyissuk meg az <CODE>index.html</CODE> fájlunkat a böngészőben</LI>
+                </OL>
+
+                Eredmény:
+                <IMG src='/res/training/img/javascript/document_write_result.png'>
+            </DIV>
+
+            <DIV>
+                <U>Megjegyzés</U>: Ha a <CODE>document.write</CODE> parancsot az után futtatjuk le, hogy a HTML teljesen betöltődött (például egy gombnyomás hatására), akkor a parancs kitörli a
+                <CODE>&lt;BODY></CODE> tartalmát, mielőtt bele írná az általunk megadott paramétert. Ez a mellékhatás miatt a <CODE>document.write</CODE> metódus használata nem javasolt.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>alert</H2>
+
+            <DIV>Az <CODE>alert(adat);</CODE> parancs segítségével felugró ablakokat tudunk megjelenateni.</DIV>
+
+            <DIV>
+                Példa:
+                <OL>
+                    <LI>
+                        Másoljuk a következő kódpt a <CODE>head.js</CODE> fájlunkba:
+                        <PRE th:replace="/example/javascript/output.html :: alert"></PRE>
+                    </LI>
+                    <LI>Nyissuk meg az <CODE>index.html</CODE> fájlunkat a böngészőben</LI>
+                </OL>
+
+                Eredmény:
+                <IMG src='/res/training/img/javascript/alert_result.png'>
+            </DIV>
+
+            <DIV>
+                <U>Megjegyzés</U>: Amíg a felugró ablak aktív, addig blokkolja az oldal futását. Mint a példán is látható, még a HTML tartalma sem töltődött be, és nem is fog, amíg a felugró ablak nincsen "leokézva". Így a felhasználót rá kényszerítjük arra, hogy az általunk közölni kívánt infirmációval foglalkozzon, aminek ő nem biztos, hogy örül. Ezért az
+                <CODE>alert</CODE>-et csak indokolt esetben használjuk.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>innerHTML</H2>
+
+            <DIV>A <CODE>node.innerHTML = adat;</CODE> segítségével már meglévő HTML elemektartalmát tudjuk módosítani.</DIV>
+
+            <DIV>
+                Példa:
+                <OL>
+                    <LI>
+                        Másoljuk a következő kódpt a <CODE>body.js</CODE> fájlunkba:
+                        <PRE th:replace="/example/javascript/output.html :: inner_html"></PRE>
+                    </LI>
+                    <LI>Nyissuk meg az <CODE>index.html</CODE> fájlunkat a böngészőben</LI>
+                </OL>
+
+                Eredmény:
+                <IMG src='/res/training/img/javascript/inner_html_result.png'>
+                <U>Magyarázat</U>: a <CODE>document.getElementById(id);</CODE> metódus segítségével a HTML megadott azonosítójú tagjét (node) kapjuk meg. Ennek a tagnek a
+                <CODE>innerHTML</CODE> tulajdonságát megadva tudjuk módosítani a weboldalon megjelenő tartalmat.
+            </DIV>
+
+            <DIV>Ezzel a megoldással a JavaScript segítségével át tudjuk formálni az egész weboldalunkat, vagy csak egy részét, annak újra töltése nélkül.</DIV>
+
+            <DIV><U>Megjegyzés</U>: A
+                <CODE>document.getElementById(id);</CODE> csak a már betöltődött HTML-ben keres, így az ezt használó JavaScript kódot csak a HTML renderelése után lehet használni.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>innerText</H2>
+
+            <DIV>
+                <CODE>A node.innerText = adat;</CODE> utasítás ugyanúgy működik, mint a <CODE>node.innerHTML</CODE>, azzal a különbséggel, hogy ha az adat esetleg más HTML tageket használ (mint a
+                <CODE>&lt;B></CODE> tag az előbbi példából), akkor azt nem rendereli ki HTML-ként, hanem ugyanúgy szövegként jeleníti meg.
+            </DIV>
+
+            <DIV>
+                Példa:
+                <OL>
+                    <LI>
+                        Másoljuk a következő kódpt a <CODE>body.js</CODE> fájlunkba:
+                        <PRE th:replace="/example/javascript/output.html :: inner_text"></PRE>
+                    </LI>
+                    <LI>Nyissuk meg az <CODE>index.html</CODE> fájlunkat a böngészőben</LI>
+                </OL>
+
+                Eredmény:
+                <IMG src='/res/training/img/javascript/inner_text_result.png'>
+            </DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/javascript/003_project'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/javascript/005_events'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

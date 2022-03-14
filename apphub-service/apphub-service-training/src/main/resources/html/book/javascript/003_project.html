@@ -1,0 +1,74 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT>eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));</SCRIPT>
+
+    <TITLE>Projekt - JavaScript - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">JavaScript - Projekt</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/javascript.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <DIV>Mielőtt tovább mennénk, állítsunk össze egy kis weboldalt, amin keresztül ki tudjuk próbálni a különböző kódokat.</DIV>
+
+            <DIV>
+                <OL>
+                    <LI>Hozzunk létre egy mappát, amibe a weboldalunk féjljai kerülnek!</LI>
+                    <LI>Hozzunk létre egy fájlt <CODE>style.css</CODE> néven! (Egyelőre hagyjuk üresen)</LI>
+                    <LI>Hozzunk létre egy fájlt <CODE>head.js</CODE> néven! (Egyelőre hagyjuk üresen)</LI>
+                    <LI>Hozzunk létre egy fájlt <CODE>body.js</CODE> néven! (Egyelőre hagyjuk üresen)</LI>
+                    <LI>
+                        Hozzunk létre egy fájlt <CODE>index.html</CODE> néven, és másoljuk bele a következő HTML kódot:
+                        <PRE th:replace="/example/javascript/project.html :: html"></PRE>
+                    </LI>
+                </OL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>A HTML a következő dolgokat tartalmazza:</H2>
+
+            <DIV>
+                <UL>
+                    <LI>Egy <CODE>&lt;TITLE></CODE> taget, az oldal címének megadásához</LI>
+                    <LI>A <CODE>&lt;LINK></CODE> tag segítségével be importálja a még üres <CODE>style.css</CODE> fájlt</LI>
+                    <LI>A <CODE>&lt;SCRIPT src="/head.js">&lt;/SCRIPT></CODE> be importálja a még üres <CODE>head.js</CODE> fájlt</LI>
+                    <LI>
+                        Egy kis HTML struktúrát, amiből az <CODE>eredmeny</CODE> azonosítóval ellátott
+                        <CODE>&lt;SPAN></CODE> a fontos számunkra, mert ebbe a tagbe fogjuk írni a JavaScript által kiszámított eredményünket. (Arról majd később, hogy pontosan hogyan.)
+                    </LI>
+                    <LI>A <CODE>&lt;SCRIPT src="/body.js">&lt;/SCRIPT></CODE> be importálja a még üres <CODE>body.js</CODE> fájlt</LI>
+                </UL>
+            </DIV>
+
+            <DIV>Van egy <CODE>&lt;SCRIPT></CODE> tagünk a <CODE>&lt;HEAD></CODE>-ben és a
+                <CODE>&lt;BODY></CODE>-ban is. Így egyszerre tudunk a weboldal tartalma előtt, és után is futtatni JavaScript kódot, ami segíti majd a szemléltetést.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <DIV>Érdemes az így létrehozott weboldalról minden példa kipróbálása előtt másolatot készíteni, így az egyes példákhoz tartozó kód külön-külön is megtekinthető lesz, valamint nem kell minden egyes alkalommal vissza állítani a weboldalunkat az eredeti állapotába.</DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/javascript/002_syntax'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/javascript/004_output'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

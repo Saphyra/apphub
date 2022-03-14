@@ -51,6 +51,10 @@ main{
                 margin-top: 0;
             }
 
+            article > *:last-child{
+                margin-bottom: 0;
+            }
+
         article h2{
             text-align: center;
             border-bottom: 3px ridge white;

@@ -1,0 +1,221 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT>eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));</SCRIPT>
+
+    <TITLE>Példák az alapokra - JavaScript - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">JavaScript - Példák az alapokra</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/javascript.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <DIV>Eddig megtanultuk a nyelv szintaktikáját, hogy hogyan lehet adatokat közölni a felhasználóval, hogyan tudunk reagálni a felhasználó különböző műveleteire, illetve hogy hogyan lehet átírni a HTML-t a Javascript segítségével.</DIV>
+            <DIV>Most nézzünk néhány komplexebb példát, amikben egyszerre alkalmazzuk az eddig tanultakat.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Tartalomjegyzék</H2>
+
+            <UL>
+                <LI><A href="#example_project">Példa projekt</A></LI>
+                <LI><A href="#add_tag">Elem hozzáadása</A></LI>
+                <LI><A href="#clear_tag">Elem tartalmának törlése</A></LI>
+                <LI><A href="#multiple_selection">Több elem kiválasztása</A></LI>
+            </UL>
+        </ARTICLE>
+
+        <ARTICLE id="example_project">
+            <H2>DOM elemek kezelése</H2>
+
+            <DIV>Csináljunk egy weboldalt, ahol a felhasználó beviteli mezők kitöltésével szerkesztheti a weboldal tartalmát!</DIV>
+
+            <DIV>
+                <UL>
+                    <LI>
+                        <CODE>index.html</CODE> tartalma:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: index_html"></PRE>
+                    </LI>
+                    <LI>
+                        <CODE>body.js</CODE> tartalma:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: body_js"></PRE>
+                    </LI>
+                </UL>
+            </DIV>
+
+            <DIV>
+                Eredmény:
+                <IMG src='/res/training/img/javascript/example_of_basics.png'>
+            </DIV>
+
+            <DIV>Nem baj, ha most még nem érted, végig fogjuk nyomkodni a gombokat, sorról sorva magyarázva a kódot.</DIV>
+        </ARTICLE>
+
+        <ARTICLE id="add_tag">
+            <H2>Elem hozzáadása</H2>
+
+            <DIV>
+                Töltsük ki a mezőket a következő adatokkal:
+                <UL>
+                    <LI>Azonosító = "uj_tartalom"</LI>
+                    <LI>Tag = "b"</LI>
+                    <LI>Tartalom = "Új tag tartalma"</LI>
+                    <LI>Szülő azonosítója = "eredeti_div"</LI>
+                </UL>
+
+                <IMG src='/res/training/img/javascript/add_tag_form.png'>
+
+                Majd nyomjuk meg az "Elem hozzáadása" gombot!
+
+                <IMG src='/res/training/img/javascript/add_tag_result.png'>
+            </DIV>
+
+            <DIV>
+                A következő történt:
+
+                <OL>
+                    <LI>
+                        Az "Elem hozzáadása" gombnak az <CODE>onclick</CODE> attribútumával megadtunk egy eseménykezelőt, mégpedig azt, hogy gombnyomásra meghívódjon az
+                        <CODE>elemHozzaadasa()</CODE> funkció. Ez a funkció a <CODE>body.js</CODE> fájlban helyezkedik el, amit a HTML
+                        <CODE>&lt;SCRIPT src="body.js">&lt;/SCRIPT></CODE> sora beimportál.
+                    </LI>
+                    <LI>
+                        Az <CODE>elemHozzaadasa()</CODE> funkció első soraiban a
+                        <CODE>document.getElementById("azonosito");</CODE> formula segítségével kiválasztjuk, és változóba helyezzük a későbbiekben szükséges beviteli mezőket:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: add_tag_select_inputs"></PRE>
+                    </LI>
+                    <LI>
+                        Ezt követően az egyes beviteli mezők értékét is változókba helyezzük. Ezek a változók tartalmazzák az általnk beírt szöveget:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: add_tag_extract_values"></PRE>
+                    </LI>
+                    <LI>
+                        Ellenőrizzük, hogy a felhasználó kitöltött-e minden szükséges értéket. Jelen esetben megvizsgáljuk, hogy a tag ki lett-e töltve, és ha nem, jelezzük ezt a felhasználónak, majd a
+                        <CODE>return</CODE> kulcsszó segítségével megszakítjuk a metódus futását, hogy elkerüljük a további műveleteket a hibásnak ítélt adatokkal.
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: add_tag_validation"></PRE>
+                    </LI>
+                    <LI>
+                        Ellenőrizzük, hogy a felhasználó megadta-e a szülő azonosítóját, azaz hogy melyik elembe szeretné bele helyezni az újonnan létrehozott taget. Jelen esetben meg van adva ("eredeti_div"), de ha nem lenne, akkor megadnánk egy alapértelmezett értéket ("root"):
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: add_tag_set_default_parent_id"></PRE>
+                    </LI>
+                    <LI>
+                        A
+                        <CODE>document.createElement(tag);</CODE> metódus segítségével létrehozunk egy új DOM elemet, és bele rakjuk az "ujElem" változóba. Tag értéke az általunk megadott szöveg, jelen esetben "b":
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: add_tag_create_tag"></PRE>
+                    </LI>
+                    <LI>
+                        Ha az új elemünknek adtunk meg azonosítót, akkor ezt beállítjuk az újonnan létrehozott elemnek:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: add_tag_set_id"></PRE>
+                    </LI>
+                    <LI>
+                        Beállítjuk az új elem tartalmát:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: add_tag_set_content"></PRE>
+                    </LI>
+                    <LI>A for ciklusról majd később...</LI>
+                    <LI>
+                        Megkeressük a felhasználó által megadott azonosítójú taget (vagy a "root"-ot, ha nem lett megadva azonosító):
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: add_tag_select_parent"></PRE>
+                    </LI>
+                    <LI>
+                        Ha a felhasználó nem létező azonosítót adott meg, akkor ezt jelezzük neki, majd megszakítjuk a funkció futását:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: add_tag_validate_parent"></PRE>
+                    </LI>
+                    <LI>
+                        A kiválasztott szülő elembe bele helyezzük az új elemet, így az megjelenik a képernyőn:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: add_tag_append"></PRE>
+                    </LI>
+                    <LI>
+                        Vissza állítjuk a beviteli mezőket alap állapotba, hogy a felhasználó a következő elemet is hozzá tudja adni az oldalhoz:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: add_tag_reset"></PRE>
+                    </LI>
+                </OL>
+                <U>Tehát összefoglalva</U>: Kiolvastuk a felhasználó által beírt értékeket, ezek alapján létrehoztunk egy új taget, és azt a megfelelő helyre beillesztve megjelenítettük a weboldalon.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE id="clear_tag">
+            <H2>Elem tartalmának törlése</H2>
+
+            <DIV>
+                Töltsük ki a "Mit töröljek?" feliratú mezőt "root" szöveggel, majd nyomjuk meg a "Azonosított tag kiürítése" gombot!
+                <IMG src='/res/training/img/javascript/clear_tag_form.png'>
+
+                <U>Eredmény</U>: A "root" azonosítóval ellátott tag tartalma törlődött.
+                <IMG src='/res/training/img/javascript/clear_tag_result.png'>
+            </DIV>
+
+            <DIV>
+                A következő történt:
+                <Ol>
+                    <LI>
+                        Az "Azonosított tag kiürítése" gombnak az <CODE>onclick</CODE> attribútumával megadtunk egy eseménykezelőt, mégpedig azt, hogy gombnyomásra meghívódjon az
+                        <CODE>azonositottTagUritese()</CODE> funkció. Ez a funkció a <CODE>body.js</CODE> fájlban helyezkedik el, amit a HTML
+                        <CODE>&lt;SCRIPT src="body.js">&lt;/SCRIPT></CODE> sora beimportál.
+                    </LI>
+                    <LI>
+                        Megkeressük, és változóba mentjük a funkció futása során használt beviteli mezőt:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: clear_tag_select_input"></PRE>
+                    </LI>
+                    <LI>
+                        Az
+                        <CODE>azonositottTagUritese()</CODE> funkció egy paramétert vár, amit "azonosito" névvel lát el. Ez a paraméter viszont opcionális, a hívás során nem kell kitölteni. (Ahogy a mi esetünkben sincs is kitöltve:
+                        <CODE>azonositottTagUritese()</CODE>.)
+                        Viszont a funkció futása során mégis szükség van erre az értékre, ezért alapértelmezett értéket adunk neki:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: clear_tag_default_value"></PRE>
+                        Vagyis: "azonosito" változónak add értékül "azonosito" nevű változó tartalmát, vagy ha az nem létezik (undefined / null / stb), akkor használd a "torlendoInput" változó "value" tulajdonságát. Ugyanezt a működést érhetnénk el a következő kóddal is:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: clear_tag_default_value_fallback"></PRE>
+                    </LI>
+                    <LI>
+                        Ha az azonosító nem lett megadva sem paraméterként, sem a beviteli mező kitöltésével, akkor ezt jelezzük a felhasználónak, majd megszakítjuk a funkció futását:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: clear_tag_validate_id_filled"></PRE>
+                    </LI>
+                    <LI>
+                        A <CODE>document.getElementById("tag");</CODE> metódus segítségével változóba mentjük az üríteni kívánt elemet:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: clear_tag_select_tag"></PRE>
+                    </LI>
+                    <LI>
+                        Ha a felhasználó nem létező azonosítót adott meg, akkor ezt jelezzük neki, majd megszakítjuk a funkció futását:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: clear_tag_validate_id_exists"></PRE>
+                    </LI>
+                    <LI>
+                        Kiürítjük a felhasználó által megadott azonosítóval ellátott elem tartalmát:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: clear_tag"></PRE>
+                    </LI>
+                    <LI>
+                        És végül alaphelyzetbe állítjuk a beviteli mezőt:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: clear_tag_reset_input"></PRE>
+                    </LI>
+                </Ol>
+            </DIV>
+
+            <DIV>
+                És most térjünk vissza arra az esetre, amikor az <CODE>elemHozzaadasa()</CODE> funkció hívta meg az <CODE>azonositottTagUritese()</CODE> funkciót:
+                Ebben az esetben a hívó fél kitöltötte az
+                <CODE>azonositottTagUritese()</CODE> funkció opcionális paraméterét, ezért a beviteli mező értéke helyett a paraméterként megadott "attributumok" azonosítóval ellátott elem tartalmát fogja üríteni szeretett metódusunk.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE id="multiple_selection">
+            <H2>Több elem kiválasztása</H2>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/javascript/006_dom_modifications'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/javascript/008'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>
