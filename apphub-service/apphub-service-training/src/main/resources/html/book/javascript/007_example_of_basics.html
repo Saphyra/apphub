@@ -33,7 +33,10 @@
                 <LI><A href="#example_project">Példa projekt</A></LI>
                 <LI><A href="#add_tag">Elem hozzáadása</A></LI>
                 <LI><A href="#clear_tag">Elem tartalmának törlése</A></LI>
-                <LI><A href="#multiple_selection">Több elem kiválasztása</A></LI>
+                <LI><A href="#remove_by_id">Elem törlése azonosító alapján</A></LI>
+                <LI><A href="#js_event_listener">Eseménykezelő JavaScriptben</A></LI>
+                <LI><A href="#multiple_class_selection">Több elem kiválasztása osztály alapján</A></LI>
+                <LI><A href="#multiple_tag_selection">Több elem kiválasztása tag alapján</A></LI>
             </UL>
         </ARTICLE>
 
@@ -206,8 +209,237 @@
             </DIV>
         </ARTICLE>
 
-        <ARTICLE id="multiple_selection">
-            <H2>Több elem kiválasztása</H2>
+        <ARTICLE id="remove_by_id">
+            <H2>Elem törlése azonosító alapján</H2>
+
+            <DIV>
+                Töltsük ki a "Mit töröljek?" feliratú mezőt "eredeti_div" szöveggel, majd nyomjuk meg a "Törlés azonosító alapján" gombot!
+                <IMG src='/res/training/img/javascript/remove_by_id_input.png'>
+
+                <U>Eredmény</U>: Az "eredeti_div" azonosítóval ellátott tag eltűnt az oldalról.
+                <IMG src='/res/training/img/javascript/remove_by_id_result.png'>
+            </DIV>
+
+            <DIV>
+                A következő történt:
+                <OL>
+                    <LI>
+                        A "Törlés azonosító alapján" gombnak az <CODE>onclick</CODE> attribútumával megadtunk egy eseménykezelőt, mégpedig azt, hogy gombnyomásra meghívódjon a
+                        <CODE>torlesAzonositoAlapjan()</CODE> funkció. Ez a funkció a <CODE>body.js</CODE> fájlban helyezkedik el, amit a HTML
+                        <CODE>&lt;SCRIPT src="body.js">&lt;/SCRIPT></CODE> sora beimportál.
+                    </LI>
+                    <LI>
+                        Megkeressük, és változóba mentjük a funkció futása során használt beviteli mezőt, valamint a bevitelo mező tartalmát:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: remove_by_id_select_input"></PRE>
+                    </LI>
+                    <LI>
+                        Ha az azonosító nem lett megadva, akkor ezt jelezzük a felhasználónak, majd megszakítjuk a funkció futását:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: remove_by_id_validate_id_filled"></PRE>
+                    </LI>
+                    <LI>
+                        A <CODE>document.getElementById(id);</CODE> metódus segítségével változóba mentjük a törölni kívánt elemet:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: remove_by_id_select_tag"></PRE>
+                    </LI>
+                    <LI>
+                        Ha a felhasználó nem létező azonosítót adott meg, akkor ezt jelezzük neki, majd megszakítjuk a funkció futását:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: remove_by_id_validate_id_exists"></PRE>
+                    </LI>
+                    <LI>
+                        A törlendő elemnek a szülőjéből eltávolítjuk az elemet:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: remove_by_id_remove"></PRE>
+                    </LI>
+                    <LI>
+                        És végül alaphelyzetbe állítjuk a beviteli mezőt:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: remove_by_id_reset_input"></PRE>
+                    </LI>
+                </OL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE id="js_event_listener">
+            <H2>Eseménykezelő JavaScriptben</H2>
+
+            <DIV>
+                Kattintsunk az "Új attribútum" feliratú gombra, majd a megjelent sorban az "Attribútum eltávolítása" gombra!
+                <IMG src='/res/training/img/javascript/js_event_handler.png'>
+                Gombnyomásra hozzá tudunk adni egy új sort a táblázathoz a megfelelő számú cellával, és újabb gombnyomásra el is tudjuk tüntetni az adott gombhoz tartozó sort.
+            </DIV>
+
+            <DIV>
+                Ha a DevToolsban megnézzük a sor eltávolító gombot, akkor a HTML kódban nem látszik, hogy <CODE>onclick</CODE> eseménykezelő lenne a gombra beállítva.
+                Pedig be lett állítva, csak JavaScripten keresztül, így az eseménykezelő nem jelenik meg a HTML kódban. Nézzük, hogyan!
+            </DIV>
+
+            <DIV>
+                Új sor hozzádása:
+                <OL>
+                    <LI>
+                        Az "Azonosított tag kiürítése" gombnak az <CODE>onclick</CODE> attribútumával megadtunk egy eseménykezelőt, mégpedig azt, hogy gombnyomásra meghívódjon az
+                        <CODE>ujAttributum()</CODE> funkció. Ez a funkció a <CODE>body.js</CODE> fájlban helyezkedik el, amit a HTML
+                        <CODE>&lt;SCRIPT src="body.js">&lt;/SCRIPT></CODE> sora beimportál.
+                    </LI>
+                    <LI>
+                        Az "ujAttributum()" funkció először is létrehozza a DOM struktúrát:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: add_attribute_generate_dom"></PRE>
+                    </LI>
+                    <LI>
+                        Ez után az újonnan létrehozott struktúrát belillesztjük a már meglévő HTML-be, azon belül is az "attributumok" azonosítójú elem végére:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: add_attribute_append"></PRE>
+                    </LI>
+                    <LI>
+                        És legvégül hozzáadjuk az eseménykezelőt az "Attribútum eltávolítása" gombhoz:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: add_attribute_add_event_listener"></PRE>
+                    </LI>
+                </OL>
+            </DIV>
+
+            <DIV>Na és mi történik, ha két sor van? Kitörlődik mind a kettő? Úgy kéne, hiszen a "sor" nevű változóba mentettük mindkét újonnan létrehozott sorunkat. Vagy nem?</DIV>
+            <DIV>Nos, az lehet, hogy a változó neve ugyanaz, viszont mégsem fog kitörlődni egy gombnyomásra az összes létrehozott táblázat sor.</DIV>
+            <DIV>
+                A "sor" változó az egy helyi változó, ami azt jelenti, hogy az csak az adott metódushívás számára létezik.
+                Az első sor létrehozásakor létrejön egy "sor" nevű változó, ami tartalmazza az első gombnyomáskor létrejött táblázat sort.
+                Amikor a másodszorra nyomunk az "Új attroibútum" gombra, akkor újra létre fog jönni a "sor" nevű változó, viszont ez független az elsőtől.
+            </DIV>
+            <DIV>
+                Körülbelül olyan, mintha vennénk két dobozt, mindkettőre rá írnánk, hogy "sor", majd oda adnánk azokat két különböző embernek, hogy használják.
+                Mi nem tudjuk, hogy mi van benne, és ők sem tudják, hogy mi van a másik dobozában, viszont a saját dobozuk tartalmával tisztában vannak.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE id="multiple_class_selection">
+            <H2>Több elem kiválasztása osztály alapján</H2>
+
+            <DIV>
+                Hozzunk létre két új attribútumot, töltsük ki a beviteli mezőket a következők szerint:
+
+                <UL>
+                    <LI>Tag = "img"</LI>
+                    <LI>src = "ilyen_kep_nincs.jpg"</LI>
+                    <LI>alt = "Nem létező kép"</LI>
+                </UL>
+
+                Majd kattintsunk az "Elem hozzáadása" gombra!
+
+                <IMG src='/res/training/img/javascript/multiple_class_selection_input.png'>
+
+                <U>Eredmény</U>: Megjelent egy új tag, az általunk megadott attribútumokkal
+                <IMG src='/res/training/img/javascript/multiple_class_selection_result.png'>
+            </DIV>
+
+            <DIV>
+                Magával a HTML tag létrehozásával már a fenti példák alapján tisztában vagyunk, úgyhogy most fókuszáljunk arra a for ciklusra, amit az első példában kihagytunk:
+
+                <OL>
+                    <LI>
+                        Még amikor a beviteli mezőket gyűjtöttük össze, szerepelt ez a sor:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: multiple_class_selection_select"></PRE>
+                        A <CODE>document.getElementByClassName("class")</CODE> metódussal egy változóba gyűjtjük az összes "attributum_sor" osztállyal ellátott taget.
+                    </LI>
+                    <LI>
+                        Ezen a tömbön a for ciklussal végig iterálunk, ellenőrizzük az értékeket, majd a
+                        <CODE>ujElem.setAttribute(attributumNev, attributumErtek)</CODE> metódus segítségével beállítjuk a megfelelő attribútumot és értéket az új tagnek.
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: multiple_class_selection_logic"></PRE>
+                    </LI>
+                    <LI>A ciklusból kilépve tovább fut az "elemHozzaadasa()" funkció, és beilleszti az új elemet a már meglévő HTML kódba.</lI>
+                </OL>
+            </DIV>
+
+            <DIV>
+                Ha nincs egy olyan elem sem, aminek az osztálya "attributum_sor" (nem adtunk hozzá egy attribútumot sem), akkor a
+                <CODE>node.getElementsByClassName("attributum_sor")</CODE> egy üres tömböt fog vissza adni, aminek a mérete "0", és mivel "0" nem kisebb, mint "0", a ciklus egyáltalán nem fog lefutni.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE id="multiple_tag_selection">
+            <H2>Több elem kiválasztása tag alapján</H2>
+
+            <DIV>
+                <OL>
+                    <LI>
+                        Hozzunk létre két <CODE>span</CODE> és egy <CODE>div</CODE> taget a fenti példákban említett módon:
+                        <IMG src='/res/training/img/javascript/multiple_tag_selection_setup.png'>
+                    </LI>
+                    <LI>
+                        Töltsük ki a "Mit töröljek?" feliratú mezőt "span" szöveggel, majd nyomjuk meg a "Törlés tag alapján" gombot!
+                        <IMG src='/res/training/img/javascript/multiple_tag_selection_input.png'>
+                    </LI>
+                </OL>
+
+                <U>Eredmény</U>: Az összes <CODE>span</CODE> tag eltűnt
+                <IMG src='/res/training/img/javascript/multiple_tag_selection_result.png'>
+            </DIV>
+
+            <DIV>
+                A következő történt:
+                <OL>
+                    <LI>
+                        Az "Törlés tag alapján" gombnak az <CODE>onclick</CODE> attribútumával megadtunk egy eseménykezelőt, mégpedig azt, hogy gombnyomásra meghívódjon az
+                        <CODE>torlesTagAlapjan()</CODE> funkció. Ez a funkció a <CODE>body.js</CODE> fájlban helyezkedik el, amit a HTML
+                        <CODE>&lt;SCRIPT src="body.js">&lt;/SCRIPT></CODE> sora beimportál.
+                    </LI>
+                    <LI>
+                        Megkeressük, és változóba mentjük a funkció futása során használt beviteli mezőt, valamint a bevitelo mező tartalmát:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: multiple_tag_selection_select_input"></PRE>
+                    </LI>
+                    <LI>
+                        Ha a tag nem lett megadva, akkor ezt jelezzük a felhasználónak, majd megszakítjuk a funkció futását:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: multiple_tag_selection_validate_tag_filled"></PRE>
+                    </LI>
+                    <LI>
+                        A <CODE>node.getElementsByTagName("tag")</CODE> metódus segítségével változóba mentjük az összes <CODE>span</CODE>-t
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: multiple_tag_selection_select_tags"></PRE>
+                    </LI>
+                    <LI>
+                        Egy for ciklussal végig iterálunk az így megkapott elemeken, és töröljük azokat a szülő elemükből
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: multiple_tag_selection_remove_tags"></PRE>
+                    </LI>
+                    <LI>
+                        És végül alaphelyzetbe állítjuk a beviteli mezőt:
+                        <PRE th:replace="/example/javascript/example_of_basics.html :: multiple_tag_selection_reset_input"></PRE>
+                    </LI>
+                </OL>
+            </DIV>
+
+            <DIV>
+                A fenti példában egy fordított for ciklust használtunk, ami a következőképpen néz ki:
+                <DIV><CODE>for (</CODE></DIV>
+                <DIV><CODE>let i = torlendoTagek.length - 1;</CODE> - A számlálást a tömb első ("0" index) eleme helyett a tömb utolsó elemének indexe (tömb mérete - 1) kezdjük</DIV>
+                <DIV><CODE>i >= 0;</CODE> - a számlálás addig tart, amíg a "0" index is feldolgozásra kerül. Amint a számláló "-1"-re vált, a ciklus véget ér</DIV>
+                <DIV><CODE>i--</CODE> - A számláló értékét csökkentjük egyel minden ciklus végén</DIV>
+                <DIV><CODE>){...}</CODE></DIV>
+            </DIV>
+
+            <DIV>
+                Erre a fordított ciklusra azért van szükség, mivel a
+                <CODE>document.getElementsByTagName("tag")</CODE> metódus nem egy egyszerű tömböt ad vissza, hanem egy "HTMLCollection" nevezetű objektumot.
+                Ez az objektum abból a szempontból hasonlít egy tömbhöz, hogy van neki mérete ("length"), és tömbként végig lehet iterálni rajta.
+                Viszont a mi szempontunkból fontos, hogy továbbra is összeköttetésben áll a DOM-mal.
+            </DIV>
+            <DIV>Ez azt jelenti, hogy ha kitörlünk egy DOM elemet, akkor az ebből a listából is automatikusan törlődik, ezzel megváltoztatva a megmaradt elemek indexxét.</DIV>
+            <DIV>
+                Például adott egy 2 elemet számláló HTMLCollection. Elkezdünk ezen végig iterálni, és minden iterációban töröljük az adott elemet. A futás a következőképpen fog zajlani:
+                <OL>
+                    <LI>Első iteráció, a tömbben van két elem, "0" és "1" indexxel. A számlálónk akuális értéke "0"</LI>
+                    <LI>Kivesszük a HTMLCollection-ból a "0" indexű elemet, és ezt töröljük a DOM-ból</LI>
+                    <LI>A törölt elem kikerül a HTMLCollection-ból is, így ami elem eddig az "1" indexen helyezkedett el, az most a "0" indexre kerül</LI>
+                    <LI>Második iteráció, a tömbben van egy elem, az indexe "0". A számlálónk értéke "1", ami nem kisebb, mint a tömb mérete (szintén "1"), tehát a ciklusnak vége</LI>
+                </OL>
+                <U>Eredmény</U>: Két elemet akartunk törölni, de csak az első törlődött.
+            </DIV>
+            <DIV>
+                Ugyanez fordított for ciklussal:
+                <OL>
+                    <LI>Első iteráció, a tömbben van két elem, "0" és "1" indexxel. A számlálónk akuális értéke "1"</LI>
+                    <LI>Kivesszük a HTMLCollection-ból az "1" indexű elemet, és ezt töröljük a DOM-ból</LI>
+                    <LI>A törölt elem kikerült a HTMLCollection-ból is, de mivel ez volt az utolsó elem, a többi elem indexe nem változik.</LI>
+                    <LI>Második iteráció, a tömbben van egy elem, az indexe "0". A számláló értéke "0"-ra módosul.</LI>
+                    <LI>Kivesszük a HTMLCollection-ból a "0" indexű elemet, és ezt töröljük a DOM-ból</LI>
+                    <LI>Harmadik iteráció, a tömb üres, a számláló "-1"-re módosul, ami kisebb, mint "0", tehát a ciklusnak vége.</LI>
+                </OL>
+                Ebben az esetben mind a két elem törlésre került.
+            </DIV>
+
+            <DIV>Ha a ciklusban elvégzendő művelet nem jár a tömb elemeinek törlésével (pl. csak adatot gyűjtünk, vagy a meglévő elemeket módosítjuk), akkor nem szükséges a forsított ciklust használni, hiszen az iteráció során nem változik a HTMLCollection tartalma.</DIV>
         </ARTICLE>
     </MAIN>
 
