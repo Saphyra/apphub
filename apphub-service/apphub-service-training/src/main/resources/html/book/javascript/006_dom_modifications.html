@@ -57,6 +57,20 @@
             </DIV>
             <DIV>A tagek inline CSS tulajdonságait a <CODE>node.style.cssTulajdonsag</CODE> útvonalon érhetjük el. (Például <CODE>node.style.margin = "3px";</CODE> - a tag margója 3px legyen.)</DIV>
             <DIV>A taghez osztályt hozzá adni a <CODE>node.classList.add("osztály");</CODE>, osztályt elvenni pedig a <CODE>node.classList.remove("osztálynév");</CODE> metódusokkal lehet.</DIV>
+
+            <DIV>
+                Az adott tag eseménykezelőinek módosítására JavaScripttel alapvetően két lehetőségünk van:
+                <UL>
+                    <LI>
+                        Egyik a tag attribútumának megadása, például: <CODE>node.onclick = function(){...}</CODE>
+                        Ez a megoldás felülírja a "node" "onclick" eseménykezelőjét, ha az már meg volt adva.
+                    </LI>
+                    <LI>
+                        Ha nem szeretnénk felülírni a már meglévő eseménykezelőt, akkor használhatjuk a <CODE>node.addEventListener("click", function(){...})</CODE> metódust.
+                        Az első paraméter az esemény neve (az "on" prefix nélkül), a második pedig az a funkció, amit meg szeretnénk hívni az adott esemény bekövetkeztekor.
+                    </LI>
+                </UL>
+            </DIV>
         </ARTICLE>
 
         <ARTICLE>
@@ -84,6 +98,8 @@
         </ARTICLE>
 
         <ARTICLE>
+            <H2>Akkor minek a HTML?</H2>
+
             <DIV>Ha csak JavaScript használatával teljes weboldalakat tudunk létrehozni, akkor minek egyáltalán HTML-t írni? Nem lenne jobb JavaScripttel össze rakni a HTML struktúrát?</DIV>
             <DIV>Erre a válasz az, hogy nem, nem lenne job, mégpedig több okból:</DIV>
             <DIV>A HTML arra való, hogy meghatározza a weboldal struktúráját, míg a JavaScript az arra, hogy azt változtassa. Ettől függetlenül vannak esetek, amikor tényleg JavaScripttel kell össze rakni a teljes weboldalt.</DIV>

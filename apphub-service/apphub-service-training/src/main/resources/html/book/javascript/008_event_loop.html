@@ -1,0 +1,170 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT>eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));</SCRIPT>
+
+    <TITLE>Event loop - JavaScript - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">JavaScript - Event loop</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/javascript.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Utasítás időzítése</H2>
+
+            <DIV>Habár a JavaScript egy szálon futó nyelv, mégis lehetőségünk van aszinkron műveletek indítására (például időzített feladatok).</DIV>
+            <DIV>
+                A <CODE>setTimeout(funkcio, idozites);</CODE> funkció segítségével hozhatunk létre időzített feladatokat.
+                Az első paraméterben megadott funkció a második paraméterben megadott milliszekundum (ezredmáspodperc) eltelte után fog lefutni.
+            </DIV>
+
+            <DIV>
+                Példa:
+
+                <OL>
+                    <LI>
+                        Adjuk hozzá a következő kódot az <CODE>index.html</CODE> fájlunkhoz (valahova a <CODE>&lt;BODY></CODE>-n belülre):
+                        <PRE th:replace="/example/javascript/event_loop.html :: set_timeout_html"></PRE>
+                    </LI>
+                    <LI>
+                        Másoljuk be a következő kódot a <CODE>body.js</CODE> fájlunkba:
+                        <PRE th:replace="/example/javascript/event_loop.html :: set_timeout_js"></PRE>
+                    </LI>
+                    <LI>Nyissuk meg az <CODE>index.html</CODE> fájlunkat a böngészőben</LI>
+                    <LI>Nyomjuk meg az "Időzítés indítása" gombot</LI>
+                </OL>
+            </DIV>
+
+            <DIV>Eredmény: A gombnyomás pillanatában megjelenik a "Feladat időzítve." felirat, majd 5 másodperc múlva a "Lejárt az idő" felirat.</DIV>
+
+            <DIV>
+                Működés:
+
+                <OL>
+                    <LI>A gomb <CODE>onclick</CODE> attribútuma megadja, hogy gombnyomásra fusson le az "idozit()" funkció</LI>
+                    <LI>Az "idozit()" funkció a <CODE>setTimeout</CODE> segítségével időzít egy feladatot (az "eredmeny" azonosítójú elembe írd ki, hogy "Lejárt az idő")</LI>
+                    <LI>Az "idozit()" funkció kiírja a "Feladat időzítve" szöveget</LI>
+                    <LI>
+                        Amikor letelik a <CODE>setInterval()</CODE>-nak megadott idő (5000 millisec, azaz 5 másodperc), akkor a
+                        <CODE>setTimeout()</CODE>-nak megadott funkció lefut, és kiírja a "Lejárt az idő" feliratot
+                    </LI>
+                </OL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Feladat ismétlése</H2>
+
+            <DIV>
+                A <CODE>setTimeout()</CODE>-hoz hasonlóan működik a <CODE>setInterval(funkcio, idozites)</CODE> funkció is.
+                A kettő között az a különbség, hogy míg a <CODE>setTimeout()</CODE> csak egyszer futtatja le a paraméterként átadott funkciót, addig a
+                <CODE>setInterval()</CODE> az minden egyes alkalommal újra lefuttatja a megadott kódot a paraméterben megadott időközönként.
+            </DIV>
+
+            <DIV>
+                Példa:
+
+                <OL>
+                    <LI>
+                        Adjuk hozzá a következő kódot az <CODE>index.html</CODE> fájlunkhoz (valahova a <CODE>&lt;BODY></CODE>-n belülre):
+                        <PRE th:replace="/example/javascript/event_loop.html :: set_interval_html"></PRE>
+                    </LI>
+                    <LI>
+                        Másoljuk be a következő kódot a <CODE>body.js</CODE> fájlunkba:
+                        <PRE th:replace="/example/javascript/event_loop.html :: set_interval_js"></PRE>
+                    </LI>
+                    <LI>Nyissuk meg az <CODE>index.html</CODE> fájlunkat a böngészőben</LI>
+                    <LI>Nyomjuk meg az "Óra indítása" gombot</LI>
+                </OL>
+            </DIV>
+
+            <DIV>Eredmény: A képernyőn megjelenik az aktuális idő, ami minden másodpercben frissül.</DIV>
+
+            <DIV>
+                Működés:
+
+                <OL>
+                    <LI>A gomb <CODE>onclick</CODE> attribútuma megadja, hogy gombnyomásra fusson le az "idozit()" funkció</LI>
+                    <LI>Az "idozit" funkció a <CODE>setInterval()</CODE> segítségével beállítja, hogy minden 1000 ms (1 másodperc) elteltével írja be "eredmeny" azonosítójú tagbe az aktuális időt.
+                    </LI>
+                </OL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Időzítés megszakítása</H2>
+
+            <DIV>Szerencsére az időzített feladatok nem véglegesek, ha nincs már rájuk szükségünk, el tudjuk őket törölni.</DIV>
+            <DIV>
+                A <CODE>setTimeout()</CODE> és <CODE>setInterval()</CODE> funkciók visszaadnak egy azonosító értéket, amit paraméterül adva <CODE>clearTimeout(azonosito)</CODE> illetve
+                <CODE>clearInterval(azonosito)</CODE> funkcióknak törölhetjük a további időzített futás(oka)t.
+            </DIV>
+
+            <DIV>
+                Példa:
+                <OL>
+                    <LI>
+                        Adjuk hozzá a következő kódot az <CODE>index.html</CODE> fájlunkhoz (valahova a <CODE>&lt;BODY></CODE>-n belülre):
+                        <PRE th:replace="/example/javascript/event_loop.html :: clear_interval_html"></PRE>
+                    </LI>
+                    <LI>
+                        Másoljuk be a következő kódot a <CODE>body.js</CODE> fájlunkba:
+                        <PRE th:replace="/example/javascript/event_loop.html :: clear_interval_js"></PRE>
+                    </LI>
+                    <LI>Nyissuk meg az <CODE>index.html</CODE> fájlunkat a böngészőben</LI>
+                    <LI>Nyomjuk meg az "Óra indítása" gombot</LI>
+                    <LI>Pár másodperc múlva nyomjuk meg az "Óra megállítása" gombot</LI>
+                </OL>
+            </DIV>
+
+            <DIV>
+                Működés:
+
+                <OL>
+                    <LI>Az "Óra indítása" gombra kattintva lefut az "idozit" funkció.</LI>
+                    <LI>Ez a funkció az előbbi példához hasonlóan beállítja, hogy másodpercenként ki legyen írva az aktuális idő, de ezen felül "azonosito" nevű változóba menti az időzített feladat azonosítóját.</LI>
+                    <LI>Amikor az "Óra megállítása" gombra kattintunk, lefut a "megallit" funkció.</LI>
+                    <LI>Ez a funkció az "idozit" funkció által "azonosito" változóba tárolt feladat azonosítót paraméterként átadva a <CODE>clearInterval()</CODE> funkciónak megállítja az ismétlést.
+                    </LI>
+                </OL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>De mégis hogyan?</H2>
+
+            <DIV>De ha a JavaScript egy szálú nyelv, akkor mégis hogyan tudunk aszinkron feladatokat indítani?</DIV>
+            <DIV>A válasz erre az "event loop", vagyis az események ciklusa.</DIV>
+            <DIV>
+                Valójábnan egyszerre mindig legfeljebb egy funkció fut.
+                Ha ez a funkció aszinkron műveletet indít, vagy egyéb esemény vált ki újabb funkció hívást (például felhasználó egy gombra kattint), akkor ezek a feladatok megvárják, míg az éppen aktuális funkció befejezi a működést, és csak utána kezdik elvégezni a saját utasításaikat.
+            </DIV>
+            <DIV>Nagyjából úgy lehet elképzelni, mintha lenne egy boltunk, ahol egyetlen kassza van. A vásárlók sorba mennek fizetni, de mivel a kasszás egyszerre csak egy vásárlót tud kiszolgálni, a többiek sorba állnak, és megvárják, amíg az előttük levő végez.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            Fontos megjegyezni, hogy ha egy funkció sokáig fut, akkor addig blokkolja a felhasználó interakcióit, ami miatt az oldal lassúvá válik.
+            (Ha a felhasználó elindít egy bonyolult műveletet, ami mondjuk tart két percig, akkor ez idő alatt ha megnyom egy gombot, nem fog történni semmi egészen addig, amíg a 2 perces feladatot el nem végzi a számítógép.)
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON onclick="window.location.href = '/web/training/javascript/007_example_of_basics'">Előző</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON onclick="window.location.href = '/web/training/javascript/009_custom_data_structures'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

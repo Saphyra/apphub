@@ -130,12 +130,13 @@
             <H2>Funkciók</H2>
 
             <DIV>
-                Funkció létrehozásának két módja:
+                Funkció létrehozásának hátom módja:
                 <UL>
-                    <LI><CODE>function funkcioNev(parameter1, parameter2){}</CODE> - Létre hozzuk "funkcioNev" funkciót, mely két paramétert vár ("parameter1" és "parameter2).</LI>
-                    <LI><CODE>const funkcioNev = function(parameter1, parameter2){}</CODE> - Létre hozzuk "funkcioNev" változót, aminek értékül adjuk az utána létre hozott névtelen funkciót.</LI>
+                    <LI><CODE>function funkcioNev(parameter1, parameter2){}</CODE> - Létrehozzuk "funkcioNev" funkciót, mely két paramétert vár ("parameter1" és "parameter2).</LI>
+                    <LI><CODE>const funkcioNev = function(parameter1, parameter2){}</CODE> - Létrehozzuk "funkcioNev" változót, aminek értékül adjuk az utána létre hozott névtelen funkciót.</LI>
+                    <LI><CODE>const funkcioNev = (param) => {}</CODE> - Úgynevezett "nyíl" (arrow) funkció. Zárójelben a paraméter lista, majd egy "nyíl", végül a funkció törzse.</LI>
                 </UL>
-                A fenti két megoldás használatában nem tér el egymástól.
+                A fenti három megoldás használatában nem tér el egymástól.
             </DIV>
 
             <DIV>Funkció meghívása: <CODE>const visszateresiErtek = funkcioNev(param);</CODE></DIV>
