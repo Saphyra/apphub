@@ -21,6 +21,40 @@
     <NAV th:replace="/menu/javascript.html :: menu"></NAV>
 
     <MAIN>
+        <ARTICLE>
+            <H2>Mi az a JSON?</H2>
+
+            <DIV>
+                Eddig a könyvben arra fókuszáltunk, hogy hogyan tudjuk a JavaScript segítségével feldolgozni és megjeleníteni a különböző adatokat a felhasználó böngészőjében.
+                Viszont mi van akkor, ha a JavaScript által kiszámított adatokat egy másik rendszerbe szeretnénk átvezetni, vagy az adatok, amikkel dolgozni szeretnénk egy másik rendszerben vannak elhelyezve (például kliens-szerver kommunikáció)?
+                Ahhoz hogy két rendszer kommunikálni tudjon egymással, közös nyelvre van szükség.
+                Csinálhatunk az adatainknak saját reprezentációt, vagy használhatunk egy már meglévő formátumot.
+            </DIV>
+            <DIV>Ilyen formátum például az XML, a CSV, vagy a JSON.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>De hogyan néz ki?</H2>
+
+            <DIV>Ahhoz, hogy a kliens és a szerver kommunikálni tudjon egymással, előbb a memóriából egy továbbítható formátummá (szöveg, bájtkód, stb) kell alakítani az adatot, majd ezt a formátumot beolvasni a címzett memóriájába.</DIV>
+            <DIV>A JSON az alapvető adatstruktúrák szöveges megfelelője, ennek megfelelően léteznek benne primitív adattípusok (number (szám), string (szöveg), boolean (igaz/hamis)), valamint tömbök és objektumok is.</DIV>
+            <DIV>
+                A szintaktika nagyon hasonlít a JavaScript objektumaihoz:
+                <PRE th:replace="/example/javascript/json.html :: example"></PRE>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Konverzió</H2>
+
+            <DIV>
+                JavaScript objektumot JSONná a <CODE>const json = JSON.stringify(objektum);</CODE> metódussal, míg JSON-t JavaScript objektummá a
+                <CODE>const objektum = JSON.parse(json);</CODE> metódussal lehet átalakítani:
+                <PRE th:replace="/example/javascript/json.html :: conversion"></PRE>
+            </DIV>
+
+            <DIV>Fontos megjegyezni, hogy a JSON nem támogatja a funkciók, és az "undefined" átalakítását. Ez a formátum csak adat tárolására alkalmas.</DIV>
+        </ARTICLE>
     </MAIN>
 
     <FOOTER>
