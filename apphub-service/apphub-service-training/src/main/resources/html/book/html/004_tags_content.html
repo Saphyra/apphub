@@ -8,6 +8,8 @@
 
     <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
     <SCRIPT src="/res/training/js/common.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT>eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));</SCRIPT>
 
     <TITLE>Tagek / Tartalom - HTML - Oktatás - Apphub</TITLE>
 </HEAD>
@@ -100,9 +102,9 @@
     </MAIN>
 
     <FOOTER>
-        <BUTTON onclick="window.location.href = '/web/training/html/003_tags_text_format'">Előző</BUTTON>
-        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
-        <BUTTON onclick="window.location.href = '/web/training/html/005_forms'">Következő</BUTTON>
+        <BUTTON id="previous" onclick="window.location.href = '/web/training/html/003_tags_text_format'">Előző</BUTTON>
+        <BUTTON id="home" onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON id="next" onclick="window.location.href = '/web/training/html/005_forms'">Következő</BUTTON>
     </FOOTER>
 </DIV>
 </BODY>

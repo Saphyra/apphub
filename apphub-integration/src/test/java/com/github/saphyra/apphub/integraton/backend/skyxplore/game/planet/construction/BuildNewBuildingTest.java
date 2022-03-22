@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreBuildingActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetStorageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
@@ -125,6 +126,36 @@ public class BuildNewBuildingTest extends BackEndTest {
         Response terraformationInProgressResponse = SkyXploreBuildingActions.getConstructNewBuildingResponse(language, accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
 
         ResponseValidator.verifyErrorResponse(language, terraformationInProgressResponse, 409, ErrorCode.ALREADY_EXISTS);
+    }
+
+    @Test(groups = "skyxplore")
+    void finishConstruction() {
+        Language language = Language.HUNGARIAN;
+        RegistrationParameters userData1 = RegistrationParameters.validParameters();
+        SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, characterModel1);
+        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
+
+        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId, userId1))
+            .get(accessTokenId);
+
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId)
+            .getPlanetId();
+
+        WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
+
+        UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_FOREST);
+
+        SurfaceResponse modifiedSurface = SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, surfaceId, Constants.DATA_ID_CAMP);
+        assertThat(modifiedSurface.getBuilding()).isNotNull();
+
+        SkyXploreGameActions.setPaused(language, accessTokenId, false);
+        gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
+            .orElseThrow(() -> new RuntimeException("Game is not started"));
+
+        gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED, 120, webSocketEvent -> UUID.fromString(webSocketEvent.getPayload().toString()).equals(modifiedSurface.getBuilding().getConstruction().getConstructionId()))
+            .orElseThrow(() -> new RuntimeException("Construction is not finished."));
     }
 
     private SurfaceResponse findBySurfaceId(Language language, UUID accessTokenId, UUID planetId, UUID surfaceId) {

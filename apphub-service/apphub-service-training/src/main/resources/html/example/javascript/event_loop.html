@@ -1,0 +1,44 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<PRE th:fragment="set_timeout_html">
+    &lt;BUTTON onclick="idozit()">Időzítés indítása&lt;/BUTTON>
+</PRE>
+
+<PRE th:fragment="set_timeout_js">
+function idozit(){
+	setTimeout(function(){document.getElementById("eredmeny").innerHTML = "Lejárt az idő"}, 5000);
+
+	document.getElementById("eredmeny").innerHTML = "Feladat időzítve.";
+}
+</PRE>
+
+<PRE th:fragment="set_interval_html">
+    &lt;BUTTON onclick="idozit()">Óra indítása&lt;/BUTTON>
+</PRE>
+
+<PRE th:fragment="set_interval_js">
+function idozit(){
+	setInterval(function(){document.getElementById("eredmeny").innerHTML = new Date()}, 1000);
+}
+</PRE>
+
+<PRE th:fragment="clear_interval_html">
+    &lt;BUTTON onclick="idozit()">Óra indítása&lt;/BUTTON>
+    &lt;BUTTON onclick="megallit()">Óra megállítása&lt;/BUTTON>
+</PRE>
+
+<PRE th:fragment="clear_interval_js">
+let azonosito;
+
+function idozit(){
+	azonosito = setInterval(function(){document.getElementById("eredmeny").innerHTML = new Date()}, 1000);
+}
+
+function megallit(){
+	clearInterval(azonosito);
+}
+</PRE>
+
+</BODY>
+</HTML>

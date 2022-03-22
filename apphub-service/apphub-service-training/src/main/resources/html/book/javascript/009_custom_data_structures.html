@@ -1,0 +1,121 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT>eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));</SCRIPT>
+
+    <TITLE>Egyedi adatstruktúrák - JavaScript - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">JavaScript - Egyedi adatstruktúrák</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/javascript.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Objektumok</H2>
+
+            <DIV>JavaScriptben objektumnak nevezünk minden nem primitív értéket.</DIV>
+
+            <DIV>
+                A legegyszerűbb objektum a név-érték párok gyűjteménye:
+                <PRE th:replace="/example/javascript/custom_data_structures.html :: simple_object"></PRE>
+            </DIV>
+
+            <DIV>
+                Az objektumok tulajdonságait a következőképpen érhetjük el:
+                <UL>
+                    <LI><CODE>const szemelyCsaladneve = szemely.csaladnev;</CODE></LI>
+                    <LI><CODE>const szemelyCsaladneve = szemely["csaladnev"];</CODE></LI>
+                </UL>
+            </DIV>
+
+            <DIV>
+                Viszont az objektumok tartalmazhatnak funkciókat is:
+                <PRE th:replace="/example/javascript/custom_data_structures.html :: simple_object_with_method"></PRE>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Objektum típusok</H2>
+
+            <DIV>
+                Egy objektumot létrehozni nem nehéz.
+                Na de ha mondjuk nem csak egy ember adatait szeretnénk objektumba írni, hanem több százét, és nem csak pár tulajdonságot és egy funkciót hozzá adni, hanem jóval többet, akkor másoljuk le annyiszor az objektum definícióját?
+                Ez szembe megy a tiszta kód írásának több elvével is.
+                Azon felül, hogy fölöslegesen másoljuk ugyanazt a kódot, ha valamit meg kell változtatni (mondjuk egy funkciónak másképp kell működnie), akkor azt a változtatást is minden egyes személy definíciójához be kéne másolni.
+            </DIV>
+
+            <DIV>
+                Szerencsére erre nincs szükség, hiszen tudunk saját típusokat definiálni, amik mintegy tervrajzként működve megadják az objektum struktúráját, de konkrét adatot nem tartalmaznak, azt a "gyártási folyamat" során kapják meg.
+                Ezeket a tervrajzokat típusoknak nevezzük.
+            </DIV>
+
+            <DIV>
+                Új típus definiálása:
+                <PRE th:replace="/example/javascript/custom_data_structures.html :: type_definition"></PRE>
+                Ebből a típusból új példányt a <CODE>new</CODE> kulcsszóval tudunk létrehozni:
+                <PRE th:replace="/example/javascript/custom_data_structures.html :: instantiate_type"></PRE>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>A this kulcsszó</H2>
+
+            <DIV>A fenti példákban láthattuk használat közben a <CODE>this</CODE> kulcsszót. De mit is csinál ez pontosan?</DIV>
+            <DIV>
+                A <CODE>this</CODE> kulcsszó körülbelül úgy viselkedik, mint egy változó, aminek az értéke maga az objektum.
+                Tehát amikor azt írtuk, hogy
+                <CODE>this.csaladnev = csaladnev;</CODE>, az azt jelenti, hogy "Ennek az objektumnak legyen egy "csaladnev" tulajdonsága, aminek értékel adjuk a "csaladnev" paraméter értékét.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Helyi változók</H2>
+
+            <DIV>Már tudunk saját típust létrehozni, a típusnak tulajdonságokat és metódusokat meghatározni, a típus alapján új példányt létrehozni, és elérni a példány tulajdonságait, illetve funkcióit.</DIV>
+            <DIV>
+                Viszont nem szabad elfelejteni, hogy az objektumok tulajdonságait az objektum létrehozása után "kívülről" is lehet módosítani:
+                <PRE th:replace="/example/javascript/custom_data_structures.html :: modify_object"></PRE>
+            </DIV>
+
+            <DIV>
+                Ha nem szeretnénk, hogy az új példányt létrehozó kód kedve szerint módosítgassa a tulajdonságainkat, akkor célszerű helyi változókat használni:
+                <PRE th:replace="/example/javascript/custom_data_structures.html :: local_variables"></PRE>
+                Ha egy tulajdonságot / funkciót nem a <CODE>this</CODE> kulcsszóval hozunk létre, akkor az a hívó fél számára láthatatlan:
+                <PRE th:replace="/example/javascript/custom_data_structures.html :: access_local_variables"></PRE>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Osztályok</H2>
+
+            <DIV>
+                Osztályokat a <CODE>class</CODE> kulcsszóval tudunk létrehozni. A <CODE>constructor</CODE> kulcsszó segítségével pedig meg tudjuk adni a paraméter listát:
+                <PRE th:replace="/example/javascript/custom_data_structures.html :: class_definition"></PRE>
+            </DIV>
+
+            <DIV>
+                A fenti kód teljesen megfelel mind tartalmában, mind működésében a "Szemely" típussal, csak a szintaktika más.
+                Ez a megoldás annyiban jobb, hogy a <CODE>function</CODE> kulcsszó helyett más kulcsszavakat használunk, így könnyebb megkülönböztetni, hogy mi a funkció, és mi a típus definíció.
+            </DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="previous" onclick="window.location.href = '/web/training/javascript/008_event_loop'">Előző</BUTTON>
+        <BUTTON id="home" onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON id="next" onclick="window.location.href = '/web/training/javascript/010_json'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

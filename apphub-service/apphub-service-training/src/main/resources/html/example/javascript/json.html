@@ -1,0 +1,36 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<PRE th:fragment="example">
+{
+    "nev": "szöveg típusú érték",
+    "szamTipus": 34.23,
+    "booleanTipus": false,
+    "letezikNull": null,
+    "tomb": [
+        "elso elem",
+        2,
+        true,
+
+    ],
+    "belsoObjektum": {
+        "egy": 1,
+        "ketto": 2
+    }
+}
+</PRE>
+
+<PRE th:fragment="conversion">
+const objektum = {
+    nev: "Béla",
+    kor: 16
+}
+
+const json = JSON.stringify(objektum);
+//"json" változó tartalma: {"nev": "Béla","kor":16} lesz
+
+const visszaAlakitottObjektum = JSON.parse(json);
+</PRE>
+
+</BODY>
+</HTML>

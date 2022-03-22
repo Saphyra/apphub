@@ -1,0 +1,441 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<PRE th:fragment="index_html">
+&lt;HTML>
+&lt;HEAD>
+    &lt;TITLE>JavaScript&lt;/TITLE>
+
+    &lt;LINK rel="stylesheet" href="style.css">
+    
+    &lt;SCRIPT src="head.js">&lt;/SCRIPT>
+&lt;/HEAD>
+&lt;BODY>
+    &lt;DIV id="root">
+        &lt;DIV id="eredeti_div">Eredeti DIV&lt;/DIV>
+    &lt;/DIV>
+
+    &lt;DIV id="inputs">
+        &lt;FIELDSET>
+            &lt;LEGEND>Elem felvétele&lt;/LEGEND>
+
+            &lt;INPUT type="text" id="azonosito" placeholder="Azonosító">
+            &lt;INPUT type="text" id="tag" placeholder="Tag">
+            &lt;INPUT type="text" id="tartalom" placeholder="Tartalom">
+            &lt;INPUT type="text" id="szulo_azonosito" placeholder="Szülő azonosítója">
+
+            &lt;TABLE border="1">
+                &lt;THEAD>
+                    &lt;TR>
+                        &lt;TH colspan="2">Attribútumok&lt;/TH>
+                        &lt;TH>&lt;BUTTON onclick="ujAttributum()">Új attribútum&lt;/BUTTON>&lt;/TH>
+                    &lt;/TR>
+                &lt;/THEAD>
+                &lt;TBODY id="attributumok">&lt;/TBODY>
+            &lt;/TABLE>
+            &lt;BUTTON onclick="elemHozzaadasa()">Elem hozzáadása&lt;/BUTTON>
+        &lt;/FIELDSET>
+
+        &lt;FIELDSET>
+            &lt;LEGEND>Elem törlése&lt;/LEGEND>
+
+            &lt;INPUT type="text" id="torlendo" placeholder="Mit töröljek?">
+
+            &lt;BUTTON onclick="torlesAzonositoAlapjan()">Törlés azonosító alapján&lt;/BUTTON>
+            &lt;BUTTON onclick="torlesTagAlapjan()">Törlés tag alapján&lt;/BUTTON>
+            &lt;BUTTON onclick="azonositottTagUritese()">Azonosított tag kiürítése&lt;/BUTTON>
+        &lt;/FIELDSET>
+    &lt;/DIV>
+
+    &lt;SCRIPT src="body.js">&lt;/SCRIPT>
+&lt;/BODY>
+&lt;/HTML>
+</PRE>
+
+<PRE th:fragment="body_js">
+function elemHozzaadasa(){
+    const azonositoInput = document.getElementById("azonosito");
+    const tagInput = document.getElementById("tag");
+    const tartalomInput = document.getElementById("tartalom");
+    const szuloAzonositoInput = document.getElementById("szulo_azonosito");
+    const attributumok = document.getElementsByClassName("attributum_sor");
+
+    const azonosito = azonositoInput.value;
+    const tag = tagInput.value;
+    const tartalom = tartalomInput.value;
+    let szuloAzonosito = szuloAzonositoInput.value;
+
+    if(tag.length == 0){
+        alert("Nincs tag megadva!");
+        return;
+    }
+
+    if(szuloAzonosito.length == 0){
+        szuloAzonosito = "root";
+    }
+
+    const ujElem = document.createElement(tag);
+        if(azonosito.length > 0){
+            ujElem.id = azonosito;
+        }
+
+        ujElem.innerText = tartalom;
+
+        for(let i = 0; i < attributumok.length; i++){
+            const attributumSor = attributumok[i];
+
+            const attributumNev = attributumSor.childNodes[0].childNodes[0].value;
+
+            if(attributumNev.length == 0){
+                alert("Attribútum név nincs megadva!");
+                return;
+            }
+
+            const attributumErtek = attributumSor.childNodes[1].childNodes[0].value;
+
+            ujElem.setAttribute(attributumNev, attributumErtek);
+        }
+
+    const szulo = document.getElementById(szuloAzonosito);
+
+        if(szulo == null){
+            alert("Szülő nem található " + szuloAzonosito + " azonosítóval!");
+            return;
+        }
+
+        szulo.appendChild(ujElem);
+
+    azonositoInput.value = "";
+    tagInput.value = "";
+    tartalomInput.value = "";
+    szuloAzonositoInput.value = "";
+    azonositottTagUritese("attributumok");
+}
+
+function azonositottTagUritese(azonosito){
+    const torlendoInput = document.getElementById("torlendo");
+
+    azonosito = azonosito || torlendoInput.value;
+
+    if(azonosito.length == 0){
+        alert("A törlendő nincs megadva!");
+        return;
+    }
+
+    const torlendo = document.getElementById(azonosito);
+
+    if(torlendo == null){
+        alert("Nem található elem " + torlendo + " azonosítóval!");
+        return;
+    }
+
+    torlendo.innerHTML = "";
+
+    torlendoInput.value = "";
+}
+
+function torlesAzonositoAlapjan(){
+    const torlendoInput = document.getElementById("torlendo");
+    const torlendoAzonosito = torlendoInput.value;
+
+    if(torlendoAzonosito.length == 0){
+        alert("A törlendő nincs megadva!");
+        return;
+    }
+
+    const torlendo = document.getElementById(torlendoAzonosito);
+
+    if(torlendo == null){
+        alert("Nem található elem ezzel az azonosítóval.");
+        return;
+    }
+
+    torlendo.parentNode.removeChild(torlendo);
+
+    torlendoInput.value = "";
+}
+
+function ujAttributum(){
+    const sor = document.createElement("TR");
+        sor.classList.add("attributum_sor");
+
+        const attributumNevCella = document.createElement("TD");
+            const attributumNevInput = document.createElement("INPUT");
+                attributumNevInput.type = "text";
+                attributumNevInput.placeholder = "Attribútum neve";
+            attributumNevCella.appendChild(attributumNevInput);
+    sor.appendChild(attributumNevCella);
+
+        const attributumErtekCella = document.createElement("TD");
+            const attributumErtekInput = document.createElement("INPUT");
+                attributumNevInput.type = "text";
+                attributumNevInput.placeholder = "Attribútum értéke";
+        attributumErtekCella.appendChild(attributumErtekInput);
+    sor.appendChild(attributumErtekCella);
+
+        const attributumEltavolitasaCella = document.createElement("TD");
+            const attributumEltavolitasaGomb = document.createElement("BUTTON");
+                attributumEltavolitasaGomb.innerHTML = "Attribútum eltávolítása";
+        attributumEltavolitasaCella.appendChild(attributumEltavolitasaGomb);
+    sor.appendChild(attributumEltavolitasaCella);
+
+    const attributumok = document.getElementById("attributumok");
+        attributumok.appendChild(sor);
+
+    attributumEltavolitasaGomb.onclick = function(){
+        attributumok.removeChild(sor);
+    }
+}
+
+function torlesTagAlapjan(){
+    const torlendoInput = document.getElementById("torlendo");
+    const torlendoTag = torlendoInput.value;
+
+    if(torlendoTag.length == 0){
+        alert("A törlendő nincs megadva!");
+        return;
+    }
+
+    const torlendoTagek = document.getElementsByTagName(torlendoTag);
+
+    for(let i = torlendoTagek.length - 1; i >= 0; i--){
+        const torlendo = torlendoTagek[i];
+
+        torlendo.parentNode.removeChild(torlendo);
+    }
+
+    torlendoInput.value = "";
+}
+</PRE>
+
+<PRE th:fragment="add_tag_select_inputs">
+const azonositoInput = document.getElementById("azonosito");
+const tagInput = document.getElementById("tag");
+const tartalomInput = document.getElementById("tartalom");
+const szuloAzonositoInput = document.getElementById("szulo_azonosito");
+const attributumok = document.getElementsByClassName("attributum_sor");
+</PRE>
+
+<PRE th:fragment="add_tag_extract_values">
+const azonosito = azonositoInput.value;
+const tag = tagInput.value;
+const tartalom = tartalomInput.value;
+let szuloAzonosito = szuloAzonositoInput.value; //Megjegyzés: A változó "let"-tel lett létrehozva, mert később lehet, hogy meg lesz változtatva az értéke.
+</PRE>
+
+<PRE th:fragment="add_tag_validation">
+if(tag.length == 0){ //<CODE>szoveg.length</CODE> vissza adja a szöveg hosszát. Ha ez 0 (tehát üres szöveg), akkor a feltétel igaz.
+    alert("Nincs tag megadva!"); //Ha a feltétel igaz (tehát "tag" értéke üres, mert a felhasználó nem írt be értéket), akkor a képernyőn megjelenik a "Nincs tag megadva!" üzenet
+    return; //Megszakítjuk a funkció futását.
+}
+</PRE>
+
+<PRE th:fragment="add_tag_set_default_parent_id">
+if(szuloAzonosito.length == 0){ //Ha a "szuloAzonosito" változóban tárolt szöveg hossza "0", akkor...
+    szuloAzonosito = "root"; //Felülírjuk "szuloAzonosito" értékét a "root" értékkel.
+}
+</PRE>
+
+<PRE th:fragment="add_tag_create_tag">
+const ujElem = document.createElement(tag);
+</PRE>
+
+<PRE th:fragment="add_tag_set_id">
+if(azonosito.length > 0){ //Ha az "azonosito" változóban tárolt szöveg hossza nagyobb, mint 0, akkor...
+    ujElem.id = azonosito; //az "ujElem" változóban tárolt DOM elemnek az azonosítóját beállítjuk "azonosito" változó értékére. ("uj_tartalom")
+}
+</PRE>
+
+<PRE th:fragment="add_tag_set_content">
+ujElem.innerText = tartalom;
+</PRE>
+
+<PRE th:fragment="add_tag_select_parent">
+const szulo = document.getElementById(szuloAzonosito);
+</PRE>
+
+<PRE th:fragment="add_tag_validate_parent">
+if(szulo == null){ //Ha "szulo" nem létezik...
+    alert("Szülő nem található " + szuloAzonosito + " azonosítóval!"); //Megjelenik a hibaüzenet, és megmondja, mit nem talál a program.
+    return; //Megszakítjuk a funkció futását.
+}
+</PRE>
+
+<PRE th:fragment="add_tag_append">
+szulo.appendChild(ujElem);
+</PRE>
+
+<PRE th:fragment="add_tag_reset">
+azonositoInput.value = ""; //A fent eltárolt beviteli mező értékét üresre állítjuk
+tagInput.value = "";
+tartalomInput.value = "";
+szuloAzonositoInput.value = "";
+azonositottTagUritese("attributumok"); //Meghívjuk az "azonositottTagUritese" funkciót "attributumok" paraméterrel. Ennek működéséről később.
+</PRE>
+
+<PRE th:fragment="clear_tag_select_input">
+const torlendoInput = document.getElementById("torlendo");
+</PRE>
+
+<PRE th:fragment="clear_tag_default_value">
+azonosito = azonosito || torlendoInput.value;
+</PRE>
+
+<PRE th:fragment="clear_tag_default_value_fallback">
+if(!azonosito){ //Ha "azonosito" nem tartalmaz értéket...
+    azonosito = torlendoInput.value; //add neki értékül a "torlendoInput" változó "value" tulajdonságát.
+}
+</PRE>
+
+<PRE th:fragment="clear_tag_validate_id_filled">
+if(azonosito.length == 0){ //Ha az "azonosito" változóban tárolt szöveg hossza "0", akkor...
+    alert("A törlendő nincs megadva!"); ezt jelezzük a felhasználónak, majd...
+    return; //megszakítjuk a funkció futását.
+}
+</PRE>
+
+<PRE th:fragment="clear_tag_select_tag">
+const torlendo = document.getElementById(azonosito);
+</PRE>
+
+<PRE th:fragment="clear_tag_validate_id_exists">
+if(torlendo == null){ //Ha az elem nem található, akkor...
+    alert("Nem található elem " + torlendo + " azonosítóval!"); //ezt jelezzük a felhasználónak, majd...
+    return; //megszakítjuk a funkció futását.
+}
+</PRE>
+
+<PRE th:fragment="clear_tag">
+torlendo.innerHTML = "";
+</PRE>
+
+<PRE th:fragment="clear_tag_reset_input">
+torlendoInput.value = "";
+</PRE>
+
+<PRE th:fragment="add_attribute_generate_dom">
+const sor = document.createElement("TR"); //Új táblázat sor létrehozása
+    sor.classList.add("attributum_sor"); //"attributum_sor" osztály hozzárendelése a sorhoz
+
+    const attributumNevCella = document.createElement("TD"); //Új táblázat cella létrehozása
+        const attributumNevInput = document.createElement("INPUT"); //Új beviteli mező létrehozása
+            attributumNevInput.type = "text"; //A beviteli mező típusának (jelen esetben "text", vagyis szöveg) megadása
+            attributumNevInput.placeholder = "Attribútum neve"; //A beviteli mező háttérszövegének megadása
+        attributumNevCella.appendChild(attributumNevInput); //Beviteli mező beillesztése a cellába
+sor.appendChild(attributumNevCella); //Cella beillesztése a sorba
+
+    //A fentiek megismétlése (Még egy cella, abba egy szöveg beviteli mező)
+    const attributumErtekCella = document.createElement("TD");
+        const attributumErtekInput = document.createElement("INPUT");
+            attributumNevInput.type = "text";
+            attributumNevInput.placeholder = "Attribútum értéke";
+    attributumErtekCella.appendChild(attributumErtekInput);
+sor.appendChild(attributumErtekCella);
+
+    const attributumEltavolitasaCella = document.createElement("TD"); //Új táblázat cella létrehozása
+        const attributumEltavolitasaGomb = document.createElement("BUTTON"); //Gomb létrehozása
+            attributumEltavolitasaGomb.innerHTML = "Attribútum eltávolítása"; //Gomb szövegének beállítása
+    attributumEltavolitasaCella.appendChild(attributumEltavolitasaGomb); //Gomb beillesztése a cellába
+sor.appendChild(attributumEltavolitasaCella); //Cella beillesztése a sorba
+</PRE>
+
+<PRE th:fragment="add_attribute_append">
+const attributumok = document.getElementById("attributumok"); //Az "attributumok" nevű változóba mentjük az "attributumok" azonosítóval ellátott elemet
+    attributumok.appendChild(sor); //Ebbe az elembe beillesztjük az újonnan létrehozott táblázat sort.
+}
+</PRE>
+
+<PRE th:fragment="add_attribute_add_event_listener">
+attributumEltavolitasaGomb.onclick = function(){ //A gomb "onclick" tulajdonságának értékül adunk egy névtelen funkciót, aminek a kódja a gomb lenyomásakor fog lefutni
+    attributumok.removeChild(sor); //A fentebb változóba mentett "attributumok" azonosítójú elemből eltávolítjuk a "sor" változóban tárolt elemet.
+}
+</PRE>
+
+<PRE th:fragment="remove_by_id_select_input">
+const torlendoInput = document.getElementById("torlendo");
+const torlendoAzonosito = torlendoInput.value;
+</PRE>
+
+<PRE th:fragment="remove_by_id_validate_id_filled">
+if(torlendoAzonosito.length == 0){ //Ha "torlendoAzonosito" változó hossza "0", akkor...
+    alert("A törlendő nincs megadva!"); //ezt jelezzük a felhasználónak...
+    return; //majd megszakítjuk a funkció futását
+}
+</PRE>
+
+<PRE th:fragment="remove_by_id_select_tag">
+const torlendo = document.getElementById(torlendoAzonosito);
+</PRE>
+
+<PRE th:fragment="remove_by_id_validate_id_exists">
+if(torlendo == null){ //Ha az elem nem található, akkor...
+    alert("Nem található elem ezzel az azonosítóval.");  //ezt jelezzük a felhasználónak, majd...
+    return; //megszakítjuk a funkció futását.
+}
+</PRE>
+
+<PRE th:fragment="remove_by_id_remove">
+torlendo.parentNode.removeChild(torlendo); //node.parentNode referál az adott elem szülő elemére. A szülő elemből pedig el tudjuk távolítani a gyermekét.
+</PRE>
+
+<PRE th:fragment="remove_by_id_reset_input">
+torlendoInput.value = "";
+</PRE>
+
+<PRE th:fragment="multiple_class_selection_select">
+const attributumok = document.getElementsByClassName("attributum_sor");
+</PRE>
+
+<PRE th:fragment="multiple_class_selection_logic">
+for(let i = 0; i < attributumok.length; i++){ //Addig léptetünk, amíg a számláló kisebb, mint az "attributumok" tömb mérete
+    const attributumSor = attributumok[i]; //Kivesszük a tömbből az aktuális "i"-edik elemet
+
+    /*
+    A fenti példákban láthattuk, hogy az "attributum_sor" osztályt a táblázat soraira raktuk rá ("TR"-ek).
+    A <CODE>node.childNodes</CODE> segítségével elérjük a téblázat sor ("TR") gyermekeit ("TD"-k - táblázat cellák).
+    A tömbből kivesszük az első ("0" indexxel ellátott) "TD"-t, majd vesszük a "TD" gyermekeit, ami tartalmazza magát a beviteli mezőt
+    Végül a beviteli mezőből kivesszük a felhasználó által beírt értéket ("value").
+    */
+    const attributumNev = attributumSor.childNodes[0].childNodes[0].value;
+
+    if(attributumNev.length == 0){ //Ha a beírt érték hossza "0", akkor...
+        alert("Attribútum név nincs megadva!"); ...ezt jelezzük a felhasználónak...
+        return; majd megszakítjuk a funkció futását
+    }
+
+    const attributumErtek = attributumSor.childNodes[1].childNodes[0].value; //Ugyanaz, mint előbb, csak itt a második ("1" indexxel ellátott) cellában található beviteli mezőnek vesszük ki az értékét
+
+    ujElem.setAttribute(attributumNev, attributumErtek); //Beállítjuk az újonnan létrehozott elem attribútum nevét, és annak értékét
+}
+</PRE>
+
+<PRE th:fragment="multiple_tag_selection_select_input">
+const torlendoInput = document.getElementById("torlendo");
+const torlendoTag = torlendoInput.value;
+</PRE>
+
+<PRE th:fragment="multiple_tag_selection_validate_tag_filled">
+if(torlendoTag.length == 0){ //Ha "torlendoTag" változó hossza "0", akkor...
+    alert("A törlendő nincs megadva!"); //ezt jelezzük a felhasználónak...
+    return; //majd megszakítjuk a funkció futását
+}
+</PRE>
+
+<PRE th:fragment="multiple_tag_selection_select_tags">
+const torlendoTagek = document.getElementsByTagName(torlendoTag);
+</PRE>
+
+<PRE th:fragment="multiple_tag_selection_remove_tags">
+for(let i = torlendoTagek.length - 1; i >= 0; i--){ //Ez egy visszafelé számláló ciklus, a működéséről és miértjéről a példa alatt
+    const torlendo = torlendoTagek[i]; //A "törlendoTagek" tömbből kivesszük az "i"-edik elemet
+
+    torlendo.parentNode.removeChild(torlendo); //node.parentNode referál az adott elem szülő elemére. A szülő elemből pedig el tudjuk távolítani a gyermekét.
+}
+</PRE>
+
+<PRE th:fragment="multiple_tag_selection_reset_input">
+torlendoInput.value = "";
+</PRE>
+
+</BODY>
+</HTML>

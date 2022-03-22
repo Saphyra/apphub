@@ -1,0 +1,91 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<PRE th:fragment="simple_object">
+const szemely = {
+    csaladnev: "Fa",
+    keresztnev: "Pál"
+}
+</PRE>
+
+<PRE th:fragment="simple_object_with_method">
+const szemely = {
+    csaladnev: "Fa",
+    keresztnev: "Pál",
+    teljesNev: function(){
+        return this.csaladnev + " " + this.keresztnev;
+    }
+}
+
+const eredmeny = szemely.teljesNev(); //Az "eredmeny" változó értéke "Fa Pál" lesz
+</PRE>
+
+<PRE th:fragment="type_definition">
+function Szemely(csaladnev, keresztnev){
+    this.csaladnev = csaladnev;
+    this.keresztnev = keresztnev;
+    this.teljesNev = function(){
+        return this.csaladnev + " " + this.keresztnev;
+    }
+}
+</PRE>
+
+<PRE th:fragment="instantiate_type">
+    const szemely1 = new Szemely("Fa", "Pál");
+    const szemely2 = new Szemely("Kiss", "István");
+
+    const szemely1TeljesNev = szemely1.teljesNev(); //"Fa Pál"
+    const szemely2TeljesNev = szemely2.teljesNev(); //"Kiss István"
+</PRE>
+
+<PRE th:fragment="modify_object">
+    const szemely = new Szemely("Fa", "Pál");
+
+    szemely.keresztnev = "József";
+
+    const teljesNev = szemely.teljesNev(); //Mivel az objektum "keresztnev" tulajdonságának új értéket adtunk meg, az eredmény "Fa József" lesz
+
+    szemely.teljesNev = function(){
+        return "Kismalac";
+    }
+
+    const nemIsEzANeve = szemely.teljesNev(); //Mivel az objektum "teljesNev" nevű metódusának új értéket adtunk, az eredmény "Kismalac" lesz.
+</PRE>
+
+<PRE th:fragment="local_variables">
+function AtnevezhetetlenSzemely(csNev, kNev){
+    const csaladnev = csNev;
+    const keresztnev = kNev;
+
+    this.teljesNev = function(){
+        return csaladnev + " " + keresztnev;
+    }
+}
+</PRE>
+
+<PRE th:fragment="access_local_variables">
+    const szemely = new AtnevezhetetlenSzemely("Fa", "Pál");
+
+    const keresztnev = szemely.keresztnev; //"keresztnev" változó értéke "undefined" lesz, mivel a definíció nem tartalmaz "keresztnev" nevű tulajdonságot
+
+    szemely.keresztnev = "József"; //Helyes kód. A hívó fél adhat tulajdonságokat az objektumnak, de ez nem fogja felülírni az "AtnevezhetetlenSzemely" típuson belül definiált "keresztnev" változó értékét, mert az helyi változó, nem tulajdonság.
+    const hamisKeresztnev = szemely.keresztnev; //"hamisKeresztnev" változó értéke "Jószef" lesz, mert a hívó fél ezt állította be "keresztnev" tulajdonságnak
+
+    const teljesNev = szemely.teljesNev(); //"teljesNev" változó értéke "Fa Pál" lesz, mivel a típusban definiált "teljesNev" metódus a típus helyi változóját használja, nem pedig azt a tulajdonságot, amit a hívó fél állított be utólag.
+</PRE>
+
+<PRE th:fragment="class_definition">
+class SzemelyOsztaly{
+    constructor(vezeteknev, keresztnev){
+        this.vezeteknev = vezeteknev;
+        this.keresztnev = keresztnev;
+    }
+
+    teljesNev(){
+        return this.vezeteknev + " " + this.keresztnev;
+    }
+}
+</PRE>
+
+</BODY>
+</HTML>

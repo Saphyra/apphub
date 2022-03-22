@@ -10,6 +10,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RequiredArgsConstructor
@@ -71,23 +73,23 @@ public class Surface {
 
     public boolean isConstructionInProgress() {
         return getFooter()
-            .findElements(By.cssSelector(":scope .progress-bar-container"))
-            .size() == 1;
-
+            .map(footerElement -> footerElement.findElements(By.cssSelector(":scope .progress-bar-container")))
+            .filter(webElements -> webElements.size() == 1)
+            .isPresent();
     }
 
-    private WebElement getFooter() {
+    private Optional<WebElement> getFooter() {
         return getContent()
             .findElements(By.cssSelector(":scope .surface-footer"))
             .stream()
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Surface footer not present."));
+            .findFirst();
     }
 
     public void cancelConstruction(WebDriver driver) {
         assertThat(isConstructionInProgress()).isTrue();
 
         getFooter()
+            .orElseThrow(() -> new RuntimeException("Surface footer not present."))
             .findElement(By.cssSelector(":scope .cancel-construction-button"))
             .click();
 
@@ -111,6 +113,7 @@ public class Surface {
         assertThat(canUpgradeBuilding()).isTrue();
 
         getFooter()
+            .orElseThrow(() -> new RuntimeException("Surface footer not present."))
             .findElement(By.cssSelector(":scope .upgrade-building-button"))
             .click();
 
@@ -133,6 +136,7 @@ public class Surface {
 
     public boolean isTerraformationInProgress() {
         return getFooter()
+            .orElseThrow(() -> new RuntimeException("Surface footer not present."))
             .findElements(By.cssSelector(":scope .cancel-terraformation-button"))
             .size() == 1;
     }
@@ -141,6 +145,7 @@ public class Surface {
         assertThat(isTerraformationInProgress()).isTrue();
 
         getFooter()
+            .orElseThrow(() -> new RuntimeException("Surface footer not present."))
             .findElement(By.cssSelector(":scope .cancel-terraformation-button"))
             .click();
 

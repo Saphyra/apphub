@@ -110,15 +110,17 @@
 
 <DIV id="error-report-details" class="main-page selectable">
     <HEADER>
-        <H1>
-            <SPAN id="error-report-id"></SPAN>
-            <SPAN id="error-report-created-at"></SPAN>
-        </H1>
+        <H1 id="error-report-id"></H1>
 
         <BUTTON id="close-error-report-details-button" onclick="reportController.closeDetailsPage()">X</BUTTON>
     </HEADER>
 
     <MAIN>
+        <FIELDSET>
+            <LEGEND id="error-report-details-timestamp-label"></LEGEND>
+            <DIV id="error-report-timestamp"></DIV>
+        </FIELDSET>
+
         <FIELDSET>
             <LEGEND id="error-report-details-service-label"></LEGEND>
             <DIV id="error-report-service"></DIV>

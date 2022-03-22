@@ -1,0 +1,68 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT>eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));</SCRIPT>
+
+    <TITLE>Bevezetés - JavaScript - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">JavaScript - Bevezetés</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/javascript.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>Mire jó a JavaScript?</H2>
+
+            <DIV>Tulajdonképpen mindenre. Szerverek futtatása, operációs rendszerek írása... Mi viszont ebben a könyvben egy jóval egyszerűbb felhasználási módjával fogunk foglalkozni: a weboldalak interaktívvá tételével.</DIV>
+            <DIV>
+                És miért jó ez nekünk? "Régen minden egyszerűbb volt" - mondják az idősek, és ez többek közt a weboldalakra is igaz. Régen a legtöbb weboldal úgy működött, hogy a kiszolgáló elküldte a böngészőnek az adott oldal HTML kódját, azt a böngésző megjelenítette, és... Ennyi.
+                Ha a felhasználó rá nyomott egy gombra akkor a gombnyomás adatait a böngésző elküldte a kiszolgálónak, ami az elküldött adatok alapján össze rakott egy újabb HTML kódot, azt vissza küldte a böngészőnek, ami megjelenítette, és így tovább.
+            </DIV>
+            <DIV>Egy modern weboldal manapság viszont sokkal bonyolultabb annál, hogy a fenti módon egyszerűen újra lehessen tölteni, és miért is töltenénk újra az egész oldalt, ha például csak az oldal egy kis részében kell változásokat eszközölni?</DIV>
+            <DIV>A JavaScript segítségével könnyedén kommunikálhatunk a különböző kiszolgálókkal, és módosíthatjuk az adott weboldal tartalmát annak újratöltése nélkül.</DIV>
+            <DIV>Ez egy elterjedt nyelv, és rengeteg könyvtár valamint keretrendszer létezik hozzá, viszont azok külön-külön is kitesznek egy-egy könyvet, ezért most csak a legalapabb, "mezei" JavaScriptről lesz szó.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Feltételek</H2>
+
+            <DIV>A könyben szereplő példák megértéséhez erősen ajánlott a HTML, a CSS, és a Programozás alapjainak ismerete.</DIV>
+            <DIV>Ezen kívül csak valamilyen szövegszerkesztő programra (pl. Notepad++), és egy böngészőre van szükség.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>A nyelv jellemzői</H2>
+            <UL>
+                <LI>Típus nélküli</LI>
+                <LI>Értelmező</LI>
+                <LI>Objektum orientált</LI>
+                <LI>Egy szálon fut</LI>
+            </UL>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Megjegyzés</H2>
+
+            <DIV>Ebben a könyvben elsősorban a nyelv működéséről lesz szó, konkrét műveletekről (például tömbök darabolása, szöveg műveletek) nem.</DIV>
+            <DIV>További információ található a <A href="https://www.w3schools.com/js/default.asp" target="_blank">W3Schools</A> oldalán.</DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="home" onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON id="next" onclick="window.location.href = '/web/training/javascript/002_syntax'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

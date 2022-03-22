@@ -6,6 +6,10 @@
     <LINK rel="stylesheet" href="/res/common/css/common.css">
     <LINK rel="stylesheet" href="/res/training/css/training_common.css">
 
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT>eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));</SCRIPT>
+
     <TITLE>Változók - A programozás alapja - Oktatás - Apphub</TITLE>
 </HEAD>
 <BODY>
@@ -98,6 +102,18 @@
         </ARTICLE>
 
         <ARTICLE>
+            <H2>A null</H2>
+
+            <DIV>Elképzelhető, hogy egy változó úgy jön létre, hogy nincs neki értéke (Nincs megadva memória terület, amire mutasson). Ilyenkor a változó értéke <CODE>null</CODE> lesz.</DIV>
+            <DIV>Változónak mi adhatunk "null"-t értékül:
+                <CODE>$valtozo = null;</CODE>, ha ki szeretnénk törölni a már meglévő értékét, vagy még nem tudjuk, hogy pontosan mi lesz az adott változó tartalma.
+            </DIV>
+            <DIV>
+                <U>Megjegyzés</U>: A "null"-ok meg tudják keseríteni a programozók életét, ha olyan műveletet akarnak egy "null" értékű változóval elvégezni, ahol szükséges konkrét adat megléte. Ezért ahol csak lehet, ajánlott kerülni a használatát, valamint ha van rá reális esély, hogy egy változó értéke "null", akkor annak használata előtt ajánlott ellenőrizni az érték meglétét.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
             <H2>Adat típusok</H2>
 
             <DIV>A változóba helyezhető értékeket szintén különböző kategóriákba, típusokba sorolhatjuk:</DIV>
@@ -117,7 +133,6 @@
                 <LI><CODE>char</CODE>: Egy karakter, vagy ASCII érték (2 bájt)</LI>
                 <LI><CODE>String</CODE>: Karakterlánc, szöveg. (Nem számít primitív adattípusnak, hiszen ez már több dologból áll össze, char-ok sorrendjéből.)</LI>
                 <LI>Egyéb nyelv specifikus objektumok, a programozó(k) által definiált egyedi adat típusok</LI>
-                <LI><CODE>null</CODE>: Az adott változónak nincs értéke. (Olyan változó, amelynek neve van, de nincs megadva memóriaterület, amire mutat)</LI>
             </UL>
 
             <DIV>Az adott nyelv határozza meg, hogy a fentiek közül melyik konkrét típusokat használja.</DIV>
@@ -125,9 +140,9 @@
     </MAIN>
 
     <FOOTER>
-        <BUTTON onclick="window.location.href = '/web/training/basics_of_programming/001_introduction'">Előző</BUTTON>
-        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
-        <BUTTON onclick="window.location.href = '/web/training/basics_of_programming/003_operations'">Következő</BUTTON>
+        <BUTTON id="previous" onclick="window.location.href = '/web/training/basics_of_programming/001_introduction'">Előző</BUTTON>
+        <BUTTON id="home" onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON id="next" onclick="window.location.href = '/web/training/basics_of_programming/003_operations'">Következő</BUTTON>
     </FOOTER>
 </DIV>
 </BODY>

@@ -1,0 +1,52 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<PRE th:fragment="onclick">
+&lt;BUTTON onclick="document.getElementById('eredmeny').innerHTML = 'Első gomb megnyomva'">Első gomb&lt;/BUTTON>
+&lt;BUTTON onclick="document.getElementById('eredmeny').innerHTML = 'Második gomb megnyomva'">Második gomb&lt;/BUTTON>
+</PRE>
+
+<PRE th:fragment="onmousemove">
+&lt;DIV onmousemove="document.getElementById('eredmeny').innerHTML = 'A kurzor pozíciója: ' + event.clientX + '/' + event.clientY">Mozgasd fölöttem az egeret!&lt;/DIV>
+</PRE>
+
+<PRE th:fragment="onmouseover">
+&lt;DIV
+    onmouseover="document.getElementById('eredmeny').innerHTML = 'A kurzor belépett a tárolóba.'"
+    onmouseout="document.getElementById('eredmeny').innerHTML = 'A kurzor elhagyta a tárolót.'"
+    >
+    Mozgasd rám az egeret!
+    &lt;/DIV>
+</PRE>
+
+<PRE th:fragment="onkeydown">
+&lt;INPUT type="text" placeholder="Írj belém!"
+    onkeydown="document.getElementById('eredmeny').innerHTML = 'Lenyomtad a(z) ' + event.key + ' gombot.'"
+    onkeyup="document.getElementById('eredmeny').innerHTML = 'Felengedted a(z) ' + event.key + ' gombot.'">
+</PRE>
+
+<PRE th:fragment="onchange">
+&lt;SELECT onchange="document.getElementById('eredmeny').innerHTML = 'A(z) ' + this.value + ' értéket választottad.'">
+    &lt;OPTION value="ertek1">Érték 1&lt;/OPTION>
+    &lt;OPTION value="ertek2">Érték 2&lt;/OPTION>
+&lt;/SELECT>
+</PRE>
+
+<PRE th:fragment="embedded_event">
+&lt;DIV onclick="alert('Külső DIV')">
+    &lt;DIV onclick="alert('Belső DIV')">
+        &lt;BUTTON onclick="alert('GOMB')">Nyomj meg!&lt;/BUTTON
+    &lt;/DIV>
+&lt;/DIV>
+</PRE>
+
+<PRE th:fragment="stop_propagation">
+&lt;DIV onclick="alert('Külső DIV')">
+    &lt;DIV onclick="alert('Belső DIV')">
+        &lt;BUTTON onclick="alert('GOMB'); <CODE>event.stopPropagation();</CODE>">Nyomj meg!&lt;/BUTTON
+    &lt;/DIV>
+&lt;/DIV>
+</PRE>
+
+</BODY>
+</HTML>

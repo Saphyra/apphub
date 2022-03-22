@@ -1,15 +1,11 @@
 package com.github.saphyra.apphub.integration;
 
-import lombok.Builder;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.time.StopWatch;
-import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 
@@ -39,7 +35,6 @@ public class SeleniumTest extends TestBase {
                 if (ITestResult.FAILURE == testResult.getStatus()) {
                     log.error("Current URL: {}", driver.getCurrentUrl());
                     takeScreenshot(webDriverWrapper, testResult.getName());
-                    extractLogs(driver);
                 }
                 WebDriverFactory.release(webDriverWrapper);
             });
@@ -78,35 +73,5 @@ public class SeleniumTest extends TestBase {
         driver.manage().deleteAllCookies();
 
         return driver;
-    }
-
-    private void extractLogs(WebDriver driver) {
-        log.info("Extracting logs...");
-        driver.findElements(By.cssSelector("#logcontainermessages > div"))
-            .stream()
-            .map(this::extractMessage)
-            .forEach(logMessage -> log.info(logMessage.toString()));
-        log.info("Logs extracted.");
-    }
-
-    private LogMessage extractMessage(WebElement webElement) {
-        return LogMessage.builder()
-            .severity(webElement.findElement(By.cssSelector(":first-child")).getText())
-            .title(webElement.findElement(By.cssSelector(":nth-child(2)")).getText())
-            .message(webElement.findElement(By.cssSelector(":nth-child(3)")).getText())
-            .build();
-    }
-
-    @Data
-    @Builder
-    private static class LogMessage {
-        private final String severity;
-        private final String title;
-        private final String message;
-
-        @Override
-        public String toString() {
-            return String.format("%s --- %s - %s", severity, title, message);
-        }
     }
 }

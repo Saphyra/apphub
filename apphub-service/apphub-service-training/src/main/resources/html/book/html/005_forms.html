@@ -8,6 +8,8 @@
 
     <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
     <SCRIPT src="/res/training/js/common.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT>eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));</SCRIPT>
 
     <TITLE>Űrlapok - HTML - Oktatás - Apphub</TITLE>
 </HEAD>
@@ -240,8 +242,8 @@
     </MAIN>
 
     <FOOTER>
-        <BUTTON onclick="window.location.href = '/web/training/html/004_tags_content'">Előző</BUTTON>
-        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON id="previous" onclick="window.location.href = '/web/training/html/004_tags_content'">Előző</BUTTON>
+        <BUTTON id="home" onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
     </FOOTER>
 </DIV>
 </BODY>

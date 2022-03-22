@@ -21,4 +21,14 @@ public class PlanetQueueItem {
 
         CommonPageActions.confirmConfirmationDialog(driver, "cancel-queue-item-confirmation-dialog");
     }
+
+    public double getStatus() {
+        String stringValue = webElement.findElement(By.cssSelector(":scope .progress-bar-background"))
+            .getCssValue("width")
+            .split("%")
+            [0]
+            .split("px")
+            [0];
+        return Double.parseDouble(stringValue);
+    }
 }

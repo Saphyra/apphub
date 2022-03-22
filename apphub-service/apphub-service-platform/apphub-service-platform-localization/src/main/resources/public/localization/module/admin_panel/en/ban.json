@@ -22,7 +22,7 @@
     "no-result": [
       {
         "key": "innerHTML",
-        "message": "Search input too short (Min. 3 characters)"
+        "message": "User not found"
       }
     ],
     "search-text-too-short": [

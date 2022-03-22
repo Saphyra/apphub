@@ -50,7 +50,6 @@
 
         const request = new Request(Mapping.getEndpoint("ACCOUNT_REGISTER"), user);
             request.processValidResponse = function(){
-                sessionStorage.successMessage = "registration-successful";
                 loginController.login(user);
             }
         dao.sendRequestAsync(request);

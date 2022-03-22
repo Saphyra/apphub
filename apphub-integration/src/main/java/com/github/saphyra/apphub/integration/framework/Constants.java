@@ -26,11 +26,13 @@ public class Constants {
     public final String SURFACE_TYPE_DESERT = "DESERT";
     public final String SURFACE_TYPE_OIL_FIELD = "OIL_FIELD";
     public final String SURFACE_TYPE_LAKE = "LAKE";
+    public final String SURFACE_TYPE_FOREST = "FOREST";
 
     //DataIds
     public final String DATA_ID_SOLAR_PANEL = "solar_panel";
     public final String DATA_ID_BATTERY = "battery";
     public final String DATA_ID_WATER_PUMP = "water_pump";
+    public final String DATA_ID_CAMP = "camp";
 
     //QueueTypes
     public final String QUEUE_TYPE_CONSTRUCTION = "CONSTRUCTION";
@@ -41,4 +43,7 @@ public class Constants {
 
     //OpenedPageType
     public final String PAGE_TYPE_PLANET = "PLANET";
+
+    //ModuleIds
+    public final String MODULE_ID_TRAINING = "training";
 }

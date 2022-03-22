@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.structure.skyxplore.ReadinessEvent;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEvent;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
+import org.java_websocket.client.WebSocketClient;
 
 import java.util.Arrays;
 import java.util.List;
@@ -57,6 +58,9 @@ public class SkyXploreFlow {
         hostLobbyWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED)
             .orElseThrow(() -> new RuntimeException("GameLoaded event not arrived."));
         memberLobbyWsClients.forEach(memberLobbyWsClient -> memberLobbyWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED).orElseThrow(() -> new RuntimeException("GameLoaded event not arrived.")));
+
+        Stream.concat(Stream.of(hostLobbyWsClient), memberLobbyWsClients.stream())
+            .forEach(WebSocketClient::close);
 
         return Stream.concat(Stream.of(host), Arrays.stream(members))
             .map(Player::getAccessTokenId)

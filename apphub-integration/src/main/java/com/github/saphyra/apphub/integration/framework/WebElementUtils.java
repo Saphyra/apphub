@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.framework;
 
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -14,6 +15,7 @@ import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class WebElementUtils {
     public static void clearAndFill(WebElement webElement, String text) {
         webElement.clear();
@@ -65,6 +67,8 @@ public class WebElementUtils {
         try {
             return Optional.of(search.get());
         } catch (Exception e) {
+            log.debug("Error querying webElement", e);
+
             return Optional.empty();
         }
     }

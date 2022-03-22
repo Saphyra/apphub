@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEvent;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
@@ -26,6 +27,7 @@ import java.util.function.Predicate;
 public class ApphubWsClient extends WebSocketClient {
     private static final ThreadLocal<List<WebSocketClient>> WS_CONNECTIONS = ThreadLocal.withInitial(Vector::new);
 
+    @Getter
     private final List<WebSocketEvent> messages = new Vector<>();
 
     private final String endpoint;
@@ -49,6 +51,14 @@ public class ApphubWsClient extends WebSocketClient {
             .assertTrue("Connection failed");
         WS_CONNECTIONS.get().add(this);
         opened = true;
+    }
+
+    public static ApphubWsClient createAdminPanelMonitoring(Language language, UUID accessTokenId) {
+        try {
+            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_ADMIN_PANEL_MONITORING, accessTokenId);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static ApphubWsClient createSkyXploreMainMenu(Language language, UUID accessTokenId) {
@@ -88,7 +98,9 @@ public class ApphubWsClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        log.debug("WebSocketMessage arrived to {}: {}", endpoint, message);
+        if (TestBase.REST_LOGGING_ENABLED) {
+            log.info("WebSocketMessage arrived to {}: {}", endpoint, message);
+        }
         WebSocketEvent event = TestBase.OBJECT_MAPPER_WRAPPER.readValue(message, WebSocketEvent.class);
         messages.add(event);
 
@@ -126,11 +138,19 @@ public class ApphubWsClient extends WebSocketClient {
     }
 
     public Optional<WebSocketEvent> awaitForEvent(WebSocketEventName eventName) {
-        return AwaitilityWrapper.findWithWait(60, () -> messages, webSocketEvent -> webSocketEvent.getEventName().equals(eventName));
+        return awaitForEvent(eventName, 60);
+    }
+
+    public Optional<WebSocketEvent> awaitForEvent(WebSocketEventName eventName, int timeout) {
+        return AwaitilityWrapper.findWithWait(timeout, () -> messages, webSocketEvent -> webSocketEvent.getEventName().equals(eventName));
     }
 
     public Optional<WebSocketEvent> awaitForEvent(WebSocketEventName eventName, Predicate<WebSocketEvent> customCondition) {
-        return AwaitilityWrapper.findWithWait(60, () -> messages, webSocketEvent -> webSocketEvent.getEventName().equals(eventName) && customCondition.test(webSocketEvent));
+        return awaitForEvent(eventName, 60, customCondition);
+    }
+
+    public Optional<WebSocketEvent> awaitForEvent(WebSocketEventName eventName, int timeoutSeconds, Predicate<WebSocketEvent> customCondition) {
+        return AwaitilityWrapper.findWithWait(timeoutSeconds, () -> messages, webSocketEvent -> webSocketEvent.getEventName().equals(eventName) && customCondition.test(webSocketEvent));
     }
 
     public void clearMessages() {

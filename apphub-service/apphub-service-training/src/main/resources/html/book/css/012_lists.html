@@ -6,6 +6,10 @@
     <LINK rel="stylesheet" href="/res/common/css/common.css">
     <LINK rel="stylesheet" href="/res/training/css/training_common.css">
 
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT>eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));</SCRIPT>
+
     <TITLE>Listák - CSS - Oktatás - Apphub</TITLE>
 </HEAD>
 <BODY>
@@ -57,9 +61,9 @@
     </MAIN>
 
     <FOOTER>
-        <BUTTON onclick="window.location.href = '/web/training/css/011_character_style'">Előző</BUTTON>
-        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
-        <BUTTON onclick="window.location.href = '/web/training/css/013_tables'">Következő</BUTTON>
+        <BUTTON id="previous" onclick="window.location.href = '/web/training/css/011_character_style'">Előző</BUTTON>
+        <BUTTON id="home" onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON id="next" onclick="window.location.href = '/web/training/css/013_tables'">Következő</BUTTON>
     </FOOTER>
 </DIV>
 </BODY>

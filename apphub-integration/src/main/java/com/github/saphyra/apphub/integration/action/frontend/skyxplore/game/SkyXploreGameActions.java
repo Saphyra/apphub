@@ -23,4 +23,12 @@ public class SkyXploreGameActions {
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE));
     }
+
+    public static void resumeGame(WebDriver driver) {
+        GamePage.resumeGameButton(driver).click();
+    }
+
+    public static void pauseGame(WebDriver driver) {
+        GamePage.pauseGameButton(driver).click();
+    }
 }

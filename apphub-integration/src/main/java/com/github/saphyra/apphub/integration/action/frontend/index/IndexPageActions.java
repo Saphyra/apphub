@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
-import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.user.registration.EmailValidationResult;
@@ -26,10 +26,6 @@ import static org.awaitility.Awaitility.await;
 @Slf4j
 public class IndexPageActions {
     public static void fillRegistrationForm(WebDriver driver, RegistrationParameters parameters) {
-        if (!driver.getCurrentUrl().endsWith(Endpoints.INDEX_PAGE)) {
-            driver.navigate().to(UrlFactory.create(Endpoints.INDEX_PAGE));
-        }
-
         SleepUtil.sleep(1000);
 
         log.debug("Filling registrationForm with {}", parameters);
@@ -77,12 +73,11 @@ public class IndexPageActions {
             .atMost(15, TimeUnit.SECONDS)
             .pollInterval(1, TimeUnit.SECONDS);
         AwaitilityWrapper.wrap(conditionFactory)
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
+            .until(() -> WebElementUtils.getIfPresent(() -> IndexPage.registrationSubmitButton(driver)).isEmpty())
             .assertTrue("Registration failed. Notifications: " + NotificationUtil.getNotificationTexts(driver));
     }
 
     public static void submitRegistration(WebDriver driver) {
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE));
         WebElement submitButton = IndexPage.registrationSubmitButton(driver);
 
         AwaitilityWrapper.createDefault()

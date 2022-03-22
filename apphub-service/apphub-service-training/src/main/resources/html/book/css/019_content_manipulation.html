@@ -6,6 +6,10 @@
     <LINK rel="stylesheet" href="/res/common/css/common.css">
     <LINK rel="stylesheet" href="/res/training/css/training_common.css">
 
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT>eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));</SCRIPT>
+
     <TITLE>Tartalom manipuláció - CSS - Oktatás - Apphub</TITLE>
 
     <STYLE>
@@ -85,9 +89,9 @@
     </MAIN>
 
     <FOOTER>
-        <BUTTON onclick="window.location.href = '/web/training/css/018_content_selectors'">Előző</BUTTON>
-        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
-        <BUTTON onclick="window.location.href = '/web/training/css/020_attribute_selectors'">Következő</BUTTON>
+        <BUTTON id="previous" onclick="window.location.href = '/web/training/css/018_content_selectors'">Előző</BUTTON>
+        <BUTTON id="home" onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON id="next" onclick="window.location.href = '/web/training/css/020_attribute_selectors'">Következő</BUTTON>
     </FOOTER>
 </DIV>
 </BODY>

@@ -1,0 +1,121 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT>eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));</SCRIPT>
+
+    <TITLE>DOM Módosítás - JavaScript - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">JavaScript - DOM Módosítás</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/javascript.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <H2>A DOM</H2>
+
+            <DIV>DOM-nak (Document Object Model) nevezzük a HTML kód JavaScript megfelelőjét. A HTML és a JavaScript szorosan összefügg, és minden ami a HTML-ben van definiálva elérhető JavaScripten keresztül.</DIV>
+            <DIV>Ennek segítségével teljes kontrollunk van a HTML felett, képesek vagyunk tageket létrehozni, módosítani vagy éppen törölni.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>DOM elemek elérése</H2>
+
+            <DIV>Ahhoz, hogy egy DOM elemet módosítani tudjunk, először ki kell azt választanunk.</DIV>
+            <DIV>Erre az egyik lehetőség a már megismert <CODE>const node = document.getElementById("id");</CODE> metódus, ami a megadott azonosítóval rendelkező DOM elemet adja vissza.</DIV>
+
+            <DIV>
+                Ha egyszerre több elemet szeretnénk elérni, akkor használhatjuk a
+                <CODE>const nodes = document.getElementsByTagName("tag");</CODE> metódust, ami vissza adja az összes, a paraméterben megadott taget (pl. az összes DIV-et),
+                vagy a <CODE>const nodes = document.getElementsByClassName("class");</CODE> metódust, ami az összes olyan taget vissza adja, amely rendelkezik a paraméterben megadott osztállyal.
+            </DIV>
+            <DIV>A JavaScript is képes a CSS által használt kiválasztók feldolgozására, erre szolgál a <CODE>const nodes = document.querySelectorAll("CSS kiválasztó");</CODE> metódus.</DIV>
+            <DIV>Az utóbbi három metódus egy tömbhöz hasonló struktúrát ad vissza, amin a for ciklussal tudunk végig iterálni.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>DOM elemek módosítása</H2>
+
+            <DIV>Azt már megtanultuk, hogy a <CODE>node.innerHTML</CODE> vagy a <CODE>node.innerText</CODE> használatával egy adott tag tartalmát tudjuk módosítani.</DIV>
+            <DIV>
+                Ezen felül lehetőségünk van az adott tag különböző attribútumainak módosítására az attribútum megadásával (Például
+                <CODE>node.width = "20px"</CODE> - az adott tag "width" (szélesség) attribútumát "20px"-re állítja.
+            </DIV>
+            <DIV>
+                Egyes esetekben ez a megoldás nem működik, ekkor használható a <CODE>node.setAttribute("attributum", "érték");</CODE> metódus. (Például
+                <CODE>node.setAttribute("width", "20px");</CODE>)
+            </DIV>
+            <DIV>A tagek inline CSS tulajdonságait a <CODE>node.style.cssTulajdonsag</CODE> útvonalon érhetjük el. (Például <CODE>node.style.margin = "3px";</CODE> - a tag margója 3px legyen.)</DIV>
+            <DIV>A taghez osztályt hozzá adni a <CODE>node.classList.add("osztály");</CODE>, osztályt elvenni pedig a <CODE>node.classList.remove("osztálynév");</CODE> metódusokkal lehet.</DIV>
+
+            <DIV>
+                Az adott tag eseménykezelőinek módosítására JavaScripttel alapvetően két lehetőségünk van:
+                <UL>
+                    <LI>
+                        Egyik a tag attribútumának megadása, például: <CODE>node.onclick = function(){...}</CODE>
+                        Ez a megoldás felülírja a "node" "onclick" eseménykezelőjét, ha az már meg volt adva.
+                    </LI>
+                    <LI>
+                        Ha nem szeretnénk felülírni a már meglévő eseménykezelőt, akkor használhatjuk a <CODE>node.addEventListener("click", function(){...})</CODE> metódust.
+                        Az első paraméter az esemény neve (az "on" prefix nélkül), a második pedig az a funkció, amit meg szeretnénk hívni az adott esemény bekövetkeztekor.
+                    </LI>
+                </UL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>DOM elem készítése</H2>
+
+            <DIV>Új DOM elemet a <CODE>const ujNode = document.createElement("tag");</CODE> metódus használatával lehet létrehozni.</DIV>
+            <DIV>
+                A létrehozás után az új node a fent említett lehetőségekkel módosítható, de ahhoz hogy meg is jelenjen a képernyőn, előbb el kell helyezni valamely már meglévő tagben. Erre a következő lehetőségeink vannak:
+                <UL>
+                    <LI><CODE>node.appendChild(ujNode);</CODE> - a "node" végére szúrja be az új elemet, mint "legfiatalabb gyermek".</LI>
+                    <LI><CODE>node.replaceChild(ujNode, meglevoGyermek);</CODE> - kicseréljük a "node" "meglevoGyermek" nodeját az újonnan létrehozott node-ra.</LI>
+                    <LI><CODE>node.insertBefore(ujNode, meglevoGyermek);</CODE> - az új node-ot a "meglevoGyermek" node elé szúrja be.</LI>
+                    <LI><CODE>node.insertAfter(ujNode, meglevoGyermek);</CODE> - az új node-ot a "meglevoGyermek" node mögé szúrja be.</LI>
+                </UL>
+            </DIV>
+
+            <DIV>Egy node aktuális gyermekeit a <CODE>node.childNodes</CODE> tulajdonsággal érhetjük el.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>DOM elem eltávolítása</H2>
+
+            <DIV>Ha egy node teljes tartalmát ki szeretnénk törölni, használjuk a <CODE>node.innerHTML = "";</CODE> parancsot.</DIV>
+            <DIV>Amennyiben csak egy bizonyos taget szeretnénk eltávolítani, akkor használjuk a <CODE>node.removeChild(eltavolitandoGyermek);</CODE> metódust.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Akkor minek a HTML?</H2>
+
+            <DIV>Ha csak JavaScript használatával teljes weboldalakat tudunk létrehozni, akkor minek egyáltalán HTML-t írni? Nem lenne jobb JavaScripttel össze rakni a HTML struktúrát?</DIV>
+            <DIV>Erre a válasz az, hogy nem, nem lenne job, mégpedig több okból:</DIV>
+            <DIV>A HTML arra való, hogy meghatározza a weboldal struktúráját, míg a JavaScript az arra, hogy azt változtassa. Ettől függetlenül vannak esetek, amikor tényleg JavaScripttel kell össze rakni a teljes weboldalt.</DIV>
+            <DIV>
+                De mielőtt ennek neki állnánk, két dolgot mindenképpen figyelembe kell venni:
+                Először is, a JavaScripttel jóval lassabban lehet elérni ugyanazt az eredményt, mint HTML írással, mind futási, és fejlesztési sebességben.
+                Ezen felül a JavaScript kód hosszabb, és nehezebben átlátható, mintha HTML-t írnánk.
+            </DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="previous" onclick="window.location.href = '/web/training/javascript/005_events'">Előző</BUTTON>
+        <BUTTON id="home" onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON id="next" onclick="window.location.href = '/web/training/javascript/007_example_of_basics'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

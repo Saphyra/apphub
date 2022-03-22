@@ -6,6 +6,10 @@
     <LINK rel="stylesheet" href="/res/common/css/common.css">
     <LINK rel="stylesheet" href="/res/training/css/training_common.css">
 
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT>eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));</SCRIPT>
+
     <TITLE>Nyelvek és kategóriák - A programozás alapja - Oktatás - Apphub</TITLE>
 </HEAD>
 <BODY>
@@ -26,7 +30,7 @@
                 Szóval íme, a teljesség igénye nélkül:
                 <UL>
                     <LI>
-                        <CODE>SQL</CODE>: Adatbázisok kezelése, adatok tárolása, lekérdezése, összesítése. Mivel másra nem alkalmas, ezt csak akkor válasszuk, ha tényleg csak ennyire van szükségünk, ismerete viszont szinte nélkülözhetetlen, ha relációs adatbázisokkal kell dolgoznunk.
+                        <CODE>SQL</CODE>: Adatbázisok kezelése, adatok tárolása, lekérdezése, összesítése. Mivel másra nem alkalmas, ezt csak akkor válasszuk, ha tényleg csak ennyire van szükségünk, ismerete viszont szinte nélkülözhetetlen, ha relációs adatbázisokkal kell dolgoznunk. (Megjegyzés: A HTML-hez és CSS-hez hasonlóan nem valós programozási nyelv)
                     </LI>
                     <LI>
                         <CODE>JavaScript (Natív)</CODE>: Dinamikus weboldalak létrehozása. Elengedhetetlen modern webalkalmazások készítéséhez, használható minden egyéb olyan feladathoz, amihez nem szükséges központi adat tárolás (adatbázis) illetve fájl elérés (olvasáson kívül).
@@ -197,8 +201,8 @@
     </MAIN>
 
     <FOOTER>
-        <BUTTON onclick="window.location.href = '/web/training/basics_of_programming/007_loops'">Előző</BUTTON>
-        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON id="previous" onclick="window.location.href = '/web/training/basics_of_programming/007_loops'">Előző</BUTTON>
+        <BUTTON id="home" onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
     </FOOTER>
 </DIV>
 </BODY>

@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
 import com.github.saphyra.apphub.lib.config.thymeleaf.EnableThymeLeaf;
 import com.github.saphyra.apphub.lib.encryption.EnableEncryption;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
+import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
@@ -34,6 +35,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackageClasses = UtilsApplication.class)
 @EntityScan(basePackageClasses = UtilsApplication.class)
 @EnableEncryption
+@EnableMemoryMonitoring
 public class UtilsBeanConfiguration {
     @Bean
     IdGenerator idGenerator() {

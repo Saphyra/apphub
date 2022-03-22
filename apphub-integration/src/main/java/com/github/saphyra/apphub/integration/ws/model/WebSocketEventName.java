@@ -10,6 +10,9 @@ public enum WebSocketEventName {
     PING("ping"),
     REDIRECT("redirect"),
 
+    //AdminPanel monitoring
+    ADMIN_PANEL_MONITORING_MEMORY_STATUS("admin-panel-monitoring-memory-status"),
+
     //SkyXplore MainMenu
     SKYXPLORE_MAIN_MENU_INVITATION("invitation"),
     SKYXPLORE_MAIN_MENU_CANCEL_INVITATION("skyxplore-main-menu-cancel-invitation"),

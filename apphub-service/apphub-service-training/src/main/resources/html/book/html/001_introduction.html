@@ -6,6 +6,10 @@
     <LINK rel="stylesheet" href="/res/common/css/common.css">
     <LINK rel="stylesheet" href="/res/training/css/training_common.css">
 
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT>eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));</SCRIPT>
+
     <TITLE>Bevezetés - HTML - Oktatás - Apphub</TITLE>
 </HEAD>
 <BODY>
@@ -105,8 +109,8 @@
     </MAIN>
 
     <FOOTER>
-        <BUTTON onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
-        <BUTTON onclick="window.location.href = '/web/training/html/002_development'">Következő</BUTTON>
+        <BUTTON id="home" onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON id="next" onclick="window.location.href = '/web/training/html/002_development'">Következő</BUTTON>
     </FOOTER>
 </DIV>
 </BODY>

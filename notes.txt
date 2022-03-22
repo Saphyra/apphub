@@ -1,2 +1,0 @@
-TODO api/fe test for game pause/resume
-TODO api/fe test for construction
