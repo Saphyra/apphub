@@ -1,6 +1,6 @@
 NAMESPACE_NAME=${1:-develop}
 SCRIPT_DIR_NAME=${2:-develop}
-MAX_WAIT_TIME=${3:60}
+MAX_WAIT_TIME=${3:-60}
 
 function deployByDirectory() {
   echo ""
