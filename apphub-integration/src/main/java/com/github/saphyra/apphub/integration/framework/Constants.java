@@ -43,4 +43,7 @@ public class Constants {
 
     //OpenedPageType
     public final String PAGE_TYPE_PLANET = "PLANET";
+
+    //ModuleIds
+    public final String MODULE_ID_TRAINING = "training";
 }

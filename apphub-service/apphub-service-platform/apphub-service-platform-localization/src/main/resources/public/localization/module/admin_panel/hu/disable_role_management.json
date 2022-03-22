@@ -1,10 +1,10 @@
 {
-  "title": "Apphub - Jogosultságok engedélyezése / letiltása",
+  "title": "Apphub - Jogosultságok letiltása / engedélyezése",
   "staticText": {
     "main-title": [
       {
         "key": "innerHTML",
-        "message": "Jogosultságok engedélyezése / letiltása"
+        "message": "Jogosultságok letiltása / engedélyezése"
       }
     ],
     "role-name-table-head": [
