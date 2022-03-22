@@ -31,7 +31,6 @@ public class RegistrationTest extends SeleniumTest {
         //Registration successful
         RegistrationParameters existingUser = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, existingUser);
-        NotificationUtil.verifySuccessNotification(driver, "Sikeres regisztráció.");
         ModulesPageActions.logout(driver);
 
         //Username already exists

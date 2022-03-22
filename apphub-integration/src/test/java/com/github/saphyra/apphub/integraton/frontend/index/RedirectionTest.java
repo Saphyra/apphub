@@ -3,7 +3,9 @@ package com.github.saphyra.apphub.integraton.frontend.index;
 import com.github.saphyra.apphub.integration.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.error.ErrorPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.Navigation;
@@ -12,10 +14,13 @@ import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.localization.LocalizationKey;
 import com.github.saphyra.apphub.integration.localization.LocalizationProperties;
 import com.github.saphyra.apphub.integration.structure.ErrorMessageElement;
+import com.github.saphyra.apphub.integration.structure.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
+
+import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,7 +35,41 @@ public class RedirectionTest extends SeleniumTest {
         driver.navigate().to(UrlFactory.create(SERVER_PORT, Endpoints.MODULES_PAGE));
 
         //THEN
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(SERVER_PORT, Endpoints.INDEX_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", UrlFactory.create(Endpoints.MODULES_PAGE))));
+    }
+
+    @Test
+    public void redirectToUrlAfterLogin() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+        ModulesPageActions.logout(driver);
+
+        driver.navigate().to(UrlFactory.create(SERVER_PORT, Endpoints.NOTEBOOK_PAGE));
+
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", UrlFactory.create(Endpoints.NOTEBOOK_PAGE))));
+
+        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.NOTEBOOK_PAGE)))
+            .assertTrue("User is not redirected to notebook page.");
+    }
+
+    @Test
+    public void redirectToUrlAfterRegistration() {
+        WebDriver driver = extractDriver();
+
+        driver.navigate().to(UrlFactory.create(SERVER_PORT, Endpoints.NOTEBOOK_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", UrlFactory.create(Endpoints.NOTEBOOK_PAGE))));
+
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.NOTEBOOK_PAGE)))
+            .assertTrue("User is not redirected to notebook page.");
     }
 
     @Test
