@@ -1,0 +1,45 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<PRE th:fragment="sync_ajax_html">
+&lt;BUTTON onclick="elkuld()">Kérelem küldése&lt;/BUTTON
+</PRE>
+
+<PRE th:fragment="sync_ajax_js">
+function elkuld(){
+    const request = new XMLHttpRequest(); //Új kérelem létrehozása
+    request.open("get", "/api/training/sample?param1=ertek1&amp;param2=ertek2", false); //Metódus, URL, mód beállítása
+    request.send(); //Kérelem elküldése üres törzzsel (A get kérelmeknek nem lehet törzsük)
+
+    if(request.status == 200){ //Válasz állapotának vizsgálata
+        document.getElementById("eredmeny").innerHTML = request.responseText; //Eredmény megjelenítése
+    }else{
+        alert("Hiba - " + request.status); //Hiba jelzése a felhasználónak
+    }
+
+}
+</PRE>
+
+<PRE th:fragment="async_ajax_html">
+&lt;BUTTON onclick="elkuld()">Kérelem küldése&lt;/BUTTON
+</PRE>
+
+<PRE th:fragment="async_ajax_js">
+function elkuld(){
+    const request = new XMLHttpRequest(); //Új kérelem létrehozása
+    request.open("get", "/api/training/sample?param1=ertek1&amp;param2=ertek2", true); //Metódus, URL, mód beállítása
+
+    request.onload = function(){
+         if(request.status == 200){ //Válasz állapotának vizsgálata
+            document.getElementById("eredmeny").innerHTML = request.responseText; //Eredmény megjelenítése
+        }else{
+            alert("Hiba - " + request.status); //Hiba jelzése a felhasználónak
+        }
+    }
+
+    request.send(); //Kérelem elküldése üres törzzsel (A get kérelmeknek nem lehet törzsük)
+}
+</PRE>
+
+</BODY>
+</HTML>

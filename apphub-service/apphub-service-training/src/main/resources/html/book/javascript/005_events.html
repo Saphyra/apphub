@@ -1,0 +1,218 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/training/css/training_common.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT>eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));</SCRIPT>
+
+    <TITLE>Események - JavaScript - Oktatás - Apphub</TITLE>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title">JavaScript - Események</H1>
+    </HEADER>
+
+    <NAV th:replace="/menu/javascript.html :: menu"></NAV>
+
+    <MAIN>
+        <ARTICLE>
+            <DIV>A felhasználó a weblapon történő műveletei különböző eseményeket (eventeket) válthatnak ki.</DIV>
+
+            <DIV>
+                Ilyen műveletek lehetnek többek közt:
+                <UL>
+                    <LI>Kattintás</LI>
+                    <LI>Kurzor mozgása, belépése egy tároló fölé, kilépése egy tároló fölül</LI>
+                    <LI>Billentyű leütés / felengedés</LI>
+                    <LI>Bemeneti mező módosítása</LI>
+                    <LI>Az oldal betöltődött</LI>
+                </UL>
+            </DIV>
+
+            <DIV>Ezekre az eseményekre lehet "feliratkozni", azaz megadni, hogy az adott esemény bekövetkeztekor melyik JavaScript kód fusson le.</DIV>
+            <DIV>A feliratkozás egyik módja, ha a HTML tag megfelelő attribútumának kitöltése: <CODE>&lt;TAG event="JavaScriptKód">&lt;/TAG></CODE></DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>onclick event</H2>
+
+            <DIV>A legalapvetőbb esemény az egérkattintás. Erre az <CODE>onclick</CODE> attribútum kitöltésével van lehetőség.</DIV>
+
+            <DIV>
+                Példa:
+                <OL>
+                    <LI>
+                        Adjuk hozzá a következő kódot az <CODE>index.html</CODE> fájlunkhoz (valahova a <CODE>&lt;BODY></CODE>-n belülre):
+                        <PRE th:replace="/example/javascript/events.html :: onclick"></PRE>
+                    </LI>
+                    <LI>Nyissuk meg az <CODE>index.html</CODE> fájlunkat a böngészőben</LI>
+                    <LI>Nyomjuk meg felváltva a megjelent gombokat!</LI>
+                </OL>
+
+                Eredmény:
+                <IMG src='/res/training/img/javascript/onclick_result.png'>
+
+                <U>Magyarázat</U>: Az adott gomb megnyomásakor lefut a gomb <CODE>onclick</CODE> attribútumában megadott JavaScript kód. Ez a kód jelen esetben az
+                "eredmeny" azonosítóju tag értékét írja át a megfelelő értékre.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Kurzor mozgás</H2>
+
+            <DIV>Az egér mozgását a <CODE>onmousemove</CODE> attribútum megadásával lehet követni.</DIV>
+
+            <DIV>
+                Példa:
+                <OL>
+                    <LI>
+                        Adjuk hozzá a következő kódot az <CODE>index.html</CODE> fájlunkhoz (valahova a <CODE>&lt;BODY></CODE>-n belülre):
+                        <PRE th:replace="/example/javascript/events.html :: onmousemove"></PRE>
+                    </LI>
+                    <LI>Nyissuk meg az <CODE>index.html</CODE> fájlunkat a böngészőben</LI>
+                    <LI>Mozgassuk az egeret a megjelent szöveg fölött!</LI>
+                </OL>
+
+                Eredmény:
+                <IMG src='/res/training/img/javascript/onmousemove_result.png'>
+
+                <U>Magyarázat</U>: Amikor a kurzor mozog a megadott HTML tag felett, akkor lefut az <CODE>onmousemove</CODE> attribútumban megadott kód. Ez a kód a következőt csinálja:
+                Az "eredmeny" azonosítójú elembe bele rakja a kurzor aktuális pozícióját, amit az "event" változóból vesz ki.
+                Ezt a változót a JavaScript magától a rendelkezésünkre bocsátja, és tartalmazza az adott esemény értékeit, jelen esetben a kurzor aktuális pozícióját a bömgészőablakban.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Kurzor belépett / elhagyta a tárolót</H2>
+
+            <DIV>
+                Ha csak annyira vagyunk kíváncsiak, hogy a kurzor egy adott tároló fölé ért / elhagyta azt, akkor használjuk az <CODE>onmouseover</CODE> és <CODE>onmouseout</CODE> attribútumokat.
+            </DIV>
+
+            <DIV>
+                Példa:
+                <OL>
+                    <LI>
+                        Adjuk hozzá a következő kódot az <CODE>index.html</CODE> fájlunkhoz (valahova a <CODE>&lt;BODY></CODE>-n belülre):
+                        <PRE th:replace="/example/javascript/events.html :: onmouseover"></PRE>
+                    </LI>
+                    <LI>Nyissuk meg az <CODE>index.html</CODE> fájlunkat a böngészőben</LI>
+                    <LI>Mozgassuk az egeret be-ki a megjelent szövegre!</LI>
+                </OL>
+
+                Eredmény:
+                <IMG src='/res/training/img/javascript/onmouseover_result.png'>
+            </DIV>
+
+            <DIV>A példán látható, hogy egy tag egyszerre több eseményre is figyelhet.</DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Billentyű lenyomása / felengedése</H2>
+
+            <DIV>Nyomon tudjuk követni a felhasználó billentyű lenyomásait illetve felengedéseit az <CODE>onkeydown</CODE> és <CODE>onkeyup</CODE> attribútumok segítségével.</DIV>
+
+            <DIV>
+                Példa:
+                <OL>
+                    <LI>
+                        Adjuk hozzá a következő kódot az <CODE>index.html</CODE> fájlunkhoz (valahova a <CODE>&lt;BODY></CODE>-n belülre):
+                        <PRE th:replace="/example/javascript/events.html :: onkeydown"></PRE>
+                    </LI>
+                    <LI>Nyissuk meg az <CODE>index.html</CODE> fájlunkat a böngészőben</LI>
+                    <LI>Kezdjünk el írni a megjelent beviteli mezőbe!</LI>
+                </OL>
+
+                Eredmény:
+                <IMG src='/res/training/img/javascript/onkeydown_result.png'>
+
+                <U>Magyarázat</U>: Ahogy a kurzor mozgás eseménynél, itt is az "event" változó tartalmazza az esemény adatait, például hogy melyik billentyű lett lenyomva vagy felengedve.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Bemeneti mező módosítása</H2>
+
+            <DIV>Egy bemeneti mező értékének módosítását az <CODE>onchange</CODE> eseménnyel figyelhetjük.</DIV>
+
+            <DIV>
+                Példa:
+                <OL>
+                    <LI>
+                        Adjuk hozzá a következő kódot az <CODE>index.html</CODE> fájlunkhoz (valahova a <CODE>&lt;BODY></CODE>-n belülre):
+                        <PRE th:replace="/example/javascript/events.html :: onchange"></PRE>
+                    </LI>
+                    <LI>Nyissuk meg az <CODE>index.html</CODE> fájlunkat a böngészőben</LI>
+                    <LI>Módosítsuk a legördülő menü értékét!</LI>
+                </OL>
+
+                Eredmény:
+                <IMG src='/res/training/img/javascript/onchange_result.png'>
+
+                <U>Magyarázat</U>: Jelen esetben nem az "event" változóból vesszük ki, hogy mi a beviteli mező új értéke, hanem a <CODE>&lt;SELECT></CODE> tagre mutató
+                <CODE>this</CODE> kulcsszó segítségével magából a beviteli mezőből.
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Egymásba ágyazott események</H2>
+
+            <DIV>Ha egy tagnek eseménykezelőt állítunk be, akkor ha az adott esemény bekövetkezik az adott tagen, beleértve annak gyermekeit is, akkor lefut az eseménykezelőben megadott kód.</DIV>
+            <DIV>Ez fordítva is igaz: Ha rá például rá nyomunk egy gombra, és annak a gombnak bármely szülő tagéhez is van beállítva <CODE>onclick</CODE> eseménykezelő, akkor az is le fog futni.</DIV>
+
+            <DIV>
+                Példa:
+                <OL>
+                    <LI>
+                        Adjuk hozzá a következő kódot az <CODE>index.html</CODE> fájlunkhoz (valahova a <CODE>&lt;BODY></CODE>-n belülre):
+                        <PRE th:replace="/example/javascript/events.html :: embedded_event"></PRE>
+                    </LI>
+                    <LI>Nyissuk meg az <CODE>index.html</CODE> fájlunkat a böngészőben</LI>
+                    <LI>Nyomjuk meg a gombot</LI>
+                </OL>
+
+                <U>Eredmény</U>: Gombnyomásra belülről kifelé haladva sorban lefut az összes eseménykezelő, tehát 3 felugró ablak fog megjelenni sorrendben a következő feliratokkal:
+                <OL>
+                    <LI>GOMB</LI>
+                    <LI>Belső DIV</LI>
+                    <LI>Külső DIV</LI>
+                </OL>
+            </DIV>
+        </ARTICLE>
+
+        <ARTICLE>
+            <H2>Esemény lánc megszakítása</H2>
+
+            <DIV>A fenti működés nem mindig a kívánt eredményt szüli. Elképzelhető, hogy csak azt szeretnénk, hogy a gomb megnyomásakor csak a gomb eseménykezelője fusson le, annak szülő tagjeié már ne.</DIV>
+            <DIV>Az <CODE>event.stopPropagation();</CODE> metódushívás megszakítja a hívási láncot, így a szülő tagek eseménykezelői már nem futnak le.</DIV>
+
+            <DIV>
+                Példa:
+                <OL>
+                    <LI>
+                        Adjuk hozzá a következő kódot az <CODE>index.html</CODE> fájlunkhoz (valahova a <CODE>&lt;BODY></CODE>-n belülre):
+                        <PRE th:replace="/example/javascript/events.html :: stop_propagation"></PRE>
+                    </LI>
+                    <LI>Nyissuk meg az <CODE>index.html</CODE> fájlunkat a böngészőben</LI>
+                    <LI>Nyomjuk meg a gombot</LI>
+                </OL>
+
+                <U>Eredmény</U>: Gombnyomásra csak egyetlen felugró ablak fog megjelenni, GOMB felirattal.
+            </DIV>
+        </ARTICLE>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="previous" onclick="window.location.href = '/web/training/javascript/004_output'">Előző</BUTTON>
+        <BUTTON id="home" onclick="window.location.href = '/web/modules'">Kezdőlap</BUTTON>
+        <BUTTON id="next" onclick="window.location.href = '/web/training/javascript/006_dom_modifications'">Következő</BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

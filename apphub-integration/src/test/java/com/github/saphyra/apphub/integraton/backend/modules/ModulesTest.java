@@ -64,7 +64,12 @@ public class ModulesTest extends BackEndTest {
             .url("/web/training/basics_of_programming/001_introduction")
             .favorite(false)
             .build();
-        assertThat(result.get("training")).containsExactlyInAnyOrder(expectedModuleHtmlTraining, expectedModuleCssTraining, expectedModuleBasicsOfProgrammingTraining);
+        ModulesResponse expectedModuleJavaScript = ModulesResponse.builder()
+            .name("javascript")
+            .url("/web/training/javascript/001_introduction")
+            .favorite(false)
+            .build();
+        assertThat(result.get("training")).containsExactlyInAnyOrder(expectedModuleHtmlTraining, expectedModuleCssTraining, expectedModuleBasicsOfProgrammingTraining, expectedModuleJavaScript);
 
         ModulesResponse expectedModuleLogFormatter = ModulesResponse.builder()
             .name("log-formatter")
