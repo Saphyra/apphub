@@ -20,7 +20,7 @@ wait
 
 #Deploying to production
 NAMESPACE_NAME="production"
-./deploy.sh "$NAMESPACE_NAME" "$NAMESPACE_NAME"
+./deploy.sh "$NAMESPACE_NAME" "$NAMESPACE_NAME" 180
 ./run_production_tests.sh
 
 echo "Deployment finished."
