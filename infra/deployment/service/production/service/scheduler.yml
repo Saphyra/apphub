@@ -50,4 +50,4 @@ spec:
   ports:
     - port: 8080
   selector:
-    name: web-content
+    name: scheduler
