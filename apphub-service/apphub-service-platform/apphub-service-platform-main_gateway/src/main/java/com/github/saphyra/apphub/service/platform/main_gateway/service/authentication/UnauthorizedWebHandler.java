@@ -13,7 +13,7 @@ public class UnauthorizedWebHandler implements AuthenticationResultHandler {
         exchange.getResponse().setStatusCode(HttpStatus.TEMPORARY_REDIRECT);
         exchange.getResponse()
             .getHeaders()
-            .add(HttpHeaders.LOCATION, Endpoints.INDEX_PAGE + "?redirect=" + exchange.getRequest().getURI());
+            .add(HttpHeaders.LOCATION, Endpoints.INDEX_PAGE + "?redirect=" + exchange.getRequest().getPath());
         return Mono.empty();
     }
 }
