@@ -73,6 +73,24 @@ public class SearchListItemTest extends SeleniumTest {
         search(driver, CHECKLIST_TABLE_COLUMN_VALUE, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
     }
 
+    @Test
+    public void sameItemShouldBeReturnedOnlyOnce() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+
+        LinkActions.createLink(driver, LINK_TITLE, LINK_TITLE);
+        TextActions.createText(driver, TEXT_TITLE, TEXT_CONTENT);
+
+        NotebookPageActions.search(driver, LINK_TITLE);
+        SleepUtil.sleep(1500);
+
+        assertThat(DetailedListActions.getDetailedListItems(driver)).hasSize(1);
+    }
+
     private void search(WebDriver driver, String searchText, String listItemTitle, ListItemType type) {
         NotebookPageActions.search(driver, searchText);
         SleepUtil.sleep(1500);

@@ -110,6 +110,19 @@ public class SearchListItemTest extends BackEndTest {
         search(language, accessTokenId, CHECKLIST_TABLE_COLUMN_VALUE, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
     }
 
+    @Test
+    public void sameItemShouldBeReturnedOnlyOnce() {
+        Language language = Language.HUNGARIAN;
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+
+        NotebookActions.createLink(language, accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).url(LINK_TITLE).build());
+
+        List<NotebookView> searchResult = NotebookActions.search(language, accessTokenId, LINK_TITLE);
+
+        assertThat(searchResult).hasSize(1);
+    }
+
     private void search(Language language, UUID accessTokenId, String search, String listItemTitle, ListItemType type) {
         List<NotebookView> searchResult = NotebookActions.search(language, accessTokenId, search);
 
