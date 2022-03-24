@@ -43,6 +43,7 @@ public class PinListItemTest extends SeleniumTest {
     private static final String CHECKLIST_TABLE_TITLE = "checklist-table-title";
     private static final String CHECKLIST_TABLE_COLUMN_NAME = "checklist-table-column-name";
     private static final String CHECKLIST_TABLE_COLUMN_VALUE = "checklist-table-column-value";
+    private static final String CATEGORY_TITLE = "category-title";
 
     @Test
     public void pinListItem() {
@@ -116,5 +117,33 @@ public class PinListItemTest extends SeleniumTest {
             .unpin(driver);
 
         assertThat(DetailedListActions.findDetailedItem(driver, LINK_TITLE).isPinned()).isFalse();
+    }
+
+    @Test
+    public void openCategoryOfPinnedItem() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+
+        CategoryActions.createCategory(driver, CATEGORY_TITLE);
+        LinkActions.createLink(driver, LINK_TITLE, LINK_TITLE, CATEGORY_TITLE);
+
+        DetailedListActions.findDetailedItem(driver, CATEGORY_TITLE)
+            .open();
+
+        DetailedListActions.findDetailedItem(driver, LINK_TITLE)
+            .pin(driver);
+
+        DetailedListActions.up(driver);
+
+        PinnedItemActions.findPinnedItem(driver, LINK_TITLE)
+            .openParent();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> DetailedListActions.getDetailedListItems(driver).get(0).getTitle().equals(LINK_TITLE))
+            .assertTrue("Parent was not opened");
     }
 }
