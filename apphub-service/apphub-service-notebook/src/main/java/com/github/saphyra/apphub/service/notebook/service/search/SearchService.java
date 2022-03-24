@@ -35,6 +35,7 @@ public class SearchService {
         }
 
         return Stream.concat(searchByTitle(userId, searchValue), searchByContent(userId, searchValue))
+            .distinct()
             .map(notebookViewFactory::create)
             .collect(Collectors.toList());
     }

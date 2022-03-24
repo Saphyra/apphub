@@ -109,4 +109,9 @@ public class ListItemDetailsItem {
     public boolean isPinned() {
         return WebElementUtils.getClasses(webElement.findElement(PIN_BUTTON)).contains("pinned");
     }
+
+    public void openParentCategory() {
+        webElement.findElement(By.cssSelector(":scope .list-item-open-parent-button"))
+            .click();
+    }
 }

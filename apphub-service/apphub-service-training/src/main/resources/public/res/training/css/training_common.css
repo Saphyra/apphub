@@ -102,3 +102,8 @@ code{
 .linethrough{
     text-decoration: line-through;
 }
+
+mark{
+    background-color: rgba(100,255,100,0.15);
+    color: white;
+}

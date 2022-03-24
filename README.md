@@ -5,41 +5,51 @@ This repository contains a complete application including the service implementa
 The app's purpose is to provide an easy-to extend frame for multiple applications, like games, office related functionalities, etc.
 
 ### Currently implemented:
-* User account management (create / delete accounts, modify user data)
+* User account management 
+    * Create / delete accounts, modify user data
+    * Locale handling (HU / EN)
 * Modules management (list available modules, mark them as favorite)
-* Admin panel (Modify user's roles, to allow/block functionalities available for their account)
-* Notebook (Store notes, links, checklists, tables grouped into categories)
-* Locale handling (Supported locales: EN, HU)
-
-### Upcoming features:
-* Extend Notebook module with Search functionality
-* Extend Notebook module with archiving functionality
-* Add Language management to Index page
-* New module "Balance", a module what can help tracking financial transactions
-* New module "Breakdown", a module where you can create tasks and subtasks, allowing to break complex problems to smaller tasks, and track them one-by-one
-* Migrate existing application "Training": https://github.com/Saphyra/training
-* Migrate/finish existing games (SkyCastle, SkyXplore versions)
+* Admin features
+    * Ban users (permanent / for a specific time)
+    * Role management (Allow / block specific roles (features) for all / specific users)
+    * Error monitoring
+    * Memory monitoring
+* Notebook 
+    * Store notes, links, checklists, tables grouped into categories
+    * Search
+    * Pin favorites
+* Development utils
+    * Base64 Encoder
+    * JSON formatter 
+    * Log formatter
+* Game
+    * SkyXplore (In progress, not enabled on production)
+* Training
+    * HTML
+    * CSS
+    * Basics of Programming
+    * JavaScript
 
 ## Modules Overview
 * Build and Deployment scripts: Located in the root directory
 * apphub-api: Endpoint definitions of the external/internal communication
-* apphub-lib: Libraries used by the service
-* apphub-proxy: Proxy application for exposing the service outside the host machine
-* apphub-service: Includes the microservices of the application
-* infra: deployment scripts used by the deployment system
+* apphub-lib: Libraries used by the services
+* apphub-proxy: Proxy application for exposing the application outside the host machine
+* apphub-service: Services of the application
+* infra: deployment scripts used by the deployment system, kubernetes definitions
 
 ## How to use
 
 ### System requirements:
 * CPU: AMD Ryzen R5 2600
-* RAM: 16 GB
-* Minikube running with at least 6GB RAM, and the most possible CPU cores available.
-  (Note: with 6GB of RAM only one namespace (develop/production) is available at once.
-  To use both namespace in parallel the recommended RAM amount is 16 GB.)
+* RAM: 24 GB
+* Minikube is running with at least 9GB RAM, and the most possible CPU cores available.
+  (Note: with 9GB of RAM only one namespace (develop/production) is available at once.
+  To use both namespace in parallel the recommended RAM amount is 18 GB.)
 * System Administrator access
 * Kubectl installed
 
-The system is configured to work with AMD Ryzen R7 2700X and 32GB RAM. The configurations can be changed to work with less resources.
+The system is configured to work with AMD Ryzen R7 5900X and 64GB RAM. The configurations can be changed to work with less resources.
 
 ### Script usage
 
@@ -51,16 +61,13 @@ The system is configured to work with AMD Ryzen R7 2700X and 32GB RAM. The confi
 * Deploys/re-deploys the services
 * Waits until all the services are up
 
-Usage: ./build_and_deploy.sh [skipBuild | skipTests]
+Usage: ./build_and_deploy.sh [skipBuild | skipTests | skipUnitTests]
 Parameters:
 * skipBuild: skip the build process of the application, deploy the existing images to the develop environment
-* skipTests: skips the unit/integration testing part of the build process
+* skipTests: skip the unit/integration testing part of the build process
+* skipIntegrationTests: skip the BE/FE tests
+* skipUnitTests: skip unit tests
 
-
-#### clean_up_space.sh
-* Cleans up the hard disk space by deleting unused docker images
-
-Usage: ./clean_up_space.sh
 
 #### deploy.sh
 
@@ -129,6 +136,9 @@ Parameters:
 Usage: ./run_tests.sh [namespace:develop]
 Parametes:
 * namespace: Namespace to run the tests agains, develop as default.
+* headless:
+    * true (default): Selenium tests run in the background
+    * false: Selenium tests open browser windows
 
 ### Defaults:
 #### Default ports:
@@ -140,13 +150,11 @@ Parametes:
 Builds and test runs are parallelised to achieve faster builds and test runs, but it causes higher performance requirement, and can lead to failures on slower systems.
 To decrease the load on your machine, you can:
 
-* Decrease the maven build thread count: reduce the treadCount for  "mvn -T <threadCount>" commands found in build&deployment scripts
-* Decrease the threadCounts of automated tests. 
+* Decrease the maven build thread count: reduce the treadCount for  "mvn -T <threadCount>" commands found in build & deployment scripts
+* Decrease the threadCounts of automated tests.
   
-  For apphub-integration-backend it can be found in the pom.xml at project.build.plugins.plugin.configuration.threadCount path.
-  
-  For apphub-integration-frontend it can be found in class com.github.saphyra.apphub.integration.frontend.WebDriverFactory.
-  Constant BROWSER_STARTUP_LIMIT sets the limit of how many browsers can be in opening phase parallel, and MAX_DRIVER_COUNT sets how many browser window can be opened maximum.
+  * For apphub-integration it can be found in the pom.xml at project.build.plugins.plugin.configuration.threadCount path.
+  * Constant BROWSER_STARTUP_LIMIT sets the limit of how many browsers can be in opening phase parallel, and MAX_DRIVER_COUNT sets how many browser window can be opened maximum.
   
 ## Testing
 * Since apphub-integration is not a child of the apphub project, IntelliJ will not recognize it as a module automatically. If you dont want to see compile errors, add it manually at File -> Project Structure -> Modules -> + -> Import module -> Select apphub-integration directory -> Import module from external model -> Maven -> Finish

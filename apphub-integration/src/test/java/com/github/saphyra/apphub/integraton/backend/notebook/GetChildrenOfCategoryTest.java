@@ -82,11 +82,15 @@ public class GetChildrenOfCategoryTest extends BackEndTest {
             .id(childCategoryId)
             .title(TITLE_2)
             .type(ListItemType.CATEGORY.name())
+            .parentId(parentId)
+            .parentTitle(TITLE_1)
             .build();
         NotebookView textView = NotebookView.builder()
             .id(childTextId)
             .title(TITLE_3)
             .type(ListItemType.TEXT.name())
+            .parentId(parentId)
+            .parentTitle(TITLE_1)
             .build();
 
         assertThat(result.getParent()).isNull();

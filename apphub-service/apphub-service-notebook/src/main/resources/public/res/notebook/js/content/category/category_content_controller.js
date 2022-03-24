@@ -41,7 +41,7 @@
         dao.sendRequestAsync(request);
     }
 
-    function displayCategoryDetails(categoryId, categoryDetails){
+    function displayCategoryDetails(categoryId, categoryDetails, displayOpenParentCategoryButton){
         const parentButton = document.getElementById("category-content-parent-selection-parent-button");
             if(categoryId == null){
                 parentButton.classList.add("disabled");
@@ -70,7 +70,7 @@
 
                 return a.title.localeCompare(b.title);
             })
-            .map(function(itemDetails){return createNode(categoryId, itemDetails)})
+            .map(function(itemDetails){return createNode(categoryId, itemDetails, displayOpenParentCategoryButton)})
             .forEach(function(node){container.appendChild(node)});
 
         function createNode(categoryId, itemDetails){
@@ -79,7 +79,7 @@
                 throwException("IllegalArgument", "NodeFactory not present for type " + itemDetails.type);
             }
 
-            const node = factory(categoryId, itemDetails);
+            const node = factory(categoryId, itemDetails, displayOpenParentCategoryButton);
                 node.id = contentController.createListItemId(itemDetails.id);
             return node;
         }

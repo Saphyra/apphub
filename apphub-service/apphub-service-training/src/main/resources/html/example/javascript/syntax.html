@@ -13,7 +13,7 @@
 
 <PRE th:fragment="inline_js">
 &lt;SCRIPT>
-    //JavaScript kód
+    <MARK>//JavaScript kód</MARK>
 &lt;/SCRIPT
 </PRE>
 
@@ -22,20 +22,20 @@
 </PRE>
 
 <PRE th:fragment="const">
-const szoveg = "alma"; //Létre hozzuk az írásvédett "szoveg" nevű változóz, ami véglegesen megkapja az "alma" értéket.
+const szoveg = "alma"; <MARK>//Létrehozzuk az írásvédett "szoveg" nevű változót, ami véglegesen megkapja az "alma" értéket.</MARK>
 
-szoveg = "körte"; //Hibás. A "szoveg" változó írásvédett, nem kaphat többször értéket.
+szoveg = "körte"; <MARK>//Hibás. A "szoveg" változó írásvédett, nem kaphat többször értéket.</MARK>
 </PRE>
 
 <PRE th:fragment="let">
-let szoveg = "alma"; //Létre hozzuk az írásvédett "szoveg" nevű változóz, ami véglegesen megkapja az "alma" értéket.
+let szoveg = "alma"; <MARK>//Létre hozzuk az írásvédett "szoveg" nevű változót, ami véglegesen megkapja az "alma" értéket.</MARK>
 
-szoveg = "körte" //Mivel a változónk többször is írható, az eredeti értékét felül tudjuk írni a "körte" értékkel.
+szoveg = "körte" <MARK>//Mivel a változónk többször is írható, az eredeti értékét felül tudjuk írni a "körte" értékkel.</MARK>
 </PRE>
 
 <PRE th:fragment="undefined_variable">
-const valtozo; //A változónak adtunk nevet, de értéket nem. Ekkor az értéke <CODE>undefined</CODE>
-valtozo = "asd"; //A változó kapott értéket, így többé nem <CODE>undefined</CODE>
+const valtozo; <MARK>//A változónak adtunk nevet, de értéket nem. Ekkor az értéke <CODE>undefined</CODE></MARK>
+valtozo = "asd"; <MARK>//A változó kapott értéket, így többé nem <CODE>undefined</CODE></MARK>
 </PRE>
 
 <PRE th:fragment="undefined_function_return_value">
@@ -43,14 +43,14 @@ function metodus(){
     return;
 }
 
-const visszateresiErtek = metodus(); //A "visszateresiErtek" változó értéke <CODE>undefined</CODE> lesz, mivel a "metodus" funkciónak nincs konkrét visszatérési értéke.
+const visszateresiErtek = metodus(); <MARK>//A "visszateresiErtek" változó értéke <CODE>undefined</CODE> lesz, mivel a "metodus" funkciónak nincs konkrét visszatérési értéke.</MARK>
 </PRE>
 
 <PRE th:fragment="for">
 const array = [];
 
-for(let i = 0; i < array.length; i++){ //<CODE>let</CODE>-et használunk az "i" változó létrehozásakor, hiszen a változó értéke minden ciklus után módosul. <CODE>array.length</CODE>: A tömb mérete
-    //Ciklus kódja
+for(let i = 0; i < array.length; i++){ <MARK>//<CODE>let</CODE>-et használunk az "i" változó létrehozásakor, hiszen a változó értéke minden ciklus után módosul. <CODE>array.length</CODE>: A tömb mérete</MARK>
+    <MARK>//Ciklus kódja</MARK>
 }
 </PRE>
 
@@ -65,7 +65,7 @@ for(let i in array){
 <PRE th:fragment="foreach_object">
 const obj = {};
 
-for(let i in Object.keys(obj)){ //<CODE>Object.keys(obj)</CODE> vissza adja egy objektum kulcsait tömb formájában.
+for(let i in Object.keys(obj)){ <MARK>//<CODE>Object.keys(obj)</CODE> vissza adja egy objektum kulcsait tömb formájában.<//MARK>
     const ertek = Object.keys(obj)[i];
 }
 </PRE>

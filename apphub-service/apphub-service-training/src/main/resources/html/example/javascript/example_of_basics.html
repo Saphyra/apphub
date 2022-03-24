@@ -220,19 +220,19 @@ const attributumok = document.getElementsByClassName("attributum_sor");
 const azonosito = azonositoInput.value;
 const tag = tagInput.value;
 const tartalom = tartalomInput.value;
-let szuloAzonosito = szuloAzonositoInput.value; //Megjegyzés: A változó "let"-tel lett létrehozva, mert később lehet, hogy meg lesz változtatva az értéke.
+let szuloAzonosito = szuloAzonositoInput.value; <MARK>//Megjegyzés: A változó "let"-tel lett létrehozva, mert később lehet, hogy meg lesz változtatva az értéke.</MARK>
 </PRE>
 
 <PRE th:fragment="add_tag_validation">
-if(tag.length == 0){ //<CODE>szoveg.length</CODE> vissza adja a szöveg hosszát. Ha ez 0 (tehát üres szöveg), akkor a feltétel igaz.
-    alert("Nincs tag megadva!"); //Ha a feltétel igaz (tehát "tag" értéke üres, mert a felhasználó nem írt be értéket), akkor a képernyőn megjelenik a "Nincs tag megadva!" üzenet
-    return; //Megszakítjuk a funkció futását.
+if(tag.length == 0){ <MARK>//<CODE>szoveg.length</CODE> vissza adja a szöveg hosszát. Ha ez 0 (tehát üres szöveg), akkor a feltétel igaz.</MARK>
+    alert("Nincs tag megadva!"); <MARK>//Ha a feltétel igaz (tehát "tag" értéke üres, mert a felhasználó nem írt be értéket), akkor a képernyőn megjelenik a "Nincs tag megadva!" üzenet</MARK>
+    return; <MARK>//Megszakítjuk a funkció futását.</MARK>
 }
 </PRE>
 
 <PRE th:fragment="add_tag_set_default_parent_id">
-if(szuloAzonosito.length == 0){ //Ha a "szuloAzonosito" változóban tárolt szöveg hossza "0", akkor...
-    szuloAzonosito = "root"; //Felülírjuk "szuloAzonosito" értékét a "root" értékkel.
+if(szuloAzonosito.length == 0){ <MARK>//Ha a "szuloAzonosito" változóban tárolt szöveg hossza "0", akkor...</MARK>
+    szuloAzonosito = "root"; <MARK>//Felülírjuk "szuloAzonosito" értékét a "root" értékkel.</MARK>
 }
 </PRE>
 
@@ -241,8 +241,8 @@ const ujElem = document.createElement(tag);
 </PRE>
 
 <PRE th:fragment="add_tag_set_id">
-if(azonosito.length > 0){ //Ha az "azonosito" változóban tárolt szöveg hossza nagyobb, mint 0, akkor...
-    ujElem.id = azonosito; //az "ujElem" változóban tárolt DOM elemnek az azonosítóját beállítjuk "azonosito" változó értékére. ("uj_tartalom")
+if(azonosito.length > 0){ <MARK>//Ha az "azonosito" változóban tárolt szöveg hossza nagyobb, mint 0, akkor...</MARK>
+    ujElem.id = azonosito; <MARK>//az "ujElem" változóban tárolt DOM elemnek az azonosítóját beállítjuk "azonosito" változó értékére. ("uj_tartalom")</MARK>
 }
 </PRE>
 
@@ -255,9 +255,9 @@ const szulo = document.getElementById(szuloAzonosito);
 </PRE>
 
 <PRE th:fragment="add_tag_validate_parent">
-if(szulo == null){ //Ha "szulo" nem létezik...
-    alert("Szülő nem található " + szuloAzonosito + " azonosítóval!"); //Megjelenik a hibaüzenet, és megmondja, mit nem talál a program.
-    return; //Megszakítjuk a funkció futását.
+if(szulo == null){ <MARK>//Ha "szulo" nem létezik...</MARK>
+    alert("Szülő nem található " + szuloAzonosito + " azonosítóval!"); <MARK>//Megjelenik a hibaüzenet, és megmondja, mit nem talál a program.</MARK>
+    return; <MARK>//Megszakítjuk a funkció futását.</MARK>
 }
 </PRE>
 
@@ -266,11 +266,11 @@ szulo.appendChild(ujElem);
 </PRE>
 
 <PRE th:fragment="add_tag_reset">
-azonositoInput.value = ""; //A fent eltárolt beviteli mező értékét üresre állítjuk
+azonositoInput.value = ""; <MARK>//A fent eltárolt beviteli mező értékét üresre állítjuk</MARK>
 tagInput.value = "";
 tartalomInput.value = "";
 szuloAzonositoInput.value = "";
-azonositottTagUritese("attributumok"); //Meghívjuk az "azonositottTagUritese" funkciót "attributumok" paraméterrel. Ennek működéséről később.
+azonositottTagUritese("attributumok"); <MARK>//Meghívjuk az "azonositottTagUritese" funkciót "attributumok" paraméterrel. Ennek működéséről később.</MARK>
 </PRE>
 
 <PRE th:fragment="clear_tag_select_input">
@@ -282,15 +282,15 @@ azonosito = azonosito || torlendoInput.value;
 </PRE>
 
 <PRE th:fragment="clear_tag_default_value_fallback">
-if(!azonosito){ //Ha "azonosito" nem tartalmaz értéket...
-    azonosito = torlendoInput.value; //add neki értékül a "torlendoInput" változó "value" tulajdonságát.
+if(!azonosito){ <MARK>//Ha "azonosito" nem tartalmaz értéket...</MARK>
+    azonosito = torlendoInput.value; <MARK>//add neki értékül a "torlendoInput" változó "value" tulajdonságát.</MARK>
 }
 </PRE>
 
 <PRE th:fragment="clear_tag_validate_id_filled">
-if(azonosito.length == 0){ //Ha az "azonosito" változóban tárolt szöveg hossza "0", akkor...
-    alert("A törlendő nincs megadva!"); ezt jelezzük a felhasználónak, majd...
-    return; //megszakítjuk a funkció futását.
+if(azonosito.length == 0){ <MARK>//Ha az "azonosito" változóban tárolt szöveg hossza "0", akkor...</MARK>
+    alert("A törlendő nincs megadva!"); <MARK>//ezt jelezzük a felhasználónak, majd...</MARK>
+    return; <MARK>//megszakítjuk a funkció futását.</MARK>
 }
 </PRE>
 
@@ -299,9 +299,9 @@ const torlendo = document.getElementById(azonosito);
 </PRE>
 
 <PRE th:fragment="clear_tag_validate_id_exists">
-if(torlendo == null){ //Ha az elem nem található, akkor...
-    alert("Nem található elem " + torlendo + " azonosítóval!"); //ezt jelezzük a felhasználónak, majd...
-    return; //megszakítjuk a funkció futását.
+if(torlendo == null){ <MARK>//Ha az elem nem található, akkor...</MARK>
+    alert("Nem található elem " + torlendo + " azonosítóval!"); <MARK>//ezt jelezzük a felhasználónak, majd...</MARK>
+    return; <MARK>//megszakítjuk a funkció futását.</MARK>
 }
 </PRE>
 
@@ -314,17 +314,17 @@ torlendoInput.value = "";
 </PRE>
 
 <PRE th:fragment="add_attribute_generate_dom">
-const sor = document.createElement("TR"); //Új táblázat sor létrehozása
-    sor.classList.add("attributum_sor"); //"attributum_sor" osztály hozzárendelése a sorhoz
+const sor = document.createElement("TR"); <MARK>//Új táblázat sor létrehozása</MARK>
+    sor.classList.add("attributum_sor"); <MARK>//"attributum_sor" osztály hozzárendelése a sorhoz</MARK>
 
-    const attributumNevCella = document.createElement("TD"); //Új táblázat cella létrehozása
-        const attributumNevInput = document.createElement("INPUT"); //Új beviteli mező létrehozása
-            attributumNevInput.type = "text"; //A beviteli mező típusának (jelen esetben "text", vagyis szöveg) megadása
-            attributumNevInput.placeholder = "Attribútum neve"; //A beviteli mező háttérszövegének megadása
-        attributumNevCella.appendChild(attributumNevInput); //Beviteli mező beillesztése a cellába
-sor.appendChild(attributumNevCella); //Cella beillesztése a sorba
+    const attributumNevCella = document.createElement("TD"); <MARK>//Új táblázat cella létrehozása</MARK>
+        const attributumNevInput = document.createElement("INPUT"); <MARK>//Új beviteli mező létrehozása</MARK>
+            attributumNevInput.type = "text"; <MARK>//A beviteli mező típusának (jelen esetben "text", vagyis szöveg) megadása</MARK>
+            attributumNevInput.placeholder = "Attribútum neve"; <MARK>//A beviteli mező háttérszövegének megadása</MARK>
+        attributumNevCella.appendChild(attributumNevInput); <MARK>//Beviteli mező beillesztése a cellába</MARK>
+sor.appendChild(attributumNevCella); <MARK>//Cella beillesztése a sorba</MARK>
 
-    //A fentiek megismétlése (Még egy cella, abba egy szöveg beviteli mező)
+    <MARK>//A fentiek megismétlése (Még egy cella, abba egy szöveg beviteli mező)</MARK>
     const attributumErtekCella = document.createElement("TD");
         const attributumErtekInput = document.createElement("INPUT");
             attributumNevInput.type = "text";
@@ -332,22 +332,22 @@ sor.appendChild(attributumNevCella); //Cella beillesztése a sorba
     attributumErtekCella.appendChild(attributumErtekInput);
 sor.appendChild(attributumErtekCella);
 
-    const attributumEltavolitasaCella = document.createElement("TD"); //Új táblázat cella létrehozása
-        const attributumEltavolitasaGomb = document.createElement("BUTTON"); //Gomb létrehozása
-            attributumEltavolitasaGomb.innerHTML = "Attribútum eltávolítása"; //Gomb szövegének beállítása
-    attributumEltavolitasaCella.appendChild(attributumEltavolitasaGomb); //Gomb beillesztése a cellába
-sor.appendChild(attributumEltavolitasaCella); //Cella beillesztése a sorba
+    const attributumEltavolitasaCella = document.createElement("TD"); <MARK>//Új táblázat cella létrehozása</MARK>
+        const attributumEltavolitasaGomb = document.createElement("BUTTON"); <MARK>//Gomb létrehozása</MARK>
+            attributumEltavolitasaGomb.innerHTML = "Attribútum eltávolítása"; <MARK>//Gomb szövegének beállítása</MARK>
+    attributumEltavolitasaCella.appendChild(attributumEltavolitasaGomb); <MARK>//Gomb beillesztése a cellába</MARK>
+sor.appendChild(attributumEltavolitasaCella); <MARK>//Cella beillesztése a sorba</MARK>
 </PRE>
 
 <PRE th:fragment="add_attribute_append">
-const attributumok = document.getElementById("attributumok"); //Az "attributumok" nevű változóba mentjük az "attributumok" azonosítóval ellátott elemet
-    attributumok.appendChild(sor); //Ebbe az elembe beillesztjük az újonnan létrehozott táblázat sort.
+const attributumok = document.getElementById("attributumok"); <MARK>//Az "attributumok" nevű változóba mentjük az "attributumok" azonosítóval ellátott elemet</MARK>
+    attributumok.appendChild(sor); <MARK>//Ebbe az elembe beillesztjük az újonnan létrehozott táblázat sort.</MARK>
 }
 </PRE>
 
 <PRE th:fragment="add_attribute_add_event_listener">
-attributumEltavolitasaGomb.onclick = function(){ //A gomb "onclick" tulajdonságának értékül adunk egy névtelen funkciót, aminek a kódja a gomb lenyomásakor fog lefutni
-    attributumok.removeChild(sor); //A fentebb változóba mentett "attributumok" azonosítójú elemből eltávolítjuk a "sor" változóban tárolt elemet.
+attributumEltavolitasaGomb.onclick = function(){ <MARK>//A gomb "onclick" tulajdonságának értékül adunk egy névtelen funkciót, aminek a kódja a gomb lenyomásakor fog lefutni</MARK>
+    attributumok.removeChild(sor); <MARK>//A fentebb változóba mentett "attributumok" azonosítójú elemből eltávolítjuk a "sor" változóban tárolt elemet.</MARK>
 }
 </PRE>
 
@@ -357,9 +357,9 @@ const torlendoAzonosito = torlendoInput.value;
 </PRE>
 
 <PRE th:fragment="remove_by_id_validate_id_filled">
-if(torlendoAzonosito.length == 0){ //Ha "torlendoAzonosito" változó hossza "0", akkor...
-    alert("A törlendő nincs megadva!"); //ezt jelezzük a felhasználónak...
-    return; //majd megszakítjuk a funkció futását
+if(torlendoAzonosito.length == 0){ <MARK>//Ha "torlendoAzonosito" változó hossza "0", akkor...</MARK>
+    alert("A törlendő nincs megadva!"); <MARK>//ezt jelezzük a felhasználónak...</MARK>
+    return; <MARK>//majd megszakítjuk a funkció futását</MARK>
 }
 </PRE>
 
@@ -368,14 +368,14 @@ const torlendo = document.getElementById(torlendoAzonosito);
 </PRE>
 
 <PRE th:fragment="remove_by_id_validate_id_exists">
-if(torlendo == null){ //Ha az elem nem található, akkor...
-    alert("Nem található elem ezzel az azonosítóval.");  //ezt jelezzük a felhasználónak, majd...
-    return; //megszakítjuk a funkció futását.
+if(torlendo == null){ <MARK>//Ha az elem nem található, akkor...</MARK>
+    alert("Nem található elem ezzel az azonosítóval.");  <MARK>//ezt jelezzük a felhasználónak, majd...</MARK>
+    return; <MARK>//megszakítjuk a funkció futását.</MARK>
 }
 </PRE>
 
 <PRE th:fragment="remove_by_id_remove">
-torlendo.parentNode.removeChild(torlendo); //node.parentNode referál az adott elem szülő elemére. A szülő elemből pedig el tudjuk távolítani a gyermekét.
+torlendo.parentNode.removeChild(torlendo); <MARK>//node.parentNode referál az adott elem szülő elemére. A szülő elemből pedig el tudjuk távolítani a gyermekét.</MARK>
 </PRE>
 
 <PRE th:fragment="remove_by_id_reset_input">
@@ -387,25 +387,25 @@ const attributumok = document.getElementsByClassName("attributum_sor");
 </PRE>
 
 <PRE th:fragment="multiple_class_selection_logic">
-for(let i = 0; i < attributumok.length; i++){ //Addig léptetünk, amíg a számláló kisebb, mint az "attributumok" tömb mérete
-    const attributumSor = attributumok[i]; //Kivesszük a tömbből az aktuális "i"-edik elemet
+for(let i = 0; i < attributumok.length; i++){ <MARK>//Addig léptetünk, amíg a számláló kisebb, mint az "attributumok" tömb mérete</MARK>
+    const attributumSor = attributumok[i]; <MARK>//Kivesszük a tömbből az aktuális "i"-edik elemet</MARK>
 
-    /*
+    <MARK>/*
     A fenti példákban láthattuk, hogy az "attributum_sor" osztályt a táblázat soraira raktuk rá ("TR"-ek).
     A <CODE>node.childNodes</CODE> segítségével elérjük a téblázat sor ("TR") gyermekeit ("TD"-k - táblázat cellák).
     A tömbből kivesszük az első ("0" indexxel ellátott) "TD"-t, majd vesszük a "TD" gyermekeit, ami tartalmazza magát a beviteli mezőt
     Végül a beviteli mezőből kivesszük a felhasználó által beírt értéket ("value").
-    */
+    */</MARK>
     const attributumNev = attributumSor.childNodes[0].childNodes[0].value;
 
-    if(attributumNev.length == 0){ //Ha a beírt érték hossza "0", akkor...
-        alert("Attribútum név nincs megadva!"); ...ezt jelezzük a felhasználónak...
-        return; majd megszakítjuk a funkció futását
+    if(attributumNev.length == 0){ <MARK>//Ha a beírt érték hossza "0", akkor...</MARK>
+        alert("Attribútum név nincs megadva!"); <MARK>//...ezt jelezzük a felhasználónak...</MARK>
+        return; <MARK>//majd megszakítjuk a funkció futását</MARK>
     }
 
-    const attributumErtek = attributumSor.childNodes[1].childNodes[0].value; //Ugyanaz, mint előbb, csak itt a második ("1" indexxel ellátott) cellában található beviteli mezőnek vesszük ki az értékét
+    const attributumErtek = attributumSor.childNodes[1].childNodes[0].value; <MARK>//Ugyanaz, mint előbb, csak itt a második ("1" indexxel ellátott) cellában található beviteli mezőnek vesszük ki az értékét</MARK>
 
-    ujElem.setAttribute(attributumNev, attributumErtek); //Beállítjuk az újonnan létrehozott elem attribútum nevét, és annak értékét
+    ujElem.setAttribute(attributumNev, attributumErtek); <MARK>//Beállítjuk az újonnan létrehozott elem attribútum nevét, és annak értékét</MARK>
 }
 </PRE>
 
@@ -415,9 +415,9 @@ const torlendoTag = torlendoInput.value;
 </PRE>
 
 <PRE th:fragment="multiple_tag_selection_validate_tag_filled">
-if(torlendoTag.length == 0){ //Ha "torlendoTag" változó hossza "0", akkor...
-    alert("A törlendő nincs megadva!"); //ezt jelezzük a felhasználónak...
-    return; //majd megszakítjuk a funkció futását
+if(torlendoTag.length == 0){ <MARK>//Ha "torlendoTag" változó hossza "0", akkor...</MARK>
+    alert("A törlendő nincs megadva!"); <MARK>//ezt jelezzük a felhasználónak...</MARK>
+    return; <MARK>//majd megszakítjuk a funkció futását</MARK>
 }
 </PRE>
 
@@ -426,10 +426,10 @@ const torlendoTagek = document.getElementsByTagName(torlendoTag);
 </PRE>
 
 <PRE th:fragment="multiple_tag_selection_remove_tags">
-for(let i = torlendoTagek.length - 1; i >= 0; i--){ //Ez egy visszafelé számláló ciklus, a működéséről és miértjéről a példa alatt
-    const torlendo = torlendoTagek[i]; //A "törlendoTagek" tömbből kivesszük az "i"-edik elemet
+for(let i = torlendoTagek.length - 1; i >= 0; i--){ <MARK>//Ez egy visszafelé számláló ciklus, a működéséről és miértjéről a példa alatt</MARK>
+    const torlendo = torlendoTagek[i]; <MARK>//A "törlendoTagek" tömbből kivesszük az "i"-edik elemet</MARK>
 
-    torlendo.parentNode.removeChild(torlendo); //node.parentNode referál az adott elem szülő elemére. A szülő elemből pedig el tudjuk távolítani a gyermekét.
+    torlendo.parentNode.removeChild(torlendo); <MARK>//node.parentNode referál az adott elem szülő elemére. A szülő elemből pedig el tudjuk távolítani a gyermekét.</MARK>
 }
 </PRE>
 

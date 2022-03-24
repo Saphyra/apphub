@@ -5,11 +5,14 @@
     margin: 0.5rem;
 }
 
-    .pinned-item button{
+    .pinned-item-button-wrapper{
         position: absolute;
         right: 0;
         top: 0;
-        border-width: 2px;
-        margin: 0.125rem;
-        padding: 0.125rem;
     }
+
+        .pinned-item button{
+            border-width: 2px;
+            margin: 0.125rem;
+            padding: 0.125rem;
+        }

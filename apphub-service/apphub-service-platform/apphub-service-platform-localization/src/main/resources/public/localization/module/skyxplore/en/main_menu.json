@@ -28,7 +28,7 @@
     "back-button": [
       {
         "key": "innerHTML",
-        "message": "Back"
+        "message": "Home"
       }
     ],
     "friends-title": [

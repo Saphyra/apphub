@@ -27,12 +27,16 @@ public class PinnedItem {
         String title = getTitle();
         int pinnedItemsAmount = PinnedItemActions.getPinnedItems(driver).size();
 
-        webElement.findElement(By.cssSelector(":scope button")).click();
+        webElement.findElement(By.cssSelector(":scope button:nth-child(2)")).click();
 
         AwaitilityWrapper.createDefault()
             .until(() -> PinnedItemActions.getPinnedItems(driver).size() == pinnedItemsAmount - 1)
             .assertTrue(title + " is not unpinned.");
 
         assertThat(PinnedItemActions.getPinnedItems(driver).stream().map(PinnedItem::getTitle)).doesNotContain(title);
+    }
+
+    public void openParent() {
+        webElement.findElement(By.cssSelector(":scope button:nth-child(1)")).click();
     }
 }

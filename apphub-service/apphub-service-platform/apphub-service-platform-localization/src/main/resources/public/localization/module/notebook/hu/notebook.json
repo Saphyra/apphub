@@ -22,7 +22,7 @@
     "back-button": [
       {
         "key": "innerHTML",
-        "message": "Vissza"
+        "message": "Kezdőlap"
       }
     ],
     "new-button": [
@@ -475,6 +475,7 @@
     "checklist-table-item-deletion-confirmation-dialog-title": "Lista-táblázat elem törlése",
     "checklist-table-item-deletion-confirmation-dialog-detail": "Biztosan törölni szeretné a lista-táblázat elemet?",
     "checklist-table-item-deletion-confirmation-dialog-confirm-button": "Törlés",
-    "checklist-table-item-deletion-confirmation-dialog-decline-button": "Mégse"
+    "checklist-table-item-deletion-confirmation-dialog-decline-button": "Mégse",
+    "open-parent": "Szülő megnyitása"
   }
 }

@@ -104,10 +104,10 @@
                             display: none;
                         }
 
-                    .list-item-options-container:hover .list-item-options-button-list-wrapper{
-                        display: block;
+                    .list-item-options-wrapper:hover .list-item-options-button-list-wrapper{
+                        display: inline;
                     }
 
-                    .list-item-options-container:hover .list-item-options-button{
+                    .list-item-options-wrapper:hover .list-item-options-button{
                         display: none;
                     }

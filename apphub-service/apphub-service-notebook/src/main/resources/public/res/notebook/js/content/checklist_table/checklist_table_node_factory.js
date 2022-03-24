@@ -1,4 +1,4 @@
-function checklistTableNodeFactory(parent, itemDetails){
+function checklistTableNodeFactory(parent, itemDetails, displayOpenParentCategoryButton){
     const node = document.createElement("DIV");
         node.classList.add("list-item-details-item");
         node.classList.add("button");
@@ -15,7 +15,8 @@ function checklistTableNodeFactory(parent, itemDetails){
     node.appendChild(actionButtonFactory.create(
         parent,
         itemDetails,
-        function(){deleteChecklistTable(itemDetails.id, itemDetails.title)}
+        function(){deleteChecklistTable(itemDetails.id, itemDetails.title)},
+        displayOpenParentCategoryButton
     ));
     return node;
 

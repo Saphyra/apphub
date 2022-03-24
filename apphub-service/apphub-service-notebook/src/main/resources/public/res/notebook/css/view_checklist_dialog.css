@@ -27,6 +27,7 @@
         border-right: 3px solid white;
         padding: 0.5rem;
         font-size: 1.25rem;
+        overflow-x: auto;
     }
 
     .view-checklist-item-content:not([contenteditable=true]){

@@ -87,13 +87,28 @@
                             notificationService.showError("Unknown type: " + item.type);
                     }
 
-                    const unpinButton = document.createElement("BUTTON");
-                        unpinButton.innerText = "X";
-                        unpinButton.onclick = function(e){
-                            e.stopPropagation();
-                            setPinStatus(item.id, false);
-                        }
-                node.appendChild(unpinButton);
+                    const buttonWrapper = document.createElement("DIV");
+                        buttonWrapper.classList.add("pinned-item-button-wrapper");
+
+                        const openParentButton = document.createElement("BUTTON");
+                            openParentButton.innerHTML = "P";
+                            openParentButton.title = item.parentTitle || Localization.getAdditionalContent("root-title");
+                            openParentButton.onclick = function(e){
+                                e.stopPropagation();
+                                categoryContentController.loadCategoryContent(item.parentId);
+                            }
+                    buttonWrapper.appendChild(openParentButton);
+
+                        const unpinButton = document.createElement("BUTTON");
+                            unpinButton.innerText = "X";
+                            unpinButton.onclick = function(e){
+                                e.stopPropagation();
+                                setPinStatus(item.id, false);
+                            }
+                    buttonWrapper.appendChild(unpinButton);
+
+
+                node.appendChild(buttonWrapper)
 
                 return node;
             }
