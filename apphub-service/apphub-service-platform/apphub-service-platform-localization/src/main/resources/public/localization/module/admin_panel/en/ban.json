@@ -112,7 +112,7 @@
     "back-button": [
       {
         "key": "innerHTML",
-        "message": "Back"
+        "message": "Home"
       }
     ],
     "current-bans-ban-id": [

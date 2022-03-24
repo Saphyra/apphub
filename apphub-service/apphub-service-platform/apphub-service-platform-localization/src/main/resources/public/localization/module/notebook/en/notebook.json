@@ -22,7 +22,7 @@
     "back-button": [
       {
         "key": "innerHTML",
-        "message": "Back"
+        "message": "Home"
       }
     ],
     "new-button": [

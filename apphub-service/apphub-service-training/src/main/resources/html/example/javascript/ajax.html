@@ -2,42 +2,42 @@
 <BODY>
 
 <PRE th:fragment="sync_ajax_html">
-&lt;BUTTON onclick="elkuld()">Kérelem küldése&lt;/BUTTON
+&lt;BUTTON onclick="elkuld()">Kérelem küldése&lt;/BUTTON>
 </PRE>
 
 <PRE th:fragment="sync_ajax_js">
 function elkuld(){
-    const request = new XMLHttpRequest(); //Új kérelem létrehozása
-    request.open("get", "/api/training/sample?param1=ertek1&amp;param2=ertek2", false); //Metódus, URL, mód beállítása
-    request.send(); //Kérelem elküldése üres törzzsel (A get kérelmeknek nem lehet törzsük)
+    const request = new XMLHttpRequest(); <MARK>//Új kérelem létrehozása</MARK>
+    request.open("get", "/api/training/sample?param1=ertek1&amp;param2=ertek2", false); <MARK>//Metódus, URL, mód beállítása</MARK>
+    request.send(); <MARK>//Kérelem elküldése üres törzzsel (A get kérelmeknek nem lehet törzsük)</MARK>
 
-    if(request.status == 200){ //Válasz állapotának vizsgálata
-        document.getElementById("eredmeny").innerHTML = request.responseText; //Eredmény megjelenítése
+    if(request.status == 200){ <MARK>//Válasz állapotának vizsgálata</MARK>
+        document.getElementById("eredmeny").innerHTML = request.responseText; <MARK>//Eredmény megjelenítése</MARK>
     }else{
-        alert("Hiba - " + request.status); //Hiba jelzése a felhasználónak
+        alert("Hiba - " + request.status); <MARK>//Hiba jelzése a felhasználónak</MARK>
     }
 
 }
 </PRE>
 
 <PRE th:fragment="async_ajax_html">
-&lt;BUTTON onclick="elkuld()">Kérelem küldése&lt;/BUTTON
+&lt;BUTTON onclick="elkuld()">Kérelem küldése&lt;/BUTTON>
 </PRE>
 
 <PRE th:fragment="async_ajax_js">
 function elkuld(){
-    const request = new XMLHttpRequest(); //Új kérelem létrehozása
-    request.open("get", "/api/training/sample?param1=ertek1&amp;param2=ertek2", true); //Metódus, URL, mód beállítása
+    const request = new XMLHttpRequest(); <MARK>//Új kérelem létrehozása</MARK>
+    request.open("get", "/api/training/sample?param1=ertek1&amp;param2=ertek2", true); <MARK>//Metódus, URL, mód beállítása</MARK>
 
     request.onload = function(){
-         if(request.status == 200){ //Válasz állapotának vizsgálata
-            document.getElementById("eredmeny").innerHTML = request.responseText; //Eredmény megjelenítése
+         if(request.status == 200){ <MARK>//Válasz állapotának vizsgálata</MARK>
+            document.getElementById("eredmeny").innerHTML = request.responseText; <MARK>//Eredmény megjelenítése</MARK>
         }else{
-            alert("Hiba - " + request.status); //Hiba jelzése a felhasználónak
+            alert("Hiba - " + request.status); <MARK>//Hiba jelzése a felhasználónak</MARK>
         }
     }
 
-    request.send(); //Kérelem elküldése üres törzzsel (A get kérelmeknek nem lehet törzsük)
+    request.send(); <MARK>//Kérelem elküldése üres törzzsel (A get kérelmeknek nem lehet törzsük)</MARK>
 }
 </PRE>
 
