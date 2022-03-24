@@ -17,8 +17,8 @@ public class NotebookView {
 
     @NonNull
     private final String type;
-
     private final boolean pinned;
-
     private final String value;
+    private final UUID parentId;
+    private final String parentTitle;
 }

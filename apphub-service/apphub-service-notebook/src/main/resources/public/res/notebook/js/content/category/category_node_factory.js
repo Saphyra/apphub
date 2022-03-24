@@ -1,4 +1,4 @@
-function categoryNodeFactory(parent, itemDetails){
+function categoryNodeFactory(parent, itemDetails, displayOpenParentCategoryButton){
     const node = document.createElement("DIV");
         node.classList.add("list-item-details-item");
         node.classList.add("button");
@@ -16,7 +16,8 @@ function categoryNodeFactory(parent, itemDetails){
     node.appendChild(actionButtonFactory.create(
         parent,
         itemDetails,
-        function(){deleteCategory(itemDetails.id, itemDetails.title)}
+        function(){deleteCategory(itemDetails.id, itemDetails.title)},
+        displayOpenParentCategoryButton
     ));
     return node;
 

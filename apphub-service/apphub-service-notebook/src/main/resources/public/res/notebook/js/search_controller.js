@@ -30,7 +30,7 @@
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(items){
                 shouldReset = true;
-                categoryContentController.displayCategoryDetails(null, {title: Localization.getAdditionalContent("search-result"), children: items});
+                categoryContentController.displayCategoryDetails(null, {title: Localization.getAdditionalContent("search-result"), children: items}, true);
             }
         dao.sendRequestAsync(request);
     }

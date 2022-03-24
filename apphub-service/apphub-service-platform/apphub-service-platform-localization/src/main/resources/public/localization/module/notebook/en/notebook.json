@@ -481,6 +481,7 @@
     "checklist-table-item-deletion-confirmation-dialog-title": "Delete checklist table item",
     "checklist-table-item-deletion-confirmation-dialog-detail": "Are you sure you want to delete the checklist table item?",
     "checklist-table-item-deletion-confirmation-dialog-confirm-button": "Delete",
-    "checklist-table-item-deletion-confirmation-dialog-decline-button": "Cancel"
+    "checklist-table-item-deletion-confirmation-dialog-decline-button": "Cancel",
+    "open-parent": "Open parent"
   }
 }
