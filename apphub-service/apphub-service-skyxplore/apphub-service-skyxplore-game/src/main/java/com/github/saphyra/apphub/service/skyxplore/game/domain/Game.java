@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
+@Slf4j
 public class Game {
     private final UUID gameId;
     private final String gameName;
@@ -51,5 +53,16 @@ public class Game {
             .filter(userId -> !players.get(userId).isAi())
             .filter(userId -> players.get(userId).isConnected())
             .collect(Collectors.toList());
+    }
+
+    //TODO unit test
+    public boolean shouldRun() {
+        if (gamePaused) {
+            log.debug("Game {} is paused.", gameId);
+            return false;
+        }
+
+        log.debug("Game {} should run", gameId);
+        return true;
     }
 }

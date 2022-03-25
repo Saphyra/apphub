@@ -2,6 +2,10 @@ package com.github.saphyra.apphub.service.skyxplore.game.tick.work;
 
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenMoraleProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenSkillProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Skill;
 import org.junit.Test;
@@ -22,10 +26,19 @@ public class CitizenEfficiencyCalculatorTest {
     private static final Double SKILL_LEVEL_MULTIPLIER = 1.5;
 
     @Mock
-    private CitizenEfficiencyCalculator.CompetencyProperties competencyProperties;
+    private GameProperties gameProperties;
 
     @InjectMocks
     private CitizenEfficiencyCalculator underTest;
+
+    @Mock
+    private CitizenProperties citizenProperties;
+
+    @Mock
+    private CitizenSkillProperties skillProperties;
+
+    @Mock
+    private CitizenMoraleProperties moraleProperties;
 
     @Mock
     private Citizen citizen;
@@ -35,13 +48,19 @@ public class CitizenEfficiencyCalculatorTest {
 
     @Test
     public void calculateEfficiency() {
+        given(gameProperties.getCitizen()).willReturn(citizenProperties);
+
+        given(citizenProperties.getSkill()).willReturn(skillProperties);
+        given(skillProperties.getSkillLevelMultiplier()).willReturn(SKILL_LEVEL_MULTIPLIER);
+
+        given(citizenProperties.getMorale()).willReturn(moraleProperties);
+        given(moraleProperties.getWorkEfficiencyDropUnder()).willReturn(MORALE_EFFICIENCY_DROP_UNDER);
+        given(moraleProperties.getMinEfficiency()).willReturn(MIN_MORALE_EFFICIENCY);
+
         given(citizen.getMorale()).willReturn(ACTUAL_MORALE);
         given(citizen.getSkills()).willReturn(CollectionUtils.singleValueMap(SkillType.AIMING, skill));
         given(skill.getLevel()).willReturn(SKILL_LEVEL);
 
-        given(competencyProperties.getMoraleEfficiencyDropUnder()).willReturn(MORALE_EFFICIENCY_DROP_UNDER);
-        given(competencyProperties.getMinMoraleEfficiency()).willReturn(MIN_MORALE_EFFICIENCY);
-        given(competencyProperties.getSkillLevelMultiplier()).willReturn(SKILL_LEVEL_MULTIPLIER);
 
         double result = underTest.calculateEfficiency(citizen, SkillType.AIMING);
 

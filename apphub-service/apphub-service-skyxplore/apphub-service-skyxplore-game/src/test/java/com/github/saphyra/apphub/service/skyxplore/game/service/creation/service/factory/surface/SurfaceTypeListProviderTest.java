@@ -2,7 +2,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.SurfaceProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.SurfaceTypeSpawnDetails;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -22,7 +24,7 @@ public class SurfaceTypeListProviderTest {
     private Random random;
 
     @Mock
-    private GameCreationProperties properties;
+    private GameProperties properties;
 
     @Mock
     private DefaultSurfaceTypeListProvider defaultSurfaceTypeListProvider;
@@ -31,10 +33,10 @@ public class SurfaceTypeListProviderTest {
     private SurfaceTypeListProvider underTest;
 
     @Mock
-    private GameCreationProperties.SurfaceProperties surfaceProperties;
+    private SurfaceProperties surfaceProperties;
 
     @Mock
-    private GameCreationProperties.SurfaceTypeSpawnDetails spawnDetails;
+    private SurfaceTypeSpawnDetails spawnDetails;
 
     @Test
     public void createSurfaceTypeList_initial_remove() {

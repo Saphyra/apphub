@@ -7,8 +7,9 @@ import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
 import com.github.saphyra.apphub.lib.geometry.RandomCoordinateProvider;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.SolarSystemProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -27,7 +28,7 @@ public class SolarSystemCoordinateProviderTest {
     private static final Double DISTANCE = 11d;
 
     @Mock
-    private GameCreationProperties gameCreationProperties;
+    private GameProperties gameCreationProperties;
 
     @Mock
     private Random random;
@@ -45,7 +46,7 @@ public class SolarSystemCoordinateProviderTest {
     private SolarSystem anchorSolarSystem;
 
     @Mock
-    private GameCreationProperties.SolarSystemProperties solarSystemProperties;
+    private SolarSystemProperties solarSystemProperties;
 
     @Mock
     private CoordinateModel coordinateModel;

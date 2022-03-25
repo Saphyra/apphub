@@ -5,7 +5,8 @@ import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGa
 import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.SolarSystemProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -23,7 +24,7 @@ public class ExpectedPlanetCountCalculatorTest {
     private static final Double AMOUNT_MULTIPLIER = 23d;
 
     @Mock
-    private GameCreationProperties gameCreationProperties;
+    private GameProperties gameCreationProperties;
 
     @Mock
     private Random random;
@@ -35,7 +36,7 @@ public class ExpectedPlanetCountCalculatorTest {
     private SkyXploreGameCreationSettingsRequest settings;
 
     @Mock
-    private GameCreationProperties.SolarSystemProperties solarSystemProperties;
+    private SolarSystemProperties solarSystemProperties;
 
     @Test
     public void calculateExpectedPlanetCount() {

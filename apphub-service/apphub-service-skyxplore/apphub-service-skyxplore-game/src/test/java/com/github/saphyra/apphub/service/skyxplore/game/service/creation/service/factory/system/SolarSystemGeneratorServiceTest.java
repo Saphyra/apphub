@@ -5,8 +5,9 @@ import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGa
 import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.PlanetProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -29,7 +30,7 @@ public class SolarSystemGeneratorServiceTest {
     private static final Integer MAX_PLANETS_PER_SYSTEM = 354;
 
     @Mock
-    private GameCreationProperties gameCreationProperties;
+    private GameProperties gameCreationProperties;
 
     @Mock
     private Random random;
@@ -50,7 +51,7 @@ public class SolarSystemGeneratorServiceTest {
     private SkyXploreGameCreationSettingsRequest settings;
 
     @Mock
-    private GameCreationProperties.PlanetProperties planetProperties;
+    private PlanetProperties planetProperties;
 
     @Mock
     private SolarSystem solarSystem;

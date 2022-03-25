@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.surface;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 class DefaultSurfaceTypeListProvider {
     private final List<SurfaceType> surfaceTypes;
 
-    DefaultSurfaceTypeListProvider(GameCreationProperties properties) {
+    DefaultSurfaceTypeListProvider(GameProperties properties) {
         surfaceTypes = properties.getSurface()
             .getSpawnDetails()
             .stream()

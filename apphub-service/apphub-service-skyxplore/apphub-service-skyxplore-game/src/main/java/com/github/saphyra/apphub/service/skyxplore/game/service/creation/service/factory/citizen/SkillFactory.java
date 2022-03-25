@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Skill;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 class SkillFactory {
-    private final GameCreationProperties properties;
+    private final GameProperties properties;
     private final IdGenerator idGenerator;
 
     Skill create(SkillType skillType, UUID citizenId) {
@@ -24,7 +24,7 @@ class SkillFactory {
             .skillType(skillType)
             .level(1)
             .experience(0)
-            .nextLevel(properties.getSkill().getInitialNextLevel())
+            .nextLevel(properties.getCitizen().getSkill().getExperiencePerLevel())
             .build();
     }
 }

@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SolarSystemNames;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.planet.SystemPopulationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ class SolarSystemPlacementService {
     private final SolarSystemNames solarSystemNames;
     private final SystemPopulationService systemPopulationService;
     private final SolarSystemFactory solarSystemFactory;
-    private final GameCreationProperties gameCreationProperties;
+    private final GameProperties gameCreationProperties;
 
     SolarSystem placeSolarSystem(UUID gameId, SkyXploreGameCreationSettingsRequest settings, List<SolarSystem> solarSystems, int numberOfPlanetsToGenerate) {
         UUID solarSystemId = idGenerator.randomUuid();
