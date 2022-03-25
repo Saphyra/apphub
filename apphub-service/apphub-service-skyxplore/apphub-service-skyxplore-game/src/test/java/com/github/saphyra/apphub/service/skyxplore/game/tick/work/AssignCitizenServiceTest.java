@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.tick.work;
 
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.Assignment;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCache;
@@ -19,7 +21,7 @@ import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AssignCitizenServiceTest {
-    private static final int WORK_POINTS_PER_TICK = 100;
+    private static final int WORK_POINTS_PER_SECONDS = 100;
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
     private static final UUID CITIZEN_ID = UUID.randomUUID();
@@ -35,9 +37,18 @@ public class AssignCitizenServiceTest {
     @Mock
     private TickCacheItem tickCacheItem;
 
+    @Mock
+    private GameProperties gameProperties;
+
+    @Mock
+    private CitizenProperties citizenProperties;
+
     @Before
     public void setUp() {
-        underTest = new AssignCitizenService(tickCache, WORK_POINTS_PER_TICK);
+        given(gameProperties.getCitizen()).willReturn(citizenProperties);
+        given(citizenProperties.getWorkPointsPerSeconds()).willReturn(WORK_POINTS_PER_SECONDS);
+
+        underTest = new AssignCitizenService(tickCache, gameProperties);
     }
 
     @Test
@@ -54,6 +65,6 @@ public class AssignCitizenServiceTest {
 
         assertThat(result.getCitizen()).isEqualTo(citizen);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getWorkPointsLeft()).isEqualTo(WORK_POINTS_PER_TICK);
+        assertThat(result.getWorkPointsLeft()).isEqualTo(WORK_POINTS_PER_SECONDS);
     }
 }

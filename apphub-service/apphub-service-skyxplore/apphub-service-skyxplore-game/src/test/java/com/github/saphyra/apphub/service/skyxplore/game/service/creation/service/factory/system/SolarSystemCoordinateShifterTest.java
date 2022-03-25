@@ -3,8 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.SolarSystemProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -28,7 +29,7 @@ public class SolarSystemCoordinateShifterTest {
     private static final Integer MAX_DISTANCE = 523412;
 
     @Mock
-    private GameCreationProperties gameCreationProperties;
+    private GameProperties gameCreationProperties;
 
     @InjectMocks
     private SolarSystemCoordinateShifter underTest;
@@ -46,7 +47,7 @@ public class SolarSystemCoordinateShifterTest {
     private CoordinateModel coordinateModel2;
 
     @Mock
-    private GameCreationProperties.SolarSystemProperties solarSystemProperties;
+    private SolarSystemProperties solarSystemProperties;
 
     @Test
     public void shiftCoordinates() {

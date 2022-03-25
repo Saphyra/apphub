@@ -4,7 +4,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game_setting.AiPresence;
 import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.PlayerProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,8 +21,9 @@ public class AiCountCalculatorTest {
     private static final double PLAYER_COUNT = 2453d;
     private static final Double MIN_AI_SPAWN_CHANCE = 3124d;
     private static final Double MAX_AI_SPAWN_CHANCE = 65234d;
+
     @Mock
-    private GameCreationProperties gameCreationProperties;
+    private GameProperties gameCreationProperties;
 
     @Mock
     private Random random;
@@ -30,7 +32,7 @@ public class AiCountCalculatorTest {
     private AiCountCalculator underTest;
 
     @Mock
-    private GameCreationProperties.PlayerCreationProperties playerCreationProperties;
+    private PlayerProperties playerCreationProperties;
 
     @Before
     public void setUp() {

@@ -2,7 +2,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenSkillProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Skill;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +24,7 @@ public class SkillFactoryTest {
     private static final UUID SKILL_ID = UUID.randomUUID();
 
     @Mock
-    private GameCreationProperties gameCreationProperties;
+    private GameProperties gameProperties;
 
     @Mock
     private IdGenerator idGenerator;
@@ -31,13 +33,18 @@ public class SkillFactoryTest {
     private SkillFactory underTest;
 
     @Mock
-    private GameCreationProperties.SkillProperties skillProperties;
+    private CitizenProperties citizenProperties;
+
+    @Mock
+    private CitizenSkillProperties skillProperties;
 
     @Test
     public void create() {
         given(idGenerator.randomUuid()).willReturn(SKILL_ID);
-        given(gameCreationProperties.getSkill()).willReturn(skillProperties);
-        given(skillProperties.getInitialNextLevel()).willReturn(INITIAL_NEXT_LEVEL);
+        given(gameProperties.getCitizen()).willReturn(citizenProperties);
+        given(citizenProperties.getSkill()).willReturn(skillProperties);
+        given(gameProperties.getCitizen().getSkill()).willReturn(skillProperties);
+        given(skillProperties.getExperiencePerLevel()).willReturn(INITIAL_NEXT_LEVEL);
 
         Skill result = underTest.create(SkillType.AIMING, CITIZEN_ID);
 

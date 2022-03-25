@@ -7,9 +7,10 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SolarSystemNames;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.SolarSystemProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.planet.SystemPopulationService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,7 +52,7 @@ public class SolarSystemPlacementServiceTest {
     private SolarSystemFactory solarSystemFactory;
 
     @Mock
-    private GameCreationProperties gameCreationProperties;
+    private GameProperties gameCreationProperties;
 
     @InjectMocks
     private SolarSystemPlacementService underTest;
@@ -63,7 +64,7 @@ public class SolarSystemPlacementServiceTest {
     private SolarSystem existingSolarSystem;
 
     @Mock
-    private GameCreationProperties.SolarSystemProperties solarSystemProperties;
+    private SolarSystemProperties solarSystemProperties;
 
     @Mock
     private Planet planet;

@@ -2,12 +2,15 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierData;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.RandomNameProvider;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenMoraleProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenSatietyProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Skill;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierData;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.RandomNameProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -41,7 +44,7 @@ public class CitizenFactoryTest {
     private SkillFactory skillFactory;
 
     @Mock
-    private GameCreationProperties properties;
+    private GameProperties properties;
 
     @Mock
     private SoldierDataFactory soldierDataFactory;
@@ -55,7 +58,14 @@ public class CitizenFactoryTest {
     @Mock
     private SoldierData soldierData;
 
-    private final GameCreationProperties.CitizenProperties citizenProperties = new GameCreationProperties.CitizenProperties(0, DEFAULT_MORALE, DEFAULT_SATIETY);
+    @Mock
+    private CitizenProperties citizenProperties;
+
+    @Mock
+    private CitizenMoraleProperties moraleProperties;
+
+    @Mock
+    private CitizenSatietyProperties satietyProperties;
 
     @Test
     public void create() {
@@ -63,6 +73,10 @@ public class CitizenFactoryTest {
         given(randomNameProvider.getRandomName(Collections.emptyList())).willReturn(CITIZEN_NAME);
         given(skillFactory.create(any(), eq(CITIZEN_ID))).willReturn(skill);
         given(properties.getCitizen()).willReturn(citizenProperties);
+        given(citizenProperties.getMorale()).willReturn(moraleProperties);
+        given(citizenProperties.getSatiety()).willReturn(satietyProperties);
+        given(moraleProperties.getMax()).willReturn(DEFAULT_MORALE);
+        given(satietyProperties.getMax()).willReturn(DEFAULT_SATIETY);
         given(soldierDataFactory.create()).willReturn(soldierData);
 
         Citizen citizen = underTest.create(PLANET_ID);

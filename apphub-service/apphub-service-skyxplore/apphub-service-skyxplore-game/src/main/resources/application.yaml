@@ -6,124 +6,124 @@ abandonedGameExpirationSeconds: 300
 
 game:
   tick:
-    delaySeconds: 5
-    schedulerThreadCount: 4
-  saver:
-    maxChunkSize: 500
-  creation:
-    queueSize: 100
-    solarSystem:
-      solarSystemDistanceMultiplier: #Multiply all the SolarSystem's coordinates with this value (After moving them to be positive)
-        SMALLEST: 1
-        SMALL: 1.5
-        MEDIUM: 2
-        LARGE: 3
-      solarSystemDistance:
-        min: 100
+    delaySeconds: 5 #todo remove
+    schedulerThreadCount: 4 #todo remove
+  itemSaverMaxChunkSize: 500
+  creationQueueSize: 100
+  solarSystem:
+    solarSystemDistanceMultiplier: #Multiply all the SolarSystem's coordinates with this value (After moving them to be positive)
+      SMALLEST: 1
+      SMALL: 1.5
+      MEDIUM: 2
+      LARGE: 3
+    solarSystemDistance:
+      min: 100
+      max: 500
+    minPlanetDistance: 100
+    amountMultiplier: # x number of total players. The expectedPlanetCount and the planetsPerSystemRange determinates the final amount of SolarSystems
+      SMALL:
+        min: 1
+        max: 1.75
+      MEDIUM:
+        min: 1.5
+        max: 3
+      COMMON:
+        min: 2
+        max: 4
+      RANDOM:
+        min: 1
+        max: 4
+    radius:
+      SMALL:
+        min: 250
         max: 500
-      minPlanetDistance: 100
-      amountMultiplier: # x number of total players. The expectedPlanetCount and the planetsPerSystemRange determinates the final amount of SolarSystems
-        SMALL:
-          min: 1
-          max: 1.75
-        MEDIUM:
-          min: 1.5
-          max: 3
-        COMMON:
-          min: 2
-          max: 4
-        RANDOM:
-          min: 1
-          max: 4
-      radius:
-        SMALL:
-          min: 250
-          max: 500
-        MEDIUM:
-          min: 500
-          max: 750
-        LARGE:
-          min: 750
-          max: 1000
-        RANDOM:
-          min: 500
-          max: 3000
-    planet:
-      planetsPerSystem:
-        SMALL:
-          min: 1
-          max: 3
-        MEDIUM:
-          min: 2
-          max: 6
-        LARGE:
-          min: 3
-          max: 9
-        RANDOM:
-          min: 1
-          max: 9
-      planetSize:
-        SMALL:
-          min: 5
-          max: 10
-        MEDIUM:
-          min: 10
-          max: 20
-        LARGE:
-          min: 15
-          max: 30
-        RANDOM:
-          min: 5
-          max: 30
-    surface:
-      spawnDetails:
-        - surfaceName: COAL_FIELD
-          spawnRate: 1
-          optional: true
-        - surfaceName: DESERT
-          spawnRate: 3
-        - surfaceName: FOREST
-          spawnRate: 2
-        - surfaceName: LAKE
-          spawnRate: 1
-        - surfaceName: MOUNTAIN
-          spawnRate: 2
-          optional: false
-        - surfaceName: OIL_FIELD
-          spawnRate: 1
-        - surfaceName: ORE_FIELD
-          spawnRate: 1
-        - surfaceName: VOLCANO
-          spawnRate: 2
-          optional: true
-    player:
-      aiSpawnChance: # x number of players
-        NONE:
-          min: 0
-          max: 0
-        RARE:
-          min: 0.25
-          max: 1.25
-        COMMON:
-          min: 0.5
-          max: 1.5
-        EVERYWHERE:
-          min: 1
-          max: 3
-    citizen:
-      hitPointsPerStamina: ${game.citizen.skill.experiencePerLevel}
-      defaultMorale: ${game.citizen.maxMorale}
-      defaultSatiety: 1000
-    skill:
-      initialNextLevel: 1000
+      MEDIUM:
+        min: 500
+        max: 750
+      LARGE:
+        min: 750
+        max: 1000
+      RANDOM:
+        min: 500
+        max: 3000
+  planet:
+    planetsPerSystem:
+      SMALL:
+        min: 1
+        max: 3
+      MEDIUM:
+        min: 2
+        max: 6
+      LARGE:
+        min: 3
+        max: 9
+      RANDOM:
+        min: 1
+        max: 9
+    planetSize:
+      SMALL:
+        min: 5
+        max: 10
+      MEDIUM:
+        min: 10
+        max: 20
+      LARGE:
+        min: 15
+        max: 30
+      RANDOM:
+        min: 5
+        max: 30
+  surface:
+    spawnDetails:
+      - surfaceName: COAL_FIELD
+        spawnRate: 1
+        optional: true
+      - surfaceName: DESERT
+        spawnRate: 3
+      - surfaceName: FOREST
+        spawnRate: 2
+      - surfaceName: LAKE
+        spawnRate: 1
+      - surfaceName: MOUNTAIN
+        spawnRate: 2
+        optional: false
+      - surfaceName: OIL_FIELD
+        spawnRate: 1
+      - surfaceName: ORE_FIELD
+        spawnRate: 1
+      - surfaceName: VOLCANO
+        spawnRate: 2
+        optional: true
+  player:
+    aiSpawnChance: # x number of players
+      NONE:
+        min: 0
+        max: 0
+      RARE:
+        min: 0.25
+        max: 1.25
+      COMMON:
+        min: 0.5
+        max: 1.5
+      EVERYWHERE:
+        min: 1
+        max: 3
   citizen:
-    maxMorale: 1600
-    moraleEfficiencyDropUnder: 800
-    minMoraleEfficiency: 0.25
-    skillLevelMultiplier: 0.1
-    workPointsPerTick: 100
+    workPointsPerSeconds: 100
+    morale:
+      max: 1600
+      workEfficiencyDropUnder: 800
+      minEfficiency: 0.25
+      moralePerWorkPoints: 1
+      regenPerSecond: 20
     skill:
       experiencePerLevel: 1000
+      skillLevelMultiplier: 0.1
+    satiety:
+      max: 10000
+      satietyDecreasedPerSecond: 50
+    hitPoints:
+      perStaminaLevel: 1000
 
 logging:
   level:

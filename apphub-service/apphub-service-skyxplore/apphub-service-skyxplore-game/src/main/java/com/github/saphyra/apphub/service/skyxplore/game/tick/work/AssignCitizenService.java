@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.tick.work;
 
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.Assignment;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCache;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -17,10 +17,10 @@ public class AssignCitizenService {
 
     public AssignCitizenService(
         TickCache tickCache,
-        @Value("${game.citizen.workPointsPerTick}") int workPointsPerTick
+        GameProperties gameProperties
     ) {
         this.tickCache = tickCache;
-        this.workPointsPerTick = workPointsPerTick;
+        this.workPointsPerTick = gameProperties.getCitizen().getWorkPointsPerSeconds();
     }
 
     public Assignment assignCitizen(UUID gameId, Citizen citizen, UUID location) {

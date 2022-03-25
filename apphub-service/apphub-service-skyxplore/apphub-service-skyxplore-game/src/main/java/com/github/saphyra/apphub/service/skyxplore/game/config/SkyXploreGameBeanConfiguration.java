@@ -17,7 +17,7 @@ import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleManda
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
 import com.github.saphyra.apphub.lib.skyxplore.data.SkyXploreDataConfig;
-import org.springframework.beans.factory.annotation.Value;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -67,8 +67,8 @@ public class SkyXploreGameBeanConfiguration {
     }
 
     @Bean
-    BlockingQueue<SkyXploreGameCreationRequest> gameCreationQueue(@Value("${game.creation.queueSize}") Integer queueSize) {
-        return new ArrayBlockingQueue<>(queueSize);
+    BlockingQueue<SkyXploreGameCreationRequest> gameCreationQueue(GameProperties gameProperties) {
+        return new ArrayBlockingQueue<>(gameProperties.getCreationQueueSize());
     }
 
     @Bean

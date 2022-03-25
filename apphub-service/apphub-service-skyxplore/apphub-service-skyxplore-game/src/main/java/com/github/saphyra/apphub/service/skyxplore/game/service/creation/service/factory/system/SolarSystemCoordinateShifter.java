@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 class SolarSystemCoordinateShifter {
-    private final GameCreationProperties gameCreationProperties;
+    private final GameProperties gameCreationProperties;
 
     void shiftCoordinates(List<SolarSystem> solarSystems) {
         double minX = solarSystems.stream()

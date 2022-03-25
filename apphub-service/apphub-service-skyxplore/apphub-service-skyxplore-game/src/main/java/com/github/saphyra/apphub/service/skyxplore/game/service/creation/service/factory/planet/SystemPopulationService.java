@@ -5,8 +5,8 @@ import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Builder
 public class SystemPopulationService {
     private final Random random;
-    private final GameCreationProperties properties;
+    private final GameProperties properties;
     private final PlanetCoordinateProvider coordinateProvider;
     private final ExecutorServiceBean executorServiceBean;
     private final PlanetFactory planetFactory;
