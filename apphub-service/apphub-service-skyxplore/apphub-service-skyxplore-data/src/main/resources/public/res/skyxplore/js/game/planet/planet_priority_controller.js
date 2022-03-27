@@ -2,8 +2,8 @@
     const priorityTypes = ["construction", "manufacturing", "extraction"];
 
     const idMasks = {
-        planetPrioritiesConstructionInput: new IdMask("planet-priorities-*-input"),
-        planetPrioritiesConstructionValue: new IdMask("planet-priorities-*-value"),
+        planetPrioritiesInput: new IdMask("planet-priorities-*-input"),
+        planetPrioritiesValue: new IdMask("planet-priorities-*-value"),
     }
 
     pageLoader.addLoader(setUpPriorityInputs, "PlanetPriority set up priority inputs");
@@ -26,8 +26,8 @@
             .forEach(setPriorities);
 
         function setPriorities(priorityType, priority){
-            document.getElementById(idMasks.planetPrioritiesConstructionInput.get(priorityType)).value = priority;
-            document.getElementById(idMasks.planetPrioritiesConstructionValue.get(priorityType)).innerHTML = priority;
+            document.getElementById(idMasks.planetPrioritiesInput.get(priorityType)).value = priority;
+            document.getElementById(idMasks.planetPrioritiesValue.get(priorityType)).innerHTML = priority;
         }
     }
 
