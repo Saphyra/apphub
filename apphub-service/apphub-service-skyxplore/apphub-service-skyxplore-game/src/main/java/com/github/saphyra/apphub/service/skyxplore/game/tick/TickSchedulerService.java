@@ -32,6 +32,5 @@ public class TickSchedulerService {
 
     public void addGame(Game game) {
         ScheduledFuture<?> scheduledFuture = scheduler.scheduleWithFixedDelay(() -> processTickService.processTick(game), delaySeconds, delaySeconds, TimeUnit.SECONDS);
-        game.setTickScheduler(scheduledFuture);
     }
 }

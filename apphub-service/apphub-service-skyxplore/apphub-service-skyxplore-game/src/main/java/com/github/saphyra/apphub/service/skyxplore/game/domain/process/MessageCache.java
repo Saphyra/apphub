@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.tick.cache;
+package com.github.saphyra.apphub.service.skyxplore.game.domain.process;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
@@ -15,7 +15,7 @@ public class MessageCache extends ConcurrentHashMap<BiWrapper<UUID, BiWrapper<We
     }
 
     public void process(ExecutorServiceBean executorServiceBean) {
-        log.debug("Sending {} amount of WS messages.", size());
+        log.info("Sending {} amount of WS messages.", size()); //TODO log level
         if (!isEmpty()) {
             values()
                 .forEach(executorServiceBean::execute);

@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.ser
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.Assignment;
-import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.MessageCache;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.process.MessageCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCacheItem;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.work.AssignCitizenService;

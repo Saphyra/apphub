@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.tick.cache;
+package com.github.saphyra.apphub.service.skyxplore.game.domain.process;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;

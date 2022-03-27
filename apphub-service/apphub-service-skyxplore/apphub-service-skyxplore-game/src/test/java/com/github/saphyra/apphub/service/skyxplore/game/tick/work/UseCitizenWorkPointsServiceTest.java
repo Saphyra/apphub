@@ -11,8 +11,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Skill;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.CitizenToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.SkillToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.GameItemCache;
-import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.MessageCache;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.process.GameItemCache;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.process.MessageCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCacheItem;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;

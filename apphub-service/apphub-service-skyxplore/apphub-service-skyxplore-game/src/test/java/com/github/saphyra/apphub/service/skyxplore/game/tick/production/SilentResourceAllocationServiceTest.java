@@ -17,8 +17,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.R
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.AllocatedResourceToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ReservedStorageToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.GameItemCache;
-import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.MessageCache;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.process.GameItemCache;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.process.MessageCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCacheItem;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;

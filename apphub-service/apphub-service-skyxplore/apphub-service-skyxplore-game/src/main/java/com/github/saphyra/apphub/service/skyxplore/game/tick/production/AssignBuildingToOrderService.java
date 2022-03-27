@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.ProductionOrder;
-import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.GameItemCache;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.process.GameItemCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 @Configuration
 @Slf4j
 public class GameProperties {
+    private int eventQueueSize;
     private int itemSaverMaxChunkSize;
     private int creationQueueSize;
     private SolarSystemProperties solarSystem;

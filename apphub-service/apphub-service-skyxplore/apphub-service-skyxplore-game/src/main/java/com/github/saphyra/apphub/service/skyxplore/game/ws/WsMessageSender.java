@@ -62,7 +62,7 @@ public class WsMessageSender {
             .getPlayers()
             .get(userId)
             .getOpenedPage();
-        log.info("{} - RequiredTypes: {}, pageId: {}", openedPage, requiredPageTypes, pageId);
+        log.debug("{} - RequiredTypes: {}, pageId: {}", openedPage, requiredPageTypes, pageId);
 
         if (requiredPageTypes.contains(openedPage.getPageType())) {
             if (isNull(pageId) || pageId.equals(openedPage.getPageId())) {

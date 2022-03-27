@@ -7,6 +7,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.process.EventLoopFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.process.ProcessContext;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.home_planet.HomePlanetSetupService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.player.AiFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.player.PlayerFactory;
@@ -31,6 +33,8 @@ public class GameFactory {
     private final DateTimeUtil dateTimeUtil;
     private final PlayerFactory playerFactory;
     private final AiFactory aiFactory;
+    private final EventLoopFactory eventLoopFactory;
+    private final ProcessContext processContext;
 
     public Game create(SkyXploreGameCreationRequest request) {
         UUID gameId = idGenerator.randomUuid();
@@ -58,6 +62,9 @@ public class GameFactory {
             .chat(chatFactory.create(request.getMembers()))
             .gameName(request.getGameName())
             .lastPlayed(dateTimeUtil.getCurrentDate())
-            .build();
+            .eventLoop(eventLoopFactory.create()) //TODO unit test
+            .processContext(processContext) //TODO unit test
+            .build()
+            .gameProcess();
     }
 }

@@ -74,7 +74,6 @@ public class GameDaoTest {
     @Test
     public void delete() {
         underTest.save(game);
-        given(game.getTickScheduler()).willReturn(scheduledFuture);
 
         underTest.delete(game);
 

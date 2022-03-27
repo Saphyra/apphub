@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.tick.cache;
+package com.github.saphyra.apphub.service.skyxplore.game.domain.process;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
@@ -34,7 +34,7 @@ public class GameItemCache {
     }
 
     public void process(GameDataProxy gameDataProxy) {
-        log.debug("Saving {} number of gameItems", items.size());
+        log.info("Saving {} number of gameItems", items.size()); //TODO log level
 
         if (!items.isEmpty()) {
             gameDataProxy.saveItems(items.values());

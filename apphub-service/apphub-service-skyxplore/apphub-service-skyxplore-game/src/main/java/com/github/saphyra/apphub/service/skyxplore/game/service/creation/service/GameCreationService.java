@@ -33,7 +33,6 @@ public class GameCreationService {
     private final BlockingQueue<SkyXploreGameCreationRequest> requests;
     private final GameSaverService gameSaverService;
     private final ErrorReporterService errorReporterService;
-    private final TickSchedulerService tickSchedulerService;
 
     @Builder
     public GameCreationService(
@@ -53,7 +52,6 @@ public class GameCreationService {
         this.gameSaverService = gameSaverService;
         executorServiceBean = executorServiceBeanFactory.create(Executors.newFixedThreadPool(3));
         this.errorReporterService = errorReporterService;
-        this.tickSchedulerService = tickSchedulerService;
     }
 
     private void create(SkyXploreGameCreationRequest request) {
@@ -74,8 +72,6 @@ public class GameCreationService {
             .build();
 
         messageSenderProxy.sendToLobby(message);
-
-        tickSchedulerService.addGame(game);
     }
 
     @PostConstruct

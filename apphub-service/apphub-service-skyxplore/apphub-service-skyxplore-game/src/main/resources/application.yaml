@@ -8,6 +8,7 @@ game:
   tick:
     delaySeconds: 5 #todo remove
     schedulerThreadCount: 4 #todo remove
+  eventQueueSize: 1000
   itemSaverMaxChunkSize: 500
   creationQueueSize: 100
   solarSystem:
