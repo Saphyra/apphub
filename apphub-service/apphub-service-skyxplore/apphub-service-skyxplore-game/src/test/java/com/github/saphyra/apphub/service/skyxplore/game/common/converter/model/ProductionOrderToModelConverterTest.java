@@ -46,7 +46,7 @@ public class ProductionOrderToModelConverterTest {
 
         assertThat(result.getId()).isEqualTo(PRODUCTION_ORDER_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getType()).isEqualTo(GameItemType.PRODUCTION_ORDER);
+        assertThat(result.getProcessType()).isEqualTo(GameItemType.PRODUCTION_ORDER);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getLocationType()).isEqualTo(LocationType.PRODUCTION.name());
         assertThat(result.getAssignee()).isEqualTo(ASSIGNEE);

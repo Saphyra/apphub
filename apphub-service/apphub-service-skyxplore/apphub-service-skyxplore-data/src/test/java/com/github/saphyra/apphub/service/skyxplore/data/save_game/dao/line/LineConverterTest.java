@@ -53,7 +53,7 @@ public class LineConverterTest {
 
         assertThat(result.getId()).isEqualTo(LINE_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getType()).isEqualTo(GameItemType.LINE);
+        assertThat(result.getProcessType()).isEqualTo(GameItemType.LINE);
         assertThat(result.getReferenceId()).isEqualTo(REFERENCE_ID);
         assertThat(result.getA()).isEqualTo(A);
         assertThat(result.getB()).isEqualTo(B);

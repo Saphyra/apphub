@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.tick.work;
+package com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenMoraleProperties;

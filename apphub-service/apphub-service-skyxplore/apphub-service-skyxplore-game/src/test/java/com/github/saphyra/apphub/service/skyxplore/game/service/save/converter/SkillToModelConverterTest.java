@@ -42,7 +42,7 @@ public class SkillToModelConverterTest {
 
         assertThat(result.get(0).getId()).isEqualTo(SKILL_ID);
         assertThat(result.get(0).getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.get(0).getType()).isEqualTo(GameItemType.SKILL);
+        assertThat(result.get(0).getProcessType()).isEqualTo(GameItemType.SKILL);
         assertThat(result.get(0).getCitizenId()).isEqualTo(CITIZEN_ID);
         assertThat(result.get(0).getSkillType()).isEqualTo(SkillType.AIMING.name());
         assertThat(result.get(0).getLevel()).isEqualTo(LEVEL);

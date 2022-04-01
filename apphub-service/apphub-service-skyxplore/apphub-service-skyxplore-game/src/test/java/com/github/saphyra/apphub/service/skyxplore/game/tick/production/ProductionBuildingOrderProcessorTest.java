@@ -15,7 +15,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.ProductionOrder;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.Assignment;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.process.GameItemCache;
+import com.github.saphyra.apphub.service.skyxplore.game.process.cache.GameItemCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCacheItem;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.work.AssignCitizenService;

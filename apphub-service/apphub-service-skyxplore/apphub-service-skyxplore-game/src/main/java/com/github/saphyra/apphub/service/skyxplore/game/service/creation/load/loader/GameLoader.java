@@ -5,11 +5,12 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.process.EventLoopFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.process.ProcessContext;
+import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessContext;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.ChatFactory;
@@ -37,6 +38,7 @@ public class GameLoader {
     private final MessageSenderProxy messageSenderProxy;
     private final EventLoopFactory eventLoopFactory;
     private final ProcessContext processContext;
+    private final ExecutorServiceBeanFactory executorServiceBeanFactory;
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -53,6 +55,7 @@ public class GameLoader {
             .chat(chatFactory.create(players.values()))
             .eventLoop(eventLoopFactory.create()) //TODO unit test
             .processContext(processContext) //TODO unit test
+            .timerThread(executorServiceBeanFactory.createScheduled(1)) //TODO unit test
             .build()
             .gameProcess();
 

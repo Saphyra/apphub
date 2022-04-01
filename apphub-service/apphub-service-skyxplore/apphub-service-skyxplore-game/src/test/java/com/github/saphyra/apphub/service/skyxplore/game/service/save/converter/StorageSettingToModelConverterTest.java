@@ -52,7 +52,7 @@ public class StorageSettingToModelConverterTest {
 
         assertThat(result.get(0).getId()).isEqualTo(STORAGE_SETTING_ID);
         assertThat(result.get(0).getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.get(0).getType()).isEqualTo(GameItemType.STORAGE_SETTING);
+        assertThat(result.get(0).getProcessType()).isEqualTo(GameItemType.STORAGE_SETTING);
         assertThat(result.get(0).getLocation()).isEqualTo(LOCATION);
         assertThat(result.get(0).getLocationType()).isEqualTo(LocationType.PLANET.name());
         assertThat(result.get(0).getDataId()).isEqualTo(DATA_ID);

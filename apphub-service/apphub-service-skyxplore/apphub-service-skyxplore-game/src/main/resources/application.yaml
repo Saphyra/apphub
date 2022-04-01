@@ -111,6 +111,7 @@ game:
         max: 3
   citizen:
     workPointsPerSeconds: 100
+    maxWorkPointsBatch: 1000
     morale:
       max: 1600
       workEfficiencyDropUnder: 800

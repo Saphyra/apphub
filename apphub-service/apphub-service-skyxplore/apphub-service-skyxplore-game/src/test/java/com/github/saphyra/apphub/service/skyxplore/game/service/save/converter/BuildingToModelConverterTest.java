@@ -36,7 +36,7 @@ public class BuildingToModelConverterTest {
 
         assertThat(result.getId()).isEqualTo(BUILDING_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getType()).isEqualTo(GameItemType.BUILDING);
+        assertThat(result.getProcessType()).isEqualTo(GameItemType.BUILDING);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getLevel()).isEqualTo(LEVEL);
         assertThat(result.getSurfaceId()).isEqualTo(SURFACE_ID);

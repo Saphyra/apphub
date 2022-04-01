@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.domain.process;
+package com.github.saphyra.apphub.service.skyxplore.game.process.cache;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;

@@ -15,6 +15,10 @@ public class GameSleepService {
     public void sleepASecond(Game game) {
         long timeout = 1000L;
 
+        sleep(game, timeout);
+    }
+
+    public void sleep(Game game, long timeout) {
         while (timeout > 0) {
             long sleep = Math.min(100, timeout);
             sleepService.sleep(sleep);

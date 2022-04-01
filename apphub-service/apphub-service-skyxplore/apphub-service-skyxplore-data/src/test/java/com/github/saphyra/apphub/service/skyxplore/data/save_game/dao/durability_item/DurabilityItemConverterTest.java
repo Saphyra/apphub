@@ -53,7 +53,7 @@ public class DurabilityItemConverterTest {
 
         assertThat(result.getId()).isEqualTo(DURABILITY_ITEM_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getType()).isEqualTo(GameItemType.DURABILITY_ITEM_MODEL);
+        assertThat(result.getProcessType()).isEqualTo(GameItemType.DURABILITY_ITEM_MODEL);
         assertThat(result.getParent()).isEqualTo(PARENT);
         assertThat(result.getMetadata()).isEqualTo(METADATA);
         assertThat(result.getMaxDurability()).isEqualTo(MAX_DURABILITY);

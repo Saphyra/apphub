@@ -80,7 +80,7 @@ public class SkillConverterTest {
 
         assertThat(result.getId()).isEqualTo(SKILL_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getType()).isEqualTo(GameItemType.SKILL);
+        assertThat(result.getProcessType()).isEqualTo(GameItemType.SKILL);
         assertThat(result.getCitizenId()).isEqualTo(CITIZEN_ID);
         assertThat(result.getSkillType()).isEqualTo(SKILL_TYPE);
         assertThat(result.getLevel()).isEqualTo(LEVEL);

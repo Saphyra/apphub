@@ -10,7 +10,6 @@ import java.util.List;
 @Data
 public class ProductionData {
     private List<SurfaceType> placed;
-    private Integer maxBatchSize;
     private ConstructionRequirements constructionRequirements;
     private SkillType requiredSkill;
 }

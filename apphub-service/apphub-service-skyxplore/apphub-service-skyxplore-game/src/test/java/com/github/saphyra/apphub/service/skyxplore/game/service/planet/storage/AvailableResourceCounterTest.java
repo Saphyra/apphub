@@ -1,10 +1,11 @@
-package com.github.saphyra.apphub.service.skyxplore.game.tick.production;
+package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResources;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AvailableResourceCounter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

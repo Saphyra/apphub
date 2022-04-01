@@ -3,12 +3,13 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.process.EventLoopFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.process.ProcessContext;
+import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessContext;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.home_planet.HomePlanetSetupService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.player.AiFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.player.PlayerFactory;
@@ -35,6 +36,7 @@ public class GameFactory {
     private final AiFactory aiFactory;
     private final EventLoopFactory eventLoopFactory;
     private final ProcessContext processContext;
+    private final ExecutorServiceBeanFactory executorServiceBeanFactory;
 
     public Game create(SkyXploreGameCreationRequest request) {
         UUID gameId = idGenerator.randomUuid();
@@ -64,6 +66,7 @@ public class GameFactory {
             .lastPlayed(dateTimeUtil.getCurrentDate())
             .eventLoop(eventLoopFactory.create()) //TODO unit test
             .processContext(processContext) //TODO unit test
+            .timerThread(executorServiceBeanFactory.createScheduled(1)) //TODO unit test
             .build()
             .gameProcess();
     }

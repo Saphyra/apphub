@@ -87,7 +87,7 @@ public class CitizenConverterTest {
 
         assertThat(result.getId()).isEqualTo(CITIZEN_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getType()).isEqualTo(GameItemType.CITIZEN);
+        assertThat(result.getProcessType()).isEqualTo(GameItemType.CITIZEN);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
         assertThat(result.getName()).isEqualTo(NAME);

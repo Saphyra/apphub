@@ -13,10 +13,8 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -36,18 +34,17 @@ public class Planet {
     private final int size;
     private final SurfaceMap surfaces;
     private UUID owner;
+    @Builder.Default
+    private final BuildingAllocations buildingAllocations = new BuildingAllocations(); //BuildingId <-> List<ProcessId> TODO save and load field
+    private final CitizenAllocations citizenAllocations = new CitizenAllocations(); //CitizenId <-> ProcessId TODO save and load field
 
     @Builder.Default
     private final OptionalMap<UUID, Citizen> population = new OptionalHashMap<>();
 
-    @Builder.Default
-    private final StorageDetails storageDetails = StorageDetails.builder().build();
+    private final StorageDetails storageDetails;
 
     @Builder.Default
     private final Map<PriorityType, Integer> priorities = getDefaultPriorities();
-
-    @Builder.Default
-    private final Set<ProductionOrder> orders = new HashSet<>();
 
     private static Map<PriorityType, Integer> getDefaultPriorities() {
         return Arrays.stream(PriorityType.values())

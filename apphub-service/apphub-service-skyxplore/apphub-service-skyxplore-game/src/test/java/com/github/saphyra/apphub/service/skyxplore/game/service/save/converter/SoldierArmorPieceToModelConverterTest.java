@@ -41,7 +41,7 @@ public class SoldierArmorPieceToModelConverterTest {
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getId()).isEqualTo(ENTITY_ID);
         assertThat(result.get(0).getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.get(0).getType()).isEqualTo(GameItemType.DURABILITY_ITEM_MODEL);
+        assertThat(result.get(0).getProcessType()).isEqualTo(GameItemType.DURABILITY_ITEM_MODEL);
         assertThat(result.get(0).getMaxDurability()).isEqualTo(MAX_DURABILITY);
         assertThat(result.get(0).getCurrentDurability()).isEqualTo(CURRENT_DURABILITY);
         assertThat(result.get(0).getParent()).isEqualTo(CITIZEN_ID);

@@ -77,7 +77,7 @@ public class PlayerConverterTest {
 
         assertThat(result.getId()).isEqualTo(PLAYER_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getType()).isEqualTo(GameItemType.PLAYER);
+        assertThat(result.getProcessType()).isEqualTo(GameItemType.PLAYER);
         assertThat(result.getUserId()).isEqualTo(USER_ID);
         assertThat(result.getAllianceId()).isEqualTo(ALLIANCE_ID);
         assertThat(result.getUsername()).isEqualTo(USERNAME);

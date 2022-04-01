@@ -2,11 +2,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.common;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.LineModel;
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.UUID;
@@ -30,7 +28,7 @@ public class LineModelFactoryTest {
 
         assertThat(result.getId()).isEqualTo(LINE_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getType()).isEqualTo(GameItemType.LINE);
+        assertThat(result.getProcessType()).isEqualTo(GameItemType.LINE);
         assertThat(result.getReferenceId()).isEqualTo(REFERENCE_ID);
         assertThat(result.getA()).isEqualTo(A);
         assertThat(result.getB()).isEqualTo(B);

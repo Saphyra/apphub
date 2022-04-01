@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.tick.cache;
 
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.process.GameItemCache;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.process.MessageCache;
+import com.github.saphyra.apphub.service.skyxplore.game.process.cache.GameItemCache;
+import com.github.saphyra.apphub.service.skyxplore.game.process.cache.MessageCache;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import lombok.Data;
 

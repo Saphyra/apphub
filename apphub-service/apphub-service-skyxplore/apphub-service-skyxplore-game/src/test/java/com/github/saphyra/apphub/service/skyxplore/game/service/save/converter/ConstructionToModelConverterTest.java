@@ -42,7 +42,7 @@ public class ConstructionToModelConverterTest {
 
         assertThat(result.getId()).isEqualTo(CONSTRUCTION_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getType()).isEqualTo(GameItemType.CONSTRUCTION);
+        assertThat(result.getProcessType()).isEqualTo(GameItemType.CONSTRUCTION);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getParallelWorkers()).isEqualTo(PARALLEL_WORKERS);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);

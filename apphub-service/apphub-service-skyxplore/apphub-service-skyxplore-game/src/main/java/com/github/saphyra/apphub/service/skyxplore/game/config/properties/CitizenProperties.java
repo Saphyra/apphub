@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class CitizenProperties {
     private int workPointsPerSeconds;
+    private int maxWorkPointsBatch;
     private CitizenMoraleProperties morale;
     private CitizenSkillProperties skill;
     private CitizenSatietyProperties satiety;

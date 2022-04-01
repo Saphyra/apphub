@@ -14,6 +14,6 @@ public class Building {
     private final UUID surfaceId;
     private final UUID buildingId;
     private final String dataId;
-    private int level;
-    private Construction construction;
+    private volatile int level;
+    private volatile Construction construction;
 }

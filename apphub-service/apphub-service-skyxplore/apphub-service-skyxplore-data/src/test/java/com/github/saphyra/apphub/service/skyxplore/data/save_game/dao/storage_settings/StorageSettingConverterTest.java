@@ -83,7 +83,7 @@ public class StorageSettingConverterTest {
 
         assertThat(result.getId()).isEqualTo(STORAGE_SETTING_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getType()).isEqualTo(GameItemType.STORAGE_SETTING);
+        assertThat(result.getProcessType()).isEqualTo(GameItemType.STORAGE_SETTING);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);

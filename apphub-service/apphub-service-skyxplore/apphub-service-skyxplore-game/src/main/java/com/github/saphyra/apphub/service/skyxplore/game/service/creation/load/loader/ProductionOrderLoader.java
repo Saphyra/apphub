@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO remove with all corresponding classes
 class ProductionOrderLoader {
     private final GameItemLoader gameItemLoader;
 

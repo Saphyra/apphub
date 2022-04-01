@@ -16,11 +16,11 @@ class StorageDetailsLoader {
     private final StoredResourceLoader storedResourceLoader;
     private final StorageSettingLoader storageSettingLoader;
 
-    StorageDetails load(UUID location) {
+    StorageDetails load(UUID gameId, UUID location) {
         return StorageDetails.builder()
             .allocatedResources(allocatedResourceLoader.load(location))
             .reservedStorages(reservedStorageLoader.load(location))
-            .storedResources(storedResourceLoader.load(location))
+            .storedResources(storedResourceLoader.load(gameId, location))
             .storageSettings(storageSettingLoader.load(location))
             .build();
     }

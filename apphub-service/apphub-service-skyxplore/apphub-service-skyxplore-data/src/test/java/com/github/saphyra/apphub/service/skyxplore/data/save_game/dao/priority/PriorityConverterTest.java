@@ -73,7 +73,7 @@ public class PriorityConverterTest {
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
         assertThat(result.getPriorityType()).isEqualTo(PRIORITY_TYPE);
-        assertThat(result.getType()).isEqualTo(GameItemType.PRIORITY);
+        assertThat(result.getProcessType()).isEqualTo(GameItemType.PRIORITY);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getValue()).isEqualTo(VALUE);
     }

@@ -1,25 +1,21 @@
-package com.github.saphyra.apphub.service.skyxplore.game.tick.production;
+package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class AvailableResourceCounter {
+public class AvailableResourceCounter {
     /*
     Calculating the not-assigned resource present in the storage
      */
-    int countAvailableAmount(StorageDetails storageDetails, String dataId) {
-        int storedAmount = Optional.ofNullable(storageDetails.getStoredResources().get(dataId))
-            .map(StoredResource::getAmount)
-            .orElse(0);
+    public int countAvailableAmount(StorageDetails storageDetails, String dataId) {
+        int storedAmount = storageDetails.getStoredResources().get(dataId)
+            .getAmount();
         int allocatedAmount = storageDetails.getAllocatedResources()
             .stream()
             .filter(allocatedResource -> allocatedResource.getDataId().equals(dataId))

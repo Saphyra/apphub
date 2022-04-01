@@ -5,9 +5,11 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.common.CoordinateModelFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
+import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.StorageDetailsFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.surface.SurfaceFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,7 @@ class PlanetFactory {
     private final Random random;
     private final SurfaceFactory surfaceFactory;
     private final CoordinateModelFactory coordinateModelFactory;
+    private final StorageDetailsFactory storageDetailsFactory;
 
     Planet create(UUID gameId, Integer planetIndex, Coordinate coordinate, UUID solarSystemId, String systemName, Range<Integer> planetSizeRange) {
         int planetSize = random.randInt(planetSizeRange.getMin(), planetSizeRange.getMax());
@@ -40,6 +43,7 @@ class PlanetFactory {
             .defaultName(String.format("%s %s", systemName, ALPHABET.charAt(planetIndex)))
             .size(planetSize)
             .surfaces(new SurfaceMap(surfaces))
+            .storageDetails(storageDetailsFactory.create(gameId, planetId, LocationType.PLANET)) //TODO unit test
             .build();
     }
 }

@@ -52,7 +52,7 @@ public class UniverseConverterTest {
         UniverseModel result = underTest.convertEntity(entity);
 
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getType()).isEqualTo(GameItemType.UNIVERSE);
+        assertThat(result.getProcessType()).isEqualTo(GameItemType.UNIVERSE);
         assertThat(result.getSize()).isEqualTo(SIZE);
     }
 }

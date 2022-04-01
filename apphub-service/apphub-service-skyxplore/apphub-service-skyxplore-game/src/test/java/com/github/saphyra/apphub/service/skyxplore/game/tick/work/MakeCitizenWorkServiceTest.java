@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.tick.work;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.CitizenEfficiencyCalculator;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.Assignment;
 import org.junit.Test;
 import org.junit.runner.RunWith;

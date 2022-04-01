@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.ProductionOrder;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.AllocatedResourceToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ReservedStorageToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.process.GameItemCache;
+import com.github.saphyra.apphub.service.skyxplore.game.process.cache.GameItemCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

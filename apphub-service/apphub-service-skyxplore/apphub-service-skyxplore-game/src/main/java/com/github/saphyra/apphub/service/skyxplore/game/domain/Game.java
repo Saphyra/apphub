@@ -1,12 +1,13 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain;
 
+import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.process.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.process.GameProcesses;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.process.ProcessContext;
+import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessContext;
+import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcesses;
+import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,10 +36,14 @@ public class Game {
     private LocalDateTime expiresAt;
 
     private final Chat chat;
+    private final ScheduledExecutorServiceBean timerThread; //TODO check usage
     private final EventLoop eventLoop;
     private final ProcessContext processContext;
 
-    private GameProcesses gameProcesses;
+    private BackgroundProcesses backgroundProcesses;
+
+    @Builder.Default
+    private final Processes processes = new Processes();
 
     @Builder.Default
     private volatile boolean gamePaused = true;
@@ -46,7 +51,7 @@ public class Game {
     private volatile boolean terminated = false;
 
     public Game gameProcess() {
-        gameProcesses = new GameProcesses(this, processContext);
+        backgroundProcesses = new BackgroundProcesses(this, processContext);
         return this;
     }
 

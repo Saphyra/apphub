@@ -7,9 +7,10 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.ProductionOrder;
+import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.StoredResourceFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.StoredResourceToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.process.GameItemCache;
+import com.github.saphyra.apphub.service.skyxplore.game.process.cache.GameItemCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCache;
 import com.github.saphyra.apphub.service.skyxplore.game.tick.cache.TickCacheItem;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;

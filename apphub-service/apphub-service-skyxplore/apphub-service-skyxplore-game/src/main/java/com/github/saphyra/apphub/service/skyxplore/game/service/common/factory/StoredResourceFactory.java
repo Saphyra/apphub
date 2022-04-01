@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.tick.production;
+package com.github.saphyra.apphub.service.skyxplore.game.service.common.factory;
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
@@ -12,10 +12,10 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class StoredResourceFactory {
+public class StoredResourceFactory {
     private final IdGenerator idGenerator;
 
-    StoredResource create(UUID location, LocationType locationType, String dataId, int amount) {
+    public StoredResource create(UUID location, LocationType locationType, String dataId, int amount) {
         return StoredResource.builder()
             .storedResourceId(idGenerator.randomUuid())
             .location(location)

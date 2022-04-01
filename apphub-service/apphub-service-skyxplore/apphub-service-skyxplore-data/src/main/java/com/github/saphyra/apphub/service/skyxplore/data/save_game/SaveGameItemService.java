@@ -35,7 +35,7 @@ class SaveGameItemService {
     void save(List<Object> items) {
         log.info("Saving {} number of gameItems for game {}...", items.size(), objectMapperWrapper.convertValue(items.get(0), GameItem.class).getGameId());
         items.stream()
-            .map(o -> new BiWrapper<>(o, objectMapperWrapper.convertValue(o, GameItem.class).getType()))
+            .map(o -> new BiWrapper<>(o, objectMapperWrapper.convertValue(o, GameItem.class).getProcessType()))
             .filter(this::isTypeFilled)
             .collect(Collectors.groupingBy(BiWrapper::getEntity2))
             .entrySet()

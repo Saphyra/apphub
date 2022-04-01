@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.domain.process;
+package com.github.saphyra.apphub.service.skyxplore.game.process.event_loop;
 
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
