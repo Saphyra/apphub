@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessContext;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
@@ -46,14 +47,17 @@ public class FinishedProcessCleanupProcess {
     private void processGame(Game game, ExecutorServiceBean executorServiceBean, GameDataProxy gameDataProxy) {
         SyncCache syncCache = new SyncCache();
 
-        List<Process> finishedProcesses = game.getProcesses()
-            .stream()
-            .filter(process -> process.getStatus() == ProcessStatus.READY_TO_DELETE)
-            .collect(Collectors.toList());
+        Processes processes = game.getProcesses();
+        synchronized (processes) {
+            List<Process> finishedProcesses = processes
+                .stream()
+                .filter(process -> process.getStatus() == ProcessStatus.READY_TO_DELETE)
+                .collect(Collectors.toList());
 
-        finishedProcesses.forEach(process -> syncCache.deleteGameItem(process.getProcessId(), GameItemType.PROCESS));
-        syncCache.process(executorServiceBean, gameDataProxy);
+            finishedProcesses.forEach(process -> syncCache.deleteGameItem(process.getProcessId(), GameItemType.PROCESS));
+            syncCache.process(executorServiceBean, gameDataProxy);
 
-        game.getProcesses().removeAll(finishedProcesses);
+            processes.removeAll(finishedProcesses);
+        }
     }
 }

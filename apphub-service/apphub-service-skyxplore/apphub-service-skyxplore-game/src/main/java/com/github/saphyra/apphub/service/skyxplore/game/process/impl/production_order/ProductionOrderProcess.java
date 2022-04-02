@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order;
 
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
@@ -9,16 +10,24 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequire
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorage;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
+import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessParamKeys;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.UseAllocatedResourceService;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.AllocatedResourceToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ReservedStorageToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.StoredResourceToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -86,11 +95,12 @@ public class ProductionOrderProcess implements Process {
 
             List<Process> requestWorkProcesses = game.getProcesses().getByExternalReferenceAndType(processId, ProcessType.REQUEST_WORK);
             if (requestWorkProcesses.isEmpty()) {
+                applicationContextProxy.getBean(UseAllocatedResourceService.class).resolveAllocations(syncCache, game.getGameId(), planet, processId);
                 requestWorkProcesses = createWorkPointProcesses(syncCache);
             }
 
             if (requestWorkProcesses.stream().allMatch(process -> process.getStatus() == ProcessStatus.DONE)) {
-                storeResource();
+                storeResource(syncCache);
                 status = ProcessStatus.DONE;
             }
         }
@@ -155,18 +165,39 @@ public class ProductionOrderProcess implements Process {
     }
 
     //TODO extract
-    private void storeResource() {
-        //TODO
+    private void storeResource(SyncCache syncCache) {
+        allocatedResource.increaseAmount(amount);
+        StoredResource storedResource = planet.getStorageDetails()
+            .getStoredResources()
+            .get(reservedStorage.getDataId());
+        storedResource.increaseAmount(amount);
+        reservedStorage.decreaseAmount(amount);
+
+        syncCache.saveGameItem(applicationContextProxy.getBean(ReservedStorageToModelConverter.class).convert(reservedStorage, game.getGameId()));
+        syncCache.saveGameItem(applicationContextProxy.getBean(AllocatedResourceToModelConverter.class).convert(allocatedResource, game.getGameId()));
+        syncCache.saveGameItem(applicationContextProxy.getBean(StoredResourceToModelConverter.class).convert(storedResource, game.getGameId()));
+
+        syncCache.addMessage(
+            planet.getOwner(),
+            WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED,
+            planet.getPlanetId(),
+            () -> applicationContextProxy.getBean(WsMessageSender.class).planetStorageModified(
+                planet.getOwner(),
+                planet.getPlanetId(),
+                applicationContextProxy.getBean(PlanetStorageOverviewQueryService.class).getStorage(planet)
+            )
+        );
     }
 
     @Override
     public void cancel(SyncCache syncCache) {
-        //TODO
+        cleanup(syncCache);
     }
 
     @Override
     public void cleanup(SyncCache syncCache) {
-        //TODO delete reservedStorages and allocatedResources
+        applicationContextProxy.getBean(AllocationRemovalService.class)
+            .removeAllocationsAndReservations(syncCache, planet, processId);
 
         game.getProcesses()
             .getByExternalReference(processId)
@@ -188,7 +219,7 @@ public class ProductionOrderProcess implements Process {
         result.setLocation(planet.getPlanetId());
         result.setLocationType(LocationType.PLANET.name());
         result.setExternalReference(getExternalReference());
-        result.setData(CollectionUtils.singleValueMap(GameConstants.PRODUCTION_BUILDING_DATA_ID, producerBuildingDataId));
+        result.setData(CollectionUtils.singleValueMap(ProcessParamKeys.PRODUCTION_BUILDING_DATA_ID, producerBuildingDataId));
         return model;
     }
 }

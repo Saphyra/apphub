@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingDataService;
@@ -18,15 +17,23 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.UseAllocatedResourceService;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order.ProductionOrderProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcessType;
+import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
 import java.util.UUID;
 
 //TODO unit test
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class ConstructionProcess implements Process {
     @Getter
     private final UUID processId;
@@ -40,20 +47,6 @@ public class ConstructionProcess implements Process {
     private final Construction construction;
 
     private final ApplicationContextProxy applicationContextProxy;
-
-
-    //TODO move to factory
-    //TODO call when new construction is started
-    public ConstructionProcess(ApplicationContextProxy applicationContextProxy, Game game, Planet planet, Building building) {
-        processId = applicationContextProxy.getBean(IdGenerator.class)
-            .randomUuid();
-        this.applicationContextProxy = applicationContextProxy;
-        this.game = game;
-        this.planet = planet;
-        this.building = building;
-        this.construction = building.getConstruction();
-        this.status = ProcessStatus.CREATED;
-    }
 
     @Override
     public UUID getExternalReference() {
@@ -87,13 +80,15 @@ public class ConstructionProcess implements Process {
         if (maybeRequestWorkProcess.isEmpty()) {
             createWorkProcesses(syncCache);
         } else if (maybeRequestWorkProcess.stream().allMatch(process -> process.getStatus() == ProcessStatus.DONE)) {
-            finishConstruction();
+            finishConstruction(syncCache);
+
             status = ProcessStatus.DONE;
         }
 
         if (status == ProcessStatus.DONE) {
             productionOrderProcesses.forEach(process -> process.cleanup(syncCache));
             maybeRequestWorkProcess.forEach(process -> process.cleanup(syncCache));
+
             status = ProcessStatus.READY_TO_DELETE;
         }
     }
@@ -139,9 +134,21 @@ public class ConstructionProcess implements Process {
     }
 
     @Override
-    //TODO call when construction is cancelled
     public void cancel(SyncCache syncCache) {
-        //TODO implement
+        game.getProcesses()
+            .getByExternalReference(processId)
+            .forEach(process -> process.cancel(syncCache));
+
+        building.setConstruction(null);
+        syncCache.deleteGameItem(construction.getConstructionId(), GameItemType.CONSTRUCTION);
+        syncCache.saveGameItem(applicationContextProxy.getBean(BuildingToModelConverter.class).convert(building, game.getGameId()));
+
+        applicationContextProxy.getBean(AllocationRemovalService.class)
+            .removeAllocationsAndReservations(syncCache, planet, construction.getConstructionId());
+
+        status = ProcessStatus.READY_TO_DELETE;
+
+        syncCache.saveGameItem(toModel());
     }
 
     @Override
@@ -164,9 +171,17 @@ public class ConstructionProcess implements Process {
     }
 
     //TODO extract
-    private void finishConstruction() {
-        //TODO delete reservedStorages and allocatedResources
-        //TODO remove resources from storage
-        //TODO increase building level
+    private void finishConstruction(SyncCache syncCache) {
+        applicationContextProxy.getBean(UseAllocatedResourceService.class)
+            .resolveAllocations(syncCache, game.getGameId(), planet, construction.getConstructionId());
+
+        applicationContextProxy.getBean(AllocationRemovalService.class)
+            .removeAllocationsAndReservations(syncCache, planet, construction.getConstructionId());
+
+        building.setLevel(building.getLevel() + 1);
+        building.setConstruction(null);
+
+        syncCache.deleteGameItem(construction.getConstructionId(), GameItemType.CONSTRUCTION);
+        syncCache.saveGameItem(applicationContextProxy.getBean(BuildingToModelConverter.class).convert(building, game.getGameId()));
     }
 }

@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.background;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessContext;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
@@ -39,10 +40,12 @@ public class ProcessSchedulerProcess {
     }
 
     private void processGame(Game game) {
-        game.getProcesses()
-            .stream()
-            .sorted(Process::compareTo)
-            .forEach(process -> scheduleProcess(game.getEventLoop(), process));
+        Processes processes = game.getProcesses();
+        synchronized (processes) {
+            processes.stream()
+                .sorted(Process::compareTo)
+                .forEach(process -> scheduleProcess(game.getEventLoop(), process));
+        }
     }
 
     private void scheduleProcess(EventLoop eventLoop, Process process) {

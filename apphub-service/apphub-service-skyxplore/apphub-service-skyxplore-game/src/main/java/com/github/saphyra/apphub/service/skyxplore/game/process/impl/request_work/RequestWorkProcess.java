@@ -1,21 +1,37 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work;
 
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
+import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessParamKeys;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction.BuildingConstructionToQueueItemConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.PlanetToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -24,6 +40,7 @@ import java.util.concurrent.Future;
 import static java.util.Objects.isNull;
 
 //TODO unit test
+@Slf4j
 public class RequestWorkProcess implements Process {
     @Getter
     private final UUID processId;
@@ -35,7 +52,7 @@ public class RequestWorkProcess implements Process {
     private final UUID externalReference;
 
     private final String buildingDataId;
-    private final SkillType requiredSkill;
+    private final SkillType skillType;
     private final int requiredWorkPoints;
     private final RequestWorkProcessType requestWorkProcessType;
     private final UUID targetId;
@@ -49,8 +66,8 @@ public class RequestWorkProcess implements Process {
 
     private final ApplicationContextProxy applicationContextProxy;
 
-    public RequestWorkProcess(ApplicationContextProxy applicationContextProxy, UUID externalReference, Game game, Planet planet, String buildingDataId, SkillType requiredSkill, int requiredWorkPoints) {
-        this(applicationContextProxy, externalReference, game, planet, buildingDataId, requiredSkill, requiredWorkPoints, RequestWorkProcessType.OTHER, null);
+    public RequestWorkProcess(ApplicationContextProxy applicationContextProxy, UUID externalReference, Game game, Planet planet, String buildingDataId, SkillType skillType, int requiredWorkPoints) {
+        this(applicationContextProxy, externalReference, game, planet, buildingDataId, skillType, requiredWorkPoints, RequestWorkProcessType.OTHER, null);
     }
 
     //TODO move to factory
@@ -60,7 +77,7 @@ public class RequestWorkProcess implements Process {
         Game game,
         Planet planet,
         String buildingDataId,
-        SkillType requiredSkill,
+        SkillType skillType,
         int requiredWorkPoints,
         RequestWorkProcessType requestWorkProcessType,
         UUID targetId
@@ -72,7 +89,7 @@ public class RequestWorkProcess implements Process {
         this.game = game;
         this.planet = planet;
         this.applicationContextProxy = applicationContextProxy;
-        this.requiredSkill = requiredSkill;
+        this.skillType = skillType;
         this.requiredWorkPoints = requiredWorkPoints;
         this.requestWorkProcessType = requestWorkProcessType;
         this.targetId = targetId;
@@ -110,11 +127,12 @@ public class RequestWorkProcess implements Process {
 
         if (!isNull(workFuture)) {
             if (workFuture.isDone()) {
-                completedWorkPoints += workFuture.get()
+                int completedWorkPoints = workFuture.get()
                     .getOrThrow()
                     .getWorkPoints();
+                this.completedWorkPoints += completedWorkPoints;
 
-                updateTarget();
+                updateTarget(syncCache, completedWorkPoints);
 
                 workFuture = null;
 
@@ -132,7 +150,7 @@ public class RequestWorkProcess implements Process {
                 .findByProcessId(processId);
 
             if (maybeWorker.isEmpty()) {
-                maybeWorker = applicationContextProxy.getBean(CitizenFinder.class).getSuitableCitizen(planet, requiredSkill);
+                maybeWorker = applicationContextProxy.getBean(CitizenFinder.class).getSuitableCitizen(planet, skillType);
             }
 
             if (maybeWorker.isEmpty()) {
@@ -150,6 +168,7 @@ public class RequestWorkProcess implements Process {
                 .game(game)
                 .planet(planet)
                 .citizenId(worker)
+                .skillType(skillType)
                 .applicationContextProxy(applicationContextProxy)
                 .build();
             workFuture = applicationContextProxy.getBean(ExecutorServiceBean.class).asyncProcess(work);
@@ -160,13 +179,58 @@ public class RequestWorkProcess implements Process {
         }
     }
 
-    private void updateTarget() {
-        //TODO
+    //TODO extract
+    private void updateTarget(SyncCache syncCache, int completedWorkPoints) {
+        switch (requestWorkProcessType) {
+            case CONSTRUCTION:
+                Surface surface = planet.getSurfaces()
+                    .values()
+                    .stream()
+                    .filter(s -> !isNull(s.getBuilding()))
+                    .filter(s -> !isNull(s.getBuilding().getConstruction()))
+                    .filter(s -> s.getBuilding().getConstruction().getConstructionId().equals(targetId))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Target not found with id " + targetId + " for type " + requestWorkProcessType + " on planet " + planet.getPlanetId() + " in game " + game.getGameId()));
+
+                Building building = surface.getBuilding();
+                Construction construction = building.getConstruction();
+                construction.setCurrentWorkPoints(construction.getCurrentWorkPoints() + completedWorkPoints);
+
+                syncCache.saveGameItem(applicationContextProxy.getBean(ConstructionToModelConverter.class).convert(construction, game.getGameId()));
+
+                WsMessageSender messageSender = applicationContextProxy.getBean(WsMessageSender.class);
+                syncCache.addMessage(
+                    planet.getOwner(),
+                    WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED,
+                    surface.getSurfaceId(),
+                    () -> messageSender.planetSurfaceModified(planet.getOwner(), planet.getPlanetId(), applicationContextProxy.getBean(SurfaceToResponseConverter.class).convert(surface))
+                );
+
+                syncCache.addMessage(
+                    planet.getOwner(),
+                    WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_MODIFIED,
+                    construction.getConstructionId(),
+                    () -> messageSender.planetQueueItemModified(
+                        planet.getOwner(),
+                        planet.getPlanetId(),
+                        applicationContextProxy.getBean(QueueItemToResponseConverter.class).convert(applicationContextProxy.getBean(BuildingConstructionToQueueItemConverter.class).convert(surface.getBuilding()), planet)
+                    )
+                );
+                break;
+            case OTHER:
+                break;
+            default:
+                log.warn("No handler for requestWorkProcessType {}", requestWorkProcessType);
+                break;
+        }
     }
 
     @Override
     public void cancel(SyncCache syncCache) {
-        //TODO
+        if (!isNull(workFuture)) {
+            workFuture.cancel(true);
+        }
+        cleanup(syncCache);
     }
 
     @Override
@@ -186,6 +250,24 @@ public class RequestWorkProcess implements Process {
 
     @Override
     public ProcessModel toModel() {
-        return null; //TODO
+        ProcessModel model = new ProcessModel();
+        ProcessModel result = new ProcessModel();
+        result.setId(processId);
+        result.setGameId(game.getGameId());
+        result.setType(GameItemType.PROCESS);
+        result.setProcessType(getType());
+        result.setLocation(planet.getPlanetId());
+        result.setLocationType(LocationType.PLANET.name());
+        result.setExternalReference(getExternalReference());
+        result.setData(CollectionUtils.toMap(
+            new BiWrapper<>(ProcessParamKeys.BUILDING_DATA_ID, buildingDataId),
+            new BiWrapper<>(ProcessParamKeys.SKILL_TYPE, skillType.name()),
+            new BiWrapper<>(ProcessParamKeys.REQUIRED_WORK_POINTS, String.valueOf(requiredWorkPoints)),
+            new BiWrapper<>(ProcessParamKeys.REQUEST_WORK_PROCESS_TYPE, requestWorkProcessType.name()),
+            new BiWrapper<>(ProcessParamKeys.TARGET_ID, applicationContextProxy.getBean(UuidConverter.class).convertDomain(targetId)),
+            new BiWrapper<>(ProcessParamKeys.COMPLETED_WORK_POINTS, String.valueOf(completedWorkPoints)),
+            new BiWrapper<>(ProcessParamKeys.CYCLE, String.valueOf(cycle))
+        ));
+        return model;
     }
 }

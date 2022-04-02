@@ -9,6 +9,4 @@ public class GameConstants {
     public static final Coordinate ORIGO = new Coordinate(0, 0);
     public static final Integer DEFAULT_PRIORITY = 5;
     public static final Integer PROCESS_PRIORITY_MULTIPLIER = 100;
-
-    public static final String PRODUCTION_BUILDING_DATA_ID = "productionBuildingDataId";
 }

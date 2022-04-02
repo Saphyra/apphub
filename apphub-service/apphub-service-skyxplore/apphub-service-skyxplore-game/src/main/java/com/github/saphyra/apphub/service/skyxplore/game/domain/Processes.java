@@ -11,14 +11,14 @@ import java.util.stream.Collectors;
 
 //TODO unit test
 public class Processes extends Vector<Process> {
-    public Process findByIdValidated(UUID processId) {
+    public synchronized Process findByIdValidated(UUID processId) {
         return stream()
             .filter(process -> process.getProcessId().equals(processId))
             .findFirst()
             .orElseThrow(() -> new IllegalStateException("Process not found with id " + processId));
     }
 
-    public Process findByExternalReferenceAndTypeValidated(UUID externalReference, ProcessType type) {
+    public synchronized Process findByExternalReferenceAndTypeValidated(UUID externalReference, ProcessType type) {
         List<Process> processes = getByExternalReferenceAndType(externalReference, type);
 
         if (processes.size() > 1) {
@@ -32,7 +32,7 @@ public class Processes extends Vector<Process> {
         return processes.get(0);
     }
 
-    public Optional<Process> findByExternalReferenceAndType(UUID externalReference, ProcessType type) {
+    public synchronized Optional<Process> findByExternalReferenceAndType(UUID externalReference, ProcessType type) {
         List<Process> processes = getByExternalReferenceAndType(externalReference, type);
 
         if (processes.size() > 1) {
@@ -42,14 +42,14 @@ public class Processes extends Vector<Process> {
         return processes.size() == 1 ? Optional.of(processes.get(0)) : Optional.empty();
     }
 
-    public List<Process> getByExternalReferenceAndType(UUID externalReference, ProcessType type) {
+    public synchronized List<Process> getByExternalReferenceAndType(UUID externalReference, ProcessType type) {
         return stream()
             .filter(process -> process.getExternalReference().equals(externalReference))
             .filter(process -> process.getType() == type)
             .collect(Collectors.toList());
     }
 
-    public List<Process> getByExternalReference(UUID externalReference) {
+    public synchronized List<Process> getByExternalReference(UUID externalReference) {
         return stream()
             .filter(process -> process.getExternalReference().equals(externalReference))
             .collect(Collectors.toList());

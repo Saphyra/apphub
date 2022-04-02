@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.api.skyxplore.model.game;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,6 +19,5 @@ public class ProcessModel extends GameItem {
     private UUID location;
     private String locationType;
     private UUID externalReference;
-    @Builder.Default
-    private Map<String, Object> data = new HashMap<>();
+    private Map<String, String> data = new HashMap<>();
 }

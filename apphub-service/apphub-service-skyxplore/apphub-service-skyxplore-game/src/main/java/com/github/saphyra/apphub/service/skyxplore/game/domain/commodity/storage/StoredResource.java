@@ -17,7 +17,7 @@ public class StoredResource {
     private final String dataId;
     private int amount;
 
-    public StoredResource reduceAmount(int amount) {
+    public StoredResource decreaseAmount(int amount) {
         this.amount -= amount;
         return this;
     }

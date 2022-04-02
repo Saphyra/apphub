@@ -93,7 +93,7 @@ public class NewlyProducedResourceAllocationServiceTest {
 
         underTest.allocateNewlyProducedResource(GAME_ID, planet, order, reservedStorage);
 
-        verify(reservedStorage).reduceAmount(AMOUNT);
+        verify(reservedStorage).decreaseAmount(AMOUNT);
         verify(gameItemCache).save(reservedStorageModel);
 
         verify(allocatedResource).increaseAmount(AMOUNT);

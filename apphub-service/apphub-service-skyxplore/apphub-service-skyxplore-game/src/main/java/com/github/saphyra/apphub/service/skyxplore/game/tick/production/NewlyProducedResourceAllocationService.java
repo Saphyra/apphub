@@ -28,7 +28,7 @@ public class NewlyProducedResourceAllocationService {
      */
     void allocateNewlyProducedResource(UUID gameId, Planet planet, ProductionOrder order, ReservedStorage reservedStorage) {
         log.debug("{} before finishing {} in game {}", reservedStorage, order, gameId);
-        reservedStorage.reduceAmount(order.getAmount());
+        reservedStorage.decreaseAmount(order.getAmount());
 
         GameItemCache gameItemCache = tickCache.get(gameId)
             .getGameItemCache();

@@ -82,7 +82,7 @@ public class AllocatedResourceResolver {
         if (isNull(storedResource)) {
             throw new NullPointerException("StoredResource not found for dataId " + allocatedResource.getDataId());
         }
-        storedResource.reduceAmount(allocatedResource.getAmount());
+        storedResource.decreaseAmount(allocatedResource.getAmount());
         tickCache.get(gameId)
             .getGameItemCache()
             .save(storedResourceToModelConverter.convert(storedResource, gameId));

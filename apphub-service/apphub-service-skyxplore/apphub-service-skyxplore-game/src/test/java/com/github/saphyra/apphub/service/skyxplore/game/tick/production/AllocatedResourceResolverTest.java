@@ -119,7 +119,7 @@ public class AllocatedResourceResolverTest {
         verify(gameItemCache).delete(ALLOCATED_RESOURCE_ID, GameItemType.ALLOCATED_RESOURCE);
         verify(gameItemCache).save(storedResourceModel);
 
-        verify(storedResource).reduceAmount(ALLOCATED_AMOUNT);
+        verify(storedResource).decreaseAmount(ALLOCATED_AMOUNT);
 
         assertThat(storageDetails.getReservedStorages()).isEmpty();
 
