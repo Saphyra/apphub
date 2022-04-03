@@ -71,6 +71,7 @@ public class SatietyDecreaseProcess {
     }
 
     private void processCitizen(UUID gameId, Planet planet, Citizen citizen, SyncCache syncCache) {
+        log.debug("Decreasing satiety for citizen {}", citizen.getCitizenId());
         int satietyDecreasedPerSecond = gameProperties.getCitizen()
             .getSatiety()
             .getSatietyDecreasedPerSecond();

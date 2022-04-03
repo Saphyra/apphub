@@ -75,7 +75,7 @@ public class StoredResourceConverterTest {
 
         assertThat(result.getId()).isEqualTo(STORED_RESOURCE_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getProcessType()).isEqualTo(GameItemType.STORED_RESOURCE);
+        assertThat(result.getType()).isEqualTo(GameItemType.STORED_RESOURCE);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);

@@ -116,7 +116,6 @@ public class PlanetToModelConverterTest {
             .storageDetails(storageDetails)
             .priorities(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION, PRIORITY))
             .owner(OWNER)
-            .orders(Set.of(productionOrder))
             .build();
 
         given(game.getGameId()).willReturn(GAME_ID);

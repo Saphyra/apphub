@@ -38,7 +38,7 @@ public class SoldierEnergyShieldToModelConverterTest {
 
         assertThat(result.getId()).isEqualTo(ENTITY_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getProcessType()).isEqualTo(GameItemType.DURABILITY_ITEM_MODEL);
+        assertThat(result.getType()).isEqualTo(GameItemType.DURABILITY_ITEM_MODEL);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getMaxDurability()).isEqualTo(MAX_DURABILITY);
         assertThat(result.getCurrentDurability()).isEqualTo(CURRENT_DURABILITY);

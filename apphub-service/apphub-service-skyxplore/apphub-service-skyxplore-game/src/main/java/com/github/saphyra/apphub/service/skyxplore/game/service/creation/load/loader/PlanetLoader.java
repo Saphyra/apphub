@@ -4,6 +4,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.BuildingAllocations;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.CitizenAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +51,8 @@ class PlanetLoader {
             .population(citizenLoader.load(model.getId()))
             .storageDetails(storageDetailsLoader.load(model.getGameId(), model.getId()))
             .priorities(priorityLoader.load(model.getId()))
+            .buildingAllocations(new BuildingAllocations(model.getBuildingAllocations())) //TODO unit test
+            .citizenAllocations(new CitizenAllocations(model.getCitizenAllocations())) //TODO unit test
             .build();
     }
 }

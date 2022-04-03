@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.background;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
@@ -32,7 +33,7 @@ public class ProcessSchedulerProcess {
                     }
 
                     processContext.getGameSleepService()
-                        .sleepASecond(game);
+                        .sleep(game, 500);
                 }
 
                 log.info("Stopping ProcessSchedulerProcess for game {}", game.getGameId());
@@ -43,12 +44,14 @@ public class ProcessSchedulerProcess {
         Processes processes = game.getProcesses();
         synchronized (processes) {
             processes.stream()
+                .filter(process -> process.getStatus() == ProcessStatus.IN_PROGRESS || process.getStatus() == ProcessStatus.CREATED)
                 .sorted(Process::compareTo)
                 .forEach(process -> scheduleProcess(game.getEventLoop(), process));
         }
     }
 
     private void scheduleProcess(EventLoop eventLoop, Process process) {
+        log.info("Scheduling process {}", process);
         SyncCache syncCache = new SyncCache();
         eventLoop.process(() -> process.scheduleWork(syncCache), syncCache);
     }

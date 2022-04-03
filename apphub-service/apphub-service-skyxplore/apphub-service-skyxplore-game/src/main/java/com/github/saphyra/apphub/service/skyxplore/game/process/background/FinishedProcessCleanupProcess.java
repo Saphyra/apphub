@@ -54,6 +54,8 @@ public class FinishedProcessCleanupProcess {
                 .filter(process -> process.getStatus() == ProcessStatus.READY_TO_DELETE)
                 .collect(Collectors.toList());
 
+            log.info("Deleting processes {}", finishedProcesses);
+
             finishedProcesses.forEach(process -> syncCache.deleteGameItem(process.getProcessId(), GameItemType.PROCESS));
             syncCache.process(executorServiceBean, gameDataProxy);
 

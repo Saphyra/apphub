@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,4 +19,6 @@ public class PlanetModel extends GameItem {
     private Map<UUID, String> customNames;
     private Integer size;
     private UUID owner;
+    private Map<UUID, List<UUID>> buildingAllocations;
+    private Map<UUID, UUID> citizenAllocations;
 }

@@ -17,6 +17,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.S
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
@@ -26,6 +27,7 @@ import java.util.concurrent.Future;
 @Data
 @Builder
 @Slf4j
+@ToString(exclude = {"game", "planet", "applicationContextProxy"})
 public class Work implements Callable<Work> {
     private final int workPoints;
     private final Game game;
@@ -57,7 +59,7 @@ public class Work implements Callable<Work> {
     private void updateCitizen(SyncCache syncCache) {
         Citizen citizen = planet.getPopulation()
             .get(citizenId);
-        log.debug("Citizen {} in game {} used {} workPoints of skill {}", citizen, game.getGameId(), workPoints, skillType);
+        log.info("Citizen {} in game {} used {} workPoints of skill {}", citizen, game.getGameId(), workPoints, skillType);
 
         citizen.reduceMorale(workPoints);
 
@@ -66,7 +68,7 @@ public class Work implements Callable<Work> {
 
         skill.increaseExperience(workPoints);
         if (skill.getExperience() >= skill.getNextLevel()) {
-            log.debug("Skill {} level earned for citizen {} in game {}", skillType, citizen.getCitizenId(), game.getGameId());
+            log.info("Skill {} level earned for citizen {} in game {}", skillType, citizen.getCitizenId(), game.getGameId());
             skill.increaseLevel(1);
             skill.setExperience(skill.getExperience() - skill.getNextLevel());
             skill.setNextLevel(skill.getLevel() * applicationContextProxy.getBean(GameProperties.class).getCitizen().getSkill().getExperiencePerLevel());
@@ -94,6 +96,8 @@ public class Work implements Callable<Work> {
                 .getCitizen()
                 .getWorkPointsPerSeconds();
 
-        return Math.round(workPoints / workPointsPerSecond * 1000);
+        long result = Math.round(workPoints / workPointsPerSecond * 1000);
+        log.info("Citizen {} will work {} milliseconds to achieve {} workPoints.", citizenId, result, workPoints);
+        return result;
     }
 }

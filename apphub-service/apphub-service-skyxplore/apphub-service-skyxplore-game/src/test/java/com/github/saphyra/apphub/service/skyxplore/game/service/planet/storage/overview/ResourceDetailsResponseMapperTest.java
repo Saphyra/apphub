@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResources;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.ActualResourceAmountQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocatedResourceAmountQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.ReservedStorageQueryService;
@@ -56,11 +57,15 @@ public class ResourceDetailsResponseMapperTest {
     @Mock
     private StorageDetails storageDetails;
 
+    @Mock
+    private StoredResources storedResources;
+
     @Test
     public void createResourceData() {
         given(resourceData.getId()).willReturn(DATA_ID);
         given(storageDetails.getReservedStorages()).willReturn(reservedStorages);
-        given(storageDetails.getStoredResources()).willReturn(CollectionUtils.singleValueMap(DATA_ID, storedResource));
+        given(storageDetails.getStoredResources()).willReturn(storedResources);
+        given(storedResources.get(DATA_ID)).willReturn(storedResource);
         given(storageDetails.getAllocatedResources()).willReturn(new AllocatedResources(Arrays.asList(allocatedResource)));
 
         given(reservedStorageQueryService.getReservedAmount(DATA_ID, reservedStorages)).willReturn(RESERVED_STORAGE_AMOUNT);

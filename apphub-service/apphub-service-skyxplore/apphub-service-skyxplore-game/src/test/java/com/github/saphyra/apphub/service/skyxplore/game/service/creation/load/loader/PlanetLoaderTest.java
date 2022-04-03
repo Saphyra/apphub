@@ -44,6 +44,7 @@ public class PlanetLoaderTest {
     private static final UUID OWNER = UUID.randomUUID();
     private static final UUID CITIZEN_ID = UUID.randomUUID();
     private static final Integer PRIORITY = 35;
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private GameItemLoader gameItemLoader;
@@ -99,6 +100,7 @@ public class PlanetLoaderTest {
         given(gameItemLoader.loadChildren(SOLAR_SYSTEM_ID, GameItemType.PLANET, PlanetModel[].class)).willReturn(Arrays.asList(planetModel));
 
         given(planetModel.getId()).willReturn(PLANET_ID);
+        given(planetModel.getGameId()).willReturn(GAME_ID);
         given(planetModel.getSolarSystemId()).willReturn(SOLAR_SYSTEM_ID);
         given(planetModel.getDefaultName()).willReturn(DEFAULT_NAME);
         given(planetModel.getCustomNames()).willReturn(new OptionalHashMap<>(CollectionUtils.singleValueMap(USER_ID, CUSTOM_NAME)));
@@ -108,7 +110,7 @@ public class PlanetLoaderTest {
         given(coordinateLoader.loadOneByReferenceId(PLANET_ID)).willReturn(coordinateModel);
         given(surfaceLoader.load(PLANET_ID)).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(coordinate, surface)));
         given(citizenLoader.load(PLANET_ID)).willReturn(new OptionalHashMap<>(CollectionUtils.singleValueMap(CITIZEN_ID, citizen)));
-        given(storageDetailsLoader.load(PLANET_ID)).willReturn(storageDetails);
+        given(storageDetailsLoader.load(GAME_ID, PLANET_ID)).willReturn(storageDetails);
         given(priorityLoader.load(PLANET_ID)).willReturn(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION, PRIORITY));
         given(productionOrderLoader.load(PLANET_ID)).willReturn(Set.of(productionOrder));
 
@@ -127,6 +129,5 @@ public class PlanetLoaderTest {
         assertThat(planet.getPopulation()).containsEntry(CITIZEN_ID, citizen);
         assertThat(planet.getStorageDetails()).isEqualTo(storageDetails);
         assertThat(planet.getPriorities()).containsEntry(PriorityType.CONSTRUCTION, PRIORITY);
-        assertThat(planet.getOrders()).containsExactly(productionOrder);
     }
 }

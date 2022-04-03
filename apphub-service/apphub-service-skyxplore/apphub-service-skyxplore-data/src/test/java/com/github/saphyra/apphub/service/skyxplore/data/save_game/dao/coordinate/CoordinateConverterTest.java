@@ -50,7 +50,7 @@ public class CoordinateConverterTest {
 
         assertThat(result.getId()).isEqualTo(COORDINATE_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getProcessType()).isEqualTo(GameItemType.COORDINATE);
+        assertThat(result.getType()).isEqualTo(GameItemType.COORDINATE);
         assertThat(result.getReferenceId()).isEqualTo(REFERENCE_ID);
         assertThat(result.getCoordinate()).isEqualTo(new Coordinate(X, Y));
     }

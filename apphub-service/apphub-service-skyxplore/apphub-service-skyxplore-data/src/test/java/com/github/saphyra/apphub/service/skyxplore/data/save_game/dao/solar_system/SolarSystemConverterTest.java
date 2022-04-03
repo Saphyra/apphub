@@ -77,7 +77,7 @@ public class SolarSystemConverterTest {
 
         assertThat(result.getId()).isEqualTo(SOLAR_SYSTEM_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getProcessType()).isEqualTo(GameItemType.SOLAR_SYSTEM);
+        assertThat(result.getType()).isEqualTo(GameItemType.SOLAR_SYSTEM);
         assertThat(result.getRadius()).isEqualTo(RADIUS);
         assertThat(result.getDefaultName()).isEqualTo(DEFAULT_NAME);
         assertThat(result.getCustomNames()).isEqualTo(CUSTOM_NAMES);

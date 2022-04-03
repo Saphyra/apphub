@@ -39,6 +39,7 @@ public class GameLoader {
     private final EventLoopFactory eventLoopFactory;
     private final ProcessContext processContext;
     private final ExecutorServiceBeanFactory executorServiceBeanFactory;
+    private final ProcessLoader processLoader;
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -58,6 +59,10 @@ public class GameLoader {
             .timerThread(executorServiceBeanFactory.createScheduled(1)) //TODO unit test
             .build()
             .gameProcess();
+
+        //TODO unit test
+        game.getProcesses()
+            .addAll(processLoader.load(game));
 
         gameDataProxy.saveItem(gameModel);
         gameDao.save(game);

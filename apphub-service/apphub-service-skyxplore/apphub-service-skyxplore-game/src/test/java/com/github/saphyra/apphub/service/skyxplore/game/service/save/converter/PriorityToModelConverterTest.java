@@ -38,7 +38,7 @@ public class PriorityToModelConverterTest {
 
         assertThat(result.get(0).getId()).isNull();
         assertThat(result.get(0).getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.get(0).getProcessType()).isEqualTo(GameItemType.PRIORITY);
+        assertThat(result.get(0).getType()).isEqualTo(GameItemType.PRIORITY);
         assertThat(result.get(0).getLocation()).isEqualTo(LOCATION);
         assertThat(result.get(0).getLocationType()).isEqualTo(LocationType.PLANET.name());
         assertThat(result.get(0).getValue()).isEqualTo(PRIORITY);

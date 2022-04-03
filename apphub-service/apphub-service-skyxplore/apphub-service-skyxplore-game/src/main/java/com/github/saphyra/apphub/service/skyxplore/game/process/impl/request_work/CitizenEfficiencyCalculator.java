@@ -35,7 +35,7 @@ public class CitizenEfficiencyCalculator {
             return 1;
         }
 
-        double result = moraleProperties.getMinEfficiency() * morale / moraleProperties.getWorkEfficiencyDropUnder();
+        double result = Math.max(moraleProperties.getMinEfficiency(), (double) morale / moraleProperties.getWorkEfficiencyDropUnder());
         log.trace("Citizen has {} morale, so the efficiency is {}", morale, result);
         return result;
     }

@@ -24,17 +24,20 @@ public class AllocationRemovalService {
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
 
     public void removeAllocationsAndReservations(SyncCache syncCache, Planet planet, UUID externalReference) {
+        log.info("Removing allocatedResources and ReservedStorages for externalReference {}", externalReference);
         StorageDetails storageDetails = planet.getStorageDetails();
 
         AllocatedResources allocatedResources = storageDetails.getAllocatedResources();
         allocatedResources.getByExternalReference(externalReference)
             .stream()
+            .peek(allocatedResource -> log.info("Deleting {}", allocatedResource))
             .peek(ar -> syncCache.deleteGameItem(ar.getAllocatedResourceId(), GameItemType.ALLOCATED_RESOURCE))
             .forEach(allocatedResources::remove);
 
         ReservedStorages reservedStorages = storageDetails.getReservedStorages();
         reservedStorages.getByExternalReference(externalReference)
             .stream()
+            .peek(reservedStorage -> log.info("Deleting {}", reservedStorage))
             .peek(rs -> syncCache.deleteGameItem(rs.getReservedStorageId(), GameItemType.RESERVED_STORAGE))
             .forEach(reservedStorages::remove);
 

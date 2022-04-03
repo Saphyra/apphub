@@ -1,12 +1,11 @@
 package com.github.saphyra.apphub.api.skyxplore.model.game;
 
+import com.github.saphyra.apphub.lib.common_util.collection.StringStringMap;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -19,5 +18,5 @@ public class ProcessModel extends GameItem {
     private UUID location;
     private String locationType;
     private UUID externalReference;
-    private Map<String, String> data = new HashMap<>();
+    private StringStringMap data = new StringStringMap();
 }

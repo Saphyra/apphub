@@ -12,7 +12,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.GameFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.GameSaverService;
-import com.github.saphyra.apphub.service.skyxplore.game.tick.TickSchedulerService;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
@@ -42,8 +41,7 @@ public class GameCreationService {
         BlockingQueue<SkyXploreGameCreationRequest> requests,
         GameSaverService gameSaverService,
         ExecutorServiceBeanFactory executorServiceBeanFactory,
-        ErrorReporterService errorReporterService,
-        TickSchedulerService tickSchedulerService
+        ErrorReporterService errorReporterService
     ) {
         this.messageSenderProxy = messageSenderProxy;
         this.gameFactory = gameFactory;

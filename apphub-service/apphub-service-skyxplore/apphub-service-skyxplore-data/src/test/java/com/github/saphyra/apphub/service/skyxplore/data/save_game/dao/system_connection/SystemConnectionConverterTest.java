@@ -56,6 +56,6 @@ public class SystemConnectionConverterTest {
 
         assertThat(result.getId()).isEqualTo(SYSTEM_CONNECTION_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getProcessType()).isEqualTo(GameItemType.SYSTEM_CONNECTION);
+        assertThat(result.getType()).isEqualTo(GameItemType.SYSTEM_CONNECTION);
     }
 }

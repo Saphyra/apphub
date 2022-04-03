@@ -49,7 +49,7 @@ public class SaveGameItemServiceTest {
     @Test
     public void error() {
         given(objectMapperWrapper.convertValue(universeModel, GameItem.class)).willReturn(universeModel);
-        given(universeModel.getProcessType()).willReturn(GameItemType.UNIVERSE);
+        given(universeModel.getType()).willReturn(GameItemType.UNIVERSE);
         given(objectMapperWrapper.convertValue(universeModel, UniverseModel.class)).willThrow(new RuntimeException());
 
         underTest.save(Arrays.asList(universeModel));
@@ -61,7 +61,7 @@ public class SaveGameItemServiceTest {
     @Test
     public void saveGameData() {
         given(objectMapperWrapper.convertValue(universeModel, GameItem.class)).willReturn(universeModel);
-        given(universeModel.getProcessType()).willReturn(GameItemType.UNIVERSE);
+        given(universeModel.getType()).willReturn(GameItemType.UNIVERSE);
         given(objectMapperWrapper.convertValue(universeModel, UniverseModel.class)).willReturn(universeModel);
 
         underTest.save(Arrays.asList(universeModel));

@@ -26,13 +26,12 @@ public class StoredResources extends ConcurrentHashMap<String, StoredResource> {
     private final LocationType locationType;
 
     @Override
-    //TODO unit test
     public StoredResource get(Object key) {
         StoredResource result = super.get(key);
         if (isNull(result)) {
-            result = storedResourceFactory.create(location, locationType, key.toString(), 0);
-            gameDataProxy.saveItem(storedResourceToModelConverter.convert(result, gameId));
-            put(key.toString(), result);
+            StoredResource storedResource = storedResourceFactory.create(location, locationType, key.toString(), 0);
+            put(storedResource.getDataId(), storedResource);
+            return storedResource;
         }
         return result;
     }

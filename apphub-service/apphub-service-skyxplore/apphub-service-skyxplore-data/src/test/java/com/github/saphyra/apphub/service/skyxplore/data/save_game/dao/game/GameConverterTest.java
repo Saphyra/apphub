@@ -66,7 +66,7 @@ public class GameConverterTest {
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getName()).isEqualTo(NAME);
         assertThat(result.getHost()).isEqualTo(HOST);
-        assertThat(result.getProcessType()).isEqualTo(GameItemType.GAME);
+        assertThat(result.getType()).isEqualTo(GameItemType.GAME);
         assertThat(result.getLastPlayed()).isEqualTo(LAST_PLAYED);
     }
 }

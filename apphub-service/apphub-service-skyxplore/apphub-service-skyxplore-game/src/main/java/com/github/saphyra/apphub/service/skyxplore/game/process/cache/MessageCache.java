@@ -15,7 +15,7 @@ public class MessageCache extends ConcurrentHashMap<BiWrapper<UUID, BiWrapper<We
     }
 
     public void process(ExecutorServiceBean executorServiceBean) {
-        log.info("Sending {} amount of WS messages.", size()); //TODO log level
+        log.debug("Sending {} amount of WS messages.", size());
         if (!isEmpty()) {
             values()
                 .forEach(executorServiceBean::execute);

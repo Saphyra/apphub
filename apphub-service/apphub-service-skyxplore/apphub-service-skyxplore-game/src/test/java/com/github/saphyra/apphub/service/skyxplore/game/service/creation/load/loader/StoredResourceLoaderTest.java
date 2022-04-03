@@ -24,6 +24,7 @@ public class StoredResourceLoaderTest {
     private static final UUID STORED_RESOURCE_ID = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
     private static final Integer AMOUNT = 354;
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private GameItemLoader gameItemLoader;
@@ -44,7 +45,7 @@ public class StoredResourceLoaderTest {
         given(storedResourceModel.getDataId()).willReturn(DATA_ID);
         given(storedResourceModel.getAmount()).willReturn(AMOUNT);
 
-        Map<String, StoredResource> result = underTest.load(LOCATION);
+        Map<String, StoredResource> result = underTest.load(GAME_ID, LOCATION);
 
         assertThat(result).hasSize(1);
         StoredResource storedResource = result.get(DATA_ID);

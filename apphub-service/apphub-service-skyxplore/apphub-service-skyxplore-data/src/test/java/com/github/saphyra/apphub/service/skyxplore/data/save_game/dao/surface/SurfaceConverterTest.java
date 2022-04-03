@@ -68,7 +68,7 @@ public class SurfaceConverterTest {
 
         assertThat(result.getId()).isEqualTo(SURFACE_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getProcessType()).isEqualTo(GameItemType.SURFACE);
+        assertThat(result.getType()).isEqualTo(GameItemType.SURFACE);
         assertThat(result.getPlanetId()).isEqualTo(PLANET_ID);
         assertThat(result.getSurfaceType()).isEqualTo(SURFACE_TYPE);
     }

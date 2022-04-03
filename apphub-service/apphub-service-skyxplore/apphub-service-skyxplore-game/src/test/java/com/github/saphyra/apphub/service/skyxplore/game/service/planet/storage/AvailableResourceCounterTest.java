@@ -1,11 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResources;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AvailableResourceCounter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResources;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -39,9 +38,13 @@ public class AvailableResourceCounterTest {
     @Mock
     private AllocatedResource allocatedResource2;
 
+    @Mock
+    private StoredResources storedResources;
+
     @Test
     public void countAvailableAmount() {
-        given(storageDetails.getStoredResources()).willReturn(CollectionUtils.singleValueMap(DATA_ID_1, storedResource));
+        given(storageDetails.getStoredResources()).willReturn(storedResources);
+        given(storedResources.get(DATA_ID_1)).willReturn(storedResource);
         given(storageDetails.getAllocatedResources()).willReturn(new AllocatedResources(List.of(allocatedResource1, allocatedResource2)));
 
         given(storedResource.getAmount()).willReturn(STORED_AMOUNT);

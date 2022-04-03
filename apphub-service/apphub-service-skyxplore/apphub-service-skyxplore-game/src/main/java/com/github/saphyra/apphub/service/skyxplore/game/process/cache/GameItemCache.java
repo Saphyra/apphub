@@ -25,6 +25,7 @@ public class GameItemCache {
     }
 
     public void save(GameItem gameItem) {
+        log.debug("Saving {} to cache", gameItem);
         items.put(gameItem.getId(), gameItem);
     }
 
@@ -34,7 +35,7 @@ public class GameItemCache {
     }
 
     public void process(GameDataProxy gameDataProxy) {
-        log.info("Saving {} number of gameItems", items.size()); //TODO log level
+        log.debug("Saving {} number of gameItems", items.size());
 
         if (!items.isEmpty()) {
             gameDataProxy.saveItems(items.values());

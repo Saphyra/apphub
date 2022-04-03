@@ -51,7 +51,7 @@ public class PlayerToModelConverterTest {
 
         assertThat(result.getId()).isEqualTo(PLAYER_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getProcessType()).isEqualTo(GameItemType.PLAYER);
+        assertThat(result.getType()).isEqualTo(GameItemType.PLAYER);
         assertThat(result.getUserId()).isEqualTo(USER_ID);
         assertThat(result.getUsername()).isEqualTo(USERNAME);
         assertThat(result.getAi()).isTrue();

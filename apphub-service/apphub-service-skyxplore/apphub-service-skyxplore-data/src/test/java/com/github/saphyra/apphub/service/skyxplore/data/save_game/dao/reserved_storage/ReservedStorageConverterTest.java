@@ -82,7 +82,7 @@ public class ReservedStorageConverterTest {
 
         assertThat(result.getId()).isEqualTo(RESERVED_STORAGE_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getProcessType()).isEqualTo(GameItemType.RESERVED_STORAGE);
+        assertThat(result.getType()).isEqualTo(GameItemType.RESERVED_STORAGE);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getAmount()).isEqualTo(AMOUNT);

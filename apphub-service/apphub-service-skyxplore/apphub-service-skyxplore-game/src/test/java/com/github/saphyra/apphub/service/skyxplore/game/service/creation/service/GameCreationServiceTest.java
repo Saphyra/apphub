@@ -11,7 +11,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.GameFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.GameSaverService;
-import com.github.saphyra.apphub.service.skyxplore.game.tick.TickSchedulerService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,9 +44,6 @@ public class GameCreationServiceTest {
     @Mock
     private GameSaverService gameSaverService;
 
-    @Mock
-    private TickSchedulerService tickSchedulerService;
-
     private final BlockingQueue<SkyXploreGameCreationRequest> requests = new ArrayBlockingQueue<>(1);
 
     @Mock
@@ -71,7 +67,6 @@ public class GameCreationServiceTest {
             .gameSaverService(gameSaverService)
             .executorServiceBeanFactory(ExecutorServiceBeenTestUtils.createFactory(Mockito.mock(ErrorReporterService.class)))
             .errorReporterService(errorReporterService)
-            .tickSchedulerService(tickSchedulerService)
             .build();
     }
 
@@ -91,6 +86,5 @@ public class GameCreationServiceTest {
         assertThat(message.getRecipients()).containsExactly(PLAYER_ID);
         assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED);
         verify(gameSaverService).save(game);
-        verify(tickSchedulerService).addGame(game);
     }
 }

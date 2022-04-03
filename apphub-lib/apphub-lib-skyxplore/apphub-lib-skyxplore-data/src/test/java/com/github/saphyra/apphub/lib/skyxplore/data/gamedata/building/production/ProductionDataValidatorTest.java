@@ -53,15 +53,6 @@ public class ProductionDataValidatorTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void nullMaxBatchSize() {
-        Map<String, ProductionData> map = new HashMap<>();
-        map.put(KEY, productionData);
-        given(productionData.getMaxBatchSize()).willReturn(null);
-
-        underTest.validate(map);
-    }
-
-    @Test(expected = IllegalStateException.class)
     public void nullPlaced() {
         Map<String, ProductionData> map = new HashMap<>();
         map.put(KEY, productionData);

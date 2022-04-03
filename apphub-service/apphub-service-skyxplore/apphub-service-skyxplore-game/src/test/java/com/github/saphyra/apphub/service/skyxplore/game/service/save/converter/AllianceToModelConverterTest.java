@@ -39,7 +39,7 @@ public class AllianceToModelConverterTest {
 
         assertThat(result.getId()).isEqualTo(ALLIANCE_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getProcessType()).isEqualTo(GameItemType.ALLIANCE);
+        assertThat(result.getType()).isEqualTo(GameItemType.ALLIANCE);
         assertThat(result.getName()).isEqualTo(ALLIANCE_NAME);
     }
 }

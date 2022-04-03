@@ -5,7 +5,10 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.common_util.collection.StringStringMap;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
@@ -22,16 +25,18 @@ import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessParamKeys
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.UseAllocatedResourceService;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.AllocatedResourceToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ReservedStorageToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.StoredResourceToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,14 +46,16 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 //TODO unit test
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-@Builder
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@Builder(access = AccessLevel.PACKAGE)
+@Slf4j
 public class ProductionOrderProcess implements Process {
     @Getter
+    @NonNull
     private final UUID processId;
 
     @Getter
-    private volatile ProcessStatus status = ProcessStatus.CREATED;
+    private volatile ProcessStatus status;
 
     private volatile String producerBuildingDataId;
 
@@ -75,9 +82,12 @@ public class ProductionOrderProcess implements Process {
 
     @Override
     public void work(SyncCache syncCache) {
+        log.info("Working on {}", this);
+
         if (status == ProcessStatus.CREATED) {
             Optional<String> maybeProductionBuilding = applicationContextProxy.getBean(ProducerBuildingFinderService.class)
                 .findProducerBuildingDataId(planet, reservedStorage.getDataId());
+            log.info("ProductionBuilding for {}: {}", reservedStorage.getDataId(), maybeProductionBuilding);
 
             if (maybeProductionBuilding.isPresent()) {
                 producerBuildingDataId = maybeProductionBuilding.get();
@@ -85,29 +95,38 @@ public class ProductionOrderProcess implements Process {
                 createResourceRequirementProcesses(syncCache);
 
                 status = ProcessStatus.IN_PROGRESS;
+            } else {
+                log.info("Producer not found for {}", reservedStorage.getDataId());
             }
         }
 
         if (status == ProcessStatus.IN_PROGRESS) {
             if (game.getProcesses().getByExternalReferenceAndType(processId, ProcessType.PRODUCTION_ORDER).stream().anyMatch(process -> process.getStatus() != ProcessStatus.DONE)) {
+                log.info("Waiting for ProductionOrderProcesses to finish...");
                 return;
             }
 
             List<Process> requestWorkProcesses = game.getProcesses().getByExternalReferenceAndType(processId, ProcessType.REQUEST_WORK);
             if (requestWorkProcesses.isEmpty()) {
-                applicationContextProxy.getBean(UseAllocatedResourceService.class).resolveAllocations(syncCache, game.getGameId(), planet, processId);
+                log.info("RequestWorkProcess is not present. Resolving allocations...");
+                applicationContextProxy.getBean(UseAllocatedResourceService.class)
+                    .resolveAllocations(syncCache, game.getGameId(), planet, processId);
                 requestWorkProcesses = createWorkPointProcesses(syncCache);
             }
 
             if (requestWorkProcesses.stream().allMatch(process -> process.getStatus() == ProcessStatus.DONE)) {
                 storeResource(syncCache);
                 status = ProcessStatus.DONE;
+            } else {
+                log.info("Waiting for RequestWorkProcesses to finish...");
             }
         }
     }
 
     //TODO extract
     private List<Process> createWorkPointProcesses(SyncCache syncCache) {
+        log.info("Creating WorkPointProcesses...");
+
         ProductionData productionData = applicationContextProxy.getBean(ProductionBuildingService.class)
             .get(producerBuildingDataId)
             .getGives()
@@ -119,18 +138,21 @@ public class ProductionOrderProcess implements Process {
             .getCitizen()
             .getMaxWorkPointsBatch();
 
+        log.info("RequiredWorkPoints: {}, MaxWorkPointsBatch: {}", requiredWorkPoints, maxWorkPointsBatch);
+
         List<Process> result = new ArrayList<>();
 
         for (int workPointsLeft = requiredWorkPoints; workPointsLeft > 0; workPointsLeft -= maxWorkPointsBatch) {
-            Process requestWorkProcess = new RequestWorkProcess(
-                applicationContextProxy,
-                processId,
-                game,
-                planet,
-                producerBuildingDataId,
-                productionData.getRequiredSkill(),
-                Math.min(workPointsLeft, maxWorkPointsBatch)
-            );
+            Process requestWorkProcess = applicationContextProxy.getBean(RequestWorkProcessFactory.class)
+                .create(
+                    processId,
+                    game,
+                    planet,
+                    producerBuildingDataId,
+                    productionData.getRequiredSkill(),
+                    Math.min(workPointsLeft, maxWorkPointsBatch)
+                );
+            log.info("{} created.", requestWorkProcess);
 
             game.getProcesses()
                 .add(requestWorkProcess);
@@ -143,6 +165,7 @@ public class ProductionOrderProcess implements Process {
 
     //TODO extract
     private void createResourceRequirementProcesses(SyncCache syncCache) {
+        log.info("Creating ResourceRequirementProcesses for {}", this);
         ProductionRequirementsAllocationService productionRequirementsAllocationService = applicationContextProxy.getBean(ProductionRequirementsAllocationService.class);
 
         applicationContextProxy.getBean(ProductionBuildingService.class)
@@ -156,8 +179,10 @@ public class ProductionOrderProcess implements Process {
             .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue() * amount))
             .entrySet()
             .stream()
+            .peek(entry -> log.info("Required {} of {}", entry.getValue(), entry.getKey()))
             .map(entry -> productionRequirementsAllocationService.allocate(syncCache, game.getGameId(), planet, processId, entry.getKey(), entry.getValue()))
-            .flatMap(reservedStorageId -> applicationContextProxy.getBean(ProductionOrderProcessFactory.class).create(applicationContextProxy, processId, game, planet, reservedStorageId).stream())
+            .flatMap(reservedStorageId -> applicationContextProxy.getBean(ProductionOrderProcessFactory.class)
+                .create(applicationContextProxy, processId, game, planet, reservedStorageId).stream())
             .forEach(productionOrderProcess -> {
                 game.getProcesses().add(productionOrderProcess);
                 syncCache.saveGameItem(productionOrderProcess.toModel());
@@ -166,12 +191,19 @@ public class ProductionOrderProcess implements Process {
 
     //TODO extract
     private void storeResource(SyncCache syncCache) {
-        allocatedResource.increaseAmount(amount);
+        log.info("ProductionOrder finished.");
+
         StoredResource storedResource = planet.getStorageDetails()
             .getStoredResources()
             .get(reservedStorage.getDataId());
+
+        log.info("Before update: {}, {}, {}", storedResource, allocatedResource, reservedStorage);
+
+        allocatedResource.increaseAmount(amount);
         storedResource.increaseAmount(amount);
         reservedStorage.decreaseAmount(amount);
+
+        log.info("After update: {}, {}, {}", storedResource, allocatedResource, reservedStorage);
 
         syncCache.saveGameItem(applicationContextProxy.getBean(ReservedStorageToModelConverter.class).convert(reservedStorage, game.getGameId()));
         syncCache.saveGameItem(applicationContextProxy.getBean(AllocatedResourceToModelConverter.class).convert(allocatedResource, game.getGameId()));
@@ -210,16 +242,39 @@ public class ProductionOrderProcess implements Process {
 
     @Override
     public ProcessModel toModel() {
+        UuidConverter uuidConverter = applicationContextProxy.getBean(UuidConverter.class);
+
         ProcessModel model = new ProcessModel();
-        ProcessModel result = new ProcessModel();
-        result.setId(processId);
-        result.setGameId(game.getGameId());
-        result.setType(GameItemType.PROCESS);
-        result.setProcessType(getType());
-        result.setLocation(planet.getPlanetId());
-        result.setLocationType(LocationType.PLANET.name());
-        result.setExternalReference(getExternalReference());
-        result.setData(CollectionUtils.singleValueMap(ProcessParamKeys.PRODUCTION_BUILDING_DATA_ID, producerBuildingDataId));
+        model.setId(processId);
+        model.setGameId(game.getGameId());
+        model.setType(GameItemType.PROCESS);
+        model.setProcessType(getType());
+        model.setStatus(status);
+        model.setLocation(planet.getPlanetId());
+        model.setLocationType(LocationType.PLANET.name());
+        model.setExternalReference(getExternalReference());
+        model.setData(new StringStringMap(
+            CollectionUtils.toMap(
+                new BiWrapper<>(ProcessParamKeys.PRODUCTION_BUILDING_DATA_ID, producerBuildingDataId),
+                new BiWrapper<>(ProcessParamKeys.RESERVED_STORAGE_ID, uuidConverter.convertDomain(reservedStorage.getReservedStorageId())),
+                new BiWrapper<>(ProcessParamKeys.ALLOCATED_RESOURCE_ID, uuidConverter.convertDomain(allocatedResource.getAllocatedResourceId())),
+                new BiWrapper<>(ProcessParamKeys.AMOUNT, String.valueOf(amount))
+            ))
+        );
         return model;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "%s(processId=%s, status=%s, producerBuildingDataId=%s, reservedStorageId=%s, dataId=%s, amount=%s)",
+            getClass().getSimpleName(),
+            processId,
+            status,
+            producerBuildingDataId,
+            reservedStorage.getReservedStorageId(),
+            reservedStorage.getDataId(),
+            amount
+        );
     }
 }

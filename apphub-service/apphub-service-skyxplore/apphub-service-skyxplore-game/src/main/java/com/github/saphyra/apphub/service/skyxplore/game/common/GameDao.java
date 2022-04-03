@@ -70,8 +70,10 @@ public class GameDao {
             for (int i = 0; i < 60; i++) {
                 int queueSize = game.getEventLoop().getQueueSize();
                 if (queueSize == 0) {
+                    sleepService.sleep(10000);
                     game.getEventLoop()
                         .stop();
+                    log.info("EventLoop is shut down.");
                     return;
                 }
 

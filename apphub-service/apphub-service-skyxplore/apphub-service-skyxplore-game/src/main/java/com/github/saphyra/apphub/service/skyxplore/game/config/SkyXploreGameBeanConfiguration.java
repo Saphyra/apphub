@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGa
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
@@ -48,6 +49,11 @@ public class SkyXploreGameBeanConfiguration {
     @Bean
     IdGenerator idGenerator() {
         return new IdGenerator();
+    }
+
+    @Bean
+    UuidConverter uuidConverter() {
+        return new UuidConverter();
     }
 
     @Bean

@@ -6,8 +6,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.common_util.collection.StringStringMap;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
@@ -29,7 +29,11 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.S
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.PlanetToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,8 +45,11 @@ import static java.util.Objects.isNull;
 
 //TODO unit test
 @Slf4j
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PACKAGE)
 public class RequestWorkProcess implements Process {
     @Getter
+    @NonNull
     private final UUID processId;
 
     @Getter
@@ -66,36 +73,6 @@ public class RequestWorkProcess implements Process {
 
     private final ApplicationContextProxy applicationContextProxy;
 
-    public RequestWorkProcess(ApplicationContextProxy applicationContextProxy, UUID externalReference, Game game, Planet planet, String buildingDataId, SkillType skillType, int requiredWorkPoints) {
-        this(applicationContextProxy, externalReference, game, planet, buildingDataId, skillType, requiredWorkPoints, RequestWorkProcessType.OTHER, null);
-    }
-
-    //TODO move to factory
-    public RequestWorkProcess(
-        ApplicationContextProxy applicationContextProxy,
-        UUID externalReference,
-        Game game,
-        Planet planet,
-        String buildingDataId,
-        SkillType skillType,
-        int requiredWorkPoints,
-        RequestWorkProcessType requestWorkProcessType,
-        UUID targetId
-    ) {
-        processId = applicationContextProxy.getBean(IdGenerator.class)
-            .randomUuid();
-        status = ProcessStatus.IN_PROGRESS;
-        this.externalReference = externalReference;
-        this.game = game;
-        this.planet = planet;
-        this.applicationContextProxy = applicationContextProxy;
-        this.skillType = skillType;
-        this.requiredWorkPoints = requiredWorkPoints;
-        this.requestWorkProcessType = requestWorkProcessType;
-        this.targetId = targetId;
-        this.buildingDataId = buildingDataId;
-    }
-
     @Override
     public int getPriority() {
         return game.getProcesses()
@@ -111,32 +88,46 @@ public class RequestWorkProcess implements Process {
     @SneakyThrows
     @Override
     public void work(SyncCache syncCache) {
+        log.info("Working on {}", this);
+
+        if (status == ProcessStatus.CREATED) {
+            status = ProcessStatus.IN_PROGRESS;
+        }
+
         if (!isNull(buildingDataId) && planet.getBuildingAllocations().findByProcessId(processId).isEmpty()) {
             Optional<UUID> maybeSuitableBuilding = applicationContextProxy.getBean(ProductionBuildingFinder.class)
                 .findSuitableProductionBuildings(planet, buildingDataId);
+            log.info("{} is required for work. Found: {}", buildingDataId, maybeSuitableBuilding);
 
             if (maybeSuitableBuilding.isEmpty()) {
+                log.info("No suitable building found.");
                 return;
             }
 
             UUID buildingId = maybeSuitableBuilding.get();
-            planet.getBuildingAllocations().add(buildingId, processId);
+            planet.getBuildingAllocations()
+                .add(buildingId, processId);
+            log.info("Building {} assigned. BuildingAllocations: {}", buildingId, planet.getBuildingAllocations());
 
             syncCache.saveGameItem(applicationContextProxy.getBean(PlanetToModelConverter.class).convert(planet, game));
         }
 
         if (!isNull(workFuture)) {
+            log.info("Citizen is already working.");
             if (workFuture.isDone()) {
                 int completedWorkPoints = workFuture.get()
                     .getOrThrow()
                     .getWorkPoints();
+
                 this.completedWorkPoints += completedWorkPoints;
+                log.info("Citizen completed {} workPoints. Total: {}. Required: {}", completedWorkPoints, this.completedWorkPoints, requiredWorkPoints);
 
                 updateTarget(syncCache, completedWorkPoints);
 
                 workFuture = null;
 
                 cycle++;
+                log.info("Cycle: {}", cycle);
                 if (cycle >= 10) {
                     releaseBuildingAndCitizen(syncCache);
                     cycle = 0;
@@ -145,24 +136,45 @@ public class RequestWorkProcess implements Process {
             }
         }
 
-        if (isNull(workFuture) && completedWorkPoints < requiredWorkPoints) {
+        if (requiredWorkPoints == completedWorkPoints) {
+            log.info("{} finished.", this);
+            releaseBuildingAndCitizen(syncCache);
+            status = ProcessStatus.DONE;
+        }
+
+        if (isNull(workFuture) && status == ProcessStatus.IN_PROGRESS) {
             Optional<UUID> maybeWorker = planet.getCitizenAllocations()
                 .findByProcessId(processId);
+            log.info("Scheduling next cycle of work. Currently employed citizen: {}", maybeWorker);
 
-            if (maybeWorker.isEmpty()) {
-                maybeWorker = applicationContextProxy.getBean(CitizenFinder.class).getSuitableCitizen(planet, skillType);
+            if (maybeWorker.isPresent()) {
+                UUID worker = maybeWorker.get();
+                if (planet.getPopulation().get(worker).getMorale() < applicationContextProxy.getBean(GameProperties.class).getCitizen().getWorkPointsPerSeconds()) {
+                    log.info("Citizen {} has not enough morale for the next work cycle.", worker);
+                    releaseCitizen(syncCache);
+                    maybeWorker = Optional.empty();
+                }
             }
 
             if (maybeWorker.isEmpty()) {
+                maybeWorker = applicationContextProxy.getBean(CitizenFinder.class)
+                    .getSuitableCitizen(planet, skillType);
+                log.info("Suitable citizen found for work: {}", maybeWorker);
+            }
+
+            if (maybeWorker.isEmpty()) {
+                log.info("No suitable worker found.");
                 return;
             }
 
             UUID worker = maybeWorker.get();
             planet.getCitizenAllocations()
                 .put(worker, processId);
+            log.info("CitizenAllocations after allocating worker: {}", planet.getCitizenAllocations());
 
             int workPointsLeft = requiredWorkPoints - completedWorkPoints;
             int workPointsPerSeconds = applicationContextProxy.getBean(GameProperties.class).getCitizen().getWorkPointsPerSeconds();
+            log.info("WorkPointsLeft: {}, workPointsPerSeconds: {}", workPointsLeft, workPointsPerSeconds);
             Work work = Work.builder()
                 .workPoints(Math.min(workPointsLeft, workPointsPerSeconds))
                 .game(game)
@@ -171,11 +183,8 @@ public class RequestWorkProcess implements Process {
                 .skillType(skillType)
                 .applicationContextProxy(applicationContextProxy)
                 .build();
+            log.info("{} created", work);
             workFuture = applicationContextProxy.getBean(ExecutorServiceBean.class).asyncProcess(work);
-        }
-
-        if (requiredWorkPoints == completedWorkPoints) {
-            status = ProcessStatus.DONE;
         }
     }
 
@@ -183,6 +192,8 @@ public class RequestWorkProcess implements Process {
     private void updateTarget(SyncCache syncCache, int completedWorkPoints) {
         switch (requestWorkProcessType) {
             case CONSTRUCTION:
+                log.info("Adding {} workPoints to CONSTRUCTION {}", completedWorkPoints, targetId);
+
                 Surface surface = planet.getSurfaces()
                     .values()
                     .stream()
@@ -194,7 +205,10 @@ public class RequestWorkProcess implements Process {
 
                 Building building = surface.getBuilding();
                 Construction construction = building.getConstruction();
+
+                log.info("Before update: {}", construction);
                 construction.setCurrentWorkPoints(construction.getCurrentWorkPoints() + completedWorkPoints);
+                log.info("After update: {}", construction);
 
                 syncCache.saveGameItem(applicationContextProxy.getBean(ConstructionToModelConverter.class).convert(construction, game.getGameId()));
 
@@ -218,6 +232,7 @@ public class RequestWorkProcess implements Process {
                 );
                 break;
             case OTHER:
+                log.info("No status update needed.");
                 break;
             default:
                 log.warn("No handler for requestWorkProcessType {}", requestWorkProcessType);
@@ -242,32 +257,58 @@ public class RequestWorkProcess implements Process {
         syncCache.saveGameItem(toModel());
     }
 
+    private void releaseCitizen(SyncCache syncCache) {
+        log.info("Releasing citizen and building allocations...");
+        planet.getCitizenAllocations().releaseByProcessId(processId);
+        log.info("CitizenAllocations after release: {}", planet.getCitizenAllocations());
+        syncCache.saveGameItem(applicationContextProxy.getBean(PlanetToModelConverter.class).convert(planet, game));
+    }
+
     private void releaseBuildingAndCitizen(SyncCache syncCache) {
+        log.info("Releasing citizen and building allocations...");
         planet.getBuildingAllocations().releaseByProcessId(processId);
         planet.getCitizenAllocations().releaseByProcessId(processId);
+        log.info("BuildingAllocations after release: {}", planet.getBuildingAllocations());
+        log.info("CitizenAllocations after release: {}", planet.getCitizenAllocations());
         syncCache.saveGameItem(applicationContextProxy.getBean(PlanetToModelConverter.class).convert(planet, game));
     }
 
     @Override
     public ProcessModel toModel() {
         ProcessModel model = new ProcessModel();
-        ProcessModel result = new ProcessModel();
-        result.setId(processId);
-        result.setGameId(game.getGameId());
-        result.setType(GameItemType.PROCESS);
-        result.setProcessType(getType());
-        result.setLocation(planet.getPlanetId());
-        result.setLocationType(LocationType.PLANET.name());
-        result.setExternalReference(getExternalReference());
-        result.setData(CollectionUtils.toMap(
-            new BiWrapper<>(ProcessParamKeys.BUILDING_DATA_ID, buildingDataId),
-            new BiWrapper<>(ProcessParamKeys.SKILL_TYPE, skillType.name()),
-            new BiWrapper<>(ProcessParamKeys.REQUIRED_WORK_POINTS, String.valueOf(requiredWorkPoints)),
-            new BiWrapper<>(ProcessParamKeys.REQUEST_WORK_PROCESS_TYPE, requestWorkProcessType.name()),
-            new BiWrapper<>(ProcessParamKeys.TARGET_ID, applicationContextProxy.getBean(UuidConverter.class).convertDomain(targetId)),
-            new BiWrapper<>(ProcessParamKeys.COMPLETED_WORK_POINTS, String.valueOf(completedWorkPoints)),
-            new BiWrapper<>(ProcessParamKeys.CYCLE, String.valueOf(cycle))
-        ));
+        model.setId(processId);
+        model.setGameId(game.getGameId());
+        model.setType(GameItemType.PROCESS);
+        model.setProcessType(getType());
+        model.setStatus(status);
+        model.setLocation(planet.getPlanetId());
+        model.setLocationType(LocationType.PLANET.name());
+        model.setExternalReference(getExternalReference());
+        model.setData(new StringStringMap(
+            CollectionUtils.toMap(
+                new BiWrapper<>(ProcessParamKeys.BUILDING_DATA_ID, buildingDataId),
+                new BiWrapper<>(ProcessParamKeys.SKILL_TYPE, skillType.name()),
+                new BiWrapper<>(ProcessParamKeys.REQUIRED_WORK_POINTS, String.valueOf(requiredWorkPoints)),
+                new BiWrapper<>(ProcessParamKeys.REQUEST_WORK_PROCESS_TYPE, requestWorkProcessType.name()),
+                new BiWrapper<>(ProcessParamKeys.TARGET_ID, applicationContextProxy.getBean(UuidConverter.class).convertDomain(targetId)),
+                new BiWrapper<>(ProcessParamKeys.COMPLETED_WORK_POINTS, String.valueOf(completedWorkPoints)),
+                new BiWrapper<>(ProcessParamKeys.CYCLE, String.valueOf(cycle))
+            ))
+        );
         return model;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "%s(processId=%s, status=%s, requiredWorkPoints=%s, completedWorkPoints=%s, cycle=%s, hasFuture=%s)",
+            getClass().getSimpleName(),
+            processId,
+            status,
+            requiredWorkPoints,
+            completedWorkPoints,
+            cycle,
+            !isNull(workFuture)
+        );
     }
 }

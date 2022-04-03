@@ -31,4 +31,12 @@ public class AllocatedResources extends Vector<AllocatedResource> {
             .filter(allocatedResource -> allocatedResource.getExternalReference().equals(externalReference))
             .collect(Collectors.toList());
     }
+
+    //TODO unit test
+    public AllocatedResource findByIdValidated(UUID allocatedResourceId) {
+        return stream()
+            .filter(allocatedResource -> allocatedResource.getAllocatedResourceId().equals(allocatedResourceId))
+            .findFirst()
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "AllocatedResource not found with id " + allocatedResourceId));
+    }
 }

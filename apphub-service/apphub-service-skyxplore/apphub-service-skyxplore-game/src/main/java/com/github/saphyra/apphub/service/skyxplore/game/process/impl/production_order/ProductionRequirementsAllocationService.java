@@ -34,14 +34,19 @@ class ProductionRequirementsAllocationService {
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
 
     UUID allocate(SyncCache syncCache, UUID gameId, Planet planet, UUID externalReference, String dataId, Integer amount) {
+        log.info("Allocating {} of {}", amount, dataId);
         StorageDetails storageDetails = planet.getStorageDetails();
         int availableAmount = availableResourceCounter.countAvailableAmount(storageDetails, dataId);
 
-        int allocatedAmount = Math.max(amount, availableAmount);
+        int allocatedAmount = Math.min(amount, availableAmount);
         int reservedAmount = amount - allocatedAmount;
 
+        log.info("Available: {}, Allocated: {}, Reserved: {}", availableAmount, allocatedAmount, reservedAmount);
+
         AllocatedResource allocatedResource = allocatedResourceFactory.create(planet.getPlanetId(), LocationType.PRODUCTION, externalReference, dataId, allocatedAmount);
+        log.info("{} created.", allocatedResource);
         ReservedStorage reservedStorage = reservedStorageFactory.create(planet.getPlanetId(), LocationType.PRODUCTION, externalReference, dataId, reservedAmount);
+        log.info("{} created.", reservedStorage);
 
         storageDetails.getAllocatedResources()
             .add(allocatedResource);

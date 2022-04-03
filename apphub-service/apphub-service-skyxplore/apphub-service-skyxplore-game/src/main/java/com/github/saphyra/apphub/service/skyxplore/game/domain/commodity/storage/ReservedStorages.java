@@ -1,6 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage;
 
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,5 +29,11 @@ public class ReservedStorages extends Vector<ReservedStorage> {
         return stream()
             .filter(reservedStorage -> reservedStorage.getExternalReference().equals(processId))
             .collect(Collectors.toList());
+    }
+
+    //TODO unit test
+    public ReservedStorage findByIdValidated(UUID reservedStorageId) {
+        return findById(reservedStorageId)
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ReservedStorage not found with id " + reservedStorageId));
     }
 }

@@ -93,7 +93,7 @@ public class PlanetConverterTest {
 
         assertThat(result.getId()).isEqualTo(PLANET_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getProcessType()).isEqualTo(GameItemType.PLANET);
+        assertThat(result.getType()).isEqualTo(GameItemType.PLANET);
         assertThat(result.getSolarSystemId()).isEqualTo(SOLAR_SYSTEM_ID);
         assertThat(result.getDefaultName()).isEqualTo(DEFAULT_NAME);
         assertThat(result.getCustomNames()).isEqualTo(CUSTOM_NAMES);

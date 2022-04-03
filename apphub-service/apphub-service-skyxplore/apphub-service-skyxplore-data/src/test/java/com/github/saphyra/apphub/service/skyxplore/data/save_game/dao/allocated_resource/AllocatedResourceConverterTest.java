@@ -55,7 +55,7 @@ public class AllocatedResourceConverterTest {
 
         assertThat(result.getId()).isEqualTo(ALLOCATED_RESOURCE_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getProcessType()).isEqualTo(GameItemType.ALLOCATED_RESOURCE);
+        assertThat(result.getType()).isEqualTo(GameItemType.ALLOCATED_RESOURCE);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);

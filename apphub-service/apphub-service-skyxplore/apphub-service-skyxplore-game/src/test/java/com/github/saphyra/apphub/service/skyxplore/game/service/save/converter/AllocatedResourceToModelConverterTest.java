@@ -50,7 +50,7 @@ public class AllocatedResourceToModelConverterTest {
 
         assertThat(result.get(0).getId()).isEqualTo(ALLOCATED_RESOURCE_ID);
         assertThat(result.get(0).getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.get(0).getProcessType()).isEqualTo(GameItemType.ALLOCATED_RESOURCE);
+        assertThat(result.get(0).getType()).isEqualTo(GameItemType.ALLOCATED_RESOURCE);
         assertThat(result.get(0).getLocation()).isEqualTo(LOCATION);
         assertThat(result.get(0).getLocationType()).isEqualTo(LocationType.PLANET.name());
         assertThat(result.get(0).getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);

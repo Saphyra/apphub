@@ -1,6 +1,3 @@
-TODO Create database for processes
-TODO Load processes when game is loading
-
 TODO Increase citizen's morale when idle, send them to entertaining facility if available
 TODO Send citizen's having meals when hungry
 

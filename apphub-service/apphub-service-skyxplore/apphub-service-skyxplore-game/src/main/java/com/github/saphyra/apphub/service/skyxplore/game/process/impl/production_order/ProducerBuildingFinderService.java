@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.BuildingCapacityCalculator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import static java.util.Objects.isNull;
 //TODO unit test
 class ProducerBuildingFinderService {
     private final ProductionBuildingService productionBuildingService;
+    private final BuildingCapacityCalculator buildingCapacityCalculator;
 
     Optional<String> findProducerBuildingDataId(Planet planet, String dataId) {
         return planet.getSurfaces()
@@ -25,10 +27,9 @@ class ProducerBuildingFinderService {
             .stream()
             .filter(surface -> !isNull(surface.getBuilding()))
             .map(Surface::getBuilding)
-            .filter(building -> building.getLevel() > 0)
             .filter(building -> productionBuildingService.containsKey(building.getDataId()))
             .filter(building -> productionBuildingService.get(building.getDataId()).getGives().containsKey(dataId))
-            .filter(building -> isNull(planet.getBuildingAllocations().get(building.getBuildingId())))
+            .filter(building -> buildingCapacityCalculator.calculateCapacity(planet, building) > 0)
             .map(Building::getDataId)
             .findAny();
     }

@@ -1,12 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResources;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,10 +45,14 @@ public class ActualResourceAmountQueryServiceTest {
     @Mock
     private ResourceData resourceData;
 
+    @Mock
+    private StoredResources storedResources;
+
     @Test
     public void getActualAmount_byDataIdAndPlanet() {
         given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getStoredResources()).willReturn(CollectionUtils.singleValueMap(DATA_ID_1, storedResource1));
+        given(storageDetails.getStoredResources()).willReturn(storedResources);
+        given(storedResources.get(DATA_ID_1)).willReturn(storedResource1);
         given(storedResource1.getAmount()).willReturn(AMOUNT);
 
         int result = underTest.getActualAmount(DATA_ID_1, planet);
@@ -60,10 +63,9 @@ public class ActualResourceAmountQueryServiceTest {
     @Test
     public void getActualAmount_byPlanetAndStorageType() {
         given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getStoredResources()).willReturn(CollectionUtils.toMap(
-            new BiWrapper<>(DATA_ID_1, storedResource1),
-            new BiWrapper<>(DATA_ID_2, storedResource2)
-        ));
+        given(storageDetails.getStoredResources()).willReturn(storedResources);
+        given(storedResources.get(DATA_ID_1)).willReturn(storedResource1);
+        given(storedResources.get(DATA_ID_2)).willReturn(storedResource2);
         given(storedResource1.getDataId()).willReturn(DATA_ID_1);
         given(storedResource2.getDataId()).willReturn(DATA_ID_2);
 
@@ -81,10 +83,9 @@ public class ActualResourceAmountQueryServiceTest {
     @Test
     public void getActualStorageAmount() {
         given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getStoredResources()).willReturn(CollectionUtils.toMap(
-            new BiWrapper<>(DATA_ID_1, storedResource1),
-            new BiWrapper<>(DATA_ID_2, storedResource2)
-        ));
+        given(storageDetails.getStoredResources()).willReturn(storedResources);
+        given(storedResources.get(DATA_ID_1)).willReturn(storedResource1);
+        given(storedResources.get(DATA_ID_2)).willReturn(storedResource2);
         given(resourceDataService.getByStorageType(StorageType.BULK)).willReturn(Arrays.asList(resourceData));
         given(storedResource1.getDataId()).willReturn(DATA_ID_1);
         given(storedResource1.getAmount()).willReturn(AMOUNT);

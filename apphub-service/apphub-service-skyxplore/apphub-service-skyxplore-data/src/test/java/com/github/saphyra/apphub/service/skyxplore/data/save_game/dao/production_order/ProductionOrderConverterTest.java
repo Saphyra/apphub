@@ -97,7 +97,7 @@ public class ProductionOrderConverterTest {
 
         assertThat(result.getId()).isEqualTo(PRODUCTION_ORDER_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
-        assertThat(result.getProcessType()).isEqualTo(GameItemType.PRODUCTION_ORDER);
+        assertThat(result.getType()).isEqualTo(GameItemType.PRODUCTION_ORDER);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
         assertThat(result.getAssignee()).isEqualTo(ASSIGNEE);

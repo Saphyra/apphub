@@ -36,12 +36,16 @@ public class UseAllocatedResourceService {
     }
 
     private void resolveAllocation(SyncCache syncCache, UUID gameId, Planet planet, UUID externalReference, ReservedStorage reservedStorage) {
+        log.info("Resolving allocation for {}", reservedStorage);
+
         StorageDetails storageDetails = planet.getStorageDetails();
         AllocatedResource allocatedResource = storageDetails.getAllocatedResources()
             .findByExternalReferenceAndDataIdValidated(externalReference, reservedStorage.getDataId());
+        log.info("Resolving {}", allocatedResource);
         StoredResource storedResource = storageDetails.getStoredResources()
             .get(reservedStorage.getDataId());
         storedResource.decreaseAmount(allocatedResource.getAmount());
+        log.info("{} left.", storedResource);
         allocatedResource.setAmount(0);
 
         syncCache.saveGameItem(allocatedResourceToModelConverter.convert(allocatedResource, gameId));
