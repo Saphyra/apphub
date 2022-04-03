@@ -36,8 +36,8 @@ public class FinishedProcessCleanupProcess {
                             .sleep(100);
                     }
 
-                    processContext.getGameSleepService()
-                        .sleepASecond(game);
+                    processContext.getSleepService()
+                        .sleep(1000);
                 }
 
                 log.info("Stopping ProcessSchedulerProcess for game {}", game.getGameId());
