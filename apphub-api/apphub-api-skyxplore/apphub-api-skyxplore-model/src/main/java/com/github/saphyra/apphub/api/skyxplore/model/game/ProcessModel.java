@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Map;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -18,5 +19,5 @@ public class ProcessModel extends GameItem {
     private UUID location;
     private String locationType;
     private UUID externalReference;
-    private StringStringMap data = new StringStringMap();
+    private Map<String, String> data = new StringStringMap();
 }

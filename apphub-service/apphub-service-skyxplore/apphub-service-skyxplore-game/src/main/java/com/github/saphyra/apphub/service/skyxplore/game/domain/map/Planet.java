@@ -68,7 +68,6 @@ public class Planet {
         return String.format("Planet(%s)", new Gson().toJson(this));
     }
 
-    //TODO unit test
     public Building findBuildingByConstructionIdValidated(UUID constructionId) {
         return surfaces.values()
             .stream()
@@ -80,7 +79,6 @@ public class Planet {
             .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Building not found by constructionId " + constructionId));
     }
 
-    //TODO unit test
     public Surface findSurfaceByBuildingIdValidated(UUID buildingId) {
         return surfaces.values()
             .stream()

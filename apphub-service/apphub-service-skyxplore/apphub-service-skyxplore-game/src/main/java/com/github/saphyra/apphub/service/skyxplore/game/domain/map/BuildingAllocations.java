@@ -11,7 +11,6 @@ import java.util.Vector;
 
 import static java.util.Objects.isNull;
 
-//TODO unit test
 @NoArgsConstructor
 public class BuildingAllocations extends HashMap<UUID, List<UUID>> {
     public BuildingAllocations(Map<UUID, List<UUID>> map) {
@@ -28,7 +27,7 @@ public class BuildingAllocations extends HashMap<UUID, List<UUID>> {
     }
 
     public void add(UUID buildingId, UUID processId) {
-        List<UUID> allocations = getOrDefault(buildingId, new Vector<>());
+        List<UUID> allocations = get(buildingId);
         allocations.add(processId);
         put(buildingId, allocations);
     }
@@ -43,6 +42,6 @@ public class BuildingAllocations extends HashMap<UUID, List<UUID>> {
 
     public void releaseByProcessId(UUID processId) {
         values()
-            .forEach(processIds -> processIds.remove(processId));
+            .forEach(processIds -> processIds.removeIf(lockedId -> lockedId.equals(processId)));
     }
 }

@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import java.util.List;
 import java.util.UUID;
 
+//TODO unit test
 public class SyncCache {
     private final MessageCache messageCache = new MessageCache();
     private final GameItemCache gameItemCache = new GameItemCache();

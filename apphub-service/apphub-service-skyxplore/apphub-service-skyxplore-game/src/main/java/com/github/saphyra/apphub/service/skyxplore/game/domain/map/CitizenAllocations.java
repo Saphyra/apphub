@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-//TODO unit test
 @NoArgsConstructor
 public class CitizenAllocations extends HashMap<UUID, UUID> {
     public CitizenAllocations(Map<UUID, UUID> map) {

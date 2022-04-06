@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ProcessService implements GameItemService {
     private final ProcessDao processDao;
     private final ProcessModelValidator processModelValidator;
@@ -45,12 +44,12 @@ public class ProcessService implements GameItemService {
     }
 
     @Override
-    public Optional<? extends GameItem> findById(UUID id) {
+    public Optional<ProcessModel> findById(UUID id) {
         return processDao.findById(id);
     }
 
     @Override
-    public List<? extends GameItem> getByParent(UUID parent) {
+    public List<ProcessModel> getByParent(UUID parent) {
         return processDao.getByGameId(parent);
     }
 

@@ -36,8 +36,8 @@ class PlanetConverter extends ConverterBase<PlanetEntity, PlanetModel> {
         model.setOwner(uuidConverter.convertEntity(entity.getOwner()));
         TypeReference<Map<UUID, List<UUID>>> typeReference = new TypeReference<>() {
         };
-        model.setBuildingAllocations(objectMapperWrapper.readValue(entity.getBuildingAllocations(), typeReference)); //TODO unit test
-        model.setCitizenAllocations(objectMapperWrapper.readValue(entity.getCitizenAllocations(), UuidMap.class)); //TODO unit test
+        model.setBuildingAllocations(objectMapperWrapper.readValue(entity.getBuildingAllocations(), typeReference));
+        model.setCitizenAllocations(objectMapperWrapper.readValue(entity.getCitizenAllocations(), UuidMap.class));
         return model;
     }
 
@@ -51,8 +51,8 @@ class PlanetConverter extends ConverterBase<PlanetEntity, PlanetModel> {
             .customNames(objectMapperWrapper.writeValueAsString(domain.getCustomNames()))
             .size(domain.getSize())
             .owner(uuidConverter.convertDomain(domain.getOwner()))
-            .buildingAllocations(objectMapperWrapper.writeValueAsString(domain.getBuildingAllocations())) //TODO unit test
-            .citizenAllocations(objectMapperWrapper.writeValueAsString(domain.getCitizenAllocations())) //TODO unit test
+            .buildingAllocations(objectMapperWrapper.writeValueAsString(domain.getBuildingAllocations()))
+            .citizenAllocations(objectMapperWrapper.writeValueAsString(domain.getCitizenAllocations()))
             .build();
         log.debug("Converted planet: {}", result);
         return result;

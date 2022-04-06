@@ -25,14 +25,12 @@ public class AllocatedResources extends Vector<AllocatedResource> {
             .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "AllocatedResource not found with externalReference " + externalReference + " and dataId " + dataId));
     }
 
-    //TODO unit test
     public List<AllocatedResource> getByExternalReference(UUID externalReference) {
         return stream()
             .filter(allocatedResource -> allocatedResource.getExternalReference().equals(externalReference))
             .collect(Collectors.toList());
     }
 
-    //TODO unit test
     public AllocatedResource findByIdValidated(UUID allocatedResourceId) {
         return stream()
             .filter(allocatedResource -> allocatedResource.getAllocatedResourceId().equals(allocatedResourceId))

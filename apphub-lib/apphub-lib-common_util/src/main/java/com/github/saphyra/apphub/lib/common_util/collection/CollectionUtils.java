@@ -31,7 +31,10 @@ public class CollectionUtils {
     }
 
     public static <K, V> Map<K, V> singleValueMap(K key, V value) {
-        Map<K, V> map = new HashMap<>();
+        return singleValueMap(key, value, new HashMap<>());
+    }
+
+    public static <K, V, M extends Map<K, V>> M singleValueMap(K key, V value, M map) {
         map.put(key, value);
         return map;
     }

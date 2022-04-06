@@ -18,22 +18,20 @@ public class ReservedStorages extends Vector<ReservedStorage> {
         addAll(reservedStorages);
     }
 
+    public ReservedStorage findByIdValidated(UUID reservedStorageId) {
+        return findById(reservedStorageId)
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ReservedStorage not found with id " + reservedStorageId));
+    }
+
     public Optional<ReservedStorage> findById(UUID reservedStorageId) {
         return stream()
             .filter(reservedStorage -> reservedStorage.getReservedStorageId().equals(reservedStorageId))
             .findFirst();
     }
 
-    //TODO unit test
     public List<ReservedStorage> getByExternalReference(UUID processId) {
         return stream()
             .filter(reservedStorage -> reservedStorage.getExternalReference().equals(processId))
             .collect(Collectors.toList());
-    }
-
-    //TODO unit test
-    public ReservedStorage findByIdValidated(UUID reservedStorageId) {
-        return findById(reservedStorageId)
-            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ReservedStorage not found with id " + reservedStorageId));
     }
 }

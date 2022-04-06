@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-//TODO unit test
 interface ProcessRepository extends CrudRepository<ProcessEntity, String> {
     @Modifying
     @Query("DELETE FROM ProcessEntity e WHERE e.gameId = :gameId")

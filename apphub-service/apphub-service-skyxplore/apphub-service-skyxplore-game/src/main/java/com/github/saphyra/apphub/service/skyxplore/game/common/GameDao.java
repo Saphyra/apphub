@@ -61,7 +61,6 @@ public class GameDao {
         repository.put(Optional.ofNullable(game.getGameId()).orElse(UUID.randomUUID()), game);
     }
 
-    //TODO unit test
     public void delete(Game game) {
         log.info("Deleting game {} from cache", game.getGameId());
 

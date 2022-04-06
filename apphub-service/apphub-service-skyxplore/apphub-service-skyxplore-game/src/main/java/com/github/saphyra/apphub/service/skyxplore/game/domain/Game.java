@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain;
 
-import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
@@ -36,7 +35,6 @@ public class Game {
     private LocalDateTime expiresAt;
 
     private final Chat chat;
-    private final ScheduledExecutorServiceBean timerThread; //TODO check usage
     private final EventLoop eventLoop;
     private final ProcessContext processContext;
 
