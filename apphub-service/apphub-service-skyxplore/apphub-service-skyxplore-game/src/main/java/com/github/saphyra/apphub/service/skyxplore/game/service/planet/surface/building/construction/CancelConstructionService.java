@@ -15,6 +15,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
@@ -40,6 +41,7 @@ public class CancelConstructionService {
     private final SurfaceToResponseConverter surfaceToResponseConverter;
     private final WsMessageSender messageSender;
     private final SleepService sleepService;
+    private final SyncCacheFactory syncCacheFactory;
 
     public void cancelConstructionOfConstruction(UUID userId, UUID planetId, UUID constructionId) {
         Game game = gameDao.findByUserIdValidated(userId);
@@ -80,7 +82,7 @@ public class CancelConstructionService {
             throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Construction not found on planet " + planet.getPlanetId() + " and building " + building.getBuildingId());
         }
 
-        SyncCache syncCache = new SyncCache();
+        SyncCache syncCache = syncCacheFactory.create();
         Future<ExecutionResult<SurfaceResponse>> future = game.getEventLoop()
             .processWithResponse(() -> {
                     game.getProcesses().findByExternalReferenceAndTypeValidated(construction.getConstructionId(), ProcessType.CONSTRUCTION)

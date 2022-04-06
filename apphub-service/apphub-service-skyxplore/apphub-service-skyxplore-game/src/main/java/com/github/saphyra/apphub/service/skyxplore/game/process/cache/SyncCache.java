@@ -11,8 +11,13 @@ import java.util.UUID;
 
 //TODO unit test
 public class SyncCache {
-    private final MessageCache messageCache = new MessageCache();
-    private final GameItemCache gameItemCache = new GameItemCache();
+    private final MessageCache messageCache;
+    private final GameItemCache gameItemCache;
+
+    public SyncCache(ExecutorServiceBean executorServiceBean, GameDataProxy gameDataProxy) {
+        this.messageCache = new MessageCache(executorServiceBean);
+        this.gameItemCache = new GameItemCache(gameDataProxy);
+    }
 
     public void saveAll(List<GameItem> gameItems) {
         gameItemCache.saveAll(gameItems);
@@ -30,8 +35,8 @@ public class SyncCache {
         messageCache.add(recipient, eventName, id, method);
     }
 
-    public void process(ExecutorServiceBean executorServiceBean, GameDataProxy gameDataProxy) {
-        messageCache.process(executorServiceBean);
-        gameItemCache.process(gameDataProxy);
+    public void process() {
+        messageCache.process();
+        gameItemCache.process();
     }
 }

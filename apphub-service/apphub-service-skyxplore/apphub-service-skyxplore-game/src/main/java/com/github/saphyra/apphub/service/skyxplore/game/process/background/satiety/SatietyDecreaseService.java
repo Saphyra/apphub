@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.process.background;
+package com.github.saphyra.apphub.service.skyxplore.game.process.background.satiety;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.service.skyxplore.game.common.converter.response.CitizenToResponseConverter;
@@ -6,56 +6,26 @@ import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GamePr
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessContext;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.CitizenToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
-import java.util.concurrent.Future;
 
+@Component
+@RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-public class SatietyDecreaseProcess {
+public class SatietyDecreaseService {
     private final GameProperties gameProperties;
     private final CitizenToModelConverter citizenToModelConverter;
     private final WsMessageSender messageSender;
     private final CitizenToResponseConverter citizenToResponseConverter;
 
-    public SatietyDecreaseProcess(Game game, ProcessContext processContext) {
-        this.gameProperties = processContext.getGameProperties();
-        this.citizenToModelConverter = processContext.getCitizenToModelConverter();
-        this.messageSender = processContext.getMessageSender();
-        this.citizenToResponseConverter = processContext.getCitizenToResponseConverter();
-        startProcess(game, processContext);
-    }
-
-    private void startProcess(Game game, ProcessContext context) {
-        context.getExecutorServiceBean()
-            .execute(() -> {
-                log.info("Starting SatietyDecreaseProcess for game {}", game.getGameId());
-
-                while (!game.isTerminated()) {
-                    context.getGameSleepService()
-                        .sleepASecond(game);
-
-                    SyncCache syncCache = new SyncCache();
-
-                    Future<?> future = game.getEventLoop()
-                        .process(() -> processGame(game, syncCache), syncCache);
-
-                    while (!future.isDone()) {
-                        context.getSleepService()
-                            .sleep(100);
-                    }
-                }
-
-                log.info("Stopping SatietyDecreaseProcess for game {}", game.getGameId());
-            });
-    }
-
-    private void processGame(Game game, SyncCache syncCache) {
+    public void processGame(Game game, SyncCache syncCache) {
         game.getUniverse()
             .getSystems()
             .values()

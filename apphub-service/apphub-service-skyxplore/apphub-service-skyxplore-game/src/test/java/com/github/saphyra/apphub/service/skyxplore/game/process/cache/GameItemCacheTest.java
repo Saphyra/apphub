@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -23,7 +24,8 @@ public class GameItemCacheTest {
     @Mock
     private GameDataProxy gameDataProxy;
 
-    private final GameItemCache underTest = new GameItemCache();
+    @InjectMocks
+    private GameItemCache underTest;
 
     @Mock
     private GameItem gameItem;
@@ -55,7 +57,7 @@ public class GameItemCacheTest {
         underTest.delete(GAME_ITEM_ID, GameItemType.PRODUCTION_ORDER);
         underTest.save(gameItem);
 
-        underTest.process(gameDataProxy);
+        underTest.process();
 
         verify(gameDataProxy).saveItems(underTest.getItems().values());
         verify(gameDataProxy).deleteItems(underTest.getDeletedItems());

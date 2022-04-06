@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Skill;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.GameSleepService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.CitizenToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.SkillToModelConverter;
@@ -28,6 +29,7 @@ import java.util.concurrent.Future;
 @Builder
 @Slf4j
 @ToString(exclude = {"game", "planet", "applicationContextProxy"})
+//TODO unit test
 public class Work implements Callable<Work> {
     private final int workPoints;
     private final Game game;
@@ -43,7 +45,8 @@ public class Work implements Callable<Work> {
         applicationContextProxy.getBean(GameSleepService.class)
             .sleep(game, processTime);
 
-        SyncCache syncCache = new SyncCache();
+        SyncCache syncCache = applicationContextProxy.getBean(SyncCacheFactory.class)
+            .create();
 
         Future<?> citizenUpdateProcess = game.getEventLoop()
             .process(() -> updateCitizen(syncCache), syncCache);

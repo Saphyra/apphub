@@ -7,18 +7,18 @@ import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessContext;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.Future;
 
 @Slf4j
-//TODO unit test
+@RequiredArgsConstructor
 public class ProcessSchedulerProcess {
-    public ProcessSchedulerProcess(Game game, ProcessContext processContext) {
-        startProcess(game, processContext);
-    }
+    private final Game game;
+    private final ProcessContext processContext;
 
-    private void startProcess(Game game, ProcessContext processContext) {
+    public ProcessSchedulerProcess startProcess() {
         processContext.getExecutorServiceBean()
             .execute(() -> {
                 log.info("Starting ProcessSchedulerProcess for game {}", game.getGameId());
@@ -38,6 +38,8 @@ public class ProcessSchedulerProcess {
 
                 log.info("Stopping ProcessSchedulerProcess for game {}", game.getGameId());
             });
+
+        return this;
     }
 
     private void processGame(Game game) {
@@ -52,7 +54,8 @@ public class ProcessSchedulerProcess {
 
     private void scheduleProcess(EventLoop eventLoop, Process process) {
         log.info("Scheduling process {}", process);
-        SyncCache syncCache = new SyncCache();
+        SyncCache syncCache = processContext.getSyncCacheFactory()
+            .create();
         eventLoop.process(() -> process.scheduleWork(syncCache), syncCache);
     }
 

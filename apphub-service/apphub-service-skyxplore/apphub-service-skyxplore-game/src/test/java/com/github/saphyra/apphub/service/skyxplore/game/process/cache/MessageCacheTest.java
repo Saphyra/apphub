@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -18,7 +19,8 @@ public class MessageCacheTest {
     @Mock
     private ExecutorServiceBean executorServiceBean;
 
-    private final MessageCache underTest = new MessageCache();
+    @InjectMocks
+    private MessageCache underTest;
 
     @Mock
     private Runnable task;
@@ -30,7 +32,7 @@ public class MessageCacheTest {
     public void process() {
         underTest.add(RECIPIENT, WebSocketEventName.SKYXPLORE_GAME_PAUSED, id, task);
 
-        underTest.process(executorServiceBean);
+        underTest.process();
 
         verify(executorServiceBean).execute(task);
     }
