@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,6 +23,7 @@ public class GameItemCache {
     private final Map<UUID, GameItem> items = new ConcurrentHashMap<>();
     private final List<BiWrapper<UUID, GameItemType>> deletedItems = new Vector<>();
 
+    @NonNull
     private final GameDataProxy gameDataProxy;
 
     public void saveAll(List<GameItem> gameItems) {

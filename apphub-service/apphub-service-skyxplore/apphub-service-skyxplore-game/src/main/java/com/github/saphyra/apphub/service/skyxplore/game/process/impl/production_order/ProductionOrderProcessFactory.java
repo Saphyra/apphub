@@ -31,7 +31,7 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
     private final UuidConverter uuidConverter;
     private final ApplicationContextProxy applicationContextProxy;
 
-    public List<ProductionOrderProcess> create(ApplicationContextProxy applicationContextProxy, UUID externalReference, Game game, Planet planet, UUID reservedStorageId) {
+    public List<ProductionOrderProcess> create(UUID externalReference, Game game, Planet planet, UUID reservedStorageId) {
         ReservedStorage reservedStorage = planet.getStorageDetails()
             .getReservedStorages()
             .findById(reservedStorageId)

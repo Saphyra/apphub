@@ -54,8 +54,8 @@ public class PlanetToModelConverter {
         model.setCustomNames(planet.getCustomNames());
         model.setSize(planet.getSize());
         model.setOwner(planet.getOwner());
-        model.setBuildingAllocations(planet.getBuildingAllocations()); //TODO unit test
-        model.setCitizenAllocations(planet.getCitizenAllocations()); //TODO unit test
+        model.setBuildingAllocations(planet.getBuildingAllocations());
+        model.setCitizenAllocations(planet.getCitizenAllocations());
         return model;
     }
 }

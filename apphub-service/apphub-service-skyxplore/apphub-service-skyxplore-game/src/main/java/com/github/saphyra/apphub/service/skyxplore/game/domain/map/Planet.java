@@ -43,7 +43,7 @@ public class Planet {
     private final CitizenAllocations citizenAllocations = new CitizenAllocations(); //CitizenId <-> ProcessId
 
     @Builder.Default
-    private final OptionalMap<UUID, Citizen> population = new OptionalHashMap<>();
+    private final Map<UUID, Citizen> population = new OptionalHashMap<>();
 
     private final StorageDetails storageDetails;
 

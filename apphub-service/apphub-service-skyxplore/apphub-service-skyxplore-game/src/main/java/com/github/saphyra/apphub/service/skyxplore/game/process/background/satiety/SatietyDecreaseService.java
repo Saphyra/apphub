@@ -18,7 +18,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SatietyDecreaseService {
     private final GameProperties gameProperties;
     private final CitizenToModelConverter citizenToModelConverter;

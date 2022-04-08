@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.cache;
 
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -9,12 +7,15 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SyncCacheFactory {
-    private final ExecutorServiceBean executorServiceBean;
-    private final GameDataProxy gameDataProxy;
+    private final GameItemCacheFactory gameItemCacheFactory;
+    private final MessageCacheFactory messageCacheFactory;
+
 
     public SyncCache create() {
-        return new SyncCache(executorServiceBean, gameDataProxy);
+        return SyncCache.builder()
+            .gameItemCache(gameItemCacheFactory.create())
+            .messageCache(messageCacheFactory.create())
+            .build();
     }
 }

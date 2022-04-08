@@ -182,7 +182,7 @@ public class ProductionOrderProcess implements Process {
             .peek(entry -> log.info("Required {} of {}", entry.getValue(), entry.getKey()))
             .map(entry -> productionRequirementsAllocationService.allocate(syncCache, game.getGameId(), planet, processId, entry.getKey(), entry.getValue()))
             .flatMap(reservedStorageId -> applicationContextProxy.getBean(ProductionOrderProcessFactory.class)
-                .create(applicationContextProxy, processId, game, planet, reservedStorageId).stream())
+                .create(processId, game, planet, reservedStorageId).stream())
             .forEach(productionOrderProcess -> {
                 game.getProcesses().add(productionOrderProcess);
                 syncCache.saveGameItem(productionOrderProcess.toModel());

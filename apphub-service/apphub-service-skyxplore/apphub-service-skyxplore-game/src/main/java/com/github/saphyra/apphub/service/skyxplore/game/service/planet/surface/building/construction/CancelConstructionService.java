@@ -16,8 +16,10 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -42,6 +44,8 @@ public class CancelConstructionService {
     private final WsMessageSender messageSender;
     private final SleepService sleepService;
     private final SyncCacheFactory syncCacheFactory;
+    private final BuildingToModelConverter buildingToModelConverter;
+    private final AllocationRemovalService allocationRemovalService;
 
     public void cancelConstructionOfConstruction(UUID userId, UUID planetId, UUID constructionId) {
         Game game = gameDao.findByUserIdValidated(userId);
@@ -87,6 +91,13 @@ public class CancelConstructionService {
             .processWithResponse(() -> {
                     game.getProcesses().findByExternalReferenceAndTypeValidated(construction.getConstructionId(), ProcessType.CONSTRUCTION)
                         .cancel(syncCache);
+
+                    building.setConstruction(null);
+                    syncCache.deleteGameItem(construction.getConstructionId(), GameItemType.CONSTRUCTION);
+                    syncCache.saveGameItem(buildingToModelConverter.convert(building, game.getGameId()));
+
+                    allocationRemovalService.removeAllocationsAndReservations(syncCache, planet, construction.getConstructionId());
+
                     if (building.getLevel() == 0) {
                         surface.setBuilding(null);
                         gameDataProxy.deleteItem(building.getBuildingId(), GameItemType.BUILDING);
