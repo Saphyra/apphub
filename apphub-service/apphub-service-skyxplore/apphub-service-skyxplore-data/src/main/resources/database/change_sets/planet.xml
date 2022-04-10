@@ -20,4 +20,28 @@
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="planet" columnNames="planet_id" constraintName="planet_pk"/>
     </changeSet>
+
+    <changeSet id="add-building_allocations-to-planet" author="saphyra">
+        <preConditions>
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="planet" columnName="building_allocations"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="planet">
+            <column name="building_allocations" type="text"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-citizen_allocations-to-planet" author="saphyra">
+        <preConditions>
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="planet" columnName="citizen_allocations"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="planet">
+            <column name="citizen_allocations" type="text"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

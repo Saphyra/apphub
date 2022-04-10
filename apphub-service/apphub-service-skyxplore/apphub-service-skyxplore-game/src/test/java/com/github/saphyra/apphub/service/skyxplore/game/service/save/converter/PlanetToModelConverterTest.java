@@ -6,21 +6,21 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PriorityModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProductionOrderModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SurfaceModel;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import com.github.saphyra.apphub.service.skyxplore.game.common.converter.model.ProductionOrderToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.BuildingAllocations;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.CitizenAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.PriorityType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.ProductionOrder;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
-import com.github.saphyra.apphub.service.skyxplore.game.common.converter.model.ProductionOrderToModelConverter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -29,7 +29,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -97,10 +96,10 @@ public class PlanetToModelConverterTest {
     private CoordinateModel coordinateModel;
 
     @Mock
-    private ProductionOrder productionOrder;
+    private BuildingAllocations buildingAllocations;
 
     @Mock
-    private ProductionOrderModel productionOrderModel;
+    private CitizenAllocations citizenAllocations;
 
     @Test
     public void convertDeep() {
@@ -116,7 +115,8 @@ public class PlanetToModelConverterTest {
             .storageDetails(storageDetails)
             .priorities(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION, PRIORITY))
             .owner(OWNER)
-            .orders(Set.of(productionOrder))
+            .buildingAllocations(buildingAllocations)
+            .citizenAllocations(citizenAllocations)
             .build();
 
         given(game.getGameId()).willReturn(GAME_ID);
@@ -124,7 +124,6 @@ public class PlanetToModelConverterTest {
         given(citizenConverter.convertDeep(any(), eq(game))).willReturn(Arrays.asList(citizenModel));
         given(storageDetailsConverter.convertDeep(storageDetails, game)).willReturn(Arrays.asList(storageDetailsItem));
         given(priorityConverter.convert(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION, PRIORITY), PLANET_ID, LocationType.PLANET, game)).willReturn(Arrays.asList(priorityModel));
-        given(productionOrderToModelConverter.convert(Set.of(productionOrder), GAME_ID)).willReturn(List.of(productionOrderModel));
 
         List<GameItem> result = underTest.convertDeep(Arrays.asList(planet), game);
 
@@ -137,7 +136,9 @@ public class PlanetToModelConverterTest {
         expected.setCustomNames(CUSTOM_NAMES);
         expected.setSize(SIZE);
         expected.setOwner(OWNER);
+        expected.setCitizenAllocations(citizenAllocations);
+        expected.setBuildingAllocations(buildingAllocations);
 
-        assertThat(result).containsExactlyInAnyOrder(expected, surfaceModel, citizenModel, storageDetailsItem, priorityModel, coordinateModel, productionOrderModel);
+        assertThat(result).containsExactlyInAnyOrder(expected, surfaceModel, citizenModel, storageDetailsItem, priorityModel, coordinateModel);
     }
 }

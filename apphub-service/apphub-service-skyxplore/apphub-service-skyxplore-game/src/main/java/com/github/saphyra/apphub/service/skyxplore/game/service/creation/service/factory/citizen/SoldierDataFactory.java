@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.citizen;
 
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierData;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,11 +12,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 @Slf4j
 class SoldierDataFactory {
-    private final GameCreationProperties properties;
+    private final GameProperties properties;
 
     SoldierData create() {
         int hitPoints = properties.getCitizen()
-            .getHitPointsPerStamina();
+            .getHitPoints()
+            .getPerStaminaLevel();
         return SoldierData.builder()
             .maxHitPoints(hitPoints)
             .currentHitPoints(hitPoints)

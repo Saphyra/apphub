@@ -4,6 +4,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.BuildingAllocations;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.CitizenAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,6 @@ class PlanetLoader {
     private final CitizenLoader citizenLoader;
     private final PriorityLoader priorityLoader;
     private final StorageDetailsLoader storageDetailsLoader;
-    private final ProductionOrderLoader productionOrderLoader;
     private final ExecutorServiceBean executorServiceBean;
 
     Map<UUID, Planet> load(UUID solarSystemId) {
@@ -48,9 +49,10 @@ class PlanetLoader {
             .surfaces(surfaceLoader.load(model.getId()))
             .owner(model.getOwner())
             .population(citizenLoader.load(model.getId()))
-            .storageDetails(storageDetailsLoader.load(model.getId()))
+            .storageDetails(storageDetailsLoader.load(model.getGameId(), model.getId()))
             .priorities(priorityLoader.load(model.getId()))
-            .orders(productionOrderLoader.load(model.getId()))
+            .buildingAllocations(new BuildingAllocations(model.getBuildingAllocations()))
+            .citizenAllocations(new CitizenAllocations(model.getCitizenAllocations()))
             .build();
     }
 }

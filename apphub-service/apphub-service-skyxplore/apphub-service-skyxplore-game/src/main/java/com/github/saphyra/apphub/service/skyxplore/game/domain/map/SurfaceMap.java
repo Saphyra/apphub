@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.map;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 import static java.util.Objects.nonNull;
 
 @Slf4j
+@NoArgsConstructor
 public class SurfaceMap extends HashMap<Coordinate, Surface> {
     public SurfaceMap(Map<Coordinate, Surface> surfaceMap) {
         putAll(surfaceMap);

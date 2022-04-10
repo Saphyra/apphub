@@ -9,8 +9,9 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.PlanetProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -43,7 +44,7 @@ public class SystemPopulationServiceTest {
     private Random random;
 
     @Mock
-    private GameCreationProperties properties;
+    private GameProperties properties;
 
     @Mock
     private PlanetCoordinateProvider coordinateProvider;
@@ -62,7 +63,7 @@ public class SystemPopulationServiceTest {
     private SkyXploreGameCreationSettingsRequest settings;
 
     @Mock
-    private GameCreationProperties.PlanetProperties planetProperties;
+    private PlanetProperties planetProperties;
 
     @Mock
     private Coordinate coordinate;

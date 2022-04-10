@@ -104,4 +104,8 @@ public class ExecutorServiceBean {
             })
             .collect(Collectors.toList());
     }
+
+    public void stop() {
+        executor.shutdownNow();
+    }
 }

@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO check usage
 public class CancelAllocationsService {
     private final GameDataProxy gameDataProxy;
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;

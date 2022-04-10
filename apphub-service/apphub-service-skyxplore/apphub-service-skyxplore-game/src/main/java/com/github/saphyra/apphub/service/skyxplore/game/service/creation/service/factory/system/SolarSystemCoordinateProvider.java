@@ -6,8 +6,8 @@ import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
 import com.github.saphyra.apphub.lib.geometry.RandomCoordinateProvider;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 class SolarSystemCoordinateProvider {
-    private final GameCreationProperties gameCreationProperties;
+    private final GameProperties gameCreationProperties;
     private final Random random;
     private final RandomCoordinateProvider randomCoordinateProvider;
     private final DistanceCalculator distanceCalculator;

@@ -103,6 +103,12 @@
         "message": "Nyersanyagtermelés"
       }
     ],
+    "planet-priorities-well-being-label": [
+      {
+        "key": "innerHTML",
+        "message": "Életszínvonal"
+      }
+    ],
     "planet-storage-settings-button": [
       {
         "key": "innerHTML",

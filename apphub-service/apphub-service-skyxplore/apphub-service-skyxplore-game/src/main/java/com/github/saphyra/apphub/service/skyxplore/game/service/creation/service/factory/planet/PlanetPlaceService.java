@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
 import com.github.saphyra.apphub.lib.geometry.RandomCoordinateProvider;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ import static com.github.saphyra.apphub.service.skyxplore.game.common.GameConsta
 class PlanetPlaceService {
     private final DistanceCalculator distanceCalculator;
     private final RandomCoordinateProvider randomCoordinateProvider;
-    private final GameCreationProperties properties;
+    private final GameProperties properties;
 
     Optional<Coordinate> placePlanet(int systemRadius, List<Coordinate> coordinates) {
         int minDistance = properties.getSolarSystem()

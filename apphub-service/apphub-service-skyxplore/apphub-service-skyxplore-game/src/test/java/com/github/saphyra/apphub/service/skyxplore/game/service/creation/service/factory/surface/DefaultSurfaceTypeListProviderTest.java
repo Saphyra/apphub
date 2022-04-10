@@ -1,7 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.surface;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.SurfaceProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.SurfaceTypeSpawnDetails;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -15,13 +17,13 @@ import static org.mockito.BDDMockito.given;
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultSurfaceTypeListProviderTest {
     @Mock
-    private GameCreationProperties properties;
+    private GameProperties properties;
 
     @Mock
-    private GameCreationProperties.SurfaceProperties surfaceProperties;
+    private SurfaceProperties surfaceProperties;
 
     @Mock
-    private GameCreationProperties.SurfaceTypeSpawnDetails spawnDetails;
+    private SurfaceTypeSpawnDetails spawnDetails;
 
     @Test
     public void generateSurfaceTypeList() {

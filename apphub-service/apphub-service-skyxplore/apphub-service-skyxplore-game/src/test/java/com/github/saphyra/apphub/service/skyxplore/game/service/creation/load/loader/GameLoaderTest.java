@@ -11,10 +11,14 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
+import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcesses;
+import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
+import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.ChatFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.tick.TickSchedulerService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -24,10 +28,12 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -66,7 +72,13 @@ public class GameLoaderTest {
     private MessageSenderProxy messageSenderProxy;
 
     @Mock
-    private TickSchedulerService tickSchedulerService;
+    private EventLoopFactory eventLoopFactory;
+
+    @Mock
+    private BackgroundProcessFactory backgroundProcessFactory;
+
+    @Mock
+    private ProcessLoader processLoader;
 
     @InjectMocks
     private GameLoader underTest;
@@ -86,6 +98,15 @@ public class GameLoaderTest {
     @Mock
     private Chat chat;
 
+    @Mock
+    private EventLoop eventLoop;
+
+    @Mock
+    private Process process;
+
+    @Mock
+    private BackgroundProcesses backgroundProcesses;
+
     @Test
     public void load() {
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
@@ -100,6 +121,10 @@ public class GameLoaderTest {
         given(allianceLoader.load(GAME_ID, players)).willReturn(CollectionUtils.singleValueMap(ALLIANCE_ID, alliance));
         given(universeLoader.load(GAME_ID)).willReturn(universe);
         given(chatFactory.create(players.values())).willReturn(chat);
+
+        given(eventLoopFactory.create()).willReturn(eventLoop);
+        given(processLoader.load(any(Game.class))).willReturn(List.of(process));
+        given(backgroundProcessFactory.create(any(Game.class))).willReturn(backgroundProcesses);
 
         underTest.loadGame(gameModel, Arrays.asList(MEMBER_ID));
 
@@ -117,13 +142,14 @@ public class GameLoaderTest {
         assertThat(game.getAlliances()).containsEntry(ALLIANCE_ID, alliance);
         assertThat(game.getUniverse()).isEqualTo(universe);
         assertThat(game.getChat()).isEqualTo(chat);
+        assertThat(game.getEventLoop()).isEqualTo(eventLoop);
+        assertThat(game.getBackgroundProcesses()).isEqualTo(backgroundProcesses);
+        assertThat(game.getProcesses()).containsExactly(process);
 
         ArgumentCaptor<WebSocketMessage> messageArgumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
         verify(messageSenderProxy).sendToLobby(messageArgumentCaptor.capture());
         WebSocketMessage message = messageArgumentCaptor.getValue();
         assertThat(message.getRecipients()).containsExactly(MEMBER_ID);
         assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED);
-
-        verify(tickSchedulerService).addGame(game);
     }
 }

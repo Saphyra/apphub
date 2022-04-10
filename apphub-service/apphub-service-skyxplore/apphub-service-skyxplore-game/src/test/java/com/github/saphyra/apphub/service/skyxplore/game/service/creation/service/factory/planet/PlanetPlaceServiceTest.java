@@ -4,7 +4,8 @@ import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
 import com.github.saphyra.apphub.lib.geometry.RandomCoordinateProvider;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.SolarSystemProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,13 +33,13 @@ public class PlanetPlaceServiceTest {
     private RandomCoordinateProvider randomCoordinateProvider;
 
     @Mock
-    private GameCreationProperties properties;
+    private GameProperties properties;
 
     @InjectMocks
     private PlanetPlaceService underTest;
 
     @Mock
-    private GameCreationProperties.SolarSystemProperties solarSystemProperties;
+    private SolarSystemProperties solarSystemProperties;
 
     @Mock
     private Coordinate planetCoordinate;

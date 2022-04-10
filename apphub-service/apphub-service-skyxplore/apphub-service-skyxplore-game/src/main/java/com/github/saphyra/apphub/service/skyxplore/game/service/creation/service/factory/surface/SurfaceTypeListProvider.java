@@ -2,7 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.SurfaceTypeSpawnDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ import java.util.List;
 @Slf4j
 class SurfaceTypeListProvider {
     private final Random random;
-    private final GameCreationProperties properties;
+    private final GameProperties properties;
     private final DefaultSurfaceTypeListProvider defaultSurfaceTypeListProvider;
 
     List<SurfaceType> createSurfaceTypeList(boolean initialPlacement) {
@@ -27,7 +28,7 @@ class SurfaceTypeListProvider {
             properties.getSurface()
                 .getSpawnDetails()
                 .stream()
-                .filter(GameCreationProperties.SurfaceTypeSpawnDetails::isOptional)
+                .filter(SurfaceTypeSpawnDetails::isOptional)
                 .filter((s) -> random.randBoolean())
                 .peek(surfaceTypeSpawnDetails -> log.debug("SurfaceType {} will not spawn", surfaceTypeSpawnDetails.getSurfaceName()))
                 .forEach(surfaceTypeSpawnDetails -> result.removeIf(surfaceType -> surfaceType.equals(SurfaceType.valueOf(surfaceTypeSpawnDetails.getSurfaceName()))));

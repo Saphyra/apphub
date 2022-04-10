@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.common;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.google.common.annotations.VisibleForTesting;
@@ -22,6 +24,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 @Slf4j
 public class GameDao {
+    private final ExecutorServiceBean executorServiceBean;
+    private final SleepService sleepService;
+
     @Getter(value = AccessLevel.PACKAGE)
     private final Map<UUID, Game> repository = new ConcurrentHashMap<>();
 
@@ -58,8 +63,27 @@ public class GameDao {
 
     public void delete(Game game) {
         log.info("Deleting game {} from cache", game.getGameId());
-        Optional.ofNullable(game.getTickScheduler())
-            .ifPresent(scheduledFuture -> scheduledFuture.cancel(false));
+
+        game.setTerminated(true);
+        executorServiceBean.execute(() -> {
+            for (int i = 0; i < 60; i++) {
+                int queueSize = game.getEventLoop().getQueueSize();
+                if (queueSize == 0) {
+                    sleepService.sleep(10000);
+                    game.getEventLoop()
+                        .stop();
+                    log.info("EventLoop is shut down.");
+                    return;
+                }
+
+                log.debug("Queue still has {} items left.", queueSize);
+
+                sleepService.sleep(1000);
+            }
+
+            throw new IllegalStateException("Queue still has " + game.getEventLoop().getQueueSize() + " number of items");
+        });
+
         repository.remove(game.getGameId());
     }
 

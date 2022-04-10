@@ -19,7 +19,7 @@ public class Citizen {
     private LocationType locationType;
     private String name;
     private int morale;
-    private int satiety;
+    private volatile int satiety;
     private final Map<SkillType, Skill> skills;
     private final SoldierData soldierData;
 

@@ -81,7 +81,7 @@ public class PopulationTest extends BackEndTest {
         assertThat(citizenResponse.getCitizenId()).isNotNull();
         assertThat(citizenResponse.getName()).isNotNull();
         assertThat(citizenResponse.getMorale()).isEqualTo(1600);
-        assertThat(citizenResponse.getSatiety()).isEqualTo(1000);
+        assertThat(citizenResponse.getSatiety()).isEqualTo(10000);
 
         assertThat(citizenResponse.getSkills()).hasSize(SkillType.values().length);
 

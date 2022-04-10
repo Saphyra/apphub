@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption;
 
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResources;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResources;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.AllocatedResourceFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ReservedStorageFactory;
@@ -58,10 +58,14 @@ public class ConsumptionCalculatorTest {
     @Mock
     private ReservedStorage createdReservedStorage;
 
+    @Mock
+    private StoredResources storedResources;
+
     @Test
     public void calculate() {
         given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getStoredResources()).willReturn(CollectionUtils.singleValueMap(DATA_ID, storedResource));
+        given(storageDetails.getStoredResources()).willReturn(storedResources);
+        given(storedResources.get(DATA_ID)).willReturn(storedResource);
         given(storedResource.getAmount()).willReturn(STORED_AMOUNT);
         given(storageDetails.getAllocatedResources()).willReturn(new AllocatedResources(List.of(allocatedResource)));
         given(allocatedResource.getDataId()).willReturn(DATA_ID);

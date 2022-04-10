@@ -30,6 +30,7 @@ public class ResourceValidator implements DataValidator<Map<String, ResourceData
 
             requireNonNull(resource.getStorageType(), "StorageType must not be null.");
             requireNonNull(resource.getMass(), "Mass must not be null.");
+            requireNonNull(resource.getMaxProductionBatchSize(), "MaxProductionBatchSize must not be null.");
 
             if (!hasProducer(resource)) {
                 throw new IllegalStateException("Producer required.");

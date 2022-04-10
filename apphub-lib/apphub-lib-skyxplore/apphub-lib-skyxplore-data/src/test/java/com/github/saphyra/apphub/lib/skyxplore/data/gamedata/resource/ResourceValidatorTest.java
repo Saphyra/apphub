@@ -66,6 +66,15 @@ public class ResourceValidatorTest {
     }
 
     @Test(expected = IllegalStateException.class)
+    public void nullMaxBatchSize() {
+        Map<String, ResourceData> map = new HashMap<>();
+        map.put(KEY, resourceData);
+        given(resourceData.getMaxProductionBatchSize()).willReturn(null);
+
+        underTest.validate(map);
+    }
+
+    @Test(expected = IllegalStateException.class)
     public void nullMass() {
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);

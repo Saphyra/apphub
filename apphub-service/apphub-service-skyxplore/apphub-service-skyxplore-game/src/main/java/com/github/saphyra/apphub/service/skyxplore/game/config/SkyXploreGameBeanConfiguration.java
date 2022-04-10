@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGa
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
@@ -17,7 +18,7 @@ import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleManda
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
 import com.github.saphyra.apphub.lib.skyxplore.data.SkyXploreDataConfig;
-import org.springframework.beans.factory.annotation.Value;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -51,6 +52,11 @@ public class SkyXploreGameBeanConfiguration {
     }
 
     @Bean
+    UuidConverter uuidConverter() {
+        return new UuidConverter();
+    }
+
+    @Bean
     DistanceCalculator distanceCalculator() {
         return new DistanceCalculator();
     }
@@ -67,8 +73,8 @@ public class SkyXploreGameBeanConfiguration {
     }
 
     @Bean
-    BlockingQueue<SkyXploreGameCreationRequest> gameCreationQueue(@Value("${game.creation.queueSize}") Integer queueSize) {
-        return new ArrayBlockingQueue<>(queueSize);
+    BlockingQueue<SkyXploreGameCreationRequest> gameCreationQueue(GameProperties gameProperties) {
+        return new ArrayBlockingQueue<>(gameProperties.getCreationQueueSize());
     }
 
     @Bean

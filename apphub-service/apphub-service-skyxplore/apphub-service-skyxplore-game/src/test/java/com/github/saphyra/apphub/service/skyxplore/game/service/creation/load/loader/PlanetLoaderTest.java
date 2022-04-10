@@ -13,7 +13,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.PriorityType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.ProductionOrder;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
@@ -26,8 +25,8 @@ import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,6 +43,9 @@ public class PlanetLoaderTest {
     private static final UUID OWNER = UUID.randomUUID();
     private static final UUID CITIZEN_ID = UUID.randomUUID();
     private static final Integer PRIORITY = 35;
+    private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID PROCESS_ID = UUID.randomUUID();
+    private static final UUID BUILDING_ID = UUID.randomUUID();
 
     @Mock
     private GameItemLoader gameItemLoader;
@@ -62,9 +64,6 @@ public class PlanetLoaderTest {
 
     @Mock
     private StorageDetailsLoader storageDetailsLoader;
-
-    @Mock
-    private ProductionOrderLoader productionOrderLoader;
 
     @SuppressWarnings("unused")
     @Spy
@@ -91,26 +90,26 @@ public class PlanetLoaderTest {
     @Mock
     private StorageDetails storageDetails;
 
-    @Mock
-    private ProductionOrder productionOrder;
-
     @Test
     public void load() {
         given(gameItemLoader.loadChildren(SOLAR_SYSTEM_ID, GameItemType.PLANET, PlanetModel[].class)).willReturn(Arrays.asList(planetModel));
 
         given(planetModel.getId()).willReturn(PLANET_ID);
+        given(planetModel.getGameId()).willReturn(GAME_ID);
         given(planetModel.getSolarSystemId()).willReturn(SOLAR_SYSTEM_ID);
         given(planetModel.getDefaultName()).willReturn(DEFAULT_NAME);
         given(planetModel.getCustomNames()).willReturn(new OptionalHashMap<>(CollectionUtils.singleValueMap(USER_ID, CUSTOM_NAME)));
         given(planetModel.getSize()).willReturn(SIZE);
         given(planetModel.getOwner()).willReturn(OWNER);
 
+        given(planetModel.getCitizenAllocations()).willReturn(CollectionUtils.singleValueMap(CITIZEN_ID, PROCESS_ID));
+        given(planetModel.getBuildingAllocations()).willReturn(CollectionUtils.singleValueMap(BUILDING_ID, List.of(PROCESS_ID)));
+
         given(coordinateLoader.loadOneByReferenceId(PLANET_ID)).willReturn(coordinateModel);
         given(surfaceLoader.load(PLANET_ID)).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(coordinate, surface)));
         given(citizenLoader.load(PLANET_ID)).willReturn(new OptionalHashMap<>(CollectionUtils.singleValueMap(CITIZEN_ID, citizen)));
-        given(storageDetailsLoader.load(PLANET_ID)).willReturn(storageDetails);
+        given(storageDetailsLoader.load(GAME_ID, PLANET_ID)).willReturn(storageDetails);
         given(priorityLoader.load(PLANET_ID)).willReturn(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION, PRIORITY));
-        given(productionOrderLoader.load(PLANET_ID)).willReturn(Set.of(productionOrder));
 
         Map<UUID, Planet> result = underTest.load(SOLAR_SYSTEM_ID);
 
@@ -127,6 +126,7 @@ public class PlanetLoaderTest {
         assertThat(planet.getPopulation()).containsEntry(CITIZEN_ID, citizen);
         assertThat(planet.getStorageDetails()).isEqualTo(storageDetails);
         assertThat(planet.getPriorities()).containsEntry(PriorityType.CONSTRUCTION, PRIORITY);
-        assertThat(planet.getOrders()).containsExactly(productionOrder);
+        assertThat(planet.getCitizenAllocations()).containsEntry(CITIZEN_ID, PROCESS_ID);
+        assertThat(planet.getBuildingAllocations()).containsEntry(BUILDING_ID, List.of(PROCESS_ID));
     }
 }

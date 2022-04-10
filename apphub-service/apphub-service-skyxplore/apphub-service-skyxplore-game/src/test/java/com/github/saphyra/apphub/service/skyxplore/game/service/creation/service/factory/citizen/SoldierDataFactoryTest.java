@@ -1,7 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.citizen;
 
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenHitPointsProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierData;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.GameCreationProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -18,18 +20,22 @@ public class SoldierDataFactoryTest {
     private static final Integer HIT_POINTS = 324;
 
     @Mock
-    private GameCreationProperties properties;
+    private GameProperties properties;
 
     @InjectMocks
     private SoldierDataFactory underTest;
 
     @Mock
-    private GameCreationProperties.CitizenProperties citizenProperties;
+    private CitizenProperties citizenProperties;
+
+    @Mock
+    private CitizenHitPointsProperties hitPointsProperties;
 
     @Test
     public void create() {
         given(properties.getCitizen()).willReturn(citizenProperties);
-        given(citizenProperties.getHitPointsPerStamina()).willReturn(HIT_POINTS);
+        given(citizenProperties.getHitPoints()).willReturn(hitPointsProperties);
+        given(hitPointsProperties.getPerStaminaLevel()).willReturn(HIT_POINTS);
 
         SoldierData result = underTest.create();
 

@@ -103,6 +103,12 @@
         "message": "Extraction"
       }
     ],
+    "planet-priorities-well-being-label": [
+      {
+        "key": "innerHTML",
+        "message": "Well being"
+      }
+    ],
     "planet-storage-settings-button": [
       {
         "key": "innerHTML",

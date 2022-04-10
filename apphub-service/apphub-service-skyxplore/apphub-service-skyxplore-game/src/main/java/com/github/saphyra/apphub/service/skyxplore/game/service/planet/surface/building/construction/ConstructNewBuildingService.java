@@ -10,10 +10,13 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingDa
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.BuildingFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
@@ -50,6 +53,7 @@ public class ConstructNewBuildingService {
     private final BuildingConstructionToQueueItemConverter buildingConstructionToQueueItemConverter;
     private final QueueItemToResponseConverter queueItemToResponseConverter;
     private final WsMessageSender messageSender;
+    private final ConstructionProcessFactory constructionProcessFactory;
 
     public SurfaceResponse constructNewBuilding(UUID userId, String dataId, UUID planetId, UUID surfaceId) {
         Optional<BuildingData> maybeBuildingData = allBuildingService.getOptional(dataId);
@@ -88,13 +92,21 @@ public class ConstructNewBuildingService {
 
         surface.setBuilding(building);
 
-        gameDataProxy.saveItem(
-            buildingToModelConverter.convert(building, game.getGameId()),
-            constructionToModelConverter.convert(construction, game.getGameId())
-        );
-
         QueueResponse queueResponse = queueItemToResponseConverter.convert(buildingConstructionToQueueItemConverter.convert(building), planet);
         messageSender.planetQueueItemModified(userId, planetId, queueResponse);
+
+        ConstructionProcess constructionProcess = constructionProcessFactory.create(game, planet, building);
+
+        Processes processes = game.getProcesses();
+        synchronized (processes) {
+            processes.add(constructionProcess);
+        }
+
+        gameDataProxy.saveItem(
+            buildingToModelConverter.convert(building, game.getGameId()),
+            constructionToModelConverter.convert(construction, game.getGameId()),
+            constructionProcess.toModel()
+        );
         return surfaceToResponseConverter.convert(surface);
     }
 }
