@@ -107,7 +107,7 @@ public class RequestWorkProcess implements Process {
             }
         }
 
-        if (requiredWorkPoints >= completedWorkPoints) {
+        if (requiredWorkPoints <= completedWorkPoints) {
             log.info("{} finished.", this);
             releaseBuildingAndCitizen(syncCache);
             status = ProcessStatus.DONE;
