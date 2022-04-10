@@ -21,7 +21,6 @@ import java.util.concurrent.Future;
 @Builder
 @Slf4j
 @ToString(exclude = {"game", "planet", "applicationContextProxy"})
-//TODO unit test
 public class Work implements Callable<Work> {
     private final int workPoints;
     private final Game game;

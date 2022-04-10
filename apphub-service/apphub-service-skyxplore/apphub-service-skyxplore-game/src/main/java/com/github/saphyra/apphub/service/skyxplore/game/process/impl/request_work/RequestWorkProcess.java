@@ -36,7 +36,6 @@ import java.util.concurrent.Future;
 
 import static java.util.Objects.isNull;
 
-//TODO unit test
 @Slf4j
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
@@ -88,35 +87,13 @@ public class RequestWorkProcess implements Process {
         }
 
         if (!isNull(buildingDataId) && planet.getBuildingAllocations().findByProcessId(processId).isEmpty()) {
-            Optional<UUID> maybeSuitableBuilding = applicationContextProxy.getBean(ProductionBuildingFinder.class)
-                .findSuitableProductionBuilding(planet, buildingDataId);
-            log.info("{} is required for work. Found: {}", buildingDataId, maybeSuitableBuilding);
-
-            if (maybeSuitableBuilding.isEmpty()) {
-                log.info("No suitable building found.");
-                return;
-            }
-
-            UUID buildingId = maybeSuitableBuilding.get();
-            planet.getBuildingAllocations()
-                .add(buildingId, processId);
-            log.info("Building {} assigned. BuildingAllocations: {}", buildingId, planet.getBuildingAllocations());
-
-            syncCache.saveGameItem(applicationContextProxy.getBean(PlanetToModelConverter.class).convert(planet, game));
+            if (allocateBuildingIfPossible(syncCache)) return;
         }
 
         if (!isNull(workFuture)) {
             log.info("Citizen is already working.");
             if (workFuture.isDone()) {
-                int completedWorkPoints = workFuture.get()
-                    .getOrThrow()
-                    .getWorkPoints();
-
-                this.completedWorkPoints += completedWorkPoints;
-                log.info("Citizen completed {} workPoints. Total: {}. Required: {}", completedWorkPoints, this.completedWorkPoints, requiredWorkPoints);
-
-                applicationContextProxy.getBean(UpdateTargetService.class)
-                    .updateTarget(syncCache, requestWorkProcessType, game, planet, targetId, completedWorkPoints);
+                finishWork(syncCache);
 
                 workFuture = null;
 
@@ -130,56 +107,92 @@ public class RequestWorkProcess implements Process {
             }
         }
 
-        if (requiredWorkPoints == completedWorkPoints) {
+        if (requiredWorkPoints >= completedWorkPoints) {
             log.info("{} finished.", this);
             releaseBuildingAndCitizen(syncCache);
             status = ProcessStatus.DONE;
         }
 
         if (isNull(workFuture) && status == ProcessStatus.IN_PROGRESS) {
-            Optional<UUID> maybeWorker = planet.getCitizenAllocations()
-                .findByProcessId(processId);
-            log.info("Scheduling next cycle of work. Currently employed citizen: {}", maybeWorker);
-
-            if (maybeWorker.isPresent()) {
-                UUID worker = maybeWorker.get();
-                if (planet.getPopulation().get(worker).getMorale() < applicationContextProxy.getBean(GameProperties.class).getCitizen().getWorkPointsPerSeconds()) {
-                    log.info("Citizen {} has not enough morale for the next work cycle.", worker);
-                    releaseCitizen(syncCache);
-                    maybeWorker = Optional.empty();
-                }
-            }
-
-            if (maybeWorker.isEmpty()) {
-                maybeWorker = applicationContextProxy.getBean(CitizenFinder.class)
-                    .getSuitableCitizen(planet, skillType);
-                log.info("Suitable citizen found for work: {}", maybeWorker);
-            }
-
-            if (maybeWorker.isEmpty()) {
-                log.info("No suitable worker found.");
-                return;
-            }
-
-            UUID worker = maybeWorker.get();
-            planet.getCitizenAllocations()
-                .put(worker, processId);
-            log.info("CitizenAllocations after allocating worker: {}", planet.getCitizenAllocations());
-
-            int workPointsLeft = requiredWorkPoints - completedWorkPoints;
-            int workPointsPerSeconds = applicationContextProxy.getBean(GameProperties.class).getCitizen().getWorkPointsPerSeconds();
-            log.info("WorkPointsLeft: {}, workPointsPerSeconds: {}", workPointsLeft, workPointsPerSeconds);
-            Work work = Work.builder()
-                .workPoints(Math.min(workPointsLeft, workPointsPerSeconds))
-                .game(game)
-                .planet(planet)
-                .citizenId(worker)
-                .skillType(skillType)
-                .applicationContextProxy(applicationContextProxy)
-                .build();
-            log.info("{} created", work);
-            workFuture = applicationContextProxy.getBean(ExecutorServiceBean.class).asyncProcess(work);
+            startWorkIfPossible(syncCache);
         }
+    }
+
+    private void startWorkIfPossible(SyncCache syncCache) {
+        Optional<UUID> maybeWorker = planet.getCitizenAllocations()
+            .findByProcessId(processId);
+        log.info("Scheduling next cycle of work. Currently employed citizen: {}", maybeWorker);
+
+        if (maybeWorker.isPresent()) {
+            UUID worker = maybeWorker.get();
+            if (planet.getPopulation().get(worker).getMorale() < applicationContextProxy.getBean(GameProperties.class).getCitizen().getWorkPointsPerSeconds()) {
+                log.info("Citizen {} has not enough morale for the next work cycle.", worker);
+                releaseCitizen(syncCache);
+                maybeWorker = Optional.empty();
+            }
+        }
+
+        if (maybeWorker.isEmpty()) {
+            maybeWorker = applicationContextProxy.getBean(CitizenFinder.class)
+                .getSuitableCitizen(planet, skillType);
+            log.info("Suitable citizen found for work: {}", maybeWorker);
+        }
+
+        if (maybeWorker.isEmpty()) {
+            log.info("No suitable worker found.");
+            return;
+        }
+
+        UUID worker = maybeWorker.get();
+        planet.getCitizenAllocations()
+            .put(worker, processId);
+        log.info("CitizenAllocations after allocating worker: {}", planet.getCitizenAllocations());
+
+        int workPointsLeft = requiredWorkPoints - completedWorkPoints;
+        int workPointsPerSeconds = applicationContextProxy.getBean(GameProperties.class).getCitizen().getWorkPointsPerSeconds();
+        log.info("WorkPointsLeft: {}, workPointsPerSeconds: {}", workPointsLeft, workPointsPerSeconds);
+        Work work = Work.builder()
+            .workPoints(Math.min(workPointsLeft, workPointsPerSeconds))
+            .game(game)
+            .planet(planet)
+            .citizenId(worker)
+            .skillType(skillType)
+            .applicationContextProxy(applicationContextProxy)
+            .build();
+        log.info("{} created", work);
+        workFuture = applicationContextProxy.getBean(ExecutorServiceBean.class)
+            .asyncProcess(work);
+    }
+
+    private void finishWork(SyncCache syncCache) throws Exception {
+        int completedWorkPoints = workFuture.get()
+            .getOrThrow()
+            .getWorkPoints();
+
+        this.completedWorkPoints += completedWorkPoints;
+        log.info("Citizen completed {} workPoints. Total: {}. Required: {}", completedWorkPoints, this.completedWorkPoints, requiredWorkPoints);
+
+        applicationContextProxy.getBean(UpdateTargetService.class)
+            .updateTarget(syncCache, requestWorkProcessType, game, planet, targetId, completedWorkPoints);
+    }
+
+    private boolean allocateBuildingIfPossible(SyncCache syncCache) {
+        Optional<UUID> maybeSuitableBuilding = applicationContextProxy.getBean(ProductionBuildingFinder.class)
+            .findSuitableProductionBuilding(planet, buildingDataId);
+        log.info("{} is required for work. Found: {}", buildingDataId, maybeSuitableBuilding);
+
+        if (maybeSuitableBuilding.isEmpty()) {
+            log.info("No suitable building found.");
+            return true;
+        }
+
+        UUID buildingId = maybeSuitableBuilding.get();
+        planet.getBuildingAllocations()
+            .add(buildingId, processId);
+        log.info("Building {} assigned. BuildingAllocations: {}", buildingId, planet.getBuildingAllocations());
+
+        syncCache.saveGameItem(applicationContextProxy.getBean(PlanetToModelConverter.class).convert(planet, game));
+        return false;
     }
 
     @Override
