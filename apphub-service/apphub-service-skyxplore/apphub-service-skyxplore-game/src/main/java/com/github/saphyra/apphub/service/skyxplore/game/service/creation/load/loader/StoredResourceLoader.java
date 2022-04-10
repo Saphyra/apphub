@@ -4,31 +4,29 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResources;
+import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.StoredResourcesFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 class StoredResourceLoader {
     private final GameItemLoader gameItemLoader;
+    private final StoredResourcesFactory storedResourcesFactory;
 
-    Map<String, StoredResource> load(UUID location) {
-        List<StoredResourceModel> models = gameItemLoader.loadChildren(location, GameItemType.STORED_RESOURCE, StoredResourceModel[].class);
-        return models.stream()
-            .map(this::convert)
-            .collect(Collectors.toMap(StoredResource::getDataId, Function.identity(), (u, v) -> {
-                throw new IllegalStateException(String.format("Duplicate key %s", u));
-            }, ConcurrentHashMap::new));
+    StoredResources load(UUID gameId, UUID location) {
+        StoredResources storedResources = storedResourcesFactory.create(gameId, location, LocationType.PLANET);
+
+        gameItemLoader.loadChildren(location, GameItemType.STORED_RESOURCE, StoredResourceModel[].class)
+            .forEach(storedResourceModel -> storedResources.put(storedResourceModel.getDataId(), convert(storedResourceModel)));
+
+        return storedResources;
     }
 
     private StoredResource convert(StoredResourceModel model) {

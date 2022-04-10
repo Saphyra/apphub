@@ -5,13 +5,12 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StorageSettingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResource;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorage;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResources;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSettings;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResources;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -48,41 +47,42 @@ public class StorageDetailsToModelConverterTest {
     private Game game;
 
     @Mock
-    private AllocatedResource allocatedResource;
+    private AllocatedResources allocatedResources;
+
+    @Mock
+    private ReservedStorages reservedStorages;
+
+    @Mock
+    private StoredResources storedResources;
+
+    @Mock
+    private StorageSettings storageSettings;
 
     @Mock
     private AllocatedResourceModel allocatedResourceModel;
 
     @Mock
-    private ReservedStorage reservedStorage;
-
-    @Mock
     private ReservedStorageModel reservedStorageModel;
 
     @Mock
-    private StoredResource storedResource;
-
-    @Mock
     private StoredResourceModel storedResourceModel;
-
-    @Mock
-    private StorageSetting storageSetting;
 
     @Mock
     private StorageSettingModel storageSettingModel;
 
     @Test
     public void convertDeep() {
-        given(allocatedResourceConverter.convert(Arrays.asList(allocatedResource), game)).willReturn(Arrays.asList(allocatedResourceModel));
-        given(reservedStorageConverter.convert(Arrays.asList(reservedStorage), game)).willReturn(Arrays.asList(reservedStorageModel));
-        given(storedResourceConverter.convert(CollectionUtils.singleValueMap("", storedResource), GAME_ID)).willReturn(Arrays.asList(storedResourceModel));
-        given(storageSettingConverter.convert(Arrays.asList(storageSetting), game)).willReturn(Arrays.asList(storageSettingModel));
+        given(allocatedResourceConverter.convert(allocatedResources, game)).willReturn(Arrays.asList(allocatedResourceModel));
+        given(reservedStorageConverter.convert(reservedStorages, game)).willReturn(Arrays.asList(reservedStorageModel));
+        given(storedResourceConverter.convert(storedResources, GAME_ID)).willReturn(Arrays.asList(storedResourceModel));
+        given(storageSettingConverter.convert(storageSettings, game)).willReturn(Arrays.asList(storageSettingModel));
 
-        StorageDetails storageDetails = StorageDetails.builder().build();
-        storageDetails.getAllocatedResources().add(allocatedResource);
-        storageDetails.getReservedStorages().add(reservedStorage);
-        storageDetails.getStorageSettings().add(storageSetting);
-        storageDetails.getStoredResources().put("", storedResource);
+        StorageDetails storageDetails = StorageDetails.builder()
+            .allocatedResources(allocatedResources)
+            .reservedStorages(reservedStorages)
+            .storedResources(storedResources)
+            .storageSettings(storageSettings)
+            .build();
 
         given(game.getGameId()).willReturn(GAME_ID);
 

@@ -1,24 +1,33 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction;
 
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.CancelAllocationsService;
+import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
+import java.util.concurrent.Future;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -28,14 +37,16 @@ import static java.util.Objects.nonNull;
 @Slf4j
 public class CancelConstructionService {
     private final GameDao gameDao;
-    private final GameDataProxy gameDataProxy;
-    private final CancelAllocationsService cancelAllocationsService;
     private final SurfaceToResponseConverter surfaceToResponseConverter;
     private final WsMessageSender messageSender;
+    private final SleepService sleepService;
+    private final SyncCacheFactory syncCacheFactory;
+    private final BuildingToModelConverter buildingToModelConverter;
+    private final AllocationRemovalService allocationRemovalService;
 
     public void cancelConstructionOfConstruction(UUID userId, UUID planetId, UUID constructionId) {
-        Planet planet = gameDao.findByUserIdValidated(userId)
-            .getUniverse()
+        Game game = gameDao.findByUserIdValidated(userId);
+        Planet planet = game.getUniverse()
             .findByOwnerAndPlanetIdValidated(userId, planetId);
         Surface surface = planet.getSurfaces()
             .values()
@@ -48,43 +59,65 @@ public class CancelConstructionService {
         Building building = surface
             .getBuilding();
 
-        processCancellation(planet, surface, building);
+        SurfaceResponse surfaceResponse = processCancellation(game, planet, surface, building);
 
-        SurfaceResponse surfaceResponse = surfaceToResponseConverter.convert(surface);
         messageSender.planetSurfaceModified(userId, planet.getPlanetId(), surfaceResponse);
     }
 
     public SurfaceResponse cancelConstructionOfBuilding(UUID userId, UUID planetId, UUID buildingId) {
-        Planet planet = gameDao.findByUserIdValidated(userId)
-            .getUniverse()
+        Game game = gameDao.findByUserIdValidated(userId);
+        Planet planet = game.getUniverse()
             .findByOwnerAndPlanetIdValidated(userId, planetId);
         Surface surface = planet.getSurfaces()
             .findByBuildingIdValidated(buildingId);
         Building building = surface
             .getBuilding();
 
-        processCancellation(planet, surface, building);
-
-        return surfaceToResponseConverter.convert(surface);
+        return processCancellation(game, planet, surface, building);
     }
 
-    private void processCancellation(Planet planet, Surface surface, Building building) {
+    @SneakyThrows
+    private SurfaceResponse processCancellation(Game game, Planet planet, Surface surface, Building building) {
         Construction construction = building.getConstruction();
         if (isNull(construction)) {
             throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Construction not found on planet " + planet.getPlanetId() + " and building " + building.getBuildingId());
         }
 
-        UUID constructionId = construction.getConstructionId();
-        building.setConstruction(null);
+        SyncCache syncCache = syncCacheFactory.create();
+        Future<ExecutionResult<SurfaceResponse>> future = game.getEventLoop()
+            .processWithResponse(() -> {
+                    game.getProcesses()
+                        .findByExternalReferenceAndTypeValidated(construction.getConstructionId(), ProcessType.CONSTRUCTION)
+                        .cancel(syncCache);
 
-        cancelAllocationsService.cancelAllocationsAndReservations(planet, constructionId);
+                    building.setConstruction(null);
+                    syncCache.deleteGameItem(construction.getConstructionId(), GameItemType.CONSTRUCTION);
+                    syncCache.saveGameItem(buildingToModelConverter.convert(building, game.getGameId()));
 
-        if (building.getLevel() == 0) {
-            surface.setBuilding(null);
-            gameDataProxy.deleteItem(building.getBuildingId(), GameItemType.BUILDING);
+                    allocationRemovalService.removeAllocationsAndReservations(syncCache, planet, construction.getConstructionId());
+
+                    if (building.getLevel() == 0) {
+                        surface.setBuilding(null);
+                        syncCache.deleteGameItem(building.getBuildingId(), GameItemType.BUILDING);
+                    }
+
+                    syncCache.addMessage(
+                        planet.getOwner(),
+                        WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED,
+                        planet.getPlanetId(),
+                        () -> messageSender.planetQueueItemDeleted(planet.getOwner(), planet.getPlanetId(), construction.getConstructionId())
+                    );
+
+                    return surfaceToResponseConverter.convert(surface);
+                },
+                syncCache
+            );
+
+        while (!future.isDone()) {
+            sleepService.sleep(100);
         }
 
-        gameDataProxy.deleteItem(constructionId, GameItemType.CONSTRUCTION);
-        messageSender.planetQueueItemDeleted(planet.getOwner(), planet.getPlanetId(), constructionId);
+        return future.get()
+            .getOrThrow();
     }
 }

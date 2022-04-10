@@ -4,19 +4,23 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResources;
+import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.StoredResourcesFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
-import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StoredResourceLoaderTest {
@@ -24,9 +28,13 @@ public class StoredResourceLoaderTest {
     private static final UUID STORED_RESOURCE_ID = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
     private static final Integer AMOUNT = 354;
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private GameItemLoader gameItemLoader;
+
+    @Mock
+    private StoredResourcesFactory storedResourcesFactory;
 
     @InjectMocks
     private StoredResourceLoader underTest;
@@ -34,8 +42,12 @@ public class StoredResourceLoaderTest {
     @Mock
     private StoredResourceModel storedResourceModel;
 
+    @Mock
+    private StoredResources storedResources;
+
     @Test
     public void load() {
+        given(storedResourcesFactory.create(GAME_ID, LOCATION, LocationType.PLANET)).willReturn(storedResources);
         given(gameItemLoader.loadChildren(LOCATION, GameItemType.STORED_RESOURCE, StoredResourceModel[].class)).willReturn(Arrays.asList(storedResourceModel));
 
         given(storedResourceModel.getId()).willReturn(STORED_RESOURCE_ID);
@@ -44,10 +56,13 @@ public class StoredResourceLoaderTest {
         given(storedResourceModel.getDataId()).willReturn(DATA_ID);
         given(storedResourceModel.getAmount()).willReturn(AMOUNT);
 
-        Map<String, StoredResource> result = underTest.load(LOCATION);
+        StoredResources result = underTest.load(GAME_ID, LOCATION);
 
-        assertThat(result).hasSize(1);
-        StoredResource storedResource = result.get(DATA_ID);
+        ArgumentCaptor<StoredResource> argumentCaptor = ArgumentCaptor.forClass(StoredResource.class);
+        verify(storedResources).put(eq(DATA_ID), argumentCaptor.capture());
+
+        StoredResource storedResource = argumentCaptor.getValue();
+
         assertThat(storedResource.getStoredResourceId()).isEqualTo(STORED_RESOURCE_ID);
         assertThat(storedResource.getLocation()).isEqualTo(LOCATION);
         assertThat(storedResource.getLocationType()).isEqualTo(LocationType.PLANET);

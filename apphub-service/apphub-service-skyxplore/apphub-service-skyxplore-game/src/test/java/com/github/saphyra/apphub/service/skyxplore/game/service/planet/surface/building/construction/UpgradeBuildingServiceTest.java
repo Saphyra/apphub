@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
@@ -13,12 +14,15 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
@@ -92,6 +96,9 @@ public class UpgradeBuildingServiceTest {
     @Mock
     private WsMessageSender messageSender;
 
+    @Mock
+    private ConstructionProcessFactory constructionProcessFactory;
+
     @InjectMocks
     private UpgradeBuildingService underTest;
 
@@ -133,6 +140,15 @@ public class UpgradeBuildingServiceTest {
 
     @Mock
     private QueueResponse queueResponse;
+
+    @Mock
+    private ConstructionProcess constructionProcess;
+
+    @Mock
+    private Processes processes;
+
+    @Mock
+    private ProcessModel processModel;
 
     @Before
     public void setUp() {
@@ -177,6 +193,7 @@ public class UpgradeBuildingServiceTest {
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
 
         given(game.getGameId()).willReturn(GAME_ID);
+        given(game.getProcesses()).willReturn(processes);
 
         given(buildingToModelConverter.convert(building, GAME_ID)).willReturn(buildingModel);
         given(constructionToModelConverter.convert(construction, GAME_ID)).willReturn(constructionModel);
@@ -185,13 +202,17 @@ public class UpgradeBuildingServiceTest {
         given(buildingConstructionToQueueItemConverter.convert(building)).willReturn(queueItem);
         given(queueItemToResponseConverter.convert(queueItem, planet)).willReturn(queueResponse);
 
+        given(constructionProcessFactory.create(game, planet, building)).willReturn(constructionProcess);
+        given(constructionProcess.toModel()).willReturn(processModel);
+
         SurfaceResponse result = underTest.upgradeBuilding(USER_ID, PLANET_ID, BUILDING_ID);
 
         assertThat(result).isEqualTo(surfaceResponse);
 
         verify(resourceAllocationService).processResourceRequirements(GAME_ID, planet, LocationType.PLANET, CONSTRUCTION_ID, Collections.emptyMap());
         verify(building).setConstruction(construction);
-        verify(gameDataProxy).saveItem(buildingModel, constructionModel);
+        verify(gameDataProxy).saveItem(buildingModel, constructionModel, processModel);
         verify(messageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);
+        verify(processes).add(constructionProcess);
     }
 }

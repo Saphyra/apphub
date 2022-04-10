@@ -7,6 +7,9 @@ import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.common.CoordinateModelFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
+import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.StorageDetailsFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.surface.SurfaceFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
@@ -42,6 +45,9 @@ public class PlanetFactoryTest {
     private SurfaceFactory surfaceFactory;
 
     @Mock
+    private StorageDetailsFactory storageDetailsFactory;
+
+    @Mock
     private CoordinateModelFactory coordinateModelFactory;
 
     @InjectMocks
@@ -56,6 +62,9 @@ public class PlanetFactoryTest {
     @Mock
     private CoordinateModel coordinateModel;
 
+    @Mock
+    private StorageDetails storageDetails;
+
     @Test
     public void create() {
         given(random.randInt(MIN_PLANET_SIZE_RANGE, MAX_PLANET_SIZE_RANGE)).willReturn(PLANET_SIZE);
@@ -63,6 +72,7 @@ public class PlanetFactoryTest {
 
         given(surfaceFactory.create(GAME_ID, PLANET_ID, PLANET_SIZE)).willReturn(CollectionUtils.singleValueMap(coordinate, surface));
         given(coordinateModelFactory.create(coordinate, GAME_ID, PLANET_ID)).willReturn(coordinateModel);
+        given(storageDetailsFactory.create(GAME_ID, PLANET_ID, LocationType.PLANET)).willReturn(storageDetails);
 
         Planet result = underTest.create(GAME_ID, PLANET_INDEX, coordinate, SOLAR_SYSTEM_ID, SYSTEM_NAME, new Range<>(MIN_PLANET_SIZE_RANGE, MAX_PLANET_SIZE_RANGE));
 
@@ -72,5 +82,6 @@ public class PlanetFactoryTest {
         assertThat(result.getDefaultName()).isEqualTo(SYSTEM_NAME + " B");
         assertThat(result.getSize()).isEqualTo(PLANET_SIZE);
         assertThat(result.getSurfaces()).containsEntry(coordinate, surface);
+        assertThat(result.getStorageDetails()).isEqualTo(storageDetails);
     }
 }

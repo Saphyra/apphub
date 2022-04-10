@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Component
@@ -37,8 +38,12 @@ class RenameCitizenService {
         Citizen citizen = game.getUniverse()
             .findByOwnerAndPlanetIdValidated(userId, planetId)
             .getPopulation()
-            .getOptional(citizenId)
-            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR, "Citizen not found with id " + citizenId));
+            .get(citizenId);
+
+        if (isNull(citizen)) {
+            throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR, "Citizen not found with id " + citizenId);
+        }
+
         citizen.setName(newName);
         gameDataProxy.saveItem(citizenToModelConverter.convert(citizen, game.getGameId()));
     }

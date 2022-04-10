@@ -12,4 +12,5 @@ import lombok.ToString;
 public class ResourceData extends GameDataItem {
     private StorageType storageType;
     private Integer mass;
+    private Integer maxProductionBatchSize;
 }

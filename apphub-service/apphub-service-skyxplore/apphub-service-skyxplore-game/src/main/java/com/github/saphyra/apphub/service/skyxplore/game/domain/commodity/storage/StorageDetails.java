@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 @Data
 @AllArgsConstructor
 @Builder
@@ -18,8 +15,7 @@ public class StorageDetails {
     @Builder.Default
     private final ReservedStorages reservedStorages = new ReservedStorages();
 
-    @Builder.Default
-    private final Map<String, StoredResource> storedResources = new ConcurrentHashMap<>();
+    private final StoredResources storedResources;
 
     @Builder.Default
     private final StorageSettings storageSettings = new StorageSettings();

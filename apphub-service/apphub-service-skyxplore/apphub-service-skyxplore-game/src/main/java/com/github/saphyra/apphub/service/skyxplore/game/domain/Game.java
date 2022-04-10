@@ -4,6 +4,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcesses;
+import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +17,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ScheduledFuture;
 import java.util.stream.Collectors;
 
 @Data
@@ -33,11 +34,17 @@ public class Game {
     private LocalDateTime expiresAt;
 
     private final Chat chat;
+    private final EventLoop eventLoop;
+
+    private BackgroundProcesses backgroundProcesses;
+
+    @Builder.Default
+    private final Processes processes = new Processes();
 
     @Builder.Default
     private volatile boolean gamePaused = true;
-
-    private ScheduledFuture<?> tickScheduler;
+    @Builder.Default
+    private volatile boolean terminated = false;
 
     public List<UUID> getConnectedPlayers() {
         return players.values()
@@ -55,14 +62,7 @@ public class Game {
             .collect(Collectors.toList());
     }
 
-    //TODO unit test
     public boolean shouldRun() {
-        if (gamePaused) {
-            log.debug("Game {} is paused.", gameId);
-            return false;
-        }
-
-        log.debug("Game {} should run", gameId);
-        return true;
+        return !gamePaused;
     }
 }

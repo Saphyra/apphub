@@ -19,7 +19,7 @@ public class ReservedStorage {
     private final String dataId;
     private int amount;
 
-    public void reduceAmount(int amount) {
+    public void decreaseAmount(int amount) {
         this.amount -= amount;
     }
 

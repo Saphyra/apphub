@@ -26,7 +26,8 @@ public enum GameItemType {
     COORDINATE(CoordinateModel.class),
     LINE(LineModel.class),
     PRODUCTION_ORDER(ProductionOrderModel.class),
-    DURABILITY_ITEM_MODEL(DurabilityItemModel.class);
+    DURABILITY_ITEM_MODEL(DurabilityItemModel.class),
+    PROCESS(ProcessModel.class);
 
     private final Class<? extends GameItem> modelType;
 }

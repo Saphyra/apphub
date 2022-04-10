@@ -5,9 +5,7 @@ spring:
 abandonedGameExpirationSeconds: 300
 
 game:
-  tick:
-    delaySeconds: 5 #todo remove
-    schedulerThreadCount: 4 #todo remove
+  eventQueueSize: 1000
   itemSaverMaxChunkSize: 500
   creationQueueSize: 100
   solarSystem:
@@ -110,6 +108,7 @@ game:
         max: 3
   citizen:
     workPointsPerSeconds: 100
+    maxWorkPointsBatch: 1000
     morale:
       max: 1600
       workEfficiencyDropUnder: 800
