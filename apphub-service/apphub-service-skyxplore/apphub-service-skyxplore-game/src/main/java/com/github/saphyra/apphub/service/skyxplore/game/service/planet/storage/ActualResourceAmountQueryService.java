@@ -38,7 +38,7 @@ public class ActualResourceAmountQueryService {
             .getStoredResources()
             .values()
             .stream()
-            .filter(reservedStorage -> dataIdsByStorageType.contains(reservedStorage.getDataId()))
+            .filter(storedResource -> dataIdsByStorageType.contains(storedResource.getDataId()))
             .mapToInt(StoredResource::getAmount)
             .sum();
     }

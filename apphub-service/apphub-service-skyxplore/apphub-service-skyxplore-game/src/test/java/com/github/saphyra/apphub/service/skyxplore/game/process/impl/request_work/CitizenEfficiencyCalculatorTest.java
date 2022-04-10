@@ -22,8 +22,8 @@ public class CitizenEfficiencyCalculatorTest {
     private static final int ACTUAL_MORALE = 800;
     private static final Integer MORALE_EFFICIENCY_DROP_UNDER = 1000;
     private static final Double MIN_MORALE_EFFICIENCY = 0.25;
-    private static final Integer SKILL_LEVEL = 10;
-    private static final Double SKILL_LEVEL_MULTIPLIER = 1.5;
+    private static final Integer SKILL_LEVEL = 2;
+    private static final Double SKILL_LEVEL_MULTIPLIER = 0.1;
 
     @Mock
     private GameProperties gameProperties;
@@ -64,6 +64,6 @@ public class CitizenEfficiencyCalculatorTest {
 
         double result = underTest.calculateEfficiency(citizen, SkillType.AIMING);
 
-        assertThat(result).isEqualTo(MIN_MORALE_EFFICIENCY * ACTUAL_MORALE / MORALE_EFFICIENCY_DROP_UNDER * (1 + SKILL_LEVEL * SKILL_LEVEL_MULTIPLIER));
+        assertThat(result).isEqualTo(0.8 * 1.1);
     }
 }

@@ -155,7 +155,7 @@ public class ConstructionProcessTest {
         given(applicationContextProxy.getBean(UseAllocatedResourceService.class)).willReturn(useAllocatedResourceService);
         given(game.getGameId()).willReturn(GAME_ID);
         given(applicationContextProxy.getBean(RequestWorkProcessFactoryForConstruction.class)).willReturn(requestWorkProcessFactoryForConstruction);
-        given(requestWorkProcessFactoryForConstruction.createRequestWorkProcesses(syncCache, PROCESS_ID, game, planet, building)).willReturn(List.of(requestWorkProcess));
+        given(requestWorkProcessFactoryForConstruction.createRequestWorkProcesses(PROCESS_ID, game, planet, building)).willReturn(List.of(requestWorkProcess));
         given(requestWorkProcess.toModel()).willReturn(processModel);
         given(game.getProcesses()).willReturn(processes);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);

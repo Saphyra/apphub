@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ProductionOrderProcessFactoryForConstruction {
     private final ProductionOrderProcessFactory productionOrderProcessFactory;
 
@@ -27,7 +26,6 @@ class ProductionOrderProcessFactoryForConstruction {
             .getReservedStorages()
             .stream()
             .filter(reservedStorage -> reservedStorage.getExternalReference().equals(construction.getConstructionId()))
-            .peek(reservedStorage -> log.info("{}", reservedStorage))
             .flatMap(reservedStorage -> productionOrderProcessFactory.create(processId, game, planet, reservedStorage.getReservedStorageId()).stream())
             .collect(Collectors.toList());
     }

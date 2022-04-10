@@ -16,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StoredResourceLoader {
     private final GameItemLoader gameItemLoader;
     private final StoredResourcesFactory storedResourcesFactory;

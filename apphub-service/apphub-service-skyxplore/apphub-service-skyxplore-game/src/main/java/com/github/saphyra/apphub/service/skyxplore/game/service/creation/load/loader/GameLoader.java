@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessContext;
+import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
@@ -36,8 +36,8 @@ public class GameLoader {
     private final GameDataProxy gameDataProxy;
     private final MessageSenderProxy messageSenderProxy;
     private final EventLoopFactory eventLoopFactory;
-    private final ProcessContext processContext;
     private final ProcessLoader processLoader;
+    private final BackgroundProcessFactory backgroundProcessFactory;
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -52,12 +52,11 @@ public class GameLoader {
             .alliances(allianceLoader.load(gameModel.getId(), players))
             .universe(universeLoader.load(gameModel.getId()))
             .chat(chatFactory.create(players.values()))
-            .eventLoop(eventLoopFactory.create()) //TODO unit test
-            .processContext(processContext) //TODO unit test
-            .build()
-            .gameProcess();
+            .eventLoop(eventLoopFactory.create())
+            .build();
 
-        //TODO unit test
+        game.setBackgroundProcesses(backgroundProcessFactory.create(game));
+
         game.getProcesses()
             .addAll(processLoader.load(game));
 

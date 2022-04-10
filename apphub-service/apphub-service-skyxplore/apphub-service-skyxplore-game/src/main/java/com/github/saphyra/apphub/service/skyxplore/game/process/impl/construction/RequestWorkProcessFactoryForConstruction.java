@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingDa
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcessType;
@@ -21,12 +20,11 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class RequestWorkProcessFactoryForConstruction {
     private final BuildingDataService buildingDataService;
     private final RequestWorkProcessFactory requestWorkProcessFactory;
 
-    List<RequestWorkProcess> createRequestWorkProcesses(SyncCache syncCache, UUID processId, Game game, Planet planet, Building building) {
+    List<RequestWorkProcess> createRequestWorkProcesses(UUID processId, Game game, Planet planet, Building building) {
         log.info("Creating RequestWorkProcesses...");
         ConstructionRequirements constructionRequirements = buildingDataService.get(building.getDataId())
             .getConstructionRequirements()

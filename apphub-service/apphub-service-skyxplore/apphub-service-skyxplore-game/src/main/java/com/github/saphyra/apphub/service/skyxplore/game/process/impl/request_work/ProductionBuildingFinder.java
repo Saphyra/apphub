@@ -16,11 +16,10 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ProductionBuildingFinder {
     private final BuildingCapacityCalculator buildingCapacityCalculator;
 
-    Optional<UUID> findSuitableProductionBuildings(Planet planet, String buildingDataId) {
+    Optional<UUID> findSuitableProductionBuilding(Planet planet, String buildingDataId) {
         log.info("Searching for suitable {} on planet {}", buildingDataId, planet.getPlanetId());
         log.info("Actual BuildingAllocations: {}", planet.getBuildingAllocations());
 

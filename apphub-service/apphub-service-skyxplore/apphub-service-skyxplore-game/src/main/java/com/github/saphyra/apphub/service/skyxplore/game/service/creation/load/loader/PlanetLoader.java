@@ -51,8 +51,8 @@ class PlanetLoader {
             .population(citizenLoader.load(model.getId()))
             .storageDetails(storageDetailsLoader.load(model.getGameId(), model.getId()))
             .priorities(priorityLoader.load(model.getId()))
-            .buildingAllocations(new BuildingAllocations(model.getBuildingAllocations())) //TODO unit test
-            .citizenAllocations(new CitizenAllocations(model.getCitizenAllocations())) //TODO unit test
+            .buildingAllocations(new BuildingAllocations(model.getBuildingAllocations()))
+            .citizenAllocations(new CitizenAllocations(model.getCitizenAllocations()))
             .build();
     }
 }

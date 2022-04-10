@@ -18,7 +18,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class AllocationRemovalService {
     private final WsMessageSender messageSender;
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;

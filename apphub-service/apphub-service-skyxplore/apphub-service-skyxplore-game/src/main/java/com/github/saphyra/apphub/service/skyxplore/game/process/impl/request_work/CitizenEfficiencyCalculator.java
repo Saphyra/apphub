@@ -19,7 +19,7 @@ public class CitizenEfficiencyCalculator {
         int skillLevel = citizen.getSkills()
             .get(skillType)
             .getLevel();
-        double skillMultiplier = 1 + skillLevel * properties.getCitizen()
+        double skillMultiplier = 1 + (skillLevel - 1) * properties.getCitizen()
             .getSkill()
             .getSkillLevelMultiplier();
         double result = moraleMultiplier * skillMultiplier;

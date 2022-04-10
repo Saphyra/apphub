@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
@@ -16,19 +15,13 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContex
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessParamKeys;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction.BuildingConstructionToQueueItemConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.update_target.UpdateTargetService;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.work.Work;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.PlanetToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -65,7 +58,7 @@ public class RequestWorkProcess implements Process {
     private final UUID targetId;
 
     private volatile Future<ExecutionResult<Work>> workFuture;
-    private volatile int completedWorkPoints = 0;
+    private volatile int completedWorkPoints;
     private volatile int cycle;
 
     private final Game game;
@@ -96,7 +89,7 @@ public class RequestWorkProcess implements Process {
 
         if (!isNull(buildingDataId) && planet.getBuildingAllocations().findByProcessId(processId).isEmpty()) {
             Optional<UUID> maybeSuitableBuilding = applicationContextProxy.getBean(ProductionBuildingFinder.class)
-                .findSuitableProductionBuildings(planet, buildingDataId);
+                .findSuitableProductionBuilding(planet, buildingDataId);
             log.info("{} is required for work. Found: {}", buildingDataId, maybeSuitableBuilding);
 
             if (maybeSuitableBuilding.isEmpty()) {
@@ -122,7 +115,8 @@ public class RequestWorkProcess implements Process {
                 this.completedWorkPoints += completedWorkPoints;
                 log.info("Citizen completed {} workPoints. Total: {}. Required: {}", completedWorkPoints, this.completedWorkPoints, requiredWorkPoints);
 
-                updateTarget(syncCache, completedWorkPoints);
+                applicationContextProxy.getBean(UpdateTargetService.class)
+                    .updateTarget(syncCache, requestWorkProcessType, game, planet, targetId, completedWorkPoints);
 
                 workFuture = null;
 
@@ -185,58 +179,6 @@ public class RequestWorkProcess implements Process {
                 .build();
             log.info("{} created", work);
             workFuture = applicationContextProxy.getBean(ExecutorServiceBean.class).asyncProcess(work);
-        }
-    }
-
-    //TODO extract
-    private void updateTarget(SyncCache syncCache, int completedWorkPoints) {
-        switch (requestWorkProcessType) {
-            case CONSTRUCTION:
-                log.info("Adding {} workPoints to CONSTRUCTION {}", completedWorkPoints, targetId);
-
-                Surface surface = planet.getSurfaces()
-                    .values()
-                    .stream()
-                    .filter(s -> !isNull(s.getBuilding()))
-                    .filter(s -> !isNull(s.getBuilding().getConstruction()))
-                    .filter(s -> s.getBuilding().getConstruction().getConstructionId().equals(targetId))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Target not found with id " + targetId + " for type " + requestWorkProcessType + " on planet " + planet.getPlanetId() + " in game " + game.getGameId()));
-
-                Building building = surface.getBuilding();
-                Construction construction = building.getConstruction();
-
-                log.info("Before update: {}", construction);
-                construction.setCurrentWorkPoints(construction.getCurrentWorkPoints() + completedWorkPoints);
-                log.info("After update: {}", construction);
-
-                syncCache.saveGameItem(applicationContextProxy.getBean(ConstructionToModelConverter.class).convert(construction, game.getGameId()));
-
-                WsMessageSender messageSender = applicationContextProxy.getBean(WsMessageSender.class);
-                syncCache.addMessage(
-                    planet.getOwner(),
-                    WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED,
-                    surface.getSurfaceId(),
-                    () -> messageSender.planetSurfaceModified(planet.getOwner(), planet.getPlanetId(), applicationContextProxy.getBean(SurfaceToResponseConverter.class).convert(surface))
-                );
-
-                syncCache.addMessage(
-                    planet.getOwner(),
-                    WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_MODIFIED,
-                    construction.getConstructionId(),
-                    () -> messageSender.planetQueueItemModified(
-                        planet.getOwner(),
-                        planet.getPlanetId(),
-                        applicationContextProxy.getBean(QueueItemToResponseConverter.class).convert(applicationContextProxy.getBean(BuildingConstructionToQueueItemConverter.class).convert(surface.getBuilding()), planet)
-                    )
-                );
-                break;
-            case OTHER:
-                log.info("No status update needed.");
-                break;
-            default:
-                log.warn("No handler for requestWorkProcessType {}", requestWorkProcessType);
-                break;
         }
     }
 

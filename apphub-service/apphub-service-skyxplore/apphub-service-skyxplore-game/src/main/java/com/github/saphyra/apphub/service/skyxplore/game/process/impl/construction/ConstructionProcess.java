@@ -105,7 +105,7 @@ public class ConstructionProcess implements Process {
         applicationContextProxy.getBean(UseAllocatedResourceService.class)
             .resolveAllocations(syncCache, game.getGameId(), planet, construction.getConstructionId());
         List<RequestWorkProcess> requestWorkProcesses = applicationContextProxy.getBean(RequestWorkProcessFactoryForConstruction.class)
-            .createRequestWorkProcesses(syncCache, processId, game, planet, building);
+            .createRequestWorkProcesses(processId, game, planet, building);
 
         game.getProcesses()
             .addAll(requestWorkProcesses);

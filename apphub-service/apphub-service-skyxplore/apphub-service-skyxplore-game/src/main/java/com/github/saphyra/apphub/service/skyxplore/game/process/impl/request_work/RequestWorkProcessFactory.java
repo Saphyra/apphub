@@ -9,7 +9,6 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessParamKeys;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class RequestWorkProcessFactory implements ProcessFactory {
     private final IdGenerator idGenerator;
     private final ApplicationContextProxy applicationContextProxy;
@@ -47,6 +45,27 @@ public class RequestWorkProcessFactory implements ProcessFactory {
         UUID targetId
     ) {
         return create(idGenerator.randomUuid(), externalReference, game, planet, ProcessStatus.CREATED, buildingDataId, skillType, requiredWorkPoints, requestWorkProcessType, targetId, 0, 0);
+    }
+
+    @Override
+    public RequestWorkProcess create(Game game, ProcessModel model) {
+        Planet planet = game.getUniverse()
+            .findPlanetByIdValidated(model.getLocation());
+
+        return create(
+            model.getId(),
+            model.getExternalReference(),
+            game,
+            planet,
+            model.getStatus(),
+            model.getData().get(ProcessParamKeys.BUILDING_DATA_ID),
+            SkillType.valueOf(model.getData().get(ProcessParamKeys.SKILL_TYPE)),
+            Integer.parseInt(model.getData().get(ProcessParamKeys.REQUIRED_WORK_POINTS)),
+            RequestWorkProcessType.valueOf(model.getData().get(ProcessParamKeys.REQUEST_WORK_PROCESS_TYPE)),
+            uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.TARGET_ID)),
+            Integer.parseInt(model.getData().get(ProcessParamKeys.CYCLE)),
+            Integer.parseInt(model.getData().get(ProcessParamKeys.COMPLETED_WORK_POINTS))
+        );
     }
 
     private RequestWorkProcess create(
@@ -78,26 +97,5 @@ public class RequestWorkProcessFactory implements ProcessFactory {
             .cycle(cycle)
             .completedWorkPoints(completedWorkPoints)
             .build();
-    }
-
-    @Override
-    public Process create(Game game, ProcessModel model) {
-        Planet planet = game.getUniverse()
-            .findPlanetByIdValidated(model.getLocation());
-
-        return create(
-            model.getId(),
-            model.getExternalReference(),
-            game,
-            planet,
-            model.getStatus(),
-            model.getData().get(ProcessParamKeys.BUILDING_DATA_ID),
-            SkillType.valueOf(model.getData().get(ProcessParamKeys.SKILL_TYPE)),
-            Integer.parseInt(model.getData().get(ProcessParamKeys.REQUIRED_WORK_POINTS)),
-            RequestWorkProcessType.valueOf(model.getData().get(ProcessParamKeys.REQUEST_WORK_PROCESS_TYPE)),
-            uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.TARGET_ID)),
-            Integer.parseInt(model.getData().get(ProcessParamKeys.CYCLE)),
-            Integer.parseInt(model.getData().get(ProcessParamKeys.COMPLETED_WORK_POINTS))
-        );
     }
 }

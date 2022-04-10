@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storag
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.StoredResourceFactory;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Objects.isNull;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Slf4j
 public class StoredResources extends ConcurrentHashMap<String, StoredResource> {

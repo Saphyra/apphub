@@ -16,7 +16,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ProducerBuildingFinderService {
     private final ProductionBuildingService productionBuildingService;
     private final BuildingCapacityCalculator buildingCapacityCalculator;

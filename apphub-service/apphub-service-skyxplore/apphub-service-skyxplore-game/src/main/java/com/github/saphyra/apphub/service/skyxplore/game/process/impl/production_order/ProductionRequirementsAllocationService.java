@@ -23,7 +23,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ProductionRequirementsAllocationService {
     private final AvailableResourceCounter availableResourceCounter;
     private final AllocatedResourceFactory allocatedResourceFactory;
@@ -33,6 +32,9 @@ class ProductionRequirementsAllocationService {
     private final WsMessageSender messageSender;
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
 
+    /**
+     * @return reservedStorageId
+     */
     UUID allocate(SyncCache syncCache, UUID gameId, Planet planet, UUID externalReference, String dataId, Integer amount) {
         log.info("Allocating {} of {}", amount, dataId);
         StorageDetails storageDetails = planet.getStorageDetails();
@@ -55,6 +57,7 @@ class ProductionRequirementsAllocationService {
 
         syncCache.saveGameItem(allocatedResourceToModelConverter.convert(allocatedResource, gameId));
         syncCache.saveGameItem(reservedStorageToModelConverter.convert(reservedStorage, gameId));
+
         syncCache.addMessage(
             planet.getOwner(),
             WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED,

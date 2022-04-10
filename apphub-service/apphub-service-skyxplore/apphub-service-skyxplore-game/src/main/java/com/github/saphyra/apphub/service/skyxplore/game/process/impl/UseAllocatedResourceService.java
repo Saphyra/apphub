@@ -20,14 +20,12 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class UseAllocatedResourceService {
     private final AllocatedResourceToModelConverter allocatedResourceToModelConverter;
     private final StoredResourceToModelConverter storedResourceToModelConverter;
     private final WsMessageSender messageSender;
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
 
-    //TODO extract
     public void resolveAllocations(SyncCache syncCache, UUID gameId, Planet planet, UUID externalReference) {
         planet.getStorageDetails()
             .getReservedStorages()

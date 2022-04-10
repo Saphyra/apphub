@@ -3,8 +3,10 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl.production
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -15,6 +17,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessParamKeys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -24,7 +27,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ProductionOrderProcessFactory implements ProcessFactory {
     private final IdGenerator idGenerator;
     private final ResourceDataService resourceDataService;
@@ -35,7 +37,7 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
         ReservedStorage reservedStorage = planet.getStorageDetails()
             .getReservedStorages()
             .findById(reservedStorageId)
-            .orElseThrow(() -> new IllegalStateException("ReservedStorage not found with id " + reservedStorageId));
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ReservedStorage not found with id " + reservedStorageId));
         AllocatedResource allocatedResource = planet.getStorageDetails()
             .getAllocatedResources()
             .findByExternalReferenceAndDataIdValidated(reservedStorage.getExternalReference(), reservedStorage.getDataId());
@@ -90,7 +92,7 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
         return ProductionOrderProcess.builder()
             .processId(model.getId())
             .status(model.getStatus())
-            .producerBuildingDataId(model.getData().get(ProcessParamKeys.PRODUCTION_BUILDING_DATA_ID))
+            .producerBuildingDataId(model.getData().get(ProcessParamKeys.PRODUCER_BUILDING_DATA_ID))
             .externalReference(model.getExternalReference())
             .game(game)
             .planet(planet)

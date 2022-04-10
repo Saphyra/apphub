@@ -43,7 +43,7 @@ class PlanetFactory {
             .defaultName(String.format("%s %s", systemName, ALPHABET.charAt(planetIndex)))
             .size(planetSize)
             .surfaces(new SurfaceMap(surfaces))
-            .storageDetails(storageDetailsFactory.create(gameId, planetId, LocationType.PLANET)) //TODO unit test
+            .storageDetails(storageDetailsFactory.create(gameId, planetId, LocationType.PLANET))
             .build();
     }
 }

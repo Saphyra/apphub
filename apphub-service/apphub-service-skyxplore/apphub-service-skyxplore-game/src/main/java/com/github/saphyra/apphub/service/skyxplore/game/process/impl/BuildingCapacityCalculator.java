@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class BuildingCapacityCalculator {
     private final ProductionBuildingService productionBuildingService;
 
     public int calculateCapacity(Planet planet, Building building) {
-        int maxWorkers = building.getLevel() * productionBuildingService.get(building.getDataId()).getWorkers();
+        int maxWorkers = building.getLevel() * productionBuildingService.get(building.getDataId())
+            .getWorkers();
 
         int assignedWorkplaces = planet.getBuildingAllocations()
             .get(building.getBuildingId())

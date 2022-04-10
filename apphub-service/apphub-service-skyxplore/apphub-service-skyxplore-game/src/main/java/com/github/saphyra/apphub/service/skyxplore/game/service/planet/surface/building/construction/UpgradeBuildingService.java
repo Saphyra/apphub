@@ -81,14 +81,12 @@ public class UpgradeBuildingService {
         resourceAllocationService.processResourceRequirements(game.getGameId(), planet, LocationType.PLANET, construction.getConstructionId(), constructionRequirements.getRequiredResources());
         building.setConstruction(construction);
 
-        //TODO unit test
         ConstructionProcess constructionProcess = constructionProcessFactory.create(game, planet, building);
 
         Processes processes = game.getProcesses();
         synchronized (processes) {
             processes.add(constructionProcess);
         }
-        //End test
 
         gameDataProxy.saveItem(
             buildingToModelConverter.convert(building, game.getGameId()),

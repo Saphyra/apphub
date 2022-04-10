@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
-import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessContext;
+import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.home_planet.HomePlanetSetupService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.player.AiFactory;
@@ -34,7 +34,7 @@ public class GameFactory {
     private final PlayerFactory playerFactory;
     private final AiFactory aiFactory;
     private final EventLoopFactory eventLoopFactory;
-    private final ProcessContext processContext;
+    private final BackgroundProcessFactory backgroundProcessFactory;
 
     public Game create(SkyXploreGameCreationRequest request) {
         UUID gameId = idGenerator.randomUuid();
@@ -53,7 +53,7 @@ public class GameFactory {
         log.info("Home planets are set up.");
 
         log.info("Game generated.");
-        return Game.builder()
+        Game result = Game.builder()
             .gameId(gameId)
             .host(request.getHost())
             .players(players)
@@ -62,9 +62,11 @@ public class GameFactory {
             .chat(chatFactory.create(request.getMembers()))
             .gameName(request.getGameName())
             .lastPlayed(dateTimeUtil.getCurrentDate())
-            .eventLoop(eventLoopFactory.create()) //TODO unit test
-            .processContext(processContext) //TODO unit test
-            .build()
-            .gameProcess();
+            .eventLoop(eventLoopFactory.create())
+            .build();
+
+        result.setBackgroundProcesses(backgroundProcessFactory.create(result));
+
+        return result;
     }
 }

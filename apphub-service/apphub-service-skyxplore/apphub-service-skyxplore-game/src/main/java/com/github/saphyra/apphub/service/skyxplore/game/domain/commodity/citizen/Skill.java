@@ -23,7 +23,7 @@ public class Skill {
         experience += workPointsUsed;
     }
 
-    public void increaseLevel(int levelEarned) {
+    public void increaseLevel() {
         level++;
     }
 }

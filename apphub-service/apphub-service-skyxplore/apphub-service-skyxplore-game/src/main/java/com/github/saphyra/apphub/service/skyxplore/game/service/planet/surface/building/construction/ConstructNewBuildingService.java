@@ -95,7 +95,6 @@ public class ConstructNewBuildingService {
         QueueResponse queueResponse = queueItemToResponseConverter.convert(buildingConstructionToQueueItemConverter.convert(building), planet);
         messageSender.planetQueueItemModified(userId, planetId, queueResponse);
 
-        //TODO unit test
         ConstructionProcess constructionProcess = constructionProcessFactory.create(game, planet, building);
 
         Processes processes = game.getProcesses();
@@ -108,7 +107,6 @@ public class ConstructNewBuildingService {
             constructionToModelConverter.convert(construction, game.getGameId()),
             constructionProcess.toModel()
         );
-        //End test block
         return surfaceToResponseConverter.convert(surface);
     }
 }

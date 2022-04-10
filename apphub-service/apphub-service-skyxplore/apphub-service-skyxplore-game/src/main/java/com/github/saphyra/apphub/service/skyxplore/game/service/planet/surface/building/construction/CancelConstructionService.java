@@ -17,7 +17,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
@@ -36,10 +35,8 @@ import static java.util.Objects.nonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO fix unit test
 public class CancelConstructionService {
     private final GameDao gameDao;
-    private final GameDataProxy gameDataProxy;
     private final SurfaceToResponseConverter surfaceToResponseConverter;
     private final WsMessageSender messageSender;
     private final SleepService sleepService;
@@ -89,7 +86,8 @@ public class CancelConstructionService {
         SyncCache syncCache = syncCacheFactory.create();
         Future<ExecutionResult<SurfaceResponse>> future = game.getEventLoop()
             .processWithResponse(() -> {
-                    game.getProcesses().findByExternalReferenceAndTypeValidated(construction.getConstructionId(), ProcessType.CONSTRUCTION)
+                    game.getProcesses()
+                        .findByExternalReferenceAndTypeValidated(construction.getConstructionId(), ProcessType.CONSTRUCTION)
                         .cancel(syncCache);
 
                     building.setConstruction(null);
@@ -100,7 +98,7 @@ public class CancelConstructionService {
 
                     if (building.getLevel() == 0) {
                         surface.setBuilding(null);
-                        gameDataProxy.deleteItem(building.getBuildingId(), GameItemType.BUILDING);
+                        syncCache.deleteGameItem(building.getBuildingId(), GameItemType.BUILDING);
                     }
 
                     syncCache.addMessage(

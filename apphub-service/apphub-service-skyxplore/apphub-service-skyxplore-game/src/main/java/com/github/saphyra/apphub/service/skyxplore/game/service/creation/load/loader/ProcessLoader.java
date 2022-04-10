@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -19,12 +20,12 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-//TODO unit test
 class ProcessLoader {
     private final GameItemLoader gameItemLoader;
     private final Map<ProcessType, ProcessFactory> factories;
     private final GameDataProxy gameDataProxy;
 
+    @Builder
     ProcessLoader(GameItemLoader gameItemLoader, List<ProcessFactory> factories, GameDataProxy gameDataProxy) {
         this.gameItemLoader = gameItemLoader;
         this.factories = factories.stream()

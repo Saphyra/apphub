@@ -12,6 +12,10 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcesses;
+import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
+import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.home_planet.HomePlanetSetupService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.player.AiFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.player.PlayerFactory;
@@ -28,6 +32,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -55,6 +60,9 @@ public class GameFactoryTest {
     private ChatFactory chatFactory;
 
     @Mock
+    private EventLoopFactory eventLoopFactory;
+
+    @Mock
     private HomePlanetSetupService homePlanetSetupService;
 
     @Mock
@@ -65,6 +73,9 @@ public class GameFactoryTest {
 
     @Mock
     private AiFactory aiFactory;
+
+    @Mock
+    private BackgroundProcessFactory backgroundProcessFactory;
 
     @InjectMocks
     private GameFactory underTest;
@@ -89,6 +100,12 @@ public class GameFactoryTest {
 
     @Mock
     private Chat chat;
+
+    @Mock
+    private EventLoop eventLoop;
+
+    @Mock
+    private BackgroundProcesses backgroundProcesses;
 
     @Test
     public void create() {
@@ -118,6 +135,8 @@ public class GameFactoryTest {
 
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
         given(chatFactory.create(members)).willReturn(chat);
+        given(eventLoopFactory.create()).willReturn(eventLoop);
+        given(backgroundProcessFactory.create(any(Game.class))).willReturn(backgroundProcesses);
 
         Game result = underTest.create(request);
 
@@ -130,6 +149,8 @@ public class GameFactoryTest {
         assertThat(result.getChat()).isEqualTo(chat);
         assertThat(result.getGameName()).isEqualTo(GAME_NAME);
         assertThat(result.getLastPlayed()).isEqualTo(CURRENT_DATE);
+        assertThat(result.getEventLoop()).isEqualTo(eventLoop);
+        assertThat(result.getBackgroundProcesses()).isEqualTo(backgroundProcesses);
 
         verify(homePlanetSetupService).setUpHomePlanet(player, allianceMap.values(), CollectionUtils.singleValueMap(coordinate, solarSystem));
     }
