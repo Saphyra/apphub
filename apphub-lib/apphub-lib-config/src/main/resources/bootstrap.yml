@@ -143,6 +143,10 @@ training:
   ribbon:
     listOfServers: training:8080
 
+community:
+  ribbon:
+    listOfServers: community:8080
+
 event:
   processor:
     heartbeat:
@@ -316,3 +320,17 @@ role:
         - PUT
       requiredRoles:
         - UTILS
+    #Community
+    - pattern: /web/community/**
+      methods:
+        - GET
+      requiredRoles:
+        - COMMUNITY
+    - pattern: /api/community/**
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - COMMUNITY

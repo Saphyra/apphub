@@ -52,7 +52,8 @@ public class MemoryMonitoringTest extends BackEndTest {
             "training",
             "user",
             "utils",
-            "web-content"
+            "web-content",
+            "community"
         );
     }
 }
