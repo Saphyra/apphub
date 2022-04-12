@@ -37,6 +37,36 @@
         "message": "Message"
       }
     ],
+    "friends-button": [
+      {
+        "key": "innerHTML",
+        "message": "Friends"
+      }
+    ],
+    "groups-button": [
+      {
+        "key": "innerHTML",
+        "message": "Groups"
+      }
+    ],
+    "blacklist-button": [
+      {
+        "key": "innerHTML",
+        "message": "Blacklist"
+      }
+    ],
+    "contacts-friends-title": [
+      {
+        "key": "innerHTML",
+        "message": "Friends"
+      }
+    ],
+    "contacts-add-friend-button": [
+      {
+        "key": "innerHTML",
+        "message": "Add friend"
+      }
+    ],
     "home-button": [
       {
         "key": "innerHTML",

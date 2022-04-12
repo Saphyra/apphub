@@ -37,6 +37,36 @@
         "message": "Üzenet"
       }
     ],
+    "friends-button": [
+      {
+        "key": "innerHTML",
+        "message": "Barátok"
+      }
+    ],
+    "groups-button": [
+      {
+        "key": "innerHTML",
+        "message": "Csoportok"
+      }
+    ],
+    "blacklist-button": [
+      {
+        "key": "innerHTML",
+        "message": "Feketelista"
+      }
+    ],
+    "contacts-friends-title": [
+      {
+        "key": "innerHTML",
+        "message": "Barátok"
+      }
+    ],
+    "contacts-add-friend-button": [
+      {
+        "key": "innerHTML",
+        "message": "Barát hozzáadása"
+      }
+    ],
     "home-button": [
       {
         "key": "innerHTML",

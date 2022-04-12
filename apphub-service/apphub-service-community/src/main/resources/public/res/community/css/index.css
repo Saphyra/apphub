@@ -28,6 +28,7 @@ main{
                 border-right: 2px solid white;
                 max-width: 50%;
                 overflow: hidden;
+                font-family: monospace;
             }
 
                 #new-conversation-button-wrapper{
@@ -67,4 +68,42 @@ main{
 
     #contacts-main{
         border-left: 3px ridge white;
+        grid-template-rows: 2.25rem 2.25rem auto;
     }
+
+        #contacts-nav-button-wrapper{
+        }
+
+        #contacts-content{
+
+        }
+
+            .contacts-panel{
+                display: grid;
+                height: calc(100% - 0.25rem);
+                border: 3px inset white;
+                margin: 0.25rem;
+                margin-top: 0
+            }
+
+                .contacts-panel h3{
+                    text-align: center;
+                    border-bottom: 1px solid white;
+                }
+
+            #contacts-friends{
+                grid-template-rows: 1.5rem auto 2.25rem;
+            }
+
+            #contacts-friend-list{
+
+            }
+
+            #contacts-add-friend-button-wrapper{
+                border-top: 1px solid white;
+                text-align: center;
+            }
+
+                #contacts-add-friend-button{
+
+                }
