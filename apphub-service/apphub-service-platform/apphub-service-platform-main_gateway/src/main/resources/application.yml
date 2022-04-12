@@ -40,6 +40,10 @@ spring:
           uri: http://training:8080
           predicates:
             - Path=/res/training/**
+        - id: community-resorces
+          uri: http://community:8080
+          predicates:
+            - Path=/res/community/**
 
         #PAGES
         - id: error-page
@@ -78,6 +82,10 @@ spring:
           uri: http://training:8080
           predicates:
             - Path=/web/training/**
+        - id: community-page
+          uri: http://community:8080
+          predicates:
+            - Path=/web/community
 
         #MODULES
         - id: user
@@ -116,6 +124,10 @@ spring:
           uri: http://training:8080
           predicates:
             - Path=/api/training/**
+        - id: community
+          uri: http://community:8080
+          predicates:
+            - Path=/api/community/**
 
         #PLATFORM
         - id: localization

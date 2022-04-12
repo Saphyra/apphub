@@ -7,6 +7,11 @@ liquibase:
 
 modules:
   modules:
+    community:
+      - name: community
+        url: /web/community
+        roles:
+          - COMMUNITY
     admin-panel:
       - name: error-report
         url: /web/admin-panel/error-report

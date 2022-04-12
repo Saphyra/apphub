@@ -1,0 +1,49 @@
+{
+  "title": "Apphub - Közösség",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Közösség"
+      }
+    ],
+    "chat-title": [
+      {
+        "key": "innerHTML",
+        "message": "Csevegés"
+      }
+    ],
+    "flow-title": [
+      {
+        "key": "innerHTML",
+        "message": "Folyam"
+      }
+    ],
+    "contacts-title": [
+      {
+        "key": "innerHTML",
+        "message": "Kapcsolatok"
+      }
+    ],
+    "new-conversation-button": [
+      {
+        "key": "innerHTML",
+        "message": "Új beszélgetés"
+      }
+    ],
+    "message-input": [
+      {
+        "key": "placeholder",
+        "message": "Üzenet"
+      }
+    ],
+    "home-button": [
+      {
+        "key": "innerHTML",
+        "message": "Kezdőlap"
+      }
+    ]
+  },
+  "additionalContent": {
+  }
+}

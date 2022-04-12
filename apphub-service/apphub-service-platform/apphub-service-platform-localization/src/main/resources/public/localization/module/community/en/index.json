@@ -1,0 +1,49 @@
+{
+  "title": "Apphub - Community",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Community"
+      }
+    ],
+    "chat-title": [
+      {
+        "key": "innerHTML",
+        "message": "Chat"
+      }
+    ],
+    "flow-title": [
+      {
+        "key": "innerHTML",
+        "message": "Flow"
+      }
+    ],
+    "contacts-title": [
+      {
+        "key": "innerHTML",
+        "message": "Contacts"
+      }
+    ],
+    "new-conversation-button": [
+      {
+        "key": "innerHTML",
+        "message": "New conversation"
+      }
+    ],
+    "message-input": [
+      {
+        "key": "placeholder",
+        "message": "Message"
+      }
+    ],
+    "home-button": [
+      {
+        "key": "innerHTML",
+        "message": "Home"
+      }
+    ]
+  },
+  "additionalContent": {
+  }
+}

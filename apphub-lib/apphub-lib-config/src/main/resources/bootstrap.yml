@@ -321,7 +321,7 @@ role:
       requiredRoles:
         - UTILS
     #Community
-    - pattern: /web/community/**
+    - pattern: /web/community
       methods:
         - GET
       requiredRoles:

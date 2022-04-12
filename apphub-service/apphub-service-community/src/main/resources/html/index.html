@@ -1,0 +1,57 @@
+<HTML>
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/community/css/index.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT src="/res/community/js/page_controller.js"></SCRIPT>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title"></H1>
+    </HEADER>
+
+    <MAIN>
+        <DIV id="chat-main" class="tab">
+            <H2 id="chat-title"></H2>
+
+            <DIV id="chat-content" class="content">
+                <DIV id="chat-conversations">
+                    <DIV id="new-conversation-button-wrapper">
+                        <DIV id="new-conversation-button" class="button"></DIV>
+                    </DIV>
+
+                    <DIV id="chat-conversations-list"></DIV>
+                </DIV>
+                <DIV id="chat-conversation-wrapper">
+                    <DIV id="chat-conversation"></DIV>
+
+                    <DIV id="message-input-wrapper">
+                        <INPUT type="text" id="message-input">
+                    </DIV>
+                </DIV>
+            </DIV>
+        </DIV>
+        <DIV id="flow-main" class="tab">
+            <H2 id="flow-title"></H2>
+
+            <DIV id="flow-content" class="content"></DIV>
+        </DIV>
+        <DIV id="contacts-main" class="tab">
+            <H2 id="contacts-title"></H2>
+
+            <DIV id="contacts-content" class="content"></DIV>
+        </DIV>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="home-button" onclick='window.location = "/web/modules"'></BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>
