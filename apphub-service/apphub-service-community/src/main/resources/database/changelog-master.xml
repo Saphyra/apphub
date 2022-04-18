@@ -2,13 +2,14 @@
 
     <changeSet id="create_schema_modules" author="saphyra">
         <sql endDelimiter=";">
-            CREATE SCHEMA IF NOT EXISTS modules
+            CREATE SCHEMA IF NOT EXISTS community
         </sql>
 
         <rollback>
-            DROP SCHEMA IF EXIST modules CASCADE
+            DROP SCHEMA IF EXIST community CASCADE
         </rollback>
     </changeSet>
 
-    <!--include file="database/change_sets/favorite.xml" -->
+    <include file="database/change_sets/friendship.xml"/>
+    <include file="database/change_sets/friend_request.xml"/>
 </databaseChangeLog>
