@@ -1,3 +1,5 @@
+scriptLoader.loadScript("/res/community/js/contacts/contacts_controller.js");
+
 (function PageController(){
     window.ids = {
     }

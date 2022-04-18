@@ -55,16 +55,46 @@
         "message": "Blacklist"
       }
     ],
-    "contacts-friends-title": [
+    "contacts-add-friend-button": [
+      {
+        "key": "innerHTML",
+        "message": "Add friend"
+      }
+    ],
+    "friends-list-title": [
       {
         "key": "innerHTML",
         "message": "Friends"
       }
     ],
-    "contacts-add-friend-button": [
+    "received-friend-requests-title": [
       {
         "key": "innerHTML",
-        "message": "Add friend"
+        "message": "Received friend requests"
+      }
+    ],
+    "sent-friend-requests-title": [
+      {
+        "key": "innerHTML",
+        "message": "Sent friend requests"
+      }
+    ],
+    "contacts-groups-search-input": [
+      {
+        "key": "placeholder",
+        "message": "Search"
+      }
+    ],
+    "contacts-groups-create-button": [
+      {
+        "key": "innerHTML",
+        "message": "Create"
+      }
+    ],
+    "contacts-blacklist-add-button": [
+      {
+        "key": "innerHTML",
+        "message": "Block a user"
       }
     ],
     "home-button": [
