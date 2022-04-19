@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.data;
 import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameApiClient;
 import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
-import com.github.saphyra.apphub.api.user.client.UserDataApiClient;
+import com.github.saphyra.apphub.api.user.client.AccountClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.Endpoints;
@@ -26,7 +26,7 @@ public class SkyXplorePageController {
     private final CharacterDao characterDao;
     private final SkyXploreLobbyApiClient lobbyClient;
     private final SkyXploreGameApiClient gameClient;
-    private final UserDataApiClient userDataClient;
+    private final AccountClient userDataClient;
 
     @GetMapping(Endpoints.SKYXPLORE_MAIN_MENU_PAGE)
     public ModelAndView mainMenu(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {

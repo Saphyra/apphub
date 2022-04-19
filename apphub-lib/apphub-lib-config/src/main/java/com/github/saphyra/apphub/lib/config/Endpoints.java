@@ -101,6 +101,8 @@ public class Endpoints {
     public static final String USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";
     public static final String USER_DATA_INTERNAL_GET_USER_LANGUAGE = "/internal/user/{userId}/data/language";
     public static final String USER_DATA_INTERNAL_USER_GET_USERNAME = "/internal/user/{userId}/data/name";
+    public static final String USER_DATA_INTERNAL_GET_ACCOUNT = "/internal/api/user/data/{userId}";
+    public static final String USER_DATA_INTERNAL_USER_EXISTS = "/internal/api/user/data/{userId}/exists";
 
     public static final String USER_DATA_GET_USER_ROLES = "/api/user/data/roles";
     public static final String USER_DATA_ADD_ROLE = "/api/user/data/roles";
@@ -236,4 +238,18 @@ public class Endpoints {
     public static final String SKYXPLORE_PLANET_GET_QUEUE = "/api/skyxplore/game/{planetId}/queue";
     public static final String SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY = "/api/skyxplore/game/{planetId}/{type}/{itemId}/priority";
     public static final String SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM = "/api/skyxplore/game/{planetId}/{type}/{itemId}";
+
+    //COMMUNITY
+    public static final String COMMUNITY_BLACKLIST_SEARCH = "/api/community/blacklist/search";
+    public static final String COMMUNITY_GET_BLACKLIST = "/api/community/blacklist";
+    public static final String COMMUNITY_CREATE_BLACKLIST = "/api/community/blacklist";
+    public static final String COMMUNITY_DELETE_BLACKLIST = "/api/community/blacklist/{blacklistId}";
+    public static final String COMMUNITY_GET_SENT_FRIEND_REQUESTS = "/api/community/friend-request/sent";
+    public static final String COMMUNITY_GET_RECEIVED_FRIEND_REQUESTS = "/api/community/friend-request/received";
+    public static final String COMMUNITY_FRIEND_REQUEST_SEARCH = "/api/community/friend-request/search";
+    public static final String COMMUNITY_FRIEND_REQUEST_CREATE = "/api/community/friend-request";
+    public static final String COMMUNITY_FRIEND_REQUEST_DELETE = "/api/community/friend-request/{friendRequestId}";
+    public static final String COMMUNITY_FRIEND_REQUEST_ACCEPT = "/api/community/friend-request/{friendRequestId}";
+    public static final String COMMUNITY_GET_FRIENDS = "/api/community/friendship";
+    public static final String COMMUNITY_DELETE_FRIENDSHIP = "/api/community/friendship/{friendshipId}";
 }

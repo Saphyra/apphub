@@ -65,10 +65,10 @@ message-sender:
 user-authentication:
   ribbon:
     listOfServers: user:8080
-user-data:
+user-account:
   ribbon:
     listOfServers: user:8080
-user-data-ban:
+user-ban:
   ribbon:
     listOfServers: user:8080
 notebook:

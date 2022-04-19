@@ -32,12 +32,13 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AccountControllerImplTest {
-    private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID USER_ID_1 = UUID.randomUUID();
     private static final String LOCALE = "locale";
     private static final String PASSWORD = "password";
     private static final String USERNAME = "username";
     private static final String SEARCH_TEXT = "search-text";
     private static final String EMAIL = "email";
+    private static final UUID USER_ID_2 = UUID.randomUUID();
 
     @Mock
     private ChangeEmailService changeEmailService;
@@ -80,35 +81,35 @@ public class AccountControllerImplTest {
 
     @Before
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
     }
 
     @Test
     public void changeEmail() {
         underTest.changeEmail(accessTokenHeader, changeEmailRequest);
 
-        verify(changeEmailService).changeEmail(USER_ID, changeEmailRequest);
+        verify(changeEmailService).changeEmail(USER_ID_1, changeEmailRequest);
     }
 
     @Test
     public void changeUsername() {
         underTest.changeUsername(accessTokenHeader, changeUsernameRequest);
 
-        verify(changeUsernameService).changeUsername(USER_ID, changeUsernameRequest);
+        verify(changeUsernameService).changeUsername(USER_ID_1, changeUsernameRequest);
     }
 
     @Test
     public void changePassword() {
         underTest.changePassword(accessTokenHeader, changePasswordRequest);
 
-        verify(changePasswordService).changePassword(USER_ID, changePasswordRequest);
+        verify(changePasswordService).changePassword(USER_ID_1, changePasswordRequest);
     }
 
     @Test
     public void deleteAccount() {
         underTest.deleteAccount(accessTokenHeader, new OneParamRequest<>(PASSWORD));
 
-        verify(deleteAccountService).deleteAccount(USER_ID, PASSWORD);
+        verify(deleteAccountService).deleteAccount(USER_ID_1, PASSWORD);
     }
 
     @Test
@@ -120,10 +121,10 @@ public class AccountControllerImplTest {
 
     @Test
     public void getUsernameByUserId() {
-        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
+        given(userDao.findByIdValidated(USER_ID_1)).willReturn(user);
         given(user.getUsername()).willReturn(USERNAME);
 
-        String result = underTest.getUsernameByUserId(USER_ID);
+        String result = underTest.getUsernameByUserId(USER_ID_1);
 
         assertThat(result).isEqualTo(USERNAME);
     }
@@ -136,9 +137,19 @@ public class AccountControllerImplTest {
     }
 
     @Test
+    public void searchAccounts_filterOwnAccount() {
+        given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user));
+        given(user.getUserId()).willReturn(USER_ID_1);
+
+        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), accessTokenHeader);
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
     public void searchAccounts() {
         given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user));
-        given(user.getUserId()).willReturn(USER_ID);
+        given(user.getUserId()).willReturn(USER_ID_2);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
 
@@ -146,7 +157,7 @@ public class AccountControllerImplTest {
 
         assertThat(result).hasSize(1);
         AccountResponse response = result.get(0);
-        assertThat(response.getUserId()).isEqualTo(USER_ID);
+        assertThat(response.getUserId()).isEqualTo(USER_ID_2);
         assertThat(response.getEmail()).isEqualTo(EMAIL);
         assertThat(response.getUsername()).isEqualTo(USERNAME);
     }

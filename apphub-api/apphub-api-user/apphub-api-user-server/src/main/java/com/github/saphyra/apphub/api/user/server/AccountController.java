@@ -41,4 +41,10 @@ public interface AccountController {
 
     @PostMapping(Endpoints.USER_DATA_SEARCH_ACCOUNT)
     List<AccountResponse> searchAccount(@RequestBody OneParamRequest<String> search, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @GetMapping(Endpoints.USER_DATA_INTERNAL_GET_ACCOUNT)
+    AccountResponse getAccount(@PathVariable("userId") UUID userId);
+
+    @GetMapping(Endpoints.USER_DATA_INTERNAL_USER_EXISTS)
+    boolean userExists(@PathVariable("userId") UUID userId);
 }

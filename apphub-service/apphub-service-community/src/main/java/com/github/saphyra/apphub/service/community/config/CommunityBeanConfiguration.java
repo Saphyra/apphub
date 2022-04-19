@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.community.config;
 
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenConfiguration;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
@@ -33,6 +34,11 @@ import org.springframework.context.annotation.Import;
 @EnableHealthCheck
 @EnableMemoryMonitoring
 public class CommunityBeanConfiguration {
+    @Bean
+    IdGenerator idGenerator() {
+        return new IdGenerator();
+    }
+
     @Bean
     UuidConverter uuidConverter() {
         return new UuidConverter();
