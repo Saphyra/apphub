@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.community.friendship.dao.request;
 
+import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Component
 @Slf4j
 //TODO unit test
-public class FriendRequestDao extends AbstractDao<FriendRequestEntity, FriendRequest, String, FriendRequestRepository> {
+public class FriendRequestDao extends AbstractDao<FriendRequestEntity, FriendRequest, String, FriendRequestRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
     public FriendRequestDao(FriendRequestConverter converter, FriendRequestRepository repository, UuidConverter uuidConverter) {
@@ -42,5 +43,10 @@ public class FriendRequestDao extends AbstractDao<FriendRequestEntity, FriendReq
 
     public Optional<FriendRequest> findById(UUID friendRequestId) {
         return findById(uuidConverter.convertDomain(friendRequestId));
+    }
+
+    @Override
+    public void deleteByUserId(UUID userId) {
+        repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }
 }

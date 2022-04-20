@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.community.blacklist.dao;
 
+import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,7 @@ import java.util.UUID;
 
 @Component
 //TODO unit test
-public class BlacklistDao extends AbstractDao<BlacklistEntity, Blacklist, String, BlacklistRepository> {
+public class BlacklistDao extends AbstractDao<BlacklistEntity, Blacklist, String, BlacklistRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
     public BlacklistDao(BlacklistConverter converter, BlacklistRepository repository, UuidConverter uuidConverter) {
@@ -32,5 +33,10 @@ public class BlacklistDao extends AbstractDao<BlacklistEntity, Blacklist, String
 
     public List<Blacklist> getByUserIdOrBlockedUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserIdOrBlockedUserId(uuidConverter.convertDomain(userId)));
+    }
+
+    @Override
+    public void deleteByUserId(UUID userId) {
+        repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }
 }

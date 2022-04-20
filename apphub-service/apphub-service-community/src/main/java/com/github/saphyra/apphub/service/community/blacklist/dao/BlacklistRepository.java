@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.community.blacklist.dao;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -16,4 +17,8 @@ interface BlacklistRepository extends CrudRepository<BlacklistEntity, String> {
 
     @Query("SELECT e FROM BlacklistEntity e WHERE e.userId = :userId OR e.blockedUserId = :userId")
     List<BlacklistEntity> getByUserIdOrBlockedUserId(@Param("userId") String userId);
+
+    @Query("DELETE BlacklistEntity e WHERE e.userId = :userId OR e.blockedUserId = :userId")
+    @Modifying
+    void deleteByUserId(@Param("userId") String userId);
 }

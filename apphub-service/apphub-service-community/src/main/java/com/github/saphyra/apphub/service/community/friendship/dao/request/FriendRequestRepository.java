@@ -24,4 +24,8 @@ interface FriendRequestRepository extends CrudRepository<FriendRequestEntity, St
 
     @Query("SELECT e FROM FriendRequestEntity e WHERE (e.senderId = :senderId AND e.receiverId = :receiverId) OR (e.senderId = :receiverId AND e.receiverId = :senderId)")
     Optional<FriendRequestEntity> findBySenderIdAndReceiverId(@Param("senderId") String senderId, @Param("receiverId") String receiverId);
+
+    @Query("DELETE FriendRequestEntity e WHERE e.senderId = :userId OR e.receiverId = :userId")
+    @Modifying
+    void deleteByUserId(@Param("userId") String userId);
 }

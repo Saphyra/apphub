@@ -19,4 +19,8 @@ interface FriendshipRepository extends CrudRepository<FriendshipEntity, String> 
 
     @Query("SELECT e FROM FriendshipEntity e WHERE (e.userId = :userId AND e.friendId = :friendId) OR (e.userId = :friendId AND e.friendId = :userId)")
     Optional<FriendshipEntity> findByUserIdAndFriendId(@Param("userId") String userId, @Param("friendId") String friendId);
+
+    @Modifying
+    @Query("DELETE FriendshipEntity e WHERE e.userId = :userId OR e.friendId = :userId")
+    void deleteByUserId(@Param("userId") String userId);
 }

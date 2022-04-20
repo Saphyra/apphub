@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.community.friendship.dao.friend;
 
+import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,7 @@ import java.util.UUID;
 
 @Component
 //TODO unit test
-public class FriendshipDao extends AbstractDao<FriendshipEntity, Friendship, String, FriendshipRepository> {
+public class FriendshipDao extends AbstractDao<FriendshipEntity, Friendship, String, FriendshipRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
     public FriendshipDao(FriendshipConverter converter, FriendshipRepository repository, UuidConverter uuidConverter) {
@@ -32,5 +33,10 @@ public class FriendshipDao extends AbstractDao<FriendshipEntity, Friendship, Str
 
     public Optional<Friendship> findById(UUID friendshipId) {
         return findById(uuidConverter.convertDomain(friendshipId));
+    }
+
+    @Override
+    public void deleteByUserId(UUID userId) {
+        repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }
 }
