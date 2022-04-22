@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Data
 @Builder
-//TODO unit test
 public class Blacklist {
     private final UUID blacklistId;
     private final UUID userId;

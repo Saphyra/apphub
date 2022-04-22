@@ -15,7 +15,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CommunityEventControllerImpl implements CommunityEventController {
     private final List<DeleteByUserIdDao> daos;
 

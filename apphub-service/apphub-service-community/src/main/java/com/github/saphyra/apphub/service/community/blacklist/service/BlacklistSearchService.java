@@ -1,8 +1,6 @@
 package com.github.saphyra.apphub.service.community.blacklist.service;
 
 import com.github.saphyra.apphub.api.community.model.response.SearchResultItem;
-import com.github.saphyra.apphub.service.community.blacklist.dao.Blacklist;
-import com.github.saphyra.apphub.service.community.blacklist.dao.BlacklistDao;
 import com.github.saphyra.apphub.service.community.common.AccountClientProxy;
 import com.github.saphyra.apphub.service.community.common.AccountResponseToSearchResultItemConverter;
 import lombok.RequiredArgsConstructor;
@@ -16,17 +14,13 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class BlacklistSearchService {
-    private final BlacklistDao blacklistDao;
     private final AccountClientProxy accountClientProxy;
     private final AccountResponseToSearchResultItemConverter accountResponseToSearchResultItemConverter;
+    private final BlockedUsersQueryService blockedUsersQueryService;
 
     public List<SearchResultItem> search(UUID userId, String queryString) {
-        List<UUID> blockedUsers = blacklistDao.getByUserId(userId)
-            .stream()
-            .map(Blacklist::getBlockedUserId)
-            .collect(Collectors.toList());
+        List<UUID> blockedUsers = blockedUsersQueryService.getUserIdsCannotContactWith(userId);
 
         return accountClientProxy.search(queryString)
             .stream()

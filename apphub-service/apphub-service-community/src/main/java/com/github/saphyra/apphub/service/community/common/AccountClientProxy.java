@@ -15,7 +15,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class AccountClientProxy {
     private final LocaleProvider localeProvider;
     private final AccountClient accountClient;
@@ -30,6 +29,6 @@ public class AccountClientProxy {
     }
 
     public boolean userExists(UUID userId) {
-        return accountClient.userExists(userId, localeProvider.getOrDefault());
+        return accountClient.userExists(userId, localeProvider.getLocaleValidated());
     }
 }

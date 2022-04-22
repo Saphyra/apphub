@@ -19,7 +19,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class BlacklistControllerImpl implements BlacklistController {
     private final BlacklistSearchService blacklistSearchService;
     private final BlacklistQueryService blacklistQueryService;

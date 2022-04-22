@@ -14,7 +14,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class BlacklistDeletionService {
     private final BlacklistDao blacklistDao;
 
@@ -23,7 +22,7 @@ public class BlacklistDeletionService {
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Blacklist not found with id " + blacklistId));
 
         if (!blacklist.getUserId().equals(userId)) {
-            throw ExceptionFactory.loggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, userId + " must not delete Blacklist " + blacklistId);
+            throw ExceptionFactory.forbiddenOperation(userId + " must not delete Blacklist " + blacklistId);
         }
 
         blacklistDao.delete(blacklist);

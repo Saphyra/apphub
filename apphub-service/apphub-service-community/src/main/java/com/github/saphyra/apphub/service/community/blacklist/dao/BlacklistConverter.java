@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class BlacklistConverter extends ConverterBase<BlacklistEntity, Blacklist> {
     private final UuidConverter uuidConverter;
 

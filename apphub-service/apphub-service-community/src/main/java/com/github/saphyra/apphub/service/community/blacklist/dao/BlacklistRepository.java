@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-//TODO unit test
 interface BlacklistRepository extends CrudRepository<BlacklistEntity, String> {
     List<BlacklistEntity> getByUserId(String userId);
 

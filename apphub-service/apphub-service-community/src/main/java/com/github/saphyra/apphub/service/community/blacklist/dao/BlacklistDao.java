@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class BlacklistDao extends AbstractDao<BlacklistEntity, Blacklist, String, BlacklistRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
