@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.user.model.request.ChangeUsernameRequest;
 import com.github.saphyra.apphub.api.user.model.request.RegistrationRequest;
 import com.github.saphyra.apphub.api.user.model.response.AccountResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -21,8 +22,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -160,5 +163,37 @@ public class AccountControllerImplTest {
         assertThat(response.getUserId()).isEqualTo(USER_ID_2);
         assertThat(response.getEmail()).isEqualTo(EMAIL);
         assertThat(response.getUsername()).isEqualTo(USERNAME);
+    }
+
+    @Test
+    public void getAccount() {
+        given(userDao.findById(USER_ID_1)).willReturn(Optional.of(user));
+        given(user.getUserId()).willReturn(USER_ID_1);
+        given(user.getEmail()).willReturn(EMAIL);
+        given(user.getUsername()).willReturn(USERNAME);
+
+        AccountResponse result = underTest.getAccount(USER_ID_1);
+
+        assertThat(result.getUserId()).isEqualTo(USER_ID_1);
+        assertThat(result.getEmail()).isEqualTo(EMAIL);
+        assertThat(result.getUsername()).isEqualTo(USERNAME);
+    }
+
+    @Test
+    public void getAccount_notFound() {
+        given(userDao.findById(USER_ID_1)).willReturn(Optional.empty());
+
+        Throwable ex = catchThrowable(() -> underTest.getAccount(USER_ID_1));
+
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.USER_NOT_FOUND);
+    }
+
+    @Test
+    public void userExists() {
+        given(userDao.findById(USER_ID_1)).willReturn(Optional.of(user));
+
+        boolean result = underTest.userExists(USER_ID_1);
+
+        assertThat(result).isTrue();
     }
 }

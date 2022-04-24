@@ -13,8 +13,6 @@ public abstract class ConverterBase<E, D> implements Converter<E, D> {
         return processEntityConversion(entity);
     }
 
-    protected abstract D processEntityConversion(E entity);
-
     @Override
     public Optional<D> convertEntity(Optional<E> entity) {
         return entity.flatMap(this::convertEntityToOptional);
@@ -44,8 +42,6 @@ public abstract class ConverterBase<E, D> implements Converter<E, D> {
         return processDomainConversion(domain);
     }
 
-    protected abstract E processDomainConversion(D domain);
-
     @Override
     public Optional<E> convertDomain(Optional<D> domain) {
         return domain.flatMap(this::convertDomainToOptional);
@@ -66,4 +62,8 @@ public abstract class ConverterBase<E, D> implements Converter<E, D> {
         }
         return domainList.stream().map(this::convertDomain).collect(Collectors.toList());
     }
+
+    protected abstract E processDomainConversion(D domain);
+
+    protected abstract D processEntityConversion(E entity);
 }

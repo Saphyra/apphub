@@ -18,7 +18,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class AcceptFriendRequestService {
     private final FriendRequestDao friendRequestDao;
     private final FriendshipFactory friendshipFactory;
@@ -31,7 +30,7 @@ public class AcceptFriendRequestService {
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "FriendRequest not found with id " + friendRequestId));
 
         if (!friendRequest.getReceiverId().equals(userId)) {
-            throw ExceptionFactory.loggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, userId + " must not accept FriendRequest " + friendRequestId);
+            throw ExceptionFactory.forbiddenOperation(userId + " must not accept FriendRequest " + friendRequestId);
         }
 
         Friendship friendship = friendshipFactory.create(friendRequest.getSenderId(), userId);
@@ -39,6 +38,6 @@ public class AcceptFriendRequestService {
 
         friendRequestDao.delete(friendRequest);
 
-        return friendshipToResponseConverter.convert(friendship, friendship.getUserId());
+        return friendshipToResponseConverter.convert(friendship, friendRequest.getSenderId());
     }
 }

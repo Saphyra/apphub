@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO unit test
 public class FriendRequestDao extends AbstractDao<FriendRequestEntity, FriendRequest, String, FriendRequestRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
@@ -26,7 +25,7 @@ public class FriendRequestDao extends AbstractDao<FriendRequestEntity, FriendReq
     }
 
     public List<FriendRequest> getBySenderIdOrReceiverId(UUID userId) {
-        return converter.convertEntity(repository.getBySenderIdOrReceiverId(userId));
+        return converter.convertEntity(repository.getBySenderIdOrReceiverId(uuidConverter.convertDomain(userId)));
     }
 
     public List<FriendRequest> getBySenderId(UUID userId) {

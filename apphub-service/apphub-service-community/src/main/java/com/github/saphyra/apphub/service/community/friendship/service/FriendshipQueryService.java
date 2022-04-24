@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class FriendshipQueryService {
     private final FriendshipDao friendshipDao;
     private final FriendshipToResponseConverter friendshipToResponseConverter;

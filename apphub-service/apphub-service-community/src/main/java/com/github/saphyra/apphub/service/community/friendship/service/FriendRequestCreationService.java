@@ -17,7 +17,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class FriendRequestCreationService {
     private final BlacklistDao blacklistDao;
     private final FriendRequestDao friendRequestDao;
@@ -27,7 +26,7 @@ public class FriendRequestCreationService {
 
     public FriendRequestResponse create(UUID userId, UUID receiverId) {
         if (blacklistDao.findByUserIdOrBlockedUserId(userId, receiverId).isPresent()) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, userId + " cannot send friendRequest to " + receiverId);
+            throw ExceptionFactory.forbiddenOperation(userId + " cannot send friendRequest to " + receiverId);
         }
 
         if (friendRequestDao.findBySenderIdAndReceiverId(userId, receiverId).isPresent()) {

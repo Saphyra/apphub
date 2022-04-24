@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class FriendRequestConverter extends ConverterBase<FriendRequestEntity, FriendRequest> {
     private final UuidConverter uuidConverter;
 

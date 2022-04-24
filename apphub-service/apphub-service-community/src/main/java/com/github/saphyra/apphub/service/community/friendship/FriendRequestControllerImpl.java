@@ -21,7 +21,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class FriendRequestControllerImpl implements FriendRequestController {
     private final FriendCandidateSearchService friendCandidateSearchService;
     private final FriendRequestQueryService friendRequestQueryService;

@@ -7,16 +7,14 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
-//TODO unit test
 interface FriendRequestRepository extends CrudRepository<FriendRequestEntity, String> {
     @Modifying
     @Query("DELETE FriendRequestEntity e WHERE (e.senderId = :senderId AND e.receiverId = :receiverId) OR (e.senderId = :receiverId AND e.receiverId = :senderId)")
     void deleteBySenderIdAndReceiverId(@Param("senderId") String senderId, @Param("receiverId") String receiverId);
 
     @Query("SELECT e FROM FriendRequestEntity e WHERE e.senderId = :userId OR e.receiverId = :userId")
-    List<FriendRequestEntity> getBySenderIdOrReceiverId(UUID userId);
+    List<FriendRequestEntity> getBySenderIdOrReceiverId(String userId);
 
     List<FriendRequestEntity> getBySenderId(String senderId);
 

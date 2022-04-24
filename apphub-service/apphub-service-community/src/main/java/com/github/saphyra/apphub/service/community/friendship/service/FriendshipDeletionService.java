@@ -14,7 +14,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class FriendshipDeletionService {
     private final FriendshipDao friendshipDao;
 
@@ -23,7 +22,7 @@ public class FriendshipDeletionService {
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Friendship not found with id" + friendshipId));
 
         if (!friendship.getUserId().equals(userId) && !friendship.getFriendId().equals(userId)) {
-            throw ExceptionFactory.loggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, userId + " must not delete Friendship " + friendshipId);
+            throw ExceptionFactory.forbiddenOperation(userId + " must not delete Friendship " + friendshipId);
         }
 
         friendshipDao.delete(friendship);

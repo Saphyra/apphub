@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class FriendRequestQueryService {
     private final FriendRequestDao friendRequestDao;
     private final FriendRequestToResponseConverter friendRequestToResponseConverter;
@@ -28,7 +27,7 @@ public class FriendRequestQueryService {
     public List<FriendRequestResponse> getReceivedFriendRequests(UUID userId) {
         return friendRequestDao.getByReceiverId(userId)
             .stream()
-            .map(friendRequest -> friendRequestToResponseConverter.convert(friendRequest, friendRequest.getReceiverId()))
+            .map(friendRequest -> friendRequestToResponseConverter.convert(friendRequest, friendRequest.getSenderId()))
             .collect(Collectors.toList());
     }
 }

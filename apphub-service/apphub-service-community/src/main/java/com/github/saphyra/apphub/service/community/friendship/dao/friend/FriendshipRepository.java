@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-//TODO unit test
 interface FriendshipRepository extends CrudRepository<FriendshipEntity, String> {
     @Query("DELETE FriendshipEntity e WHERE (e.userId = :userId AND e.friendId = :friendId) OR (e.userId = :friendId AND e.friendId = :userId)")
     @Modifying

@@ -45,7 +45,6 @@ public class UserDao extends AbstractDao<UserEntity, User, String, UserRepositor
         return converter.convertEntity(repository.getByUsersMarkedToDelete());
     }
 
-    //TODO unit test
     public Optional<User> findById(UUID userId) {
         return findById(uuidConverter.convertDomain(userId));
     }

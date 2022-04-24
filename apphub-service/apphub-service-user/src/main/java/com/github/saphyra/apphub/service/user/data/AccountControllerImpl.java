@@ -97,7 +97,6 @@ class AccountControllerImpl implements AccountController {
     }
 
     @Override
-    //TODO unit test
     public AccountResponse getAccount(UUID userId) {
         return userDao.findById(userId)
             .map(this::convert)
@@ -105,7 +104,6 @@ class AccountControllerImpl implements AccountController {
     }
 
     @Override
-    //TODO unit test
     public boolean userExists(UUID userId) {
         return userDao.findById(userId)
             .isPresent();
