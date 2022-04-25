@@ -19,27 +19,21 @@ import java.util.List;
 import java.util.UUID;
 
 public interface FriendRequestController {
-    //TODO API test
-    @GetMapping(Endpoints.COMMUNITY_FRIEND_REQUEST_SEARCH)
+    @PostMapping(Endpoints.COMMUNITY_FRIEND_REQUEST_SEARCH)
     List<SearchResultItem> search(@RequestBody OneParamRequest<String> query, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @GetMapping(Endpoints.COMMUNITY_GET_SENT_FRIEND_REQUESTS)
     List<FriendRequestResponse> getSentFriendRequests(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @GetMapping(Endpoints.COMMUNITY_GET_RECEIVED_FRIEND_REQUESTS)
     List<FriendRequestResponse> getReceivedFriendRequests(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @PutMapping(Endpoints.COMMUNITY_FRIEND_REQUEST_CREATE)
     FriendRequestResponse create(@RequestBody OneParamRequest<UUID> friendUserId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @DeleteMapping(Endpoints.COMMUNITY_FRIEND_REQUEST_DELETE)
     void delete(@PathVariable("friendRequestId") UUID friendRequestId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @PostMapping(Endpoints.COMMUNITY_FRIEND_REQUEST_ACCEPT)
     FriendshipResponse accept(@PathVariable("friendRequestId") UUID friendRequestId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

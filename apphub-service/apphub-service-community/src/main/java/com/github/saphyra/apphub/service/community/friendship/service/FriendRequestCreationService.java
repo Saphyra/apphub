@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.community.model.response.friend_request.Fri
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.community.blacklist.dao.BlacklistDao;
+import com.github.saphyra.apphub.service.community.common.AccountClientProxy;
 import com.github.saphyra.apphub.service.community.friendship.dao.friend.FriendshipDao;
 import com.github.saphyra.apphub.service.community.friendship.dao.request.FriendRequest;
 import com.github.saphyra.apphub.service.community.friendship.dao.request.FriendRequestDao;
@@ -23,8 +24,13 @@ public class FriendRequestCreationService {
     private final FriendshipDao friendshipDao;
     private final FriendRequestFactory friendRequestFactory;
     private final FriendRequestToResponseConverter friendRequestToResponseConverter;
+    private final AccountClientProxy accountClientProxy;
 
     public FriendRequestResponse create(UUID userId, UUID receiverId) {
+        if (!accountClientProxy.userExists(receiverId)) {
+            throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.USER_NOT_FOUND, "User not found with id " + receiverId);
+        }
+
         if (blacklistDao.findByUserIdOrBlockedUserId(userId, receiverId).isPresent()) {
             throw ExceptionFactory.forbiddenOperation(userId + " cannot send friendRequest to " + receiverId);
         }

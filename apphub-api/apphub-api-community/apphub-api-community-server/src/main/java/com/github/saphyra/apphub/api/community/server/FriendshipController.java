@@ -13,11 +13,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface FriendshipController {
-    //TODO API test
     @GetMapping(Endpoints.COMMUNITY_GET_FRIENDS)
     List<FriendshipResponse> getFriendships(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @DeleteMapping(Endpoints.COMMUNITY_DELETE_FRIENDSHIP)
     void delete(@PathVariable("friendshipId") UUID friendshipId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

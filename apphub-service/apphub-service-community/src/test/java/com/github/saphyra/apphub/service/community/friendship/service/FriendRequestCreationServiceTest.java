@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.community.model.response.friend_request.Fri
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.community.blacklist.dao.Blacklist;
 import com.github.saphyra.apphub.service.community.blacklist.dao.BlacklistDao;
+import com.github.saphyra.apphub.service.community.common.AccountClientProxy;
 import com.github.saphyra.apphub.service.community.friendship.dao.friend.Friendship;
 import com.github.saphyra.apphub.service.community.friendship.dao.friend.FriendshipDao;
 import com.github.saphyra.apphub.service.community.friendship.dao.request.FriendRequest;
@@ -44,6 +45,9 @@ public class FriendRequestCreationServiceTest {
     @Mock
     private FriendRequestToResponseConverter friendRequestToResponseConverter;
 
+    @Mock
+    private AccountClientProxy accountClientProxy;
+
     @InjectMocks
     private FriendRequestCreationService underTest;
 
@@ -60,7 +64,17 @@ public class FriendRequestCreationServiceTest {
     private FriendRequestResponse friendRequestResponse;
 
     @Test
+    public void userDoesNotExist() {
+        given(accountClientProxy.userExists(RECEIVER_ID)).willReturn(false);
+
+        Throwable ex = catchThrowable(() -> underTest.create(USER_ID, RECEIVER_ID));
+
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.USER_NOT_FOUND);
+    }
+
+    @Test
     public void userBlocked() {
+        given(accountClientProxy.userExists(RECEIVER_ID)).willReturn(true);
         given(blacklistDao.findByUserIdOrBlockedUserId(USER_ID, RECEIVER_ID)).willReturn(Optional.of(blacklist));
 
         Throwable ex = catchThrowable(() -> underTest.create(USER_ID, RECEIVER_ID));
@@ -70,6 +84,7 @@ public class FriendRequestCreationServiceTest {
 
     @Test
     public void friendshipAlreadyExists() {
+        given(accountClientProxy.userExists(RECEIVER_ID)).willReturn(true);
         given(blacklistDao.findByUserIdOrBlockedUserId(USER_ID, RECEIVER_ID)).willReturn(Optional.empty());
         given(friendRequestDao.findBySenderIdAndReceiverId(USER_ID, RECEIVER_ID)).willReturn(Optional.of(friendRequest));
 
@@ -80,6 +95,7 @@ public class FriendRequestCreationServiceTest {
 
     @Test
     public void friendRequestAlreadyExists() {
+        given(accountClientProxy.userExists(RECEIVER_ID)).willReturn(true);
         given(blacklistDao.findByUserIdOrBlockedUserId(USER_ID, RECEIVER_ID)).willReturn(Optional.empty());
         given(friendRequestDao.findBySenderIdAndReceiverId(USER_ID, RECEIVER_ID)).willReturn(Optional.empty());
         given(friendshipDao.findByUserIdAndFriendId(USER_ID, RECEIVER_ID)).willReturn(Optional.of(friendship));
@@ -91,6 +107,7 @@ public class FriendRequestCreationServiceTest {
 
     @Test
     public void create() {
+        given(accountClientProxy.userExists(RECEIVER_ID)).willReturn(true);
         given(blacklistDao.findByUserIdOrBlockedUserId(USER_ID, RECEIVER_ID)).willReturn(Optional.empty());
         given(friendRequestDao.findBySenderIdAndReceiverId(USER_ID, RECEIVER_ID)).willReturn(Optional.empty());
         given(friendshipDao.findByUserIdAndFriendId(USER_ID, RECEIVER_ID)).willReturn(Optional.empty());

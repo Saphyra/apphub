@@ -18,19 +18,15 @@ import java.util.List;
 import java.util.UUID;
 
 public interface BlacklistController {
-    //TODO API test
     @PostMapping(Endpoints.COMMUNITY_BLACKLIST_SEARCH)
     List<SearchResultItem> search(@RequestBody OneParamRequest<String> queryString, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @GetMapping(Endpoints.COMMUNITY_GET_BLACKLIST)
     List<BlacklistResponse> getBlacklist(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @PutMapping(Endpoints.COMMUNITY_CREATE_BLACKLIST)
     BlacklistResponse create(@RequestBody OneParamRequest<UUID> blockedUserId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @DeleteMapping(Endpoints.COMMUNITY_DELETE_BLACKLIST)
     void delete(@PathVariable("blacklistId") UUID blacklistId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }
