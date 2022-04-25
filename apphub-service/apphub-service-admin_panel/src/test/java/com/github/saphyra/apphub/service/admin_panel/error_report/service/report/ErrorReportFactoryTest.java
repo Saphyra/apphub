@@ -74,7 +74,7 @@ public class ErrorReportFactoryTest {
             .build();
 
         given(idGenerator.randomUuid()).willReturn(ID);
-        given(dateTimeUtil.getCurrentDate()).willReturn(CREATED_AT);
+        given(dateTimeUtil.getCurrentTime()).willReturn(CREATED_AT);
 
         ErrorReport result = underTest.create(model);
 

@@ -43,7 +43,7 @@ public class DeleteAccountService {
     @Transactional
     public void deleteAccount(User user) {
         user.setMarkedForDeletion(true);
-        user.setMarkedForDeletionAt(dateTimeUtil.getCurrentDate());
+        user.setMarkedForDeletionAt(dateTimeUtil.getCurrentTime());
         userDao.save(user);
         accessTokenDao.deleteByUserId(user.getUserId());
     }

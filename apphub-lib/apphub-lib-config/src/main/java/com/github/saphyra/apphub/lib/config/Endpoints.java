@@ -48,6 +48,7 @@ public class Endpoints {
     public static final String EVENT_MESSAGE_SENDER_CONNECTION_CLEANUP = "/event/message-sender/connection-cleanup";
     public static final String EVENT_TRIGGER_ACCOUNT_DELETION = "/event/user-data/trigger-account-deletion";
     public static final String EVENT_TRIGGER_REVOKE_EXPIRED_BANS = "/event/user-data/trigger-remove-expired-bans";
+    public static final String EVENT_SKYXPLORE__DELETE_GAMES = "/event/skyxplore/data/game/delete";
 
     //WEB-SOCKET-MESSAGING
     public static final String WEB_SOCKET_SEND_MESSAGE = "/internal/message/{group}";

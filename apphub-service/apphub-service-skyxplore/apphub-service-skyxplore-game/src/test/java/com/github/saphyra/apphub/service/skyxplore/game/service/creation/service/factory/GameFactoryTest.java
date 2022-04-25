@@ -133,7 +133,7 @@ public class GameFactoryTest {
         given(universeFactory.create(GAME_ID, 2, settings)).willReturn(universe);
         given(universe.getSystems()).willReturn(CollectionUtils.singleValueMap(coordinate, solarSystem));
 
-        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
         given(chatFactory.create(members)).willReturn(chat);
         given(eventLoopFactory.create()).willReturn(eventLoop);
         given(backgroundProcessFactory.create(any(Game.class))).willReturn(backgroundProcesses);
@@ -151,6 +151,7 @@ public class GameFactoryTest {
         assertThat(result.getLastPlayed()).isEqualTo(CURRENT_DATE);
         assertThat(result.getEventLoop()).isEqualTo(eventLoop);
         assertThat(result.getBackgroundProcesses()).isEqualTo(backgroundProcesses);
+        assertThat(result.getMarkedForDeletion()).isFalse();
 
         verify(homePlanetSetupService).setUpHomePlanet(player, allianceMap.values(), CollectionUtils.singleValueMap(coordinate, solarSystem));
     }

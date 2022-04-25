@@ -11,6 +11,7 @@
   "FRIENDSHIP_ALREADY_EXISTS": "Ez a barátság már létrejött.",
   "FRIENDSHIP_NOT_FOUND": "A barát nem található.",
   "FORBIDDEN_OPERATION": "Ezt nem teheted meg.",
+  "GAME_DELETED": "A játék már törölve van.",
   "GAME_NOT_FOUND": "A játék nem található.",
   "INVALID_PARAM": "Érvénytelen paraméter.",
   "INVALID_TYPE": "Érvénytelen típus.",

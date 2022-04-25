@@ -8,6 +8,10 @@ spring:
 liquibase:
   schema: skyxplore
 
+game:
+  deletion:
+    expirationMinutes: 10
+
 logging:
   level:
     com:

@@ -90,7 +90,7 @@ public class DefaultWebSocketHandlerTest {
         given(session.getPrincipal()).willReturn(principal);
         given(principal.getName()).willReturn(USER_ID_STRING);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
-        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
     }
 
     @Test(expected = IllegalArgumentException.class)

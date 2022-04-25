@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.game.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.player.PlayerDao;
@@ -21,9 +22,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class GameDeletionService implements DeleteByUserIdDao {
-    private final List<GameItemService> gameItemServices;
     private final GameDao gameDao;
     private final PlayerDao playerDao;
+    private final DateTimeUtil dateTimeUtil;
 
     @Override
     @Transactional
@@ -33,7 +34,7 @@ public class GameDeletionService implements DeleteByUserIdDao {
             .stream()
             .map(GameItem::getGameId)
             .peek(gameId -> log.info("Deleting game by id {} of host {}", gameId, userId))
-            .peek(this::deleteByGamaId)
+            .peek(this::markGameForDeletion)
             .collect(Collectors.toList());
 
         playerDao.getByUserId(userId)
@@ -54,10 +55,14 @@ public class GameDeletionService implements DeleteByUserIdDao {
             throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, userId + " must not delete game " + gameId);
         }
 
-        deleteByGamaId(gameId);
+        markGameForDeletion(gameId);
     }
 
-    private void deleteByGamaId(UUID gameId) {
-        gameItemServices.forEach(gameItemService -> gameItemService.deleteByGameId(gameId));
+    private void markGameForDeletion(UUID gameId) {
+        GameModel gameModel = gameDao.findByIdValidated(gameId);
+        gameModel.setMarkedForDeletion(true);
+        gameModel.setMarkedForDeletionAt(dateTimeUtil.getCurrentTime());
+
+        gameDao.save(gameModel);
     }
 }

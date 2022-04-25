@@ -42,7 +42,7 @@ public class EventProcessorCleanupServiceTest {
 
     @Test
     public void cleanupExpiredEventProcessors() {
-        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
         given(eventProcessorDao.getByLastAccessBefore(CURRENT_DATE.minusSeconds(EXPIRATION_SECONDS))).willReturn(Arrays.asList(eventProcessor));
 
         underTest.cleanupExpiredEventProcessors();

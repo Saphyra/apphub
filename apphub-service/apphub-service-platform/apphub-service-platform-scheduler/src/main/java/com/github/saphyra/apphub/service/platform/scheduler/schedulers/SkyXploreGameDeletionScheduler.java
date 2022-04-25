@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class SkyXploreGameCleanupScheduler {
+public class SkyXploreGameDeletionScheduler {
     private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;
 
-    @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.skyxplore.game.gameCleanup}")
-    void gameCleanup() {
-        String eventName = EmptyEvent.SKYXPLORE_GAME_CLEANUP_EVENT_NAME;
+    @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.skyxplore.game.deletion}")
+    void gameDeletion() {
+        String eventName = EmptyEvent.SKYXPLORE_GAME_DELETION_EVENT_NAME;
         log.info("Sending event with name {}", eventName);
         eventGatewayApi.sendEvent(
             SendEventRequest.builder()

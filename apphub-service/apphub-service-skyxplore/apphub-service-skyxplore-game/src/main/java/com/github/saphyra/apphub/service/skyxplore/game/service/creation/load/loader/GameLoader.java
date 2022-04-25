@@ -41,7 +41,7 @@ public class GameLoader {
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
         Stopwatch stopwatch = Stopwatch.createStarted();
-        gameModel.setLastPlayed(dateTimeUtil.getCurrentDate());
+        gameModel.setLastPlayed(dateTimeUtil.getCurrentTime());
         Map<UUID, Player> players = playerLoader.load(gameModel.getId(), members);
         Game game = Game.builder()
             .gameId(gameModel.getId())
@@ -53,6 +53,8 @@ public class GameLoader {
             .universe(universeLoader.load(gameModel.getId()))
             .chat(chatFactory.create(players.values()))
             .eventLoop(eventLoopFactory.create())
+            .markedForDeletion(gameModel.getMarkedForDeletion())
+            .markedForDeletionAt(gameModel.getMarkedForDeletionAt())
             .build();
 
         game.setBackgroundProcesses(backgroundProcessFactory.create(game));

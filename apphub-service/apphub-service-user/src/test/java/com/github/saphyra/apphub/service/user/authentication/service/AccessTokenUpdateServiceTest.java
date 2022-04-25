@@ -30,7 +30,7 @@ public class AccessTokenUpdateServiceTest {
 
     @Test
     public void updateLastAccess() {
-        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
 
         underTest.updateLastAccess(ACCESS_TOKEN_ID);
 

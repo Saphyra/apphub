@@ -113,6 +113,10 @@ public class LoadGameTest extends BackEndTest {
         hostLobbyClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED)
             .orElseThrow(() -> new RuntimeException("Game not loaded."));
 
-        ApphubWsClient.cleanUpConnections();
+        //Create lobby - Game marked for deletion
+        SkyXploreSavedGameActions.deleteGame(language, accessTokenId1, gameId);
+        Response loadGameResponse = SkyXploreLobbyActions.getLoadGameResponse(language, accessTokenId1, gameId);
+
+        ResponseValidator.verifyErrorResponse(language, loadGameResponse, 423, ErrorCode.GAME_DELETED);
     }
 }

@@ -11,6 +11,7 @@
   "FRIENDSHIP_ALREADY_EXISTS": "Friendship already exists.",
   "FRIENDSHIP_NOT_FOUND": "Friendship not found.",
   "FORBIDDEN_OPERATION": "You cannot do this.",
+  "GAME_DELETED": "Game is already deleted.",
   "GAME_NOT_FOUND": "Game not found.",
   "GENERAL_ERROR": "Unknown error.",
   "INVALID_PARAM": "Invalid parameter.",

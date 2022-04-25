@@ -47,4 +47,21 @@ public class GameRepositoryTest {
 
         assertThat(result).containsExactly(entity1);
     }
+
+    @Test
+    public void getGamesMarkedForDeletion() {
+        GameEntity entity1 = GameEntity.builder()
+            .gameId(GAME_ID_1)
+            .markedForDeletion(true)
+            .build();
+        GameEntity entity2 = GameEntity.builder()
+            .gameId(GAME_ID_2)
+            .markedForDeletion(false)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2));
+
+        List<GameEntity> result = underTest.getGamesMarkedForDeletion();
+
+        assertThat(result).containsExactly(entity1);
+    }
 }

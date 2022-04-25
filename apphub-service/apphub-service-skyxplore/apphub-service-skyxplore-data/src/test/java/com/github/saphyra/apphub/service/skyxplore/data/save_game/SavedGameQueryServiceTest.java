@@ -56,9 +56,20 @@ public class SavedGameQueryServiceTest {
     private PlayerModel aiPlayer;
 
     @Test
+    public void getSavedGames_markedForDeletion() {
+        given(gameDao.getByHost(USER_ID)).willReturn(Arrays.asList(gameModel));
+        given(gameModel.getMarkedForDeletion()).willReturn(false);
+
+        List<SavedGameResponse> result = underTest.getSavedGames(USER_ID);
+
+        assertThat(result.isEmpty());
+    }
+
+    @Test
     public void getSavedGames() {
         given(gameDao.getByHost(USER_ID)).willReturn(Arrays.asList(gameModel));
         given(gameModel.getHost()).willReturn(USER_ID);
+        given(gameModel.getMarkedForDeletion()).willReturn(false);
 
         given(gameModel.getGameId()).willReturn(GAME_ID);
         given(gameModel.getName()).willReturn(GAME_NAME);

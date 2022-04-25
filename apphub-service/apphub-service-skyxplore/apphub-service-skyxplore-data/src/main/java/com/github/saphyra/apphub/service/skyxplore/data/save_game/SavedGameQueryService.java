@@ -25,6 +25,7 @@ class SavedGameQueryService {
     List<SavedGameResponse> getSavedGames(UUID userId) {
         return gameDao.getByHost(userId)
             .stream()
+            .filter(gameModel -> !gameModel.getMarkedForDeletion())
             .map(gameModel -> SavedGameResponse.builder()
                 .gameId(gameModel.getGameId())
                 .gameName(gameModel.getName())

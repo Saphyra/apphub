@@ -28,13 +28,13 @@ class ExpiredGameCleanupService {
 
     private void process(Game game) {
         if (nonNull(game.getExpiresAt())) {
-            if (dateTimeUtil.getCurrentDate().isAfter(game.getExpiresAt())) {
+            if (dateTimeUtil.getCurrentTime().isAfter(game.getExpiresAt())) {
                 log.info("Deleting game {}", game.getGameId());
                 gameDao.delete(game);
             }
         } else {
             log.info("Marking game {} for deletion", game.getGameId());
-            game.setExpiresAt(dateTimeUtil.getCurrentDate().plusSeconds(configuration.getAbandonedGameExpirationSeconds()));
+            game.setExpiresAt(dateTimeUtil.getCurrentTime().plusSeconds(configuration.getAbandonedGameExpirationSeconds()));
         }
     }
 }

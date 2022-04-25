@@ -38,6 +38,7 @@ public class GameModelValidatorTest {
         given(model.getName()).willReturn(NAME);
         given(model.getHost()).willReturn(HOST);
         given(model.getLastPlayed()).willReturn(LAST_PLAYED);
+        given(model.getMarkedForDeletion()).willReturn(false);
     }
 
     @After
@@ -70,6 +71,15 @@ public class GameModelValidatorTest {
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
         ExceptionValidator.validateInvalidParam(ex, "lastPlayed", "must not be null");
+    }
+
+    @Test
+    public void nullMarkedForDeletion() {
+        given(model.getMarkedForDeletion()).willReturn(null);
+
+        Throwable ex = catchThrowable(() -> underTest.validate(model));
+
+        ExceptionValidator.validateInvalidParam(ex, "markedForDeletion", "must not be null");
     }
 
     @Test

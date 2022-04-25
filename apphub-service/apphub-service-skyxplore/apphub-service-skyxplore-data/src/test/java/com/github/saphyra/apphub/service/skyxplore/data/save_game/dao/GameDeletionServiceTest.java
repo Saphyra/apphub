@@ -3,16 +3,18 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.game.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.player.PlayerDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,6 +28,7 @@ public class GameDeletionServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final String USERNAME = "username";
+    private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
 
     @Mock
     private GameDao gameDao;
@@ -34,8 +37,9 @@ public class GameDeletionServiceTest {
     private PlayerDao playerDao;
 
     @Mock
-    private GameItemService gameItemService;
+    private DateTimeUtil dateTimeUtil;
 
+    @InjectMocks
     private GameDeletionService underTest;
 
     @Mock
@@ -44,21 +48,15 @@ public class GameDeletionServiceTest {
     @Mock
     private GameModel gameModel;
 
-    @Before
-    public void setUp() {
-        underTest = new GameDeletionService(
-            Arrays.asList(gameItemService),
-            gameDao,
-            playerDao
-        );
-    }
-
     @Test
     public void deleteByUserId() {
         given(playerDao.getByUserId(USER_ID)).willReturn(Arrays.asList(playerModel));
         given(gameDao.getByHost(USER_ID)).willReturn(Arrays.asList(gameModel));
         given(gameModel.getGameId()).willReturn(GAME_ID);
         given(playerModel.getUsername()).willReturn(USERNAME);
+        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_TIME);
+
+        given(gameDao.findByIdValidated(GAME_ID)).willReturn(gameModel);
 
         underTest.deleteByUserId(USER_ID);
 
@@ -66,7 +64,10 @@ public class GameDeletionServiceTest {
         verify(playerModel).setUsername(USERNAME + " (AI)");
         verify(playerDao).save(playerModel);
 
-        verify(gameItemService).deleteByGameId(GAME_ID);
+        verify(gameModel).setMarkedForDeletion(true);
+        verify(gameModel).setMarkedForDeletionAt(CURRENT_TIME);
+
+        verify(gameDao).save(gameModel);
     }
 
     @Test
@@ -91,8 +92,14 @@ public class GameDeletionServiceTest {
         given(gameDao.findById(GAME_ID)).willReturn(Optional.of(gameModel));
         given(gameModel.getHost()).willReturn(USER_ID);
 
+        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_TIME);
+        given(gameDao.findByIdValidated(GAME_ID)).willReturn(gameModel);
+
         underTest.deleteByGameId(GAME_ID, USER_ID);
 
-        verify(gameItemService).deleteByGameId(GAME_ID);
+        verify(gameModel).setMarkedForDeletion(true);
+        verify(gameModel).setMarkedForDeletionAt(CURRENT_TIME);
+
+        verify(gameDao).save(gameModel);
     }
 }

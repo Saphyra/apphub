@@ -37,4 +37,8 @@ public class GameDao extends AbstractDao<GameEntity, GameModel, String, GameRepo
         return findById(gameId)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.GAME_NOT_FOUND, "Game not found with id " + gameId));
     }
+
+    public List<GameModel> getGamesMarkedForDeletion() {
+        return converter.convertEntity(repository.getGamesMarkedForDeletion());
+    }
 }

@@ -84,4 +84,14 @@ public class GameDaoTest {
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.GAME_NOT_FOUND);
     }
+
+    @Test
+    public void getGamesMarkedForDeletion() {
+        given(repository.getGamesMarkedForDeletion()).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(model));
+
+        List<GameModel> result = underTest.getGamesMarkedForDeletion();
+
+        assertThat(result).containsExactly(model);
+    }
 }
