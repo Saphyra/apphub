@@ -24,7 +24,7 @@ class ErrorReportModelFactory {
     ErrorReportModel create(HttpStatus status, ErrorResponse errorResponse, Throwable exception) {
         ExceptionModel exceptionModel = exceptionMapper.map(exception);
         return ErrorReportModel.builder()
-            .createdAt(dateTimeUtil.getCurrentDate())
+            .createdAt(dateTimeUtil.getCurrentTime())
             .message(NullSafeConverter.safeConvert(exception, throwable -> String.format("%s on thread %s: %s", exceptionModel.getType(), exceptionModel.getThread(), throwable.getMessage()), "No message"))
             .responseStatus(status.value())
             .responseBody(objectMapperWrapper.writeValueAsString(errorResponse))
@@ -41,7 +41,7 @@ class ErrorReportModelFactory {
         ExceptionModel exceptionModel = NullSafeConverter.safeConvert(exception, exceptionMapper::map);
 
         return ErrorReportModel.builder()
-            .createdAt(dateTimeUtil.getCurrentDate())
+            .createdAt(dateTimeUtil.getCurrentTime())
             .message(message)
             .exception(exceptionModel)
             .service(commonConfigProperties.getApplicationName())

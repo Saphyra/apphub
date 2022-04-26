@@ -19,7 +19,7 @@ public class ProcessHeartbeatService {
 
     public void heartbeat(String serviceName) {
         List<EventProcessor> eventProcessors = eventProcessorDao.getByServiceName(serviceName);
-        LocalDateTime currentDate = dateTimeUtil.getCurrentDate();
+        LocalDateTime currentDate = dateTimeUtil.getCurrentTime();
         eventProcessors.forEach(processor -> processor.setLastAccess(currentDate));
 
         eventProcessorDao.saveAll(eventProcessors);

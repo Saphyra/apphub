@@ -70,7 +70,7 @@ public class DeleteAccountServiceTest {
         given(user.getPassword()).willReturn(PASSWORD_HASH);
         given(user.getUserId()).willReturn(USER_ID);
         given(passwordService.authenticate(PASSWORD, PASSWORD_HASH)).willReturn(true);
-        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
 
         underTest.deleteAccount(USER_ID, PASSWORD);
 

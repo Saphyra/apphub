@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.data;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
+import com.github.saphyra.apphub.service.skyxplore.data.save_game.GameCleanupService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,13 +20,23 @@ public class SkyXploreDataEventControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
+    private GameCleanupService gameCleanupService;
+
+    @Mock
     private DeleteByUserIdDao deleteByUserIdDao;
 
     private SkyXploreDataEventControllerImpl underTest;
 
     @Before
     public void setUp() {
-        underTest = new SkyXploreDataEventControllerImpl(Arrays.asList(deleteByUserIdDao));
+        underTest = new SkyXploreDataEventControllerImpl(gameCleanupService, Arrays.asList(deleteByUserIdDao));
+    }
+
+    @Test
+    public void deleteGames() {
+        underTest.deleteGames();
+
+        verify(gameCleanupService).deleteMarkedGames();
     }
 
     @Test

@@ -165,7 +165,7 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
     public void userLeftGame_noMoreConnectedMembers() {
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
         given(game.getPlayers()).willReturn(CollectionUtils.toMap(new BiWrapper<>(USER_ID, player1)));
-        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
         given(configuration.getAbandonedGameExpirationSeconds()).willReturn(ABANDONED_GAME_EXPIRATION_SECONDS);
 
         underTest.userLeftGame(USER_ID);

@@ -27,7 +27,7 @@ public class MemoryStatusModelFactoryTest {
 
     @Test
     public void create() {
-        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
 
         MemoryStatusModel result = underTest.create(SERVICE_NAME);
 

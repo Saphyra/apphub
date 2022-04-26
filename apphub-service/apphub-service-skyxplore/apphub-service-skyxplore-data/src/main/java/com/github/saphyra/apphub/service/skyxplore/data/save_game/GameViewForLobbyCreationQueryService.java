@@ -31,7 +31,11 @@ public class GameViewForLobbyCreationQueryService {
         GameModel gameModel = gameDao.findByIdValidated(gameId);
 
         if (!gameModel.getHost().equals(host)) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, host + " has no access to game " + gameId);
+            throw ExceptionFactory.forbiddenOperation(host + " has no access to game " + gameId);
+        }
+
+        if (gameModel.getMarkedForDeletion()) {
+            throw ExceptionFactory.notLoggedException(HttpStatus.LOCKED, ErrorCode.GAME_DELETED, gameId + " is marked for deletion.");
         }
 
         Map<UUID, PlayerModel> players = fetchPlayers(gameId);

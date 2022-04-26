@@ -25,7 +25,7 @@ public class MemoryStatusModelFactory {
             .availableMemoryBytes(maxMemory)
             .allocatedMemoryBytes(totalMemory)
             .usedMemoryBytes(totalMemory - freeMemory)
-            .epochSeconds(dateTimeUtil.getCurrentDate().toEpochSecond(ZoneOffset.UTC))
+            .epochSeconds(dateTimeUtil.getCurrentTime().toEpochSecond(ZoneOffset.UTC))
             .build();
     }
 }

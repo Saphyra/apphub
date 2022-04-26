@@ -109,12 +109,14 @@ public class GameLoaderTest {
 
     @Test
     public void load() {
-        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
 
         given(gameModel.getId()).willReturn(GAME_ID);
         given(gameModel.getName()).willReturn(GAME_NAME);
         given(gameModel.getHost()).willReturn(HOST);
         given(gameModel.getLastPlayed()).willReturn(CURRENT_DATE);
+        given(gameModel.getMarkedForDeletion()).willReturn(true);
+        given(gameModel.getMarkedForDeletionAt()).willReturn(CURRENT_DATE);
 
         Map<UUID, Player> players = CollectionUtils.singleValueMap(USER_ID, player);
         given(playerLoader.load(GAME_ID, Arrays.asList(MEMBER_ID))).willReturn(players);
@@ -144,6 +146,9 @@ public class GameLoaderTest {
         assertThat(game.getChat()).isEqualTo(chat);
         assertThat(game.getEventLoop()).isEqualTo(eventLoop);
         assertThat(game.getBackgroundProcesses()).isEqualTo(backgroundProcesses);
+        assertThat(game.getProcesses()).containsExactly(process);
+        assertThat(game.getMarkedForDeletion()).isTrue();
+        assertThat(game.getMarkedForDeletionAt()).isEqualTo(CURRENT_DATE);
         assertThat(game.getProcesses()).containsExactly(process);
 
         ArgumentCaptor<WebSocketMessage> messageArgumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);

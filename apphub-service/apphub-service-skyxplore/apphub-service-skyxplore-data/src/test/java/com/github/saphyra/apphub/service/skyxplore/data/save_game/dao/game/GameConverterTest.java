@@ -23,6 +23,7 @@ public class GameConverterTest {
     private static final String GAME_ID_STRING = "game-id";
     private static final String HOST_STRING = "host";
     private static final LocalDateTime LAST_PLAYED = LocalDateTime.now();
+    private static final LocalDateTime MARKED_FOR_DELETION_AT = LocalDateTime.now();
 
     @Mock
     private UuidConverter uuidConverter;
@@ -37,6 +38,8 @@ public class GameConverterTest {
         model.setName(NAME);
         model.setHost(HOST);
         model.setLastPlayed(LAST_PLAYED);
+        model.setMarkedForDeletion(true);
+        model.setMarkedForDeletionAt(MARKED_FOR_DELETION_AT);
 
         given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
         given(uuidConverter.convertDomain(HOST)).willReturn(HOST_STRING);
@@ -47,6 +50,8 @@ public class GameConverterTest {
         assertThat(result.getName()).isEqualTo(NAME);
         assertThat(result.getHost()).isEqualTo(HOST_STRING);
         assertThat(result.getLastPlayed()).isEqualTo(LAST_PLAYED);
+        assertThat(result.getMarkedForDeletion()).isTrue();
+        assertThat(result.getMarkedForDeletionAt()).isEqualTo(MARKED_FOR_DELETION_AT);
     }
 
     @Test
@@ -56,6 +61,8 @@ public class GameConverterTest {
             .host(HOST_STRING)
             .name(NAME)
             .lastPlayed(LAST_PLAYED)
+            .markedForDeletion(true)
+            .markedForDeletionAt(MARKED_FOR_DELETION_AT)
             .build();
 
         given(uuidConverter.convertEntity(GAME_ID_STRING)).willReturn(GAME_ID);
@@ -68,5 +75,7 @@ public class GameConverterTest {
         assertThat(result.getHost()).isEqualTo(HOST);
         assertThat(result.getType()).isEqualTo(GameItemType.GAME);
         assertThat(result.getLastPlayed()).isEqualTo(LAST_PLAYED);
+        assertThat(result.getMarkedForDeletion()).isTrue();
+        assertThat(result.getMarkedForDeletionAt()).isEqualTo(MARKED_FOR_DELETION_AT);
     }
 }

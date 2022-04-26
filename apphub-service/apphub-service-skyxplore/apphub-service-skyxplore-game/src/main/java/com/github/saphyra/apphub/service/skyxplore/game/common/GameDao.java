@@ -73,6 +73,7 @@ public class GameDao {
                     game.getEventLoop()
                         .stop();
                     log.info("EventLoop is shut down.");
+                    repository.remove(game.getGameId());
                     return;
                 }
 
@@ -81,10 +82,10 @@ public class GameDao {
                 sleepService.sleep(1000);
             }
 
+            repository.remove(game.getGameId());
+
             throw new IllegalStateException("Queue still has " + game.getEventLoop().getQueueSize() + " number of items");
         });
-
-        repository.remove(game.getGameId());
     }
 
     public List<Game> getAll() {

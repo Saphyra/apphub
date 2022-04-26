@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEv
 import com.github.saphyra.apphub.api.skyxplore.data.server.SkyXploreDataEventController;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
+import com.github.saphyra.apphub.service.skyxplore.data.save_game.GameCleanupService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +17,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class SkyXploreDataEventControllerImpl implements SkyXploreDataEventController {
+    private final GameCleanupService gameCleanupService;
     private final List<DeleteByUserIdDao> deleteByUserIdDaos;
+
+    @Override
+    public void deleteGames() {
+        log.info("Deleting games marked for deletion...");
+        gameCleanupService.deleteMarkedGames();
+    }
 
     @Override
     @Transactional
