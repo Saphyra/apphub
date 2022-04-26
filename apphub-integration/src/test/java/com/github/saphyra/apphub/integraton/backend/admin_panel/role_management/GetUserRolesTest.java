@@ -39,6 +39,14 @@ public class GetUserRolesTest extends BackEndTest {
         UserRoleResponse userRoleResponse = successfulQueryResponse.get(0);
         assertThat(userRoleResponse.getEmail()).isEqualTo(userData.getEmail());
         assertThat(userRoleResponse.getUsername()).isEqualTo(userData.getUsername());
-        assertThat(userRoleResponse.getRoles()).containsExactlyInAnyOrder(Constants.ROLE_ADMIN, Constants.ROLE_NOTEBOOK, Constants.ROLE_SKYXPLORE, Constants.ROLE_ACCESS, Constants.ROLE_TRAINING, Constants.ROLE_UTILS);
+        assertThat(userRoleResponse.getRoles()).containsExactlyInAnyOrder(
+            Constants.ROLE_ADMIN,
+            Constants.ROLE_NOTEBOOK,
+            Constants.ROLE_SKYXPLORE,
+            Constants.ROLE_ACCESS,
+            Constants.ROLE_TRAINING,
+            Constants.ROLE_UTILS,
+            Constants.ROLE_COMMUNITY
+        );
     }
 }

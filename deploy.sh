@@ -16,7 +16,7 @@ function deployByDirectory() {
     kubectl apply -n "$NAMESPACE_NAME" -f "$file"
   done
 
-  ./infra/deployment/script/wait_for_pods_ready.sh "$NAMESPACE_NAME" "$MAX_WAIT_TIME" 2 10
+  ./infra/deployment/script/wait_for_pods_ready.sh "$NAMESPACE_NAME" "$MAX_WAIT_TIME" 2 5
   STARTUP_RESULT=$?
   if [[ "$STARTUP_RESULT" -ne 0 ]]; then
     echo "Services failed to start."

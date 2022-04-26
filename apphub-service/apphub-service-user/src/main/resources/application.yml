@@ -17,6 +17,7 @@ registration:
     - ACCESS
     - TRAINING
     - UTILS
+    - COMMUNITY
 
 rolesCanBeDisabled:
   - NOTEBOOK
@@ -24,6 +25,7 @@ rolesCanBeDisabled:
   - TRAINING
   - TEST
   - UTILS
+  - COMMUNITY
 
 add-role-to-all:
   restrictedRoles:

@@ -16,6 +16,7 @@ public class Constants {
     public final String ROLE_TEST = "TEST";
     public final String ROLE_TRAINING = "TRAINING";
     public final String ROLE_UTILS = "UTILS";
+    public final String ROLE_COMMUNITY = "COMMUNITY";
 
     public final String TEST_ROLE_NAME = "Teszt";
     public final String GENERAL_CHAT_ROOM_NAME = "general";

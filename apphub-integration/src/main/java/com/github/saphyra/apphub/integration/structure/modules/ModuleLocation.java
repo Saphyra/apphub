@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 @Getter
 @RequiredArgsConstructor
 public enum ModuleLocation {
+    COMMUNITY("community", "community", Endpoints.COMMUNITY_PAGE, "Közösség"),
     BAN("admin-panel", "ban", Endpoints.ADMIN_PANEL_BAN_PAGE, "Felhasználók tiltása"),
     DISABLED_ROLE_MANAGEMENT("admin-panel", "disabled-role-management", Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE, "Jobosultságok letiltása / engedélyezése"),
     ROLE_MANAGEMENT("admin-panel", "role-management", Endpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE, "Jogosultságok kezelése"),

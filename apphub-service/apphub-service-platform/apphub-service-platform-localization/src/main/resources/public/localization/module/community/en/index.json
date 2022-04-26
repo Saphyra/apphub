@@ -1,0 +1,109 @@
+{
+  "title": "Apphub - Community",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Community"
+      }
+    ],
+    "chat-title": [
+      {
+        "key": "innerHTML",
+        "message": "Chat"
+      }
+    ],
+    "flow-title": [
+      {
+        "key": "innerHTML",
+        "message": "Flow"
+      }
+    ],
+    "contacts-title": [
+      {
+        "key": "innerHTML",
+        "message": "Contacts"
+      }
+    ],
+    "new-conversation-button": [
+      {
+        "key": "innerHTML",
+        "message": "New conversation"
+      }
+    ],
+    "message-input": [
+      {
+        "key": "placeholder",
+        "message": "Message"
+      }
+    ],
+    "friends-button": [
+      {
+        "key": "innerHTML",
+        "message": "Friends"
+      }
+    ],
+    "groups-button": [
+      {
+        "key": "innerHTML",
+        "message": "Groups"
+      }
+    ],
+    "blacklist-button": [
+      {
+        "key": "innerHTML",
+        "message": "Blacklist"
+      }
+    ],
+    "contacts-add-friend-button": [
+      {
+        "key": "innerHTML",
+        "message": "Add friend"
+      }
+    ],
+    "friends-list-title": [
+      {
+        "key": "innerHTML",
+        "message": "Friends"
+      }
+    ],
+    "received-friend-requests-title": [
+      {
+        "key": "innerHTML",
+        "message": "Received friend requests"
+      }
+    ],
+    "sent-friend-requests-title": [
+      {
+        "key": "innerHTML",
+        "message": "Sent friend requests"
+      }
+    ],
+    "contacts-groups-search-input": [
+      {
+        "key": "placeholder",
+        "message": "Search"
+      }
+    ],
+    "contacts-groups-create-button": [
+      {
+        "key": "innerHTML",
+        "message": "Create"
+      }
+    ],
+    "contacts-blacklist-add-button": [
+      {
+        "key": "innerHTML",
+        "message": "Block a user"
+      }
+    ],
+    "home-button": [
+      {
+        "key": "innerHTML",
+        "message": "Home"
+      }
+    ]
+  },
+  "additionalContent": {
+  }
+}

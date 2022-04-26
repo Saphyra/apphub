@@ -44,4 +44,8 @@ public class UserDao extends AbstractDao<UserEntity, User, String, UserRepositor
     public List<User> getUsersMarkedToDelete() {
         return converter.convertEntity(repository.getByUsersMarkedToDelete());
     }
+
+    public Optional<User> findById(UUID userId) {
+        return findById(uuidConverter.convertDomain(userId));
+    }
 }

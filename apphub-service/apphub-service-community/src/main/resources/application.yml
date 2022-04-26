@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: community
+
+liquibase:
+  schema: community

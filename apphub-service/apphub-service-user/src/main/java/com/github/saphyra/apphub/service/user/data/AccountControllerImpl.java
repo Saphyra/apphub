@@ -7,8 +7,11 @@ import com.github.saphyra.apphub.api.user.model.request.RegistrationRequest;
 import com.github.saphyra.apphub.api.user.model.response.AccountResponse;
 import com.github.saphyra.apphub.api.user.server.AccountController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangeEmailService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangePasswordService;
@@ -17,6 +20,7 @@ import com.github.saphyra.apphub.service.user.data.service.account.DeleteAccount
 import com.github.saphyra.apphub.service.user.data.service.register.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -79,11 +83,29 @@ class AccountControllerImpl implements AccountController {
 
         return userDao.getByUsernameOrEmailContainingIgnoreCase(searchText)
             .stream()
-            .map(user -> AccountResponse.builder()
-                .userId(user.getUserId())
-                .email(user.getEmail())
-                .username(user.getUsername())
-                .build()
-            ).collect(Collectors.toList());
+            .filter(user -> !user.getUserId().equals(accessTokenHeader.getUserId()))
+            .map(this::convert)
+            .collect(Collectors.toList());
+    }
+
+    private AccountResponse convert(User user) {
+        return AccountResponse.builder()
+            .userId(user.getUserId())
+            .email(user.getEmail())
+            .username(user.getUsername())
+            .build();
+    }
+
+    @Override
+    public AccountResponse getAccount(UUID userId) {
+        return userDao.findById(userId)
+            .map(this::convert)
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.USER_NOT_FOUND, "User not found with id " + userId));
+    }
+
+    @Override
+    public boolean userExists(UUID userId) {
+        return userDao.findById(userId)
+            .isPresent();
     }
 }

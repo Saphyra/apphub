@@ -1,0 +1,109 @@
+<HTML>
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/community/css/index.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT src="/res/community/js/page_controller.js"></SCRIPT>
+</HEAD>
+<BODY>
+<DIV id="main" class="main-page">
+    <HEADER>
+        <H1 id="main-title"></H1>
+    </HEADER>
+
+    <MAIN>
+        <DIV id="chat-main" class="tab">
+            <H2 id="chat-title"></H2>
+
+            <DIV id="chat-content" class="content">
+                <DIV id="chat-conversations">
+                    <DIV id="new-conversation-button-wrapper">
+                        <DIV id="new-conversation-button" class="button"></DIV>
+                    </DIV>
+
+                    <DIV id="chat-conversations-list"></DIV>
+                </DIV>
+                <DIV id="chat-conversation-wrapper">
+                    <DIV id="chat-conversation"></DIV>
+
+                    <DIV id="message-input-wrapper">
+                        <INPUT type="text" id="message-input">
+                    </DIV>
+                </DIV>
+            </DIV>
+        </DIV>
+        <DIV id="flow-main" class="tab">
+            <H2 id="flow-title"></H2>
+
+            <DIV id="flow-content" class="content"></DIV>
+        </DIV>
+        <DIV id="contacts-main" class="tab">
+            <H2 id="contacts-title"></H2>
+
+            <DIV id="contacts-nav-button-wrapper">
+                <BUTTON id="friends-button" class="contacts-tab-switch-button" onclick="contactsController.openFriendsTab()"></BUTTON>
+                <BUTTON id="groups-button" class="contacts-tab-switch-button" onclick="contactsController.openGroupsTab()"></BUTTON>
+                <BUTTON id="blacklist-button" class="contacts-tab-switch-button" onclick="contactsController.openBlacklistTab()"></BUTTON>
+            </DIV>
+
+            <DIV id="contacts-content" class="content">
+                <DIV id="contacts-friends" class="contacts-panel">
+                    <DIV id="contacts-friend-list-wrapper">
+                        <DIV id="friends-list" class="friends-list-item">
+                            <DIV id="friends-list-title" class="friends-list-title"></DIV>
+
+                            <DIV id="friends-list-content"></DIV>
+                        </DIV>
+
+                        <DIV id="received-friend-requests" class="friends-list-item">
+                            <DIV id="received-friend-requests-title" class="friends-list-title"></DIV>
+
+                            <DIV id="received-friend-requests-content"></DIV>
+                        </DIV>
+
+                        <DIV id="sent-friend-requests" class="friends-list-item">
+                            <DIV id="sent-friend-requests-title" class="friends-list-title"></DIV>
+
+                            <DIV id="sent-friend-requests-content"></DIV>
+
+                            <DIV id="contacts-add-friend-button-wrapper">
+                                <BUTTON id="contacts-add-friend-button"></BUTTON>
+                            </DIV>
+                        </DIV>
+                    </DIV>
+                </DIV>
+
+                <DIV id="contacts-groups" class="contacts-panel">
+                    <DIV id="contacts-groups-search-wrapper">
+                        <INPUT type="text" id="contacts-groups-search-input">
+                    </DIV>
+
+                    <DIV id="contacts-groups-list"></DIV>
+
+                    <DIV id="contacts-groups-create-wrapper">
+                        <BUTTON id="contacts-groups-create-button"></BUTTON>
+                    </DIV>
+                </DIV>
+
+                <DIV id="contacts-blacklist" class="contacts-panel">
+                    <DIV id="contacts-blacklist-add-wrapper">
+                        <BUTTON id="contacts-blacklist-add-button"></BUTTON>
+                    </DIV>
+
+                    <DIV id="contacts-blacklist-list"></DIV>
+                </DIV>
+            </DIV>
+        </DIV>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="home-button" onclick='window.location = "/web/modules"'></BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

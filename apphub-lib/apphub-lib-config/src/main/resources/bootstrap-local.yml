@@ -92,3 +92,7 @@ message-sender:
 training:
   ribbon:
     listOfServers: localhost:8095
+
+community:
+  ribbon:
+    listOfServers: localhost:8096

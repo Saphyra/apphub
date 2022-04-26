@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
-@FeignClient("user-data-ban")
+@FeignClient("user-ban")
 public interface BanClient {
     @GetMapping(Endpoints.ACCOUNT_GET_BANS)
     BanResponse getBans(@PathVariable("userId") UUID bannedUserId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
