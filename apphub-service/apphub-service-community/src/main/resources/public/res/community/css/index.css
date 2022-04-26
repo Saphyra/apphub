@@ -1,4 +1,29 @@
-main{
+.close-dialog-button{
+    position: absolute;
+    top: 0;
+    right: 0.25rem;
+    font-size: 1.5rem;
+}
+
+.list-item{
+    text-align: left;
+    position: relative;
+}
+
+    .list-item-button-wrapper{
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+        .list-item-button-wrapper button{
+            margin: 0.125rem;
+            padding: 0.125rem;
+            border-width: 1px;
+            font-size: 0.7rem;
+        }
+
+#main main{
     display: grid;
     grid-template-columns: 35% 35% 30%;
     padding: 0;
@@ -197,3 +222,32 @@ main{
                 #contacts-blacklist-list{
 
                 }
+
+#create-friend-request main{
+    display: grid;
+    grid-template-rows: 4rem auto;
+}
+
+    #create-friend-request-search-wrapper{
+        text-align: center;
+    }
+
+        #create-friend-request-search-input{
+            width: 90%;
+        }
+
+    #create-friend-request-search-result-wrapper{
+        overflow: auto;
+        padding-bottom: 1rem;
+    }
+
+        .create-friend-request-search-result-error{
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        #create-friend-request-search-result-wrapper .button{
+            font-size: 1.25rem;
+            width: 90%;
+            margin: auto;
+        }

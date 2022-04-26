@@ -97,6 +97,30 @@
         "message": "Block a user"
       }
     ],
+    "create-friend-request-title": [
+      {
+        "key": "innerHTML",
+        "message": "Add friend"
+      }
+    ],
+    "create-friend-request-search-input": [
+      {
+        "key": "placeholder",
+        "message": "Search"
+      }
+    ],
+    "create-friend-request-search-result-query-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "Please enter at least 3 characters!"
+      }
+    ],
+    "create-friend-request-search-result-no-result": [
+      {
+        "key": "innerHTML",
+        "message": "User not found."
+      }
+    ],
     "home-button": [
       {
         "key": "innerHTML",
@@ -105,5 +129,16 @@
     ]
   },
   "additionalContent": {
+    "delete-friendship-button": "Delete",
+    "delete-friend-request-button": "Delete",
+    "accept-friend-request-button": "Accept",
+    "friend-request-created": "Friend request sent.",
+    "friend-request-deleted": "Friend request deleted.",
+    "friend-request-accepted": "Friend request accepted.",
+    "delete-friendship-confirmation-dialog-title": "Confirm removal of friendship",
+    "delete-friendship-confirmation-dialog-detail": "Are you sure you want to end friendship with <SPAN class=\"red\">{username}</SPAN>?",
+    "delete-friendship-confirmation-dialog-confirm-button": "Remove friendship",
+    "delete-friendship-confirmation-dialog-cancel-button": "Cancel",
+    "friendship-deleted": "Friendship ended."
   }
 }
