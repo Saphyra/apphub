@@ -25,6 +25,8 @@ public class NotificationUtil {
         if (!backgroundColor.equals("rgba(255, 0, 0, 1)")) {
             throw new AssertionError("Notification's background color is not red. It is " + backgroundColor);
         }
+
+        clearNotifications(driver);
     }
 
     public static void verifySuccessNotification(WebDriver driver, String notificationMessage) {
@@ -36,6 +38,8 @@ public class NotificationUtil {
         if (!backgroundColor.equals("rgba(0, 128, 0, 1)")) {
             throw new AssertionError("Notification's background color is not green. It is " + backgroundColor);
         }
+
+        clearNotifications(driver);
     }
 
     public static void verifyZeroNotifications(WebDriver driver) {
