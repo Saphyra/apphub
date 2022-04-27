@@ -97,6 +97,30 @@
         "message": "Felhasználó tiltása"
       }
     ],
+    "create-friend-request-title": [
+      {
+        "key": "innerHTML",
+        "message": "Barát felvétele"
+      }
+    ],
+    "create-friend-request-search-input": [
+      {
+        "key": "placeholder",
+        "message": "Keresés"
+      }
+    ],
+    "create-friend-request-search-result-query-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "Legalább 3 karaktert írj be!"
+      }
+    ],
+    "create-friend-request-search-result-no-result": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználó nem található."
+      }
+    ],
     "home-button": [
       {
         "key": "innerHTML",
@@ -105,5 +129,16 @@
     ]
   },
   "additionalContent": {
+    "delete-friendship-button": "Törlés",
+    "delete-friend-request-button": "Törlés",
+    "accept-friend-request-button": "Elfogad",
+    "friend-request-created": "Barátkérelem elküldve.",
+    "friend-request-deleted": "Barátkérelem törölve.",
+    "friend-request-accepted": "Barátkérelem elfogadva.",
+    "delete-friendship-confirmation-dialog-title": "Barátság megszakítása",
+    "delete-friendship-confirmation-dialog-detail": "Biztosan meg akarod szakítani a barátságot <SPAN class=\"red\">{username}</SPAN>-al?",
+    "delete-friendship-confirmation-dialog-confirm-button": "Barátság megszakítása",
+    "delete-friendship-confirmation-dialog-cancel-button": "Mégse",
+    "friendship-deleted": "Barátság megszakítva."
   }
 }

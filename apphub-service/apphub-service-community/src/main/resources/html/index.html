@@ -72,7 +72,7 @@
                             <DIV id="sent-friend-requests-content"></DIV>
 
                             <DIV id="contacts-add-friend-button-wrapper">
-                                <BUTTON id="contacts-add-friend-button"></BUTTON>
+                                <BUTTON id="contacts-add-friend-button" onclick="createFriendRequestController.openTab()"></BUTTON>
                             </DIV>
                         </DIV>
                     </DIV>
@@ -104,6 +104,25 @@
     <FOOTER>
         <BUTTON id="home-button" onclick='window.location = "/web/modules"'></BUTTON>
     </FOOTER>
+</DIV>
+
+<DIV id="create-friend-request" class="main-page">
+    <HEADER>
+        <H1 id="create-friend-request-title"></H1>
+        <BUTTON class="close-dialog-button" onclick="pageController.displayMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN class="footerless">
+        <DIV id="create-friend-request-search-wrapper">
+            <INPUT type="text" id="create-friend-request-search-input">
+        </DIV>
+
+        <DIV id="create-friend-request-search-result-wrapper">
+            <DIV id="create-friend-request-search-result-query-too-short" class="create-friend-request-search-result create-friend-request-search-result-error"></DIV>
+            <DIV id="create-friend-request-search-result-no-result" class="create-friend-request-search-result create-friend-request-search-result-error"></DIV>
+            <DIV id="create-friend-request-search-result" class="create-friend-request-search-result"></DIV>
+        </DIV>
+    </MAIN>
 </DIV>
 </BODY>
 </HTML>
