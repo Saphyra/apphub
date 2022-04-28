@@ -151,7 +151,10 @@ public class AccountControllerImplTest {
 
     @Test
     public void searchAccounts() {
-        given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user));
+        given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user, user));
+        given(user.isMarkedForDeletion())
+            .willReturn(true)
+            .willReturn(false);
         given(user.getUserId()).willReturn(USER_ID_2);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
@@ -186,6 +189,16 @@ public class AccountControllerImplTest {
         Throwable ex = catchThrowable(() -> underTest.getAccount(USER_ID_1));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.USER_NOT_FOUND);
+    }
+
+    @Test
+    public void userExists_markedForDeletion() {
+        given(userDao.findById(USER_ID_1)).willReturn(Optional.of(user));
+        given(user.isMarkedForDeletion()).willReturn(true);
+
+        boolean result = underTest.userExists(USER_ID_1);
+
+        assertThat(result).isFalse();
     }
 
     @Test
