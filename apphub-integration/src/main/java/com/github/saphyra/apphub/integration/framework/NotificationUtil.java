@@ -74,7 +74,7 @@ public class NotificationUtil {
         try {
             webElement.click();
         } catch (Exception e) {
-            log.info("Element {} not clickable.", webElement, e);
+            log.warn("Element {} not clickable: {}", webElement, e.getMessage());
         }
     }
 
