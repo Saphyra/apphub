@@ -1,6 +1,8 @@
-NAMESPACE_NAME=${1:-develop}
+NAMESPACE_NAME=${1:-$(git rev-parse --abbrev-ref HEAD)}
 HEADLESS=${2:-true}
 DISABLED_GROUPS=${3:-}
+
+echo "Running Integration tests against namespace $NAMESPACE_NAME"
 
 SERVER_PORT=$RANDOM
 DATABASE_PORT=$RANDOM

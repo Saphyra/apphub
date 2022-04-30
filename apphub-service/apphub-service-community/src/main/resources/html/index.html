@@ -92,7 +92,7 @@
 
                 <DIV id="contacts-blacklist" class="contacts-panel">
                     <DIV id="contacts-blacklist-add-wrapper">
-                        <BUTTON id="contacts-blacklist-add-button"></BUTTON>
+                        <BUTTON id="contacts-blacklist-add-button" onclick="createBlacklistController.openTab()"></BUTTON>
                     </DIV>
 
                     <DIV id="contacts-blacklist-list"></DIV>
@@ -121,6 +121,25 @@
             <DIV id="create-friend-request-search-result-query-too-short" class="create-friend-request-search-result create-friend-request-search-result-error"></DIV>
             <DIV id="create-friend-request-search-result-no-result" class="create-friend-request-search-result create-friend-request-search-result-error"></DIV>
             <DIV id="create-friend-request-search-result" class="create-friend-request-search-result"></DIV>
+        </DIV>
+    </MAIN>
+</DIV>
+
+<DIV id="create-blacklist" class="main-page">
+    <HEADER>
+        <H1 id="create-blacklist-title"></H1>
+        <BUTTON class="close-dialog-button" onclick="pageController.displayMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN class="footerless">
+        <DIV id="create-blacklist-search-wrapper">
+            <INPUT type="text" id="create-blacklist-search-input">
+        </DIV>
+
+        <DIV id="create-blacklist-search-result-wrapper">
+            <DIV id="create-blacklist-search-result-query-too-short" class="create-blacklist-search-result create-blacklist-search-result-error"></DIV>
+            <DIV id="create-blacklist-search-result-no-result" class="create-blacklist-search-result create-blacklist-search-result-error"></DIV>
+            <DIV id="create-blacklist-search-result" class="create-blacklist-search-result"></DIV>
         </DIV>
     </MAIN>
 </DIV>

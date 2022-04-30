@@ -162,6 +162,10 @@ window.Mapping = new function(){
         COMMUNITY_FRIEND_REQUEST_DELETE: new Endpoint("/api/community/friend-request/{friendRequestId}", HttpMethod.DELETE),
         COMMUNITY_FRIEND_REQUEST_ACCEPT: new Endpoint("/api/community/friend-request/{friendRequestId}", HttpMethod.POST),
         COMMUNITY_DELETE_FRIENDSHIP: new Endpoint("/api/community/friendship/{friendshipId}", HttpMethod.DELETE),
+        COMMUNITY_BLACKLIST_SEARCH: new Endpoint("/api/community/blacklist/search", HttpMethod.POST),
+        COMMUNITY_CREATE_BLACKLIST: new Endpoint("/api/community/blacklist", HttpMethod.PUT),
+        COMMUNITY_GET_BLACKLIST: new Endpoint("/api/community/blacklist", HttpMethod.GET),
+        COMMUNITY_DELETE_BLACKLIST: new Endpoint("/api/community/blacklist/{blacklistId}", HttpMethod.DELETE),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){
