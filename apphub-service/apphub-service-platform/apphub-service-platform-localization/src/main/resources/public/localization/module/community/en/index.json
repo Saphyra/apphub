@@ -121,6 +121,30 @@
         "message": "User not found."
       }
     ],
+    "create-blacklist-title": [
+      {
+        "key": "innerHTML",
+        "message": "Block user"
+      }
+    ],
+    "create-blacklist-search-input": [
+      {
+        "key": "placeholder",
+        "message": "Search"
+      }
+    ],
+    "create-blacklist-search-result-query-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "Please enter at least 3 characters!"
+      }
+    ],
+    "create-blacklist-search-result-no-result": [
+      {
+        "key": "innerHTML",
+        "message": "User not found."
+      }
+    ],
     "home-button": [
       {
         "key": "innerHTML",
@@ -139,6 +163,13 @@
     "delete-friendship-confirmation-dialog-detail": "Are you sure you want to end friendship with <SPAN class=\"red\">{username}</SPAN>?",
     "delete-friendship-confirmation-dialog-confirm-button": "Remove friendship",
     "delete-friendship-confirmation-dialog-cancel-button": "Cancel",
-    "friendship-deleted": "Friendship ended."
+    "friendship-deleted": "Friendship ended.",
+    "blacklist-created": "User blocked.",
+    "delete-blacklist-button": "Delete",
+    "delete-blacklist-confirmation-dialog-title": "Confirm unblock user",
+    "delete-blacklist-confirmation-dialog-detail": "Are you sure you want to unblock <SPAN class=\"red\">{username}</SPAN>?",
+    "delete-blacklist-confirmation-dialog-confirm-button": "Unblock",
+    "delete-blacklist-confirmation-dialog-cancel-button": "Cancel",
+    "blacklist-deleted": "User unblocked"
   }
 }

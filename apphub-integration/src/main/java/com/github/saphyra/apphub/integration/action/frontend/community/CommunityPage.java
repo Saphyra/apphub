@@ -50,4 +50,40 @@ class CommunityPage {
     public static List<WebElement> friendships(WebDriver driver) {
         return driver.findElements(By.cssSelector("#friends-list-content .list-item"));
     }
+
+    public static WebElement blacklistButton(WebDriver driver) {
+        return driver.findElement(By.id("blacklist-button"));
+    }
+
+    public static WebElement createBlacklistPage(WebDriver driver) {
+        return driver.findElement(By.id("create-blacklist"));
+    }
+
+    public static WebElement addBlacklistButton(WebDriver driver) {
+        return driver.findElement(By.id("contacts-blacklist-add-button"));
+    }
+
+    public static WebElement createBlacklistSearchInput(WebDriver driver) {
+        return driver.findElement(By.id("create-blacklist-search-input"));
+    }
+
+    public static WebElement createBlacklistSearchResultNoResult(WebDriver driver) {
+        return driver.findElement(By.id("create-blacklist-search-result-no-result"));
+    }
+
+    public static WebElement createBlacklistSearchResultQueryTooShort(WebDriver driver) {
+        return driver.findElement(By.id("create-blacklist-search-result-query-too-short"));
+    }
+
+    public static WebElement createBlacklistSearchResult(WebDriver driver) {
+        return driver.findElement(By.id("create-blacklist-search-result"));
+    }
+
+    public static List<WebElement> createBlacklistSearchResultItems(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#create-blacklist-search-result div.button"));
+    }
+
+    public static List<WebElement> blacklists(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#contacts-blacklist-list .list-item"));
+    }
 }

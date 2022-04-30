@@ -1,4 +1,4 @@
-NAMESPACE=${1:-develop}
+NAMESPACE=${1:-$(git rev-parse --abbrev-ref HEAD)}
 
 ./release_port.sh 9001
 ./release_port.sh 9002

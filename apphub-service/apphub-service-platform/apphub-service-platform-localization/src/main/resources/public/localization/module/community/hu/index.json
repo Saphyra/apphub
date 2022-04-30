@@ -121,6 +121,30 @@
         "message": "Felhasználó nem található."
       }
     ],
+    "create-blacklist-title": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználó tiltása"
+      }
+    ],
+    "create-blacklist-search-input": [
+      {
+        "key": "placeholder",
+        "message": "Keresés"
+      }
+    ],
+    "create-blacklist-search-result-query-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "Legalább 3 karaktert írj be!"
+      }
+    ],
+    "create-blacklist-search-result-no-result": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználó nem található."
+      }
+    ],
     "home-button": [
       {
         "key": "innerHTML",
@@ -139,6 +163,13 @@
     "delete-friendship-confirmation-dialog-detail": "Biztosan meg akarod szakítani a barátságot <SPAN class=\"red\">{username}</SPAN>-al?",
     "delete-friendship-confirmation-dialog-confirm-button": "Barátság megszakítása",
     "delete-friendship-confirmation-dialog-cancel-button": "Mégse",
-    "friendship-deleted": "Barátság megszakítva."
+    "friendship-deleted": "Barátság megszakítva.",
+    "blacklist-created": "Felhasználó tiltva.",
+    "delete-blacklist-button": "Törlés",
+    "delete-blacklist-confirmation-dialog-title": "Tiltás feloldása",
+    "delete-blacklist-confirmation-dialog-detail": "Biztosan fel akaor oldani <SPAN class=\"red\">{username}</SPAN> tiltását?",
+    "delete-blacklist-confirmation-dialog-confirm-button": "Tiltás feloldása",
+    "delete-blacklist-confirmation-dialog-cancel-button": "Mégse",
+    "blacklist-deleted": "Tiltás feloldva."
   }
 }

@@ -8,6 +8,12 @@ window.ids = {
     createFriendRequest: "create-friend-request",
     sentFriendRequestsContent: "sent-friend-requests-content",
     receivedFriendRequestsContent: "received-friend-requests-content",
+    createBlacklist: "create-blacklist",
+    createBlacklistSearchInput: "create-blacklist-search-input",
+    createBlacklistSearchResultQueryTooShort: "create-blacklist-search-result-query-too-short",
+    createBlacklistSearchResultNoResult: "create-blacklist-search-result-no-result",
+    createBlacklistSearchResult: "create-blacklist-search-result",
+    contactsBlacklistList: "contacts-blacklist-list",
 }
 
 scriptLoader.loadScript("/res/community/js/contacts/contacts_controller.js");

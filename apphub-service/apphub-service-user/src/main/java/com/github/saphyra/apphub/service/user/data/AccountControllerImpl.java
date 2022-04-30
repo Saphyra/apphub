@@ -84,6 +84,7 @@ class AccountControllerImpl implements AccountController {
         return userDao.getByUsernameOrEmailContainingIgnoreCase(searchText)
             .stream()
             .filter(user -> !user.getUserId().equals(accessTokenHeader.getUserId()))
+            .filter(user -> !user.isMarkedForDeletion())
             .map(this::convert)
             .collect(Collectors.toList());
     }
@@ -106,6 +107,7 @@ class AccountControllerImpl implements AccountController {
     @Override
     public boolean userExists(UUID userId) {
         return userDao.findById(userId)
+            .filter(user -> !user.isMarkedForDeletion())
             .isPresent();
     }
 }
