@@ -20,6 +20,7 @@ class GroupMemberConverter extends ConverterBase<GroupMemberEntity, GroupMember>
             .userId(uuidConverter.convertDomain(domain.getUserId()))
             .canInvite(domain.isCanInvite())
             .canKick(domain.isCanKick())
+            .canModifyRoles(domain.isCanModifyRoles())
             .build();
     }
 
@@ -31,6 +32,7 @@ class GroupMemberConverter extends ConverterBase<GroupMemberEntity, GroupMember>
             .userId(uuidConverter.convertEntity(entity.getUserId()))
             .canInvite(isTrue(entity.getCanInvite()))
             .canKick(isTrue(entity.getCanKick()))
+            .canModifyRoles(isTrue(entity.getCanModifyRoles()))
             .build();
     }
 }

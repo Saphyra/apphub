@@ -1,22 +1,22 @@
-(function CreateBlacklistController(){
-    pageLoader.addLoader(addEventListener, "Add eventListener to Create Blacklist search input");
+(function AddGroupMemberController(){
+    pageLoader.addLoader(addEventListener, "Add eventListener to Group AddMember search input");
 
     let timer = null;
     let lastQuery = null;
 
-    window.createBlacklistController = new function(){
-        this.openTab = openTab;
+    window.addGroupMemberController = new function(){
+        this.openAddGroupMemberWindow = openAddGroupMemberWindow;
     }
 
-    function openTab(){
+    function openAddGroupMemberWindow(){
         lastQuery = null;
-        document.getElementById(ids.createBlacklistSearchInput).value = "";
+        document.getElementById(ids.groupAddMemberSearchInput).value = "";
         displayErrorQueryTooShort();
-        switchTab("main-page", ids.createBlacklist);
+        switchTab("main-page", ids.groupAddMember);
     }
 
     function search(){
-        const input = document.getElementById(ids.createBlacklistSearchInput).value;
+        const input = document.getElementById(ids.groupAddMemberSearchInput).value;
 
         if(input.length < 3){
             displayErrorQueryTooShort();
@@ -29,7 +29,7 @@
 
         lastQuery = input;
 
-        const request = new Request(Mapping.getEndpoint("COMMUNITY_BLACKLIST_SEARCH"), {value: input});
+        const request = new Request(Mapping.getEndpoint("COMMUNITY_GROUP_SEARCH_MEMBER_CANDIDATES", {groupId: groupDetailsController.getCurrentGroup().groupId}), {value: input});
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(searchResult){
                 displaySearchResult(searchResult);
@@ -42,7 +42,7 @@
                 return;
             }
 
-            const container = document.getElementById(ids.createBlacklistSearchResult);
+            const container = document.getElementById(ids.groupAddMemberSearchResult);
                 container.innerHTML = "";
 
             new Stream(searchResult)
@@ -50,7 +50,7 @@
                 .map(createNode)
                 .forEach((node) => {container.appendChild(node)});
 
-            switchTab("create-blacklist-search-result", ids.createBlacklistSearchResult);
+            switchTab("group-add-member-search-result", ids.groupAddMemberSearchResult);
 
             function createNode(user){
                 const item = document.createElement("DIV");
@@ -58,7 +58,7 @@
 
                     item.innerHTML = user.username + " / " + user.email;
                     item.onclick = function(){
-                        createBlacklist(user.userId);
+                        addMember(user.userId);
                     };
 
                 return item;
@@ -66,27 +66,27 @@
         }
     }
 
-    function createBlacklist(userId){
-        const request = new Request(Mapping.getEndpoint("COMMUNITY_CREATE_BLACKLIST"), {value: userId});
+    function addMember(userId){
+        const request = new Request(Mapping.getEndpoint("COMMUNITY_GROUP_CREATE_MEMBER", {groupId: groupDetailsController.getCurrentGroup().groupId}), {value: userId});
             request.convertResponse = jsonConverter;
-            request.processValidResponse = function(blacklist){
-                blacklistController.addBlacklist(blacklist);
-                notificationService.showSuccess(Localization.getAdditionalContent("blacklist-created"));
-                pageController.displayMainPage();
+            request.processValidResponse = function(groupMember){
+                notificationService.showSuccess(Localization.getAdditionalContent("group-member-added"));
+                groupDetailsController.addMember(groupMember);
+                groupDetailsController.openWindow();
             }
         dao.sendRequestAsync(request);
     }
 
     function displayErrorQueryTooShort(){
-        switchTab("create-blacklist-search-result", ids.createBlacklistSearchResultQueryTooShort);
+        switchTab("group-add-member-search-result", ids.groupAddMemberSearchResultQueryTooShort);
     }
 
     function displayErrorUserNotFound(){
-        switchTab("create-blacklist-search-result", ids.createBlacklistSearchResultNoResult);
+        switchTab("group-add-member-search-result", ids.groupAddMemberSearchResultNoResult);
     }
 
     function addEventListener(){
-        document.getElementById(ids.createBlacklistSearchInput).onkeyup = function(){
+        document.getElementById(ids.groupAddMemberSearchInput).onkeyup = function(){
             if(timer){
                 clearTimeout(timer);
             }

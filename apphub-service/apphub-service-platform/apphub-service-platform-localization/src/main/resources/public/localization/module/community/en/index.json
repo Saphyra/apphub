@@ -145,10 +145,106 @@
         "message": "User not found."
       }
     ],
+    "create-group-title": [
+      {
+        "key": "innerHTML",
+        "message": "New group"
+      }
+    ],
+    "create-group-name-label": [
+      {
+        "key": "innerHTML",
+        "message": "Group name"
+      }
+    ],
+    "create-group-name-input": [
+      {
+        "key": "placeholder",
+        "message": "Group name"
+      }
+    ],
+    "create-group-button": [
+      {
+        "key": "innerHTML",
+        "message": "Create"
+      }
+    ],
     "home-button": [
       {
         "key": "innerHTML",
         "message": "Home"
+      }
+    ],
+    "group-details-invitation-type-label": [
+      {
+        "key": "innerHTML",
+        "message": "Invitation"
+      }
+    ],
+    "invitation-type-friends": [
+      {
+        "key": "innerHTML",
+        "message": "Friends"
+      }
+    ],
+    "invitation-type-friends-of-friends": [
+      {
+        "key": "innerHTML",
+        "message": "Friends of friends"
+      }
+    ],
+    "group-details-add-member-button": [
+      {
+        "key": "innerHTML",
+        "message": "Add member"
+      }
+    ],
+    "group-details-members-can-invite": [
+      {
+        "key": "innerHTML",
+        "message": "Can invite"
+      }
+    ],
+    "group-details-members-can-kick": [
+      {
+        "key": "innerHTML",
+        "message": "Can kick"
+      }
+    ],
+    "group-details-members-can-modify-roles": [
+      {
+        "key": "innerHTML",
+        "message": "Can modify roles"
+      }
+    ],
+    "group-details-members-kick": [
+      {
+        "key": "innerHTML",
+        "message": "Kick"
+      }
+    ],
+    "group-add-member-title": [
+      {
+        "key": "innerHTML",
+        "message": "Block user"
+      }
+    ],
+    "group-add-member-search-input": [
+      {
+        "key": "placeholder",
+        "message": "Search"
+      }
+    ],
+    "group-add-member-search-result-query-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "Please enter at least 3 characters!"
+      }
+    ],
+    "group-add-member-search-result-no-result": [
+      {
+        "key": "innerHTML",
+        "message": "User not found."
       }
     ]
   },
@@ -170,6 +266,11 @@
     "delete-blacklist-confirmation-dialog-detail": "Are you sure you want to unblock <SPAN class=\"red\">{username}</SPAN>?",
     "delete-blacklist-confirmation-dialog-confirm-button": "Unblock",
     "delete-blacklist-confirmation-dialog-cancel-button": "Cancel",
-    "blacklist-deleted": "User unblocked"
+    "blacklist-deleted": "User unblocked",
+    "group-name-too-short": "Group name too short (Minimum 3 characters)",
+    "group-name-too-long": "Group name too long (Maximum 30 characters)",
+    "group-created": "Group created.",
+    "group-renamed": "Group renamed.",
+    "group-member-added": "Group member added."
   }
 }

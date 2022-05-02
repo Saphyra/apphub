@@ -1,4 +1,4 @@
-<HTML>
+<HTML xmlns:th="http://www.w3.org/1999/xhtml">
 <HEAD>
     <META charset="UTF-8">
 
@@ -9,6 +9,13 @@
     <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
     <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
     <SCRIPT src="/res/community/js/page_controller.js"></SCRIPT>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+            window.userId = /*[[${userId}]]*/;
+        /*]]>*/
+
+    </script>
 </HEAD>
 <BODY>
 <DIV id="main" class="main-page">
@@ -86,7 +93,7 @@
                     <DIV id="contacts-groups-list"></DIV>
 
                     <DIV id="contacts-groups-create-wrapper">
-                        <BUTTON id="contacts-groups-create-button"></BUTTON>
+                        <BUTTON id="contacts-groups-create-button" onclick="createGroupController.openTab()"></BUTTON>
                     </DIV>
                 </DIV>
 
@@ -140,6 +147,84 @@
             <DIV id="create-blacklist-search-result-query-too-short" class="create-blacklist-search-result create-blacklist-search-result-error"></DIV>
             <DIV id="create-blacklist-search-result-no-result" class="create-blacklist-search-result create-blacklist-search-result-error"></DIV>
             <DIV id="create-blacklist-search-result" class="create-blacklist-search-result"></DIV>
+        </DIV>
+    </MAIN>
+</DIV>
+
+<DIV id="create-group" class="main-page">
+    <HEADER>
+        <H1 id="create-group-title"></H1>
+        <BUTTON class="close-dialog-button" onclick="pageController.displayMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN class="footerless">
+        <DIV id="create-group-input-wrapper">
+            <LABEL>
+                <SPAN id="create-group-name-label"></SPAN>:
+                <INPUT type="text" id="create-group-name-input">
+                <DIV id="create-group-invalid-name" class="invalid-input">X</DIV>
+            </LABEL>
+
+            <BUTTON id="create-group-button" onclick="createGroupController.createGroup()"></BUTTON>
+        </DIV>
+    </MAIN>
+</DIV>
+
+<DIV id="group-details" class="main-page">
+    <HEADER>
+        <H1 id="group-details-title"></H1>
+        <BUTTON class="close-dialog-button" onclick="pageController.displayMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN>
+        <DIV id="group-details-invitation-type-wrapper">
+            <LABEL>
+                <SPAN id="group-details-invitation-type-label"></SPAN>:
+                <SELECT id="group-details-invitation-type">
+                    <OPTION id="invitation-type-friends" value="FRIENDS"></OPTION>
+                    <OPTION id="invitation-type-friends-of-friends" value="FRIENDS_OF_FRIENDS"></OPTION>
+                </SELECT>
+            </LABEL>
+        </DIV>
+
+        <DIV>
+            <TABLE id="group-details-members-table" class="formatted-table">
+                <THEAD>
+                <TR>
+                    <TH>
+                        <BUTTON id="group-details-add-member-button" onclick="addGroupMemberController.openAddGroupMemberWindow()"></BUTTON>
+                    </TH>
+                    <TH id="group-details-members-can-invite"></TH>
+                    <TH id="group-details-members-can-kick"></TH>
+                    <TH id="group-details-members-can-modify-roles"></TH>
+                    <TH id="group-details-members-kick"></TH>
+                </TR>
+                </THEAD>
+                <TBODY id="group-details-members"></TBODY>
+            </TABLE>
+        </DIV>
+    </MAIN>
+
+    <FOOTER>
+
+    </FOOTER>
+</DIV>
+
+<DIV id="group-add-member" class="main-page">
+    <HEADER>
+        <H1 id="group-add-member-title"></H1>
+        <BUTTON class="close-dialog-button" onclick="groupDetailsController.openCurrentGroup()">X</BUTTON>
+    </HEADER>
+
+    <MAIN class="footerless">
+        <DIV id="group-add-member-search-wrapper">
+            <INPUT type="text" id="group-add-member-search-input">
+        </DIV>
+
+        <DIV id="group-add-member-search-result-wrapper">
+            <DIV id="group-add-member-search-result-query-too-short" class="group-add-member-search-result group-add-member-search-result-error"></DIV>
+            <DIV id="group-add-member-search-result-no-result" class="group-add-member-search-result group-add-member-search-result-error"></DIV>
+            <DIV id="group-add-member-search-result" class="group-add-member-search-result"></DIV>
         </DIV>
     </MAIN>
 </DIV>

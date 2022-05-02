@@ -166,6 +166,12 @@ window.Mapping = new function(){
         COMMUNITY_CREATE_BLACKLIST: new Endpoint("/api/community/blacklist", HttpMethod.PUT),
         COMMUNITY_GET_BLACKLIST: new Endpoint("/api/community/blacklist", HttpMethod.GET),
         COMMUNITY_DELETE_BLACKLIST: new Endpoint("/api/community/blacklist/{blacklistId}", HttpMethod.DELETE),
+        COMMUNITY_GROUP_CREATE: new Endpoint("/api/community/group", HttpMethod.PUT),
+        COMMUNITY_GET_GROUPS: new Endpoint("/api/community/group", HttpMethod.GET),
+        COMMUNITY_GROUP_RENAME: new Endpoint("/api/community/group/{groupId}/name", HttpMethod.POST),
+        COMMUNITY_GROUP_GET_MEMBERS: new Endpoint("/api/community/group/{groupId}/member", HttpMethod.GET),
+        COMMUNITY_GROUP_SEARCH_MEMBER_CANDIDATES: new Endpoint("/api/community/group/{groupId}/member/search", HttpMethod.POST),
+        COMMUNITY_GROUP_CREATE_MEMBER: new Endpoint("/api/community/group/{groupId}/member", HttpMethod.PUT),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

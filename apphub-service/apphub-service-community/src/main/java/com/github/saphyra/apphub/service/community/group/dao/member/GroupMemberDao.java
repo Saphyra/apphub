@@ -1,10 +1,14 @@
 package com.github.saphyra.apphub.service.community.group.dao.member;
 
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -23,5 +27,21 @@ public class GroupMemberDao extends AbstractDao<GroupMemberEntity, GroupMember, 
 
     public void deleteByGroupId(UUID groupId) {
         repository.deleteByGroupId(uuidConverter.convertDomain(groupId));
+    }
+
+    //TODO unit test
+    public List<GroupMember> getByUserId(UUID userId) {
+        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
+    }
+
+    //TODO unit test
+    public List<GroupMember> getByGroupId(UUID groupId) {
+        return converter.convertEntity(repository.getByGroupId(uuidConverter.convertDomain(groupId)));
+    }
+
+    //TODO unit test
+    public GroupMember findByGroupIdAndUserIdValidated(UUID groupId, UUID userId) {
+        return converter.convertEntity(repository.findByGroupIdAndUserId(uuidConverter.convertDomain(groupId), uuidConverter.convertDomain(userId)))
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "GroupMember not found for groupId " + groupId + " and userId " + userId));
     }
 }

@@ -13,4 +13,5 @@ public class GroupMember {
     private final UUID userId;
     private boolean canInvite;
     private boolean canKick;
+    private boolean canModifyRoles;
 }

@@ -35,6 +35,7 @@ public class GroupMemberConverterTest {
             .userId(USER_ID)
             .canInvite(true)
             .canKick(true)
+            .canModifyRoles(true)
             .build();
 
         given(uuidConverter.convertDomain(GROUP_MEMBER_ID)).willReturn(GROUP_MEMBER_ID_STRING);
@@ -48,6 +49,7 @@ public class GroupMemberConverterTest {
         assertThat(result.getUserId()).isEqualTo(USER_ID_STRING);
         assertThat(result.getCanInvite()).isTrue();
         assertThat(result.getCanKick()).isTrue();
+        assertThat(result.getCanModifyRoles()).isTrue();
     }
 
     @Test
@@ -58,6 +60,7 @@ public class GroupMemberConverterTest {
             .userId(USER_ID_STRING)
             .canInvite(true)
             .canKick(true)
+            .canModifyRoles(true)
             .build();
 
         given(uuidConverter.convertEntity(GROUP_MEMBER_ID_STRING)).willReturn(GROUP_MEMBER_ID);
@@ -71,5 +74,6 @@ public class GroupMemberConverterTest {
         assertThat(result.getUserId()).isEqualTo(USER_ID);
         assertThat(result.isCanInvite()).isTrue();
         assertThat(result.isCanKick()).isTrue();
+        assertThat(result.isCanModifyRoles()).isTrue();
     }
 }

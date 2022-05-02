@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.community.group.dao.group;
 
+import com.github.saphyra.apphub.api.community.model.response.group.GroupInvitationType;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.Test;
 import org.junit.runner.RunWith;

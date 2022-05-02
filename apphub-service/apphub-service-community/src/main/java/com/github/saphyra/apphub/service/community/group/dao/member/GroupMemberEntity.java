@@ -22,4 +22,5 @@ class GroupMemberEntity {
     private String userId;
     private Boolean canInvite;
     private Boolean canKick;
+    private Boolean canModifyRoles;
 }

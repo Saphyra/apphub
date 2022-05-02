@@ -23,4 +23,16 @@
 
         <addPrimaryKey schemaName="community" tableName="community_group_member" columnNames="group_member_id" constraintName="community_group_member_pk"/>
     </changeSet>
+
+    <changeSet id="add-column-can_modify_roles-to-community_group_member" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="community" tableName="community_group_member" columnName="can_modify_roles"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="community" tableName="community_group_member">
+            <column name="can_modify_roles" type="boolean"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

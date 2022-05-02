@@ -145,10 +145,106 @@
         "message": "Felhasználó nem található."
       }
     ],
+    "create-group-title": [
+      {
+        "key": "innerHTML",
+        "message": "Új csoport"
+      }
+    ],
+    "create-group-name-label": [
+      {
+        "key": "innerHTML",
+        "message": "Csoport neve"
+      }
+    ],
+    "create-group-name-input": [
+      {
+        "key": "placeholder",
+        "message": "Csoport neve"
+      }
+    ],
+    "create-group-button": [
+      {
+        "key": "innerHTML",
+        "message": "Létrehozás"
+      }
+    ],
     "home-button": [
       {
         "key": "innerHTML",
         "message": "Kezdőlap"
+      }
+    ],
+    "group-details-invitation-type-label": [
+      {
+        "key": "innerHTML",
+        "message": "Meghívás"
+      }
+    ],
+    "invitation-type-friends": [
+      {
+        "key": "innerHTML",
+        "message": "Barátok"
+      }
+    ],
+    "invitation-type-friends-of-friends": [
+      {
+        "key": "innerHTML",
+        "message": "Barátok barátai"
+      }
+    ],
+    "group-details-add-member-button": [
+      {
+        "key": "innerHTML",
+        "message": "Tag felvétele"
+      }
+    ],
+    "group-details-members-can-invite": [
+      {
+        "key": "innerHTML",
+        "message": "Meghívhat"
+      }
+    ],
+    "group-details-members-can-kick": [
+      {
+        "key": "innerHTML",
+        "message": "Kirúghat"
+      }
+    ],
+    "group-details-members-can-modify-roles": [
+      {
+        "key": "innerHTML",
+        "message": "Módosíthatja a jogosultságokat"
+      }
+    ],
+    "group-details-members-kick": [
+      {
+        "key": "innerHTML",
+        "message": "Kirúgás"
+      }
+    ],
+    "group-add-member-title": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználó tiltása"
+      }
+    ],
+    "group-add-member-search-input": [
+      {
+        "key": "placeholder",
+        "message": "Keresés"
+      }
+    ],
+    "group-add-member-search-result-query-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "Legalább 3 karaktert írj be!"
+      }
+    ],
+    "group-add-member-search-result-no-result": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználó nem található."
       }
     ]
   },
@@ -170,6 +266,11 @@
     "delete-blacklist-confirmation-dialog-detail": "Biztosan fel akaor oldani <SPAN class=\"red\">{username}</SPAN> tiltását?",
     "delete-blacklist-confirmation-dialog-confirm-button": "Tiltás feloldása",
     "delete-blacklist-confirmation-dialog-cancel-button": "Mégse",
-    "blacklist-deleted": "Tiltás feloldva."
+    "blacklist-deleted": "Tiltás feloldva.",
+    "group-name-too-short": "Csoport neve túl rövid (Legalább 3 karakter)",
+    "group-name-too-long": "Csoport neve túl hosszú (Maximum 30 karakter)",
+    "group-created": "Csoport létrehozva",
+    "group-renamed": "Csoport átnevezve.",
+    "group-member-added": "Tag hozzáadva."
   }
 }
