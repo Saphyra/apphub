@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.service.community.group.service;
 
+import com.github.saphyra.apphub.api.community.model.response.group.GroupInvitationType;
 import com.github.saphyra.apphub.api.community.model.response.group.GroupListResponse;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.community.group.dao.group.Group;
 import com.github.saphyra.apphub.service.community.group.dao.group.GroupDao;
@@ -14,7 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-public class RenameGroupService {
+public class EditGroupService {
     private final GroupNameValidator groupNameValidator;
     private final GroupDao groupDao;
     private final GroupToResponseConverter groupToResponseConverter;
@@ -29,6 +31,21 @@ public class RenameGroupService {
         }
 
         group.setName(groupName);
+        groupDao.save(group);
+
+        return groupToResponseConverter.convert(group);
+    }
+
+    public GroupListResponse changeInvitationType(UUID userId, UUID groupId, GroupInvitationType invitationType) {
+        ValidationUtil.notNull(invitationType, "invitationType");
+
+        Group group = groupDao.findByIdValidated(groupId);
+
+        if (!group.getOwnerId().equals(userId)) {
+            throw ExceptionFactory.forbiddenOperation(userId + " must not rename group " + groupId);
+        }
+
+        group.setInvitationType(invitationType);
         groupDao.save(group);
 
         return groupToResponseConverter.convert(group);

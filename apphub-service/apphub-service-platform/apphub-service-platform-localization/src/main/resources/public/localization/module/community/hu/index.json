@@ -271,6 +271,11 @@
     "group-name-too-long": "Csoport neve túl hosszú (Maximum 30 karakter)",
     "group-created": "Csoport létrehozva",
     "group-renamed": "Csoport átnevezve.",
-    "group-member-added": "Tag hozzáadva."
+    "group-member-added": "Tag hozzáadva.",
+    "group-invitation-type-changed": "Meghívás módja megváltoztatva.",
+    "kick-group-member-confirmation-dialog-title": "Tag eltávolításának megerősítése",
+    "kick-group-member-confirmation-dialog-detail": "Biztosan el akarod távolítani <SPAN class=\"red\">{username}</SPAN>-t a <SPAN class=\"red\">{groupName}</SPAN> csoportból?",
+    "kick-group-member-confirmation-dialog-confirm-button": "Eltávolítás",
+    "kick-group-member-confirmation-dialog-cancel-button": "Mégse"
   }
 }

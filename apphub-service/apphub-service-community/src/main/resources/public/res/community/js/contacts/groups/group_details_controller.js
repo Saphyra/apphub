@@ -1,9 +1,11 @@
 scriptLoader.loadScript("/res/common/js/sync_engine.js");
+scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
 (function GroupDetailsController(){
     pageLoader.addLoader(addEventListeners, "Add eventListeners to Group Details window");
 
     let currentGroup;
+    let ownMember;
 
     const syncEngine = new SyncEngineBuilder()
         .withContainerId(ids.groupDetailsMembers)
@@ -17,6 +19,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
             if(b.userId == currentGroup.ownerId){
                 return 1;
             }
+
             return a.username.localeCompare(b.username)
         })
         .withIdPrefix("group-member")
@@ -61,26 +64,18 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
             const request = new Request(Mapping.getEndpoint("COMMUNITY_GROUP_GET_MEMBERS", {groupId: groupId}));
                 request.convertResponse = jsonConverter;
                 request.processValidResponse = function(groupMembers){
-                    let canInvite = false;
-                    if(currentGroup.ownerId == window.userId){
-                        canInvite = true;
-                    } else if(userCanInvite(groupMembers)){
-                        canInvite = true;
-                    }
+                    ownMember = new Stream(groupMembers)
+                       .filter((groupMember) => {return groupMember.userId == window.userId})
+                       .findFirst()
+                       .orElseThrow("IllegalState", window.userId + " is not member of group " + groupId);
+
+                    let canInvite = currentGroup.ownerId == window.userId || ownMember.canInvite;
 
                     document.getElementById(ids.groupDetailsAddMemberButton).disabled = !canInvite;
 
                     syncEngine.addAll(groupMembers);
                 }
             dao.sendRequestAsync(request);
-
-            function userCanInvite(groupMembers){
-                return new Stream(groupMembers)
-                   .filter((groupMember) => {return groupMember.userId = window.userId})
-                   .map((groupMember) => {return groupMember.canInvite})
-                   .findFirst()
-                   .orElseThrow("IllegalState", window.userId + " is not member of group " + groupId);
-            }
         }
     }
 
@@ -96,7 +91,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
                 const canInviteInput = document.createElement("INPUT");
                     canInviteInput.type = "checkbox";
                     canInviteInput.checked = groupMember.canInvite;
-                    canInviteInput.disabled = window.userId != currentGroup.ownerId || groupMember.userId == currentGroup.ownerId;
+                    canInviteInput.disabled = !canOperate(groupMember, ownMember.canModifyRoles);
             canInviteCell.appendChild(canInviteInput);
         node.appendChild(canInviteCell);
 
@@ -104,7 +99,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
                 const canKickInput = document.createElement("INPUT");
                     canKickInput.type = "checkbox";
                     canKickInput.checked = groupMember.canKick;
-                    canKickInput.disabled = window.userId != currentGroup.ownerId || groupMember.userId == currentGroup.ownerId;
+                    canKickInput.disabled = !canOperate(groupMember, ownMember.canModifyRoles);
             canKickCell.appendChild(canKickInput);
         node.appendChild(canKickCell);
 
@@ -112,25 +107,43 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
                 const canModifyRolesInput = document.createElement("INPUT");
                     canModifyRolesInput.type = "checkbox";
                     canModifyRolesInput.checked = groupMember.canModifyRoles;
-                    canModifyRolesInput.disabled = window.userId != currentGroup.ownerId || groupMember.userId == currentGroup.ownerId;
+                    canModifyRolesInput.disabled = !canOperate(groupMember, ownMember.canModifyRoles);
             canModifyRolesCell.appendChild(canModifyRolesInput);
         node.appendChild(canModifyRolesCell);
 
             const kickCell = document.createElement("TD");
                 const kickButton = document.createElement("BUTTON");
                     kickButton.innerText = "X";
-                    kickButton.disabled = window.userId != currentGroup.ownerId || groupMember.userId == currentGroup.ownerId;
+                    kickButton.disabled = !canOperate(groupMember, ownMember.canKick);
             kickCell.appendChild(kickButton);
         node.appendChild(kickCell);
 
 
-        canInviteInput.onchange = updateGroupMember(groupMember, canInviteInput, canKickInput, canModifyRolesInput);
-        canKickInput.onchange = updateGroupMember(groupMember, canInviteInput, canKickInput, canModifyRolesInput);
-        canModifyRolesCell.onchange = updateGroupMember(groupMember, canInviteInput, canKickInput, canModifyRolesInput);
+        canInviteInput.onchange = function(){
+            updateGroupMember(groupMember, canInviteInput, canKickInput, canModifyRolesInput);
+        }
+        canKickInput.onchange = function(){
+             updateGroupMember(groupMember, canInviteInput, canKickInput, canModifyRolesInput);
+        }
+        canModifyRolesCell.onchange = function(){
+            updateGroupMember(groupMember, canInviteInput, canKickInput, canModifyRolesInput);
+        }
 
-        kickButton.onclick = kickMember(groupMember.groupMemberId)
+        kickButton.onclick = function(){
+            kickMember(groupMember)
+        };
 
         return node;
+
+        function canOperate(groupMember, setting){
+            if(groupMember.userId == currentGroup.ownerId){
+                console.log("Group member is the owner", groupMember);
+                return false;
+            }
+
+            console.log(setting);
+            return setting;
+        }
     }
 
     function updateName(){
@@ -167,11 +180,36 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
     }
 
     function changeInvitationType(){
-        //TODO
+        const invitationType = document.getElementById(ids.groupDetailsInvitationType).value;
+
+        const request = new Request(Mapping.getEndpoint("COMMUNITY_GROUP_CHANGE_INVITATION_TYPE", {groupId: currentGroup.groupId}), {value: invitationType});
+            request.convertResponse = jsonConverter;
+            request.processValidResponse = function(group){
+                groupsController.addGroup(group);
+                notificationService.showSuccess(Localization.getAdditionalContent("group-invitation-type-changed"));
+            }
+        dao.sendRequestAsync(request);
     }
 
-    function kickMember(){
-        //TODO
+    function kickMember(groupMember){
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(Localization.getAdditionalContent("kick-group-member-confirmation-dialog-title"))
+            .withDetail(Localization.getAdditionalContent("kick-group-member-confirmation-dialog-detail", {username: groupMember.username, groupName: currentGroup.name}))
+            .withConfirmButton(Localization.getAdditionalContent("kick-group-member-confirmation-dialog-confirm-button"))
+            .withDeclineButton(Localization.getAdditionalContent("kick-group-member-confirmation-dialog-cancel-button"));
+
+        confirmationService.openDialog(
+            "kick-group-member-confirmation-dialog",
+            confirmationDialogLocalization,
+            function(){
+                const request = new Request(Mapping.getEndpoint("COMMUNITY_GROUP_DELETE_MEMBER", {groupId: currentGroup.groupId, groupMemberId: groupMember.groupMemberId}));
+                    request.processValidResponse = function(){
+                        notificationService.showSuccess(Localization.getAdditionalContent("group-member-kicked"));
+                        syncEngine.remove(groupMember.groupMemberId);
+                    }
+                dao.sendRequestAsync(request);
+            }
+        )
     }
 
     function addEventListeners(){

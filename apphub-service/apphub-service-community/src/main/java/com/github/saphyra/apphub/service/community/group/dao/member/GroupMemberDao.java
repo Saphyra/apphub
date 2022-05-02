@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -43,5 +44,16 @@ public class GroupMemberDao extends AbstractDao<GroupMemberEntity, GroupMember, 
     public GroupMember findByGroupIdAndUserIdValidated(UUID groupId, UUID userId) {
         return converter.convertEntity(repository.findByGroupIdAndUserId(uuidConverter.convertDomain(groupId), uuidConverter.convertDomain(userId)))
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "GroupMember not found for groupId " + groupId + " and userId " + userId));
+    }
+
+    //TODO unit test
+    public GroupMember findByIdValidated(UUID groupMemberId) {
+        return findById(groupMemberId)
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "GroupMember not found for groupMemberId " + groupMemberId));
+    }
+
+    //TODO unit test
+    public Optional<GroupMember> findById(UUID groupMemberId) {
+        return findById(uuidConverter.convertDomain(groupMemberId));
     }
 }

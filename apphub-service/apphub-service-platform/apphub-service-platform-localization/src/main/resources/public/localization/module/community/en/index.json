@@ -271,6 +271,11 @@
     "group-name-too-long": "Group name too long (Maximum 30 characters)",
     "group-created": "Group created.",
     "group-renamed": "Group renamed.",
-    "group-member-added": "Group member added."
+    "group-member-added": "Group member added.",
+    "group-invitation-type-changed": "Invitation type changed.",
+    "kick-group-member-confirmation-dialog-title": "Confirm kicking group member",
+    "kick-group-member-confirmation-dialog-detail": "Are you sure you want to kick <SPAN class=\"red\">{username}</SPAN> from group <SPAN class=\"red\">{groupName}</SPAN>?",
+    "kick-group-member-confirmation-dialog-confirm-button": "Kick",
+    "kick-group-member-confirmation-dialog-cancel-button": "Cancel"
   }
 }
