@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.community.group.service;
+package com.github.saphyra.apphub.service.community.group.service.group_member;
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.community.group.dao.member.GroupMember;
@@ -12,10 +12,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-class GroupMemberFactory {
+public class GroupMemberFactory {
     private final IdGenerator idGenerator;
 
-    GroupMember create(UUID groupId, UUID userId, boolean hasRoles) {
+    public GroupMember create(UUID groupId, UUID userId, boolean hasRoles) {
         return GroupMember.builder()
             .groupMemberId(idGenerator.randomUuid())
             .groupId(groupId)

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.community.group.service;
+package com.github.saphyra.apphub.service.community.group.service.group;
 
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import lombok.RequiredArgsConstructor;

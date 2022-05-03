@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.community.group.service;
+package com.github.saphyra.apphub.service.community.group.service.group;
 
 import com.github.saphyra.apphub.api.community.model.response.group.GroupListResponse;
 import com.github.saphyra.apphub.service.community.group.dao.group.Group;

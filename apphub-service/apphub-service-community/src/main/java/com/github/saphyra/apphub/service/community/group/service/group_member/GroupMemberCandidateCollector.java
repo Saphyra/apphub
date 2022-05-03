@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.community.group.service;
+package com.github.saphyra.apphub.service.community.group.service.group_member;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
