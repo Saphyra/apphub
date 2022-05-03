@@ -276,6 +276,13 @@
     "kick-group-member-confirmation-dialog-title": "Confirm kicking group member",
     "kick-group-member-confirmation-dialog-detail": "Are you sure you want to kick <SPAN class=\"red\">{username}</SPAN> from group <SPAN class=\"red\">{groupName}</SPAN>?",
     "kick-group-member-confirmation-dialog-confirm-button": "Kick",
-    "kick-group-member-confirmation-dialog-cancel-button": "Cancel"
+    "kick-group-member-confirmation-dialog-cancel-button": "Cancel",
+    "role-can-invite": "Can invite",
+    "role-can-kick": "Can kick",
+    "role-can-modify-roles": "Can modify roles",
+    "grant-role-to-member-confirmation-dialog-title": "Confirm granting role",
+    "grant-role-to-member-confirmation-dialog-detail": "Are you sure you want to grant role <SPAN class=\"red\">{role}</SPAN> to member <SPAN class=\"red\">{username}</SPAN> of group <SPAN class=\"red\">{groupName}</SPAN>?",
+    "grant-role-to-member-confirmation-dialog-confirm-button": "Grant role",
+    "grant-role-to-member-confirmation-dialog-cancel-button": "Cancel"
   }
 }

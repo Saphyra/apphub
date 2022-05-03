@@ -176,7 +176,64 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
     }
 
     function updateGroupMember(groupMember, canInviteInput, canKickInput, canModifyRolesInput){
-        //TODO
+        const payload = {
+            canInvite: canInviteInput.checked,
+            canKick: canKickInput.checked,
+            canModifyRoles: canModifyRolesInput.checked
+        };
+
+        const request = new Request(Mapping.getEndpoint("COMMUNITY_GROUP_MEMBER_ROLES", {groupId: currentGroup.groupId, groupMemberId: groupMember.groupMemberId}), payload);
+            request.convertResponse = jsonConverter;
+            request.processValidResponse = function(modifiedMember){
+                syncEngine.add(modifiedMember);
+            }
+
+        if(groupMember.canInvite != canInviteInput.checked){
+            if(canInviteInput.checked){
+                openConfirmationDialog(
+                    groupMember.username,
+                    "role-can-invite",
+                    () => {dao.sendRequestAsync(request)}
+                );
+            }else{
+                dao.sendRequestAsync(request);
+            }
+        }else if(groupMember.canKick != canKickInput.checked){
+            if(canKickInput.checked){
+                openConfirmationDialog(
+                    groupMember.username,
+                    "role-can-kick",
+                    () => {dao.sendRequestAsync(request)}
+                );
+            }else{
+                dao.sendRequestAsync(request);
+            }
+        }else if(groupMember.canModifyRoles != canModifyRolesInput.checked){
+             if(canModifyRolesInput.checked){
+                 openConfirmationDialog(
+                     groupMember.username,
+                     "role-can-modify-roles",
+                     () => {dao.sendRequestAsync(request)}
+                 );
+             }else{
+                 dao.sendRequestAsync(request);
+             }
+        }
+
+        function openConfirmationDialog(username, roleLocalizationKey, callback){
+            const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+                .withTitle(Localization.getAdditionalContent("grant-role-to-member-confirmation-dialog-title"))
+                .withDetail(Localization.getAdditionalContent("grant-role-to-member-confirmation-dialog-detail", {username: username, groupName: currentGroup.name, role: Localization.getAdditionalContent(roleLocalizationKey)}))
+                .withConfirmButton(Localization.getAdditionalContent("grant-role-to-member-confirmation-dialog-confirm-button"))
+                .withDeclineButton(Localization.getAdditionalContent("grant-role-to-member-confirmation-dialog-cancel-button"));
+
+            confirmationService.openDialog(
+                "grant-role-to-member-confirmation-dialog",
+                confirmationDialogLocalization,
+                callback,
+                ()=>{syncEngine.reload()}
+            )
+        }
     }
 
     function changeInvitationType(){

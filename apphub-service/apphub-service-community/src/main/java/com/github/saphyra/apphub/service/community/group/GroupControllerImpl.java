@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.community.model.response.SearchResultItem;
 import com.github.saphyra.apphub.api.community.model.response.group.GroupInvitationType;
 import com.github.saphyra.apphub.api.community.model.response.group.GroupListResponse;
 import com.github.saphyra.apphub.api.community.model.response.group.GroupMemberResponse;
+import com.github.saphyra.apphub.api.community.model.response.group.GroupMemberRoleRequest;
 import com.github.saphyra.apphub.api.community.server.GroupController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
@@ -12,6 +13,7 @@ import com.github.saphyra.apphub.service.community.group.service.GroupMemberCand
 import com.github.saphyra.apphub.service.community.group.service.GroupMemberCreationService;
 import com.github.saphyra.apphub.service.community.group.service.GroupMemberDeletionService;
 import com.github.saphyra.apphub.service.community.group.service.GroupMemberQueryService;
+import com.github.saphyra.apphub.service.community.group.service.GroupMemberRoleModificationService;
 import com.github.saphyra.apphub.service.community.group.service.GroupQueryService;
 import com.github.saphyra.apphub.service.community.group.service.EditGroupService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,7 @@ public class GroupControllerImpl implements GroupController {
     private final GroupMemberCandidateQueryService groupMemberCandidateQueryService;
     private final GroupMemberCreationService groupMemberCreationService;
     private final GroupMemberDeletionService groupMemberDeletionService;
+    private final GroupMemberRoleModificationService groupMemberRoleModificationService;
 
     @Override
     public List<GroupListResponse> getGroups(AccessTokenHeader accessTokenHeader) {
@@ -80,5 +83,11 @@ public class GroupControllerImpl implements GroupController {
     public void deleteMember(UUID groupId, UUID groupMemberId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to delete GroupMember {} of Group {}", accessTokenHeader.getUserId(), groupMemberId, groupId);
         groupMemberDeletionService.delete(accessTokenHeader.getUserId(), groupId, groupMemberId);
+    }
+
+    @Override
+    public GroupMemberResponse modifyRoles(GroupMemberRoleRequest request, UUID groupId, UUID groupMemberId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to modify roles of {} to {} in group {}", accessTokenHeader.getUserId(), groupId, request, groupId);
+        return groupMemberRoleModificationService.modifyRoles(accessTokenHeader.getUserId(), groupId, groupMemberId, request);
     }
 }

@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.community.model.response.SearchResultItem;
 import com.github.saphyra.apphub.api.community.model.response.group.GroupInvitationType;
 import com.github.saphyra.apphub.api.community.model.response.group.GroupListResponse;
 import com.github.saphyra.apphub.api.community.model.response.group.GroupMemberResponse;
+import com.github.saphyra.apphub.api.community.model.response.group.GroupMemberRoleRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
@@ -51,4 +52,7 @@ public interface GroupController {
     //TODO API test
     @DeleteMapping(Endpoints.COMMUNITY_GROUP_DELETE_MEMBER)
     void deleteMember(@PathVariable("groupId") UUID groupId, @PathVariable("groupMemberId") UUID groupMemberId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.COMMUNITY_GROUP_MEMBER_ROLES)
+    GroupMemberResponse modifyRoles(@RequestBody GroupMemberRoleRequest request, @PathVariable("groupId") UUID groupId, @PathVariable("groupMemberId") UUID groupMemberId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }
