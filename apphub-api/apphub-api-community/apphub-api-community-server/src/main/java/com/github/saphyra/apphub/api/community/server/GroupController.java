@@ -30,6 +30,14 @@ public interface GroupController {
     GroupListResponse createGroup(@RequestBody OneParamRequest<String> groupName, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     //TODO API test
+    @DeleteMapping(Endpoints.COMMUNITY_GROUP_DELETE)
+    void deleteGroup(@PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    //TODO API test
+    @PostMapping(Endpoints.COMMUNITY_GROUP_CHANGE_OWNER)
+    void changeOwner(@RequestBody OneParamRequest<UUID> groupMemberId, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    //TODO API test
     @PostMapping(Endpoints.COMMUNITY_GROUP_RENAME)
     GroupListResponse renameGroup(@RequestBody OneParamRequest<String> groupName, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 

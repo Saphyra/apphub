@@ -198,6 +198,7 @@
                     <TH id="group-details-members-can-kick"></TH>
                     <TH id="group-details-members-can-modify-roles"></TH>
                     <TH id="group-details-members-kick"></TH>
+                    <TH id="group-details-transfer-ownership"></TH>
                 </TR>
                 </THEAD>
                 <TBODY id="group-details-members"></TBODY>
@@ -206,7 +207,8 @@
     </MAIN>
 
     <FOOTER>
-
+        <BUTTON id="disband-group-button" class="group-details-button" onclick="groupDetailsController.disbandGroup()"></BUTTON>
+        <BUTTON id="leave-group-button" class="group-details-button" onclick="groupDetailsController.leaveGroup()"></BUTTON>
     </FOOTER>
 </DIV>
 

@@ -39,6 +39,8 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
         this.openWindow = function(){
             switchTab("main-page", ids.groupDetails);
         }
+        this.disbandGroup = disbandGroup;
+        this.leaveGroup = leaveGroup;
     }
 
     function openGroup(group){
@@ -68,6 +70,11 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
                        .filter((groupMember) => {return groupMember.userId == window.userId})
                        .findFirst()
                        .orElseThrow("IllegalState", window.userId + " is not member of group " + groupId);
+
+                    const buttonId = currentGroup.ownerId == window.userId ? ids.disbandGroupButton : ids.leaveGroupButton;
+                    switchTab("group-details-button", buttonId);
+
+                    document.getElementById(ids.groupDetailsTransferOwnership).style.display = window.userId == currentGroup.ownerId ? "table-cell" : "none";
 
                     let canInvite = currentGroup.ownerId == window.userId || ownMember.canInvite;
 
@@ -117,6 +124,18 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
                     kickButton.disabled = !canOperate(groupMember, ownMember.canKick);
             kickCell.appendChild(kickButton);
         node.appendChild(kickCell);
+
+            if(window.userId == currentGroup.ownerId){
+                const transferLeadershipCell = document.createElement("TD");
+                    const transferLeadershipButton = document.createElement("BUTTON");
+                        transferLeadershipButton.innerText = Localization.getAdditionalContent("transfer-leadership-button");
+                        transferLeadershipButton.onclick = function(){
+                            transferLeadership(groupMember);
+                        }
+                        transferLeadershipButton.disabled = window.userId == groupMember.userId;
+                transferLeadershipCell.appendChild(transferLeadershipButton);
+                node.appendChild(transferLeadershipCell);
+            }
 
 
         canInviteInput.onchange = function(){
@@ -263,6 +282,72 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
                     request.processValidResponse = function(){
                         notificationService.showSuccess(Localization.getAdditionalContent("group-member-kicked"));
                         syncEngine.remove(groupMember.groupMemberId);
+                    }
+                dao.sendRequestAsync(request);
+            }
+        )
+    }
+
+    function disbandGroup(){
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(Localization.getAdditionalContent("disband-group-confirmation-dialog-title"))
+            .withDetail(Localization.getAdditionalContent("disband-group-confirmation-dialog-detail", {groupName: currentGroup.name}))
+            .withConfirmButton(Localization.getAdditionalContent("disband-group-confirmation-dialog-confirm-button"))
+            .withDeclineButton(Localization.getAdditionalContent("disband-group-confirmation-dialog-cancel-button"));
+
+        confirmationService.openDialog(
+            "disband-group-confirmation-dialog",
+            confirmationDialogLocalization,
+            function(){
+                const request = new Request(Mapping.getEndpoint("COMMUNITY_GROUP_DELETE", {groupId: currentGroup.groupId}));
+                    request.processValidResponse = function(){
+                        notificationService.showSuccess(Localization.getAdditionalContent("group-disbanded"));
+                        pageController.displayMainPage();
+                        groupsController.removeGroup(currentGroup.groupId);
+                    }
+                dao.sendRequestAsync(request);
+            }
+        )
+    }
+
+    function leaveGroup(){
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(Localization.getAdditionalContent("leave-group-confirmation-dialog-title"))
+            .withDetail(Localization.getAdditionalContent("leave-group-confirmation-dialog-detail", {groupName: currentGroup.name}))
+            .withConfirmButton(Localization.getAdditionalContent("leave-group-confirmation-dialog-confirm-button"))
+            .withDeclineButton(Localization.getAdditionalContent("leave-group-confirmation-dialog-cancel-button"));
+
+        confirmationService.openDialog(
+            "leave-group-confirmation-dialog",
+            confirmationDialogLocalization,
+            function(){
+                const request = new Request(Mapping.getEndpoint("COMMUNITY_GROUP_DELETE_MEMBER", {groupId: currentGroup.groupId, groupMemberId: ownMember.groupMemberId}));
+                    request.processValidResponse = function(){
+                        notificationService.showSuccess(Localization.getAdditionalContent("group-left"));
+                        pageController.displayMainPage();
+                        groupsController.removeGroup(currentGroup.groupId);
+                    }
+                dao.sendRequestAsync(request);
+            }
+        )
+    }
+
+    function transferLeadership(groupMember){
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(Localization.getAdditionalContent("transfer-ownership-confirmation-dialog-title"))
+            .withDetail(Localization.getAdditionalContent("transfer-ownership-confirmation-dialog-detail", {groupName: currentGroup.name, username: groupMember.username}))
+            .withConfirmButton(Localization.getAdditionalContent("transfer-ownership-confirmation-dialog-confirm-button"))
+            .withDeclineButton(Localization.getAdditionalContent("transfer-ownership-confirmation-dialog-cancel-button"));
+
+        confirmationService.openDialog(
+            "transfer-ownership-confirmation-dialog",
+            confirmationDialogLocalization,
+            function(){
+                const request = new Request(Mapping.getEndpoint("COMMUNITY_GROUP_CHANGE_OWNER", {groupId: currentGroup.groupId}), {value: groupMember.groupMemberId});
+                    request.processValidResponse = function(){
+                        notificationService.showSuccess(Localization.getAdditionalContent("ownership-transferred"));
+                        pageController.displayMainPage();
+                        groupsController.load();
                     }
                 dao.sendRequestAsync(request);
             }

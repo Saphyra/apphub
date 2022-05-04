@@ -30,6 +30,9 @@ window.ids = {
     groupAddMemberSearchResultQueryTooShort: "group-add-member-search-result-query-too-short",
     groupAddMemberSearchResultNoResult: "group-add-member-search-result-no-result",
     groupAddMember: "group-add-member",
+    disbandGroupButton: "disband-group-button",
+    leaveGroupButton: "leave-group-button",
+    groupDetailsTransferOwnership: "group-details-transfer-ownership",
 }
 
 scriptLoader.loadScript("/res/community/js/contacts/contacts_controller.js");

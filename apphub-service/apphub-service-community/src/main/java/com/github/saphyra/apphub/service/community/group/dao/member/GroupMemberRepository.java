@@ -10,12 +10,9 @@ interface GroupMemberRepository extends CrudRepository<GroupMemberEntity, String
 
     void deleteByGroupId(String groupId);
 
-    //TODO unit test
     List<GroupMemberEntity> getByUserId(String userId);
 
-    //TODO unit test
     List<GroupMemberEntity> getByGroupId(String groupId);
 
-    //TODO unit test
     Optional<GroupMemberEntity> findByGroupIdAndUserId(String groupId, String userId);
 }

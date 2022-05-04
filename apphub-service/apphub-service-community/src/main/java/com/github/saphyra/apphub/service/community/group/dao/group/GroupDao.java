@@ -24,14 +24,12 @@ public class GroupDao extends AbstractDao<GroupEntity, Group, String, GroupRepos
         return converter.convertEntity(repository.getByOwnerId(uuidConverter.convertDomain(ownerId)));
     }
 
-    //TODO unit test
     public Optional<Group> findById(UUID groupId) {
         return findById(uuidConverter.convertDomain(groupId));
     }
 
-    //TODO unit test
     public Group findByIdValidated(UUID groupId) {
         return findById(groupId)
-            .orElseThrow(() -> ExceptionFactory.reportedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Group not found with id " + groupId));
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Group not found with id " + groupId));
     }
 }

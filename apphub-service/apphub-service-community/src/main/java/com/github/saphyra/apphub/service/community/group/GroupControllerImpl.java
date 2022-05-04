@@ -9,13 +9,14 @@ import com.github.saphyra.apphub.api.community.server.GroupController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.community.group.service.group.GroupCreationService;
+import com.github.saphyra.apphub.service.community.group.service.group.GroupDeletionService;
 import com.github.saphyra.apphub.service.community.group.service.group_member.GroupMemberCandidateQueryService;
 import com.github.saphyra.apphub.service.community.group.service.group_member.GroupMemberCreationService;
 import com.github.saphyra.apphub.service.community.group.service.group_member.GroupMemberDeletionService;
 import com.github.saphyra.apphub.service.community.group.service.group_member.GroupMemberQueryService;
 import com.github.saphyra.apphub.service.community.group.service.group_member.GroupMemberRoleModificationService;
 import com.github.saphyra.apphub.service.community.group.service.group.GroupQueryService;
-import com.github.saphyra.apphub.service.community.group.service.group.EditGroupService;
+import com.github.saphyra.apphub.service.community.group.service.group.GroupEditionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,12 +31,13 @@ import java.util.UUID;
 public class GroupControllerImpl implements GroupController {
     private final GroupQueryService groupQueryService;
     private final GroupCreationService groupCreationService;
-    private final EditGroupService editGroupService;
+    private final GroupEditionService groupEditionService;
     private final GroupMemberQueryService groupMemberQueryService;
     private final GroupMemberCandidateQueryService groupMemberCandidateQueryService;
     private final GroupMemberCreationService groupMemberCreationService;
     private final GroupMemberDeletionService groupMemberDeletionService;
     private final GroupMemberRoleModificationService groupMemberRoleModificationService;
+    private final GroupDeletionService groupDeletionService;
 
     @Override
     public List<GroupListResponse> getGroups(AccessTokenHeader accessTokenHeader) {
@@ -50,15 +52,27 @@ public class GroupControllerImpl implements GroupController {
     }
 
     @Override
+    public void deleteGroup(UUID groupId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to delete group {}", accessTokenHeader.getUserId(), groupId);
+        groupDeletionService.deleteGroup(accessTokenHeader.getUserId(), groupId);
+    }
+
+    @Override
+    public void changeOwner(OneParamRequest<UUID> groupMemberId, UUID groupId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to change owner of group {} to {}", accessTokenHeader.getUserId(), groupId, groupMemberId);
+        groupEditionService.changeOwner(accessTokenHeader.getUserId(), groupId, groupMemberId.getValue());
+    }
+
+    @Override
     public GroupListResponse renameGroup(OneParamRequest<String> groupName, UUID groupId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to rename group {} to {}", accessTokenHeader.getUserId(), groupId, groupName);
-        return editGroupService.rename(accessTokenHeader.getUserId(), groupId, groupName.getValue());
+        return groupEditionService.rename(accessTokenHeader.getUserId(), groupId, groupName.getValue());
     }
 
     @Override
     public GroupListResponse changeInvitationType(OneParamRequest<GroupInvitationType> invitationType, UUID groupId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to change invitationType of Group {} to {}", accessTokenHeader.getUserId(), groupId, invitationType.getValue());
-        return editGroupService.changeInvitationType(accessTokenHeader.getUserId(), groupId, invitationType.getValue());
+        return groupEditionService.changeInvitationType(accessTokenHeader.getUserId(), groupId, invitationType.getValue());
     }
 
     @Override

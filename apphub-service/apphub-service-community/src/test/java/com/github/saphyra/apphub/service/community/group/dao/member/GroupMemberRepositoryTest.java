@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -65,5 +66,53 @@ public class GroupMemberRepositoryTest {
         underTest.deleteByGroupId(GROUP_ID_1);
 
         assertThat(underTest.findAll()).containsExactly(entity2);
+    }
+
+    @Test
+    public void getByUserId() {
+        GroupMemberEntity entity1 = GroupMemberEntity.builder()
+            .groupMemberId(GROUP_MEMBER_ID_1)
+            .userId(USER_ID_1)
+            .build();
+        GroupMemberEntity entity2 = GroupMemberEntity.builder()
+            .groupMemberId(GROUP_MEMBER_ID_2)
+            .userId(USER_ID_2)
+            .build();
+        underTest.saveAll(List.of(entity1, entity2));
+
+        List<GroupMemberEntity> result = underTest.getByUserId(USER_ID_1);
+
+        assertThat(result).containsExactly(entity1);
+    }
+
+    @Test
+    public void getByGroupId() {
+        GroupMemberEntity entity1 = GroupMemberEntity.builder()
+            .groupMemberId(GROUP_MEMBER_ID_1)
+            .groupId(GROUP_ID_1)
+            .build();
+        GroupMemberEntity entity2 = GroupMemberEntity.builder()
+            .groupMemberId(GROUP_MEMBER_ID_2)
+            .groupId(GROUP_ID_2)
+            .build();
+        underTest.saveAll(List.of(entity1, entity2));
+
+        List<GroupMemberEntity> result = underTest.getByGroupId(GROUP_ID_1);
+
+        assertThat(result).containsExactly(entity1);
+    }
+
+    @Test
+    public void findByGroupIdAndUserId() {
+        GroupMemberEntity entity = GroupMemberEntity.builder()
+            .groupMemberId(GROUP_MEMBER_ID_1)
+            .userId(USER_ID_1)
+            .groupId(GROUP_ID_1)
+            .build();
+        underTest.save(entity);
+
+        Optional<GroupMemberEntity> result = underTest.findByGroupIdAndUserId(GROUP_ID_1, USER_ID_1);
+
+        assertThat(result).contains(entity);
     }
 }

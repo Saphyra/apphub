@@ -36,11 +36,10 @@ public class ValidationUtil {
         }
     }
 
-    //TODO unit test
     public static void maxLength(String value, int maxLength, String field) {
         notNull(value, field);
         if (value.length() > maxLength) {
-            throw ExceptionFactory.invalidParam(field, "too short");
+            throw ExceptionFactory.invalidParam(field, "too long");
         }
     }
 

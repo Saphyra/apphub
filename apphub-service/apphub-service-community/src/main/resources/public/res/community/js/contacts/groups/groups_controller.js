@@ -23,6 +23,9 @@ scriptLoader.loadScript("/res/community/js/contacts/groups/add_group_member_cont
         this.addGroup = function(group){
             syncEngine.add(group);
         }
+        this.removeGroup = function(groupId){
+            syncEngine.remove(groupId);
+        }
     }
 
     function load(){

@@ -246,6 +246,18 @@
         "key": "innerHTML",
         "message": "User not found."
       }
+    ],
+    "disband-group-button": [
+      {
+        "key": "innerHTML",
+        "message": "Disband group"
+      }
+    ],
+    "leave-group-button": [
+      {
+        "key": "innerHTML",
+        "message": "Leave group"
+      }
     ]
   },
   "additionalContent": {
@@ -283,6 +295,22 @@
     "grant-role-to-member-confirmation-dialog-title": "Confirm granting role",
     "grant-role-to-member-confirmation-dialog-detail": "Are you sure you want to grant role <SPAN class=\"red\">{role}</SPAN> to member <SPAN class=\"red\">{username}</SPAN> of group <SPAN class=\"red\">{groupName}</SPAN>?",
     "grant-role-to-member-confirmation-dialog-confirm-button": "Grant role",
-    "grant-role-to-member-confirmation-dialog-cancel-button": "Cancel"
+    "grant-role-to-member-confirmation-dialog-cancel-button": "Cancel",
+    "transfer-leadership-button": "Transfer leadership",
+    "disband-group-confirmation-dialog-title": "Confirm disbanding role",
+    "disband-group-confirmation-dialog-detail": "Are you sure you want to disband group <SPAN class=\"red\">{groupName}</SPAN>?",
+    "disband-group-confirmation-dialog-confirm-button": "Disband",
+    "disband-group-confirmation-dialog-cancel-button": "Cancel",
+    "group-disbanded": "Group disbanded.",
+    "leave-group-confirmation-dialog-title": "Confirm leaving role",
+    "leave-group-confirmation-dialog-detail": "Are you sure you want to leave group <SPAN class=\"red\">{groupName}</SPAN>?",
+    "leave-group-confirmation-dialog-confirm-button": "Leave",
+    "leave-group-confirmation-dialog-cancel-button": "Cancel",
+    "group-left": "Group left.",
+    "transfer-ownership-confirmation-dialog-title": "Confirm transferring ownership",
+    "transfer-ownership-confirmation-dialog-detail": "Are you sure you want to transfer ownership of group <SPAN class=\"red\">{groupName}</SPAN> to <SPAN class=\"red\">{username}</SPAN>?",
+    "transfer-ownership-confirmation-dialog-confirm-button": "Transfer ownership",
+    "transfer-ownership-confirmation-dialog-cancel-button": "Cancel",
+    "ownership-transferred": "Ownership transferred."
   }
 }

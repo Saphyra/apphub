@@ -175,6 +175,8 @@ window.Mapping = new function(){
         COMMUNITY_GROUP_CREATE_MEMBER: new Endpoint("/api/community/group/{groupId}/member", HttpMethod.PUT),
         COMMUNITY_GROUP_DELETE_MEMBER: new Endpoint("/api/community/group/{groupId}/member/{groupMemberId}", HttpMethod.DELETE),
         COMMUNITY_GROUP_MEMBER_ROLES: new Endpoint("/api/community/group/{groupId}/member/{groupMemberId}", HttpMethod.POST),
+        COMMUNITY_GROUP_DELETE: new Endpoint("/api/community/group/{groupId}", HttpMethod.DELETE),
+        COMMUNITY_GROUP_CHANGE_OWNER: new Endpoint("/api/community/group/{groupId}/owner", HttpMethod.POST),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

@@ -246,6 +246,18 @@
         "key": "innerHTML",
         "message": "Felhasználó nem található."
       }
+    ],
+    "disband-group-button": [
+      {
+        "key": "innerHTML",
+        "message": "Csoport feloszlatása"
+      }
+    ],
+    "leave-group-button": [
+      {
+        "key": "innerHTML",
+        "message": "Csoport elhagyása"
+      }
     ]
   },
   "additionalContent": {
@@ -283,6 +295,22 @@
     "grant-role-to-member-confirmation-dialog-title": "Jogosultság engedélyezése",
     "grant-role-to-member-confirmation-dialog-detail": "Biztosítani akarod <SPAN class=\"red\">{role}</SPAN> jogosultságot <SPAN class=\"red\">{username}</SPAN>-nak a <SPAN class=\"red\">{groupName}</SPAN> csoportban?",
     "grant-role-to-member-confirmation-dialog-confirm-button": "Jogosultság engedélyezése",
-    "grant-role-to-member-confirmation-dialog-cancel-button": "Mégse"
+    "grant-role-to-member-confirmation-dialog-cancel-button": "Mégse",
+    "transfer-leadership-button": "Vezetés átadása",
+    "disband-group-confirmation-dialog-title": "Csoport feloszlatása",
+    "disband-group-confirmation-dialog-detail": "Biztosan fel akarod oszlatni a <SPAN class=\"red\">{groupName}</SPAN> csoportot?",
+    "disband-group-confirmation-dialog-confirm-button": "Feloszlatás",
+    "disband-group-confirmation-dialog-cancel-button": "Mégse",
+    "group-disbanded": "Csapat feloszlatva.",
+    "leave-group-confirmation-dialog-title": "Csoport elhagyása",
+    "leave-group-confirmation-dialog-detail": "Biztosan el akarod hagyni a <SPAN class=\"red\">{groupName}</SPAN> csoportot?",
+    "leave-group-confirmation-dialog-confirm-button": "Elhagyás",
+    "leave-group-confirmation-dialog-cancel-button": "Mégse",
+    "leave-disbanded": "Csapat elhagyva.",
+    "transfer-ownership-confirmation-dialog-title": "Vezetés átadása",
+    "transfer-ownership-confirmation-dialog-detail": "Biztosan át akarod adni <SPAN class=\"red\">{groupName}</SPAN> csoport vezetését <SPAN class=\"red\">{username}</SPAN>-nak?",
+    "transfer-ownership-confirmation-dialog-confirm-button": "Vezetés átadása",
+    "transfer-ownership-confirmation-dialog-cancel-button": "Mégse",
+    "ownership-transferred": "Ownership transferred."
   }
 }
