@@ -14,7 +14,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class GroupDeletionService {
     private final GroupDao groupDao;
     private final GroupMemberDao groupMemberDao;

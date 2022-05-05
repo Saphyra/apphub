@@ -32,7 +32,7 @@ class GroupMemberCandidateCollector {
         return getCandidateUserIds(group, currentMembers);
     }
 
-    public List<UUID> getCandidateUserIds(Group group, List<UUID> currentMembers) {
+    private List<UUID> getCandidateUserIds(Group group, List<UUID> currentMembers) {
         switch (group.getInvitationType()) {
             case FRIENDS:
                 return getFriendsOf(group.getOwnerId(), currentMembers);

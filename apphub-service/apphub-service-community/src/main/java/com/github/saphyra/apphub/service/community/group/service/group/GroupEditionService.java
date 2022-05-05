@@ -20,7 +20,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class GroupEditionService {
     private final GroupNameValidator groupNameValidator;
     private final GroupDao groupDao;

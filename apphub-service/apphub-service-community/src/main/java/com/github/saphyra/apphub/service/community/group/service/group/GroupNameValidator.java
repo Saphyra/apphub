@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class GroupNameValidator {
     void validate(String groupName) {
         ValidationUtil.minLength(groupName, 3, "groupName");
