@@ -21,43 +21,33 @@ import java.util.List;
 import java.util.UUID;
 
 public interface GroupController {
-    //TODO API test
     @GetMapping(Endpoints.COMMUNITY_GET_GROUPS)
     List<GroupListResponse> getGroups(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @PutMapping(Endpoints.COMMUNITY_GROUP_CREATE)
     GroupListResponse createGroup(@RequestBody OneParamRequest<String> groupName, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @DeleteMapping(Endpoints.COMMUNITY_GROUP_DELETE)
     void deleteGroup(@PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @PostMapping(Endpoints.COMMUNITY_GROUP_CHANGE_OWNER)
     void changeOwner(@RequestBody OneParamRequest<UUID> groupMemberId, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @PostMapping(Endpoints.COMMUNITY_GROUP_RENAME)
     GroupListResponse renameGroup(@RequestBody OneParamRequest<String> groupName, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @PostMapping(Endpoints.COMMUNITY_GROUP_CHANGE_INVITATION_TYPE)
     GroupListResponse changeInvitationType(@RequestBody OneParamRequest<GroupInvitationType> invitationType, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @GetMapping(Endpoints.COMMUNITY_GROUP_GET_MEMBERS)
     List<GroupMemberResponse> getMembersOfGroup(@PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @PostMapping(Endpoints.COMMUNITY_GROUP_SEARCH_MEMBER_CANDIDATES)
     List<SearchResultItem> searchMemberCandidates(@RequestBody OneParamRequest<String> queryString, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @PutMapping(Endpoints.COMMUNITY_GROUP_CREATE_MEMBER)
     GroupMemberResponse createMember(@RequestBody OneParamRequest<UUID> memberUserId, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @DeleteMapping(Endpoints.COMMUNITY_GROUP_DELETE_MEMBER)
     void deleteMember(@PathVariable("groupId") UUID groupId, @PathVariable("groupMemberId") UUID groupMemberId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 

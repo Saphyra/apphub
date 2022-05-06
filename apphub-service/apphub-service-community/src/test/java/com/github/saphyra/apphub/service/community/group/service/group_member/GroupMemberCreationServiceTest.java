@@ -86,7 +86,7 @@ public class GroupMemberCreationServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.create(USER_ID, GROUP_ID, MEMBER_USER_ID));
 
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS);
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.CONFLICT, ErrorCode.GENERAL_ERROR);
     }
 
     @Test

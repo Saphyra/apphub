@@ -36,7 +36,7 @@ public class GroupMemberCreationService {
 
         Group group = groupDao.findByIdValidated(groupId);
         if (!groupMemberCandidateCollector.getCandidateUserIds(group).contains(memberUserId)) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, memberUserId + " must not be invited to group " + groupId);
+            throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.GENERAL_ERROR, memberUserId + " must not be invited to group " + groupId);
         }
 
         GroupMember groupMember = groupMemberFactory.create(groupId, memberUserId, false);
