@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class GroupMemberCandidateCollector {
     private final FriendshipDao friendshipDao;
     private final GroupMemberDao groupMemberDao;

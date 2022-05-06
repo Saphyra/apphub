@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class GroupMemberCandidateQueryService {
     private final GroupDao groupDao;
     private final GroupMemberDao groupMemberDao;
@@ -28,13 +27,13 @@ public class GroupMemberCandidateQueryService {
     private final AccountResponseToSearchResultItemConverter accountResponseToSearchResultItemConverter;
 
     public List<SearchResultItem> search(UUID userId, UUID groupId, String query) {
-        Group group = groupDao.findByIdValidated(groupId);
         GroupMember groupMember = groupMemberDao.findByGroupIdAndUserIdValidated(groupId, userId);
 
-        if (!group.getOwnerId().equals(userId) && !groupMember.isCanInvite()) {
+        if (!groupMember.isCanInvite()) {
             throw ExceptionFactory.forbiddenOperation(userId + " must not invite members to groupId " + groupId);
         }
 
+        Group group = groupDao.findByIdValidated(groupId);
         List<UUID> memberCandidates = groupMemberCandidateCollector.getCandidateUserIds(group);
 
         return accountClientProxy.search(query)

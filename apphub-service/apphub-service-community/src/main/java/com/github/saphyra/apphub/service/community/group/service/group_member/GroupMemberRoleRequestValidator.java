@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class GroupMemberRoleRequestValidator {
     void validate(GroupMemberRoleRequest request) {
         ValidationUtil.notNull(request.getCanInvite(), "canInvite");

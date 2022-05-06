@@ -27,7 +27,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class GroupControllerImpl implements GroupController {
     private final GroupQueryService groupQueryService;
     private final GroupCreationService groupCreationService;

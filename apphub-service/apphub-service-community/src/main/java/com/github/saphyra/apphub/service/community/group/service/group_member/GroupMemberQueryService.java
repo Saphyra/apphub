@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class GroupMemberQueryService {
     private final GroupMemberDao groupMemberDao;
     private final GroupMemberToResponseConverter groupMemberToResponseConverter;

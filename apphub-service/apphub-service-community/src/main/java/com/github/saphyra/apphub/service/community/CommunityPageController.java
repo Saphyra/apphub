@@ -15,9 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Slf4j
 class CommunityPageController {
     @GetMapping(Endpoints.COMMUNITY_PAGE)
-        //TODO unit test
     ModelAndView getIndex(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
-        ModelAndView mav = new ModelAndView("index");
+        ModelAndView mav = new ModelAndView("community");
         mav.addObject("userId", accessTokenHeader.getUserId());
         return mav;
     }

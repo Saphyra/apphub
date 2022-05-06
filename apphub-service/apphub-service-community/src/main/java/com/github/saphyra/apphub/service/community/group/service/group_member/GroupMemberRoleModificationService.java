@@ -16,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class GroupMemberRoleModificationService {
     private final GroupMemberRoleRequestValidator groupMemberRoleRequestValidator;
     private final GroupDao groupDao;
@@ -26,7 +25,6 @@ public class GroupMemberRoleModificationService {
     public GroupMemberResponse modifyRoles(UUID userId, UUID groupId, UUID groupMemberId, GroupMemberRoleRequest request) {
         groupMemberRoleRequestValidator.validate(request);
 
-        Group group = groupDao.findByIdValidated(groupId);
         GroupMember ownMember = groupMemberDao.findByGroupIdAndUserIdValidated(groupId, userId);
 
         if (!ownMember.isCanModifyRoles()) {
@@ -34,6 +32,7 @@ public class GroupMemberRoleModificationService {
         }
 
         GroupMember memberToModify = groupMemberDao.findByIdValidated(groupMemberId);
+        Group group = groupDao.findByIdValidated(groupId);
         if (group.getOwnerId().equals(memberToModify.getUserId())) {
             throw ExceptionFactory.forbiddenOperation(groupMemberId + " is the owner of group " + groupId);
         }

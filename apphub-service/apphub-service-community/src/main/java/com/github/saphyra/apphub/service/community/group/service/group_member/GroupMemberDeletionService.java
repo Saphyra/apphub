@@ -14,21 +14,19 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class GroupMemberDeletionService {
     private final GroupDao groupDao;
     private final GroupMemberDao groupMemberDao;
 
     public void delete(UUID userId, UUID groupId, UUID groupMemberId) {
-        Group group = groupDao.findByIdValidated(groupId);
         GroupMember ownMember = groupMemberDao.findByGroupIdAndUserIdValidated(groupId, userId);
         GroupMember memberToDelete = groupMemberDao.findByIdValidated(groupMemberId);
 
-        if (!group.getOwnerId().equals(userId) && !ownMember.isCanKick() && !userId.equals(memberToDelete.getUserId())) {
+        if (!ownMember.isCanKick() && !userId.equals(memberToDelete.getUserId())) {
             throw ExceptionFactory.forbiddenOperation(userId + " must not kick GroupMember" + groupMemberId + " from Group " + groupId);
         }
 
-
+        Group group = groupDao.findByIdValidated(groupId);
         if (memberToDelete.getUserId().equals(group.getOwnerId())) {
             throw ExceptionFactory.forbiddenOperation("GroupMember " + groupMemberId + " is the owner of group " + groupId);
         }
