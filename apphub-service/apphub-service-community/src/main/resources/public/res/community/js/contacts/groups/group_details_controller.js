@@ -88,7 +88,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
     function createGroupMemberNode(groupMember){
         const node = document.createElement("TR");
-            node.title = groupMember.username;
+            node.title = groupMember.email;
 
             const usernameCell = document.createElement("TD");
                 usernameCell.innerText = groupMember.username;
@@ -96,6 +96,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
             const canInviteCell = document.createElement("TD");
                 const canInviteInput = document.createElement("INPUT");
+                    canInviteInput.classList.add("can-invite-checkbox")
                     canInviteInput.type = "checkbox";
                     canInviteInput.checked = groupMember.canInvite;
                     canInviteInput.disabled = !canOperate(groupMember, ownMember.canModifyRoles);
@@ -104,6 +105,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
             const canKickCell = document.createElement("TD");
                 const canKickInput = document.createElement("INPUT");
+                    canKickInput.classList.add("can-kick-checkbox")
                     canKickInput.type = "checkbox";
                     canKickInput.checked = groupMember.canKick;
                     canKickInput.disabled = !canOperate(groupMember, ownMember.canModifyRoles);
@@ -112,6 +114,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
             const canModifyRolesCell = document.createElement("TD");
                 const canModifyRolesInput = document.createElement("INPUT");
+                    canModifyRolesInput.classList.add("can-modify-roles-checkbox")
                     canModifyRolesInput.type = "checkbox";
                     canModifyRolesInput.checked = groupMember.canModifyRoles;
                     canModifyRolesInput.disabled = !canOperate(groupMember, ownMember.canModifyRoles);
@@ -120,6 +123,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
             const kickCell = document.createElement("TD");
                 const kickButton = document.createElement("BUTTON");
+                    kickButton.classList.add("kick-button")
                     kickButton.innerText = "X";
                     kickButton.disabled = !canOperate(groupMember, ownMember.canKick);
             kickCell.appendChild(kickButton);
@@ -128,6 +132,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
             if(window.userId == currentGroup.ownerId){
                 const transferLeadershipCell = document.createElement("TD");
                     const transferLeadershipButton = document.createElement("BUTTON");
+                        transferLeadershipButton.classList.add("transfer-leadership-button")
                         transferLeadershipButton.innerText = Localization.getAdditionalContent("transfer-leadership-button");
                         transferLeadershipButton.onclick = function(){
                             transferLeadership(groupMember);

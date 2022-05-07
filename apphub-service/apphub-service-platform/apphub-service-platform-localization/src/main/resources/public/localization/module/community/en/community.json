@@ -226,7 +226,7 @@
     "group-add-member-title": [
       {
         "key": "innerHTML",
-        "message": "Block user"
+        "message": "Add member"
       }
     ],
     "group-add-member-search-input": [
@@ -289,6 +289,7 @@
     "kick-group-member-confirmation-dialog-detail": "Are you sure you want to kick <SPAN class=\"red\">{username}</SPAN> from group <SPAN class=\"red\">{groupName}</SPAN>?",
     "kick-group-member-confirmation-dialog-confirm-button": "Kick",
     "kick-group-member-confirmation-dialog-cancel-button": "Cancel",
+    "group-member-kicked": "Group member kicked.",
     "role-can-invite": "Can invite",
     "role-can-kick": "Can kick",
     "role-can-modify-roles": "Can modify roles",

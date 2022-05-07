@@ -226,7 +226,7 @@
     "group-add-member-title": [
       {
         "key": "innerHTML",
-        "message": "Felhasználó tiltása"
+        "message": "Tag hozzáadása"
       }
     ],
     "group-add-member-search-input": [
@@ -279,7 +279,7 @@
     "delete-blacklist-confirmation-dialog-confirm-button": "Tiltás feloldása",
     "delete-blacklist-confirmation-dialog-cancel-button": "Mégse",
     "blacklist-deleted": "Tiltás feloldva.",
-    "group-name-too-short": "Csoport neve túl rövid (Legalább 3 karakter)",
+    "group-name-too-short": "Csoport neve túl rövid (Minimum 3 karakter)",
     "group-name-too-long": "Csoport neve túl hosszú (Maximum 30 karakter)",
     "group-created": "Csoport létrehozva",
     "group-renamed": "Csoport átnevezve.",
@@ -289,6 +289,7 @@
     "kick-group-member-confirmation-dialog-detail": "Biztosan el akarod távolítani <SPAN class=\"red\">{username}</SPAN>-t a <SPAN class=\"red\">{groupName}</SPAN> csoportból?",
     "kick-group-member-confirmation-dialog-confirm-button": "Eltávolítás",
     "kick-group-member-confirmation-dialog-cancel-button": "Mégse",
+    "group-member-kicked": "Tag eltávolítva.",
     "role-can-invite": "Meghívhat",
     "role-can-kick": "Kirúghat",
     "role-can-modify-roles": "Módosíthatja a jogosultságokat",
@@ -306,11 +307,11 @@
     "leave-group-confirmation-dialog-detail": "Biztosan el akarod hagyni a <SPAN class=\"red\">{groupName}</SPAN> csoportot?",
     "leave-group-confirmation-dialog-confirm-button": "Elhagyás",
     "leave-group-confirmation-dialog-cancel-button": "Mégse",
-    "leave-disbanded": "Csapat elhagyva.",
+    "group-left": "Csapat elhagyva.",
     "transfer-ownership-confirmation-dialog-title": "Vezetés átadása",
     "transfer-ownership-confirmation-dialog-detail": "Biztosan át akarod adni <SPAN class=\"red\">{groupName}</SPAN> csoport vezetését <SPAN class=\"red\">{username}</SPAN>-nak?",
     "transfer-ownership-confirmation-dialog-confirm-button": "Vezetés átadása",
     "transfer-ownership-confirmation-dialog-cancel-button": "Mégse",
-    "ownership-transferred": "Ownership transferred."
+    "ownership-transferred": "Vezetés átadva."
   }
 }
