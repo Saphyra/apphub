@@ -34,6 +34,7 @@ public class MemoryMonitoringTest extends BackEndTest {
 
         Set<String> services = wsClient.getMessages()
             .stream()
+            .filter(webSocketEvent -> webSocketEvent.getEventName().equals(WebSocketEventName.ADMIN_PANEL_MONITORING_MEMORY_STATUS))
             .map(webSocketEvent -> webSocketEvent.getPayloadAs(MemoryStatusModel.class).getService())
             .collect(Collectors.toSet());
 
@@ -52,7 +53,8 @@ public class MemoryMonitoringTest extends BackEndTest {
             "training",
             "user",
             "utils",
-            "web-content"
+            "web-content",
+            "community"
         );
     }
 }

@@ -176,8 +176,8 @@ class GamePage {
         return driver.findElement(By.id("planet-name"));
     }
 
-    public static WebElement planetMiddleBar(WebDriver driver) {
-        return driver.findElement(By.id("planet-middle-bar"));
+    public static WebElement planetRightBar(WebDriver driver) {
+        return driver.findElement(By.id("planet-right-bar"));
     }
 
     public static WebElement closePlanetButton(WebDriver driver) {

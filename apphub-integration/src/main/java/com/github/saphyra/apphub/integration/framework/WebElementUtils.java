@@ -44,6 +44,12 @@ public class WebElementUtils {
             .click();
     }
 
+    public static void selectOptionById(WebElement selectMenu, String id) {
+        selectMenu.click();
+        selectMenu.findElement(By.cssSelector(String.format(":scope #%s", id)))
+            .click();
+    }
+
     public static void setCheckboxState(WebElement webElement, boolean shouldBeChecked) {
         if (!webElement.isSelected() == shouldBeChecked) {
             webElement.click();
@@ -79,15 +85,6 @@ public class WebElementUtils {
             return false;
         } catch (StaleElementReferenceException e) {
             return true;
-        }
-    }
-
-    public static void verifyInvalidFieldStateSoft(WebElement inputValid, boolean shouldBeVisible, String errorMessage) {
-        if (shouldBeVisible) {
-            assertThat(inputValid.isDisplayed()).isTrue();
-            assertThat(inputValid.getAttribute("title")).isEqualTo(errorMessage);
-        } else {
-            assertThat(inputValid.isDisplayed()).isFalse();
         }
     }
 }

@@ -78,6 +78,6 @@ public class RegistrationTest extends BackEndTest {
         Response response = IndexPageActions.getRegistrationResponse(language, registrationRequest);
         assertThat(response.getStatusCode()).isEqualTo(200);
         List<String> roles = DatabaseUtil.getRolesByUserId(DatabaseUtil.getUserIdByEmail(registrationRequest.getEmail()));
-        assertThat(roles).containsExactlyInAnyOrder(Constants.ROLE_NOTEBOOK, Constants.ROLE_SKYXPLORE, Constants.ROLE_ACCESS, Constants.ROLE_TRAINING, Constants.ROLE_UTILS);
+        assertThat(roles).containsExactlyInAnyOrder(Constants.ROLE_NOTEBOOK, Constants.ROLE_SKYXPLORE, Constants.ROLE_ACCESS, Constants.ROLE_TRAINING, Constants.ROLE_UTILS, Constants.ROLE_COMMUNITY);
     }
 }

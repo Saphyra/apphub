@@ -53,7 +53,7 @@ public class RevokeBanServiceTest {
 
     @Test
     public void revokeExpiredBans() {
-        given(dateTimeUtil.getCurrentDate()).willReturn(EXPIRATION);
+        given(dateTimeUtil.getCurrentTime()).willReturn(EXPIRATION);
 
         underTest.revokeExpiredBans();
 

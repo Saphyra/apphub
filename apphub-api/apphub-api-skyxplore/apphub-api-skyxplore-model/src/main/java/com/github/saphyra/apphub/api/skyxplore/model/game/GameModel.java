@@ -16,4 +16,6 @@ public class GameModel extends GameItem {
     private UUID host;
     private String name;
     private LocalDateTime lastPlayed;
+    private Boolean markedForDeletion;
+    private LocalDateTime markedForDeletionAt;
 }

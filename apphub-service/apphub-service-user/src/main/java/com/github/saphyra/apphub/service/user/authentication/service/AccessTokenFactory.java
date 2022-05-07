@@ -19,7 +19,7 @@ class AccessTokenFactory {
             .accessTokenId(idGenerator.randomUuid())
             .userId(userId)
             .persistent(persistent)
-            .lastAccess(dateTimeUtil.getCurrentDate())
+            .lastAccess(dateTimeUtil.getCurrentTime())
             .build();
     }
 }

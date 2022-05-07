@@ -79,7 +79,7 @@ public class RenameSolarSystemAndPlanetTest extends SeleniumTest {
         SkyXplorePlanetActions.renamePlanet(driver, " ");
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetActions.getPlanetName(driver).equals(oldPlanetName))
-            .assertTrue("Planet name changed.");
+            .assertTrue(String.format("Planet name changed. It was '%s'", SkyXplorePlanetActions.getPlanetName(driver)));
 
         //Planet - Too long
         SkyXplorePlanetActions.renamePlanet(driver, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));

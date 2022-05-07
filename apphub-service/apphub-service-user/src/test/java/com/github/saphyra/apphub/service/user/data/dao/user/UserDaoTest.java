@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -77,7 +76,7 @@ public class UserDaoTest {
     }
 
     @Test
-    public void findById() {
+    public void findByIdValidated() {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(repository.findById(USER_ID_STRING)).willReturn(Optional.of(entity));
         given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(user));
@@ -99,8 +98,8 @@ public class UserDaoTest {
 
     @Test
     public void getByUsernameOrEmailContainingIgnoreCase() {
-        given(repository.getByUsernameOrEmailContainingIgnoreCase(QUERY_STRING)).willReturn(Arrays.asList(entity));
-        given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(user));
+        given(repository.getByUsernameOrEmailContainingIgnoreCase(QUERY_STRING)).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(user));
 
         List<User> result = underTest.getByUsernameOrEmailContainingIgnoreCase(QUERY_STRING);
 
@@ -109,11 +108,22 @@ public class UserDaoTest {
 
     @Test
     public void getUsersMarkedToDelete() {
-        given(repository.getByUsersMarkedToDelete()).willReturn(Arrays.asList(entity));
-        given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(user));
+        given(repository.getByUsersMarkedToDelete()).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(user));
 
         List<User> result = underTest.getUsersMarkedToDelete();
 
         assertThat(result).containsExactly(user);
+    }
+
+    @Test
+    public void findById() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(repository.findById(USER_ID_STRING)).willReturn(Optional.of(entity));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(user));
+
+        Optional<User> result = underTest.findById(USER_ID);
+
+        assertThat(result).contains(user);
     }
 }

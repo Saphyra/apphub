@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.locale;
 
-import com.github.saphyra.apphub.api.user.client.UserDataApiClient;
+import com.github.saphyra.apphub.api.user.client.AccountClient;
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
@@ -38,7 +38,7 @@ public class UserSettingLocaleResolverTest {
     private CommonConfigProperties commonConfigProperties;
 
     @Mock
-    private UserDataApiClient userDataApi;
+    private AccountClient userDataApi;
 
     @InjectMocks
     private UserSettingLocaleResolver underTest;

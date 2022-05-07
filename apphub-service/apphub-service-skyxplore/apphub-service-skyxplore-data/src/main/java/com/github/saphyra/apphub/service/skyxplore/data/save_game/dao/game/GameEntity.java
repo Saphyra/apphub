@@ -22,4 +22,6 @@ class GameEntity {
     private String host;
     private String name;
     private LocalDateTime lastPlayed;
+    private Boolean markedForDeletion;
+    private LocalDateTime markedForDeletionAt;
 }

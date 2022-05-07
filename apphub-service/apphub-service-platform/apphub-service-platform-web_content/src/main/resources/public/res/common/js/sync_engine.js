@@ -1,4 +1,4 @@
-function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, idPref, aUpdate){
+function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, idPref, aUpdate, fMethod){
     logService.logToConsole("Creating new SyncEngine with containerId: " + cId + "and idPrefix: " + idPref);
 
     let nodeCache = {};
@@ -10,6 +10,7 @@ function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, 
     const createNodeMethod = cnMethod || throwException("IllegalArgument", "createNodeMethod is not defined");
     const updateNodeMethod = unMethod || null;
     const sortMethod = sMethod || function(a, b){return 0;};
+    const filterMethod = fMethod || throwException("IllegalArgument", "filterMethod is not defined")
     let order = getOrder();
 
     if(Object.keys(cache).length > 0){
@@ -88,12 +89,15 @@ function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, 
         return Object.keys(cache).length;
     }
 
+    this.render = render;
+
     function render(order){
         order = order || getOrder();
         const container = document.getElementById(containerId);
             container.innerHTML = "";
 
             new Stream(order)
+                .filter((key) => {return filterMethod(cache[key])})
                 .map((key) => {return nodeCache[key]})
                 .forEach(node => {container.appendChild(node)});
     }
@@ -133,6 +137,9 @@ function SyncEngineBuilder(){
     this.updateNodeMethod = null;
     this.sortMethod = null;
     this.idPrefix = "";
+    this.filterMethod = function(a, b){
+        return true;
+    }
 
     this.withContainerId = function(cId){
         this.containerId = cId;
@@ -174,6 +181,11 @@ function SyncEngineBuilder(){
         return this;
     }
 
+    this.withFilterMethod = function(method){
+        this.filterMethod = method;
+        return this;
+    }
+
     this.build = function(){
         return new  SyncEngine(
             this.containerId,
@@ -183,7 +195,8 @@ function SyncEngineBuilder(){
             this.sortMethod,
             this.initialValues,
             this.idPrefix,
-            this.allowUpdate
+            this.allowUpdate,
+            this.filterMethod
         );
     }
 }

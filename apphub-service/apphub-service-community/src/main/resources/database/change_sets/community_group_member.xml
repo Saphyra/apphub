@@ -1,0 +1,38 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-table-community_group_member" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="community" tableName="community_group_member"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="community" tableName="community_group_member">
+            <column name="group_member_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_id" type="varchar(37)"/>
+            <column name="user_id" type="varchar(37)"/>
+            <column name="can_invite" type="boolean"/>
+            <column name="can_kick" type="boolean"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="community" tableName="community_group_member" columnNames="group_member_id" constraintName="community_group_member_pk"/>
+    </changeSet>
+
+    <changeSet id="add-column-can_modify_roles-to-community_group_member" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="community" tableName="community_group_member" columnName="can_modify_roles"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="community" tableName="community_group_member">
+            <column name="can_modify_roles" type="boolean"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

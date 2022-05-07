@@ -21,6 +21,8 @@ class GameConverter extends ConverterBase<GameEntity, GameModel> {
         model.setName(entity.getName());
         model.setHost(uuidConverter.convertEntity(entity.getHost()));
         model.setLastPlayed(entity.getLastPlayed());
+        model.setMarkedForDeletion(entity.getMarkedForDeletion());
+        model.setMarkedForDeletionAt(entity.getMarkedForDeletionAt());
         return model;
     }
 
@@ -31,6 +33,8 @@ class GameConverter extends ConverterBase<GameEntity, GameModel> {
             .name(domain.getName())
             .host(uuidConverter.convertDomain(domain.getHost()))
             .lastPlayed(domain.getLastPlayed())
+            .markedForDeletion(domain.getMarkedForDeletion())
+            .markedForDeletionAt(domain.getMarkedForDeletionAt())
             .build();
     }
 }

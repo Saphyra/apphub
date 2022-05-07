@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Component
 public class DateTimeUtil {
-    public LocalDateTime getCurrentDate() {
+    public LocalDateTime getCurrentTime() {
         return LocalDateTime.now(ZoneOffset.UTC);
     }
 

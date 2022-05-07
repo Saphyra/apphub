@@ -23,4 +23,12 @@ function Optional(obj){
     this.orElseGet = function(func){
         return this.isPresent() ? value : func();
     }
+
+    this.orElseThrow = function(errorType, errorMessage){
+        if(this.isPresent()){
+            return value;
+        }
+
+        throwException(errorType, errorMessage);
+    }
 }

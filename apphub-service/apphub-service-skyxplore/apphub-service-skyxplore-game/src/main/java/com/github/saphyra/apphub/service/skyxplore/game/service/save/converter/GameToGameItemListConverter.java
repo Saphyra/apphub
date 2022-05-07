@@ -57,6 +57,8 @@ public class GameToGameItemListConverter {
         gameModel.setHost(game.getHost());
         gameModel.setName(game.getGameName());
         gameModel.setLastPlayed(game.getLastPlayed());
+        gameModel.setMarkedForDeletion(game.getMarkedForDeletion());
+        gameModel.setMarkedForDeletionAt(game.getMarkedForDeletionAt());
         return gameModel;
     }
 }

@@ -65,10 +65,10 @@ message-sender:
 user-authentication:
   ribbon:
     listOfServers: user:8080
-user-data:
+user-account:
   ribbon:
     listOfServers: user:8080
-user-data-ban:
+user-ban:
   ribbon:
     listOfServers: user:8080
 notebook:
@@ -142,6 +142,10 @@ skyxplore-game-ws:
 training:
   ribbon:
     listOfServers: training:8080
+
+community:
+  ribbon:
+    listOfServers: community:8080
 
 event:
   processor:
@@ -316,3 +320,17 @@ role:
         - PUT
       requiredRoles:
         - UTILS
+    #Community
+    - pattern: /web/community
+      methods:
+        - GET
+      requiredRoles:
+        - COMMUNITY
+    - pattern: /api/community/**
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - COMMUNITY

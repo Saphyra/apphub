@@ -23,6 +23,12 @@ public class SkyXploreSavedGameActions {
         return Arrays.asList(response.getBody().as(SavedGameResponse[].class));
     }
 
+    public static void deleteGame(Language language, UUID accessTokenId, UUID gameId) {
+        Response response = getDeleteGameResponse(language, accessTokenId, gameId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
     public static Response getDeleteGameResponse(Language language, UUID accessTokenId, UUID gameId) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .delete(UrlFactory.create(Endpoints.SKYXPLORE_DELETE_GAME, "gameId", gameId));

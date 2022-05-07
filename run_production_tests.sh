@@ -1,1 +1,1 @@
-./run_tests.sh production true skyxplore
+./run_tests.sh production true skyxplore,community

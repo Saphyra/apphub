@@ -28,7 +28,7 @@ public class InvitationFactoryTest {
 
     @Test
     public void create() {
-        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
 
         Invitation result = underTest.create(INVITOR_ID, CHARACTER_ID);
 

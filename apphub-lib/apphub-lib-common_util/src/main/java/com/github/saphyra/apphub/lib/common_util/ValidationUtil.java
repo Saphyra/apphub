@@ -36,6 +36,14 @@ public class ValidationUtil {
         }
     }
 
+    public static void maxLength(String value, int maxLength, String field) {
+        notNull(value, field);
+        if (value.length() > maxLength) {
+            throw ExceptionFactory.invalidParam(field, "too long");
+        }
+    }
+
+
     public static void atLeast(Integer value, int minValue, String field) {
         notNull(value, field);
         if (value < minValue) {

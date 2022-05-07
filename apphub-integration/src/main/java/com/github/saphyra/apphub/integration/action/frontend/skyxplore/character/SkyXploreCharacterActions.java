@@ -21,12 +21,12 @@ public class SkyXploreCharacterActions {
     }
 
     public static void verifyInvalidCharacterName(WebDriver driver, String errorMessage) {
-        WebElementUtils.verifyInvalidFieldStateSoft(CharacterPage.invalidCharacterName(driver), true, errorMessage);
+        WebElementUtils.verifyInvalidFieldState(CharacterPage.invalidCharacterName(driver), true, errorMessage);
         assertThat(CharacterPage.submitButton(driver).isEnabled()).isFalse();
     }
 
     public static void verifyValidCharacterName(WebDriver driver) {
-        WebElementUtils.verifyInvalidFieldStateSoft(CharacterPage.invalidCharacterName(driver), false, null);
+        WebElementUtils.verifyInvalidFieldState(CharacterPage.invalidCharacterName(driver), false, null);
         assertThat(CharacterPage.submitButton(driver).isEnabled()).isTrue();
     }
 

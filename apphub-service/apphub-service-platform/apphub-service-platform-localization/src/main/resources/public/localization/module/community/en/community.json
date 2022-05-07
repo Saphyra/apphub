@@ -1,0 +1,317 @@
+{
+  "title": "Apphub - Community",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Community"
+      }
+    ],
+    "chat-title": [
+      {
+        "key": "innerHTML",
+        "message": "Chat"
+      }
+    ],
+    "flow-title": [
+      {
+        "key": "innerHTML",
+        "message": "Flow"
+      }
+    ],
+    "contacts-title": [
+      {
+        "key": "innerHTML",
+        "message": "Contacts"
+      }
+    ],
+    "new-conversation-button": [
+      {
+        "key": "innerHTML",
+        "message": "New conversation"
+      }
+    ],
+    "message-input": [
+      {
+        "key": "placeholder",
+        "message": "Message"
+      }
+    ],
+    "friends-button": [
+      {
+        "key": "innerHTML",
+        "message": "Friends"
+      }
+    ],
+    "groups-button": [
+      {
+        "key": "innerHTML",
+        "message": "Groups"
+      }
+    ],
+    "blacklist-button": [
+      {
+        "key": "innerHTML",
+        "message": "Blacklist"
+      }
+    ],
+    "contacts-add-friend-button": [
+      {
+        "key": "innerHTML",
+        "message": "Add friend"
+      }
+    ],
+    "friends-list-title": [
+      {
+        "key": "innerHTML",
+        "message": "Friends"
+      }
+    ],
+    "received-friend-requests-title": [
+      {
+        "key": "innerHTML",
+        "message": "Received friend requests"
+      }
+    ],
+    "sent-friend-requests-title": [
+      {
+        "key": "innerHTML",
+        "message": "Sent friend requests"
+      }
+    ],
+    "contacts-groups-search-input": [
+      {
+        "key": "placeholder",
+        "message": "Search"
+      }
+    ],
+    "contacts-groups-create-button": [
+      {
+        "key": "innerHTML",
+        "message": "Create"
+      }
+    ],
+    "contacts-blacklist-add-button": [
+      {
+        "key": "innerHTML",
+        "message": "Block a user"
+      }
+    ],
+    "create-friend-request-title": [
+      {
+        "key": "innerHTML",
+        "message": "Add friend"
+      }
+    ],
+    "create-friend-request-search-input": [
+      {
+        "key": "placeholder",
+        "message": "Search"
+      }
+    ],
+    "create-friend-request-search-result-query-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "Please enter at least 3 characters!"
+      }
+    ],
+    "create-friend-request-search-result-no-result": [
+      {
+        "key": "innerHTML",
+        "message": "User not found."
+      }
+    ],
+    "create-blacklist-title": [
+      {
+        "key": "innerHTML",
+        "message": "Block user"
+      }
+    ],
+    "create-blacklist-search-input": [
+      {
+        "key": "placeholder",
+        "message": "Search"
+      }
+    ],
+    "create-blacklist-search-result-query-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "Please enter at least 3 characters!"
+      }
+    ],
+    "create-blacklist-search-result-no-result": [
+      {
+        "key": "innerHTML",
+        "message": "User not found."
+      }
+    ],
+    "create-group-title": [
+      {
+        "key": "innerHTML",
+        "message": "New group"
+      }
+    ],
+    "create-group-name-label": [
+      {
+        "key": "innerHTML",
+        "message": "Group name"
+      }
+    ],
+    "create-group-name-input": [
+      {
+        "key": "placeholder",
+        "message": "Group name"
+      }
+    ],
+    "create-group-button": [
+      {
+        "key": "innerHTML",
+        "message": "Create"
+      }
+    ],
+    "home-button": [
+      {
+        "key": "innerHTML",
+        "message": "Home"
+      }
+    ],
+    "group-details-invitation-type-label": [
+      {
+        "key": "innerHTML",
+        "message": "Invitation"
+      }
+    ],
+    "invitation-type-friends": [
+      {
+        "key": "innerHTML",
+        "message": "Friends"
+      }
+    ],
+    "invitation-type-friends-of-friends": [
+      {
+        "key": "innerHTML",
+        "message": "Friends of friends"
+      }
+    ],
+    "group-details-add-member-button": [
+      {
+        "key": "innerHTML",
+        "message": "Add member"
+      }
+    ],
+    "group-details-members-can-invite": [
+      {
+        "key": "innerHTML",
+        "message": "Can invite"
+      }
+    ],
+    "group-details-members-can-kick": [
+      {
+        "key": "innerHTML",
+        "message": "Can kick"
+      }
+    ],
+    "group-details-members-can-modify-roles": [
+      {
+        "key": "innerHTML",
+        "message": "Can modify roles"
+      }
+    ],
+    "group-details-members-kick": [
+      {
+        "key": "innerHTML",
+        "message": "Kick"
+      }
+    ],
+    "group-add-member-title": [
+      {
+        "key": "innerHTML",
+        "message": "Add member"
+      }
+    ],
+    "group-add-member-search-input": [
+      {
+        "key": "placeholder",
+        "message": "Search"
+      }
+    ],
+    "group-add-member-search-result-query-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "Please enter at least 3 characters!"
+      }
+    ],
+    "group-add-member-search-result-no-result": [
+      {
+        "key": "innerHTML",
+        "message": "User not found."
+      }
+    ],
+    "disband-group-button": [
+      {
+        "key": "innerHTML",
+        "message": "Disband group"
+      }
+    ],
+    "leave-group-button": [
+      {
+        "key": "innerHTML",
+        "message": "Leave group"
+      }
+    ]
+  },
+  "additionalContent": {
+    "delete-friendship-button": "Delete",
+    "delete-friend-request-button": "Delete",
+    "accept-friend-request-button": "Accept",
+    "friend-request-created": "Friend request sent.",
+    "friend-request-deleted": "Friend request deleted.",
+    "friend-request-accepted": "Friend request accepted.",
+    "delete-friendship-confirmation-dialog-title": "Confirm removal of friendship",
+    "delete-friendship-confirmation-dialog-detail": "Are you sure you want to end friendship with <SPAN class=\"red\">{username}</SPAN>?",
+    "delete-friendship-confirmation-dialog-confirm-button": "Remove friendship",
+    "delete-friendship-confirmation-dialog-cancel-button": "Cancel",
+    "friendship-deleted": "Friendship ended.",
+    "blacklist-created": "User blocked.",
+    "delete-blacklist-button": "Delete",
+    "delete-blacklist-confirmation-dialog-title": "Confirm unblock user",
+    "delete-blacklist-confirmation-dialog-detail": "Are you sure you want to unblock <SPAN class=\"red\">{username}</SPAN>?",
+    "delete-blacklist-confirmation-dialog-confirm-button": "Unblock",
+    "delete-blacklist-confirmation-dialog-cancel-button": "Cancel",
+    "blacklist-deleted": "User unblocked",
+    "group-name-too-short": "Group name too short (Minimum 3 characters)",
+    "group-name-too-long": "Group name too long (Maximum 30 characters)",
+    "group-created": "Group created.",
+    "group-renamed": "Group renamed.",
+    "group-member-added": "Group member added.",
+    "group-invitation-type-changed": "Invitation type changed.",
+    "kick-group-member-confirmation-dialog-title": "Confirm kicking group member",
+    "kick-group-member-confirmation-dialog-detail": "Are you sure you want to kick <SPAN class=\"red\">{username}</SPAN> from group <SPAN class=\"red\">{groupName}</SPAN>?",
+    "kick-group-member-confirmation-dialog-confirm-button": "Kick",
+    "kick-group-member-confirmation-dialog-cancel-button": "Cancel",
+    "group-member-kicked": "Group member kicked.",
+    "role-can-invite": "Can invite",
+    "role-can-kick": "Can kick",
+    "role-can-modify-roles": "Can modify roles",
+    "grant-role-to-member-confirmation-dialog-title": "Confirm granting role",
+    "grant-role-to-member-confirmation-dialog-detail": "Are you sure you want to grant role <SPAN class=\"red\">{role}</SPAN> to member <SPAN class=\"red\">{username}</SPAN> of group <SPAN class=\"red\">{groupName}</SPAN>?",
+    "grant-role-to-member-confirmation-dialog-confirm-button": "Grant role",
+    "grant-role-to-member-confirmation-dialog-cancel-button": "Cancel",
+    "transfer-leadership-button": "Transfer leadership",
+    "disband-group-confirmation-dialog-title": "Confirm disbanding role",
+    "disband-group-confirmation-dialog-detail": "Are you sure you want to disband group <SPAN class=\"red\">{groupName}</SPAN>?",
+    "disband-group-confirmation-dialog-confirm-button": "Disband",
+    "disband-group-confirmation-dialog-cancel-button": "Cancel",
+    "group-disbanded": "Group disbanded.",
+    "leave-group-confirmation-dialog-title": "Confirm leaving role",
+    "leave-group-confirmation-dialog-detail": "Are you sure you want to leave group <SPAN class=\"red\">{groupName}</SPAN>?",
+    "leave-group-confirmation-dialog-confirm-button": "Leave",
+    "leave-group-confirmation-dialog-cancel-button": "Cancel",
+    "group-left": "Group left.",
+    "transfer-ownership-confirmation-dialog-title": "Confirm transferring ownership",
+    "transfer-ownership-confirmation-dialog-detail": "Are you sure you want to transfer ownership of group <SPAN class=\"red\">{groupName}</SPAN> to <SPAN class=\"red\">{username}</SPAN>?",
+    "transfer-ownership-confirmation-dialog-confirm-button": "Transfer ownership",
+    "transfer-ownership-confirmation-dialog-cancel-button": "Cancel",
+    "ownership-transferred": "Ownership transferred."
+  }
+}

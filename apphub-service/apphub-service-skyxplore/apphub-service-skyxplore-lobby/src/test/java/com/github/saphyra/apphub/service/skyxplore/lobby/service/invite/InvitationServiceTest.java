@@ -112,7 +112,7 @@ public class InvitationServiceTest {
         given(invitation.getCharacterId()).willReturn(FRIEND_ID);
         given(invitation.getInvitorId()).willReturn(USER_ID);
         given(invitation.getInvitationTime()).willReturn(CURRENT_DATE);
-        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
 
         Throwable ex = catchThrowable(() -> underTest.invite(accessTokenHeader, FRIEND_ID));
 
@@ -156,7 +156,7 @@ public class InvitationServiceTest {
         given(invitation.getCharacterId()).willReturn(FRIEND_ID);
         given(invitation.getInvitorId()).willReturn(USER_ID);
         given(invitation.getInvitationTime()).willReturn(CURRENT_DATE.minusSeconds(FLOODING_LIMIT_SECONDS));
-        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
         given(invitationFactory.create(USER_ID, FRIEND_ID)).willReturn(newInvitation);
         given(characterProxy.getCharacter()).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
 

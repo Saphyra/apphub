@@ -152,6 +152,31 @@ window.Mapping = new function(){
         SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY: new Endpoint("/api/skyxplore/game/{planetId}/{type}/{itemId}/priority", HttpMethod.POST),
         SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM: new Endpoint("/api/skyxplore/game/{planetId}/{type}/{itemId}", HttpMethod.DELETE),
         SKYXPLORE_GAME_PAUSE: new Endpoint("/api/skyxplore/game/pause", HttpMethod.POST),
+
+        //COMMUNITY
+        COMMUNITY_GET_FRIENDS: new Endpoint("/api/community/friendship", HttpMethod.GET),
+        COMMUNITY_FRIEND_REQUEST_SEARCH: new Endpoint("/api/community/friend-request/search", HttpMethod.POST),
+        COMMUNITY_FRIEND_REQUEST_CREATE: new Endpoint("/api/community/friend-request", HttpMethod.PUT),
+        COMMUNITY_GET_RECEIVED_FRIEND_REQUESTS: new Endpoint("/api/community/friend-request/received", HttpMethod.GET),
+        COMMUNITY_GET_SENT_FRIEND_REQUESTS: new Endpoint("/api/community/friend-request/sent", HttpMethod.GET),
+        COMMUNITY_FRIEND_REQUEST_DELETE: new Endpoint("/api/community/friend-request/{friendRequestId}", HttpMethod.DELETE),
+        COMMUNITY_FRIEND_REQUEST_ACCEPT: new Endpoint("/api/community/friend-request/{friendRequestId}", HttpMethod.POST),
+        COMMUNITY_DELETE_FRIENDSHIP: new Endpoint("/api/community/friendship/{friendshipId}", HttpMethod.DELETE),
+        COMMUNITY_BLACKLIST_SEARCH: new Endpoint("/api/community/blacklist/search", HttpMethod.POST),
+        COMMUNITY_CREATE_BLACKLIST: new Endpoint("/api/community/blacklist", HttpMethod.PUT),
+        COMMUNITY_GET_BLACKLIST: new Endpoint("/api/community/blacklist", HttpMethod.GET),
+        COMMUNITY_DELETE_BLACKLIST: new Endpoint("/api/community/blacklist/{blacklistId}", HttpMethod.DELETE),
+        COMMUNITY_GROUP_CREATE: new Endpoint("/api/community/group", HttpMethod.PUT),
+        COMMUNITY_GET_GROUPS: new Endpoint("/api/community/group", HttpMethod.GET),
+        COMMUNITY_GROUP_RENAME: new Endpoint("/api/community/group/{groupId}/name", HttpMethod.POST),
+        COMMUNITY_GROUP_CHANGE_INVITATION_TYPE: new Endpoint("/api/community/group/{groupId}/invitation-type", HttpMethod.POST),
+        COMMUNITY_GROUP_GET_MEMBERS: new Endpoint("/api/community/group/{groupId}/member", HttpMethod.GET),
+        COMMUNITY_GROUP_SEARCH_MEMBER_CANDIDATES: new Endpoint("/api/community/group/{groupId}/member/search", HttpMethod.POST),
+        COMMUNITY_GROUP_CREATE_MEMBER: new Endpoint("/api/community/group/{groupId}/member", HttpMethod.PUT),
+        COMMUNITY_GROUP_DELETE_MEMBER: new Endpoint("/api/community/group/{groupId}/member/{groupMemberId}", HttpMethod.DELETE),
+        COMMUNITY_GROUP_MEMBER_ROLES: new Endpoint("/api/community/group/{groupId}/member/{groupMemberId}", HttpMethod.POST),
+        COMMUNITY_GROUP_DELETE: new Endpoint("/api/community/group/{groupId}", HttpMethod.DELETE),
+        COMMUNITY_GROUP_CHANGE_OWNER: new Endpoint("/api/community/group/{groupId}/owner", HttpMethod.POST),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

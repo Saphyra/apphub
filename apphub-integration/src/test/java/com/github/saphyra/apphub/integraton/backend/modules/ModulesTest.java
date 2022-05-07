@@ -34,7 +34,14 @@ public class ModulesTest extends BackEndTest {
 
         Map<String, List<ModulesResponse>> result = ModulesActions.getModules(locale, accessTokenId);
 
-        assertThat(result).containsKeys("accounts", "office", "development-utils");
+        assertThat(result).containsKeys("accounts", "office", "development-utils", "community");
+        ModulesResponse expectedModuleCommunity = ModulesResponse.builder()
+            .name("community")
+            .url("/web/community")
+            .favorite(false)
+            .build();
+        assertThat(result.get("community")).containsExactly(expectedModuleCommunity);
+
         ModulesResponse expectedModuleAccount = ModulesResponse.builder()
             .name("account")
             .url("/web/user/account")

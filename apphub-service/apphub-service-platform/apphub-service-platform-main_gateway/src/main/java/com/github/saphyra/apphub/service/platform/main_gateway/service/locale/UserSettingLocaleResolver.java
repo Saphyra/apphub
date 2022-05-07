@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.locale;
 
-import com.github.saphyra.apphub.api.user.client.UserDataApiClient;
+import com.github.saphyra.apphub.api.user.client.AccountClient;
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_util.AbstractCache;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
@@ -35,7 +35,7 @@ public class UserSettingLocaleResolver {
 
     private final AccessTokenQueryService accessTokenQueryService;
     private final CommonConfigProperties commonConfigProperties;
-    private final UserDataApiClient userDataApi;
+    private final AccountClient userDataApi;
 
     Optional<String> getLocale(MultiValueMap<String, HttpCookie> cookies) {
         Optional<UUID> userIdOptional = extractUserId(cookies);

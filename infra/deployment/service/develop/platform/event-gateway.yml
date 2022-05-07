@@ -33,8 +33,8 @@ spec:
               path: /platform/health
               port: 8080
             initialDelaySeconds: 5
-            periodSeconds: 5
-            failureThreshold: 4
+            periodSeconds: 1
+            failureThreshold: 10
           resources:
             limits:
               memory: 500Mi

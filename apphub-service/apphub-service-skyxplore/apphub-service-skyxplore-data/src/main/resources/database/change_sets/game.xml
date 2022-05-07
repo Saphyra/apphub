@@ -28,4 +28,28 @@
             <column name="last_played" type="datetime"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="add-column-marked-for-deletion-to-game" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="game" columnName="marked_for_deletion"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="game">
+            <column name="marked_for_deletion" type="boolean" defaultValue="false"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-marked-for-deletion_at-tp-game" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="game" columnName="marked_for_deletion_at"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="game">
+            <column name="marked_for_deletion_at" type="datetime"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
