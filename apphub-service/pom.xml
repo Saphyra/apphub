@@ -76,6 +76,7 @@
     </dependencies>
 
     <modules>
+        <module>apphub-service-community</module>
         <module>apphub-service-notebook</module>
         <module>apphub-service-skyxplore</module>
         <module>apphub-service-platform</module>
@@ -84,6 +85,5 @@
         <module>apphub-service-admin_panel</module>
         <module>apphub-service-utils</module>
         <module>apphub-service-training</module>
-        <module>apphub-service-community</module>
     </modules>
 </project>

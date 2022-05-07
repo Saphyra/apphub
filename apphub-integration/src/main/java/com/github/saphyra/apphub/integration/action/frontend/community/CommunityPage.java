@@ -86,4 +86,100 @@ class CommunityPage {
     public static List<WebElement> blacklists(WebDriver driver) {
         return driver.findElements(By.cssSelector("#contacts-blacklist-list .list-item"));
     }
+
+    public static WebElement groupsButton(WebDriver driver) {
+        return driver.findElement(By.id("groups-button"));
+    }
+
+    public static WebElement blacklistTab(WebDriver driver) {
+        return driver.findElement(By.id("contacts-blacklist"));
+    }
+
+    public static WebElement groupsTab(WebDriver driver) {
+        return driver.findElement(By.id("contacts-groups"));
+    }
+
+    public static WebElement openCreateGroupWindowButton(WebDriver driver) {
+        return driver.findElement(By.id("contacts-groups-create-button"));
+    }
+
+    public static WebElement createGroupWindow(WebDriver driver) {
+        return driver.findElement(By.id("create-group"));
+    }
+
+    public static WebElement createGroupNameInput(WebDriver driver) {
+        return driver.findElement(By.id("create-group-name-input"));
+    }
+
+    public static WebElement createGroupInvalidName(WebDriver driver) {
+        return driver.findElement(By.id("create-group-invalid-name"));
+    }
+
+    public static WebElement createGroupButton(WebDriver driver) {
+        return driver.findElement(By.id("create-group-button"));
+    }
+
+    public static WebElement closeGroupDetailsButton(WebDriver driver) {
+        return driver.findElement(By.cssSelector("#group-details header .close-dialog-button"));
+    }
+
+    public static List<WebElement> groups(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#contacts-groups-list .list-item"));
+    }
+
+    public static WebElement groupDetailsWindow(WebDriver driver) {
+        return driver.findElement(By.id("group-details"));
+    }
+
+    public static WebElement groupDetailsName(WebDriver driver) {
+        return driver.findElement(By.id("group-details-title"));
+    }
+
+    public static WebElement groupDetailsInvitationTypeWrapper(WebDriver driver) {
+        return driver.findElement(By.id("group-details-invitation-type-wrapper"));
+    }
+
+    public static WebElement invitationTypeSelectMenu(WebDriver driver) {
+        return driver.findElement(By.id("group-details-invitation-type"));
+    }
+
+    public static WebElement disbandGroupButton(WebDriver driver) {
+        return driver.findElement(By.id("disband-group-button"));
+    }
+
+    public static WebElement addGroupMemberButton(WebDriver driver) {
+        return driver.findElement(By.id("group-details-add-member-button"));
+    }
+
+    public static WebElement addGroupMemberWindow(WebDriver driver) {
+        return driver.findElement(By.id("group-add-member"));
+    }
+
+    public static WebElement addGroupMemberSearchInput(WebDriver driver) {
+        return driver.findElement(By.id("group-add-member-search-input"));
+    }
+
+    public static WebElement groupAddMemberResultNoResult(WebDriver driver) {
+        return driver.findElement(By.id("group-add-member-search-result-no-result"));
+    }
+
+    public static WebElement groupAddMemberResultQueryTooShort(WebDriver driver) {
+        return driver.findElement(By.id("group-add-member-search-result-query-too-short"));
+    }
+
+    public static WebElement groupAddMemberSearchResult(WebDriver driver) {
+        return driver.findElement(By.id("group-add-member-search-result"));
+    }
+
+    public static List<WebElement> groupAddMemberSearchResultItems(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#group-add-member-search-result div.button"));
+    }
+
+    public static List<WebElement> groupMembers(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#group-details-members tr"));
+    }
+
+    public static WebElement leaveGroupButton(WebDriver driver) {
+        return driver.findElement(By.id("leave-group-button"));
+    }
 }

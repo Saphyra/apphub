@@ -13,4 +13,6 @@
     <include file="database/change_sets/friendship.xml"/>
     <include file="database/change_sets/friend_request.xml"/>
     <include file="database/change_sets/blacklist.xml"/>
+    <include file="database/change_sets/community_group.xml"/>
+    <include file="database/change_sets/community_group_member.xml"/>
 </databaseChangeLog>

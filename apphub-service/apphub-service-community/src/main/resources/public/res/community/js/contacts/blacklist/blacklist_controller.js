@@ -1,4 +1,5 @@
 scriptLoader.loadScript("/res/common/js/sync_engine.js");
+scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/community/js/contacts/blacklist/create_blacklist_controller.js");
 
 (function BlacklistController(){

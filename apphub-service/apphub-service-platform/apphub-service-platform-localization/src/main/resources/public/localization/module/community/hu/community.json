@@ -1,0 +1,317 @@
+{
+  "title": "Apphub - Közösség",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Közösség"
+      }
+    ],
+    "chat-title": [
+      {
+        "key": "innerHTML",
+        "message": "Csevegés"
+      }
+    ],
+    "flow-title": [
+      {
+        "key": "innerHTML",
+        "message": "Folyam"
+      }
+    ],
+    "contacts-title": [
+      {
+        "key": "innerHTML",
+        "message": "Kapcsolatok"
+      }
+    ],
+    "new-conversation-button": [
+      {
+        "key": "innerHTML",
+        "message": "Új beszélgetés"
+      }
+    ],
+    "message-input": [
+      {
+        "key": "placeholder",
+        "message": "Üzenet"
+      }
+    ],
+    "friends-button": [
+      {
+        "key": "innerHTML",
+        "message": "Barátok"
+      }
+    ],
+    "groups-button": [
+      {
+        "key": "innerHTML",
+        "message": "Csoportok"
+      }
+    ],
+    "blacklist-button": [
+      {
+        "key": "innerHTML",
+        "message": "Feketelista"
+      }
+    ],
+    "contacts-add-friend-button": [
+      {
+        "key": "innerHTML",
+        "message": "Barát hozzáadása"
+      }
+    ],
+    "friends-list-title": [
+      {
+        "key": "innerHTML",
+        "message": "Barátok"
+      }
+    ],
+    "received-friend-requests-title": [
+      {
+        "key": "innerHTML",
+        "message": "Bejövő barátkérelmek"
+      }
+    ],
+    "sent-friend-requests-title": [
+      {
+        "key": "innerHTML",
+        "message": "Elküldött barátkérelmek"
+      }
+    ],
+    "contacts-groups-search-input": [
+      {
+        "key": "placeholder",
+        "message": "Keresés"
+      }
+    ],
+    "contacts-groups-create-button": [
+      {
+        "key": "innerHTML",
+        "message": "Új"
+      }
+    ],
+    "contacts-blacklist-add-button": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználó tiltása"
+      }
+    ],
+    "create-friend-request-title": [
+      {
+        "key": "innerHTML",
+        "message": "Barát felvétele"
+      }
+    ],
+    "create-friend-request-search-input": [
+      {
+        "key": "placeholder",
+        "message": "Keresés"
+      }
+    ],
+    "create-friend-request-search-result-query-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "Legalább 3 karaktert írj be!"
+      }
+    ],
+    "create-friend-request-search-result-no-result": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználó nem található."
+      }
+    ],
+    "create-blacklist-title": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználó tiltása"
+      }
+    ],
+    "create-blacklist-search-input": [
+      {
+        "key": "placeholder",
+        "message": "Keresés"
+      }
+    ],
+    "create-blacklist-search-result-query-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "Legalább 3 karaktert írj be!"
+      }
+    ],
+    "create-blacklist-search-result-no-result": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználó nem található."
+      }
+    ],
+    "create-group-title": [
+      {
+        "key": "innerHTML",
+        "message": "Új csoport"
+      }
+    ],
+    "create-group-name-label": [
+      {
+        "key": "innerHTML",
+        "message": "Csoport neve"
+      }
+    ],
+    "create-group-name-input": [
+      {
+        "key": "placeholder",
+        "message": "Csoport neve"
+      }
+    ],
+    "create-group-button": [
+      {
+        "key": "innerHTML",
+        "message": "Létrehozás"
+      }
+    ],
+    "home-button": [
+      {
+        "key": "innerHTML",
+        "message": "Kezdőlap"
+      }
+    ],
+    "group-details-invitation-type-label": [
+      {
+        "key": "innerHTML",
+        "message": "Meghívás"
+      }
+    ],
+    "invitation-type-friends": [
+      {
+        "key": "innerHTML",
+        "message": "Barátok"
+      }
+    ],
+    "invitation-type-friends-of-friends": [
+      {
+        "key": "innerHTML",
+        "message": "Barátok barátai"
+      }
+    ],
+    "group-details-add-member-button": [
+      {
+        "key": "innerHTML",
+        "message": "Tag felvétele"
+      }
+    ],
+    "group-details-members-can-invite": [
+      {
+        "key": "innerHTML",
+        "message": "Meghívhat"
+      }
+    ],
+    "group-details-members-can-kick": [
+      {
+        "key": "innerHTML",
+        "message": "Kirúghat"
+      }
+    ],
+    "group-details-members-can-modify-roles": [
+      {
+        "key": "innerHTML",
+        "message": "Módosíthatja a jogosultságokat"
+      }
+    ],
+    "group-details-members-kick": [
+      {
+        "key": "innerHTML",
+        "message": "Kirúgás"
+      }
+    ],
+    "group-add-member-title": [
+      {
+        "key": "innerHTML",
+        "message": "Tag hozzáadása"
+      }
+    ],
+    "group-add-member-search-input": [
+      {
+        "key": "placeholder",
+        "message": "Keresés"
+      }
+    ],
+    "group-add-member-search-result-query-too-short": [
+      {
+        "key": "innerHTML",
+        "message": "Legalább 3 karaktert írj be!"
+      }
+    ],
+    "group-add-member-search-result-no-result": [
+      {
+        "key": "innerHTML",
+        "message": "Felhasználó nem található."
+      }
+    ],
+    "disband-group-button": [
+      {
+        "key": "innerHTML",
+        "message": "Csoport feloszlatása"
+      }
+    ],
+    "leave-group-button": [
+      {
+        "key": "innerHTML",
+        "message": "Csoport elhagyása"
+      }
+    ]
+  },
+  "additionalContent": {
+    "delete-friendship-button": "Törlés",
+    "delete-friend-request-button": "Törlés",
+    "accept-friend-request-button": "Elfogad",
+    "friend-request-created": "Barátkérelem elküldve.",
+    "friend-request-deleted": "Barátkérelem törölve.",
+    "friend-request-accepted": "Barátkérelem elfogadva.",
+    "delete-friendship-confirmation-dialog-title": "Barátság megszakítása",
+    "delete-friendship-confirmation-dialog-detail": "Biztosan meg akarod szakítani a barátságot <SPAN class=\"red\">{username}</SPAN>-al?",
+    "delete-friendship-confirmation-dialog-confirm-button": "Barátság megszakítása",
+    "delete-friendship-confirmation-dialog-cancel-button": "Mégse",
+    "friendship-deleted": "Barátság megszakítva.",
+    "blacklist-created": "Felhasználó tiltva.",
+    "delete-blacklist-button": "Törlés",
+    "delete-blacklist-confirmation-dialog-title": "Tiltás feloldása",
+    "delete-blacklist-confirmation-dialog-detail": "Biztosan fel akaor oldani <SPAN class=\"red\">{username}</SPAN> tiltását?",
+    "delete-blacklist-confirmation-dialog-confirm-button": "Tiltás feloldása",
+    "delete-blacklist-confirmation-dialog-cancel-button": "Mégse",
+    "blacklist-deleted": "Tiltás feloldva.",
+    "group-name-too-short": "Csoport neve túl rövid (Minimum 3 karakter)",
+    "group-name-too-long": "Csoport neve túl hosszú (Maximum 30 karakter)",
+    "group-created": "Csoport létrehozva",
+    "group-renamed": "Csoport átnevezve.",
+    "group-member-added": "Tag hozzáadva.",
+    "group-invitation-type-changed": "Meghívás módja megváltoztatva.",
+    "kick-group-member-confirmation-dialog-title": "Tag eltávolításának megerősítése",
+    "kick-group-member-confirmation-dialog-detail": "Biztosan el akarod távolítani <SPAN class=\"red\">{username}</SPAN>-t a <SPAN class=\"red\">{groupName}</SPAN> csoportból?",
+    "kick-group-member-confirmation-dialog-confirm-button": "Eltávolítás",
+    "kick-group-member-confirmation-dialog-cancel-button": "Mégse",
+    "group-member-kicked": "Tag eltávolítva.",
+    "role-can-invite": "Meghívhat",
+    "role-can-kick": "Kirúghat",
+    "role-can-modify-roles": "Módosíthatja a jogosultságokat",
+    "grant-role-to-member-confirmation-dialog-title": "Jogosultság engedélyezése",
+    "grant-role-to-member-confirmation-dialog-detail": "Biztosítani akarod <SPAN class=\"red\">{role}</SPAN> jogosultságot <SPAN class=\"red\">{username}</SPAN>-nak a <SPAN class=\"red\">{groupName}</SPAN> csoportban?",
+    "grant-role-to-member-confirmation-dialog-confirm-button": "Jogosultság engedélyezése",
+    "grant-role-to-member-confirmation-dialog-cancel-button": "Mégse",
+    "transfer-leadership-button": "Vezetés átadása",
+    "disband-group-confirmation-dialog-title": "Csoport feloszlatása",
+    "disband-group-confirmation-dialog-detail": "Biztosan fel akarod oszlatni a <SPAN class=\"red\">{groupName}</SPAN> csoportot?",
+    "disband-group-confirmation-dialog-confirm-button": "Feloszlatás",
+    "disband-group-confirmation-dialog-cancel-button": "Mégse",
+    "group-disbanded": "Csapat feloszlatva.",
+    "leave-group-confirmation-dialog-title": "Csoport elhagyása",
+    "leave-group-confirmation-dialog-detail": "Biztosan el akarod hagyni a <SPAN class=\"red\">{groupName}</SPAN> csoportot?",
+    "leave-group-confirmation-dialog-confirm-button": "Elhagyás",
+    "leave-group-confirmation-dialog-cancel-button": "Mégse",
+    "group-left": "Csapat elhagyva.",
+    "transfer-ownership-confirmation-dialog-title": "Vezetés átadása",
+    "transfer-ownership-confirmation-dialog-detail": "Biztosan át akarod adni <SPAN class=\"red\">{groupName}</SPAN> csoport vezetését <SPAN class=\"red\">{username}</SPAN>-nak?",
+    "transfer-ownership-confirmation-dialog-confirm-button": "Vezetés átadása",
+    "transfer-ownership-confirmation-dialog-cancel-button": "Mégse",
+    "ownership-transferred": "Vezetés átadva."
+  }
+}

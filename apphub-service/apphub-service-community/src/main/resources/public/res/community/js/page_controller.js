@@ -14,6 +14,25 @@ window.ids = {
     createBlacklistSearchResultNoResult: "create-blacklist-search-result-no-result",
     createBlacklistSearchResult: "create-blacklist-search-result",
     contactsBlacklistList: "contacts-blacklist-list",
+    createGroupNameInput: "create-group-name-input",
+    createGroup: "create-group",
+    createGroupButton: "create-group-button",
+    createGroupInvalidName: "create-group-invalid-name",
+    contactsGroupsList: "contacts-groups-list",
+    contactsGroupsSearchInput: "contacts-groups-search-input",
+    groupDetails: "group-details",
+    groupDetailsTitle: "group-details-title",
+    groupDetailsInvitationType: "group-details-invitation-type",
+    groupDetailsMembers: "group-details-members",
+    groupDetailsAddMemberButton: "group-details-add-member-button",
+    groupAddMemberSearchInput: "group-add-member-search-input",
+    groupAddMemberSearchResult: "group-add-member-search-result",
+    groupAddMemberSearchResultQueryTooShort: "group-add-member-search-result-query-too-short",
+    groupAddMemberSearchResultNoResult: "group-add-member-search-result-no-result",
+    groupAddMember: "group-add-member",
+    disbandGroupButton: "disband-group-button",
+    leaveGroupButton: "leave-group-button",
+    groupDetailsTransferOwnership: "group-details-transfer-ownership",
 }
 
 scriptLoader.loadScript("/res/community/js/contacts/contacts_controller.js");
@@ -26,6 +45,6 @@ scriptLoader.loadScript("/res/community/js/contacts/contacts_controller.js");
     }
 
     $(document).ready(function(){
-        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "community", fileName: "index"}));
+        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "community", fileName: "community"}));
     });
 })();

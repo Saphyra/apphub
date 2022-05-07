@@ -24,8 +24,4 @@ public class CommonPageActions {
 
         dialog.findElement(By.cssSelector(String.format("#%s .confirmation-dialog-confirm-button", id))).click();
     }
-
-    public static WebElement blacklistTab(WebDriver driver) {
-        return driver.findElement(By.id("contacts-blacklist"));
-    }
 }

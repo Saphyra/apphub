@@ -66,6 +66,20 @@ public class ValidationUtilTest {
     }
 
     @Test
+    public void maxLength_null() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.maximum(null, 1, FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+    }
+
+    @Test
+    public void maxLength_tooLong() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.maxLength("asd", 2, FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "too long");
+    }
+
+    @Test
     public void minLength() {
         ValidationUtil.minLength("asd", 3, FIELD);
     }

@@ -253,4 +253,15 @@ public class Endpoints {
     public static final String COMMUNITY_FRIEND_REQUEST_ACCEPT = "/api/community/friend-request/{friendRequestId}";
     public static final String COMMUNITY_GET_FRIENDS = "/api/community/friendship";
     public static final String COMMUNITY_DELETE_FRIENDSHIP = "/api/community/friendship/{friendshipId}";
+    public static final String COMMUNITY_GET_GROUPS = "/api/community/group";
+    public static final String COMMUNITY_GROUP_CREATE = "/api/community/group";
+    public static final String COMMUNITY_GROUP_RENAME = "/api/community/group/{groupId}/name";
+    public static final String COMMUNITY_GROUP_GET_MEMBERS = "/api/community/group/{groupId}/member";
+    public static final String COMMUNITY_GROUP_SEARCH_MEMBER_CANDIDATES = "/api/community/group/{groupId}/member/search";
+    public static final String COMMUNITY_GROUP_CREATE_MEMBER = "/api/community/group/{groupId}/member";
+    public static final String COMMUNITY_GROUP_CHANGE_INVITATION_TYPE = "/api/community/group/{groupId}/invitation-type";
+    public static final String COMMUNITY_GROUP_DELETE_MEMBER = "/api/community/group/{groupId}/member/{groupMemberId}";
+    public static final String COMMUNITY_GROUP_MEMBER_ROLES = "/api/community/group/{groupId}/member/{groupMemberId}";
+    public static final String COMMUNITY_GROUP_DELETE = "/api/community/group/{groupId}";
+    public static final String COMMUNITY_GROUP_CHANGE_OWNER = "/api/community/group/{groupId}/owner";
 }

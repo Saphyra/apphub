@@ -94,5 +94,4 @@
             timer = setTimeout(search, 1000);
         }
     }
-
 })();

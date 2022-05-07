@@ -55,7 +55,7 @@ public class SkyXploreMainMenuActions {
     }
 
     public static void verifyInvalidGameName(WebDriver driver, String errorMessage) {
-        WebElementUtils.verifyInvalidFieldStateSoft(MainMenuPage.invalidGameName(driver), true, errorMessage);
+        WebElementUtils.verifyInvalidFieldState(MainMenuPage.invalidGameName(driver), true, errorMessage);
         assertThat(MainMenuPage.submitGameCreationFormButton(driver).isEnabled()).isFalse();
     }
 
@@ -66,7 +66,7 @@ public class SkyXploreMainMenuActions {
     }
 
     public static void verifyValidGameName(WebDriver driver) {
-        WebElementUtils.verifyInvalidFieldStateSoft(MainMenuPage.invalidGameName(driver), false, null);
+        WebElementUtils.verifyInvalidFieldState(MainMenuPage.invalidGameName(driver), false, null);
         assertThat(MainMenuPage.submitGameCreationFormButton(driver).isEnabled()).isTrue();
     }
 

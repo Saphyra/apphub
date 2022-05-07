@@ -29,7 +29,7 @@ public class SkyXplorePlanetActions {
 
     public static void renamePlanet(WebDriver driver, String newPlanetName) {
         clearAndFillContentEditable(driver, GamePage.planetName(driver), newPlanetName);
-        GamePage.planetMiddleBar(driver).click();
+        GamePage.planetRightBar(driver).click();
     }
 
     public static void closePlanet(WebDriver driver) {

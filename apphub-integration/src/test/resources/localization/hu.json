@@ -13,6 +13,7 @@
   "FORBIDDEN_OPERATION": "Ezt nem teheted meg.",
   "GAME_DELETED": "A játék már törölve van.",
   "GAME_NOT_FOUND": "A játék nem található.",
+  "GENERAL_ERROR": "Ismeretlen hiba.",
   "INVALID_PARAM": "Érvénytelen paraméter.",
   "INVALID_TYPE": "Érvénytelen típus.",
   "LIST_ITEM_NOT_FOUND": "Elem nem található.",
