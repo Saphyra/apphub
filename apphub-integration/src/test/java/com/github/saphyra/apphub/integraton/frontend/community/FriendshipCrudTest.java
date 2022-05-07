@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FriendshipCrudTest extends SeleniumTest {
-    @Test
+    @Test(groups = "community")
     public void friendRequestCrud() {
         WebDriver driver1 = extractDriver();
         WebDriver driver2 = extractDriver();

@@ -34,13 +34,7 @@ public class ModulesTest extends BackEndTest {
 
         Map<String, List<ModulesResponse>> result = ModulesActions.getModules(locale, accessTokenId);
 
-        assertThat(result).containsKeys("accounts", "office", "development-utils", "community");
-        ModulesResponse expectedModuleCommunity = ModulesResponse.builder()
-            .name("community")
-            .url("/web/community")
-            .favorite(false)
-            .build();
-        assertThat(result.get("community")).containsExactly(expectedModuleCommunity);
+        assertThat(result).containsKeys("accounts", "office", "development-utils");
 
         ModulesResponse expectedModuleAccount = ModulesResponse.builder()
             .name("account")
@@ -103,6 +97,16 @@ public class ModulesTest extends BackEndTest {
                 .favorite(false)
                 .build();
             assertThat(result.get("game")).containsExactly(expectedModuleSkyXplore);
+        }
+
+        if (!DISABLED_TEST_GROUPS.contains("community")) {
+            assertThat(result).containsKey("community");
+            ModulesResponse expectedModuleCommunity = ModulesResponse.builder()
+                .name("community")
+                .url("/web/community")
+                .favorite(false)
+                .build();
+            assertThat(result.get("community")).containsExactly(expectedModuleCommunity);
         }
     }
 
