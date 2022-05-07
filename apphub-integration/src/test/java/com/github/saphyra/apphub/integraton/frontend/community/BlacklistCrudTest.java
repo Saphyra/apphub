@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BlacklistCrudTest extends SeleniumTest {
-    @Test
+    @Test(groups = "community")
     void blacklistCrud() {
         WebDriver driver1 = extractDriver();
         WebDriver driver2 = extractDriver();
