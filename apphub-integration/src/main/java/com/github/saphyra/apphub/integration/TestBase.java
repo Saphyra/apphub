@@ -108,13 +108,13 @@ public class TestBase {
     public void tearDownMethod(Method method) {
         String methodName = method.getName();
 
-        deleteTestUsers(methodName);
-
-        EMAIL_DOMAIN.remove();
-
         log.debug("Available permits before releasing: {}", SEMAPHORE.availablePermits());
         SEMAPHORE.release(1);
         log.info("Available permits after releasing of {}: {}", methodName, SEMAPHORE.availablePermits());
+
+        deleteTestUsers(methodName);
+
+        EMAIL_DOMAIN.remove();
 
         log.debug("Test {} completed", methodName);
     }
