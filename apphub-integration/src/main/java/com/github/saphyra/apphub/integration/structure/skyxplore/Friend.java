@@ -8,7 +8,6 @@ import org.openqa.selenium.WebElement;
 public class Friend {
     private final WebElement webElement;
 
-
     public String getName() {
         return webElement.findElement(By.cssSelector(":scope div:first-child"))
             .getText();
