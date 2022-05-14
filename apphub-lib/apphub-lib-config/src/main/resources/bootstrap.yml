@@ -147,6 +147,10 @@ community:
   ribbon:
     listOfServers: community:8080
 
+diary:
+  ribbon:
+    listOfServers: diary:8080
+
 event:
   processor:
     heartbeat:
@@ -334,3 +338,17 @@ role:
         - PUT
       requiredRoles:
         - COMMUNITY
+    #Diary
+    - pattern: /web/diary
+      methods:
+        - GET
+      requiredRoles:
+        - DIARY
+    - pattern: /api/diary/**
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - DIARY

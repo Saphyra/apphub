@@ -18,6 +18,7 @@ registration:
     - TRAINING
     - UTILS
     - COMMUNITY
+    - DIARY
 
 rolesCanBeDisabled:
   - NOTEBOOK
@@ -26,6 +27,7 @@ rolesCanBeDisabled:
   - TEST
   - UTILS
   - COMMUNITY
+  - DIARY
 
 add-role-to-all:
   restrictedRoles:
