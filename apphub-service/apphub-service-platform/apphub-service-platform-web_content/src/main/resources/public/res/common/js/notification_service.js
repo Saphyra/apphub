@@ -50,13 +50,7 @@
                 })
             )
             .then(() => roll.rollOutHorizontal(messageElement, 300))
-            .then(() => setTimeout(function(){
-                    if(container.childNodes.indexOf(messageElement) > -1){
-                        container.removeChild(messageElement);
-                    }
-                },
-                10000)
-             );
+            .then(() => setTimeout(() => container.removeChild(messageElement), 10000));
 
         function createContainer(){
             const container = document.createElement("DIV");

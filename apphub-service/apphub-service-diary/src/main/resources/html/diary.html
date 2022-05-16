@@ -16,7 +16,20 @@
         <H1 id="main-title"></H1>
     </HEADER>
 
-    <MAIN>
+    <MAIN id="main-page-content">
+        <DIV id="calendar-container">
+            <DIV id="calendar-title">
+                <BUTTON onclick="calendarController.previousMonth()">&lt;</BUTTON>
+                <H2 id="calendar-current-month"></H2>
+                <BUTTON onclick="calendarController.nextMonth()">&gt;</BUTTON>
+            </DIV>
+
+            <DIV id="calendar"></DIV>
+        </DIV>
+
+        <DIV id="daily-tasks-container">
+            <H2 id="daily-tasks-current-day">ChangeIt</H2>
+        </DIV>
     </MAIN>
 
     <FOOTER>

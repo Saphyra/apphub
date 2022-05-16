@@ -1,0 +1,19 @@
+{
+  "title": "Apphub - Diary",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Diary"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Home"
+      }
+    ]
+  },
+  "additionalContent": {
+  }
+}

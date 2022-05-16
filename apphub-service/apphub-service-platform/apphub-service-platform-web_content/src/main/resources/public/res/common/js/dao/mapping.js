@@ -177,6 +177,9 @@ window.Mapping = new function(){
         COMMUNITY_GROUP_MEMBER_ROLES: new Endpoint("/api/community/group/{groupId}/member/{groupMemberId}", HttpMethod.POST),
         COMMUNITY_GROUP_DELETE: new Endpoint("/api/community/group/{groupId}", HttpMethod.DELETE),
         COMMUNITY_GROUP_CHANGE_OWNER: new Endpoint("/api/community/group/{groupId}/owner", HttpMethod.POST),
+
+        //DIARY
+        DIARY_GET_CALENDAR: new Endpoint("/api/diary/calendar", HttpMethod.GET),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

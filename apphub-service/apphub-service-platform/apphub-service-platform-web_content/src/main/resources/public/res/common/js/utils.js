@@ -1,3 +1,15 @@
+Date.prototype.plusMonths = function(months){
+    const date = new Date(this.valueOf());
+    date.setMonth(date.getMonth() + months);
+    return date;
+}
+
+Date.prototype.minusMonths = function(months){
+    const date = new Date(this.valueOf());
+    date.setMonth(date.getMonth() - months);
+    return date;
+}
+
 function Switch(aFunc, bFunc){
     let counter = 0;
     const aFunction = aFunc || throwException("IllegalArgument", "function1 is not defined");

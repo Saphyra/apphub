@@ -1,0 +1,19 @@
+{
+  "title": "Apphub - Határidőnapló",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Határidőnapló"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Kezdőlap"
+      }
+    ]
+  },
+  "additionalContent": {
+  }
+}

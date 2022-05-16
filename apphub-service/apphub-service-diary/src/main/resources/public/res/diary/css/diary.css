@@ -1,0 +1,65 @@
+#main-page-content{
+    display: grid;
+    grid-template-columns: 70% 30%;
+    padding: 0;
+}
+
+    #calendar-container{
+        border-right: 5px ridge white;
+    }
+
+        #calendar-title{
+            text-align: center;
+            border-bottom: 3px ridge white;
+            padding: 0.25rem;
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+            #calendar-title button{
+
+            }
+
+                #calendar-title button:first-child{
+                    float: left;
+                }
+
+                #calendar-title button:last-child{
+                    float: right;
+                }
+
+        #calendar-current-month{
+            display: inline;
+        }
+
+    #calendar{
+        display: grid;
+        grid-template-columns: repeat(7, auto);
+    }
+
+        .calendar-day{
+            text-align: left;
+        }
+
+            .different-month-day{
+                opacity: 0.5;
+            }
+
+            .current-day{
+                border-color: yellow;
+            }
+
+
+            .calendar-day-title{
+
+            }
+
+    #daily-tasks-container{
+
+    }
+
+        #daily-tasks-current-day{
+            text-align: center;
+            border-bottom: 3px ridge white;
+            padding: 0.25rem;
+        }
