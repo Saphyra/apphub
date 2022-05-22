@@ -45,21 +45,29 @@
                 opacity: 0.5;
             }
 
+            .selected-day{
+                border-color: lime;
+            }
+
             .current-day{
                 border-color: yellow;
             }
-
 
             .calendar-day-title{
 
             }
 
     #daily-tasks-container{
-
+        display: grid;
+        grid-template-rows: 2.75rem auto 2.25rem;
     }
 
         #daily-tasks-current-day{
             text-align: center;
             border-bottom: 3px ridge white;
             padding: 0.25rem;
+        }
+
+        #daily-tasks{
+
         }

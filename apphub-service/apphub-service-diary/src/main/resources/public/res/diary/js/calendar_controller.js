@@ -1,7 +1,4 @@
 scriptLoader.loadScript("/res/common/js/sync_engine.js");
-scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
-
-const CURRENT_DATE = new LocalDate(new Date());
 
 (function CalendarController(){
     pageLoader.addLoader(loadCalendar, "Loading current month to calendar");
@@ -27,7 +24,7 @@ const CURRENT_DATE = new LocalDate(new Date());
     }
 
     function loadCalendar(date){
-        currentDate = (date || CURRENT_DATE);
+        currentDate = date || CURRENT_DATE;
 
         const request = new Request(Mapping.getEndpoint("DIARY_GET_CALENDAR", {}, {date: currentDate.toString()}));
             request.convertResponse = jsonConverter;
@@ -62,40 +59,12 @@ const CURRENT_DATE = new LocalDate(new Date());
                 title.innerText = extractDay(day.date)
         node.appendChild(title);
 
+        node.onclick = function(){
+            dailyTasksController.displayDay(parseLocalDate(day.date));
+            $(".calendar-day").removeClass("selected-day");
+            node.classList.add("selected-day");
+        }
+
         return node;
     }
 })();
-
-function LocalDate(date){
-    const days = String(date.getDate()).padStart(2, '0');
-    const months = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
-    const years = date.getFullYear();
-
-    this.plusMonths = function(m){
-        return new LocalDate(date.plusMonths(m));
-    }
-
-    this.minusMonths = function(m){
-        return new LocalDate(date.minusMonths(m));
-    }
-
-    this.getMonth = function(){
-        return months;
-    }
-
-    this.getYear = function(){
-        return years;
-    }
-
-    this.toString = function(){
-        return years + "-" + months + "-" + days;
-    }
-}
-
-function extractDay(date){
-    return date.split("-")[2];
-}
-
-function extractMonth(date){
-    return date.split("-")[1];
-}

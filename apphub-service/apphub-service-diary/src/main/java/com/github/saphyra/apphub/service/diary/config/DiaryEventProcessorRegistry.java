@@ -25,7 +25,7 @@ public class DiaryEventProcessorRegistry implements EventProcessorRegistry {
             RegisterProcessorRequest.builder()
                 .serviceName(serviceName)
                 .eventName(DeleteAccountEvent.EVENT_NAME)
-                .url(Endpoints.EVENT_DELETE_ACCOUNT) //TODO create event endpoint
+                .url(Endpoints.EVENT_DELETE_ACCOUNT)
                 .build()
         );
     }

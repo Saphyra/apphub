@@ -12,6 +12,12 @@
         "key": "innerHTML",
         "message": "Home"
       }
+    ],
+    "create-task-button": [
+      {
+        "key": "innerHTML",
+        "message": "New"
+      }
     ]
   },
   "additionalContent": {

@@ -14,5 +14,5 @@ import java.util.List;
 @Builder
 public class CalendarResponse {
     private LocalDate date;
-    private List<CalendarEventResponse> events;
+    private List<OccurrenceResponse> events;
 }

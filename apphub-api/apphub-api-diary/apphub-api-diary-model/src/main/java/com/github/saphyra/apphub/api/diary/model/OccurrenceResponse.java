@@ -11,6 +11,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CalendarEventResponse {
+public class OccurrenceResponse {
+    private UUID occurrenceId;
     private UUID eventId;
+    private Integer order;
 }
