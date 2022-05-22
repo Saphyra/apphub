@@ -7,7 +7,7 @@ if [ "$1" != "skipBuild" ]; then
   elif [ "$1" == "skipUnitTests" ]; then
     mvn -T 24 clean install -DskipTests
   else
-    mvn -T 4 clean install
+    mvn -T 6 clean install
   fi
   BUILD_RESULT=$?
   if [[ "$BUILD_RESULT" -ne 0 ]]; then

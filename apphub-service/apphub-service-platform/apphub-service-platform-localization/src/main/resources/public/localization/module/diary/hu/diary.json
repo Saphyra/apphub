@@ -18,6 +18,108 @@
         "key": "innerHTML",
         "message": "Új"
       }
+    ],
+    "create-event-title": [
+      {
+        "key": "innerHTML",
+        "message": "Új bejegyzés"
+      }
+    ],
+    "create-event-description-label": [
+      {
+        "key": "innerHTML",
+        "message": "Leírás"
+      }
+    ],
+    "create-event-title-input": [
+      {
+        "key": "placeholder",
+        "message": "Cím"
+      }
+    ],
+    "create-event-content-input": [
+      {
+        "key": "placeholder",
+        "message": "Tartalom"
+      }
+    ],
+    "create-event-repetition-type-label": [
+      {
+        "key": "innerHTML",
+        "message": "Ismétlés"
+      }
+    ],
+    "create-event-repetition-type-one-time": [
+      {
+        "key": "innerHTML",
+        "message": "Egyszeri"
+      }
+    ],
+    "create-event-repetition-type-every-x-days": [
+      {
+        "key": "innerHTML",
+        "message": "Minden X-edik nap"
+      }
+    ],
+    "create-event-repetition-type-days-of-week": [
+      {
+        "key": "innerHTML",
+        "message": "Hét napjain"
+      }
+    ],
+    "create-event-repetition-type-days-input": [
+      {
+        "key": "placeholder",
+        "message": "Napok"
+      }
+    ],
+    "create-event-days-of-week-monday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Hétfő"
+      }
+    ],
+    "create-event-days-of-week-tuesday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Kedd"
+      }
+    ],
+    "create-event-days-of-week-wednesday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Szerda"
+      }
+    ],
+    "create-event-days-of-week-thursday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Csütörtök"
+      }
+    ],
+    "create-event-days-of-week-friday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Péntek"
+      }
+    ],
+    "create-event-days-of-week-saturday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Szombat"
+      }
+    ],
+    "create-event-days-of-week-sunday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Vasránap"
+      }
+    ],
+    "create-event-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
     ]
   },
   "additionalContent": {

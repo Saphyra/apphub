@@ -18,6 +18,108 @@
         "key": "innerHTML",
         "message": "New"
       }
+    ],
+    "create-event-title": [
+      {
+        "key": "innerHTML",
+        "message": "New event"
+      }
+    ],
+    "create-event-description-label": [
+      {
+        "key": "innerHTML",
+        "message": "Description"
+      }
+    ],
+    "create-event-title-input": [
+      {
+        "key": "placeholder",
+        "message": "Title"
+      }
+    ],
+    "create-event-content-input": [
+      {
+        "key": "placeholder",
+        "message": "Content"
+      }
+    ],
+    "create-event-repetition-type-label": [
+      {
+        "key": "innerHTML",
+        "message": "Repetition type"
+      }
+    ],
+    "create-event-repetition-type-one-time": [
+      {
+        "key": "innerHTML",
+        "message": "One time"
+      }
+    ],
+    "create-event-repetition-type-every-x-days": [
+      {
+        "key": "innerHTML",
+        "message": "Every X days"
+      }
+    ],
+    "create-event-repetition-type-days-of-week": [
+      {
+        "key": "innerHTML",
+        "message": "Days of week"
+      }
+    ],
+    "create-event-repetition-type-days-input": [
+      {
+        "key": "placeholder",
+        "message": "Days"
+      }
+    ],
+    "create-event-days-of-week-monday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Monday"
+      }
+    ],
+    "create-event-days-of-week-tuesday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Tuesday"
+      }
+    ],
+    "create-event-days-of-week-wednesday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Wednesday"
+      }
+    ],
+    "create-event-days-of-week-thursday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Thursday"
+      }
+    ],
+    "create-event-days-of-week-friday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Friday"
+      }
+    ],
+    "create-event-days-of-week-saturday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Saturday"
+      }
+    ],
+    "create-event-days-of-week-sunday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Sunday"
+      }
+    ],
+    "create-event-button": [
+      {
+        "key": "innerHTML",
+        "message": "Create"
+      }
     ]
   },
   "additionalContent": {

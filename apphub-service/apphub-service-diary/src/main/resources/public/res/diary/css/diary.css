@@ -1,3 +1,10 @@
+.close-dialog-button{
+    position: absolute;
+    top: 0;
+    right: 0.25rem;
+    font-size: 1.75rem;
+}
+
 #main-page-content{
     display: grid;
     grid-template-columns: 70% 30%;
@@ -70,4 +77,38 @@
 
         #daily-tasks{
 
+        }
+
+#create-event-page{
+
+}
+
+    #create-event-page fieldset{
+        margin: 1rem;
+    }
+
+        #create-event-page fieldset legend{
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+    #create-event-title-input{
+        width: 90%;
+    }
+
+    #create-event-content-input{
+        width: 90%;
+        height: 50vh;
+    }
+
+    #create-event-days-of-week-repetition-type-data label{
+        white-space: nowrap;
+    }
+
+        #create-event-days-of-week-repetition-type-data label span{
+            font-size: 2rem;
+        }
+
+        #create-event-days-of-week-repetition-type-data label input{
+            transform: scale(1.5);
         }

@@ -24,9 +24,11 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
         currentDate = date || CURRENT_DATE;
 
         document.getElementById(ids.dailyTasksCurrentDay).innerText = currentDate.getYear() + " " + monthLocalization.get(currentDate.getMonth()) + " " + currentDate.getDay();
+
+        //TODO
     }
 
     function createTaskNode(event){
-
+        //TODO
     }
 })();

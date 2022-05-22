@@ -11,7 +11,7 @@
     <SCRIPT src="/res/diary/js/page_controller.js"></SCRIPT>
 </HEAD>
 <BODY>
-<DIV class="main-page">
+<DIV id="main-page" class="main-page">
     <HEADER>
         <H1 id="main-title"></H1>
     </HEADER>
@@ -32,12 +32,87 @@
 
             <DIV id="daily-tasks"></DIV>
 
-            <DIV id="create-task-button" class="button" onclick="createEventController.createEvent()"></DIV>
+            <DIV id="create-task-button" class="button" onclick="createEventController.openCreateEventWindow()"></DIV>
         </DIV>
     </MAIN>
 
     <FOOTER>
         <BUTTON id="back-button" onclick='window.location = "/web/modules"'></BUTTON>
+    </FOOTER>
+</DIV>
+
+<DIV id="create-event-page" class="main-page">
+    <HEADER>
+        <H1 id="create-event-title"></H1>
+
+        <BUTTON class="close-dialog-button" onclick="pageController.displayMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN class="centered">
+        <FIELDSET>
+            <LEGEND id="create-event-description-label"></LEGEND>
+
+            <INPUT type="text" id="create-event-title-input">
+
+            <TEXTAREA id="create-event-content-input"></TEXTAREA>
+        </FIELDSET>
+
+        <FIELDSET>
+            <LEGEND id="create-event-repetition-type-label"></LEGEND>
+
+            <SELECT id="create-event-repetition-type-select">
+                <OPTION value="ONE_TIME" id="create-event-repetition-type-one-time"></OPTION>
+                <OPTION value="EVERY_X_DAYS" id="create-event-repetition-type-every-x-days"></OPTION>
+                <OPTION value="DAYS_OF_WEEK" id="create-event-repetition-type-days-of-week"></OPTION>
+            </SELECT>
+
+            <DIV id="create-event-one-time-repetition-type-data" class="repetition-type-data"></DIV>
+
+            <DIV id="create-event-every-x-days-repetition-type-data" class="repetition-type-data">
+                <INPUT type="number" id="create-event-repetition-type-days-input" min="1" max="1000">
+            </DIV>
+
+            <DIV id="create-event-days-of-week-repetition-type-data" class="repetition-type-data">
+                <LABEL>
+                    <INPUT type="checkbox" class="create-event-days-of-week-input" value="MONDAY">
+                    <SPAN id="create-event-days-of-week-monday-label"></SPAN>
+                </LABEL>
+
+                <LABEL>
+                    <INPUT type="checkbox" class="create-event-days-of-week-input" value="TUESDAY">
+                    <SPAN id="create-event-days-of-week-tuesday-label"></SPAN>
+                </LABEL>
+
+                <LABEL>
+                    <INPUT type="checkbox" class="create-event-days-of-week-input" value="WEDNESDAY">
+                    <SPAN id="create-event-days-of-week-wednesday-label"></SPAN>
+                </LABEL>
+
+                <LABEL>
+                    <INPUT type="checkbox" class="create-event-days-of-week-input" value="THURSDAY">
+                    <SPAN id="create-event-days-of-week-thursday-label"></SPAN>
+                </LABEL>
+
+                <LABEL>
+                    <INPUT type="checkbox" class="create-event-days-of-week-input" value="FRIDAY">
+                    <SPAN id="create-event-days-of-week-friday-label"></SPAN>
+                </LABEL>
+
+                <LABEL>
+                    <INPUT type="checkbox" class="create-event-days-of-week-input" value="SATURDAY">
+                    <SPAN id="create-event-days-of-week-saturday-label"></SPAN>
+                </LABEL>
+
+                <LABEL>
+                    <INPUT type="checkbox" class="create-event-days-of-week-input" value="SUNDAY">
+                    <SPAN id="create-event-days-of-week-sunday-label"></SPAN>
+                </LABEL>
+            </DIV>
+        </FIELDSET>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="create-event-button" onclick="createEventController.createEvent()"></BUTTON>
     </FOOTER>
 </DIV>
 </BODY>

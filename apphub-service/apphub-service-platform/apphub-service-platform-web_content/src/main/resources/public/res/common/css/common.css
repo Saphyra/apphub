@@ -121,7 +121,7 @@ button, .button, a, select, footer label{
         cursor: no-drop;
     }
 
-footer label *{
+label *{
     cursor: pointer;
 }
 
