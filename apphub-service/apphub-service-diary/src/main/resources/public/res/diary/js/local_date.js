@@ -1,51 +1,64 @@
-function parseLocalDate(date){
-    if(typeof date !== "string"){
-        throwException("IllegalArgument", date + " is not a string, it is a " + typeof date);
+window.LocalDate = new function(){
+    this.parse = function(dateString){
+        return new LocalDateObj(new Date(extractYear(dateString), extractMonth(dateString) - 1, extractDay(dateString)));
     }
 
-    return new LocalDate(extractYear(date), extractMonth(date), extractDay(date));
-}
-
-function extractDay(date){
-    return date.split("-")[2];
-}
-
-function extractMonth(date){
-    return date.split("-")[1];
-}
-
-function extractYear(date){
-    return date.split("-")[0];
-}
-
-function LocalDate(years, months, days){
-    if(years instanceof Date){
-        days = String(years.getDate()).padStart(2, '0');
-        months = String(years.getMonth() + 1).padStart(2, '0'); //January is 0!
-        years = years.getFullYear();
+    this.create = function(date){
+        return new LocalDateObj(date);
     }
 
-    this.plusMonths = function(m){
-        return new LocalDate(date.plusMonths(m));
+    function extractDay(date){
+        return date.split("-")[2];
     }
 
-    this.minusMonths = function(m){
-        return new LocalDate(date.minusMonths(m));
+    function extractMonth(date){
+        return date.split("-")[1];
     }
 
-    this.getMonth = function(){
-        return months;
+    function extractYear(date){
+        return date.split("-")[0];
     }
 
-    this.getYear = function(){
-        return years;
-    }
+    function LocalDateObj(date){
+        if(!date instanceof Date){
+            console.log(date);
+            throwException("IllegalArgument", "Date is not a Date");
+        }
 
-    this.getDay = function(){
-        return days;
-    }
+        this.plusMonths = function(m){
+            return new LocalDateObj(date.plusMonths(m));
+        }
 
-    this.toString = function(){
-        return years + "-" + months + "-" + days;
+        this.minusMonths = function(m){
+            return new LocalDateObj(date.minusMonths(m));
+        }
+
+        this.getMonth = function(){
+            return String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+        }
+
+        this.getYear = function(){
+            return date.getFullYear();;
+        }
+
+        this.getDay = function(){
+            return String(date.getDate()).padStart(2, '0');
+        }
+
+        this.toString = function(){
+            return this.getYear() + "-" + this.getMonth() + "-" + this.getDay();
+        }
+
+        this.equals = function(obj){
+            if(!hasValue(obj)){
+                return false;
+            }
+
+            if(!obj instanceof LocalDateObj){
+                return false;
+            }
+
+            return obj.toString() == this.toString();
+        }
     }
 }

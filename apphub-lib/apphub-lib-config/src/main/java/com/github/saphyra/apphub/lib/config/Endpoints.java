@@ -268,4 +268,5 @@ public class Endpoints {
 
     //DIARY
     public static final String DIARY_GET_CALENDAR = "/api/diary/calendar";
+    public static final String DIARY_CREATE_EVENT = "/api/diary/event";
 }

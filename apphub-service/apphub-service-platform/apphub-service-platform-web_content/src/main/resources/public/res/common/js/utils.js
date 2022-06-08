@@ -1,9 +1,11 @@
+//TODO extract to date utils
 Date.prototype.plusMonths = function(months){
     const date = new Date(this.valueOf());
     date.setMonth(date.getMonth() + months);
     return date;
 }
 
+//TODO extract to date utils
 Date.prototype.minusMonths = function(months){
     const date = new Date(this.valueOf());
     date.setMonth(date.getMonth() - months);
@@ -58,6 +60,7 @@ function copyArray(arr){
     return result;
 }
 
+//TODO extract to date utils
 function formatDate(date){
     return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + " " + date.toLocaleTimeString(getLocale());
 }

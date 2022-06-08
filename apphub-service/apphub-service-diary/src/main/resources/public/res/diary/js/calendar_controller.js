@@ -40,27 +40,29 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
     }
 
     function createDayNode(day){
+        const date = LocalDate.parse(day.date);
+
         const node = document.createElement("DIV");
             node.classList.add("calendar-day");
             node.classList.add("button");
 
             node.style.height = "calc((100vh - 14rem) / " + rowAmount + ")";
 
-            if(extractMonth(day.date) != currentDate.getMonth()){
+            if(date.getMonth() != currentDate.getMonth()){
                 node.classList.add("different-month-day");
             }
 
-            if(day.date == CURRENT_DATE.toString()){
+            if(date.equals(CURRENT_DATE)){
                 node.classList.add("current-day");
             }
 
             const title  = document.createElement("DIV");
                 title.classList.add("calendar-day-title");
-                title.innerText = extractDay(day.date)
+                title.innerText = date.getDay();
         node.appendChild(title);
 
         node.onclick = function(){
-            dailyTasksController.displayDay(parseLocalDate(day.date));
+            dailyTasksController.displayDay(date);
             $(".calendar-day").removeClass("selected-day");
             node.classList.add("selected-day");
         }

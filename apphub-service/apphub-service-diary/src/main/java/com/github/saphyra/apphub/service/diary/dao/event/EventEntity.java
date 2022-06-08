@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.diary.dao.event;
 
+import com.github.saphyra.apphub.api.diary.model.RepetitionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

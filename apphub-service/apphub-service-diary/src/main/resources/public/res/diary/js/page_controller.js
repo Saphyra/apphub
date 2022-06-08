@@ -18,7 +18,7 @@ scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
 scriptLoader.loadScript("/res/diary/js/local_date.js");
 
 window.monthLocalization = new CustomLocalization("diary", "months");
-const CURRENT_DATE = new LocalDate(new Date());
+const CURRENT_DATE = LocalDate.create(new Date());
 
 scriptLoader.loadScript("/res/diary/js/calendar_controller.js");
 scriptLoader.loadScript("/res/diary/js/daily_tasks_controller.js");
