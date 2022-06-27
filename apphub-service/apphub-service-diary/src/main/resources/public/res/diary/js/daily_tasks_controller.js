@@ -1,8 +1,6 @@
 scriptLoader.loadScript("/res/common/js/sync_engine.js");
 
 (function DailyTasksController(){
-    pageLoader.addLoader(loadDay, "Loading current day");
-
     const syncEngine = new SyncEngineBuilder()
         .withContainerId(ids.dailyTasks)
         .withGetKeyMethod((event) => {return event.occurrenceId})
@@ -20,8 +18,10 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
         }
     }
 
-    function loadDay(date){
-        currentDate = date || CURRENT_DATE;
+    function loadDay(day){
+        console.log("Loading day", day);
+
+        currentDate = LocalDate.parse(day.date) || CURRENT_DATE;
 
         document.getElementById(ids.dailyTasksCurrentDay).innerText = currentDate.getYear() + " " + monthLocalization.get(currentDate.getMonth()) + " " + currentDate.getDay();
 

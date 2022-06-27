@@ -180,6 +180,7 @@ window.Mapping = new function(){
 
         //DIARY
         DIARY_GET_CALENDAR: new Endpoint("/api/diary/calendar", HttpMethod.GET),
+        DIARY_CREATE_EVENT: new Endpoint("/api/diary/event", HttpMethod.PUT),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

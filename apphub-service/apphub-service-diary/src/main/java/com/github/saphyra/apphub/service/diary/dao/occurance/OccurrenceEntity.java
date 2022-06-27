@@ -10,7 +10,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +22,7 @@ class OccurrenceEntity {
     private String occurrenceId;
     private String eventId;
     private String userId;
-    private LocalDate date;
+    private String date;
     @Enumerated(EnumType.STRING)
     private OccurrenceStatus status;
     private String note;

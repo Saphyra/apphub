@@ -3,4 +3,4 @@ logging:
     com:
       github:
         saphyra:
-          apphub: warn
+          apphub: INFO

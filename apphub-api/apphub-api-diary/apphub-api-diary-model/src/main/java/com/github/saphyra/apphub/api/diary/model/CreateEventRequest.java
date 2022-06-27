@@ -18,6 +18,6 @@ public class CreateEventRequest {
     private String title;
     private String content;
     private RepetitionType repetitionType;
-    private int repetitionDays;
+    private Integer repetitionDays;
     private List<DayOfWeek> repetitionDaysOfWeek;
 }

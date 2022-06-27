@@ -123,5 +123,9 @@
     ]
   },
   "additionalContent": {
+    "empty-title": "A cím nem lehet üres.",
+    "repetition-type-days-too-low": "Napok száma túl alacsony (minimum 1)",
+    "no-day-selected": "Nincs nap kiválasztva.",
+    "event-created": "Esemény létrehozva."
   }
 }

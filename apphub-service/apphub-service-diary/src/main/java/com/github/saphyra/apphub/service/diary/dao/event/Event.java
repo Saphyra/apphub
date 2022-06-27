@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Map;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -15,8 +15,9 @@ import java.util.UUID;
 public class Event {
     private final UUID eventId;
     private final UUID userId;
+    private final LocalDate startDate;
     private RepetitionType repetitionType;
-    private Map<String, String> repetitionData;
+    private String repetitionData;
     private String title;
     private String content;
 }

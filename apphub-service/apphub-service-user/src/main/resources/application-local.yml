@@ -8,4 +8,4 @@ logging:
         saphyra:
           apphub:
             service:
-              user: DEBUG
+              user: INFO

@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -22,7 +24,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .occurrenceId(uuidConverter.convertDomain(domain.getOccurrenceId()))
             .eventId(uuidConverter.convertDomain(domain.getEventId()))
             .userId(userId)
-            .date(domain.getDate())
+            .date(stringEncryptor.encryptEntity(domain.getDate().toString(), userId))
             .status(domain.getStatus())
             .note(stringEncryptor.encryptEntity(domain.getNote(), userId))
             .build();
@@ -34,7 +36,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .occurrenceId(uuidConverter.convertEntity(entity.getOccurrenceId()))
             .eventId(uuidConverter.convertEntity(entity.getEventId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
-            .date(entity.getDate())
+            .date(LocalDate.parse(stringEncryptor.decryptEntity(entity.getDate(), entity.getUserId())))
             .status(entity.getStatus())
             .note(stringEncryptor.decryptEntity(entity.getNote(), entity.getUserId()))
             .build();

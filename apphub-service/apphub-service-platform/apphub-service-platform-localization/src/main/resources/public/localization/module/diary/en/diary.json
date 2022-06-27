@@ -123,5 +123,9 @@
     ]
   },
   "additionalContent": {
+    "empty-title": "Title must not be empty.",
+    "repetition-type-days-too-low": "Days to low (minimum 1).",
+    "no-day-selected": "No day selected.",
+    "event-created": "Event created."
   }
 }

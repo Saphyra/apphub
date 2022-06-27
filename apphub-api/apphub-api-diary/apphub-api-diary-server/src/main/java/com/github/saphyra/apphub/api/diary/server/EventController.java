@@ -11,5 +11,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 public interface EventController {
     @PutMapping(Endpoints.DIARY_CREATE_EVENT)
+    //TODO API test
     CalendarResponse createEvent(@RequestBody CreateEventRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

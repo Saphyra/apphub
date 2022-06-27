@@ -16,6 +16,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="user_id" type="varchar(37)"/>
+            <column name="start_date" type="text"/>
             <column name="repetition_type" type="varchar(255)"/>
             <column name="repetition_data" type="text"/>
             <column name="title" type="text"/>

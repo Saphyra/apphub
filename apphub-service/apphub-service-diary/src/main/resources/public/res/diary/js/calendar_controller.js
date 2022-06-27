@@ -1,7 +1,7 @@
 scriptLoader.loadScript("/res/common/js/sync_engine.js");
 
 (function CalendarController(){
-    pageLoader.addLoader(loadCalendar, "Loading current month to calendar");
+    pageLoader.addLoader(loadCalendarFirstTime, "Loading current month to calendar");
 
     const syncEngine = new SyncEngineBuilder()
         .withContainerId(ids.calendar)
@@ -21,6 +21,14 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
         this.nextMonth = function(){
             loadCalendar(currentDate.plusMonths(1));
         }
+        this.updateDay = function(day){
+            syncEngine.add(day);
+        }
+    }
+
+    function loadCalendarFirstTime(){
+        loadCalendar()
+            .then(() => dailyTasksController.displayDay(syncEngine.get(currentDate.toString())));
     }
 
     function loadCalendar(date){
@@ -36,7 +44,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
 
                 document.getElementById(ids.calendarCurrentMonth).innerText = currentDate.getYear() + " " + monthLocalization.get(currentDate.getMonth());
             }
-        dao.sendRequestAsync(request);
+        return dao.sendRequestAsync(request);
     }
 
     function createDayNode(day){
@@ -62,7 +70,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
         node.appendChild(title);
 
         node.onclick = function(){
-            dailyTasksController.displayDay(date);
+            dailyTasksController.displayDay(day);
             $(".calendar-day").removeClass("selected-day");
             node.classList.add("selected-day");
         }

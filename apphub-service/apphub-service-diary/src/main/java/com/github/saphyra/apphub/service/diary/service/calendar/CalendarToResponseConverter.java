@@ -12,10 +12,10 @@ import java.util.UUID;
 @Slf4j
 @Component
 //TODO unit test
-class CalendarToResponseConverter {
+public class CalendarToResponseConverter {
     private final CalendarEventProvider calendarEventProvider;
 
-    CalendarResponse convert(UUID userId, LocalDate date) {
+    public CalendarResponse convert(UUID userId, LocalDate date) {
         return CalendarResponse.builder()
             .date(date)
             .events(calendarEventProvider.getEvents(userId, date))
