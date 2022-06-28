@@ -88,6 +88,7 @@ window.Mapping = new function(){
         NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST_TABLE: new Endpoint("/api/notebook/checklist-table/{listItemId}/checked", HttpMethod.DELETE),
         NOTEBOOK_ORDER_CHECKLIST_ITEMS: new Endpoint("/api/notebook/checklist/{listItemId}/order", HttpMethod.POST),
         NOTEBOOK_SEARCH: new Endpoint("/api/notebook/item/search", HttpMethod.POST),
+        NOTEBOOK_ARCHIVE_ITEM: new Endpoint("/api/notebook/item/{listItemId}/archive", HttpMethod.POST),
 
         //Utils
         UTILS_LOG_FORMATTER_GET_VISIBILITY: new Endpoint("/api/utils/log-formatter/visibility", HttpMethod.PUT),

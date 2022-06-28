@@ -26,4 +26,5 @@ public class ListItem {
     private String title;
 
     private boolean pinned;
+    private boolean archived;
 }

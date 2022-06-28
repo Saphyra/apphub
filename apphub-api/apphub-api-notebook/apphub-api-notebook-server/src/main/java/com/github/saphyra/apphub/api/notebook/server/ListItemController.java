@@ -29,4 +29,7 @@ public interface ListItemController {
 
     @PostMapping(Endpoints.NOTEBOOK_SEARCH)
     List<NotebookView> search(@RequestBody OneParamRequest<String> query, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.NOTEBOOK_ARCHIVE_ITEM)
+    void archive(@RequestBody OneParamRequest<Boolean> archived, @PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

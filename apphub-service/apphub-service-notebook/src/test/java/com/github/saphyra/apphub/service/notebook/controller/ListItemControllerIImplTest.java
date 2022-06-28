@@ -4,11 +4,12 @@ import com.github.saphyra.apphub.api.notebook.model.request.EditListItemRequest;
 import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.service.notebook.service.ArchiveService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemEditionService;
 import com.github.saphyra.apphub.service.notebook.service.PinService;
 import com.github.saphyra.apphub.service.notebook.service.clone.ListItemCloneService;
-import com.github.saphyra.apphub.service.notebook.service.search.SearchService;
+import com.github.saphyra.apphub.service.notebook.service.SearchService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,6 +45,9 @@ public class ListItemControllerIImplTest {
 
     @Mock
     private SearchService searchService;
+
+    @Mock
+    private ArchiveService archiveService;
 
     @InjectMocks
     private ListItemControllerIImpl underTest;
@@ -106,5 +110,12 @@ public class ListItemControllerIImplTest {
         List<NotebookView> result = underTest.search(new OneParamRequest<>(SEARCH_TEXT), accessTokenHeader);
 
         assertThat(result).containsExactly(notebookView);
+    }
+
+    @Test
+    public void archive() {
+        underTest.archive(new OneParamRequest<>(true), LIST_ITEM_ID, accessTokenHeader);
+
+        verify(archiveService).archive(LIST_ITEM_ID, true);
     }
 }

@@ -114,4 +114,16 @@ public class ListItemDetailsItem {
         webElement.findElement(By.cssSelector(":scope .list-item-open-parent-button"))
             .click();
     }
+
+    public void archive(WebDriver driver) {
+        openOptionsMenu(driver);
+
+        WebElement cloneButton = webElement.findElement(By.cssSelector(":scope .list-item-options-button-list-wrapper .archive-button"));
+        assertThat(cloneButton.isDisplayed()).isTrue();
+        cloneButton.click();
+    }
+
+    public boolean isArchived() {
+        return WebElementUtils.getClasses(webElement).contains("archived");
+    }
 }

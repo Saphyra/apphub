@@ -16,31 +16,36 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PinTest extends BackEndTest {
+public class ArchiveTest extends BackEndTest {
     private static final String TITLE = "title";
 
     @Test(dataProvider = "languageDataProvider")
-    public void pinListItem(Language language) {
+    public void archiveListItem(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
         UUID listItemId = NotebookActions.createText(language, accessTokenId, CreateTextRequest.builder().title(TITLE).content("").build());
 
-        //Pin - Null pinned
-        Response pin_nullPinnedResponse = NotebookActions.getPinResponse(language, accessTokenId, listItemId, null);
-        ResponseValidator.verifyInvalidParam(language, pin_nullPinnedResponse, "pinned", "must not be null");
+        //Archive - Null archived
+        Response pin_nullPinnedResponse = NotebookActions.getArchiveResponse(language, accessTokenId, listItemId, null);
+        ResponseValidator.verifyInvalidParam(language, pin_nullPinnedResponse, "archived", "must not be null");
 
-        //Pin
-        NotebookActions.pin(language, accessTokenId, listItemId, true);
+        //Archive
+        NotebookActions.archive(language, accessTokenId, listItemId, true);
 
-        List<NotebookView> pinnedItems = NotebookActions.getPinnedItems(language, accessTokenId);
+        List<NotebookView> pinnedItems = NotebookActions.getChildrenOfCategory(language, accessTokenId, null)
+            .getChildren();
         assertThat(pinnedItems).hasSize(1);
         assertThat(pinnedItems.get(0).getId()).isEqualTo(listItemId);
+        assertThat(pinnedItems.get(0).isArchived()).isTrue();
 
-        //Unpin
-        NotebookActions.pin(language, accessTokenId, listItemId, false);
+        //Unarchive
+        NotebookActions.archive(language, accessTokenId, listItemId, false);
 
-        pinnedItems = NotebookActions.getPinnedItems(language, accessTokenId);
-        assertThat(pinnedItems).isEmpty();
+        pinnedItems = NotebookActions.getChildrenOfCategory(language, accessTokenId, null)
+            .getChildren();
+        assertThat(pinnedItems).hasSize(1);
+        assertThat(pinnedItems.get(0).getId()).isEqualTo(listItemId);
+        assertThat(pinnedItems.get(0).isArchived()).isFalse();
     }
 }

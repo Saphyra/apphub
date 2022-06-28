@@ -28,7 +28,8 @@ public class ListItemConverterTest {
     private static final UUID ACCESS_TOKEN_USER_ID = UUID.randomUUID();
     private static final String ACCESS_TOKEN_USER_ID_STRING = "access-token-user-id-string";
     private static final String DECRYPTED_TITLE = "decrypted-title";
-    private static final String ENCRYPTED_PINNED = "encrypited-pinned";
+    private static final String ENCRYPTED_PINNED = "encrypyted-pinned";
+    private static final String ENCRYPTED_ARCHIVED = "encrypted-archived";
 
     @Mock
     private AccessTokenProvider accessTokenProvider;
@@ -49,7 +50,7 @@ public class ListItemConverterTest {
     private AccessTokenHeader accessTokenHeader;
 
     @Test
-    public void convertEntity_nullPinned() {
+    public void convertEntity_nullBooleans() {
         ListItemEntity entity = ListItemEntity.builder()
             .listItemId(LIST_ITEM_ID_STRING)
             .userId(USER_ID_STRING)
@@ -74,6 +75,7 @@ public class ListItemConverterTest {
         assertThat(result.getType()).isEqualTo(ListItemType.CHECKLIST);
         assertThat(result.getTitle()).isEqualTo(DECRYPTED_TITLE);
         assertThat(result.isPinned()).isFalse();
+        assertThat(result.isArchived()).isFalse();
     }
 
     @Test
@@ -85,6 +87,7 @@ public class ListItemConverterTest {
             .type(ListItemType.CHECKLIST)
             .title(ENCRYPTED_TITLE)
             .pinned(ENCRYPTED_PINNED)
+            .archived(ENCRYPTED_ARCHIVED)
             .build();
 
         given(uuidConverter.convertEntity(LIST_ITEM_ID_STRING)).willReturn(LIST_ITEM_ID);
@@ -95,6 +98,7 @@ public class ListItemConverterTest {
         given(uuidConverter.convertDomain(ACCESS_TOKEN_USER_ID)).willReturn(ACCESS_TOKEN_USER_ID_STRING);
         given(stringEncryptor.decryptEntity(ENCRYPTED_TITLE, ACCESS_TOKEN_USER_ID_STRING)).willReturn(DECRYPTED_TITLE);
         given(booleanEncryptor.decryptEntity(ENCRYPTED_PINNED, ACCESS_TOKEN_USER_ID_STRING)).willReturn(true);
+        given(booleanEncryptor.decryptEntity(ENCRYPTED_ARCHIVED, ACCESS_TOKEN_USER_ID_STRING)).willReturn(true);
 
         ListItem result = underTest.convertEntity(entity);
 
@@ -104,6 +108,7 @@ public class ListItemConverterTest {
         assertThat(result.getType()).isEqualTo(ListItemType.CHECKLIST);
         assertThat(result.getTitle()).isEqualTo(DECRYPTED_TITLE);
         assertThat(result.isPinned()).isTrue();
+        assertThat(result.isArchived()).isTrue();
     }
 
     @Test
@@ -115,6 +120,7 @@ public class ListItemConverterTest {
             .type(ListItemType.CHECKLIST)
             .title(DECRYPTED_TITLE)
             .pinned(true)
+            .archived(true)
             .build();
 
         given(uuidConverter.convertDomain(LIST_ITEM_ID)).willReturn(LIST_ITEM_ID_STRING);
@@ -124,7 +130,8 @@ public class ListItemConverterTest {
         given(accessTokenHeader.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
         given(uuidConverter.convertDomain(ACCESS_TOKEN_USER_ID)).willReturn(ACCESS_TOKEN_USER_ID_STRING);
         given(stringEncryptor.encryptEntity(DECRYPTED_TITLE, ACCESS_TOKEN_USER_ID_STRING)).willReturn(ENCRYPTED_TITLE);
-        given(booleanEncryptor.encryptEntity(true, ACCESS_TOKEN_USER_ID_STRING)).willReturn(ENCRYPTED_PINNED);
+        given(booleanEncryptor.encryptEntity(true, ACCESS_TOKEN_USER_ID_STRING)).willReturn(ENCRYPTED_PINNED)
+            .willReturn(ENCRYPTED_ARCHIVED);
 
         ListItemEntity result = underTest.convertDomain(domain);
 
@@ -134,5 +141,6 @@ public class ListItemConverterTest {
         assertThat(result.getType()).isEqualTo(ListItemType.CHECKLIST);
         assertThat(result.getTitle()).isEqualTo(ENCRYPTED_TITLE);
         assertThat(result.getPinned()).isEqualTo(ENCRYPTED_PINNED);
+        assertThat(result.getArchived()).isEqualTo(ENCRYPTED_ARCHIVED);
     }
 }

@@ -31,4 +31,5 @@ class ListItemEntity {
     private String title;
 
     private String pinned;
+    private String archived;
 }
