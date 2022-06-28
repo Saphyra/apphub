@@ -15,6 +15,7 @@ function textNodeFactory(parent, itemDetails, displayOpenParentCategoryButton){
     node.appendChild(actionButtonFactory.create(
         parent,
         itemDetails,
+        node,
         function(){deleteText(itemDetails.id, itemDetails.title)},
         displayOpenParentCategoryButton
     ));

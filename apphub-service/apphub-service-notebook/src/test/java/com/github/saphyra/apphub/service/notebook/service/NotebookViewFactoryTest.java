@@ -50,6 +50,7 @@ public class NotebookViewFactoryTest {
             .type(ListItemType.CATEGORY)
             .title(TITLE)
             .pinned(true)
+            .archived(true)
             .build();
 
         given(listItemDao.findByIdValidated(PARENT)).willReturn(parentListItem);
@@ -62,6 +63,7 @@ public class NotebookViewFactoryTest {
         assertThat(result.getType()).isEqualTo(ListItemType.CATEGORY.name());
         assertThat(result.getValue()).isNull();
         assertThat(result.isPinned()).isTrue();
+        assertThat(result.isArchived()).isTrue();
         assertThat(result.getParentId()).isEqualTo(PARENT);
         assertThat(result.getParentTitle()).isEqualTo(PARENT_TITLE);
     }
@@ -75,6 +77,7 @@ public class NotebookViewFactoryTest {
             .type(ListItemType.CATEGORY)
             .title(TITLE)
             .pinned(true)
+            .archived(true)
             .build();
 
         NotebookView result = underTest.create(listItem);
@@ -84,6 +87,7 @@ public class NotebookViewFactoryTest {
         assertThat(result.getType()).isEqualTo(ListItemType.CATEGORY.name());
         assertThat(result.getValue()).isNull();
         assertThat(result.isPinned()).isTrue();
+        assertThat(result.isArchived()).isTrue();
         assertThat(result.getParentId()).isNull();
         assertThat(result.getParentTitle()).isNull();
     }

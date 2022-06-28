@@ -1,6 +1,6 @@
 (function ActionButtonFactory(){
     window.actionButtonFactory = new function(){
-        this.create = function(parent, itemDetails, deleteCallBack, displayOpenParentCategoryButton){
+        this.create = function(parent, itemDetails, node, deleteCallBack, displayOpenParentCategoryButton){
             const optionsContainer = document.createElement("DIV");
                 optionsContainer.classList.add("list-item-options-container");
 
@@ -65,6 +65,7 @@
                     buttonListWrapper.appendChild(editButton);
 
                         const pinButton = document.createElement("BUTTON");
+                            pinButton.title = Localization.getAdditionalContent("pin-button-title");
                             pinButton.classList.add("pin-button");
                             if(itemDetails.pinned){
                                 pinButton.classList.add("pinned");
@@ -74,6 +75,25 @@
                                 itemDetails.pinned ? pinController.unpin(itemDetails.id) : pinController.pin(itemDetails.id);
                             }
                     buttonListWrapper.appendChild(pinButton);
+
+                        const archiveButton = document.createElement("BUTTON");
+                            archiveButton.title = Localization.getAdditionalContent("archive-button-title");
+                            archiveButton.classList.add("archive-button");
+                            if(itemDetails.archived){
+                                node.classList.add("archived");
+                            }
+                            archiveButton.onclick = function(e){
+                                e.stopPropagation();
+                                itemDetails.archived = !itemDetails.archived;
+
+                                const request = new Request(Mapping.getEndpoint("NOTEBOOK_ARCHIVE_ITEM", {listItemId: itemDetails.id}), {value: itemDetails.archived});
+                                    request.processValidResponse = function(){
+                                        itemDetails.archived ? node.classList.add("archived") : node.classList.remove("archived");
+                                    }
+                                dao.sendRequestAsync(request);
+                            }
+                    buttonListWrapper.appendChild(archiveButton);
+
                 optionsButtonWrapper.appendChild(buttonListWrapper);
 
             optionsContainer.appendChild(optionsButtonWrapper);

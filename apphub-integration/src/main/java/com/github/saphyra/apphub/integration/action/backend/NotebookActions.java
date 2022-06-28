@@ -355,4 +355,16 @@ public class NotebookActions {
 
         return Arrays.asList(response.getBody().as(NotebookView[].class));
     }
+
+    public static void archive(Language language, UUID accessTokenId, UUID listItemId, boolean archived) {
+        Response response = getArchiveResponse(language, accessTokenId, listItemId, archived);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getArchiveResponse(Language language, UUID accessTokenId, UUID listItemId, Boolean archived) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(new OneParamRequest<>(archived))
+            .post(UrlFactory.create(Endpoints.NOTEBOOK_ARCHIVE_LIST_ITEM, "listItemId", listItemId));
+    }
 }

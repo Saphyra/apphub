@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.service.search;
+package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.service.NotebookViewFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

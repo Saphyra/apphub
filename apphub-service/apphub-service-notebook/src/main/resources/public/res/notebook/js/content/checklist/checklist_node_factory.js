@@ -16,6 +16,7 @@ function checklistNodeFactory(parent, itemDetails, displayOpenParentCategoryButt
     node.appendChild(actionButtonFactory.create(
         parent,
         itemDetails,
+        node,
         function(){deleteChecklist(itemDetails.id, itemDetails.title)},
         displayOpenParentCategoryButton
     ));

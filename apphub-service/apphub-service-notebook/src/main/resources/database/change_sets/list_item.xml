@@ -32,4 +32,15 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="add-column-archived-to-list_item" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="notebook" tableName="list_item" columnName="archived"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="notebook" tableName="list_item">
+            <column name="archived" type="text"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -17,6 +17,7 @@ public class NotebookView {
     private String type;
     private String value;
     private boolean pinned;
+    private boolean archived;
     private UUID parentId;
     private String parentTitle;
 }
