@@ -16,6 +16,7 @@ function linkNodeFactory(parent, itemDetails, displayOpenParentCategoryButton){
     node.appendChild(actionButtonFactory.create(
         parent,
         itemDetails,
+        node,
         function(){deleteLink(itemDetails.id, itemDetails.title)},
         displayOpenParentCategoryButton
     ));

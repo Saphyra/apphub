@@ -15,6 +15,7 @@ function tableNodeFactory(parent, itemDetails, displayOpenParentCategoryButton){
     node.appendChild(actionButtonFactory.create(
         parent,
         itemDetails,
+        node,
         function(){deleteTable(itemDetails.id, itemDetails.title)},
         displayOpenParentCategoryButton
     ));

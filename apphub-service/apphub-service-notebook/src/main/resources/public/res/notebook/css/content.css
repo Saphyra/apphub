@@ -88,6 +88,11 @@
                     overflow: hidden;
                 }
 
+                    .list-item-details-item.archived{
+                        text-decoration: line-through;
+                        opacity: 0.25;
+                    }
+
                     .list-item-options-container{
                         position: absolute;
                         top: 0;

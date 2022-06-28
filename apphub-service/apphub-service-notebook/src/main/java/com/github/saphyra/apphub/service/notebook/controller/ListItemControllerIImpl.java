@@ -5,11 +5,12 @@ import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.api.notebook.server.ListItemController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.service.notebook.service.ArchiveService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemEditionService;
 import com.github.saphyra.apphub.service.notebook.service.PinService;
 import com.github.saphyra.apphub.service.notebook.service.clone.ListItemCloneService;
-import com.github.saphyra.apphub.service.notebook.service.search.SearchService;
+import com.github.saphyra.apphub.service.notebook.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,7 @@ class ListItemControllerIImpl implements ListItemController {
     private final ListItemEditionService listItemEditionService;
     private final PinService pinService;
     private final SearchService searchService;
+    private final ArchiveService archiveService;
 
     @Override
     public void deleteListItem(UUID listItemId, AccessTokenHeader accessTokenHeader) {
@@ -61,5 +63,11 @@ class ListItemControllerIImpl implements ListItemController {
     public List<NotebookView> search(OneParamRequest<String> query, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to search for item(s).", accessTokenHeader.getUserId());
         return searchService.search(accessTokenHeader.getUserId(), query.getValue());
+    }
+
+    @Override
+    public void archive(OneParamRequest<Boolean> archived, UUID listItemId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to archive an item.", accessTokenHeader.getUserId());
+        archiveService.archive(listItemId, archived.getValue());
     }
 }

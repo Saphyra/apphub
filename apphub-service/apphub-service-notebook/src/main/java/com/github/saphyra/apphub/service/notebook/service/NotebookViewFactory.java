@@ -36,6 +36,7 @@ public class NotebookViewFactory {
             .type(listItem.getType().name())
             .value(value)
             .pinned(listItem.isPinned())
+            .archived(listItem.isArchived())
             .parentId(parentId)
             .parentTitle(parentTitle)
             .build();

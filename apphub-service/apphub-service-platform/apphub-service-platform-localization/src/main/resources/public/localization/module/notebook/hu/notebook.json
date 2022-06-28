@@ -476,6 +476,8 @@
     "checklist-table-item-deletion-confirmation-dialog-detail": "Biztosan törölni szeretné a lista-táblázat elemet?",
     "checklist-table-item-deletion-confirmation-dialog-confirm-button": "Törlés",
     "checklist-table-item-deletion-confirmation-dialog-decline-button": "Mégse",
-    "open-parent": "Szülő megnyitása"
+    "open-parent": "Szülő megnyitása",
+    "archive-button-title": "Archiválás",
+    "pin-button-title": "Kitűzés"
   }
 }
