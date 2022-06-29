@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.diary.service.occurrence.service;
+package com.github.saphyra.apphub.service.diary.service.occurrence;
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.diary.dao.event.Event;
@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -15,13 +17,26 @@ import org.springframework.stereotype.Component;
 public class OccurrenceFactory {
     private final IdGenerator idGenerator;
 
-    public Occurrence create(Event event) {
+    public Occurrence createPending(Event event) {
+        return create(event, event.getStartDate(), OccurrenceStatus.PENDING);
+    }
+
+    public Occurrence createVirtual(LocalDate date, Event event) {
+        return create(event, date, OccurrenceStatus.VIRTUAL);
+    }
+
+    public Occurrence createExpired(LocalDate date, Event event) {
+        return create(event, date, OccurrenceStatus.EXPIRED);
+    }
+
+    private Occurrence create(Event event, LocalDate date, OccurrenceStatus status) {
         return Occurrence.builder()
             .occurrenceId(idGenerator.randomUuid())
             .eventId(event.getEventId())
             .userId(event.getUserId())
-            .date(event.getStartDate())
-            .status(OccurrenceStatus.PENDING)
+            .date(date)
+            .status(status)
             .build();
     }
+
 }

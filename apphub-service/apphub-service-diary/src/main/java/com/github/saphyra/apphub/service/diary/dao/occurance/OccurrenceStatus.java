@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.diary.dao.occurance;
 
 public enum OccurrenceStatus {
-    VIRTUAL, //Record created to track repetitions, but not saved to database
-    PENDING, //Record is saved to database, waiting for actions
+    VIRTUAL, //Record created to track repetitions, but can be deleted anytime automatically
+    PENDING, //Record contains user data, should not be moved
     DONE,
     SNOOZED, //Dismissed by user
     EXPIRED,

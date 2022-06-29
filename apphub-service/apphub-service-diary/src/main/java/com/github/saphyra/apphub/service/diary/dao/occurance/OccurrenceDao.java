@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -20,5 +21,13 @@ public class OccurrenceDao extends AbstractDao<OccurrenceEntity, Occurrence, Str
     @Override
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
+    }
+
+    public void deleteVirtualByUserId(UUID userId) {
+        repository.deleteByUserIdAndStatus(uuidConverter.convertDomain(userId), OccurrenceStatus.VIRTUAL);
+    }
+
+    public List<Occurrence> getByEventId(UUID eventId) {
+        return converter.convertEntity(repository.getByEventId(uuidConverter.convertDomain(eventId)));
     }
 }

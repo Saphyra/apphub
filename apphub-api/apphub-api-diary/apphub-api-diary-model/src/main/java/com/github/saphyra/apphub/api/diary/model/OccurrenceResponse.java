@@ -14,5 +14,6 @@ import java.util.UUID;
 public class OccurrenceResponse {
     private UUID occurrenceId;
     private UUID eventId;
-    private Integer order;
+    private String status;
+    private String note;
 }
