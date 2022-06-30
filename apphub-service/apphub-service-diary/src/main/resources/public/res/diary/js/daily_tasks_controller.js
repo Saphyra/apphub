@@ -31,8 +31,16 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
 
     function createTaskNode(event){
         const node = document.createElement("DIV");
-        //TODO
+            node.classList.add("daily-task");
+            node.classList.add("button");
+            node.classList.add(event.status.toLowerCase());
 
+            node.innerText = event.title;
+            node.title = event.content;
+
+            node.onclick = function(e){
+                //TODO open event handling window
+            }
         return node;
     }
 })();

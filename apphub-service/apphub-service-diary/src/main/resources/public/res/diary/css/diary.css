@@ -76,6 +76,7 @@
                     border-color: white;
                     margin: 0.25rem 0;
                     padding: 0.125rem;
+                    text-align: left;
                 }
 
                     .calendar-event.button:hover{
@@ -111,6 +112,31 @@
         #daily-tasks{
 
         }
+
+            .daily-task{
+                white-space: nowrap;
+                border-color: white;
+                text-align: left;
+            }
+
+                .daily-task.button:hover{
+                    border-color: yellow;
+                }
+
+                .daily-task.done{
+                    border-color: green;
+                    text-decoration: line-through;
+                }
+
+                .daily-task.snoozed{
+                    border-color: grey;
+                    opacity: 0.5;
+                    text-decoration: line-through;
+                }
+
+                .daily-task.expired{
+                    border-color: red;
+                }
 
 #create-event-page{
 
