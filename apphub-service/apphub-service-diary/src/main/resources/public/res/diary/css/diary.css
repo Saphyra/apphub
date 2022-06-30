@@ -41,11 +41,13 @@
 
     #calendar{
         display: grid;
-        grid-template-columns: repeat(7, auto);
+        grid-template-columns: repeat(7, calc(100% / 7));
     }
 
         .calendar-day{
             text-align: left;
+            display: grid;
+            grid-template-rows: 1rem auto;
         }
 
             .different-month-day{
@@ -63,6 +65,37 @@
             .calendar-day-title{
 
             }
+
+            .calendar-event-wrapper{
+                overflow-y: auto;
+            }
+
+                .calendar-event{
+                    white-space: nowrap;
+                    border-width: 1px;
+                    border-color: white;
+                    margin: 0.25rem 0;
+                    padding: 0.125rem;
+                }
+
+                    .calendar-event.button:hover{
+                        border-color: yellow;
+                    }
+
+                    .calendar-event.done{
+                        border-color: green;
+                        text-decoration: line-through;
+                    }
+
+                    .calendar-event.snoozed{
+                        border-color: grey;
+                        opacity: 0.5;
+                        text-decoration: line-through;
+                    }
+
+                    .calendar-event.expired{
+                        border-color: red;
+                    }
 
     #daily-tasks-container{
         display: grid;

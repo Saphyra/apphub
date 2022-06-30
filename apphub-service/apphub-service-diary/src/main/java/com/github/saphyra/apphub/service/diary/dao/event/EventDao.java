@@ -1,8 +1,11 @@
 package com.github.saphyra.apphub.service.diary.dao.event;
 
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -25,5 +28,10 @@ public class EventDao extends AbstractDao<EventEntity, Event, String, EventRepos
 
     public List<Event> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
+    }
+
+    public Event findByIdValidated(UUID eventId) {
+        return converter.convertEntity(repository.findById(uuidConverter.convertDomain(eventId)))
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Event not found with id " + eventId));
     }
 }

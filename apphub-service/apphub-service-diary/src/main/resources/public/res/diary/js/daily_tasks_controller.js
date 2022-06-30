@@ -30,6 +30,9 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
     }
 
     function createTaskNode(event){
+        const node = document.createElement("DIV");
         //TODO
+
+        return node;
     }
 })();

@@ -70,8 +70,8 @@
         const request = new Request(Mapping.getEndpoint("DIARY_CREATE_EVENT"), payload);
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(response){
-                calendarController.updateDay(response);
-                dailyTasksController.displayDay(response);
+                calendarController.updateDay(response); //TODO move to event
+                dailyTasksController.displayDay(response); //TODO move to event
                 notificationService.showSuccess(Localization.getAdditionalContent("event-created"));
                 pageController.displayMainPage();
             }

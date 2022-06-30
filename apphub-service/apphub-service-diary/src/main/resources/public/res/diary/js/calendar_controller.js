@@ -69,6 +69,14 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
                 title.innerText = date.getDay();
         node.appendChild(title);
 
+            const eventsWrapper = document.createElement("DIV");
+                eventsWrapper.classList.add("calendar-event-wrapper");
+
+                new Stream(day.events)
+                    .map(createEvent)
+                    .forEach((eventNode) => eventsWrapper.appendChild(eventNode));
+        node.appendChild(eventsWrapper);
+
         node.onclick = function(){
             dailyTasksController.displayDay(day);
             $(".calendar-day").removeClass("selected-day");
@@ -76,5 +84,20 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
         }
 
         return node;
+
+        function createEvent(event){
+            const node = document.createElement("DIV");
+                node.classList.add("calendar-event");
+                node.classList.add("button");
+                node.classList.add(event.status.toLowerCase());
+                node.innerText = event.title;
+                node.title = event.content;
+
+                node.onclick = function(e){
+                    e.stopPropagation();
+                    //TODO open event handling window
+                }
+            return node;
+        }
     }
 })();

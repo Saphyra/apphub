@@ -15,5 +15,7 @@ public class OccurrenceResponse {
     private UUID occurrenceId;
     private UUID eventId;
     private String status;
+    private String title;
+    private String content;
     private String note;
 }
