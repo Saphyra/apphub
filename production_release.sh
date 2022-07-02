@@ -8,10 +8,12 @@ eval "$(minikube docker-env)"
 echo "Logging in to docker with username $1..."
 docker login -u "$1" -p "$2"
 
-while IFS="" read -r image_name || [ -n "$image_name" ]
+while IFS="" read -r service_data || [ -n "$service_data" ]
 do
+  IFS=' ' read -r -a array <<< "$service_data"
+  image_name=${array[1]}
   TRIMMED="$(sed -e 's/[[:space:]]*$//' <<<"${image_name}")"
-  echo "$image_name"
+  echo "$TRIMMED"
   docker tag saphyra/"$TRIMMED":latest saphyra/"$TRIMMED":release
   docker push saphyra/"$TRIMMED":release &
 done < ./infra/deployment/service/service_list
