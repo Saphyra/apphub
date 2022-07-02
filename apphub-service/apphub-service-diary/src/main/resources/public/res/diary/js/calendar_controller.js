@@ -95,7 +95,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
 
                 node.onclick = function(e){
                     e.stopPropagation();
-                    //TODO open event handling window
+                    viewEventController.viewEvent(event);
                 }
             return node;
         }

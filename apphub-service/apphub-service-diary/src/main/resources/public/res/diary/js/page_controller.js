@@ -12,6 +12,10 @@ window.ids = {
     createEventOneTimeRepetitionTypeData: "create-event-one-time-repetition-type-data",
     createEventEveryXDaysRepetitionTypeData: "create-event-every-x-days-repetition-type-data",
     createEventDaysOfWeekRepetitionTypeData: "create-event-days-of-week-repetition-type-data",
+    viewEventPage: "view-event-page",
+    viewEventTitle: "view-event-title",
+    viewEventContent: "view-event-content",
+    viewEventNote: "view-event-note",
 }
 
 scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
@@ -23,6 +27,7 @@ const CURRENT_DATE = LocalDate.create(new Date());
 scriptLoader.loadScript("/res/diary/js/calendar_controller.js");
 scriptLoader.loadScript("/res/diary/js/daily_tasks_controller.js");
 scriptLoader.loadScript("/res/diary/js/create_event_controller.js");
+scriptLoader.loadScript("/res/diary/js/view_event_controller.js");
 
 (function PageController(){
     $(document).ready(function(){

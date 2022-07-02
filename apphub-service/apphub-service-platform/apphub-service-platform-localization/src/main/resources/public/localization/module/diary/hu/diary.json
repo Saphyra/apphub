@@ -120,6 +120,42 @@
         "key": "innerHTML",
         "message": "Mentés"
       }
+    ],
+    "view-event-edit-button": [
+      {
+        "key": "innerHTML",
+        "message": "Szerkesztés"
+      }
+    ],
+    "view-event-save-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
+    ],
+    "view-event-discard-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mégse"
+      }
+    ],
+    "view-event-done-button": [
+      {
+        "key": "innerHTML",
+        "message": "Kész"
+      }
+    ],
+    "view-event-snooze-button": [
+      {
+        "key": "innerHTML",
+        "message": "Elnémít"
+      }
+    ],
+    "view-event-delete-button": [
+      {
+        "key": "innerHTML",
+        "message": "Törlés"
+      }
     ]
   },
   "additionalContent": {

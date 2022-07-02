@@ -120,6 +120,42 @@
         "key": "innerHTML",
         "message": "Create"
       }
+    ],
+    "view-event-edit-button": [
+      {
+        "key": "innerHTML",
+        "message": "Edit"
+      }
+    ],
+    "view-event-save-button": [
+      {
+        "key": "innerHTML",
+        "message": "Save"
+      }
+    ],
+    "view-event-discard-button": [
+      {
+        "key": "innerHTML",
+        "message": "Discard"
+      }
+    ],
+    "view-event-done-button": [
+      {
+        "key": "innerHTML",
+        "message": "Done"
+      }
+    ],
+    "view-event-snooze-button": [
+      {
+        "key": "innerHTML",
+        "message": "Snooze"
+      }
+    ],
+    "view-event-delete-button": [
+      {
+        "key": "innerHTML",
+        "message": "Delete"
+      }
     ]
   },
   "additionalContent": {

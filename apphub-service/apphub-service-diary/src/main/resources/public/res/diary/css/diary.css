@@ -171,3 +171,26 @@
         #create-event-days-of-week-repetition-type-data label input{
             transform: scale(1.5);
         }
+
+#view-event-page{
+
+}
+
+    #view-event-content-wrapper{
+        display: grid;
+        grid-template-rows: 50% 50%;
+        padding: 0;
+    }
+
+        #view-event-content-wrapper textarea{
+            width: calc(100% - 1rem);
+            margin: 0.5rem;
+        }
+
+            #view-event-content-wrapper textarea:first-child{
+                margin-bottom: 0.25rem;
+            }
+
+            #view-event-content-wrapper textarea:last-child{
+                margin-top: 0.25rem;
+            }

@@ -39,7 +39,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
             node.title = event.content;
 
             node.onclick = function(e){
-                //TODO open event handling window
+                viewEventController.viewEvent(event);
             }
         return node;
     }
