@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.diary.model.CreateEventRequest;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.diary.service.event.service.EventTitleValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,9 +15,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 //TODO unit test
 class CreateEventRequestValidator {
+    private final EventTitleValidator eventTitleValidator;
+
     void validate(CreateEventRequest request) {
+        eventTitleValidator.validate(request.getTitle());
+
         ValidationUtil.notNull(request.getDate(), "date");
-        ValidationUtil.notBlank(request.getTitle(), "title");
 
         ValidationUtil.notNull(request.getRepetitionType(), "repetitionType");
 

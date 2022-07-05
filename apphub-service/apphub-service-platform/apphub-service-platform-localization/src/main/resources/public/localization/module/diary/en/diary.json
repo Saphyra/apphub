@@ -145,10 +145,22 @@
         "message": "Done"
       }
     ],
+    "view-event-not-done-button": [
+      {
+        "key": "innerHTML",
+        "message": "Not done"
+      }
+    ],
     "view-event-snooze-button": [
       {
         "key": "innerHTML",
         "message": "Snooze"
+      }
+    ],
+    "view-event-unsnooze-button": [
+      {
+        "key": "innerHTML",
+        "message": "Unsnooze"
       }
     ],
     "view-event-delete-button": [

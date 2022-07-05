@@ -270,4 +270,9 @@ public class Endpoints {
     //DIARY
     public static final String DIARY_GET_CALENDAR = "/api/diary/calendar";
     public static final String DIARY_CREATE_EVENT = "/api/diary/event";
+    public static final String DIARY_OCCURRENCE_EDIT = "/api/diary/occurrence/{occurrenceId}/edit";
+    public static final String DIARY_OCCURRENCE_DONE = "/api/diary/occurrence/{occurrenceId}/done";
+    public static final String DIARY_OCCURRENCE_DEFAULT = "/api/diary/occurrence/{occurrenceId}/default";
+    public static final String DIARY_OCCURRENCE_SNOOZED = "/api/diary/occurrence/{occurrenceId}/snoozed";
+    public static final String DIARY_OCCURRENCE_DELETE = "/api/diary/occurrence/{occurrenceId}";
 }

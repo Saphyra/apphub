@@ -145,10 +145,22 @@
         "message": "Kész"
       }
     ],
+    "view-event-not-done-button": [
+      {
+        "key": "innerHTML",
+        "message": "Nincs kész"
+      }
+    ],
     "view-event-snooze-button": [
       {
         "key": "innerHTML",
         "message": "Elnémít"
+      }
+    ],
+    "view-event-unsnooze-button": [
+      {
+        "key": "innerHTML",
+        "message": "Némítás feloldása"
       }
     ],
     "view-event-delete-button": [

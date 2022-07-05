@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.diary.service.occurrence;
+package com.github.saphyra.apphub.service.diary.service.occurrence.service;
 
 import com.github.saphyra.apphub.api.diary.model.OccurrenceResponse;
 import com.github.saphyra.apphub.service.diary.dao.event.Event;
