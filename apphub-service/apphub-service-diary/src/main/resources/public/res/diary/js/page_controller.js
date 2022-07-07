@@ -16,8 +16,19 @@ window.ids = {
     viewEventTitle: "view-event-title",
     viewEventContent: "view-event-content",
     viewEventNote: "view-event-note",
+    viewEventEditButton: "view-event-edit-button",
+    viewEventDeleteButton: "view-event-delete-button",
+    viewEventDoneButton: "view-event-done-button",
+    viewEventNotDoneButton: "view-event-not-done-button",
+    viewEventSnoozeButton: "view-event-snooze-button",
+    viewEventUnsnoozeButton: "view-event-unsnooze-button",
+    viewEventSaveButton: "view-event-save-button",
+    viewEventDiscardButton: "view-event-discard-button",
 }
 
+events.EVENT_CHANGED = "event-changed";
+
+scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
 scriptLoader.loadScript("/res/diary/js/local_date.js");
 

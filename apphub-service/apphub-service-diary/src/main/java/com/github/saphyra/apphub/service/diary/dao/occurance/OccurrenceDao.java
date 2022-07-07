@@ -43,4 +43,8 @@ public class OccurrenceDao extends AbstractDao<OccurrenceEntity, Occurrence, Str
         return findById(occurrenceId)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Occurrence not found with id " + occurrenceId));
     }
+
+    public void deleteByEventId(UUID eventId) {
+        repository.deleteByEventId(uuidConverter.convertDomain(eventId));
+    }
 }

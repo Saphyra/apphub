@@ -182,6 +182,8 @@ window.Mapping = new function(){
         //DIARY
         DIARY_GET_CALENDAR: new Endpoint("/api/diary/calendar", HttpMethod.GET),
         DIARY_CREATE_EVENT: new Endpoint("/api/diary/event", HttpMethod.PUT),
+        DIARY_OCCURRENCE_EDIT: new Endpoint("/api/diary/occurrence/{occurrenceId}/edit", HttpMethod.POST),
+        DIARY_EVENT_DELETE: new Endpoint("/api/diary/event/{eventId}", HttpMethod.DELETE),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

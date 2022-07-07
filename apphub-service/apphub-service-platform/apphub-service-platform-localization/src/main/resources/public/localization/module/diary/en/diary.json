@@ -168,12 +168,29 @@
         "key": "innerHTML",
         "message": "Delete"
       }
+    ],
+    "view-event-content": [
+      {
+        "key": "placeholder",
+        "message": "Content"
+      }
+    ],
+    "view-event-note": [
+      {
+        "key": "placeholder",
+        "message": "Note"
+      }
     ]
   },
   "additionalContent": {
     "empty-title": "Title must not be empty.",
     "repetition-type-days-too-low": "Days to low (minimum 1).",
     "no-day-selected": "No day selected.",
-    "event-created": "Event created."
+    "event-created": "Event created.",
+    "delete-event-confirmation-dialog-title": "Do you want to delete the event?",
+    "delete-event-confirmation-dialog-detail": "Are you sure you want to delete event <SPAN class='red'>{title}</SPAN> with all of its occurrences?",
+    "delete-event-confirmation-dialog-confirm-button": "Delete event",
+    "delete-event-confirmation-dialog-cancel-button": "Cancel",
+    "event-deleted": "Event deleted."
   }
 }

@@ -168,12 +168,29 @@
         "key": "innerHTML",
         "message": "Törlés"
       }
+    ],
+    "view-event-content": [
+      {
+        "key": "placeholder",
+        "message": "Tartalom"
+      }
+    ],
+    "view-event-note": [
+      {
+        "key": "placeholder",
+        "message": "Megjegyzés"
+      }
     ]
   },
   "additionalContent": {
     "empty-title": "A cím nem lehet üres.",
     "repetition-type-days-too-low": "Napok száma túl alacsony (minimum 1)",
     "no-day-selected": "Nincs nap kiválasztva.",
-    "event-created": "Esemény létrehozva."
+    "event-created": "Esemény létrehozva.",
+    "delete-event-confirmation-dialog-title": "Törölni szeretnéd az eseményt?",
+    "delete-event-confirmation-dialog-detail": "Biztosan törölni szeretnéd a <SPAN class='red'>{title}</SPAN> eseményt és összes előfordulását?",
+    "delete-event-confirmation-dialog-confirm-button": "Esemény törlése",
+    "delete-event-confirmation-dialog-cancel-button": "Mégse",
+    "event-deleted": "Esemény törölve."
   }
 }

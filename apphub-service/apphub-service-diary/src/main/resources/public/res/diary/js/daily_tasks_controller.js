@@ -11,14 +11,26 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
 
     let currentDate = CURRENT_DATE;
 
+    eventProcessor.registerProcessor(new EventProcessor(
+        (eventType) => {return eventType == events.EVENT_CHANGED},
+        (event) => {
+            new Stream(event.getPayload())
+                .filter((day) => {return day.date == currentDate.toString()})
+                .findFirst()
+                .ifPresent((day) => displayDay(day));
+        },
+        false,
+        "EventChanged EventProcessor for DailyTasksController"
+    ));
+
     window.dailyTasksController = new function(){
-        this.displayDay = loadDay;
+        this.displayDay = displayDay;
         this.getCurrentDate = function(){
             return currentDate;
         }
     }
 
-    function loadDay(day){
+    function displayDay(day){
         console.log("Loading day", day);
 
         currentDate = LocalDate.parse(day.date) || CURRENT_DATE;

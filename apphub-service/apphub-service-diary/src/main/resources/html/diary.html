@@ -129,14 +129,14 @@
     </MAIN>
 
     <FOOTER>
-        <BUTTON id="view-event-edit-button"></BUTTON>
-        <BUTTON id="view-event-save-button"></BUTTON>
-        <BUTTON id="view-event-discard-button"></BUTTON>
-        <BUTTON id="view-event-done-button"></BUTTON>
-        <BUTTON id="view-event-not-done-button"></BUTTON>
-        <BUTTON id="view-event-snooze-button"></BUTTON>
-        <BUTTON id="view-event-unsnooze-button"></BUTTON>
-        <BUTTON id="view-event-delete-button"></BUTTON>
+        <BUTTON id="view-event-edit-button" onclick="viewEventController.enableEditing()"></BUTTON>
+        <BUTTON id="view-event-save-button" onclick="viewEventController.saveModifications()"></BUTTON>
+        <BUTTON id="view-event-discard-button" onclick="viewEventController.discardModifications()"></BUTTON>
+        <BUTTON id="view-event-done-button" onclick="viewEventController.markAsDone()"></BUTTON>
+        <BUTTON id="view-event-not-done-button" onclick="viewEventController.markAsDefault()"></BUTTON>
+        <BUTTON id="view-event-snooze-button" onclick="viewEventController.markAsSnoozed()"></BUTTON>
+        <BUTTON id="view-event-unsnooze-button" onclick="viewEventController.markAsDefault()"></BUTTON>
+        <BUTTON id="view-event-delete-button" onclick="viewEventController.deleteEvent()"></BUTTON>
     </FOOTER>
 </DIV>
 </BODY>

@@ -20,6 +20,7 @@ class CreateEventRequestValidator {
     void validate(CreateEventRequest request) {
         eventTitleValidator.validate(request.getTitle());
 
+        ValidationUtil.notNull(request.getReferenceDate(), "referenceDate");
         ValidationUtil.notNull(request.getDate(), "date");
 
         ValidationUtil.notNull(request.getRepetitionType(), "repetitionType");

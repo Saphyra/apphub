@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class CreateEventRequest {
+    private LocalDate referenceDate;
     private LocalDate date;
     private String title;
     private String content;

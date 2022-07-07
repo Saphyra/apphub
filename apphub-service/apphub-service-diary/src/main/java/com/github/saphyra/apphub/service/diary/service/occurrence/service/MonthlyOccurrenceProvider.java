@@ -61,7 +61,7 @@ public class MonthlyOccurrenceProvider {
             .stream()
             .flatMap(event -> fetchOccurrenceOfEvent(event, currentDate, sortedDates).stream())
             .peek(occurrence -> {
-                if (occurrence.getDate().isBefore(currentDate) && occurrence.getStatus() != OccurrenceStatus.EXPIRED) {
+                if (occurrence.getDate().isBefore(currentDate) && (occurrence.getStatus() == OccurrenceStatus.VIRTUAL || occurrence.getStatus() == OccurrenceStatus.PENDING)) {
                     log.info("{} is expired.", occurrence); //TODO debug
                     occurrence.setStatus(OccurrenceStatus.EXPIRED);
                     occurrenceDao.save(occurrence);

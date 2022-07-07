@@ -28,7 +28,7 @@ public class OccurrenceControllerImpl implements OccurrenceController {
     private final DeleteOccurrenceService deleteOccurrenceService;
 
     @Override
-    public CalendarResponse editOccurrence(EditOccurrenceRequest request, UUID occurrenceId, AccessTokenHeader accessTokenHeader) {
+    public List<CalendarResponse> editOccurrence(EditOccurrenceRequest request, UUID occurrenceId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to edit occurrence {}", accessTokenHeader.getUserId(), occurrenceId);
         log.debug("EditOccurrenceRequest: {}", request);
 
@@ -56,10 +56,5 @@ public class OccurrenceControllerImpl implements OccurrenceController {
         return markOccurrenceDefaultService.markDefault(accessTokenHeader.getUserId(), occurrenceId);
     }
 
-    @Override
-    public List<CalendarResponse> deleteOccurrence(UUID occurrenceId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete occurrence {}", accessTokenHeader.getUserId(), occurrenceId);
 
-        return deleteOccurrenceService.delete(accessTokenHeader.getUserId(), occurrenceId);
-    }
 }

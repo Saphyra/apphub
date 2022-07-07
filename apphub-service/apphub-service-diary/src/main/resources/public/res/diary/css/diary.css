@@ -176,6 +176,12 @@
 
 }
 
+    #view-event-title[contenteditable=true]{
+        width: 80%;
+        margin: 0.25rem auto;
+        font-size: 2rem;
+    }
+
     #view-event-content-wrapper{
         display: grid;
         grid-template-rows: 50% 50%;

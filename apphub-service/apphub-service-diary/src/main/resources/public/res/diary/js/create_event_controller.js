@@ -59,6 +59,7 @@
         }
 
         const payload = {
+            referenceDate: calendarController.getCurrentDate().toString(),
             date: currentDate.toString(),
             title: title,
             content: content,
@@ -69,9 +70,8 @@
 
         const request = new Request(Mapping.getEndpoint("DIARY_CREATE_EVENT"), payload);
             request.convertResponse = jsonConverter;
-            request.processValidResponse = function(response){
-                calendarController.updateDay(response); //TODO move to event
-                dailyTasksController.displayDay(response); //TODO move to event
+            request.processValidResponse = function(days){
+                eventProcessor.processEvent(new Event(events.EVENT_CHANGED, days));
                 notificationService.showSuccess(Localization.getAdditionalContent("event-created"));
                 pageController.displayMainPage();
             }

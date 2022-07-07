@@ -30,7 +30,7 @@ command=$(IFS=, ; echo "${artifactIds[*]}")
 if [ "$OPTIONS" == "skipTests" ]; then
   mvn -T 12 clean install -pl "$command" -am -DskipTests
 else
-  mvn -T 4 clean install -pl "$command" -am
+  mvn -T 12 clean install -pl "$command" -am
 fi
 BUILD_RESULT=$?
 if [[ "$BUILD_RESULT" -ne 0 ]]; then

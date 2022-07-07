@@ -14,6 +14,13 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
     let rowAmount;
     let currentDate;
 
+    eventProcessor.registerProcessor(new EventProcessor(
+        (eventType) => {return eventType == events.EVENT_CHANGED},
+        (event) => new Stream(event.getPayload()).forEach((day) => syncEngine.add(day)),
+        false,
+        "EventChanged EventProcessor for CalendarController"
+    ));
+
     window.calendarController = new function(){
         this.previousMonth = function(){
             loadCalendar(currentDate.minusMonths(1));
@@ -21,8 +28,8 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
         this.nextMonth = function(){
             loadCalendar(currentDate.plusMonths(1));
         }
-        this.updateDay = function(day){
-            syncEngine.add(day);
+        this.getCurrentDate = function(){
+            return currentDate;
         }
     }
 
