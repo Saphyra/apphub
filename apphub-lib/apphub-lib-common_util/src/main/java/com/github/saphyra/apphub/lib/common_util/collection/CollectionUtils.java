@@ -67,9 +67,9 @@ public class CollectionUtils {
         return result;
     }
 
+    @SafeVarargs
     public static <T> List<T> asList(T... items) {
-        List<T> result = new ArrayList<>(Arrays.asList(items));
-        return result;
+        return new ArrayList<>(Arrays.asList(items));
     }
 
     //TODO unit tst

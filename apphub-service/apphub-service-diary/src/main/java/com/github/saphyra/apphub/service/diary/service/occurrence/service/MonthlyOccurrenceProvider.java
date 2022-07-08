@@ -62,7 +62,7 @@ public class MonthlyOccurrenceProvider {
             .flatMap(event -> fetchOccurrenceOfEvent(event, currentDate, sortedDates).stream())
             .peek(occurrence -> {
                 if (occurrence.getDate().isBefore(currentDate) && (occurrence.getStatus() == OccurrenceStatus.VIRTUAL || occurrence.getStatus() == OccurrenceStatus.PENDING)) {
-                    log.info("{} is expired.", occurrence); //TODO debug
+                    log.debug("{} is expired.", occurrence);
                     occurrence.setStatus(OccurrenceStatus.EXPIRED);
                     occurrenceDao.save(occurrence);
                 }
@@ -73,9 +73,9 @@ public class MonthlyOccurrenceProvider {
     }
 
     private List<Occurrence> fetchOccurrenceOfEvent(Event event, LocalDate currentDate, List<LocalDate> dates) {
-        log.info("Fetching Occurrences for event {}", event); //TODO debug
+        log.debug("Fetching Occurrences for event {}", event);
         List<Occurrence> occurrences = occurrenceDao.getByEventId(event.getEventId());
-        log.info("Occurrences related to event: {}", occurrences);//TODO debug
+        log.debug("Occurrences related to event: {}", occurrences);
 
         OptionalMap<LocalDate, Occurrence> occurrenceMapping = CollectionUtils.mapToOptionalMap(occurrences, Occurrence::getDate, Function.identity());
 
@@ -105,10 +105,10 @@ public class MonthlyOccurrenceProvider {
                     .map(Occurrence::getDate)
                     .max(Comparator.naturalOrder())
                     .orElse(event.getStartDate());
-                log.info("Time of last event: {}", timeOfLastEvent);//TODO debug
+                log.debug("Time of last event: {}", timeOfLastEvent);
 
                 long dayDifference = ChronoUnit.DAYS.between(timeOfLastEvent, date);
-                log.info("dayDifference between {} and {}: {}", timeOfLastEvent, date, dayDifference);//TODO debug
+                log.debug("dayDifference between {} and {}: {}", timeOfLastEvent, date, dayDifference);
 
                 return dayDifference % Integer.parseInt(event.getRepetitionData()) == 0;
             })
@@ -118,7 +118,7 @@ public class MonthlyOccurrenceProvider {
 
     private List<Occurrence> handleDaysOfWeekEvent(Event event, LocalDate currentDate, List<LocalDate> dates, OptionalMap<LocalDate, Occurrence> occurrenceMapping) {
         List<DayOfWeek> repetitionTypeDaysOfWeeks = parseDaysOfWeek(event);
-        log.info("RepetitionData days of week: {}", repetitionTypeDaysOfWeeks);//TODO debug
+        log.debug("RepetitionData days of week: {}", repetitionTypeDaysOfWeeks);
 
         return dates.stream()
             .filter(date -> !date.isBefore(event.getStartDate()))
@@ -142,7 +142,7 @@ public class MonthlyOccurrenceProvider {
 
     private Occurrence createOccurrence(LocalDate currentDate, LocalDate date, Event event) {
         Occurrence occurrence = date.isBefore(currentDate) ? occurrenceFactory.createExpired(date, event) : occurrenceFactory.createVirtual(date, event);
-        log.info("Occurrence created: {}", occurrence); //TODO debug
+        log.debug("Occurrence created: {}", occurrence);
         occurrenceDao.save(occurrence);
         return occurrence;
     }
