@@ -184,6 +184,9 @@ window.Mapping = new function(){
         DIARY_CREATE_EVENT: new Endpoint("/api/diary/event", HttpMethod.PUT),
         DIARY_OCCURRENCE_EDIT: new Endpoint("/api/diary/occurrence/{occurrenceId}/edit", HttpMethod.POST),
         DIARY_EVENT_DELETE: new Endpoint("/api/diary/event/{eventId}", HttpMethod.DELETE),
+        DIARY_OCCURRENCE_DONE: new Endpoint("/api/diary/occurrence/{occurrenceId}/done", HttpMethod.POST),
+        DIARY_OCCURRENCE_DEFAULT: new Endpoint("/api/diary/occurrence/{occurrenceId}/default", HttpMethod.POST),
+        DIARY_OCCURRENCE_SNOOZED: new Endpoint("/api/diary/occurrence/{occurrenceId}/snoozed", HttpMethod.POST),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

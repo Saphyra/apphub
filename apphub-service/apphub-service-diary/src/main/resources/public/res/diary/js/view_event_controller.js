@@ -93,15 +93,36 @@
     }
 
     function markAsDone(){
-        //TODO
+        const request = new Request(Mapping.getEndpoint("DIARY_OCCURRENCE_DONE", {occurrenceId: currentEvent.occurrenceId}));
+            request.convertResponse = jsonConverter;
+            request.processValidResponse = function(day){
+                eventProcessor.processEvent(new Event(events.EVENT_CHANGED, [day]));
+                currentEvent.status = "DONE";
+                viewEvent(currentEvent);
+            }
+        dao.sendRequestAsync(request);
     }
 
     function markAsDefault(){
-        //TODO
+        const request = new Request(Mapping.getEndpoint("DIARY_OCCURRENCE_DEFAULT", {occurrenceId: currentEvent.occurrenceId}));
+            request.convertResponse = jsonConverter;
+            request.processValidResponse = function(day){
+                eventProcessor.processEvent(new Event(events.EVENT_CHANGED, [day]));
+                currentEvent.status = "PENDING";
+                viewEvent(currentEvent);
+            }
+        dao.sendRequestAsync(request);
     }
 
     function markAsSnoozed(){
-        //TODO
+        const request = new Request(Mapping.getEndpoint("DIARY_OCCURRENCE_SNOOZED", {occurrenceId: currentEvent.occurrenceId}));
+            request.convertResponse = jsonConverter;
+            request.processValidResponse = function(day){
+                eventProcessor.processEvent(new Event(events.EVENT_CHANGED, [day]));
+                currentEvent.status = "SNOOZED";
+                viewEvent(currentEvent);
+            }
+        dao.sendRequestAsync(request);
     }
 
     function deleteEvent(){

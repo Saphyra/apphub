@@ -55,6 +55,4 @@ public class OccurrenceControllerImpl implements OccurrenceController {
 
         return markOccurrenceDefaultService.markDefault(accessTokenHeader.getUserId(), occurrenceId);
     }
-
-
 }
