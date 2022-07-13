@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.diary.model.CalendarResponse;
 import com.github.saphyra.apphub.api.diary.model.EditOccurrenceRequest;
 import com.github.saphyra.apphub.api.diary.server.OccurrenceController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.service.diary.service.occurrence.service.DeleteOccurrenceService;
 import com.github.saphyra.apphub.service.diary.service.occurrence.service.EditOccurrenceService;
 import com.github.saphyra.apphub.service.diary.service.occurrence.service.MarkOccurrenceDefaultService;
 import com.github.saphyra.apphub.service.diary.service.occurrence.service.MarkOccurrenceDoneService;
@@ -25,7 +24,6 @@ public class OccurrenceControllerImpl implements OccurrenceController {
     private final MarkOccurrenceDoneService markOccurrenceDoneService;
     private final MarkOccurrenceSnoozedService markOccurrenceSnoozedService;
     private final MarkOccurrenceDefaultService markOccurrenceDefaultService;
-    private final DeleteOccurrenceService deleteOccurrenceService;
 
     @Override
     public List<CalendarResponse> editOccurrence(EditOccurrenceRequest request, UUID occurrenceId, AccessTokenHeader accessTokenHeader) {

@@ -65,7 +65,6 @@ public class ValidationUtil {
         maximum(value, max, field);
     }
 
-    //TODO unit test
     public static void notEmpty(Collection<?> collection, String field) {
         notNull(collection, field);
         if (collection.isEmpty()) {

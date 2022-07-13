@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.diary.service.event.service;
 
 import com.github.saphyra.apphub.api.diary.model.CalendarResponse;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.service.diary.dao.event.Event;
 import com.github.saphyra.apphub.service.diary.dao.event.EventDao;
 import com.github.saphyra.apphub.service.diary.dao.occurance.OccurrenceDao;
 import com.github.saphyra.apphub.service.diary.service.calendar.CalendarQueryService;
@@ -18,7 +17,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class DeleteEventService {
     private final OccurrenceDao occurrenceDao;
     private final EventDao eventDao;
@@ -28,10 +26,8 @@ public class DeleteEventService {
     public List<CalendarResponse> delete(UUID userId, UUID eventId, LocalDate date) {
         ValidationUtil.notNull(date, "date");
 
-        Event event = eventDao.findByIdValidated(eventId);
-
         occurrenceDao.deleteByEventId(eventId);
-        eventDao.delete(event);
+        eventDao.deleteById(eventId);
 
         return calendarQueryService.getCalendar(userId, date);
     }

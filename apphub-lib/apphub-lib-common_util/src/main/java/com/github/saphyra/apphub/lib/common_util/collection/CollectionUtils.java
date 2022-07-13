@@ -72,7 +72,6 @@ public class CollectionUtils {
         return new ArrayList<>(Arrays.asList(items));
     }
 
-    //TODO unit tst
     public static <K, V, R> OptionalMap<K, V> mapToOptionalMap(List<R> list, Function<R, K> keyMapper, Function<R, V> valueMapper) {
         Map<K, V> map = list.stream()
             .collect(Collectors.toMap(keyMapper, valueMapper));

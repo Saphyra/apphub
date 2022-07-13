@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CalendarControllerImpl implements CalendarController {
     private final CalendarQueryService calendarQueryService;
 

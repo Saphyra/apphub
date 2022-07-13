@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class EventTitleValidator {
     public void validate(String title) {
         ValidationUtil.notBlank(title, "title");

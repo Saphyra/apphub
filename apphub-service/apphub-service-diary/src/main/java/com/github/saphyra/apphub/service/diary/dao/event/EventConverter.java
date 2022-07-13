@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EventConverter extends ConverterBase<EventEntity, Event> {
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;

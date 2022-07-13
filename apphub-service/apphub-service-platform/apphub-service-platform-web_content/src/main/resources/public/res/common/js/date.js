@@ -1,3 +1,19 @@
+Date.prototype.plusMonths = function(months){
+    const date = new Date(this.valueOf());
+    date.setMonth(date.getMonth() + months);
+    return date;
+}
+
+Date.prototype.minusMonths = function(months){
+    const date = new Date(this.valueOf());
+    date.setMonth(date.getMonth() - months);
+    return date;
+}
+
+function formatDate(date){
+    return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + " " + date.toLocaleTimeString(getLocale());
+}
+
 window.LocalDate = new function(){
     this.parse = function(dateString){
         return new LocalDateObj(new Date(extractYear(dateString), extractMonth(dateString) - 1, extractDay(dateString)));

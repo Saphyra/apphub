@@ -1,3 +1,4 @@
+scriptLoader.loadScript("/res/common/js/date.js");
 scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/admin-panel/js/ban/search_controller.js");

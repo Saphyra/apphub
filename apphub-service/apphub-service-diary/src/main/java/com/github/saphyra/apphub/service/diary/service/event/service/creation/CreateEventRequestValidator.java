@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 class CreateEventRequestValidator {
     private final EventTitleValidator eventTitleValidator;
 

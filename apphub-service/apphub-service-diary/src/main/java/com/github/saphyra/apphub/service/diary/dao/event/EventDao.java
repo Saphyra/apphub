@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class EventDao extends AbstractDao<EventEntity, Event, String, EventRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
@@ -33,5 +32,9 @@ public class EventDao extends AbstractDao<EventEntity, Event, String, EventRepos
     public Event findByIdValidated(UUID eventId) {
         return converter.convertEntity(repository.findById(uuidConverter.convertDomain(eventId)))
             .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Event not found with id " + eventId));
+    }
+
+    public void deleteById(UUID eventId) {
+        deleteById(uuidConverter.convertDomain(eventId));
     }
 }

@@ -30,7 +30,7 @@ events.EVENT_CHANGED = "event-changed";
 
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
-scriptLoader.loadScript("/res/diary/js/local_date.js");
+scriptLoader.loadScript("/res/common/js/date.js");
 
 window.monthLocalization = new CustomLocalization("diary", "months");
 const CURRENT_DATE = LocalDate.create(new Date());

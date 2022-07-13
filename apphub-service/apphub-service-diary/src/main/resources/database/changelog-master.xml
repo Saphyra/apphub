@@ -1,4 +1,8 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-schema-diary" author="saphyra">
+        <sql>CREATE SCHEMA IF NOT EXISTS diary</sql>
+    </changeSet>
+
     <include file="database/change_sets/event.xml"/>
     <include file="database/change_sets/occurrence.xml"/>
 </databaseChangeLog>

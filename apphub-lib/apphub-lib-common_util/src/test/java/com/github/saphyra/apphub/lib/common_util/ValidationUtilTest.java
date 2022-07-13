@@ -3,6 +3,9 @@ package com.github.saphyra.apphub.lib.common_util;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 
+import java.util.Collections;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class ValidationUtilTest {
@@ -146,6 +149,25 @@ public class ValidationUtilTest {
     @Test
     public void between() {
         ValidationUtil.betweenInclusive(8, 5, 10, FIELD);
+    }
+
+    @Test
+    public void notEmpty_null() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.notEmpty(null, FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+    }
+
+    @Test
+    public void notEmpty_empty() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.notEmpty(Collections.emptyList(), FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be empty");
+    }
+
+    @Test
+    public void notEmpty() {
+        ValidationUtil.notEmpty(List.of("asd"), FIELD);
     }
 
     enum TestEnum {
