@@ -8,8 +8,6 @@ import java.util.List;
 interface OccurrenceRepository extends CrudRepository<OccurrenceEntity, String> {
     void deleteByUserId(String userId);
 
-    void deleteByUserIdAndStatus(String userId, OccurrenceStatus status);
-
     List<OccurrenceEntity> getByEventId(String eventId);
 
     void deleteByEventId(String eventId);

@@ -59,8 +59,10 @@
         }
 
         const payload = {
-            referenceDate: calendarController.getCurrentDate().toString(),
-            date: currentDate.toString(),
+            referenceDate: {
+                month: calendarController.getCurrentDate().toString(),
+                day: currentDate.toString()
+            },
             title: title,
             content: content,
             repetitionType: repetitionType,

@@ -1,7 +1,9 @@
 package com.github.saphyra.apphub.service.diary.service.event.service.creation;
 
 import com.github.saphyra.apphub.api.diary.model.CreateEventRequest;
+import com.github.saphyra.apphub.api.diary.model.ReferenceDate;
 import com.github.saphyra.apphub.api.diary.model.RepetitionType;
+import com.github.saphyra.apphub.service.diary.service.ReferenceDateValidator;
 import com.github.saphyra.apphub.service.diary.service.event.service.EventTitleValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
@@ -28,24 +30,19 @@ public class CreateEventRequestValidatorTest {
     @Mock
     private EventTitleValidator eventTitleValidator;
 
+    @Mock
+    private ReferenceDateValidator referenceDateValidator;
+
     @InjectMocks
     private CreateEventRequestValidator underTest;
+
+    @Mock
+    private ReferenceDate referenceDate;
 
     @After
     public void validate() {
         verify(eventTitleValidator).validate(TITLE);
-    }
-
-    @Test
-    public void nullReferenceDate() {
-        CreateEventRequest request = validRequest(RepetitionType.ONE_TIME)
-            .toBuilder()
-            .referenceDate(null)
-            .build();
-
-        Throwable ex = catchThrowable(() -> underTest.validate(request));
-
-        ExceptionValidator.validateInvalidParam(ex, "referenceDate", "must not be null");
+        verify(referenceDateValidator).validate(referenceDate);
     }
 
     @Test
@@ -110,7 +107,7 @@ public class CreateEventRequestValidatorTest {
 
     private CreateEventRequest validRequest(RepetitionType repetitionType) {
         return CreateEventRequest.builder()
-            .referenceDate(DATE)
+            .referenceDate(referenceDate)
             .date(DATE)
             .title(TITLE)
             .repetitionType(repetitionType)

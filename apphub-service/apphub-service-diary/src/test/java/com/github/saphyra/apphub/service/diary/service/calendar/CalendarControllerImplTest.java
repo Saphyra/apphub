@@ -40,7 +40,7 @@ public class CalendarControllerImplTest {
 
     @Test
     public void getCalendar() {
-        given(calendarQueryService.getCalendar(USER_ID, DATE)).willReturn(List.of(calendarResponse));
+        given(calendarQueryService.getCalendarForMonth(USER_ID, DATE)).willReturn(List.of(calendarResponse));
 
         List<CalendarResponse> result = underTest.getCalendar(DATE.toString(), accessTokenHeader);
 

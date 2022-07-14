@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.diary.service.calendar;
 
 import com.github.saphyra.apphub.api.diary.model.CalendarResponse;
-import com.github.saphyra.apphub.service.diary.dao.occurance.Occurrence;
+import com.github.saphyra.apphub.api.diary.model.ReferenceDate;
 import com.github.saphyra.apphub.service.diary.service.occurrence.service.MonthlyOccurrenceProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -20,15 +21,22 @@ public class CalendarQueryService {
     private final MonthlyOccurrenceProvider monthlyOccurrenceProvider;
     private final CalendarResponseFactory calendarResponseFactory;
 
-    public CalendarResponse getCalendarForDay(UUID userId, LocalDate date) {
-        List<Occurrence> occurrences = monthlyOccurrenceProvider.getOccurrencesOfDay(userId, date);
-        return calendarResponseFactory.create(date, occurrences);
+    public List<CalendarResponse> getCalendar(UUID userId, ReferenceDate referenceDate) {
+        Set<LocalDate> dates = daysOfMonthProvider.getDaysOfMonth(referenceDate.getMonth());
+        dates.add(referenceDate.getDay());
+
+
+        return fetchCalendar(userId, dates);
     }
 
-    public List<CalendarResponse> getCalendar(UUID userId, LocalDate date) {
-        List<LocalDate> dates = daysOfMonthProvider.getDaysOfMonth(date);
+    public List<CalendarResponse> getCalendarForMonth(UUID userId, LocalDate date) {
+        Set<LocalDate> dates = daysOfMonthProvider.getDaysOfMonth(date);
 
-        return monthlyOccurrenceProvider.getOccurrencesOfMonth(userId, dates)
+        return fetchCalendar(userId, dates);
+    }
+
+    private List<CalendarResponse> fetchCalendar(UUID userId, Set<LocalDate> dates) {
+        return monthlyOccurrenceProvider.getOccurrences(userId, dates)
             .entrySet()
             .stream()
             .map(entry -> calendarResponseFactory.create(entry.getKey(), entry.getValue()))

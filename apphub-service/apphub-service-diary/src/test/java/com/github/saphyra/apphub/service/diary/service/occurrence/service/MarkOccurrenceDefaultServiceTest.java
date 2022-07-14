@@ -1,9 +1,10 @@
-package com.github.saphyra.apphub.service.diary.service.event.service;
+package com.github.saphyra.apphub.service.diary.service.occurrence.service;
 
 import com.github.saphyra.apphub.api.diary.model.CalendarResponse;
 import com.github.saphyra.apphub.api.diary.model.ReferenceDate;
-import com.github.saphyra.apphub.service.diary.dao.event.EventDao;
+import com.github.saphyra.apphub.service.diary.dao.occurance.Occurrence;
 import com.github.saphyra.apphub.service.diary.dao.occurance.OccurrenceDao;
+import com.github.saphyra.apphub.service.diary.dao.occurance.OccurrenceStatus;
 import com.github.saphyra.apphub.service.diary.service.ReferenceDateValidator;
 import com.github.saphyra.apphub.service.diary.service.calendar.CalendarQueryService;
 import org.junit.Test;
@@ -20,24 +21,24 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DeleteEventServiceTest {
+public class MarkOccurrenceDefaultServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final UUID EVENT_ID = UUID.randomUUID();
+    private static final UUID OCCURRENCE_ID = UUID.randomUUID();
 
     @Mock
     private OccurrenceDao occurrenceDao;
 
     @Mock
-    private EventDao eventDao;
+    private CalendarQueryService calendarQueryService;
 
     @Mock
     private ReferenceDateValidator referenceDateValidator;
 
-    @Mock
-    private CalendarQueryService calendarQueryService;
-
     @InjectMocks
-    private DeleteEventService underTest;
+    private MarkOccurrenceDefaultService underTest;
+
+    @Mock
+    private Occurrence occurrence;
 
     @Mock
     private CalendarResponse calendarResponse;
@@ -46,14 +47,16 @@ public class DeleteEventServiceTest {
     private ReferenceDate referenceDate;
 
     @Test
-    public void deleteEvent() {
+    public void markDefault() {
+        given(occurrenceDao.findByIdValidated(OCCURRENCE_ID)).willReturn(occurrence);
         given(calendarQueryService.getCalendar(USER_ID, referenceDate)).willReturn(List.of(calendarResponse));
 
-        List<CalendarResponse> result = underTest.delete(USER_ID, EVENT_ID, referenceDate);
+        List<CalendarResponse> result = underTest.markDefault(USER_ID, OCCURRENCE_ID, referenceDate);
+
+        verify(occurrence).setStatus(OccurrenceStatus.PENDING);
+        verify(occurrenceDao).save(occurrence);
+        verify(referenceDateValidator).validate(referenceDate);
 
         assertThat(result).containsExactly(calendarResponse);
-        verify(eventDao).deleteById(EVENT_ID);
-        verify(occurrenceDao).deleteByEventId(EVENT_ID);
-        verify(referenceDateValidator).validate(referenceDate);
     }
 }

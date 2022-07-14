@@ -5,13 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Data
-public class EditOccurrenceRequest {
-    private ReferenceDate referenceDate;
-    private String title;
-    private String content;
-    private String note;
+@Builder
+public class ReferenceDate {
+    private LocalDate month;
+    private LocalDate day;
 }

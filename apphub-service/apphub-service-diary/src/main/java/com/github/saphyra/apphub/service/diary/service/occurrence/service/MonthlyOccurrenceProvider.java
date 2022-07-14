@@ -20,6 +20,7 @@ import javax.transaction.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -41,16 +42,7 @@ public class MonthlyOccurrenceProvider {
     private final ObjectMapperWrapper objectMapperWrapper;
 
     @Transactional
-    public List<Occurrence> getOccurrencesOfDay(UUID userId, LocalDate date) {
-        return getOccurrencesOfMonth(userId, List.of(date))
-            .get(date);
-    }
-
-    @Transactional
-    public Map<LocalDate, List<Occurrence>> getOccurrencesOfMonth(UUID userId, List<LocalDate> dates) {
-        log.info("Deleting virtual dates of user {}", userId);
-        occurrenceDao.deleteVirtualByUserId(userId);
-
+    public Map<LocalDate, List<Occurrence>> getOccurrences(UUID userId, Collection<LocalDate> dates) {
         List<LocalDate> sortedDates = dates.stream()
             .sorted()
             .collect(Collectors.toList());

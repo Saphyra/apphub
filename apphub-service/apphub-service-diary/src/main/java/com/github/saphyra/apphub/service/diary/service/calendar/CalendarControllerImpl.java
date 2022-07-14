@@ -19,6 +19,6 @@ class CalendarControllerImpl implements CalendarController {
     @Override
     public List<CalendarResponse> getCalendar(String date, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know his calendar for date {}.", accessTokenHeader.getUserId(), date);
-        return calendarQueryService.getCalendar(accessTokenHeader.getUserId(), LocalDate.parse(date));
+        return calendarQueryService.getCalendarForMonth(accessTokenHeader.getUserId(), LocalDate.parse(date));
     }
 }

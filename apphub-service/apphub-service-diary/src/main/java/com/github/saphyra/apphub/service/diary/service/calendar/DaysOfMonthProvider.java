@@ -6,16 +6,16 @@ import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 class DaysOfMonthProvider {
 
-    List<LocalDate> getDaysOfMonth(LocalDate date) {
-        List<LocalDate> dates = new ArrayList<>();
+    Set<LocalDate> getDaysOfMonth(LocalDate date) {
+        Set<LocalDate> dates = new HashSet<>();
 
         LocalDate lastAdded = date;
         while (shouldAddBefore(date, lastAdded.minusDays(1))) {

@@ -16,7 +16,11 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
 
     eventProcessor.registerProcessor(new EventProcessor(
         (eventType) => {return eventType == events.EVENT_CHANGED},
-        (event) => new Stream(event.getPayload()).forEach((day) => syncEngine.add(day)),
+        (event) => {
+            new Stream(event.getPayload())
+                .filter((day) => {return syncEngine.contains(day)})
+                .forEach((day) => syncEngine.add(day));
+        },
         false,
         "EventChanged EventProcessor for CalendarController"
     ));

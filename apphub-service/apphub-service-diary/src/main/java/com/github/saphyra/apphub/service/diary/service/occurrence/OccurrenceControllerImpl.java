@@ -2,9 +2,10 @@ package com.github.saphyra.apphub.service.diary.service.occurrence;
 
 import com.github.saphyra.apphub.api.diary.model.CalendarResponse;
 import com.github.saphyra.apphub.api.diary.model.EditOccurrenceRequest;
+import com.github.saphyra.apphub.api.diary.model.ReferenceDate;
 import com.github.saphyra.apphub.api.diary.server.OccurrenceController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.service.diary.service.occurrence.service.EditOccurrenceService;
+import com.github.saphyra.apphub.service.diary.service.occurrence.service.edit.EditOccurrenceService;
 import com.github.saphyra.apphub.service.diary.service.occurrence.service.MarkOccurrenceDefaultService;
 import com.github.saphyra.apphub.service.diary.service.occurrence.service.MarkOccurrenceDoneService;
 import com.github.saphyra.apphub.service.diary.service.occurrence.service.MarkOccurrenceSnoozedService;
@@ -34,23 +35,23 @@ public class OccurrenceControllerImpl implements OccurrenceController {
     }
 
     @Override
-    public CalendarResponse markOccurrenceDone(UUID occurrenceId, AccessTokenHeader accessTokenHeader) {
+    public List<CalendarResponse> markOccurrenceDone(ReferenceDate referenceDate, UUID occurrenceId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to mark occurrence {} done", accessTokenHeader.getUserId(), occurrenceId);
 
-        return markOccurrenceDoneService.markDone(accessTokenHeader.getUserId(), occurrenceId);
+        return markOccurrenceDoneService.markDone(accessTokenHeader.getUserId(), occurrenceId, referenceDate);
     }
 
     @Override
-    public CalendarResponse markOccurrenceSnoozed(UUID occurrenceId, AccessTokenHeader accessTokenHeader) {
+    public List<CalendarResponse> markOccurrenceSnoozed(ReferenceDate referenceDate, UUID occurrenceId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to mark occurrence {} snoozed", accessTokenHeader.getUserId(), occurrenceId);
 
-        return markOccurrenceSnoozedService.markSnoozed(accessTokenHeader.getUserId(), occurrenceId);
+        return markOccurrenceSnoozedService.markSnoozed(accessTokenHeader.getUserId(), occurrenceId, referenceDate);
     }
 
     @Override
-    public CalendarResponse markOccurrenceDefault(UUID occurrenceId, AccessTokenHeader accessTokenHeader) {
+    public List<CalendarResponse> markOccurrenceDefault(ReferenceDate referenceDate, UUID occurrenceId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to mark occurrence {} default", accessTokenHeader.getUserId(), occurrenceId);
 
-        return markOccurrenceDefaultService.markDefault(accessTokenHeader.getUserId(), occurrenceId);
+        return markOccurrenceDefaultService.markDefault(accessTokenHeader.getUserId(), occurrenceId, referenceDate);
     }
 }

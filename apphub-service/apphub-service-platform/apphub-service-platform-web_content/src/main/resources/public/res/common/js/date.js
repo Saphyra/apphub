@@ -65,6 +65,15 @@ window.LocalDate = new function(){
             return this.getYear() + "-" + this.getMonth() + "-" + this.getDay();
         }
 
+        this.isSameMonth = function(obj){
+            if(!obj instanceof LocalDateObj){
+                console.log(obj);
+                throwException("IllegalArgument", "obj is not a LocalDateObj");
+            }
+
+            return this.getYear() == obj.getYear() && this.getMonth() == obj.getMonth();
+        }
+
         this.equals = function(obj){
             if(!hasValue(obj)){
                 return false;

@@ -58,6 +58,10 @@ function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, 
         render();
     }
 
+    this.contains = function(item){
+        return Object.keys(cache).indexOf(getKeyMethod(item)) > -1;
+    }
+
     this.get = function(key){
         return cache[key];
     }

@@ -71,6 +71,10 @@
         }
 
         const payload = {
+            referenceDate: {
+                month: calendarController.getCurrentDate().toString(),
+                day: dailyTasksController.getCurrentDate().toString()
+            },
             title: title,
             content: content,
             note: note
@@ -93,10 +97,15 @@
     }
 
     function markAsDone(){
-        const request = new Request(Mapping.getEndpoint("DIARY_OCCURRENCE_DONE", {occurrenceId: currentEvent.occurrenceId}));
+        const payload = {
+            month: calendarController.getCurrentDate().toString(),
+            day: dailyTasksController.getCurrentDate().toString()
+        }
+
+        const request = new Request(Mapping.getEndpoint("DIARY_OCCURRENCE_DONE", {occurrenceId: currentEvent.occurrenceId}), payload);
             request.convertResponse = jsonConverter;
-            request.processValidResponse = function(day){
-                eventProcessor.processEvent(new Event(events.EVENT_CHANGED, [day]));
+            request.processValidResponse = function(days){
+                eventProcessor.processEvent(new Event(events.EVENT_CHANGED, days));
                 currentEvent.status = "DONE";
                 viewEvent(currentEvent);
             }
@@ -104,10 +113,15 @@
     }
 
     function markAsDefault(){
-        const request = new Request(Mapping.getEndpoint("DIARY_OCCURRENCE_DEFAULT", {occurrenceId: currentEvent.occurrenceId}));
+        const payload = {
+            month: calendarController.getCurrentDate().toString(),
+            day: dailyTasksController.getCurrentDate().toString()
+        }
+
+        const request = new Request(Mapping.getEndpoint("DIARY_OCCURRENCE_DEFAULT", {occurrenceId: currentEvent.occurrenceId}), payload);
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(day){
-                eventProcessor.processEvent(new Event(events.EVENT_CHANGED, [day]));
+                eventProcessor.processEvent(new Event(events.EVENT_CHANGED, days));
                 currentEvent.status = "PENDING";
                 viewEvent(currentEvent);
             }
@@ -115,10 +129,15 @@
     }
 
     function markAsSnoozed(){
-        const request = new Request(Mapping.getEndpoint("DIARY_OCCURRENCE_SNOOZED", {occurrenceId: currentEvent.occurrenceId}));
+        const payload = {
+            month: calendarController.getCurrentDate().toString(),
+            day: dailyTasksController.getCurrentDate().toString()
+        }
+
+        const request = new Request(Mapping.getEndpoint("DIARY_OCCURRENCE_SNOOZED", {occurrenceId: currentEvent.occurrenceId}), payload);
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(day){
-                eventProcessor.processEvent(new Event(events.EVENT_CHANGED, [day]));
+                eventProcessor.processEvent(new Event(events.EVENT_CHANGED, days));
                 currentEvent.status = "SNOOZED";
                 viewEvent(currentEvent);
             }
@@ -126,6 +145,11 @@
     }
 
     function deleteEvent(){
+        const payload = {
+            month: calendarController.getCurrentDate().toString(),
+            day: dailyTasksController.getCurrentDate().toString()
+        }
+
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
             .withTitle(Localization.getAdditionalContent("delete-event-confirmation-dialog-title"))
             .withDetail(Localization.getAdditionalContent("delete-event-confirmation-dialog-detail", {title: currentEvent.title}))
@@ -136,7 +160,7 @@
             "delete-event-confirmation-dialog",
             confirmationDialogLocalization,
             function(){
-                const request = new Request(Mapping.getEndpoint("DIARY_EVENT_DELETE", {eventId: currentEvent.eventId}), {value: calendarController.getCurrentDate().toString()});
+                const request = new Request(Mapping.getEndpoint("DIARY_EVENT_DELETE", {eventId: currentEvent.eventId}), payload);
                     request.convertResponse = jsonConverter;
                     request.processValidResponse = function(days){
                         notificationService.showSuccess(Localization.getAdditionalContent("event-deleted"));

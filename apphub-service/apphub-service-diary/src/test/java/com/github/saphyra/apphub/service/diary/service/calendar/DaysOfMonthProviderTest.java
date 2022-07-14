@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,7 +15,7 @@ public class DaysOfMonthProviderTest {
 
     @Test
     public void getDaysOfMonth() {
-        List<LocalDate> result = underTest.getDaysOfMonth(DATE);
+        Set<LocalDate> result = underTest.getDaysOfMonth(DATE);
 
         YearMonth yearMonthObject = YearMonth.of(DATE.getYear(), DATE.getMonth());
         int daysInMonth = yearMonthObject.lengthOfMonth();
