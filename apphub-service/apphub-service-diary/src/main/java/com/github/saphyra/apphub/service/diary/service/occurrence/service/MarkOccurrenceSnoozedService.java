@@ -20,7 +20,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class MarkOccurrenceSnoozedService {
     private final OccurrenceDao occurrenceDao;
     private final CalendarQueryService calendarQueryService;

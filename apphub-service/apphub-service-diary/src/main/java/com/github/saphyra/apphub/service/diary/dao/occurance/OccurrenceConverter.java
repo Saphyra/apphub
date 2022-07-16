@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;

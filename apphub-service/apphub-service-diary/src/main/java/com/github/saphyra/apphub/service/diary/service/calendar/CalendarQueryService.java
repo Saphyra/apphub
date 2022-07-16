@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.diary.service.calendar;
 
 import com.github.saphyra.apphub.api.diary.model.CalendarResponse;
 import com.github.saphyra.apphub.api.diary.model.ReferenceDate;
-import com.github.saphyra.apphub.service.diary.service.occurrence.service.MonthlyOccurrenceProvider;
+import com.github.saphyra.apphub.service.diary.service.occurrence.service.query.OccurrenceQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Component
 public class CalendarQueryService {
     private final DaysOfMonthProvider daysOfMonthProvider;
-    private final MonthlyOccurrenceProvider monthlyOccurrenceProvider;
+    private final OccurrenceQueryService occurrenceQueryService;
     private final CalendarResponseFactory calendarResponseFactory;
 
     public List<CalendarResponse> getCalendar(UUID userId, ReferenceDate referenceDate) {
@@ -36,7 +36,7 @@ public class CalendarQueryService {
     }
 
     private List<CalendarResponse> fetchCalendar(UUID userId, Set<LocalDate> dates) {
-        return monthlyOccurrenceProvider.getOccurrences(userId, dates)
+        return occurrenceQueryService.getOccurrences(userId, dates)
             .entrySet()
             .stream()
             .map(entry -> calendarResponseFactory.create(entry.getKey(), entry.getValue()))

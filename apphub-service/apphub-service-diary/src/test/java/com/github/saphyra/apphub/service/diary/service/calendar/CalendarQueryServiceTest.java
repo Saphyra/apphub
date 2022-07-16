@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.diary.model.CalendarResponse;
 import com.github.saphyra.apphub.api.diary.model.ReferenceDate;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.diary.dao.occurance.Occurrence;
-import com.github.saphyra.apphub.service.diary.service.occurrence.service.MonthlyOccurrenceProvider;
+import com.github.saphyra.apphub.service.diary.service.occurrence.service.query.OccurrenceQueryService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -38,7 +38,7 @@ public class CalendarQueryServiceTest {
     private DaysOfMonthProvider daysOfMonthProvider;
 
     @Mock
-    private MonthlyOccurrenceProvider monthlyOccurrenceProvider;
+    private OccurrenceQueryService occurrenceQueryService;
 
     @Mock
     private CalendarResponseFactory calendarResponseFactory;
@@ -63,21 +63,21 @@ public class CalendarQueryServiceTest {
             .build();
 
         given(daysOfMonthProvider.getDaysOfMonth(MONTH)).willReturn(CollectionUtils.toSet(DATE_OF_MONTH));
-        given(monthlyOccurrenceProvider.getOccurrences(eq(USER_ID), any())).willReturn(Map.of(DATE_OF_MONTH, List.of(occurrence)));
+        given(occurrenceQueryService.getOccurrences(eq(USER_ID), any())).willReturn(Map.of(DATE_OF_MONTH, List.of(occurrence)));
         given(calendarResponseFactory.create(DATE_OF_MONTH, List.of(occurrence))).willReturn(calendarResponse);
 
         List<CalendarResponse> result = underTest.getCalendar(USER_ID, referenceDate);
 
         assertThat(result).containsExactly(calendarResponse);
 
-        verify(monthlyOccurrenceProvider).getOccurrences(eq(USER_ID), argumentCaptor.capture());
+        verify(occurrenceQueryService).getOccurrences(eq(USER_ID), argumentCaptor.capture());
         assertThat(argumentCaptor.getValue()).containsExactlyInAnyOrder(DATE_OF_MONTH, DAY);
     }
 
     @Test
     public void getCalendarForMonth() {
         given(daysOfMonthProvider.getDaysOfMonth(DATE)).willReturn(Set.of(DATE_OF_MONTH));
-        given(monthlyOccurrenceProvider.getOccurrences(USER_ID, Set.of(DATE_OF_MONTH))).willReturn(Map.of(DATE_OF_MONTH, List.of(occurrence)));
+        given(occurrenceQueryService.getOccurrences(USER_ID, Set.of(DATE_OF_MONTH))).willReturn(Map.of(DATE_OF_MONTH, List.of(occurrence)));
         given(calendarResponseFactory.create(DATE_OF_MONTH, List.of(occurrence))).willReturn(calendarResponse);
 
         List<CalendarResponse> result = underTest.getCalendarForMonth(USER_ID, DATE);

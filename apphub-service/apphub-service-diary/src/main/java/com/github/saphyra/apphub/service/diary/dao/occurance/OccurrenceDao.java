@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class OccurrenceDao extends AbstractDao<OccurrenceEntity, Occurrence, String, OccurrenceRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
@@ -26,7 +25,6 @@ public class OccurrenceDao extends AbstractDao<OccurrenceEntity, Occurrence, Str
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }
-
 
     public List<Occurrence> getByEventId(UUID eventId) {
         return converter.convertEntity(repository.getByEventId(uuidConverter.convertDomain(eventId)));

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EditOccurrenceRequestValidator {
     private final EventTitleValidator eventTitleValidator;
     private final ReferenceDateValidator referenceDateValidator;
