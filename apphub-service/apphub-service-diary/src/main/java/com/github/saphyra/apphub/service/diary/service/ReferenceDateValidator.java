@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-//TODO unit test
 public class ReferenceDateValidator {
     public void validate(ReferenceDate referenceDate) {
         ValidationUtil.notNull(referenceDate, "referenceDate");

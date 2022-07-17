@@ -15,14 +15,14 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class DiaryEventControllerImpl implements DiaryEventController {
     private final List<DeleteByUserIdDao> daos;
 
     @Override
     @Transactional
     public void deleteAccountEvent(SendEventRequest<DeleteAccountEvent> request) {
-        UUID userId = request.getPayload().getUserId();
+        UUID userId = request.getPayload()
+            .getUserId();
 
         log.info("Deleting records for user {}", userId);
 

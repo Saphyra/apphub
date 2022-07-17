@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class OccurrenceFactory {
     private final IdGenerator idGenerator;
 
@@ -25,10 +24,6 @@ public class OccurrenceFactory {
         return create(event, date, OccurrenceStatus.VIRTUAL);
     }
 
-    public Occurrence createExpired(LocalDate date, Event event) {
-        return create(event, date, OccurrenceStatus.EXPIRED);
-    }
-
     private Occurrence create(Event event, LocalDate date, OccurrenceStatus status) {
         return Occurrence.builder()
             .occurrenceId(idGenerator.randomUuid())
@@ -38,5 +33,4 @@ public class OccurrenceFactory {
             .status(status)
             .build();
     }
-
 }

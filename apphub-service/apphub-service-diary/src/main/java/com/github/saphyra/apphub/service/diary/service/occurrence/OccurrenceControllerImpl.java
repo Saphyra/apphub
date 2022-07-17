@@ -19,7 +19,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class OccurrenceControllerImpl implements OccurrenceController {
     private final EditOccurrenceService editOccurrenceService;
     private final MarkOccurrenceDoneService markOccurrenceDoneService;
