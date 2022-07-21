@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @Component
-//TODO unit test
 class DaysOfWeekEventHandler {
     private final DaysOfWeekParser daysOfWeekParser;
     private final OccurrenceFactory occurrenceFactory;

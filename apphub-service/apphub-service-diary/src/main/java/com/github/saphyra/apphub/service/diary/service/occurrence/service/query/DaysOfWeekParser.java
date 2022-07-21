@@ -12,7 +12,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Component
-//TODO unit test
 public class DaysOfWeekParser {
     private final ObjectMapperWrapper objectMapperWrapper;
 

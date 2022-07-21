@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @Component
-//TODO unit test
 public class OccurrenceQueryService {
     private final OccurrenceFetcher occurrenceFetcher;
     private final EventDao eventDao;
@@ -39,7 +38,7 @@ public class OccurrenceQueryService {
 
         Map<LocalDate, List<Occurrence>> occurrences = eventDao.getByUserId(userId)
             .stream()
-            .flatMap(event -> occurrenceFetcher.fetchOccurrenceOfEvent(event, sortedDates).stream())
+            .flatMap(event -> occurrenceFetcher.fetchOccurrencesOfEvent(event, sortedDates).stream())
             .peek(occurrence -> {
                 if (occurrence.getDate().isBefore(currentDate) && (occurrence.getStatus() == OccurrenceStatus.VIRTUAL || occurrence.getStatus() == OccurrenceStatus.PENDING)) {
                     log.debug("{} is expired.", occurrence);

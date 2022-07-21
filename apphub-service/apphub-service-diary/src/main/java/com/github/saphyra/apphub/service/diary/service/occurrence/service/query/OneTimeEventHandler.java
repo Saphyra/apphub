@@ -12,7 +12,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Component
-//TODO unit test
 class OneTimeEventHandler {
     List<Occurrence> handleOneTimeEvent(List<Occurrence> occurrences, List<LocalDate> dates) {
         Occurrence occurrence = occurrences.get(0);

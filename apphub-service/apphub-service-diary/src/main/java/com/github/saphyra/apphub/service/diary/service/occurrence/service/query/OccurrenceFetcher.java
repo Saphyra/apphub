@@ -19,14 +19,13 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 @Slf4j
 @Component
-//TODO unit test
 class OccurrenceFetcher {
     private final OccurrenceDao occurrenceDao;
     private final OneTimeEventHandler oneTimeEventHandler;
     private final DaysOfWeekEventHandler daysOfWeekEventHandler;
     private final EveryXDayEventHandler everyXDayEventHandler;
 
-    List<Occurrence> fetchOccurrenceOfEvent(Event event, List<LocalDate> dates) {
+    List<Occurrence> fetchOccurrencesOfEvent(Event event, List<LocalDate> dates) {
         log.debug("Fetching Occurrences for event {}", event);
         List<Occurrence> occurrences = occurrenceDao.getByEventId(event.getEventId());
         log.debug("Occurrences related to event: {}", occurrences);
@@ -39,7 +38,7 @@ class OccurrenceFetcher {
             case DAYS_OF_WEEK:
                 return daysOfWeekEventHandler.handleDaysOfWeekEvent(event, dates, occurrenceMapping);
             case EVERY_X_DAYS:
-                return everyXDayEventHandler.handleEveryXDayEvent(event, dates, occurrences, occurrenceMapping);
+                return everyXDayEventHandler.handleEveryXDayEvent(event, dates, occurrenceMapping);
             default:
                 throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR, "Unhandled repetitionType: " + event.getRepetitionType());
         }
