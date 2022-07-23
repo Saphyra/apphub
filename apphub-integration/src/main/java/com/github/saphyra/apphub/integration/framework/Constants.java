@@ -48,4 +48,11 @@ public class Constants {
 
     //ModuleIds
     public final String MODULE_ID_TRAINING = "training";
+
+    //Diary
+    public final String DIARY_OCCURRENCE_STATUS_PENDING = "PENDING";
+    public final String DIARY_OCCURRENCE_STATUS_EXPIRED = "EXPIRED";
+    public final String DIARY_OCCURRENCE_STATUS_VIRTUAL = "VIRTUAL";
+    public final String DIARY_OCCURRENCE_STATUS_DONE = "DONE";
+    public final String DIARY_OCCURRENCE_STATUS_SNOOZED = "SNOOZED";
 }

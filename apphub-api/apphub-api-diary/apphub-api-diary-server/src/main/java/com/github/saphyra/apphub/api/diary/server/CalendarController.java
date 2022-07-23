@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 public interface CalendarController {
-    //TODO API test
     @GetMapping(Endpoints.DIARY_GET_CALENDAR)
     List<CalendarResponse> getCalendar(@RequestParam("date") String date, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

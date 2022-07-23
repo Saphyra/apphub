@@ -16,11 +16,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface EventController {
-    //TODO API test
     @PutMapping(Endpoints.DIARY_CREATE_EVENT)
     List<CalendarResponse> createEvent(@RequestBody CreateEventRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @DeleteMapping(Endpoints.DIARY_EVENT_DELETE)
-    List<CalendarResponse> deleteOccurrence(@RequestBody ReferenceDate referenceDate, @PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<CalendarResponse> deleteEvent(@RequestBody ReferenceDate referenceDate, @PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

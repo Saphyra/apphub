@@ -28,7 +28,7 @@ public class EventControllerImpl implements EventController {
     }
 
     @Override
-    public List<CalendarResponse> deleteOccurrence(ReferenceDate referenceDate, UUID eventId, AccessTokenHeader accessTokenHeader) {
+    public List<CalendarResponse> deleteEvent(ReferenceDate referenceDate, UUID eventId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to delete event {}", accessTokenHeader.getUserId(), eventId);
 
         return deleteEventService.delete(accessTokenHeader.getUserId(), eventId, referenceDate);

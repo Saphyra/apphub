@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.service.diary.dao.event.Event;
 import com.github.saphyra.apphub.service.diary.dao.occurance.Occurrence;
+import com.github.saphyra.apphub.service.diary.dao.occurance.OccurrenceDao;
 import com.github.saphyra.apphub.service.diary.service.occurrence.service.OccurrenceFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DaysOfWeekEventHandlerTest {
@@ -30,6 +32,9 @@ public class DaysOfWeekEventHandlerTest {
 
     @Mock
     private OccurrenceFactory occurrenceFactory;
+
+    @Mock
+    private OccurrenceDao occurrenceDao;
 
     @InjectMocks
     private DaysOfWeekEventHandler underTest;
@@ -52,5 +57,7 @@ public class DaysOfWeekEventHandlerTest {
         List<Occurrence> result = underTest.handleDaysOfWeekEvent(event, List.of(MONDAY_1, MONDAY_2, MONDAY_3, OTHER_DAY), CollectionUtils.singleValueMap(MONDAY_2, existingOccurrence, new OptionalHashMap<>()));
 
         assertThat(result).containsExactlyInAnyOrder(existingOccurrence, newOccurrence);
+
+        verify(occurrenceDao).save(newOccurrence);
     }
 }

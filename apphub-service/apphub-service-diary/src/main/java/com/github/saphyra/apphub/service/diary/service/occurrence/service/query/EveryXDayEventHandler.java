@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.diary.service.occurrence.service.query
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
 import com.github.saphyra.apphub.service.diary.dao.event.Event;
 import com.github.saphyra.apphub.service.diary.dao.occurance.Occurrence;
+import com.github.saphyra.apphub.service.diary.dao.occurance.OccurrenceDao;
 import com.github.saphyra.apphub.service.diary.service.occurrence.service.OccurrenceFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 class EveryXDayEventHandler {
     private final OccurrenceFactory occurrenceFactory;
     private final DateOfLastOccurrenceProvider dateOfLastOccurrenceProvider;
+    private final OccurrenceDao occurrenceDao;
 
     List<Occurrence> handleEveryXDayEvent(Event event, List<LocalDate> dates, OptionalMap<LocalDate, Occurrence> occurrenceMapping) {
         return dates.stream()
@@ -36,7 +38,11 @@ class EveryXDayEventHandler {
 
                 return dayDifference % Integer.parseInt(event.getRepetitionData()) == 0;
             })
-            .map(date -> occurrenceMapping.getOptional(date).orElseGet(() -> occurrenceFactory.createVirtual(date, event)))
+            .map(date -> occurrenceMapping.getOptional(date).orElseGet(() -> {
+                Occurrence occurrence = occurrenceFactory.createVirtual(date, event);
+                occurrenceDao.save(occurrence);
+                return occurrence;
+            }))
             .collect(Collectors.toList());
     }
 }

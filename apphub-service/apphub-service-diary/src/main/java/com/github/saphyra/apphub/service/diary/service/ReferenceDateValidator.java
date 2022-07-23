@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class ReferenceDateValidator {
     public void validate(ReferenceDate referenceDate) {
         ValidationUtil.notNull(referenceDate, "referenceDate");
-        ValidationUtil.notNull(referenceDate.getMonth(), "month");
-        ValidationUtil.notNull(referenceDate.getDay(), "day");
+        ValidationUtil.notNull(referenceDate.getMonth(), "referenceDate.month");
+        ValidationUtil.notNull(referenceDate.getDay(), "referenceDate.day");
     }
 }

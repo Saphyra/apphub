@@ -28,7 +28,7 @@ public class ReferenceDateValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(referenceDate));
 
-        ExceptionValidator.validateInvalidParam(ex, "month", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "referenceDate.month", "must not be null");
     }
 
     @Test
@@ -39,7 +39,7 @@ public class ReferenceDateValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(referenceDate));
 
-        ExceptionValidator.validateInvalidParam(ex, "day", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "referenceDate.day", "must not be null");
     }
 
     @Test

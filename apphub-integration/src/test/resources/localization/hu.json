@@ -15,6 +15,7 @@
   "GAME_NOT_FOUND": "A játék nem található.",
   "GENERAL_ERROR": "Ismeretlen hiba.",
   "INVALID_PARAM": "Érvénytelen paraméter.",
+  "INVALID_STATUS": "Érvénytelen állapot.",
   "INVALID_TYPE": "Érvénytelen típus.",
   "LIST_ITEM_NOT_FOUND": "Elem nem található.",
   "LOBBY_MEMBER_NOT_READY": "Várd meg, amíg mindenki kész van!",

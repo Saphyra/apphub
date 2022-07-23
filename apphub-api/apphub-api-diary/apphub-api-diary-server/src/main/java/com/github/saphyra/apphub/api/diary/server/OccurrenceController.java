@@ -15,19 +15,15 @@ import java.util.List;
 import java.util.UUID;
 
 public interface OccurrenceController {
-    //TODO API test
     @PostMapping(Endpoints.DIARY_OCCURRENCE_EDIT)
     List<CalendarResponse> editOccurrence(@RequestBody EditOccurrenceRequest request, @PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @PostMapping(Endpoints.DIARY_OCCURRENCE_DONE)
     List<CalendarResponse> markOccurrenceDone(@RequestBody ReferenceDate referenceDate, @PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @PostMapping(Endpoints.DIARY_OCCURRENCE_SNOOZED)
     List<CalendarResponse> markOccurrenceSnoozed(@RequestBody ReferenceDate referenceDate, @PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @PostMapping(Endpoints.DIARY_OCCURRENCE_DEFAULT)
     List<CalendarResponse> markOccurrenceDefault(@RequestBody ReferenceDate referenceDate, @PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

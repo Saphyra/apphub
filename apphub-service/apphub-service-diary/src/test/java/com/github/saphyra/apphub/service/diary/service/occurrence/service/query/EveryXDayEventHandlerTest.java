@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.service.diary.dao.event.Event;
 import com.github.saphyra.apphub.service.diary.dao.occurance.Occurrence;
+import com.github.saphyra.apphub.service.diary.dao.occurance.OccurrenceDao;
 import com.github.saphyra.apphub.service.diary.service.occurrence.service.OccurrenceFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EveryXDayEventHandlerTest {
@@ -44,6 +46,9 @@ public class EveryXDayEventHandlerTest {
     @Mock
     private DateOfLastOccurrenceProvider dateOfLastOccurrenceProvider;
 
+    @Mock
+    private OccurrenceDao occurrenceDao;
+
     @InjectMocks
     private EveryXDayEventHandler underTest;
 
@@ -68,5 +73,7 @@ public class EveryXDayEventHandlerTest {
         List<Occurrence> result = underTest.handleEveryXDayEvent(event, DATES, occurrenceMapping);
 
         assertThat(result).containsExactlyInAnyOrder(existingOccurrence, newOccurrence);
+
+        verify(occurrenceDao).save(newOccurrence);
     }
 }
