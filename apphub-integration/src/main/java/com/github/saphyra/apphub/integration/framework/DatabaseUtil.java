@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.framework;
 
 import com.github.saphyra.apphub.integration.TestBase;
+import com.github.saphyra.apphub.integration.structure.diary.Occurrence;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
@@ -26,6 +27,7 @@ public class DatabaseUtil {
     private static final String FIND_SKYXPLORE_CHARACTER_NAME_BY_EMAIL = "SELECT name FROM skyxplore.character WHERE user_id = (SELECT user_id FROM apphub_user.apphub_user where email='%s')";
     private static final String SET_MARKED_FOR_DELETION_AT_BY_EMAIL = "UPDATE apphub_user.apphub_user SET marked_for_deletion_at='%s' WHERE email='%s'";
     private static final String SET_MARKED_FOR_DELETION_BY_EMAIL_LIKE = "UPDATE apphub_user.apphub_user SET marked_for_deletion=true WHERE email LIKE '%s'";
+    private static final String GET_DIARY_OCCURRENCES_BY_USER_ID = "SELECT * FROM diary.occurrence WHERE user_id='%s'";
 
     private static <T> T query(String sql, Mapper<T> mapper) throws Exception {
         Class.forName(JDBC_DRIVER);
@@ -155,6 +157,33 @@ public class DatabaseUtil {
         } catch (Exception e) {
             log.error("setMarkedForDeletionByEmailLike failed", e);
             throw new RuntimeException("Failed setting markedForDeletion", e);
+        }
+    }
+
+    public static List<Occurrence> getDiaryOccurrencesByUserId(UUID userId) {
+        String sql = String.format(GET_DIARY_OCCURRENCES_BY_USER_ID, userId);
+
+        try {
+            return query(
+                sql,
+                rs -> {
+                    List<Occurrence> result = new ArrayList<>();
+                    while (rs.next()) {
+                        Occurrence occurrence = Occurrence.builder()
+                            .occurrenceId(UUID.fromString(rs.getString("occurrence_id")))
+                            .eventId(UUID.fromString(rs.getString("event_id")))
+                            .userId(UUID.fromString(rs.getString("user_id")))
+                            .date(rs.getString("date"))
+                            .status(rs.getString("status"))
+                            .note(rs.getString("note"))
+                            .build();
+                        result.add(occurrence);
+                    }
+                    return result;
+                }
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed querying Diary occurrences", e);
         }
     }
 

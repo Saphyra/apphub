@@ -1,0 +1,143 @@
+<HTML>
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/diary/css/diary.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT src="/res/diary/js/page_controller.js"></SCRIPT>
+</HEAD>
+<BODY>
+<DIV id="main-page" class="main-page">
+    <HEADER>
+        <H1 id="main-title"></H1>
+    </HEADER>
+
+    <MAIN id="main-page-content">
+        <DIV id="calendar-container">
+            <DIV id="calendar-title">
+                <BUTTON onclick="calendarController.previousMonth()">&lt;</BUTTON>
+                <H2 id="calendar-current-month"></H2>
+                <BUTTON onclick="calendarController.nextMonth()">&gt;</BUTTON>
+            </DIV>
+
+            <DIV id="calendar"></DIV>
+        </DIV>
+
+        <DIV id="daily-tasks-container">
+            <H2 id="daily-tasks-current-day"></H2>
+
+            <DIV id="daily-tasks"></DIV>
+
+            <DIV id="create-task-button" class="button" onclick="createEventController.openCreateEventWindow()"></DIV>
+        </DIV>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="back-button" onclick='window.location = "/web/modules"'></BUTTON>
+    </FOOTER>
+</DIV>
+
+<DIV id="create-event-page" class="main-page">
+    <HEADER>
+        <H1 id="create-event-title"></H1>
+
+        <BUTTON class="close-dialog-button" onclick="pageController.displayMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN class="centered">
+        <FIELDSET>
+            <LEGEND id="create-event-description-label"></LEGEND>
+
+            <INPUT type="text" id="create-event-title-input">
+
+            <TEXTAREA id="create-event-content-input"></TEXTAREA>
+        </FIELDSET>
+
+        <FIELDSET>
+            <LEGEND id="create-event-repetition-type-label"></LEGEND>
+
+            <SELECT id="create-event-repetition-type-select">
+                <OPTION value="ONE_TIME" id="create-event-repetition-type-one-time"></OPTION>
+                <OPTION value="EVERY_X_DAYS" id="create-event-repetition-type-every-x-days"></OPTION>
+                <OPTION value="DAYS_OF_WEEK" id="create-event-repetition-type-days-of-week"></OPTION>
+            </SELECT>
+
+            <DIV id="create-event-one-time-repetition-type-data" class="repetition-type-data"></DIV>
+
+            <DIV id="create-event-every-x-days-repetition-type-data" class="repetition-type-data">
+                <INPUT type="number" id="create-event-repetition-type-days-input" min="1" max="1000">
+            </DIV>
+
+            <DIV id="create-event-days-of-week-repetition-type-data" class="repetition-type-data">
+                <LABEL>
+                    <INPUT type="checkbox" class="create-event-days-of-week-input" value="MONDAY">
+                    <SPAN id="create-event-days-of-week-monday-label"></SPAN>
+                </LABEL>
+
+                <LABEL>
+                    <INPUT type="checkbox" class="create-event-days-of-week-input" value="TUESDAY">
+                    <SPAN id="create-event-days-of-week-tuesday-label"></SPAN>
+                </LABEL>
+
+                <LABEL>
+                    <INPUT type="checkbox" class="create-event-days-of-week-input" value="WEDNESDAY">
+                    <SPAN id="create-event-days-of-week-wednesday-label"></SPAN>
+                </LABEL>
+
+                <LABEL>
+                    <INPUT type="checkbox" class="create-event-days-of-week-input" value="THURSDAY">
+                    <SPAN id="create-event-days-of-week-thursday-label"></SPAN>
+                </LABEL>
+
+                <LABEL>
+                    <INPUT type="checkbox" class="create-event-days-of-week-input" value="FRIDAY">
+                    <SPAN id="create-event-days-of-week-friday-label"></SPAN>
+                </LABEL>
+
+                <LABEL>
+                    <INPUT type="checkbox" class="create-event-days-of-week-input" value="SATURDAY">
+                    <SPAN id="create-event-days-of-week-saturday-label"></SPAN>
+                </LABEL>
+
+                <LABEL>
+                    <INPUT type="checkbox" class="create-event-days-of-week-input" value="SUNDAY">
+                    <SPAN id="create-event-days-of-week-sunday-label"></SPAN>
+                </LABEL>
+            </DIV>
+        </FIELDSET>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="create-event-button" onclick="createEventController.createEvent()"></BUTTON>
+    </FOOTER>
+</DIV>
+
+<DIV id="view-event-page" class="main-page">
+    <HEADER>
+        <H1 id="view-event-title"></H1>
+
+        <BUTTON id="view-event-page-close-button" class="close-dialog-button" onclick="pageController.displayMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN id="view-event-content-wrapper">
+        <TEXTAREA id="view-event-content"></TEXTAREA>
+        <TEXTAREA id="view-event-note"></TEXTAREA>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="view-event-edit-button" onclick="viewEventController.enableEditing()"></BUTTON>
+        <BUTTON id="view-event-save-button" onclick="viewEventController.saveModifications()"></BUTTON>
+        <BUTTON id="view-event-discard-button" onclick="viewEventController.discardModifications()"></BUTTON>
+        <BUTTON id="view-event-done-button" onclick="viewEventController.markAsDone()"></BUTTON>
+        <BUTTON id="view-event-not-done-button" onclick="viewEventController.markAsDefault()"></BUTTON>
+        <BUTTON id="view-event-snooze-button" onclick="viewEventController.markAsSnoozed()"></BUTTON>
+        <BUTTON id="view-event-unsnooze-button" onclick="viewEventController.markAsDefault()"></BUTTON>
+        <BUTTON id="view-event-delete-button" onclick="viewEventController.deleteEvent()"></BUTTON>
+    </FOOTER>
+</DIV>
+</BODY>
+</HTML>

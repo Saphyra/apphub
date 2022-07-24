@@ -1,5 +1,6 @@
 admin-panel apphub-service-admin_panel service
 community apphub-service-community service
+diary apphub-service-diary service
 modules apphub-service-modules service
 notebook apphub-service-notebook service
 training apphub-service-training service

@@ -47,6 +47,11 @@ modules:
         mobileAllowed: false
         roles:
           - NOTEBOOK
+      - name: diary
+        url: /web/diary
+        mobileAllowed: false
+        roles:
+          - DIARY
     development-utils:
       - name: json-formatter
         url: /web/utils/json-formatter

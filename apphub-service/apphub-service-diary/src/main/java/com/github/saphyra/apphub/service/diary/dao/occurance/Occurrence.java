@@ -1,0 +1,21 @@
+package com.github.saphyra.apphub.service.diary.dao.occurance;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
+import java.time.LocalDate;
+import java.util.UUID;
+
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Data
+@Builder
+public class Occurrence {
+    private final UUID occurrenceId;
+    private final UUID eventId;
+    private final UUID userId;
+    private final LocalDate date;
+    private OccurrenceStatus status;
+    private String note;
+}

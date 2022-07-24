@@ -5,6 +5,7 @@ public class Endpoints {
     public static final String INDEX_PAGE = "/web";
     public static final String ACCOUNT_PAGE = "/web/user/account";
     public static final String MODULES_PAGE = "/web/modules";
+    public static final String DIARY_PAGE = "/web/diary";
     public static final String ADMIN_PANEL_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/role-management";
     public static final String ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/disabled-role-management";
     public static final String ADMIN_PANEL_ERROR_REPORT_PAGE = "/web/admin-panel/error-report";
@@ -268,4 +269,13 @@ public class Endpoints {
     public static final String COMMUNITY_GROUP_MEMBER_ROLES = "/api/community/group/{groupId}/member/{groupMemberId}";
     public static final String COMMUNITY_GROUP_DELETE = "/api/community/group/{groupId}";
     public static final String COMMUNITY_GROUP_CHANGE_OWNER = "/api/community/group/{groupId}/owner";
+
+    //DIARY
+    public static final String DIARY_GET_CALENDAR = "/api/diary/calendar";
+    public static final String DIARY_CREATE_EVENT = "/api/diary/event";
+    public static final String DIARY_OCCURRENCE_EDIT = "/api/diary/occurrence/{occurrenceId}/edit";
+    public static final String DIARY_OCCURRENCE_DONE = "/api/diary/occurrence/{occurrenceId}/done";
+    public static final String DIARY_OCCURRENCE_DEFAULT = "/api/diary/occurrence/{occurrenceId}/default";
+    public static final String DIARY_OCCURRENCE_SNOOZED = "/api/diary/occurrence/{occurrenceId}/snoozed";
+    public static final String DIARY_EVENT_DELETE = "/api/diary/event/{eventId}";
 }

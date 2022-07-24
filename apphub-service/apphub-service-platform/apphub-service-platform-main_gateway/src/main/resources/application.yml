@@ -44,6 +44,10 @@ spring:
           uri: http://community:8080
           predicates:
             - Path=/res/community/**
+        - id: diary-resorces
+          uri: http://diary:8080
+          predicates:
+            - Path=/res/diary/**
 
         #PAGES
         - id: error-page
@@ -86,6 +90,10 @@ spring:
           uri: http://community:8080
           predicates:
             - Path=/web/community
+        - id: diary-page
+          uri: http://diary:8080
+          predicates:
+            - Path=/web/diary
 
         #MODULES
         - id: user
@@ -128,6 +136,10 @@ spring:
           uri: http://community:8080
           predicates:
             - Path=/api/community/**
+        - id: diary
+          uri: http://diary:8080
+          predicates:
+            - Path=/api/diary/**
 
         #PLATFORM
         - id: localization

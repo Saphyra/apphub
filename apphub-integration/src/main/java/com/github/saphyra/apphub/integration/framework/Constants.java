@@ -17,6 +17,7 @@ public class Constants {
     public final String ROLE_TRAINING = "TRAINING";
     public final String ROLE_UTILS = "UTILS";
     public final String ROLE_COMMUNITY = "COMMUNITY";
+    public final String ROLE_DIARY = "DIARY";
 
     public final String TEST_ROLE_NAME = "Teszt";
     public final String GENERAL_CHAT_ROOM_NAME = "general";
@@ -47,4 +48,11 @@ public class Constants {
 
     //ModuleIds
     public final String MODULE_ID_TRAINING = "training";
+
+    //Diary
+    public final String DIARY_OCCURRENCE_STATUS_PENDING = "PENDING";
+    public final String DIARY_OCCURRENCE_STATUS_EXPIRED = "EXPIRED";
+    public final String DIARY_OCCURRENCE_STATUS_VIRTUAL = "VIRTUAL";
+    public final String DIARY_OCCURRENCE_STATUS_DONE = "DONE";
+    public final String DIARY_OCCURRENCE_STATUS_SNOOZED = "SNOOZED";
 }

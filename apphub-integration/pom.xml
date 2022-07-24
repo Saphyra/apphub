@@ -26,6 +26,7 @@
         <versions.apache-commons.commons-net>3.6</versions.apache-commons.commons-net>
         <versions.assertj-core>3.15.0</versions.assertj-core>
         <versions.jackson-core>2.10.2</versions.jackson-core>
+        <versions.jackson-datatype>2.10.3</versions.jackson-datatype>
         <versions.rest-assured>4.4.0</versions.rest-assured>
         <versions.selenium>4.0.0-alpha-4</versions.selenium>
         <versions.testng>7.1.0</versions.testng>
@@ -116,13 +117,19 @@
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
-            <version>4.0.0</version>
+            <version>5.2.1</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
             <version>2.9.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${versions.jackson-datatype}</version>
         </dependency>
     </dependencies>
 

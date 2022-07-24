@@ -21,6 +21,7 @@ public class Endpoints {
     public static final String UTILS_LOG_FORMATTER_PAGE = "/web/utils/log-formatter";
     public static final String UTILS_BASE64_ENCODER_PAGE = "/web/utils/base64";
     public static final String COMMUNITY_PAGE = "/web/community";
+    public static final String DIARY_PAGE = "/web/diary";
 
     //Training
     public static final String TRAINING_BOOK_PAGE = "/web/training/{book}/{chapter}";
@@ -265,4 +266,13 @@ public class Endpoints {
     public static final String COMMUNITY_GROUP_MEMBER_ROLES = "/api/community/group/{groupId}/member/{groupMemberId}";
     public static final String COMMUNITY_GROUP_DELETE = "/api/community/group/{groupId}";
     public static final String COMMUNITY_GROUP_CHANGE_OWNER = "/api/community/group/{groupId}/owner";
+
+    //DIARY
+    public static final String DIARY_GET_CALENDAR = "/api/diary/calendar";
+    public static final String DIARY_CREATE_EVENT = "/api/diary/event";
+    public static final String DIARY_OCCURRENCE_EDIT = "/api/diary/occurrence/{occurrenceId}/edit";
+    public static final String DIARY_OCCURRENCE_DONE = "/api/diary/occurrence/{occurrenceId}/done";
+    public static final String DIARY_OCCURRENCE_DEFAULT = "/api/diary/occurrence/{occurrenceId}/default";
+    public static final String DIARY_OCCURRENCE_SNOOZED = "/api/diary/occurrence/{occurrenceId}/snoozed";
+    public static final String DIARY_EVENT_DELETE = "/api/diary/event/{eventId}";
 }

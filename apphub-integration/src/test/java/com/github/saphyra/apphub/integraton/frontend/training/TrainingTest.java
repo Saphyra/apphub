@@ -30,7 +30,7 @@ public class TrainingTest extends SeleniumTest {
             .toArray();
     }
 
-    @Test(dataProvider = "bookDataProvider")
+    @Test(dataProvider = "bookDataProvider", priority = -1)
     public void bookStepThroughTest(ModuleLocation moduleLocation) {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

@@ -110,7 +110,7 @@ public class TestBase {
 
         log.debug("Available permits before releasing: {}", SEMAPHORE.availablePermits());
         SEMAPHORE.release(1);
-        log.info("Available permits after releasing of {}: {}", methodName, SEMAPHORE.availablePermits());
+        log.info("Available permits after releasing {}: {}", methodName, SEMAPHORE.availablePermits());
 
         deleteTestUsers(methodName);
 

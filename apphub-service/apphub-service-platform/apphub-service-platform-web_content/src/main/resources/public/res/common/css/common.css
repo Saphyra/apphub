@@ -121,7 +121,7 @@ button, .button, a, select, footer label{
         cursor: no-drop;
     }
 
-footer label *{
+label *{
     cursor: pointer;
 }
 
@@ -129,7 +129,7 @@ button:hover, .button:hover, a:hover, footer label:hover{
     border-color: red;
 }
 button:active, .button:active, a:active, footer label:active{
-    border-color: orange;
+    border-color: orange !important;
     border-style: inset;
     outline: none;
 }

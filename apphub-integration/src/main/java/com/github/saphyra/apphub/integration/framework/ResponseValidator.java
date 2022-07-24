@@ -15,7 +15,7 @@ public class ResponseValidator {
     }
 
     private static void verifyParam(ErrorResponse errorResponse, String field, String value) {
-        assertThat(errorResponse.getParams().get(field)).isEqualTo(value);
+        assertThat(errorResponse.getParams()).containsEntry(field, value);
     }
 
     public static ErrorResponse verifyBadRequest(Language language, Response response, ErrorCode errorCode) {
