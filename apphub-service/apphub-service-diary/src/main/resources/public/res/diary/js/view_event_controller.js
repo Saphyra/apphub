@@ -120,7 +120,7 @@
 
         const request = new Request(Mapping.getEndpoint("DIARY_OCCURRENCE_DEFAULT", {occurrenceId: currentEvent.occurrenceId}), payload);
             request.convertResponse = jsonConverter;
-            request.processValidResponse = function(day){
+            request.processValidResponse = function(days){
                 eventProcessor.processEvent(new Event(events.EVENT_CHANGED, days));
                 currentEvent.status = "PENDING";
                 viewEvent(currentEvent);
@@ -136,7 +136,7 @@
 
         const request = new Request(Mapping.getEndpoint("DIARY_OCCURRENCE_SNOOZED", {occurrenceId: currentEvent.occurrenceId}), payload);
             request.convertResponse = jsonConverter;
-            request.processValidResponse = function(day){
+            request.processValidResponse = function(days){
                 eventProcessor.processEvent(new Event(events.EVENT_CHANGED, days));
                 currentEvent.status = "SNOOZED";
                 viewEvent(currentEvent);

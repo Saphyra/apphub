@@ -63,6 +63,7 @@
                 month: calendarController.getCurrentDate().toString(),
                 day: currentDate.toString()
             },
+            date: currentDate.toString(),
             title: title,
             content: content,
             repetitionType: repetitionType,
