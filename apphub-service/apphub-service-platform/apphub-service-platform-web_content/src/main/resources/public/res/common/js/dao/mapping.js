@@ -88,6 +88,7 @@ window.Mapping = new function(){
         NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST_TABLE: new Endpoint("/api/notebook/checklist-table/{listItemId}/checked", HttpMethod.DELETE),
         NOTEBOOK_ORDER_CHECKLIST_ITEMS: new Endpoint("/api/notebook/checklist/{listItemId}/order", HttpMethod.POST),
         NOTEBOOK_SEARCH: new Endpoint("/api/notebook/item/search", HttpMethod.POST),
+        NOTEBOOK_ARCHIVE_ITEM: new Endpoint("/api/notebook/item/{listItemId}/archive", HttpMethod.POST),
 
         //Utils
         UTILS_LOG_FORMATTER_GET_VISIBILITY: new Endpoint("/api/utils/log-formatter/visibility", HttpMethod.PUT),
@@ -177,6 +178,15 @@ window.Mapping = new function(){
         COMMUNITY_GROUP_MEMBER_ROLES: new Endpoint("/api/community/group/{groupId}/member/{groupMemberId}", HttpMethod.POST),
         COMMUNITY_GROUP_DELETE: new Endpoint("/api/community/group/{groupId}", HttpMethod.DELETE),
         COMMUNITY_GROUP_CHANGE_OWNER: new Endpoint("/api/community/group/{groupId}/owner", HttpMethod.POST),
+
+        //DIARY
+        DIARY_GET_CALENDAR: new Endpoint("/api/diary/calendar", HttpMethod.GET),
+        DIARY_CREATE_EVENT: new Endpoint("/api/diary/event", HttpMethod.PUT),
+        DIARY_OCCURRENCE_EDIT: new Endpoint("/api/diary/occurrence/{occurrenceId}/edit", HttpMethod.POST),
+        DIARY_EVENT_DELETE: new Endpoint("/api/diary/event/{eventId}", HttpMethod.DELETE),
+        DIARY_OCCURRENCE_DONE: new Endpoint("/api/diary/occurrence/{occurrenceId}/done", HttpMethod.POST),
+        DIARY_OCCURRENCE_DEFAULT: new Endpoint("/api/diary/occurrence/{occurrenceId}/default", HttpMethod.POST),
+        DIARY_OCCURRENCE_SNOOZED: new Endpoint("/api/diary/occurrence/{occurrenceId}/snoozed", HttpMethod.POST),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

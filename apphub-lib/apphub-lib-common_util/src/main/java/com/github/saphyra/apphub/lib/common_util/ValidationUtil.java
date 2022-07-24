@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.lib.common_util;
 
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 
+import java.util.Collection;
 import java.util.function.Function;
 
 import static java.util.Objects.isNull;
@@ -62,5 +63,12 @@ public class ValidationUtil {
         notNull(value, field);
         atLeast(value, min, field);
         maximum(value, max, field);
+    }
+
+    public static void notEmpty(Collection<?> collection, String field) {
+        notNull(collection, field);
+        if (collection.isEmpty()) {
+            throw ExceptionFactory.invalidParam(field, "must not be empty");
+        }
     }
 }

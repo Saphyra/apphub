@@ -1,3 +1,4 @@
+scriptLoader.loadScript("/res/common/js/date.js");
 scriptLoader.loadScript("/res/common/js/web_socket.js");
 scriptLoader.loadScript("/res/common/js/animation/roll.js");
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");

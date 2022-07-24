@@ -31,6 +31,7 @@ class ListItemConverter extends ConverterBase<ListItemEntity, ListItem> {
             .type(entity.getType())
             .title(stringEncryptor.decryptEntity(entity.getTitle(), userId))
             .pinned(Optional.ofNullable(entity.getPinned()).map(s -> booleanEncryptor.decryptEntity(s, userId)).orElse(false))
+            .archived(Optional.ofNullable(entity.getArchived()).map(s -> booleanEncryptor.decryptEntity(s, userId)).orElse(false))
             .build();
     }
 
@@ -44,6 +45,7 @@ class ListItemConverter extends ConverterBase<ListItemEntity, ListItem> {
             .type(domain.getType())
             .title(stringEncryptor.encryptEntity(domain.getTitle(), userId))
             .pinned(booleanEncryptor.encryptEntity(domain.isPinned(), userId))
+            .archived(booleanEncryptor.encryptEntity(domain.isArchived(), userId))
             .build();
     }
 }

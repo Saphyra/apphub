@@ -49,5 +49,6 @@
         <module>apphub-api-utils</module>
         <module>apphub-api-admin_panel</module>
         <module>apphub-api-community</module>
+        <module>apphub-api-diary</module>
     </modules>
 </project>

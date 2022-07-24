@@ -1,0 +1,196 @@
+{
+  "title": "Apphub - Diary",
+  "staticText": {
+    "main-title": [
+      {
+        "key": "innerHTML",
+        "message": "Diary"
+      }
+    ],
+    "back-button": [
+      {
+        "key": "innerHTML",
+        "message": "Home"
+      }
+    ],
+    "create-task-button": [
+      {
+        "key": "innerHTML",
+        "message": "New"
+      }
+    ],
+    "create-event-title": [
+      {
+        "key": "innerHTML",
+        "message": "New event"
+      }
+    ],
+    "create-event-description-label": [
+      {
+        "key": "innerHTML",
+        "message": "Description"
+      }
+    ],
+    "create-event-title-input": [
+      {
+        "key": "placeholder",
+        "message": "Title"
+      }
+    ],
+    "create-event-content-input": [
+      {
+        "key": "placeholder",
+        "message": "Content"
+      }
+    ],
+    "create-event-repetition-type-label": [
+      {
+        "key": "innerHTML",
+        "message": "Repetition type"
+      }
+    ],
+    "create-event-repetition-type-one-time": [
+      {
+        "key": "innerHTML",
+        "message": "One time"
+      }
+    ],
+    "create-event-repetition-type-every-x-days": [
+      {
+        "key": "innerHTML",
+        "message": "Every X days"
+      }
+    ],
+    "create-event-repetition-type-days-of-week": [
+      {
+        "key": "innerHTML",
+        "message": "Days of week"
+      }
+    ],
+    "create-event-repetition-type-days-input": [
+      {
+        "key": "placeholder",
+        "message": "Days"
+      }
+    ],
+    "create-event-days-of-week-monday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Monday"
+      }
+    ],
+    "create-event-days-of-week-tuesday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Tuesday"
+      }
+    ],
+    "create-event-days-of-week-wednesday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Wednesday"
+      }
+    ],
+    "create-event-days-of-week-thursday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Thursday"
+      }
+    ],
+    "create-event-days-of-week-friday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Friday"
+      }
+    ],
+    "create-event-days-of-week-saturday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Saturday"
+      }
+    ],
+    "create-event-days-of-week-sunday-label": [
+      {
+        "key": "innerHTML",
+        "message": "Sunday"
+      }
+    ],
+    "create-event-button": [
+      {
+        "key": "innerHTML",
+        "message": "Create"
+      }
+    ],
+    "view-event-edit-button": [
+      {
+        "key": "innerHTML",
+        "message": "Edit"
+      }
+    ],
+    "view-event-save-button": [
+      {
+        "key": "innerHTML",
+        "message": "Save"
+      }
+    ],
+    "view-event-discard-button": [
+      {
+        "key": "innerHTML",
+        "message": "Discard"
+      }
+    ],
+    "view-event-done-button": [
+      {
+        "key": "innerHTML",
+        "message": "Done"
+      }
+    ],
+    "view-event-not-done-button": [
+      {
+        "key": "innerHTML",
+        "message": "Not done"
+      }
+    ],
+    "view-event-snooze-button": [
+      {
+        "key": "innerHTML",
+        "message": "Snooze"
+      }
+    ],
+    "view-event-unsnooze-button": [
+      {
+        "key": "innerHTML",
+        "message": "Unsnooze"
+      }
+    ],
+    "view-event-delete-button": [
+      {
+        "key": "innerHTML",
+        "message": "Delete"
+      }
+    ],
+    "view-event-content": [
+      {
+        "key": "placeholder",
+        "message": "Content"
+      }
+    ],
+    "view-event-note": [
+      {
+        "key": "placeholder",
+        "message": "Note"
+      }
+    ]
+  },
+  "additionalContent": {
+    "empty-title": "Title must not be empty.",
+    "repetition-type-days-too-low": "Days to low (minimum 1).",
+    "no-day-selected": "No day selected.",
+    "event-created": "Event created.",
+    "delete-event-confirmation-dialog-title": "Do you want to delete the event?",
+    "delete-event-confirmation-dialog-detail": "Are you sure you want to delete event <SPAN class='red'>{title}</SPAN> with all of its occurrences?",
+    "delete-event-confirmation-dialog-confirm-button": "Delete event",
+    "delete-event-confirmation-dialog-cancel-button": "Cancel",
+    "event-deleted": "Event deleted."
+  }
+}

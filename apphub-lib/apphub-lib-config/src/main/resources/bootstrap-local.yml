@@ -96,3 +96,7 @@ training:
 community:
   ribbon:
     listOfServers: localhost:8096
+
+diary:
+  ribbon:
+    listOfServers: localhost:8097

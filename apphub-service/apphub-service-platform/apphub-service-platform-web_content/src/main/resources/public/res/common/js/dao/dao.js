@@ -25,20 +25,24 @@
             throwException("IllegalArgument", "request must not be null or undefined.");
         }
         request.validate();
-        
-        const xhr = new XMLHttpRequest();
-            xhr.open(request.method, request.path, 1);
-            prepareRequest(xhr, request.method);
-        
-            xhr.onload = function(){
-                const response = new Response(xhr);
-                request.processResponse(response);
-            };
-            xhr.onerror = function(){
-                request.processResponse(new Response(xhr));
-            };
 
-            xhr.send(request.body);
+        return new Promise(function(resolve, reject){
+            const xhr = new XMLHttpRequest();
+                xhr.open(request.method, request.path, 1);
+                prepareRequest(xhr, request.method);
+
+                xhr.onload = function(){
+                    const response = new Response(xhr);
+                    request.processResponse(response);
+                    resolve();
+                };
+                xhr.onerror = function(){
+                    request.processResponse(new Response(xhr));
+                    reject();
+                };
+
+                xhr.send(request.body);
+        });
     }
     
     function sendRequest(request){

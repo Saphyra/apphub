@@ -6,6 +6,7 @@ import org.testng.IMethodInterceptor;
 import org.testng.ITestContext;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ public class SkipDisabledTestsInterceptor implements IMethodInterceptor {
     public List<IMethodInstance> intercept(List<IMethodInstance> methods, ITestContext context) {
         return methods.stream()
             .filter(this::shouldRun)
+            .sorted(Comparator.comparingInt(method -> method.getMethod().getPriority()))
             .collect(Collectors.toList());
     }
 

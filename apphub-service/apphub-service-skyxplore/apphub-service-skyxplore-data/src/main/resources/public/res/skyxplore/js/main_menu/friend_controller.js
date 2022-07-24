@@ -9,37 +9,39 @@
             return [
                 new WebSocketEventHandler(
                     function(eventName){return eventName == "skyxplore-main-menu-friend-request-accepted"},
-                    loadFriendData
+                    loadFriendData //TODO Data should come with the ws event
                 ),
 
                 new WebSocketEventHandler(
                     function(eventName){return eventName == "skyxplore-main-menu-friend-request-sent"},
                     function(){
                         loadIncomingFriendRequests();
-                        loadSentFriendRequests();
+                        loadSentFriendRequests(); //TODO Data should come with the ws event
                     }
                 ),
 
                 new WebSocketEventHandler(
                     function(eventName){return eventName == "skyxplore-main-menu-friend-request-deleted"},
                     function(){
-                        loadIncomingFriendRequests();
-                        loadSentFriendRequests();
+                        loadIncomingFriendRequests(); //TODO Data should come with the ws event
+                        loadSentFriendRequests(); //TODO Data should come with the ws event
                     }
                 ),
 
                 new WebSocketEventHandler(
                     function(eventName){return eventName == "skyxplore-main-menu-friendship-deleted"},
-                    loadFriends
+                    loadFriends //TODO Data should come with the ws event
                 ),
             ];
         }
     }
 
     function loadFriendData(){
-        loadIncomingFriendRequests();
-        loadFriends();
-        loadSentFriendRequests();
+        setTimeout(function(){
+            loadIncomingFriendRequests();
+            loadFriends();
+            loadSentFriendRequests();
+        }, 3000);
     }
 
     function searchFriendAttempt(){

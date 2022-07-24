@@ -1,0 +1,27 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-table-occurrence" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="diary" tableName="occurrence"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="diary" tableName="occurrence">
+            <column name="occurrence_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_id" type="varchar(37)"/>
+            <column name="user_id" type="varchar(37)"/>
+            <column name="date" type="text"/>
+            <column name="status" type="varchar(255)"/>
+            <column name="note" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="diary" tableName="occurrence" columnNames="occurrence_id" constraintName="occurrence_pk"/>
+    </changeSet>
+</databaseChangeLog>

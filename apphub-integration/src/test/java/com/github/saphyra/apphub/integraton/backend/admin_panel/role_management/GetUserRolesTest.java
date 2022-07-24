@@ -46,7 +46,8 @@ public class GetUserRolesTest extends BackEndTest {
             Constants.ROLE_ACCESS,
             Constants.ROLE_TRAINING,
             Constants.ROLE_UTILS,
-            Constants.ROLE_COMMUNITY
+            Constants.ROLE_COMMUNITY,
+            Constants.ROLE_DIARY
         );
     }
 }

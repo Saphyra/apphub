@@ -1,16 +1,17 @@
-apphub-service-platform-event_gateway
-apphub-service-platform-web_content
-apphub-service-platform-localization
-apphub-service-platform-main_gateway
-apphub-service-platform-message_sender
-apphub-service-platform-scheduler
-apphub-service-user
-apphub-service-notebook
-apphub-service-admin_panel
-apphub-service-modules
-apphub-service-skyxplore-data
-apphub-service-skyxplore-lobby
-apphub-service-skyxplore-game
-apphub-service-utils
-apphub-service-training
-apphub-service-community
+admin-panel apphub-service-admin_panel service
+community apphub-service-community service
+diary apphub-service-diary service
+modules apphub-service-modules service
+notebook apphub-service-notebook service
+training apphub-service-training service
+user apphub-service-user service
+utils apphub-service-utils service
+event-gateway apphub-service-platform-event_gateway platform
+localization apphub-service-platform-localization service
+main-gateway apphub-service-platform-main_gateway service
+message-sender apphub-service-platform-message_sender service
+scheduler apphub-service-platform-scheduler service
+web-content apphub-service-platform-web_content service
+skyxplore-data apphub-service-skyxplore-data service
+skyxplore-game apphub-service-skyxplore-game service
+skyxplore-lobby apphub-service-skyxplore-lobby service

@@ -1,5 +1,7 @@
 NAMESPACE=${1:-$(git rev-parse --abbrev-ref HEAD)}
 
+echo "Forwarding to namespace $NAMESPACE"
+
 ./release_port.sh 9001
 ./release_port.sh 9002
 

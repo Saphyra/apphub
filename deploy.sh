@@ -1,4 +1,4 @@
-NAMESPACE_NAME=${1:-develop}
+NAMESPACE_NAME=${1:-$(git rev-parse --abbrev-ref HEAD)}
 SCRIPT_DIR_NAME=${2:-develop}
 MAX_WAIT_TIME=${3:-60}
 

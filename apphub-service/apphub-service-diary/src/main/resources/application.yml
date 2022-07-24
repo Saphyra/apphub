@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: diary
+
+liquibase:
+  schema: diary
