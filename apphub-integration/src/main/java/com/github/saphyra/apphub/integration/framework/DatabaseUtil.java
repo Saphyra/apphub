@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.framework;
 
-import com.github.saphyra.apphub.integration.TestBase;
+import com.github.saphyra.apphub.integration.core.TestBase;
 import com.github.saphyra.apphub.integration.structure.diary.Occurrence;
 import lombok.extern.slf4j.Slf4j;
 

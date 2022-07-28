@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.action.backend;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.saphyra.apphub.integration.TestBase;
+import com.github.saphyra.apphub.integration.core.TestBase;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;

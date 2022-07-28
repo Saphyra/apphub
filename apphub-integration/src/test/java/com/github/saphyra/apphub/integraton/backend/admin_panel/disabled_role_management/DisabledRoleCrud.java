@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integraton.backend.admin_panel.disabled_role_management;
 
-import com.github.saphyra.apphub.integration.BackEndTest;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.admin_panel.DisabledRoleActions;
 import com.github.saphyra.apphub.integration.framework.Constants;

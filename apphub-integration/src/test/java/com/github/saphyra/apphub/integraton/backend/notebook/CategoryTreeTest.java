@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integraton.backend.notebook;
 
-import com.github.saphyra.apphub.integration.BackEndTest;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
 import com.github.saphyra.apphub.integration.localization.Language;

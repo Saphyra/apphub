@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration;
+package com.github.saphyra.apphub.integration.core;
 
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;

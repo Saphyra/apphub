@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.framework;
 
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.TestBase;
+import com.github.saphyra.apphub.integration.core.TestBase;
 import io.restassured.config.DecoderConfig;
 import io.restassured.config.HttpClientConfig;
 import io.restassured.config.RestAssuredConfig;

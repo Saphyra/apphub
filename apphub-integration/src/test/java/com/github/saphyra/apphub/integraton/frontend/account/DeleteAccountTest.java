@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integraton.frontend.account;
 
-import com.github.saphyra.apphub.integration.SeleniumTest;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.account.AccountPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;

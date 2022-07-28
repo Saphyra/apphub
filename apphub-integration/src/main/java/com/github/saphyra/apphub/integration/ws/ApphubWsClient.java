@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.ws;
 
-import com.github.saphyra.apphub.integration.TestBase;
+import com.github.saphyra.apphub.integration.core.TestBase;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;

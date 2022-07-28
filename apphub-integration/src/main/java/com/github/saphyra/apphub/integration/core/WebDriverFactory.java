@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration;
+package com.github.saphyra.apphub.integration.core;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import static com.github.saphyra.apphub.integration.SeleniumTest.HEADLESS_MODE;
+import static com.github.saphyra.apphub.integration.core.SeleniumTest.HEADLESS_MODE;
 import static java.util.Objects.isNull;
 
 @Slf4j
