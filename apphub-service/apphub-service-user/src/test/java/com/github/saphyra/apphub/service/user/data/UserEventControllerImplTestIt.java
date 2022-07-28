@@ -67,6 +67,7 @@ public class UserEventControllerImplTestIt {
             .username(USERNAME_1)
             .password(PASSWORD)
             .language(TestConstants.DEFAULT_LOCALE)
+            .passwordFailureCount(0)
             .build();
         User user2 = User.builder()
             .userId(USER_ID_2)
@@ -74,6 +75,7 @@ public class UserEventControllerImplTestIt {
             .username(USERNAME_2)
             .password(PASSWORD)
             .language(TestConstants.DEFAULT_LOCALE)
+            .passwordFailureCount(0)
             .build();
         userDao.saveAll(Arrays.asList(user1, user2));
 

@@ -1,8 +1,13 @@
 package com.github.saphyra.apphub.service.user.common;
 
+import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
+import com.github.saphyra.apphub.service.user.authentication.service.LogoutService;
+import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +22,36 @@ import java.util.UUID;
 public class CheckPasswordService {
     private final PasswordService passwordService;
     private final UserDao userDao;
+    private final PasswordProperties passwordProperties;
+    private final DateTimeUtil dateTimeUtil;
+    private final LogoutService logoutService;
+    private final AccessTokenProvider accessTokenProvider;
 
-    public void checkPassword(UUID userId, String password) {
-        String hash = userDao.findByIdValidated(userId)
-            .getPassword();
+    public User checkPassword(UUID userId, String password) {
+        User user = userDao.findByIdValidated(userId);
+        String hash = user.getPassword();
 
-        if (!passwordService.authenticate(password, hash)) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.INCORRECT_PASSWORD, "Incorrect password");
+        try {
+            if (!passwordService.authenticate(password, hash)) {
+                user.setPasswordFailureCount(user.getPasswordFailureCount() + 1);
+
+                if (user.getPasswordFailureCount() % passwordProperties.getLockAccountFailures() == 0) {
+                    user.setLockedUntil(dateTimeUtil.getCurrentTime().plusMinutes(passwordProperties.getLockedMinutes()));
+
+                    AccessTokenHeader accessTokenHeader = accessTokenProvider.get();
+                    logoutService.logout(accessTokenHeader.getAccessTokenId(), userId);
+
+                    throw ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.ACCOUNT_LOCKED, "Incorrect password. Account locked.");
+                }
+
+                throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.INCORRECT_PASSWORD, "Incorrect password");
+            }
+
+            user.setPasswordFailureCount(0);
+
+            return user;
+        } finally {
+            userDao.save(user);
         }
     }
 }

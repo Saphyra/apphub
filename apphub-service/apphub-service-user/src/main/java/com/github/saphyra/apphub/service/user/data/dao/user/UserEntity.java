@@ -26,4 +26,6 @@ class UserEntity {
     @Builder.Default
     private Boolean markedForDeletion = false;
     private LocalDateTime markedForDeletionAt;
+    private Integer passwordFailureCount;
+    private LocalDateTime lockedUntil;
 }

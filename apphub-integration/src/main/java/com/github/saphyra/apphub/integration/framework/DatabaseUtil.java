@@ -28,6 +28,7 @@ public class DatabaseUtil {
     private static final String SET_MARKED_FOR_DELETION_AT_BY_EMAIL = "UPDATE apphub_user.apphub_user SET marked_for_deletion_at='%s' WHERE email='%s'";
     private static final String SET_MARKED_FOR_DELETION_BY_EMAIL_LIKE = "UPDATE apphub_user.apphub_user SET marked_for_deletion=true WHERE email LIKE '%s'";
     private static final String GET_DIARY_OCCURRENCES_BY_USER_ID = "SELECT * FROM diary.occurrence WHERE user_id='%s'";
+    private static final String UNLOCK_USER_BY_EMAIL = "UPDATE apphub_user.apphub_user SET locked_until = null WHERE email='%s'";
 
     private static <T> T query(String sql, Mapper<T> mapper) throws Exception {
         Class.forName(JDBC_DRIVER);
@@ -184,6 +185,15 @@ public class DatabaseUtil {
             );
         } catch (Exception e) {
             throw new RuntimeException("Failed querying Diary occurrences", e);
+        }
+    }
+
+    public static void unlockUserByEmail(String email) {
+        try {
+            String sql = String.format(UNLOCK_USER_BY_EMAIL, email);
+            execute(sql);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed unlocking user.", e);
         }
     }
 

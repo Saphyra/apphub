@@ -9,11 +9,14 @@ import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.structure.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.admin_panel.DisabledRole;
 import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,13 +41,34 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
             .orElseThrow(() -> new RuntimeException("Test role not found"));
         assertThat(initialRole.isEnabled()).isTrue();
 
-        //Disable role
+        //Disable role - Incorrect password
         initialRole.toggle(driver);
+
+        Stream.generate(() -> "")
+            .limit(2)
+            .forEach(s -> {
+                DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
+                DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
+                NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
+                assertThat(DisabledRolesActions.isToggleDisabledRoleConfirmationDialogOpened(driver)).isTrue();
+            });
 
         DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
         DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-        NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
-        assertThat(DisabledRolesActions.isToggleDisabledRoleConfirmationDialogOpened(driver)).isTrue();
+        NotificationUtil.verifyErrorNotification(driver, "Fiók zárolva. Próbáld újra később!");
+
+        DatabaseUtil.unlockUserByEmail(userData.getEmail());
+        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
+        ModulesPageActions.openModule(driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
+
+        //Disable role
+        initialRole = DisabledRolesActions.getDisabledRoles(driver)
+            .stream()
+            .filter(disabledRole -> disabledRole.getRole().equals(Constants.TEST_ROLE_NAME))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Test role not found"));
+        assertThat(initialRole.isEnabled()).isTrue();
+        initialRole.toggle(driver);
 
         DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, userData.getPassword());
         DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
@@ -59,13 +83,36 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
 
         NotificationUtil.clearNotifications(driver);
 
-        //Enable role
+        //Enable role - Incorrect password
         disabledRole.toggle(driver);
+
+        Stream.generate(() -> "")
+            .limit(2)
+            .forEach(s -> {
+                DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
+                DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
+                NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
+                assertThat(DisabledRolesActions.isToggleDisabledRoleConfirmationDialogOpened(driver)).isTrue();
+            });
 
         DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
         DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-        NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
-        assertThat(DisabledRolesActions.isToggleDisabledRoleConfirmationDialogOpened(driver)).isTrue();
+        NotificationUtil.verifyErrorNotification(driver, "Fiók zárolva. Próbáld újra később!");
+
+        //Enable role
+        DatabaseUtil.unlockUserByEmail(userData.getEmail());
+        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
+        ModulesPageActions.openModule(driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
+
+        disabledRole = DisabledRolesActions.getDisabledRoles(driver)
+            .stream()
+            .filter(role -> role.getRole().equals(Constants.TEST_ROLE_NAME))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Test role not found"));
+        assertThat(disabledRole.isEnabled()).isFalse();
+
+        NotificationUtil.clearNotifications(driver);
+        disabledRole.toggle(driver);
 
         DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, userData.getPassword());
         DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);

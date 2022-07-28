@@ -17,7 +17,9 @@ import org.testng.annotations.Test;
 
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
+import java.util.stream.Stream;
 
+import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyErrorResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BanCrudTest extends BackEndTest {
@@ -165,9 +167,21 @@ public class BanCrudTest extends BackEndTest {
             .password("asd")
             .build();
 
-        Response ban_incorrectPasswordResponse = BanActions.getBanResponse(language, accessTokenId, ban_incorrectPasswordRequest);
+        UUID ati = accessTokenId;
+        Stream.generate(() -> "")
+            .limit(2)
+            .forEach(s -> {
+                Response ban_incorrectPasswordResponse = BanActions.getBanResponse(language, ati, ban_incorrectPasswordRequest);
 
-        ResponseValidator.verifyBadRequest(language, ban_incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
+                ResponseValidator.verifyBadRequest(language, ban_incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
+            });
+
+        Response ban_accountLockedResponse = BanActions.getBanResponse(language, accessTokenId, ban_incorrectPasswordRequest);
+        verifyErrorResponse(language, ban_accountLockedResponse, 401, ErrorCode.ACCOUNT_LOCKED);
+
+
+        DatabaseUtil.unlockUserByEmail(userData.getEmail());
+        accessTokenId = IndexPageActions.login(language, userData.toLoginRequest());
 
         //Ban
         BanRequest banRequest = BanRequest.builder()
@@ -203,9 +217,19 @@ public class BanCrudTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(language, revokeBan_blankPasswordResponse, "password", "must not be null or blank");
 
         //Revoke ban - Incorrect password
-        Response revokeBan_incorrectPasswordResponse = BanActions.getRevokeBanResponse(language, accessTokenId, ban.getId(), "asd");
+        UUID ati2 = accessTokenId;
+        Stream.generate(() -> "")
+            .limit(2)
+            .forEach(s -> {
+                Response revokeBan_incorrectPasswordResponse = BanActions.getRevokeBanResponse(language, ati2, ban.getId(), "asd");
+                ResponseValidator.verifyBadRequest(language, revokeBan_incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
+            });
 
-        ResponseValidator.verifyBadRequest(language, revokeBan_incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
+        Response revokeBan_accountLockedResponse = BanActions.getRevokeBanResponse(language, ati2, ban.getId(), "asd");
+        verifyErrorResponse(language, revokeBan_accountLockedResponse, 401, ErrorCode.ACCOUNT_LOCKED);
+
+        DatabaseUtil.unlockUserByEmail(userData.getEmail());
+        accessTokenId = IndexPageActions.login(language, userData.toLoginRequest());
 
         //Revoke ban
         BanActions.revokeBan(language, accessTokenId, ban.getId(), userData.getPassword());

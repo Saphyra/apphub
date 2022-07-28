@@ -43,7 +43,7 @@ class ErrorHandlerAdvice {
     @ExceptionHandler(NotLoggedException.class)
     ResponseEntity<ErrorResponse> notLoggedException(NotLoggedException exception) {
         ErrorResponseWrapper errorResponse = getErrorResponse(exception);
-        log.info("Returning errorResponse: {} with logMessage: {}", errorResponse, exception.getErrorMessage());
+        log.info("Returning errorResponse: {} with logMessage: {}", errorResponse, exception.getMessage());
         log.debug("Exception:", exception);
 
         return new ResponseEntity<>(errorResponse.getErrorResponse(), errorResponse.getStatus());

@@ -1,4 +1,5 @@
 {
+  "ACCOUNT_LOCKED": "Fiók zárolva. Próbáld újra később!",
   "ALREADY_EXISTS": "Ilyen elem már létezik.",
   "BAD_CREDENTIALS": "Az email cím és jelszó kombinációja ismeretlen.",
   "INCORRECT_PASSWORD": "Hibás jelszó.",

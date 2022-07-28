@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.AccountActions;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
+import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.localization.Language;
@@ -16,7 +17,9 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.UUID;
+import java.util.stream.Stream;
 
+import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyErrorResponse;
 import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,8 +34,20 @@ public class DeleteAccountTest extends BackEndTest {
         verifyInvalidParam(language, nullPasswordResponse, "password", "must not be null");
 
         //Incorrect password
-        Response incorrectPasswordResponse = AccountActions.getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(DataConstants.INCORRECT_PASSWORD));
-        ResponseValidator.verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
+
+        UUID ati = accessTokenId;
+        Stream.generate(() -> "")
+            .limit(2)
+            .forEach(s -> {
+                Response incorrectPasswordResponse = AccountActions.getDeleteAccountResponse(language, ati, new OneParamRequest<>(DataConstants.INCORRECT_PASSWORD));
+                ResponseValidator.verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
+            });
+
+        Response accountLockedResponse = AccountActions.getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(DataConstants.INCORRECT_PASSWORD));
+        verifyErrorResponse(language, accountLockedResponse, 401, ErrorCode.ACCOUNT_LOCKED);
+
+        DatabaseUtil.unlockUserByEmail(userData.getEmail());
+        accessTokenId = IndexPageActions.login(language, userData.toLoginRequest());
 
         //Successful deletion
         Response response = AccountActions.getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(userData.getPassword()));

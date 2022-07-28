@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.structure.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.admin_panel.CurrentBan;
 import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
@@ -51,15 +52,7 @@ public class BanCrudTest extends SeleniumTest {
             .until(testUserSetup::isDone)
             .assertTrue("Test user is not registered.");
 
-        BanActions.searchUser(adminDriver, testUserData.getEmail());
-        WebElement searchResult = AwaitilityWrapper.getListWithWait(() -> BanActions.getSearchResult(adminDriver), ts -> !ts.isEmpty())
-            .stream()
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("TestUser not found."));
-        searchResult.click();
-        AwaitilityWrapper.createDefault()
-            .until(() -> BanActions.isUserDetailsPageOpened(adminDriver))
-            .assertTrue("UserDetails not opened");
+        openUser(adminDriver, testUserData);
 
         ban_runValidation(adminDriver, "", false, 1, ChronoUnit.MINUTES.name(), REASON, adminUserData.getPassword(), "Válaszd ki a kitiltandó jogosultságot!");
         ban_runValidation(adminDriver, Constants.ROLE_TEST, false, 0, ChronoUnit.MINUTES.name(), REASON, adminUserData.getPassword(), "Időtartam túl kevés (minimum 1)");
@@ -67,6 +60,13 @@ public class BanCrudTest extends SeleniumTest {
         ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", " ", adminUserData.getPassword(), "A kitiltás oka nem lehet üres.");
         ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "", "A jelszó nem lehet üres.");
         ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Hibás jelszó.");
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Hibás jelszó.");
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Fiók zárolva. Próbáld újra később!");
+
+        DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
+        IndexPageActions.submitLogin(adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
+        ModulesPageActions.openModule(adminDriver, ModuleLocation.BAN);
+        openUser(adminDriver, testUserData);
 
         BanActions.setUpAdminForm(adminDriver, Constants.ROLE_ACCESS, true, 0, "", REASON, adminUserData.getPassword());
         BanActions.submitBanForm(adminDriver);
@@ -80,6 +80,13 @@ public class BanCrudTest extends SeleniumTest {
 
         revokeBan_runValidation(adminDriver, "", "A jelszó nem lehet üres.");
         revokeBan_runValidation(adminDriver, "asd", "Hibás jelszó.");
+        revokeBan_runValidation(adminDriver, "asd", "Hibás jelszó.");
+        revokeBan_runValidation(adminDriver, "asd", "Fiók zárolva. Próbáld újra később!");
+
+        DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
+        IndexPageActions.submitLogin(adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
+        ModulesPageActions.openModule(adminDriver, ModuleLocation.BAN);
+        openUser(adminDriver, testUserData);
 
         revokeBan(adminDriver, adminUserData.getPassword());
         NotificationUtil.verifySuccessNotification(adminDriver, "Tiltás visszavonva.");
@@ -93,6 +100,18 @@ public class BanCrudTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> testDriver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE))
             .assertTrue("TestUser is still banned.");
+    }
+
+    private void openUser(WebDriver adminDriver, RegistrationParameters userData) {
+        BanActions.searchUser(adminDriver, userData.getEmail());
+        WebElement searchResult = AwaitilityWrapper.getListWithWait(() -> BanActions.getSearchResult(adminDriver), ts -> !ts.isEmpty())
+            .stream()
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("TestUser not found."));
+        searchResult.click();
+        AwaitilityWrapper.createDefault()
+            .until(() -> BanActions.isUserDetailsPageOpened(adminDriver))
+            .assertTrue("UserDetails not opened");
     }
 
     private void ban_runValidation(WebDriver driver, String bannedRole, boolean permanent, int duration, String chronoUnit, String reason, String password, String errorMessage) {

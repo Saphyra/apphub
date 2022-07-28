@@ -26,7 +26,7 @@ public class MarkOccurrenceDefaultTest extends BackEndTest {
     private static final LocalDate CURRENT_DATE = LocalDate.now();
     private static final LocalDate REFERENCE_DATE_DAY = CURRENT_DATE.plusMonths(1);
     private static final LocalDate REFERENCE_DATE_MONTH = CURRENT_DATE;
-    private static final LocalDate EVENT_DATE = CURRENT_DATE.plusWeeks(1);
+    private static final LocalDate EVENT_DATE = CURRENT_DATE.plusDays(1);
     private static final String TITLE = "title";
 
     @Test(dataProvider = "languageDataProvider", groups = "diary")

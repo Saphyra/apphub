@@ -70,6 +70,7 @@ public class AuthenticationControllerTestIt {
         .username(USERNAME)
         .password(new PasswordService().hashPassword(PASSWORD))
         .language(LOCALE)
+        .passwordFailureCount(0)
         .build();
     private static final String ROLE = "role";
 

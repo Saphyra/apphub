@@ -17,6 +17,7 @@ import org.testng.annotations.Test;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyErrorResponse;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -81,5 +82,18 @@ public class LoginTest extends BackEndTest {
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.NO_SESSION_AVAILABLE.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.SESSION_EXPIRED));
+
+        //Lock user
+        Stream.generate(() -> "")
+            .limit(3)
+            .map(s -> IndexPageActions.getLoginResponse(language, incorrectPasswordRequest))
+            .forEach(r -> verifyErrorResponse(language, r, 401, ErrorCode.BAD_CREDENTIALS));
+
+        Response lockedLoginResponse = IndexPageActions.getLoginResponse(language, oneTimeLoginRequest);
+        verifyErrorResponse(language, lockedLoginResponse, 403, ErrorCode.ACCOUNT_LOCKED);
+
+        DatabaseUtil.unlockUserByEmail(userData.getEmail());
+
+        IndexPageActions.getSuccessfulLoginResponse(language, oneTimeLoginRequest);
     }
 }

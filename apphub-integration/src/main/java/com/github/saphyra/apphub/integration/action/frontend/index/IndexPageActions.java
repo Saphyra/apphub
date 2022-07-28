@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
@@ -87,6 +88,10 @@ public class IndexPageActions {
     }
 
     public static void submitLogin(WebDriver driver, LoginParameters loginParameters) {
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().split("\\?")[0].equals(UrlFactory.create(Endpoints.INDEX_PAGE)))
+            .assertTrue("LoginPage is not loaded.");
+
         clearAndFill(IndexPage.loginEmail(driver), loginParameters.getEmail());
         clearAndFill(IndexPage.loginPassword(driver), loginParameters.getPassword());
 

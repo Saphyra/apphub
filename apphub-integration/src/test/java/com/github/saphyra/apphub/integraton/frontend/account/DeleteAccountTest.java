@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActi
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
+import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
@@ -17,6 +18,8 @@ import com.github.saphyra.apphub.integration.structure.user.RegistrationParamete
 import com.github.saphyra.apphub.integration.structure.user.delete_account.DeleteAccountPasswordValidationResult;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,11 +39,21 @@ public class DeleteAccountTest extends SeleniumTest {
         AccountPageActions.verifyDeleteAccountForm(driver, DeleteAccountPasswordValidationResult.EMPTY_PASSWORD);
 
         //Incorrect password
+        Stream.generate(() -> "")
+            .limit(2)
+            .forEach(s -> {
+                AccountPageActions.deleteAccount(driver, DataConstants.INCORRECT_PASSWORD);
+                NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
+            });
+
         AccountPageActions.deleteAccount(driver, DataConstants.INCORRECT_PASSWORD);
-        NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
-        NotificationUtil.clearNotifications(driver);
+        NotificationUtil.verifyErrorNotification(driver, "Fiók zárolva. Próbáld újra később!");
 
         //Cancel deletion
+        DatabaseUtil.unlockUserByEmail(userData.getEmail());
+        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
+        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
+
         AccountPageActions.fillDeleteAccountForm(driver, DataConstants.VALID_PASSWORD);
         AccountPageActions.submitDeleteAccountForm(driver);
         AccountPageActions.cancelAccountDeletion(driver);

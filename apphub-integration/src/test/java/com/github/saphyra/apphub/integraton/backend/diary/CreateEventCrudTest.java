@@ -234,7 +234,7 @@ public class CreateEventCrudTest extends BackEndTest {
                 if (calendarResponse.getDate().isBefore(CURRENT_DATE)) {
                     assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_EXPIRED);
                 } else if (calendarResponse.getDate().equals(CURRENT_DATE)) {
-                    assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_PENDING);
+                    assertThat(List.of(Constants.DIARY_OCCURRENCE_STATUS_PENDING, Constants.DIARY_OCCURRENCE_STATUS_VIRTUAL)).contains(occurrenceResponse.getStatus());
                 } else {
                     assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_VIRTUAL);
                 }
