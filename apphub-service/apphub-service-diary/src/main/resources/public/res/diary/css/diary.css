@@ -111,13 +111,14 @@
         }
 
         #daily-tasks{
-
+            overflow: auto;
         }
 
             .daily-task{
                 white-space: nowrap;
                 border-color: white;
                 text-align: left;
+                overflow-x: auto;
             }
 
                 .daily-task.button:hover{

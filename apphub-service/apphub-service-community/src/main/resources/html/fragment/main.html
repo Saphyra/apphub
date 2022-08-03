@@ -1,0 +1,21 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<DIV id="main" class="main-page" th:fragment="main">
+    <HEADER>
+        <H1 id="main-title"></H1>
+    </HEADER>
+
+    <MAIN>
+        <DIV th:replace="/fragment/main/chat.html :: chat"></DIV>
+        <DIV th:replace="/fragment/main/flow.html :: flow"></DIV>
+        <DIV th:replace="/fragment/main/contacts.html :: contacts"></DIV>
+    </MAIN>
+
+    <FOOTER>
+        <BUTTON id="home-button" onclick='window.location = "/web/modules"'></BUTTON>
+    </FOOTER>
+</DIV>
+
+</BODY>
+</HTML>

@@ -1,0 +1,28 @@
+#group-add-member main{
+    display: grid;
+    grid-template-rows: 4rem auto;
+}
+
+    #group-add-member-search-wrapper{
+        text-align: center;
+    }
+
+        #group-add-member-search-input{
+            width: 90%;
+        }
+
+    #group-add-member-search-result-wrapper{
+        overflow: auto;
+        padding-bottom: 1rem;
+    }
+
+        .group-add-member-search-result-error{
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        #group-add-member-search-result-wrapper .button{
+            font-size: 1.25rem;
+            width: 90%;
+            margin: auto;
+        }

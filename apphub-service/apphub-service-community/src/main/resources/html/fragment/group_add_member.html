@@ -1,0 +1,24 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<DIV id="group-add-member" class="main-page" th:fragment="group-add-member">
+    <HEADER>
+        <H1 id="group-add-member-title"></H1>
+        <BUTTON class="close-dialog-button" onclick="groupDetailsController.openCurrentGroup()">X</BUTTON>
+    </HEADER>
+
+    <MAIN class="footerless">
+        <DIV id="group-add-member-search-wrapper">
+            <INPUT type="text" id="group-add-member-search-input">
+        </DIV>
+
+        <DIV id="group-add-member-search-result-wrapper">
+            <DIV id="group-add-member-search-result-query-too-short" class="group-add-member-search-result group-add-member-search-result-error"></DIV>
+            <DIV id="group-add-member-search-result-no-result" class="group-add-member-search-result group-add-member-search-result-error"></DIV>
+            <DIV id="group-add-member-search-result" class="group-add-member-search-result"></DIV>
+        </DIV>
+    </MAIN>
+</DIV>
+
+</BODY>
+</HTML>

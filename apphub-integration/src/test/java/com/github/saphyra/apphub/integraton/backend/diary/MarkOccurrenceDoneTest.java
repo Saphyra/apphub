@@ -26,7 +26,6 @@ public class MarkOccurrenceDoneTest extends BackEndTest {
     private static final LocalDate CURRENT_DATE = LocalDate.now();
     private static final LocalDate REFERENCE_DATE_DAY = CURRENT_DATE.plusMonths(1);
     private static final LocalDate REFERENCE_DATE_MONTH = CURRENT_DATE;
-    private static final LocalDate EVENT_DATE = CURRENT_DATE.minusWeeks(1);
     private static final String TITLE = "title";
 
     @Test(dataProvider = "languageDataProvider", groups = "diary")
@@ -39,7 +38,7 @@ public class MarkOccurrenceDoneTest extends BackEndTest {
                 .day(REFERENCE_DATE_DAY)
                 .month(REFERENCE_DATE_MONTH)
                 .build())
-            .date(EVENT_DATE)
+            .date(REFERENCE_DATE_DAY)
             .title(TITLE)
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
