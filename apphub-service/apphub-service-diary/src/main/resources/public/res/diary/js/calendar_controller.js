@@ -65,7 +65,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
             node.classList.add("calendar-day");
             node.classList.add("button");
 
-            node.style.height = "calc((100vh - 14rem) / " + rowAmount + ")";
+            node.style.height = "calc((100vh - 16rem) / " + rowAmount + ")";
 
             if(date.getMonth() != currentDate.getMonth()){
                 node.classList.add("different-month-day");

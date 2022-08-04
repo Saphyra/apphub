@@ -15,6 +15,22 @@
         border-right: 5px ridge white;
     }
 
+        #days-of-week{
+            display: grid;
+            grid-template-columns: repeat(7, calc(100% / 7));
+        }
+
+            #days-of-week div{
+                text-align: center;
+                margin: 0.25rem;
+                background: var(--background-color);
+                border: 3px outset white;
+                border-radius: 5px;
+                padding: 0.2rem;
+                color: white;
+                white-space: nowrap;
+            }
+
         #calendar-title{
             text-align: center;
             border-bottom: 3px ridge white;

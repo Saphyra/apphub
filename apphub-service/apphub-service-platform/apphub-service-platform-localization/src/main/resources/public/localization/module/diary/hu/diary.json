@@ -180,6 +180,48 @@
         "key": "placeholder",
         "message": "Megjegyzés"
       }
+    ],
+    "monday": [
+      {
+        "key": "innerHTML",
+        "message": "Hétfő"
+      }
+    ],
+    "tuesday": [
+      {
+        "key": "innerHTML",
+        "message": "Kedd"
+      }
+    ],
+    "wednesday": [
+      {
+        "key": "innerHTML",
+        "message": "Szerda"
+      }
+    ],
+    "thursday": [
+      {
+        "key": "innerHTML",
+        "message": "Csütörtök"
+      }
+    ],
+    "friday": [
+      {
+        "key": "innerHTML",
+        "message": "Péntek"
+      }
+    ],
+    "saturday": [
+      {
+        "key": "innerHTML",
+        "message": "Szombat"
+      }
+    ],
+    "sunday": [
+      {
+        "key": "innerHTML",
+        "message": "Vasárnap"
+      }
     ]
   },
   "additionalContent": {
