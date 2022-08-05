@@ -62,7 +62,8 @@
             node.id = generateRandomId();
             const inputField = document.createElement("INPUT");
                 if(tableHead.tableHeadId) inputField.id = tableHead.tableHeadId;
-                inputField.value = tableHead.content;
+                inputField.value = tableHead.content || "";
+                inputField.placeholder = Localization.getAdditionalContent("column-name-title");
                 inputField.disabled = !editingEnabled;
                 inputField.classList.add("column-title");
                 inputField.classList.add("view-checklist-table-column-title");
@@ -291,7 +292,7 @@
     }
 
     function addColumn(){
-        const columnHead = createTableHead({tableHeadId: null, content: Localization.getAdditionalContent("column-name-title")});
+        const columnHead = createTableHead({tableHeadId: null, content: null});
         columnNames.push(columnHead);
 
         new Stream(rows)
