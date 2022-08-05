@@ -8,7 +8,7 @@
         this.newColumn = newColumn;
         this.newRow = newRow;
         this.openCreateTableDialog = function(){
-            document.getElementById("create-table-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
+            document.getElementById("create-table-selected-category-title").innerText = Localization.getAdditionalContent("root-title");
             document.getElementById("new-table-title").value = "";
             loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
             columnNames = [];
@@ -35,7 +35,7 @@
     }
 
     function displayChildrenOfCategory(categoryId, parent, categories, title){
-        document.getElementById("create-table-selected-category-title").innerHTML = title;
+        document.getElementById("create-table-selected-category-title").innerText = title;
 
         const parentButton = document.getElementById("create-table-parent-selection-parent-button");
             if(categoryId == null){
@@ -54,7 +54,7 @@
             if(!categories.length){
                 const noContentText = document.createElement("DIV");
                     noContentText.classList.add("no-content");
-                    noContentText.innerHTML = Localization.getAdditionalContent("category-empty");
+                    noContentText.innerText = Localization.getAdditionalContent("category-empty");
                 container.appendChild(noContentText);
             }
 
@@ -69,7 +69,7 @@
                 node.classList.add("button");
                 node.classList.add("create-item-category");
 
-                node.innerHTML = category.title;
+                node.innerText = category.title;
 
                 node.onclick = function(){
                     loadChildrenOfCategory(category.id);
@@ -120,7 +120,7 @@
         function extractValues(columnNodes){
             return new Stream(columnNodes)
                 .map(function(columnNode){return columnNode.inputField})
-                .map(function(inputField){return inputField.innerHTML})
+                .map(function(inputField){return inputField.innerText})
                 .toList();
         }
     }
@@ -146,19 +146,19 @@
                 buttonWrapper.classList.add("table-head-button-wrapper");
 
                 const moveLeftButton = document.createElement("BUTTON");
-                    moveLeftButton.innerHTML = "<";
+                    moveLeftButton.innerText = "<";
                     moveLeftButton.onclick = function(){
                         moveColumnLeft(node.id);
                     }
             buttonWrapper.appendChild(moveLeftButton);
                 const moveRightButton = document.createElement("BUTTON");
-                    moveRightButton.innerHTML = ">";
+                    moveRightButton.innerText = ">";
                     moveRightButton.onclick = function(){
                         moveColumnRight(node.id);
                     }
             buttonWrapper.appendChild(moveRightButton);
                 const deleteColumnButton = document.createElement("BUTTON");
-                    deleteColumnButton.innerHTML = "X";
+                    deleteColumnButton.innerText = "X";
                     deleteColumnButton.onclick = function(){
                         removeColumn(node.id);
                     }
@@ -214,19 +214,19 @@
 
                     const buttonCell = document.createElement("TD");
                         const moveUpButton = document.createElement("BUTTON");
-                            moveUpButton.innerHTML = "^";
+                            moveUpButton.innerText = "^";
                             moveUpButton.onclick = function(){
                                 moveRowUp(rowNode.id);
                             }
                     buttonCell.appendChild(moveUpButton);
                         const moveDownButton = document.createElement("BUTTON");
-                            moveDownButton.innerHTML = "v";
+                            moveDownButton.innerText = "v";
                             moveDownButton.onclick = function(){
                                 moveRowDown(rowNode.id);
                             }
                     buttonCell.appendChild(moveDownButton);
                         const deleteRowButton = document.createElement("BUTTON");
-                            deleteRowButton.innerHTML = "X";
+                            deleteRowButton.innerText = "X";
                             deleteRowButton.onclick = function(){
                                 removeRow(rowNode.id);
                             }

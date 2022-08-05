@@ -70,7 +70,7 @@
 
                     const titleLabel = document.createElement("SPAN");
                         titleLabel.classList.add("category-view-button-title")
-                        titleLabel.innerHTML = category.title;
+                        titleLabel.innerText = category.title;
                 wrapper.appendChild(button);
 
                     const toggleButton = document.createElement("SPAN");
@@ -80,9 +80,9 @@
                         const isOpened = openedCategories.indexOf(createWrapperId(category.categoryId)) > -1;
 
                         if(isOpened || category.categoryId == null){
-                            toggleButton.innerHTML = "^";
+                            toggleButton.innerText = "^";
                         }else{
-                            toggleButton.innerHTML = "v";
+                            toggleButton.innerText = "v";
                         }
 
                 button.appendChild(toggleButton);
@@ -108,10 +108,10 @@
                         toggleButton.onclick = function(e){
                             e.stopPropagation();
                             if(childrenContainer.style.display != "none"){
-                                toggleButton.innerHTML = "v";
+                                toggleButton.innerText = "v";
                                 $(childrenContainer).fadeOut();
                             }else{
-                                toggleButton.innerHTML = "^";
+                                toggleButton.innerText = "^";
                                 $(childrenContainer).fadeIn();
                             }
                         }

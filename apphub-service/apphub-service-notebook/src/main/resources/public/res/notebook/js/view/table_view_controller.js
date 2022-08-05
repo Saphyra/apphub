@@ -26,7 +26,7 @@
             }
             request.processValidResponse = function(tableData){
                 mapTableData(tableData);
-                document.getElementById("view-table-title").innerHTML = tableData.title;
+                document.getElementById("view-table-title").innerText = tableData.title;
                 displayTable();
             };
         dao.sendRequestAsync(request);
@@ -73,19 +73,19 @@
             buttonWrapper.classList.add("table-head-button-wrapper");
 
             const moveLeftButton = document.createElement("BUTTON");
-                moveLeftButton.innerHTML = "<";
+                moveLeftButton.innerText = "<";
                 moveLeftButton.onclick = function(){
                     moveColumnLeft(node.id);
                 }
         buttonWrapper.appendChild(moveLeftButton);
             const moveRightButton = document.createElement("BUTTON");
-                moveRightButton.innerHTML = ">";
+                moveRightButton.innerText = ">";
                 moveRightButton.onclick = function(){
                     moveColumnRight(node.id);
                 }
         buttonWrapper.appendChild(moveRightButton);
             const deleteColumnButton = document.createElement("BUTTON");
-                deleteColumnButton.innerHTML = "X";
+                deleteColumnButton.innerText = "X";
                 deleteColumnButton.onclick = function(){
                     removeColumn(node.id);
                 }
@@ -123,7 +123,7 @@
                 contentNode.classList.add("view-table-input-field");
                 if(columnData.tableJoinId) contentNode.id = columnData.tableJoinId;
                 contentNode.contenteditable = editingEnabled;
-                contentNode.innerHTML = columnData.content;
+                contentNode.innerText = columnData.content;
                 contentNode.contentEditable = editingEnabled;
         cell.appendChild(contentNode);
 
@@ -161,7 +161,7 @@
                         const buttonWrapper = document.createElement("DIV");
                             buttonWrapper.classList.add("view-table-operations-button-wrapper");
                             const moveUpButton = document.createElement("BUTTON");
-                                moveUpButton.innerHTML = "^";
+                                moveUpButton.innerText = "^";
                                 moveUpButton.onclick = function(){
                                     const notModified = moveRowUp(rowNode.id);
                                     if(!editingEnabled && !notModified){
@@ -170,7 +170,7 @@
                                 }
                         buttonWrapper.appendChild(moveUpButton);
                             const moveDownButton = document.createElement("BUTTON");
-                                moveDownButton.innerHTML = "v";
+                                moveDownButton.innerText = "v";
                                 moveDownButton.onclick = function(){
                                     const notModified = moveRowDown(rowNode.id);
                                     if(!editingEnabled && !notModified){
@@ -179,7 +179,7 @@
                                 }
                         buttonWrapper.appendChild(moveDownButton);
                             const deleteRowButton = document.createElement("BUTTON");
-                                deleteRowButton.innerHTML = "X";
+                                deleteRowButton.innerText = "X";
                                 deleteRowButton.onclick = function(){
                                     removeRow(rowNode.id);
                                     if(!editingEnabled){
@@ -248,7 +248,7 @@
     }
 
     function saveChanges(){
-        const title = document.getElementById("view-table-title").innerHTML;
+        const title = document.getElementById("view-table-title").innerText;
 
         if(!title.length){
             notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
@@ -275,7 +275,7 @@
                     .map(function(column){
                         return {
                             key: column.inputField.id,
-                            value: column.inputField.innerHTML
+                            value: column.inputField.innerText
                         };
                     })
                     .toList();

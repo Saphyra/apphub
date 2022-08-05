@@ -20,7 +20,7 @@
 
     function displayText(textData){
         const titleNode = document.getElementById("view-text-title");
-            titleNode.innerHTML = textData.title;
+            titleNode.innerText = textData.title;
             titleNode.contentEditable = false;
 
         const contentArea = document.getElementById("view-text-content");
@@ -38,7 +38,7 @@
     }
 
     function saveChanges(){
-        const title = document.getElementById("view-text-title").innerHTML;
+        const title = document.getElementById("view-text-title").innerText;
         const content = document.getElementById("view-text-content").value;
 
         if(!title.length){

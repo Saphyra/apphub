@@ -73,19 +73,19 @@
             buttonWrapper.classList.add("table-head-button-wrapper");
 
             const moveLeftButton = document.createElement("BUTTON");
-                moveLeftButton.innerHTML = "<";
+                moveLeftButton.innerText = "<";
                 moveLeftButton.onclick = function(){
                     moveColumnLeft(node.id);
                 }
         buttonWrapper.appendChild(moveLeftButton);
             const moveRightButton = document.createElement("BUTTON");
-                moveRightButton.innerHTML = ">";
+                moveRightButton.innerText = ">";
                 moveRightButton.onclick = function(){
                     moveColumnRight(node.id);
                 }
         buttonWrapper.appendChild(moveRightButton);
             const deleteColumnButton = document.createElement("BUTTON");
-                deleteColumnButton.innerHTML = "X";
+                deleteColumnButton.innerText = "X";
                 deleteColumnButton.onclick = function(){
                     removeColumn(node.id);
                 }
@@ -153,7 +153,7 @@
 
         function createCheckedColumnHead(){
             const columnHead = document.createElement("TH");
-                columnHead.innerHTML = Localization.getAdditionalContent("table-head-checked-column");
+                columnHead.innerText = Localization.getAdditionalContent("table-head-checked-column");
             return columnHead;
         }
     }
@@ -173,7 +173,7 @@
                         const buttonWrapper = document.createElement("DIV");
                             buttonWrapper.classList.add("view-checklist-table-operations-button-wrapper");
                             const moveUpButton = document.createElement("BUTTON");
-                                moveUpButton.innerHTML = "^";
+                                moveUpButton.innerText = "^";
                                 moveUpButton.onclick = function(){
                                     const notModified = moveRowUp(rowNode.id);
                                     if(!editingEnabled && !notModified){
@@ -182,7 +182,7 @@
                                 }
                         buttonWrapper.appendChild(moveUpButton);
                             const moveDownButton = document.createElement("BUTTON");
-                                moveDownButton.innerHTML = "v";
+                                moveDownButton.innerText = "v";
                                 moveDownButton.onclick = function(){
                                     const notModified = moveRowDown(rowNode.id);
                                     if(!editingEnabled && !notModified){
@@ -191,7 +191,7 @@
                                 }
                         buttonWrapper.appendChild(moveDownButton);
                             const deleteRowButton = document.createElement("BUTTON");
-                                deleteRowButton.innerHTML = "X";
+                                deleteRowButton.innerText = "X";
                                 deleteRowButton.onclick = function(){
                                     if(!editingEnabled){
                                         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
@@ -316,7 +316,7 @@
     }
 
     function saveChanges(){
-        const title = document.getElementById("view-checklist-table-title").innerHTML;
+        const title = document.getElementById("view-checklist-table-title").innerText;
 
         if(!title.length){
             notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
@@ -343,7 +343,7 @@
                     .map(function(column){
                         return {
                             key: column.inputField.id,
-                            value: column.inputField.innerHTML
+                            value: column.inputField.innerText
                         };
                     })
                     .toList();

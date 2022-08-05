@@ -91,7 +91,7 @@
                         buttonWrapper.classList.add("pinned-item-button-wrapper");
 
                         const openParentButton = document.createElement("BUTTON");
-                            openParentButton.innerHTML = "P";
+                            openParentButton.innerText = "P";
                             openParentButton.title = item.parentTitle || Localization.getAdditionalContent("root-title");
                             openParentButton.onclick = function(e){
                                 e.stopPropagation();
