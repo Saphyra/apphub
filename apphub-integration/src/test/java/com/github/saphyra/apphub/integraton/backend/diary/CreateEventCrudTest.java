@@ -224,6 +224,17 @@ public class CreateEventCrudTest extends BackEndTest {
         responses.forEach(calendarResponse -> {
             if (calendarResponse.getDate().isBefore(EVENT_DATE)) {
                 assertThat(calendarResponse.getEvents()).isEmpty();
+            } else if (calendarResponse.getDate().equals(CURRENT_DATE)) {
+                assertThat(calendarResponse.getEvents()).hasSize(1);
+                OccurrenceResponse occurrenceResponse = calendarResponse.getEvents().get(0);
+                assertThat(occurrenceResponse.getOccurrenceId()).isNotNull();
+                assertThat(occurrenceResponse.getEventId()).isNotNull();
+
+                assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_EXPIRED);
+
+                assertThat(occurrenceResponse.getTitle()).isEqualTo(TITLE);
+                assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
+                assertThat(occurrenceResponse.getNote()).isNull();
             } else if (!daysOfWeek.contains(calendarResponse.getDate().getDayOfWeek())) {
                 assertThat(calendarResponse.getEvents()).isEmpty();
             } else {
@@ -272,6 +283,17 @@ public class CreateEventCrudTest extends BackEndTest {
         responses.forEach(calendarResponse -> {
             if (calendarResponse.getDate().isBefore(EVENT_DATE)) {
                 assertThat(calendarResponse.getEvents()).isEmpty();
+            } else if (calendarResponse.getDate().equals(CURRENT_DATE)) {
+                assertThat(calendarResponse.getEvents()).hasSize(1);
+                OccurrenceResponse occurrenceResponse = calendarResponse.getEvents().get(0);
+                assertThat(occurrenceResponse.getOccurrenceId()).isNotNull();
+                assertThat(occurrenceResponse.getEventId()).isNotNull();
+
+                assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_EXPIRED);
+
+                assertThat(occurrenceResponse.getTitle()).isEqualTo(TITLE);
+                assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
+                assertThat(occurrenceResponse.getNote()).isNull();
             } else if (ChronoUnit.DAYS.between(EVENT_DATE, calendarResponse.getDate()) % REPETITION_DAYS != 0) {
                 assertThat(calendarResponse.getEvents()).isEmpty();
             } else {
