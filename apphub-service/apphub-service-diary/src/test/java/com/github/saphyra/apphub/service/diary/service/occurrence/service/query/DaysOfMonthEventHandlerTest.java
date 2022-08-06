@@ -13,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,15 +21,15 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DaysOfWeekEventHandlerTest {
-    private final static LocalDate START_DATE = LocalDate.parse("2022-07-16");
-    private final static LocalDate MONDAY_1 = LocalDate.parse("2022-07-04");
-    private final static LocalDate MONDAY_2 = LocalDate.parse("2022-07-11");
-    private final static LocalDate MONDAY_3 = LocalDate.parse("2022-07-18");
+public class DaysOfMonthEventHandlerTest {
+    private final static LocalDate START_DATE = LocalDate.parse("2022-08-07");
+    private final static LocalDate MONTH_DAY_1 = LocalDate.parse("2022-07-01");
+    private final static LocalDate MONTH_DAY_2 = LocalDate.parse("2022-08-01");
+    private final static LocalDate MONTH_DAY_3 = LocalDate.parse("2022-09-01");
     private final static LocalDate OTHER_DAY = LocalDate.parse("2022-07-12");
 
     @Mock
-    private DaysOfWeekParser daysOfWeekParser;
+    private DaysOfMonthParser daysOfMonthParser;
 
     @Mock
     private OccurrenceFactory occurrenceFactory;
@@ -39,13 +38,10 @@ public class DaysOfWeekEventHandlerTest {
     private OccurrenceDao occurrenceDao;
 
     @InjectMocks
-    private DaysOfWeekEventHandler underTest;
+    private DaysOfMonthEventHandler underTest;
 
     @Mock
     private Event event;
-
-    @Mock
-    private Occurrence startOccurrence;
 
     @Mock
     private Occurrence existingOccurrence;
@@ -53,18 +49,21 @@ public class DaysOfWeekEventHandlerTest {
     @Mock
     private Occurrence newOccurrence;
 
-    @Test
-    public void handleDaysOfWeekEvent() {
-        given(daysOfWeekParser.parseDaysOfWeek(event)).willReturn(List.of(DayOfWeek.MONDAY));
-        given(event.getStartDate()).willReturn(MONDAY_2.minusDays(1));
-        given(occurrenceFactory.createVirtual(MONDAY_3, event)).willReturn(newOccurrence);
+    @Mock
+    private Occurrence startOccurrence;
 
-        List<Occurrence> result = underTest.handleDaysOfWeekEvent(
+    @Test
+    public void handleDaysOfMonthEvent() {
+        given(daysOfMonthParser.parseDaysOfMonth(event)).willReturn(List.of(1));
+        given(event.getStartDate()).willReturn(MONTH_DAY_2);
+        given(occurrenceFactory.createVirtual(MONTH_DAY_3, event)).willReturn(newOccurrence);
+
+        List<Occurrence> result = underTest.handleDaysOfMonthEvent(
             event,
-            List.of(START_DATE, MONDAY_1, MONDAY_2, MONDAY_3, OTHER_DAY),
+            List.of(START_DATE, MONTH_DAY_1, MONTH_DAY_2, MONTH_DAY_3, OTHER_DAY),
             CollectionUtils.toMap(
                 new OptionalHashMap<>(),
-                new BiWrapper<>(MONDAY_2, existingOccurrence),
+                new BiWrapper<>(MONTH_DAY_2, existingOccurrence),
                 new BiWrapper<>(START_DATE, startOccurrence)
             )
         );

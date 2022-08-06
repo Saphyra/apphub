@@ -21,4 +21,5 @@ public class CreateEventRequest {
     private RepetitionType repetitionType;
     private Integer repetitionDays;
     private List<DayOfWeek> repetitionDaysOfWeek;
+    private List<Integer> repetitionDaysOfMonth;
 }

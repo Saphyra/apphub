@@ -85,6 +85,30 @@ public class EventFactoryTest {
     }
 
     @Test
+    public void createDaysOfMonth() {
+        CreateEventRequest request = CreateEventRequest.builder()
+            .repetitionType(RepetitionType.DAYS_OF_MONTH)
+            .repetitionDaysOfMonth(List.of(1))
+            .date(START_DATE)
+            .title(TITLE)
+            .content(CONTENT)
+            .build();
+
+        given(idGenerator.randomUuid()).willReturn(EVENT_ID);
+        given(objectMapperWrapper.writeValueAsString(List.of(1))).willReturn(REPETITION_DATA);
+
+        Event event = underTest.create(USER_ID, request);
+
+        assertThat(event.getEventId()).isEqualTo(EVENT_ID);
+        assertThat(event.getUserId()).isEqualTo(USER_ID);
+        assertThat(event.getStartDate()).isEqualTo(START_DATE);
+        assertThat(event.getRepetitionType()).isEqualTo(RepetitionType.DAYS_OF_MONTH);
+        assertThat(event.getTitle()).isEqualTo(TITLE);
+        assertThat(event.getContent()).isEqualTo(CONTENT);
+        assertThat(event.getRepetitionData()).isEqualTo(REPETITION_DATA);
+    }
+
+    @Test
     public void createEveryXDays() {
         CreateEventRequest request = CreateEventRequest.builder()
             .repetitionType(RepetitionType.EVERY_X_DAYS)

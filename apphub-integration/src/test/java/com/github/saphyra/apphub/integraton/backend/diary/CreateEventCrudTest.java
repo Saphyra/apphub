@@ -261,6 +261,59 @@ public class CreateEventCrudTest extends BackEndTest {
     }
 
     @Test(groups = "diary")
+    public void createDaysOfMonthEvent() {
+        Language language = Language.HUNGARIAN;
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+
+        CreateEventRequest request = CreateEventRequest.builder()
+            .referenceDate(ReferenceDate.builder()
+                .day(REFERENCE_DATE_DAY)
+                .month(REFERENCE_DATE_MONTH)
+                .build())
+            .date(EVENT_DATE)
+            .title(TITLE)
+            .content(CONTENT)
+            .repetitionType(RepetitionType.DAYS_OF_MONTH)
+            .repetitionDaysOfMonth(List.of(REFERENCE_DATE_DAY.getDayOfMonth()))
+            .build();
+
+        List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
+
+        responses.forEach(calendarResponse -> {
+            if (calendarResponse.getDate().isBefore(EVENT_DATE)) {
+                assertThat(calendarResponse.getEvents()).isEmpty();
+            } else if (calendarResponse.getDate().equals(CURRENT_DATE)) {
+                assertThat(calendarResponse.getEvents()).hasSize(1);
+                OccurrenceResponse occurrenceResponse = calendarResponse.getEvents().get(0);
+                assertThat(occurrenceResponse.getOccurrenceId()).isNotNull();
+                assertThat(occurrenceResponse.getEventId()).isNotNull();
+
+                assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_VIRTUAL);
+
+                assertThat(occurrenceResponse.getTitle()).isEqualTo(TITLE);
+                assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
+                assertThat(occurrenceResponse.getNote()).isNull();
+            } else if (calendarResponse.getDate().equals(REFERENCE_DATE_DAY)) {
+                assertThat(calendarResponse.getEvents()).hasSize(1);
+                OccurrenceResponse occurrenceResponse = calendarResponse.getEvents().get(0);
+                assertThat(occurrenceResponse.getOccurrenceId()).isNotNull();
+                assertThat(occurrenceResponse.getEventId()).isNotNull();
+
+                assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_VIRTUAL);
+
+                assertThat(occurrenceResponse.getTitle()).isEqualTo(TITLE);
+                assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
+                assertThat(occurrenceResponse.getNote()).isNull();
+            } else {
+                assertThat(calendarResponse.getEvents()).isEmpty();
+            }
+        });
+
+        verifyDatabaseIntegrity(responses, userData.getEmail());
+    }
+
+    @Test(groups = "diary")
     public void createEveryXDaysEvent() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

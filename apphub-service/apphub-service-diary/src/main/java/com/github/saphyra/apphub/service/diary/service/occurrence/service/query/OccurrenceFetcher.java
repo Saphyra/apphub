@@ -24,6 +24,7 @@ class OccurrenceFetcher {
     private final OneTimeEventHandler oneTimeEventHandler;
     private final DaysOfWeekEventHandler daysOfWeekEventHandler;
     private final EveryXDayEventHandler everyXDayEventHandler;
+    private final DaysOfMonthEventHandler daysOfMonthEventHandler;
 
     List<Occurrence> fetchOccurrencesOfEvent(Event event, List<LocalDate> dates) {
         log.debug("Fetching Occurrences for event {}", event);
@@ -39,6 +40,8 @@ class OccurrenceFetcher {
                 return daysOfWeekEventHandler.handleDaysOfWeekEvent(event, dates, occurrenceMapping);
             case EVERY_X_DAYS:
                 return everyXDayEventHandler.handleEveryXDayEvent(event, dates, occurrenceMapping);
+            case DAYS_OF_MONTH:
+                return daysOfMonthEventHandler.handleDaysOfMonthEvent(event, dates, occurrenceMapping);
             default:
                 throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR, "Unhandled repetitionType: " + event.getRepetitionType());
         }
