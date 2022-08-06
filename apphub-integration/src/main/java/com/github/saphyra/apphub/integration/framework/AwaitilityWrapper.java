@@ -95,7 +95,13 @@ public class AwaitilityWrapper {
 
     public AwaitResult until(Callable<Boolean> callable) {
         try {
-            conditionFactory.until(callable);
+            conditionFactory.until(() -> {
+                try {
+                    return callable.call();
+                } catch (Exception e) {
+                    return false;
+                }
+            });
             return new AwaitResult(true, null);
         } catch (ConditionTimeoutException e) {
             return new AwaitResult(false, e);

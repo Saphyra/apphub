@@ -53,7 +53,7 @@ public class OccurrenceQueryService {
 
         if (sortedDates.contains(currentDate)) {
             List<Occurrence> currentDateOccurrences = occurrenceMapping.getOrDefault(currentDate, new ArrayList<>());
-            currentDateOccurrences.addAll(expiredOccurrenceCollector.getExpiredOccurrences(occurrences));
+            currentDateOccurrences.addAll(expiredOccurrenceCollector.getExpiredOccurrences(userId));
             occurrenceMapping.put(currentDate, currentDateOccurrences);
         }
 

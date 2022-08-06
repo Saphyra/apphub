@@ -42,4 +42,8 @@ public class OccurrenceDao extends AbstractDao<OccurrenceEntity, Occurrence, Str
     public void deleteByEventId(UUID eventId) {
         repository.deleteByEventId(uuidConverter.convertDomain(eventId));
     }
+
+    public List<Occurrence> getByUserId(UUID userId) {
+        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
+    }
 }

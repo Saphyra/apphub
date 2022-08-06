@@ -26,6 +26,20 @@ window.ids = {
     viewEventDiscardButton: "view-event-discard-button",
 }
 
+window.occurrenceOrder = new function(){
+    const orders = {
+        EXPIRED: 1,
+        VIRTUAL: 2,
+        PENDING: 2,
+        DONE: 3,
+        SNOOZED: 4
+    }
+
+    this.getOrder = function(status){
+        return orders[status] || throwException("IllegalArgument", status + " has no order defined.");
+    }
+}
+
 events.EVENT_CHANGED = "event-changed";
 
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");

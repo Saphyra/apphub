@@ -71,7 +71,7 @@ public class OccurrenceQueryServiceTest {
         given(occurrence2.getDate()).willReturn(DATE_2);
         given(occurrence1.getStatus()).willReturn(OccurrenceStatus.VIRTUAL);
 
-        given(expiredOccurrenceCollector.getExpiredOccurrences(List.of(occurrence1, occurrence2))).willReturn(List.of(expiredOccurrence));
+        given(expiredOccurrenceCollector.getExpiredOccurrences(USER_ID)).willReturn(List.of(expiredOccurrence));
 
         Map<LocalDate, List<Occurrence>> result = underTest.getOccurrences(USER_ID, List.of(DATE_2, DATE_1, DATE_3, CURRENT_DATE));
 

@@ -296,6 +296,7 @@ public class EventCrudTest extends SeleniumTest {
         }
 
         return List.of(
+            Constants.DIARY_OCCURRENCE_STATUS_EXPIRED.toLowerCase(),
             Constants.DIARY_OCCURRENCE_STATUS_PENDING.toLowerCase(),
             Constants.DIARY_OCCURRENCE_STATUS_VIRTUAL.toLowerCase()
         );

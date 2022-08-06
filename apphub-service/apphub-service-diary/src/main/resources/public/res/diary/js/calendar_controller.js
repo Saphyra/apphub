@@ -84,6 +84,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
                 eventsWrapper.classList.add("calendar-event-wrapper");
 
                 new Stream(day.events)
+                    .sorted((a, b) => {return occurrenceOrder.getOrder(a.status) - occurrenceOrder.getOrder(b.status)})
                     .map(createEvent)
                     .forEach((eventNode) => eventsWrapper.appendChild(eventNode));
         node.appendChild(eventsWrapper);

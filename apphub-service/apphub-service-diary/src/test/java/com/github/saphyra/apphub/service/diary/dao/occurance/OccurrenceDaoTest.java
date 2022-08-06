@@ -67,6 +67,17 @@ public class OccurrenceDaoTest {
     }
 
     @Test
+    public void getByUserId() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(repository.getByUserId(USER_ID_STRING)).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(occurrence));
+
+        List<Occurrence> result = underTest.getByUserId(USER_ID);
+
+        assertThat(result).containsExactly(occurrence);
+    }
+
+    @Test
     public void findById() {
         given(uuidConverter.convertDomain(OCCURRENCE_ID)).willReturn(OCCURRENCE_ID_STRING);
         given(repository.findById(OCCURRENCE_ID_STRING)).willReturn(Optional.of(entity));

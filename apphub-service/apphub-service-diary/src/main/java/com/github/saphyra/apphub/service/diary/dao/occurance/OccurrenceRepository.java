@@ -10,4 +10,6 @@ interface OccurrenceRepository extends CrudRepository<OccurrenceEntity, String> 
     List<OccurrenceEntity> getByEventId(String eventId);
 
     void deleteByEventId(String eventId);
+
+    List<OccurrenceEntity> getByUserId(String userId);
 }
