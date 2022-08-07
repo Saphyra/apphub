@@ -2,8 +2,17 @@
     const REPETITION_TYPES = {
         ONE_TIME: ids.createEventOneTimeRepetitionTypeData,
         EVERY_X_DAYS: ids.createEventEveryXDaysRepetitionTypeData,
-        DAYS_OF_WEEK: ids.createEventDaysOfWeekRepetitionTypeData
+        DAYS_OF_WEEK: ids.createEventDaysOfWeekRepetitionTypeData,
+        DAYS_OF_MONTH: ids.createEventDaysOfMonthRepetitionTypeData
     }
+
+    const daysOfMonthSyncEngine = new SyncEngineBuilder()
+        .withContainerId(ids.selectedDaysOfMonth)
+        .withGetKeyMethod((day) => {return day})
+        .withCreateNodeMethod(createDayOfMonthNode)
+        .withSortMethod((a, b) => {return a.localeCompare(b)})
+        .withIdPrefix("selected-day-of-month")
+        .build();
 
     pageLoader.addLoader(addEventListeners, "Add eventListeners to CreateEvent page");
 
@@ -12,6 +21,7 @@
     window.createEventController = new function(){
         this.openCreateEventWindow = openCreateEventWindow;
         this.createEvent = createEvent;
+        this.addDayOfMonth = addDayOfMonth;
     }
 
     function openCreateEventWindow(){
@@ -23,6 +33,7 @@
         document.getElementById(ids.createEventRepetitionTypeDaysInput).value = 1;
         $(".create-event-days-of-week-input").prop("checked", false);
         switchTab("repetition-type-data", REPETITION_TYPES.ONE_TIME);
+        daysOfMonthSyncEngine.clear();
 
         switchTab("main-page", ids.createEventPage);
     }
@@ -33,6 +44,7 @@
         const repetitionType = document.getElementById(ids.createEventRepetitionTypeSelect).value;
         const repetitionDays = document.getElementById(ids.createEventRepetitionTypeDaysInput).value;
         const repetitionDaysOfWeek = getCheckedDays();
+        const repetitionDaysOfMonth = daysOfMonthSyncEngine.keys();
 
         if(isBlank(title)){
             notificationService.showError(Localization.getAdditionalContent("empty-title"));
@@ -52,6 +64,12 @@
                     return;
                 }
                 break;
+            case "DAYS_OF_MONTH":
+                if(repetitionDaysOfMonth.length < 1){
+                    notificationService.showError(Localization.getAdditionalContent("no-day-selected"));
+                    return;
+                }
+            break;
             case "ONE_TIME":
                 break;
             default:
@@ -68,7 +86,8 @@
             content: content,
             repetitionType: repetitionType,
             repetitionDays: repetitionDays,
-            repetitionDaysOfWeek: repetitionDaysOfWeek
+            repetitionDaysOfWeek: repetitionDaysOfWeek,
+            repetitionDaysOfMonth: repetitionDaysOfMonth
         }
 
         const request = new Request(Mapping.getEndpoint("DIARY_CREATE_EVENT"), payload);
@@ -88,6 +107,29 @@
 
             return result;
         }
+    }
+
+    function addDayOfMonth(){
+        const value = document.getElementById(ids.createEventRepetitionTypeDaysOfMonthInput).value;
+
+        if(value < 1 || value > 31){
+            return;
+        }
+
+        daysOfMonthSyncEngine.add(value);
+    }
+
+    function createDayOfMonthNode(day){
+        const node = document.createElement("DIV");
+            node.classList.add("selected-day-of-month");
+            node.classList.add("button");
+
+            node.innerText = day;
+
+            node.onclick = function(){
+                daysOfMonthSyncEngine.remove(day);
+            }
+        return node;
     }
 
     function addEventListeners(){

@@ -32,7 +32,7 @@ public class EventCrudTest extends SeleniumTest {
     private static final String NEW_CONTENT = "new-content";
 
     @Test(groups = "diary")
-    public void oneTimeEvent() {
+    public void oneTimeEvent_changeStatuses() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
 
@@ -158,7 +158,7 @@ public class EventCrudTest extends SeleniumTest {
     }
 
     @Test(groups = "diary")
-    public void daysOfWeekEvent() {
+    public void daysOfWeekEvent_editEvent() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
 
@@ -247,6 +247,51 @@ public class EventCrudTest extends SeleniumTest {
             assertThat(calendarEvent.getText()).isEqualTo(NEW_TITLE);
             assertThat(calendarEvent.getAttribute("title")).isEqualTo(NEW_CONTENT);
         }
+    }
+
+    @Test(groups = "diary")
+    public void daysOfMonthEvent() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.DIARY);
+
+        DiaryActions.openCreateEventWindowAt(driver, FIRST_OF_MONTH);
+
+        //Create - No days set
+        DiaryActions.fillEventTitle(driver, TITLE);
+        DiaryActions.fillEventContent(driver, CONTENT);
+        DiaryActions.setCreateEventRepetitionType(driver, RepetitionType.DAYS_OF_MONTH);
+
+        DiaryActions.createEvent(driver);
+
+        NotificationUtil.verifyErrorNotification(driver, "Nincs nap kiválasztva.");
+
+        //Create
+        DiaryActions.selectDayOfMonth(driver, 21);
+
+        DiaryActions.createEvent(driver);
+
+        NotificationUtil.verifySuccessNotification(driver, "Esemény létrehozva.");
+
+        WebElement dailyTask = AwaitilityWrapper.getListWithWait(() -> DiaryActions.getDailyTasks(driver), ts -> !ts.isEmpty())
+            .get(0);
+        assertThat(dailyTask.getText()).isEqualTo(TITLE);
+        assertThat(dailyTask.getAttribute("title")).isEqualTo(CONTENT);
+        assertThat(WebElementUtils.getClasses(dailyTask)).containsAnyElementsOf(getStatusOfDay(FIRST_OF_MONTH));
+
+        DiaryActions.nextMonth(driver);
+
+        LocalDate date = LocalDate.of(FIRST_OF_MONTH.getYear(), FIRST_OF_MONTH.plusMonths(1).getMonth(), 21);
+
+        WebElement calendarEvent = DiaryActions.getEventsOfDay(driver, date)
+            .get(0);
+        assertThat(calendarEvent.getText()).isEqualTo(TITLE);
+        assertThat(calendarEvent.getAttribute("title")).isEqualTo(CONTENT);
+        assertThat(WebElementUtils.getClasses(calendarEvent)).containsAnyElementsOf(getStatusOfDay(date));
     }
 
     @Test(groups = "diary")

@@ -74,6 +74,7 @@
                 <OPTION value="ONE_TIME" id="create-event-repetition-type-one-time"></OPTION>
                 <OPTION value="EVERY_X_DAYS" id="create-event-repetition-type-every-x-days"></OPTION>
                 <OPTION value="DAYS_OF_WEEK" id="create-event-repetition-type-days-of-week"></OPTION>
+                <OPTION value="DAYS_OF_MONTH" id="create-event-repetition-type-days-of-month"></OPTION>
             </SELECT>
 
             <DIV id="create-event-one-time-repetition-type-data" class="repetition-type-data"></DIV>
@@ -117,6 +118,15 @@
                     <INPUT type="checkbox" class="create-event-days-of-week-input" value="SUNDAY">
                     <SPAN id="create-event-days-of-week-sunday-label"></SPAN>
                 </LABEL>
+            </DIV>
+
+            <DIV id="create-event-days-of-month-repetition-type-data" class="repetition-type-data">
+                <DIV id="selected-days-of-month"></DIV>
+                <LABEL>
+                    <SPAN id="create-event-repetition-type-days-of-month-label"></SPAN>:
+                    <INPUT type="number" id="create-event-repetition-type-days-of-month-input" min="1" max="31" value="1">
+                </LABEL>
+                <BUTTON id="create-event-repetition-type-days-of-month-add-day-button" onclick="createEventController.addDayOfMonth()"></BUTTON>
             </DIV>
         </FIELDSET>
     </MAIN>

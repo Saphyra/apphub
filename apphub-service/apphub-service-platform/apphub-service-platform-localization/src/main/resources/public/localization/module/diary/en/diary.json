@@ -67,6 +67,12 @@
         "message": "Days of week"
       }
     ],
+    "create-event-repetition-type-days-of-month": [
+      {
+        "key": "innerHTML",
+        "message": "Days of month"
+      }
+    ],
     "create-event-repetition-type-days-input": [
       {
         "key": "placeholder",
@@ -221,6 +227,18 @@
       {
         "key": "innerHTML",
         "message": "Sunday"
+      }
+    ],
+    "create-event-repetition-type-days-of-month-label": [
+      {
+        "key": "innerHTML",
+        "message": "Select a day"
+      }
+    ],
+    "create-event-repetition-type-days-of-month-add-day-button": [
+      {
+        "key": "innerHTML",
+        "message": "Add"
       }
     ]
   },

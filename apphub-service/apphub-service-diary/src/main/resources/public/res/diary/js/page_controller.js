@@ -9,9 +9,11 @@ window.ids = {
     createEventContentInput: "create-event-content-input",
     createEventRepetitionTypeSelect: "create-event-repetition-type-select",
     createEventRepetitionTypeDaysInput: "create-event-repetition-type-days-input",
+    createEventRepetitionTypeDaysOfMonthInput: "create-event-repetition-type-days-of-month-input",
     createEventOneTimeRepetitionTypeData: "create-event-one-time-repetition-type-data",
     createEventEveryXDaysRepetitionTypeData: "create-event-every-x-days-repetition-type-data",
     createEventDaysOfWeekRepetitionTypeData: "create-event-days-of-week-repetition-type-data",
+    createEventDaysOfMonthRepetitionTypeData: "create-event-days-of-month-repetition-type-data",
     viewEventPage: "view-event-page",
     viewEventTitle: "view-event-title",
     viewEventContent: "view-event-content",
@@ -24,6 +26,7 @@ window.ids = {
     viewEventUnsnoozeButton: "view-event-unsnooze-button",
     viewEventSaveButton: "view-event-save-button",
     viewEventDiscardButton: "view-event-discard-button",
+    selectedDaysOfMonth: "selected-days-of-month",
 }
 
 window.occurrenceOrder = new function(){

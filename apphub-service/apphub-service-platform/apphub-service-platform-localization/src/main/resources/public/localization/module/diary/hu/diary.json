@@ -67,6 +67,12 @@
         "message": "Hét napjain"
       }
     ],
+    "create-event-repetition-type-days-of-month": [
+      {
+        "key": "innerHTML",
+        "message": "Hónap napjain"
+      }
+    ],
     "create-event-repetition-type-days-input": [
       {
         "key": "placeholder",
@@ -221,6 +227,18 @@
       {
         "key": "innerHTML",
         "message": "Vasárnap"
+      }
+    ],
+    "create-event-repetition-type-days-of-month-label": [
+      {
+        "key": "innerHTML",
+        "message": "Válassz egy napot"
+      }
+    ],
+    "create-event-repetition-type-days-of-month-add-day-button": [
+      {
+        "key": "innerHTML",
+        "message": "Kiválaszt"
       }
     ]
   },

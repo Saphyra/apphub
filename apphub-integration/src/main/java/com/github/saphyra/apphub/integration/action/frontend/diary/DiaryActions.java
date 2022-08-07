@@ -63,7 +63,9 @@ public class DiaryActions {
     }
 
     public static List<WebElement> getEventsOfDay(WebDriver driver, LocalDate date) {
-        return driver.findElement(By.id("calendar-day-" + date))
+        return AwaitilityWrapper.getWithWait(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("calendar-day-" + date))), Optional::isPresent)
+            .orElseThrow(() -> new RuntimeException("No day found for date " + date))
+            .get()
             .findElements(By.cssSelector(":scope .calendar-event"));
     }
 
@@ -222,6 +224,13 @@ public class DiaryActions {
 
     public static void nextMonth(WebDriver driver) {
         DiaryPage.nextMonthButton(driver)
+            .click();
+    }
+
+    public static void selectDayOfMonth(WebDriver driver, int dayOfMonth) {
+        clearAndFill(DiaryPage.createEventRepetitionTypeDaysOfMonthInput(driver), dayOfMonth);
+
+        DiaryPage.createEventDaysOfMonthAddDayButton(driver)
             .click();
     }
 }

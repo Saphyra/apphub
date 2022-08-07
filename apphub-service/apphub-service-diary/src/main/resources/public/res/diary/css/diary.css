@@ -190,6 +190,10 @@
             transform: scale(1.5);
         }
 
+    .selected-day-of-month{
+        display: inline-block;
+    }
+
 #view-event-page{
 
 }
