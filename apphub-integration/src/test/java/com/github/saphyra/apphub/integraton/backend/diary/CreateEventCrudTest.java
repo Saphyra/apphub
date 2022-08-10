@@ -32,13 +32,13 @@ public class CreateEventCrudTest extends BackEndTest {
     private static final LocalDate CURRENT_DATE = LocalDate.now(ZoneOffset.UTC);
     private static final LocalDate REFERENCE_DATE_DAY = CURRENT_DATE.plusMonths(1);
     private static final LocalDate REFERENCE_DATE_MONTH = CURRENT_DATE;
-    private static final LocalDate EVENT_DATE = CURRENT_DATE.minusWeeks(1);
+    private static final LocalDate EVENT_DATE = CURRENT_DATE.minusWeeks(2);
     private static final String TITLE = "title";
     private static final String CONTENT = "content";
     public static final int REPETITION_DAYS = 3;
 
     @Test(dataProvider = "languageDataProvider", groups = "diary")
-    public void createEvent_blankTitle(Language language) {
+    public void createEvent_validation(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
@@ -170,7 +170,7 @@ public class CreateEventCrudTest extends BackEndTest {
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
-                .day(REFERENCE_DATE_DAY)
+                .day(EVENT_DATE)
                 .month(REFERENCE_DATE_MONTH)
                 .build())
             .date(EVENT_DATE)
@@ -192,6 +192,15 @@ public class CreateEventCrudTest extends BackEndTest {
                 assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
                 assertThat(occurrenceResponse.getNote()).isNull();
 
+            } else if (calendarResponse.getDate().equals(CURRENT_DATE)) {
+                assertThat(calendarResponse.getEvents()).hasSize(1);
+                OccurrenceResponse occurrenceResponse = calendarResponse.getEvents().get(0);
+                assertThat(occurrenceResponse.getOccurrenceId()).isNotNull();
+                assertThat(occurrenceResponse.getEventId()).isNotNull();
+                assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_EXPIRED);
+                assertThat(occurrenceResponse.getTitle()).isEqualTo(TITLE);
+                assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
+                assertThat(occurrenceResponse.getNote()).isNull();
             } else {
                 assertThat(calendarResponse.getEvents()).isEmpty();
             }

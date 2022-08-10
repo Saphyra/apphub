@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.integration.structure.notebook.CreateCategoryRe
 import com.github.saphyra.apphub.integration.structure.notebook.CreateChecklistItemRequest;
 import com.github.saphyra.apphub.integration.structure.notebook.CreateChecklistTableRequest;
 import com.github.saphyra.apphub.integration.structure.notebook.CreateLinkRequest;
+import com.github.saphyra.apphub.integration.structure.notebook.CreateOnlyTitleyRequest;
 import com.github.saphyra.apphub.integration.structure.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.structure.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.structure.notebook.EditChecklistItemRequest;
@@ -366,5 +367,19 @@ public class NotebookActions {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(new OneParamRequest<>(archived))
             .post(UrlFactory.create(Endpoints.NOTEBOOK_ARCHIVE_LIST_ITEM, "listItemId", listItemId));
+    }
+
+    public static UUID createOnlyTitle(Language language, UUID accessTokenId, CreateOnlyTitleyRequest request) {
+        Response response = getCreateOnlyTitleResponse(language, accessTokenId, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().jsonPath().getUUID("value");
+    }
+
+    public static Response getCreateOnlyTitleResponse(Language language, UUID accessTokenId, CreateOnlyTitleyRequest request) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(request)
+            .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_ONLY_TITLE));
     }
 }

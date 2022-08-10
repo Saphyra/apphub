@@ -36,6 +36,8 @@ public class ListItemCloneServiceTest {
     private static final String TABLE_LIST_ITEM_TITLE = "table-list-item-title";
     private static final UUID CHECKLIST_TABLE_LIST_ITEM_ID = UUID.randomUUID();
     private static final String CHECKLIST_TABLE_ITEM_TITLE = "checklist-table-list-item-id";
+    private static final UUID ONLY_TITLE_LIST_ITEM_ID = UUID.randomUUID();
+    private static final String ONLY_TITLE_TITLE = "only-title-title";
 
     @Mock
     private ListItemDao listItemDao;
@@ -93,6 +95,11 @@ public class ListItemCloneServiceTest {
     @Mock
     private ListItem checklistTableListItemClone;
 
+    private final ListItem onlyTitleListItem = createListItem(ONLY_TITLE_LIST_ITEM_ID, ONLY_TITLE_TITLE, ListItemType.ONLY_TITLE, PARENT_OF_PARENT);
+
+    @Mock
+    private ListItem onlyTitleListItemClone;
+
     @Test
     public void cloneTest() {
         given(parentListItemClone.getListItemId()).willReturn(PARENT_LIST_ITEM_CLONE_ID);
@@ -100,7 +107,7 @@ public class ListItemCloneServiceTest {
         given(listItemDao.findByIdValidated(PARENT_LIST_ITEM_ID)).willReturn(parentListItem);
         given(listItemFactory.create(USER_ID, PARENT_LIST_ITEM_TITLE, PARENT_OF_PARENT, ListItemType.CATEGORY)).willReturn(parentListItemClone);
 
-        given(listItemDao.getByUserIdAndParent(USER_ID, PARENT_LIST_ITEM_ID)).willReturn(Arrays.asList(categoryListItem, linkListItem, textListItem, checklistListItem, tableListItem, checklistTableListItem));
+        given(listItemDao.getByUserIdAndParent(USER_ID, PARENT_LIST_ITEM_ID)).willReturn(Arrays.asList(categoryListItem, linkListItem, textListItem, checklistListItem, tableListItem, checklistTableListItem, onlyTitleListItem));
 
         given(listItemFactory.create(USER_ID, CATEGORY_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.CATEGORY)).willReturn(categoryListItemClone);
         given(listItemDao.getByUserIdAndParent(USER_ID, CATEGORY_LIST_ITEM_ID)).willReturn(Collections.emptyList());
@@ -110,6 +117,7 @@ public class ListItemCloneServiceTest {
         given(listItemFactory.create(USER_ID, CHECKLIST_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.CHECKLIST)).willReturn(checklistListItemClone);
         given(listItemFactory.create(USER_ID, TABLE_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.TABLE)).willReturn(tableListItemClone);
         given(listItemFactory.create(USER_ID, CHECKLIST_TABLE_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.CHECKLIST_TABLE)).willReturn(checklistTableListItemClone);
+        given(listItemFactory.create(USER_ID, ONLY_TITLE_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.ONLY_TITLE)).willReturn(onlyTitleListItemClone);
 
         underTest.clone(PARENT_LIST_ITEM_ID);
 
@@ -125,6 +133,7 @@ public class ListItemCloneServiceTest {
         verify(tableCloneService).clone(tableListItem, tableListItemClone);
         verify(listItemDao).save(checklistTableListItemClone);
         verify(checklistTableCloneService).clone(checklistTableListItem, checklistTableListItemClone);
+        verify(listItemDao).save(onlyTitleListItemClone);
     }
 
     private ListItem createListItem(UUID listItemId, String title, ListItemType type, UUID parent) {
