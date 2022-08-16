@@ -37,3 +37,7 @@ add-role-to-all:
   restrictedRoles:
     - ACCESS
     - ADMIN
+
+settings:
+  notebook:
+    show-archived: true

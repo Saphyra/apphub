@@ -15,4 +15,5 @@
     <include file="database/change_sets/user.xml"/>
     <include file="database/change_sets/disabled_role.xml"/>
     <include file="database/change_sets/ban.xml"/>
+    <include file="database/change_sets/settings.xml"/>
 </databaseChangeLog>

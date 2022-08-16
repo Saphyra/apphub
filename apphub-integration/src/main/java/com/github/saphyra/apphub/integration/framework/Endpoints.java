@@ -97,6 +97,10 @@ public class Endpoints {
     public static final String ACCOUNT_GET_LANGUAGES = "/api/user/data/languages";
     public static final String USER_DATA_SEARCH_ACCOUNT = "/api/user/accounts";
 
+    //SETTINGS
+    public static final String GET_USER_SETTINGS = "/api/user/settings/{category}";
+    public static final String SET_USER_SETTINGS = "/api/user/settings";
+
     //BAN USER
     public static final String ACCOUNT_BAN_USER = "/api/user/ban";
     public static final String ACCOUNT_REMOVE_BAN = "/api/user/ban/{banId}";
