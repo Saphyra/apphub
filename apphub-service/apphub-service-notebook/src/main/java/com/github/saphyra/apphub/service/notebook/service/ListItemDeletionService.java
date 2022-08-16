@@ -52,6 +52,9 @@ public class ListItemDeletionService {
             case CHECKLIST_TABLE:
                 checklistTableDeletionService.deleteByListItemId(listItem.getListItemId());
                 break;
+            case ONLY_TITLE:
+                log.info("OnlyTitle is handled by default.");
+                break;
             default:
                 throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, "Unhandled listItemType: " + listItem.getType());
         }

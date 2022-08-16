@@ -6,6 +6,7 @@ scriptLoader.loadScript("/res/notebook/js/creation/link_creation_controller.js")
 scriptLoader.loadScript("/res/notebook/js/creation/checklist_creation_controller.js");
 scriptLoader.loadScript("/res/notebook/js/creation/table_creation_controller.js");
 scriptLoader.loadScript("/res/notebook/js/creation/checklist_table_creation_controller.js");
+scriptLoader.loadScript("/res/notebook/js/creation/only_title_creation_controller.js");
 scriptLoader.loadScript("/res/notebook/js/content/list_item_clone_service.js");
 scriptLoader.loadScript("/res/notebook/js/list_item_edition_service.js");
 scriptLoader.loadScript("/res/notebook/js/pin_controller.js");
@@ -15,6 +16,7 @@ scriptLoader.loadScript("/res/notebook/js/content/category/category_node_factory
 scriptLoader.loadScript("/res/notebook/js/content/checklist/checklist_node_factory.js")
 scriptLoader.loadScript("/res/notebook/js/content/table/table_node_factory.js")
 scriptLoader.loadScript("/res/notebook/js/content/checklist_table/checklist_table_node_factory.js")
+scriptLoader.loadScript("/res/notebook/js/content/only_title/only_title_node_factory.js")
 scriptLoader.loadScript("/res/notebook/js/content/action_button_factory.js")
 scriptLoader.loadScript("/res/notebook/js/view/text_view_controller.js");
 scriptLoader.loadScript("/res/notebook/js/content/link/link_node_factory.js");

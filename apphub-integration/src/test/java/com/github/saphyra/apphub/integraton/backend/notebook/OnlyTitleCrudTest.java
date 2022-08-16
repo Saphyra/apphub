@@ -65,5 +65,12 @@ public class OnlyTitleCrudTest extends BackEndTest {
         Response create_parentNotCategoryResponse = NotebookActions.getCreateOnlyTitleResponse(language, accessTokenId, create_parentNotCategoryRequest);
 
         verifyErrorResponse(language, create_parentNotCategoryResponse, 422, ErrorCode.INVALID_TYPE);
+
+        //Delete
+        NotebookActions.deleteListItem(language, accessTokenId, listItemId);
+
+        content = NotebookActions.getChildrenOfCategory(language, accessTokenId, null)
+            .getChildren();
+        assertThat(content).hasSize(1);
     }
 }

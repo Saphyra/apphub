@@ -48,6 +48,10 @@ body{
     border-color: rgb(40,40,255);
 }
 
+.only-title{
+
+}
+
 .checklist, .pinned, .archived.archive-button{
     border-color: orange;
 }

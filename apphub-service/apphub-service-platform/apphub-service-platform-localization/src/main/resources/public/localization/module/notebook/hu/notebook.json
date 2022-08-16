@@ -426,6 +426,36 @@
         "key": "innerHTML",
         "message": "Sorba rendezés"
       }
+    ],
+    "new-only-title-button": [
+      {
+        "key": "innerHTML",
+        "message": "Csak cím"
+      }
+    ],
+    "create-only-title-title": [
+      {
+        "key": "innerHTML",
+        "message": "Új Csak cím"
+      }
+    ],
+    "new-only-title-title": [
+      {
+        "key": "placeholder",
+        "message": "Cím"
+      }
+    ],
+    "create-only-title-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
+    ],
+    "create-only-title-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Fel"
+      }
     ]
   },
   "additionalContent": {
@@ -478,6 +508,7 @@
     "checklist-table-item-deletion-confirmation-dialog-decline-button": "Mégse",
     "open-parent": "Szülő megnyitása",
     "archive-button-title": "Archiválás",
-    "pin-button-title": "Kitűzés"
+    "pin-button-title": "Kitűzés",
+    "only-title-created": "Sikeresen létrehozva."
   }
 }

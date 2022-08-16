@@ -8,6 +8,7 @@
     <LINK rel="stylesheet" href="/res/notebook/css/category_tree_view.css">
     <LINK rel="stylesheet" href="/res/notebook/css/content.css">
     <LINK rel="stylesheet" href="/res/notebook/css/create_category_dialog.css">
+    <LINK rel="stylesheet" href="/res/notebook/css/create_only_title_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/create_text_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/create_link_dialog.css">
     <LINK rel="stylesheet" href="/res/notebook/css/create_checklist_dialog.css">
@@ -75,6 +76,25 @@
                 <DIV id="create-category-current-category-title"></DIV>
                 <DIV id="create-category-parent-selection-parent-button" class="button create-item-category"></DIV>
                 <DIV id="create-category-parent-selection-category-list"></DIV>
+            </DIV>
+        </MAIN>
+    </DIV>
+
+    <DIV id="create-only-title" class="main-page">
+        <HEADER>
+            <H1 id="create-only-title-title"></H1>
+            <BUTTON id="create-only-title-close-button" class="dialog-close-button" onclick="pageController.openMainPage()">X</BUTTON>
+        </HEADER>
+
+        <MAIN>
+            <DIV class="create-item-input-wrapper">
+                <INPUT type="text" id="new-only-title-title" class="new-item-title">
+            </DIV>
+
+            <DIV id="create-only-title-parent-selection-wrapper" class="parent-selection-wrapper">
+                <DIV id="create-only-title-current-category-title"></DIV>
+                <DIV id="create-only-title-parent-selection-parent-button" class="button create-item-category"></DIV>
+                <DIV id="create-only-title-parent-selection-category-list"></DIV>
             </DIV>
         </MAIN>
     </DIV>
@@ -309,6 +329,7 @@
                     <DIV id="new-checklist-button" class="button" onclick="checklistCreationController.openCreateChecklistDialog()"></DIV>
                     <DIV id="new-table-button" class="button" onclick="tableCreationController.openCreateTableDialog()"></DIV>
                     <DIV id="new-checklist-table-button" class="button" onclick="checklistTableCreationController.openCreateChecklistTableDialog()"></DIV>
+                    <DIV id="new-only-title-button" class="button" onclick="onlyTitleCreationController.openCreateOnlyTitleDialog()"></DIV>
                 </DIV>
 
                 <DIV id="new-button" class="button"></DIV>
@@ -317,6 +338,10 @@
 
     <SPAN id="create-category-buttons" class="button-wrapper">
         <BUTTON id="create-category-button" onclick="categoryCreationController.save()"></BUTTON>
+    </SPAN>
+
+    <SPAN id="create-only-title-buttons" class="button-wrapper">
+        <BUTTON id="create-only-title-button" onclick="onlyTitleCreationController.save()"></BUTTON>
     </SPAN>
 
     <SPAN id="create-text-buttons" class="button-wrapper">

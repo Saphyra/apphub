@@ -5,7 +5,8 @@
         LINK: linkNodeFactory,
         CHECKLIST: checklistNodeFactory,
         TABLE: tableNodeFactory,
-        CHECKLIST_TABLE: checklistTableNodeFactory
+        CHECKLIST_TABLE: checklistTableNodeFactory,
+        ONLY_TITLE: onlyTitleNodeFactory
     }
 
     window.contentController = new function(){

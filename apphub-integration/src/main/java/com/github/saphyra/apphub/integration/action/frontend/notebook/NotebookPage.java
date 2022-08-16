@@ -524,4 +524,24 @@ class NotebookPage {
     public static WebElement searchInput(WebDriver driver) {
         return driver.findElement(By.id("search-container-title"));
     }
+
+    public static WebElement openCreateOnlyTitleWindowButton(WebDriver driver) {
+        return driver.findElement(By.id("new-only-title-button"));
+    }
+
+    public static WebElement createOnlyTitleWindow(WebDriver driver) {
+        return driver.findElement(By.id("create-only-title"));
+    }
+
+    public static WebElement saveNewOnlyTitleButton(WebDriver driver) {
+        return driver.findElement(By.id("create-only-title-button"));
+    }
+
+    public static WebElement newOnlyTitleTitleTitleInput(WebDriver driver) {
+        return driver.findElement(By.id("new-only-title-title"));
+    }
+
+    public static List<WebElement> availableParentsForNewOnlyTitle(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#create-only-title-parent-selection-category-list .category"));
+    }
 }

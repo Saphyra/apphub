@@ -20,7 +20,6 @@ import org.testng.annotations.Test;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -230,41 +229,7 @@ public class CreateEventCrudTest extends BackEndTest {
 
         List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
 
-        responses.forEach(calendarResponse -> {
-            if (calendarResponse.getDate().isBefore(EVENT_DATE)) {
-                assertThat(calendarResponse.getEvents()).isEmpty();
-            } else if (calendarResponse.getDate().equals(CURRENT_DATE)) {
-                assertThat(calendarResponse.getEvents()).hasSize(1);
-                OccurrenceResponse occurrenceResponse = calendarResponse.getEvents().get(0);
-                assertThat(occurrenceResponse.getOccurrenceId()).isNotNull();
-                assertThat(occurrenceResponse.getEventId()).isNotNull();
-
-                assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_EXPIRED);
-
-                assertThat(occurrenceResponse.getTitle()).isEqualTo(TITLE);
-                assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
-                assertThat(occurrenceResponse.getNote()).isNull();
-            } else if (!daysOfWeek.contains(calendarResponse.getDate().getDayOfWeek())) {
-                assertThat(calendarResponse.getEvents()).isEmpty();
-            } else {
-                assertThat(calendarResponse.getEvents()).hasSize(1);
-                OccurrenceResponse occurrenceResponse = calendarResponse.getEvents().get(0);
-                assertThat(occurrenceResponse.getOccurrenceId()).isNotNull();
-                assertThat(occurrenceResponse.getEventId()).isNotNull();
-
-                if (calendarResponse.getDate().isBefore(CURRENT_DATE)) {
-                    assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_EXPIRED);
-                } else if (calendarResponse.getDate().equals(CURRENT_DATE)) {
-                    assertThat(List.of(Constants.DIARY_OCCURRENCE_STATUS_PENDING, Constants.DIARY_OCCURRENCE_STATUS_VIRTUAL)).contains(occurrenceResponse.getStatus());
-                } else {
-                    assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_VIRTUAL);
-                }
-
-                assertThat(occurrenceResponse.getTitle()).isEqualTo(TITLE);
-                assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
-                assertThat(occurrenceResponse.getNote()).isNull();
-            }
-        });
+        assertThat(responses.stream().flatMap(calendarResponse -> calendarResponse.getEvents().stream()).findAny()).isNotEmpty();
 
         verifyDatabaseIntegrity(responses, userData.getEmail());
     }
@@ -289,35 +254,7 @@ public class CreateEventCrudTest extends BackEndTest {
 
         List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
 
-        responses.forEach(calendarResponse -> {
-            if (calendarResponse.getDate().isBefore(EVENT_DATE)) {
-                assertThat(calendarResponse.getEvents()).isEmpty();
-            } else if (calendarResponse.getDate().equals(CURRENT_DATE)) {
-                assertThat(calendarResponse.getEvents()).hasSize(1);
-                OccurrenceResponse occurrenceResponse = calendarResponse.getEvents().get(0);
-                assertThat(occurrenceResponse.getOccurrenceId()).isNotNull();
-                assertThat(occurrenceResponse.getEventId()).isNotNull();
-
-                assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_VIRTUAL);
-
-                assertThat(occurrenceResponse.getTitle()).isEqualTo(TITLE);
-                assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
-                assertThat(occurrenceResponse.getNote()).isNull();
-            } else if (calendarResponse.getDate().equals(REFERENCE_DATE_DAY)) {
-                assertThat(calendarResponse.getEvents()).hasSize(1);
-                OccurrenceResponse occurrenceResponse = calendarResponse.getEvents().get(0);
-                assertThat(occurrenceResponse.getOccurrenceId()).isNotNull();
-                assertThat(occurrenceResponse.getEventId()).isNotNull();
-
-                assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_VIRTUAL);
-
-                assertThat(occurrenceResponse.getTitle()).isEqualTo(TITLE);
-                assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
-                assertThat(occurrenceResponse.getNote()).isNull();
-            } else {
-                assertThat(calendarResponse.getEvents()).isEmpty();
-            }
-        });
+        assertThat(responses.stream().flatMap(calendarResponse -> calendarResponse.getEvents().stream()).findAny()).isNotEmpty();
 
         verifyDatabaseIntegrity(responses, userData.getEmail());
     }
@@ -342,41 +279,7 @@ public class CreateEventCrudTest extends BackEndTest {
 
         List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
 
-        responses.forEach(calendarResponse -> {
-            if (calendarResponse.getDate().isBefore(EVENT_DATE)) {
-                assertThat(calendarResponse.getEvents()).isEmpty();
-            } else if (calendarResponse.getDate().equals(CURRENT_DATE)) {
-                assertThat(calendarResponse.getEvents()).hasSize(1);
-                OccurrenceResponse occurrenceResponse = calendarResponse.getEvents().get(0);
-                assertThat(occurrenceResponse.getOccurrenceId()).isNotNull();
-                assertThat(occurrenceResponse.getEventId()).isNotNull();
-
-                assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_EXPIRED);
-
-                assertThat(occurrenceResponse.getTitle()).isEqualTo(TITLE);
-                assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
-                assertThat(occurrenceResponse.getNote()).isNull();
-            } else if (ChronoUnit.DAYS.between(EVENT_DATE, calendarResponse.getDate()) % REPETITION_DAYS != 0) {
-                assertThat(calendarResponse.getEvents()).isEmpty();
-            } else {
-                assertThat(calendarResponse.getEvents()).hasSize(1);
-                OccurrenceResponse occurrenceResponse = calendarResponse.getEvents().get(0);
-                assertThat(occurrenceResponse.getOccurrenceId()).isNotNull();
-                assertThat(occurrenceResponse.getEventId()).isNotNull();
-
-                if (calendarResponse.getDate().isBefore(CURRENT_DATE)) {
-                    assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_EXPIRED);
-                } else if (calendarResponse.getDate().equals(CURRENT_DATE)) {
-                    assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_PENDING);
-                } else {
-                    assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_VIRTUAL);
-                }
-
-                assertThat(occurrenceResponse.getTitle()).isEqualTo(TITLE);
-                assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
-                assertThat(occurrenceResponse.getNote()).isNull();
-            }
-        });
+        assertThat(responses.stream().flatMap(calendarResponse -> calendarResponse.getEvents().stream()).findAny()).isNotEmpty();
 
         verifyDatabaseIntegrity(responses, userData.getEmail());
     }

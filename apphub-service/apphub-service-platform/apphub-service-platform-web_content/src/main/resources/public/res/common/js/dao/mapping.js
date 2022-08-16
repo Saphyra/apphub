@@ -89,6 +89,7 @@ window.Mapping = new function(){
         NOTEBOOK_ORDER_CHECKLIST_ITEMS: new Endpoint("/api/notebook/checklist/{listItemId}/order", HttpMethod.POST),
         NOTEBOOK_SEARCH: new Endpoint("/api/notebook/item/search", HttpMethod.POST),
         NOTEBOOK_ARCHIVE_ITEM: new Endpoint("/api/notebook/item/{listItemId}/archive", HttpMethod.POST),
+        NOTEBOOK_CREATE_ONLY_TITLE: new Endpoint("/api/notebook/only-title", HttpMethod.PUT),
 
         //Utils
         UTILS_LOG_FORMATTER_GET_VISIBILITY: new Endpoint("/api/utils/log-formatter/visibility", HttpMethod.PUT),
