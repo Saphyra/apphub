@@ -89,6 +89,9 @@
                                 const request = new Request(Mapping.getEndpoint("NOTEBOOK_ARCHIVE_ITEM", {listItemId: itemDetails.id}), {value: itemDetails.archived});
                                     request.processValidResponse = function(){
                                         itemDetails.archived ? node.classList.add("archived") : node.classList.remove("archived");
+                                        if(!itemDetails.archived && settings.get("show-archived" !== "true")){
+                                            eventProcessor.processEvent(new Event(events.ITEM_ARCHIVED));
+                                        }
                                     }
                                 dao.sendRequestAsync(request);
                             }

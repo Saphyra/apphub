@@ -544,4 +544,16 @@ class NotebookPage {
     public static List<WebElement> availableParentsForNewOnlyTitle(WebDriver driver) {
         return driver.findElements(By.cssSelector("#create-only-title-parent-selection-category-list .category"));
     }
+
+    public static WebElement settingMenuToggleButton(WebDriver driver) {
+        return driver.findElement(By.id("settings-container-toggle-button"));
+    }
+
+    public static WebElement settingMenu(WebDriver driver) {
+        return driver.findElement(By.id("settings-container"));
+    }
+
+    public static WebElement showArchivedCheckbox(WebDriver driver) {
+        return driver.findElement(By.id("settings-show-archived-input"));
+    }
 }

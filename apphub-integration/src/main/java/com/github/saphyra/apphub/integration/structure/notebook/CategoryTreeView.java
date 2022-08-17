@@ -11,5 +11,6 @@ import java.util.UUID;
 public class CategoryTreeView {
     private UUID categoryId;
     private String title;
+    private Boolean archived;
     private List<CategoryTreeView> children;
 }

@@ -18,6 +18,8 @@ public class CategoryTreeView {
     @NonNull
     private final String title;
 
+    private final boolean archived;
+
     @NonNull
     private final List<CategoryTreeView> children;
 }

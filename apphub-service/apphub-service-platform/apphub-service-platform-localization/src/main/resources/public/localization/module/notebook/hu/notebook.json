@@ -456,6 +456,12 @@
         "key": "innerHTML",
         "message": "Fel"
       }
+    ],
+    "settings-show-archived-label": [
+      {
+        "key": "innerHTML",
+        "message": "Show archived"
+      }
     ]
   },
   "additionalContent": {

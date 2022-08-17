@@ -462,6 +462,12 @@
         "key": "innerHTML",
         "message": "Up"
       }
+    ],
+    "settings-show-archived-label": [
+      {
+        "key": "innerHTML",
+        "message": "Archiváltak mutatása"
+      }
     ]
   },
   "additionalContent": {
