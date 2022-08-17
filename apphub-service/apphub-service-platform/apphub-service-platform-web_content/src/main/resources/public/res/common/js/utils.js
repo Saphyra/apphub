@@ -1,3 +1,11 @@
+function isTrue(value){
+    if(typeof value == "boolean"){
+        return value;
+    }
+
+    return value === "true";
+}
+
 function Switch(aFunc, bFunc){
     let counter = 0;
     const aFunction = aFunc || throwException("IllegalArgument", "function1 is not defined");
@@ -53,7 +61,7 @@ function hasValue(obj){
 function throwException(name, message){
     name = name == undefined ? "" : name;
     message = message == undefined ? "" : message;
-    throw {name: name, message: message};
+    throw {name: name, message: message, stackTrace: (new Error()).stack};
 }
 
 function getLocale(){

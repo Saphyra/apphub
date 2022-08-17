@@ -27,7 +27,7 @@
     }
 
     function displayChildrenOfCategory(categoryId, parent, categories, title){
-        document.getElementById("create-text-selected-category-title").innerHTML = title;
+        document.getElementById("create-text-selected-category-title").innerText = title;
 
         const parentButton = document.getElementById("create-text-parent-selection-parent-button");
             if(categoryId == null){
@@ -46,7 +46,7 @@
             if(!categories.length){
                 const noContentText = document.createElement("DIV");
                     noContentText.classList.add("no-content");
-                    noContentText.innerHTML = Localization.getAdditionalContent("category-empty");
+                    noContentText.innerText = Localization.getAdditionalContent("category-empty");
                 container.appendChild(noContentText);
             }
 
@@ -61,7 +61,7 @@
                 node.classList.add("button");
                 node.classList.add("create-item-category");
 
-                node.innerHTML = category.title;
+                node.innerText = category.title;
 
                 node.onclick = function(){
                     loadChildrenOfCategory(category.id);

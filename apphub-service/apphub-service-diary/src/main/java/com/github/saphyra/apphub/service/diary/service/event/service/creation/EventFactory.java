@@ -40,6 +40,8 @@ class EventFactory {
                 return String.valueOf(request.getRepetitionDays());
             case DAYS_OF_WEEK:
                 return objectMapperWrapper.writeValueAsString(request.getRepetitionDaysOfWeek());
+            case DAYS_OF_MONTH:
+                return objectMapperWrapper.writeValueAsString(request.getRepetitionDaysOfMonth());
             default:
                 throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR, "Unhandled RepetitionType: " + request.getRepetitionType());
         }

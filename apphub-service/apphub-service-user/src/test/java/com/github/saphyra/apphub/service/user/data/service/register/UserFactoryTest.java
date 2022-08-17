@@ -44,5 +44,6 @@ public class UserFactoryTest {
         assertThat(result.getEmail()).isEqualTo(EMAIL);
         assertThat(result.getPassword()).isEqualTo(HASHED_PASSWORD);
         assertThat(result.getLanguage()).isEqualTo(LOCALE);
+        assertThat(result.getPasswordFailureCount()).isZero();
     }
 }

@@ -19,6 +19,7 @@ class UserFactory {
             .username(username)
             .password(passwordService.hashPassword(password))
             .language(locale)
+            .passwordFailureCount(0)
             .build();
     }
 }

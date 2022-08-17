@@ -91,6 +91,42 @@ public class CreateEventRequestValidatorTest {
     }
 
     @Test
+    public void emptyRepetitionDayOfMonth() {
+        CreateEventRequest request = validRequest(RepetitionType.DAYS_OF_MONTH)
+            .toBuilder()
+            .repetitionDaysOfMonth(Collections.emptyList())
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.validate(request));
+
+        ExceptionValidator.validateInvalidParam(ex, "repetitionDaysOfMonth", "must not be empty");
+    }
+
+    @Test
+    public void tooLowRepetitionDayOfMonth() {
+        CreateEventRequest request = validRequest(RepetitionType.DAYS_OF_MONTH)
+            .toBuilder()
+            .repetitionDaysOfMonth(List.of(0))
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.validate(request));
+
+        ExceptionValidator.validateInvalidParam(ex, "repetitionDaysOfMonth", "too low");
+    }
+
+    @Test
+    public void tooHighRepetitionDayOfMonth() {
+        CreateEventRequest request = validRequest(RepetitionType.DAYS_OF_MONTH)
+            .toBuilder()
+            .repetitionDaysOfMonth(List.of(32))
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.validate(request));
+
+        ExceptionValidator.validateInvalidParam(ex, "repetitionDaysOfMonth", "too high");
+    }
+
+    @Test
     public void validDaysOfWeek() {
         underTest.validate(validRequest(RepetitionType.DAYS_OF_WEEK));
     }
@@ -113,6 +149,7 @@ public class CreateEventRequestValidatorTest {
             .repetitionType(repetitionType)
             .repetitionDays(REPETITION_DAYS)
             .repetitionDaysOfWeek(List.of(DayOfWeek.MONDAY))
+            .repetitionDaysOfMonth(List.of(25))
             .build();
     }
 }

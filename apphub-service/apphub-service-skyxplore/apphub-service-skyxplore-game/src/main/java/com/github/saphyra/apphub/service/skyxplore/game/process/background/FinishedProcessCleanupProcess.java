@@ -26,7 +26,6 @@ public class FinishedProcessCleanupProcess {
                 log.info("Starting ProcessSchedulerProcess for game {}", game.getGameId());
 
                 while (!game.isTerminated()) {
-                    log.info("aad");
                     SyncCache syncCache = processContext.getSyncCacheFactory()
                         .create();
                     Future<?> future = game.getEventLoop()
@@ -48,16 +47,15 @@ public class FinishedProcessCleanupProcess {
     }
 
     private void processGame(SyncCache syncCache, Game game) {
-        log.info("Cleaning up finished processes...");
+        log.debug("Cleaning up finished processes...");
 
         Processes processes = game.getProcesses();
         synchronized (processes) {
-            List<Process> finishedProcesses = processes
-                .stream()
+            List<Process> finishedProcesses = processes.stream()
                 .filter(process -> process.getStatus() == ProcessStatus.READY_TO_DELETE)
                 .collect(Collectors.toList());
 
-            log.info("Deleting processes {}", finishedProcesses);
+            log.debug("Deleting processes {}", finishedProcesses);
 
             finishedProcesses.forEach(process -> syncCache.deleteGameItem(process.getProcessId(), GameItemType.PROCESS));
             syncCache.process();

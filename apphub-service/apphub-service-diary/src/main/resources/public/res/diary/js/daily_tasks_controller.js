@@ -5,7 +5,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
         .withContainerId(ids.dailyTasks)
         .withGetKeyMethod((event) => {return event.occurrenceId})
         .withCreateNodeMethod(createTaskNode)
-        .withSortMethod((a, b) => {return a.order - b.order})
+        .withSortMethod((a, b) => {return occurrenceOrder.getOrder(a.status) - occurrenceOrder.getOrder(b.status)})
         .withIdPrefix("task")
         .build();
 

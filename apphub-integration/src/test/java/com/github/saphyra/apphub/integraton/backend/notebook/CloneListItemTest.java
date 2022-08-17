@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integraton.backend.notebook;
 
-import com.github.saphyra.apphub.integration.BackEndTest;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
@@ -17,6 +17,7 @@ import com.github.saphyra.apphub.integration.structure.notebook.CreateCategoryRe
 import com.github.saphyra.apphub.integration.structure.notebook.CreateChecklistItemRequest;
 import com.github.saphyra.apphub.integration.structure.notebook.CreateChecklistTableRequest;
 import com.github.saphyra.apphub.integration.structure.notebook.CreateLinkRequest;
+import com.github.saphyra.apphub.integration.structure.notebook.CreateOnlyTitleyRequest;
 import com.github.saphyra.apphub.integration.structure.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.structure.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.structure.notebook.ListItemType;
@@ -49,6 +50,7 @@ public class CloneListItemTest extends BackEndTest {
     private static final String CHECKLIST_TABLE_TITLE = "checklist-table-title";
     private static final String CHECKLIST_TABLE_COLUMN_NAME = "checklist-table-column-name";
     private static final String CHECKLIST_TABLE_COLUMN_VALUE = "checklist-table-column-value";
+    private static final String ONLY_TITLE_TITLE = "only-title-title";
 
     @Test(dataProvider = "languageDataProvider")
     public void listItemNotFound(Language language) {
@@ -79,6 +81,7 @@ public class CloneListItemTest extends BackEndTest {
 
         NotebookActions.createLink(language, accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).parent(childCategoryId).url(LINK_URL).build());
         NotebookActions.createText(language, accessTokenId, CreateTextRequest.builder().title(TEXT_TITLE).content(TEXT_CONTENT).parent(parentId).build());
+        NotebookActions.createOnlyTitle(language, accessTokenId, CreateOnlyTitleyRequest.builder().title(ONLY_TITLE_TITLE).parent(parentId).build());
         NotebookActions.createChecklist(
             language,
             accessTokenId,
@@ -133,7 +136,7 @@ public class CloneListItemTest extends BackEndTest {
             .orElseThrow(() -> new RuntimeException("Clone not found"));
 
         ChildrenOfCategoryResponse clonedParentItems = NotebookActions.getChildrenOfCategory(language, accessTokenId, clonedParentId);
-        assertThat(clonedParentItems.getChildren()).hasSize(5);
+        assertThat(clonedParentItems.getChildren()).hasSize(6);
 
         UUID clonedChildCategoryId = findByTitle(CHILD_CATEGORY_TITLE, clonedParentItems.getChildren()).getId();
         ChildrenOfCategoryResponse clonedChildCategoryItems = NotebookActions.getChildrenOfCategory(language, accessTokenId, clonedChildCategoryId);
@@ -148,6 +151,9 @@ public class CloneListItemTest extends BackEndTest {
         String textContent = NotebookActions.getText(language, accessTokenId, textItem.getId())
             .getContent();
         assertThat(textContent).isEqualTo(TEXT_CONTENT);
+
+        NotebookView onlyTitleItem = findByTitle(ONLY_TITLE_TITLE, clonedParentItems.getChildren());
+        assertThat(onlyTitleItem.getType()).isEqualTo(ListItemType.ONLY_TITLE.name());
 
         NotebookView checklistItem = findByTitle(CHECKLIST_TITLE, clonedParentItems.getChildren());
         assertThat(checklistItem.getType()).isEqualTo(ListItemType.CHECKLIST.name());

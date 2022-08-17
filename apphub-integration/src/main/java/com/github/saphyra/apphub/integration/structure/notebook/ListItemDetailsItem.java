@@ -69,6 +69,10 @@ public class ListItemDetailsItem {
     }
 
     private void openOptionsMenu(WebDriver driver) {
+        if (webElement.findElement(By.cssSelector(":scope .list-item-options-button-list-wrapper")).isDisplayed()) {
+            return;
+        }
+
         new Actions(driver)
             .moveToElement(webElement.findElement(OPTIONS_BUTTON))
             .perform();

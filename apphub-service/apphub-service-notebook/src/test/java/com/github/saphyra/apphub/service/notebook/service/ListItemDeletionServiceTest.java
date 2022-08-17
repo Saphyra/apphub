@@ -97,6 +97,16 @@ public class ListItemDeletionServiceTest {
     }
 
     @Test
+    public void deleteOnlyTitle() {
+        given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
+        given(deleted.getType()).willReturn(ListItemType.ONLY_TITLE);
+
+        underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
+
+        verify(listItemDao).delete(deleted);
+    }
+
+    @Test
     public void deleteChecklistItem() {
         given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
         given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);

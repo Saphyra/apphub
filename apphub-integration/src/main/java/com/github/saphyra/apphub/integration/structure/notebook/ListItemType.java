@@ -11,7 +11,8 @@ public enum ListItemType {
     TEXT("text"),
     CHECKLIST("checklist"),
     CHECKLIST_TABLE("checklist-table"),
-    LINK("link");
+    LINK("link"),
+    ONLY_TITLE("only-title");
 
     private final String cssClass;
 }

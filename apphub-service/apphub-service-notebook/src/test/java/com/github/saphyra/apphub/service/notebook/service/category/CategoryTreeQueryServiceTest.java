@@ -38,6 +38,7 @@ public class CategoryTreeQueryServiceTest {
             .userId(USER_ID)
             .type(ListItemType.CATEGORY)
             .title(TITLE_1)
+            .archived(true)
             .build();
         ListItem child = ListItem.builder()
             .listItemId(LIST_ITEM_ID_2)
@@ -45,6 +46,7 @@ public class CategoryTreeQueryServiceTest {
             .type(ListItemType.CATEGORY)
             .title(TITLE_2)
             .parent(LIST_ITEM_ID_1)
+            .archived(false)
             .build();
         given(listItemDao.getByUserIdAndType(USER_ID, ListItemType.CATEGORY)).willReturn(Arrays.asList(parent, child));
 
@@ -54,8 +56,10 @@ public class CategoryTreeQueryServiceTest {
         assertThat(result.get(0).getCategoryId()).isEqualTo(LIST_ITEM_ID_1);
         assertThat(result.get(0).getTitle()).isEqualTo(TITLE_1);
         assertThat(result.get(0).getChildren()).hasSize(1);
+        assertThat(result.get(0).isArchived()).isTrue();
         assertThat(result.get(0).getChildren().get(0).getCategoryId()).isEqualTo(LIST_ITEM_ID_2);
         assertThat(result.get(0).getChildren().get(0).getTitle()).isEqualTo(TITLE_2);
         assertThat(result.get(0).getChildren().get(0).getChildren()).isEmpty();
+        assertThat(result.get(0).getChildren().get(0).isArchived()).isFalse();
     }
 }

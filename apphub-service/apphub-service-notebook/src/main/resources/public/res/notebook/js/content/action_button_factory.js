@@ -10,7 +10,7 @@
                         openParentCategoryButton.classList.add("list-item-open-parent-button");
 
                         openParentCategoryButton.title = itemDetails.parentTitle || Localization.getAdditionalContent("root-title");
-                        openParentCategoryButton.innerHTML = Localization.getAdditionalContent("open-parent");
+                        openParentCategoryButton.innerText = Localization.getAdditionalContent("open-parent");
 
                         openParentCategoryButton.onclick = function(e){
                             e.stopPropagation();
@@ -25,7 +25,7 @@
                     const optionsButton = document.createElement("BUTTON");
                         optionsButton.classList.add("list-item-option-button");
                         optionsButton.classList.add("list-item-options-button");
-                        optionsButton.innerHTML = Localization.getAdditionalContent("list-item-options-button");
+                        optionsButton.innerText = Localization.getAdditionalContent("list-item-options-button");
                         optionsButton.onclick = function(e){
                             e.stopPropagation();
                         }
@@ -37,7 +37,7 @@
                         const deleteButton = document.createElement("BUTTON");
                             deleteButton.classList.add("list-item-option-button");
                             deleteButton.classList.add("delete-button");
-                            deleteButton.innerHTML = Localization.getAdditionalContent("delete-button");
+                            deleteButton.innerText = Localization.getAdditionalContent("delete-button");
                             deleteButton.onclick = function(e){
                                 e.stopPropagation();
                                 deleteCallBack();
@@ -47,7 +47,7 @@
                         const cloneButton = document.createElement("BUTTON");
                             cloneButton.classList.add("list-item-option-button");
                             cloneButton.classList.add("clone-button");
-                            cloneButton.innerHTML = Localization.getAdditionalContent("clone-button");
+                            cloneButton.innerText = Localization.getAdditionalContent("clone-button");
                             cloneButton.onclick = function(e){
                                 e.stopPropagation();
                                 listItemCloneService.clone(itemDetails.id, true);
@@ -57,7 +57,7 @@
                         const editButton = document.createElement("BUTTON");
                             editButton.classList.add("list-item-option-button");
                             editButton.classList.add("edit-button");
-                            editButton.innerHTML = Localization.getAdditionalContent("edit-button");
+                            editButton.innerText = Localization.getAdditionalContent("edit-button");
                             editButton.onclick = function(e){
                                 e.stopPropagation();
                                 listItemEditionService.openEditListItemWindow(parent, itemDetails);
@@ -89,6 +89,9 @@
                                 const request = new Request(Mapping.getEndpoint("NOTEBOOK_ARCHIVE_ITEM", {listItemId: itemDetails.id}), {value: itemDetails.archived});
                                     request.processValidResponse = function(){
                                         itemDetails.archived ? node.classList.add("archived") : node.classList.remove("archived");
+                                        if(!itemDetails.archived && settings.get("show-archived" !== "true")){
+                                            eventProcessor.processEvent(new Event(events.ITEM_ARCHIVED));
+                                        }
                                     }
                                 dao.sendRequestAsync(request);
                             }

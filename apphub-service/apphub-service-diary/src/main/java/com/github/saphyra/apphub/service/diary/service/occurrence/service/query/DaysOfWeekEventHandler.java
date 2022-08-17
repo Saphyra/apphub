@@ -28,7 +28,7 @@ class DaysOfWeekEventHandler {
 
         return dates.stream()
             .filter(date -> !date.isBefore(event.getStartDate()))
-            .filter(date -> repetitionTypeDaysOfWeeks.contains(date.getDayOfWeek()))
+            .filter(date -> repetitionTypeDaysOfWeeks.contains(date.getDayOfWeek()) || occurrenceMapping.getOptional(date).isPresent())
             .map(date -> occurrenceMapping.getOptional(date).orElseGet(() -> {
                 Occurrence occurrence = occurrenceFactory.createVirtual(date, event);
                 occurrenceDao.save(occurrence);

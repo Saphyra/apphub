@@ -1,0 +1,42 @@
+#group-details{
+
+}
+
+    #group-details header{
+        text-align: center;
+    }
+
+        #group-details header h1[contenteditable='true']{
+            display: inline-block;
+            font-size: 2rem;
+        }
+
+    #group-details main{
+        display: grid;
+        grid-template-rows: 2.75rem auto;
+    }
+
+        #group-details-invitation-type-wrapper{
+            text-align: center;
+            border-bottom: 1px ridge white;
+        }
+
+            #group-details-invitation-type-label{
+                font-size: 1.5rem;
+            }
+
+        #group-details-members-table{
+            margin: 1rem auto;
+        }
+
+            #group-details-members-table td:first-child{
+                text-align: right;
+            }
+
+            #group-details-members-table td:not(:first-child){
+                text-align: center;
+            }
+
+                #group-details-members-table td input[type='checkbox']{
+                    transform: scale(2);
+                }

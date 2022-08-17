@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.integration.localization;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 
 public enum LocalizationKey {
+    ACCOUNT_LOCKED,
     ALREADY_EXISTS,
     BAD_CREDENTIALS,
     INCORRECT_PASSWORD,

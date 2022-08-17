@@ -35,10 +35,10 @@
         </addColumn>
     </changeSet>
 
-    <changeSet id="add-column-marked_for_deletion-to-user" author="Bernat Bonda">
+    <changeSet id="add-column-marked_for_deletion-to-user" author="saphyra">
         <preConditions onFail="MARK_RAN">
             <not>
-                <columnExists schemaName="apphub_user" tableName="apphub_user" columnName="column_marked_for_deletion"/>
+                <columnExists schemaName="apphub_user" tableName="apphub_user" columnName="marked_for_deletion"/>
             </not>
         </preConditions>
 
@@ -47,15 +47,39 @@
         </addColumn>
     </changeSet>
 
-    <changeSet id="add-column-marked_for_deletion_at-to-user" author="Bernat Bonda">
+    <changeSet id="add-column-marked_for_deletion_at-to-user" author="saphyra">
         <preConditions onFail="MARK_RAN">
             <not>
-                <columnExists schemaName="apphub_user" tableName="apphub_user" columnName="column_marked_for_deletion_at"/>
+                <columnExists schemaName="apphub_user" tableName="apphub_user" columnName="marked_for_deletion_at"/>
             </not>
         </preConditions>
 
         <addColumn schemaName="apphub_user" tableName="apphub_user">
             <column name="marked_for_deletion_at" type="datetime"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-password_failure_count-to-user" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="apphub_user" tableName="apphub_user" columnName="password_failure_count"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="apphub_user" tableName="apphub_user">
+            <column name="password_failure_count" type="number" defaultValue="0"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-locked_until-to-user" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="apphub_user" tableName="apphub_user" columnName="locked_until"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="apphub_user" tableName="apphub_user">
+            <column name="locked_until" type="datetime"/>
         </addColumn>
     </changeSet>
 </databaseChangeLog>

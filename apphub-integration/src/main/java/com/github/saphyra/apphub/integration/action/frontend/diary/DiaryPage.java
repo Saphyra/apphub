@@ -98,4 +98,20 @@ class DiaryPage {
     public static WebElement createEventRepetitionTypeDaysInput(WebDriver driver) {
         return driver.findElement(By.id("create-event-repetition-type-days-input"));
     }
+
+    public static WebElement previousMonthButton(WebDriver driver) {
+        return driver.findElement(By.id("previous-month-button"));
+    }
+
+    public static WebElement nextMonthButton(WebDriver driver) {
+        return driver.findElement(By.id("next-month-button"));
+    }
+
+    public static WebElement createEventRepetitionTypeDaysOfMonthInput(WebDriver driver) {
+        return driver.findElement(By.id("create-event-repetition-type-days-of-month-input"));
+    }
+
+    public static WebElement createEventDaysOfMonthAddDayButton(WebDriver driver) {
+        return driver.findElement(By.id("create-event-repetition-type-days-of-month-add-day-button"));
+    }
 }

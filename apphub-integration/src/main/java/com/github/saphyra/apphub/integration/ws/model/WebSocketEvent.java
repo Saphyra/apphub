@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.ws.model;
 
 
-import com.github.saphyra.apphub.integration.TestBase;
+import com.github.saphyra.apphub.integration.core.TestBase;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

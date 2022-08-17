@@ -432,6 +432,42 @@
         "key": "innerHTML",
         "message": "Order items"
       }
+    ],
+    "new-only-title-button": [
+      {
+        "key": "innerHTML",
+        "message": "Only title"
+      }
+    ],
+    "create-only-title-title": [
+      {
+        "key": "innerHTML",
+        "message": "Create only title"
+      }
+    ],
+    "new-only-title-title": [
+      {
+        "key": "placeholder",
+        "message": "Title"
+      }
+    ],
+    "create-only-title-button": [
+      {
+        "key": "innerHTML",
+        "message": "Save"
+      }
+    ],
+    "create-only-title-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Up"
+      }
+    ],
+    "settings-show-archived-label": [
+      {
+        "key": "innerHTML",
+        "message": "Archiváltak mutatása"
+      }
     ]
   },
   "additionalContent": {
@@ -484,6 +520,7 @@
     "checklist-table-item-deletion-confirmation-dialog-decline-button": "Cancel",
     "open-parent": "Open parent",
     "archive-button-title": "Archive",
-    "pin-button-title": "Pin"
+    "pin-button-title": "Pin",
+    "only-title-created": "Successfully created."
   }
 }

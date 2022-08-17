@@ -61,9 +61,10 @@ public class ModulesPageActions {
     }
 
     public static void openModule(WebDriver driver, ModuleLocation moduleLocation) {
-        log.info("Opening module {}", moduleLocation);
-        String modulesPageUrl = UrlFactory.create(Endpoints.MODULES_PAGE);
-        assertThat(driver.getCurrentUrl()).isEqualTo(modulesPageUrl);
+        log.debug("Opening module {}", moduleLocation);
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
+            .assertTrue("Modules page is not loaded.");
 
         getModule(driver, moduleLocation)
             .orElseThrow(() -> new RuntimeException("Module not found for moduleLocation " + moduleLocation))

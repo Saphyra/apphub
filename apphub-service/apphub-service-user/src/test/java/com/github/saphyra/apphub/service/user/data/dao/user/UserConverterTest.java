@@ -22,6 +22,8 @@ public class UserConverterTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String LANGUAGE = "language";
     private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
+    private static final Integer LOGIN_FAILURE_COUNT = 25;
+    private static final LocalDateTime LOCKED_UNTIL = LocalDateTime.now().plusSeconds(1);
 
     @Mock
     private UuidConverter uuidConverter;
@@ -39,6 +41,8 @@ public class UserConverterTest {
             .language(LANGUAGE)
             .markedForDeletion(true)
             .markedForDeletionAt(CURRENT_DATE)
+            .passwordFailureCount(LOGIN_FAILURE_COUNT)
+            .lockedUntil(LOCKED_UNTIL)
             .build();
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
 
@@ -51,6 +55,8 @@ public class UserConverterTest {
         assertThat(result.getLanguage()).isEqualTo(LANGUAGE);
         assertThat(result.isMarkedForDeletion()).isTrue();
         assertThat(result.getMarkedForDeletionAt()).isEqualTo(CURRENT_DATE);
+        assertThat(result.getPasswordFailureCount()).isEqualTo(LOGIN_FAILURE_COUNT);
+        assertThat(result.getLockedUntil()).isEqualTo(LOCKED_UNTIL);
     }
 
     @Test
@@ -63,6 +69,8 @@ public class UserConverterTest {
             .language(LANGUAGE)
             .markedForDeletion(null)
             .markedForDeletionAt(CURRENT_DATE)
+            .passwordFailureCount(LOGIN_FAILURE_COUNT)
+            .lockedUntil(LOCKED_UNTIL)
             .build();
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
 
@@ -75,6 +83,8 @@ public class UserConverterTest {
         assertThat(result.getLanguage()).isEqualTo(LANGUAGE);
         assertThat(result.isMarkedForDeletion()).isFalse();
         assertThat(result.getMarkedForDeletionAt()).isEqualTo(CURRENT_DATE);
+        assertThat(result.getPasswordFailureCount()).isEqualTo(LOGIN_FAILURE_COUNT);
+        assertThat(result.getLockedUntil()).isEqualTo(LOCKED_UNTIL);
     }
 
     @Test
@@ -87,6 +97,8 @@ public class UserConverterTest {
             .language(LANGUAGE)
             .markedForDeletion(true)
             .markedForDeletionAt(CURRENT_DATE)
+            .passwordFailureCount(LOGIN_FAILURE_COUNT)
+            .lockedUntil(LOCKED_UNTIL)
             .build();
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
 
@@ -99,5 +111,7 @@ public class UserConverterTest {
         assertThat(result.getLanguage()).isEqualTo(LANGUAGE);
         assertThat(result.getMarkedForDeletion()).isTrue();
         assertThat(result.getMarkedForDeletionAt()).isEqualTo(CURRENT_DATE);
+        assertThat(result.getPasswordFailureCount()).isEqualTo(LOGIN_FAILURE_COUNT);
+        assertThat(result.getLockedUntil()).isEqualTo(LOCKED_UNTIL);
     }
 }

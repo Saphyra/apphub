@@ -44,9 +44,10 @@
 <DIV id="user-details" class="main-page">
     <HEADER>
         <H1 id="user-details-title"></H1>
+        <BUTTON id="close-user-details-button" class="close-dialog-button" onclick='banController.close()'>X</BUTTON>
     </HEADER>
 
-    <MAIN>
+    <MAIN class="footerless">
         <DIV id="user-details-container">
             <FIELDSET>
                 <LEGEND id="user-details-container-title"></LEGEND>
@@ -112,10 +113,6 @@
             </DIV>
         </DIV>
     </MAIN>
-
-    <FOOTER>
-        <BUTTON id="close-user-details-button" onclick='banController.close()'></BUTTON>
-    </FOOTER>
 </DIV>
 </BODY>
 </HTML>

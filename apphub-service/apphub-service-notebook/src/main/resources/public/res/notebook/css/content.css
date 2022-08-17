@@ -12,8 +12,6 @@
         left: 0;
         right: 0;
         min-height: var(--search-container-min-height);
-
-        border-bottom: 3px ridge white;
     }
 
         #search-container-title{

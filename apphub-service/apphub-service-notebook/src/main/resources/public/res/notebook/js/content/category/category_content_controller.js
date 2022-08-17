@@ -1,7 +1,19 @@
 (function CategoryContentController(){
     let currentCategoryId = null;
 
-    pageLoader.addLoader(function(){loadCategoryContent(null, false)}, "Load root category content");
+    eventProcessor.registerProcessor(new EventProcessor(
+        (eventType) => {return eventType == events.SETTINGS_LOADED},
+        () => loadCategoryContent(null, false),
+        true,
+        "Load root category content"
+    ));
+
+    eventProcessor.registerProcessor(new EventProcessor(
+        (eventType) => {return eventType == events.SETTINGS_MODIFIED  || eventType == events.ITEM_ARCHIVED},
+        () => loadCategoryContent(currentCategoryId, false),
+        false,
+        "Reload category content"
+    ));
 
     window.categoryContentController = new function(){
         this.loadCategoryContent = loadCategoryContent;
@@ -53,7 +65,7 @@
                 }
             }
 
-        document.getElementById("category-details-title").innerHTML = categoryDetails.title == null ? Localization.getAdditionalContent("root-title") : categoryDetails.title;
+        document.getElementById("category-details-title").innerText = categoryDetails.title == null ? Localization.getAdditionalContent("root-title") : categoryDetails.title;
 
         const container = document.getElementById("category-content-list");
             container.innerHTML = "";
@@ -70,6 +82,7 @@
 
                 return a.title.localeCompare(b.title);
             })
+            .filter((item)=>{return isTrue(settings.get("show-archived")) || !item.archived})
             .map(function(itemDetails){return createNode(categoryId, itemDetails, displayOpenParentCategoryButton)})
             .forEach(function(node){container.appendChild(node)});
 

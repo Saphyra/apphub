@@ -22,6 +22,8 @@ public class UserConverter extends ConverterBase<UserEntity, User> {
             .language(entity.getLanguage())
             .markedForDeletion(Optional.ofNullable(entity.getMarkedForDeletion()).orElse(false))
             .markedForDeletionAt(entity.getMarkedForDeletionAt())
+            .passwordFailureCount(entity.getPasswordFailureCount())
+            .lockedUntil(entity.getLockedUntil())
             .build();
     }
 
@@ -35,6 +37,8 @@ public class UserConverter extends ConverterBase<UserEntity, User> {
             .language(user.getLanguage())
             .markedForDeletion(user.isMarkedForDeletion())
             .markedForDeletionAt(user.getMarkedForDeletionAt())
+            .passwordFailureCount(user.getPasswordFailureCount())
+            .lockedUntil(user.getLockedUntil())
             .build();
     }
 }

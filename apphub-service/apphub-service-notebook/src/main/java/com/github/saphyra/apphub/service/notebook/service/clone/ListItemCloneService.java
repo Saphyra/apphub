@@ -51,6 +51,9 @@ public class ListItemCloneService {
             case CHECKLIST_TABLE:
                 checklistTableCloneService.clone(toClone, listItemClone);
                 break;
+            case ONLY_TITLE:
+                log.info("OnlyTitle is cloned by default.");
+                break;
             default:
                 throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, toClone.getType() + "cannot be cloned.");
         }

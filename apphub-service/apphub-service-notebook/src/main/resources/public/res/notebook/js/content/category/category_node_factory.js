@@ -9,7 +9,7 @@ function categoryNodeFactory(parent, itemDetails, displayOpenParentCategoryButto
         }
 
         const title = document.createElement("SPAN");
-            title.innerHTML = itemDetails.title;
+            title.innerText = itemDetails.title;
     node.appendChild(title);
 
 

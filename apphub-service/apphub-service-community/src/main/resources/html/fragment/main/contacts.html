@@ -1,0 +1,62 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<DIV id="contacts-main" class="tab" th:fragment="contacts">
+    <H2 id="contacts-title"></H2>
+
+    <DIV id="contacts-nav-button-wrapper">
+        <BUTTON id="friends-button" class="contacts-tab-switch-button" onclick="contactsController.openFriendsTab()"></BUTTON>
+        <BUTTON id="groups-button" class="contacts-tab-switch-button" onclick="contactsController.openGroupsTab()"></BUTTON>
+        <BUTTON id="blacklist-button" class="contacts-tab-switch-button" onclick="contactsController.openBlacklistTab()"></BUTTON>
+    </DIV>
+
+    <DIV id="contacts-content" class="content">
+        <DIV id="contacts-friends" class="contacts-panel">
+            <DIV id="contacts-friend-list-wrapper">
+                <DIV id="friends-list" class="friends-list-item">
+                    <DIV id="friends-list-title" class="friends-list-title"></DIV>
+
+                    <DIV id="friends-list-content"></DIV>
+                </DIV>
+
+                <DIV id="received-friend-requests" class="friends-list-item">
+                    <DIV id="received-friend-requests-title" class="friends-list-title"></DIV>
+
+                    <DIV id="received-friend-requests-content"></DIV>
+                </DIV>
+
+                <DIV id="sent-friend-requests" class="friends-list-item">
+                    <DIV id="sent-friend-requests-title" class="friends-list-title"></DIV>
+
+                    <DIV id="sent-friend-requests-content"></DIV>
+
+                    <DIV id="contacts-add-friend-button-wrapper">
+                        <BUTTON id="contacts-add-friend-button" onclick="createFriendRequestController.openTab()"></BUTTON>
+                    </DIV>
+                </DIV>
+            </DIV>
+        </DIV>
+
+        <DIV id="contacts-groups" class="contacts-panel">
+            <DIV id="contacts-groups-search-wrapper">
+                <INPUT type="text" id="contacts-groups-search-input">
+            </DIV>
+
+            <DIV id="contacts-groups-list"></DIV>
+
+            <DIV id="contacts-groups-create-wrapper">
+                <BUTTON id="contacts-groups-create-button" onclick="createGroupController.openTab()"></BUTTON>
+            </DIV>
+        </DIV>
+
+        <DIV id="contacts-blacklist" class="contacts-panel">
+            <DIV id="contacts-blacklist-add-wrapper">
+                <BUTTON id="contacts-blacklist-add-button" onclick="createBlacklistController.openTab()"></BUTTON>
+            </DIV>
+
+            <DIV id="contacts-blacklist-list"></DIV>
+        </DIV>
+    </DIV>
+</DIV>
+</BODY>
+</HTML>

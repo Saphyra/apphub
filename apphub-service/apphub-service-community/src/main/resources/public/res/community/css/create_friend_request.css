@@ -1,0 +1,28 @@
+#create-friend-request main{
+    display: grid;
+    grid-template-rows: 4rem auto;
+}
+
+    #create-friend-request-search-wrapper{
+        text-align: center;
+    }
+
+        #create-friend-request-search-input{
+            width: 90%;
+        }
+
+    #create-friend-request-search-result-wrapper{
+        overflow: auto;
+        padding-bottom: 1rem;
+    }
+
+        .create-friend-request-search-result-error{
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        #create-friend-request-search-result-wrapper .button{
+            font-size: 1.25rem;
+            width: 90%;
+            margin: auto;
+        }

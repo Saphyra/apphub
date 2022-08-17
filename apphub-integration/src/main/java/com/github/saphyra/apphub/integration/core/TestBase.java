@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration;
+package com.github.saphyra.apphub.integration.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.integration.framework.CustomObjectMapper;
@@ -34,7 +34,9 @@ public class TestBase {
     public static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
     public static final CustomObjectMapper OBJECT_MAPPER_WRAPPER = new CustomObjectMapper(new ObjectMapper());
 
-    private static final int AVAILABLE_PERMITS = 40;
+    private static final int AVAILABLE_PERMITS = 10;
+    private static final int INCREASE_PERMITS_AFTER_TESTS_FINISHED = 4;
+    private static volatile int TESTS_FINISHED = 0;
     private static final Semaphore SEMAPHORE = new Semaphore(AVAILABLE_PERMITS);
 
     public static int SERVER_PORT;
@@ -109,6 +111,10 @@ public class TestBase {
         String methodName = method.getName();
 
         log.debug("Available permits before releasing: {}", SEMAPHORE.availablePermits());
+        TESTS_FINISHED++;
+        if (TESTS_FINISHED % INCREASE_PERMITS_AFTER_TESTS_FINISHED == 0 && SEMAPHORE.availablePermits() < 3) {
+            SEMAPHORE.release(1);
+        }
         SEMAPHORE.release(1);
         log.info("Available permits after releasing {}: {}", methodName, SEMAPHORE.availablePermits());
 

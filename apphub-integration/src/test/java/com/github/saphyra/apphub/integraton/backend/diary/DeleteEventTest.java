@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integraton.backend.diary;
 
-import com.github.saphyra.apphub.integration.BackEndTest;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.diary.EventActions;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;

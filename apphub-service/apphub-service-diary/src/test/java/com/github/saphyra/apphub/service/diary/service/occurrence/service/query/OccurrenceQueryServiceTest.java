@@ -29,7 +29,8 @@ public class OccurrenceQueryServiceTest {
     private static final LocalDate DATE_1 = CURRENT_DATE.minusDays(1);
     private static final LocalDate DATE_2 = CURRENT_DATE.plusDays(1);
     private static final LocalDate DATE_3 = DATE_2.plusDays(1);
-    public static final List<LocalDate> SORTED_DATES = List.of(DATE_1, DATE_2, DATE_3);
+    public static final List<LocalDate> SORTED_DATES = List.of(DATE_1, CURRENT_DATE, DATE_2, DATE_3);
+
     @Mock
     private OccurrenceFetcher occurrenceFetcher;
 
@@ -41,6 +42,9 @@ public class OccurrenceQueryServiceTest {
 
     @Mock
     private DateTimeUtil dateTimeUtil;
+
+    @Mock
+    private ExpiredOccurrenceCollector expiredOccurrenceCollector;
 
     @InjectMocks
     private OccurrenceQueryService underTest;
@@ -54,6 +58,9 @@ public class OccurrenceQueryServiceTest {
     @Mock
     private Occurrence occurrence2;
 
+    @Mock
+    private Occurrence expiredOccurrence;
+
     @Test
     public void getOccurrences() {
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
@@ -64,13 +71,16 @@ public class OccurrenceQueryServiceTest {
         given(occurrence2.getDate()).willReturn(DATE_2);
         given(occurrence1.getStatus()).willReturn(OccurrenceStatus.VIRTUAL);
 
-        Map<LocalDate, List<Occurrence>> result = underTest.getOccurrences(USER_ID, List.of(DATE_2, DATE_1, DATE_3));
+        given(expiredOccurrenceCollector.getExpiredOccurrences(USER_ID)).willReturn(List.of(expiredOccurrence));
+
+        Map<LocalDate, List<Occurrence>> result = underTest.getOccurrences(USER_ID, List.of(DATE_2, DATE_1, DATE_3, CURRENT_DATE));
 
         verify(occurrence1).setStatus(OccurrenceStatus.EXPIRED);
         verify(occurrenceDao).save(occurrence1);
 
-        assertThat(result).hasSize(3);
+        assertThat(result).hasSize(4);
         assertThat(result).containsEntry(DATE_1, List.of(occurrence1));
+        assertThat(result).containsEntry(CURRENT_DATE, List.of(expiredOccurrence));
         assertThat(result).containsEntry(DATE_2, List.of(occurrence2));
         assertThat(result).containsEntry(DATE_3, Collections.emptyList());
     }

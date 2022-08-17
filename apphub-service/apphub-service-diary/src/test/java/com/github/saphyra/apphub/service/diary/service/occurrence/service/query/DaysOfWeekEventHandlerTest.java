@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.diary.service.occurrence.service.query;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.service.diary.dao.event.Event;
@@ -22,6 +23,7 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DaysOfWeekEventHandlerTest {
+    private final static LocalDate START_DATE = LocalDate.parse("2022-07-16");
     private final static LocalDate MONDAY_1 = LocalDate.parse("2022-07-04");
     private final static LocalDate MONDAY_2 = LocalDate.parse("2022-07-11");
     private final static LocalDate MONDAY_3 = LocalDate.parse("2022-07-18");
@@ -43,6 +45,9 @@ public class DaysOfWeekEventHandlerTest {
     private Event event;
 
     @Mock
+    private Occurrence startOccurrence;
+
+    @Mock
     private Occurrence existingOccurrence;
 
     @Mock
@@ -54,9 +59,17 @@ public class DaysOfWeekEventHandlerTest {
         given(event.getStartDate()).willReturn(MONDAY_2.minusDays(1));
         given(occurrenceFactory.createVirtual(MONDAY_3, event)).willReturn(newOccurrence);
 
-        List<Occurrence> result = underTest.handleDaysOfWeekEvent(event, List.of(MONDAY_1, MONDAY_2, MONDAY_3, OTHER_DAY), CollectionUtils.singleValueMap(MONDAY_2, existingOccurrence, new OptionalHashMap<>()));
+        List<Occurrence> result = underTest.handleDaysOfWeekEvent(
+            event,
+            List.of(START_DATE, MONDAY_1, MONDAY_2, MONDAY_3, OTHER_DAY),
+            CollectionUtils.toMap(
+                new OptionalHashMap<>(),
+                new BiWrapper<>(MONDAY_2, existingOccurrence),
+                new BiWrapper<>(START_DATE, startOccurrence)
+            )
+        );
 
-        assertThat(result).containsExactlyInAnyOrder(existingOccurrence, newOccurrence);
+        assertThat(result).containsExactlyInAnyOrder(existingOccurrence, newOccurrence, startOccurrence);
 
         verify(occurrenceDao).save(newOccurrence);
     }

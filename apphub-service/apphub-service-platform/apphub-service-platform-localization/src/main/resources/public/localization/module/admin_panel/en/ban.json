@@ -187,12 +187,6 @@
         "message": "User is not banned."
       }
     ],
-    "close-user-details-button": [
-      {
-        "key": "innerHTML",
-        "message": "Close"
-      }
-    ],
     "user-details-title": [
       {
         "key": "innerHTML",

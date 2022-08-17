@@ -33,6 +33,13 @@ class CreateEventRequestValidator {
             case EVERY_X_DAYS:
                 ValidationUtil.atLeast(request.getRepetitionDays(), 1, "repetitionDays");
                 break;
+            case DAYS_OF_MONTH:
+                ValidationUtil.notEmpty(request.getRepetitionDaysOfMonth(), "repetitionDaysOfMonth");
+                request.getRepetitionDaysOfMonth()
+                    .forEach(integer -> {
+                        ValidationUtil.atLeast(integer, 1, "repetitionDaysOfMonth");
+                        ValidationUtil.maximum(integer, 31, "repetitionDaysOfMonth");
+                    });
             case ONE_TIME:
                 break;
             default:

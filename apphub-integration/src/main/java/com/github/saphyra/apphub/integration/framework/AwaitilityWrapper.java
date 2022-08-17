@@ -26,7 +26,7 @@ public class AwaitilityWrapper {
     private final ConditionFactory conditionFactory;
 
     public static AwaitilityWrapper createDefault() {
-        return create(10, 1);
+        return create(15, 1);
     }
 
     public static AwaitilityWrapper create(int timeout, int pollInterval) {
@@ -95,7 +95,13 @@ public class AwaitilityWrapper {
 
     public AwaitResult until(Callable<Boolean> callable) {
         try {
-            conditionFactory.until(callable);
+            conditionFactory.until(() -> {
+                try {
+                    return callable.call();
+                } catch (Exception e) {
+                    return false;
+                }
+            });
             return new AwaitResult(true, null);
         } catch (ConditionTimeoutException e) {
             return new AwaitResult(false, e);

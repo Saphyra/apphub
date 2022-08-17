@@ -5,7 +5,7 @@
         this.save = save;
         this.newItem = newItem;
         this.openCreateChecklistDialog = function(){
-            document.getElementById("create-checklist-selected-category-title").innerHTML = Localization.getAdditionalContent("root-title");
+            document.getElementById("create-checklist-selected-category-title").innerText = Localization.getAdditionalContent("root-title");
             document.getElementById("new-checklist-title").value = "";
             document.getElementById("new-checklist-content-wrapper").innerHTML = "";
             loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
@@ -48,7 +48,7 @@
             if(!categories.length){
                 const noContentText = document.createElement("DIV");
                     noContentText.classList.add("no-content");
-                    noContentText.innerHTML = Localization.getAdditionalContent("category-empty");
+                    noContentText.innerText = Localization.getAdditionalContent("category-empty");
                 container.appendChild(noContentText);
             }
 
@@ -82,7 +82,7 @@
                 reorderButtonWrapper.classList.add("checklist-item-reorder-button-wrapper");
 
                 const upButton = document.createElement("BUTTON");
-                    upButton.innerHTML = "^";
+                    upButton.innerText = "^";
                     upButton.onclick = function(){
                         const sibling = listItem.previousSibling;
                         if(sibling){
@@ -91,7 +91,7 @@
                     }
             reorderButtonWrapper.appendChild(upButton);
                 const downButton = document.createElement("BUTTON");
-                    downButton.innerHTML = "v";
+                    downButton.innerText = "v";
                     downButton.onclick = function(){
                         const sibling = listItem.nextSibling;
                         if(sibling){
@@ -115,7 +115,7 @@
             optionsButtonWrapper.appendChild(checked);
 
                 const removeButton = document.createElement("BUTTON");
-                    removeButton.innerHTML = "X";
+                    removeButton.innerText = "X";
                     removeButton.onclick = function(){
                         document.getElementById("new-checklist-content-wrapper").removeChild(listItem);
                     }

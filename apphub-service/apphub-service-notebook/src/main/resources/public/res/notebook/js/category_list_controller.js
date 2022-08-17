@@ -1,7 +1,19 @@
 (function CategoryListController(){
     let openedCategories = [];
 
-    pageLoader.addLoader(loadCategories, "Load categories");
+    eventProcessor.registerProcessor(new EventProcessor(
+        (eventType) => {return eventType == events.SETTINGS_LOADED},
+        loadCategories,
+        true,
+        "Load category tree"
+    ));
+
+    eventProcessor.registerProcessor(new EventProcessor(
+        (eventType) => {return eventType == events.SETTINGS_MODIFIED || eventType == events.ITEM_ARCHIVED},
+        reloadCategories,
+        false,
+        "Reload category tree"
+    ));
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.CATEGORY_DELETED},
@@ -14,19 +26,21 @@
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){return eventType == events.CATEGORY_SAVED},
-        function(){
-            openedCategories = new Stream(document.getElementsByClassName("category-children-container"))
-                .filter(function(node){
-                    return node.style.display != "none"
-                })
-                .map(function(node){return node.parentElement})
-                .map(function(node){return node.id})
-                .toList();
-            loadCategories();
-        },
+        reloadCategories,
         false,
         "Reload category tree"
     ));
+
+    function reloadCategories(){
+        openedCategories = new Stream(document.getElementsByClassName("category-children-container"))
+            .filter(function(node){
+                return node.style.display != "none"
+            })
+            .map(function(node){return node.parentElement})
+            .map(function(node){return node.id})
+            .toList();
+        loadCategories();
+    }
 
     function loadCategories(){
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_CATEGORY_TREE"));
@@ -70,7 +84,7 @@
 
                     const titleLabel = document.createElement("SPAN");
                         titleLabel.classList.add("category-view-button-title")
-                        titleLabel.innerHTML = category.title;
+                        titleLabel.innerText = category.title;
                 wrapper.appendChild(button);
 
                     const toggleButton = document.createElement("SPAN");
@@ -80,15 +94,20 @@
                         const isOpened = openedCategories.indexOf(createWrapperId(category.categoryId)) > -1;
 
                         if(isOpened || category.categoryId == null){
-                            toggleButton.innerHTML = "^";
+                            toggleButton.innerText = "^";
                         }else{
-                            toggleButton.innerHTML = "v";
+                            toggleButton.innerText = "v";
                         }
 
                 button.appendChild(toggleButton);
                 button.appendChild(titleLabel);
 
-                    if(category.children.length == 0){
+                    const displayedChildren = new Stream(category.children)
+                          .sorted(function(c1, c2){return c1.title.localeCompare(c2.title)})
+                          .filter((item)=>{return isTrue(settings.get("show-archived")) || !item.archived})
+                          .toList();
+
+                    if(displayedChildren.length == 0){
                         toggleButton.classList.add("invisible");
                     }else{
                         const childrenContainer = document.createElement("DIV");
@@ -100,18 +119,17 @@
                             childrenContainer.classList.add("category-children-container");
                     wrapper.appendChild(childrenContainer);
 
-                            new Stream(category.children)
-                                .sorted(function(c1, c2){return c1.title.localeCompare(c2.title)})
+                            new Stream(displayedChildren)
                                 .map(createTree)
                                 .forEach(function(w){childrenContainer.appendChild(w)});
 
                         toggleButton.onclick = function(e){
                             e.stopPropagation();
                             if(childrenContainer.style.display != "none"){
-                                toggleButton.innerHTML = "v";
+                                toggleButton.innerText = "v";
                                 $(childrenContainer).fadeOut();
                             }else{
-                                toggleButton.innerHTML = "^";
+                                toggleButton.innerText = "^";
                                 $(childrenContainer).fadeIn();
                             }
                         }

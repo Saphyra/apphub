@@ -19,9 +19,19 @@
     <MAIN id="main-page-content">
         <DIV id="calendar-container">
             <DIV id="calendar-title">
-                <BUTTON onclick="calendarController.previousMonth()">&lt;</BUTTON>
+                <BUTTON id="previous-month-button" onclick="calendarController.previousMonth()">&lt;</BUTTON>
                 <H2 id="calendar-current-month"></H2>
-                <BUTTON onclick="calendarController.nextMonth()">&gt;</BUTTON>
+                <BUTTON id="next-month-button" onclick="calendarController.nextMonth()">&gt;</BUTTON>
+            </DIV>
+
+            <DIV id="days-of-week">
+                <DIV id="monday"></DIV>
+                <DIV id="tuesday"></DIV>
+                <DIV id="wednesday"></DIV>
+                <DIV id="thursday"></DIV>
+                <DIV id="friday"></DIV>
+                <DIV id="saturday"></DIV>
+                <DIV id="sunday"></DIV>
             </DIV>
 
             <DIV id="calendar"></DIV>
@@ -64,6 +74,7 @@
                 <OPTION value="ONE_TIME" id="create-event-repetition-type-one-time"></OPTION>
                 <OPTION value="EVERY_X_DAYS" id="create-event-repetition-type-every-x-days"></OPTION>
                 <OPTION value="DAYS_OF_WEEK" id="create-event-repetition-type-days-of-week"></OPTION>
+                <OPTION value="DAYS_OF_MONTH" id="create-event-repetition-type-days-of-month"></OPTION>
             </SELECT>
 
             <DIV id="create-event-one-time-repetition-type-data" class="repetition-type-data"></DIV>
@@ -107,6 +118,15 @@
                     <INPUT type="checkbox" class="create-event-days-of-week-input" value="SUNDAY">
                     <SPAN id="create-event-days-of-week-sunday-label"></SPAN>
                 </LABEL>
+            </DIV>
+
+            <DIV id="create-event-days-of-month-repetition-type-data" class="repetition-type-data">
+                <DIV id="selected-days-of-month"></DIV>
+                <LABEL>
+                    <SPAN id="create-event-repetition-type-days-of-month-label"></SPAN>:
+                    <INPUT type="number" id="create-event-repetition-type-days-of-month-input" min="1" max="31" value="1">
+                </LABEL>
+                <BUTTON id="create-event-repetition-type-days-of-month-add-day-button" onclick="createEventController.addDayOfMonth()"></BUTTON>
             </DIV>
         </FIELDSET>
     </MAIN>

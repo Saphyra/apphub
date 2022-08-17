@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integraton.backend.diary;
 
-import com.github.saphyra.apphub.integration.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.diary.EventActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
@@ -19,7 +19,7 @@ import org.testng.annotations.Test;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -28,16 +28,16 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateEventCrudTest extends BackEndTest {
-    private static final LocalDate CURRENT_DATE = LocalDate.now();
+    private static final LocalDate CURRENT_DATE = LocalDate.now(ZoneOffset.UTC);
     private static final LocalDate REFERENCE_DATE_DAY = CURRENT_DATE.plusMonths(1);
     private static final LocalDate REFERENCE_DATE_MONTH = CURRENT_DATE;
-    private static final LocalDate EVENT_DATE = CURRENT_DATE.minusWeeks(1);
+    private static final LocalDate EVENT_DATE = CURRENT_DATE.minusWeeks(2);
     private static final String TITLE = "title";
     private static final String CONTENT = "content";
     public static final int REPETITION_DAYS = 3;
 
     @Test(dataProvider = "languageDataProvider", groups = "diary")
-    public void createEvent_blankTitle(Language language) {
+    public void createEvent_validation(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
@@ -169,7 +169,7 @@ public class CreateEventCrudTest extends BackEndTest {
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
-                .day(REFERENCE_DATE_DAY)
+                .day(EVENT_DATE)
                 .month(REFERENCE_DATE_MONTH)
                 .build())
             .date(EVENT_DATE)
@@ -191,6 +191,15 @@ public class CreateEventCrudTest extends BackEndTest {
                 assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
                 assertThat(occurrenceResponse.getNote()).isNull();
 
+            } else if (calendarResponse.getDate().equals(CURRENT_DATE)) {
+                assertThat(calendarResponse.getEvents()).hasSize(1);
+                OccurrenceResponse occurrenceResponse = calendarResponse.getEvents().get(0);
+                assertThat(occurrenceResponse.getOccurrenceId()).isNotNull();
+                assertThat(occurrenceResponse.getEventId()).isNotNull();
+                assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_EXPIRED);
+                assertThat(occurrenceResponse.getTitle()).isEqualTo(TITLE);
+                assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
+                assertThat(occurrenceResponse.getNote()).isNull();
             } else {
                 assertThat(calendarResponse.getEvents()).isEmpty();
             }
@@ -220,30 +229,32 @@ public class CreateEventCrudTest extends BackEndTest {
 
         List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
 
-        responses.forEach(calendarResponse -> {
-            if (calendarResponse.getDate().isBefore(EVENT_DATE)) {
-                assertThat(calendarResponse.getEvents()).isEmpty();
-            } else if (!daysOfWeek.contains(calendarResponse.getDate().getDayOfWeek())) {
-                assertThat(calendarResponse.getEvents()).isEmpty();
-            } else {
-                assertThat(calendarResponse.getEvents()).hasSize(1);
-                OccurrenceResponse occurrenceResponse = calendarResponse.getEvents().get(0);
-                assertThat(occurrenceResponse.getOccurrenceId()).isNotNull();
-                assertThat(occurrenceResponse.getEventId()).isNotNull();
+        assertThat(responses.stream().flatMap(calendarResponse -> calendarResponse.getEvents().stream()).findAny()).isNotEmpty();
 
-                if (calendarResponse.getDate().isBefore(CURRENT_DATE)) {
-                    assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_EXPIRED);
-                } else if (calendarResponse.getDate().equals(CURRENT_DATE)) {
-                    assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_PENDING);
-                } else {
-                    assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_VIRTUAL);
-                }
+        verifyDatabaseIntegrity(responses, userData.getEmail());
+    }
 
-                assertThat(occurrenceResponse.getTitle()).isEqualTo(TITLE);
-                assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
-                assertThat(occurrenceResponse.getNote()).isNull();
-            }
-        });
+    @Test(groups = "diary")
+    public void createDaysOfMonthEvent() {
+        Language language = Language.HUNGARIAN;
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+
+        CreateEventRequest request = CreateEventRequest.builder()
+            .referenceDate(ReferenceDate.builder()
+                .day(REFERENCE_DATE_DAY)
+                .month(REFERENCE_DATE_MONTH)
+                .build())
+            .date(EVENT_DATE)
+            .title(TITLE)
+            .content(CONTENT)
+            .repetitionType(RepetitionType.DAYS_OF_MONTH)
+            .repetitionDaysOfMonth(List.of(REFERENCE_DATE_DAY.getDayOfMonth()))
+            .build();
+
+        List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
+
+        assertThat(responses.stream().flatMap(calendarResponse -> calendarResponse.getEvents().stream()).findAny()).isNotEmpty();
 
         verifyDatabaseIntegrity(responses, userData.getEmail());
     }
@@ -268,30 +279,7 @@ public class CreateEventCrudTest extends BackEndTest {
 
         List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
 
-        responses.forEach(calendarResponse -> {
-            if (calendarResponse.getDate().isBefore(EVENT_DATE)) {
-                assertThat(calendarResponse.getEvents()).isEmpty();
-            } else if (ChronoUnit.DAYS.between(EVENT_DATE, calendarResponse.getDate()) % REPETITION_DAYS != 0) {
-                assertThat(calendarResponse.getEvents()).isEmpty();
-            } else {
-                assertThat(calendarResponse.getEvents()).hasSize(1);
-                OccurrenceResponse occurrenceResponse = calendarResponse.getEvents().get(0);
-                assertThat(occurrenceResponse.getOccurrenceId()).isNotNull();
-                assertThat(occurrenceResponse.getEventId()).isNotNull();
-
-                if (calendarResponse.getDate().isBefore(CURRENT_DATE)) {
-                    assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_EXPIRED);
-                } else if (calendarResponse.getDate().equals(CURRENT_DATE)) {
-                    assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_PENDING);
-                } else {
-                    assertThat(occurrenceResponse.getStatus()).isEqualTo(Constants.DIARY_OCCURRENCE_STATUS_VIRTUAL);
-                }
-
-                assertThat(occurrenceResponse.getTitle()).isEqualTo(TITLE);
-                assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
-                assertThat(occurrenceResponse.getNote()).isNull();
-            }
-        });
+        assertThat(responses.stream().flatMap(calendarResponse -> calendarResponse.getEvents().stream()).findAny()).isNotEmpty();
 
         verifyDatabaseIntegrity(responses, userData.getEmail());
     }

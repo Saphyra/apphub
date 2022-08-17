@@ -2,7 +2,7 @@
     --category-list-width: 30vw;
     --search-container-min-height: 2.5rem;
     --create-item-input-height: 3.25rem;
-    --detailed-container-title-height: 3rem;
+    --detailed-container-title-height: 2.5rem;
 }
 
 
@@ -46,6 +46,10 @@ body{
 
 .link{
     border-color: rgb(40,40,255);
+}
+
+.only-title{
+
 }
 
 .checklist, .pinned, .archived.archive-button{

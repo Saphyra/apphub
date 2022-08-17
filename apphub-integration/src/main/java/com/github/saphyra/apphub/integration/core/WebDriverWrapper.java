@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration;
+package com.github.saphyra.apphub.integration.core;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

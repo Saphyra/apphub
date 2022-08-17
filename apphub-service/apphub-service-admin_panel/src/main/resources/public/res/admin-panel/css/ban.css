@@ -58,6 +58,13 @@
     padding: 1rem;
 }
 
+    .close-dialog-button{
+        position: absolute;
+        top: 0;
+        right: 0.25rem;
+        font-size: 1.75rem;
+    }
+
 #current-bans-container{
     position: absolute;
     top: var(--user-details-container-height);

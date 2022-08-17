@@ -6,5 +6,6 @@ public enum ListItemType {
     TEXT,
     CHECKLIST,
     CHECKLIST_TABLE,
-    LINK
+    LINK,
+    ONLY_TITLE
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +28,7 @@ public class OccurrenceQueryService {
     private final EventDao eventDao;
     private final OccurrenceDao occurrenceDao;
     private final DateTimeUtil dateTimeUtil;
+    private final ExpiredOccurrenceCollector expiredOccurrenceCollector;
 
     @Transactional
     public Map<LocalDate, List<Occurrence>> getOccurrences(UUID userId, Collection<LocalDate> dates) {
@@ -36,9 +38,10 @@ public class OccurrenceQueryService {
 
         LocalDate currentDate = dateTimeUtil.getCurrentDate();
 
-        Map<LocalDate, List<Occurrence>> occurrences = eventDao.getByUserId(userId)
-            .stream()
+        List<Occurrence> occurrences = eventDao.getByUserId(userId).stream()
             .flatMap(event -> occurrenceFetcher.fetchOccurrencesOfEvent(event, sortedDates).stream())
+            .collect(Collectors.toList());
+        Map<LocalDate, List<Occurrence>> occurrenceMapping = occurrences.stream()
             .peek(occurrence -> {
                 if (occurrence.getDate().isBefore(currentDate) && (occurrence.getStatus() == OccurrenceStatus.VIRTUAL || occurrence.getStatus() == OccurrenceStatus.PENDING)) {
                     log.debug("{} is expired.", occurrence);
@@ -47,7 +50,14 @@ public class OccurrenceQueryService {
                 }
             })
             .collect(Collectors.groupingBy(Occurrence::getDate));
+
+        if (sortedDates.contains(currentDate)) {
+            List<Occurrence> currentDateOccurrences = occurrenceMapping.getOrDefault(currentDate, new ArrayList<>());
+            currentDateOccurrences.addAll(expiredOccurrenceCollector.getExpiredOccurrences(userId));
+            occurrenceMapping.put(currentDate, currentDateOccurrences);
+        }
+
         return sortedDates.stream()
-            .collect(Collectors.toMap(Function.identity(), date -> occurrences.getOrDefault(date, Collections.emptyList())));
+            .collect(Collectors.toMap(Function.identity(), date -> occurrenceMapping.getOrDefault(date, Collections.emptyList())));
     }
 }

@@ -9,7 +9,7 @@ function checklistTableNodeFactory(parent, itemDetails, displayOpenParentCategor
         }
 
         const title = document.createElement("SPAN");
-            title.innerHTML = itemDetails.title;
+            title.innerText = itemDetails.title;
     node.appendChild(title);
 
     node.appendChild(actionButtonFactory.create(

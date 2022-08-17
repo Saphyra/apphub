@@ -15,6 +15,22 @@
         border-right: 5px ridge white;
     }
 
+        #days-of-week{
+            display: grid;
+            grid-template-columns: repeat(7, calc(100% / 7));
+        }
+
+            #days-of-week div{
+                text-align: center;
+                margin: 0.25rem;
+                background: var(--background-color);
+                border: 3px outset white;
+                border-radius: 5px;
+                padding: 0.2rem;
+                color: white;
+                white-space: nowrap;
+            }
+
         #calendar-title{
             text-align: center;
             border-bottom: 3px ridge white;
@@ -77,6 +93,7 @@
                     margin: 0.25rem 0;
                     padding: 0.125rem;
                     text-align: left;
+                    overflow-x: auto;
                 }
 
                     .calendar-event.button:hover{
@@ -110,13 +127,14 @@
         }
 
         #daily-tasks{
-
+            overflow: auto;
         }
 
             .daily-task{
                 white-space: nowrap;
                 border-color: white;
                 text-align: left;
+                overflow-x: auto;
             }
 
                 .daily-task.button:hover{
@@ -171,6 +189,10 @@
         #create-event-days-of-week-repetition-type-data label input{
             transform: scale(1.5);
         }
+
+    .selected-day-of-month{
+        display: inline-block;
+    }
 
 #view-event-page{
 

@@ -187,12 +187,6 @@
         "message": "A felhasználó nincs kitiltva."
       }
     ],
-    "close-user-details-button": [
-      {
-        "key": "innerHTML",
-        "message": "Bezárás"
-      }
-    ],
     "user-details-title": [
       {
         "key": "innerHTML",

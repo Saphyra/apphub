@@ -8,7 +8,19 @@
         }
     }
 
-    pageLoader.addLoader(loadPinnedItems, "Load Pinned items");
+    eventProcessor.registerProcessor(new EventProcessor(
+        (eventType) => {return eventType == events.SETTINGS_LOADED},
+        loadPinnedItems,
+        true,
+        "Load pinned items"
+    ));
+
+    eventProcessor.registerProcessor(new EventProcessor(
+        (eventType) => {return eventType == events.SETTINGS_MODIFIED || eventType == events.ITEM_ARCHIVED},
+        loadPinnedItems,
+        false,
+        "Reload pinned items"
+    ));
 
     eventProcessor.registerProcessor(new EventProcessor(
         function(eventType){
@@ -34,6 +46,7 @@
 
                 new Stream(items)
                     .sorted(function(a, b){return a.title.localeCompare(b.title)})
+                    .filter((item)=>{return isTrue(settings.get("show-archived")) || !item.archived})
                     .map(createNode)
                     .forEach(function(node){container.appendChild(node)});
 
@@ -91,7 +104,7 @@
                         buttonWrapper.classList.add("pinned-item-button-wrapper");
 
                         const openParentButton = document.createElement("BUTTON");
-                            openParentButton.innerHTML = "P";
+                            openParentButton.innerText = "P";
                             openParentButton.title = item.parentTitle || Localization.getAdditionalContent("root-title");
                             openParentButton.onclick = function(e){
                                 e.stopPropagation();

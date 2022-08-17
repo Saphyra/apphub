@@ -49,6 +49,23 @@ public class OccurrenceRepositoryTest {
     }
 
     @Test
+    public void getByUserId() {
+        OccurrenceEntity entity1 = OccurrenceEntity.builder()
+            .occurrenceId(OCCURRENCE_ID_1)
+            .userId(USER_ID_1)
+            .build();
+        OccurrenceEntity entity2 = OccurrenceEntity.builder()
+            .occurrenceId(OCCURRENCE_ID_2)
+            .userId(USER_ID_2)
+            .build();
+        underTest.saveAll(List.of(entity1, entity2));
+
+        List<OccurrenceEntity> result = underTest.getByUserId(USER_ID_1);
+
+        assertThat(result).containsExactly(entity1);
+    }
+
+    @Test
     public void getByEventId() {
         OccurrenceEntity entity1 = OccurrenceEntity.builder()
             .occurrenceId(OCCURRENCE_ID_1)

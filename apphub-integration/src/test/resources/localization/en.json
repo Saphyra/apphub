@@ -1,4 +1,5 @@
 {
+  "ACCOUNT_LOCKED": "Account locked. Try again later.",
   "ALREADY_EXISTS": "Item already exists.",
   "BAD_CREDENTIALS": "Unknown combination of e-mail address and password.",
   "INCORRECT_PASSWORD": "Incorrect password.",

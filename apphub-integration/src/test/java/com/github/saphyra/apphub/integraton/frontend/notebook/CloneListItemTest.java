@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integraton.frontend.notebook;
 
-import com.github.saphyra.apphub.integration.SeleniumTest;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.OnlyTitleActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.CategoryActions;
@@ -45,6 +46,7 @@ public class CloneListItemTest extends SeleniumTest {
     private static final String CHECKLIST_TABLE_TITLE = "checklist-table-title";
     private static final String CHECKLIST_TABLE_COLUMN_NAME = "checklist-table-column-name";
     private static final String CHECKLIST_TABLE_COLUMN_VALUE = "checklist-table-column-value";
+    private static final String ONLY_TITLE_TITLE = "only-title-title";
 
     @Test(priority = -1)
     public void cloneListItem() {
@@ -60,6 +62,7 @@ public class CloneListItemTest extends SeleniumTest {
         CategoryActions.createCategory(driver, CHILD_CATEGORY_TITLE, ROOT_TITLE, PARENT_TITLE);
         LinkActions.createLink(driver, LINK_TITLE, LINK_URL, ROOT_TITLE, PARENT_TITLE, CHILD_CATEGORY_TITLE);
         TextActions.createText(driver, TEXT_TITLE, TEXT_CONTENT, ROOT_TITLE, PARENT_TITLE);
+        OnlyTitleActions.createOnlyTitle(driver, ONLY_TITLE_TITLE, ROOT_TITLE, PARENT_TITLE);
         ChecklistActions.createChecklist(driver, CHECKLIST_TITLE, Arrays.asList(new NewChecklistItemData(CHECKLIST_ITEM_CONTENT, true)), ROOT_TITLE, PARENT_TITLE);
         TableActions.createTable(driver, TABLE_TITLE, Arrays.asList(TABLE_COLUMN_NAME), Arrays.asList(Arrays.asList(TABLE_COLUMN_VALUE)), ROOT_TITLE, PARENT_TITLE);
         ChecklistTableActions.createChecklistTable(driver, CHECKLIST_TABLE_TITLE, Arrays.asList(CHECKLIST_TABLE_COLUMN_NAME), Arrays.asList(new ChecklistTableRow(true, Arrays.asList(CHECKLIST_TABLE_COLUMN_VALUE))), ROOT_TITLE, PARENT_TITLE);
@@ -95,6 +98,8 @@ public class CloneListItemTest extends SeleniumTest {
         driver.switchTo().window(tabs.get(0));
 
         DetailedListActions.up(driver);
+
+        DetailedListActions.findDetailedItem(driver, ONLY_TITLE_TITLE);
 
         TextActions.openText(driver, TEXT_TITLE);
         assertThat(TextActions.getContent(driver)).isEqualTo(TEXT_CONTENT);

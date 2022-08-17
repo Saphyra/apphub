@@ -42,12 +42,16 @@ public class CollectionUtils {
 
     @SafeVarargs
     public static <K, V> Map<K, V> toMap(BiWrapper<K, V>... entries) {
-        Map<K, V> result = new HashMap<>();
+        return toMap(new HashMap<>(), entries);
+    }
+
+    @SafeVarargs
+    public static <T extends Map<K, V>, K, V> T toMap(T instance, BiWrapper<K, V>... entries) {
         for (BiWrapper<K, V> entry : entries) {
-            result.put(entry.getEntity1(), entry.getEntity2());
+            instance.put(entry.getEntity1(), entry.getEntity2());
         }
 
-        return result;
+        return instance;
     }
 
     @SafeVarargs

@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.lib.common_domain;
 
 public enum ErrorCode {
+    ACCOUNT_LOCKED,
     ALREADY_EXISTS,
     BAD_CREDENTIALS,
     INCORRECT_PASSWORD,

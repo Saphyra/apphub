@@ -1,9 +1,10 @@
-package com.github.saphyra.apphub.integration;
+package com.github.saphyra.apphub.integration.core;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.google.common.base.Stopwatch;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.DestroyMode;
@@ -20,8 +21,9 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
-import static com.github.saphyra.apphub.integration.SeleniumTest.HEADLESS_MODE;
+import static com.github.saphyra.apphub.integration.core.SeleniumTest.HEADLESS_MODE;
 import static java.util.Objects.isNull;
 
 @Slf4j
@@ -33,14 +35,20 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
 
     static {
         DRIVER_POOL_CONFIG.setMaxTotal(MAX_DRIVER_COUNT);
-        DRIVER_POOL_CONFIG.setMinIdle(MAX_DRIVER_COUNT);
     }
 
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(BROWSER_STARTUP_LIMIT);
     private static final GenericObjectPool<WebDriverWrapper> DRIVER_POOL = new GenericObjectPool<>(new WebDriverFactory(), DRIVER_POOL_CONFIG);
 
-    public static WebDriverWrapper getDriver() throws Exception {
-        return DRIVER_POOL.borrowObject();
+    static WebDriverWrapper getDriver() throws Exception {
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        WebDriverWrapper result = DRIVER_POOL.borrowObject();
+        stopwatch.stop();
+        long elapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+        if (elapsed > 100) {
+            log.info("WebDriver fetched in {}ms", elapsed);
+        }
+        return result;
     }
 
     @NotNull
@@ -49,7 +57,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
         return new WebDriverWrapper(future);
     }
 
-    public static void release(WebDriverWrapper webDriverWrapper) {
+    static void release(WebDriverWrapper webDriverWrapper) {
         log.debug("Releasing webDriver with id {}", webDriverWrapper.getId());
         try {
             WebDriver driver = webDriverWrapper.getDriver();

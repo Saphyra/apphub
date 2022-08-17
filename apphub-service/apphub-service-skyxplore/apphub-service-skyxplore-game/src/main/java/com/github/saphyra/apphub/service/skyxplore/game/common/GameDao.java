@@ -70,10 +70,7 @@ public class GameDao {
                 int queueSize = game.getEventLoop().getQueueSize();
                 if (queueSize == 0) {
                     sleepService.sleep(10000);
-                    game.getEventLoop()
-                        .stop();
-                    log.info("EventLoop is shut down.");
-                    repository.remove(game.getGameId());
+                    stopGame(game);
                     return;
                 }
 
@@ -82,10 +79,19 @@ public class GameDao {
                 sleepService.sleep(1000);
             }
 
-            repository.remove(game.getGameId());
+            int queueSize = game.getEventLoop().getQueueSize();
+            stopGame(game);
 
-            throw new IllegalStateException("Queue still has " + game.getEventLoop().getQueueSize() + " number of items");
+            throw new IllegalStateException("Queue still has " + queueSize + " number of items");
         });
+    }
+
+    private void stopGame(Game game) {
+        game.getEventLoop()
+            .stop();
+        log.info("EventLoop is shut down.");
+        repository.remove(game.getGameId());
+        log.info("GameDao still has {} number of games left.", repository.size());
     }
 
     public List<Game> getAll() {

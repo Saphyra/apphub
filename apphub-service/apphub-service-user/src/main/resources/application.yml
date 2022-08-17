@@ -10,6 +10,10 @@ accessToken:
     expirationDays: 365
   expirationMinutes: 10
 
+password:
+  lockAccountFailures: 3
+  lockedMinutes: 60
+
 registration:
   defaultRoles:
     - NOTEBOOK
@@ -33,3 +37,7 @@ add-role-to-all:
   restrictedRoles:
     - ACCESS
     - ADMIN
+
+settings:
+  notebook:
+    show-archived: true

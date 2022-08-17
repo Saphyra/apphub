@@ -17,6 +17,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class WebElementUtils {
+    public static void clearAndFill(WebElement webElement, Object input) {
+        clearAndFill(webElement, input.toString());
+    }
+
     public static void clearAndFill(WebElement webElement, String text) {
         webElement.clear();
         webElement.sendKeys(text);

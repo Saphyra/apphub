@@ -1,0 +1,20 @@
+#create-group main{
+    text-align: center;
+}
+
+    #create-group-input-wrapper{
+        margin: auto;
+        margin-top: 25vh;
+        border: 2px ridge white;
+        padding: 1rem;
+        border-radius: 15px;
+        display: inline-block;
+    }
+
+        #create-group-input-wrapper label{
+            position: relative;
+            display: block;
+            font-size: 1.5rem;
+            margin: 0.5rem;
+            padding-right: 2rem;
+        }

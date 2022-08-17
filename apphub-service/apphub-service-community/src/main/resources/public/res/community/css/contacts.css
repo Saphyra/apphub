@@ -1,0 +1,131 @@
+#contacts-main{
+    border-left: 3px ridge white;
+    grid-template-rows: 2.25rem 2.25rem auto;
+}
+
+    #contacts-nav-button-wrapper{
+    }
+
+        .selected-tab-button{
+            border-color: lime;
+        }
+
+    #contacts-content{
+
+    }
+
+        .contacts-panel{
+            display: grid;
+            height: calc(100% - 0.75rem);
+            border: 3px inset white;
+            margin: 0.5rem;
+            margin-top: 0.25rem;
+        }
+
+            .contacts-panel h3{
+                text-align: center;
+                border-bottom: 1px solid white;
+            }
+
+        #contacts-friends{
+            grid-template-rows: auto;
+            border: none;
+            margin: 0;
+            height: calc(100% - 0.25rem);
+        }
+
+            #contacts-friend-list-wrapper{
+                display: flex;
+                flex-direction: column;
+            }
+
+                .friends-list-item{
+                    display: grid;
+                    grid-template-rows: 1.5rem auto;
+                    flex-grow: 2;
+                    border: 3px inset white;
+                    margin: 0.25rem 0.5rem;
+                }
+
+                    .friends-list-title{
+                        font-weight: bold;
+                        border-bottom: 1px solid white;
+                        text-align: center;
+                        padding: 0.25rem;
+                    }
+
+                    #friends-list{
+
+                    }
+
+                        #friends-list-content{
+
+                        }
+
+                    #received-friend-requests{
+
+                    }
+
+                        #received-friend-requests-content{
+
+                        }
+
+                    #sent-friend-requests{
+                        grid-template-rows: 1.5rem auto 2.25rem;
+                    }
+
+                        #sent-friend-requests-content{
+
+                        }
+
+                        #contacts-add-friend-button-wrapper{
+                            text-align: center;
+                            border-top: 1px solid white;
+                        }
+
+                            #contacts-add-friend-button{
+
+                            }
+
+        #contacts-groups{
+            grid-template-rows: 2.25rem auto 2.25rem;
+        }
+
+            #contacts-groups-search-wrapper{
+                text-align: center;
+                border-bottom: 1px solid white;
+            }
+
+                #contacts-groups-search-input{
+                    width: 90%;
+                }
+
+            #contacts-groups-list{
+
+            }
+
+            #contacts-groups-create-wrapper{
+                border-top: 1px solid white;
+                text-align: center;
+            }
+
+                #contacts-groups-create-button{
+
+                }
+
+        #contacts-blacklist{
+            grid-template-rows: 2.25rem auto;
+        }
+
+            #contacts-blacklist-add-wrapper{
+                text-align: center;
+                border-bottom: 1px solid white;
+            }
+
+                #contacts-blacklist-add-button{
+
+                }
+
+            #contacts-blacklist-list{
+
+            }

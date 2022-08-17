@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.framework;
 
 
-import com.github.saphyra.apphub.integration.TestBase;
+import com.github.saphyra.apphub.integration.core.TestBase;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,0 +1,28 @@
+#create-blacklist main{
+    display: grid;
+    grid-template-rows: 4rem auto;
+}
+
+    #create-blacklist-search-wrapper{
+        text-align: center;
+    }
+
+        #create-blacklist-search-input{
+            width: 90%;
+        }
+
+    #create-blacklist-search-result-wrapper{
+        overflow: auto;
+        padding-bottom: 1rem;
+    }
+
+        .create-blacklist-search-result-error{
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        #create-blacklist-search-result-wrapper .button{
+            font-size: 1.25rem;
+            width: 90%;
+            margin: auto;
+        }

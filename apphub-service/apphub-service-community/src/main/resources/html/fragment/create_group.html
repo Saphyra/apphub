@@ -1,0 +1,24 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<DIV id="create-group" class="main-page" th:fragment="create-group">
+    <HEADER>
+        <H1 id="create-group-title"></H1>
+        <BUTTON class="close-dialog-button" onclick="pageController.displayMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN class="footerless">
+        <DIV id="create-group-input-wrapper">
+            <LABEL>
+                <SPAN id="create-group-name-label"></SPAN>:
+                <INPUT type="text" id="create-group-name-input">
+                <DIV id="create-group-invalid-name" class="invalid-input">X</DIV>
+            </LABEL>
+
+            <BUTTON id="create-group-button" onclick="createGroupController.createGroup()"></BUTTON>
+        </DIV>
+    </MAIN>
+</DIV>
+
+</BODY>
+</HTML>

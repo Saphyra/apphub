@@ -32,6 +32,7 @@ public class CategoryTreeQueryService {
                 .categoryId(listItem.getListItemId())
                 .title(listItem.getTitle())
                 .children(process(listItem.getListItemId(), listItems))
+                .archived(listItem.isArchived())
                 .build())
             .collect(Collectors.toList());
     }

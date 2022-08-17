@@ -23,7 +23,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class DiaryActions {
     public static void selectDay(WebDriver driver, LocalDate currentDate) {
-        driver.findElement(By.id("calendar-day-" + currentDate))
+        AwaitilityWrapper.getWithWait(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("calendar-day-" + currentDate))), Optional::isPresent)
+            .orElseThrow(() -> new RuntimeException(currentDate + " is not opened."))
+            .get()
+            .findElement(By.cssSelector(":scope .calendar-day-title"))
             .click();
 
         AwaitilityWrapper.createDefault()
@@ -59,9 +62,25 @@ public class DiaryActions {
         return DiaryPage.dailyTasks(driver);
     }
 
-    public static List<WebElement> getEventsOfDay(WebDriver driver, LocalDate currentDate) {
-        return driver.findElement(By.id("calendar-day-" + currentDate))
+    public static List<WebElement> getEventsOfDay(WebDriver driver, LocalDate date) {
+        return AwaitilityWrapper.getWithWait(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("calendar-day-" + date))), Optional::isPresent)
+            .orElseThrow(() -> new RuntimeException("No day found for date " + date))
+            .get()
             .findElements(By.cssSelector(":scope .calendar-event"));
+    }
+
+    public static void openEvent(WebDriver driver, String title) {
+        WebElement dailyTask = AwaitilityWrapper.getWithWait(
+            () -> getDailyTasks(driver)
+                .stream()
+                .filter(webElement -> webElement.getText().equals(title))
+                .findAny(),
+            Optional::isPresent
+        )
+            .orElseThrow(() -> new RuntimeException("No daily task found with title " + title))
+            .orElseThrow(() -> new RuntimeException("No daily task found with title " + title));
+
+        openEvent(driver, dailyTask);
     }
 
     public static void openEvent(WebDriver driver, WebElement dailyTask) {
@@ -125,8 +144,14 @@ public class DiaryActions {
     }
 
     public static void closeViewEventPage(WebDriver driver) {
+        NotificationUtil.clearNotifications(driver);
+
         DiaryPage.viewEventWindowCloseButton(driver)
             .click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> !DiaryPage.viewEventPage(driver).isDisplayed())
+            .assertTrue("ViewEvent page is not closed.");
     }
 
     public static void markAsNotDone(WebDriver driver) {
@@ -190,5 +215,22 @@ public class DiaryActions {
 
     public static void fillRepetitionDays(WebDriver driver, int repetitionDays) {
         clearAndFill(DiaryPage.createEventRepetitionTypeDaysInput(driver), String.valueOf(repetitionDays));
+    }
+
+    public static void previousMonth(WebDriver driver) {
+        DiaryPage.previousMonthButton(driver)
+            .click();
+    }
+
+    public static void nextMonth(WebDriver driver) {
+        DiaryPage.nextMonthButton(driver)
+            .click();
+    }
+
+    public static void selectDayOfMonth(WebDriver driver, int dayOfMonth) {
+        clearAndFill(DiaryPage.createEventRepetitionTypeDaysOfMonthInput(driver), dayOfMonth);
+
+        DiaryPage.createEventDaysOfMonthAddDayButton(driver)
+            .click();
     }
 }

@@ -94,6 +94,10 @@ public class Endpoints {
     public static final String ACCOUNT_GET_LANGUAGES = "/api/user/data/languages";
     public static final String USER_DATA_SEARCH_ACCOUNT = "/api/user/accounts";
 
+    //SETTINGS
+    public static final String GET_USER_SETTINGS = "/api/user/settings/{category}";
+    public static final String SET_USER_SETTINGS = "/api/user/settings";
+
     //BAN USER
     public static final String ACCOUNT_BAN_USER = "/api/user/ban";
     public static final String ACCOUNT_REMOVE_BAN = "/api/user/ban/{banId}";
@@ -150,6 +154,7 @@ public class Endpoints {
     public static final String NOTEBOOK_ORDER_CHECKLIST_ITEMS = "/api/notebook/checklist/{listItemId}/order";
     public static final String NOTEBOOK_SEARCH = "/api/notebook/item/search";
     public static final String NOTEBOOK_ARCHIVE_ITEM = "/api/notebook/item/{listItemId}/archive";
+    public static final String NOTEBOOK_CREATE_ONLY_TITLE = "/api/notebook/only-title";
 
     //UTILS
     public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";

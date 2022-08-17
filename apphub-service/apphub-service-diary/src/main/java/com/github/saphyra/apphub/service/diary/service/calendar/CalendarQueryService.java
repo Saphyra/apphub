@@ -25,7 +25,6 @@ public class CalendarQueryService {
         Set<LocalDate> dates = daysOfMonthProvider.getDaysOfMonth(referenceDate.getMonth());
         dates.add(referenceDate.getDay());
 
-
         return fetchCalendar(userId, dates);
     }
 

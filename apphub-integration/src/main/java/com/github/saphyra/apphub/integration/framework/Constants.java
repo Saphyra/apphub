@@ -55,4 +55,9 @@ public class Constants {
     public final String DIARY_OCCURRENCE_STATUS_VIRTUAL = "VIRTUAL";
     public final String DIARY_OCCURRENCE_STATUS_DONE = "DONE";
     public final String DIARY_OCCURRENCE_STATUS_SNOOZED = "SNOOZED";
+
+    //User settings
+    public final String USER_SETTING_CATEGORY_NOTEBOOK = "notebook";
+
+    public final String USER_SETTING_KEY_SHOW_ARCHIVED = "show-archived";
 }

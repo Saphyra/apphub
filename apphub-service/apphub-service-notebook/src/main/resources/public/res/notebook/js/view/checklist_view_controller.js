@@ -24,7 +24,7 @@
 
     function displayChecklistItem(checklistItemData){
         const titleNode = document.getElementById("view-checklist-title");
-            titleNode.innerHTML = checklistItemData.title;
+            titleNode.innerText = checklistItemData.title;
             titleNode.contentEditable = false;
 
         const contentTable = document.getElementById("view-checklist-content");
@@ -58,7 +58,7 @@
             const contentCell = document.createElement("DIV");
                 contentCell.classList.add("view-checklist-item-content");
                 contentCell.classList.add("selectable");
-                contentCell.innerHTML = itemData.content;
+                contentCell.innerText = itemData.content;
                 contentCell.contentEditable = editingEnabled;
                 contentCell.onclick = function(){
                     if(!editingEnabled && !isTextSelected()){
@@ -76,7 +76,7 @@
 
                 const moveUpButton = document.createElement("BUTTON");
                     moveUpButton.classList.add("view-checklist-item-edit-button");
-                    moveUpButton.innerHTML = "^";
+                    moveUpButton.innerText = "^";
                     moveUpButton.onclick = function(){
                         const sibling = nodeRow.previousSibling;
                         if(sibling){
@@ -93,7 +93,7 @@
 
                 const moveDownButton = document.createElement("BUTTON");
                     moveDownButton.classList.add("view-checklist-item-edit-button");
-                    moveDownButton.innerHTML = "V";
+                    moveDownButton.innerText = "V";
                     moveDownButton.onclick = function(){
                         const sibling = nodeRow.nextSibling;
                         if(sibling){
@@ -110,7 +110,7 @@
 
                 const removeButton = document.createElement("BUTTON");
                     removeButton.classList.add("view-checklist-item-edit-button");
-                    removeButton.innerHTML = "X";
+                    removeButton.innerText = "X";
                     removeButton.onclick = function(){
                         if(!editingEnabled){
                             const confirmationDialogLocalization = new ConfirmationDialogLocalization()
@@ -189,7 +189,7 @@
     }
 
     function saveChanges(){
-        const title = document.getElementById("view-checklist-title").innerHTML;
+        const title = document.getElementById("view-checklist-title").innerText;
 
         if(!title.length){
             notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
@@ -205,7 +205,7 @@
                 checklistItemId: $(item).attr("checklist-item-id"),
                 order: i,
                 checked: item.querySelector(".view-checklist-item-checked-input").checked,
-                content: item.querySelector(".view-checklist-item-content").innerHTML
+                content: item.querySelector(".view-checklist-item-content").innerText
             }
             nodes.push(nodeData);
         }

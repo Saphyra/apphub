@@ -5,6 +5,14 @@
     <LINK rel="stylesheet" href="/res/common/css/reset.css">
     <LINK rel="stylesheet" href="/res/common/css/common.css">
     <LINK rel="stylesheet" href="/res/community/css/community.css">
+    <LINK rel="stylesheet" href="/res/community/css/chat.css">
+    <LINK rel="stylesheet" href="/res/community/css/flow.css">
+    <LINK rel="stylesheet" href="/res/community/css/contacts.css">
+    <LINK rel="stylesheet" href="/res/community/css/group_add_member.css">
+    <LINK rel="stylesheet" href="/res/community/css/group_details.css">
+    <LINK rel="stylesheet" href="/res/community/css/create_blacklist.css">
+    <LINK rel="stylesheet" href="/res/community/css/create_friend_request.css">
+    <LINK rel="stylesheet" href="/res/community/css/create_group.css">
 
     <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
     <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
@@ -18,217 +26,13 @@
     </script>
 </HEAD>
 <BODY>
-<DIV id="main" class="main-page">
-    <HEADER>
-        <H1 id="main-title"></H1>
-    </HEADER>
 
-    <MAIN>
-        <DIV id="chat-main" class="tab">
-            <H2 id="chat-title"></H2>
+<DIV th:replace="/fragment/main.html :: main"></DIV>
+<DIV th:replace="/fragment/create_friend_request.html :: create-friend-request"></DIV>
+<DIV th:replace="/fragment/create_blacklist.html :: create-blacklist"></DIV>
+<DIV th:replace="/fragment/create_group.html :: create-group"></DIV>
+<DIV th:replace="/fragment/group_details.html :: group-details"></DIV>
+<DIV th:replace="/fragment/group_add_member.html :: group-add-member"></DIV>
 
-            <DIV id="chat-content" class="content">
-                <DIV id="chat-conversations">
-                    <DIV id="new-conversation-button-wrapper">
-                        <DIV id="new-conversation-button" class="button"></DIV>
-                    </DIV>
-
-                    <DIV id="chat-conversations-list"></DIV>
-                </DIV>
-                <DIV id="chat-conversation-wrapper">
-                    <DIV id="chat-conversation"></DIV>
-
-                    <DIV id="message-input-wrapper">
-                        <INPUT type="text" id="message-input">
-                    </DIV>
-                </DIV>
-            </DIV>
-        </DIV>
-        <DIV id="flow-main" class="tab">
-            <H2 id="flow-title"></H2>
-
-            <DIV id="flow-content" class="content"></DIV>
-        </DIV>
-        <DIV id="contacts-main" class="tab">
-            <H2 id="contacts-title"></H2>
-
-            <DIV id="contacts-nav-button-wrapper">
-                <BUTTON id="friends-button" class="contacts-tab-switch-button" onclick="contactsController.openFriendsTab()"></BUTTON>
-                <BUTTON id="groups-button" class="contacts-tab-switch-button" onclick="contactsController.openGroupsTab()"></BUTTON>
-                <BUTTON id="blacklist-button" class="contacts-tab-switch-button" onclick="contactsController.openBlacklistTab()"></BUTTON>
-            </DIV>
-
-            <DIV id="contacts-content" class="content">
-                <DIV id="contacts-friends" class="contacts-panel">
-                    <DIV id="contacts-friend-list-wrapper">
-                        <DIV id="friends-list" class="friends-list-item">
-                            <DIV id="friends-list-title" class="friends-list-title"></DIV>
-
-                            <DIV id="friends-list-content"></DIV>
-                        </DIV>
-
-                        <DIV id="received-friend-requests" class="friends-list-item">
-                            <DIV id="received-friend-requests-title" class="friends-list-title"></DIV>
-
-                            <DIV id="received-friend-requests-content"></DIV>
-                        </DIV>
-
-                        <DIV id="sent-friend-requests" class="friends-list-item">
-                            <DIV id="sent-friend-requests-title" class="friends-list-title"></DIV>
-
-                            <DIV id="sent-friend-requests-content"></DIV>
-
-                            <DIV id="contacts-add-friend-button-wrapper">
-                                <BUTTON id="contacts-add-friend-button" onclick="createFriendRequestController.openTab()"></BUTTON>
-                            </DIV>
-                        </DIV>
-                    </DIV>
-                </DIV>
-
-                <DIV id="contacts-groups" class="contacts-panel">
-                    <DIV id="contacts-groups-search-wrapper">
-                        <INPUT type="text" id="contacts-groups-search-input">
-                    </DIV>
-
-                    <DIV id="contacts-groups-list"></DIV>
-
-                    <DIV id="contacts-groups-create-wrapper">
-                        <BUTTON id="contacts-groups-create-button" onclick="createGroupController.openTab()"></BUTTON>
-                    </DIV>
-                </DIV>
-
-                <DIV id="contacts-blacklist" class="contacts-panel">
-                    <DIV id="contacts-blacklist-add-wrapper">
-                        <BUTTON id="contacts-blacklist-add-button" onclick="createBlacklistController.openTab()"></BUTTON>
-                    </DIV>
-
-                    <DIV id="contacts-blacklist-list"></DIV>
-                </DIV>
-            </DIV>
-        </DIV>
-    </MAIN>
-
-    <FOOTER>
-        <BUTTON id="home-button" onclick='window.location = "/web/modules"'></BUTTON>
-    </FOOTER>
-</DIV>
-
-<DIV id="create-friend-request" class="main-page">
-    <HEADER>
-        <H1 id="create-friend-request-title"></H1>
-        <BUTTON class="close-dialog-button" onclick="pageController.displayMainPage()">X</BUTTON>
-    </HEADER>
-
-    <MAIN class="footerless">
-        <DIV id="create-friend-request-search-wrapper">
-            <INPUT type="text" id="create-friend-request-search-input">
-        </DIV>
-
-        <DIV id="create-friend-request-search-result-wrapper">
-            <DIV id="create-friend-request-search-result-query-too-short" class="create-friend-request-search-result create-friend-request-search-result-error"></DIV>
-            <DIV id="create-friend-request-search-result-no-result" class="create-friend-request-search-result create-friend-request-search-result-error"></DIV>
-            <DIV id="create-friend-request-search-result" class="create-friend-request-search-result"></DIV>
-        </DIV>
-    </MAIN>
-</DIV>
-
-<DIV id="create-blacklist" class="main-page">
-    <HEADER>
-        <H1 id="create-blacklist-title"></H1>
-        <BUTTON class="close-dialog-button" onclick="pageController.displayMainPage()">X</BUTTON>
-    </HEADER>
-
-    <MAIN class="footerless">
-        <DIV id="create-blacklist-search-wrapper">
-            <INPUT type="text" id="create-blacklist-search-input">
-        </DIV>
-
-        <DIV id="create-blacklist-search-result-wrapper">
-            <DIV id="create-blacklist-search-result-query-too-short" class="create-blacklist-search-result create-blacklist-search-result-error"></DIV>
-            <DIV id="create-blacklist-search-result-no-result" class="create-blacklist-search-result create-blacklist-search-result-error"></DIV>
-            <DIV id="create-blacklist-search-result" class="create-blacklist-search-result"></DIV>
-        </DIV>
-    </MAIN>
-</DIV>
-
-<DIV id="create-group" class="main-page">
-    <HEADER>
-        <H1 id="create-group-title"></H1>
-        <BUTTON class="close-dialog-button" onclick="pageController.displayMainPage()">X</BUTTON>
-    </HEADER>
-
-    <MAIN class="footerless">
-        <DIV id="create-group-input-wrapper">
-            <LABEL>
-                <SPAN id="create-group-name-label"></SPAN>:
-                <INPUT type="text" id="create-group-name-input">
-                <DIV id="create-group-invalid-name" class="invalid-input">X</DIV>
-            </LABEL>
-
-            <BUTTON id="create-group-button" onclick="createGroupController.createGroup()"></BUTTON>
-        </DIV>
-    </MAIN>
-</DIV>
-
-<DIV id="group-details" class="main-page">
-    <HEADER>
-        <H1 id="group-details-title"></H1>
-        <BUTTON class="close-dialog-button" onclick="pageController.displayMainPage()">X</BUTTON>
-    </HEADER>
-
-    <MAIN>
-        <DIV id="group-details-invitation-type-wrapper">
-            <LABEL>
-                <SPAN id="group-details-invitation-type-label"></SPAN>:
-                <SELECT id="group-details-invitation-type">
-                    <OPTION id="invitation-type-friends" value="FRIENDS"></OPTION>
-                    <OPTION id="invitation-type-friends-of-friends" value="FRIENDS_OF_FRIENDS"></OPTION>
-                </SELECT>
-            </LABEL>
-        </DIV>
-
-        <DIV>
-            <TABLE id="group-details-members-table" class="formatted-table">
-                <THEAD>
-                <TR>
-                    <TH>
-                        <BUTTON id="group-details-add-member-button" onclick="addGroupMemberController.openAddGroupMemberWindow()"></BUTTON>
-                    </TH>
-                    <TH id="group-details-members-can-invite"></TH>
-                    <TH id="group-details-members-can-kick"></TH>
-                    <TH id="group-details-members-can-modify-roles"></TH>
-                    <TH id="group-details-members-kick"></TH>
-                    <TH id="group-details-transfer-ownership"></TH>
-                </TR>
-                </THEAD>
-                <TBODY id="group-details-members"></TBODY>
-            </TABLE>
-        </DIV>
-    </MAIN>
-
-    <FOOTER>
-        <BUTTON id="disband-group-button" class="group-details-button" onclick="groupDetailsController.disbandGroup()"></BUTTON>
-        <BUTTON id="leave-group-button" class="group-details-button" onclick="groupDetailsController.leaveGroup()"></BUTTON>
-    </FOOTER>
-</DIV>
-
-<DIV id="group-add-member" class="main-page">
-    <HEADER>
-        <H1 id="group-add-member-title"></H1>
-        <BUTTON class="close-dialog-button" onclick="groupDetailsController.openCurrentGroup()">X</BUTTON>
-    </HEADER>
-
-    <MAIN class="footerless">
-        <DIV id="group-add-member-search-wrapper">
-            <INPUT type="text" id="group-add-member-search-input">
-        </DIV>
-
-        <DIV id="group-add-member-search-result-wrapper">
-            <DIV id="group-add-member-search-result-query-too-short" class="group-add-member-search-result group-add-member-search-result-error"></DIV>
-            <DIV id="group-add-member-search-result-no-result" class="group-add-member-search-result group-add-member-search-result-error"></DIV>
-            <DIV id="group-add-member-search-result" class="group-add-member-search-result"></DIV>
-        </DIV>
-    </MAIN>
-</DIV>
 </BODY>
 </HTML>
