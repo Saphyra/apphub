@@ -103,7 +103,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
                 node.classList.add("button");
                 node.classList.add(event.status.toLowerCase());
                 node.innerText = event.title;
-                node.title = event.content;
+                node.title = event.date + "\n" + event.content;
 
                 node.onclick = function(e){
                     e.stopPropagation();

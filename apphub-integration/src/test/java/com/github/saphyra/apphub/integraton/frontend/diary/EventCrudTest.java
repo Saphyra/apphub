@@ -61,13 +61,13 @@ public class EventCrudTest extends SeleniumTest {
         WebElement dailyTask = AwaitilityWrapper.getListWithWait(() -> DiaryActions.getDailyTasks(driver), ts -> !ts.isEmpty())
             .get(0);
         assertThat(dailyTask.getText()).isEqualTo(TITLE);
-        assertThat(dailyTask.getAttribute("title")).isEqualTo(CONTENT);
+        assertThat(dailyTask.getAttribute("title")).endsWith(CONTENT);
         assertThat(WebElementUtils.getClasses(dailyTask)).contains(Constants.DIARY_OCCURRENCE_STATUS_PENDING.toLowerCase());
 
         WebElement calendarEvent = DiaryActions.getEventsOfDay(driver, CURRENT_DATE)
             .get(0);
         assertThat(calendarEvent.getText()).isEqualTo(TITLE);
-        assertThat(calendarEvent.getAttribute("title")).isEqualTo(CONTENT);
+        assertThat(calendarEvent.getAttribute("title")).endsWith(CONTENT);
         assertThat(WebElementUtils.getClasses(calendarEvent)).contains(Constants.DIARY_OCCURRENCE_STATUS_PENDING.toLowerCase());
 
         //View event
@@ -188,7 +188,7 @@ public class EventCrudTest extends SeleniumTest {
         WebElement dailyTask = AwaitilityWrapper.getListWithWait(() -> DiaryActions.getDailyTasks(driver), ts -> !ts.isEmpty())
             .get(0);
         assertThat(dailyTask.getText()).isEqualTo(TITLE);
-        assertThat(dailyTask.getAttribute("title")).isEqualTo(CONTENT);
+        assertThat(dailyTask.getAttribute("title")).endsWith(CONTENT);
         assertThat(WebElementUtils.getClasses(dailyTask)).containsAnyElementsOf(getStatusOfDay(FIRST_OF_MONTH));
 
         for (int i = 0; i <= 4; i++) {
@@ -197,7 +197,7 @@ public class EventCrudTest extends SeleniumTest {
             WebElement calendarEvent = DiaryActions.getEventsOfDay(driver, date)
                 .get(0);
             assertThat(calendarEvent.getText()).isEqualTo(TITLE);
-            assertThat(calendarEvent.getAttribute("title")).isEqualTo(CONTENT);
+            assertThat(calendarEvent.getAttribute("title")).endsWith(CONTENT);
             assertThat(WebElementUtils.getClasses(calendarEvent)).containsAnyElementsOf(getStatusOfDay(date));
         }
 
@@ -245,7 +245,7 @@ public class EventCrudTest extends SeleniumTest {
             WebElement calendarEvent = DiaryActions.getEventsOfDay(driver, date)
                 .get(0);
             assertThat(calendarEvent.getText()).isEqualTo(NEW_TITLE);
-            assertThat(calendarEvent.getAttribute("title")).isEqualTo(NEW_CONTENT);
+            assertThat(calendarEvent.getAttribute("title")).endsWith(NEW_CONTENT);
         }
     }
 
@@ -280,7 +280,7 @@ public class EventCrudTest extends SeleniumTest {
         WebElement dailyTask = AwaitilityWrapper.getListWithWait(() -> DiaryActions.getDailyTasks(driver), ts -> !ts.isEmpty())
             .get(0);
         assertThat(dailyTask.getText()).isEqualTo(TITLE);
-        assertThat(dailyTask.getAttribute("title")).isEqualTo(CONTENT);
+        assertThat(dailyTask.getAttribute("title")).endsWith(CONTENT);
         assertThat(WebElementUtils.getClasses(dailyTask)).containsAnyElementsOf(getStatusOfDay(FIRST_OF_MONTH));
 
         DiaryActions.nextMonth(driver);
@@ -290,7 +290,7 @@ public class EventCrudTest extends SeleniumTest {
         WebElement calendarEvent = DiaryActions.getEventsOfDay(driver, date)
             .get(0);
         assertThat(calendarEvent.getText()).isEqualTo(TITLE);
-        assertThat(calendarEvent.getAttribute("title")).isEqualTo(CONTENT);
+        assertThat(calendarEvent.getAttribute("title")).endsWith(CONTENT);
         assertThat(WebElementUtils.getClasses(calendarEvent)).containsAnyElementsOf(getStatusOfDay(date));
     }
 
@@ -330,7 +330,7 @@ public class EventCrudTest extends SeleniumTest {
             WebElement calendarEvent = DiaryActions.getEventsOfDay(driver, date)
                 .get(0);
             assertThat(calendarEvent.getText()).isEqualTo(TITLE);
-            assertThat(calendarEvent.getAttribute("title")).isEqualTo(CONTENT);
+            assertThat(calendarEvent.getAttribute("title")).endsWith(CONTENT);
             assertThat(WebElementUtils.getClasses(calendarEvent)).containsAnyElementsOf(getStatusOfDay(date));
         }
     }
