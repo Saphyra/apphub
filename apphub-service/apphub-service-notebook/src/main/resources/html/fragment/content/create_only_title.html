@@ -1,0 +1,24 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<DIV id="create-only-title" class="main-page" th:fragment="create-only-title">
+    <HEADER>
+        <H1 id="create-only-title-title"></H1>
+        <BUTTON id="create-only-title-close-button" class="dialog-close-button" onclick="pageController.openMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN>
+        <DIV class="create-item-input-wrapper">
+            <INPUT type="text" id="new-only-title-title" class="new-item-title">
+        </DIV>
+
+        <DIV id="create-only-title-parent-selection-wrapper" class="parent-selection-wrapper">
+            <DIV id="create-only-title-current-category-title"></DIV>
+            <DIV id="create-only-title-parent-selection-parent-button" class="button create-item-category"></DIV>
+            <DIV id="create-only-title-parent-selection-category-list"></DIV>
+        </DIV>
+    </MAIN>
+</DIV>
+
+</BODY>
+</HTML>
