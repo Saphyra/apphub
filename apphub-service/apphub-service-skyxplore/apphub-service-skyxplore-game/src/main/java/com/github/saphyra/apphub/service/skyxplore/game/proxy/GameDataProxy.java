@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -39,10 +40,18 @@ public class GameDataProxy {
     }
 
     public void deleteItem(UUID id, GameItemType type) {
-        dataGameClient.deleteGameItem(id, type, localeProvider.getOrDefault());
+        deleteItems(List.of(new BiWrapper<>(id, type)));
     }
 
-    public void deleteItems(List<BiWrapper<UUID, GameItemType>> deletedItems) {
-        deletedItems.forEach(biWrapper -> deleteItem(biWrapper.getEntity1(), biWrapper.getEntity2()));
+    public void deleteItem(List<GameItem> items) {
+        deleteItems(
+            items.stream()
+                .map(gameItem -> new BiWrapper<>(gameItem.getId(), gameItem.getType()))
+                .collect(Collectors.toList())
+        );
+    }
+
+    public void deleteItems(List<BiWrapper<UUID, GameItemType>> items) {
+        dataGameClient.deleteGameItem(items, localeProvider.getOrDefault());
     }
 }

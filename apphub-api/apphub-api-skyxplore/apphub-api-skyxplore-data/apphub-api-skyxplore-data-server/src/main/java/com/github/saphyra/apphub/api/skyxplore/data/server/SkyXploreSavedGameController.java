@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.response.SavedGameResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCreation;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +26,7 @@ public interface SkyXploreSavedGameController {
     GameItem loadGameItem(@PathVariable("id") UUID id, @PathVariable("type") GameItemType type);
 
     @DeleteMapping(Endpoints.SKYXPLORE_INTERNAL_DELETE_GAME_ITEM)
-    void deleteGameItem(@PathVariable("id") UUID id, @PathVariable("type") GameItemType type);
+    void deleteGameItem(@RequestBody List<BiWrapper<UUID, GameItemType>> items);
 
     @GetMapping(Endpoints.SKYXPLORE_INTERNAL_LOAD_GAME_ITEM_CHILDREN)
     List<? extends GameItem> loadChildrenOfGameItem(@PathVariable("parent") UUID parent, @PathVariable("type") GameItemType type);

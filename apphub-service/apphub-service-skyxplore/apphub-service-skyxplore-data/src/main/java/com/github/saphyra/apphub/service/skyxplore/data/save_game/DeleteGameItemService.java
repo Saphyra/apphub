@@ -17,6 +17,7 @@ class DeleteGameItemService {
     private final List<GameItemService> gameItemServices;
 
     void deleteItem(UUID id, GameItemType type) {
+        log.info("Deleting GameItem {} of type {}", id, type);
         gameItemServices.stream()
             .filter(gameItemService -> gameItemService.getType() == type)
             .findFirst()
