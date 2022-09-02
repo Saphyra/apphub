@@ -1,3 +1,35 @@
+(function ErrorHandler(){
+    const errorResponseParameterTranslators = [];
+
+    window.errorHandler = new function(){
+        this.addErrorResponseParameterTranslator = function(errorResponseParameterTranslator){
+            if(!errorResponseParameterTranslator instanceof ErrorResponseParameterTranslator){
+                throwException("IllegalArgument", "input is not an ErrorResponseParameterTranslator.");
+            }
+
+            console.log("Adding ErrorResponseParameterTranslator", errorResponseParameterTranslator);
+
+            errorResponseParameterTranslators.push(errorResponseParameterTranslator);
+        }
+        this.assembleLocalization = assembleLocalization;
+    }
+
+    function assembleLocalization(errorResponse){
+        let result = errorResponse.localizedMessage;
+
+        new MapStream(errorResponse.params)
+            .map((key, value) => {
+                return new Stream(errorResponseParameterTranslators)
+                    .findFirst((translator) => {return translator.canTranslate(key)})
+                    .map((translator) => {return translator.translate(value)})
+                    .orElse(value);
+            })
+            .forEach((key, value) => result = result.replace("{" + key + "}", value));
+
+        return result;
+    }
+})();
+
 function ErrorHandlerRegistry(){
     const handlers = [];
 
@@ -14,7 +46,7 @@ function ErrorHandlerRegistry(){
                         eventProcessor.processEvent(new Event(events.LOGOUT));
                     break;
                     default:
-                        notificationService.showError(errorResponse.localizedMessage);
+                        notificationService.showError(errorHandler.assembleLocalization(errorResponse));
                 }
             }else{
                 notificationService.showError("Error response from BackEnd: " + response.toString());
@@ -89,4 +121,9 @@ function ErrorHandlerRegistry(){
 function ErrorHandler(canHandle, handle){
     this.canHandle = canHandle;
     this.handle = handle;
+}
+
+function ErrorResponseParameterTranslator(canTranslate, translate){
+    this.canTranslate = canTranslate;
+    this.translate = translate;
 }

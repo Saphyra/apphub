@@ -43,9 +43,9 @@
     function setUpPriorityInputs(){
         new Stream(priorityTypes)
             .forEach(function(priorityType){
-                const input = document.getElementById(idMasks.planetPrioritiesConstructionInput.get(priorityType));
+                const input = document.getElementById(idMasks.planetPrioritiesInput.get(priorityType));
                     input.onchange = function(){
-                        document.getElementById(idMasks.planetPrioritiesConstructionValue.get(priorityType)).innerHTML = input.value;
+                        document.getElementById(idMasks.planetPrioritiesValue.get(priorityType)).innerHTML = input.value;
                         updatePriority(priorityType, input.value);
                     }
             });
