@@ -70,6 +70,7 @@ public class FriendshipDeletionServiceTest {
         given(friendshipDao.findById(FRIENDSHIP_ID)).willReturn(Optional.of(friendship));
         given(friendship.getFriend1()).willReturn(USER_ID);
         given(friendship.getFriend2()).willReturn(FRIEND_ID);
+        given(friendship.getOtherId(USER_ID)).willReturn(FRIEND_ID);
 
         underTest.removeFriendship(FRIENDSHIP_ID, USER_ID);
 
@@ -78,7 +79,8 @@ public class FriendshipDeletionServiceTest {
         verify(messageSenderProxy).sendToMainMenu(argumentCaptor.capture());
         WebSocketMessage message = argumentCaptor.getValue();
         assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED);
-        assertThat(message.getRecipients()).containsExactlyInAnyOrder(FRIEND_ID, USER_ID);
+        assertThat(message.getRecipients()).containsExactly(FRIEND_ID);
+        assertThat(message.getEvent().getPayload()).isEqualTo(FRIENDSHIP_ID);
 
         verify(friendshipDeletionPlayerProcessor).processDeletedFriendship(USER_ID, FRIEND_ID);
     }

@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service;
 
 import com.github.saphyra.apphub.api.skyxplore.response.FriendshipResponse;
+import com.github.saphyra.apphub.service.skyxplore.data.friend.converter.FriendshipToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.Friendship;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.FriendshipDao;
 import org.junit.Test;
@@ -19,18 +20,12 @@ import static org.mockito.BDDMockito.given;
 @RunWith(MockitoJUnitRunner.class)
 public class FriendshipQueryServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final UUID FRIENDSHIP_ID = UUID.randomUUID();
-    private static final UUID FRIEND_ID = UUID.randomUUID();
-    private static final String FRIEND_NAME = "friend-name";
 
     @Mock
     private FriendshipDao friendshipDao;
 
     @Mock
-    private FriendNameQueryService friendNameQueryService;
-
-    @Mock
-    private FriendIdExtractor friendIdExtractor;
+    private FriendshipToResponseConverter friendshipToResponseConverter;
 
     @InjectMocks
     private FriendshipQueryService underTest;
@@ -38,18 +33,16 @@ public class FriendshipQueryServiceTest {
     @Mock
     private Friendship friendship;
 
+    @Mock
+    private FriendshipResponse friendshipResponse;
+
     @Test
     public void getFriends() {
         given(friendshipDao.getByFriendId(USER_ID)).willReturn(Arrays.asList(friendship));
-        given(friendship.getFriendshipId()).willReturn(FRIENDSHIP_ID);
-        given(friendIdExtractor.getFriendId(friendship, USER_ID)).willReturn(FRIEND_ID);
-        given(friendNameQueryService.getFriendName(friendship, USER_ID)).willReturn(FRIEND_NAME);
+        given(friendshipToResponseConverter.convert(friendship, USER_ID)).willReturn(friendshipResponse);
 
         List<FriendshipResponse> result = underTest.getFriends(USER_ID);
 
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getFriendshipId()).isEqualTo(FRIENDSHIP_ID);
-        assertThat(result.get(0).getFriendId()).isEqualTo(FRIEND_ID);
-        assertThat(result.get(0).getFriendName()).isEqualTo(FRIEND_NAME);
+        assertThat(result).containsExactly(friendshipResponse);
     }
 }

@@ -72,10 +72,14 @@ function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, 
     }
 
     this.remove = function(key){
-        document.getElementById(containerId).removeChild(document.getElementById(createId(key)));
+        if(Object.keys(cache).indexOf(key) < 0){
+            return;
+        }
 
         delete cache[key];
         delete nodeCache[key];
+
+        render();
     }
 
     this.reload = function(){

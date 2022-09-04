@@ -11,6 +11,7 @@
         .withCreateNodeMethod(createIncomingFriendRequestNode)
         .withIdPrefix("incoming-friend-request")
         .withIfEmptyMethod(noResult)
+        .withSortMethod((a, b) => {return a.senderName.localeCompare(b.senderName)})
         .build();
 
     const friendSyncEngine = new SyncEngineBuilder()
@@ -19,6 +20,7 @@
         .withCreateNodeMethod(createFriendshipNode)
         .withIdPrefix("friend")
         .withIfEmptyMethod(noResult)
+        .withSortMethod((a, b) => {return a.username.localeCompare(b.username)})
         .build();
 
     const sentFriendRequestSyncEngine = new SyncEngineBuilder()
@@ -27,6 +29,7 @@
         .withCreateNodeMethod(createSentFriendRequestNode)
         .withIdPrefix("sent-friend-request")
         .withIfEmptyMethod(noResult)
+        .withSortMethod((a, b) => {return a.friendName.localeCompare(b.friendName)})
         .build();
 
     window.friendController = new function(){
@@ -139,11 +142,12 @@
 
     function addFriend(characterId){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_ADD_FRIEND"), {value: characterId});
-            request.processValidResponse = function(){
+            request.convertResponse = jsonConverter;
+            request.processValidResponse = function(friendRequest){
                 document.getElementById(ids.searchFriendInput).value = "";
                 $("#" + ids.friendSearchResultWrapper).fadeOut();
                 notificationService.showSuccess(Localization.getAdditionalContent("friend-request-sent"));
-                loadFriendData();
+                sentFriendRequestSyncEngine.add(friendRequest);
             }
         dao.sendRequestAsync(request);
     }
@@ -219,16 +223,19 @@
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_CANCEL_FRIEND_REQUEST", {friendRequestId: friendRequestId}));
             request.processValidResponse = function(){
                 notificationService.showSuccess(Localization.getAdditionalContent("friend-request-canceled"));
-                loadFriendData();
+                incomingFriendRequestSyncEngine.remove(friendRequestId);
+                sentFriendRequestSyncEngine.remove(friendRequestId);
             }
         dao.sendRequestAsync(request);
     }
 
     function acceptFriendRequest(friendRequestId){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_ACCEPT_FRIEND_REQUEST", {friendRequestId: friendRequestId}));
-            request.processValidResponse = function(){
+            request.convertResponse = jsonConverter;
+            request.processValidResponse = function(friendship){
                 notificationService.showSuccess(Localization.getAdditionalContent("friend-request-accepted"));
-                loadFriendData();
+                incomingFriendRequestSyncEngine.remove(friendRequestId);
+                friendSyncEngine.add(friendship);
             }
         dao.sendRequestAsync(request);
     }
@@ -247,7 +254,7 @@
                 const request = new Request(Mapping.getEndpoint("SKYXPLORE_REMOVE_FRIEND", {friendshipId: friendshipId}));
                     request.processValidResponse = function(){
                         notificationService.showSuccess(Localization.getAdditionalContent("friend-removed"));
-                        loadFriendData();
+                        friendSyncEngine.remove(friendshipId);
                     }
                 dao.sendRequestAsync(request);
             }
@@ -258,28 +265,30 @@
         wsConnection.addHandler(
             new WebSocketEventHandler(
                 function(eventName){return eventName == "skyxplore-main-menu-friend-request-accepted"},
-                loadFriendData //TODO Data should come with the ws event
+                (data) => {
+                    sentFriendRequestSyncEngine.remove(data.friendRequestId);
+                    friendSyncEngine.add(data.friendship);
+                }
             )
         ).addHandler(
             new WebSocketEventHandler(
                 function(eventName){return eventName == "skyxplore-main-menu-friend-request-sent"},
-                function(){
-                    loadIncomingFriendRequests();
-                    loadSentFriendRequests(); //TODO Data should come with the ws event
+                function(friendRequest){
+                    incomingFriendRequestSyncEngine.add(friendRequest);
                 }
             )
         ).addHandler(
             new WebSocketEventHandler(
                 function(eventName){return eventName == "skyxplore-main-menu-friend-request-deleted"},
-                function(){
-                    loadIncomingFriendRequests(); //TODO Data should come with the ws event
-                    loadSentFriendRequests(); //TODO Data should come with the ws event
+                function(friendRequestId){
+                    sentFriendRequestSyncEngine.remove(friendRequestId);
+                    incomingFriendRequestSyncEngine.remove(friendRequestId);
                 }
             )
         ).addHandler(
             new WebSocketEventHandler(
                 function(eventName){return eventName == "skyxplore-main-menu-friendship-deleted"},
-                loadFriends //TODO Data should come with the ws event
+                (friendshipId) => friendSyncEngine.remove(friendshipId)
             )
         )
     }

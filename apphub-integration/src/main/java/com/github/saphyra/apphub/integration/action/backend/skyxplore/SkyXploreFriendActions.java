@@ -31,10 +31,12 @@ public class SkyXploreFriendActions {
         acceptFriendRequest(language, friendAccessTokenId, friendRequest.getFriendRequestId());
     }
 
-    public static void createFriendRequest(Language language, UUID accessTokenId, UUID userId) {
+    public static SentFriendRequestResponse createFriendRequest(Language language, UUID accessTokenId, UUID userId) {
         Response response = getCreateFriendRequestResponse(language, accessTokenId, userId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().as(SentFriendRequestResponse.class);
     }
 
     public static Response getCreateFriendRequestResponse(Language language, UUID accessTokenId, UUID userId) {
@@ -53,10 +55,12 @@ public class SkyXploreFriendActions {
             .collect(Collectors.toList());
     }
 
-    public static void acceptFriendRequest(Language language, UUID accessTokenId, UUID friendRequestId) {
+    public static FriendshipResponse acceptFriendRequest(Language language, UUID accessTokenId, UUID friendRequestId) {
         Response response = getAcceptFriendRequestResponse(language, accessTokenId, friendRequestId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().as(FriendshipResponse.class);
     }
 
     public static Response getAcceptFriendRequestResponse(Language language, UUID accessTokenId, UUID friendRequestId) {
@@ -85,6 +89,12 @@ public class SkyXploreFriendActions {
             .collect(Collectors.toList());
     }
 
+    public static void cancelFriendRequest(Language language, UUID accessTokenId, UUID friendRequestId) {
+        Response response = getCancelFriendRequestResponse(language, accessTokenId, friendRequestId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
     public static Response getCancelFriendRequestResponse(Language language, UUID accessTokenId, UUID friendRequestId) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .delete(UrlFactory.create(Endpoints.SKYXPLORE_CANCEL_FRIEND_REQUEST, "friendRequestId", friendRequestId));
@@ -97,6 +107,12 @@ public class SkyXploreFriendActions {
         assertThat(response.getStatusCode()).isEqualTo(200);
         return Arrays.stream(response.getBody().as(FriendshipResponse[].class))
             .collect(Collectors.toList());
+    }
+
+    public static void removeFriend(Language language, UUID accessTokenId, UUID friendshipId) {
+        Response response = getRemoveFriendResponse(language, accessTokenId, friendshipId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
     public static Response getRemoveFriendResponse(Language language, UUID accessTokenId, UUID friendshipId) {

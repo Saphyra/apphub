@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service;
+package com.github.saphyra.apphub.service.skyxplore.data.friend.converter;
 
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreCharacter;
@@ -21,9 +21,6 @@ public class FriendNameQueryServiceTest {
     private static final String CHARACTER_NAME = "character-name";
 
     @Mock
-    private FriendIdExtractor friendIdExtractor;
-
-    @Mock
     private CharacterDao characterDao;
 
     @InjectMocks
@@ -37,7 +34,7 @@ public class FriendNameQueryServiceTest {
 
     @Test
     public void getFriendName() {
-        given(friendIdExtractor.getFriendId(friendship, USER_ID)).willReturn(FRIEND_ID);
+        given(friendship.getOtherId(USER_ID)).willReturn(FRIEND_ID);
         given(characterDao.findByIdValidated(FRIEND_ID)).willReturn(character);
         given(character.getName()).willReturn(CHARACTER_NAME);
 
