@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integraton.backend.skyxplore.game.planet.queue;
 
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.PlanetBuildingDetailsValidator;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreBuildingActions;
@@ -98,6 +99,8 @@ public class ConstructionQueueTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(language, cancelConstruction_invalidTypeResponse, "type", "invalid value");
 
         //Cancel construction
+        gameWsClient.clearMessages();
+
         SkyXplorePlanetQueueActions.cancelItem(language, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
 
         assertThat(SkyXplorePlanetQueueActions.getQueue(language, accessTokenId, planetId)).isEmpty();
@@ -113,5 +116,11 @@ public class ConstructionQueueTest extends BackEndTest {
             .getPayloadAs(SurfaceResponse.class);
 
         assertThat(surfaceResponse.getBuilding()).isNull();
+
+        Object buildingDetails = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED)
+            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED + " event not arrived"))
+            .getPayload();
+
+        PlanetBuildingDetailsValidator.verifyBuildingDetails(buildingDetails, Constants.SURFACE_TYPE_DESERT, Constants.DATA_ID_SOLAR_PANEL, 1, 1);
     }
 }

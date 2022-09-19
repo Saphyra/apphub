@@ -21,6 +21,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.Que
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.terraformation.SurfaceToQueueItemConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,8 @@ class TerraformationService {
     private final SurfaceToResponseConverter surfaceToResponseConverter;
     private final SurfaceToQueueItemConverter surfaceToQueueItemConverter;
     private final QueueItemToResponseConverter queueItemToResponseConverter;
-    private final WsMessageSender wsMessageSender;
+    private final WsMessageSender messageSender;
+    private final PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
 
     SurfaceResponse terraform(UUID userId, UUID planetId, UUID surfaceId, String surfaceTypeString) {
         SurfaceType surfaceType = ValidationUtil.convertToEnumChecked(surfaceTypeString, SurfaceType::valueOf, "surfaceType");
@@ -82,7 +84,10 @@ class TerraformationService {
         gameDataProxy.saveItem(constructionModel);
 
         QueueResponse queueResponse = queueItemToResponseConverter.convert(surfaceToQueueItemConverter.convert(surface), planet);
-        wsMessageSender.planetQueueItemModified(userId, planetId, queueResponse);
+        messageSender.planetQueueItemModified(userId, planetId, queueResponse);
+
+        messageSender.planetBuildingDetailsModified(userId, planetId, planetBuildingOverviewQueryService.getBuildingOverview(planet));
+
         return surfaceToResponseConverter.convert(surface);
     }
 }

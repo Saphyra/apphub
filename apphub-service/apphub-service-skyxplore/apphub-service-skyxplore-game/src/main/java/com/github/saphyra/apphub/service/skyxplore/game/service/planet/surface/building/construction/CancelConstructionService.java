@@ -18,6 +18,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,7 @@ public class CancelConstructionService {
     private final SyncCacheFactory syncCacheFactory;
     private final BuildingToModelConverter buildingToModelConverter;
     private final AllocationRemovalService allocationRemovalService;
+    private final PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
 
     public void cancelConstructionOfConstruction(UUID userId, UUID planetId, UUID constructionId) {
         Game game = gameDao.findByUserIdValidated(userId);
@@ -106,6 +108,17 @@ public class CancelConstructionService {
                         WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED,
                         planet.getPlanetId(),
                         () -> messageSender.planetQueueItemDeleted(planet.getOwner(), planet.getPlanetId(), construction.getConstructionId())
+                    );
+
+                    syncCache.addMessage(
+                        planet.getOwner(),
+                        WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED,
+                        planet.getPlanetId(),
+                        () -> messageSender.planetBuildingDetailsModified(
+                            planet.getOwner(),
+                            planet.getPlanetId(),
+                            planetBuildingOverviewQueryService.getBuildingOverview(planet)
+                        )
                     );
 
                     return surfaceToResponseConverter.convert(surface);

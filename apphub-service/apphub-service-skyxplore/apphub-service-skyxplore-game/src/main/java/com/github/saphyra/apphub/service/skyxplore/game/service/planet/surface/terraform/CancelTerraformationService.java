@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.CancelAllocationsService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +32,9 @@ public class CancelTerraformationService {
     private final CancelAllocationsService cancelAllocationsService;
     private final WsMessageSender messageSender;
     private final SurfaceToResponseConverter surfaceToResponseConverter;
+    private final PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
 
-    public void cancelTerraformationOfConstruction(UUID userId, UUID planetId, UUID constructionId) {
+    public void cancelTerraformationQueueItem(UUID userId, UUID planetId, UUID constructionId) {
         Planet planet = gameDao.findByUserIdValidated(userId)
             .getUniverse()
             .findByOwnerAndPlanetIdValidated(userId, planetId);
@@ -46,6 +48,7 @@ public class CancelTerraformationService {
 
         processCancellation(planet, surface);
         SurfaceResponse surfaceResponse = surfaceToResponseConverter.convert(surface);
+
         messageSender.planetSurfaceModified(userId, planetId, surfaceResponse);
     }
 
@@ -57,6 +60,7 @@ public class CancelTerraformationService {
             .findByIdValidated(surfaceId);
 
         processCancellation(planet, surface);
+
         return surfaceToResponseConverter.convert(surface);
     }
 
@@ -71,5 +75,6 @@ public class CancelTerraformationService {
         surface.setTerraformation(null);
         gameDataProxy.deleteItem(construction.getConstructionId(), GameItemType.CONSTRUCTION);
         messageSender.planetQueueItemDeleted(planet.getOwner(), planet.getPlanetId(), construction.getConstructionId());
+        messageSender.planetBuildingDetailsModified(planet.getOwner(), planet.getPlanetId(), planetBuildingOverviewQueryService.getBuildingOverview(planet));
     }
 }

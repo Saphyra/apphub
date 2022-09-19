@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.framework;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.util.ObjectMapperWrapper;
 
@@ -12,6 +13,10 @@ public class CustomObjectMapper extends ObjectMapperWrapper {
     }
 
     public <T> T convertValue(Object in, Class<T> type) {
+        return objectMapper.convertValue(in, type);
+    }
+
+    public <T> T convertValue(Object in, TypeReference<T> type) {
         return objectMapper.convertValue(in, type);
     }
 }

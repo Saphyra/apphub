@@ -67,6 +67,6 @@ public class TerraformationQueueServiceTest {
     public void cancel() {
         underTest.cancel(USER_ID, PLANET_ID, ITEM_ID);
 
-        verify(cancelTerraformationService).cancelTerraformationOfConstruction(USER_ID, PLANET_ID, ITEM_ID);
+        verify(cancelTerraformationService).cancelTerraformationQueueItem(USER_ID, PLANET_ID, ITEM_ID);
     }
 }

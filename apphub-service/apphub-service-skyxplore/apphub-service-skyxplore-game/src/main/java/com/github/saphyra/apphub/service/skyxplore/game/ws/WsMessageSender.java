@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
@@ -29,6 +31,10 @@ public class WsMessageSender {
 
     private final GameDao gameDao;
     private final MessageSenderProxy messageSenderProxy;
+
+    public void planetBuildingDetailsModified(UUID userId, UUID planetId, Map<String, PlanetBuildingOverviewResponse> buildingOverview) {
+        sendIfProperPageIsOpened(userId, WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED, PLANET_PAGE_TYPE_GROUP, planetId, buildingOverview);
+    }
 
     public void planetQueueItemModified(UUID userId, UUID planetId, QueueResponse queueResponse) {
         if (isNull(queueResponse)) {

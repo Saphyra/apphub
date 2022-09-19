@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integraton.backend.skyxplore.game.planet.construction;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.PlanetBuildingDetailsValidator;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreBuildingActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreP
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetStorageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSurfaceActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
@@ -97,6 +98,12 @@ public class BuildNewBuildingTest extends BackEndTest {
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED)
             .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED + " event not arrived"));
 
+        Object buildingDetails = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED)
+            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED + " event not arrived"))
+            .getPayload();
+
+        PlanetBuildingDetailsValidator.verifyBuildingDetails(buildingDetails, Constants.SURFACE_TYPE_DESERT, Constants.DATA_ID_SOLAR_PANEL, 2, 1);
+
         //Cancel
         gameWsClient.clearMessages();
         modifiedSurface = SkyXploreBuildingActions.cancelConstruction(language, accessTokenId, planetId, modifiedSurface.getBuilding().getBuildingId());
@@ -120,12 +127,11 @@ public class BuildNewBuildingTest extends BackEndTest {
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED)
             .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED + " event not arrived"));
 
-        //Terraformation in progress
-        SkyXploreSurfaceActions.getTerraformResponse(language, accessTokenId, planetId, emptyDesertSurfaceId, Constants.SURFACE_TYPE_LAKE);
+        buildingDetails = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED)
+            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED + " event not arrived"))
+            .getPayload();
 
-        Response terraformationInProgressResponse = SkyXploreBuildingActions.getConstructNewBuildingResponse(language, accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
-
-        ResponseValidator.verifyErrorResponse(language, terraformationInProgressResponse, 409, ErrorCode.ALREADY_EXISTS);
+        PlanetBuildingDetailsValidator.verifyBuildingDetails(buildingDetails, Constants.SURFACE_TYPE_DESERT, Constants.DATA_ID_SOLAR_PANEL, 1, 1);
     }
 
     @Test(groups = "skyxplore")
@@ -150,12 +156,20 @@ public class BuildNewBuildingTest extends BackEndTest {
         SurfaceResponse modifiedSurface = SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, surfaceId, Constants.DATA_ID_CAMP);
         assertThat(modifiedSurface.getBuilding()).isNotNull();
 
+        gameWsClient.clearMessages();
+
         SkyXploreGameActions.setPaused(language, accessTokenId, false);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not started"));
 
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED, 120, webSocketEvent -> UUID.fromString(webSocketEvent.getPayload().toString()).equals(modifiedSurface.getBuilding().getConstruction().getConstructionId()))
             .orElseThrow(() -> new RuntimeException("Construction is not finished."));
+
+        Object buildingDetails = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED)
+            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED + " event not arrived"))
+            .getPayload();
+
+        PlanetBuildingDetailsValidator.verifyBuildingDetails(buildingDetails, Constants.SURFACE_TYPE_FOREST, Constants.DATA_ID_CAMP, 2, 2);
     }
 
     private SurfaceResponse findBySurfaceId(Language language, UUID accessTokenId, UUID planetId, UUID surfaceId) {
