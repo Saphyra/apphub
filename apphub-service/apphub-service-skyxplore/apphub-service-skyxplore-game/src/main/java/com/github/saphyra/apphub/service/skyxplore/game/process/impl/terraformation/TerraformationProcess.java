@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction;
+package com.github.saphyra.apphub.service.skyxplore.game.process.impl.terraformation;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
@@ -8,10 +8,10 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContex
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.PriorityType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.ProductionOrderProcessFactoryForConstruction;
@@ -30,7 +30,7 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
-public class ConstructionProcess implements Process {
+public class TerraformationProcess implements Process {
     @Getter
     @NonNull
     private final UUID processId;
@@ -44,25 +44,25 @@ public class ConstructionProcess implements Process {
     @NonNull
     private final Planet planet;
     @NonNull
-    private final Building building;
+    private final Surface surface;
     @NonNull
-    private final Construction construction;
+    private final Construction terraformation;
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
 
     @Override
     public UUID getExternalReference() {
-        return construction.getConstructionId();
+        return terraformation.getConstructionId();
     }
 
     @Override
     public int getPriority() {
-        return planet.getPriorities().get(PriorityType.CONSTRUCTION) * construction.getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
+        return planet.getPriorities().get(PriorityType.CONSTRUCTION) * terraformation.getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
     @Override
     public ProcessType getType() {
-        return ProcessType.CONSTRUCTION;
+        return ProcessType.TERRAFORMATION;
     }
 
     @Override
@@ -86,8 +86,8 @@ public class ConstructionProcess implements Process {
         if (workProcesses.isEmpty()) {
             createRequestWorkProcesses(syncCache);
         } else if (workProcesses.stream().allMatch(process -> process.getStatus() == ProcessStatus.DONE)) {
-            applicationContextProxy.getBean(FinishConstructionService.class)
-                .finishConstruction(syncCache, game, planet, building);
+            applicationContextProxy.getBean(FinishTerraformationService.class)
+                .finishTerraformation(syncCache, game, planet, surface);
 
             status = ProcessStatus.DONE;
         } else {
@@ -104,9 +104,9 @@ public class ConstructionProcess implements Process {
 
     private void createRequestWorkProcesses(SyncCache syncCache) {
         applicationContextProxy.getBean(UseAllocatedResourceService.class)
-            .resolveAllocations(syncCache, game.getGameId(), planet, construction.getConstructionId());
-        List<RequestWorkProcess> requestWorkProcesses = applicationContextProxy.getBean(RequestWorkProcessFactoryForConstruction.class)
-            .createRequestWorkProcesses(processId, game, planet, building);
+            .resolveAllocations(syncCache, game.getGameId(), planet, terraformation.getConstructionId());
+        List<RequestWorkProcess> requestWorkProcesses = applicationContextProxy.getBean(RequestWorkProcessFactoryForTerraformation.class)
+            .createRequestWorkProcesses(processId, game, planet, surface);
 
         game.getProcesses()
             .addAll(requestWorkProcesses);
@@ -120,7 +120,7 @@ public class ConstructionProcess implements Process {
         log.info("Creating ProductionOrderProcesses...");
 
         applicationContextProxy.getBean(ProductionOrderProcessFactoryForConstruction.class)
-            .createProductionOrderProcesses(processId, game, planet, construction)
+            .createProductionOrderProcesses(processId, game, planet, terraformation)
             .forEach(productionOrderProcess -> {
                 game.getProcesses().add(productionOrderProcess);
                 syncCache.saveGameItem(productionOrderProcess.toModel());

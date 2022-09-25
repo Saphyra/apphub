@@ -31,7 +31,7 @@ public class TerraformationQueueTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
     @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
-    public void constructionQueueCrud(Language language) {
+    public void terraformationQueueCrud(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData1);

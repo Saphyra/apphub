@@ -2,11 +2,12 @@
   {
     "surfaceType": "concrete",
     "constructionRequirements": {
-      "requiredWorkPoints": 20,
+      "requiredWorkPoints": 1000,
+      "parallelWorkers": 2,
       "requiredResources": {
-        "stone": 17,
-        "water": 21,
-        "energy": 39
+        "stone": 200,
+        "water": 200,
+        "energy": 200
       }
     }
   },

@@ -15,12 +15,15 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.terraformation.TerraformationProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.terraformation.TerraformationProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
@@ -94,6 +97,9 @@ public class TerraformationServiceTest {
     @Mock
     private PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
 
+    @Mock
+    private TerraformationProcessFactory terraformationProcessFactory;
+
     @InjectMocks
     private TerraformationService underTest;
 
@@ -134,6 +140,12 @@ public class TerraformationServiceTest {
 
     @Mock
     private PlanetBuildingOverviewResponse planetBuildingOverviewResponse;
+
+    @Mock
+    private TerraformationProcess terraformationProcess;
+
+    @Mock
+    private Processes processes;
 
     @Before
     public void setUp() {
@@ -204,6 +216,8 @@ public class TerraformationServiceTest {
         given(queueItemToResponseConverter.convert(queueItem, planet)).willReturn(queueResponse);
         given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
         given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
+        given(terraformationProcessFactory.create(game, planet, surface)).willReturn(terraformationProcess);
+        given(game.getProcesses()).willReturn(processes);
 
         SurfaceResponse result = underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name());
 
@@ -214,5 +228,6 @@ public class TerraformationServiceTest {
         verify(gameDataProxy).saveItem(constructionModel);
         verify(messageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);
         verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
+        verify(processes).add(terraformationProcess);
     }
 }

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction;
+package com.github.saphyra.apphub.service.skyxplore.game.process.impl;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class ProductionOrderProcessFactoryForConstruction {
+public class ProductionOrderProcessFactoryForConstruction {
     private final ProductionOrderProcessFactory productionOrderProcessFactory;
 
-    List<ProductionOrderProcess> createProductionOrderProcesses(UUID processId, Game game, Planet planet, Construction construction) {
+    public List<ProductionOrderProcess> createProductionOrderProcesses(UUID processId, Game game, Planet planet, Construction construction) {
         log.info("Creating ProductionOrderProcesses...");
 
         return planet.getStorageDetails()

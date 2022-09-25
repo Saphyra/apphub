@@ -20,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -67,21 +68,25 @@ public class RequestWorkProcessFactoryTest {
     public void create() throws NoSuchFieldException, IllegalAccessException {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
 
-        RequestWorkProcess result = underTest.create(EXTERNAL_REFERENCE, game, planet, BUILDING_DATA_ID, SkillType.DOCTORING, REQUIRED_WORK_POINTS, RequestWorkProcessType.CONSTRUCTION, TARGET_ID);
+        List<RequestWorkProcess> result = underTest.create(game, EXTERNAL_REFERENCE, planet, TARGET_ID, RequestWorkProcessType.CONSTRUCTION, SkillType.DOCTORING, REQUIRED_WORK_POINTS, 1);
 
-        assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
-        assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);
-        assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
-        assertThat((Game) ReflectionUtils.getFieldValue(result, "game")).isEqualTo(game);
-        assertThat((Planet) ReflectionUtils.getFieldValue(result, "planet")).isEqualTo(planet);
-        assertThat((String) ReflectionUtils.getFieldValue(result, "buildingDataId")).isEqualTo(BUILDING_DATA_ID);
-        assertThat((SkillType) ReflectionUtils.getFieldValue(result, "skillType")).isEqualTo(SkillType.DOCTORING);
-        assertThat((Integer) ReflectionUtils.getFieldValue(result, "requiredWorkPoints")).isEqualTo(REQUIRED_WORK_POINTS);
-        assertThat((UUID) ReflectionUtils.getFieldValue(result, "targetId")).isEqualTo(TARGET_ID);
-        assertThat((RequestWorkProcessType) ReflectionUtils.getFieldValue(result, "requestWorkProcessType")).isEqualTo(RequestWorkProcessType.CONSTRUCTION);
-        assertThat((ApplicationContextProxy) ReflectionUtils.getFieldValue(result, "applicationContextProxy")).isEqualTo(applicationContextProxy);
-        assertThat((Integer) ReflectionUtils.getFieldValue(result, "cycle")).isEqualTo(0);
-        assertThat((Integer) ReflectionUtils.getFieldValue(result, "completedWorkPoints")).isEqualTo(0);
+        assertThat(result).hasSize(1);
+
+        RequestWorkProcess process = result.get(0);
+
+        assertThat(process.getProcessId()).isEqualTo(PROCESS_ID);
+        assertThat(process.getStatus()).isEqualTo(ProcessStatus.CREATED);
+        assertThat(process.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
+        assertThat((Game) ReflectionUtils.getFieldValue(process, "game")).isEqualTo(game);
+        assertThat((Planet) ReflectionUtils.getFieldValue(process, "planet")).isEqualTo(planet);
+        assertThat((String) ReflectionUtils.getFieldValue(process, "buildingDataId")).isNull();
+        assertThat((SkillType) ReflectionUtils.getFieldValue(process, "skillType")).isEqualTo(SkillType.DOCTORING);
+        assertThat((Integer) ReflectionUtils.getFieldValue(process, "requiredWorkPoints")).isEqualTo(REQUIRED_WORK_POINTS);
+        assertThat((UUID) ReflectionUtils.getFieldValue(process, "targetId")).isEqualTo(TARGET_ID);
+        assertThat((RequestWorkProcessType) ReflectionUtils.getFieldValue(process, "requestWorkProcessType")).isEqualTo(RequestWorkProcessType.CONSTRUCTION);
+        assertThat((ApplicationContextProxy) ReflectionUtils.getFieldValue(process, "applicationContextProxy")).isEqualTo(applicationContextProxy);
+        assertThat((Integer) ReflectionUtils.getFieldValue(process, "cycle")).isEqualTo(0);
+        assertThat((Integer) ReflectionUtils.getFieldValue(process, "completedWorkPoints")).isEqualTo(0);
     }
 
     @Test

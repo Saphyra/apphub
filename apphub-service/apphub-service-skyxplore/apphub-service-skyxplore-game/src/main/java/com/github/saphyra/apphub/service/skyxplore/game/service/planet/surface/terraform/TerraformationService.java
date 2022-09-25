@@ -12,9 +12,12 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.Terraf
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.terraformation.TerraformationProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.process.impl.terraformation.TerraformationProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
@@ -48,6 +51,7 @@ class TerraformationService {
     private final QueueItemToResponseConverter queueItemToResponseConverter;
     private final WsMessageSender messageSender;
     private final PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
+    private final TerraformationProcessFactory terraformationProcessFactory;
 
     SurfaceResponse terraform(UUID userId, UUID planetId, UUID surfaceId, String surfaceTypeString) {
         SurfaceType surfaceType = ValidationUtil.convertToEnumChecked(surfaceTypeString, SurfaceType::valueOf, "surfaceType");
@@ -85,8 +89,14 @@ class TerraformationService {
 
         QueueResponse queueResponse = queueItemToResponseConverter.convert(surfaceToQueueItemConverter.convert(surface), planet);
         messageSender.planetQueueItemModified(userId, planetId, queueResponse);
-
         messageSender.planetBuildingDetailsModified(userId, planetId, planetBuildingOverviewQueryService.getBuildingOverview(planet));
+
+        TerraformationProcess constructionProcess = terraformationProcessFactory.create(game, planet, surface);
+
+        Processes processes = game.getProcesses();
+        synchronized (processes) {
+            processes.add(constructionProcess);
+        }
 
         return surfaceToResponseConverter.convert(surface);
     }

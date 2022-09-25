@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -32,7 +33,7 @@ public class SurfaceToModelConverter {
 
     private List<GameItem> convertDeep(Surface surface, Game game) {
         List<GameItem> result = new ArrayList<>();
-        result.add(convert(surface, game));
+        result.add(convert(surface, game.getGameId()));
         result.add(surface.getCoordinate());
         if (!isNull(surface.getBuilding())) {
             result.add(buildingConverter.convert(surface.getBuilding(), game.getGameId()));
@@ -43,10 +44,10 @@ public class SurfaceToModelConverter {
         return result;
     }
 
-    private SurfaceModel convert(Surface surface, Game game) {
+    public SurfaceModel convert(Surface surface, UUID gameId) {
         SurfaceModel model = new SurfaceModel();
         model.setId(surface.getSurfaceId());
-        model.setGameId(game.getGameId());
+        model.setGameId(gameId);
         model.setType(GameItemType.SURFACE);
         model.setPlanetId(surface.getPlanetId());
         model.setSurfaceType(surface.getSurfaceType().name());

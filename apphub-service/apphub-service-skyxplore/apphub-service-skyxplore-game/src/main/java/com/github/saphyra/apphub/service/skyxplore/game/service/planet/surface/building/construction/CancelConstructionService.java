@@ -58,8 +58,7 @@ public class CancelConstructionService {
             .filter(s -> s.getBuilding().getConstruction().getConstructionId().equals(constructionId))
             .findFirst()
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Construction not found with id " + constructionId));
-        Building building = surface
-            .getBuilding();
+        Building building = surface.getBuilding();
 
         SurfaceResponse surfaceResponse = processCancellation(game, planet, surface, building);
 
@@ -72,8 +71,7 @@ public class CancelConstructionService {
             .findByOwnerAndPlanetIdValidated(userId, planetId);
         Surface surface = planet.getSurfaces()
             .findByBuildingIdValidated(buildingId);
-        Building building = surface
-            .getBuilding();
+        Building building = surface.getBuilding();
 
         return processCancellation(game, planet, surface, building);
     }

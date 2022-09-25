@@ -27,6 +27,11 @@ public class CollectionUtils {
     @SafeVarargs
     public static <T> List<T> toList(T... elements) {
         List<T> list = new ArrayList<>();
+        return toList(list, elements);
+    }
+
+    @SafeVarargs
+    public static <L extends List<T>, T> L toList(L list, T... elements) {
         Collections.addAll(list, elements);
         return list;
     }
