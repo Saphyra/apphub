@@ -270,6 +270,30 @@
         "key": "innerHTML",
         "message": "Játék folytatása"
       }
+    ],
+    "planet-priorities-construction-wrapper": [
+      {
+        "key": "title",
+        "message": "Épületek építése / fejlesztése, terraformálás"
+      }
+    ],
+    "planet-priorities-manufacturing-wrapper": [
+      {
+        "key": "title",
+        "message": "Nyersanyagok feldolgozása a gyárakban"
+      }
+    ],
+    "planet-priorities-extraction-wrapper": [
+      {
+        "key": "title",
+        "message": "Nyersanyagtermelés (pl. víz, energia, ércek, stb.)"
+      }
+    ],
+    "planet-priorities-well-being-wrapper": [
+      {
+        "key": "title",
+        "message": "Mikor menjenek a városlakók enni és pihenni"
+      }
     ]
   },
   "additionalContent": {
