@@ -1,19 +1,9 @@
 (function InvitationController(){
+    pageLoader.addLoader(addWsHandlers, "Add WebSocket event handlers for Lobby invitation");
+
     const invitations = {};
 
     window.invitationController = new function(){
-        this.createHandlers = function(){
-            return [
-                new WebSocketEventHandler(
-                    function(eventName){return eventName == "invitation"},
-                    displayInvitation
-                ),
-                new WebSocketEventHandler(
-                    function(eventName){return eventName == "skyxplore-main-menu-cancel-invitation"},
-                    rejectInvitation
-                )
-            ]
-        }
     }
 
     function displayInvitation(invitation){
@@ -76,4 +66,18 @@
             }
         dao.sendRequestAsync(request);
     }
+
+        function addWsHandlers(){
+            wsConnection.addHandler(
+                new WebSocketEventHandler(
+                    function(eventName){return eventName == "invitation"},
+                    displayInvitation
+                )
+            ).addHandler(
+                new WebSocketEventHandler(
+                    function(eventName){return eventName == "skyxplore-main-menu-cancel-invitation"},
+                    rejectInvitation
+                )
+            );
+        }
 })();

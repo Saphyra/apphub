@@ -270,6 +270,30 @@
         "key": "innerHTML",
         "message": "Resume game"
       }
+    ],
+    "planet-priorities-construction-wrapper": [
+      {
+        "key": "title",
+        "message": "Construction or upgrade of buildings, terraforming"
+      }
+    ],
+    "planet-priorities-manufacturing-wrapper": [
+      {
+        "key": "title",
+        "message": "Processing raw materials in factories"
+      }
+    ],
+    "planet-priorities-extraction-wrapper": [
+      {
+        "key": "title",
+        "message": "Producing raw materials, like water, energy, ores, etc."
+      }
+    ],
+    "planet-priorities-well-being-wrapper": [
+      {
+        "key": "title",
+        "message": "When to send the citizens eating / resting"
+      }
     ]
   },
   "additionalContent": {

@@ -11,10 +11,10 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class FriendshipFactory {
+public class FriendshipFactory {
     private final IdGenerator idGenerator;
 
-    Friendship create(UUID friendId, UUID senderId) {
+    public Friendship create(UUID friendId, UUID senderId) {
         return Friendship.builder()
             .friendshipId(idGenerator.randomUuid())
             .friend1(friendId)

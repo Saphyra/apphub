@@ -65,7 +65,7 @@ public class FriendRequestCancelServiceTest {
     public void cancelFriendRequest() {
         given(friendRequestDao.findById(FRIEND_REQUEST_ID)).willReturn(Optional.of(friendRequest));
         given(friendRequest.getFriendId()).willReturn(USER_ID);
-        given(friendRequest.getSenderId()).willReturn(SENDER_ID);
+        given(friendRequest.getOtherId(USER_ID)).willReturn(SENDER_ID);
 
         underTest.cancelFriendRequest(USER_ID, FRIEND_REQUEST_ID);
 
@@ -74,6 +74,7 @@ public class FriendRequestCancelServiceTest {
         verify(messageSenderProxy).sendToMainMenu(argumentCaptor.capture());
         WebSocketMessage message = argumentCaptor.getValue();
         assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_DELETED);
-        assertThat(message.getRecipients()).containsExactlyInAnyOrder(SENDER_ID, USER_ID);
+        assertThat(message.getRecipients()).containsExactlyInAnyOrder(SENDER_ID);
+        assertThat(message.getEvent().getPayload()).isEqualTo(FRIEND_REQUEST_ID);
     }
 }

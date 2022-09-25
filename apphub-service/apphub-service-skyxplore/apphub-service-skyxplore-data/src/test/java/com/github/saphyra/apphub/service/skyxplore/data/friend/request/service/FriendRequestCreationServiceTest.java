@@ -2,10 +2,13 @@ package com.github.saphyra.apphub.service.skyxplore.data.friend.request.service;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.api.skyxplore.response.IncomingFriendRequestResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.SentFriendRequestResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreCharacter;
 import com.github.saphyra.apphub.service.skyxplore.data.common.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.data.friend.converter.FriendRequestToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.Friendship;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.FriendshipDao;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequest;
@@ -47,6 +50,9 @@ public class FriendRequestCreationServiceTest {
     @Mock
     private MessageSenderProxy messageSenderProxy;
 
+    @Mock
+    private FriendRequestToResponseConverter friendRequestToResponseConverter;
+
     @InjectMocks
     private FriendRequestCreationService underTest;
 
@@ -58,6 +64,12 @@ public class FriendRequestCreationServiceTest {
 
     @Mock
     private Friendship friendship;
+
+    @Mock
+    private SentFriendRequestResponse sentFriendRequestResponse;
+
+    @Mock
+    private IncomingFriendRequestResponse incomingFriendRequestResponse;
 
     @Test
     public void characterNotFound() {
@@ -95,14 +107,19 @@ public class FriendRequestCreationServiceTest {
         given(friendRequestDao.findBySenderIdAndFriendId(SENDER_ID, FRIEND_ID)).willReturn(Optional.empty());
         given(friendshipDao.findByFriendIds(SENDER_ID, FRIEND_ID)).willReturn(Optional.empty());
         given(friendRequestFactory.create(SENDER_ID, FRIEND_ID)).willReturn(friendRequest);
+        given(friendRequestToResponseConverter.toSentFriendRequest(friendRequest)).willReturn(sentFriendRequestResponse);
+        given(friendRequestToResponseConverter.toIncomingFriendRequest(friendRequest)).willReturn(incomingFriendRequestResponse);
 
-        underTest.createFriendRequest(SENDER_ID, FRIEND_ID);
+        SentFriendRequestResponse result = underTest.createFriendRequest(SENDER_ID, FRIEND_ID);
 
         verify(friendRequestDao).save(friendRequest);
         ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
         verify(messageSenderProxy).sendToMainMenu(argumentCaptor.capture());
         WebSocketMessage message = argumentCaptor.getValue();
         assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_SENT);
-        assertThat(message.getRecipients()).containsExactlyInAnyOrder(FRIEND_ID, SENDER_ID);
+        assertThat(message.getRecipients()).containsExactlyInAnyOrder(FRIEND_ID);
+        assertThat(message.getEvent().getPayload()).isEqualTo(incomingFriendRequestResponse);
+
+        assertThat(result).isEqualTo(sentFriendRequestResponse);
     }
 }

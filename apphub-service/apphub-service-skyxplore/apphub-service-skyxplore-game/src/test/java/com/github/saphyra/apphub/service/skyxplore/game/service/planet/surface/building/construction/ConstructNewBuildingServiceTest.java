@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
@@ -32,6 +33,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.Que
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction.BuildingConstructionToQueueItemConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
@@ -105,6 +107,9 @@ public class ConstructNewBuildingServiceTest {
     @Mock
     private ConstructionProcessFactory constructionProcessFactory;
 
+    @Mock
+    private PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
+
     @InjectMocks
     private ConstructNewBuildingService underTest;
 
@@ -155,6 +160,9 @@ public class ConstructNewBuildingServiceTest {
 
     @Mock
     private ProcessModel processModel;
+
+    @Mock
+    private PlanetBuildingOverviewResponse planetBuildingOverviewResponse;
 
     @Before
     public void setUp() {
@@ -220,6 +228,7 @@ public class ConstructNewBuildingServiceTest {
         given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
         given(buildingConstructionToQueueItemConverter.convert(building)).willReturn(queueItem);
         given(queueItemToResponseConverter.convert(queueItem, planet)).willReturn(queueResponse);
+        given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
 
         given(constructionProcessFactory.create(game, planet, building)).willReturn(constructionProcess);
         given(game.getProcesses()).willReturn(processes);
@@ -234,6 +243,7 @@ public class ConstructNewBuildingServiceTest {
         verify(resourceAllocationService).processResourceRequirements(GAME_ID, planet, LocationType.PLANET, CONSTRUCTION_ID, Collections.emptyMap());
         verify(gameDataProxy).saveItem(buildingModel, constructionModel, processModel);
         verify(messageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);
+        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
         verify(processes).add(constructionProcess);
     }
 }

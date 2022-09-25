@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service;
+package com.github.saphyra.apphub.service.skyxplore.data.friend.converter;
 
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.Friendship;
@@ -12,11 +12,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 class FriendNameQueryService {
-    private final FriendIdExtractor friendIdExtractor;
     private final CharacterDao characterDao;
 
     String getFriendName(Friendship friendship, UUID userId) {
-        UUID friendId = friendIdExtractor.getFriendId(friendship, userId);
-        return characterDao.findByIdValidated(friendId).getName();
+        return characterDao.findByIdValidated(friendship.getOtherId(userId)).getName();
     }
 }

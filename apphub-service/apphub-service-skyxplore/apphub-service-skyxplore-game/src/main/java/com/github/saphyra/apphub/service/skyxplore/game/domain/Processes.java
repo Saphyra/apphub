@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
@@ -11,7 +12,14 @@ import java.util.UUID;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class Processes extends Vector<Process> {
+    @Override
+    public synchronized boolean add(Process process) {
+        log.info("Adding process with id={}, externalReference={} and type={}", process.getProcessId(), process.getExternalReference(), process.getType());
+        return super.add(process);
+    }
+
     public synchronized Process findByIdValidated(UUID processId) {
         return stream()
             .filter(process -> process.getProcessId().equals(processId))
@@ -20,6 +28,7 @@ public class Processes extends Vector<Process> {
     }
 
     public synchronized Process findByExternalReferenceAndTypeValidated(UUID externalReference, ProcessType type) {
+        log.info("Looking for process with externalReference {} and type {}", elementData, type);
         List<Process> processes = getByExternalReferenceAndType(externalReference, type);
 
         if (processes.size() > 1) {

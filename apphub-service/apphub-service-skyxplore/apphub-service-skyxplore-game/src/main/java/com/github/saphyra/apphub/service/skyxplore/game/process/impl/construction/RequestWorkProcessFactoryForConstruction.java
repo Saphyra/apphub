@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,27 +30,15 @@ class RequestWorkProcessFactoryForConstruction {
             .get(building.getLevel() + 1);
         log.info("{}", constructionRequirements);
 
-        int workPointsPerWorker = constructionRequirements.getRequiredWorkPoints() / constructionRequirements.getParallelWorkers();
-        log.info("WorkPointsPerWorker: {}", workPointsPerWorker);
-
-        List<RequestWorkProcess> result = new ArrayList<>();
-
-        for (int i = 0; i < constructionRequirements.getParallelWorkers(); i++) {
-            RequestWorkProcess requestWorkProcess = requestWorkProcessFactory.create(
-                processId,
-                game,
-                planet,
-                null,
-                SkillType.BUILDING,
-                workPointsPerWorker,
-                RequestWorkProcessType.CONSTRUCTION,
-                building.getConstruction().getConstructionId()
-            );
-            log.info("{} created.", requestWorkProcess);
-            result.add(requestWorkProcess);
-        }
-        log.info("RequestWorkProcesses created.");
-
-        return result;
+        return requestWorkProcessFactory.create(
+            game,
+            processId,
+            planet,
+            building.getConstruction().getConstructionId(),
+            RequestWorkProcessType.CONSTRUCTION,
+            SkillType.BUILDING,
+            constructionRequirements.getRequiredWorkPoints(),
+            constructionRequirements.getParallelWorkers()
+        );
     }
 }

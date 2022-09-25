@@ -90,9 +90,11 @@ public class FriendDataControllerImplTest {
 
     @Test
     public void createFriendRequest() {
-        underTest.createFriendRequest(new OneParamRequest<>(FRIEND_ID), accessTokenHeader);
+        given(friendRequestCreationService.createFriendRequest(USER_ID, FRIEND_ID)).willReturn(sentFriendRequestResponse);
 
-        verify(friendRequestCreationService).createFriendRequest(USER_ID, FRIEND_ID);
+        SentFriendRequestResponse result = underTest.createFriendRequest(new OneParamRequest<>(FRIEND_ID), accessTokenHeader);
+
+        assertThat(result).isEqualTo(sentFriendRequestResponse);
     }
 
     @Test
@@ -122,9 +124,11 @@ public class FriendDataControllerImplTest {
 
     @Test
     public void acceptFriendRequest() {
-        underTest.acceptFriendRequest(FRIEND_REQUEST_ID, accessTokenHeader);
+        given(friendRequestAcceptService.accept(USER_ID, FRIEND_REQUEST_ID)).willReturn(friendshipResponse);
 
-        verify(friendRequestAcceptService).accept(USER_ID, FRIEND_REQUEST_ID);
+        FriendshipResponse result = underTest.acceptFriendRequest(FRIEND_REQUEST_ID, accessTokenHeader);
+
+        assertThat(result).isEqualTo(friendshipResponse);
     }
 
     @Test

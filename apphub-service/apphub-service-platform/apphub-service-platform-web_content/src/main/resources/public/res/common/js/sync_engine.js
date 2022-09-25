@@ -1,4 +1,4 @@
-function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, idPref, aUpdate, fMethod){
+function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, idPref, aUpdate, fMethod, ieMethod){
     logService.logToConsole("Creating new SyncEngine with containerId: " + cId + "and idPrefix: " + idPref);
 
     let nodeCache = {};
@@ -12,6 +12,7 @@ function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, 
     const sortMethod = sMethod || function(a, b){return 0;};
     const filterMethod = fMethod || throwException("IllegalArgument", "filterMethod is not defined")
     let order = getOrder();
+    const ifEmptyMethod = ieMethod;
 
     if(Object.keys(cache).length > 0){
         render();
@@ -71,10 +72,14 @@ function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, 
     }
 
     this.remove = function(key){
-        document.getElementById(containerId).removeChild(document.getElementById(createId(key)));
+        if(Object.keys(cache).indexOf(key) < 0){
+            return;
+        }
 
         delete cache[key];
         delete nodeCache[key];
+
+        render();
     }
 
     this.reload = function(){
@@ -100,9 +105,15 @@ function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, 
     this.render = render;
 
     function render(order){
-        order = order || getOrder();
         const container = document.getElementById(containerId);
             container.innerHTML = "";
+
+        if(Object.keys(cache).length == 0 && hasValue(ifEmptyMethod)){
+            container.appendChild(ifEmptyMethod());
+            return;
+        }
+
+        order = order || getOrder();
 
             new Stream(order)
                 .filter((key) => {return filterMethod(cache[key])})
@@ -148,6 +159,7 @@ function SyncEngineBuilder(){
     this.filterMethod = function(a, b){
         return true;
     }
+    this.ifEmptyMethod = null;
 
     this.withContainerId = function(cId){
         this.containerId = cId;
@@ -194,6 +206,11 @@ function SyncEngineBuilder(){
         return this;
     }
 
+    this.withIfEmptyMethod = function(method){
+        this.ifEmptyMethod = method;
+        return this;
+    }
+
     this.build = function(){
         return new  SyncEngine(
             this.containerId,
@@ -204,7 +221,8 @@ function SyncEngineBuilder(){
             this.initialValues,
             this.idPrefix,
             this.allowUpdate,
-            this.filterMethod
+            this.filterMethod,
+            this.ifEmptyMethod
         );
     }
 }

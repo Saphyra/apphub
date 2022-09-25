@@ -37,6 +37,6 @@ class TerraformationQueueService implements QueueService {
 
     @Override
     public void cancel(UUID userId, UUID planetId, UUID itemId) {
-        cancelTerraformationService.cancelTerraformationOfConstruction(userId, planetId, itemId);
+        cancelTerraformationService.cancelTerraformationQueueItem(userId, planetId, itemId);
     }
 }

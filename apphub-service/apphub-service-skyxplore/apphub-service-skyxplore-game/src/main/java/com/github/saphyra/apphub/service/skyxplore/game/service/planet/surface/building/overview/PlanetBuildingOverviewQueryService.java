@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +20,14 @@ public class PlanetBuildingOverviewQueryService {
     private final PlanetBuildingOverviewMapper overviewMapper;
 
     public Map<String, PlanetBuildingOverviewResponse> getBuildingOverview(UUID userId, UUID planetId) {
-        return gameDao.findByUserIdValidated(userId)
+        Planet planet = gameDao.findByUserIdValidated(userId)
             .getUniverse()
-            .findPlanetByIdValidated(planetId)
+            .findPlanetByIdValidated(planetId);
+        return getBuildingOverview(planet);
+    }
+
+    public Map<String, PlanetBuildingOverviewResponse> getBuildingOverview(Planet planet) {
+        return planet
             .getSurfaces()
             .values()
             .stream()

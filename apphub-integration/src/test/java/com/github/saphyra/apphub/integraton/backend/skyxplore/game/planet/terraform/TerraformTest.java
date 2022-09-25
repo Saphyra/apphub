@@ -1,12 +1,13 @@
 package com.github.saphyra.apphub.integraton.backend.skyxplore.game.planet.terraform;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSurfaceActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
@@ -105,6 +106,47 @@ public class TerraformTest extends BackEndTest {
             .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED + " event not arrived"));
 
         assertThat(findBySurfaceId(language, accessTokenId, planetId, emptySurfaceId).getTerraformation()).isNull();
+    }
+
+    @Test(groups = "skyxplore")
+    public void finishTerraformation() {
+        Language language = Language.HUNGARIAN;
+        RegistrationParameters userData1 = RegistrationParameters.validParameters();
+        SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, characterModel1);
+        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
+
+        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId, userId1))
+            .get(accessTokenId);
+
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId)
+            .getPlanetId();
+
+        WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
+
+        UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
+
+        SurfaceResponse modifiedSurface = SkyXploreSurfaceActions.terraform(language, accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
+
+        assertThat(modifiedSurface.getTerraformation()).isNotNull();
+
+        gameWsClient.clearMessages();
+
+        SkyXploreGameActions.setPaused(language, accessTokenId, false);
+
+        gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
+            .orElseThrow(() -> new RuntimeException("Game is not started"));
+
+        gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED, 120, webSocketEvent -> UUID.fromString(webSocketEvent.getPayload().toString()).equals(modifiedSurface.getTerraformation().getConstructionId()))
+            .orElseThrow(() -> new RuntimeException("Terraformation is not finished."));
+
+        SurfaceResponse surfaceResponse = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, 120, webSocketEvent -> isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getTerraformation()))
+            .orElseThrow(() -> new RuntimeException("Terraformation is not finished."))
+            .getPayloadAs(SurfaceResponse.class);
+
+        assertThat(surfaceResponse.getTerraformation()).isNull();
+        assertThat(surfaceResponse.getSurfaceType()).isEqualTo(Constants.SURFACE_TYPE_CONCRETE);
     }
 
     private SurfaceResponse findBySurfaceId(Language language, UUID accessTokenId, UUID planetId, UUID surfaceId) {

@@ -72,13 +72,15 @@ public class RequestWorkProcessFactoryForConstructionTest {
         given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.singleValueMap(LEVEL + 1, constructionRequirements));
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(constructionRequirements.getParallelWorkers()).willReturn(PARALLEL_WORKERS);
+
         given(building.getConstruction()).willReturn(construction);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
-        given(requestWorkProcessFactory.create(PROCESS_ID, game, planet, null, SkillType.BUILDING, REQUIRED_WORK_POINTS / PARALLEL_WORKERS, RequestWorkProcessType.CONSTRUCTION, CONSTRUCTION_ID))
-            .willReturn(requestWorkProcess);
+
+        given(requestWorkProcessFactory.create(game, PROCESS_ID, planet, CONSTRUCTION_ID, RequestWorkProcessType.CONSTRUCTION, SkillType.BUILDING, REQUIRED_WORK_POINTS, PARALLEL_WORKERS))
+            .willReturn(List.of(requestWorkProcess));
 
         List<RequestWorkProcess> result = underTest.createRequestWorkProcesses(PROCESS_ID, game, planet, building);
 
-        assertThat(result).containsExactly(requestWorkProcess, requestWorkProcess);
+        assertThat(result).containsExactly(requestWorkProcess);
     }
 }

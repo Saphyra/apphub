@@ -29,6 +29,7 @@ public class Constants {
     public final String SURFACE_TYPE_OIL_FIELD = "OIL_FIELD";
     public final String SURFACE_TYPE_LAKE = "LAKE";
     public final String SURFACE_TYPE_FOREST = "FOREST";
+    public final String SURFACE_TYPE_CONCRETE = "CONCRETE";
 
     //DataIds
     public final String DATA_ID_SOLAR_PANEL = "solar_panel";
