@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Objects;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
             .eventId(uuidConverter.convertDomain(domain.getEventId()))
             .userId(userId)
             .startDate(stringEncryptor.encryptEntity(domain.getStartDate().toString(), userId))
+            .time(stringEncryptor.encryptEntity(Optional.ofNullable(domain.getTime()).map(Objects::toString).orElse(null), userId))
             .repetitionType(domain.getRepetitionType())
             .repetitionData(stringEncryptor.encryptEntity(domain.getRepetitionData(), userId))
             .title(stringEncryptor.encryptEntity(domain.getTitle(), userId))
@@ -36,6 +40,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
             .eventId(uuidConverter.convertEntity(entity.getEventId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
             .startDate(LocalDate.parse(stringEncryptor.decryptEntity(entity.getStartDate(), entity.getUserId())))
+            .time(Optional.ofNullable(stringEncryptor.decryptEntity(entity.getTime(), entity.getUserId())).map(LocalTime::parse).orElse(null))
             .repetitionType(entity.getRepetitionType())
             .repetitionData(stringEncryptor.decryptEntity(entity.getRepetitionData(), entity.getUserId()))
             .title(stringEncryptor.decryptEntity(entity.getTitle(), entity.getUserId()))

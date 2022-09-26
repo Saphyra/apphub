@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -16,6 +17,7 @@ public class Event {
     private final UUID eventId;
     private final UUID userId;
     private final LocalDate startDate;
+    private final LocalTime time;
     private RepetitionType repetitionType;
     private String repetitionData;
     private String title;

@@ -25,4 +25,16 @@
 
         <addPrimaryKey schemaName="diary" tableName="event" columnNames="event_id" constraintName="event_pk"/>
     </changeSet>
+
+    <changeSet id="add-column-time-to-event" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="diary" tableName="event" columnName="time"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="diary" tableName="event">
+            <column name="time" type="text"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

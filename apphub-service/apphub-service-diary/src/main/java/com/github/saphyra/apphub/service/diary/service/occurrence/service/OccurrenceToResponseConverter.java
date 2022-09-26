@@ -28,6 +28,7 @@ public class OccurrenceToResponseConverter {
 
         return OccurrenceResponse.builder()
             .date(occurrence.getDate())
+            .time(occurrence.getTime())
             .occurrenceId(occurrence.getOccurrenceId())
             .eventId(occurrence.getEventId())
             .status(occurrence.getStatus().name())

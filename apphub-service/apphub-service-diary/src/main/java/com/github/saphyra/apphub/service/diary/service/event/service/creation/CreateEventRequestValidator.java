@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import static java.util.Objects.isNull;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +27,11 @@ class CreateEventRequestValidator {
         ValidationUtil.notNull(request.getDate(), "date");
 
         ValidationUtil.notNull(request.getRepetitionType(), "repetitionType");
+
+        if (!isNull(request.getHours()) || !isNull(request.getMinutes())) {
+            ValidationUtil.betweenInclusive(request.getHours(), 0, 23, "hours");
+            ValidationUtil.betweenInclusive(request.getMinutes(), 0, 59, "minutes");
+        }
 
         switch (request.getRepetitionType()) {
             case DAYS_OF_WEEK:

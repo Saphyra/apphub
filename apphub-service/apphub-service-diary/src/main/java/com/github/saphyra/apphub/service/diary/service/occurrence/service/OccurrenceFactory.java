@@ -30,6 +30,7 @@ public class OccurrenceFactory {
             .eventId(event.getEventId())
             .userId(event.getUserId())
             .date(date)
+            .time(event.getTime())
             .status(status)
             .build();
     }

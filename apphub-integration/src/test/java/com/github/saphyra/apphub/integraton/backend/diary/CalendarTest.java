@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CalendarControllerTest extends BackEndTest {
+public class CalendarTest extends BackEndTest {
     private static final LocalDate DATE = LocalDate.parse("2022-07-01");
 
     @Test(groups = "diary")

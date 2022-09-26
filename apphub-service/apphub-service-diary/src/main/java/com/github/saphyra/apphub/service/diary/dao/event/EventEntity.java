@@ -23,6 +23,7 @@ class EventEntity {
     private String eventId;
     private String userId;
     private String startDate;
+    private String time;
     @Enumerated(EnumType.STRING)
     private RepetitionType repetitionType;
     private String repetitionData;

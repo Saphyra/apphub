@@ -19,6 +19,7 @@ import org.testng.annotations.Test;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CreateEventCrudTest extends BackEndTest {
+public class EventCrudTest extends BackEndTest {
     private static final LocalDate CURRENT_DATE = LocalDate.now(ZoneOffset.UTC);
     private static final LocalDate REFERENCE_DATE_DAY = CURRENT_DATE.plusMonths(1);
     private static final LocalDate REFERENCE_DATE_MONTH = CURRENT_DATE;
@@ -35,6 +36,8 @@ public class CreateEventCrudTest extends BackEndTest {
     private static final String TITLE = "title";
     private static final String CONTENT = "content";
     public static final int REPETITION_DAYS = 3;
+    private static final Integer HOURS = 23;
+    private static final Integer MINUTES = 24;
 
     @Test(dataProvider = "languageDataProvider", groups = "diary")
     public void createEvent_validation(Language language) {
@@ -159,6 +162,108 @@ public class CreateEventCrudTest extends BackEndTest {
         Response zeroRepetitionTypeDaysResponse = EventActions.getCreateEventResponse(language, accessTokenId, zeroRepetitionTypeDaysRequest);
 
         ResponseValidator.verifyInvalidParam(language, zeroRepetitionTypeDaysResponse, "repetitionDays", "too low");
+
+        //Null minutes
+        CreateEventRequest nullMinutesRequest = CreateEventRequest.builder()
+            .referenceDate(ReferenceDate.builder()
+                .day(REFERENCE_DATE_DAY)
+                .month(REFERENCE_DATE_MONTH)
+                .build())
+            .date(EVENT_DATE)
+            .title(TITLE)
+            .repetitionType(RepetitionType.ONE_TIME)
+            .hours(1)
+            .minutes(null)
+            .build();
+
+        Response nullMinutesResponse = EventActions.getCreateEventResponse(language, accessTokenId, nullMinutesRequest);
+
+        ResponseValidator.verifyInvalidParam(language, nullMinutesResponse, "minutes", "must not be null");
+
+        //Minutes too low
+        CreateEventRequest minutesTooLowRequest = CreateEventRequest.builder()
+            .referenceDate(ReferenceDate.builder()
+                .day(REFERENCE_DATE_DAY)
+                .month(REFERENCE_DATE_MONTH)
+                .build())
+            .date(EVENT_DATE)
+            .title(TITLE)
+            .repetitionType(RepetitionType.ONE_TIME)
+            .hours(1)
+            .minutes(-1)
+            .build();
+
+        Response minutesTooLowResponse = EventActions.getCreateEventResponse(language, accessTokenId, minutesTooLowRequest);
+
+        ResponseValidator.verifyInvalidParam(language, minutesTooLowResponse, "minutes", "too low");
+
+        //Minutes too low
+        CreateEventRequest minutesTooHighRequest = CreateEventRequest.builder()
+            .referenceDate(ReferenceDate.builder()
+                .day(REFERENCE_DATE_DAY)
+                .month(REFERENCE_DATE_MONTH)
+                .build())
+            .date(EVENT_DATE)
+            .title(TITLE)
+            .repetitionType(RepetitionType.ONE_TIME)
+            .hours(1)
+            .minutes(60)
+            .build();
+
+        Response minutesTooHighResponse = EventActions.getCreateEventResponse(language, accessTokenId, minutesTooHighRequest);
+
+        ResponseValidator.verifyInvalidParam(language, minutesTooHighResponse, "minutes", "too high");
+
+        //Null hours
+        CreateEventRequest nullHoursRequest = CreateEventRequest.builder()
+            .referenceDate(ReferenceDate.builder()
+                .day(REFERENCE_DATE_DAY)
+                .month(REFERENCE_DATE_MONTH)
+                .build())
+            .date(EVENT_DATE)
+            .title(TITLE)
+            .repetitionType(RepetitionType.ONE_TIME)
+            .hours(null)
+            .minutes(1)
+            .build();
+
+        Response nullHoursResponse = EventActions.getCreateEventResponse(language, accessTokenId, nullHoursRequest);
+
+        ResponseValidator.verifyInvalidParam(language, nullHoursResponse, "hours", "must not be null");
+
+        //Hours too low
+        CreateEventRequest hoursTooLowRequest = CreateEventRequest.builder()
+            .referenceDate(ReferenceDate.builder()
+                .day(REFERENCE_DATE_DAY)
+                .month(REFERENCE_DATE_MONTH)
+                .build())
+            .date(EVENT_DATE)
+            .title(TITLE)
+            .repetitionType(RepetitionType.ONE_TIME)
+            .hours(-1)
+            .minutes(1)
+            .build();
+
+        Response hoursTooLowResponse = EventActions.getCreateEventResponse(language, accessTokenId, hoursTooLowRequest);
+
+        ResponseValidator.verifyInvalidParam(language, hoursTooLowResponse, "hours", "too low");
+
+        //Hours too low
+        CreateEventRequest hoursTooHighRequest = CreateEventRequest.builder()
+            .referenceDate(ReferenceDate.builder()
+                .day(REFERENCE_DATE_DAY)
+                .month(REFERENCE_DATE_MONTH)
+                .build())
+            .date(EVENT_DATE)
+            .title(TITLE)
+            .repetitionType(RepetitionType.ONE_TIME)
+            .hours(24)
+            .minutes(1)
+            .build();
+
+        Response hoursTooHighResponse = EventActions.getCreateEventResponse(language, accessTokenId, hoursTooHighRequest);
+
+        ResponseValidator.verifyInvalidParam(language, hoursTooHighResponse, "hours", "too high");
     }
 
     @Test(groups = "diary")
@@ -176,6 +281,8 @@ public class CreateEventCrudTest extends BackEndTest {
             .title(TITLE)
             .content(CONTENT)
             .repetitionType(RepetitionType.ONE_TIME)
+            .hours(HOURS)
+            .minutes(MINUTES)
             .build();
 
         List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
@@ -190,6 +297,7 @@ public class CreateEventCrudTest extends BackEndTest {
                 assertThat(occurrenceResponse.getTitle()).isEqualTo(TITLE);
                 assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
                 assertThat(occurrenceResponse.getNote()).isNull();
+                assertThat(occurrenceResponse.getTime()).isEqualTo(LocalTime.of(HOURS, MINUTES, 0));
 
             } else if (calendarResponse.getDate().equals(CURRENT_DATE)) {
                 assertThat(calendarResponse.getEvents()).hasSize(1);
@@ -200,6 +308,7 @@ public class CreateEventCrudTest extends BackEndTest {
                 assertThat(occurrenceResponse.getTitle()).isEqualTo(TITLE);
                 assertThat(occurrenceResponse.getContent()).isEqualTo(CONTENT);
                 assertThat(occurrenceResponse.getNote()).isNull();
+                assertThat(occurrenceResponse.getTime()).isEqualTo(LocalTime.of(HOURS, MINUTES, 0));
             } else {
                 assertThat(calendarResponse.getEvents()).isEmpty();
             }

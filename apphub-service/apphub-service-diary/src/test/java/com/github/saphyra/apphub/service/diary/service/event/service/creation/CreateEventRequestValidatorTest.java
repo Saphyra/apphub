@@ -26,6 +26,8 @@ public class CreateEventRequestValidatorTest {
     private static final String TITLE = "title";
     private static final Integer REPETITION_DAYS = 435;
     private static final LocalDate DATE = LocalDate.now();
+    private static final Integer HOURS = 21;
+    private static final Integer MINUTES = 32;
 
     @Mock
     private EventTitleValidator eventTitleValidator;
@@ -127,6 +129,78 @@ public class CreateEventRequestValidatorTest {
     }
 
     @Test
+    public void nullMinutes() {
+        CreateEventRequest request = validRequest(RepetitionType.DAYS_OF_MONTH)
+            .toBuilder()
+            .minutes(null)
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.validate(request));
+
+        ExceptionValidator.validateInvalidParam(ex, "minutes", "must not be null");
+    }
+
+    @Test
+    public void minutesTooLow() {
+        CreateEventRequest request = validRequest(RepetitionType.DAYS_OF_MONTH)
+            .toBuilder()
+            .minutes(-1)
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.validate(request));
+
+        ExceptionValidator.validateInvalidParam(ex, "minutes", "too low");
+    }
+
+    @Test
+    public void minutesTooHigh() {
+        CreateEventRequest request = validRequest(RepetitionType.DAYS_OF_MONTH)
+            .toBuilder()
+            .minutes(60)
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.validate(request));
+
+        ExceptionValidator.validateInvalidParam(ex, "minutes", "too high");
+    }
+
+    @Test
+    public void nullHours() {
+        CreateEventRequest request = validRequest(RepetitionType.DAYS_OF_MONTH)
+            .toBuilder()
+            .hours(null)
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.validate(request));
+
+        ExceptionValidator.validateInvalidParam(ex, "hours", "must not be null");
+    }
+
+    @Test
+    public void hoursTooLow() {
+        CreateEventRequest request = validRequest(RepetitionType.DAYS_OF_MONTH)
+            .toBuilder()
+            .hours(-1)
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.validate(request));
+
+        ExceptionValidator.validateInvalidParam(ex, "hours", "too low");
+    }
+
+    @Test
+    public void hoursTooHigh() {
+        CreateEventRequest request = validRequest(RepetitionType.DAYS_OF_MONTH)
+            .toBuilder()
+            .hours(24)
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.validate(request));
+
+        ExceptionValidator.validateInvalidParam(ex, "hours", "too high");
+    }
+
+    @Test
     public void validDaysOfWeek() {
         underTest.validate(validRequest(RepetitionType.DAYS_OF_WEEK));
     }
@@ -150,6 +224,8 @@ public class CreateEventRequestValidatorTest {
             .repetitionDays(REPETITION_DAYS)
             .repetitionDaysOfWeek(List.of(DayOfWeek.MONDAY))
             .repetitionDaysOfMonth(List.of(25))
+            .hours(HOURS)
+            .minutes(MINUTES)
             .build();
     }
 }

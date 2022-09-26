@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Data
@@ -20,4 +21,5 @@ public class OccurrenceResponse {
     private String content;
     private String note;
     private LocalDate date;
+    private LocalTime time;
 }
