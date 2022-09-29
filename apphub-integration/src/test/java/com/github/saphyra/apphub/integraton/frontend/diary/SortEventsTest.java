@@ -25,6 +25,8 @@ public class SortEventsTest extends SeleniumTest {
     private static final String SNOOZED_TITLE = "snoozed-title";
     private static final String PENDING_TITLE = "pending-title";
     private static final String DONE_TITLE = "done-title";
+    private static final String LATER_PENDING_TITLE = "later-pending-title";
+    private static final String NO_TIME_PENDING_TITLE = "no-time-pending-title";
 
     @Test(groups = "diary")
     public void orderOfEvents() {
@@ -64,6 +66,18 @@ public class SortEventsTest extends SeleniumTest {
         //Create Pending event
         DiaryActions.openCreateEventWindowAt(driver, CURRENT_DATE);
         DiaryActions.fillEventTitle(driver, PENDING_TITLE);
+        DiaryActions.setCreateEventHours(driver, "10");
+        DiaryActions.setCreateEventMinutes(driver, "10");
+        DiaryActions.createEvent(driver);
+
+        DiaryActions.openCreateEventWindowAt(driver, CURRENT_DATE);
+        DiaryActions.fillEventTitle(driver, LATER_PENDING_TITLE);
+        DiaryActions.setCreateEventHours(driver, "10");
+        DiaryActions.setCreateEventMinutes(driver, "11");
+        DiaryActions.createEvent(driver);
+
+        DiaryActions.openCreateEventWindowAt(driver, CURRENT_DATE);
+        DiaryActions.fillEventTitle(driver, NO_TIME_PENDING_TITLE);
         DiaryActions.createEvent(driver);
 
         SleepUtil.sleep(1000);
@@ -73,12 +87,12 @@ public class SortEventsTest extends SeleniumTest {
             .stream()
             .map(WebElement::getText)
             .collect(Collectors.toList());
-        assertThat(dailyTasks).containsExactly(EXPIRED_TITLE, PENDING_TITLE, DONE_TITLE, SNOOZED_TITLE);
+        assertThat(dailyTasks).containsExactly(EXPIRED_TITLE, PENDING_TITLE, LATER_PENDING_TITLE, NO_TIME_PENDING_TITLE, DONE_TITLE, SNOOZED_TITLE);
 
         List<String> calendarDayTasks = DiaryActions.getEventsOfDay(driver, CURRENT_DATE)
             .stream()
             .map(WebElement::getText)
             .collect(Collectors.toList());
-        assertThat(calendarDayTasks).containsExactly(EXPIRED_TITLE, PENDING_TITLE, DONE_TITLE, SNOOZED_TITLE);
+        assertThat(calendarDayTasks).containsExactly(EXPIRED_TITLE, PENDING_TITLE, LATER_PENDING_TITLE, NO_TIME_PENDING_TITLE, DONE_TITLE, SNOOZED_TITLE);
     }
 }

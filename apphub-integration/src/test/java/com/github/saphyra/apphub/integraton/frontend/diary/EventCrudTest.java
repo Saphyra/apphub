@@ -50,9 +50,27 @@ public class EventCrudTest extends SeleniumTest {
 
         NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
 
-        //Create
+        //Create - No Hours
         DiaryActions.fillEventTitle(driver, TITLE);
         DiaryActions.fillEventContent(driver, CONTENT);
+
+        DiaryActions.setCreateEventHours(driver, "");
+        DiaryActions.setCreateEventMinutes(driver, "10");
+
+        DiaryActions.createEvent(driver);
+
+        NotificationUtil.verifyErrorNotification(driver, "Az órát és a percet is ki kell tölteni, vagy egyiket sem.");
+
+        //Create - No Minutes
+        DiaryActions.setCreateEventMinutes(driver, "");
+        DiaryActions.setCreateEventHours(driver, "10");
+
+        DiaryActions.createEvent(driver);
+
+        NotificationUtil.verifyErrorNotification(driver, "Az órát és a percet is ki kell tölteni, vagy egyiket sem.");
+
+        //Create
+        DiaryActions.setCreateEventHours(driver, "");
 
         DiaryActions.createEvent(driver);
 

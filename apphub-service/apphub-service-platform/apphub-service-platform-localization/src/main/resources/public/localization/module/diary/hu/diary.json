@@ -240,6 +240,12 @@
         "key": "innerHTML",
         "message": "Kiválaszt"
       }
+    ],
+    "create-event-time": [
+      {
+        "key": "innerHTML",
+        "message": "Idő"
+      }
     ]
   },
   "additionalContent": {
@@ -251,6 +257,7 @@
     "delete-event-confirmation-dialog-detail": "Biztosan törölni szeretnéd a <SPAN class='red'>{title}</SPAN> eseményt és összes előfordulását?",
     "delete-event-confirmation-dialog-confirm-button": "Esemény törlése",
     "delete-event-confirmation-dialog-cancel-button": "Mégse",
-    "event-deleted": "Esemény törölve."
+    "event-deleted": "Esemény törölve.",
+    "empty-time": "Az órát és a percet is ki kell tölteni, vagy egyiket sem."
   }
 }

@@ -84,7 +84,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
                 eventsWrapper.classList.add("calendar-event-wrapper");
 
                 new Stream(day.events)
-                    .sorted((a, b) => {return occurrenceOrder.getOrder(a.status) - occurrenceOrder.getOrder(b.status)})
+                    .sorted(occurrenceComparator)
                     .map(createEvent)
                     .forEach((eventNode) => eventsWrapper.appendChild(eventNode));
         node.appendChild(eventsWrapper);
@@ -103,7 +103,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
                 node.classList.add("button");
                 node.classList.add(event.status.toLowerCase());
                 node.innerText = event.title;
-                node.title = event.date + "\n" + event.content;
+                node.title = event.date + parseTime(event.time) + "\n" + event.content;
 
                 node.onclick = function(e){
                     e.stopPropagation();

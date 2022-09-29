@@ -27,6 +27,8 @@ window.ids = {
     viewEventSaveButton: "view-event-save-button",
     viewEventDiscardButton: "view-event-discard-button",
     selectedDaysOfMonth: "selected-days-of-month",
+    createEventTimeHours: "create-event-time-hours",
+    createEventTimeMinutes: "create-event-time-minutes",
 }
 
 window.occurrenceOrder = new function(){
@@ -68,3 +70,31 @@ scriptLoader.loadScript("/res/diary/js/view_event_controller.js");
         }
     }
 })();
+
+function parseTime(time){
+    if(time == null){
+        return "";
+    }
+
+    const splitted = time.split(":");
+
+    return " " + splitted[0] + ":" + splitted[1];
+}
+
+function occurrenceComparator(a, b){
+    let result = occurrenceOrder.getOrder(a.status) - occurrenceOrder.getOrder(b.status);
+
+    if(result == 0){
+        if(a.time == b.time){
+            return 0;
+        }
+
+        if(a.time == null){
+            return 1;
+        }
+
+        return a.time.localeCompare(b.time);
+    }
+
+    return result;
+}

@@ -9,7 +9,6 @@
                 sessionStorage.successMessage = "successful-logout";
                 location.href = Mapping.INDEX_PAGE;
             }
-            
         dao.sendRequestAsync(request);
     }
 })();

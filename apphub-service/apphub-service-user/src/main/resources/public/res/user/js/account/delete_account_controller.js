@@ -56,6 +56,18 @@
                 $("#delete-account-password-input").val("");
 
                 const request = new Request(Mapping.getEndpoint("ACCOUNT_DELETE_ACCOUNT"), payload);
+                    request.getErrorHandler()
+                        .addErrorHandler(new ErrorHandler(
+                            (request, response) => {
+                                console.log("Response body: ", response.body);
+                                return response.body.indexOf("ACCOUNT_LOCKED") > -1
+                            },
+                            (request, response) => {
+                                const errorResponse = JSON.parse(response.body);
+                                notificationService.storeErrorText(errorResponse.localizedMessage);
+                                eventProcessor.processEvent(new Event(events.LOGOUT));
+                            }
+                        ));
                     request.processValidResponse = function(){
                         sessionStorage.successMessage = "account-deleted";
                         window.location.href = Mapping.INDEX_PAGE;

@@ -36,6 +36,7 @@ function ErrorHandlerRegistry(){
     const defaultErrorHandler = new ErrorHandler(
         function(){return true},
         function(request, response){
+            console.log("Using default error handler...");
             if(isErrorResponse(response.body)){
                 logService.logToConsole("Handling errorResponse: " + response.toString());
                 const errorResponse = JSON.parse(response.body);
@@ -105,7 +106,7 @@ function ErrorHandlerRegistry(){
         for(let hIndex in handlers){
             const handler = handlers[hIndex];
             if(handler.canHandle(request, response)){
-                console.log("ErrorHandler found");
+                console.log("ErrorHandler found", handler);
                 setTimeout(function(){handler.handle(request, response), 0});
                 foundProcessor = true;
             }

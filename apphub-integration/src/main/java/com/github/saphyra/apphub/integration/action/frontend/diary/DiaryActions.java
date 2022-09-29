@@ -233,4 +233,12 @@ public class DiaryActions {
         DiaryPage.createEventDaysOfMonthAddDayButton(driver)
             .click();
     }
+
+    public static void setCreateEventMinutes(WebDriver driver, String minutes) {
+        WebElementUtils.selectOption(DiaryPage.createEventMinutes(driver), minutes);
+    }
+
+    public static void setCreateEventHours(WebDriver driver, String hours) {
+        WebElementUtils.selectOption(DiaryPage.createEventHours(driver), hours);
+    }
 }

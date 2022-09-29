@@ -46,7 +46,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
         stopwatch.stop();
         long elapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);
         if (elapsed > 100) {
-            log.info("WebDriver fetched in {}ms", elapsed);
+            log.info("WebDriver fetched in {}ms. Number of Drivers: {}", elapsed, DRIVER_POOL.listAllObjects().size());
         }
         return result;
     }
@@ -118,7 +118,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
                 log.error("Could not stop driver", e);
             }
         }
-        log.info("Driver {} is stopped.", webDriverWrapper.getId());
+        log.info("Driver {} is stopped. Drivers left: {}", webDriverWrapper.getId(), DRIVER_POOL.listAllObjects().size());
     }
 
     @Override
