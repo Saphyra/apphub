@@ -106,11 +106,11 @@ public class LoadGameTest extends BackEndTest {
 
         //Load game
         SkyXploreLobbyActions.startGame(language, accessTokenId1);
-        hostLobbyClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED, 60)
+        hostLobbyClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED)
             .orElseThrow(() -> new RuntimeException("Game creation not started."));
 
         //Check game loading process
-        hostLobbyClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED)
+        hostLobbyClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED, 120)
             .orElseThrow(() -> new RuntimeException("Game not loaded."));
 
         //Create lobby - Game marked for deletion
