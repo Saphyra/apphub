@@ -72,13 +72,13 @@ public class GameDataProxyTest {
     public void deleteItem() {
         underTest.deleteItem(ID, GameItemType.PLAYER);
 
-        verify(dataGameClient).deleteGameItem(ID, GameItemType.PLAYER, LOCALE);
+        verify(dataGameClient).deleteGameItem(List.of(new BiWrapper<>(ID, GameItemType.PLAYER)), LOCALE);
     }
 
     @Test
     public void deleteItems() {
         underTest.deleteItems(List.of(new BiWrapper<>(ID, GameItemType.ALLIANCE)));
 
-        verify(dataGameClient).deleteGameItem(ID, GameItemType.ALLIANCE, LOCALE);
+        verify(dataGameClient).deleteGameItem(List.of(new BiWrapper<>(ID, GameItemType.ALLIANCE)), LOCALE);
     }
 }

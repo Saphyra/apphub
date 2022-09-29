@@ -27,6 +27,8 @@ window.ids = {
     viewEventSaveButton: "view-event-save-button",
     viewEventDiscardButton: "view-event-discard-button",
     selectedDaysOfMonth: "selected-days-of-month",
+    createEventTimeHours: "create-event-time-hours",
+    createEventTimeMinutes: "create-event-time-minutes",
 }
 
 window.occurrenceOrder = new function(){
@@ -50,7 +52,7 @@ scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
 scriptLoader.loadScript("/res/common/js/date.js");
 
 window.monthLocalization = new CustomLocalization("diary", "months");
-const CURRENT_DATE = LocalDate.create(new Date());
+const CURRENT_DATE = LocalDate.now();
 
 scriptLoader.loadScript("/res/diary/js/calendar_controller.js");
 scriptLoader.loadScript("/res/diary/js/daily_tasks_controller.js");
@@ -60,6 +62,8 @@ scriptLoader.loadScript("/res/diary/js/view_event_controller.js");
 (function PageController(){
     $(document).ready(function(){
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "diary", fileName: "diary"}));
+
+        window.addEventListener("focus", refreshPageIfNeeded);
     });
 
     window.pageController = new function(){
@@ -67,4 +71,42 @@ scriptLoader.loadScript("/res/diary/js/view_event_controller.js");
             switchTab("main-page", ids.mainPage);
         }
     }
+
+    function refreshPageIfNeeded(){
+        console.log("Checking if page needs to be refreshed...");
+
+        const currentDate = LocalDate.now();
+
+        if(!currentDate.equals(CURRENT_DATE)){
+            window.location.reload();
+        }
+    }
 })();
+
+function parseTime(time){
+    if(time == null){
+        return "";
+    }
+
+    const splitted = time.split(":");
+
+    return " " + splitted[0] + ":" + splitted[1];
+}
+
+function occurrenceComparator(a, b){
+    let result = occurrenceOrder.getOrder(a.status) - occurrenceOrder.getOrder(b.status);
+
+    if(result == 0){
+        if(a.time == b.time){
+            return 0;
+        }
+
+        if(a.time == null){
+            return 1;
+        }
+
+        return a.time.localeCompare(b.time);
+    }
+
+    return result;
+}

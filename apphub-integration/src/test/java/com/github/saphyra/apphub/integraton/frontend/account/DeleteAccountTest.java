@@ -35,7 +35,7 @@ public class DeleteAccountTest extends SeleniumTest {
 
         //Empty password
         AccountPageActions.fillDeleteAccountForm(driver, "");
-        SleepUtil.sleep(2000);
+        SleepUtil.sleep(3000);
         AccountPageActions.verifyDeleteAccountForm(driver, DeleteAccountPasswordValidationResult.EMPTY_PASSWORD);
 
         //Incorrect password
@@ -47,6 +47,9 @@ public class DeleteAccountTest extends SeleniumTest {
             });
 
         AccountPageActions.deleteAccount(driver, DataConstants.INCORRECT_PASSWORD);
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE)))
+            .assertTrue("User not logged out");
         NotificationUtil.verifyErrorNotification(driver, "Fiók zárolva. Próbáld újra később!");
 
         //Cancel deletion

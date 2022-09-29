@@ -4,9 +4,11 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -23,6 +25,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheF
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -56,6 +59,7 @@ public class CancelConstructionServiceTest {
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final String DATA_ID = "data-id";
 
     @Mock
     private GameDao gameDao;
@@ -77,6 +81,9 @@ public class CancelConstructionServiceTest {
 
     @Mock
     private BuildingToModelConverter buildingToModelConverter;
+
+    @Mock
+    private PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
 
     @InjectMocks
     private CancelConstructionService underTest;
@@ -126,6 +133,9 @@ public class CancelConstructionServiceTest {
     @Mock
     private BuildingModel buildingModel;
 
+    @Mock
+    private PlanetBuildingOverviewResponse planetBuildingOverviewResponse;
+
     @Captor
     private ArgumentCaptor<Callable<SurfaceResponse>> argumentCaptor;
 
@@ -153,6 +163,7 @@ public class CancelConstructionServiceTest {
         given(building.getLevel()).willReturn(0);
         given(surfaceMap.values()).willReturn(List.of(surface));
         given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
+        given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
 
         given(game.getProcesses()).willReturn(processes);
         given(processes.findByExternalReferenceAndTypeValidated(CONSTRUCTION_ID, ProcessType.CONSTRUCTION)).willReturn(process);
@@ -178,12 +189,19 @@ public class CancelConstructionServiceTest {
         verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, planet, CONSTRUCTION_ID);
         verify(syncCache).saveGameItem(buildingModel);
 
-        ArgumentCaptor<Runnable> runnableArgumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED), eq(PLANET_ID), runnableArgumentCaptor.capture());
-        runnableArgumentCaptor.getValue()
+        ArgumentCaptor<Runnable> runnableArgumentCaptor1 = ArgumentCaptor.forClass(Runnable.class);
+        verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED), eq(PLANET_ID), runnableArgumentCaptor1.capture());
+        runnableArgumentCaptor1.getValue()
             .run();
+
+        ArgumentCaptor<Runnable> runnableArgumentCaptor2 = ArgumentCaptor.forClass(Runnable.class);
+        verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED), eq(PLANET_ID), runnableArgumentCaptor2.capture());
+        runnableArgumentCaptor2.getValue()
+            .run();
+
         verify(messageSender).planetQueueItemDeleted(USER_ID, PLANET_ID, CONSTRUCTION_ID);
         verify(messageSender).planetSurfaceModified(USER_ID, PLANET_ID, surfaceResponse);
+        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
         verify(sleepService, times(1)).sleep(100);
     }
 
@@ -197,10 +215,11 @@ public class CancelConstructionServiceTest {
     }
 
     @Test
-    public void cancelConstructionOfBuilding() throws Exception {
+    public void cancelConstructionOfUpgrade() throws Exception {
         given(building.getConstruction()).willReturn(construction);
         given(building.getLevel()).willReturn(0);
         given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
+        given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
 
         given(game.getProcesses()).willReturn(processes);
         given(processes.findByExternalReferenceAndTypeValidated(CONSTRUCTION_ID, ProcessType.CONSTRUCTION)).willReturn(process);
@@ -232,7 +251,14 @@ public class CancelConstructionServiceTest {
         verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED), eq(PLANET_ID), runnableArgumentCaptor.capture());
         runnableArgumentCaptor.getValue()
             .run();
+
+        ArgumentCaptor<Runnable> runnableArgumentCaptor2 = ArgumentCaptor.forClass(Runnable.class);
+        verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED), eq(PLANET_ID), runnableArgumentCaptor2.capture());
+        runnableArgumentCaptor2.getValue()
+            .run();
+
         verify(messageSender).planetQueueItemDeleted(USER_ID, PLANET_ID, CONSTRUCTION_ID);
+        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
         verify(sleepService, times(1)).sleep(100);
     }
 }

@@ -26,7 +26,8 @@ public class Surface {
             .filter(s -> s.startsWith(SURFACE_TYPE_PREFIX))
             .findFirst()
             .map(s -> s.replace(SURFACE_TYPE_PREFIX, ""))
-            .orElseThrow(() -> new RuntimeException("SurfaceType is not recognizable"));
+            .orElseThrow(() -> new RuntimeException("SurfaceType is not recognizable"))
+            .toUpperCase();
     }
 
     public boolean isEmpty() {

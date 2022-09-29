@@ -22,4 +22,6 @@ public class CreateEventRequest {
     private Integer repetitionDays;
     private List<DayOfWeek> repetitionDaysOfWeek;
     private List<Integer> repetitionDaysOfMonth;
+    private Integer hours;
+    private Integer minutes;
 }

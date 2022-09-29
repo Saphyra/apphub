@@ -23,6 +23,7 @@ class OccurrenceEntity {
     private String eventId;
     private String userId;
     private String date;
+    private String time;
     @Enumerated(EnumType.STRING)
     private OccurrenceStatus status;
     private String note;

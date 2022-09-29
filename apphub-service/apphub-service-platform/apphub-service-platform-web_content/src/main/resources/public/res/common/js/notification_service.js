@@ -5,6 +5,10 @@
         this.showSuccess = showSuccess;
         this.showError = showError;
         this.showMessage = showMessage;
+        this.storeError = (errorMessage) => sessionStorage.errorMessage = errorMessage;
+        this.storeSuccess = (successMessage) => sessionStorage.successMessage = successMessage;
+        this.storeErrorText = (errorText) => sessionStorage.errorText = errorText;
+        this.storeSuccessText = (successText) => sessionStorage.successText = successText;
     }
 
     eventProcessor.registerProcessor(new EventProcessor(
@@ -90,6 +94,22 @@
                 showSuccess(Localization.getAdditionalContent(sessionStorage.successMessage));
             }finally{
                 delete sessionStorage.successMessage;
+            }
+        }
+
+        if(hasValue(sessionStorage.errorText)){
+            try{
+                showError(sessionStorage.errorText);
+            }finally{
+                delete sessionStorage.errorText;
+            }
+        }
+
+        if(hasValue(sessionStorage.successText)){
+            try{
+                showSuccess(sessionStorage.successText);
+            } finally{
+                delete sessionStorage.successText;
             }
         }
     }

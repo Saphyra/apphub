@@ -24,4 +24,16 @@
 
         <addPrimaryKey schemaName="diary" tableName="occurrence" columnNames="occurrence_id" constraintName="occurrence_pk"/>
     </changeSet>
+
+    <changeSet id="add-column-time-to-occurrence" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="diary" tableName="occurrence" columnName="time"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="diary" tableName="occurrence">
+            <column name="time" type="text"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

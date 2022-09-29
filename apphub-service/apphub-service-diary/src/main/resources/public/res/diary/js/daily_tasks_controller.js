@@ -5,7 +5,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
         .withContainerId(ids.dailyTasks)
         .withGetKeyMethod((event) => {return event.occurrenceId})
         .withCreateNodeMethod(createTaskNode)
-        .withSortMethod((a, b) => {return occurrenceOrder.getOrder(a.status) - occurrenceOrder.getOrder(b.status)})
+        .withSortMethod(occurrenceComparator)
         .withIdPrefix("task")
         .build();
 
@@ -48,7 +48,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
             node.classList.add(event.status.toLowerCase());
 
             node.innerText = event.title;
-            node.title = event.content;
+            node.title = event.date + parseTime(event.time) + "\n" + event.content;
 
             node.onclick = function(e){
                 viewEventController.viewEvent(event);

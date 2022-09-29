@@ -61,16 +61,14 @@ public class CancelFriendRequestTest extends BackEndTest {
         assertThat(SkyXploreFriendActions.getIncomingFriendRequests(language, accessTokenId2)).hasSize(1);
 
         //Cancel
-        ApphubWsClient senderClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId1);
         ApphubWsClient friendClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2);
 
-        Response response = SkyXploreFriendActions.getCancelFriendRequestResponse(language, accessTokenId1, friendRequestId);
-        assertThat(response.getStatusCode()).isEqualTo(200);
+        SkyXploreFriendActions.cancelFriendRequest(language, accessTokenId1, friendRequestId);
+
         assertThat(SkyXploreFriendActions.getSentFriendRequests(language, accessTokenId1)).isEmpty();
         assertThat(SkyXploreFriendActions.getIncomingFriendRequests(language, accessTokenId2)).isEmpty();
 
-        assertThat(senderClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_DELETED)).isPresent();
-        assertThat(friendClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_DELETED)).isPresent();
+        assertThat(friendClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_DELETED).get().getPayloadAs(UUID.class)).isEqualTo(friendRequestId);
 
         ApphubWsClient.cleanUpConnections();
     }

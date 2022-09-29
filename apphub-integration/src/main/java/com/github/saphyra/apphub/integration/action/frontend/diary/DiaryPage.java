@@ -114,4 +114,12 @@ class DiaryPage {
     public static WebElement createEventDaysOfMonthAddDayButton(WebDriver driver) {
         return driver.findElement(By.id("create-event-repetition-type-days-of-month-add-day-button"));
     }
+
+    public static WebElement createEventMinutes(WebDriver driver) {
+        return driver.findElement(By.id("create-event-time-minutes"));
+    }
+
+    public static WebElement createEventHours(WebDriver driver) {
+        return driver.findElement(By.id("create-event-time-hours"));
+    }
 }

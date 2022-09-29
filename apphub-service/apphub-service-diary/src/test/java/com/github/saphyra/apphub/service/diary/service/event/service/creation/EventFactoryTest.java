@@ -13,6 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +29,8 @@ public class EventFactoryTest {
     private static final String CONTENT = "content";
     private static final String REPETITION_DATA = "repetition-data";
     private static final Integer REPETITION_TYPE_DAYS = 25;
+    private static final Integer HOURS = 21;
+    private static final Integer MINUTES = 24;
 
     @Mock
     private IdGenerator idGenerator;
@@ -43,6 +46,8 @@ public class EventFactoryTest {
         CreateEventRequest request = CreateEventRequest.builder()
             .repetitionType(RepetitionType.ONE_TIME)
             .date(START_DATE)
+            .hours(HOURS)
+            .minutes(MINUTES)
             .title(TITLE)
             .content(CONTENT)
             .build();
@@ -58,6 +63,7 @@ public class EventFactoryTest {
         assertThat(event.getTitle()).isEqualTo(TITLE);
         assertThat(event.getContent()).isEqualTo(CONTENT);
         assertThat(event.getRepetitionData()).isNull();
+        assertThat(event.getTime()).isEqualTo(LocalTime.of(HOURS, MINUTES, 0));
     }
 
     @Test
@@ -82,6 +88,7 @@ public class EventFactoryTest {
         assertThat(event.getTitle()).isEqualTo(TITLE);
         assertThat(event.getContent()).isEqualTo(CONTENT);
         assertThat(event.getRepetitionData()).isEqualTo(REPETITION_DATA);
+        assertThat(event.getTime()).isNull();
     }
 
     @Test

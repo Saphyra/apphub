@@ -138,7 +138,7 @@ public class ApphubWsClient extends WebSocketClient {
     }
 
     public Optional<WebSocketEvent> awaitForEvent(WebSocketEventName eventName) {
-        return awaitForEvent(eventName, 60);
+        return awaitForEvent(eventName, 15);
     }
 
     public Optional<WebSocketEvent> awaitForEvent(WebSocketEventName eventName, int timeout) {
@@ -146,7 +146,7 @@ public class ApphubWsClient extends WebSocketClient {
     }
 
     public Optional<WebSocketEvent> awaitForEvent(WebSocketEventName eventName, Predicate<WebSocketEvent> customCondition) {
-        return awaitForEvent(eventName, 60, customCondition);
+        return awaitForEvent(eventName, 15, customCondition);
     }
 
     public Optional<WebSocketEvent> awaitForEvent(WebSocketEventName eventName, int timeoutSeconds, Predicate<WebSocketEvent> customCondition) {
@@ -154,6 +154,7 @@ public class ApphubWsClient extends WebSocketClient {
     }
 
     public void clearMessages() {
+        log.debug("Clearing WebSocket messages for wsClient {}", endpoint);
         messages.clear();
     }
 }

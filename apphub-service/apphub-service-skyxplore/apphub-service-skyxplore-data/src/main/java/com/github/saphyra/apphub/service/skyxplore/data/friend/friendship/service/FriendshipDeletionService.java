@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -35,7 +35,7 @@ public class FriendshipDeletionService {
         friendshipDao.delete(friendship);
         friendshipDeletionPlayerProcessor.processDeletedFriendship(friendship.getFriend1(), friendship.getFriend2());
 
-        WebSocketMessage event = WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED, Arrays.asList(friendship.getFriend1(), friendship.getFriend2()));
+        WebSocketMessage event = WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED, List.of(friendship.getOtherId(userId)), friendshipId);
         messageSenderProxy.sendToMainMenu(event);
     }
 }

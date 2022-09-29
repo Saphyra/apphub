@@ -31,6 +31,8 @@
         document.getElementById(ids.createEventContentInput).value = "";
         document.getElementById(ids.createEventRepetitionTypeSelect).value = "ONE_TIME";
         document.getElementById(ids.createEventRepetitionTypeDaysInput).value = 1;
+        document.getElementById(ids.createEventTimeHours).value = "";
+        document.getElementById(ids.createEventTimeMinutes).value = "";
         $(".create-event-days-of-week-input").prop("checked", false);
         switchTab("repetition-type-data", REPETITION_TYPES.ONE_TIME);
         daysOfMonthSyncEngine.clear();
@@ -45,6 +47,8 @@
         const repetitionDays = document.getElementById(ids.createEventRepetitionTypeDaysInput).value;
         const repetitionDaysOfWeek = getCheckedDays();
         const repetitionDaysOfMonth = daysOfMonthSyncEngine.keys();
+        const timeHours = replaceWithNullIfEmpty(document.getElementById(ids.createEventTimeHours).value);
+        const timeMinutes = replaceWithNullIfEmpty(document.getElementById(ids.createEventTimeMinutes).value);
 
         if(isBlank(title)){
             notificationService.showError(Localization.getAdditionalContent("empty-title"));
@@ -76,6 +80,11 @@
                 throwException("IllegalArgument", "Unhandled repetitionType: " + repetitionType);
         }
 
+        if((timeHours == null && timeMinutes != null) || (timeHours != null && timeMinutes == null)){
+            notificationService.showError(Localization.getAdditionalContent("empty-time"));
+            return;
+        }
+
         const payload = {
             referenceDate: {
                 month: calendarController.getCurrentDate().toString(),
@@ -87,7 +96,9 @@
             repetitionType: repetitionType,
             repetitionDays: repetitionDays,
             repetitionDaysOfWeek: repetitionDaysOfWeek,
-            repetitionDaysOfMonth: repetitionDaysOfMonth
+            repetitionDaysOfMonth: repetitionDaysOfMonth,
+            hours: timeHours,
+            minutes: timeMinutes
         }
 
         const request = new Request(Mapping.getEndpoint("DIARY_CREATE_EVENT"), payload);
@@ -106,6 +117,10 @@
                 .each(function(){result.push($(this).val())});
 
             return result;
+        }
+
+        function replaceWithNullIfEmpty(value){
+            return value === "" ? null : value;
         }
     }
 

@@ -20,6 +20,14 @@ function Optional(obj){
         return value !== null && value !== undefined;
     }
 
+    this.map = function(mapper){
+        return this.isPresent() ? new Optional(mapper(value)) : this;
+    }
+
+    this.orElse = function(elseValue){
+        return this.isPresent() ? value : elseValue;
+    }
+
     this.orElseGet = function(func){
         return this.isPresent() ? value : func();
     }

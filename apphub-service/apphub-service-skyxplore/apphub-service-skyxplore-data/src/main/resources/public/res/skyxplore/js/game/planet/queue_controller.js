@@ -68,7 +68,6 @@
         function createProgressBarWrapper(item){
             const progressBarWrapper = document.createElement("DIV");
                 progressBarWrapper.classList.add("queue-item-progress");
-                console.log(item);
                 const status = Math.floor(item.currentWorkPoints / item.requiredWorkPoints * 100);
                 progressBarWrapper.appendChild(createProgressBar(status, status + "%"));
             return progressBarWrapper;

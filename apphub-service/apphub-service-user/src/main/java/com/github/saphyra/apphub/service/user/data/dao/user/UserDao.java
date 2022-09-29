@@ -4,6 +4,9 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import lombok.Builder;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -14,10 +17,18 @@ import java.util.UUID;
 @Component
 public class UserDao extends AbstractDao<UserEntity, User, String, UserRepository> {
     private final UuidConverter uuidConverter;
+    private final int maxNumberOfUsersFound;
 
-    public UserDao(UserConverter converter, UserRepository repository, UuidConverter uuidConverter) {
+    @Builder
+    public UserDao(
+        UserConverter converter,
+        UserRepository repository,
+        UuidConverter uuidConverter,
+        @Value("${maxNumberOfUsersFound}") int maxNumberOfUsersFound
+    ) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
+        this.maxNumberOfUsersFound = maxNumberOfUsersFound;
     }
 
     public void deleteById(UUID userId) {
@@ -38,7 +49,7 @@ public class UserDao extends AbstractDao<UserEntity, User, String, UserRepositor
     }
 
     public List<User> getByUsernameOrEmailContainingIgnoreCase(String queryString) {
-        return converter.convertEntity(repository.getByUsernameOrEmailContainingIgnoreCase(queryString));
+        return converter.convertEntity(repository.getByUsernameOrEmailContainingIgnoreCase(queryString, PageRequest.of(0, maxNumberOfUsersFound)));
     }
 
     public List<User> getUsersMarkedToDelete() {

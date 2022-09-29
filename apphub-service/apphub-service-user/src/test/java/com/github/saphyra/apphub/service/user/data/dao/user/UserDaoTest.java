@@ -3,11 +3,12 @@ package com.github.saphyra.apphub.service.user.data.dao.user;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class UserDaoTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String USER_ID_STRING = "user-id";
     private static final String QUERY_STRING = "query-string";
+    public static final int MAX_NUMBER_OF_USERS_FOUND = 100;
 
     @Mock
     private UserRepository repository;
@@ -36,7 +38,6 @@ public class UserDaoTest {
     @Mock
     private UuidConverter uuidConverter;
 
-    @InjectMocks
     private UserDao underTest;
 
     @Mock
@@ -44,6 +45,16 @@ public class UserDaoTest {
 
     @Mock
     private User user;
+
+    @Before
+    public void setUp() {
+        underTest = UserDao.builder()
+            .converter(converter)
+            .repository(repository)
+            .uuidConverter(uuidConverter)
+            .maxNumberOfUsersFound(MAX_NUMBER_OF_USERS_FOUND)
+            .build();
+    }
 
     @Test
     public void findByEmail() {
@@ -98,7 +109,7 @@ public class UserDaoTest {
 
     @Test
     public void getByUsernameOrEmailContainingIgnoreCase() {
-        given(repository.getByUsernameOrEmailContainingIgnoreCase(QUERY_STRING)).willReturn(List.of(entity));
+        given(repository.getByUsernameOrEmailContainingIgnoreCase(QUERY_STRING, PageRequest.of(0, MAX_NUMBER_OF_USERS_FOUND))).willReturn(List.of(entity));
         given(converter.convertEntity(List.of(entity))).willReturn(List.of(user));
 
         List<User> result = underTest.getByUsernameOrEmailContainingIgnoreCase(QUERY_STRING);

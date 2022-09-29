@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +24,7 @@ public class OccurrenceFactoryTest {
     private static final UUID OCCURRENCE_ID = UUID.randomUUID();
     private static final UUID EVENT_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final LocalTime TIME = LocalTime.now();
 
     @Mock
     private IdGenerator idGenerator;
@@ -43,6 +45,7 @@ public class OccurrenceFactoryTest {
         given(event.getStartDate()).willReturn(DATE);
         given(event.getEventId()).willReturn(EVENT_ID);
         given(event.getUserId()).willReturn(USER_ID);
+        given(event.getTime()).willReturn(TIME);
 
         Occurrence result = underTest.createPending(event);
 
@@ -50,6 +53,7 @@ public class OccurrenceFactoryTest {
         assertThat(result.getEventId()).isEqualTo(EVENT_ID);
         assertThat(result.getUserId()).isEqualTo(USER_ID);
         assertThat(result.getDate()).isEqualTo(DATE);
+        assertThat(result.getTime()).isEqualTo(TIME);
         assertThat(result.getStatus()).isEqualTo(OccurrenceStatus.PENDING);
         assertThat(result.getNote()).isNull();
     }

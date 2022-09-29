@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.integraton.backend.skyxplore.friend;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFriendActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.localization.Language;
@@ -25,8 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RemoveFriendTest extends BackEndTest {
     @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
     public void removeFriend(Language language) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        RegistrationParameters userData1 = RegistrationParameters.validParameters();
+        UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         UUID accessTokenId2 = IndexPageActions.registerAndLogin(language, userData2);
@@ -35,7 +35,7 @@ public class RemoveFriendTest extends BackEndTest {
         UUID accessTokenId3 = IndexPageActions.registerAndLogin(language, userData3);
 
         SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId1, model);
 
         SkyXploreCharacterModel model3 = SkyXploreCharacterModel.valid();
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId3, model3);
@@ -45,19 +45,19 @@ public class RemoveFriendTest extends BackEndTest {
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
         //Friend not found
-        Response friendNotFoundResponse = SkyXploreFriendActions.getRemoveFriendResponse(language, accessTokenId, UUID.randomUUID());
+        Response friendNotFoundResponse = SkyXploreFriendActions.getRemoveFriendResponse(language, accessTokenId1, UUID.randomUUID());
         verifyErrorResponse(language, friendNotFoundResponse, 404, ErrorCode.FRIENDSHIP_NOT_FOUND);
 
         //Forbidden operation
-        SkyXploreFriendActions.createFriendRequest(language, accessTokenId, userId2);
-        UUID friendRequestId = SkyXploreFriendActions.getSentFriendRequests(language, accessTokenId)
+        SkyXploreFriendActions.createFriendRequest(language, accessTokenId1, userId2);
+        UUID friendRequestId = SkyXploreFriendActions.getSentFriendRequests(language, accessTokenId1)
             .stream()
             .map(SentFriendRequestResponse::getFriendRequestId)
             .findFirst()
             .orElseThrow(() -> new RuntimeException("FriendRequest not found"));
         SkyXploreFriendActions.acceptFriendRequest(language, accessTokenId2, friendRequestId);
 
-        UUID friendshipId = SkyXploreFriendActions.getFriends(language, accessTokenId)
+        UUID friendshipId = SkyXploreFriendActions.getFriends(language, accessTokenId1)
             .stream()
             .map(FriendshipResponse::getFriendshipId)
             .findFirst()
@@ -65,20 +65,18 @@ public class RemoveFriendTest extends BackEndTest {
 
         Response forbiddenOperationResponse = SkyXploreFriendActions.getRemoveFriendResponse(language, accessTokenId3, friendshipId);
         verifyForbiddenOperation(language, forbiddenOperationResponse);
-        assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId)).hasSize(1);
+        assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId1)).hasSize(1);
         assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId2)).hasSize(1);
 
         //Remove
-        ApphubWsClient senderClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId);
         ApphubWsClient friendClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2);
 
-        Response removeResponse = SkyXploreFriendActions.getRemoveFriendResponse(language, accessTokenId, friendshipId);
-        assertThat(removeResponse.getStatusCode()).isEqualTo(200);
-        assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId)).isEmpty();
+        SkyXploreFriendActions.removeFriend(language, accessTokenId1, friendshipId);
+
+        assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId1)).isEmpty();
         assertThat(SkyXploreFriendActions.getFriends(language, accessTokenId2)).isEmpty();
 
-        assertThat(senderClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED)).isPresent();
-        assertThat(friendClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED)).isPresent();
+        assertThat(friendClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED).get().getPayloadAs(UUID.class)).isEqualTo(friendshipId);
 
         ApphubWsClient.cleanUpConnections();
     }

@@ -1,4 +1,6 @@
 function CustomLocalization(module, fileName){
+    console.log("Initializing CustomLocalization for module " + module + " and fileName " + fileName);
+
     const localization = loadLocalization(module, fileName, function(localization){return localization});
 
     this.getKeys = function(){

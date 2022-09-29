@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ class FinishConstructionService {
     private final BuildingToModelConverter buildingToModelConverter;
     private final WsMessageSender messageSender;
     private final SurfaceToResponseConverter surfaceToResponseConverter;
+    private final PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
 
     void finishConstruction(SyncCache syncCache, Game game, Planet planet, Building building) {
         log.info("Finishing construction...");
@@ -56,6 +58,17 @@ class FinishConstructionService {
                 planet.getOwner(),
                 planet.getPlanetId(),
                 surfaceToResponseConverter.convert(surface)
+            )
+        );
+
+        syncCache.addMessage(
+            planet.getOwner(),
+            WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED,
+            planet.getPlanetId(),
+            () -> messageSender.planetBuildingDetailsModified(
+                planet.getOwner(),
+                planet.getPlanetId(),
+                planetBuildingOverviewQueryService.getBuildingOverview(planet)
             )
         );
     }

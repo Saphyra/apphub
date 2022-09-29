@@ -27,6 +27,8 @@ public class OccurrenceToResponseConverter {
         Event event = eventDao.findByIdValidated(occurrence.getEventId());
 
         return OccurrenceResponse.builder()
+            .date(occurrence.getDate())
+            .time(occurrence.getTime())
             .occurrenceId(occurrence.getOccurrenceId())
             .eventId(occurrence.getEventId())
             .status(occurrence.getStatus().name())

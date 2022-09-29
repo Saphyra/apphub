@@ -3,7 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl.constructi
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
@@ -12,6 +14,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import org.junit.Test;
@@ -36,6 +39,7 @@ public class FinishConstructionServiceTest {
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID SURFACE_ID = UUID.randomUUID();
     private static final UUID BUILDING_ID = UUID.randomUUID();
+    private static final String DATA_ID = "data-id";
 
     @Mock
     private AllocationRemovalService allocationRemovalService;
@@ -48,6 +52,9 @@ public class FinishConstructionServiceTest {
 
     @Mock
     private SurfaceToResponseConverter surfaceToResponseConverter;
+
+    @Mock
+    private PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
 
     @InjectMocks
     private FinishConstructionService underTest;
@@ -76,6 +83,9 @@ public class FinishConstructionServiceTest {
     @Mock
     private SurfaceResponse surfaceResponse;
 
+    @Mock
+    private PlanetBuildingOverviewResponse planetBuildingOverviewResponse;
+
     @Test
     public void finishConstruction() {
         given(building.getConstruction()).willReturn(construction);
@@ -89,6 +99,7 @@ public class FinishConstructionServiceTest {
         given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
         given(building.getBuildingId()).willReturn(BUILDING_ID);
         given(planet.findSurfaceByBuildingIdValidated(BUILDING_ID)).willReturn(surface);
+        given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
 
         underTest.finishConstruction(syncCache, game, planet, building);
 
@@ -109,5 +120,11 @@ public class FinishConstructionServiceTest {
         surfaceModifiedArgumentCaptor.getValue()
             .run();
         verify(messageSender).planetSurfaceModified(USER_ID, PLANET_ID, surfaceResponse);
+
+        ArgumentCaptor<Runnable> buildingDetailsModifiedArgumentCaptor = ArgumentCaptor.forClass(Runnable.class);
+        verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED), eq(PLANET_ID), buildingDetailsModifiedArgumentCaptor.capture());
+        buildingDetailsModifiedArgumentCaptor.getValue()
+            .run();
+        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
     }
 }

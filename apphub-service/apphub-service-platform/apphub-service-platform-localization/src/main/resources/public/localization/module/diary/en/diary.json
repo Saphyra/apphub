@@ -240,6 +240,12 @@
         "key": "innerHTML",
         "message": "Add"
       }
+    ],
+    "create-event-time": [
+      {
+        "key": "innerHTML",
+        "message": "Time"
+      }
     ]
   },
   "additionalContent": {
@@ -251,6 +257,7 @@
     "delete-event-confirmation-dialog-detail": "Are you sure you want to delete event <SPAN class='red'>{title}</SPAN> with all of its occurrences?",
     "delete-event-confirmation-dialog-confirm-button": "Delete event",
     "delete-event-confirmation-dialog-cancel-button": "Cancel",
-    "event-deleted": "Event deleted."
+    "event-deleted": "Event deleted.",
+    "empty-time": "Both of neither hours and minutes needs to be filled."
   }
 }

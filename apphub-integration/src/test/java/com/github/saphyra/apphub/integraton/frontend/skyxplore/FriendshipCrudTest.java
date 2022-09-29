@@ -49,8 +49,6 @@ public class FriendshipCrudTest extends SeleniumTest {
             .click();
         NotificationUtil.verifySuccessNotification(driver1, "Barátkérelem elküldve.");
 
-        SleepUtil.sleep(6000); //TODO reset when WS messaging fixed
-
         SentFriendRequest sentFriendRequest = AwaitilityWrapper.getListWithWait(() -> SkyXploreFriendshipActions.getSentFriendRequests(driver1), t -> !t.isEmpty())
             .stream()
             .filter(sentRequest -> sentRequest.getFriendName().equals(userData2.getUsername()))
@@ -148,8 +146,6 @@ public class FriendshipCrudTest extends SeleniumTest {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("IncomingFriendRequest not found."))
             .accept();
-
-        SleepUtil.sleep(6000); //TODO reset when WS messaging fixed
 
         AwaitilityWrapper.getListWithWait(() -> SkyXploreFriendshipActions.getFriends(driver2), friends -> !friends.isEmpty())
             .stream()

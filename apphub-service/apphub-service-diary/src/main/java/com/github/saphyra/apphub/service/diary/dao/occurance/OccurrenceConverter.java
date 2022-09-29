@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Objects;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -24,6 +27,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .eventId(uuidConverter.convertDomain(domain.getEventId()))
             .userId(userId)
             .date(stringEncryptor.encryptEntity(domain.getDate().toString(), userId))
+            .time(stringEncryptor.encryptEntity(Optional.ofNullable(domain.getTime()).map(Objects::toString).orElse(null), userId))
             .status(domain.getStatus())
             .note(stringEncryptor.encryptEntity(domain.getNote(), userId))
             .build();
@@ -36,6 +40,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .eventId(uuidConverter.convertEntity(entity.getEventId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
             .date(LocalDate.parse(stringEncryptor.decryptEntity(entity.getDate(), entity.getUserId())))
+            .time(Optional.ofNullable(stringEncryptor.decryptEntity(entity.getTime(), entity.getUserId())).map(LocalTime::parse).orElse(null))
             .status(entity.getStatus())
             .note(stringEncryptor.decryptEntity(entity.getNote(), entity.getUserId()))
             .build();

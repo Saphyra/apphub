@@ -6,9 +6,11 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.response.SavedGameResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCreation;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameDeletionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -39,9 +41,8 @@ public class SkyXploreSavedGameControllerImpl implements SkyXploreSavedGameContr
     }
 
     @Override
-    public void deleteGameItem(UUID id, GameItemType type) {
-        log.info("Deleting GameItem {} of type {}", id, type);
-        deleteGameItemService.deleteItem(id, type);
+    public void deleteGameItem(@RequestBody List<BiWrapper<UUID, GameItemType>> items) {
+        items.forEach(biWrapper -> deleteGameItemService.deleteItem(biWrapper.getEntity1(), biWrapper.getEntity2()));
     }
 
     @Override

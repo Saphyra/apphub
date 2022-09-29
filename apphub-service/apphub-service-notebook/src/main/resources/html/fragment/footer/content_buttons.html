@@ -1,0 +1,91 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<SPAN id="create-category-buttons" class="button-wrapper" th:fragment="create-category-buttons">
+    <BUTTON id="create-category-button" onclick="categoryCreationController.save()"></BUTTON>
+</SPAN>
+
+<SPAN id="create-only-title-buttons" class="button-wrapper" th:fragment="create-only-title-buttons">
+    <BUTTON id="create-only-title-button" onclick="onlyTitleCreationController.save()"></BUTTON>
+</SPAN>
+
+<SPAN id="create-text-buttons" class="button-wrapper" th:fragment="create-text-buttons">
+    <DIV id="create-text-button" class="button dialog-button" onclick="textCreationController.save()"></DIV>
+</SPAN>
+
+<SPAN id="create-checklist-buttons" class="button-wrapper" th:fragment="create-checklist-buttons">
+    <SPAN id="create-checklist-new-item-button" class="button dialog-button" onclick="checklistCreationController.newItem()"></SPAN>
+    <SPAN id="create-checklist-button" class="button dialog-button" onclick="checklistCreationController.save()"></SPAN>
+</SPAN>
+
+<SPAN id="create-table-buttons" class="button-wrapper" th:fragment="create-table-buttons">
+    <SPAN id="create-table-new-column-button" class="button dialog-button" onclick="tableCreationController.newColumn()"></SPAN>
+    <SPAN id="create-table-new-row-button" class="button dialog-button" onclick="tableCreationController.newRow()"></SPAN>
+    <SPAN id="create-table-button" class="button dialog-button" onclick="tableCreationController.save()"></SPAN>
+</SPAN>
+
+<SPAN id="create-checklist-table-buttons" class="button-wrapper" th:fragment="create-checklist-table-buttons">
+    <SPAN id="create-checklist-table-new-column-button" class="button dialog-button" onclick="checklistTableCreationController.newColumn()"></SPAN>
+    <SPAN id="create-checklist-table-new-row-button" class="button dialog-button" onclick="checklistTableCreationController.newRow()"></SPAN>
+    <SPAN id="create-checklist-table-button" class="button dialog-button" onclick="checklistTableCreationController.save()"></SPAN>
+</SPAN>
+
+<SPAN id="create-link-buttons" class="button-wrapper" th:fragment="create-link-buttons">
+    <SPAN id="create-link-button" class="button dialog-button" onclick="linkCreationController.saveLink()"></SPAN>
+</SPAN>
+
+<SPAN id="view-text-buttons" class="button-wrapper" th:fragment="view-text-buttons">
+    <SPAN id="view-text-edit-button-wrapper" class="view-text-button-wrapper">
+        <DIV id="view-text-edit-button" class="button dialog-button" onclick="textViewController.enableEditing()"></DIV>
+    </SPAN>
+    <SPAN id="view-text-editing-operations-button-wrapper" class="view-text-button-wrapper">
+        <SPAN id="view-text-edit-save-button" class="button dialog-button" onclick="textViewController.saveChanges()"></SPAN>
+        <SPAN id="view-text-edit-cancel-button" class="button dialog-button" onclick="textViewController.discardChanges()"></SPAN>
+    </SPAN>
+</SPAN>
+
+<SPAN id="edit-list-item-buttons" class="button-wrapper" th:fragment="edit-list-item-buttons">
+    <SPAN id="edit-list-item-save-button" class="button dialog-button" onclick="listItemEditionService.editListItem()"></SPAN>
+</SPAN>
+
+<SPAN id="view-checklist-buttons" class="button-wrapper" th:fragment="view-checklist-buttons">
+    <SPAN id="view-checklist-edit-button-wrapper" class="view-checklist-button-wrapper">
+        <SPAN id="view-checklist-edit-button" class="button dialog-button" onclick="checklistViewController.enableEditing()"></SPAN>
+        <SPAN id="delete-checked-checklist-items" class="button dialog-button" onclick="checklistViewController.deleteChecked()"></SPAN>
+        <SPAN id="order-checklist-items" class="button dialog-button" onclick="checklistViewController.orderItems()"></SPAN>
+    </SPAN>
+    <SPAN id="view-checklist-editing-operations-button-wrapper" class="view-checklist-button-wrapper">
+        <SPAN id="view-checklist-edit-save-button" class="button dialog-button" onclick="checklistViewController.saveChanges()"></SPAN>
+        <SPAN id="view-checklist-edit-cancel-button" class="button dialog-button" onclick="checklistViewController.discardChanges()"></SPAN>
+        <SPAN id="view-checklist-edit-add-item-button" class="button dialog-button" onclick="checklistViewController.addItem()"></SPAN>
+    </SPAN>
+</SPAN>
+
+<SPAN id="view-table-buttons" class="button-wrapper" th:fragment="view-table-buttons">
+    <SPAN id="view-table-edit-button-wrapper" class="view-table-button-wrapper">
+        <SPAN id="view-table-edit-button" class="button dialog-button" onclick="tableViewController.enableEditing()"></SPAN>
+        <SPAN id="convert-table-to-checklist-table-button" class="button dialog-button" onclick="tableViewController.convertToChecklistTable()"></SPAN>
+    </SPAN>
+    <SPAN id="view-table-editing-operations-button-wrapper" class="view-table-button-wrapper">
+        <SPAN id="view-table-edit-save-button" class="button dialog-button" onclick="tableViewController.saveChanges()"></SPAN>
+        <SPAN id="view-table-edit-cancel-button" class="button dialog-button" onclick="tableViewController.discardChanges()"></SPAN>
+        <SPAN id="view-table-edit-add-column-button" class="button dialog-button" onclick="tableViewController.addColumn()"></SPAN>
+        <SPAN id="view-table-edit-add-row-button" class="button dialog-button" onclick="tableViewController.addRow()"></SPAN>
+    </SPAN>
+</SPAN>
+
+<SPAN id="view-checklist-table-buttons" class="button-wrapper" th:fragment="view-checklist-table-buttons">
+    <SPAN id="view-checklist-table-edit-button-wrapper" class="view-checklist-table-button-wrapper">
+        <SPAN id="view-checklist-table-edit-button" class="button dialog-button" onclick="checklistTableViewController.enableEditing()"></SPAN>
+        <SPAN id="delete-checked-checklist-table-items" class="button dialog-button" onclick="checklistTableViewController.deleteChecked()"></SPAN>
+    </SPAN>
+    <SPAN id="view-checklist-table-editing-operations-button-wrapper" class="view-checklist-table-button-wrapper">
+        <SPAN id="view-checklist-table-edit-save-button" class="button dialog-button" onclick="checklistTableViewController.saveChanges()"></SPAN>
+        <SPAN id="view-checklist-table-edit-cancel-button" class="button dialog-button" onclick="checklistTableViewController.discardChanges()"></SPAN>
+        <SPAN id="view-checklist-table-edit-add-column-button" class="button dialog-button" onclick="checklistTableViewController.addColumn()"></SPAN>
+        <SPAN id="view-checklist-table-edit-add-row-button" class="button dialog-button" onclick="checklistTableViewController.addRow()"></SPAN>
+    </SPAN>
+</SPAN>
+
+</BODY>
+</HTML>

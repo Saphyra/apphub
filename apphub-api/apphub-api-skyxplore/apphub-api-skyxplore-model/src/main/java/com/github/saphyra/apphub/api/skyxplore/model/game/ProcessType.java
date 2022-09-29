@@ -1,5 +1,8 @@
 package com.github.saphyra.apphub.api.skyxplore.model.game;
 
 public enum ProcessType {
-    CONSTRUCTION, PRODUCTION_ORDER, REQUEST_WORK
+    CONSTRUCTION,
+    TERRAFORMATION,
+    PRODUCTION_ORDER,
+    REQUEST_WORK
 }

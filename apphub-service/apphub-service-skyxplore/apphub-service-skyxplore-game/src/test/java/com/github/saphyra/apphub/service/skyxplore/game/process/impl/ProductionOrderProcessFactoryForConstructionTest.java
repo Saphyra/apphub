@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction;
+package com.github.saphyra.apphub.service.skyxplore.game.process.impl;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorage;

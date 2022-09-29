@@ -11,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +25,8 @@ public class OccurrenceToResponseConverterTest {
     private static final String TITLE = "title";
     private static final String CONTENT = "content";
     private static final String NOTE = "note";
+    private static final LocalDate DATE = LocalDate.now();
+    private static final LocalTime TIME = LocalTime.now();
 
     @Mock
     private EventDao eventDao;
@@ -42,6 +46,8 @@ public class OccurrenceToResponseConverterTest {
         given(occurrence.getEventId()).willReturn(EVENT_ID);
         given(occurrence.getStatus()).willReturn(OccurrenceStatus.PENDING);
         given(occurrence.getNote()).willReturn(NOTE);
+        given(occurrence.getDate()).willReturn(DATE);
+        given(occurrence.getTime()).willReturn(TIME);
 
         given(eventDao.findByIdValidated(EVENT_ID)).willReturn(event);
         given(event.getTitle()).willReturn(TITLE);
@@ -55,5 +61,7 @@ public class OccurrenceToResponseConverterTest {
         assertThat(result.getTitle()).isEqualTo(TITLE);
         assertThat(result.getContent()).isEqualTo(CONTENT);
         assertThat(result.getNote()).isEqualTo(NOTE);
+        assertThat(result.getDate()).isEqualTo(DATE);
+        assertThat(result.getTime()).isEqualTo(TIME);
     }
 }

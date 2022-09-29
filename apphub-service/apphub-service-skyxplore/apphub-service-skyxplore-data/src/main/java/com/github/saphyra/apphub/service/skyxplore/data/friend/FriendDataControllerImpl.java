@@ -39,9 +39,9 @@ public class FriendDataControllerImpl implements SkyXploreFriendDataController {
     }
 
     @Override
-    public void createFriendRequest(OneParamRequest<UUID> userId, AccessTokenHeader accessTokenHeader) {
+    public SentFriendRequestResponse createFriendRequest(OneParamRequest<UUID> userId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to add {} as friend", accessTokenHeader.getUserId(), userId.getValue());
-        friendRequestCreationService.createFriendRequest(accessTokenHeader.getUserId(), userId.getValue());
+        return friendRequestCreationService.createFriendRequest(accessTokenHeader.getUserId(), userId.getValue());
     }
 
     @Override
@@ -63,9 +63,9 @@ public class FriendDataControllerImpl implements SkyXploreFriendDataController {
     }
 
     @Override
-    public void acceptFriendRequest(UUID friendRequestId, AccessTokenHeader accessTokenHeader) {
+    public FriendshipResponse acceptFriendRequest(UUID friendRequestId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to accept friendRequest {}", accessTokenHeader.getUserId(), friendRequestId);
-        friendRequestAcceptService.accept(accessTokenHeader.getUserId(), friendRequestId);
+        return friendRequestAcceptService.accept(accessTokenHeader.getUserId(), friendRequestId);
     }
 
     @Override

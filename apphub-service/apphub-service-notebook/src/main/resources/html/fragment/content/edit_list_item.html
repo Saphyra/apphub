@@ -1,0 +1,25 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<DIV id="edit-list-item" class="main-page" th:fragment="edit-list-item">
+    <HEADER>
+        <H1 id="edit-list-item-title"></H1>
+        <BUTTON id="edit-list-item-close-button" class="dialog-close-button" onclick="pageController.openMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN>
+        <DIV class="create-item-input-wrapper">
+            <INPUT type="text" id="edit-list-item-title-input" class="new-item-title">
+            <INPUT type="text" id="edit-list-item-value-input" class="new-item-title">
+        </DIV>
+
+        <DIV id="edit-list-item-parent-selection-wrapper" class="parent-selection-wrapper">
+            <DIV id="edit-list-item-current-category-title"></DIV>
+            <DIV id="edit-list-item-parent-selection-parent-button" class="button create-item-category"></DIV>
+            <DIV id="edit-list-item-parent-selection-category-list"></DIV>
+        </DIV>
+    </MAIN>
+</DIV>
+
+</BODY>
+</HTML>

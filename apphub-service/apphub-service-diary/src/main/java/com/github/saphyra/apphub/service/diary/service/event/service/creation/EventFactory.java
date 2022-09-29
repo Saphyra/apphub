@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -21,10 +23,15 @@ class EventFactory {
     private final ObjectMapperWrapper objectMapperWrapper;
 
     public Event create(UUID userId, CreateEventRequest request) {
+        LocalTime time = Optional.ofNullable(request.getHours())
+            .map(i -> LocalTime.of(request.getHours(), request.getMinutes(), 0))
+            .orElse(null);
+
         return Event.builder()
             .eventId(idGenerator.randomUuid())
             .userId(userId)
             .startDate(request.getDate())
+            .time(time)
             .repetitionType(request.getRepetitionType())
             .repetitionData(getRepetitionData(request))
             .title(request.getTitle())

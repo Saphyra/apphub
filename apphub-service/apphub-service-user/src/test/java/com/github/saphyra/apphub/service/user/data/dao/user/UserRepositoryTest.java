@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -13,6 +14,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -90,9 +93,27 @@ public class UserRepositoryTest {
             .build();
         underTest.saveAll(Arrays.asList(entity1, entity2, entity3));
 
-        List<UserEntity> result = underTest.getByUsernameOrEmailContainingIgnoreCase("AsD");
+        List<UserEntity> result = underTest.getByUsernameOrEmailContainingIgnoreCase("AsD", PageRequest.of(0, 10));
 
         assertThat(result).containsExactlyInAnyOrder(entity1, entity2);
+    }
+
+    @Test
+    public void getByUsernameOrEmailContainingIgnoreCase_limiting() {
+        Stream.generate(UUID::randomUUID)
+            .limit(101)
+            .map(UUID::toString)
+            .map(userId ->
+                UserEntity.builder()
+                    .userId(userId)
+                    .username("asd")
+                    .build()
+            )
+            .forEach(underTest::save);
+
+        List<UserEntity> result = underTest.getByUsernameOrEmailContainingIgnoreCase("asd", PageRequest.of(0, 100));
+
+        assertThat(result).hasSize(100);
     }
 
     @Test

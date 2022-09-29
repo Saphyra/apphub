@@ -71,4 +71,54 @@ public class TerraformationTest extends SeleniumTest {
         surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
         assertThat(surface.isTerraformationInProgress()).isFalse();
     }
+
+    @Test(groups = "skyxplore")
+    public void finishTerraformation() {
+        WebDriver driver = extractDriver();
+        RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
+        Navigation.toIndexPage(driver);
+        IndexPageActions.registerUser(driver, registrationParameters);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
+
+        SkyXploreCharacterActions.createCharacter(driver);
+        SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyActions.setReady(driver);
+        SkyXploreLobbyActions.startGameCreation(driver);
+
+        AwaitilityWrapper.create(60, 1)
+            .until(() -> SkyXploreGameActions.isGameLoaded(driver))
+            .assertTrue("Game not loaded.");
+
+        SkyXploreMapActions.getSolarSystem(driver).click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXploreSolarSystemActions.isOpened(driver))
+            .assertTrue("SolarSystem is not opened.");
+
+        SkyXploreSolarSystemActions.getPlanet(driver).click();
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXplorePlanetActions.isLoaded(driver))
+            .assertTrue("Planet is not opened.");
+
+        Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_DESERT);
+        String surfaceId = surface.getSurfaceId();
+        surface.openTerraformationWindow(driver);
+
+        SkyXploreSurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_CONCRETE);
+
+        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
+        assertThat(surface.isConstructionInProgress()).isTrue();
+
+        SkyXploreGameActions.resumeGame(driver);
+
+        AwaitilityWrapper.create(120, 5)
+            .until(() -> SkyXplorePlanetActions.getQueue(driver).isEmpty())
+            .assertTrue("Construction is not finished.");
+
+        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
+
+        assertThat(surface.isConstructionInProgress()).isFalse();
+        assertThat(surface.getSurfaceType()).isEqualTo(Constants.SURFACE_TYPE_CONCRETE);
+    }
 }

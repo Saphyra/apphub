@@ -24,6 +24,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.Que
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction.BuildingConstructionToQueueItemConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
@@ -54,6 +55,7 @@ public class ConstructNewBuildingService {
     private final QueueItemToResponseConverter queueItemToResponseConverter;
     private final WsMessageSender messageSender;
     private final ConstructionProcessFactory constructionProcessFactory;
+    private final PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
 
     public SurfaceResponse constructNewBuilding(UUID userId, String dataId, UUID planetId, UUID surfaceId) {
         Optional<BuildingData> maybeBuildingData = allBuildingService.getOptional(dataId);
@@ -94,6 +96,7 @@ public class ConstructNewBuildingService {
 
         QueueResponse queueResponse = queueItemToResponseConverter.convert(buildingConstructionToQueueItemConverter.convert(building), planet);
         messageSender.planetQueueItemModified(userId, planetId, queueResponse);
+        messageSender.planetBuildingDetailsModified(userId, planetId, planetBuildingOverviewQueryService.getBuildingOverview(planet));
 
         ConstructionProcess constructionProcess = constructionProcessFactory.create(game, planet, building);
 
@@ -107,6 +110,7 @@ public class ConstructNewBuildingService {
             constructionToModelConverter.convert(construction, game.getGameId()),
             constructionProcess.toModel()
         );
+
         return surfaceToResponseConverter.convert(surface);
     }
 }

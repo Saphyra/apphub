@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.ws;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
@@ -21,6 +22,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,6 +35,7 @@ public class WsMessageSenderTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID ITEM_ID = UUID.randomUUID();
+    private static final String DATA_ID = "data-id";
 
     @Mock
     private GameDao gameDao;
@@ -63,6 +66,9 @@ public class WsMessageSenderTest {
 
     @Mock
     private CitizenResponse citizenResponse;
+
+    @Mock
+    private PlanetBuildingOverviewResponse planetBuildingOverviewResponse;
 
     @Before
     public void setUp() {
@@ -136,6 +142,20 @@ public class WsMessageSenderTest {
         ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
         verify(messageSenderProxy).sendToGame(argumentCaptor.capture());
         verifyMessageSent(argumentCaptor.getValue(), WebSocketEventName.SKYXPLORE_GAME_PLANET_CITIZEN_MODIFIED, citizenResponse);
+    }
+
+    @Test
+    public void planetBuildingDetailsModified() {
+        given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET_POPULATION_OVERVIEW);
+        given(openedPage.getPageId()).willReturn(PLANET_ID);
+
+        Map<String, PlanetBuildingOverviewResponse> payload = CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse);
+
+        underTest.planetBuildingDetailsModified(USER_ID, PLANET_ID, payload);
+
+        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
+        verify(messageSenderProxy).sendToGame(argumentCaptor.capture());
+        verifyMessageSent(argumentCaptor.getValue(), WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED, payload);
     }
 
     private void verifyMessageSent(WebSocketMessage webSocketMessage, WebSocketEventName eventName, Object payload) {

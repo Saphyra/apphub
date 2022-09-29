@@ -186,6 +186,12 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/queue_controller.js");
         ));
 
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "skyxplore", fileName: "game"}));
+
+        errorHandler.addErrorResponseParameterTranslator(new ErrorResponseParameterTranslator(
+            (key) => {return key == "storageType"},
+            (value) => {return dataCaches.storageTypeLocalization.get(value)}
+        ));
+
         //document.addEventListener('contextmenu', event => event.preventDefault());
     });
 })();
