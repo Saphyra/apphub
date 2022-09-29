@@ -52,7 +52,7 @@ scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
 scriptLoader.loadScript("/res/common/js/date.js");
 
 window.monthLocalization = new CustomLocalization("diary", "months");
-const CURRENT_DATE = LocalDate.create(new Date());
+const CURRENT_DATE = LocalDate.now();
 
 scriptLoader.loadScript("/res/diary/js/calendar_controller.js");
 scriptLoader.loadScript("/res/diary/js/daily_tasks_controller.js");
@@ -62,11 +62,23 @@ scriptLoader.loadScript("/res/diary/js/view_event_controller.js");
 (function PageController(){
     $(document).ready(function(){
         eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "diary", fileName: "diary"}));
+
+        window.addEventListener("focus", refreshPageIfNeeded);
     });
 
     window.pageController = new function(){
         this.displayMainPage = function(){
             switchTab("main-page", ids.mainPage);
+        }
+    }
+
+    function refreshPageIfNeeded(){
+        console.log("Checking if page needs to be refreshed...");
+
+        const currentDate = LocalDate.now();
+
+        if(!currentDate.equals(CURRENT_DATE)){
+            window.location.reload();
         }
     }
 })();

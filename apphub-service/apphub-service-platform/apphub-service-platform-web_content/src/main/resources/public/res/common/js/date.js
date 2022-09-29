@@ -23,6 +23,10 @@ window.LocalDate = new function(){
         return new LocalDateObj(date);
     }
 
+    this.now = function(){
+        return this.create(new Date());
+    }
+
     function extractDay(date){
         return date.split("-")[2];
     }
@@ -36,7 +40,11 @@ window.LocalDate = new function(){
     }
 
     function LocalDateObj(date){
-        if(!date instanceof Date){
+        if(!hasValue(date)){
+            throwException("IllegalArgument", "date must not be null");
+        }
+
+        if(!(date instanceof Date)){
             console.log(date);
             throwException("IllegalArgument", "Date is not a Date");
         }
@@ -54,7 +62,7 @@ window.LocalDate = new function(){
         }
 
         this.getYear = function(){
-            return date.getFullYear();;
+            return date.getFullYear();
         }
 
         this.getDay = function(){
