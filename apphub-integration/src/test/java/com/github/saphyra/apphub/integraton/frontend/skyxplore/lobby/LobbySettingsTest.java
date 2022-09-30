@@ -35,8 +35,9 @@ public class LobbySettingsTest extends SeleniumTest {
 
     @Test(groups = "skyxplore")
     public void setUpLobby() {
-        WebDriver driver1 = extractDriver();
-        WebDriver driver2 = extractDriver();
+        List<WebDriver> drivers = extractDrivers(2);
+        WebDriver driver1 = drivers.get(0);
+        WebDriver driver2 = drivers.get(1);
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
 

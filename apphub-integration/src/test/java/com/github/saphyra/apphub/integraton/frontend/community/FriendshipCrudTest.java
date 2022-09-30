@@ -30,8 +30,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FriendshipCrudTest extends SeleniumTest {
     @Test(groups = "community")
     public void friendRequestCrud() {
-        WebDriver driver1 = extractDriver();
-        WebDriver driver2 = extractDriver();
+        List<WebDriver> drivers = extractDrivers(2);
+        WebDriver driver1 = drivers.get(0);
+        WebDriver driver2 = drivers.get(1);
+
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
 

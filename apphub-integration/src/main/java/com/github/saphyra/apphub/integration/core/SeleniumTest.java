@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.integration.core;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.time.StopWatch;
+import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -53,25 +55,30 @@ public class SeleniumTest extends TestBase {
     }
 
     protected static WebDriver extractDriver() {
+        return extractDrivers(1)
+            .get(0);
+    }
+
+    @NotNull
+    protected static List<WebDriver> extractDrivers(int driverCount) {
         StopWatch stopWatch = StopWatch.createStarted();
-        WebDriverWrapper webDriverWrapper;
+        List<WebDriverWrapper> webDriverWrappers;
         try {
-            webDriverWrapper = WebDriverFactory.getDriver();
+            webDriverWrappers = WebDriverFactory.getDrivers(driverCount);
             stopWatch.stop();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        log.debug("WebDriver with id {} allocated in {} seconds", webDriverWrapper.getId(), stopWatch.getTime(TimeUnit.SECONDS));
+        log.debug("{} WebDriver(s) allocated in {} seconds", driverCount, stopWatch.getTime(TimeUnit.SECONDS));
 
         if (isNull(driverWrappers.get())) {
             driverWrappers.set(new ArrayList<>());
         }
-        driverWrappers.get().add(webDriverWrapper);
+        driverWrappers.get().addAll(webDriverWrappers);
 
-        WebDriver driver = webDriverWrapper.getDriver();
-        driver.manage().deleteAllCookies();
-
-        return driver;
+        return webDriverWrappers.stream()
+            .map(WebDriverWrapper::getDriver)
+            .collect(Collectors.toList());
     }
 }

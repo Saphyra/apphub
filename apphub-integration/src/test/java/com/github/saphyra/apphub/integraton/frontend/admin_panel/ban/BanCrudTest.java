@@ -22,6 +22,7 @@ import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.concurrent.Future;
 
 public class BanCrudTest extends SeleniumTest {
@@ -29,8 +30,9 @@ public class BanCrudTest extends SeleniumTest {
 
     @Test
     public void banCrud() {
-        WebDriver testDriver = extractDriver();
-        WebDriver adminDriver = extractDriver();
+        List<WebDriver> drivers = extractDrivers(2);
+        WebDriver testDriver = drivers.get(0);
+        WebDriver adminDriver = drivers.get(1);
 
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
         RegistrationParameters testUserData = RegistrationParameters.validParameters();

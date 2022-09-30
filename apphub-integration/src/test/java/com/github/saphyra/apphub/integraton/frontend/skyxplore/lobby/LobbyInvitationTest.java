@@ -17,6 +17,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
+import java.util.List;
 import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,9 +27,11 @@ public class LobbyInvitationTest extends SeleniumTest {
 
     @Test(groups = "skyxplore")
     public void inviteFriendToLobby() {
-        WebDriver driver1 = extractDriver();
+        List<WebDriver> drivers = extractDrivers(2);
+        WebDriver driver1 = drivers.get(0);
+        WebDriver driver2 = drivers.get(1);
+
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
-        WebDriver driver2 = extractDriver();
         Future<Void> driverFuture = EXECUTOR_SERVICE.submit(() -> {
             Navigation.toIndexPage(driver2);
             IndexPageActions.registerUser(driver2, userData2);

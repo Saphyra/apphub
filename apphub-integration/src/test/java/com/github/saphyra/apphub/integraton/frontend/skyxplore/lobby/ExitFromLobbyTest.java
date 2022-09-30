@@ -31,10 +31,12 @@ public class ExitFromLobbyTest extends SeleniumTest {
 
     @Test(groups = "skyxplore")
     public void exitFromLobby() {
-        WebDriver driver1 = extractDriver();
-        WebDriver driver2 = extractDriver();
-        WebDriver driver3 = extractDriver();
-        WebDriver driver4 = extractDriver();
+        List<WebDriver> drivers = extractDrivers(4);
+        WebDriver driver1 = drivers.get(0);
+        WebDriver driver2 = drivers.get(1);
+        WebDriver driver3 = drivers.get(2);
+        WebDriver driver4 = drivers.get(3);
+
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData3 = RegistrationParameters.validParameters();

@@ -103,7 +103,7 @@ public class TestBase {
     private static synchronized void acquirePermit(Method method, Stopwatch stopwatch) throws InterruptedException {
         SEMAPHORE.acquire(1);
         stopwatch.stop();
-        log.info("Permit acquired for test {} in {}ms. Permits left: {}", method.getName(), stopwatch.elapsed(TimeUnit.MILLISECONDS), SEMAPHORE.availablePermits());
+        log.debug("Permit acquired for test {} in {}ms. Permits left: {}", method.getName(), stopwatch.elapsed(TimeUnit.MILLISECONDS), SEMAPHORE.availablePermits());
     }
 
     @AfterMethod(alwaysRun = true)
@@ -116,7 +116,7 @@ public class TestBase {
             SEMAPHORE.release(1);
         }
         SEMAPHORE.release(1);
-        log.info("Available permits after releasing {}: {}", methodName, SEMAPHORE.availablePermits());
+        log.debug("Available permits after releasing {}: {}", methodName, SEMAPHORE.availablePermits());
 
         deleteTestUsers(methodName);
 

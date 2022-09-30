@@ -42,9 +42,11 @@ public class GameChatTest extends SeleniumTest {
 
     @Test(groups = "skyxplore")
     public void chatInGame() {
-        WebDriver driver1 = extractDriver();
-        WebDriver driver2 = extractDriver();
-        WebDriver driver3 = extractDriver();
+        List<WebDriver> drivers = extractDrivers(3);
+        WebDriver driver1 = drivers.get(0);
+        WebDriver driver2 = drivers.get(1);
+        WebDriver driver3 = drivers.get(2);
+
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
