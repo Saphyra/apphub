@@ -77,7 +77,7 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
     }
 
     @Override
-    public ProductionOrderProcess create(Game game, ProcessModel model) {
+    public ProductionOrderProcess createFromModel(Game game, ProcessModel model) {
         Planet planet = game.getUniverse()
             .findPlanetByIdValidated(model.getLocation());
 

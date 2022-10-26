@@ -38,7 +38,7 @@ public class ConstructionProcessFactory implements ProcessFactory {
     }
 
     @Override
-    public ConstructionProcess create(Game game, ProcessModel model) {
+    public ConstructionProcess createFromModel(Game game, ProcessModel model) {
         Planet planet = game.getUniverse()
             .findPlanetByIdValidated(model.getLocation());
 

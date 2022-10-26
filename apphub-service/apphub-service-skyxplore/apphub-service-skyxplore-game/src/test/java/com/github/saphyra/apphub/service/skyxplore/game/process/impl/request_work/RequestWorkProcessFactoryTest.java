@@ -110,7 +110,7 @@ public class RequestWorkProcessFactoryTest {
         given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
         given(uuidConverter.convertEntity(TARGET_ID_STRING)).willReturn(TARGET_ID);
 
-        RequestWorkProcess result = underTest.create(game, model);
+        RequestWorkProcess result = underTest.createFromModel(game, model);
 
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);

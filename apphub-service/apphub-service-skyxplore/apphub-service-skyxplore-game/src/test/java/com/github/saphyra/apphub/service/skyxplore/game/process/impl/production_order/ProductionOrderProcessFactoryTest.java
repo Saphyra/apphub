@@ -149,7 +149,7 @@ public class ProductionOrderProcessFactoryTest {
         given(reservedStorages.findByIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
         given(allocatedResources.findByIdValidated(ALLOCATED_RESOURCE_ID)).willReturn(allocatedResource);
 
-        ProductionOrderProcess result = underTest.create(game, model);
+        ProductionOrderProcess result = underTest.createFromModel(game, model);
 
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID_1);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
