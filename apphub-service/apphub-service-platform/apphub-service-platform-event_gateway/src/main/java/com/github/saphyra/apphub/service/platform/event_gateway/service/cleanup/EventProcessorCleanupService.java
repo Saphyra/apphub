@@ -35,7 +35,7 @@ class EventProcessorCleanupService {
     @Scheduled(fixedRateString = "${eventProcessor.cleanup.interval}")
     void cleanupExpiredEventProcessors() {
         log.info("Cleaning up expired eventProcessors...");
-        LocalDateTime expiration = dateTimeUtil.getCurrentTime()
+        LocalDateTime expiration = dateTimeUtil.getCurrentDateTime()
             .minusSeconds(eventProcessorExpirationSeconds);
         List<EventProcessor> eventProcessors = eventProcessorDao.getByLastAccessBefore(expiration);
         eventProcessorDao.deleteAll(eventProcessors);

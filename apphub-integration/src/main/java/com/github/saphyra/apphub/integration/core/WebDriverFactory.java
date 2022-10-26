@@ -126,7 +126,6 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
         WebDriver driver = webDriverWrapper.getDriver();
         for (int tryCount = 0; tryCount < 3; tryCount++) {
             try {
-                driver.close();
                 driver.quit();
                 break;
             } catch (Exception e) {

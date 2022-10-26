@@ -83,7 +83,7 @@ public class LoginServiceTest {
     @Test
     public void userLocked() {
         given(userDao.findByEmail(EMAIL)).willReturn(Optional.of(user));
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_TIME);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(user.getLockedUntil()).willReturn(CURRENT_TIME.plusSeconds(1));
 
         LoginRequest request = LoginRequest.builder()
@@ -126,7 +126,7 @@ public class LoginServiceTest {
         given(user.getPasswordFailureCount()).willReturn(LOCK_ACCOUNT_FAILURES);
         given(passwordProperties.getLockAccountFailures()).willReturn(LOCK_ACCOUNT_FAILURES);
         given(passwordProperties.getLockedMinutes()).willReturn(LOCK_MINUTES);
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_TIME);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
 
         LoginRequest request = LoginRequest.builder()
             .email(EMAIL)

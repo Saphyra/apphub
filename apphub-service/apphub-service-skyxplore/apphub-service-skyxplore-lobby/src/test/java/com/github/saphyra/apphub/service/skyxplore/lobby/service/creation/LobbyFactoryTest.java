@@ -44,7 +44,7 @@ public class LobbyFactoryTest {
 
     @Test
     public void create() {
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         given(idGenerator.randomUuid()).willReturn(LOBBY_ID);
 
         Lobby result = underTest.create(USER_ID, LOBBY_NAME, LobbyType.LOAD_GAME);
@@ -60,7 +60,7 @@ public class LobbyFactoryTest {
 
     @Test
     public void create_detailed() {
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         given(idGenerator.randomUuid()).willReturn(LOBBY_ID);
 
         Lobby result = underTest.create(USER_ID, GAME_ID, ALLIANCE_ID, LOBBY_NAME, LobbyType.LOAD_GAME, Arrays.asList(alliance), Arrays.asList(PLAYER_ID));

@@ -41,7 +41,7 @@ public class GameLoader {
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
         Stopwatch stopwatch = Stopwatch.createStarted();
-        gameModel.setLastPlayed(dateTimeUtil.getCurrentTime());
+        gameModel.setLastPlayed(dateTimeUtil.getCurrentDateTime());
         Map<UUID, Player> players = playerLoader.load(gameModel.getId(), members);
         Game game = Game.builder()
             .gameId(gameModel.getId())

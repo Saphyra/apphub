@@ -29,6 +29,10 @@ window.ids = {
     selectedDaysOfMonth: "selected-days-of-month",
     createEventTimeHours: "create-event-time-hours",
     createEventTimeMinutes: "create-event-time-minutes",
+    searchResultPage: "search-result-page",
+    searchResult: "search-result",
+    searchInput: "search-input",
+    searchResultPageSearchInput: "search-result-page-search-input",
 }
 
 window.occurrenceOrder = new function(){
@@ -58,6 +62,7 @@ scriptLoader.loadScript("/res/diary/js/calendar_controller.js");
 scriptLoader.loadScript("/res/diary/js/daily_tasks_controller.js");
 scriptLoader.loadScript("/res/diary/js/create_event_controller.js");
 scriptLoader.loadScript("/res/diary/js/view_event_controller.js");
+scriptLoader.loadScript("/res/diary/js/search_controller.js");
 
 (function PageController(){
     $(document).ready(function(){

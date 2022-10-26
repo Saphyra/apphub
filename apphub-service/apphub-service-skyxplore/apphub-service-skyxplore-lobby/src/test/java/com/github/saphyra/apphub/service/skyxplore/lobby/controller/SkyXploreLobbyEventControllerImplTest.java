@@ -42,7 +42,7 @@ public class SkyXploreLobbyEventControllerImplTest {
 
     @Test
     public void cleanupExpiredLobbies() {
-        given(dateTimeUtil.getCurrentTime()).willReturn(ACTUAL_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(ACTUAL_DATE);
         given(lobbyDao.getByLastAccessedBefore(ACTUAL_DATE.minusMinutes(EXPIRATION_MINUTES))).willReturn(Arrays.asList(lobby));
 
         underTest.cleanupExpiredLobbies();

@@ -48,7 +48,7 @@ public class RegisterProcessorServiceTest {
     @Test
     public void registerProcessor_alreadyExists() {
         given(eventProcessorDao.findByServiceNameAndEventName(SERVICE_NAME, EVENT_NAME)).willReturn(Optional.of(eventProcessor));
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
 
         RegisterProcessorRequest request = RegisterProcessorRequest.builder()
             .serviceName(SERVICE_NAME)
@@ -66,7 +66,7 @@ public class RegisterProcessorServiceTest {
     @Test
     public void registerProcessor_differentUrl() {
         given(eventProcessorDao.findByServiceNameAndEventName(SERVICE_NAME, EVENT_NAME)).willReturn(Optional.of(eventProcessor));
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
 
         RegisterProcessorRequest request = RegisterProcessorRequest.builder()
             .serviceName(SERVICE_NAME)
@@ -85,7 +85,7 @@ public class RegisterProcessorServiceTest {
     @Test
     public void registerProcessor_notPresent() {
         given(eventProcessorDao.findByServiceNameAndEventName(SERVICE_NAME, EVENT_NAME)).willReturn(Optional.empty());
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
 
         RegisterProcessorRequest request = RegisterProcessorRequest.builder()
             .serviceName(SERVICE_NAME)

@@ -54,7 +54,7 @@ public class GameDeletionServiceTest {
         given(gameDao.getByHost(USER_ID)).willReturn(Arrays.asList(gameModel));
         given(gameModel.getGameId()).willReturn(GAME_ID);
         given(playerModel.getUsername()).willReturn(USERNAME);
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_TIME);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
 
         given(gameDao.findByIdValidated(GAME_ID)).willReturn(gameModel);
 
@@ -92,7 +92,7 @@ public class GameDeletionServiceTest {
         given(gameDao.findById(GAME_ID)).willReturn(Optional.of(gameModel));
         given(gameModel.getHost()).willReturn(USER_ID);
 
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_TIME);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(gameDao.findByIdValidated(GAME_ID)).willReturn(gameModel);
 
         underTest.deleteByGameId(GAME_ID, USER_ID);

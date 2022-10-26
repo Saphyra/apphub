@@ -80,7 +80,7 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
             String userName = characterProxy.getCharacterByUserId(userId).getName();
 
             if (game.getConnectedPlayers().isEmpty()) {
-                game.setExpiresAt(dateTimeUtil.getCurrentTime().plusSeconds(configuration.getAbandonedGameExpirationSeconds()));
+                game.setExpiresAt(dateTimeUtil.getCurrentDateTime().plusSeconds(configuration.getAbandonedGameExpirationSeconds()));
                 return;
             }
 

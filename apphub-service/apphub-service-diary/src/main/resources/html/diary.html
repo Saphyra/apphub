@@ -48,6 +48,10 @@
 
     <FOOTER>
         <BUTTON id="back-button" onclick='window.location = "/web/modules"'></BUTTON>
+        <SPAN id="search-container">
+            <INPUT type="text" id="search-input">
+            <BUTTON id="search-button" onclick="searchController.searchByFooter()"></BUTTON>
+        </SPAN>
     </FOOTER>
 </DIV>
 
@@ -256,6 +260,23 @@
         <BUTTON id="view-event-unsnooze-button" onclick="viewEventController.markAsDefault()"></BUTTON>
         <BUTTON id="view-event-delete-button" onclick="viewEventController.deleteEvent()"></BUTTON>
     </FOOTER>
+</DIV>
+
+<DIV id="search-result-page" class="main-page">
+    <HEADER>
+        <H1 id="search-result-title"></H1>
+
+        <BUTTON id="search-result-page-close-button" class="close-dialog-button" onclick="pageController.displayMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN id="search-result-page-main" class="footerless">
+        <DIV id="search-result-page-search-container">
+            <INPUT type="text" id="search-result-page-search-input">
+            <BUTTON id="search-result-page-search-button" onclick="searchController.searchBySearchPage()"></BUTTON>
+        </DIV>
+
+        <DIV id="search-result"></DIV>
+    </MAIN>
 </DIV>
 </BODY>
 </HTML>

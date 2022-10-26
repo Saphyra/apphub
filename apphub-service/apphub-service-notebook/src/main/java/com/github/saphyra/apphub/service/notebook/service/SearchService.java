@@ -39,13 +39,13 @@ public class SearchService {
             .collect(Collectors.toList());
     }
 
-    private Stream<ListItem> searchByContent(UUID userId, String searchValue) {
+    private Stream<ListItem> searchByTitle(UUID userId, String searchValue) {
         return listItemDao.getByUserId(userId)
             .stream()
             .filter(listItem -> listItem.getTitle().toLowerCase().contains(searchValue.toLowerCase()));
     }
 
-    private Stream<ListItem> searchByTitle(UUID userId, String searchValue) {
+    private Stream<ListItem> searchByContent(UUID userId, String searchValue) {
         return contentDao.getByUserId(userId)
             .stream()
             .filter(content -> content.getContent().toLowerCase().contains(searchValue.toLowerCase()))

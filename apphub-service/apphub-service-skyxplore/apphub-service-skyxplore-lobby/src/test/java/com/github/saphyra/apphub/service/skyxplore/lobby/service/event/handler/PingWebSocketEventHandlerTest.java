@@ -48,7 +48,7 @@ public class PingWebSocketEventHandlerTest {
     @Test
     public void handle() {
         given(lobbyDao.findByUserId(FROM)).willReturn(Optional.of(lobby));
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
 
         underTest.handle(FROM, null);
 

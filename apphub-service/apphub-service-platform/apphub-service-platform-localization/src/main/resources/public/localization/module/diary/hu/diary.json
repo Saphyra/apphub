@@ -246,6 +246,18 @@
         "key": "innerHTML",
         "message": "Idő"
       }
+    ],
+    "search-input": [
+      {
+        "key": "placeholder",
+        "message": "Keresés"
+      }
+    ],
+    "search-result-title": [
+      {
+        "key": "innerHTML",
+        "message": "Találatok"
+      }
     ]
   },
   "additionalContent": {
@@ -258,6 +270,8 @@
     "delete-event-confirmation-dialog-confirm-button": "Esemény törlése",
     "delete-event-confirmation-dialog-cancel-button": "Mégse",
     "event-deleted": "Esemény törölve.",
-    "empty-time": "Az órát és a percet is ki kell tölteni, vagy egyiket sem."
+    "empty-time": "Az órát és a percet is ki kell tölteni, vagy egyiket sem.",
+    "search-text-too-short": "A kereséshez írj be legalább 3 karaktert!",
+    "search-result-empty": "Nincs találat."
   }
 }

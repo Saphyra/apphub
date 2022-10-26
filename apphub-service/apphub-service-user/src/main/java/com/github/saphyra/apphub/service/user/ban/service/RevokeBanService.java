@@ -29,7 +29,7 @@ public class RevokeBanService {
 
     @Transactional
     public void revokeExpiredBans() {
-        LocalDateTime expiration = dateTimeUtil.getCurrentTime();
+        LocalDateTime expiration = dateTimeUtil.getCurrentDateTime();
 
         banDao.deleteExpired(expiration);
     }

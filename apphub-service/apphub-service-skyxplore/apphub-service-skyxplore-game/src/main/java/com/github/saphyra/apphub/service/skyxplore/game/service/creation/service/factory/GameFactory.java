@@ -61,7 +61,7 @@ public class GameFactory {
             .universe(universe)
             .chat(chatFactory.create(request.getMembers()))
             .gameName(request.getGameName())
-            .lastPlayed(dateTimeUtil.getCurrentTime())
+            .lastPlayed(dateTimeUtil.getCurrentDateTime())
             .eventLoop(eventLoopFactory.create())
             .markedForDeletion(false)
             .build();

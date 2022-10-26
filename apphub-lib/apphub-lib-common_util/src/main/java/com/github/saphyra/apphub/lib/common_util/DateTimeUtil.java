@@ -4,12 +4,17 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
 
 @Component
 public class DateTimeUtil {
-    public LocalDateTime getCurrentTime() {
+    public LocalTime getCurrentTime() {
+        return LocalTime.now(ZoneOffset.UTC);
+    }
+
+    public LocalDateTime getCurrentDateTime() {
         return LocalDateTime.now(ZoneOffset.UTC);
     }
 

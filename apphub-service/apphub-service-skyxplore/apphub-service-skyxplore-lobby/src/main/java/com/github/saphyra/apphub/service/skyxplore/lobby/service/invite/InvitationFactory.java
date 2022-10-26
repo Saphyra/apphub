@@ -18,7 +18,7 @@ class InvitationFactory {
         return Invitation.builder()
             .invitorId(invitorId)
             .characterId(characterId)
-            .invitationTime(dateTimeUtil.getCurrentTime())
+            .invitationTime(dateTimeUtil.getCurrentDateTime())
             .build();
     }
 }

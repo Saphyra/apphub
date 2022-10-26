@@ -188,6 +188,7 @@ window.Mapping = new function(){
         DIARY_OCCURRENCE_DONE: new Endpoint("/api/diary/occurrence/{occurrenceId}/done", HttpMethod.POST),
         DIARY_OCCURRENCE_DEFAULT: new Endpoint("/api/diary/occurrence/{occurrenceId}/default", HttpMethod.POST),
         DIARY_OCCURRENCE_SNOOZED: new Endpoint("/api/diary/occurrence/{occurrenceId}/snoozed", HttpMethod.POST),
+        DIARY_SEARCH: new Endpoint("/api/diary/search", HttpMethod.POST),
 
         //SETTINGS
         GET_USER_SETTINGS: new Endpoint("/api/user/settings/{category}", HttpMethod.GET),

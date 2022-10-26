@@ -17,7 +17,7 @@ public class AccessTokenUpdateService {
     private final DateTimeUtil dateTimeUtil;
 
     public void updateLastAccess(UUID accessTokenId) {
-        LocalDateTime currentDate = dateTimeUtil.getCurrentTime();
+        LocalDateTime currentDate = dateTimeUtil.getCurrentDateTime();
         accessTokenDao.updateLastAccess(accessTokenId, currentDate);
     }
 }

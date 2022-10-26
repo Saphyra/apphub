@@ -283,4 +283,5 @@ public class Endpoints {
     public static final String DIARY_OCCURRENCE_DEFAULT = "/api/diary/occurrence/{occurrenceId}/default";
     public static final String DIARY_OCCURRENCE_SNOOZED = "/api/diary/occurrence/{occurrenceId}/snoozed";
     public static final String DIARY_EVENT_DELETE = "/api/diary/event/{eventId}";
+    public static final String DIARY_SEARCH = "/api/diary/search";
 }

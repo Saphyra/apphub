@@ -61,7 +61,7 @@ public class GameDeletionService implements DeleteByUserIdDao {
     private void markGameForDeletion(UUID gameId) {
         GameModel gameModel = gameDao.findByIdValidated(gameId);
         gameModel.setMarkedForDeletion(true);
-        gameModel.setMarkedForDeletionAt(dateTimeUtil.getCurrentTime());
+        gameModel.setMarkedForDeletionAt(dateTimeUtil.getCurrentDateTime());
 
         gameDao.save(gameModel);
     }

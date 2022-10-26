@@ -33,7 +33,7 @@ class LobbyFactory {
             .lobbyName(lobbyName)
             .host(userId)
             .members(members)
-            .lastAccess(dateTimeUtil.getCurrentTime())
+            .lastAccess(dateTimeUtil.getCurrentDateTime())
             .build();
     }
 
@@ -48,7 +48,7 @@ class LobbyFactory {
             .type(lobbyType)
             .lobbyName(lobbyName)
             .alliances(alliances)
-            .lastAccess(dateTimeUtil.getCurrentTime())
+            .lastAccess(dateTimeUtil.getCurrentDateTime())
             .members(members)
             .expectedPlayers(expectedPlayers)
             .build();

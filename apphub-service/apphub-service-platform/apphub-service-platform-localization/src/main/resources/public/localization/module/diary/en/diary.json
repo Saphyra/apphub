@@ -246,6 +246,18 @@
         "key": "innerHTML",
         "message": "Time"
       }
+    ],
+    "search-input": [
+      {
+        "key": "placeholder",
+        "message": "Search"
+      }
+    ],
+    "search-result-title": [
+      {
+        "key": "innerHTML",
+        "message": "Search result"
+      }
     ]
   },
   "additionalContent": {
@@ -258,6 +270,8 @@
     "delete-event-confirmation-dialog-confirm-button": "Delete event",
     "delete-event-confirmation-dialog-cancel-button": "Cancel",
     "event-deleted": "Event deleted.",
-    "empty-time": "Both of neither hours and minutes needs to be filled."
+    "empty-time": "Both of neither hours and minutes needs to be filled.",
+    "search-text-too-short": "Enter at least 3 characters to search.",
+    "search-result-empty": "No result."
   }
 }
