@@ -36,4 +36,7 @@ public interface ErrorReporterController {
 
     @DeleteMapping(Endpoints.ADMIN_PANEL_DELETE_READ_ERROR_REPORTS)
     void deleteReadErrorReports(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @DeleteMapping(Endpoints.ADMIN_PANEL_ERROR_REPORT_DELETE_ALL)
+    void deleteAll(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

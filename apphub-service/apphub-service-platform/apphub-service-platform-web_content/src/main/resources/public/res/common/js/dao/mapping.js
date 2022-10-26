@@ -18,6 +18,7 @@ window.Mapping = new function(){
         ADMIN_PANEL_DELETE_ERROR_REPORTS: new Endpoint("/api/admin-panel/error-report", HttpMethod.DELETE),
         ADMIN_PANEL_MARK_ERROR_REPORTS: new Endpoint("/api/admin-panel/error-report/mark/{status}", HttpMethod.POST),
         ADMIN_PANEL_DELETE_READ_ERROR_REPORTS: new Endpoint("/api/admin-panel/error-report/read", HttpMethod.DELETE),
+        ADMIN_PANEL_ERROR_REPORT_DELETE_ALL: new Endpoint("/api/admin-panel/error-report/all", HttpMethod.DELETE),
 
         //Login
         LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),

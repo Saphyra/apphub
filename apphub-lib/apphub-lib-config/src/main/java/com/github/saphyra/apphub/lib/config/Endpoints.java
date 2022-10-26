@@ -74,6 +74,7 @@ public class Endpoints {
     public static final String ADMIN_PANEL_DELETE_ERROR_REPORTS = "/api/admin-panel/error-report";
     public static final String ADMIN_PANEL_MARK_ERROR_REPORTS = "/api/admin-panel/error-report/mark/{status}";
     public static final String ADMIN_PANEL_DELETE_READ_ERROR_REPORTS = "/api/admin-panel/error-report/read";
+    public static final String ADMIN_PANEL_ERROR_REPORT_DELETE_ALL = "/api/admin-panel/error-report/all";
 
     //MONITORING
     public static final String ADMIN_PANEL_REPORT_MEMORY_STATUS = "/internal/api/admin-panel/monitoring/memory";

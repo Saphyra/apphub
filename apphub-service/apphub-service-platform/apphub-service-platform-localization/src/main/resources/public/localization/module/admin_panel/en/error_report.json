@@ -216,6 +216,12 @@
         "key": "innerHTML",
         "message": "Home"
       }
+    ],
+    "delete-all-button": [
+      {
+        "key": "innerHTML",
+        "message": "Delete all"
+      }
     ]
   },
   "additionalContent": {
@@ -229,11 +235,16 @@
     "mark-error-report-as-unread-button": "Mark as unread",
     "mark-error-report-as-read-button": "Mark as read",
     "delete-all-read-error-reports-confirmation-dialog-title": "Confirm deleting all read error reports",
-    "delete-all-read-error-reports-confirmation-dialog-detail": "Are you sure you want to delete all error reports?",
+    "delete-all-read-error-reports-confirmation-dialog-detail": "Are you sure you want to delete all read error reports?",
     "delete-all-read-error-reports-confirmation-dialog-confirm-button": "Delete all read",
     "delete-all-read-error-reports-confirmation-dialog-cancel-button": "Cancel",
     "all-read-deleted": "All read error reports are deleted.",
     "delete-checked-error-reports-confirmation-dialog-title": "Confirm deleting error reports",
-    "delete-checked-error-reports-confirmation-dialog-detail": "Are you sure you want to delete reports {ids}?"
+    "delete-checked-error-reports-confirmation-dialog-detail": "Are you sure you want to delete reports {ids}?",
+    "delete-all-error-reports-confirmation-dialog-title": "Confirm deleting all error reports",
+    "delete-all-error-reports-confirmation-dialog-detail": "Are you sure you want to delete all error reports?",
+    "delete-all-error-reports-confirmation-dialog-confirm-button": "Delete all",
+    "delete-all-error-reports-confirmation-dialog-cancel-button": "Cancel",
+    "all-deleted": "All error reports are deleted."
   }
 }
