@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class ReservedStorageQueryService {
             .getReservedStorages()
             .stream()
             .filter(reservedStorage -> dataIdsByStorageType.contains(reservedStorage.getDataId()))
+            .filter(reservedStorage -> reservedStorage.getLocationType() != LocationType.PRODUCTION)
             .mapToInt(ReservedStorage::getAmount)
             .sum();
     }
@@ -55,6 +57,7 @@ public class ReservedStorageQueryService {
             .getReservedStorages()
             .stream()
             .filter(reservedStorage -> dataIdsByStorageType.contains(reservedStorage.getDataId()))
+            .filter(reservedStorage -> reservedStorage.getLocationType() != LocationType.PRODUCTION)
             .map(this::getReservedStorageCapacity)
             .mapToInt(Integer::intValue)
             .sum();

@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
@@ -25,6 +26,7 @@ public class ReservedStorageQueryServiceTest {
     private static final String DATA_ID_2 = "data-id-2";
     private static final Integer AMOUNT = 3214;
     private static final Integer MASS = 25;
+    private static final String DATA_ID_3 = "data-id-3";
 
     @Mock
     private ResourceDataService resourceDataService;
@@ -43,6 +45,9 @@ public class ReservedStorageQueryServiceTest {
 
     @Mock
     private ReservedStorage reservedStorage2;
+
+    @Mock
+    private ReservedStorage reservedStorage3;
 
     @Mock
     private ResourceData resourceData;
@@ -66,12 +71,14 @@ public class ReservedStorageQueryServiceTest {
 
     @Test
     public void getReservedAmount_byPlanetAndStorageType() {
-        given(storageDetails.getReservedStorages()).willReturn(new ReservedStorages(Arrays.asList(reservedStorage1, reservedStorage2)));
+        given(storageDetails.getReservedStorages()).willReturn(new ReservedStorages(Arrays.asList(reservedStorage1, reservedStorage2, reservedStorage3)));
         given(resourceData.getId()).willReturn(DATA_ID_1);
         given(resourceDataService.getByStorageType(StorageType.BULK)).willReturn(Arrays.asList(resourceData));
         given(reservedStorage1.getDataId()).willReturn(DATA_ID_1);
         given(reservedStorage1.getAmount()).willReturn(AMOUNT);
         given(reservedStorage2.getDataId()).willReturn(DATA_ID_2);
+        given(reservedStorage3.getDataId()).willReturn(DATA_ID_1);
+        given(reservedStorage3.getLocationType()).willReturn(LocationType.PRODUCTION);
 
         int result = underTest.getReservedAmount(planet, StorageType.BULK);
 
@@ -80,7 +87,7 @@ public class ReservedStorageQueryServiceTest {
 
     @Test
     public void getReservedStorageCapacity() {
-        given(storageDetails.getReservedStorages()).willReturn(new ReservedStorages(Arrays.asList(reservedStorage1, reservedStorage2)));
+        given(storageDetails.getReservedStorages()).willReturn(new ReservedStorages(Arrays.asList(reservedStorage1, reservedStorage2, reservedStorage3)));
         given(reservedStorage1.getDataId()).willReturn(DATA_ID_1);
         given(reservedStorage2.getDataId()).willReturn(DATA_ID_2);
         given(reservedStorage1.getAmount()).willReturn(AMOUNT);
@@ -88,6 +95,8 @@ public class ReservedStorageQueryServiceTest {
         given(resourceData.getId()).willReturn(DATA_ID_1);
         given(resourceData.getMass()).willReturn(MASS);
         given(resourceDataService.get(DATA_ID_1)).willReturn(resourceData);
+        given(reservedStorage3.getDataId()).willReturn(DATA_ID_1);
+        given(reservedStorage3.getLocationType()).willReturn(LocationType.PRODUCTION);
 
         int result = underTest.getReservedStorageCapacity(planet, StorageType.BULK);
 
