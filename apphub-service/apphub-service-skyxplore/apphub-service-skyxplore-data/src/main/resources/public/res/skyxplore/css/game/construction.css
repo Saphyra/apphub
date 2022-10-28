@@ -2,6 +2,11 @@
 
 }
 
+    #available-buildings .formatted-table th{
+        font-size: 1rem;
+        background: rgba(75,0,0,0.7);
+    }
+
     .available-building{
         margin: 1rem;
         text-align: center;
@@ -23,6 +28,10 @@
         .available-building-effect{
 
         }
+
+            .available-building-effect-production{
+                margin: 1rem auto;
+            }
 
         .available-building-construction-requirements{
             margin: 1rem auto;
