@@ -53,6 +53,7 @@ public class GameDao {
         return repository.values()
             .stream()
             .filter(game -> game.getPlayers().containsKey(userId))
+            .filter(game -> !game.isTerminated())
             .findFirst();
     }
 

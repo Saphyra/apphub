@@ -118,8 +118,12 @@
 
         function createTerraformation(planetId, surfaceId, terraformation){
             const content = document.createElement("DIV");
-                content.classList.add("empty-surface-content");
                 content.classList.add("surface-content");
+
+                const header = document.createElement("DIV");
+                    header.innerHTML = dataCaches.surfaceTypeLocalization.get(terraformation.data);
+                    header.classList.add("surface-header");
+            content.appendChild(header);
 
                 const footer = document.createElement("DIV");
                     footer.classList.add("surface-footer");

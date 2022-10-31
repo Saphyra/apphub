@@ -1,12 +1,34 @@
-Date.prototype.plusMonths = function(months){
+Date.isLeapYear = function (year) {
+    return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0));
+};
+
+Date.getDaysInMonth = function (year, month) {
+    return [31, (Date.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+};
+
+Date.prototype.isLeapYear = function () {
+    return Date.isLeapYear(this.getFullYear());
+};
+
+Date.prototype.getDaysInMonth = function () {
+    return Date.getDaysInMonth(this.getFullYear(), this.getMonth());
+};
+
+Date.prototype.plusMonths = function (value) {
     const date = new Date(this.valueOf());
-    date.setMonth(date.getMonth() + months);
+    const n = this.getDate();
+    date.setDate(1);
+    date.setMonth(this.getMonth() + value);
+    date.setDate(Math.min(n, date.getDaysInMonth()));
     return date;
-}
+};
 
 Date.prototype.minusMonths = function(months){
     const date = new Date(this.valueOf());
+    const n = this.getDate();
+    date.setDate(1);
     date.setMonth(date.getMonth() - months);
+    date.setDate(Math.min(n, date.getDaysInMonth()));
     return date;
 }
 

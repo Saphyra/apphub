@@ -15,4 +15,5 @@ public class ConstructionResponse {
     private UUID constructionId;
     private Integer requiredWorkPoints;
     private Integer currentWorkPoints;
+    private String data;
 }

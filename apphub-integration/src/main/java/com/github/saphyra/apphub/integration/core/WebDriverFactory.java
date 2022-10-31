@@ -54,7 +54,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
         stopwatch.stop();
         long elapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);
         if (elapsed > 100) {
-            log.info("{} WebDrivers fetched in {}ms", driverCount, elapsed);
+            log.debug("{} WebDrivers fetched in {}ms", driverCount, elapsed);
         }
         return result;
     }
@@ -104,7 +104,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
                 options.addArguments("window-size=1920,1080");
 
                 driver = new ChromeDriver(options);
-                log.info("Driver created: {}", driver);
+                log.debug("Driver created: {}", driver);
                 SleepUtil.sleep(1000);
                 driver.navigate().to(UrlFactory.create(Endpoints.ERROR_PAGE));
                 numberOfDriversCreated++;
