@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.game;
 
 import com.github.saphyra.apphub.integration.structure.skyxplore.PlanetQueueItem;
+import com.github.saphyra.apphub.integration.structure.skyxplore.PlanetStorageOverview;
 import com.github.saphyra.apphub.integration.structure.skyxplore.Surface;
 import org.openqa.selenium.WebDriver;
 
@@ -17,6 +18,11 @@ public class SkyXplorePlanetActions {
 
     public static void openStorageSettingWindow(WebDriver driver) {
         GamePage.openStorageSettingButton(driver).click();
+    }
+
+    public static void closeStorageSettingsWindow(WebDriver driver) {
+        GamePage.closeStorageSettingsButton(driver)
+            .click();
     }
 
     public static void openPopulationOverview(WebDriver driver) {
@@ -69,5 +75,9 @@ public class SkyXplorePlanetActions {
             .stream()
             .map(PlanetQueueItem::new)
             .collect(Collectors.toList());
+    }
+
+    public static PlanetStorageOverview getStorageOverview(WebDriver driver) {
+        return new PlanetStorageOverview(driver);
     }
 }

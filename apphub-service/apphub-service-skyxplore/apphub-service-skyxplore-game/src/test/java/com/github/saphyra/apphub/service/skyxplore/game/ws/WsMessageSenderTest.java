@@ -23,6 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,7 +73,7 @@ public class WsMessageSenderTest {
 
     @Before
     public void setUp() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
         given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
         given(player.getOpenedPage()).willReturn(openedPage);
     }

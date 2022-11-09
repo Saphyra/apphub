@@ -1,20 +1,19 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-
-import java.util.UUID;
-
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StorageSettingFactoryTest {
@@ -37,11 +36,12 @@ public class StorageSettingFactoryTest {
             .dataId(DATA_ID)
             .priority(PRIORITY)
             .batchSize(BATCH_SIZE)
+            .targetAmount(TARGET_AMOUNT)
             .build();
 
         given(idGenerator.randomUuid()).willReturn(STORAGE_SETTING_ID);
 
-        StorageSetting result = underTest.create(request, TARGET_AMOUNT, LOCATION, LocationType.PLANET);
+        StorageSetting result = underTest.create(request, LOCATION, LocationType.PLANET);
 
         assertThat(result.getStorageSettingId()).isEqualTo(STORAGE_SETTING_ID);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);

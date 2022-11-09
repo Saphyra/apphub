@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import static java.util.Objects.nonNull;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -27,7 +29,7 @@ class StoreResourceService {
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
 
     void storeResource(SyncCache syncCache, Game game, Planet planet, ReservedStorage reservedStorage, AllocatedResource allocatedResource, int amount) {
-        log.info("ProductionOrder finished.");
+        log.info("ProductionOrder finished. Storing {} of {}", amount, reservedStorage.getDataId());
 
         StoredResource storedResource = planet.getStorageDetails()
             .getStoredResources()
@@ -35,14 +37,16 @@ class StoreResourceService {
 
         log.info("Before update: {}, {}, {}", storedResource, allocatedResource, reservedStorage);
 
-        allocatedResource.increaseAmount(amount);
+        if (nonNull(allocatedResource)) {
+            allocatedResource.increaseAmount(amount);
+            syncCache.saveGameItem(allocatedResourceToModelConverter.convert(allocatedResource, game.getGameId()));
+        }
         storedResource.increaseAmount(amount);
         reservedStorage.decreaseAmount(amount);
 
         log.info("After update: {}, {}, {}", storedResource, allocatedResource, reservedStorage);
 
         syncCache.saveGameItem(reservedStorageToModelConverter.convert(reservedStorage, game.getGameId()));
-        syncCache.saveGameItem(allocatedResourceToModelConverter.convert(allocatedResource, game.getGameId()));
         syncCache.saveGameItem(storedResourceToModelConverter.convert(storedResource, game.getGameId()));
 
         syncCache.addMessage(

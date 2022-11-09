@@ -31,6 +31,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -275,9 +276,8 @@ public class ProductionOrderProcessTest {
         given(planet.getPlanetId()).willReturn(PLANET_ID);
 
         given(reservedStorage.getReservedStorageId()).willReturn(RESERVED_STORAGE_ID);
-        given(allocatedResource.getAllocatedResourceId()).willReturn(ALLOCATED_RESOURCE_ID);
         given(uuidConverter.convertDomain(RESERVED_STORAGE_ID)).willReturn(RESOURCE_DATA_ID_STRING);
-        given(uuidConverter.convertDomain(ALLOCATED_RESOURCE_ID)).willReturn(ALLOCATED_RESOURCE_ID_STRING);
+        given(uuidConverter.convertDomain(eq(allocatedResource), any())).willReturn(ALLOCATED_RESOURCE_ID_STRING);
 
         ProcessModel result = underTest.toModel();
 

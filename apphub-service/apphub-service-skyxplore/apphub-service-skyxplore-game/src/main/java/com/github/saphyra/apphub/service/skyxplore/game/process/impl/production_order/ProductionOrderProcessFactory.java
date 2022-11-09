@@ -38,10 +38,16 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
             .getReservedStorages()
             .findById(reservedStorageId)
             .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ReservedStorage not found with id " + reservedStorageId));
+
+        return create(externalReference, game, planet, reservedStorage);
+    }
+
+    public List<ProductionOrderProcess> create(UUID externalReference, Game game, Planet planet, ReservedStorage reservedStorage) {
         AllocatedResource allocatedResource = planet.getStorageDetails()
             .getAllocatedResources()
-            .findByExternalReferenceAndDataIdValidated(reservedStorage.getExternalReference(), reservedStorage.getDataId());
-        log.info("{} fond for {}", allocatedResource, reservedStorage);
+            .findByExternalReferenceAndDataId(reservedStorage.getExternalReference(), reservedStorage.getDataId())
+            .orElse(null);
+        log.info("{} found for {}", allocatedResource, reservedStorage);
 
         int maxBatchSize = resourceDataService.get(reservedStorage.getDataId()).getMaxProductionBatchSize();
         log.info("maxBatchSize: {}", maxBatchSize);
@@ -83,7 +89,8 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
 
         AllocatedResource allocatedResource = planet.getStorageDetails()
             .getAllocatedResources()
-            .findByIdValidated(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.ALLOCATED_RESOURCE_ID)));
+            .findById(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.ALLOCATED_RESOURCE_ID)))
+            .orElse(null);
 
         ReservedStorage reservedStorage = planet.getStorageDetails()
             .getReservedStorages()

@@ -1,6 +1,6 @@
 {
   "id": "ore",
-  "storageType": "liquid",
+  "storageType": "bulk",
   "mass": 1,
   "maxProductionBatchSize": 100
 }

@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integraton.frontend.skyxplore.game.planet;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
@@ -11,7 +10,9 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyX
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePlanetStorageSettingActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.skyxplore.StorageSetting;
@@ -23,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class StorageSettingTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
-    public static final String RESOURCE_ID = "ore";
 
     @Test(groups = "skyxplore")
     public void storageSettingCrud() {
@@ -60,9 +60,9 @@ public class StorageSettingTest extends SeleniumTest {
             .assertTrue("StorageSettings is not opened.");
 
         //Create storage setting
-        SkyXplorePlanetStorageSettingActions.create(driver, RESOURCE_ID, 10, 5, 3);
+        SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_ORE, 10, 5, 3);
 
-        assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).doesNotContain(RESOURCE_ID);
+        assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).doesNotContain(Constants.DATA_ID_ORE);
         StorageSetting storageSetting = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver), storageSettings -> !storageSettings.isEmpty())
             .stream()
             .findFirst()
@@ -94,6 +94,64 @@ public class StorageSettingTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver).isEmpty())
             .assertTrue("StorageSetting not deleted.");
 
-        assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).contains(RESOURCE_ID);
+        assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).contains(Constants.DATA_ID_ORE);
+    }
+
+    @Test(groups = "skyxplore", priority = -1)
+    public void produceResourcesForStorageSetting() {
+        WebDriver driver = extractDriver();
+        RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
+        Navigation.toIndexPage(driver);
+        IndexPageActions.registerUser(driver, registrationParameters);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
+
+        SkyXploreCharacterActions.createCharacter(driver);
+        SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyActions.setReady(driver);
+        SkyXploreLobbyActions.startGameCreation(driver);
+
+        AwaitilityWrapper.create(60, 1)
+            .until(() -> SkyXploreGameActions.isGameLoaded(driver))
+            .assertTrue("Game not loaded.");
+
+        SkyXploreMapActions.getSolarSystem(driver).click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXploreSolarSystemActions.isOpened(driver))
+            .assertTrue("SolarSystem is not opened.");
+
+        SkyXploreSolarSystemActions.getPlanet(driver).click();
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXplorePlanetActions.isLoaded(driver))
+            .assertTrue("Planet is not opened.");
+
+        SkyXplorePlanetActions.openStorageSettingWindow(driver);
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXplorePlanetStorageSettingActions.isLoaded(driver))
+            .assertTrue("StorageSettings is not opened.");
+
+        //Create storage setting
+        SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_ORE, 300, 5, 3);
+
+        StorageSetting storageSetting = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver), storageSettings -> !storageSettings.isEmpty())
+            .stream()
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Storage Setting not found."));
+        assertThat(storageSetting.getResourceName()).isEqualTo("Érc");
+
+        SkyXplorePlanetActions.closeStorageSettingsWindow(driver);
+
+        SkyXploreGameActions.resumeGame(driver);
+
+        //Check storage reserved
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXplorePlanetActions.getStorageOverview(driver).getBulk().getReservedAmount() > 0)
+            .assertTrue("Storage not reserved.");
+
+        //Check resource produced
+        AwaitilityWrapper.create(60, 10)
+            .until(() -> SkyXplorePlanetActions.getStorageOverview(driver).getBulk().getAvailable() == 300)
+            .assertTrue("Resource not produced.");
     }
 }
