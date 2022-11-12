@@ -24,13 +24,28 @@ function deployByDirectory() {
   fi
 }
 
+function scaleDownByDirectory() {
+  echo ""
+  echo "Scaling down services defined in directory $1"
+
+  for file in $1; do
+    echo ""
+    echo "$file";
+    SERVICE_NAME="$(basename "$file" .yml)"
+
+    kubectl -n "$NAMESPACE_NAME" scale deployments --replicas=0 "$SERVICE_NAME"
+  done
+}
+
 echo "Deploying to namespace $NAMESPACE_NAME with scriptDirName $SCRIPT_DIR_NAME"
 
 echo ""
 kubectl create namespace "$NAMESPACE_NAME"
 echo ""
 
-kubectl -n "$NAMESPACE_NAME" scale deployments --replicas=0 --all
+scaleDownByDirectory "./infra/deployment/service/$SCRIPT_DIR_NAME/platform/*"
+scaleDownByDirectory "./infra/deployment/service/$SCRIPT_DIR_NAME/service/*"
+
 ./infra/deployment/script/setup_namespace.sh "$NAMESPACE_NAME"
 sleep 5
 
