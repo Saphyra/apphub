@@ -34,7 +34,7 @@ public class SkyXploreDataEventControllerImplTest {
 
     @Test
     public void deleteGames() {
-        underTest.deleteGames();
+        underTest.deleteGamesMarkedForDeletion();
 
         verify(gameCleanupService).deleteMarkedGames();
     }

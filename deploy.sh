@@ -43,11 +43,12 @@ echo ""
 kubectl create namespace "$NAMESPACE_NAME"
 echo ""
 
+./infra/deployment/script/setup_namespace.sh "$NAMESPACE_NAME"
+
 scaleDownByDirectory "./infra/deployment/service/$SCRIPT_DIR_NAME/platform/*"
 scaleDownByDirectory "./infra/deployment/service/$SCRIPT_DIR_NAME/service/*"
 
-./infra/deployment/script/setup_namespace.sh "$NAMESPACE_NAME"
-sleep 5
+./infra/deployment/script/wait_for_pods_ready.sh "$NAMESPACE_NAME" "$MAX_WAIT_TIME" 2 5
 
 deployByDirectory "./infra/deployment/service/$SCRIPT_DIR_NAME/platform/*"
 deployByDirectory "./infra/deployment/service/$SCRIPT_DIR_NAME/service/*"

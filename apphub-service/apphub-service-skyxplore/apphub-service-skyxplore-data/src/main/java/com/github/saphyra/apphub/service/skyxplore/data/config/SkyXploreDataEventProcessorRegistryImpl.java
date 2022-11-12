@@ -32,7 +32,7 @@ public class SkyXploreDataEventProcessorRegistryImpl implements EventProcessorRe
             RegisterProcessorRequest.builder()
                 .serviceName(serviceName)
                 .eventName(EmptyEvent.SKYXPLORE_GAME_DELETION_EVENT_NAME)
-                .url(Endpoints.EVENT_SKYXPLORE__DELETE_GAMES)
+                .url(Endpoints.EVENT_SKYXPLORE_DELETE_GAMES)
                 .build()
         );
     }
