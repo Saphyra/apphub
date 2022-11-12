@@ -10,7 +10,6 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.SurfaceModel;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
-import com.github.saphyra.apphub.service.skyxplore.game.common.converter.model.ProductionOrderToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
@@ -61,9 +60,6 @@ public class PlanetToModelConverterTest {
 
     @Mock
     private PriorityToModelConverter priorityConverter;
-
-    @Mock
-    private ProductionOrderToModelConverter productionOrderToModelConverter;
 
     @InjectMocks
     private PlanetToModelConverter underTest;
