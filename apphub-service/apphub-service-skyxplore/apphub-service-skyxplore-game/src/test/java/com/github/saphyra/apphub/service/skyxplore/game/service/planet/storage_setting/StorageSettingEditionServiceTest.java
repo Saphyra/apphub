@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_
 
 import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StorageSettingModel;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
@@ -10,23 +10,25 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.StorageSettingToModelConverter;
-import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.HttpStatus;
 
-import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -35,9 +37,9 @@ public class StorageSettingEditionServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID STORAGE_SETTING_ID = UUID.randomUUID();
-    private static final int PRIORITY = 234;
-    private static final int BATCH_SIZE = 2344;
-    private static final Integer NEW_TARGET_AMOUNT = 2456;
+    private static final int PRIORITY = 2;
+    private static final int BATCH_SIZE = 245;
+    private static final int TARGET_AMOUNT = 2456;
     private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
@@ -50,10 +52,10 @@ public class StorageSettingEditionServiceTest {
     private StorageSettingToModelConverter storageSettingToModelConverter;
 
     @Mock
-    private GameDataProxy gameDataProxy;
+    private StorageSettingToApiModelMapper storageSettingToApiModelMapper;
 
     @Mock
-    private StorageSettingToApiModelMapper storageSettingToApiModelMapper;
+    private SyncCacheFactory syncCacheFactory;
 
     @InjectMocks
     private StorageSettingEditionService underTest;
@@ -68,13 +70,28 @@ public class StorageSettingEditionServiceTest {
     private Planet planet;
 
     @Mock
+    private StorageSettingApiModel request;
+
+    @Mock
+    private StorageSettingApiModel response;
+
+    @Mock
+    private SyncCache syncCache;
+
+    @Mock
+    private EventLoop eventLoop;
+
+    @Mock
+    private ExecutionResult<StorageSettingApiModel> executionResult;
+
+    @Mock
+    private Future<ExecutionResult<StorageSettingApiModel>> future;
+
+    @Mock
     private StorageDetails storageDetails;
 
     @Mock
     private StorageSettings storageSettings;
-
-    @Mock
-    private StorageSettingApiModel storageSettingModel;
 
     @Mock
     private StorageSetting storageSetting;
@@ -82,53 +99,43 @@ public class StorageSettingEditionServiceTest {
     @Mock
     private StorageSettingModel model;
 
-    @Mock
-    private StorageSettingApiModel responseModel;
+    @Captor
+    private ArgumentCaptor<Callable<StorageSettingApiModel>> argumentCaptor;
 
-    @Before
-    public void setUp() {
+    @Test
+    public void edit() throws Exception {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
+        given(game.getGameId()).willReturn(GAME_ID);
         given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(syncCacheFactory.create()).willReturn(syncCache);
+        given(game.getEventLoop()).willReturn(eventLoop);
+        given(eventLoop.processWithResponse(any(Callable.class), any())).willReturn(future);
+        given(future.get()).willReturn(executionResult);
+        given(executionResult.getOrThrow()).willReturn(response);
+
+        given(request.getStorageSettingId()).willReturn(STORAGE_SETTING_ID);
+        given(request.getPriority()).willReturn(PRIORITY);
+        given(request.getBatchSize()).willReturn(BATCH_SIZE);
+        given(request.getTargetAmount()).willReturn(TARGET_AMOUNT);
+
         given(planet.getStorageDetails()).willReturn(storageDetails);
         given(storageDetails.getStorageSettings()).willReturn(storageSettings);
-
-        given(storageSettingModel.getStorageSettingId()).willReturn(STORAGE_SETTING_ID);
-    }
-
-    @After
-    public void validate() {
-        verify(storageSettingsModelValidator).validate(storageSettingModel);
-    }
-
-    @Test
-    public void storageSettingNotFound() {
-        given(storageSettings.findByStorageSettingId(STORAGE_SETTING_ID)).willReturn(Optional.empty());
-
-        Throwable ex = catchThrowable(() -> underTest.edit(USER_ID, PLANET_ID, storageSettingModel));
-
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR);
-    }
-
-    @Test
-    public void edit() {
-        given(storageSettings.findByStorageSettingId(STORAGE_SETTING_ID)).willReturn(Optional.of(storageSetting));
-        given(storageSettingModel.getPriority()).willReturn(PRIORITY);
-        given(storageSettingModel.getBatchSize()).willReturn(BATCH_SIZE);
-        given(storageSettingModel.getTargetAmount()).willReturn(NEW_TARGET_AMOUNT);
-
-        given(game.getGameId()).willReturn(GAME_ID);
+        given(storageSettings.findByStorageSettingIdValidated(STORAGE_SETTING_ID)).willReturn(storageSetting);
         given(storageSettingToModelConverter.convert(storageSetting, GAME_ID)).willReturn(model);
+        given(storageSettingToApiModelMapper.convert(storageSetting)).willReturn(response);
 
-        given(storageSettingToApiModelMapper.convert(storageSetting)).willReturn(responseModel);
+        StorageSettingApiModel result = underTest.edit(USER_ID, PLANET_ID, request);
 
-        StorageSettingApiModel result = underTest.edit(USER_ID, PLANET_ID, storageSettingModel);
+        verify(eventLoop).processWithResponse(argumentCaptor.capture(), eq(syncCache));
+        argumentCaptor.getValue()
+            .call();
 
-        assertThat(result).isEqualTo(responseModel);
-
+        verify(storageSettingsModelValidator).validate(request);
         verify(storageSetting).setPriority(PRIORITY);
         verify(storageSetting).setBatchSize(BATCH_SIZE);
-        verify(storageSetting).setTargetAmount(NEW_TARGET_AMOUNT);
-        verify(gameDataProxy).saveItem(model);
+        verify(storageSetting).setTargetAmount(TARGET_AMOUNT);
+        verify(syncCache).saveGameItem(model);
+        assertThat(result).isEqualTo(response);
     }
 }

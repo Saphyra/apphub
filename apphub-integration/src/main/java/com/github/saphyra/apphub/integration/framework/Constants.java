@@ -36,6 +36,7 @@ public class Constants {
     public final String DATA_ID_BATTERY = "battery";
     public final String DATA_ID_WATER_PUMP = "water_pump";
     public final String DATA_ID_CAMP = "camp";
+    public final String DATA_ID_ORE = "ore";
 
     //QueueTypes
     public final String QUEUE_TYPE_CONSTRUCTION = "CONSTRUCTION";

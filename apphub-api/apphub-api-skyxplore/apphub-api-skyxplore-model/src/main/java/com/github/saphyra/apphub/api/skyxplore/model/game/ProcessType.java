@@ -4,5 +4,6 @@ public enum ProcessType {
     CONSTRUCTION,
     TERRAFORMATION,
     PRODUCTION_ORDER,
-    REQUEST_WORK
+    REQUEST_WORK,
+    STORAGE_SETTING
 }

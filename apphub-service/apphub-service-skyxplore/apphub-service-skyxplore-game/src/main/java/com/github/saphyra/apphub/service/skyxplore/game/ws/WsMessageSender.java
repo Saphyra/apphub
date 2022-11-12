@@ -64,17 +64,19 @@ public class WsMessageSender {
     }
 
     private void sendIfProperPageIsOpened(UUID userId, WebSocketEventName eventName, List<OpenedPageType> requiredPageTypes, UUID pageId, Object payload) {
-        OpenedPage openedPage = gameDao.findByUserIdValidated(userId)
-            .getPlayers()
-            .get(userId)
-            .getOpenedPage();
-        log.debug("{} - RequiredTypes: {}, pageId: {}", openedPage, requiredPageTypes, pageId);
+        gameDao.findByUserId(userId)
+            .ifPresent(game -> {
+                OpenedPage openedPage = game.getPlayers()
+                    .get(userId)
+                    .getOpenedPage();
+                log.debug("{} - RequiredTypes: {}, pageId: {}", openedPage, requiredPageTypes, pageId);
 
-        if (requiredPageTypes.contains(openedPage.getPageType())) {
-            if (isNull(pageId) || pageId.equals(openedPage.getPageId())) {
-                sendMessage(userId, eventName, payload);
-            }
-        }
+                if (requiredPageTypes.contains(openedPage.getPageType())) {
+                    if (isNull(pageId) || pageId.equals(openedPage.getPageId())) {
+                        sendMessage(userId, eventName, payload);
+                    }
+                }
+            });
     }
 
     private void sendMessage(UUID recipient, WebSocketEventName eventName, Object payload) {

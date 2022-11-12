@@ -21,7 +21,7 @@ public class SkyXploreDataEventControllerImpl implements SkyXploreDataEventContr
     private final List<DeleteByUserIdDao> deleteByUserIdDaos;
 
     @Override
-    public void deleteGames() {
+    public void deleteGamesMarkedForDeletion() {
         log.info("Deleting games marked for deletion...");
         gameCleanupService.deleteMarkedGames();
     }

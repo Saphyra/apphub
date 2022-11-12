@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 public interface SkyXploreDataEventController {
-    @PostMapping(Endpoints.EVENT_SKYXPLORE__DELETE_GAMES)
-    void deleteGames();
+    @PostMapping(Endpoints.EVENT_SKYXPLORE_DELETE_GAMES)
+    void deleteGamesMarkedForDeletion();
 
     @PostMapping(Endpoints.EVENT_DELETE_ACCOUNT)
     void deleteAccountEvent(@RequestBody SendEventRequest<DeleteAccountEvent> request);

@@ -1,11 +1,14 @@
 package com.github.saphyra.apphub.integraton.backend.skyxplore.game.planet;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreGameActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetStorageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreStorageSettingActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.localization.Language;
@@ -19,6 +22,7 @@ import com.github.saphyra.apphub.integration.structure.skyxplore.StorageSettingM
 import com.github.saphyra.apphub.integration.structure.skyxplore.StorageSettingsResponse;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
+import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
@@ -27,7 +31,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StorageSettingCrudTest extends BackEndTest {
+public class StorageSettingTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
     @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
@@ -125,6 +129,42 @@ public class StorageSettingCrudTest extends BackEndTest {
         assertThat(storageSettingsResponse.getCurrentSettings()).isEmpty();
 
         ApphubWsClient.cleanUpConnections();
+    }
+
+    @Test(groups = "skyxplore", priority = -1)
+    public void produceResourcesForStorageSetting() {
+        Language language = Language.HUNGARIAN;
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        SkyXploreCharacterModel characterModel = SkyXploreCharacterModel.valid();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, characterModel);
+        UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
+
+        ApphubWsClient wsClient = SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId, userId))
+            .get(accessTokenId);
+
+        PlanetLocationResponse planet = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId);
+
+        //Create
+        StorageSettingModel createModel = StorageSettingModel.valid();
+        StorageSettingModel created = SkyXploreStorageSettingActions.createStorageSetting(language, accessTokenId, planet.getPlanetId(), createModel);
+        assertThat(created.getDataId()).isEqualTo(createModel.getDataId());
+
+        //Check storage reserved
+        SkyXploreGameActions.setPaused(language, accessTokenId, false);
+
+        wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
+            .orElseThrow(() -> new RuntimeException("Game is not started"));
+
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXplorePlanetStorageActions.getStorageOverview(language, accessTokenId, planet.getPlanetId()).getBulk().getReservedStorageAmount() > 0)
+            .assertTrue("Storage not reserved.");
+
+        //Check resource produced
+        AwaitilityWrapper.create(60, 10)
+            .until(() -> SkyXplorePlanetStorageActions.getStorageOverview(language, accessTokenId, planet.getPlanetId()).getBulk().getActualResourceAmount() == createModel.getTargetAmount())
+            .assertTrue("Resource not produced.");
     }
 
     private void create_runValidationTest(Language language, UUID accessTokenId, UUID planetId, StorageSettingModel model, String key, String value) {

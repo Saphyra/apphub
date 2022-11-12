@@ -121,6 +121,17 @@ function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, 
                 .forEach(node => {container.appendChild(node)});
     }
 
+    this.renderNode = function(key){
+        const oldNode = nodeCache[key];
+        const item = cache[key];
+        console.log(item);
+        const newNode = createNode(item);
+
+        oldNode.replaceWith(newNode);
+
+        nodeCache[key] = newNode;
+    }
+
     function getOrder(){
         return new Stream(Object.keys(cache))
             .sorted(function(a, b){return sortMethod(cache[a], cache[b])})
