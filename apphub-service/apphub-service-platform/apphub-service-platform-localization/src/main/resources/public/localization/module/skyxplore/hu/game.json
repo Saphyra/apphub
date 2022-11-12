@@ -355,6 +355,7 @@
     "building-effect-production-header-produced-item": "Termék",
     "building-effect-production-header-production-requirements": "Összetevők",
     "parallel-workers": "Munkások",
-    "required-work-points": "Munkapontok"
+    "required-work-points": "Munkapontok",
+    "reset": "Visszaállít"
   }
 }

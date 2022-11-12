@@ -355,6 +355,7 @@
     "building-effect-production-header-produced-item": "Item",
     "building-effect-production-header-production-requirements": "Requirements",
     "parallel-workers": "Parallel workers",
-    "required-work-points": "Required work points"
+    "required-work-points": "Required work points",
+    "reset": "Reset"
   }
 }
