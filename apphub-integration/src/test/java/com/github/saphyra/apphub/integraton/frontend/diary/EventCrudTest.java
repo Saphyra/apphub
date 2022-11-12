@@ -46,7 +46,7 @@ public class EventCrudTest extends SeleniumTest {
         //Create - Empty title
         DiaryActions.fillEventTitle(driver, " ");
 
-        DiaryActions.createEvent(driver);
+        DiaryActions.pushCreateEventButton(driver);
 
         NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
 
@@ -57,7 +57,7 @@ public class EventCrudTest extends SeleniumTest {
         DiaryActions.setCreateEventHours(driver, "");
         DiaryActions.setCreateEventMinutes(driver, "10");
 
-        DiaryActions.createEvent(driver);
+        DiaryActions.pushCreateEventButton(driver);
 
         NotificationUtil.verifyErrorNotification(driver, "Az órát és a percet is ki kell tölteni, vagy egyiket sem.");
 
@@ -65,14 +65,14 @@ public class EventCrudTest extends SeleniumTest {
         DiaryActions.setCreateEventMinutes(driver, "");
         DiaryActions.setCreateEventHours(driver, "10");
 
-        DiaryActions.createEvent(driver);
+        DiaryActions.pushCreateEventButton(driver);
 
         NotificationUtil.verifyErrorNotification(driver, "Az órát és a percet is ki kell tölteni, vagy egyiket sem.");
 
         //Create
         DiaryActions.setCreateEventHours(driver, "");
 
-        DiaryActions.createEvent(driver);
+        DiaryActions.pushCreateEventButton(driver);
 
         NotificationUtil.verifySuccessNotification(driver, "Esemény létrehozva.");
 
@@ -192,14 +192,14 @@ public class EventCrudTest extends SeleniumTest {
         DiaryActions.fillEventContent(driver, CONTENT);
         DiaryActions.setCreateEventRepetitionType(driver, RepetitionType.DAYS_OF_WEEK);
 
-        DiaryActions.createEvent(driver);
+        DiaryActions.pushCreateEventButton(driver);
 
         NotificationUtil.verifyErrorNotification(driver, "Nincs nap kiválasztva.");
 
         //Create
         DiaryActions.selectDayOfWeek(driver, FIRST_OF_MONTH.getDayOfWeek());
 
-        DiaryActions.createEvent(driver);
+        DiaryActions.pushCreateEventButton(driver);
 
         NotificationUtil.verifySuccessNotification(driver, "Esemény létrehozva.");
 
@@ -284,14 +284,14 @@ public class EventCrudTest extends SeleniumTest {
         DiaryActions.fillEventContent(driver, CONTENT);
         DiaryActions.setCreateEventRepetitionType(driver, RepetitionType.DAYS_OF_MONTH);
 
-        DiaryActions.createEvent(driver);
+        DiaryActions.pushCreateEventButton(driver);
 
         NotificationUtil.verifyErrorNotification(driver, "Nincs nap kiválasztva.");
 
         //Create
         DiaryActions.selectDayOfMonth(driver, 21);
 
-        DiaryActions.createEvent(driver);
+        DiaryActions.pushCreateEventButton(driver);
 
         NotificationUtil.verifySuccessNotification(driver, "Esemény létrehozva.");
 
@@ -331,14 +331,14 @@ public class EventCrudTest extends SeleniumTest {
 
         DiaryActions.fillRepetitionDays(driver, 0);
 
-        DiaryActions.createEvent(driver);
+        DiaryActions.pushCreateEventButton(driver);
 
         NotificationUtil.verifyErrorNotification(driver, "Napok száma túl alacsony (minimum 1)");
 
         //Create
         DiaryActions.fillRepetitionDays(driver, 5);
 
-        DiaryActions.createEvent(driver);
+        DiaryActions.pushCreateEventButton(driver);
 
         NotificationUtil.verifySuccessNotification(driver, "Esemény létrehozva.");
 

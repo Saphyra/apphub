@@ -42,7 +42,7 @@ public class SortEventsTest extends SeleniumTest {
         DiaryActions.previousMonth(driver);
         DiaryActions.openCreateEventWindowAt(driver, FIRST_OF_MONTH.minusMonths(1));
         DiaryActions.fillEventTitle(driver, EXPIRED_TITLE);
-        DiaryActions.createEvent(driver);
+        DiaryActions.pushCreateEventButton(driver);
 
         SleepUtil.sleep(1000);
 
@@ -50,7 +50,7 @@ public class SortEventsTest extends SeleniumTest {
         DiaryActions.nextMonth(driver);
         DiaryActions.openCreateEventWindowAt(driver, CURRENT_DATE);
         DiaryActions.fillEventTitle(driver, SNOOZED_TITLE);
-        DiaryActions.createEvent(driver);
+        DiaryActions.pushCreateEventButton(driver);
         DiaryActions.openEvent(driver, SNOOZED_TITLE);
         DiaryActions.markAsSnoozed(driver);
         DiaryActions.closeViewEventPage(driver);
@@ -58,7 +58,7 @@ public class SortEventsTest extends SeleniumTest {
         //Create Done event
         DiaryActions.openCreateEventWindowAt(driver, CURRENT_DATE);
         DiaryActions.fillEventTitle(driver, DONE_TITLE);
-        DiaryActions.createEvent(driver);
+        DiaryActions.pushCreateEventButton(driver);
         DiaryActions.openEvent(driver, DONE_TITLE);
         DiaryActions.markAsDone(driver);
         DiaryActions.closeViewEventPage(driver);
@@ -68,17 +68,17 @@ public class SortEventsTest extends SeleniumTest {
         DiaryActions.fillEventTitle(driver, PENDING_TITLE);
         DiaryActions.setCreateEventHours(driver, "10");
         DiaryActions.setCreateEventMinutes(driver, "10");
-        DiaryActions.createEvent(driver);
+        DiaryActions.pushCreateEventButton(driver);
 
         DiaryActions.openCreateEventWindowAt(driver, CURRENT_DATE);
         DiaryActions.fillEventTitle(driver, LATER_PENDING_TITLE);
         DiaryActions.setCreateEventHours(driver, "10");
         DiaryActions.setCreateEventMinutes(driver, "11");
-        DiaryActions.createEvent(driver);
+        DiaryActions.pushCreateEventButton(driver);
 
         DiaryActions.openCreateEventWindowAt(driver, CURRENT_DATE);
         DiaryActions.fillEventTitle(driver, NO_TIME_PENDING_TITLE);
-        DiaryActions.createEvent(driver);
+        DiaryActions.pushCreateEventButton(driver);
 
         SleepUtil.sleep(1000);
 

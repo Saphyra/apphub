@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -38,5 +40,12 @@ public class SkyXploreGameControllerImpl implements SkyXploreGameController {
     public void pauseGame(OneParamRequest<Boolean> paused, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to pause game: {}", accessTokenHeader.getUserId(), paused.getValue());
         pauseGameService.setPausedStatus(accessTokenHeader.getUserId(), paused.getValue());
+    }
+
+    @Override
+    public void deleteGame(UUID gameId) {
+        log.info("Deleting game {}", gameId);
+
+        gameDao.delete(gameId);
     }
 }

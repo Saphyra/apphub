@@ -49,7 +49,7 @@ public class ExpiredGameCleanupServiceTest {
 
     @Test
     public void cleanUp() {
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
 
         given(gameDao.getAll()).willReturn(Arrays.asList(gameWithConnectedPlayers, gameNotExpired, gameExpired, gameWithNoExpirationSet));
         given(gameWithConnectedPlayers.getConnectedPlayers()).willReturn(Arrays.asList(UUID.randomUUID()));

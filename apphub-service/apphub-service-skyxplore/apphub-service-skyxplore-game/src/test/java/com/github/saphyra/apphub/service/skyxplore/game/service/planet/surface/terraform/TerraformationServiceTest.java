@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.terraform;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
@@ -147,6 +148,9 @@ public class TerraformationServiceTest {
     @Mock
     private Processes processes;
 
+    @Mock
+    private ProcessModel processModel;
+
     @Before
     public void setUp() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
@@ -218,6 +222,7 @@ public class TerraformationServiceTest {
         given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
         given(terraformationProcessFactory.create(game, planet, surface)).willReturn(terraformationProcess);
         given(game.getProcesses()).willReturn(processes);
+        given(terraformationProcess.toModel()).willReturn(processModel);
 
         SurfaceResponse result = underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name());
 
@@ -225,7 +230,7 @@ public class TerraformationServiceTest {
 
         verify(resourceAllocationService).processResourceRequirements(GAME_ID, planet, LocationType.PLANET, CONSTRUCTION_ID, Collections.emptyMap());
         verify(surface).setTerraformation(construction);
-        verify(gameDataProxy).saveItem(constructionModel);
+        verify(gameDataProxy).saveItem(constructionModel, processModel);
         verify(messageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);
         verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
         verify(processes).add(terraformationProcess);

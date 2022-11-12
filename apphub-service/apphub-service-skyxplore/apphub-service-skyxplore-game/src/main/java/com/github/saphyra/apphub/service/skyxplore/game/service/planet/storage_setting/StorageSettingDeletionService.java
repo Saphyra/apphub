@@ -1,10 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -15,17 +17,25 @@ import java.util.UUID;
 @Slf4j
 public class StorageSettingDeletionService {
     private final GameDao gameDao;
-    private final GameDataProxy gameDataProxy;
+    private final SyncCacheFactory syncCacheFactory;
 
+    @SneakyThrows
     public void deleteStorageSetting(UUID userId, UUID planetId, UUID storageSettingId) {
-        StorageDetails storageDetails = gameDao.findByUserIdValidated(userId)
-            .getUniverse()
-            .findByOwnerAndPlanetIdValidated(userId, planetId)
-            .getStorageDetails();
+        Game game = gameDao.findByUserIdValidated(userId);
 
-        storageDetails.getStorageSettings()
-            .deleteByStorageSettingId(storageSettingId);
+        game.getUniverse()
+            .findByOwnerAndPlanetIdValidated(userId, planetId);
 
-        gameDataProxy.deleteItem(storageSettingId, GameItemType.STORAGE_SETTING);
+        SyncCache syncCache = syncCacheFactory.create();
+
+        game.getEventLoop()
+            .process(
+                () -> game.getProcesses()
+                    .findByExternalReferenceAndTypeValidated(storageSettingId, ProcessType.STORAGE_SETTING)
+                    .cancel(syncCache),
+                syncCache
+            )
+            .get()
+            .getOrThrow();
     }
 }

@@ -122,4 +122,24 @@ class DiaryPage {
     public static WebElement createEventHours(WebDriver driver) {
         return driver.findElement(By.id("create-event-time-hours"));
     }
+
+    public static WebElement searchInFooterInput(WebDriver driver) {
+        return driver.findElement(By.id("search-input"));
+    }
+
+    public static WebElement searchInFooterButton(WebDriver driver) {
+        return driver.findElement(By.id("search-button"));
+    }
+
+    public static List<WebElement> searchResult(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#search-result .search-result"));
+    }
+
+    public static WebElement searchInResultInput(WebDriver driver) {
+        return driver.findElement(By.id("search-result-page-search-input"));
+    }
+
+    public static WebElement searchInResultButton(WebDriver driver) {
+        return driver.findElement(By.id("search-result-page-search-button"));
+    }
 }

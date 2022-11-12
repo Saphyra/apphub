@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 public class ProductionData {
     private List<SurfaceType> placed;
-    private ConstructionRequirements constructionRequirements;
+    private ConstructionRequirements constructionRequirements; //For the production
     private SkillType requiredSkill;
+    private Integer amount = 1;
 }

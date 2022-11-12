@@ -15,6 +15,7 @@ public class ConstructionToResponseConverter {
             .constructionId(construction.getConstructionId())
             .requiredWorkPoints(construction.getRequiredWorkPoints())
             .currentWorkPoints(construction.getCurrentWorkPoints())
+            .data(construction.getData())
             .build();
     }
 }

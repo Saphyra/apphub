@@ -104,8 +104,6 @@ public class ProductionOrderProcessFactoryTest {
         given(reservedStorage.getDataId()).willReturn(DATA_ID);
         given(storageDetails.getAllocatedResources()).willReturn(allocatedResources);
         given(reservedStorage.getAmount()).willReturn(RESERVED_AMOUNT);
-        given(allocatedResources.findByExternalReferenceAndDataIdValidated(RESERVED_STORAGE_EXTERNAL_REFERENCE, DATA_ID)).willReturn(allocatedResource);
-
         given(resourceDataService.get(DATA_ID)).willReturn(resourceData);
         given(resourceData.getMaxProductionBatchSize()).willReturn(MAX_PRODUCTION_BATCH_SIZE);
 
@@ -147,9 +145,9 @@ public class ProductionOrderProcessFactoryTest {
         given(storageDetails.getReservedStorages()).willReturn(reservedStorages);
         given(storageDetails.getAllocatedResources()).willReturn(allocatedResources);
         given(reservedStorages.findByIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
-        given(allocatedResources.findByIdValidated(ALLOCATED_RESOURCE_ID)).willReturn(allocatedResource);
+        given(allocatedResources.findById(ALLOCATED_RESOURCE_ID)).willReturn(Optional.of(allocatedResource));
 
-        ProductionOrderProcess result = underTest.create(game, model);
+        ProductionOrderProcess result = underTest.createFromModel(game, model);
 
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID_1);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);

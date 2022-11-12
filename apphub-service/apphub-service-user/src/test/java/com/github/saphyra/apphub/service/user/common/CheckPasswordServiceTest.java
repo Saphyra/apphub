@@ -90,7 +90,7 @@ public class CheckPasswordServiceTest {
     public void incorrectPassword_lockUser() {
         given(passwordService.authenticate(PASSWORD, PASSWORD_HASH)).willReturn(false);
         given(user.getPasswordFailureCount()).willReturn(LOCK_ACCOUNT_FAILURES);
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_TIME);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(passwordProperties.getLockedMinutes()).willReturn(LOCKED_MINUTES);
         given(accessTokenProvider.get()).willReturn(accessTokenHeader);
         given(accessTokenHeader.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);

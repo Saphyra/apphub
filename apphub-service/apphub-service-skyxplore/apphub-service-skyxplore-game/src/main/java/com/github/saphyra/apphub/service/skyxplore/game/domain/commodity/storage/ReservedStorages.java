@@ -29,9 +29,9 @@ public class ReservedStorages extends Vector<ReservedStorage> {
             .findFirst();
     }
 
-    public List<ReservedStorage> getByExternalReference(UUID processId) {
+    public List<ReservedStorage> getByExternalReference(UUID externalReference) {
         return stream()
-            .filter(reservedStorage -> reservedStorage.getExternalReference().equals(processId))
+            .filter(reservedStorage -> reservedStorage.getExternalReference().equals(externalReference))
             .collect(Collectors.toList());
     }
 }

@@ -350,6 +350,12 @@
     "cancel-queue-item-confirmation-dialog-title": "Confirm cancelling production",
     "cancel-queue-item-confirmation-dialog-detail": "Are you sure you want to cancel the production?",
     "cancel-queue-item-confirm-button": "Cancel production",
-    "cancel-queue-item-cancel-button": "Back"
+    "cancel-queue-item-cancel-button": "Back",
+    "building-effect-title-production": "Produces",
+    "building-effect-production-header-produced-item": "Item",
+    "building-effect-production-header-production-requirements": "Requirements",
+    "parallel-workers": "Parallel workers",
+    "required-work-points": "Required work points",
+    "reset": "Reset"
   }
 }

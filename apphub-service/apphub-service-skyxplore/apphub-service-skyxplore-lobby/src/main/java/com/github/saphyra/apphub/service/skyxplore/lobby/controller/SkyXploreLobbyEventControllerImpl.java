@@ -31,7 +31,7 @@ class SkyXploreLobbyEventControllerImpl implements SkyXploreLobbyEventController
     @Override
     public void cleanupExpiredLobbies() {
         log.info("Cleaning up expired lobbies...");
-        LocalDateTime expiration = dateTimeUtil.getCurrentTime()
+        LocalDateTime expiration = dateTimeUtil.getCurrentDateTime()
             .minusMinutes(lobbyExpirationMinutes);
         lobbyDao.getByLastAccessedBefore(expiration)
             .forEach(lobbyDao::delete);

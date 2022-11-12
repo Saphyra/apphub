@@ -37,7 +37,7 @@ public class LoginService {
             .filter(u -> !u.isMarkedForDeletion())
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.BAD_CREDENTIALS, String.format("User not found with email %s", loginRequest.getEmail())));
 
-        if (nonNull(user.getLockedUntil()) && user.getLockedUntil().isAfter(dateTimeUtil.getCurrentTime())) {
+        if (nonNull(user.getLockedUntil()) && user.getLockedUntil().isAfter(dateTimeUtil.getCurrentDateTime())) {
             throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.ACCOUNT_LOCKED, "User account locked.");
         }
 
@@ -45,7 +45,7 @@ public class LoginService {
             user.setPasswordFailureCount(user.getPasswordFailureCount() + 1);
 
             if (user.getPasswordFailureCount() % passwordProperties.getLockAccountFailures() == 0) {
-                LocalDateTime lockedUntil = dateTimeUtil.getCurrentTime()
+                LocalDateTime lockedUntil = dateTimeUtil.getCurrentDateTime()
                     .plusMinutes(passwordProperties.getLockedMinutes());
                 user.setLockedUntil(lockedUntil);
             }

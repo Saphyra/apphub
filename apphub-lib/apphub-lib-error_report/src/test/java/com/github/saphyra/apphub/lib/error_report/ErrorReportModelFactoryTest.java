@@ -53,7 +53,7 @@ public class ErrorReportModelFactoryTest {
 
     @Test
     public void create() {
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         given(objectMapperWrapper.writeValueAsString(errorResponse)).willReturn(ERROR_RESPONSE);
         given(exceptionMapper.map(exception)).willReturn(exceptionModel);
         given(exception.getMessage()).willReturn(MESSAGE);
@@ -74,7 +74,7 @@ public class ErrorReportModelFactoryTest {
 
     @Test
     public void createForMessage() {
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         given(exceptionMapper.map(exception)).willReturn(exceptionModel);
         given(commonConfigProperties.getApplicationName()).willReturn(APPLICATION_NAME);
 

@@ -133,7 +133,7 @@ public class GameFactoryTest {
         given(universeFactory.create(GAME_ID, 2, settings)).willReturn(universe);
         given(universe.getSystems()).willReturn(CollectionUtils.singleValueMap(coordinate, solarSystem));
 
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         given(chatFactory.create(members)).willReturn(chat);
         given(eventLoopFactory.create()).willReturn(eventLoop);
         given(backgroundProcessFactory.create(any(Game.class))).willReturn(backgroundProcesses);

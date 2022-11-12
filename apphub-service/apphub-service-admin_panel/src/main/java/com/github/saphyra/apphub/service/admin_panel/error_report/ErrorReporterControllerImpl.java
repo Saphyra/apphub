@@ -66,4 +66,10 @@ public class ErrorReporterControllerImpl implements ErrorReporterController {
         log.info("{} wants to delete read error reports.", accessTokenHeader.getUserId());
         errorReportDao.deleteByStatus(ErrorReportStatus.READ);
     }
+
+    @Override
+    public void deleteAll(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to delete all error reports.", accessTokenHeader.getUserId());
+        errorReportDao.deleteAll();
+    }
 }

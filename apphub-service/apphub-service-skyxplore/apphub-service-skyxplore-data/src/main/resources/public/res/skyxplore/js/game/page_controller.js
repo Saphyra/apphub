@@ -116,7 +116,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/common/js/animation/move_controller.js");
 scriptLoader.loadScript("/res/common/js/animation/zoom_controller.js");
 scriptLoader.loadScript("/res/common/js/sync_engine.js");
-scriptLoader.loadScript("/res/skyxplore/js/game/caches.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/data_caches.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/chat_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/map/map_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/solar_system/solar_system_controller.js");

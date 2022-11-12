@@ -25,6 +25,6 @@ class PingWebSocketEventHandler implements WebSocketEventHandler {
     @Override
     public void handle(UUID from, WebSocketEvent event) {
         log.info("Handling ping from {}", from);
-        lobbyDao.findByUserId(from).ifPresent(lobby -> lobby.setLastAccess(dateTimeUtil.getCurrentTime()));
+        lobbyDao.findByUserId(from).ifPresent(lobby -> lobby.setLastAccess(dateTimeUtil.getCurrentDateTime()));
     }
 }

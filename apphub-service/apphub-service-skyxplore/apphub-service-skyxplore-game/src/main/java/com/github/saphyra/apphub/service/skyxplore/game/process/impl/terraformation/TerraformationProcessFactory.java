@@ -43,7 +43,7 @@ public class TerraformationProcessFactory implements ProcessFactory {
     }
 
     @Override
-    public TerraformationProcess create(Game game, ProcessModel model) {
+    public TerraformationProcess createFromModel(Game game, ProcessModel model) {
         Planet planet = game.getUniverse()
             .findPlanetByIdValidated(model.getLocation());
 

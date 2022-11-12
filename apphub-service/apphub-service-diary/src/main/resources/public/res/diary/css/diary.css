@@ -5,6 +5,34 @@
     font-size: 1.75rem;
 }
 
+#main-page footer{
+    display: grid;
+    grid-template-columns: min-content auto;
+}
+
+    #back-button{
+    }
+
+    #search-container{
+        text-align: right;
+    }
+
+        #search-input{
+            font-size: 1.25rem;
+            width: calc(100% - 3rem);
+        }
+
+        #search-button{
+            background-image: url("/res/common/images/search.png");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 80%;
+            width: 2rem;
+            height: 2rem;
+            margin: 0.2rem;
+            margin-left: 0;
+        }
+
 #main-page-content{
     display: grid;
     grid-template-columns: 70% 30%;
@@ -222,3 +250,95 @@
             #view-event-content-wrapper textarea:last-child{
                 margin-top: 0.25rem;
             }
+
+#search-result-page{
+
+}
+
+    #search-result-page-main{
+        display: grid;
+        grid-template-rows: 2.5rem auto;
+    }
+
+        #search-result-page-search-container{
+            border-bottom: 3px ridge white;
+            position: relative;
+        }
+
+            #search-result-page-search-input{
+                width: calc(100% - 3rem);
+                margin: 0;
+                position: absolute;
+                top: 0;
+                left: 0.25rem;
+                font-size: 1rem;
+            }
+
+            #search-result-page-search-button{
+                background-image: url("/res/common/images/search.png");
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: 80%;
+                width: 2rem;
+                height: 2rem;
+                position: absolute;
+                top: 0;
+                right: 0.25rem;
+                margin: 0;
+            }
+
+        #search-result{
+            padding: 1rem;
+        }
+            .search-result{
+                border: 2px solid white;
+                border-radius: 5px;
+                margin: 0.5rem;
+                padding: 0.25rem;
+                font-size: 1.5rem;
+            }
+
+                .search-result-header{
+                    position: relative;
+                }
+
+                    .search-result-title{
+
+                    }
+
+                    .search-result-toggle-button{
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        margin: 0;
+                        border-width: 2px;
+                    }
+
+                .search-result-occurrences{
+                    display: none;
+                    margin-top: 0.5rem;
+                }
+
+                    .search-result-occurrence{
+                        text-align: left;
+                        font-size: 1rem;
+                    }
+
+                        .search-result-occurrence.button:hover{
+                            border-color: yellow;
+                        }
+
+                        .search-result-occurrence.done{
+                            border-color: green;
+                            text-decoration: line-through;
+                        }
+
+                        .search-result-occurrence.snoozed{
+                            border-color: grey;
+                            opacity: 0.5;
+                            text-decoration: line-through;
+                        }
+
+                        .search-result-occurrence.expired{
+                            border-color: red;
+                        }

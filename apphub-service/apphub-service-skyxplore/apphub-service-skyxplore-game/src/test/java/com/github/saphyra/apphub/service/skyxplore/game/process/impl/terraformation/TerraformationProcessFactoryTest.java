@@ -84,7 +84,7 @@ public class TerraformationProcessFactoryTest {
         given(surface.getTerraformation()).willReturn(terraformation);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
 
-        TerraformationProcess result = underTest.create(game, model);
+        TerraformationProcess result = underTest.createFromModel(game, model);
 
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
     }

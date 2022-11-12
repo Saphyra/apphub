@@ -52,10 +52,11 @@ public class ProductionOrderProcess implements Process {
     private final Game game;
     @NonNull
     private final Planet planet;
-    @NonNull
     private final AllocatedResource allocatedResource;
     @NonNull
     private final ReservedStorage reservedStorage;
+
+    @Getter
     private final int amount;
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
@@ -137,6 +138,8 @@ public class ProductionOrderProcess implements Process {
 
     @Override
     public void cleanup(SyncCache syncCache) {
+        log.info("Cleaning up {}", this);
+
         applicationContextProxy.getBean(AllocationRemovalService.class)
             .removeAllocationsAndReservations(syncCache, planet, processId);
 
@@ -166,7 +169,7 @@ public class ProductionOrderProcess implements Process {
             CollectionUtils.toMap(
                 new BiWrapper<>(ProcessParamKeys.PRODUCER_BUILDING_DATA_ID, producerBuildingDataId),
                 new BiWrapper<>(ProcessParamKeys.RESERVED_STORAGE_ID, uuidConverter.convertDomain(reservedStorage.getReservedStorageId())),
-                new BiWrapper<>(ProcessParamKeys.ALLOCATED_RESOURCE_ID, uuidConverter.convertDomain(allocatedResource.getAllocatedResourceId())),
+                new BiWrapper<>(ProcessParamKeys.ALLOCATED_RESOURCE_ID, uuidConverter.convertDomain(allocatedResource, AllocatedResource::getAllocatedResourceId)),
                 new BiWrapper<>(ProcessParamKeys.AMOUNT, String.valueOf(amount))
             ))
         );

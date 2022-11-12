@@ -1,11 +1,13 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao;
 
+import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameApiClient;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.game.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.player.PlayerDao;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,8 @@ public class GameDeletionService implements DeleteByUserIdDao {
     private final GameDao gameDao;
     private final PlayerDao playerDao;
     private final DateTimeUtil dateTimeUtil;
+    private final SkyXploreGameApiClient gameClient;
+    private final LocaleProvider localeProvider;
 
     @Override
     @Transactional
@@ -59,9 +63,11 @@ public class GameDeletionService implements DeleteByUserIdDao {
     }
 
     private void markGameForDeletion(UUID gameId) {
+        gameClient.deleteGame(gameId, localeProvider.getOrDefault());
+
         GameModel gameModel = gameDao.findByIdValidated(gameId);
         gameModel.setMarkedForDeletion(true);
-        gameModel.setMarkedForDeletionAt(dateTimeUtil.getCurrentTime());
+        gameModel.setMarkedForDeletionAt(dateTimeUtil.getCurrentDateTime());
 
         gameDao.save(gameModel);
     }

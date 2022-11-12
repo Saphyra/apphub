@@ -42,7 +42,7 @@ class ProcessLoader {
 
         return models.stream()
             .filter(model -> model.getStatus() != ProcessStatus.READY_TO_DELETE)
-            .map(model -> factories.get(model.getProcessType()).create(game, model))
+            .map(model -> factories.get(model.getProcessType()).createFromModel(game, model))
             .collect(Collectors.toList());
     }
 }

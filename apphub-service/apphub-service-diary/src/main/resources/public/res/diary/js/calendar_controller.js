@@ -12,7 +12,8 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
         .build();
 
     let rowAmount;
-    let currentDate;
+    let currentDate = CURRENT_DATE;
+    let selectedDate = CURRENT_DATE;
 
     eventProcessor.registerProcessor(new EventProcessor(
         (eventType) => {return eventType == events.EVENT_CHANGED},
@@ -65,6 +66,10 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
             node.classList.add("calendar-day");
             node.classList.add("button");
 
+            if(date.equals(selectedDate)){
+                node.classList.add("selected-day");
+            }
+
             node.style.height = "calc((100vh - 16rem) / " + rowAmount + ")";
 
             if(date.getMonth() != currentDate.getMonth()){
@@ -93,6 +98,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
             dailyTasksController.displayDay(day);
             $(".calendar-day").removeClass("selected-day");
             node.classList.add("selected-day");
+            selectedDate = date;
         }
 
         return node;

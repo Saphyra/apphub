@@ -63,7 +63,7 @@ public class EventSenderTest {
     public void sendEvent() {
         given(urlAssembler.assemble(eventProcessor)).willThrow(new RuntimeException())
             .willReturn(URL);
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
 
         underTest.sendEvent(eventProcessor, sendEventRequest, TestConstants.DEFAULT_LOCALE);
 

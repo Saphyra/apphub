@@ -70,7 +70,7 @@ public class ProcessLoaderTest {
         given(readyToDeleteProcessModel.getId()).willReturn(PROCESS_ID);
         given(processModel.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
         given(processModel.getProcessType()).willReturn(ProcessType.PRODUCTION_ORDER);
-        given(processFactory.create(game, processModel)).willReturn(process);
+        given(processFactory.createFromModel(game, processModel)).willReturn(process);
 
         List<Process> result = underTest.load(game);
 

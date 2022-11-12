@@ -46,7 +46,7 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
         log.info("{} is connected to messageGroup {}", userId, getGroup());
         SessionWrapper sessionWrapper = SessionWrapper.builder()
             .session(session)
-            .lastUpdate(context.getDateTimeUtil().getCurrentTime())
+            .lastUpdate(context.getDateTimeUtil().getCurrentDateTime())
             .build();
         sessionMap.put(userId, sessionWrapper);
         afterConnection(userId);
@@ -78,7 +78,7 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
             userId = getUserId(session);
             String payload = message.getPayload();
             event = context.getObjectMapperWrapper().readValue(payload, WebSocketEvent.class);
-            Optional.ofNullable(sessionMap.get(userId)).ifPresent(sessionWrapper -> sessionWrapper.setLastUpdate(context.getDateTimeUtil().getCurrentTime()));
+            Optional.ofNullable(sessionMap.get(userId)).ifPresent(sessionWrapper -> sessionWrapper.setLastUpdate(context.getDateTimeUtil().getCurrentDateTime()));
             handleMessage(userId, event);
         } catch (Exception e) {
             log.error("Failed processing event {} from {} in messageGroup {}", event.getEventName(), userId, getGroup(), e);
@@ -126,7 +126,7 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
 
     private boolean isExpired(Map.Entry<UUID, SessionWrapper> entry) {
         LocalDateTime expiration = context.getDateTimeUtil()
-            .getCurrentTime()
+            .getCurrentDateTime()
             .minusSeconds(context.getWebSocketSessionExpirationSeconds());
         return entry.getValue()
             .getLastUpdate()
@@ -156,7 +156,7 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
             synchronized (session) {
                 session.sendMessage(textMessage);
             }
-            sessionWrapper.setLastUpdate(context.getDateTimeUtil().getCurrentTime());
+            sessionWrapper.setLastUpdate(context.getDateTimeUtil().getCurrentDateTime());
             return true;
         } catch (Exception e) {
             log.info("Failed to send {} event to {} in messageGroup {}", event.getEventName(), recipient, getGroup(), e);

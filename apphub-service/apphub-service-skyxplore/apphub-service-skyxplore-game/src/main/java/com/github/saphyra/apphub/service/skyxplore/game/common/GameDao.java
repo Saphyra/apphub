@@ -20,6 +20,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.util.Objects.isNull;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -53,12 +55,21 @@ public class GameDao {
         return repository.values()
             .stream()
             .filter(game -> game.getPlayers().containsKey(userId))
+            .filter(game -> !game.isTerminated())
             .findFirst();
     }
 
     @VisibleForTesting
     public void put(Game game) {
         repository.put(Optional.ofNullable(game.getGameId()).orElse(UUID.randomUUID()), game);
+    }
+
+    public void delete(UUID gameId) {
+        Game game = repository.get(gameId);
+
+        if (!isNull(game)) {
+            delete(game);
+        }
     }
 
     public void delete(Game game) {

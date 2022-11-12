@@ -35,7 +35,7 @@ public class DeleteAccountService {
 
     public void deleteAccount(User user) {
         user.setMarkedForDeletion(true);
-        user.setMarkedForDeletionAt(dateTimeUtil.getCurrentTime());
+        user.setMarkedForDeletionAt(dateTimeUtil.getCurrentDateTime());
         userDao.save(user);
         accessTokenDao.deleteByUserId(user.getUserId());
     }

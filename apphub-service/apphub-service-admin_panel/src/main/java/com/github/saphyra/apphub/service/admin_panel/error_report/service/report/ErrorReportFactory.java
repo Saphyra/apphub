@@ -22,7 +22,7 @@ class ErrorReportFactory {
     public ErrorReport create(ErrorReportModel model) {
         return ErrorReport.builder()
             .id(getOrCreate(model.getId(), idGenerator::randomUuid))
-            .createdAt(getOrCreate(model.getCreatedAt(), dateTimeUtil::getCurrentTime))
+            .createdAt(getOrCreate(model.getCreatedAt(), dateTimeUtil::getCurrentDateTime))
             .message(model.getMessage())
             .responseStatus(model.getResponseStatus())
             .responseBody(model.getResponseBody())

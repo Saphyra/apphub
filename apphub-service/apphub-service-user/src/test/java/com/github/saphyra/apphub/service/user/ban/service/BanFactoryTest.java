@@ -39,7 +39,7 @@ public class BanFactoryTest {
     @Before
     public void setUp() {
         given(idGenerator.randomUuid()).willReturn(BAN_ID);
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
     }
 
     @Test

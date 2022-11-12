@@ -22,7 +22,7 @@ class EventProcessorFactory {
             .serviceName(request.getServiceName())
             .url(request.getUrl())
             .eventName(request.getEventName())
-            .lastAccess(dateTimeUtil.getCurrentTime())
+            .lastAccess(dateTimeUtil.getCurrentDateTime())
             .build();
     }
 }

@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.google.common.base.Stopwatch;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.DestroyMode;
 import org.apache.commons.pool2.PooledObject;
@@ -18,10 +19,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.github.saphyra.apphub.integration.core.SeleniumTest.HEADLESS_MODE;
 import static java.util.Objects.isNull;
@@ -33,6 +37,8 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
 
     private static final GenericObjectPoolConfig<WebDriverWrapper> DRIVER_POOL_CONFIG = new GenericObjectPoolConfig<>();
 
+    private static volatile int numberOfDriversCreated = 0;
+
     static {
         DRIVER_POOL_CONFIG.setMaxTotal(MAX_DRIVER_COUNT);
     }
@@ -40,15 +46,22 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(BROWSER_STARTUP_LIMIT);
     private static final GenericObjectPool<WebDriverWrapper> DRIVER_POOL = new GenericObjectPool<>(new WebDriverFactory(), DRIVER_POOL_CONFIG);
 
-    static WebDriverWrapper getDriver() throws Exception {
+    static synchronized List<WebDriverWrapper> getDrivers(int driverCount) {
         Stopwatch stopwatch = Stopwatch.createStarted();
-        WebDriverWrapper result = DRIVER_POOL.borrowObject();
+        List<WebDriverWrapper> result = Stream.generate(WebDriverFactory::getDriver)
+            .limit(driverCount)
+            .collect(Collectors.toList());
         stopwatch.stop();
         long elapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);
         if (elapsed > 100) {
-            log.info("WebDriver fetched in {}ms. Number of Drivers: {}", elapsed, DRIVER_POOL.listAllObjects().size());
+            log.debug("{} WebDrivers fetched in {}ms", driverCount, elapsed);
         }
         return result;
+    }
+
+    @SneakyThrows
+    private static WebDriverWrapper getDriver() {
+        return DRIVER_POOL.borrowObject();
     }
 
     @NotNull
@@ -91,9 +104,10 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
                 options.addArguments("window-size=1920,1080");
 
                 driver = new ChromeDriver(options);
-                log.info("Driver created: {}", driver);
+                log.debug("Driver created: {}", driver);
                 SleepUtil.sleep(1000);
                 driver.navigate().to(UrlFactory.create(Endpoints.ERROR_PAGE));
+                numberOfDriversCreated++;
                 return driver;
             } catch (Exception e) {
                 log.error("Could not create driver", e);
@@ -105,13 +119,13 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
 
     static void stopDrivers() {
         DRIVER_POOL.close();
+        log.info("NumberOfDriversCreated: {}", numberOfDriversCreated);
     }
 
     private static void stopDriver(WebDriverWrapper webDriverWrapper) {
         WebDriver driver = webDriverWrapper.getDriver();
         for (int tryCount = 0; tryCount < 3; tryCount++) {
             try {
-                driver.close();
                 driver.quit();
                 break;
             } catch (Exception e) {

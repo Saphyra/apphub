@@ -54,7 +54,7 @@ public class DeleteAccountServiceTest {
     public void deleteAccount() {
         given(user.getUserId()).willReturn(USER_ID);
         given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
 
         underTest.deleteAccount(USER_ID, PASSWORD);
 

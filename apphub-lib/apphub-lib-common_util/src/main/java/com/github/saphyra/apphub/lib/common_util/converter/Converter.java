@@ -2,6 +2,9 @@ package com.github.saphyra.apphub.lib.common_util.converter;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+
+import static java.util.Objects.isNull;
 
 public interface Converter<E, D> {
     D convertEntity(E entity);
@@ -13,6 +16,14 @@ public interface Converter<E, D> {
     List<D> convertEntity(List<E> entityList);
 
     E convertDomain(D domain);
+
+    default <T> E convertDomain(T input, Function<T, D> mapper) {
+        if (isNull(input)) {
+            return null;
+        }
+
+        return convertDomain(mapper.apply(input));
+    }
 
     Optional<E> convertDomain(Optional<D> domain);
 

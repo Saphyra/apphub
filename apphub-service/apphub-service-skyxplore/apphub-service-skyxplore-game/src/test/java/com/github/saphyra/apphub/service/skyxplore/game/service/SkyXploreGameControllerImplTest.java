@@ -21,6 +21,7 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class SkyXploreGameControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
@@ -81,5 +82,12 @@ public class SkyXploreGameControllerImplTest {
         underTest.pauseGame(new OneParamRequest<>(true), accessTokenHeader);
 
         verify(pauseGameService).setPausedStatus(USER_ID, true);
+    }
+
+    @Test
+    public void deleteGame() {
+        underTest.deleteGame(GAME_ID);
+
+        verify(gameDao).delete(GAME_ID);
     }
 }

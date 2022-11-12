@@ -34,7 +34,7 @@ public class AccessTokenCleanupServiceTest {
 
     @Test
     public void deleteExpiredAccessTokens() {
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         given(authenticationProperties.getAccessTokenCookieExpirationDays()).willReturn(COOKIE_EXPIRATION_DAYS);
         given(authenticationProperties.getAccessTokenExpirationMinutes()).willReturn(EXPIRATION_MINUTES);
 

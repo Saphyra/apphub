@@ -58,7 +58,7 @@ public class GameCleanupServiceTest {
     @Test
     public void deleteMarkedGames() {
         given(gameDao.getGamesMarkedForDeletion()).willReturn(List.of(expiredGame, game));
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_TIME);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(properties.getGameDeletionExpirationMinutes()).willReturn(EXPIRATION_MINUTES);
         given(expiredGame.getMarkedForDeletionAt()).willReturn(CURRENT_TIME.minusMinutes(EXPIRATION_MINUTES + 1));
         given(expiredGame.getGameId()).willReturn(GAME_ID);

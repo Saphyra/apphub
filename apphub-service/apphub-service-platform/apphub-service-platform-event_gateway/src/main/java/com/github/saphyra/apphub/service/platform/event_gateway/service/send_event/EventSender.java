@@ -37,7 +37,7 @@ class EventSender {
                     HttpEntity<SendEventRequest<?>> entity = new HttpEntity<>(sendEventRequest, headers);
                     restTemplate.postForEntity(url, entity, Void.class);
 
-                    processor.setLastAccess(dateTimeUtil.getCurrentTime());
+                    processor.setLastAccess(dateTimeUtil.getCurrentDateTime());
                     eventProcessorDao.save(processor);
                     return;
                 } catch (Exception e) {

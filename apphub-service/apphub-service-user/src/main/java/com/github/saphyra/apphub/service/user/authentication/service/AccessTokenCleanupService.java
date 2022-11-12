@@ -18,7 +18,7 @@ public class AccessTokenCleanupService {
     private final DateTimeUtil dateTimeUtil;
 
     public void deleteExpiredAccessTokens() {
-        LocalDateTime currentDate = dateTimeUtil.getCurrentTime();
+        LocalDateTime currentDate = dateTimeUtil.getCurrentDateTime();
 
         LocalDateTime persistentExpirationDate = currentDate.minusDays(authenticationProperties.getAccessTokenCookieExpirationDays());
         LocalDateTime nonPersistentExpirationDate = currentDate.minusMinutes(authenticationProperties.getAccessTokenExpirationMinutes());

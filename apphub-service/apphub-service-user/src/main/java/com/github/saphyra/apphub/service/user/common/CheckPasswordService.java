@@ -36,7 +36,7 @@ public class CheckPasswordService {
                 user.setPasswordFailureCount(user.getPasswordFailureCount() + 1);
 
                 if (user.getPasswordFailureCount() % passwordProperties.getLockAccountFailures() == 0) {
-                    user.setLockedUntil(dateTimeUtil.getCurrentTime().plusMinutes(passwordProperties.getLockedMinutes()));
+                    user.setLockedUntil(dateTimeUtil.getCurrentDateTime().plusMinutes(passwordProperties.getLockedMinutes()));
 
                     AccessTokenHeader accessTokenHeader = accessTokenProvider.get();
                     logoutService.logout(accessTokenHeader.getAccessTokenId(), userId);

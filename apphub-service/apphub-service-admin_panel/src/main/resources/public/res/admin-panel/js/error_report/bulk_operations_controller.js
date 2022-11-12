@@ -25,6 +25,8 @@
         this.markAsUnread = function(){
             markErrorReports(getCheckedIds(), "UNREAD", reportController.search);
         }
+
+        this.deleteAll = deleteAll;
     }
 
     function deleteChecked(){
@@ -64,5 +66,26 @@
         $(".error-report-selection:checked").each(function(){result.push($(this).val())});
 
         return result;
+    }
+
+    function deleteAll(){
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(Localization.getAdditionalContent("delete-all-error-reports-confirmation-dialog-title"))
+            .withDetail(Localization.getAdditionalContent("delete-all-error-reports-confirmation-dialog-detail"))
+            .withConfirmButton(Localization.getAdditionalContent("delete-all-error-reports-confirmation-dialog-confirm-button"))
+            .withDeclineButton(Localization.getAdditionalContent("delete-all-error-reports-confirmation-dialog-cancel-button"));
+
+        confirmationService.openDialog(
+            "delete-all-error-reports-confirmation-dialog",
+            confirmationDialogLocalization,
+            function(){
+                const request = new Request(Mapping.getEndpoint("ADMIN_PANEL_ERROR_REPORT_DELETE_ALL"));
+                    request.processValidResponse = function(){
+                        notificationService.showSuccess(Localization.getAdditionalContent("all-deleted"));
+                        reportController.search();
+                    };
+                dao.sendRequestAsync(request);
+            }
+        )
     }
 })();

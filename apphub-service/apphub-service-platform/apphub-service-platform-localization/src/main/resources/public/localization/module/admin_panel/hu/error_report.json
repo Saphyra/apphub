@@ -216,6 +216,12 @@
         "key": "innerHTML",
         "message": "Kezdőlap"
       }
+    ],
+    "delete-all-button": [
+      {
+        "key": "innerHTML",
+        "message": "Összes törlése"
+      }
     ]
   },
   "additionalContent": {
@@ -232,6 +238,11 @@
     "delete-all-read-error-reports-confirmation-dialog-detail": "Biztos hogy törölni szeretné az összes olvasott hibajelentést??",
     "delete-all-read-error-reports-confirmation-dialog-confirm-button": "Összes olvasott törlése",
     "delete-all-read-error-reports-confirmation-dialog-cancel-button": "Mégse",
-    "all-read-deleted": "Az összes olvasott hibajelentés törölve.."
+    "all-read-deleted": "Az összes olvasott hibajelentés törölve..",
+    "delete-all-error-reports-confirmation-dialog-title": "Összes hibajelentés törlésének megerősítése",
+    "delete-all-error-reports-confirmation-dialog-detail": "Biztos hogy törölni szeretné az összes hibajelentést?",
+    "delete-all-error-reports-confirmation-dialog-confirm-button": "Összes törlése",
+    "delete-all-error-reports-confirmation-dialog-cancel-button": "Mégse",
+    "all-deleted": "Az összes hibajelentés törölve."
   }
 }

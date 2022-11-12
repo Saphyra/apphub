@@ -80,7 +80,7 @@ public class ConstructionProcessFactoryTest {
         given(planet.findBuildingByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(building);
         given(building.getConstruction()).willReturn(construction);
 
-        ConstructionProcess result = underTest.create(game, model);
+        ConstructionProcess result = underTest.createFromModel(game, model);
 
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
     }

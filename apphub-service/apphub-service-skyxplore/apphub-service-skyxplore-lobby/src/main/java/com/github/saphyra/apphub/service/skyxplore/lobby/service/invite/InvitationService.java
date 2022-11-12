@@ -74,7 +74,7 @@ public class InvitationService {
 
         if (existingInvitation.isPresent()) {
             Invitation invitation = existingInvitation.get();
-            LocalDateTime localDateTime = dateTimeUtil.getCurrentTime()
+            LocalDateTime localDateTime = dateTimeUtil.getCurrentDateTime()
                 .minusSeconds(floodingLimitSeconds);
             if (invitation.getInvitationTime().isAfter(localDateTime)) {
                 throw ExceptionFactory.notLoggedException(HttpStatus.TOO_MANY_REQUESTS, ErrorCode.TOO_FREQUENT_INVITATIONS, accessTokenHeader.getUserId() + " cannot invite " + friendId + " again yet.");

@@ -16,6 +16,7 @@ public class ConstructionToResponseConverterTest {
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final int REQUIRED_WORK_POINTS = 235;
     private static final int CURRENT_WORK_POINTS = 657;
+    private static final String DATA = "data";
 
     @InjectMocks
     private ConstructionToResponseConverter underTest;
@@ -26,6 +27,7 @@ public class ConstructionToResponseConverterTest {
             .constructionId(CONSTRUCTION_ID)
             .requiredWorkPoints(REQUIRED_WORK_POINTS)
             .currentWorkPoints(CURRENT_WORK_POINTS)
+            .data(DATA)
             .build();
 
         ConstructionResponse result = underTest.convert(construction);
@@ -33,5 +35,6 @@ public class ConstructionToResponseConverterTest {
         assertThat(result.getConstructionId()).isEqualTo(CONSTRUCTION_ID);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
         assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
+        assertThat(result.getData()).isEqualTo(DATA);
     }
 }

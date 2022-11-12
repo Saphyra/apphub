@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.structure.skyxplore;
 
+import com.github.saphyra.apphub.integration.framework.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +13,7 @@ import java.util.UUID;
 @Data
 @Builder(toBuilder = true)
 public class StorageSettingModel {
-    private static final String DATA_ID = "coal";
-    private static final Integer TARGET_AMOUNT = 3453;
+    private static final Integer TARGET_AMOUNT = 300;
     private static final Integer PRIORITY = 4;
     private static final Integer BATCH_SIZE = 13;
 
@@ -25,7 +25,7 @@ public class StorageSettingModel {
 
     public static StorageSettingModel valid() {
         return StorageSettingModel.builder()
-            .dataId(DATA_ID)
+            .dataId(Constants.DATA_ID_ORE)
             .targetAmount(TARGET_AMOUNT)
             .priority(PRIORITY)
             .batchSize(BATCH_SIZE)

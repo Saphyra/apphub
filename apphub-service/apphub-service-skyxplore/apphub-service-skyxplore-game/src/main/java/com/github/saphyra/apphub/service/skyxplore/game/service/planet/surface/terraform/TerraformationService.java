@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.terraform;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
@@ -84,9 +83,6 @@ class TerraformationService {
 
         surface.setTerraformation(construction);
 
-        ConstructionModel constructionModel = constructionToModelConverter.convert(construction, game.getGameId());
-        gameDataProxy.saveItem(constructionModel);
-
         QueueResponse queueResponse = queueItemToResponseConverter.convert(surfaceToQueueItemConverter.convert(surface), planet);
         messageSender.planetQueueItemModified(userId, planetId, queueResponse);
         messageSender.planetBuildingDetailsModified(userId, planetId, planetBuildingOverviewQueryService.getBuildingOverview(planet));
@@ -97,6 +93,11 @@ class TerraformationService {
         synchronized (processes) {
             processes.add(constructionProcess);
         }
+
+        gameDataProxy.saveItem(
+            constructionToModelConverter.convert(construction, game.getGameId()),
+            constructionProcess.toModel()
+        );
 
         return surfaceToResponseConverter.convert(surface);
     }

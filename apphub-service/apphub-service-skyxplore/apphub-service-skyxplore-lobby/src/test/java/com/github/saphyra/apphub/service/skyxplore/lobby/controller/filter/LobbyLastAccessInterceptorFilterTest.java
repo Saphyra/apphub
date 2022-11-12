@@ -60,7 +60,7 @@ public class LobbyLastAccessInterceptorFilterTest {
         given(accessTokenProvider.get()).willReturn(accessTokenHeader);
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(lobbyDao.findByUserId(USER_ID)).willReturn(Optional.of(lobby));
-        given(dateTimeUtil.getCurrentTime()).willReturn(ACTUAL_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(ACTUAL_DATE);
 
         underTest.doFilterInternal(request, response, filterChain);
 

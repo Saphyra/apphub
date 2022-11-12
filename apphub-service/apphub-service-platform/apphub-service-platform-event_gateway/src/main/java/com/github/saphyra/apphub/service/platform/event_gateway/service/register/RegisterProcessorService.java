@@ -23,7 +23,7 @@ public class RegisterProcessorService {
             .orElseGet(() -> eventProcessorFactory.create(request));
 
         eventProcessor.setUrl(request.getUrl());
-        eventProcessor.setLastAccess(dateTimeUtil.getCurrentTime());
+        eventProcessor.setLastAccess(dateTimeUtil.getCurrentDateTime());
         eventProcessorDao.save(eventProcessor);
     }
 }

@@ -28,7 +28,7 @@ public class LobbyLastAccessInterceptorFilter extends OncePerRequestFilter {
         try {
             AccessTokenHeader accessTokenHeader = accessTokenProvider.get();
             lobbyDao.findByUserId(accessTokenHeader.getUserId())
-                .ifPresent(lobby -> lobby.setLastAccess(dateTimeUtil.getCurrentTime()));
+                .ifPresent(lobby -> lobby.setLastAccess(dateTimeUtil.getCurrentDateTime()));
         } catch (Exception e) {
             log.error("LobbyInterception failed.", e);
         }

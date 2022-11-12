@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.structure.diary.CalendarSearchResult;
 import com.github.saphyra.apphub.integration.structure.diary.RepetitionType;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -16,12 +17,21 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.github.saphyra.apphub.integration.framework.WebElementUtils.clearAndFill;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class DiaryActions {
+    public static void createEvent(WebDriver driver, LocalDate date, String title) {
+        openCreateEventWindowAt(driver, date);
+        fillEventTitle(driver, title);
+        pushCreateEventButton(driver);
+
+        NotificationUtil.verifySuccessNotification(driver, "Esemény létrehozva.");
+    }
+
     public static void selectDay(WebDriver driver, LocalDate currentDate) {
         AwaitilityWrapper.getWithWait(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("calendar-day-" + currentDate))), Optional::isPresent)
             .orElseThrow(() -> new RuntimeException(currentDate + " is not opened."))
@@ -45,7 +55,7 @@ public class DiaryActions {
             .assertTrue("CreateEvent window is not displayed");
     }
 
-    public static void createEvent(WebDriver driver) {
+    public static void pushCreateEventButton(WebDriver driver) {
         DiaryPage.createEventButton(driver)
             .click();
     }
@@ -240,5 +250,26 @@ public class DiaryActions {
 
     public static void setCreateEventHours(WebDriver driver, String hours) {
         WebElementUtils.selectOption(DiaryPage.createEventHours(driver), hours);
+    }
+
+    public static void searchInFooter(WebDriver driver, String query) {
+        WebElementUtils.clearAndFill(DiaryPage.searchInFooterInput(driver), query);
+
+        DiaryPage.searchInFooterButton(driver)
+            .click();
+    }
+
+    public static List<CalendarSearchResult> searchResult(WebDriver driver) {
+        return DiaryPage.searchResult(driver)
+            .stream()
+            .map(CalendarSearchResult::new)
+            .collect(Collectors.toList());
+    }
+
+    public static void searchInResult(WebDriver driver, String query) {
+        WebElementUtils.clearAndFill(DiaryPage.searchInResultInput(driver), query);
+
+        DiaryPage.searchInResultButton(driver)
+            .click();
     }
 }

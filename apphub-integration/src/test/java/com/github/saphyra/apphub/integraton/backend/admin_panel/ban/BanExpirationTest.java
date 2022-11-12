@@ -52,7 +52,7 @@ public class BanExpirationTest extends BackEndTest {
 
         AwaitilityWrapper.create(300, 10)
             .until(() -> {
-                log.info("Checking if user is unlocked...");
+                log.debug("Checking if user is unlocked...");
                 return ModulesActions.getModulesResponse(language, testAccessTokenId).getStatusCode() == 200;
             })
             .assertTrue("Ban was not revoked in the given time.");

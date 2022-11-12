@@ -30,7 +30,7 @@ public class ValidAccessTokenQueryService {
         boolean isPersistent = accessToken.isPersistent();
         boolean notExpired = accessToken.getLastAccess()
             .plusMinutes(authenticationProperties.getAccessTokenExpirationMinutes())
-            .isAfter(dateTimeUtil.getCurrentTime());
+            .isAfter(dateTimeUtil.getCurrentDateTime());
         boolean result = isPersistent || notExpired;
         log.debug("Checking if accessToken {} valid: isPersistent: {}, notExpired: {}. Result: {}", accessToken.getAccessTokenId(), isPersistent, notExpired, result);
         return result;

@@ -104,4 +104,11 @@ public class ErrorReporterControllerImplTest {
 
         verify(errorReportDao).deleteByStatus(ErrorReportStatus.READ);
     }
+
+    @Test
+    public void deleteAll() {
+        underTest.deleteAll(accessTokenHeader);
+
+        verify(errorReportDao).deleteAll();
+    }
 }

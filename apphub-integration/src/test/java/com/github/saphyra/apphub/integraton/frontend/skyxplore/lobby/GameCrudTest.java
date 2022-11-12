@@ -31,13 +31,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class GameCrudTest extends SeleniumTest {
     @Test(groups = "skyxplore")
     public void gameCrud() {
-        WebDriver driver1 = extractDriver();
+        List<WebDriver> drivers = extractDrivers(3);
+        WebDriver driver1 = drivers.get(0);
+        WebDriver driver2 = drivers.get(1);
+        WebDriver driver3 = drivers.get(2);
+
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
-
-        WebDriver driver2 = extractDriver();
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
-
-        WebDriver driver3 = extractDriver();
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
 
         List<Future<?>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2), new BiWrapper<>(driver3, userData3))

@@ -16,7 +16,7 @@
 
                     new Stream(availableBuildings)
                         .sorted(function(a, b){dataCaches.itemDataNames.get(a).localeCompare(dataCaches.itemDataNames.get(b))})
-                        .map(function(dataId){return createAvailableBuilding(planetId, surfaceId, dataId)})
+                        .map(function(dataId){return createAvailableBuilding(planetId, surfaceId, surfaceType, dataId)})
                         .forEach(function(node){container.appendChild(node)});
 
 
@@ -24,7 +24,7 @@
             }
         dao.sendRequestAsync(request);
 
-        function createAvailableBuilding(planetId, surfaceId, dataId){
+        function createAvailableBuilding(planetId, surfaceId, surfaceType, dataId){
             const itemData = dataCaches.itemData.get(dataId);
 
             const container = document.createElement("DIV");
@@ -41,7 +41,7 @@
                     description.innerText = dataCaches.itemDataDescriptions.get(dataId);
             container.appendChild(description);
 
-                container.appendChild(createEffect(itemData));
+                container.appendChild(createEffect(surfaceType, itemData));
                 container.appendChild(createConstructionRequirements(itemData.constructionRequirements));
 
                 const buildButton = document.createElement("BUTTON");
@@ -53,7 +53,7 @@
             container.appendChild(buildButton);
             return container;
 
-            function createEffect(itemData){
+            function createEffect(surfaceType, itemData){
                 const container = document.createElement("DIV");
                     container.classList.add("available-building-effect");
 
@@ -63,10 +63,69 @@
                         case "storage":
                         break;
                         case "production":
+                            container.appendChild(createProductionBuildingEffect(surfaceType, itemData));
                         break;
                     }
 
                 return container;
+
+                function createProductionBuildingEffect(surfaceType, itemData){
+                    const table = document.createElement("TABLE");
+                        table.classList.add("formatted-table");
+                        table.classList.add("available-building-effect-production");
+
+                        const tableHead = document.createElement("THEAD");
+                            const titleRow = document.createElement("TR");
+                                const titleCell = document.createElement("TH");
+                                    titleCell.innerText = Localization.getAdditionalContent("building-effect-title-production");
+                                    titleCell.colSpan = 2;
+                            titleRow.appendChild(titleCell);
+                        tableHead.appendChild(titleRow);
+                    table.appendChild(tableHead);
+
+                            const headerRow = document.createElement("TR");
+                                const producedItemHeader = document.createElement("TH");
+                                    producedItemHeader.innerText = Localization.getAdditionalContent("building-effect-production-header-produced-item");
+                            headerRow.appendChild(producedItemHeader);
+
+                                const productionRequirementsHeader = document.createElement("TH");
+                                    productionRequirementsHeader.innerText = Localization.getAdditionalContent("building-effect-production-header-production-requirements");
+                            headerRow.appendChild(productionRequirementsHeader);
+                        tableHead.appendChild(headerRow);
+                    table.appendChild(tableHead);
+
+                        const tableBody = document.createElement("TBODY");
+                            fetchProductions(surfaceType, itemData)
+                                .forEach((node) => tableBody.appendChild(node));
+                    table.appendChild(tableBody);
+
+                    return table;
+
+                    function fetchProductions(surfaceType, itemData){
+                        return new Stream(Object.keys(itemData.gives))
+                            .filter((itemId) => {return itemData.gives[itemId].placed.indexOf(surfaceType) > -1})
+                            .map((itemId) => {return createProductionRequirementRow(itemId, itemData.gives[itemId])});
+
+                        function createProductionRequirementRow(itemId, gives){
+                            const row = document.createElement("TR");
+                                const producedItemCell = document.createElement("TD");
+                                    producedItemCell.innerText = gives.amount + " x " + dataCaches.itemDataNames.get(itemId);
+                            row.appendChild(producedItemCell);
+
+                                const constructionRequirementsCell = document.createElement("TD");
+                                    new MapStream(gives.constructionRequirements.requiredResources)
+                                        .sorted((a, b) => {return dataCaches.itemDataNames.get(a.getKey()).localeCompare(dataCaches.itemDataNames.get(b.getKey()))})
+                                        .toListStream((requiredItemId, amount) => {return createElementWithText("DIV", dataCaches.itemDataNames.get(requiredItemId) + ": " + amount)})
+                                        .forEach((node) => constructionRequirementsCell.appendChild(node));
+
+                                constructionRequirementsCell.appendChild(createElementWithText("DIV", Localization.getAdditionalContent("parallel-workers") + ": " + gives.constructionRequirements.parallelWorkers));
+                                constructionRequirementsCell.appendChild(createElementWithText("DIV", Localization.getAdditionalContent("required-work-points") + ": " + gives.constructionRequirements.requiredWorkPoints));
+
+                            row.appendChild(constructionRequirementsCell);
+                            return row;
+                        }
+                    }
+                }
             }
 
             function createConstructionRequirements(constructionRequirements){
@@ -76,7 +135,7 @@
 
                     const thead = document.createElement("THEAD");
                         const headRow = document.createElement("TR");
-                            const headCell = document.createElement("TD");
+                            const headCell = document.createElement("TH");
                                 headCell.colSpan = 2;
                                 headCell.innerText = Localization.getAdditionalContent("construction-requirements");
                         headRow.appendChild(headCell);
@@ -86,16 +145,19 @@
                     const tbody = document.createElement("TBODY");
                         new MapStream(constructionRequirements["1"].requiredResources)
                             .sorted(function(a, b){return dataCaches.itemDataNames.get(a.getKey()).localeCompare(dataCaches.itemDataNames.get(b.getKey()))})
-                            .toListStream(createRow)
+                            .toListStream((resourceDataId, amount) => {return createRow(dataCaches.itemDataNames.get(resourceDataId), amount)})
                             .forEach(function(node){tbody.appendChild(node)});
+
+                        tbody.appendChild(createRow(Localization.getAdditionalContent("parallel-workers"), constructionRequirements["1"].parallelWorkers));
+                        tbody.appendChild(createRow(Localization.getAdditionalContent("required-work-points"), constructionRequirements["1"].requiredWorkPoints));
                 container.appendChild(tbody);
 
                 return container;
 
-                function createRow(resourceDataId, amount){
+                function createRow(name, amount){
                     const row = document.createElement("TR");
                         const resourceCell = document.createElement("TD");
-                            resourceCell.innerText = dataCaches.itemDataNames.get(resourceDataId);
+                            resourceCell.innerText = name;
                     row.appendChild(resourceCell);
 
                         const amountCell = document.createElement("TD");

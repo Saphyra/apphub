@@ -1,3 +1,9 @@
+function createElementWithText(elementType, text){
+    const element = document.createElement(elementType);
+        element.innerText = text;
+    return element;
+}
+
 function isTrue(value){
     if(typeof value == "boolean"){
         return value;

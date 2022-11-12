@@ -57,16 +57,19 @@
                     const tbody = document.createElement("TBODY");
                         new MapStream(constructionRequirements.requiredResources)
                             .sorted(function(a, b){return dataCaches.itemDataNames.get(a.getKey()).localeCompare(dataCaches.itemDataNames.get(b.getKey()))})
-                            .toListStream(createRow)
+                            .toListStream((resourceDataId, amount) => {return createRow(dataCaches.itemDataNames.get(resourceDataId), amount)})
                             .forEach(function(node){tbody.appendChild(node)});
+
+                    tbody.appendChild(createRow(Localization.getAdditionalContent("parallel-workers"), constructionRequirements.parallelWorkers));
+                    tbody.appendChild(createRow(Localization.getAdditionalContent("required-work-points"), constructionRequirements.requiredWorkPoints));
                 container.appendChild(tbody);
 
                 return container;
 
-                function createRow(resourceDataId, amount){
+                function createRow(name, amount){
                     const row = document.createElement("TR");
                         const resourceCell = document.createElement("TD");
-                            resourceCell.innerText = dataCaches.itemDataNames.get(resourceDataId);
+                            resourceCell.innerText = name;
                     row.appendChild(resourceCell);
 
                         const amountCell = document.createElement("TD");

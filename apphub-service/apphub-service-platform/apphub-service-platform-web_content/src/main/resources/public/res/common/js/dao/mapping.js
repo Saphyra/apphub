@@ -18,6 +18,7 @@ window.Mapping = new function(){
         ADMIN_PANEL_DELETE_ERROR_REPORTS: new Endpoint("/api/admin-panel/error-report", HttpMethod.DELETE),
         ADMIN_PANEL_MARK_ERROR_REPORTS: new Endpoint("/api/admin-panel/error-report/mark/{status}", HttpMethod.POST),
         ADMIN_PANEL_DELETE_READ_ERROR_REPORTS: new Endpoint("/api/admin-panel/error-report/read", HttpMethod.DELETE),
+        ADMIN_PANEL_ERROR_REPORT_DELETE_ALL: new Endpoint("/api/admin-panel/error-report/all", HttpMethod.DELETE),
 
         //Login
         LOGIN: new Endpoint("/api/user/authentication/login", HttpMethod.POST),
@@ -188,6 +189,7 @@ window.Mapping = new function(){
         DIARY_OCCURRENCE_DONE: new Endpoint("/api/diary/occurrence/{occurrenceId}/done", HttpMethod.POST),
         DIARY_OCCURRENCE_DEFAULT: new Endpoint("/api/diary/occurrence/{occurrenceId}/default", HttpMethod.POST),
         DIARY_OCCURRENCE_SNOOZED: new Endpoint("/api/diary/occurrence/{occurrenceId}/snoozed", HttpMethod.POST),
+        DIARY_SEARCH: new Endpoint("/api/diary/search", HttpMethod.POST),
 
         //SETTINGS
         GET_USER_SETTINGS: new Endpoint("/api/user/settings/{category}", HttpMethod.GET),

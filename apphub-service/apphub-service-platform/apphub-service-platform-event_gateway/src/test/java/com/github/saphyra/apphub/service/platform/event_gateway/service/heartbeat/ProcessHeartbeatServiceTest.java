@@ -35,7 +35,7 @@ public class ProcessHeartbeatServiceTest {
     @Test
     public void heartbeat() {
         given(eventProcessorDao.getByServiceName(SERVICE_NAME)).willReturn(Arrays.asList(eventProcessor));
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
 
         underTest.heartbeat(SERVICE_NAME);
 

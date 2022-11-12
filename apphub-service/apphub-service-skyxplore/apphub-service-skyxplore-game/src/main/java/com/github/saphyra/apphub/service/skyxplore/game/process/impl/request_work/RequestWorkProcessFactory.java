@@ -75,7 +75,7 @@ public class RequestWorkProcessFactory implements ProcessFactory {
     }
 
     @Override
-    public RequestWorkProcess create(Game game, ProcessModel model) {
+    public RequestWorkProcess createFromModel(Game game, ProcessModel model) {
         Planet planet = game.getUniverse()
             .findPlanetByIdValidated(model.getLocation());
 

@@ -63,7 +63,7 @@ public class StorageSetting {
     }
 
     public void delete(WebDriver driver) {
-        webElement.findElement(By.cssSelector(":scope button:last-child")).click();
+        webElement.findElement(By.cssSelector(":scope button:nth-child(2)")).click();
 
         CommonPageActions.confirmConfirmationDialog(driver, "delete-storage-setting-confirmation-dialog");
 

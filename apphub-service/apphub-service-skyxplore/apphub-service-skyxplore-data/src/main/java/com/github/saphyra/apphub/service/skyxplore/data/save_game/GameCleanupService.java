@@ -25,7 +25,7 @@ public class GameCleanupService {
 
     @Transactional
     public void deleteMarkedGames() {
-        LocalDateTime expirationDate = dateTimeUtil.getCurrentTime()
+        LocalDateTime expirationDate = dateTimeUtil.getCurrentDateTime()
             .minusMinutes(properties.getGameDeletionExpirationMinutes());
 
         gameDao.getGamesMarkedForDeletion()

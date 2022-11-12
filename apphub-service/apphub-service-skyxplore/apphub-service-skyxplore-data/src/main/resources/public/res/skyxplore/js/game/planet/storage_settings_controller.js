@@ -75,6 +75,7 @@
                     const amountInput = document.createElement("INPUT");
                         amountInput.type = "number";
                         amountInput.step = 1;
+                        amountInput.min = 1;
                         amountInput.value = storageSetting.targetAmount;
                 amountLabel.appendChild(amountInput);
             inputContainer.appendChild(amountLabel);
@@ -116,13 +117,14 @@
                 const deleteButton = document.createElement("BUTTON");
                     deleteButton.innerHTML = Localization.getAdditionalContent("delete-storage-setting");
             buttonContainer.appendChild(deleteButton);
-        node.appendChild(buttonContainer);
 
-        amountInput.onchange = function(){
-            if(amountInput.value > maxAmount){
-                amountInput.value = maxAmount;
-            }
-        }
+                const resetButton = document.createElement("BUTTON");
+                    resetButton.innerText = Localization.getAdditionalContent("reset");
+                    resetButton.onclick = function(){
+                        storageSettingsSyncEngine.renderNode(storageSetting.storageSettingId);
+                    }
+            buttonContainer.appendChild(resetButton);
+        node.appendChild(buttonContainer);
 
         priorityInput.onchange = function(){
             priorityValue.innerHTML = priorityInput.value;

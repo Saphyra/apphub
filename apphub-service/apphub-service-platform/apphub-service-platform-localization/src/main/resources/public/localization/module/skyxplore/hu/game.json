@@ -350,6 +350,12 @@
     "cancel-queue-item-confirmation-dialog-title": "Feladat visszavonásának megerősítése",
     "cancel-queue-item-confirmation-dialog-detail": "Biztosan vissza akarod vonni a feladatot?",
     "cancel-queue-item-confirm-button": "Feladat visszavonása",
-    "cancel-queue-item-cancel-button": "Mégse"
+    "cancel-queue-item-cancel-button": "Mégse",
+    "building-effect-title-production": "Előállít",
+    "building-effect-production-header-produced-item": "Termék",
+    "building-effect-production-header-production-requirements": "Összetevők",
+    "parallel-workers": "Munkások",
+    "required-work-points": "Munkapontok",
+    "reset": "Visszaállít"
   }
 }

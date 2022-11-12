@@ -22,7 +22,7 @@ class BanFactory {
     Ban create(UUID userId, BanRequest request) {
         LocalDateTime expiration = null;
         if (!request.getPermanent()) {
-            expiration = dateTimeUtil.getCurrentTime().plus(request.getDuration(), ChronoUnit.valueOf(request.getChronoUnit()));
+            expiration = dateTimeUtil.getCurrentDateTime().plus(request.getDuration(), ChronoUnit.valueOf(request.getChronoUnit()));
         }
 
         return Ban.builder()

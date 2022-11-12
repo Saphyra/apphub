@@ -109,7 +109,7 @@ public class GameLoaderTest {
 
     @Test
     public void load() {
-        given(dateTimeUtil.getCurrentTime()).willReturn(CURRENT_DATE);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
 
         given(gameModel.getId()).willReturn(GAME_ID);
         given(gameModel.getName()).willReturn(GAME_NAME);
