@@ -2,6 +2,21 @@
     let pageNumber = 1;
     let openedErrorReportId = null;
 
+    const wsConnection = new WebSocketConnection(Mapping.getEndpoint("WS_CONNECTION_ADMIN_PANEL_ERROR_REPORT"))
+        .addHandler(new WebSocketEventHandler(
+            (eventName)=>{return eventName == "admin-panel-error-report"},
+            (errorReport) => {
+                if(pageNumber == 1){
+                    const node = createErrorReport(errorReport);
+
+                    const container = document.getElementById(ids.errorReports);
+
+                    container.insertBefore(node, container.childNodes[0]);
+                }
+            }
+        ))
+        .connect();
+
     window.reportController = new function(){
         this.search = loadCurrentPage;
         this.nextPage = nextPage;
@@ -62,106 +77,106 @@
             container.innerHTML = "";
 
             new Stream(errors)
-                .map(createRow)
+                .map(createErrorReport)
                 .forEach(function(row){container.appendChild(row)});
+    }
 
-        function createRow(errorReport){
-            const row = document.createElement("TR");
-                row.classList.add(errorReport.status.toLowerCase());
+    function createErrorReport(errorReport){
+        const row = document.createElement("TR");
+            row.classList.add(errorReport.status.toLowerCase());
 
-                const checkboxCell = document.createElement("TD");
-                    const checkbox = document.createElement("INPUT");
-                        checkbox.type = "checkbox";
-                        checkbox.value = errorReport.id;
-                        checkbox.classList.add("error-report-selection");
-                        checkbox.onclick = function(e){
-                            e.stopPropagation();
-                        }
-                checkboxCell.appendChild(checkbox);
-            row.appendChild(checkboxCell);
+            const checkboxCell = document.createElement("TD");
+                const checkbox = document.createElement("INPUT");
+                    checkbox.type = "checkbox";
+                    checkbox.value = errorReport.id;
+                    checkbox.classList.add("error-report-selection");
+                    checkbox.onclick = function(e){
+                        e.stopPropagation();
+                    }
+            checkboxCell.appendChild(checkbox);
+        row.appendChild(checkboxCell);
 
-                const createdAtCell = document.createElement("TD");
-                    createdAtCell.classList.add("nowrap");
-                    createdAtCell.innerText = errorReport.createdAt;
-            row.appendChild(createdAtCell);
+            const createdAtCell = document.createElement("TD");
+                createdAtCell.classList.add("nowrap");
+                createdAtCell.innerText = errorReport.createdAt;
+        row.appendChild(createdAtCell);
 
-                const responseStatusCell = document.createElement("TD");
-                    responseStatusCell.innerText = errorReport.responseStatus;
-            row.appendChild(responseStatusCell);
+            const responseStatusCell = document.createElement("TD");
+                responseStatusCell.innerText = errorReport.responseStatus;
+        row.appendChild(responseStatusCell);
 
-                const serviceCell = document.createElement("TD");
-                    serviceCell.innerText = errorReport.service;
-            row.appendChild(serviceCell);
+            const serviceCell = document.createElement("TD");
+                serviceCell.innerText = errorReport.service;
+        row.appendChild(serviceCell);
 
-                const messageCell = document.createElement("TD");
-                    messageCell.classList.add("left");
-                    messageCell.innerText = errorReport.message;
-            row.appendChild(messageCell);
+            const messageCell = document.createElement("TD");
+                messageCell.classList.add("left");
+                messageCell.innerText = errorReport.message;
+        row.appendChild(messageCell);
 
-                const operationsCell = document.createElement("TD");
-                    addOperationButtons(
-                        errorReport,
-                        operationsCell,
-                        function(newStatus){
-                            row.classList.remove(errorReport.status.toLowerCase());
-                            row.classList.add(newStatus.toLowerCase());
-                        }
-                    );
-            row.appendChild(operationsCell);
+            const operationsCell = document.createElement("TD");
+                addOperationButtons(
+                    errorReport,
+                    operationsCell,
+                    function(newStatus){
+                        row.classList.remove(errorReport.status.toLowerCase());
+                        row.classList.add(newStatus.toLowerCase());
+                    }
+                );
+        row.appendChild(operationsCell);
 
-            row.onclick = function(){
-                viewErrorReport(errorReport.id);
+        row.onclick = function(){
+            viewErrorReport(errorReport.id);
+        }
+        return row;
+
+        function addOperationButtons(errorReport, operationsCell, statusChanger){
+            operationsCell.innerHTML = "";
+
+            const deleteButton = document.createElement("BUTTON");
+                deleteButton.innerText = Localization.getAdditionalContent("delete-error-report-button");
+                deleteButton.onclick = function(e){
+                    e.stopPropagation();
+                    deleteReports([errorReport.id]);
+                }
+            operationsCell.appendChild(deleteButton);
+
+            switch(errorReport.status){
+                case "READ":
+                    addButton("MARKED", "mark-error-report-button", errorReport, operationsCell, statusChanger);
+                    addButton("UNREAD", "mark-error-report-as-unread-button", errorReport, operationsCell, statusChanger);
+                break;
+                case "UNREAD":
+                    addButton("MARKED", "mark-error-report-button", errorReport, operationsCell, statusChanger);
+                    addButton("READ", "mark-error-report-as-read-button", errorReport, operationsCell, statusChanger);
+                break;
+                case "MARKED":
+                    addButton("READ", "mark-error-report-as-read-button", errorReport, operationsCell, statusChanger);
+                    addButton("UNREAD", "mark-error-report-as-unread-button", errorReport, operationsCell, statusChanger);
+                break;
+                default:
+                    notificationService.showError("Unhandled status: " + errorReport.status);
             }
-            return row;
 
-            function addOperationButtons(errorReport, operationsCell, statusChanger){
-                operationsCell.innerHTML = "";
+            function addButton(newStatus, localizationKey, errorReport, operationsCell, statusChanger){
+                const button = document.createElement("BUTTON");
+                    button.innerText = Localization.getAdditionalContent(localizationKey);
+                    button.onclick = createChangeStatusFunction(newStatus, errorReport, operationsCell, statusChanger);
+                operationsCell.appendChild(button);
+            }
 
-                const deleteButton = document.createElement("BUTTON");
-                    deleteButton.innerText = Localization.getAdditionalContent("delete-error-report-button");
-                    deleteButton.onclick = function(e){
-                        e.stopPropagation();
-                        deleteReports([errorReport.id]);
-                    }
-                operationsCell.appendChild(deleteButton);
-
-                switch(errorReport.status){
-                    case "READ":
-                        addButton("MARKED", "mark-error-report-button", errorReport, operationsCell, statusChanger);
-                        addButton("UNREAD", "mark-error-report-as-unread-button", errorReport, operationsCell, statusChanger);
-                    break;
-                    case "UNREAD":
-                        addButton("MARKED", "mark-error-report-button", errorReport, operationsCell, statusChanger);
-                        addButton("READ", "mark-error-report-as-read-button", errorReport, operationsCell, statusChanger);
-                    break;
-                    case "MARKED":
-                        addButton("READ", "mark-error-report-as-read-button", errorReport, operationsCell, statusChanger);
-                        addButton("UNREAD", "mark-error-report-as-unread-button", errorReport, operationsCell, statusChanger);
-                    break;
-                    default:
-                        notificationService.showError("Unhandled status: " + errorReport.status);
-                }
-
-                function addButton(newStatus, localizationKey, errorReport, operationsCell, statusChanger){
-                    const button = document.createElement("BUTTON");
-                        button.innerText = Localization.getAdditionalContent(localizationKey);
-                        button.onclick = createChangeStatusFunction(newStatus, errorReport, operationsCell, statusChanger);
-                    operationsCell.appendChild(button);
-                }
-
-                function createChangeStatusFunction(status, errorReport, operationsCell, statusChanger){
-                    return function(e){
-                        e.stopPropagation();
-                        markErrorReports(
-                            [errorReport.id],
-                             status,
-                             function(){
-                                statusChanger(status);
-                                errorReport.status = status;
-                                addOperationButtons(errorReport, operationsCell, statusChanger);
-                             }
-                         )
-                    }
+            function createChangeStatusFunction(status, errorReport, operationsCell, statusChanger){
+                return function(e){
+                    e.stopPropagation();
+                    markErrorReports(
+                        [errorReport.id],
+                         status,
+                         function(){
+                            statusChanger(status);
+                            errorReport.status = status;
+                            addOperationButtons(errorReport, operationsCell, statusChanger);
+                         }
+                     )
                 }
             }
         }

@@ -1,8 +1,14 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.service.report;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
+import com.github.saphyra.apphub.service.admin_panel.error_report.service.overview.ErrorReportToOverviewConverter;
+import com.github.saphyra.apphub.service.admin_panel.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.service.admin_panel.ws.WebSocketMessageFactory;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -27,11 +34,26 @@ public class ReportErrorServiceTest {
     @Mock
     private ErrorReportDao errorReportDao;
 
+    @Mock
+    private WebSocketMessageFactory webSocketMessageFactory;
+
+    @Mock
+    private MessageSenderProxy messageSenderProxy;
+
+    @Mock
+    private ErrorReportToOverviewConverter converter;
+
     @InjectMocks
     private ReportErrorService underTest;
 
     @Mock
     private ErrorReport errorReport;
+
+    @Mock
+    private WebSocketMessage webSocketMessage;
+
+    @Mock
+    private ErrorReportOverview errorReportOverview;
 
     @Test
     public void notNullModelId() {
@@ -77,10 +99,14 @@ public class ReportErrorServiceTest {
             .service(SERVICE)
             .build();
 
+        given(webSocketMessageFactory.create((List<UUID>) null, WebSocketEventName.ADMIN_PANEL_ERROR_REPORT, errorReportOverview)).willReturn(webSocketMessage);
+        given(converter.convert(errorReport)).willReturn(errorReportOverview);
+
         given(errorReportFactory.create(model)).willReturn(errorReport);
 
         underTest.saveReport(model);
 
         verify(errorReportDao).save(errorReport);
+        verify(messageSenderProxy).sendToErrorReport(webSocketMessage);
     }
 }

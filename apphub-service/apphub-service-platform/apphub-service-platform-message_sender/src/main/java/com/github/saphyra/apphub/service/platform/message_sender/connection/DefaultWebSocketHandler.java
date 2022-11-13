@@ -137,7 +137,7 @@ abstract class DefaultWebSocketHandler extends TextWebSocketHandler implements W
     public void sendEvent(WebSocketMessage message) {
         log.info("Sending {} event in messageGroup {} to {} number of recipients", message.getEvent().getEventName(), getGroup(), message.getRecipients().size());
         log.debug("Recipients: {}", message.getRecipients());
-        message.getRecipients()
+        (isNull(message.getRecipients()) ? sessionMap.keySet() : message.getRecipients())
             .stream()
             .filter(sessionMap::containsKey)
             .filter(recipient -> !sendEvent(recipient, message.getEvent()))

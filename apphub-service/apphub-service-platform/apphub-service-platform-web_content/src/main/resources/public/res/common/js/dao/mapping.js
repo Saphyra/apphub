@@ -11,6 +11,7 @@ window.Mapping = new function(){
         WS_CONNECTION_SKYXPLORE_LOBBY: new Endpoint("/api/message-sender/skyxplore/lobby", HttpMethod.GET),
         WS_CONNECTION_SKYXPLORE_GAME: new Endpoint("/api/message-sender/skyxplore/game", HttpMethod.GET),
         WS_CONNECTION_ADMIN_PANEL_MONITORING: new Endpoint("/api/message-sender/admin-panel/monitoring", HttpMethod.GET),
+        WS_CONNECTION_ADMIN_PANEL_ERROR_REPORT: new Endpoint("/api/message-sender/admin-panel/error-report", HttpMethod.GET),
 
         //Error reporting
         ADMIN_PANEL_GET_ERROR_REPORTS: new Endpoint("/api/admin-panel/error-report", HttpMethod.POST),

@@ -18,4 +18,8 @@ public class MessageSenderProxy {
     public void sendToMonitoring(WebSocketMessage message) {
         messageSenderClient.sendMessage(MessageGroup.ADMIN_PANEL_MONITORING, message, localeProvider.getOrDefault());
     }
+
+    public void sendToErrorReport(WebSocketMessage message) {
+        messageSenderClient.sendMessage(MessageGroup.ADMIN_PANEL_ERROR_REPORT, message, localeProvider.getOrDefault());
+    }
 }
