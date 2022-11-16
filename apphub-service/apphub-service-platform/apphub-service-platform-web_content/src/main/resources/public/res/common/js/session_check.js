@@ -4,11 +4,11 @@ function sessionChecker(){
     if(window.SESSION_CHECK_DISABLED != true){
         setUpSessionChecker();
     }else{
-        logService.logToConsole("SessionCheck disabled.");
+        console.log("SessionCheck disabled.");
     }
 
     if(window.SESSION_EXTENSION_ENABLED){
-        logService.logToConsole("SessionExtension enabled.");
+        console.log("SessionExtension enabled.");
         setUpSessionExtender();
     }
 

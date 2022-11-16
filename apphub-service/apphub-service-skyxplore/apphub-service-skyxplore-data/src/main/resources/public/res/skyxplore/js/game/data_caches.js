@@ -16,7 +16,7 @@
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_GET_ITEM_DATA", {dataId: itemId}));
             request.processValidResponse = function(response){
                 const parsed = JSON.parse(response.body);
-                logService.logToConsole("Item loaded with id " + itemId, parsed);
+                console.log("Item loaded with id " + itemId, parsed);
                 result = parsed;
             };
         const response = dao.sendRequest(request);
@@ -30,7 +30,7 @@
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES", {surfaceType: surfaceType}));
             request.processValidResponse = function(response){
                 const parsed = JSON.parse(response.body);
-                logService.logToConsole("TerraformingPossibility loaded with surfaceType " + surfaceType, parsed);
+                console.log("TerraformingPossibility loaded with surfaceType " + surfaceType, parsed);
                 result = parsed;
             };
         const response = dao.sendRequest(request);

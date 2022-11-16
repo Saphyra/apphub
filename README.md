@@ -18,6 +18,10 @@ The app's purpose is to provide an easy-to extend frame for multiple application
     * Store notes, links, checklists, tables grouped into categories
     * Search
     * Pin favorites
+* Diary
+    * Setting up events
+    * Search
+    * Setting statuses for occurrences
 * Development utils
     * Base64 Encoder
     * JSON formatter 
@@ -61,47 +65,23 @@ The system is configured to work with AMD Ryzen R7 5900X and 64GB RAM. The confi
 * Deploys/re-deploys the services
 * Waits until all the services are up
 
-Usage: ./build_and_deploy.sh [skipBuild | skipTests | skipUnitTests]
+Usage: ./build_and_deploy.sh [skipBuild | skipTests | skipUnitTests] [namespace:current git branch]
 Parameters:
 * skipBuild: skip the build process of the application, deploy the existing images to the develop environment
 * skipTests: skip the unit/integration testing part of the build process
 * skipIntegrationTests: skip the BE/FE tests
 * skipUnitTests: skip unit tests
-
-
-#### deploy.sh
-
-* Creates and configures namespace
-* Deploys/re-deploy the services
-
-Usage: ./deploy.sh [namespace:develop]
-
-Parametes:
-* namespace: Name of the namespace to use (production/develop). Default: develop
-
-#### develop_deployment.sh
-
-* Cleans up the hard disk space by deleting unused docker images
-* Builds the application
-* Creates and configures develop namespace
-* Deploys/re-deploys the services to develop namespace
-* Waits until all the services are up
-* Runs automated tests
-
-Usage: ./develop_deployment.sh [skipBuild | skipTrap]
-Parametes:
-* skipBuild: skip the build process of the application, deploy the existing images to the develop environment
-* skipTrap: created background processes for port-forwarding are not stopped after the script is finished
+* namespace: Name of the namespace to use (production/develop). Default: name of the current git branch
 
 #### port_forward.sh
 
 * Exposes the application's endpoints and database
 
-Usage: ./port_forward.sh [namespace:develop]
+Usage: ./port_forward.sh [namespace:current git branch]
 Parametes:
-* namespace: Name of the namespace to use (production/develop). Default: develop
+* namespace: Name of the namespace to use (production/develop). Default: name of the current git branch
 
-#### production_proxy.sh
+#### pp.sh
 
 * Exposes the application running on production namespace to a random port of the host machine
 * Builds module apphub-proxy
@@ -133,12 +113,13 @@ Parameters:
 
 * Runs automated tests
 
-Usage: ./run_tests.sh [namespace:develop]
+Usage: ./run_tests.sh [namespace:current git branch] [headless] [disabled groups]
 Parametes:
-* namespace: Namespace to run the tests agains, develop as default.
+* namespace: Name of the namespace to use (production/develop). Default: name of the current git branch
 * headless:
     * true (default): Selenium tests run in the background
     * false: Selenium tests open browser windows
+* disabled groups: Name of test groups should not run
 
 ### Defaults:
 #### Default ports:
@@ -147,7 +128,7 @@ Parametes:
 * 9002: Exposed database with port_forward.sh
 
 #### Parallelism:
-Builds and test runs are parallelised to achieve faster builds and test runs, but it causes higher performance requirement, and can lead to failures on slower systems.
+Builds and test runs are parallelised to achieve faster builds and test runs, but it causes higher system requirements, and can lead to failures on slower systems.
 To decrease the load on your machine, you can:
 
 * Decrease the maven build thread count: reduce the treadCount for  "mvn -T <threadCount>" commands found in build & deployment scripts

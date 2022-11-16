@@ -17,7 +17,7 @@ window.events = {
         if(!processor || !processor instanceof EventProcessor){
             throwException("IllegalArgument", "eventProcessor is not type of EventProcessor");
         }
-        logService.logToConsole("EventProcessor registered with name " + processor.name);
+        console.log("EventProcessor registered with name " + processor.name);
         processors.push(processor);
     }
     
@@ -28,23 +28,23 @@ window.events = {
         
         const eventType = event.getEventType();
         
-        logService.logToConsole("Processing event: " + eventType);
+        console.log("Processing event: " + eventType);
         
         let hasProcessor = false;
         for(let pindex = processors.length - 1; pindex >= 0; pindex--){
             const processor = processors[pindex];
             if(processor.canProcess(eventType)){
                 hasProcessor = true;
-                logService.logToConsole("Processing event " + eventType + " for EventProcessor " + processor.name);
+                console.log("Processing event " + eventType + " for EventProcessor " + processor.name);
                 setTimeout(function(){processor.process(event)}, 0);
                 if(processor.isOnceRunning()){
-                    logService.logToConsole("OnceRunning processor with name " + processor.name + " has run, removing from list...");
+                    console.log("OnceRunning processor with name " + processor.name + " has run, removing from list...");
                     processors.splice(pindex, 1);
                 }
             }
         }
         if(!hasProcessor){
-            logService.logToConsole("No eventProcessor for eventType " + event.getEventType());
+            console.log("No eventProcessor for eventType " + event.getEventType());
         }
     }
 })();

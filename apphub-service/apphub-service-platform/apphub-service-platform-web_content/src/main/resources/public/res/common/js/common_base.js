@@ -12,7 +12,6 @@ const HEADER_BROWSER_LANGUAGE = "BrowserLanguage";
     scriptLoader.loadScript("/res/common/js/optional.js");
     scriptLoader.loadScript("/res/common/js/stream.js");
     scriptLoader.loadScript("/res/common/js/utils.js");
-    scriptLoader.loadScript("/res/common/js/log_service.js");
     scriptLoader.loadScript("/res/common/js/dao/dao.js");
     scriptLoader.loadScript("/res/common/js/dao/mapping.js");
     scriptLoader.loadScript("/res/common/js/dao/error_handler.js");
@@ -91,7 +90,7 @@ function initPageLoader(){
                         new Promise((resolve, reject) => {
                             setTimeout(
                                 function(){
-                                    logService.logToConsole("Calling loader: " + loader.description);
+                                    console.log("Calling loader: " + loader.description);
                                     try{
                                         loader.load();
                                     }catch(e){

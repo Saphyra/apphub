@@ -1,11 +1,11 @@
 set -e
 
-./build.sh "$1"
+./infra/deployment/script/build.sh "$1"
 
-NAMESPACE_NAME=$(git rev-parse --abbrev-ref HEAD)
+NAMESPACE_NAME=${2:-$(git rev-parse --abbrev-ref HEAD)}
 echo "Namespace: $NAMESPACE_NAME"
 
-./deploy.sh "$NAMESPACE_NAME"
+./infra/deployment/script/deploy.sh "$NAMESPACE_NAME"
 start ./port_forward.sh "$NAMESPACE_NAME"
 
 if [ "$1" != "skipTests" ]; then

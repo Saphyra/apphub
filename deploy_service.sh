@@ -22,7 +22,7 @@ done
 
 echo "Artifacts to build: ${artifactIds[*]}"
 
-./clean_up_space.sh
+./infra/deployment/script/clean_up_space.sh
 eval "$(minikube docker-env)"
 
 command=$(IFS=, ; echo "${artifactIds[*]}")
