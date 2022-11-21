@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order;
 
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuilding;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
@@ -16,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,11 +55,13 @@ public class ProducerBuildingFinderServiceTest {
     @Test
     public void findProducerBuildingDataId() {
         given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(surface.getSurfaceType()).willReturn(SurfaceType.LAKE);
         given(surface.getBuilding()).willReturn(building);
         given(building.getDataId()).willReturn(BUILDING_DATA_ID);
         given(productionBuildingService.containsKey(BUILDING_DATA_ID)).willReturn(true);
         given(productionBuildingService.get(BUILDING_DATA_ID)).willReturn(productionBuilding);
         given(productionBuilding.getGives()).willReturn(CollectionUtils.singleValueMap(RESOURCE_DATA_ID, productionData));
+        given(productionData.getPlaced()).willReturn(List.of(SurfaceType.LAKE));
         given(buildingCapacityCalculator.calculateCapacity(planet, building)).willReturn(12);
 
         Optional<String> result = underTest.findProducerBuildingDataId(planet, RESOURCE_DATA_ID);
