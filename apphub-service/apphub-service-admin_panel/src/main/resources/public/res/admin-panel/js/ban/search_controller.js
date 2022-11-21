@@ -13,7 +13,7 @@
             return;
         }
 
-        const request = new Request(Mapping.getEndpoint("USER_DATA_SEARCH_ACCOUNT"), {value: searchText});
+        const request = new Request(Mapping.getEndpoint("USER_DATA_SEARCH_ACCOUNT", {}, {includeMarkedForDeletion: true}), {value: searchText});
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(users){
                 if(users.length == 0){

@@ -23,7 +23,15 @@ scriptLoader.loadScript("/res/admin-panel/js/ban/ban_controller.js");
         noCurrentBans: "no-current-bans",
         userDetails: "user-details",
         userList: "user-list",
-        noResult: "no-result"
+        noResult: "no-result",
+        markedForDeletion: "user-marked-for-deletion",
+        markedForDeletionAt: "user-marked-for-deletion-at",
+        markedForDeletionAtContainer: "user-marked-for-deletion-at-container",
+        unmarkForDeletionButton: "unmark-for-deletion-button",
+        deleteUserInputContainer: "delete-user-input-container",
+        deleteTheUserAtDate: "delete-the-user-at-date",
+        deleteTheUserAtTime: "delete-the-user-at-time",
+        confirmationDialogId: "user-deletion-confirmation-dialog",
     }
 
     $(document).ready(function(){

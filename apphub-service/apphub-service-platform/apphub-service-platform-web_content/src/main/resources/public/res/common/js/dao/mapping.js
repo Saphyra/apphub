@@ -40,6 +40,8 @@ window.Mapping = new function(){
         ACCOUNT_GET_BANS: new Endpoint("/api/user/ban/{userId}", HttpMethod.GET),
         ACCOUNT_BAN_USER: new Endpoint("/api/user/ban/", HttpMethod.PUT),
         ACCOUNT_REMOVE_BAN: new Endpoint("/api/user/ban/{banId}", HttpMethod.DELETE),
+        ACCOUNT_MARK_FOR_DELETION: new Endpoint("/api/user/{userId}/mark-for-deletion", HttpMethod.DELETE),
+        ACCOUNT_UNMARK_FOR_DELETION: new Endpoint("/api/user/{userId}/mark-for-deletion", HttpMethod.POST),
 
         //User data
         USER_DATA_GET_USER_ROLES: new Endpoint("/api/user/data/roles", HttpMethod.POST),

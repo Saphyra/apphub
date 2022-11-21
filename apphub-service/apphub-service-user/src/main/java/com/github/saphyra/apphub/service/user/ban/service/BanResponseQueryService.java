@@ -36,6 +36,8 @@ public class BanResponseQueryService {
             .username(bannedUser.getUsername())
             .email(bannedUser.getEmail())
             .bans(bans)
+            .markedForDeletion(bannedUser.isMarkedForDeletion())
+            .markedForDeletionAt(Optional.ofNullable(bannedUser.getMarkedForDeletionAt()).map(localDateTime -> localDateTime.toEpochSecond(ZoneOffset.UTC)).orElse(null))
             .build();
     }
 

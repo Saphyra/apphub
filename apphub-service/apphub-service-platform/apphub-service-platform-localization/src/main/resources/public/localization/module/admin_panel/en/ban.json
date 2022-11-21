@@ -192,6 +192,30 @@
         "key": "innerHTML",
         "message": "Bans of user"
       }
+    ],
+    "user-marked-for-deletion-label": [
+      {
+        "key": "innerHTML",
+        "message": "User marked for deletion"
+      }
+    ],
+    "user-marked-for-deletion-at-label": [
+      {
+        "key": "innerHTML",
+        "message": "Will be deleted at"
+      }
+    ],
+    "unmark-for-deletion-button": [
+      {
+        "key": "innerHTML",
+        "message": "Do not delete this user"
+      }
+    ],
+    "delete-the-user-button": [
+      {
+        "key": "innerHTML",
+        "message": "Delete this user"
+      }
     ]
   },
   "additionalContent": {
@@ -210,6 +234,13 @@
     "password": "Password",
     "revoke-ban": "Revoke ban",
     "cancel": "Cancel",
-    "ban-revoked": "Ban revoked."
+    "ban-revoked": "Ban revoked.",
+    "date-empty": "Date must not be empty.",
+    "time-empty": "Time must not be empty.",
+    "confirm-password": "Password",
+    "confirm-delete-user-title": "Confirm user deletion",
+    "confirm-delete-user-detail": "In order to schedule this user to deletion, please enter your password:",
+    "delete-user": "Schedule for deletion",
+    "empty-password": "Please enter your password."
   }
 }

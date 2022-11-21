@@ -201,6 +201,29 @@ public class DefaultWebSocketHandlerTest {
     }
 
     @Test
+    public void sendEvent_nullRecipients() throws IOException {
+        Map<UUID, SessionWrapper> sessionMap = underTest.getSessionMap();
+        sessionMap.put(USER_ID, sessionWrapper);
+        UUID userId = UUID.randomUUID();
+        sessionMap.put(userId, SessionWrapper.builder().lastUpdate(CURRENT_DATE.minusSeconds(WEB_SOCKET_SESSION_EXPIRATION_SECONDS + 1)).build());
+
+        given(objectMapperWrapper.writeValueAsString(any())).willReturn(MESSAGE_PAYLOAD);
+        given(sessionWrapper.getSession()).willReturn(session);
+
+        WebSocketMessage webSocketMessage = WebSocketMessage.builder()
+            .recipients(null)
+            .event(webSocketEvent)
+            .build();
+
+        underTest.sendEvent(webSocketMessage);
+
+        verify(session, times(1)).sendMessage(any());
+
+        assertThat(underTest.getRetryEvents()).containsKey(userId);
+        assertThat(underTest.getRetryEvents().get(userId)).containsExactly(webSocketEvent);
+    }
+
+    @Test
     public void sendEvent_error() throws IOException {
         Map<UUID, SessionWrapper> sessionMap = underTest.getSessionMap();
         sessionMap.put(USER_ID, sessionWrapper);

@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.user.common;
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.user.server.UserEventController;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.transaction.Transactional;
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -29,6 +32,7 @@ class UserEventControllerImpl implements UserEventController {
     private final LocaleProvider localeProvider;
     private final BanDao banDao;
     private final RevokeBanService revokeBanService;
+    private final DateTimeUtil dateTimeUtil;
 
     @Override
     @Transactional
@@ -46,6 +50,7 @@ class UserEventControllerImpl implements UserEventController {
     public void triggerAccountDeletion() {
         userDao.getUsersMarkedToDelete()
             .stream()
+            .filter(user -> isNull(user.getMarkedForDeletionAt()) || user.getMarkedForDeletionAt().isBefore(dateTimeUtil.getCurrentDateTime()))
             .limit(5)
             .map(User::getUserId)
             .forEach(this::deleteAccount);

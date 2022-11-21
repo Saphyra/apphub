@@ -1,3 +1,13 @@
+function withLeadingZeros(num, length){
+    let result = num;
+
+    while(result.length < length){
+        result = "0" +num;
+    }
+
+    return result;
+}
+
 function createElementWithText(elementType, text){
     const element = document.createElement(elementType);
         element.innerText = text;

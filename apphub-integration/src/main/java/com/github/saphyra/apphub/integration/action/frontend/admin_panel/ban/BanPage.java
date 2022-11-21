@@ -54,4 +54,32 @@ class BanPage {
     public static List<WebElement> currentBans(WebDriver driver) {
         return driver.findElements(By.cssSelector("#current-bans tr"));
     }
+
+    public static WebElement deleteTheUserButton(WebDriver driver) {
+        return driver.findElement(By.id("delete-the-user-button"));
+    }
+
+    public static WebElement deleteTheUserAtDate(WebDriver driver) {
+        return driver.findElement(By.id("delete-the-user-at-date"));
+    }
+
+    public static WebElement deleteTheUserAtTime(WebDriver driver) {
+        return driver.findElement(By.id("delete-the-user-at-time"));
+    }
+
+    public static WebElement confirmDeleteUserPassword(WebDriver driver) {
+        return driver.findElement(By.id("confirm-delete-user-password"));
+    }
+
+    public static WebElement userMarkedForDeletion(WebDriver driver) {
+        return driver.findElement(By.id("user-marked-for-deletion"));
+    }
+
+    public static WebElement userMarkedForDeletionAt(WebDriver driver) {
+        return driver.findElement(By.id("user-marked-for-deletion-at"));
+    }
+
+    public static WebElement unmarkForDeletionButton(WebDriver driver) {
+        return driver.findElement(By.id("unmark-for-deletion-button"));
+    }
 }
