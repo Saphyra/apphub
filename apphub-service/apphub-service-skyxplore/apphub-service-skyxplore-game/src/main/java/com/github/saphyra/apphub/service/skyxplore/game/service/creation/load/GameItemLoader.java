@@ -19,8 +19,8 @@ public class GameItemLoader {
     private final ObjectMapperWrapper objectMapperWrapper;
     private final GameDataProxy gameDataProxy;
 
+    @SuppressWarnings("unchecked")
     public <T extends GameItem> Optional<T> loadItem(UUID id, GameItemType type) {
-        //noinspection unchecked
         return Optional.ofNullable(gameDataProxy.loadItem(id, type))
             .map(s -> (T) objectMapperWrapper.readValue(s, type.getModelType()));
     }

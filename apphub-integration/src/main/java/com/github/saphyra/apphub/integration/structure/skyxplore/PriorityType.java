@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum PriorityType {
     CONSTRUCTION,
-    MANUFACTURING,
-    EXTRACTION,
+    INDUSTRY,
     WELL_BEING;
 
     @JsonCreator
