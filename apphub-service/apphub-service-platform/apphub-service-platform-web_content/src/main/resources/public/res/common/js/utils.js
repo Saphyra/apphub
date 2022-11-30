@@ -1,9 +1,11 @@
 function withLeadingZeros(num, length){
-    let result = num;
+    let result = "" + num;
 
     while(result.length < length){
-        result = "0" +num;
+        result = "0" + result;
     }
+
+    console.log(result);
 
     return result;
 }

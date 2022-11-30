@@ -282,6 +282,24 @@
         "key": "title",
         "message": "Mikor menjenek a városlakók enni és pihenni"
       }
+    ],
+    "terraformation-title": [
+      {
+        "key": "innerHTML",
+        "message": "Terraformálás"
+      }
+    ],
+    "upgrade-building-title": [
+      {
+        "key": "innerHTML",
+        "message": "Épület fejlesztése"
+      }
+    ],
+    "upgrade-building-button": [
+      {
+        "key": "innerHTML",
+        "message": "Fejlesztés"
+      }
     ]
   },
   "additionalContent": {

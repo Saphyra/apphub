@@ -219,4 +219,8 @@ class GamePage {
     public static WebElement closeStorageSettingsButton(WebDriver driver) {
         return driver.findElement(By.id("close-storage-settings-button"));
     }
+
+    public static WebElement upgradeBuildingButton(WebDriver driver) {
+        return driver.findElement(By.id("upgrade-building-button"));
+    }
 }

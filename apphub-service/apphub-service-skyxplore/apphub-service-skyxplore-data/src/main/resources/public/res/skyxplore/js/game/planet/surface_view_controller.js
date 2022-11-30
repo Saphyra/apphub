@@ -47,7 +47,7 @@
             surfaceNode.id = surface.surfaceId;
 
             if(surface.building){
-                surfaceNode.appendChild(createBuilding(currentPlanetId, surface.building));
+                surfaceNode.appendChild(createBuilding(currentPlanetId, surface.surfaceType, surface.building));
             }else if(surface.terraformation){
                 surfaceNode.appendChild(createTerraformation(currentPlanetId, surface.surfaceId, surface.terraformation));
             }else{
@@ -55,7 +55,7 @@
             }
         return surfaceNode;
 
-        function createBuilding(planetId, building){
+        function createBuilding(planetId, surfaceType, building){
             const content = document.createElement("DIV");
                 content.classList.add("building-" + building.dataId);
                 content.classList.add("surface-content");
@@ -70,7 +70,7 @@
                 }else if(building.level < dataCaches.itemData.get(building.dataId).maxLevel){
                     const footer = document.createElement("DIV");
                         footer.classList.add("surface-footer");
-                        footer.appendChild(createUpgradeBuildingFooter(planetId, building));
+                        footer.appendChild(createUpgradeBuildingFooter(planetId, surfaceType, building));
                     content.appendChild(footer);
                 }
 
@@ -104,13 +104,12 @@
                 return footer;
             }
 
-            function createUpgradeBuildingFooter(planetId, building){
+            function createUpgradeBuildingFooter(planetId, surfaceType, building){
                 const upgradeButton = document.createElement("button");
                     upgradeButton.classList.add("upgrade-building-button");
                     upgradeButton.innerHTML = Localization.getAdditionalContent("upgrade");
                     upgradeButton.onclick = function(){
-                        constructionController.upgradeBuilding(planetId, building.buildingId)
-                            .then((surface)=>{syncEngine.add(surface)});
+                        constructionController.openUpgradeBuildingWindow(planetId, surfaceType, building.buildingId, building.dataId, building.level)
                     }
                 return upgradeButton;
             }

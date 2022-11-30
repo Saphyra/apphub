@@ -23,4 +23,9 @@ public class SkyXploreConstructionActions {
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not loaded.");
     }
+
+    public static void confirmUpgrade(WebDriver driver) {
+        GamePage.upgradeBuildingButton(driver)
+            .click();
+    }
 }

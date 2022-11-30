@@ -110,13 +110,15 @@ public class Surface {
             .size() == 1;
     }
 
-    public void upgradeBuilding() {
+    public void upgradeBuilding(WebDriver driver) {
         assertThat(canUpgradeBuilding()).isTrue();
 
         getFooter()
             .orElseThrow(() -> new RuntimeException("Surface footer not present."))
             .findElement(By.cssSelector(":scope .upgrade-building-button"))
             .click();
+
+        SkyXploreConstructionActions.confirmUpgrade(driver);
 
         AwaitilityWrapper.createDefault()
             .until(() -> WebElementUtils.isStale(webElement))

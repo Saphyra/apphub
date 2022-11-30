@@ -36,3 +36,44 @@
         .available-building-construction-requirements{
             margin: 1rem auto;
         }
+
+#upgrade-building{
+
+}
+
+    #upgrade-building-details{
+        margin: 2rem;
+        border: 3px ridge white;
+        border-radius: 10px
+    }
+
+        #upgrade-building-details-title{
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-bottom: 2px solid white;
+            padding: 0.5rem;
+        }
+
+        #upgrade-building-details-description{
+            text-align: center;
+            margin: 0.5rem;
+        }
+
+        .upgrade-building-effect{
+
+        }
+
+            .upgrade-building-effect-production{
+                margin: 0 auto;
+            }
+
+        .upgrade-building-construction-requirements{
+            margin: 1rem auto;
+        }
+
+        #upgrade-building-button-container{
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+

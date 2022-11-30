@@ -80,7 +80,7 @@ public class ConstructionTest extends SeleniumTest {
         surface = SkyXplorePlanetActions.findSurfaceWithUpgradableBuilding(driver);
         surfaceId = surface.getSurfaceId();
 
-        surface.upgradeBuilding();
+        surface.upgradeBuilding(driver);
 
         surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
         assertThat(surface.isConstructionInProgress()).isTrue();

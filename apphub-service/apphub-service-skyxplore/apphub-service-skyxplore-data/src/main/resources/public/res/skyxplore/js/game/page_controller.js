@@ -85,6 +85,14 @@ const ids = {
     construction: "construction",
     closeConstructionButton: "close-construction-button",
     availableBuildings: "available-buildings",
+    closeUpgradeBuildingButton: "close-upgrade-building-button",
+    upgradeBuilding: "upgrade-building",
+    upgradeBuildingDetailsTitleName: "upgrade-building-details-title-name",
+    upgradeBuildingDetailsTitleCurrentLevel: "upgrade-building-details-title-current-level",
+    upgradeBuildingDetailsTitleNextLevel: "upgrade-building-details-title-next-level",
+    upgradeBuildingDetailsDescription: "upgrade-building-details-description",
+    upgradeBuildingDetailsConstructionCost: "upgrade-building-details-construction-cost",
+    upgradeBuildingDetailsEffect: "upgrade-building-details-effect",
 
     //Terraforming
     terraformingPossibilities: "terraforming-possibilities",

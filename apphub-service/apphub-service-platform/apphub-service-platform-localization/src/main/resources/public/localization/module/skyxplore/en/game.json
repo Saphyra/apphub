@@ -282,6 +282,24 @@
         "key": "title",
         "message": "When to send the citizens eating / resting"
       }
+    ],
+    "terraformation-title": [
+      {
+        "key": "innerHTML",
+        "message": "Terraformation"
+      }
+    ],
+    "upgrade-building-title": [
+      {
+        "key": "innerHTML",
+        "message": "Upgrade building"
+      }
+    ],
+    "upgrade-building-button": [
+      {
+        "key": "innerHTML",
+        "message": "Upgrade"
+      }
     ]
   },
   "additionalContent": {
