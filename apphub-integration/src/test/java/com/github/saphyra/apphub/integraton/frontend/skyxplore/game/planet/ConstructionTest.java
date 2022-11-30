@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActi
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreConstructionActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreModifySurfaceActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreMapActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePlanetActions;
@@ -60,9 +60,9 @@ public class ConstructionTest extends SeleniumTest {
         //Construct new building
         Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_LAKE);
         String surfaceId = surface.getSurfaceId();
-        surface.openConstructNewBuildingWindow(driver);
+        surface.openModifySurfaceWindow(driver);
 
-        SkyXploreConstructionActions.constructBuilding(driver, Constants.DATA_ID_WATER_PUMP);
+        SkyXploreModifySurfaceActions.constructBuilding(driver, Constants.DATA_ID_WATER_PUMP);
 
         surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
         assertThat(surface.isEmpty()).isFalse();
@@ -124,9 +124,9 @@ public class ConstructionTest extends SeleniumTest {
 
         Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_FOREST);
         String surfaceId = surface.getSurfaceId();
-        surface.openConstructNewBuildingWindow(driver);
+        surface.openModifySurfaceWindow(driver);
 
-        SkyXploreConstructionActions.constructBuilding(driver, Constants.DATA_ID_CAMP);
+        SkyXploreModifySurfaceActions.constructBuilding(driver, Constants.DATA_ID_CAMP);
 
         surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
         assertThat(surface.isEmpty()).isFalse();

@@ -1,6 +1,4 @@
 (function ConstructionController(){
-    pageLoader.addLoader(() => {document.getElementById(ids.closeConstructionButton).onclick = function(){planetController.openPlanetWindow()}}, "Close construction button");
-
     const MODE_AVAILABLE = "available";
     const MODE_UPGRADE = "upgrade";
 
@@ -8,13 +6,13 @@
     let openedBuildingId;
 
     window.constructionController = new function(){
-        this.openConstructNewBuildingWindow = openConstructNewBuildingWindow;
+        this.fillAvailableBuildings = fillAvailableBuildings;
         this.cancelConstruction = cancelConstruction;
         this.openUpgradeBuildingWindow = openUpgradeBuildingWindow;
         this.upgradeBuilding = upgradeBuilding
     }
 
-    function openConstructNewBuildingWindow(planetId, surfaceType, surfaceId){
+    function fillAvailableBuildings(planetId, surfaceType, surfaceId){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_DATA_AVAILABLE_BUILDINGS", {surfaceType: surfaceType}));
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(availableBuildings){
@@ -25,9 +23,6 @@
                         .sorted(function(a, b){dataCaches.itemDataNames.get(a).localeCompare(dataCaches.itemDataNames.get(b))})
                         .map(function(dataId){return createAvailableBuilding(planetId, surfaceId, surfaceType, dataId)})
                         .forEach(function(node){container.appendChild(node)});
-
-
-                switchTab("main-tab", ids.construction);
             }
         dao.sendRequestAsync(request);
 

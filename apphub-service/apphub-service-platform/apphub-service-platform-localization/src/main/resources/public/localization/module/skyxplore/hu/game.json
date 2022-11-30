@@ -300,6 +300,18 @@
         "key": "innerHTML",
         "message": "Fejlesztés"
       }
+    ],
+    "modify-surface-title": [
+      {
+        "key": "innerHTML",
+        "message": "Felszín módosítása"
+      }
+    ],
+    "available-buildings-title": [
+      {
+        "key": "innerHTML",
+        "message": "Épületek"
+      }
     ]
   },
   "additionalContent": {

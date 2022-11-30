@@ -188,8 +188,8 @@ class GamePage {
         return driver.findElements(By.cssSelector("#planet-surface-container .surface-table-cell"));
     }
 
-    public static WebElement constructionWindow(WebDriver driver) {
-        return driver.findElement(By.id("construction"));
+    public static WebElement modifySurfaceWindow(WebDriver driver) {
+        return driver.findElement(By.id("modify-surface"));
     }
 
     public static List<WebElement> availableBuildings(WebDriver driver) {

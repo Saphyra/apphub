@@ -160,22 +160,12 @@
                 const footer = document.createElement("DIV");
                     footer.classList.add("surface-footer");
 
-                    const buildButton = document.createElement("button");
-                        buildButton.classList.add("empty-surface-construct-new-building-button");
-                        buildButton.innerHTML = "+";
-                        buildButton.onclick = function(){
-                            constructionController.openConstructNewBuildingWindow(planetController.getOpenedPlanetId(), surfaceType, surfaceId);
+                    const modifyButton = document.createElement("button");
+                        modifyButton.classList.add("empty-surface-modify-button");
+                        modifyButton.onclick = function(){
+                            modifySurfaceController.openModifySurfaceWindow(planetController.getOpenedPlanetId(), surfaceType, surfaceId);
                         }
-                footer.appendChild(buildButton);
-
-                if(dataCaches.terraformingPossibilities.get(surfaceType).length > 0){
-                    const terraformButton = document.createElement("button");
-                        terraformButton.classList.add("empty-surface-terraform-button");
-                        terraformButton.onclick = function(){
-                            terraformationController.openTerraformWindow(planetController.getOpenedPlanetId(), surfaceId, surfaceType);
-                        }
-                    footer.appendChild(terraformButton);
-                }
+                footer.appendChild(modifyButton);
 
             content.appendChild(footer);
             return content;

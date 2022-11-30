@@ -1,8 +1,7 @@
 package com.github.saphyra.apphub.integration.structure.skyxplore;
 
 import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreConstructionActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSurfaceActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreModifySurfaceActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import lombok.RequiredArgsConstructor;
@@ -35,15 +34,15 @@ public class Surface {
             .contains("empty-surface-content");
     }
 
-    public void openConstructNewBuildingWindow(WebDriver driver) {
+    public void openModifySurfaceWindow(WebDriver driver) {
         assertThat(isEmpty()).isTrue();
 
         getContent()
-            .findElement(By.cssSelector(":scope .surface-footer .empty-surface-construct-new-building-button"))
+            .findElement(By.cssSelector(":scope .surface-footer .empty-surface-modify-button"))
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreConstructionActions.isDisplayed(driver))
+            .until(() -> SkyXploreModifySurfaceActions.isDisplayed(driver))
             .assertTrue("Construct new building window is not displayed.");
     }
 
@@ -118,23 +117,11 @@ public class Surface {
             .findElement(By.cssSelector(":scope .upgrade-building-button"))
             .click();
 
-        SkyXploreConstructionActions.confirmUpgrade(driver);
+        SkyXploreModifySurfaceActions.confirmUpgrade(driver);
 
         AwaitilityWrapper.createDefault()
             .until(() -> WebElementUtils.isStale(webElement))
             .assertTrue("Planet surface was not reloaded.");
-    }
-
-    public void openTerraformationWindow(WebDriver driver) {
-        assertThat(isEmpty()).isTrue();
-
-        getContent()
-            .findElement(By.cssSelector(":scope .surface-footer .empty-surface-terraform-button"))
-            .click();
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreSurfaceActions.isDisplayed(driver))
-            .assertTrue("Construct new building window is not displayed.");
     }
 
     public boolean isTerraformationInProgress() {

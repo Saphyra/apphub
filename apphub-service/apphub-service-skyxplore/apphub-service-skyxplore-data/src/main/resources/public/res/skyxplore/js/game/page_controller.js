@@ -82,7 +82,8 @@ const ids = {
     populationOverviewCitizenList: "population-overview-citizen-list",
 
     //Construction
-    construction: "construction",
+    modifySurface: "modify-surface",
+    closeModifySurfaceButton: "close-modify-surface-button",
     closeConstructionButton: "close-construction-button",
     availableBuildings: "available-buildings",
     closeUpgradeBuildingButton: "close-upgrade-building-button",
@@ -93,11 +94,7 @@ const ids = {
     upgradeBuildingDetailsDescription: "upgrade-building-details-description",
     upgradeBuildingDetailsConstructionCost: "upgrade-building-details-construction-cost",
     upgradeBuildingDetailsEffect: "upgrade-building-details-effect",
-
-    //Terraforming
     terraformingPossibilities: "terraforming-possibilities",
-    closeTerraformationButton: "close-terraformation-button",
-    terraformation: "terraformation",
 
     //Queue
     queue: "planet-right-bar-content",
@@ -140,6 +137,7 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/population_overview_contr
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/construction_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/terraformation_controller.js");
 scriptLoader.loadScript("/res/skyxplore/js/game/planet/queue_controller.js");
+scriptLoader.loadScript("/res/skyxplore/js/game/planet/modify_surface_controller.js");
 
 (function PageController(){
     window.wsConnection = new WebSocketConnection(Mapping.getEndpoint("WS_CONNECTION_SKYXPLORE_GAME"))

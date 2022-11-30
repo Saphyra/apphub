@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActi
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreConstructionActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreModifySurfaceActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreMapActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePlanetActions;
@@ -59,9 +59,9 @@ public class PauseGameTest extends SeleniumTest {
             .assertTrue("Planet is not opened.");
 
         Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_FOREST);
-        surface.openConstructNewBuildingWindow(driver);
+        surface.openModifySurfaceWindow(driver);
 
-        SkyXploreConstructionActions.constructBuilding(driver, Constants.DATA_ID_CAMP);
+        SkyXploreModifySurfaceActions.constructBuilding(driver, Constants.DATA_ID_CAMP);
 
         List<PlanetQueueItem> queueItems = SkyXplorePlanetActions.getQueue(driver);
         assertThat(queueItems).hasSize(1);

@@ -57,7 +57,7 @@ public class TerraformationTest extends SeleniumTest {
         //Start terraformation
         Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_DESERT);
         String surfaceId = surface.getSurfaceId();
-        surface.openTerraformationWindow(driver);
+        surface.openModifySurfaceWindow(driver);
 
         SkyXploreSurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_LAKE);
 
@@ -103,7 +103,7 @@ public class TerraformationTest extends SeleniumTest {
 
         Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_DESERT);
         String surfaceId = surface.getSurfaceId();
-        surface.openTerraformationWindow(driver);
+        surface.openModifySurfaceWindow(driver);
 
         SkyXploreSurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_CONCRETE);
 

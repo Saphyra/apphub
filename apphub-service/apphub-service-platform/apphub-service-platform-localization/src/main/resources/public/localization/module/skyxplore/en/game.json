@@ -300,6 +300,18 @@
         "key": "innerHTML",
         "message": "Upgrade"
       }
+    ],
+    "modify-surface-title": [
+      {
+        "key": "innerHTML",
+        "message": "Modify surface"
+      }
+    ],
+    "available-buildings-title": [
+      {
+        "key": "innerHTML",
+        "message": "Buildings"
+      }
     ]
   },
   "additionalContent": {
