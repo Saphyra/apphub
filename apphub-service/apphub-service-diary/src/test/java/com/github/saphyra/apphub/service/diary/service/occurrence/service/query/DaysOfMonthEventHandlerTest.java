@@ -6,9 +6,12 @@ import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.service.diary.dao.event.Event;
 import com.github.saphyra.apphub.service.diary.dao.occurance.Occurrence;
 import com.github.saphyra.apphub.service.diary.dao.occurance.OccurrenceDao;
+import com.github.saphyra.apphub.service.diary.dao.occurance.OccurrenceType;
 import com.github.saphyra.apphub.service.diary.service.occurrence.service.OccurrenceFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -17,6 +20,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -37,6 +42,9 @@ public class DaysOfMonthEventHandlerTest {
     @Mock
     private OccurrenceDao occurrenceDao;
 
+    @Mock
+    private RepeatedEventPostCollector repeatedEventPostCollector;
+
     @InjectMocks
     private DaysOfMonthEventHandler underTest;
 
@@ -52,15 +60,25 @@ public class DaysOfMonthEventHandlerTest {
     @Mock
     private Occurrence startOccurrence;
 
+    @Mock
+    private Occurrence resultOccurrence;
+
+    @Captor
+    private ArgumentCaptor<List<Occurrence>> argumentCaptor;
+
     @Test
     public void handleDaysOfMonthEvent() {
+        List<LocalDate> dates = List.of(START_DATE, MONTH_DAY_1, MONTH_DAY_2, MONTH_DAY_3, OTHER_DAY);
+
         given(daysOfMonthParser.parseDaysOfMonth(event)).willReturn(List.of(1));
         given(event.getStartDate()).willReturn(MONTH_DAY_2);
-        given(occurrenceFactory.createVirtual(MONTH_DAY_3, event)).willReturn(newOccurrence);
+        given(occurrenceFactory.createVirtual(MONTH_DAY_3, event, OccurrenceType.DEFAULT)).willReturn(newOccurrence);
+        given(repeatedEventPostCollector.collect(eq(event), any(), eq(dates))).willReturn(List.of(resultOccurrence));
+
 
         List<Occurrence> result = underTest.handleDaysOfMonthEvent(
             event,
-            List.of(START_DATE, MONTH_DAY_1, MONTH_DAY_2, MONTH_DAY_3, OTHER_DAY),
+            dates,
             CollectionUtils.toMap(
                 new OptionalHashMap<>(),
                 new BiWrapper<>(MONTH_DAY_2, existingOccurrence),
@@ -68,8 +86,10 @@ public class DaysOfMonthEventHandlerTest {
             )
         );
 
-        assertThat(result).containsExactlyInAnyOrder(existingOccurrence, newOccurrence, startOccurrence);
+        assertThat(result).containsExactly(resultOccurrence);
 
         verify(occurrenceDao).save(newOccurrence);
+        verify(repeatedEventPostCollector).collect(eq(event), argumentCaptor.capture(), eq(dates));
+        assertThat(argumentCaptor.getValue()).containsExactlyInAnyOrder(existingOccurrence, newOccurrence, startOccurrence);
     }
 }

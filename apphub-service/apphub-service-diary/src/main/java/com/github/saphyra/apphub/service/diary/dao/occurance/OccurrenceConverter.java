@@ -30,6 +30,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .time(stringEncryptor.encryptEntity(Optional.ofNullable(domain.getTime()).map(Objects::toString).orElse(null), userId))
             .status(domain.getStatus())
             .note(stringEncryptor.encryptEntity(domain.getNote(), userId))
+            .type(stringEncryptor.encryptEntity(domain.getType().name(), userId))
             .build();
     }
 
@@ -43,6 +44,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .time(Optional.ofNullable(stringEncryptor.decryptEntity(entity.getTime(), entity.getUserId())).map(LocalTime::parse).orElse(null))
             .status(entity.getStatus())
             .note(stringEncryptor.decryptEntity(entity.getNote(), entity.getUserId()))
+            .type(Optional.ofNullable(entity.getType()).map(type -> stringEncryptor.decryptEntity(type, entity.getUserId())).map(OccurrenceType::valueOf).orElse(OccurrenceType.DEFAULT))
             .build();
     }
 }

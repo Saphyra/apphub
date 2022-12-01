@@ -33,6 +33,7 @@ window.ids = {
     searchResult: "search-result",
     searchInput: "search-input",
     searchResultPageSearchInput: "search-result-page-search-input",
+    repeatForDays: "repeat-for-days",
 }
 
 window.occurrenceOrder = new function(){

@@ -55,7 +55,7 @@ public class OccurrenceFetcherTest {
         given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
         given(occurrence.getDate()).willReturn(DATE);
 
-        given(oneTimeEventHandler.handleOneTimeEvent(List.of(occurrence), List.of(DATE))).willReturn(List.of(occurrence));
+        given(oneTimeEventHandler.handleOneTimeEvent(event, List.of(occurrence), List.of(DATE))).willReturn(List.of(occurrence));
 
         List<Occurrence> result = underTest.fetchOccurrencesOfEvent(event, List.of(DATE));
 

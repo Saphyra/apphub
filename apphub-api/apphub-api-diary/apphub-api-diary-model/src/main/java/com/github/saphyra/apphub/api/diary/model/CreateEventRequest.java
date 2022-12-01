@@ -24,4 +24,5 @@ public class CreateEventRequest {
     private List<Integer> repetitionDaysOfMonth;
     private Integer hours;
     private Integer minutes;
+    private Integer repeat;
 }

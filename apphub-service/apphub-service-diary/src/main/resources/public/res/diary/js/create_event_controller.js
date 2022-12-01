@@ -33,6 +33,7 @@
         document.getElementById(ids.createEventRepetitionTypeDaysInput).value = 1;
         document.getElementById(ids.createEventTimeHours).value = "";
         document.getElementById(ids.createEventTimeMinutes).value = "";
+        document.getElementById(ids.repeatForDays).value = 1;
         $(".create-event-days-of-week-input").prop("checked", false);
         switchTab("repetition-type-data", REPETITION_TYPES.ONE_TIME);
         daysOfMonthSyncEngine.clear();
@@ -49,6 +50,7 @@
         const repetitionDaysOfMonth = daysOfMonthSyncEngine.keys();
         const timeHours = replaceWithNullIfEmpty(document.getElementById(ids.createEventTimeHours).value);
         const timeMinutes = replaceWithNullIfEmpty(document.getElementById(ids.createEventTimeMinutes).value);
+        const repeatForDays = document.getElementById(ids.repeatForDays).value;
 
         if(isBlank(title)){
             notificationService.showError(Localization.getAdditionalContent("empty-title"));
@@ -98,7 +100,8 @@
             repetitionDaysOfWeek: repetitionDaysOfWeek,
             repetitionDaysOfMonth: repetitionDaysOfMonth,
             hours: timeHours,
-            minutes: timeMinutes
+            minutes: timeMinutes,
+            repeat: repeatForDays
         }
 
         const request = new Request(Mapping.getEndpoint("DIARY_CREATE_EVENT"), payload);

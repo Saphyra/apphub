@@ -48,6 +48,42 @@ public class CreateEventRequestValidatorTest {
     }
 
     @Test
+    public void nullRepeat() {
+        CreateEventRequest request = validRequest(RepetitionType.ONE_TIME)
+            .toBuilder()
+            .repeat(null)
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.validate(request));
+
+        ExceptionValidator.validateInvalidParam(ex, "repeat", "must not be null");
+    }
+
+    @Test
+    public void tooLowRepeat() {
+        CreateEventRequest request = validRequest(RepetitionType.ONE_TIME)
+            .toBuilder()
+            .repeat(0)
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.validate(request));
+
+        ExceptionValidator.validateInvalidParam(ex, "repeat", "too low");
+    }
+
+    @Test
+    public void tooHighRepeat() {
+        CreateEventRequest request = validRequest(RepetitionType.ONE_TIME)
+            .toBuilder()
+            .repeat(366)
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.validate(request));
+
+        ExceptionValidator.validateInvalidParam(ex, "repeat", "too high");
+    }
+
+    @Test
     public void nullDate() {
         CreateEventRequest request = validRequest(RepetitionType.ONE_TIME)
             .toBuilder()
@@ -226,6 +262,7 @@ public class CreateEventRequestValidatorTest {
             .repetitionDaysOfMonth(List.of(25))
             .hours(HOURS)
             .minutes(MINUTES)
+            .repeat(5)
             .build();
     }
 }

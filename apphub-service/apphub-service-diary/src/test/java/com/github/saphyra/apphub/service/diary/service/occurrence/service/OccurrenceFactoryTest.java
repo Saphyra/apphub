@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.diary.dao.event.Event;
 import com.github.saphyra.apphub.service.diary.dao.occurance.Occurrence;
 import com.github.saphyra.apphub.service.diary.dao.occurance.OccurrenceStatus;
+import com.github.saphyra.apphub.service.diary.dao.occurance.OccurrenceType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,7 +64,7 @@ public class OccurrenceFactoryTest {
         given(event.getEventId()).willReturn(EVENT_ID);
         given(event.getUserId()).willReturn(USER_ID);
 
-        Occurrence result = underTest.createVirtual(DATE, event);
+        Occurrence result = underTest.createVirtual(DATE, event, OccurrenceType.DEFAULT);
 
         assertThat(result.getOccurrenceId()).isEqualTo(OCCURRENCE_ID);
         assertThat(result.getEventId()).isEqualTo(EVENT_ID);
@@ -71,5 +72,6 @@ public class OccurrenceFactoryTest {
         assertThat(result.getDate()).isEqualTo(DATE);
         assertThat(result.getStatus()).isEqualTo(OccurrenceStatus.VIRTUAL);
         assertThat(result.getNote()).isNull();
+        assertThat(result.getType()).isEqualTo(OccurrenceType.DEFAULT);
     }
 }

@@ -258,6 +258,18 @@
         "key": "innerHTML",
         "message": "Találatok"
       }
+    ],
+    "repeat-for-days-pre": [
+      {
+        "key": "innerHTML",
+        "message": "Ismétlődjön"
+      }
+    ],
+    "repeat-for-days-suff": [
+      {
+        "key": "innerHTML",
+        "message": "napig"
+      }
     ]
   },
   "additionalContent": {

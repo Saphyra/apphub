@@ -27,4 +27,5 @@ class OccurrenceEntity {
     @Enumerated(EnumType.STRING)
     private OccurrenceStatus status;
     private String note;
+    private String type;
 }

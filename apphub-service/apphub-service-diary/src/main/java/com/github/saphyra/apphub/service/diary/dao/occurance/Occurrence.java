@@ -20,4 +20,5 @@ public class Occurrence {
     private final LocalTime time;
     private OccurrenceStatus status;
     private String note;
+    private final OccurrenceType type;
 }

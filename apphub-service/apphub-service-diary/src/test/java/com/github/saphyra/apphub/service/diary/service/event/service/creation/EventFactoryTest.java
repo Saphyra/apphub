@@ -31,6 +31,7 @@ public class EventFactoryTest {
     private static final Integer REPETITION_TYPE_DAYS = 25;
     private static final Integer HOURS = 21;
     private static final Integer MINUTES = 24;
+    private static final Integer REPEAT = 31;
 
     @Mock
     private IdGenerator idGenerator;
@@ -50,6 +51,7 @@ public class EventFactoryTest {
             .minutes(MINUTES)
             .title(TITLE)
             .content(CONTENT)
+            .repeat(REPEAT)
             .build();
 
         given(idGenerator.randomUuid()).willReturn(EVENT_ID);
@@ -63,6 +65,7 @@ public class EventFactoryTest {
         assertThat(event.getTitle()).isEqualTo(TITLE);
         assertThat(event.getContent()).isEqualTo(CONTENT);
         assertThat(event.getRepetitionData()).isNull();
+        assertThat(event.getRepeat()).isEqualTo(REPEAT);
         assertThat(event.getTime()).isEqualTo(LocalTime.of(HOURS, MINUTES, 0));
     }
 
@@ -74,6 +77,7 @@ public class EventFactoryTest {
             .date(START_DATE)
             .title(TITLE)
             .content(CONTENT)
+            .repeat(REPEAT)
             .build();
 
         given(idGenerator.randomUuid()).willReturn(EVENT_ID);
@@ -89,6 +93,7 @@ public class EventFactoryTest {
         assertThat(event.getContent()).isEqualTo(CONTENT);
         assertThat(event.getRepetitionData()).isEqualTo(REPETITION_DATA);
         assertThat(event.getTime()).isNull();
+        assertThat(event.getRepeat()).isEqualTo(REPEAT);
     }
 
     @Test
@@ -99,6 +104,7 @@ public class EventFactoryTest {
             .date(START_DATE)
             .title(TITLE)
             .content(CONTENT)
+            .repeat(REPEAT)
             .build();
 
         given(idGenerator.randomUuid()).willReturn(EVENT_ID);
@@ -113,6 +119,7 @@ public class EventFactoryTest {
         assertThat(event.getTitle()).isEqualTo(TITLE);
         assertThat(event.getContent()).isEqualTo(CONTENT);
         assertThat(event.getRepetitionData()).isEqualTo(REPETITION_DATA);
+        assertThat(event.getRepeat()).isEqualTo(REPEAT);
     }
 
     @Test
@@ -122,6 +129,7 @@ public class EventFactoryTest {
             .repetitionDays(REPETITION_TYPE_DAYS)
             .date(START_DATE)
             .title(TITLE)
+            .repeat(REPEAT)
             .content(CONTENT)
             .build();
 
@@ -136,5 +144,6 @@ public class EventFactoryTest {
         assertThat(event.getTitle()).isEqualTo(TITLE);
         assertThat(event.getContent()).isEqualTo(CONTENT);
         assertThat(event.getRepetitionData()).isEqualTo(REPETITION_TYPE_DAYS.toString());
+        assertThat(event.getRepeat()).isEqualTo(REPEAT);
     }
 }
