@@ -1,3 +1,4 @@
+scriptLoader.loadScript("/res/common/js/web_socket.js");
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/admin-panel/js/error_report/report_controller.js");
 scriptLoader.loadScript("/res/admin-panel/js/error_report/bulk_operations_controller.js");

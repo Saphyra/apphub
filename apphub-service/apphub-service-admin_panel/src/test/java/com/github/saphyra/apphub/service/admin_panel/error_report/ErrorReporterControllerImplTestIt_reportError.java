@@ -4,6 +4,10 @@ import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
 import com.github.saphyra.apphub.api.admin_panel.model.model.StackTraceModel;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationClient;
+import com.github.saphyra.apphub.api.platform.message_sender.client.MessageSenderApiClient;
+import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.lib.config.Endpoints;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
@@ -16,6 +20,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -31,9 +36,11 @@ import java.util.UUID;
 
 import static com.github.saphyra.apphub.test.common.TestConstants.DEFAULT_LOCALE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -57,6 +64,9 @@ public class ErrorReporterControllerImplTestIt_reportError {
 
     @MockBean
     private LocalizationClient localizationClient;
+
+    @MockBean
+    private MessageSenderApiClient messageSenderClient;
 
     @Autowired
     private ErrorReportDao errorReportDao;
@@ -137,5 +147,11 @@ public class ErrorReporterControllerImplTestIt_reportError {
         assertThat(report.getResponseBody()).isEqualTo(RESPONSE_BODY);
         assertThat(report.getService()).isEqualTo(SERVICE);
         assertThat(report.getException()).isEqualTo(exceptionModel);
+
+        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
+        verify(messageSenderClient).sendMessage(eq(MessageGroup.ADMIN_PANEL_ERROR_REPORT), argumentCaptor.capture(), any());
+        WebSocketMessage message = argumentCaptor.getValue();
+        assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.ADMIN_PANEL_ERROR_REPORT);
+        assertThat(message.getRecipients()).isNull();
     }
 }

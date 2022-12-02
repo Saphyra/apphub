@@ -57,6 +57,7 @@ public class Endpoints {
 
     //CONNECTION SUBSCRIPTIONS
     public static final String WS_CONNECTION_ADMIN_PANEL_MONITORING = "/api/message-sender/admin-panel/monitoring";
+    public static final String WS_CONNECTION_ADMIN_PANEL_ERROR_REPORT = "/api/message-sender/admin-panel/error-report";
     public static final String WS_CONNECTION_SKYXPLORE_MAIN_MENU = "/api/message-sender/skyxplore/main-menu";
     public static final String WS_CONNECTION_SKYXPLORE_LOBBY = "/api/message-sender/skyxplore/lobby";
     public static final String WS_CONNECTION_SKYXPLORE_GAME = "/api/message-sender/skyxplore/game";
@@ -103,6 +104,8 @@ public class Endpoints {
     public static final String ACCOUNT_BAN_USER = "/api/user/ban";
     public static final String ACCOUNT_REMOVE_BAN = "/api/user/ban/{banId}";
     public static final String ACCOUNT_GET_BANS = "/api/user/ban/{userId}";
+    public static final String ACCOUNT_MARK_FOR_DELETION = "/api/user/{userId}/mark-for-deletion";
+    public static final String ACCOUNT_UNMARK_FOR_DELETION = "/api/user/{userId}/mark-for-deletion";
 
     //USER-DATA
     public static final String USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";

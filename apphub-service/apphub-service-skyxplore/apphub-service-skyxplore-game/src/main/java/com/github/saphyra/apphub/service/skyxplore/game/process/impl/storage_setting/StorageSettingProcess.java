@@ -65,7 +65,7 @@ public class StorageSettingProcess implements Process {
 
     @Override
     public int getPriority() {
-        return planet.getPriorities().get(PriorityType.MANUFACTURING) * storageSetting.getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
+        return planet.getPriorities().get(PriorityType.INDUSTRY) * storageSetting.getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
     @Override

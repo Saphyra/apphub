@@ -38,7 +38,7 @@ function ErrorHandlerRegistry(){
         function(request, response){
             console.log("Using default error handler...");
             if(isErrorResponse(response.body)){
-                logService.logToConsole("Handling errorResponse: " + response.toString());
+                console.log("Handling errorResponse: " + response.toString());
                 const errorResponse = JSON.parse(response.body);
 
                 switch(errorResponse.errorCode){
@@ -60,7 +60,7 @@ function ErrorHandlerRegistry(){
             function isErrorResponse(responseBody){
                 try{
                     if(responseBody.length == 0){
-                        logService.logToConsole("Empty response body");
+                        console.log("Empty response body");
                         return false;
                     }
 

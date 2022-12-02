@@ -57,7 +57,7 @@ function jsonConverter(response){
             return "Unknown statusCode: " + statusCode;
         }catch(err){
             const message = arguments.callee.name + " - " + err.name + ": " + err.message;
-            logService.log(message, "error");
+            console.log(message);
             return null;
         }
     }

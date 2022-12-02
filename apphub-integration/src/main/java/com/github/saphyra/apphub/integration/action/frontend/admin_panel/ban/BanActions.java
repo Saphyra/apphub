@@ -1,15 +1,18 @@
 package com.github.saphyra.apphub.integration.action.frontend.admin_panel.ban;
 
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.admin_panel.CurrentBan;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.github.saphyra.apphub.integration.framework.WebElementUtils.clearAndFill;
 import static com.github.saphyra.apphub.integration.framework.WebElementUtils.selectOption;
 import static com.github.saphyra.apphub.integration.framework.WebElementUtils.setCheckboxState;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class BanActions {
@@ -44,5 +47,40 @@ public class BanActions {
             .stream()
             .map(CurrentBan::new)
             .collect(Collectors.toList());
+    }
+
+    public static void submitDeleteAccountForm(WebDriver driver) {
+        BanPage.deleteTheUserButton(driver)
+            .click();
+    }
+
+    public static void fillDeleteUserDate(WebDriver driver, LocalDate date) {
+        WebElementUtils.clearAndFillDate(BanPage.deleteTheUserAtDate(driver), date);
+    }
+
+    public static void fillDeleteUserTime(WebDriver driver, Integer hours, Integer minutes) {
+        WebElementUtils.clearAndFillTime(BanPage.deleteTheUserAtTime(driver), hours, minutes);
+    }
+
+    public static void fillDeleteUserPassword(WebDriver driver, String password) {
+        WebElementUtils.clearAndFill(BanPage.confirmDeleteUserPassword(driver), password);
+    }
+
+    public static boolean isUserMarkedForDeletion(WebDriver driver) {
+        String text = BanPage.userMarkedForDeletion(driver)
+            .getText();
+
+        assertThat(text).isIn("Igen", "Nem");
+
+        return text.equals("Igen");
+    }
+
+    public static String getUserMarkedForDeletionAt(WebDriver driver) {
+        return BanPage.userMarkedForDeletionAt(driver)
+            .getText();
+    }
+
+    public static void unmarkForDeletion(WebDriver driver) {
+        BanPage.unmarkForDeletionButton(driver).click();
     }
 }

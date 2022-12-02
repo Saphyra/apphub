@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.diary.dao.event;
 
 import com.github.saphyra.apphub.api.diary.model.RepetitionType;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.encryption.impl.IntegerEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,12 +33,17 @@ public class EventConverterTest {
     private static final String ENCRYPTED_CONTENT = "encrypted-content";
     private static final LocalTime TIME = LocalTime.now();
     private static final String ENCRYPTED_TIME = "encrypted-time";
+    private static final Integer REPEAT = 345;
+    private static final String ENCRYPTED_REPEAT = "encrypted-repeat";
 
     @Mock
     private UuidConverter uuidConverter;
 
     @Mock
     private StringEncryptor stringEncryptor;
+
+    @Mock
+    private IntegerEncryptor integerEncryptor;
 
     @InjectMocks
     private EventConverter underTest;
@@ -53,6 +59,7 @@ public class EventConverterTest {
             .repetitionData(REPETITION_DATA)
             .title(TITLE)
             .content(CONTENT)
+            .repeat(REPEAT)
             .build();
 
         given(uuidConverter.convertDomain(EVENT_ID)).willReturn(EVENT_ID_STRING);
@@ -62,6 +69,7 @@ public class EventConverterTest {
         given(stringEncryptor.encryptEntity(REPETITION_DATA, USER_ID_STRING)).willReturn(ENCRYPTED_REPETITION_DATA);
         given(stringEncryptor.encryptEntity(TITLE, USER_ID_STRING)).willReturn(ENCRYPTED_TITLE);
         given(stringEncryptor.encryptEntity(CONTENT, USER_ID_STRING)).willReturn(ENCRYPTED_CONTENT);
+        given(integerEncryptor.encryptEntity(REPEAT, USER_ID_STRING)).willReturn(ENCRYPTED_REPEAT);
 
         EventEntity result = underTest.convertDomain(event);
 
@@ -73,6 +81,7 @@ public class EventConverterTest {
         assertThat(result.getRepetitionData()).isEqualTo(ENCRYPTED_REPETITION_DATA);
         assertThat(result.getTitle()).isEqualTo(ENCRYPTED_TITLE);
         assertThat(result.getContent()).isEqualTo(ENCRYPTED_CONTENT);
+        assertThat(result.getRepeat()).isEqualTo(ENCRYPTED_REPEAT);
     }
 
     @Test
@@ -86,6 +95,43 @@ public class EventConverterTest {
             .repetitionData(ENCRYPTED_REPETITION_DATA)
             .title(ENCRYPTED_TITLE)
             .content(ENCRYPTED_CONTENT)
+            .repeat(ENCRYPTED_REPEAT)
+            .build();
+
+        given(uuidConverter.convertEntity(EVENT_ID_STRING)).willReturn(EVENT_ID);
+        given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
+        given(stringEncryptor.decryptEntity(ENCRYPTED_START_DATE, USER_ID_STRING)).willReturn(START_DATE.toString());
+        given(stringEncryptor.decryptEntity(ENCRYPTED_TIME, USER_ID_STRING)).willReturn(TIME.toString());
+        given(stringEncryptor.decryptEntity(ENCRYPTED_REPETITION_DATA, USER_ID_STRING)).willReturn(REPETITION_DATA);
+        given(stringEncryptor.decryptEntity(ENCRYPTED_TITLE, USER_ID_STRING)).willReturn(TITLE);
+        given(stringEncryptor.decryptEntity(ENCRYPTED_CONTENT, USER_ID_STRING)).willReturn(CONTENT);
+        given(integerEncryptor.decryptEntity(ENCRYPTED_REPEAT, USER_ID_STRING)).willReturn(REPEAT);
+
+        Event result = underTest.convertEntity(entity);
+
+        assertThat(result.getEventId()).isEqualTo(EVENT_ID);
+        assertThat(result.getUserId()).isEqualTo(USER_ID);
+        assertThat(result.getStartDate()).isEqualTo(START_DATE);
+        assertThat(result.getTime()).isEqualTo(TIME);
+        assertThat(result.getRepetitionType()).isEqualTo(RepetitionType.DAYS_OF_WEEK);
+        assertThat(result.getRepetitionData()).isEqualTo(REPETITION_DATA);
+        assertThat(result.getTitle()).isEqualTo(TITLE);
+        assertThat(result.getContent()).isEqualTo(CONTENT);
+        assertThat(result.getRepeat()).isEqualTo(REPEAT);
+    }
+
+    @Test
+    public void convertEntity_nullRepeat() {
+        EventEntity entity = EventEntity.builder()
+            .eventId(EVENT_ID_STRING)
+            .userId(USER_ID_STRING)
+            .startDate(ENCRYPTED_START_DATE)
+            .time(ENCRYPTED_TIME)
+            .repetitionType(RepetitionType.DAYS_OF_WEEK)
+            .repetitionData(ENCRYPTED_REPETITION_DATA)
+            .title(ENCRYPTED_TITLE)
+            .content(ENCRYPTED_CONTENT)
+            .repeat(null)
             .build();
 
         given(uuidConverter.convertEntity(EVENT_ID_STRING)).willReturn(EVENT_ID);
@@ -106,5 +152,6 @@ public class EventConverterTest {
         assertThat(result.getRepetitionData()).isEqualTo(REPETITION_DATA);
         assertThat(result.getTitle()).isEqualTo(TITLE);
         assertThat(result.getContent()).isEqualTo(CONTENT);
+        assertThat(result.getRepeat()).isEqualTo(1);
     }
 }

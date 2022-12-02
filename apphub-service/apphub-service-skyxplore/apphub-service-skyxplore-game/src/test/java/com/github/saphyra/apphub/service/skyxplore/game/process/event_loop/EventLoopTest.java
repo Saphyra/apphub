@@ -82,6 +82,7 @@ public class EventLoopTest {
         verify(syncCache).process();
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void processWithResponse() throws Exception {
         given(executorServiceBean.asyncProcess(any(Callable.class))).willReturn(objectFuture);

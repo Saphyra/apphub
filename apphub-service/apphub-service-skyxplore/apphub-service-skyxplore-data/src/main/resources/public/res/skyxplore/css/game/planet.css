@@ -156,7 +156,7 @@
     }
 
     .surface-table-cell{
-        border: 2px outset white;
+        border: 1px outset white;
         width: var(--surface-table-cell-size);
         height: var(--surface-table-cell-size);
         position: relative;
@@ -258,7 +258,7 @@
                         background-color: green;
                     }
 
-                .empty-surface-terraform-button{
+                .empty-surface-modify-button{
                     background: url("/res/common/images/edit.png");
                     background-position: center;
                     background-size: cover;

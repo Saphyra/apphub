@@ -24,4 +24,9 @@ public class CommonPageActions {
 
         dialog.findElement(By.cssSelector(String.format("#%s .confirmation-dialog-confirm-button", id))).click();
     }
+
+    public static boolean isConfirmationDialogOpened(WebDriver driver, String id) {
+        Optional<WebElement> maybeConfirmationDialog = WebElementUtils.getIfPresent(() -> driver.findElement(By.id(id)));
+        return maybeConfirmationDialog.isPresent() && maybeConfirmationDialog.get().isDisplayed();
+    }
 }

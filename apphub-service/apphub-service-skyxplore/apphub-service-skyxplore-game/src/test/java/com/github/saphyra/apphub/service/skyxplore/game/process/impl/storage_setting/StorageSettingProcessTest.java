@@ -175,7 +175,7 @@ public class StorageSettingProcessTest {
 
     @Test
     public void getPriority() {
-        given(planet.getPriorities()).willReturn(CollectionUtils.singleValueMap(PriorityType.MANUFACTURING, PLANET_PRIORITY));
+        given(planet.getPriorities()).willReturn(CollectionUtils.singleValueMap(PriorityType.INDUSTRY, PLANET_PRIORITY));
         given(storageSetting.getPriority()).willReturn(STORAGE_SETTING_PRIORITY);
 
         assertThat(underTest.getPriority()).isEqualTo(PLANET_PRIORITY * STORAGE_SETTING_PRIORITY * GameConstants.PROCESS_PRIORITY_MULTIPLIER);

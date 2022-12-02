@@ -42,7 +42,7 @@
                 for(let lindex in localizations){
                     element[localizations[lindex].key] = localizations[lindex].message;
                 }
-            }else logService.log("Element not found with id " + id, "warn");
+            }else console.log("Element not found with id " + id);
         }
         additionalContent = content.additionalContent;
         eventProcessor.processEvent(new Event(events.LOCALIZATION_LOADED));

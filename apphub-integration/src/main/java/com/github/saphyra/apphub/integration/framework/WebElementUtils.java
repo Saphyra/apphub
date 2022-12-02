@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -90,5 +91,17 @@ public class WebElementUtils {
         } catch (StaleElementReferenceException e) {
             return true;
         }
+    }
+
+    public static void clearAndFillDate(WebElement webElement, LocalDate date) {
+        webElement.sendKeys(String.valueOf(date.getYear()));
+        webElement.sendKeys(Keys.TAB);
+        webElement.sendKeys(CommonUtils.withLeadingZeros(date.getMonthValue(), 2));
+        webElement.sendKeys(CommonUtils.withLeadingZeros(date.getDayOfMonth(), 2));
+    }
+
+    public static void clearAndFillTime(WebElement webElement, Integer hours, Integer minutes) {
+        webElement.sendKeys(CommonUtils.withLeadingZeros(hours, 2));
+        webElement.sendKeys(CommonUtils.withLeadingZeros(minutes, 2));
     }
 }

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.diary.dao.event;
 
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.encryption.impl.IntegerEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.util.Optional;
 class EventConverter extends ConverterBase<EventEntity, Event> {
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;
+    private final IntegerEncryptor integerEncryptor;
 
     @Override
     protected EventEntity processDomainConversion(Event domain) {
@@ -31,6 +33,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
             .repetitionData(stringEncryptor.encryptEntity(domain.getRepetitionData(), userId))
             .title(stringEncryptor.encryptEntity(domain.getTitle(), userId))
             .content(stringEncryptor.encryptEntity(domain.getContent(), userId))
+            .repeat(integerEncryptor.encryptEntity(domain.getRepeat(), userId))
             .build();
     }
 
@@ -45,6 +48,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
             .repetitionData(stringEncryptor.decryptEntity(entity.getRepetitionData(), entity.getUserId()))
             .title(stringEncryptor.decryptEntity(entity.getTitle(), entity.getUserId()))
             .content(stringEncryptor.decryptEntity(entity.getContent(), entity.getUserId()))
+            .repeat(Optional.ofNullable(entity.getRepeat()).map(repeat -> integerEncryptor.decryptEntity(repeat, entity.getUserId())).orElse(1))
             .build();
     }
 }

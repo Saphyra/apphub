@@ -65,7 +65,7 @@
                 return orderValue * (a[stat] - b[stat]);
             break;
             default:
-                logService.warn("Unknown orderType: " + orderType);
+                console.log("Unknown orderType: " + orderType);
                 return 0;
         }
     }

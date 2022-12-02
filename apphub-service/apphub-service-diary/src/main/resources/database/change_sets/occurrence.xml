@@ -36,4 +36,16 @@
             <column name="time" type="text"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="add-column-type-to-occurrence" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="diary" tableName="occurrence" columnName="type"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="diary" tableName="occurrence">
+            <column name="type" type="text"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

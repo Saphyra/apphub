@@ -56,6 +56,7 @@
     font-size: 1.5rem;
     line-height: 1.25;
     padding: 1rem;
+    border-bottom: 3px ridge white;
 }
 
     .close-dialog-button{
@@ -65,24 +66,50 @@
         font-size: 1.75rem;
     }
 
-#current-bans-container{
+#current-bans-wrapper{
     position: absolute;
     top: var(--user-details-container-height);
     left: 0;
-    right: 0;
-    bottom: var(--add-ban-container-height);
-    overflow: auto;
+    bottom: 0;
+    width: 50%;
+    border-right: 3px ridge white;
 }
 
-    #current-bans-table{
-        margin: auto;
+    #current-bans-container{
+        position: absolute;
+        top: 1rem;
+        left: 0;
+        right: 0;
+        bottom: var(--add-ban-container-height);
+        overflow: auto;
     }
 
-        #current-bans textarea{
-            background: transparent;
-            border: none;
-            margin: 0;
+        #current-bans-table{
+            margin: auto;
         }
+
+            #current-bans textarea{
+                background: transparent;
+                border: none;
+                margin: 0;
+            }
+
+#delete-user-wrapper{
+    position: absolute;
+    top: var(--user-details-container-height);
+    right: 0;
+    bottom: 0;
+    width: 50%;
+}
+
+    #delete-user-status{
+        padding: 1rem;
+    }
+
+    #delete-user-input-container{
+        padding: 1rem;
+        text-align: center;
+    }
 
 #add-ban-container{
     position: absolute;
@@ -110,4 +137,8 @@
 #revoke-role-confirm-password-container{
     text-align: center;
     margin: 1rem;
+}
+
+#user-deletion-confirmation-dialog .confirmation-dialog-detail-container{
+    text-align: center;
 }

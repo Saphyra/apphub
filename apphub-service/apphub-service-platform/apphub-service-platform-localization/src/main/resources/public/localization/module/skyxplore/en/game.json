@@ -91,16 +91,10 @@
         "message": "Construction"
       }
     ],
-    "planet-priorities-manufacturing-label": [
+    "planet-priorities-industry-label": [
       {
         "key": "innerHTML",
-        "message": "Manufacturing"
-      }
-    ],
-    "planet-priorities-extraction-label": [
-      {
-        "key": "innerHTML",
-        "message": "Extraction"
+        "message": "Industry"
       }
     ],
     "planet-priorities-well-being-label": [
@@ -277,22 +271,46 @@
         "message": "Construction or upgrade of buildings, terraforming"
       }
     ],
-    "planet-priorities-manufacturing-wrapper": [
+    "planet-priorities-industry-wrapper": [
       {
         "key": "title",
-        "message": "Processing raw materials in factories"
-      }
-    ],
-    "planet-priorities-extraction-wrapper": [
-      {
-        "key": "title",
-        "message": "Producing raw materials, like water, energy, ores, etc."
+        "message": "Extracting / processing commodities"
       }
     ],
     "planet-priorities-well-being-wrapper": [
       {
         "key": "title",
         "message": "When to send the citizens eating / resting"
+      }
+    ],
+    "terraformation-title": [
+      {
+        "key": "innerHTML",
+        "message": "Terraformation"
+      }
+    ],
+    "upgrade-building-title": [
+      {
+        "key": "innerHTML",
+        "message": "Upgrade building"
+      }
+    ],
+    "upgrade-building-button": [
+      {
+        "key": "innerHTML",
+        "message": "Upgrade"
+      }
+    ],
+    "modify-surface-title": [
+      {
+        "key": "innerHTML",
+        "message": "Modify surface"
+      }
+    ],
+    "available-buildings-title": [
+      {
+        "key": "innerHTML",
+        "message": "Buildings"
       }
     ]
   },

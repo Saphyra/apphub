@@ -44,6 +44,54 @@ public class EventCrudTest extends BackEndTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
+        //Null repeat
+        CreateEventRequest nullRepeatRequest = CreateEventRequest.builder()
+            .referenceDate(ReferenceDate.builder()
+                .day(REFERENCE_DATE_DAY)
+                .month(REFERENCE_DATE_MONTH)
+                .build())
+            .date(EVENT_DATE)
+            .title(TITLE)
+            .repetitionType(RepetitionType.ONE_TIME)
+            .repeat(null)
+            .build();
+
+        Response nullRepeatResponse = EventActions.getCreateEventResponse(language, accessTokenId, nullRepeatRequest);
+
+        ResponseValidator.verifyInvalidParam(language, nullRepeatResponse, "repeat", "must not be null");
+
+        //Repeat too low
+        CreateEventRequest repeatTooLowRequest = CreateEventRequest.builder()
+            .referenceDate(ReferenceDate.builder()
+                .day(REFERENCE_DATE_DAY)
+                .month(REFERENCE_DATE_MONTH)
+                .build())
+            .date(EVENT_DATE)
+            .title(TITLE)
+            .repetitionType(RepetitionType.ONE_TIME)
+            .repeat(0)
+            .build();
+
+        Response repeatTooLowResponse = EventActions.getCreateEventResponse(language, accessTokenId, repeatTooLowRequest);
+
+        ResponseValidator.verifyInvalidParam(language, repeatTooLowResponse, "repeat", "too low");
+
+        //Repeat too high
+        CreateEventRequest repeatTooHighRequest = CreateEventRequest.builder()
+            .referenceDate(ReferenceDate.builder()
+                .day(REFERENCE_DATE_DAY)
+                .month(REFERENCE_DATE_MONTH)
+                .build())
+            .date(EVENT_DATE)
+            .title(TITLE)
+            .repetitionType(RepetitionType.ONE_TIME)
+            .repeat(366)
+            .build();
+
+        Response repeatTooHighResponse = EventActions.getCreateEventResponse(language, accessTokenId, repeatTooHighRequest);
+
+        ResponseValidator.verifyInvalidParam(language, repeatTooHighResponse, "repeat", "too high");
+
         //Blank title
         CreateEventRequest blankTitleRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()

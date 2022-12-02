@@ -92,7 +92,7 @@ function WebSocketConnection(ep){
             .filter(function(handler){return handler.canHandle(eventName)})
             .peek(function(handler){handler.handle(eventData, eventName)})
             .findFirst()
-            .ifNotPresent(function(){logService.logToConsole("No WebSocketHandler found for eventName " + eventName)});
+            .ifNotPresent(function(){console.log("No WebSocketHandler found for eventName " + eventName)});
     }
 
     function reconnect(){

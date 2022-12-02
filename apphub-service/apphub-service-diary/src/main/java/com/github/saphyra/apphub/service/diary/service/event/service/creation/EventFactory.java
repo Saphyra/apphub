@@ -36,6 +36,7 @@ class EventFactory {
             .repetitionData(getRepetitionData(request))
             .title(request.getTitle())
             .content(request.getContent())
+            .repeat(request.getRepeat())
             .build();
     }
 

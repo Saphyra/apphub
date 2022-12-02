@@ -91,16 +91,10 @@
         "message": "Építkezés"
       }
     ],
-    "planet-priorities-manufacturing-label": [
+    "planet-priorities-industry-label": [
       {
         "key": "innerHTML",
-        "message": "Gyártás"
-      }
-    ],
-    "planet-priorities-extraction-label": [
-      {
-        "key": "innerHTML",
-        "message": "Nyersanyagtermelés"
+        "message": "Ipar"
       }
     ],
     "planet-priorities-well-being-label": [
@@ -280,19 +274,43 @@
     "planet-priorities-manufacturing-wrapper": [
       {
         "key": "title",
-        "message": "Nyersanyagok feldolgozása a gyárakban"
-      }
-    ],
-    "planet-priorities-extraction-wrapper": [
-      {
-        "key": "title",
-        "message": "Nyersanyagtermelés (pl. víz, energia, ércek, stb.)"
+        "message": "Nyersanyagok termelése és feldolgozása"
       }
     ],
     "planet-priorities-well-being-wrapper": [
       {
         "key": "title",
         "message": "Mikor menjenek a városlakók enni és pihenni"
+      }
+    ],
+    "terraformation-title": [
+      {
+        "key": "innerHTML",
+        "message": "Terraformálás"
+      }
+    ],
+    "upgrade-building-title": [
+      {
+        "key": "innerHTML",
+        "message": "Épület fejlesztése"
+      }
+    ],
+    "upgrade-building-button": [
+      {
+        "key": "innerHTML",
+        "message": "Fejlesztés"
+      }
+    ],
+    "modify-surface-title": [
+      {
+        "key": "innerHTML",
+        "message": "Felszín módosítása"
+      }
+    ],
+    "available-buildings-title": [
+      {
+        "key": "innerHTML",
+        "message": "Épületek"
       }
     ]
   },

@@ -29,4 +29,5 @@ class EventEntity {
     private String repetitionData;
     private String title;
     private String content;
+    private String repeat;
 }

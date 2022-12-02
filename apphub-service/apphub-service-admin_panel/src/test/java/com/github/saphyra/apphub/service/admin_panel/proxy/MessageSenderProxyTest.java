@@ -37,4 +37,13 @@ public class MessageSenderProxyTest {
 
         verify(messageSenderClient).sendMessage(MessageGroup.ADMIN_PANEL_MONITORING, message, LOCALE);
     }
+
+    @Test
+    public void sendToErrorReport() {
+        given(localeProvider.getOrDefault()).willReturn(LOCALE);
+
+        underTest.sendToErrorReport(message);
+
+        verify(messageSenderClient).sendMessage(MessageGroup.ADMIN_PANEL_ERROR_REPORT, message, LOCALE);
+    }
 }

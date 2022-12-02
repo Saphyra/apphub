@@ -38,7 +38,7 @@ function loadLocalization(module, fileName, successCallback){
                     if(errorCallback){
                         return errorCallback();
                     }else{
-                        logService.log(response.toString(), "error", "Error loading localization: ");
+                        console.log(response.toString(), "error", "Error loading localization: ");
                     }
                 }
             dao.sendRequest(request);

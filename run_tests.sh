@@ -15,8 +15,8 @@ if [[ "$TEST_RESULT" -ne 0 ]]; then
   echo "Tests failed"
   cd .. || exit
 
-  ./release_port.sh $SERVER_PORT
-  ./release_port.sh $DATABASE_PORT
+  ./infra/deployment/script/release_port.sh $SERVER_PORT
+  ./infra/deployment/script/release_port.sh $DATABASE_PORT
 
   taskkill //F //IM chromedriver.exe //T
   exit
@@ -26,7 +26,7 @@ fi
 
 cd .. || exit
 
-./release_port.sh $SERVER_PORT
-./release_port.sh $DATABASE_PORT
+./infra/deployment/script/release_port.sh $SERVER_PORT
+./infra/deployment/script/release_port.sh $DATABASE_PORT
 
 taskkill //F //IM chromedriver.exe //T

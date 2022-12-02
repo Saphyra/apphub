@@ -29,6 +29,7 @@ public class OccurrenceConverterTest {
     private static final String ENCRYPTED_NOTE = "encrypted-note";
     private static final LocalTime TIME = LocalTime.now();
     private static final String ENCRYPTED_TIME = "encrypted-time";
+    private static final String ENCRYPTED_TYPE = "encrypted-type";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -49,6 +50,7 @@ public class OccurrenceConverterTest {
             .time(TIME)
             .status(OccurrenceStatus.SNOOZED)
             .note(NOTE)
+            .type(OccurrenceType.FOLLOW_UP)
             .build();
 
         given(uuidConverter.convertDomain(OCCURRENCE_ID)).willReturn(OCCURRENCE_ID_STRING);
@@ -57,6 +59,7 @@ public class OccurrenceConverterTest {
         given(stringEncryptor.encryptEntity(DATE.toString(), USER_ID_STRING)).willReturn(ENCRYPTED_DATE);
         given(stringEncryptor.encryptEntity(TIME.toString(), USER_ID_STRING)).willReturn(ENCRYPTED_TIME);
         given(stringEncryptor.encryptEntity(NOTE, USER_ID_STRING)).willReturn(ENCRYPTED_NOTE);
+        given(stringEncryptor.encryptEntity(OccurrenceType.FOLLOW_UP.name(), USER_ID_STRING)).willReturn(ENCRYPTED_TYPE);
 
         OccurrenceEntity result = underTest.convertDomain(occurrence);
 
@@ -67,6 +70,7 @@ public class OccurrenceConverterTest {
         assertThat(result.getTime()).isEqualTo(ENCRYPTED_TIME);
         assertThat(result.getStatus()).isEqualTo(OccurrenceStatus.SNOOZED);
         assertThat(result.getNote()).isEqualTo(ENCRYPTED_NOTE);
+        assertThat(result.getType()).isEqualTo(ENCRYPTED_TYPE);
     }
 
     @Test
@@ -79,6 +83,40 @@ public class OccurrenceConverterTest {
             .time(ENCRYPTED_TIME)
             .status(OccurrenceStatus.SNOOZED)
             .note(ENCRYPTED_NOTE)
+            .type(ENCRYPTED_TYPE)
+            .build();
+
+        given(uuidConverter.convertEntity(OCCURRENCE_ID_STRING)).willReturn(OCCURRENCE_ID);
+        given(uuidConverter.convertEntity(EVENT_ID_STRING)).willReturn(EVENT_ID);
+        given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
+        given(stringEncryptor.decryptEntity(ENCRYPTED_DATE, USER_ID_STRING)).willReturn(DATE.toString());
+        given(stringEncryptor.decryptEntity(ENCRYPTED_TIME, USER_ID_STRING)).willReturn(TIME.toString());
+        given(stringEncryptor.decryptEntity(ENCRYPTED_NOTE, USER_ID_STRING)).willReturn(NOTE);
+        given(stringEncryptor.decryptEntity(ENCRYPTED_TYPE, USER_ID_STRING)).willReturn(OccurrenceType.FOLLOW_UP.name());
+
+        Occurrence result = underTest.convertEntity(occurrence);
+
+        assertThat(result.getOccurrenceId()).isEqualTo(OCCURRENCE_ID);
+        assertThat(result.getEventId()).isEqualTo(EVENT_ID);
+        assertThat(result.getUserId()).isEqualTo(USER_ID);
+        assertThat(result.getDate()).isEqualTo(DATE);
+        assertThat(result.getTime()).isEqualTo(TIME);
+        assertThat(result.getStatus()).isEqualTo(OccurrenceStatus.SNOOZED);
+        assertThat(result.getNote()).isEqualTo(NOTE);
+        assertThat(result.getType()).isEqualTo(OccurrenceType.FOLLOW_UP);
+    }
+
+    @Test
+    public void convertEntity_nullType() {
+        OccurrenceEntity occurrence = OccurrenceEntity.builder()
+            .occurrenceId(OCCURRENCE_ID_STRING)
+            .eventId(EVENT_ID_STRING)
+            .userId(USER_ID_STRING)
+            .date(ENCRYPTED_DATE)
+            .time(ENCRYPTED_TIME)
+            .status(OccurrenceStatus.SNOOZED)
+            .note(ENCRYPTED_NOTE)
+            .type(null)
             .build();
 
         given(uuidConverter.convertEntity(OCCURRENCE_ID_STRING)).willReturn(OCCURRENCE_ID);
@@ -97,5 +135,6 @@ public class OccurrenceConverterTest {
         assertThat(result.getTime()).isEqualTo(TIME);
         assertThat(result.getStatus()).isEqualTo(OccurrenceStatus.SNOOZED);
         assertThat(result.getNote()).isEqualTo(NOTE);
+        assertThat(result.getType()).isEqualTo(OccurrenceType.DEFAULT);
     }
 }

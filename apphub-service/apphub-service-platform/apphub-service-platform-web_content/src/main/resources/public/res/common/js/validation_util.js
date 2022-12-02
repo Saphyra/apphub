@@ -3,7 +3,7 @@ function createSuccessProcess(id){
         if(!id.startsWith("#")){
             id = "#" + id;
         }
-        logService.logToConsole("Running successProcess for id " + id);
+        console.log("Running successProcess for id " + id);
         $(id).fadeOut();
     }
 }
@@ -14,7 +14,7 @@ function createErrorProcess(id, code){
             id = "#" + id;
         }
 
-        logService.logToConsole("Running errorProcess for id " + id + " and code " + code);
+        console.log("Running errorProcess for id " + id + " and code " + code);
         $(id).prop("title", Localization.getAdditionalContent(code))
             .fadeIn();
     }

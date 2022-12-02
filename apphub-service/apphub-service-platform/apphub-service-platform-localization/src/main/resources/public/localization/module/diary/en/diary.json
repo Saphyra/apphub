@@ -258,6 +258,18 @@
         "key": "innerHTML",
         "message": "Search result"
       }
+    ],
+    "repeat-for-days-pre": [
+      {
+        "key": "innerHTML",
+        "message": "Repeat for"
+      }
+    ],
+    "repeat-for-days-suff": [
+      {
+        "key": "innerHTML",
+        "message": "days"
+      }
     ]
   },
   "additionalContent": {

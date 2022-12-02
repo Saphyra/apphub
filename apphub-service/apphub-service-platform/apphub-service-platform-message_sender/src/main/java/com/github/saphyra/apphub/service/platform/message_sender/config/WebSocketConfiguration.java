@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.platform.message_sender.config;
 
 import com.github.saphyra.apphub.lib.config.Endpoints;
+import com.github.saphyra.apphub.service.platform.message_sender.connection.AdminPanelErrorReportHandler;
 import com.github.saphyra.apphub.service.platform.message_sender.connection.AdminPanelMonitoringWebSocketHandler;
 import com.github.saphyra.apphub.service.platform.message_sender.connection.SkyXploreGameConnectionHandler;
 import com.github.saphyra.apphub.service.platform.message_sender.connection.SkyXploreLobbyWebSocketHandler;
@@ -20,6 +21,7 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
     private final SkyXploreLobbyWebSocketHandler skyXploreLobbyWebSocketHandler;
     private final SkyXploreGameConnectionHandler skyXploreGameConnectionHandler;
     private final AdminPanelMonitoringWebSocketHandler adminPanelMonitoringWebSocketHandler;
+    private final AdminPanelErrorReportHandler adminPanelErrorReportHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
@@ -27,6 +29,7 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
             .addHandler(skyXploreLobbyWebSocketHandler, Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY)
             .addHandler(skyXploreGameConnectionHandler, Endpoints.WS_CONNECTION_SKYXPLORE_GAME)
             .addHandler(adminPanelMonitoringWebSocketHandler, Endpoints.WS_CONNECTION_ADMIN_PANEL_MONITORING)
+            .addHandler(adminPanelErrorReportHandler, Endpoints.WS_CONNECTION_ADMIN_PANEL_ERROR_REPORT)
             .setHandshakeHandler(authenticationHandshakeHandler);
     }
 }

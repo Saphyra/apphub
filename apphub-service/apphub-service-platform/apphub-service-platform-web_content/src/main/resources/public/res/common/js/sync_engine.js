@@ -1,5 +1,5 @@
 function SyncEngine(cId, keyMethod, cnMethod, unMethod, sMethod, initialValues, idPref, aUpdate, fMethod, ieMethod){
-    logService.logToConsole("Creating new SyncEngine with containerId: " + cId + "and idPrefix: " + idPref);
+    console.log("Creating new SyncEngine with containerId: " + cId + "and idPrefix: " + idPref);
 
     let nodeCache = {};
     let cache = initialValues ? setInitialValues(initialValues) : {};

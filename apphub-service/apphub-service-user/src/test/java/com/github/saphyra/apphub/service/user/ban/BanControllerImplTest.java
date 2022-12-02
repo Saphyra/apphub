@@ -1,12 +1,15 @@
 package com.github.saphyra.apphub.service.user.ban;
 
 import com.github.saphyra.apphub.api.user.model.request.BanRequest;
+import com.github.saphyra.apphub.api.user.model.request.MarkUserForDeletionRequest;
 import com.github.saphyra.apphub.api.user.model.response.BanResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.user.ban.service.BanResponseQueryService;
 import com.github.saphyra.apphub.service.user.ban.service.BanService;
+import com.github.saphyra.apphub.service.user.ban.service.MarkUserForDeletionService;
 import com.github.saphyra.apphub.service.user.ban.service.RevokeBanService;
+import com.github.saphyra.apphub.service.user.ban.service.UnmarkUserForDeletionService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +29,7 @@ public class BanControllerImplTest {
     private static final String PASSWORD = "password";
     private static final UUID BAN_ID = UUID.randomUUID();
     private static final UUID BANNED_USER_ID = UUID.randomUUID();
+    private static final UUID DELETED_USER_ID = UUID.randomUUID();
 
     @Mock
     private BanService banService;
@@ -35,6 +39,12 @@ public class BanControllerImplTest {
 
     @Mock
     private BanResponseQueryService banResponseQueryService;
+
+    @Mock
+    private MarkUserForDeletionService markUserForDeletionService;
+
+    @Mock
+    private UnmarkUserForDeletionService unmarkUserForDeletionService;
 
     @InjectMocks
     private BanControllerImpl underTest;
@@ -47,6 +57,12 @@ public class BanControllerImplTest {
 
     @Mock
     private AccessTokenHeader accessTokenHeader;
+
+    @Mock
+    private BanResponse banResponse;
+
+    @Mock
+    private MarkUserForDeletionRequest markUserForDeletionRequest;
 
     @Before
     public void setUp() {
@@ -74,5 +90,23 @@ public class BanControllerImplTest {
         BanResponse result = underTest.getBans(BANNED_USER_ID, accessTokenHeader);
 
         assertThat(result).isEqualTo(response);
+    }
+
+    @Test
+    public void markUserForDeletion() {
+        given(markUserForDeletionService.markUserForDeletion(DELETED_USER_ID, markUserForDeletionRequest, USER_ID)).willReturn(banResponse);
+
+        BanResponse result = underTest.markUserForDeletion(markUserForDeletionRequest, DELETED_USER_ID, accessTokenHeader);
+
+        assertThat(result).isEqualTo(banResponse);
+    }
+
+    @Test
+    public void unmarkUserForDeletion() {
+        given(unmarkUserForDeletionService.unmarkUserForDeletion(DELETED_USER_ID)).willReturn(banResponse);
+
+        BanResponse result = underTest.unmarkUserForDeletion(DELETED_USER_ID, accessTokenHeader);
+
+        assertThat(result).isEqualTo(banResponse);
     }
 }

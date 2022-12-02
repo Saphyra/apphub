@@ -24,6 +24,8 @@ class CreateEventRequestValidator {
         eventTitleValidator.validate(request.getTitle());
         referenceDateValidator.validate(request.getReferenceDate());
 
+        ValidationUtil.betweenInclusive(request.getRepeat(), 1, 365, "repeat");
+
         ValidationUtil.notNull(request.getDate(), "date");
 
         ValidationUtil.notNull(request.getRepetitionType(), "repetitionType");

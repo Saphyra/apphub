@@ -37,4 +37,16 @@
             <column name="time" type="text"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="add-column-repeat-to-event" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="diary" tableName="event" columnName="repeat"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="diary" tableName="event">
+            <column name="repeat" type="text"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

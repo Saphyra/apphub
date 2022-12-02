@@ -47,7 +47,7 @@
             surfaceNode.id = surface.surfaceId;
 
             if(surface.building){
-                surfaceNode.appendChild(createBuilding(currentPlanetId, surface.building));
+                surfaceNode.appendChild(createBuilding(currentPlanetId, surface.surfaceType, surface.building));
             }else if(surface.terraformation){
                 surfaceNode.appendChild(createTerraformation(currentPlanetId, surface.surfaceId, surface.terraformation));
             }else{
@@ -55,7 +55,7 @@
             }
         return surfaceNode;
 
-        function createBuilding(planetId, building){
+        function createBuilding(planetId, surfaceType, building){
             const content = document.createElement("DIV");
                 content.classList.add("building-" + building.dataId);
                 content.classList.add("surface-content");
@@ -70,7 +70,7 @@
                 }else if(building.level < dataCaches.itemData.get(building.dataId).maxLevel){
                     const footer = document.createElement("DIV");
                         footer.classList.add("surface-footer");
-                        footer.appendChild(createUpgradeBuildingFooter(planetId, building));
+                        footer.appendChild(createUpgradeBuildingFooter(planetId, surfaceType, building));
                     content.appendChild(footer);
                 }
 
@@ -104,13 +104,12 @@
                 return footer;
             }
 
-            function createUpgradeBuildingFooter(planetId, building){
+            function createUpgradeBuildingFooter(planetId, surfaceType, building){
                 const upgradeButton = document.createElement("button");
                     upgradeButton.classList.add("upgrade-building-button");
                     upgradeButton.innerHTML = Localization.getAdditionalContent("upgrade");
                     upgradeButton.onclick = function(){
-                        constructionController.upgradeBuilding(planetId, building.buildingId)
-                            .then((surface)=>{syncEngine.add(surface)});
+                        constructionController.openUpgradeBuildingWindow(planetId, surfaceType, building.buildingId, building.dataId, building.level)
                     }
                 return upgradeButton;
             }
@@ -161,22 +160,12 @@
                 const footer = document.createElement("DIV");
                     footer.classList.add("surface-footer");
 
-                    const buildButton = document.createElement("button");
-                        buildButton.classList.add("empty-surface-construct-new-building-button");
-                        buildButton.innerHTML = "+";
-                        buildButton.onclick = function(){
-                            constructionController.openConstructNewBuildingWindow(planetController.getOpenedPlanetId(), surfaceType, surfaceId);
+                    const modifyButton = document.createElement("button");
+                        modifyButton.classList.add("empty-surface-modify-button");
+                        modifyButton.onclick = function(){
+                            modifySurfaceController.openModifySurfaceWindow(planetController.getOpenedPlanetId(), surfaceType, surfaceId);
                         }
-                footer.appendChild(buildButton);
-
-                if(dataCaches.terraformingPossibilities.get(surfaceType).length > 0){
-                    const terraformButton = document.createElement("button");
-                        terraformButton.classList.add("empty-surface-terraform-button");
-                        terraformButton.onclick = function(){
-                            terraformationController.openTerraformWindow(planetController.getOpenedPlanetId(), surfaceId, surfaceType);
-                        }
-                    footer.appendChild(terraformButton);
-                }
+                footer.appendChild(modifyButton);
 
             content.appendChild(footer);
             return content;

@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class SkyXploreConstructionActions {
+public class SkyXploreModifySurfaceActions {
     public static Boolean isDisplayed(WebDriver driver) {
-        return GamePage.constructionWindow(driver)
+        return GamePage.modifySurfaceWindow(driver)
             .isDisplayed();
     }
 
@@ -22,5 +22,10 @@ public class SkyXploreConstructionActions {
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not loaded.");
+    }
+
+    public static void confirmUpgrade(WebDriver driver) {
+        GamePage.upgradeBuildingButton(driver)
+            .click();
     }
 }

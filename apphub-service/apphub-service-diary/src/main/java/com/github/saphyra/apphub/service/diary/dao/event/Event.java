@@ -22,4 +22,5 @@ public class Event {
     private String repetitionData;
     private String title;
     private String content;
+    private int repeat;
 }

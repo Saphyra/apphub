@@ -6,9 +6,12 @@ import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.service.diary.dao.event.Event;
 import com.github.saphyra.apphub.service.diary.dao.occurance.Occurrence;
 import com.github.saphyra.apphub.service.diary.dao.occurance.OccurrenceDao;
+import com.github.saphyra.apphub.service.diary.dao.occurance.OccurrenceType;
 import com.github.saphyra.apphub.service.diary.service.occurrence.service.OccurrenceFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -18,6 +21,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -38,6 +43,9 @@ public class DaysOfWeekEventHandlerTest {
     @Mock
     private OccurrenceDao occurrenceDao;
 
+    @Mock
+    private RepeatedEventPostCollector repeatedEventPostCollector;
+
     @InjectMocks
     private DaysOfWeekEventHandler underTest;
 
@@ -53,15 +61,24 @@ public class DaysOfWeekEventHandlerTest {
     @Mock
     private Occurrence newOccurrence;
 
+    @Mock
+    private Occurrence resultOccurrence;
+
+    @Captor
+    private ArgumentCaptor<List<Occurrence>> argumentCaptor;
+
     @Test
     public void handleDaysOfWeekEvent() {
+        List<LocalDate> dates = List.of(START_DATE, MONDAY_1, MONDAY_2, MONDAY_3, OTHER_DAY);
+
         given(daysOfWeekParser.parseDaysOfWeek(event)).willReturn(List.of(DayOfWeek.MONDAY));
         given(event.getStartDate()).willReturn(MONDAY_2.minusDays(1));
-        given(occurrenceFactory.createVirtual(MONDAY_3, event)).willReturn(newOccurrence);
+        given(occurrenceFactory.createVirtual(MONDAY_3, event, OccurrenceType.DEFAULT)).willReturn(newOccurrence);
+        given(repeatedEventPostCollector.collect(eq(event), anyList(), eq(dates))).willReturn(List.of(resultOccurrence));
 
         List<Occurrence> result = underTest.handleDaysOfWeekEvent(
             event,
-            List.of(START_DATE, MONDAY_1, MONDAY_2, MONDAY_3, OTHER_DAY),
+            dates,
             CollectionUtils.toMap(
                 new OptionalHashMap<>(),
                 new BiWrapper<>(MONDAY_2, existingOccurrence),
@@ -69,7 +86,9 @@ public class DaysOfWeekEventHandlerTest {
             )
         );
 
-        assertThat(result).containsExactlyInAnyOrder(existingOccurrence, newOccurrence, startOccurrence);
+        assertThat(result).containsExactly(resultOccurrence);
+        verify(repeatedEventPostCollector).collect(eq(event), argumentCaptor.capture(), eq(dates));
+        assertThat(argumentCaptor.getValue()).containsExactlyInAnyOrder(existingOccurrence, newOccurrence, startOccurrence);
 
         verify(occurrenceDao).save(newOccurrence);
     }

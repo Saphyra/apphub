@@ -35,7 +35,7 @@ class OccurrenceFetcher {
 
         switch (event.getRepetitionType()) {
             case ONE_TIME:
-                return oneTimeEventHandler.handleOneTimeEvent(occurrences, dates);
+                return oneTimeEventHandler.handleOneTimeEvent(event, occurrences, dates);
             case DAYS_OF_WEEK:
                 return daysOfWeekEventHandler.handleDaysOfWeekEvent(event, dates, occurrenceMapping);
             case EVERY_X_DAYS:

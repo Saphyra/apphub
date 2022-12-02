@@ -1,10 +1,10 @@
 (function TerraformationController(){
     window.terraformationController = new function(){
-        this.openTerraformWindow = openTerraformWindow;
+        this.fillTerraformWindow = fillTerraformWindow;
         this.cancelTerraformation = cancelTerraformation;
     }
 
-    function openTerraformWindow(planetId, surfaceId, surfaceType){
+    function fillTerraformWindow(planetId, surfaceId, surfaceType){
         const container = document.getElementById(ids.terraformingPossibilities);
             container.innerHTML = "";
 
@@ -12,11 +12,6 @@
             .sorted(function(a, b){return dataCaches.surfaceTypeLocalization.get(a.surfaceType).localeCompare(dataCaches.surfaceTypeLocalization.get(b.surfaceType))})
             .map(function(terraformingPossibility){return createNode(planetId, surfaceId, terraformingPossibility)})
             .forEach(function(node){container.appendChild(node)});
-
-        document.getElementById(ids.closeTerraformationButton).onclick = function(){
-            planetController.openPlanetWindow();
-        };
-        switchTab("main-tab", ids.terraformation);
 
         function createNode(planetId, surfaceId, terraformingPossibility){
             const container = document.createElement("DIV");

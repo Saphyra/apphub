@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class ErrorReportToOverviewConverter {
+public class ErrorReportToOverviewConverter {
     public ErrorReportOverview convert(ErrorReport errorReport) {
         return ErrorReportOverview.builder()
             .id(errorReport.getId())

@@ -303,7 +303,8 @@ public class EventCrudTest extends SeleniumTest {
 
         DiaryActions.nextMonth(driver);
 
-        LocalDate date = LocalDate.of(FIRST_OF_MONTH.getYear(), FIRST_OF_MONTH.plusMonths(1).getMonth(), 21);
+        LocalDate date = LocalDate.of(FIRST_OF_MONTH.getYear(), FIRST_OF_MONTH.getMonth(), 21)
+            .plusMonths(1);
 
         WebElement calendarEvent = DiaryActions.getEventsOfDay(driver, date)
             .get(0);

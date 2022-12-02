@@ -1,1 +1,1 @@
-start ./production_proxy.sh
+start ./infra/deployment/script/production_proxy.sh

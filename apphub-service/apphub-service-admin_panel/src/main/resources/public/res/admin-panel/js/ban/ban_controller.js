@@ -12,21 +12,28 @@
         this.close = function(){
             switchTab("main-page", ids.userList);
         }
+        this.markUserForDeletion = markUserForDeletion;
+        this.unmarkUserForDeletion = unmarkUserForDeletion;
     }
 
     function openUser(userId){
+        openedUserId = userId;
+
         const request = new Request(Mapping.getEndpoint("ACCOUNT_GET_BANS", {userId: userId}));
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(response){
-                setUserData(response);
-                displayCurrentBans(response.userId, response.bans);
-                setBannableRoles(getBannedRoles(response.bans));
-                resetInputFields();
-
-                openedUserId = userId;
-                switchTab("main-page", ids.userDetails);
+                displayUser(response);
             }
         dao.sendRequestAsync(request);
+    }
+
+    function displayUser(response){
+        setUserData(response);
+        displayCurrentBans(response.userId, response.bans);
+        setBannableRoles(getBannedRoles(response.bans));
+        setDeletionStatus(response);
+        resetInputFields();
+        switchTab("main-page", ids.userDetails);
 
         function getBannedRoles(bans){
             return new Stream(bans)
@@ -123,6 +130,31 @@
             document.getElementById(ids.userDetailsUserId).innerText = response.userId;
             document.getElementById(ids.userDetailsUsername).innerText = response.username;
             document.getElementById(ids.userDetailsEmail).innerText = response.email;
+        }
+
+        function setDeletionStatus(response){
+            const markedForDeletionValue = document.getElementById(ids.markedForDeletion);
+            const markedForDeletionAtValue = document.getElementById(ids.markedForDeletionAt);
+            const markedForDeletionAtContainer = document.getElementById(ids.markedForDeletionAtContainer);
+            const unmarkForDeletionButton = document.getElementById(ids.unmarkForDeletionButton);
+            const deleteUserInputContainer = document.getElementById(ids.deleteUserInputContainer);
+
+            if(response.markedForDeletion){
+                deleteUserInputContainer.style.display = "none";
+                markedForDeletionAtContainer.style.display = "block";
+                unmarkForDeletionButton.style.display = "block";
+
+                const date = new Date(0);
+                     date.setUTCSeconds(response.markedForDeletionAt);
+
+                markedForDeletionAtValue.innerText = formatDate(date);
+            }else{
+                deleteUserInputContainer.style.display = "block";
+                markedForDeletionAtContainer.style.display = "none";
+                unmarkForDeletionButton.style.display = "none";
+            }
+
+            markedForDeletionValue.innerText = Localization.getAdditionalContent(response.markedForDeletion);
         }
 
         function resetInputFields(){
@@ -236,6 +268,76 @@
             request.processValidResponse = function(roles){
                 new Stream(roles)
                     .forEach(function(role){availableRoles.push(role)});
+            }
+        dao.sendRequestAsync(request);
+    }
+
+    function markUserForDeletion(){
+        const date = document.getElementById(ids.deleteTheUserAtDate).value;
+        const time = document.getElementById(ids.deleteTheUserAtTime).value;
+
+        if(date.length == 0){
+            notificationService.showError(Localization.getAdditionalContent("date-empty"));
+            return;
+        }
+
+        if(time.length == 0){
+            notificationService.showError(Localization.getAdditionalContent("time-empty"));
+            return;
+        }
+
+        const passwordInput = document.createElement("INPUT");
+            passwordInput.id = "confirm-delete-user-password";
+            passwordInput.type = "password";
+            passwordInput.placeholder = Localization.getAdditionalContent("password");
+            passwordInput.classList.add("confirm-password");
+
+        const detail = document.createElement("DIV");
+            const text = document.createElement("DIV");
+                text.innerHTML = Localization.getAdditionalContent("confirm-delete-user-detail");
+        detail.appendChild(text);
+        detail.appendChild(passwordInput);
+
+        const localization = new ConfirmationDialogLocalization()
+            .withTitle(Localization.getAdditionalContent("confirm-delete-user-title"))
+            .withDetail(detail)
+            .withConfirmButton(Localization.getAdditionalContent("delete-user"))
+            .withDeclineButton(Localization.getAdditionalContent("cancel"));
+
+        const options = new ConfirmationDialogOptions()
+            .withCloseAfterChoice(false);
+
+        const confirmCallback = function(){
+            const password = passwordInput.value;
+            if(password.length == 0){
+                notificationService.showError(Localization.getAdditionalContent("empty-password"));
+                return;
+            }
+
+            const request = new Request(Mapping.getEndpoint("ACCOUNT_MARK_FOR_DELETION", {userId: openedUserId}), {date: date, time: time, password: password});
+                request.convertResponse = jsonConverter;
+                request.processValidResponse = function(response){
+                    confirmationService.closeDialog(ids.confirmationDialogId);
+                    displayUser(response);
+                }
+            dao.sendRequestAsync(request);
+
+            passwordInput.value = "";
+        }
+
+        const declineCallback = function(){
+            passwordInput.value = "";
+            confirmationService.closeDialog(ids.confirmationDialogId);
+        }
+
+        confirmationService.openDialog(ids.confirmationDialogId, localization, confirmCallback, declineCallback, options);
+    }
+
+    function unmarkUserForDeletion(){
+        const request = new Request(Mapping.getEndpoint("ACCOUNT_UNMARK_FOR_DELETION", {userId: openedUserId}));
+            request.convertResponse = jsonConverter;
+            request.processValidResponse = function(response){
+                displayUser(response);
             }
         dao.sendRequestAsync(request);
     }

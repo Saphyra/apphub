@@ -24,4 +24,6 @@ public class CreateEventRequest {
     private List<Integer> repetitionDaysOfMonth;
     private Integer hours;
     private Integer minutes;
+    @Builder.Default
+    private Integer repeat = 1;
 }

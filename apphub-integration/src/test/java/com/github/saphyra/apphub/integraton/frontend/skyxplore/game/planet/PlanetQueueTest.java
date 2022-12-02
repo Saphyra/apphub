@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActi
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreConstructionActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreModifySurfaceActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreMapActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePlanetActions;
@@ -57,10 +57,10 @@ public class PlanetQueueTest extends SeleniumTest {
             .assertTrue("Planet is not opened.");
 
         Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_LAKE);
-        surface.openConstructNewBuildingWindow(driver);
+        surface.openModifySurfaceWindow(driver);
 
         //Construction item
-        SkyXploreConstructionActions.constructBuilding(driver, Constants.DATA_ID_WATER_PUMP);
+        SkyXploreModifySurfaceActions.constructBuilding(driver, Constants.DATA_ID_WATER_PUMP);
 
         PlanetQueueItem queueItem = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetActions.getQueue(driver), planetQueueItems -> !planetQueueItems.isEmpty())
             .stream()
@@ -77,7 +77,7 @@ public class PlanetQueueTest extends SeleniumTest {
 
         //Terraformation item
         surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_LAKE);
-        surface.openTerraformationWindow(driver);
+        surface.openModifySurfaceWindow(driver);
         SkyXploreSurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_DESERT);
 
         queueItem = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetActions.getQueue(driver), planetQueueItems -> !planetQueueItems.isEmpty())

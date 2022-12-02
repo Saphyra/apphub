@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Objects.isNull;
@@ -25,11 +27,21 @@ class ProducerBuildingFinderService {
             .values()
             .stream()
             .filter(surface -> !isNull(surface.getBuilding()))
+            .filter(surface -> productionBuildingService.containsKey(surface.getBuilding().getDataId()))
+            .filter(surface -> canProduce(dataId, surface))
             .map(Surface::getBuilding)
-            .filter(building -> productionBuildingService.containsKey(building.getDataId()))
-            .filter(building -> productionBuildingService.get(building.getDataId()).getGives().containsKey(dataId))
             .filter(building -> buildingCapacityCalculator.calculateCapacity(planet, building) > 0)
             .map(Building::getDataId)
             .findAny();
+    }
+
+    private boolean canProduce(String dataId, Surface surface) {
+        Map<String, ProductionData> gives = productionBuildingService.get(surface.getBuilding().getDataId()).getGives();
+        if (gives.containsKey(dataId)) {
+            return gives.get(dataId)
+                .getPlaced()
+                .contains(surface.getSurfaceType());
+        }
+        return false;
     }
 }
