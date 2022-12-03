@@ -4,6 +4,16 @@
             const optionsContainer = document.createElement("DIV");
                 optionsContainer.classList.add("list-item-options-container");
 
+                const copyTitleButton = domBuilder.create("BUTTON")
+                    .addClass("list-item-copy-title-button")
+                    .innerText("C")
+                    .onclick((e) => {
+                        e.stopPropagation();
+                        navigator.clipboard.writeText(itemDetails.title);
+                        notificationService.showSuccess(Localization.getAdditionalContent("list-item-title-copied"));
+                    })
+                    .appendTo(optionsContainer);
+
                 if(displayOpenParentCategoryButton){
                     const openParentCategoryButton = document.createElement("BUTTON");
                         openParentCategoryButton.classList.add("list-item-option-button");

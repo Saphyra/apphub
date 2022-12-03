@@ -4,6 +4,8 @@ import com.github.saphyra.apphub.api.diary.model.RepetitionType;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.IntegerEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
+import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -35,6 +37,7 @@ public class EventConverterTest {
     private static final String ENCRYPTED_TIME = "encrypted-time";
     private static final Integer REPEAT = 345;
     private static final String ENCRYPTED_REPEAT = "encrypted-repeat";
+    private static final String ACCESS_TOKEN_USER_ID = "access-token-user-id";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -45,8 +48,16 @@ public class EventConverterTest {
     @Mock
     private IntegerEncryptor integerEncryptor;
 
+    @Mock
+    private AccessTokenProvider accessTokenProvider;
+
     @InjectMocks
     private EventConverter underTest;
+
+    @Before
+    public void setUp() {
+        given(accessTokenProvider.getUidAsString()).willReturn(ACCESS_TOKEN_USER_ID);
+    }
 
     @Test
     public void convertDomain() {
@@ -64,12 +75,12 @@ public class EventConverterTest {
 
         given(uuidConverter.convertDomain(EVENT_ID)).willReturn(EVENT_ID_STRING);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(stringEncryptor.encryptEntity(START_DATE.toString(), USER_ID_STRING)).willReturn(ENCRYPTED_START_DATE);
-        given(stringEncryptor.encryptEntity(TIME.toString(), USER_ID_STRING)).willReturn(ENCRYPTED_TIME);
-        given(stringEncryptor.encryptEntity(REPETITION_DATA, USER_ID_STRING)).willReturn(ENCRYPTED_REPETITION_DATA);
-        given(stringEncryptor.encryptEntity(TITLE, USER_ID_STRING)).willReturn(ENCRYPTED_TITLE);
-        given(stringEncryptor.encryptEntity(CONTENT, USER_ID_STRING)).willReturn(ENCRYPTED_CONTENT);
-        given(integerEncryptor.encryptEntity(REPEAT, USER_ID_STRING)).willReturn(ENCRYPTED_REPEAT);
+        given(stringEncryptor.encryptEntity(START_DATE.toString(), ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_START_DATE);
+        given(stringEncryptor.encryptEntity(TIME.toString(), ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_TIME);
+        given(stringEncryptor.encryptEntity(REPETITION_DATA, ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_REPETITION_DATA);
+        given(stringEncryptor.encryptEntity(TITLE, ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_TITLE);
+        given(stringEncryptor.encryptEntity(CONTENT, ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_CONTENT);
+        given(integerEncryptor.encryptEntity(REPEAT, ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_REPEAT);
 
         EventEntity result = underTest.convertDomain(event);
 
@@ -100,12 +111,12 @@ public class EventConverterTest {
 
         given(uuidConverter.convertEntity(EVENT_ID_STRING)).willReturn(EVENT_ID);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_START_DATE, USER_ID_STRING)).willReturn(START_DATE.toString());
-        given(stringEncryptor.decryptEntity(ENCRYPTED_TIME, USER_ID_STRING)).willReturn(TIME.toString());
-        given(stringEncryptor.decryptEntity(ENCRYPTED_REPETITION_DATA, USER_ID_STRING)).willReturn(REPETITION_DATA);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_TITLE, USER_ID_STRING)).willReturn(TITLE);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_CONTENT, USER_ID_STRING)).willReturn(CONTENT);
-        given(integerEncryptor.decryptEntity(ENCRYPTED_REPEAT, USER_ID_STRING)).willReturn(REPEAT);
+        given(stringEncryptor.decryptEntity(ENCRYPTED_START_DATE, ACCESS_TOKEN_USER_ID)).willReturn(START_DATE.toString());
+        given(stringEncryptor.decryptEntity(ENCRYPTED_TIME, ACCESS_TOKEN_USER_ID)).willReturn(TIME.toString());
+        given(stringEncryptor.decryptEntity(ENCRYPTED_REPETITION_DATA, ACCESS_TOKEN_USER_ID)).willReturn(REPETITION_DATA);
+        given(stringEncryptor.decryptEntity(ENCRYPTED_TITLE, ACCESS_TOKEN_USER_ID)).willReturn(TITLE);
+        given(stringEncryptor.decryptEntity(ENCRYPTED_CONTENT, ACCESS_TOKEN_USER_ID)).willReturn(CONTENT);
+        given(integerEncryptor.decryptEntity(ENCRYPTED_REPEAT, ACCESS_TOKEN_USER_ID)).willReturn(REPEAT);
 
         Event result = underTest.convertEntity(entity);
 
@@ -136,11 +147,11 @@ public class EventConverterTest {
 
         given(uuidConverter.convertEntity(EVENT_ID_STRING)).willReturn(EVENT_ID);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_START_DATE, USER_ID_STRING)).willReturn(START_DATE.toString());
-        given(stringEncryptor.decryptEntity(ENCRYPTED_TIME, USER_ID_STRING)).willReturn(TIME.toString());
-        given(stringEncryptor.decryptEntity(ENCRYPTED_REPETITION_DATA, USER_ID_STRING)).willReturn(REPETITION_DATA);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_TITLE, USER_ID_STRING)).willReturn(TITLE);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_CONTENT, USER_ID_STRING)).willReturn(CONTENT);
+        given(stringEncryptor.decryptEntity(ENCRYPTED_START_DATE, ACCESS_TOKEN_USER_ID)).willReturn(START_DATE.toString());
+        given(stringEncryptor.decryptEntity(ENCRYPTED_TIME, ACCESS_TOKEN_USER_ID)).willReturn(TIME.toString());
+        given(stringEncryptor.decryptEntity(ENCRYPTED_REPETITION_DATA, ACCESS_TOKEN_USER_ID)).willReturn(REPETITION_DATA);
+        given(stringEncryptor.decryptEntity(ENCRYPTED_TITLE, ACCESS_TOKEN_USER_ID)).willReturn(TITLE);
+        given(stringEncryptor.decryptEntity(ENCRYPTED_CONTENT, ACCESS_TOKEN_USER_ID)).willReturn(CONTENT);
 
         Event result = underTest.convertEntity(entity);
 

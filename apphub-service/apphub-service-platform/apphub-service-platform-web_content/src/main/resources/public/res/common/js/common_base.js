@@ -38,7 +38,7 @@ const HEADER_BROWSER_LANGUAGE = "BrowserLanguage";
             throwException("IllegalArgument", "src must not be null or undefined.");
         }
 
-        //console.log("Loading script " + src);
+        console.log("Loading script " + src);
         if(loadedScripts.indexOf(src) > -1){
             //console.log(src + " is already loaded.");
             return;

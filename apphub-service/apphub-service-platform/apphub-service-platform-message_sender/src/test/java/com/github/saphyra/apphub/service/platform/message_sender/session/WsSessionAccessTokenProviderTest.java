@@ -20,6 +20,7 @@ import static org.mockito.BDDMockito.given;
 public class WsSessionAccessTokenProviderTest {
     private static final String ACCESS_TOKEN_ID_STRING = "access-token-id";
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
+
     @Mock
     private UuidConverter uuidConverter;
 

@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.user.settings.dao;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
+import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,14 +14,15 @@ import org.springframework.stereotype.Component;
 class UserSettingConverter extends ConverterBase<UserSettingEntity, UserSetting> {
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;
+    private final AccessTokenProvider accessTokenProvider;
 
     @Override
     protected UserSettingEntity processDomainConversion(UserSetting domain) {
-        String userId = uuidConverter.convertDomain(domain.getUserId());
+        String userId = accessTokenProvider.getUidAsString();
         return UserSettingEntity.builder()
             .id(
                 UserSettingEntityId.builder()
-                    .userId(userId)
+                    .userId(uuidConverter.convertDomain(domain.getUserId()))
                     .category(domain.getCategory())
                     .key(domain.getKey())
                     .build()
@@ -31,11 +33,12 @@ class UserSettingConverter extends ConverterBase<UserSettingEntity, UserSetting>
 
     @Override
     protected UserSetting processEntityConversion(UserSettingEntity entity) {
+        String userId = accessTokenProvider.getUidAsString();
         return UserSetting.builder()
             .userId(uuidConverter.convertEntity(entity.getId().getUserId()))
             .category(entity.getId().getCategory())
             .key(entity.getId().getKey())
-            .value(stringEncryptor.decryptEntity(entity.getValue(), entity.getId().getUserId()))
+            .value(stringEncryptor.decryptEntity(entity.getValue(), userId))
             .build();
     }
 }

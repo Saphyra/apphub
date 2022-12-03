@@ -3,6 +3,8 @@ package com.github.saphyra.apphub.service.utils.log_formatter.repository;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
+import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -23,6 +25,7 @@ public class LogParameterVisibilityConverterTest {
     private static final UUID ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String DECRYPTED_PARAMETER = "decrypted-parameter";
+    private static final String ACCESS_TOKEN_USER_ID = "access-token-user-id";
 
     @Mock
     private StringEncryptor stringEncryptor;
@@ -33,8 +36,16 @@ public class LogParameterVisibilityConverterTest {
     @Mock
     private UuidConverter uuidConverter;
 
+    @Mock
+    private AccessTokenProvider accessTokenProvider;
+
     @InjectMocks
     private LogParameterVisibilityConverter underTest;
+
+    @Before
+    public void setUp() {
+        given(accessTokenProvider.getUidAsString()).willReturn(ACCESS_TOKEN_USER_ID);
+    }
 
     @Test
     public void convertEntity() {
@@ -47,8 +58,8 @@ public class LogParameterVisibilityConverterTest {
 
         given(uuidConverter.convertEntity(ID_STRING)).willReturn(ID);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_PARAMETER, USER_ID_STRING)).willReturn(DECRYPTED_PARAMETER);
-        given(booleanEncryptor.decryptEntity(ENCRYPTED_VISIBLE, USER_ID_STRING)).willReturn(true);
+        given(stringEncryptor.decryptEntity(ENCRYPTED_PARAMETER, ACCESS_TOKEN_USER_ID)).willReturn(DECRYPTED_PARAMETER);
+        given(booleanEncryptor.decryptEntity(ENCRYPTED_VISIBLE, ACCESS_TOKEN_USER_ID)).willReturn(true);
 
         LogParameterVisibility result = underTest.convertEntity(entity);
 
@@ -69,8 +80,8 @@ public class LogParameterVisibilityConverterTest {
 
         given(uuidConverter.convertDomain(ID)).willReturn(ID_STRING);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(stringEncryptor.encryptEntity(DECRYPTED_PARAMETER, USER_ID_STRING)).willReturn(ENCRYPTED_PARAMETER);
-        given(booleanEncryptor.encryptEntity(true, USER_ID_STRING)).willReturn(ENCRYPTED_VISIBLE);
+        given(stringEncryptor.encryptEntity(DECRYPTED_PARAMETER, ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_PARAMETER);
+        given(booleanEncryptor.encryptEntity(true, ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_VISIBLE);
 
         LogParameterVisibilityEntity result = underTest.convertDomain(domain);
 

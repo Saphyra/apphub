@@ -103,6 +103,14 @@
                             border-width: 1px;
                         }
 
+                        .list-item-copy-title-button{
+                            margin: 0.125rem;
+                            border-width: 1px;
+                            background-image: url("/res/common/images/copy.png");
+                            background-size: cover;
+                            width: 1.5rem;
+                        }
+
                         .list-item-options-button-list-wrapper{
                             display: none;
                         }

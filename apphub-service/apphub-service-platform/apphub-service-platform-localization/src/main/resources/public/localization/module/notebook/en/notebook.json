@@ -521,6 +521,7 @@
     "open-parent": "Open parent",
     "archive-button-title": "Archive",
     "pin-button-title": "Pin",
-    "only-title-created": "Successfully created."
+    "only-title-created": "Successfully created.",
+    "list-item-title-copied": "Title copied to clipboard"
   }
 }

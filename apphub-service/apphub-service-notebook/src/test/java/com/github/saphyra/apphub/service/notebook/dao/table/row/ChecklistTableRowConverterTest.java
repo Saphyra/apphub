@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.service.notebook.dao.table.row;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
+import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -23,6 +25,7 @@ public class ChecklistTableRowConverterTest {
     private static final String USER_ID_STRING = "user-id";
     private static final String PARENT_STRING = "parent";
     private static final String CHECKED = "checked";
+    private static final String ACCESS_TOKEN_USER_ID = "access-token-user-id";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -30,8 +33,16 @@ public class ChecklistTableRowConverterTest {
     @Mock
     private BooleanEncryptor booleanEncryptor;
 
+    @Mock
+    private AccessTokenProvider accessTokenProvider;
+
     @InjectMocks
     private ChecklistTableRowConverter underTest;
+
+    @Before
+    public void setUp() {
+        given(accessTokenProvider.getUidAsString()).willReturn(ACCESS_TOKEN_USER_ID);
+    }
 
     @Test
     public void convertDomain() {
@@ -46,7 +57,7 @@ public class ChecklistTableRowConverterTest {
         given(uuidConverter.convertDomain(ROW_ID)).willReturn(ROW_ID_STRING);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
-        given(booleanEncryptor.encryptEntity(true, USER_ID_STRING)).willReturn(CHECKED);
+        given(booleanEncryptor.encryptEntity(true, ACCESS_TOKEN_USER_ID)).willReturn(CHECKED);
 
         ChecklistTableRowEntity result = underTest.convertDomain(domain);
 
@@ -70,7 +81,7 @@ public class ChecklistTableRowConverterTest {
         given(uuidConverter.convertEntity(ROW_ID_STRING)).willReturn(ROW_ID);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
         given(uuidConverter.convertEntity(PARENT_STRING)).willReturn(PARENT);
-        given(booleanEncryptor.decryptEntity(CHECKED, USER_ID_STRING)).willReturn(true);
+        given(booleanEncryptor.decryptEntity(CHECKED, ACCESS_TOKEN_USER_ID)).willReturn(true);
 
         ChecklistTableRow result = underTest.convertEntity(entity);
 
