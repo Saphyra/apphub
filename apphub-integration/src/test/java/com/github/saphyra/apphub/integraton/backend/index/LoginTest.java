@@ -85,12 +85,15 @@ public class LoginTest extends BackEndTest {
 
         //Lock user
         Stream.generate(() -> "")
-            .limit(3)
+            .limit(2)
             .map(s -> IndexPageActions.getLoginResponse(language, incorrectPasswordRequest))
             .forEach(r -> verifyErrorResponse(language, r, 401, ErrorCode.BAD_CREDENTIALS));
 
-        Response lockedLoginResponse = IndexPageActions.getLoginResponse(language, oneTimeLoginRequest);
-        verifyErrorResponse(language, lockedLoginResponse, 403, ErrorCode.ACCOUNT_LOCKED);
+        Response lockedLoginResponse = IndexPageActions.getLoginResponse(language, incorrectPasswordRequest);
+        verifyErrorResponse(language, lockedLoginResponse, 401, ErrorCode.ACCOUNT_LOCKED);
+
+        lockedLoginResponse = IndexPageActions.getLoginResponse(language, oneTimeLoginRequest);
+        verifyErrorResponse(language, lockedLoginResponse, 401, ErrorCode.ACCOUNT_LOCKED);
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
 

@@ -10,6 +10,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,7 +47,7 @@ public class PasswordService {
         return 1 << cost;
     }
 
-    public String hashPassword(char[] password) {
+    private String hashPassword(char[] password) {
         byte[] salt = new byte[SIZE / 8];
         random.nextBytes(salt);
         byte[] dk = pbkdf2(password, salt, 1 << cost);
@@ -57,7 +58,7 @@ public class PasswordService {
         return ID + cost + '$' + enc.encodeToString(hash);
     }
 
-    public boolean authenticate(char[] password, String token) {
+    private boolean authenticate(char[] password, String token) {
         Matcher m = layout.matcher(token);
         if (!m.matches())
             throw new IllegalArgumentException("Invalid token format");
@@ -83,11 +84,15 @@ public class PasswordService {
         }
     }
 
-    public String hashPassword(String password) {
-        return hashPassword(password.toCharArray());
+    public String hashPassword(String password, UUID userId) {
+        return hashPassword((password + userId).toCharArray());
     }
 
-    public boolean authenticate(String password, String token) {
+    public boolean authenticate(String password, UUID userId, String token) {
+        return authenticate((password + userId).toCharArray(), token);
+    }
+
+    public boolean authenticateOld(String password, String token) {
         return authenticate(password.toCharArray(), token);
     }
 }

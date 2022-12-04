@@ -35,7 +35,7 @@ public class UserFactoryTest {
     @Test
     public void create() {
         given(idGenerator.randomUuid()).willReturn(USER_ID);
-        given(passwordService.hashPassword(PASSWORD)).willReturn(HASHED_PASSWORD);
+        given(passwordService.hashPassword(PASSWORD, USER_ID)).willReturn(HASHED_PASSWORD);
 
         User result = underTest.create(EMAIL, USERNAME, PASSWORD, LOCALE);
 

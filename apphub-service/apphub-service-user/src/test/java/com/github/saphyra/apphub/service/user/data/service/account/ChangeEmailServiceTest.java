@@ -1,8 +1,7 @@
 package com.github.saphyra.apphub.service.user.data.service.account;
 
 import com.github.saphyra.apphub.api.user.model.request.ChangeEmailRequest;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
+import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.service.user.data.service.validator.EmailValidator;
@@ -13,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.HttpStatus;
 
 import java.util.UUID;
 
@@ -32,7 +30,7 @@ public class ChangeEmailServiceTest {
     private EmailValidator emailValidator;
 
     @Mock
-    private PasswordService passwordService;
+    private CheckPasswordService checkPasswordService;
 
     @Mock
     private UserDao userDao;
@@ -56,21 +54,8 @@ public class ChangeEmailServiceTest {
     }
 
     @Test
-    public void invalidPassword() {
-        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
-        given(user.getPassword()).willReturn(PASSWORD_HASH);
-        given(passwordService.authenticate(PASSWORD, PASSWORD_HASH)).willReturn(false);
-
-        Throwable ex = catchThrowable(() -> underTest.changeEmail(USER_ID, ChangeEmailRequest.builder().email(EMAIL).password(PASSWORD).build()));
-
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.INCORRECT_PASSWORD);
-    }
-
-    @Test
     public void changeEmail() {
-        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
-        given(user.getPassword()).willReturn(PASSWORD_HASH);
-        given(passwordService.authenticate(PASSWORD, PASSWORD_HASH)).willReturn(true);
+        given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
 
         underTest.changeEmail(USER_ID, ChangeEmailRequest.builder().email(EMAIL).password(PASSWORD).build());
 

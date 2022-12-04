@@ -68,7 +68,7 @@ public class AuthenticationControllerTestIt {
         .userId(USER_ID)
         .email(EMAIL)
         .username(USERNAME)
-        .password(new PasswordService().hashPassword(PASSWORD))
+        .password(new PasswordService().hashPassword(PASSWORD, USER_ID))
         .language(LOCALE)
         .passwordFailureCount(0)
         .build();

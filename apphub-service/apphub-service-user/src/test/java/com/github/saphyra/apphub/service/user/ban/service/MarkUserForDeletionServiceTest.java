@@ -2,8 +2,7 @@ package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.user.model.request.MarkUserForDeletionRequest;
 import com.github.saphyra.apphub.api.user.model.response.BanResponse;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
+import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -13,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -43,7 +41,7 @@ public class MarkUserForDeletionServiceTest {
     private UserDao userDao;
 
     @Mock
-    private PasswordService passwordService;
+    private CheckPasswordService checkPasswordService;
 
     @InjectMocks
     private MarkUserForDeletionService underTest;
@@ -59,9 +57,7 @@ public class MarkUserForDeletionServiceTest {
 
     @Before
     public void setUp() {
-        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
-        given(user.getPassword()).willReturn(PASSWORD_TOKEN);
-        given(passwordService.authenticate(PASSWORD, PASSWORD_TOKEN)).willReturn(true);
+        given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
     }
 
     @Test
@@ -75,21 +71,6 @@ public class MarkUserForDeletionServiceTest {
         Throwable ex = catchThrowable(() -> underTest.markUserForDeletion(DELETED_USER_ID, request, USER_ID));
 
         ExceptionValidator.validateInvalidParam(ex, "password", "must not be null");
-    }
-
-    @Test
-    public void incorrectPassword() {
-        MarkUserForDeletionRequest request = MarkUserForDeletionRequest.builder()
-            .date(DATE)
-            .time(TIME)
-            .password("asd")
-            .build();
-
-        given(passwordService.authenticate("asd", PASSWORD_TOKEN)).willReturn(false);
-
-        Throwable ex = catchThrowable(() -> underTest.markUserForDeletion(DELETED_USER_ID, request, USER_ID));
-
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.INCORRECT_PASSWORD);
     }
 
     @Test
@@ -139,14 +120,15 @@ public class MarkUserForDeletionServiceTest {
             .password(PASSWORD)
             .build();
 
-        given(userDao.findByIdValidated(DELETED_USER_ID)).willReturn(deletedUser);
         given(banResponseQueryService.getBans(DELETED_USER_ID)).willReturn(banResponse);
+        given(userDao.findByIdValidated(DELETED_USER_ID)).willReturn(deletedUser);
 
         BanResponse result = underTest.markUserForDeletion(DELETED_USER_ID, request, USER_ID);
 
         verify(deletedUser).setMarkedForDeletion(true);
         verify(deletedUser).setMarkedForDeletionAt(LocalDateTime.of(DATE, LocalTime.of(HOURS, MINUTES, 0)));
         verify(userDao).save(deletedUser);
+        verify(checkPasswordService).checkPassword(USER_ID, PASSWORD);
 
         assertThat(result).isEqualTo(banResponse);
     }
