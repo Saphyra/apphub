@@ -71,7 +71,7 @@
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(friendRequest){
                 friendRequestController.addSentFriendRequest(friendRequest);
-                notificationService.showSuccess(Localization.getAdditionalContent("friend-request-created"));
+                notificationService.showSuccess(localization.getAdditionalContent("friend-request-created"));
                 pageController.displayMainPage();
             }
         dao.sendRequestAsync(request);

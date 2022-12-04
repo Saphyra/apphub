@@ -61,7 +61,7 @@
                 content.classList.add("surface-content");
 
                 const levelCell = document.createElement("DIV");
-                    levelCell.innerHTML = Localization.getAdditionalContent("level") + ": " + building.level;
+                    levelCell.innerHTML = localization.getAdditionalContent("level") + ": " + building.level;
                     levelCell.classList.add("surface-header");
             content.appendChild(levelCell);
 
@@ -107,7 +107,7 @@
             function createUpgradeBuildingFooter(planetId, surfaceType, building){
                 const upgradeButton = document.createElement("button");
                     upgradeButton.classList.add("upgrade-building-button");
-                    upgradeButton.innerHTML = Localization.getAdditionalContent("upgrade");
+                    upgradeButton.innerHTML = localization.getAdditionalContent("upgrade");
                     upgradeButton.onclick = function(){
                         constructionController.openUpgradeBuildingWindow(planetId, surfaceType, building.buildingId, building.dataId, building.level)
                     }

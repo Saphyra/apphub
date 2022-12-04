@@ -1,7 +1,5 @@
 (function ChangeLanguageController(){
-    scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
-
-    const languageLocalization = new CustomLocalization("user", "language");
+    const languageLocalization = localization.loadCustomLocalization("user", "language");
 
     pageLoader.addLoader(loadLanguages, "Load languages");
     pageLoader.addLoader(addEventListeners, "ChangeLanguage add event listeners");

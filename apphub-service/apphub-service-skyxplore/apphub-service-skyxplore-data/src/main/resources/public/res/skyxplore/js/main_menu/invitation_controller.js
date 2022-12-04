@@ -18,7 +18,7 @@
 
                 const title = document.createElement("DIV");
                     title.classList.add("invitation-title");
-                    title.innerHTML = Localization.getAdditionalContent("invitation-title");
+                    title.innerHTML = localization.getAdditionalContent("invitation-title");
             node.appendChild(title);
 
                 const name = document.createElement("DIV");
@@ -28,21 +28,21 @@
 
                 const message = document.createElement("DIV");
                     message.classList.add("invitation-message");
-                    message.innerHTML = Localization.getAdditionalContent("invitation-message");
+                    message.innerHTML = localization.getAdditionalContent("invitation-message");
             node.appendChild(message);
 
                 const buttons = document.createElement("DIV");
                     buttons.classList.add("invitation-buttons");
 
                     const acceptButton = document.createElement("BUTTON");
-                        acceptButton.innerHTML = Localization.getAdditionalContent("accept-invitation");
+                        acceptButton.innerHTML = localization.getAdditionalContent("accept-invitation");
                         acceptButton.onclick = function(){
                             acceptInvitation(invitation.senderId);
                         }
                 buttons.appendChild(acceptButton);
 
                     const rejectButton = document.createElement("BUTTON");
-                        rejectButton.innerHTML = Localization.getAdditionalContent("reject-invitation");
+                        rejectButton.innerHTML = localization.getAdditionalContent("reject-invitation");
                         rejectButton.onclick = function(){
                             rejectInvitation(invitation.senderId);
                         }

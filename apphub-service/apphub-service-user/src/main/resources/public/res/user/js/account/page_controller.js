@@ -6,6 +6,6 @@
     scriptLoader.loadScript("/res/user/js/account/delete_account_controller.js");
 
     $(document).ready(function(){
-        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "user", fileName: "account"}));
+        localization.loadLocalization("user", "account");
     });
 })();

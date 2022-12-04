@@ -1,4 +1,3 @@
-scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/admin-panel/js/disabled_role_management/disabled_role_controller.js");
 
@@ -9,6 +8,6 @@ scriptLoader.loadScript("/res/admin-panel/js/disabled_role_management/disabled_r
     }
 
     $(document).ready(function(){
-        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "admin_panel", fileName: "disable_role_management"}));
+        localization.loadLocalization("admin_panel", "disabled_role_management");
     });
 })();

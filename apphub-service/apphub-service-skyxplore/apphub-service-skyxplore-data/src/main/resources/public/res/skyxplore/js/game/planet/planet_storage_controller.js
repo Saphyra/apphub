@@ -11,7 +11,7 @@
     }
 
     pageLoader.addLoader(setUpEventListeners, "PlanetStorage set up event listeners");
-    pageLoader.addLoader(function(){$(".planet-storage-reserved-label").text(Localization.getAdditionalContent("planet-storage-reserved-label"))}, "Fill PlanetStorageReservedLabels");
+    pageLoader.addLoader(function(){$(".planet-storage-reserved-label").text(localization.getAdditionalContent("planet-storage-reserved-label"))}, "Fill PlanetStorageReservedLabels");
     pageLoader.addLoader(addHandlers, "PlanetStorageController add WS event handlers");
 
     window.planetStorageController = new function(){
@@ -79,7 +79,7 @@
 
                         const detailsContainer = document.createElement("UL");
                             const storedAmount = document.createElement("LI");
-                                storedAmount.innerHTML = Localization.getAdditionalContent("stored-amount-label") + " (" + resourceDetail.allocatedResourceAmount + ") / ";
+                                storedAmount.innerHTML = localization.getAdditionalContent("stored-amount-label") + " (" + resourceDetail.allocatedResourceAmount + ") / ";
                                 const storedAmountValue = document.createElement("SPAN");
                                     storedAmountValue.innerHTML = resourceDetail.actualAmount;
                             storedAmount.appendChild(storedAmountValue);
@@ -87,7 +87,7 @@
 
                             const reservedAmount = document.createElement("LI");
                                 const reservedAmountLabel = document.createElement("SPAN");
-                                    reservedAmountLabel.innerHTML = Localization.getAdditionalContent("reserved-amount-label") + ": ";
+                                    reservedAmountLabel.innerHTML = localization.getAdditionalContent("reserved-amount-label") + ": ";
                             reservedAmount.appendChild(reservedAmountLabel);
                                 const reservedAmountValue = document.createElement("SPAN");
                                     reservedAmountValue.innerHTML = resourceDetail.reservedStorageAmount;

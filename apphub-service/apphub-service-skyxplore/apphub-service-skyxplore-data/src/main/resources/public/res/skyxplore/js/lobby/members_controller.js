@@ -118,7 +118,7 @@
             const allianceNode = document.createElement("DIV");
                 allianceNode.classList.add("lobby-member-alliance-container");
                 const allianceNodeTitle = document.createElement("SPAN");
-                    allianceNodeTitle.innerHTML = Localization.getAdditionalContent("alliance-title") + ": ";
+                    allianceNodeTitle.innerHTML = localization.getAdditionalContent("alliance-title") + ": ";
             allianceNode.appendChild(allianceNodeTitle);
 
                 const allianceSelectMenu = document.createElement("SELECT");
@@ -131,12 +131,12 @@
                     }
 
                     const noAllianceOption = document.createElement("OPTION");
-                        noAllianceOption.innerHTML = Localization.getAdditionalContent("no-alliance");
+                        noAllianceOption.innerHTML = localization.getAdditionalContent("no-alliance");
                         noAllianceOption.value = "no-alliance";
                 allianceSelectMenu.appendChild(noAllianceOption);
 
                     const newAllianceOption = document.createElement("OPTION");
-                        newAllianceOption.innerHTML = Localization.getAdditionalContent("new-alliance");
+                        newAllianceOption.innerHTML = localization.getAdditionalContent("new-alliance");
                         newAllianceOption.value = "new-alliance";
                 allianceSelectMenu.appendChild(newAllianceOption);
 

@@ -1,32 +1,33 @@
-function textNodeFactory(parent, itemDetails, displayOpenParentCategoryButton){
+function linkNodeFactory(parent, itemDetails, displayOpenParentCategoryButton){
     const node = document.createElement("DIV");
         node.classList.add("list-item-details-item");
         node.classList.add("button");
-        node.classList.add("text");
+        node.classList.add("link");
 
         node.onclick = function(){
-            textViewController.viewText(itemDetails.id);
+            window.open(itemDetails.value);
         }
 
         const title = document.createElement("SPAN");
             title.innerText = itemDetails.title;
+            title.title = itemDetails.value;
     node.appendChild(title);
 
     node.appendChild(actionButtonFactory.create(
         parent,
         itemDetails,
         node,
-        function(){deleteText(itemDetails.id, itemDetails.title)},
+        function(){deleteLink(itemDetails.id, itemDetails.title)},
         displayOpenParentCategoryButton
     ));
     return node;
 
-    function deleteText(listItemId, title){
+    function deleteLink(listItemId, title){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("deletion-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("deletion-confirmation-dialog-detail", {listItemTitle: title}))
-            .withConfirmButton(Localization.getAdditionalContent("deletion-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("deletion-confirmation-dialog-decline-button"));
+            .withTitle(localization.getAdditionalContent("deletion-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("deletion-confirmation-dialog-detail", {listItemTitle: title}))
+            .withConfirmButton(localization.getAdditionalContent("deletion-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("deletion-confirmation-dialog-decline-button"));
 
         confirmationService.openDialog(
             "deletion-confirmation-dialog",
@@ -34,7 +35,7 @@ function textNodeFactory(parent, itemDetails, displayOpenParentCategoryButton){
             function(){
                 const request = new Request(Mapping.getEndpoint("NOTEBOOK_DELETE_LIST_ITEM", {listItemId: listItemId}))
                     request.processValidResponse = function(){
-                        notificationService.showSuccess(Localization.getAdditionalContent("item-deleted"));
+                        notificationService.showSuccess(localization.getAdditionalContent("item-deleted"));
                         eventProcessor.processEvent(new Event(events.ITEM_DELETED, listItemId));
                     }
                 dao.sendRequestAsync(request);

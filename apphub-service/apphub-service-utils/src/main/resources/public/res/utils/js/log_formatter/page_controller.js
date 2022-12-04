@@ -20,7 +20,8 @@
     }
 
     $(document).ready(function(){
-        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "utils", fileName: "log_formatter"}));
+        localization.loadLocalization("utils", "log_formatter");
+
         addRightClickMove("result-container", "result");
         document.getElementById("result-container")
             .addEventListener('contextmenu', event => event.preventDefault());

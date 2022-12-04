@@ -59,7 +59,7 @@
 
             const root = {
                 categoryId: null,
-                title: Localization.getAdditionalContent("root-title"),
+                title: localization.getAdditionalContent("root-title"),
                 children: categories
             };
 

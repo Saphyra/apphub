@@ -36,7 +36,7 @@
                 }
             }
 
-        document.getElementById("create-link-current-category-title").innerText = title || Localization.getAdditionalContent("root-title");
+        document.getElementById("create-link-current-category-title").innerText = title || localization.getAdditionalContent("root-title");
 
         const container = document.getElementById("create-link-parent-selection-category-list");
             container.innerHTML = "";
@@ -44,7 +44,7 @@
             if(!categories.length){
                 const noContentText = document.createElement("DIV");
                     noContentText.classList.add("no-content");
-                    noContentText.innerText = Localization.getAdditionalContent("category-empty");
+                    noContentText.innerText = localization.getAdditionalContent("category-empty");
                 container.appendChild(noContentText);
             }
 
@@ -73,17 +73,17 @@
         const title = document.getElementById("new-link-title").value;
         const url = document.getElementById("new-link-url").value;
         if(!title.length){
-            notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
+            notificationService.showError(localization.getAdditionalContent("new-item-title-empty"));
             return;
         }
         if(!url.length){
-            notificationService.showError(Localization.getAdditionalContent("link-url-empty"));
+            notificationService.showError(localization.getAdditionalContent("link-url-empty"));
             return;
         }
 
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_LINK"), {parent: currentCategoryId, title: title, url: url});
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("link-created"));
+                notificationService.showSuccess(localization.getAdditionalContent("link-created"));
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
                 pageController.openMainPage();
             }

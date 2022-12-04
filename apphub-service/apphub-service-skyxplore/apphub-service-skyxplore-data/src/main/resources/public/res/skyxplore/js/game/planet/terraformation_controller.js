@@ -27,7 +27,7 @@
 
                 const terraformButton = document.createElement("BUTTON");
                     terraformButton.classList.add("terraform-button");
-                    terraformButton.innerText = Localization.getAdditionalContent("start-terraformation");
+                    terraformButton.innerText = localization.getAdditionalContent("start-terraformation");
                     terraformButton.onclick = function(){
                         startTerraformation(planetId, surfaceId, terraformingPossibility.surfaceType);
                     }
@@ -44,7 +44,7 @@
                         const headRow = document.createElement("TR");
                             const headCell = document.createElement("TD");
                                 headCell.colSpan = 2;
-                                headCell.innerText = Localization.getAdditionalContent("construction-requirements");
+                                headCell.innerText = localization.getAdditionalContent("construction-requirements");
                         headRow.appendChild(headCell);
                     thead.appendChild(headRow);
                 container.appendChild(thead);
@@ -55,8 +55,8 @@
                             .toListStream((resourceDataId, amount) => {return createRow(dataCaches.itemDataNames.get(resourceDataId), amount)})
                             .forEach(function(node){tbody.appendChild(node)});
 
-                    tbody.appendChild(createRow(Localization.getAdditionalContent("parallel-workers"), constructionRequirements.parallelWorkers));
-                    tbody.appendChild(createRow(Localization.getAdditionalContent("required-work-points"), constructionRequirements.requiredWorkPoints));
+                    tbody.appendChild(createRow(localization.getAdditionalContent("parallel-workers"), constructionRequirements.parallelWorkers));
+                    tbody.appendChild(createRow(localization.getAdditionalContent("required-work-points"), constructionRequirements.requiredWorkPoints));
                 container.appendChild(tbody);
 
                 return container;
@@ -88,10 +88,10 @@
 
     function cancelTerraformation(planetId, surfaceId){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("cancel-terraformation-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("cancel-terraformation-confirmation-dialog-detail"))
-            .withConfirmButton(Localization.getAdditionalContent("cancel-terraformation-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("cancel-terraformation-cancel-button"));
+            .withTitle(localization.getAdditionalContent("cancel-terraformation-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("cancel-terraformation-confirmation-dialog-detail"))
+            .withConfirmButton(localization.getAdditionalContent("cancel-terraformation-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("cancel-terraformation-cancel-button"));
 
         return new Promise((resolve, reject)=>{
             confirmationService.openDialog(

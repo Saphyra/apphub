@@ -78,7 +78,7 @@
                 prioritySliderWrapper.classList.add("queue-item-priority");
 
                 const prioritySliderLabel = document.createElement("SPAN");
-                    prioritySliderLabel.innerText = Localization.getAdditionalContent("priority") + ": ";
+                    prioritySliderLabel.innerText = localization.getAdditionalContent("priority") + ": ";
             prioritySliderWrapper.appendChild(prioritySliderLabel);
 
                 const prioritySliderInput = document.createElement("INPUT");
@@ -103,7 +103,7 @@
         function createCancelButton(planetId, item){
             const cancelButton = document.createElement("BUTTON");
                 cancelButton.classList.add("cancel-queue-item-button");
-                cancelButton.innerText = Localization.getAdditionalContent("cancel-production");
+                cancelButton.innerText = localization.getAdditionalContent("cancel-production");
                 cancelButton.onclick = function(){
                     cancelItem(planetId, item.type, item.itemId);
                 }
@@ -118,10 +118,10 @@
 
     function cancelItem(planetId, type, itemId){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("cancel-queue-item-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("cancel-queue-item-confirmation-dialog-detail"))
-            .withConfirmButton(Localization.getAdditionalContent("cancel-queue-item-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("cancel-queue-item-cancel-button"));
+            .withTitle(localization.getAdditionalContent("cancel-queue-item-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("cancel-queue-item-confirmation-dialog-detail"))
+            .withConfirmButton(localization.getAdditionalContent("cancel-queue-item-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("cancel-queue-item-cancel-button"));
 
         confirmationService.openDialog(
             "cancel-queue-item-confirmation-dialog",

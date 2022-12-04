@@ -48,7 +48,8 @@ scriptLoader.loadScript("/res/skyxplore/js/lobby/start_game_controller.js");
     }
 
     $(document).ready(function(){
-        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "skyxplore", fileName: "lobby"}));
+        localization.loadLocalization("skyxplore", "lobby");
+
         wsConnection.addHandler(chatController.createChatSendMessageHandler())
             .addHandler(chatController.createCharacterJoinedHandler())
             .addHandler(membersController.createCharacterJoinedHandler())

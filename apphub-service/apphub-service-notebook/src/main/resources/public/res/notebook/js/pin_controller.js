@@ -105,7 +105,7 @@
 
                         const openParentButton = document.createElement("BUTTON");
                             openParentButton.innerText = "P";
-                            openParentButton.title = item.parentTitle || Localization.getAdditionalContent("root-title");
+                            openParentButton.title = item.parentTitle || localization.getAdditionalContent("root-title");
                             openParentButton.onclick = function(e){
                                 e.stopPropagation();
                                 categoryContentController.loadCategoryContent(item.parentId);

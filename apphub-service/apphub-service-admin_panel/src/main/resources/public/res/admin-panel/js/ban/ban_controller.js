@@ -1,5 +1,5 @@
 (function BanController(){
-    const roleLocalization = new CustomLocalization("admin_panel", "roles");
+    const roleLocalization = localization.loadCustomLocalization("admin_panel", "roles");
     const availableRoles = [];
 
     let openedUserId = null;
@@ -48,7 +48,7 @@
 
                 const selectOption = document.createElement("OPTION");
                     selectOption.value = "";
-                    selectOption.innerText = Localization.getAdditionalContent("select-role");
+                    selectOption.innerText = localization.getAdditionalContent("select-role");
                     selectOption.selected = true;
                 selectMenu.appendChild(selectOption);
 
@@ -99,7 +99,7 @@
                 row.appendChild(expirationCell);
 
                     const permanentCell = document.createElement("TD");
-                        permanentCell.innerText = Localization.getAdditionalContent(ban.permanent);
+                        permanentCell.innerText = localization.getAdditionalContent(ban.permanent);
                 row.appendChild(permanentCell);
 
                     const reasonCell = document.createElement("TD");
@@ -116,7 +116,7 @@
 
                     const revokeCell = document.createElement("TD");
                         const revokeButton = document.createElement("BUTTON");
-                            revokeButton.innerHTML = Localization.getAdditionalContent("revoke-button");
+                            revokeButton.innerHTML = localization.getAdditionalContent("revoke-button");
                             revokeButton.onclick = function(){
                                 revokeBan(ban.id, ban.bannedRole);
                             }
@@ -154,7 +154,7 @@
                 unmarkForDeletionButton.style.display = "none";
             }
 
-            markedForDeletionValue.innerText = Localization.getAdditionalContent(response.markedForDeletion);
+            markedForDeletionValue.innerText = localization.getAdditionalContent(response.markedForDeletion);
         }
 
         function resetInputFields(){
@@ -169,7 +169,7 @@
     function createBan(){
         const bannedRole = document.getElementById(ids.bannableRoles).value;
         if(bannedRole.length == 0){
-            notificationService.showError(Localization.getAdditionalContent("select-banned-role"));
+            notificationService.showError(localization.getAdditionalContent("select-banned-role"));
             return;
         }
 
@@ -179,26 +179,26 @@
         if(!permanent){
             duration = document.getElementById(ids.duration).value;
             if(duration <= 0){
-                notificationService.showError(Localization.getAdditionalContent("duration-too-low"));
+                notificationService.showError(localization.getAdditionalContent("duration-too-low"));
                 return;
             }
 
             chronoUnit = document.getElementById(ids.chronoUnit).value;
             if(chronoUnit.length == 0){
-                notificationService.showError(Localization.getAdditionalContent("select-chrono-unit"));
+                notificationService.showError(localization.getAdditionalContent("select-chrono-unit"));
                 return;
             }
         }
 
         const reason = document.getElementById(ids.reason).value;
         if(isBlank(reason)){
-            notificationService.showError(Localization.getAdditionalContent("blank-reason"));
+            notificationService.showError(localization.getAdditionalContent("blank-reason"));
             return;
         }
 
         const password = document.getElementById(ids.password).value;
         if(password.length == 0){
-            notificationService.showError(Localization.getAdditionalContent("blank-password"));
+            notificationService.showError(localization.getAdditionalContent("blank-password"));
             return;
         }
 
@@ -214,7 +214,7 @@
 
         const request = new Request(Mapping.getEndpoint("ACCOUNT_BAN_USER"), payload);
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("user-banned"));
+                notificationService.showSuccess(localization.getAdditionalContent("user-banned"));
                 openUser(openedUserId);
             }
         dao.sendRequestAsync(request);
@@ -223,21 +223,21 @@
     function revokeBan(banId, bannedRole){
         const passwordInput = document.createElement("INPUT");
             passwordInput.type = "password";
-            passwordInput.placeholder = Localization.getAdditionalContent("password");
+            passwordInput.placeholder = localization.getAdditionalContent("password");
 
-        const localization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("confirm-revoke-ban-confirmation-dialog-title"))
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(localization.getAdditionalContent("confirm-revoke-ban-confirmation-dialog-title"))
             .withDetail(createDetail(passwordInput, bannedRole))
-            .withConfirmButton(Localization.getAdditionalContent("revoke-ban"))
-            .withDeclineButton(Localization.getAdditionalContent("cancel"));
+            .withConfirmButton(localization.getAdditionalContent("revoke-ban"))
+            .withDeclineButton(localization.getAdditionalContent("cancel"));
 
-        confirmationService.openDialog("confirm-revoke-ban", localization, function(){sendRevokeBanRequest(banId, passwordInput.value)});
+        confirmationService.openDialog("confirm-revoke-ban", confirmationDialogLocalization, function(){sendRevokeBanRequest(banId, passwordInput.value)});
 
         function createDetail(passwordInput, bannedRole){
             const container = document.createElement("DIV");
 
                 const detail = document.createElement("DIV");
-                    detail.innerHTML = Localization.getAdditionalContent("confirm-revoke-ban-confirmation-dialog-detail", {bannedRole: roleLocalization.get(bannedRole)});
+                    detail.innerHTML = localization.getAdditionalContent("confirm-revoke-ban-confirmation-dialog-detail", {bannedRole: roleLocalization.get(bannedRole)});
             container.appendChild(detail);
 
                 const passwordContainer = document.createElement("DIV");
@@ -249,13 +249,13 @@
 
         function sendRevokeBanRequest(banId, password){
             if(password.length == 0){
-                notificationService.showError(Localization.getAdditionalContent("blank-password"));
+                notificationService.showError(localization.getAdditionalContent("blank-password"));
                 return;
             }
 
             const request = new Request(Mapping.getEndpoint("ACCOUNT_REMOVE_BAN", {banId: banId}), {value: password});
                 request.processValidResponse = function(){
-                    notificationService.showSuccess(Localization.getAdditionalContent("ban-revoked"));
+                    notificationService.showSuccess(localization.getAdditionalContent("ban-revoked"));
                     openUser(openedUserId);
                 }
             dao.sendRequestAsync(request);
@@ -277,32 +277,32 @@
         const time = document.getElementById(ids.deleteTheUserAtTime).value;
 
         if(date.length == 0){
-            notificationService.showError(Localization.getAdditionalContent("date-empty"));
+            notificationService.showError(localization.getAdditionalContent("date-empty"));
             return;
         }
 
         if(time.length == 0){
-            notificationService.showError(Localization.getAdditionalContent("time-empty"));
+            notificationService.showError(localization.getAdditionalContent("time-empty"));
             return;
         }
 
         const passwordInput = document.createElement("INPUT");
             passwordInput.id = "confirm-delete-user-password";
             passwordInput.type = "password";
-            passwordInput.placeholder = Localization.getAdditionalContent("password");
+            passwordInput.placeholder = localization.getAdditionalContent("password");
             passwordInput.classList.add("confirm-password");
 
         const detail = document.createElement("DIV");
             const text = document.createElement("DIV");
-                text.innerHTML = Localization.getAdditionalContent("confirm-delete-user-detail");
+                text.innerHTML = localization.getAdditionalContent("confirm-delete-user-detail");
         detail.appendChild(text);
         detail.appendChild(passwordInput);
 
-        const localization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("confirm-delete-user-title"))
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(localization.getAdditionalContent("confirm-delete-user-title"))
             .withDetail(detail)
-            .withConfirmButton(Localization.getAdditionalContent("delete-user"))
-            .withDeclineButton(Localization.getAdditionalContent("cancel"));
+            .withConfirmButton(localization.getAdditionalContent("delete-user"))
+            .withDeclineButton(localization.getAdditionalContent("cancel"));
 
         const options = new ConfirmationDialogOptions()
             .withCloseAfterChoice(false);
@@ -310,7 +310,7 @@
         const confirmCallback = function(){
             const password = passwordInput.value;
             if(password.length == 0){
-                notificationService.showError(Localization.getAdditionalContent("empty-password"));
+                notificationService.showError(localization.getAdditionalContent("empty-password"));
                 return;
             }
 
@@ -330,7 +330,7 @@
             confirmationService.closeDialog(ids.confirmationDialogId);
         }
 
-        confirmationService.openDialog(ids.confirmationDialogId, localization, confirmCallback, declineCallback, options);
+        confirmationService.openDialog(ids.confirmationDialogId, confirmationDialogLocalization, confirmCallback, declineCallback, options);
     }
 
     function unmarkUserForDeletion(){

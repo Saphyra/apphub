@@ -8,7 +8,7 @@
         this.newColumn = newColumn;
         this.newRow = newRow;
         this.openCreateTableDialog = function(){
-            document.getElementById("create-table-selected-category-title").innerText = Localization.getAdditionalContent("root-title");
+            document.getElementById("create-table-selected-category-title").innerText = localization.getAdditionalContent("root-title");
             document.getElementById("new-table-title").value = "";
             loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
             columnNames = [];
@@ -28,7 +28,7 @@
                 return JSON.parse(response.body)
             }
             request.processValidResponse = function(categoryResponse){
-                const title = categoryResponse.title || Localization.getAdditionalContent("root-title");
+                const title = categoryResponse.title || localization.getAdditionalContent("root-title");
                 displayChildrenOfCategory(categoryId, categoryResponse.parent, categoryResponse.children, title);
             }
         dao.sendRequestAsync(request);
@@ -54,7 +54,7 @@
             if(!categories.length){
                 const noContentText = document.createElement("DIV");
                     noContentText.classList.add("no-content");
-                    noContentText.innerText = Localization.getAdditionalContent("category-empty");
+                    noContentText.innerText = localization.getAdditionalContent("category-empty");
                 container.appendChild(noContentText);
             }
 
@@ -83,7 +83,7 @@
         const title = document.getElementById("new-table-title").value;
 
         if(!title.length){
-            notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
+            notificationService.showError(localization.getAdditionalContent("new-item-title-empty"));
             return;
         }
 
@@ -93,7 +93,7 @@
             .toList();
 
         if(new Stream(columnNameValues).anyMatch(function(columnName){return columnName.length == 0})){
-            notificationService.showError(Localization.getAdditionalContent("empty-column-name"));
+            notificationService.showError(localization.getAdditionalContent("empty-column-name"));
             return;
         }
 
@@ -111,7 +111,7 @@
 
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_TABLE"), body);
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("table-saved"));
+                notificationService.showSuccess(localization.getAdditionalContent("table-saved"));
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
                 pageController.openMainPage();
             }
@@ -139,7 +139,7 @@
                 const inputField = document.createElement("INPUT");
                     inputField.classList.add("column-title");
                     inputField.type = "text";
-                    inputField.placeholder = Localization.getAdditionalContent("column-name-title");
+                    inputField.placeholder = localization.getAdditionalContent("column-name-title");
             node.appendChild(inputField);
 
             const buttonWrapper = document.createElement("SPAN");

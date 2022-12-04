@@ -1,6 +1,6 @@
 (function ModulesController(){
-    const categoryNames = new CustomLocalization("modules", "module_category");
-    const moduleNames = new CustomLocalization("modules", "module_name");
+    const categoryNames = localization.loadCustomLocalization("modules", "module_category");
+    const moduleNames = localization.loadCustomLocalization("modules", "module_name");
 
     let searchTimeout = null;
 

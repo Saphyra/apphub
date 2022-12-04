@@ -48,7 +48,7 @@
 
                 const buildButton = document.createElement("BUTTON");
                     buildButton.classList.add("construct-new-building-button");
-                    buildButton.innerText = Localization.getAdditionalContent("construct-new-building");
+                    buildButton.innerText = localization.getAdditionalContent("construct-new-building");
                     buildButton.onclick = function(){
                         constructNewBuilding(planetId, surfaceId, dataId);
                     }
@@ -115,7 +115,7 @@
                 const headRow = document.createElement("TR");
                     const headCell = document.createElement("TH");
                         headCell.colSpan = 2;
-                        headCell.innerText = Localization.getAdditionalContent("construction-requirements");
+                        headCell.innerText = localization.getAdditionalContent("construction-requirements");
                 headRow.appendChild(headCell);
             thead.appendChild(headRow);
         container.appendChild(thead);
@@ -126,8 +126,8 @@
                     .toListStream((resourceDataId, amount) => {return createRow(dataCaches.itemDataNames.get(resourceDataId), amount)})
                     .forEach(function(node){tbody.appendChild(node)});
 
-                tbody.appendChild(createRow(Localization.getAdditionalContent("parallel-workers"), constructionRequirements.parallelWorkers));
-                tbody.appendChild(createRow(Localization.getAdditionalContent("required-work-points"), constructionRequirements.requiredWorkPoints));
+                tbody.appendChild(createRow(localization.getAdditionalContent("parallel-workers"), constructionRequirements.parallelWorkers));
+                tbody.appendChild(createRow(localization.getAdditionalContent("required-work-points"), constructionRequirements.requiredWorkPoints));
         container.appendChild(tbody);
 
         return container;
@@ -169,7 +169,7 @@
                 const tableHead = document.createElement("THEAD");
                     const titleRow = document.createElement("TR");
                         const titleCell = document.createElement("TH");
-                            titleCell.innerText = Localization.getAdditionalContent("building-effect-title-production");
+                            titleCell.innerText = localization.getAdditionalContent("building-effect-title-production");
                             titleCell.colSpan = 2;
                     titleRow.appendChild(titleCell);
                 tableHead.appendChild(titleRow);
@@ -177,11 +177,11 @@
 
                     const headerRow = document.createElement("TR");
                         const producedItemHeader = document.createElement("TH");
-                            producedItemHeader.innerText = Localization.getAdditionalContent("building-effect-production-header-produced-item");
+                            producedItemHeader.innerText = localization.getAdditionalContent("building-effect-production-header-produced-item");
                     headerRow.appendChild(producedItemHeader);
 
                         const productionRequirementsHeader = document.createElement("TH");
-                            productionRequirementsHeader.innerText = Localization.getAdditionalContent("building-effect-production-header-production-requirements");
+                            productionRequirementsHeader.innerText = localization.getAdditionalContent("building-effect-production-header-production-requirements");
                     headerRow.appendChild(productionRequirementsHeader);
                 tableHead.appendChild(headerRow);
             table.appendChild(tableHead);
@@ -210,8 +210,8 @@
                                 .toListStream((requiredItemId, amount) => {return createElementWithText("DIV", dataCaches.itemDataNames.get(requiredItemId) + ": " + amount)})
                                 .forEach((node) => constructionRequirementsCell.appendChild(node));
 
-                        constructionRequirementsCell.appendChild(createElementWithText("DIV", Localization.getAdditionalContent("parallel-workers") + ": " + (gives.constructionRequirements.parallelWorkers * level)));
-                        constructionRequirementsCell.appendChild(createElementWithText("DIV", Localization.getAdditionalContent("required-work-points") + ": " + gives.constructionRequirements.requiredWorkPoints));
+                        constructionRequirementsCell.appendChild(createElementWithText("DIV", localization.getAdditionalContent("parallel-workers") + ": " + (gives.constructionRequirements.parallelWorkers * level)));
+                        constructionRequirementsCell.appendChild(createElementWithText("DIV", localization.getAdditionalContent("required-work-points") + ": " + gives.constructionRequirements.requiredWorkPoints));
 
                     row.appendChild(constructionRequirementsCell);
                     return row;
@@ -222,10 +222,10 @@
 
     function cancelConstruction(planetId, buildingId, dataId){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("cancel-construction-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("cancel-construction-confirmation-dialog-detail", {buildingName: dataCaches.itemDataNames.get(dataId)}))
-            .withConfirmButton(Localization.getAdditionalContent("cancel-construction-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("cancel-construction-cancel-button"));
+            .withTitle(localization.getAdditionalContent("cancel-construction-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("cancel-construction-confirmation-dialog-detail", {buildingName: dataCaches.itemDataNames.get(dataId)}))
+            .withConfirmButton(localization.getAdditionalContent("cancel-construction-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("cancel-construction-cancel-button"));
 
         return new Promise((resolve, reject) => {
             confirmationService.openDialog(

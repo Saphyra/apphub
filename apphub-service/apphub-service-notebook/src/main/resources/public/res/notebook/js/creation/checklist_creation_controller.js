@@ -5,7 +5,7 @@
         this.save = save;
         this.newItem = newItem;
         this.openCreateChecklistDialog = function(){
-            document.getElementById("create-checklist-selected-category-title").innerText = Localization.getAdditionalContent("root-title");
+            document.getElementById("create-checklist-selected-category-title").innerText = localization.getAdditionalContent("root-title");
             document.getElementById("new-checklist-title").value = "";
             document.getElementById("new-checklist-content-wrapper").innerHTML = "";
             loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
@@ -22,7 +22,7 @@
                 return JSON.parse(response.body)
             }
             request.processValidResponse = function(categoryResponse){
-                const title = categoryResponse.title || Localization.getAdditionalContent("root-title");
+                const title = categoryResponse.title || localization.getAdditionalContent("root-title");
                 displayChildrenOfCategory(categoryId, categoryResponse.parent, categoryResponse.children, title);
             }
         dao.sendRequestAsync(request);
@@ -48,7 +48,7 @@
             if(!categories.length){
                 const noContentText = document.createElement("DIV");
                     noContentText.classList.add("no-content");
-                    noContentText.innerText = Localization.getAdditionalContent("category-empty");
+                    noContentText.innerText = localization.getAdditionalContent("category-empty");
                 container.appendChild(noContentText);
             }
 
@@ -129,7 +129,7 @@
         const title = document.getElementById("new-checklist-title").value;
 
         if(!title.length){
-            notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
+            notificationService.showError(localization.getAdditionalContent("new-item-title-empty"));
             return;
         }
 
@@ -143,7 +143,7 @@
 
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_CHECKLIST_ITEM"), {parent: currentCategoryId, title: title, nodes: nodes});
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("checklist-saved"));
+                notificationService.showSuccess(localization.getAdditionalContent("checklist-saved"));
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
                 pageController.openMainPage();
             }

@@ -17,7 +17,7 @@
                 .replaceAll("\\t", "    ");
             result.innerHTML = highlighted;
         }catch(e){
-            notificationService.showError(Localization.getAdditionalContent("json-processing-failed"));
+            notificationService.showError(localization.getAdditionalContent("json-processing-failed"));
         }
     }
 

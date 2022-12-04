@@ -9,14 +9,9 @@
         this.storeSuccess = (successMessage) => sessionStorage.successMessage = successMessage;
         this.storeErrorText = (errorText) => sessionStorage.errorText = errorText;
         this.storeSuccessText = (successText) => sessionStorage.successText = successText;
+        this.printStoredMessages = printStoredMessages;
     }
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType === events.LOCALIZATION_LOADED},
-        printStoredMessages,
-        true,
-        "Print stored notifications"
-    ));
     /*
     Shows a success message.
     Arguments:
@@ -83,7 +78,7 @@
     function printStoredMessages(){
         if(hasValue(sessionStorage.errorMessage)){
             try{
-                showError(Localization.getAdditionalContent(sessionStorage.errorMessage));
+                showError(localization.getAdditionalContent(sessionStorage.errorMessage));
             } finally{
                 delete sessionStorage.errorMessage;
             }
@@ -91,7 +86,7 @@
         
         if(hasValue(sessionStorage.successMessage)){
             try{
-                showSuccess(Localization.getAdditionalContent(sessionStorage.successMessage));
+                showSuccess(localization.getAdditionalContent(sessionStorage.successMessage));
             }finally{
                 delete sessionStorage.successMessage;
             }

@@ -65,7 +65,7 @@
                 }
             }
 
-        document.getElementById("category-details-title").innerText = categoryDetails.title == null ? Localization.getAdditionalContent("root-title") : categoryDetails.title;
+        document.getElementById("category-details-title").innerText = categoryDetails.title == null ? localization.getAdditionalContent("root-title") : categoryDetails.title;
 
         const container = document.getElementById("category-content-list");
             container.innerHTML = "";

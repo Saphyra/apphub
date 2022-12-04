@@ -11,7 +11,7 @@ scriptLoader.loadScript("/res/skyxplore/js/character/character_controller.js");
     }
 
     $(document).ready(function(){
-        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "skyxplore", fileName: "character"}));
+        localization.loadLocalization("skyxplore", "character");
     });
 
     window.pageController = new function(){

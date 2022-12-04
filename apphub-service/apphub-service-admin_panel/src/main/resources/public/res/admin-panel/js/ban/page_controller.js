@@ -1,5 +1,4 @@
 scriptLoader.loadScript("/res/common/js/date.js");
-scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/admin-panel/js/ban/search_controller.js");
 scriptLoader.loadScript("/res/admin-panel/js/ban/ban_controller.js");
@@ -35,6 +34,6 @@ scriptLoader.loadScript("/res/admin-panel/js/ban/ban_controller.js");
     }
 
     $(document).ready(function(){
-        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "admin_panel", fileName: "ban"}));
+        localization.loadLocalization("admin_panel", "ban");
     });
 })();

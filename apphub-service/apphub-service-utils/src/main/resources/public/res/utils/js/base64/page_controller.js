@@ -11,6 +11,6 @@
     }
 
     $(document).ready(function(){
-        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "utils", fileName: "base64"}));
+        localization.loadLocalization("utils", "base4");
     });
 })();

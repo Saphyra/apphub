@@ -65,14 +65,14 @@
                 buttonWrapper.classList.add("friend-list-button");
 
                 const acceptButton = document.createElement("BUTTON");
-                    acceptButton.innerHTML = Localization.getAdditionalContent("accept-friend-request");
+                    acceptButton.innerHTML = localization.getAdditionalContent("accept-friend-request");
                     acceptButton.onclick = function(){
                         acceptFriendRequest(friendRequest.friendRequestId)
                     };
             buttonWrapper.appendChild(acceptButton);
 
                 const cancelButton = document.createElement("BUTTON");
-                    cancelButton.innerHTML = Localization.getAdditionalContent("cancel-friend-request");
+                    cancelButton.innerHTML = localization.getAdditionalContent("cancel-friend-request");
                     cancelButton.onclick = function(){
                         cancelFriendRequest(friendRequest.friendRequestId);
                     }
@@ -146,7 +146,7 @@
             request.processValidResponse = function(friendRequest){
                 document.getElementById(ids.searchFriendInput).value = "";
                 $("#" + ids.friendSearchResultWrapper).fadeOut();
-                notificationService.showSuccess(Localization.getAdditionalContent("friend-request-sent"));
+                notificationService.showSuccess(localization.getAdditionalContent("friend-request-sent"));
                 sentFriendRequestSyncEngine.add(friendRequest);
             }
         dao.sendRequestAsync(request);
@@ -174,7 +174,7 @@
 
             const removeButton = document.createElement("BUTTON");
                 removeButton.classList.add("friend-list-button");
-                removeButton.innerHTML = Localization.getAdditionalContent("remove-friend");
+                removeButton.innerHTML = localization.getAdditionalContent("remove-friend");
                 removeButton.onclick = function(){
                     removeFriend(friendship.friendshipId, friendship.friendName)
                 }
@@ -204,7 +204,7 @@
 
             const cancelButton = document.createElement("BUTTON");
                 cancelButton.classList.add("friend-list-button");
-                cancelButton.innerHTML = Localization.getAdditionalContent("cancel-friend-request");
+                cancelButton.innerHTML = localization.getAdditionalContent("cancel-friend-request");
                 cancelButton.onclick = function(){
                     cancelFriendRequest(friendRequest.friendRequestId);
                 }
@@ -215,14 +215,14 @@
     function noResult(){
         const noResult = document.createElement("DIV");
             noResult.classList.add("no-friend-list-item");
-            noResult.innerHTML = Localization.getAdditionalContent("empty-result");
+            noResult.innerHTML = localization.getAdditionalContent("empty-result");
         return noResult;
     }
 
     function cancelFriendRequest(friendRequestId){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_CANCEL_FRIEND_REQUEST", {friendRequestId: friendRequestId}));
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("friend-request-canceled"));
+                notificationService.showSuccess(localization.getAdditionalContent("friend-request-canceled"));
                 incomingFriendRequestSyncEngine.remove(friendRequestId);
                 sentFriendRequestSyncEngine.remove(friendRequestId);
             }
@@ -233,7 +233,7 @@
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_ACCEPT_FRIEND_REQUEST", {friendRequestId: friendRequestId}));
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(friendship){
-                notificationService.showSuccess(Localization.getAdditionalContent("friend-request-accepted"));
+                notificationService.showSuccess(localization.getAdditionalContent("friend-request-accepted"));
                 incomingFriendRequestSyncEngine.remove(friendRequestId);
                 friendSyncEngine.add(friendship);
             }
@@ -242,10 +242,10 @@
 
     function removeFriend(friendshipId, friendName){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("remove-friend-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("remove-friend-confirmation-dialog-detail", {friendName: friendName}))
-            .withConfirmButton(Localization.getAdditionalContent("remove-friend-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("remove-friend-confirmation-dialog-cancel-button"));
+            .withTitle(localization.getAdditionalContent("remove-friend-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("remove-friend-confirmation-dialog-detail", {friendName: friendName}))
+            .withConfirmButton(localization.getAdditionalContent("remove-friend-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("remove-friend-confirmation-dialog-cancel-button"));
 
         confirmationService.openDialog(
             "remove-friend-confirmation-dialog",
@@ -253,7 +253,7 @@
             function(){
                 const request = new Request(Mapping.getEndpoint("SKYXPLORE_REMOVE_FRIEND", {friendshipId: friendshipId}));
                     request.processValidResponse = function(){
-                        notificationService.showSuccess(Localization.getAdditionalContent("friend-removed"));
+                        notificationService.showSuccess(localization.getAdditionalContent("friend-removed"));
                         friendSyncEngine.remove(friendshipId);
                     }
                 dao.sendRequestAsync(request);

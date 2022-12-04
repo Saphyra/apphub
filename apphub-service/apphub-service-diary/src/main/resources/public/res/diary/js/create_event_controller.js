@@ -53,26 +53,26 @@
         const repeatForDays = document.getElementById(ids.repeatForDays).value;
 
         if(isBlank(title)){
-            notificationService.showError(Localization.getAdditionalContent("empty-title"));
+            notificationService.showError(localization.getAdditionalContent("empty-title"));
             return;
         }
 
         switch(repetitionType){
             case "EVERY_X_DAYS":
                 if(repetitionDays < 1){
-                    notificationService.showError(Localization.getAdditionalContent("repetition-type-days-too-low"));
+                    notificationService.showError(localization.getAdditionalContent("repetition-type-days-too-low"));
                     return;
                 }
                 break;
             case "DAYS_OF_WEEK":
                 if(repetitionDaysOfWeek.length < 1){
-                    notificationService.showError(Localization.getAdditionalContent("no-day-selected"));
+                    notificationService.showError(localization.getAdditionalContent("no-day-selected"));
                     return;
                 }
                 break;
             case "DAYS_OF_MONTH":
                 if(repetitionDaysOfMonth.length < 1){
-                    notificationService.showError(Localization.getAdditionalContent("no-day-selected"));
+                    notificationService.showError(localization.getAdditionalContent("no-day-selected"));
                     return;
                 }
             break;
@@ -83,7 +83,7 @@
         }
 
         if((timeHours == null && timeMinutes != null) || (timeHours != null && timeMinutes == null)){
-            notificationService.showError(Localization.getAdditionalContent("empty-time"));
+            notificationService.showError(localization.getAdditionalContent("empty-time"));
             return;
         }
 
@@ -108,7 +108,7 @@
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(days){
                 eventProcessor.processEvent(new Event(events.EVENT_CHANGED, days));
-                notificationService.showSuccess(Localization.getAdditionalContent("event-created"));
+                notificationService.showSuccess(localization.getAdditionalContent("event-created"));
                 pageController.displayMainPage();
             }
         dao.sendRequestAsync(request);

@@ -47,7 +47,7 @@
 
         const request = new Request(Mapping.getEndpoint("ACCOUNT_CHANGE_USERNAME"), payload);
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("username-changed"));
+                notificationService.showSuccess(localization.getAdditionalContent("username-changed"));
             }
         dao.sendRequestAsync(request);
         blockSubmission();

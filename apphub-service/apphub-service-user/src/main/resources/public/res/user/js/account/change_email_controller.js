@@ -47,7 +47,7 @@
 
         const request = new Request(Mapping.getEndpoint("ACCOUNT_CHANGE_EMAIL"), payload);
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("email-changed"));
+                notificationService.showSuccess(localization.getAdditionalContent("email-changed"));
             }
         dao.sendRequestAsync(request);
         blockSubmission();

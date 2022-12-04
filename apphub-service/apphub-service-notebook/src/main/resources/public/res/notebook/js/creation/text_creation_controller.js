@@ -20,7 +20,7 @@
                 return JSON.parse(response.body)
             }
             request.processValidResponse = function(categoryResponse){
-                const title = categoryResponse.title || Localization.getAdditionalContent("root-title");
+                const title = categoryResponse.title || localization.getAdditionalContent("root-title");
                 displayChildrenOfCategory(categoryId, categoryResponse.parent, categoryResponse.children, title);
             }
         dao.sendRequestAsync(request);
@@ -46,7 +46,7 @@
             if(!categories.length){
                 const noContentText = document.createElement("DIV");
                     noContentText.classList.add("no-content");
-                    noContentText.innerText = Localization.getAdditionalContent("category-empty");
+                    noContentText.innerText = localization.getAdditionalContent("category-empty");
                 container.appendChild(noContentText);
             }
 
@@ -76,13 +76,13 @@
         const content = document.getElementById("new-text-content").value;
 
         if(!title.length){
-            notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
+            notificationService.showError(localization.getAdditionalContent("new-item-title-empty"));
             return;
         }
 
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_TEXT"), {parent: currentCategoryId, title: title, content: content});
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("text-saved"));
+                notificationService.showSuccess(localization.getAdditionalContent("text-saved"));
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
                 pageController.openMainPage();
             }

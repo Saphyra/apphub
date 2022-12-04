@@ -5,7 +5,6 @@ function Settings(category){
         const request = new Request(Mapping.getEndpoint("GET_USER_SETTINGS", {category: category}));
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(s){
-                console.log("S: ", s);
                 items = s;
             }
         return dao.sendRequestAsync(request);

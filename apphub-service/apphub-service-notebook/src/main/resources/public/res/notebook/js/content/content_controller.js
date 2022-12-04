@@ -23,7 +23,7 @@
             document.getElementById("category-content-list").removeChild(document.getElementById(createListItemId(event.getPayload())));
         },
         false,
-        "Remove item from categroy content"
+        "Remove item from category content"
     ));
 
     function createListItemId(listItemId){

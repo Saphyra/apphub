@@ -35,7 +35,7 @@
                 }
             }
 
-        document.getElementById("create-category-current-category-title").innerText = title || Localization.getAdditionalContent("root-title");
+        document.getElementById("create-category-current-category-title").innerText = title || localization.getAdditionalContent("root-title");
 
         const container = document.getElementById("create-category-parent-selection-category-list");
             container.innerHTML = "";
@@ -43,7 +43,7 @@
             if(!categories.length){
                 const noContentText = document.createElement("DIV");
                     noContentText.classList.add("no-content");
-                    noContentText.innerText = Localization.getAdditionalContent("category-empty");
+                    noContentText.innerText = localization.getAdditionalContent("category-empty");
                 container.appendChild(noContentText);
             }
 
@@ -71,13 +71,13 @@
     function saveCategory(){
         const value = document.getElementById("new-category-title").value;
         if(!value.length){
-            notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
+            notificationService.showError(localization.getAdditionalContent("new-item-title-empty"));
             return;
         }
 
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_CATEGORY"), {parent: currentCategoryId, title: value});
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("category-created"));
+                notificationService.showSuccess(localization.getAdditionalContent("category-created"));
                 eventProcessor.processEvent(new Event(events.CATEGORY_SAVED));
             }
         dao.sendRequestAsync(request);

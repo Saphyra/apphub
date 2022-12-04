@@ -1,12 +1,12 @@
 (function Caches(){
     window.dataCaches = new function(){
         this.itemData = new Cache(itemDataLoader);
-        this.itemDataNames = new CustomLocalization("skyxplore", "item_names");
-        this.itemDataDescriptions = new CustomLocalization("skyxplore", "item_descriptions");
-        this.surfaceTypeLocalization = new CustomLocalization("skyxplore", "surface_type");
-        this.storageTypeLocalization = new CustomLocalization("skyxplore", "storage_type");
-        this.skillTypeLocalization = new CustomLocalization("skyxplore", "skill_type");
-        this.citizenStatLocalization = new CustomLocalization("skyxplore", "citizen_stat");
+        this.itemDataNames = localization.loadCustomLocalization("skyxplore", "item_names");
+        this.itemDataDescriptions = localization.loadCustomLocalization("skyxplore", "item_descriptions");
+        this.surfaceTypeLocalization = localization.loadCustomLocalization("skyxplore", "surface_type");
+        this.storageTypeLocalization = localization.loadCustomLocalization("skyxplore", "storage_type");
+        this.skillTypeLocalization = localization.loadCustomLocalization("skyxplore", "skill_type");
+        this.citizenStatLocalization = localization.loadCustomLocalization("skyxplore", "citizen_stat");
         this.terraformingPossibilities = new Cache(terraformingPossibilitiesLoader);
     }
 

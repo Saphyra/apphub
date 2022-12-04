@@ -53,10 +53,9 @@ window.occurrenceOrder = new function(){
 events.EVENT_CHANGED = "event-changed";
 
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
-scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
 scriptLoader.loadScript("/res/common/js/date.js");
 
-window.monthLocalization = new CustomLocalization("diary", "months");
+window.monthLocalization = localization.loadCustomLocalization("diary", "months");
 const CURRENT_DATE = LocalDate.now();
 
 scriptLoader.loadScript("/res/diary/js/calendar_controller.js");
@@ -67,7 +66,7 @@ scriptLoader.loadScript("/res/diary/js/search_controller.js");
 
 (function PageController(){
     $(document).ready(function(){
-        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "diary", fileName: "diary"}));
+        localization.loadLocalization("diary", "diary");
 
         window.addEventListener("focus", refreshPageIfNeeded);
     });

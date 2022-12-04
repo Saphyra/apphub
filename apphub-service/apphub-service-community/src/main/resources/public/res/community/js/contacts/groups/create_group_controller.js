@@ -53,7 +53,7 @@ scriptLoader.loadScript("/res/common/js/validation_util.js");
         const request = new Request(Mapping.getEndpoint("COMMUNITY_GROUP_CREATE"), {value: name});
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(group){
-                notificationService.showSuccess(Localization.getAdditionalContent("group-created"));
+                notificationService.showSuccess(localization.getAdditionalContent("group-created"));
                 groupsController.addGroup(group);
                 groupDetailsController.openGroup(group);
             }

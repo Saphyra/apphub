@@ -116,7 +116,7 @@
         const messagesContainer = document.getElementById("messages");
             const joinMessageNode = document.createElement("DIV");
                 joinMessageNode.classList.add("system-message");
-                joinMessageNode.innerText = characterName + " " + Localization.getAdditionalContent("character-joined-to-lobby");
+                joinMessageNode.innerText = characterName + " " + localization.getAdditionalContent("character-joined-to-lobby");
         messagesContainer.appendChild(joinMessageNode);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
@@ -127,7 +127,7 @@
         const messagesContainer = document.getElementById("messages");
             const joinMessageNode = document.createElement("DIV");
                 joinMessageNode.classList.add("system-message");
-                joinMessageNode.innerText = characterName + " " + Localization.getAdditionalContent("character-left-the-lobby");
+                joinMessageNode.innerText = characterName + " " + localization.getAdditionalContent("character-left-the-lobby");
         messagesContainer.appendChild(joinMessageNode);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }

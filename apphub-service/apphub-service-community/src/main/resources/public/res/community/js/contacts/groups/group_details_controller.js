@@ -133,7 +133,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
                 const transferLeadershipCell = document.createElement("TD");
                     const transferLeadershipButton = document.createElement("BUTTON");
                         transferLeadershipButton.classList.add("transfer-leadership-button")
-                        transferLeadershipButton.innerText = Localization.getAdditionalContent("transfer-leadership-button");
+                        transferLeadershipButton.innerText = localization.getAdditionalContent("transfer-leadership-button");
                         transferLeadershipButton.onclick = function(){
                             transferLeadership(groupMember);
                         }
@@ -179,13 +179,13 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
         }
 
         if(name.length < 3){
-            notificationService.showError(Localization.getAdditionalContent("group-name-too-short"));
+            notificationService.showError(localization.getAdditionalContent("group-name-too-short"));
             titleNode.innerText = currentGroup.name;
             return;
         }
 
         if(name.length > 30){
-            notificationService.showError(Localization.getAdditionalContent("group-name-too-long"));
+            notificationService.showError(localization.getAdditionalContent("group-name-too-long"));
             titleNode.innerText = currentGroup.name;
             return;
         }
@@ -194,7 +194,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(group){
                 groupsController.addGroup(group);
-                notificationService.showSuccess(Localization.getAdditionalContent("group-renamed"));
+                notificationService.showSuccess(localization.getAdditionalContent("group-renamed"));
             }
         dao.sendRequestAsync(request);
     }
@@ -246,10 +246,10 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
         function openConfirmationDialog(username, roleLocalizationKey, callback){
             const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-                .withTitle(Localization.getAdditionalContent("grant-role-to-member-confirmation-dialog-title"))
-                .withDetail(Localization.getAdditionalContent("grant-role-to-member-confirmation-dialog-detail", {username: username, groupName: currentGroup.name, role: Localization.getAdditionalContent(roleLocalizationKey)}))
-                .withConfirmButton(Localization.getAdditionalContent("grant-role-to-member-confirmation-dialog-confirm-button"))
-                .withDeclineButton(Localization.getAdditionalContent("grant-role-to-member-confirmation-dialog-cancel-button"));
+                .withTitle(localization.getAdditionalContent("grant-role-to-member-confirmation-dialog-title"))
+                .withDetail(localization.getAdditionalContent("grant-role-to-member-confirmation-dialog-detail", {username: username, groupName: currentGroup.name, role: localization.getAdditionalContent(roleLocalizationKey)}))
+                .withConfirmButton(localization.getAdditionalContent("grant-role-to-member-confirmation-dialog-confirm-button"))
+                .withDeclineButton(localization.getAdditionalContent("grant-role-to-member-confirmation-dialog-cancel-button"));
 
             confirmationService.openDialog(
                 "grant-role-to-member-confirmation-dialog",
@@ -267,17 +267,17 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(group){
                 groupsController.addGroup(group);
-                notificationService.showSuccess(Localization.getAdditionalContent("group-invitation-type-changed"));
+                notificationService.showSuccess(localization.getAdditionalContent("group-invitation-type-changed"));
             }
         dao.sendRequestAsync(request);
     }
 
     function kickMember(groupMember){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("kick-group-member-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("kick-group-member-confirmation-dialog-detail", {username: groupMember.username, groupName: currentGroup.name}))
-            .withConfirmButton(Localization.getAdditionalContent("kick-group-member-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("kick-group-member-confirmation-dialog-cancel-button"));
+            .withTitle(localization.getAdditionalContent("kick-group-member-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("kick-group-member-confirmation-dialog-detail", {username: groupMember.username, groupName: currentGroup.name}))
+            .withConfirmButton(localization.getAdditionalContent("kick-group-member-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("kick-group-member-confirmation-dialog-cancel-button"));
 
         confirmationService.openDialog(
             "kick-group-member-confirmation-dialog",
@@ -285,7 +285,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
             function(){
                 const request = new Request(Mapping.getEndpoint("COMMUNITY_GROUP_DELETE_MEMBER", {groupId: currentGroup.groupId, groupMemberId: groupMember.groupMemberId}));
                     request.processValidResponse = function(){
-                        notificationService.showSuccess(Localization.getAdditionalContent("group-member-kicked"));
+                        notificationService.showSuccess(localization.getAdditionalContent("group-member-kicked"));
                         syncEngine.remove(groupMember.groupMemberId);
                     }
                 dao.sendRequestAsync(request);
@@ -295,10 +295,10 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
     function disbandGroup(){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("disband-group-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("disband-group-confirmation-dialog-detail", {groupName: currentGroup.name}))
-            .withConfirmButton(Localization.getAdditionalContent("disband-group-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("disband-group-confirmation-dialog-cancel-button"));
+            .withTitle(localization.getAdditionalContent("disband-group-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("disband-group-confirmation-dialog-detail", {groupName: currentGroup.name}))
+            .withConfirmButton(localization.getAdditionalContent("disband-group-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("disband-group-confirmation-dialog-cancel-button"));
 
         confirmationService.openDialog(
             "disband-group-confirmation-dialog",
@@ -306,7 +306,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
             function(){
                 const request = new Request(Mapping.getEndpoint("COMMUNITY_GROUP_DELETE", {groupId: currentGroup.groupId}));
                     request.processValidResponse = function(){
-                        notificationService.showSuccess(Localization.getAdditionalContent("group-disbanded"));
+                        notificationService.showSuccess(localization.getAdditionalContent("group-disbanded"));
                         pageController.displayMainPage();
                         groupsController.removeGroup(currentGroup.groupId);
                     }
@@ -317,10 +317,10 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
     function leaveGroup(){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("leave-group-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("leave-group-confirmation-dialog-detail", {groupName: currentGroup.name}))
-            .withConfirmButton(Localization.getAdditionalContent("leave-group-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("leave-group-confirmation-dialog-cancel-button"));
+            .withTitle(localization.getAdditionalContent("leave-group-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("leave-group-confirmation-dialog-detail", {groupName: currentGroup.name}))
+            .withConfirmButton(localization.getAdditionalContent("leave-group-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("leave-group-confirmation-dialog-cancel-button"));
 
         confirmationService.openDialog(
             "leave-group-confirmation-dialog",
@@ -328,7 +328,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
             function(){
                 const request = new Request(Mapping.getEndpoint("COMMUNITY_GROUP_DELETE_MEMBER", {groupId: currentGroup.groupId, groupMemberId: ownMember.groupMemberId}));
                     request.processValidResponse = function(){
-                        notificationService.showSuccess(Localization.getAdditionalContent("group-left"));
+                        notificationService.showSuccess(localization.getAdditionalContent("group-left"));
                         pageController.displayMainPage();
                         groupsController.removeGroup(currentGroup.groupId);
                     }
@@ -339,10 +339,10 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
     function transferLeadership(groupMember){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("transfer-ownership-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("transfer-ownership-confirmation-dialog-detail", {groupName: currentGroup.name, username: groupMember.username}))
-            .withConfirmButton(Localization.getAdditionalContent("transfer-ownership-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("transfer-ownership-confirmation-dialog-cancel-button"));
+            .withTitle(localization.getAdditionalContent("transfer-ownership-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("transfer-ownership-confirmation-dialog-detail", {groupName: currentGroup.name, username: groupMember.username}))
+            .withConfirmButton(localization.getAdditionalContent("transfer-ownership-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("transfer-ownership-confirmation-dialog-cancel-button"));
 
         confirmationService.openDialog(
             "transfer-ownership-confirmation-dialog",
@@ -350,7 +350,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
             function(){
                 const request = new Request(Mapping.getEndpoint("COMMUNITY_GROUP_CHANGE_OWNER", {groupId: currentGroup.groupId}), {value: groupMember.groupMemberId});
                     request.processValidResponse = function(){
-                        notificationService.showSuccess(Localization.getAdditionalContent("ownership-transferred"));
+                        notificationService.showSuccess(localization.getAdditionalContent("ownership-transferred"));
                         pageController.displayMainPage();
                         groupsController.load();
                     }

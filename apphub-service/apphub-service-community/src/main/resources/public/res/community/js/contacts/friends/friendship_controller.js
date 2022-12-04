@@ -42,7 +42,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
                 buttonWrapper.classList.add("list-item-button-wrapper");
 
                 const deleteFriendshipButton = document.createElement("BUTTON");
-                    deleteFriendshipButton.innerText = Localization.getAdditionalContent("delete-friendship-button");
+                    deleteFriendshipButton.innerText = localization.getAdditionalContent("delete-friendship-button");
                     deleteFriendshipButton.onclick = function(){
                         deleteFriendship(friendship);
                     }
@@ -55,10 +55,10 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 
     function deleteFriendship(friendship){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("delete-friendship-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("delete-friendship-confirmation-dialog-detail", {username: friendship.username}))
-            .withConfirmButton(Localization.getAdditionalContent("delete-friendship-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("delete-friendship-confirmation-dialog-cancel-button"));
+            .withTitle(localization.getAdditionalContent("delete-friendship-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("delete-friendship-confirmation-dialog-detail", {username: friendship.username}))
+            .withConfirmButton(localization.getAdditionalContent("delete-friendship-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("delete-friendship-confirmation-dialog-cancel-button"));
 
         confirmationService.openDialog(
             "delete-friendship-confirmation-dialog",
@@ -66,7 +66,7 @@ scriptLoader.loadScript("/res/common/js/confirmation_service.js");
             function(){
                 const request = new Request(Mapping.getEndpoint("COMMUNITY_DELETE_FRIENDSHIP", {friendshipId: friendship.friendshipId}));
                     request.processValidResponse = function(){
-                        notificationService.showSuccess(Localization.getAdditionalContent("friendship-deleted"));
+                        notificationService.showSuccess(localization.getAdditionalContent("friendship-deleted"));
                         syncEngine.remove(friendship.friendshipId);
 
                     }

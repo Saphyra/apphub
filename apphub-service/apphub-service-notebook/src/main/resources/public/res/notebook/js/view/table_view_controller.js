@@ -63,7 +63,7 @@
             const inputField = document.createElement("INPUT");
                 if(tableHead.tableHeadId) inputField.id = tableHead.tableHeadId;
                 inputField.value = tableHead.content || "";
-                inputField.placeholder = Localization.getAdditionalContent("column-name-title");
+                inputField.placeholder = localization.getAdditionalContent("column-name-title");
                 inputField.disabled = !editingEnabled;
                 inputField.classList.add("column-title");
                 inputField.classList.add("view-table-column-title");
@@ -209,10 +209,10 @@
 
     function discardChanges(){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("discard-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("discard-confirmation-dialog-detail"))
-            .withConfirmButton(Localization.getAdditionalContent("discard-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("discard-confirmation-dialog-decline-button"));
+            .withTitle(localization.getAdditionalContent("discard-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("discard-confirmation-dialog-detail"))
+            .withConfirmButton(localization.getAdditionalContent("discard-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("discard-confirmation-dialog-decline-button"));
 
         confirmationService.openDialog(
             "discard-confirmation-dialog",
@@ -252,7 +252,7 @@
         const title = document.getElementById("view-table-title").innerText;
 
         if(!title.length){
-            notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
+            notificationService.showError(localization.getAdditionalContent("new-item-title-empty"));
             return;
         }
 
@@ -266,7 +266,7 @@
             .toList();
 
         if(new Stream(columnNameList).anyMatch(function(c){return c.value.length == 0})){
-            notificationService.showError(Localization.getAdditionalContent("empty-column-name"));
+            notificationService.showError(localization.getAdditionalContent("empty-column-name"));
             return;
         }
 
@@ -291,7 +291,7 @@
 
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_EDIT_TABLE", {listItemId: openedTableId}), body);
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("table-saved"));
+                notificationService.showSuccess(localization.getAdditionalContent("table-saved"));
                 viewTable(openedTableId);
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
             }
@@ -385,7 +385,7 @@
     function convertToChecklistTable(){
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_CONVERT_TABLE_TO_CHECKLIST_TABLE", {listItemId: openedTableId}));
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("table-conversion-successful"));
+                notificationService.showSuccess(localization.getAdditionalContent("table-conversion-successful"));
                 checklistTableViewController.viewChecklistTable(openedTableId);
                 eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
             }
