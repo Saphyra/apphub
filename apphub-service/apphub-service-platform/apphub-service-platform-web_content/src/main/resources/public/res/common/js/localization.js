@@ -7,8 +7,9 @@
             additionalContent = content.additionalContent;
             fillPageWithText(content);
 
-            pageLoader.runLoaders();
             notificationService.printStoredMessages();
+
+            return pageLoader.runLoaders();
         };
         this.loadCustomLocalization = function(module, fileName){
             return new CustomLocalization(module, fileName);

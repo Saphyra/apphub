@@ -180,17 +180,11 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/modify_surface_controller
     }
 
     $(document).ready(function(){
-        eventProcessor.registerProcessor(new EventProcessor(
-            (eventType) => {return eventType == events.PAGE_LOADERS_COMPLETED},
-            () => {
+        localization.loadLocalization("skyxplore", "game")
+            .then(() => {
                 wsConnection.connect();
                 wsConnection.waitForConnection(()=>{mapController.showMap()});
-            },
-            true,
-            "Connect to WebSocket"
-        ));
-
-        localization.loadLocalization("skyxplore", "game");
+            });
 
         errorHandler.addErrorResponseParameterTranslator(new ErrorResponseParameterTranslator(
             (key) => {return key == "storageType"},

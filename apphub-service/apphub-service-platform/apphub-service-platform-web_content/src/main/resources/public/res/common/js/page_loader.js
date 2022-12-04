@@ -15,40 +15,43 @@
              loaders.push({load: loader, description: description});
          }
          this.runLoaders = function(){
-             let counter = 0;
+            return new Promise((res, rej) => {
+                let counter = 0;
 
-             const promises = new Stream(loaders)
-                 .forEach(
-                     function(loader){
-                         new Promise((resolve, reject) => {
-                             setTimeout(
-                                 function(){
-                                     console.log("Calling loader: " + loader.description);
-                                     try{
-                                         loader.load();
-                                     }catch(e){
-                                         reject();
-                                         throw e;
-                                     }
-                                     resolve();
-                                 },
-                                 0
-                             )
-                         })
-                         .then(()=>counter++, ()=>counter++);
-                     }
-                 );
+                     const promises = new Stream(loaders)
+                         .forEach(
+                             function(loader){
+                                 new Promise((resolve, reject) => {
+                                     setTimeout(
+                                         function(){
+                                             console.log("Calling loader: " + loader.description);
+                                             try{
+                                                 loader.load();
+                                             }catch(e){
+                                                 reject();
+                                                 throw e;
+                                             }
+                                             resolve();
+                                         },
+                                         0
+                                     )
+                                 })
+                                 .then(()=>counter++, ()=>counter++);
+                             }
+                         );
 
-             const interval = setInterval(
-                 function(){
-                     console.log("Number of loaders: " + loaders.length + ", completed: " + counter);
-                     if(counter == loaders.length){
-                         clearInterval(interval);
-                         eventProcessor.processEvent(new Event(events.PAGE_LOADERS_COMPLETED));
-                     }
-                 },
-                 100
-             )
-         }
+                     const interval = setInterval(
+                         function(){
+                             console.log("Number of loaders: " + loaders.length + ", completed: " + counter);
+                             if(counter == loaders.length){
+                                 clearInterval(interval);
+                                 res();
+                             }
+                         },
+                         100
+                     )
+                 }
+            );
+        }
      }
  })();

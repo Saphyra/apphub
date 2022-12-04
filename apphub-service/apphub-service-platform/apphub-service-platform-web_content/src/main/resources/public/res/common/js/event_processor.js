@@ -1,5 +1,4 @@
 window.events = {
-    PAGE_LOADERS_COMPLETED: "page_loaders_completed",
     LOGOUT: "logout"
 };
 
