@@ -2,14 +2,7 @@
     let currentCategoryId = null;
 
     eventProcessor.registerProcessor(new EventProcessor(
-        (eventType) => {return eventType == events.SETTINGS_LOADED},
-        () => loadCategoryContent(null, false),
-        true,
-        "Load root category content"
-    ));
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        (eventType) => {return eventType == events.SETTINGS_MODIFIED  || eventType == events.ITEM_ARCHIVED},
+        (eventType) => {return eventType == events.ITEM_ARCHIVED},
         () => loadCategoryContent(currentCategoryId, false),
         false,
         "Reload category content"

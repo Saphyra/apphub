@@ -6,17 +6,11 @@
         this.unpin = function(listItemId){
             setPinStatus(listItemId, false);
         }
+        this.loadPinnedItems = loadPinnedItems;
     }
 
     eventProcessor.registerProcessor(new EventProcessor(
-        (eventType) => {return eventType == events.SETTINGS_LOADED},
-        loadPinnedItems,
-        true,
-        "Load pinned items"
-    ));
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        (eventType) => {return eventType == events.SETTINGS_MODIFIED || eventType == events.ITEM_ARCHIVED},
+        (eventType) => {return eventType == events.ITEM_ARCHIVED},
         loadPinnedItems,
         false,
         "Reload pinned items"

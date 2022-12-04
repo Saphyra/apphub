@@ -1,15 +1,8 @@
-(function CategoryListController(){
+(function CategoryTreeController(){
     let openedCategories = [];
 
     eventProcessor.registerProcessor(new EventProcessor(
-        (eventType) => {return eventType == events.SETTINGS_LOADED},
-        loadCategories,
-        true,
-        "Load category tree"
-    ));
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        (eventType) => {return eventType == events.SETTINGS_MODIFIED || eventType == events.ITEM_ARCHIVED},
+        (eventType) => {return eventType == events.ITEM_ARCHIVED},
         reloadCategories,
         false,
         "Reload category tree"
@@ -30,6 +23,11 @@
         false,
         "Reload category tree"
     ));
+
+    window.categoryTreeController = new function(){
+        this.loadCategories = loadCategories;
+        this.reloadCategories = reloadCategories;
+    }
 
     function reloadCategories(){
         openedCategories = new Stream(document.getElementsByClassName("category-children-container"))

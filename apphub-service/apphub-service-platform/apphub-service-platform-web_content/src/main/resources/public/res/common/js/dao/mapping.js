@@ -64,7 +64,7 @@ window.Mapping = new function(){
         ADMIN_PANEL_AVAILABLE_ROLES: new Endpoint("/res/admin-panel/json/available_roles.json", HttpMethod.GET),
 
         //Notebook
-        NOTEBOOK_GET_CATEGORY_TREE: new Endpoint("/api/notebook/category", HttpMethod.GET),
+        NOTEBOOK_GET_CATEGORY_TREE: new Endpoint("/api/notebook/category/tree", HttpMethod.GET),
         NOTEBOOK_CREATE_CATEGORY: new Endpoint("/api/notebook/category", HttpMethod.PUT),
         NOTEBOOK_CREATE_TEXT: new Endpoint("/api/notebook/text", HttpMethod.PUT),
         NOTEBOOK_GET_CHILDREN_OF_CATEGORY: new Endpoint("/api/notebook/category/children", HttpMethod.GET),

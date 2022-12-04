@@ -130,7 +130,7 @@ public class Endpoints {
     public static final String MODULES_SET_FAVORITE = "/api/modules/{module}/favorite";
 
     //NOTEBOOK
-    public static final String NOTEBOOK_GET_CATEGORY_TREE = "/api/notebook/category";
+    public static final String NOTEBOOK_GET_CATEGORY_TREE = "/api/notebook/category/tree";
     public static final String NOTEBOOK_CREATE_CATEGORY = "/api/notebook/category";
     public static final String NOTEBOOK_CREATE_TEXT = "/api/notebook/text";
     public static final String NOTEBOOK_GET_CHILDREN_OF_CATEGORY = "/api/notebook/category/children";

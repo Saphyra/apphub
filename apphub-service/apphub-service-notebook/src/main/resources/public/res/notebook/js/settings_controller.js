@@ -1,15 +1,10 @@
 (function SettingsController(){
     pageLoader.addLoader(addEventListeners, "Add setting event listeners");
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        (eventType) => {return eventType == events.SETTINGS_LOADED},
-        synchronizeSettings,
-        true,
-        "Synchronize settings UI based on config"
-    ));
-
-    function synchronizeSettings(){
-        document.getElementById("settings-show-archived-input").checked = settings.get("show-archived") === "true";
+    window.settingsController = new function(){
+        this.synchronizeSettings = function(){
+            document.getElementById("settings-show-archived-input").checked = settings.get("show-archived") === "true";
+        }
     }
 
     function addEventListeners(){
@@ -33,7 +28,11 @@
         const showArchivedCheckbox = document.getElementById("settings-show-archived-input")
             showArchivedCheckbox.onchange = function(){
                 settings.set("show-archived", showArchivedCheckbox.checked)
-                    .then(() => eventProcessor.processEvent(new Event(events.SETTINGS_MODIFIED)));
+                    .then(() => {
+                        categoryContentController.reloadCategoryContent();
+                        pinController.loadPinnedItems();
+                        categoryTreeController.reloadCategories();
+                    });
             }
     }
 })();

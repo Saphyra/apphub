@@ -15,7 +15,7 @@ import com.github.saphyra.apphub.integration.structure.user.RegistrationParamete
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
-public class SettingsTest extends SeleniumTest {
+public class NotebookSettingsTest extends SeleniumTest {
     private static final String CATEGORY_TITLE = "category-title";
     private static final String ONLY_TITLE_TITLE = "only-title-title";
 

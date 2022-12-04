@@ -1,6 +1,6 @@
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/common/js/settings.js");
-scriptLoader.loadScript("/res/notebook/js/category_list_controller.js");
+scriptLoader.loadScript("/res/notebook/js/category_tree_controller.js");
 scriptLoader.loadScript("/res/notebook/js/creation/category_creation_controller.js");
 scriptLoader.loadScript("/res/notebook/js/creation/text_creation_controller.js");
 scriptLoader.loadScript("/res/notebook/js/creation/link_creation_controller.js");
@@ -33,8 +33,6 @@ scriptLoader.loadScript("/res/notebook/js/settings_controller.js");
     events.ITEM_DELETED = "ITEM_DELETED";
     events.CATEGORY_SAVED = "CATEGORY_SAVED";
     events.LIST_ITEM_SAVED = "LIST_ITEM_SAVED";
-    events.SETTINGS_LOADED = "SETTINGS_LOADED";
-    events.SETTINGS_MODIFIED = "SETTINGS_MODIFIED";
     events.ITEM_ARCHIVED = "ITEM_ARCHIVED";
 
     window.ids = {
@@ -45,7 +43,12 @@ scriptLoader.loadScript("/res/notebook/js/settings_controller.js");
     $(document).ready(function(){
         localization.loadLocalization("notebook", "notebook");
         settings.initialize()
-            .then(() => eventProcessor.processEvent(new Event(events.SETTINGS_LOADED)));
+            .then(() => {
+                settingsController.synchronizeSettings();
+                categoryTreeController.loadCategories();
+                pinController.loadPinnedItems();
+                categoryContentController.loadCategoryContent(null, false);
+            });
     });
 
     window.pageController = new function(){
