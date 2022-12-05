@@ -106,6 +106,7 @@
                 notificationService.showSuccess(localization.getAdditionalContent("item-saved"));
                 categoryTreeController.reloadCategories();
                 categoryContentController.reloadCategoryContent();
+                pinController.loadPinnedItems();
                 pageController.openMainPage();
             }
         dao.sendRequestAsync(request);

@@ -71,6 +71,10 @@
                                 checklistTableViewController.viewChecklistTable(item.id);
                             }
                         break;
+                        case "ONLY_TITLE":
+                            node.classList.add("only-title");
+                            node.classList.add("disabled");
+                        break;
                         default:
                             notificationService.showError("Unknown type: " + item.type);
                     }
