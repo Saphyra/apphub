@@ -215,7 +215,7 @@
                 notificationService.showSuccess(localization.getAdditionalContent("checklist-saved"));
                 editingEnabled = false;
                 viewChecklist(openedChecklistId);
-                eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
+                categoryContentController.reloadCategoryContent();
             }
         dao.sendRequestAsync(request);
     }

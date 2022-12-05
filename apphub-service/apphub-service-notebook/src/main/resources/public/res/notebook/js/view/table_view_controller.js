@@ -293,7 +293,7 @@
             request.processValidResponse = function(){
                 notificationService.showSuccess(localization.getAdditionalContent("table-saved"));
                 viewTable(openedTableId);
-                eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
+                categoryContentController.reloadCategoryContent();
             }
         dao.sendRequestAsync(request);
     }
@@ -387,7 +387,7 @@
             request.processValidResponse = function(){
                 notificationService.showSuccess(localization.getAdditionalContent("table-conversion-successful"));
                 checklistTableViewController.viewChecklistTable(openedTableId);
-                eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
+                categoryContentController.reloadCategoryContent();
             }
         dao.sendRequestAsync(request);
     }

@@ -83,7 +83,7 @@
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_TEXT"), {parent: currentCategoryId, title: title, content: content});
             request.processValidResponse = function(){
                 notificationService.showSuccess(localization.getAdditionalContent("text-saved"));
-                eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
+                categoryContentController.reloadCategoryContent();
                 pageController.openMainPage();
             }
         dao.sendRequestAsync(request);

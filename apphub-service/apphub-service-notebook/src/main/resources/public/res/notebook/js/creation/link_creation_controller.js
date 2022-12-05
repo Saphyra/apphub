@@ -84,7 +84,7 @@
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_LINK"), {parent: currentCategoryId, title: title, url: url});
             request.processValidResponse = function(){
                 notificationService.showSuccess(localization.getAdditionalContent("link-created"));
-                eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
+                categoryContentController.reloadCategoryContent();
                 pageController.openMainPage();
             }
         dao.sendRequestAsync(request);

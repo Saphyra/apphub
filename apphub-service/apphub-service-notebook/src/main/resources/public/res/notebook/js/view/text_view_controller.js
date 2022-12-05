@@ -50,7 +50,7 @@
             request.processValidResponse = function(){
                 notificationService.showSuccess(localization.getAdditionalContent("text-saved"));
                 viewText(openedTextId);
-                eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
+                categoryContentController.reloadCategoryContent();
             }
         dao.sendRequestAsync(request);
     }

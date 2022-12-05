@@ -29,16 +29,12 @@ scriptLoader.loadScript("/res/notebook/js/content/content_controller.js");
 scriptLoader.loadScript("/res/notebook/js/settings_controller.js");
 
 (function PageController(){
-    events.CATEGORY_DELETED = "CATEGORY_DELETED";
-    events.ITEM_DELETED = "ITEM_DELETED";
-    events.CATEGORY_SAVED = "CATEGORY_SAVED";
-    events.LIST_ITEM_SAVED = "LIST_ITEM_SAVED";
-    events.ITEM_ARCHIVED = "ITEM_ARCHIVED";
-
     window.ids = {
         pinnedItems: "pinned-items",
         searchInput: "search-container-title"
     }
+
+    window.settings = new Settings("notebook");
 
     $(document).ready(function(){
         localization.loadLocalization("notebook", "notebook");
@@ -57,15 +53,4 @@ scriptLoader.loadScript("/res/notebook/js/settings_controller.js");
             switchTab("button-wrapper", "category-content-buttons");
         }
     }
-
-    window.settings = new Settings("notebook");
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){
-            return eventType == events.CATEGORY_SAVED
-        },
-        pageController.openMainPage,
-        false,
-        "Open main page after category saved"
-    ));
 })();

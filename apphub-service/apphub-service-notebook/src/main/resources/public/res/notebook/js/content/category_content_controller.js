@@ -1,13 +1,6 @@
 (function CategoryContentController(){
     let currentCategoryId = null;
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        (eventType) => {return eventType == events.ITEM_ARCHIVED},
-        () => loadCategoryContent(currentCategoryId, false),
-        false,
-        "Reload category content"
-    ));
-
     window.categoryContentController = new function(){
         this.loadCategoryContent = loadCategoryContent;
         this.reloadCategoryContent = function(){
@@ -18,18 +11,6 @@
         }
         this.displayCategoryDetails = displayCategoryDetails;
     }
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){
-            return eventType == events.CATEGORY_SAVED
-                || eventType == events.LIST_ITEM_SAVED
-        },
-        function(){
-            loadCategoryContent(currentCategoryId, false);
-        },
-        false,
-        "Reload category content"
-    ));
 
     function loadCategoryContent(categoryId, shouldSwitchTab){
         currentCategoryId = categoryId;

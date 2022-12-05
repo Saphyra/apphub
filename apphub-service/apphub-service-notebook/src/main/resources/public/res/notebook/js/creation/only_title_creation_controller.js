@@ -81,7 +81,7 @@
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_ONLY_TITLE"), {parent: currentCategoryId, title: value});
             request.processValidResponse = function(){
                 notificationService.showSuccess(localization.getAdditionalContent("only-title-created"));
-                eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
+                categoryContentController.reloadCategoryContent();
                 pageController.openMainPage();
             }
         dao.sendRequestAsync(request);

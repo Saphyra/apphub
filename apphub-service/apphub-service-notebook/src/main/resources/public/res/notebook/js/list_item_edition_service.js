@@ -104,7 +104,9 @@
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_EDIT_LIST_ITEM", {listItemId: editedItemDetails.id}), body);
             request.processValidResponse = function(){
                 notificationService.showSuccess(localization.getAdditionalContent("item-saved"));
-                eventProcessor.processEvent(new Event(events.CATEGORY_SAVED));
+                categoryTreeController.reloadCategories();
+                categoryContentController.reloadCategoryContent();
+                pageController.openMainPage();
             }
         dao.sendRequestAsync(request);
     }

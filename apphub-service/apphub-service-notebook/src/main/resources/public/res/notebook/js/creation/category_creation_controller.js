@@ -78,7 +78,9 @@
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_CATEGORY"), {parent: currentCategoryId, title: value});
             request.processValidResponse = function(){
                 notificationService.showSuccess(localization.getAdditionalContent("category-created"));
-                eventProcessor.processEvent(new Event(events.CATEGORY_SAVED));
+                categoryTreeController.reloadCategories();
+                categoryContentController.reloadCategoryContent();
+                pageController.openMainPage();
             }
         dao.sendRequestAsync(request);
     }

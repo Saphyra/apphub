@@ -365,7 +365,7 @@
             request.processValidResponse = function(){
                 notificationService.showSuccess(localization.getAdditionalContent("checklist-table-saved"));
                 viewChecklistTable(openedTableId);
-                eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
+                categoryContentController.reloadCategoryContent();
             }
         dao.sendRequestAsync(request);
     }

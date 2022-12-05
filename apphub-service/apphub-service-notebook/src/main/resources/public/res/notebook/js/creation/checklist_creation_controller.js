@@ -144,7 +144,7 @@
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_CHECKLIST_ITEM"), {parent: currentCategoryId, title: title, nodes: nodes});
             request.processValidResponse = function(){
                 notificationService.showSuccess(localization.getAdditionalContent("checklist-saved"));
-                eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
+                categoryContentController.reloadCategoryContent();
                 pageController.openMainPage();
             }
         dao.sendRequestAsync(request);

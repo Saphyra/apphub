@@ -9,25 +9,6 @@
         this.loadPinnedItems = loadPinnedItems;
     }
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        (eventType) => {return eventType == events.ITEM_ARCHIVED},
-        loadPinnedItems,
-        false,
-        "Reload pinned items"
-    ));
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){
-            return eventType == events.CATEGORY_DELETED
-                || eventType == events.ITEM_DELETED
-        },
-        function(event){
-            loadPinnedItems();
-        },
-        false,
-        "Reload pinned items after deletion"
-    ));
-
     function loadPinnedItems(){
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_PINNED_ITEMS"));
             request.convertResponse = jsonConverter;

@@ -36,7 +36,9 @@ function categoryNodeFactory(parent, itemDetails, displayOpenParentCategoryButto
                 const request = new Request(Mapping.getEndpoint("NOTEBOOK_DELETE_LIST_ITEM", {listItemId: categoryId}))
                     request.processValidResponse = function(){
                         notificationService.showSuccess(localization.getAdditionalContent("category-deleted"));
-                        eventProcessor.processEvent(new Event(events.CATEGORY_DELETED, categoryId));
+                        categoryTreeController.removeCategory(categoryId);
+                        contentController.removeListItem(categoryId);
+                        pinController.loadPinnedItems();
                     }
                 dao.sendRequestAsync(request);
             }
