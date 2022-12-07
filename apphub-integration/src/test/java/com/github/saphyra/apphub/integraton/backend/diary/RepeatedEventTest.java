@@ -78,13 +78,11 @@ public class RepeatedEventTest extends BackEndTest {
 
         assertThat(findByDate(responses, date)).hasSize(1);
         assertThat(findByDate(responses, date.plusDays(1))).hasSize(1);
-        assertThat(findByDate(responses, date.plusDays(2))).isEmpty();
 
         LocalDate firstThursday = getFirstOfMonth(date, d -> d.getDayOfWeek() == DayOfWeek.THURSDAY);
 
         assertThat(findByDate(responses, firstThursday)).hasSize(1);
         assertThat(findByDate(responses, firstThursday.plusDays(1))).isNotEmpty();
-        assertThat(findByDate(responses, firstThursday.plusDays(2))).isEmpty();
     }
 
     @Test(groups = "diary")

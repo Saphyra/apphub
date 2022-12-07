@@ -3,6 +3,9 @@
         this.create = function(input){
             return new DomBuilder(input);
         }
+        this.titleBuilder = function(){
+            return new TitleBuilder();
+        }
     }
 
     function DomBuilder(input){
@@ -23,6 +26,11 @@
             return this;
         }
 
+        this.title = function(title){
+            node.title = title;
+            return this;
+        }
+
         this.onclick = function(callback){
             node.onclick = callback;
             return this;
@@ -32,9 +40,46 @@
             return node;
         }
 
+        this.appendChild = function(child){
+            node.appendChild(child);
+            return this;
+        }
+
         this.appendTo = function(parent){
             parent.appendChild(node);
             return this;
+        }
+    }
+
+    function TitleBuilder(){
+        let title = "";
+
+        this.append = function(text){
+            title += text;
+            return this;
+        }
+
+        this.appendLine = function(line, indentation){
+            indentation = indentation || 0;
+
+            if(title.length > 0){
+                this.newLine();
+            }
+
+            for(let i = 0; i < indentation; i++){
+                this.append(" ");
+            }
+
+            this.append(line);
+        }
+
+        this.newLine = function(){
+            title += LINE_SEPARATOR;
+            return this;
+        }
+
+        this.build = function(){
+            return title;
         }
     }
 })();
