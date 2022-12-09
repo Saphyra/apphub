@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import lombok.Builder;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
@@ -33,6 +34,12 @@ public class EventLoop {
         );
     }
 
+    @SneakyThrows
+    public ExecutionResult<Void> processWithWait(Runnable runnable) {
+        return process(runnable)
+            .get(60, TimeUnit.SECONDS);
+    }
+
     public Future<ExecutionResult<Void>> process(Runnable runnable) {
         return eventLoopThread.execute(runnable);
     }
@@ -43,6 +50,18 @@ public class EventLoop {
 
             syncCache.process();
         });
+    }
+
+    @SneakyThrows
+    public <T> ExecutionResult<T> processWithResponseAndWait(Callable<T> callable) {
+        return eventLoopThread.asyncProcess(callable)
+            .get(60, TimeUnit.SECONDS);
+    }
+
+    @SneakyThrows
+    public <T> ExecutionResult<T> processWithResponseAndWait(Callable<T> callable, SyncCache syncCache) {
+        return processWithResponse(callable, syncCache)
+            .get(60, TimeUnit.SECONDS);
     }
 
     public <T> Future<ExecutionResult<T>> processWithResponse(Callable<T> callable, SyncCache syncCache) {

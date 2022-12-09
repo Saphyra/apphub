@@ -50,9 +50,13 @@ class TerraformationQueueItemPriorityUpdateService {
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Surface not found with terraformation constructionId " + constructionId));
         Construction construction = surface.getTerraformation();
 
-        construction.setPriority(priority);
-        gameDataProxy.saveItem(constructionToModelConverter.convert(construction, game.getGameId()));
-        QueueResponse queueResponse = queueItemToResponseConverter.convert(surfaceToQueueItemConverter.convert(surface), planet);
-        messageSender.planetQueueItemModified(userId, planetId, queueResponse);
+        game.getEventLoop()
+            .processWithWait(() -> {
+                construction.setPriority(priority);
+                gameDataProxy.saveItem(constructionToModelConverter.convert(construction, game.getGameId()));
+                QueueResponse queueResponse = queueItemToResponseConverter.convert(surfaceToQueueItemConverter.convert(surface), planet);
+                messageSender.planetQueueItemModified(userId, planetId, queueResponse);
+            })
+            .getOrThrow();
     }
 }

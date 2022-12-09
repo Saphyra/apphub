@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueRespons
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.AllBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingData;
@@ -21,6 +22,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
@@ -37,6 +39,8 @@ import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -45,9 +49,11 @@ import org.springframework.http.HttpStatus;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -150,6 +156,15 @@ public class UpgradeBuildingServiceTest {
     @Mock
     private ProcessModel processModel;
 
+    @Mock
+    private EventLoop eventLoop;
+
+    @Mock
+    private ExecutionResult<SurfaceResponse> executionResult;
+
+    @Captor
+    private ArgumentCaptor<Callable<SurfaceResponse>> argumentCaptor;
+
     @Before
     public void setUp() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
@@ -184,7 +199,7 @@ public class UpgradeBuildingServiceTest {
     }
 
     @Test
-    public void upgradeBuilding() {
+    public void upgradeBuilding() throws Exception {
         given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.singleValueMap(LEVEL + 1, constructionRequirements));
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());
@@ -194,6 +209,9 @@ public class UpgradeBuildingServiceTest {
 
         given(game.getGameId()).willReturn(GAME_ID);
         given(game.getProcesses()).willReturn(processes);
+        given(game.getEventLoop()).willReturn(eventLoop);
+        given(eventLoop.processWithResponseAndWait(any(Callable.class))).willReturn(executionResult);
+        given(executionResult.getOrThrow()).willReturn(surfaceResponse);
 
         given(buildingToModelConverter.convert(building, GAME_ID)).willReturn(buildingModel);
         given(constructionToModelConverter.convert(construction, GAME_ID)).willReturn(constructionModel);
@@ -208,6 +226,12 @@ public class UpgradeBuildingServiceTest {
         SurfaceResponse result = underTest.upgradeBuilding(USER_ID, PLANET_ID, BUILDING_ID);
 
         assertThat(result).isEqualTo(surfaceResponse);
+
+        verify(eventLoop).processWithResponseAndWait(argumentCaptor.capture());
+        SurfaceResponse executionResponse = argumentCaptor.getValue()
+            .call();
+
+        assertThat(executionResponse).isEqualTo(surfaceResponse);
 
         verify(resourceAllocationService).processResourceRequirements(GAME_ID, planet, LocationType.PLANET, CONSTRUCTION_ID, Collections.emptyMap());
         verify(building).setConstruction(construction);

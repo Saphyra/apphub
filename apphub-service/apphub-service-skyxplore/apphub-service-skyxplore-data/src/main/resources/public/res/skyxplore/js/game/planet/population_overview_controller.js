@@ -161,10 +161,9 @@
         }
         const planetId = planetController.getOpenedPlanetId();
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_RENAME_CITIZEN", {planetId: planetId, citizenId: citizenId}), {value: newName});
-            request.processValidResponse = function(){
+            request.convertResponse = jsonConverter;
+            request.processValidResponse = function(citizen){
                 notificationService.showSuccess(localization.getAdditionalContent("citizen-renamed"));
-                const citizen = syncEngine.get(citizenId);
-                citizen.name = newName;
                 syncEngine.add(citizen);
             }
         dao.sendRequestAsync(request);

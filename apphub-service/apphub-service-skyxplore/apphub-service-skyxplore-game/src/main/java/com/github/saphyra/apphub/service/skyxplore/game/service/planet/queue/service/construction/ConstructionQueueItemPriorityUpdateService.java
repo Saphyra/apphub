@@ -53,10 +53,13 @@ class ConstructionQueueItemPriorityUpdateService {
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Construction not found with id " + constructionId));
         Construction construction = building.getConstruction();
 
-        log.info("Before update: {}", construction);
-        construction.setPriority(priority);
-        gameDataProxy.saveItem(constructionToModelConverter.convert(construction, game.getGameId()));
-        QueueResponse queueResponse = queueItemToResponseConverter.convert(buildingConstructionToQueueItemConverter.convert(building), planet);
-        messageSender.planetQueueItemModified(userId, planetId, queueResponse);
+        game.getEventLoop()
+            .processWithWait(() -> {
+                construction.setPriority(priority);
+                gameDataProxy.saveItem(constructionToModelConverter.convert(construction, game.getGameId()));
+                QueueResponse queueResponse = queueItemToResponseConverter.convert(buildingConstructionToQueueItemConverter.convert(building), planet);
+                messageSender.planetQueueItemModified(userId, planetId, queueResponse);
+            })
+            .getOrThrow();
     }
 }

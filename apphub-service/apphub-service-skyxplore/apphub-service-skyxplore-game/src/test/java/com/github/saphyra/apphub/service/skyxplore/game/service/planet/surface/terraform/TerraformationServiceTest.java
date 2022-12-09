@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueRespons
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilities;
@@ -23,6 +24,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.terraformation.TerraformationProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.terraformation.TerraformationProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
@@ -39,6 +41,8 @@ import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -48,9 +52,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -151,6 +157,15 @@ public class TerraformationServiceTest {
     @Mock
     private ProcessModel processModel;
 
+    @Mock
+    private EventLoop eventLoop;
+
+    @Mock
+    private ExecutionResult<SurfaceResponse> executionResult;
+
+    @Captor
+    private ArgumentCaptor<Callable<SurfaceResponse>> argumentCaptor;
+
     @Before
     public void setUp() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
@@ -206,7 +221,7 @@ public class TerraformationServiceTest {
     }
 
     @Test
-    public void terraform() {
+    public void terraform() throws Exception {
         given(terraformingPossibilitiesService.getOptional(SurfaceType.DESERT)).willReturn(Optional.of(new TerraformingPossibilities(List.of(terraformingPossibility))));
         given(terraformingPossibility.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(terraformingPossibility.getConstructionRequirements()).willReturn(constructionRequirements);
@@ -223,10 +238,18 @@ public class TerraformationServiceTest {
         given(terraformationProcessFactory.create(game, planet, surface)).willReturn(terraformationProcess);
         given(game.getProcesses()).willReturn(processes);
         given(terraformationProcess.toModel()).willReturn(processModel);
+        given(game.getEventLoop()).willReturn(eventLoop);
+        given(eventLoop.processWithResponseAndWait(any(Callable.class))).willReturn(executionResult);
+        given(executionResult.getOrThrow()).willReturn(surfaceResponse);
 
         SurfaceResponse result = underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name());
 
         assertThat(result).isEqualTo(surfaceResponse);
+
+        verify(eventLoop).processWithResponseAndWait(argumentCaptor.capture());
+        SurfaceResponse executionResponse = argumentCaptor.getValue()
+            .call();
+        assertThat(executionResponse).isEqualTo(surfaceResponse);
 
         verify(resourceAllocationService).processResourceRequirements(GAME_ID, planet, LocationType.PLANET, CONSTRUCTION_ID, Collections.emptyMap());
         verify(surface).setTerraformation(construction);

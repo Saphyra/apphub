@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.PriorityModel;
+import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.common.PriorityValidator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -8,6 +9,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.priority.PriorityUpdateService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.PriorityToModelConverter;
@@ -15,6 +17,7 @@ import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -25,6 +28,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -62,6 +66,12 @@ public class PriorityUpdateServiceTest {
     @Mock
     private PriorityModel model;
 
+    @Mock
+    private EventLoop eventLoop;
+
+    @Mock
+    private ExecutionResult<Void> executionResult;
+
     @After
     public void validate() {
         verify(priorityValidator).validate(NEW_PRIORITY);
@@ -83,8 +93,15 @@ public class PriorityUpdateServiceTest {
         given(planet.getPriorities()).willReturn(priorities);
         given(game.getGameId()).willReturn(GAME_ID);
         given(priorityToModelConverter.convert(PriorityType.CONSTRUCTION, NEW_PRIORITY, PLANET_ID, LocationType.PLANET, GAME_ID)).willReturn(model);
+        given(game.getEventLoop()).willReturn(eventLoop);
+        given(eventLoop.processWithWait(any())).willReturn(executionResult);
 
         underTest.updatePriority(USER_ID, PLANET_ID, PriorityType.CONSTRUCTION.toString(), NEW_PRIORITY);
+
+        ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
+        verify(eventLoop).processWithWait(argumentCaptor.capture());
+        argumentCaptor.getValue()
+            .run();
 
         assertThat(priorities).containsEntry(PriorityType.CONSTRUCTION, NEW_PRIORITY);
 

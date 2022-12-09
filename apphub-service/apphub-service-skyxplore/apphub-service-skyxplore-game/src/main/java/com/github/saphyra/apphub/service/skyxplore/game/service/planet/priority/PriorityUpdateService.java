@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,12 +33,17 @@ public class PriorityUpdateService {
             .orElseThrow(() -> ExceptionFactory.invalidParam("priorityType", "unknown value"));
 
         Game game = gameDao.findByUserIdValidated(userId);
-        game.getUniverse()
+        Map<PriorityType, Integer> priorities = game.getUniverse()
             .findByOwnerAndPlanetIdValidated(userId, planetId)
-            .getPriorities()
-            .put(priorityType, newPriority);
+            .getPriorities();
 
-        PriorityModel model = priorityToModelConverter.convert(priorityType, newPriority, planetId, LocationType.PLANET, game.getGameId());
-        gameDataProxy.saveItem(model);
+        game.getEventLoop()
+            .processWithWait(() -> {
+                priorities.put(priorityType, newPriority);
+
+                PriorityModel model = priorityToModelConverter.convert(priorityType, newPriority, planetId, LocationType.PLANET, game.getGameId());
+                gameDataProxy.saveItem(model);
+            })
+            .getOrThrow();
     }
 }

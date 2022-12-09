@@ -5,8 +5,6 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.SleepService;
-import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -28,7 +26,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
-import java.util.concurrent.Future;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -40,7 +37,6 @@ public class CancelConstructionService {
     private final GameDao gameDao;
     private final SurfaceToResponseConverter surfaceToResponseConverter;
     private final WsMessageSender messageSender;
-    private final SleepService sleepService;
     private final SyncCacheFactory syncCacheFactory;
     private final BuildingToModelConverter buildingToModelConverter;
     private final AllocationRemovalService allocationRemovalService;
@@ -84,8 +80,8 @@ public class CancelConstructionService {
         }
 
         SyncCache syncCache = syncCacheFactory.create();
-        Future<ExecutionResult<SurfaceResponse>> future = game.getEventLoop()
-            .processWithResponse(() -> {
+        return game.getEventLoop()
+            .processWithResponseAndWait(() -> {
                     game.getProcesses()
                         .findByExternalReferenceAndTypeValidated(construction.getConstructionId(), ProcessType.CONSTRUCTION)
                         .cancel(syncCache);
@@ -122,13 +118,7 @@ public class CancelConstructionService {
                     return surfaceToResponseConverter.convert(surface);
                 },
                 syncCache
-            );
-
-        while (!future.isDone()) {
-            sleepService.sleep(100);
-        }
-
-        return future.get()
+            )
             .getOrThrow();
     }
 }
