@@ -21,6 +21,11 @@
             return this;
         }
 
+        this.attr = function(attribute, value){
+            node[attribute] = value;
+            return this;
+        }
+
         this.innerText = function(text){
             node.innerText = text;
             return this;
@@ -40,8 +45,15 @@
             return node;
         }
 
-        this.appendChild = function(child){
-            node.appendChild(child);
+        this.appendChild = function(childFactory){
+            const child = (typeof childFactory == "function") ? childFactory() : childFactory;
+            if(child){
+                if(child instanceof DomBuilder){
+                    node.appendChild(child.getNode());
+                }else{
+                    node.appendChild(child);
+                }
+            }
             return this;
         }
 
@@ -70,7 +82,7 @@
                 this.append(" ");
             }
 
-            this.append(line);
+            return this.append(line);
         }
 
         this.newLine = function(){

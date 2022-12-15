@@ -99,6 +99,8 @@
                         case "miscellaneous":
                         break;
                         case "storage":
+                            titleBuilder.appendLine(localization.getAdditionalContent("building-effect-title-storage"))
+                                .appendLine((building.level * buildingData.capacity) + " x " + dataCaches.storageTypeLocalization.get(buildingData.stores), 2);
                         break;
                         case "production":
                             new Stream(Object.keys(buildingData.gives))

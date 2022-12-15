@@ -12,6 +12,14 @@
         "iron": 1,
         "silicon": 1
       }
+    },
+    "2": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1,
+        "iron": 1,
+        "silicon": 1
+      }
     }
   }
 }

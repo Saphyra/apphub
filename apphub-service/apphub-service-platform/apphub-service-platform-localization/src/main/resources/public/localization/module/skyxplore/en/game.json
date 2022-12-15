@@ -370,6 +370,7 @@
     "cancel-queue-item-confirm-button": "Cancel production",
     "cancel-queue-item-cancel-button": "Back",
     "building-effect-title-production": "Produces",
+    "building-effect-title-storage": "Stores",
     "building-effect-production-header-produced-item": "Item",
     "building-effect-production-header-production-requirements": "Requirements",
     "parallel-workers": "Parallel workers",

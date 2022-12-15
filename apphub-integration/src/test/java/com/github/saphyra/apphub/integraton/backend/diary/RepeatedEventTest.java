@@ -116,7 +116,7 @@ public class RepeatedEventTest extends BackEndTest {
         assertThat(findByDate(responses, date.plusDays(2))).isNotEmpty();
 
         date = LocalDate.of(CURRENT_DATE.getYear(), CURRENT_DATE.getMonth(), 15);
-        assertThat(findByDate(responses, date)).hasSize(1);
+        assertThat(findByDate(responses, date)).isNotEmpty();
         assertThat(findByDate(responses, date.plusDays(1))).isNotEmpty();
         assertThat(findByDate(responses, date.plusDays(2))).isNotEmpty();
     }

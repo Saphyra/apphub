@@ -43,7 +43,7 @@
                     description.innerText = dataCaches.itemDataDescriptions.get(dataId);
             container.appendChild(description);
 
-                container.appendChild(createEffect(surfaceType, itemData, 1, MODE_AVAILABLE));
+                container.appendChild(createEffect(surfaceType, itemData, 1, MODE_AVAILABLE).getNode());
                 container.appendChild(createConstructionRequirements(itemData.constructionRequirements["1"], MODE_AVAILABLE));
 
                 const buildButton = document.createElement("BUTTON");
@@ -90,7 +90,7 @@
 
         const effectContainer = document.getElementById(ids.upgradeBuildingDetailsEffect);
             effectContainer.innerHTML = "";
-            effectContainer.appendChild(createEffect(surfaceType, itemData, newLevel, MODE_UPGRADE));
+            effectContainer.appendChild(createEffect(surfaceType, itemData, newLevel, MODE_UPGRADE).getNode());
 
         switchTab("main-tab", ids.upgradeBuilding);
     }
@@ -146,20 +146,42 @@
     }
 
     function createEffect(surfaceType, itemData, level, mode){
-        const container = document.createElement("DIV");
-            container.classList.add(mode + "-building-effect");
+        return domBuilder.create("DIV")
+            .addClass(mode + "-building-effect")
+            .appendChild(() => {
+                switch(itemData.buildingType){
+                    case "miscellaneous":
+                    break;
+                    case "storage":
+                        return createStorageBuildingEffect(itemData, level, mode);
+                    break;
+                    case "production":
+                        return createProductionBuildingEffect(surfaceType, itemData, level, mode);
+                    break;
+                }
+            });
 
-            switch(itemData.buildingType){
-                case "miscellaneous":
-                break;
-                case "storage":
-                break;
-                case "production":
-                    container.appendChild(createProductionBuildingEffect(surfaceType, itemData, level, mode));
-                break;
-            }
-
-        return container;
+        function createStorageBuildingEffect(itemData, level, mode){
+            return domBuilder.create("TABLE")
+                .addClass("formatted-table")
+                .addClass(mode + "-building-effect-storage")
+                .appendChild(domBuilder.create("THEAD")
+                    .appendChild(domBuilder.create("TR")
+                        .appendChild(domBuilder.create("TH")
+                            .attr("colSpan", 2)
+                            .innerText(localization.getAdditionalContent("building-effect-title-storage"))
+                        )
+                    )
+                )
+                .appendChild(domBuilder.create("TBODY")
+                    .appendChild(domBuilder.create("TR")
+                        .appendChild(domBuilder.create("TD")
+                            .innerText(dataCaches.storageTypeLocalization.get(itemData.stores)))
+                        .appendChild(domBuilder.create("TD")
+                            .innerText(level * itemData.capacity))
+                    )
+                )
+        }
 
         function createProductionBuildingEffect(surfaceType, itemData, level, mode){
             const table = document.createElement("TABLE");
