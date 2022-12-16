@@ -32,8 +32,8 @@ import static java.util.Objects.isNull;
 
 @Slf4j
 class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
-    private static final int BROWSER_STARTUP_LIMIT = 3;
-    private static final int MAX_DRIVER_COUNT = 30;
+    private static final int BROWSER_STARTUP_LIMIT = 1;
+    private static final int MAX_DRIVER_COUNT = 40;
 
     private static final GenericObjectPoolConfig<WebDriverWrapper> DRIVER_POOL_CONFIG = new GenericObjectPoolConfig<>();
 

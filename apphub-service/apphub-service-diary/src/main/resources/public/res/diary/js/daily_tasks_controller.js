@@ -48,7 +48,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
             node.classList.add(event.status.toLowerCase());
 
             node.innerText = event.title;
-            node.title = event.date + parseTime(event.time) + "\n" + event.content;
+            node.title = joinIfPresent("\n", [event.date + parseTime(event.time), event.content, event.note]);
 
             node.onclick = function(e){
                 viewEventController.viewEvent(event);
