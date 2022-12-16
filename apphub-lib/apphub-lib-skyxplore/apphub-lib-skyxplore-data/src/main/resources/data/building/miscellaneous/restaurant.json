@@ -1,12 +1,12 @@
 {
-  "id": "school",
+  "id": "restaurant",
   "buildingType": "miscellaneous",
   "placeableSurfaceTypes": [
     "concrete"
   ],
   "data": {
-    "desks": 3,
-    "experiencePerSecond": 50,
+    "seats": 5,
+    "satietyRechargeMultiplier": 2,
     "energyUsage": 10
   },
   "constructionRequirements": {

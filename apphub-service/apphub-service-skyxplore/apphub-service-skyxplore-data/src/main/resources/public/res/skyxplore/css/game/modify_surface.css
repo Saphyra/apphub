@@ -44,7 +44,7 @@
 
                 }
 
-                    .available-building-effect-production, .available-building-effect-storage{
+                    .available-building-effect-production, .available-building-effect-storage, .available-building-effect-misc{
                         margin: 1rem auto;
                     }
 
@@ -101,7 +101,7 @@
 
         }
 
-            .upgrade-building-effect-production, .upgrade-building-effect-storage{
+            .upgrade-building-effect-production, .upgrade-building-effect-storage, .upgrade-building-effect-misc{
                 margin: 0 auto;
             }
 

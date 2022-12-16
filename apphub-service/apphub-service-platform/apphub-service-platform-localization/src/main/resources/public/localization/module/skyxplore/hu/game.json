@@ -375,6 +375,17 @@
     "building-effect-production-header-production-requirements": "Összetevők",
     "parallel-workers": "Munkások",
     "required-work-points": "Munkapontok",
-    "reset": "Visszaállít"
+    "reset": "Visszaállít",
+    "seats": "Ülések",
+    "moraleRechargeMultiplier": "Morál többszöröző",
+    "energyUsage": "Energiahasználat",
+    "beds": "Ágyak",
+    "heal": "Gyógyítás",
+    "regenerationPerSecond": "Regeneráció",
+    "birth": "Születés",
+    "maternityLeave": "Szülési szabadság",
+    "satietyRechargeMultiplier": "Étel többszöröző",
+    "desks": "Padok",
+    "experiencePerSecond": "Tapasztalat"
   }
 }

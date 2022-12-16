@@ -4,7 +4,11 @@
   "placeableSurfaceTypes": [
     "concrete"
   ],
-  "workers": 1,
+  "data": {
+    "seats": 5,
+    "moraleRechargeMultiplier": 2,
+    "energyUsage": 10
+  },
   "constructionRequirements": {
     "1": {
       "requiredWorkPoints": 1,

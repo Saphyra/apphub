@@ -1,7 +1,17 @@
 (function(){
     window.domBuilder = new function(){
-        this.create = function(input){
-            return new DomBuilder(input);
+        this.create = function(input, content){
+            const result = new DomBuilder(input)
+
+            if(content){
+                if(typeof content != "object"){
+                    result.innerText(content);
+                }else{
+                    result.appendChild(content);
+                }
+            }
+
+            return result;
         }
         this.titleBuilder = function(){
             return new TitleBuilder();
@@ -46,14 +56,28 @@
         }
 
         this.appendChild = function(childFactory){
-            const child = (typeof childFactory == "function") ? childFactory() : childFactory;
+            let child = (typeof childFactory == "function") ? childFactory() : childFactory;
             if(child){
                 if(child instanceof DomBuilder){
-                    node.appendChild(child.getNode());
-                }else{
-                    node.appendChild(child);
+                    child = child.getNode();
                 }
+
+                node.appendChild(child);
             }
+            return this;
+        }
+
+        this.appendChildren = function(childrenFactory){
+            const children = (typeof childFactory == "function") ? childrenFactory() : childrenFactory;
+
+            if(!children instanceof Stream && !Array.isArray(children)){
+                console.log(children);
+                throwException("IllegalArgument", "Children is not a collection.");
+            }
+
+            new ((children instanceof Stream) ? children : new Stream(children))
+                .forEach((node) => this.appendChild(node));
+
             return this;
         }
 

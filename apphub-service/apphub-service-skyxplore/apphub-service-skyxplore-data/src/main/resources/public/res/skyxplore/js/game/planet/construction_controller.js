@@ -95,7 +95,6 @@
         switchTab("main-tab", ids.upgradeBuilding);
     }
 
-
     function upgradeBuilding(){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_UPGRADE", {planetId: openedPlanetId, buildingId: openedBuildingId}));
             request.convertResponse = jsonConverter;
@@ -151,6 +150,7 @@
             .appendChild(() => {
                 switch(itemData.buildingType){
                     case "miscellaneous":
+                        return createMiscBuildingEffect(itemData, level, mode);
                     break;
                     case "storage":
                         return createStorageBuildingEffect(itemData, level, mode);
@@ -160,6 +160,63 @@
                     break;
                 }
             });
+
+        function createMiscBuildingEffect(itemData, level, mode){
+            return domBuilder.create("TABLE")
+                .addClass("formatted-table")
+                .addClass(mode + "-building-effect-misc")
+                .appendChild(domBuilder.create("TBODY")
+                    .appendChildren(createForBuilding(itemData, level))
+                );
+
+            function createForBuilding(itemData, level){
+                switch(itemData.id){
+                    case "community_center":
+                        return new Stream(["seats", "moraleRechargeMultiplier", "energyUsage"])
+                            .map((id) => createRow(localization.getAdditionalContent(id), itemData.data[id]));
+                    case "hospital":
+                        const result = [];
+
+                        result.push(createRow(localization.getAdditionalContent("beds"), itemData.data.beds));
+
+                        const healRow = domBuilder.create("TR")
+                            .appendChild(domBuilder.create("TD", localization.getAdditionalContent("heal")))
+                            .appendChild(domBuilder.create("TD")
+                                .appendChild(domBuilder.create("DIV", localization.getAdditionalContent("energyUsage") + ": " + itemData.data.heal.energyUsage))
+                                .appendChild(domBuilder.create("DIV", localization.getAdditionalContent("regenerationPerSecond") + ": " + itemData.data.heal.regenerationPerSecond))
+                            );
+                        result.push(healRow);
+
+                        const birthRow = domBuilder.create("TR")
+                            .appendChild(domBuilder.create("TD", localization.getAdditionalContent("birth")))
+                            .appendChild(domBuilder.create("TD")
+                                .appendChild(domBuilder.create("DIV", localization.getAdditionalContent("maternityLeave") + ": " + itemData.data.birth.maternityLeaveSeconds))
+                                .appendChild(domBuilder.create("DIV", localization.getAdditionalContent("required-work-points") + ": " + itemData.data.birth.constructionRequirements.requiredWorkPoints))
+                                .appendChildren(new MapStream(itemData.data.birth.constructionRequirements.requiredResources)
+                                    .sorted((a, b) => {return dataCaches.itemDataNames.get(a.getKey()).localeCompare(dataCaches.itemDataNames.get(b.getKey()))})
+                                    .toListStream((dataId, amount) => {return domBuilder.create("DIV", amount + " x " + dataCaches.itemDataNames.get(dataId))})
+                                )
+                            );
+                        result.push(birthRow);
+
+                        return result;
+                    case "restaurant":
+                        return new Stream(["seats", "satietyRechargeMultiplier", "energyUsage"])
+                            .map((id) => createRow(localization.getAdditionalContent(id), itemData.data[id]));
+                    case "school":
+                        return new Stream(["desks", "experiencePerSecond", "energyUsage"])
+                            .map((id) => createRow(localization.getAdditionalContent(id), itemData.data[id]));
+                    default:
+                        throwException("IllegalArgument", "Unhandled misc building " + itemData.dataId);
+                }
+
+                function createRow(label, value){
+                    return domBuilder.create("TR")
+                        .appendChild(domBuilder.create("TD", label))
+                        .appendChild(domBuilder.create("TD", value))
+                }
+            }
+        }
 
         function createStorageBuildingEffect(itemData, level, mode){
             return domBuilder.create("TABLE")

@@ -97,6 +97,7 @@
 
                     switch(buildingData.buildingType){
                         case "miscellaneous":
+                            addMiscTitle(building, buildingData, titleBuilder);
                         break;
                         case "storage":
                             titleBuilder.appendLine(localization.getAdditionalContent("building-effect-title-storage"))
@@ -114,6 +115,42 @@
                                         .forEach((line) => titleBuilder.appendLine(line, 2));
                                 });
                         break;
+                    }
+                }
+
+                function addMiscTitle(building, buildingData, titleBuilder){
+                    switch(buildingData.id){
+                        case "community_center":
+                            titleBuilder.appendLine(building.level + " x " + buildingData.data.seats + " " + localization.getAdditionalContent("seats"));
+                            new Stream(["moraleRechargeMultiplier", "energyUsage"])
+                                .forEach((property) => titleBuilder.appendLine(localization.getAdditionalContent(property) + ": " + buildingData.data[property], 2));
+                            break;
+                        case "hospital":
+                            titleBuilder.appendLine(building.level + " x " + buildingData.data.beds + " " + localization.getAdditionalContent("beds"));
+
+                            titleBuilder.appendLine(localization.getAdditionalContent("heal"));
+                                new Stream(["energyUsage", "regenerationPerSecond"])
+                                    .forEach((property) => titleBuilder.appendLine(buildingData.data.heal[property] + ": " + localization.getAdditionalContent(property), 2));
+
+                            titleBuilder.appendLine(localization.getAdditionalContent("birth"))
+                                titleBuilder.appendLine(localization.getAdditionalContent("maternityLeave") + ": " + buildingData.data.birth.maternityLeaveSeconds, 2);
+                                titleBuilder.appendLine(localization.getAdditionalContent("required-work-points") + ": " + buildingData.data.birth.constructionRequirements.requiredWorkPoints, 2);
+                                new MapStream(buildingData.data.birth.constructionRequirements.requiredResources)
+                                    .sorted((a, b) => {return dataCaches.itemDataNames.get(a.getKey()).localeCompare(dataCaches.itemDataNames.get(b.getKey()))})
+                                    .forEach((dataId, amount) => titleBuilder.appendLine(amount + " x " + dataCaches.itemDataNames.get(dataId), 2));
+                            break;
+                        case "restaurant":
+                            titleBuilder.appendLine(building.level + " x " + buildingData.data.seats + " " + localization.getAdditionalContent("seats"));
+                            new Stream(["satietyRechargeMultiplier", "energyUsage"])
+                                .forEach((property) => titleBuilder.appendLine(localization.getAdditionalContent(property) + ": " + buildingData.data[property], 2));
+                            break;
+                        case "school":
+                            titleBuilder.appendLine(building.level + " x " + buildingData.data.desks + " " + localization.getAdditionalContent("desks"));
+                            new Stream(["experiencePerSecond", "energyUsage"])
+                                .forEach((property) => titleBuilder.appendLine(localization.getAdditionalContent(property) + ": " + buildingData.data[property], 2));
+                        break;
+                        default:
+                            throwException("IllegalArgument", "Unhandled misc building: " + buildingData.id);
                     }
                 }
 
