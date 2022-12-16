@@ -48,7 +48,7 @@
 
         const request = new Request(Mapping.getEndpoint("ACCOUNT_CHANGE_PASSWORD"), payload);
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("password-changed"));
+                notificationService.showSuccess(localization.getAdditionalContent("password-changed"));
             }
         dao.sendRequestAsync(request);
         blockSubmission();

@@ -1,5 +1,5 @@
 (function RoleController(){
-    const roleLocalization = new CustomLocalization("admin_panel", "roles");
+    const roleLocalization = localization.loadCustomLocalization("admin_panel", "roles");
     const availableRoles = [];
     let searchUserTimeout = null;
     let previousSearchText = "";
@@ -44,7 +44,7 @@
         function displayTooShortSearchText(container){
             const node = document.createElement("div");
                 node.id = "too-short-search-text";
-                node.innerHTML = Localization.getAdditionalContent("too-short-search-text");
+                node.innerHTML = localization.getAdditionalContent("too-short-search-text");
             container.appendChild(node);
         }
 
@@ -69,7 +69,7 @@
                     const row = document.createElement("tr");
                         const cell = document.createElement("td");
                             cell.colSpan = 4;
-                            cell.innerHTML = Localization.getAdditionalContent("no-users-found");
+                            cell.innerHTML = localization.getAdditionalContent("no-users-found");
                             cell.classList.add("no-users");
                     row.appendChild(cell);
                     tbody.appendChild(row);
@@ -83,7 +83,7 @@
 
             function createTableHead(localizationKey){
                 const head = document.createElement("th");
-                    head.innerHTML = Localization.getAdditionalContent(localizationKey);
+                    head.innerHTML = localization.getAdditionalContent(localizationKey);
                 return head;
             }
 
@@ -152,7 +152,7 @@
 
         const request = new Request(Mapping.getEndpoint("USER_DATA_REMOVE_ROLE"), payload);
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("role-removed"));
+                notificationService.showSuccess(localization.getAdditionalContent("role-removed"));
                 actualRolesCell.removeChild(roleNode);
                 availableRolesCell.appendChild(roleNode);
                 roleNode.onclick = function(){
@@ -170,7 +170,7 @@
 
         const request = new Request(Mapping.getEndpoint("USER_DATA_ADD_ROLE"), payload);
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("role-added"));
+                notificationService.showSuccess(localization.getAdditionalContent("role-added"));
                 availableRolesCell.removeChild(roleNode);
                 actualRolesCell.appendChild(roleNode);
                 roleNode.onclick = function(){

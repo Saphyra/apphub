@@ -16,7 +16,7 @@
         $("#login-password").val("");
         
         if(!credentials.isValid()){
-            notificationService.showError(Localization.getAdditionalContent("empty-credentials"));
+            notificationService.showError(localization.getAdditionalContent("empty-credentials"));
             return;
         }
         

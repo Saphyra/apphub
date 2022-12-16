@@ -39,7 +39,7 @@
             try{
                 return JSON.parse(input);
             }catch(e){
-                notificationService.showError(Localization.getAdditionalContent("json-processing-failed"));
+                notificationService.showError(localization.getAdditionalContent("json-processing-failed"));
                 throw e;
             }
         }
@@ -282,7 +282,7 @@
         }
 
         if((operation == operations.IS || operation == operations.IS_NOT) && filterText.length == 0){
-            notificationService.showError(Localization.getAdditionalContent("empty-filter-text"));
+            notificationService.showError(localization.getAdditionalContent("empty-filter-text"));
             return;
         }
 

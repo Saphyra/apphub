@@ -43,12 +43,12 @@
                     description.innerText = dataCaches.itemDataDescriptions.get(dataId);
             container.appendChild(description);
 
-                container.appendChild(createEffect(surfaceType, itemData, 1, MODE_AVAILABLE));
+                container.appendChild(createEffect(surfaceType, itemData, 1, MODE_AVAILABLE).getNode());
                 container.appendChild(createConstructionRequirements(itemData.constructionRequirements["1"], MODE_AVAILABLE));
 
                 const buildButton = document.createElement("BUTTON");
                     buildButton.classList.add("construct-new-building-button");
-                    buildButton.innerText = Localization.getAdditionalContent("construct-new-building");
+                    buildButton.innerText = localization.getAdditionalContent("construct-new-building");
                     buildButton.onclick = function(){
                         constructNewBuilding(planetId, surfaceId, dataId);
                     }
@@ -90,11 +90,10 @@
 
         const effectContainer = document.getElementById(ids.upgradeBuildingDetailsEffect);
             effectContainer.innerHTML = "";
-            effectContainer.appendChild(createEffect(surfaceType, itemData, newLevel, MODE_UPGRADE));
+            effectContainer.appendChild(createEffect(surfaceType, itemData, newLevel, MODE_UPGRADE).getNode());
 
         switchTab("main-tab", ids.upgradeBuilding);
     }
-
 
     function upgradeBuilding(){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_UPGRADE", {planetId: openedPlanetId, buildingId: openedBuildingId}));
@@ -115,7 +114,7 @@
                 const headRow = document.createElement("TR");
                     const headCell = document.createElement("TH");
                         headCell.colSpan = 2;
-                        headCell.innerText = Localization.getAdditionalContent("construction-requirements");
+                        headCell.innerText = localization.getAdditionalContent("construction-requirements");
                 headRow.appendChild(headCell);
             thead.appendChild(headRow);
         container.appendChild(thead);
@@ -126,8 +125,8 @@
                     .toListStream((resourceDataId, amount) => {return createRow(dataCaches.itemDataNames.get(resourceDataId), amount)})
                     .forEach(function(node){tbody.appendChild(node)});
 
-                tbody.appendChild(createRow(Localization.getAdditionalContent("parallel-workers"), constructionRequirements.parallelWorkers));
-                tbody.appendChild(createRow(Localization.getAdditionalContent("required-work-points"), constructionRequirements.requiredWorkPoints));
+                tbody.appendChild(createRow(localization.getAdditionalContent("parallel-workers"), constructionRequirements.parallelWorkers));
+                tbody.appendChild(createRow(localization.getAdditionalContent("required-work-points"), constructionRequirements.requiredWorkPoints));
         container.appendChild(tbody);
 
         return container;
@@ -146,20 +145,100 @@
     }
 
     function createEffect(surfaceType, itemData, level, mode){
-        const container = document.createElement("DIV");
-            container.classList.add(mode + "-building-effect");
+        return domBuilder.create("DIV")
+            .addClass(mode + "-building-effect")
+            .appendChild(() => {
+                switch(itemData.buildingType){
+                    case "miscellaneous":
+                        return createMiscBuildingEffect(itemData, level, mode);
+                    break;
+                    case "storage":
+                        return createStorageBuildingEffect(itemData, level, mode);
+                    break;
+                    case "production":
+                        return createProductionBuildingEffect(surfaceType, itemData, level, mode);
+                    break;
+                }
+            });
 
-            switch(itemData.buildingType){
-                case "miscellaneous":
-                break;
-                case "storage":
-                break;
-                case "production":
-                    container.appendChild(createProductionBuildingEffect(surfaceType, itemData, level, mode));
-                break;
+        function createMiscBuildingEffect(itemData, level, mode){
+            return domBuilder.create("TABLE")
+                .addClass("formatted-table")
+                .addClass(mode + "-building-effect-misc")
+                .appendChild(domBuilder.create("TBODY")
+                    .appendChildren(createForBuilding(itemData, level))
+                );
+
+            function createForBuilding(itemData, level){
+                switch(itemData.id){
+                    case "community_center":
+                        return new Stream(["seats", "moraleRechargeMultiplier", "energyUsage"])
+                            .map((id) => createRow(localization.getAdditionalContent(id), itemData.data[id]));
+                    case "hospital":
+                        const result = [];
+
+                        result.push(createRow(localization.getAdditionalContent("beds"), itemData.data.beds));
+
+                        const healRow = domBuilder.create("TR")
+                            .appendChild(domBuilder.create("TD", localization.getAdditionalContent("heal")))
+                            .appendChild(domBuilder.create("TD")
+                                .appendChild(domBuilder.create("DIV", localization.getAdditionalContent("energyUsage") + ": " + itemData.data.heal.energyUsage))
+                                .appendChild(domBuilder.create("DIV", localization.getAdditionalContent("regenerationPerSecond") + ": " + itemData.data.heal.regenerationPerSecond))
+                            );
+                        result.push(healRow);
+
+                        const birthRow = domBuilder.create("TR")
+                            .appendChild(domBuilder.create("TD", localization.getAdditionalContent("birth")))
+                            .appendChild(domBuilder.create("TD")
+                                .appendChild(domBuilder.create("DIV", localization.getAdditionalContent("maternityLeave") + ": " + itemData.data.birth.maternityLeaveSeconds))
+                                .appendChild(domBuilder.create("DIV", localization.getAdditionalContent("required-work-points") + ": " + itemData.data.birth.constructionRequirements.requiredWorkPoints))
+                                .appendChildren(new MapStream(itemData.data.birth.constructionRequirements.requiredResources)
+                                    .sorted((a, b) => {return dataCaches.itemDataNames.get(a.getKey()).localeCompare(dataCaches.itemDataNames.get(b.getKey()))})
+                                    .toListStream((dataId, amount) => {return domBuilder.create("DIV", amount + " x " + dataCaches.itemDataNames.get(dataId))})
+                                )
+                            );
+                        result.push(birthRow);
+
+                        return result;
+                    case "restaurant":
+                        return new Stream(["seats", "satietyRechargeMultiplier", "energyUsage"])
+                            .map((id) => createRow(localization.getAdditionalContent(id), itemData.data[id]));
+                    case "school":
+                        return new Stream(["desks", "experiencePerSecond", "energyUsage"])
+                            .map((id) => createRow(localization.getAdditionalContent(id), itemData.data[id]));
+                    default:
+                        throwException("IllegalArgument", "Unhandled misc building " + itemData.dataId);
+                }
+
+                function createRow(label, value){
+                    return domBuilder.create("TR")
+                        .appendChild(domBuilder.create("TD", label))
+                        .appendChild(domBuilder.create("TD", value))
+                }
             }
+        }
 
-        return container;
+        function createStorageBuildingEffect(itemData, level, mode){
+            return domBuilder.create("TABLE")
+                .addClass("formatted-table")
+                .addClass(mode + "-building-effect-storage")
+                .appendChild(domBuilder.create("THEAD")
+                    .appendChild(domBuilder.create("TR")
+                        .appendChild(domBuilder.create("TH")
+                            .attr("colSpan", 2)
+                            .innerText(localization.getAdditionalContent("building-effect-title-storage"))
+                        )
+                    )
+                )
+                .appendChild(domBuilder.create("TBODY")
+                    .appendChild(domBuilder.create("TR")
+                        .appendChild(domBuilder.create("TD")
+                            .innerText(dataCaches.storageTypeLocalization.get(itemData.stores)))
+                        .appendChild(domBuilder.create("TD")
+                            .innerText(level * itemData.capacity))
+                    )
+                )
+        }
 
         function createProductionBuildingEffect(surfaceType, itemData, level, mode){
             const table = document.createElement("TABLE");
@@ -169,7 +248,7 @@
                 const tableHead = document.createElement("THEAD");
                     const titleRow = document.createElement("TR");
                         const titleCell = document.createElement("TH");
-                            titleCell.innerText = Localization.getAdditionalContent("building-effect-title-production");
+                            titleCell.innerText = localization.getAdditionalContent("building-effect-title-production");
                             titleCell.colSpan = 2;
                     titleRow.appendChild(titleCell);
                 tableHead.appendChild(titleRow);
@@ -177,11 +256,11 @@
 
                     const headerRow = document.createElement("TR");
                         const producedItemHeader = document.createElement("TH");
-                            producedItemHeader.innerText = Localization.getAdditionalContent("building-effect-production-header-produced-item");
+                            producedItemHeader.innerText = localization.getAdditionalContent("building-effect-production-header-produced-item");
                     headerRow.appendChild(producedItemHeader);
 
                         const productionRequirementsHeader = document.createElement("TH");
-                            productionRequirementsHeader.innerText = Localization.getAdditionalContent("building-effect-production-header-production-requirements");
+                            productionRequirementsHeader.innerText = localization.getAdditionalContent("building-effect-production-header-production-requirements");
                     headerRow.appendChild(productionRequirementsHeader);
                 tableHead.appendChild(headerRow);
             table.appendChild(tableHead);
@@ -210,8 +289,8 @@
                                 .toListStream((requiredItemId, amount) => {return createElementWithText("DIV", dataCaches.itemDataNames.get(requiredItemId) + ": " + amount)})
                                 .forEach((node) => constructionRequirementsCell.appendChild(node));
 
-                        constructionRequirementsCell.appendChild(createElementWithText("DIV", Localization.getAdditionalContent("parallel-workers") + ": " + (gives.constructionRequirements.parallelWorkers * level)));
-                        constructionRequirementsCell.appendChild(createElementWithText("DIV", Localization.getAdditionalContent("required-work-points") + ": " + gives.constructionRequirements.requiredWorkPoints));
+                        constructionRequirementsCell.appendChild(createElementWithText("DIV", localization.getAdditionalContent("parallel-workers") + ": " + (gives.constructionRequirements.parallelWorkers * level)));
+                        constructionRequirementsCell.appendChild(createElementWithText("DIV", localization.getAdditionalContent("required-work-points") + ": " + gives.constructionRequirements.requiredWorkPoints));
 
                     row.appendChild(constructionRequirementsCell);
                     return row;
@@ -222,10 +301,10 @@
 
     function cancelConstruction(planetId, buildingId, dataId){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("cancel-construction-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("cancel-construction-confirmation-dialog-detail", {buildingName: dataCaches.itemDataNames.get(dataId)}))
-            .withConfirmButton(Localization.getAdditionalContent("cancel-construction-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("cancel-construction-cancel-button"));
+            .withTitle(localization.getAdditionalContent("cancel-construction-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("cancel-construction-confirmation-dialog-detail", {buildingName: dataCaches.itemDataNames.get(dataId)}))
+            .withConfirmButton(localization.getAdditionalContent("cancel-construction-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("cancel-construction-cancel-button"));
 
         return new Promise((resolve, reject) => {
             confirmationService.openDialog(

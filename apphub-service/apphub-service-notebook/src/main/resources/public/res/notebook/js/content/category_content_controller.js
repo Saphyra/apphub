@@ -1,20 +1,6 @@
 (function CategoryContentController(){
     let currentCategoryId = null;
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        (eventType) => {return eventType == events.SETTINGS_LOADED},
-        () => loadCategoryContent(null, false),
-        true,
-        "Load root category content"
-    ));
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        (eventType) => {return eventType == events.SETTINGS_MODIFIED  || eventType == events.ITEM_ARCHIVED},
-        () => loadCategoryContent(currentCategoryId, false),
-        false,
-        "Reload category content"
-    ));
-
     window.categoryContentController = new function(){
         this.loadCategoryContent = loadCategoryContent;
         this.reloadCategoryContent = function(){
@@ -25,18 +11,6 @@
         }
         this.displayCategoryDetails = displayCategoryDetails;
     }
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){
-            return eventType == events.CATEGORY_SAVED
-                || eventType == events.LIST_ITEM_SAVED
-        },
-        function(){
-            loadCategoryContent(currentCategoryId, false);
-        },
-        false,
-        "Reload category content"
-    ));
 
     function loadCategoryContent(categoryId, shouldSwitchTab){
         currentCategoryId = categoryId;
@@ -65,7 +39,7 @@
                 }
             }
 
-        document.getElementById("category-details-title").innerText = categoryDetails.title == null ? Localization.getAdditionalContent("root-title") : categoryDetails.title;
+        document.getElementById("category-details-title").innerText = categoryDetails.title == null ? localization.getAdditionalContent("root-title") : categoryDetails.title;
 
         const container = document.getElementById("category-content-list");
             container.innerHTML = "";

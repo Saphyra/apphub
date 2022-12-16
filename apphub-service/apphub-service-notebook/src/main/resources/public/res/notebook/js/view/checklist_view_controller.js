@@ -114,10 +114,10 @@
                     removeButton.onclick = function(){
                         if(!editingEnabled){
                             const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-                                .withTitle(Localization.getAdditionalContent("checklist-item-deletion-confirmation-dialog-title"))
-                                .withDetail(Localization.getAdditionalContent("checklist-item-deletion-confirmation-dialog-detail"))
-                                .withConfirmButton(Localization.getAdditionalContent("checklist-item-deletion-confirmation-dialog-confirm-button"))
-                                .withDeclineButton(Localization.getAdditionalContent("checklist-item-deletion-confirmation-dialog-decline-button"));
+                                .withTitle(localization.getAdditionalContent("checklist-item-deletion-confirmation-dialog-title"))
+                                .withDetail(localization.getAdditionalContent("checklist-item-deletion-confirmation-dialog-detail"))
+                                .withConfirmButton(localization.getAdditionalContent("checklist-item-deletion-confirmation-dialog-confirm-button"))
+                                .withDeclineButton(localization.getAdditionalContent("checklist-item-deletion-confirmation-dialog-decline-button"));
 
                             confirmationService.openDialog(
                                 "checklist-item-deletion-confirmation-dialog",
@@ -163,10 +163,10 @@
 
     function discardChanges(){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("discard-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("discard-confirmation-dialog-detail"))
-            .withConfirmButton(Localization.getAdditionalContent("discard-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("discard-confirmation-dialog-decline-button"));
+            .withTitle(localization.getAdditionalContent("discard-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("discard-confirmation-dialog-detail"))
+            .withConfirmButton(localization.getAdditionalContent("discard-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("discard-confirmation-dialog-decline-button"));
 
         confirmationService.openDialog(
             "discard-confirmation-dialog",
@@ -192,7 +192,7 @@
         const title = document.getElementById("view-checklist-title").innerText;
 
         if(!title.length){
-            notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
+            notificationService.showError(localization.getAdditionalContent("new-item-title-empty"));
             return;
         }
 
@@ -212,20 +212,20 @@
 
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_EDIT_CHECKLIST_ITEM", {listItemId: openedChecklistId}), {title: title, nodes: nodes});
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("checklist-saved"));
+                notificationService.showSuccess(localization.getAdditionalContent("checklist-saved"));
                 editingEnabled = false;
                 viewChecklist(openedChecklistId);
-                eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
+                categoryContentController.reloadCategoryContent();
             }
         dao.sendRequestAsync(request);
     }
 
     function deleteChecked(){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("delete-checked-items-confirmation-title"))
-            .withDetail(Localization.getAdditionalContent("delete-checked-items-confirmation-detail"))
-            .withConfirmButton(Localization.getAdditionalContent("delete-checked-items-confirmation-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("delete-checked-items-confirmation-cancel-button"));
+            .withTitle(localization.getAdditionalContent("delete-checked-items-confirmation-title"))
+            .withDetail(localization.getAdditionalContent("delete-checked-items-confirmation-detail"))
+            .withConfirmButton(localization.getAdditionalContent("delete-checked-items-confirmation-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("delete-checked-items-confirmation-cancel-button"));
 
         confirmationService.openDialog(
             "delete-checked-items-confirmation",
@@ -233,7 +233,7 @@
             function(){
                 const request = new Request(Mapping.getEndpoint("NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST", {listItemId: openedChecklistId}));
                     request.processValidResponse = function(){
-                        notificationService.showSuccess(Localization.getAdditionalContent("checked-items-deleted"));
+                        notificationService.showSuccess(localization.getAdditionalContent("checked-items-deleted"));
                         viewChecklist(openedChecklistId);
                     }
                 dao.sendRequestAsync(request);
@@ -244,7 +244,7 @@
     function orderItems(){
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_ORDER_CHECKLIST_ITEMS", {listItemId: openedChecklistId}));
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("checklist-items-ordered"));
+                notificationService.showSuccess(localization.getAdditionalContent("checklist-items-ordered"));
                 viewChecklist(openedChecklistId);
             }
         dao.sendRequestAsync(request);

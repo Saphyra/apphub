@@ -370,10 +370,22 @@
     "cancel-queue-item-confirm-button": "Cancel production",
     "cancel-queue-item-cancel-button": "Back",
     "building-effect-title-production": "Produces",
+    "building-effect-title-storage": "Stores",
     "building-effect-production-header-produced-item": "Item",
     "building-effect-production-header-production-requirements": "Requirements",
     "parallel-workers": "Parallel workers",
     "required-work-points": "Required work points",
-    "reset": "Reset"
+    "reset": "Reset",
+    "seats": "Seats",
+    "moraleRechargeMultiplier": "Morale multiplier",
+    "energyUsage": "Energy usage",
+    "beds": "Beds",
+    "heal": "Healing",
+    "regenerationPerSecond": "Regeneration",
+    "birth": "Birth",
+    "maternityLeave": "Maternity leave",
+    "satietyRechargeMultiplier": "Satiety multiplier",
+    "desks": "Desks",
+    "experiencePerSecond": "Experience"
   }
 }

@@ -24,10 +24,10 @@ function categoryNodeFactory(parent, itemDetails, displayOpenParentCategoryButto
 
     function deleteCategory(categoryId, title){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("deletion-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("category-deletion-confirmation-dialog-detail", {listItemTitle: title}))
-            .withConfirmButton(Localization.getAdditionalContent("category-deletion-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("deletion-confirmation-dialog-decline-button"));
+            .withTitle(localization.getAdditionalContent("deletion-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("category-deletion-confirmation-dialog-detail", {listItemTitle: title}))
+            .withConfirmButton(localization.getAdditionalContent("category-deletion-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("deletion-confirmation-dialog-decline-button"));
 
         confirmationService.openDialog(
             "deletion-confirmation-dialog",
@@ -35,8 +35,10 @@ function categoryNodeFactory(parent, itemDetails, displayOpenParentCategoryButto
             function(){
                 const request = new Request(Mapping.getEndpoint("NOTEBOOK_DELETE_LIST_ITEM", {listItemId: categoryId}))
                     request.processValidResponse = function(){
-                        notificationService.showSuccess(Localization.getAdditionalContent("category-deleted"));
-                        eventProcessor.processEvent(new Event(events.CATEGORY_DELETED, categoryId));
+                        notificationService.showSuccess(localization.getAdditionalContent("category-deleted"));
+                        categoryTreeController.removeCategory(categoryId);
+                        contentController.removeListItem(categoryId);
+                        pinController.loadPinnedItems();
                     }
                 dao.sendRequestAsync(request);
             }

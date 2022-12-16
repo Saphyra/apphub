@@ -53,7 +53,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
                 buttonWrapper.classList.add("list-item-button-wrapper");
 
                 const deleteFriendRequestButton = document.createElement("BUTTON");
-                    deleteFriendRequestButton.innerText = Localization.getAdditionalContent("delete-friend-request-button");
+                    deleteFriendRequestButton.innerText = localization.getAdditionalContent("delete-friend-request-button");
                     deleteFriendRequestButton.onclick = function(){
                         deleteFriendRequest(friendRequest.friendRequestId, sentFriendRequestSyncEngine);
                     }
@@ -70,14 +70,14 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
                 buttonWrapper.classList.add("list-item-button-wrapper");
 
                 const deleteFriendRequestButton = document.createElement("BUTTON");
-                    deleteFriendRequestButton.innerText = Localization.getAdditionalContent("delete-friend-request-button");
+                    deleteFriendRequestButton.innerText = localization.getAdditionalContent("delete-friend-request-button");
                     deleteFriendRequestButton.onclick = function(){
                         deleteFriendRequest(friendRequest.friendRequestId, receivedFriendRequestSyncEngine);
                     }
             buttonWrapper.appendChild(deleteFriendRequestButton);
 
                 const acceptFriendRequestButton = document.createElement("BUTTON");
-                    acceptFriendRequestButton.innerText = Localization.getAdditionalContent("accept-friend-request-button");
+                    acceptFriendRequestButton.innerText = localization.getAdditionalContent("accept-friend-request-button");
                     acceptFriendRequestButton.onclick = function(){
                         acceptFriendRequest(friendRequest.friendRequestId);
                     }
@@ -102,7 +102,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
     function deleteFriendRequest(friendRequestId, syncEngine){
         const request = new Request(Mapping.getEndpoint("COMMUNITY_FRIEND_REQUEST_DELETE", {friendRequestId: friendRequestId}));
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("friend-request-deleted"));
+                notificationService.showSuccess(localization.getAdditionalContent("friend-request-deleted"));
                 syncEngine.remove(friendRequestId);
             }
         dao.sendRequestAsync(request);
@@ -112,7 +112,7 @@ scriptLoader.loadScript("/res/common/js/sync_engine.js");
         const request = new Request(Mapping.getEndpoint("COMMUNITY_FRIEND_REQUEST_ACCEPT", {friendRequestId: friendRequestId}));
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(friendship){
-                notificationService.showSuccess(Localization.getAdditionalContent("friend-request-accepted"));
+                notificationService.showSuccess(localization.getAdditionalContent("friend-request-accepted"));
                 receivedFriendRequestSyncEngine.remove(friendRequestId);
                 friendshipController.add(friendship);
             }

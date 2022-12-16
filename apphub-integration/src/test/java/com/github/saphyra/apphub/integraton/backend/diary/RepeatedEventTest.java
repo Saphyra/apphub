@@ -51,7 +51,6 @@ public class RepeatedEventTest extends BackEndTest {
         assertThat(findByDate(responses, FIRST_OF_MONTH)).hasSize(1);
         assertThat(findByDate(responses, FIRST_OF_MONTH.plusDays(1))).isNotEmpty();
         assertThat(findByDate(responses, FIRST_OF_MONTH.plusDays(2))).isNotEmpty();
-        assertThat(findByDate(responses, FIRST_OF_MONTH.plusDays(3))).isEmpty();
     }
 
     @Test(groups = "diary")
@@ -79,13 +78,11 @@ public class RepeatedEventTest extends BackEndTest {
 
         assertThat(findByDate(responses, date)).hasSize(1);
         assertThat(findByDate(responses, date.plusDays(1))).hasSize(1);
-        assertThat(findByDate(responses, date.plusDays(2))).isEmpty();
 
         LocalDate firstThursday = getFirstOfMonth(date, d -> d.getDayOfWeek() == DayOfWeek.THURSDAY);
 
-        assertThat(findByDate(responses, firstThursday)).hasSize(1);
+        assertThat(findByDate(responses, firstThursday)).isNotEmpty();
         assertThat(findByDate(responses, firstThursday.plusDays(1))).isNotEmpty();
-        assertThat(findByDate(responses, firstThursday.plusDays(2))).isEmpty();
     }
 
     @Test(groups = "diary")
@@ -112,19 +109,16 @@ public class RepeatedEventTest extends BackEndTest {
         assertThat(findByDate(responses, FIRST_OF_MONTH)).hasSize(1);
         assertThat(findByDate(responses, FIRST_OF_MONTH.plusDays(1))).isNotEmpty();
         assertThat(findByDate(responses, FIRST_OF_MONTH.plusDays(2))).isNotEmpty();
-        assertThat(findByDate(responses, FIRST_OF_MONTH.plusDays(3))).isEmpty();
 
         LocalDate date = LocalDate.of(CURRENT_DATE.getYear(), CURRENT_DATE.getMonth(), 10);
         assertThat(findByDate(responses, date)).hasSize(1);
         assertThat(findByDate(responses, date.plusDays(1))).isNotEmpty();
         assertThat(findByDate(responses, date.plusDays(2))).isNotEmpty();
-        assertThat(findByDate(responses, date.plusDays(3))).isEmpty();
 
         date = LocalDate.of(CURRENT_DATE.getYear(), CURRENT_DATE.getMonth(), 15);
-        assertThat(findByDate(responses, date)).hasSize(1);
+        assertThat(findByDate(responses, date)).isNotEmpty();
         assertThat(findByDate(responses, date.plusDays(1))).isNotEmpty();
         assertThat(findByDate(responses, date.plusDays(2))).isNotEmpty();
-        assertThat(findByDate(responses, date.plusDays(3))).isEmpty();
     }
 
     @Test(groups = "diary")
@@ -151,13 +145,11 @@ public class RepeatedEventTest extends BackEndTest {
         assertThat(findByDate(responses, FIRST_OF_MONTH)).hasSize(1);
         assertThat(findByDate(responses, FIRST_OF_MONTH.plusDays(1))).isNotEmpty();
         assertThat(findByDate(responses, FIRST_OF_MONTH.plusDays(2))).isNotEmpty();
-        assertThat(findByDate(responses, FIRST_OF_MONTH.plusDays(3))).isEmpty();
 
         LocalDate date = FIRST_OF_MONTH.plusDays(5);
         assertThat(findByDate(responses, date)).hasSize(1);
         assertThat(findByDate(responses, date.plusDays(1))).isNotEmpty();
         assertThat(findByDate(responses, date.plusDays(2))).isNotEmpty();
-        assertThat(findByDate(responses, date.plusDays(3))).isEmpty();
 
     }
 

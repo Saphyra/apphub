@@ -1,35 +1,13 @@
-(function CategoryListController(){
+(function CategoryTreeController(){
     let openedCategories = [];
 
-    eventProcessor.registerProcessor(new EventProcessor(
-        (eventType) => {return eventType == events.SETTINGS_LOADED},
-        loadCategories,
-        true,
-        "Load category tree"
-    ));
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        (eventType) => {return eventType == events.SETTINGS_MODIFIED || eventType == events.ITEM_ARCHIVED},
-        reloadCategories,
-        false,
-        "Reload category tree"
-    ));
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.CATEGORY_DELETED},
-        function(event){
-            document.getElementById(createWrapperId(event.getPayload())).remove();
-        },
-        false,
-        "Delete category from category tree"
-    ));
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.CATEGORY_SAVED},
-        reloadCategories,
-        false,
-        "Reload category tree"
-    ));
+    window.categoryTreeController = new function(){
+        this.loadCategories = loadCategories;
+        this.reloadCategories = reloadCategories;
+        this.removeCategory = function(listItemId){
+            document.getElementById(createWrapperId(listItemId)).remove();
+        }
+    }
 
     function reloadCategories(){
         openedCategories = new Stream(document.getElementsByClassName("category-children-container"))
@@ -59,7 +37,7 @@
 
             const root = {
                 categoryId: null,
-                title: Localization.getAdditionalContent("root-title"),
+                title: localization.getAdditionalContent("root-title"),
                 children: categories
             };
 

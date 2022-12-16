@@ -11,7 +11,6 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.Terraf
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
@@ -79,26 +78,28 @@ class TerraformationService {
 
         Construction construction = constructionFactory.create(surfaceId, constructionRequirements.getParallelWorkers(), constructionRequirements.getRequiredWorkPoints(), surfaceTypeString);
 
-        resourceAllocationService.processResourceRequirements(game.getGameId(), planet, LocationType.PLANET, construction.getConstructionId(), constructionRequirements.getRequiredResources());
+        return game.getEventLoop()
+            .processWithResponseAndWait(() -> {
+                resourceAllocationService.processResourceRequirements(game.getGameId(), planet, LocationType.PLANET, construction.getConstructionId(), constructionRequirements.getRequiredResources());
 
-        surface.setTerraformation(construction);
+                surface.setTerraformation(construction);
 
-        QueueResponse queueResponse = queueItemToResponseConverter.convert(surfaceToQueueItemConverter.convert(surface), planet);
-        messageSender.planetQueueItemModified(userId, planetId, queueResponse);
-        messageSender.planetBuildingDetailsModified(userId, planetId, planetBuildingOverviewQueryService.getBuildingOverview(planet));
+                QueueResponse queueResponse = queueItemToResponseConverter.convert(surfaceToQueueItemConverter.convert(surface), planet);
+                messageSender.planetQueueItemModified(userId, planetId, queueResponse);
+                messageSender.planetBuildingDetailsModified(userId, planetId, planetBuildingOverviewQueryService.getBuildingOverview(planet));
 
-        TerraformationProcess constructionProcess = terraformationProcessFactory.create(game, planet, surface);
+                TerraformationProcess constructionProcess = terraformationProcessFactory.create(game, planet, surface);
 
-        Processes processes = game.getProcesses();
-        synchronized (processes) {
-            processes.add(constructionProcess);
-        }
+                game.getProcesses()
+                    .add(constructionProcess);
 
-        gameDataProxy.saveItem(
-            constructionToModelConverter.convert(construction, game.getGameId()),
-            constructionProcess.toModel()
-        );
+                gameDataProxy.saveItem(
+                    constructionToModelConverter.convert(construction, game.getGameId()),
+                    constructionProcess.toModel()
+                );
 
-        return surfaceToResponseConverter.convert(surface);
+                return surfaceToResponseConverter.convert(surface);
+            })
+            .getOrThrow();
     }
 }

@@ -4,7 +4,11 @@
   "placeableSurfaceTypes": [
     "concrete"
   ],
-  "workers": 1,
+  "data": {
+    "desks": 3,
+    "experiencePerSecond": 50,
+    "energyUsage": 10
+  },
   "constructionRequirements": {
     "1": {
       "requiredWorkPoints": 1,

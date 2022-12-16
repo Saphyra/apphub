@@ -7,14 +7,14 @@
                 return JSON.parse(response.body);
             }
             request.processValidResponse = function(character){
-                document.getElementById(ids.characterTabTitle).innerHTML = Localization.getAdditionalContent("edit-character-title");
+                document.getElementById(ids.characterTabTitle).innerHTML = localization.getAdditionalContent("edit-character-title");
                 document.getElementById(ids.characterNameInput).value = character.name;
             }
             request.getErrorHandler()
                 .addErrorHandler(new ErrorHandler(
                     function(request, response){return response.status == ResponseStatus.NOT_FOUND},
                     function(request, response){
-                        document.getElementById(ids.characterTabTitle).innerHTML = Localization.getAdditionalContent("create-character-title");
+                        document.getElementById(ids.characterTabTitle).innerHTML = localization.getAdditionalContent("create-character-title");
                     }
                 ));
         dao.sendRequestAsync(request);

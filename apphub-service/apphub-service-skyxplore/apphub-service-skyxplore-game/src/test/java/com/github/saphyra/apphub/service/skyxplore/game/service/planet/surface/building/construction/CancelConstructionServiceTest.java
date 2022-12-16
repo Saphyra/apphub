@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
@@ -42,14 +41,12 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -75,9 +72,6 @@ public class CancelConstructionServiceTest {
 
     @Mock
     private AllocationRemovalService allocationRemovalService;
-
-    @Mock
-    private SleepService sleepService;
 
     @Mock
     private BuildingToModelConverter buildingToModelConverter;
@@ -125,9 +119,6 @@ public class CancelConstructionServiceTest {
     private Process process;
 
     @Mock
-    private Future<ExecutionResult<SurfaceResponse>> future;
-
-    @Mock
     private ExecutionResult<SurfaceResponse> executionResult;
 
     @Mock
@@ -167,17 +158,13 @@ public class CancelConstructionServiceTest {
 
         given(game.getProcesses()).willReturn(processes);
         given(processes.findByExternalReferenceAndTypeValidated(CONSTRUCTION_ID, ProcessType.CONSTRUCTION)).willReturn(process);
-        given(eventLoop.processWithResponse(any(Callable.class), eq(syncCache))).willReturn(future);
-        given(future.isDone())
-            .willReturn(false)
-            .willReturn(true);
-        given(future.get()).willReturn(executionResult);
+        given(eventLoop.processWithResponseAndWait(any(Callable.class), eq(syncCache))).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(surfaceResponse);
         given(buildingToModelConverter.convert(building, GAME_ID)).willReturn(buildingModel);
 
         underTest.cancelConstructionOfConstruction(USER_ID, PLANET_ID, CONSTRUCTION_ID);
 
-        verify(eventLoop).processWithResponse(argumentCaptor.capture(), eq(syncCache));
+        verify(eventLoop).processWithResponseAndWait(argumentCaptor.capture(), eq(syncCache));
         argumentCaptor.getValue()
             .call();
 
@@ -202,7 +189,6 @@ public class CancelConstructionServiceTest {
         verify(messageSender).planetQueueItemDeleted(USER_ID, PLANET_ID, CONSTRUCTION_ID);
         verify(messageSender).planetSurfaceModified(USER_ID, PLANET_ID, surfaceResponse);
         verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
-        verify(sleepService, times(1)).sleep(100);
     }
 
     @Test
@@ -223,11 +209,7 @@ public class CancelConstructionServiceTest {
 
         given(game.getProcesses()).willReturn(processes);
         given(processes.findByExternalReferenceAndTypeValidated(CONSTRUCTION_ID, ProcessType.CONSTRUCTION)).willReturn(process);
-        given(eventLoop.processWithResponse(any(Callable.class), eq(syncCache))).willReturn(future);
-        given(future.isDone())
-            .willReturn(false)
-            .willReturn(true);
-        given(future.get()).willReturn(executionResult);
+        given(eventLoop.processWithResponseAndWait(any(Callable.class), eq(syncCache))).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(surfaceResponse);
         given(buildingToModelConverter.convert(building, GAME_ID)).willReturn(buildingModel);
 
@@ -235,7 +217,7 @@ public class CancelConstructionServiceTest {
 
         assertThat(result).isEqualTo(surfaceResponse);
 
-        verify(eventLoop).processWithResponse(argumentCaptor.capture(), eq(syncCache));
+        verify(eventLoop).processWithResponseAndWait(argumentCaptor.capture(), eq(syncCache));
         argumentCaptor.getValue()
             .call();
 
@@ -259,6 +241,5 @@ public class CancelConstructionServiceTest {
 
         verify(messageSender).planetQueueItemDeleted(USER_ID, PLANET_ID, CONSTRUCTION_ID);
         verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
-        verify(sleepService, times(1)).sleep(100);
     }
 }

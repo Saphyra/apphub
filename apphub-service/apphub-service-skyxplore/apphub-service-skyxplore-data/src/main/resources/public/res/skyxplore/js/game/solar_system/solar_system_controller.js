@@ -150,7 +150,7 @@
             } else if(newName.length > 30){
                 solarSystemNameField.innerText = currentSolarSystemName;
                 solarSystemNameField.contentEditable = false;
-                notificationService.showError(Localization.getAdditionalContent("new-solar-system-name-too-long"));
+                notificationService.showError(localization.getAdditionalContent("new-solar-system-name-too-long"));
             } else{
                 const request = new Request(Mapping.getEndpoint("SKYXPLORE_SOLAR_SYSTEM_RENAME", {solarSystemId: openedSolarSystemId}), {value: newName});
                     request.processValidResponse = function(){

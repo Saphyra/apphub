@@ -1,5 +1,5 @@
 (function RolesController(){
-    const roleLocalization = new CustomLocalization("admin_panel", "roles");
+    const roleLocalization = localization.loadCustomLocalization("admin_panel", "roles");
 
     pageLoader.addLoader(initRoles, "Initializing roles");
 
@@ -35,14 +35,14 @@
 
             const addToAllCell = document.createElement("TD");
                 const addToAllButton = document.createElement("BUTTON");
-                    addToAllButton.innerText = Localization.getAdditionalContent("add-role-to-all");
+                    addToAllButton.innerText = localization.getAdditionalContent("add-role-to-all");
                     addToAllButton.onclick = function(){addToAll(role)};
             addToAllCell.appendChild(addToAllButton);
         row.appendChild(addToAllCell);
 
             const removeFromAllCell = document.createElement("TD");
                 const removeFromAllButton = document.createElement("BUTTON");
-                    removeFromAllButton.innerText = Localization.getAdditionalContent("remove-role-from-all");
+                    removeFromAllButton.innerText = localization.getAdditionalContent("remove-role-from-all");
                     removeFromAllButton.onclick = function(){removeFromAll(role)};
             removeFromAllCell.appendChild(removeFromAllButton);
         row.appendChild(removeFromAllCell);
@@ -52,13 +52,13 @@
     function addToAll(role){
         const passwordInput = document.createElement("INPUT");
             passwordInput.type = "password";
-            passwordInput.placeholder = Localization.getAdditionalContent("password");
+            passwordInput.placeholder = localization.getAdditionalContent("password");
 
         const localization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("confirm-add-to-all-title"))
+            .withTitle(localization.getAdditionalContent("confirm-add-to-all-title"))
             .withDetail(createDetail(passwordInput, role))
-            .withConfirmButton(Localization.getAdditionalContent("add-to-all-button"))
-            .withDeclineButton(Localization.getAdditionalContent("cancel"));
+            .withConfirmButton(localization.getAdditionalContent("add-to-all-button"))
+            .withDeclineButton(localization.getAdditionalContent("cancel"));
 
         confirmationService.openDialog("confirm-add-to-all", localization, function(){sendAddToAllRequest(role, passwordInput.value)});
 
@@ -66,7 +66,7 @@
             const container = document.createElement("DIV");
 
                 const detail = document.createElement("DIV");
-                    detail.innerHTML = Localization.getAdditionalContent("confirm-add-to-all-detail", {role: roleLocalization.get(role)});
+                    detail.innerHTML = localization.getAdditionalContent("confirm-add-to-all-detail", {role: roleLocalization.get(role)});
             container.appendChild(detail);
 
                 const passwordContainer = document.createElement("DIV");
@@ -78,13 +78,13 @@
 
         function sendAddToAllRequest(role, password){
             if(password.length == 0){
-                notificationService.showError(Localization.getAdditionalContent("empty-password"));
+                notificationService.showError(localization.getAdditionalContent("empty-password"));
                 return;
             }
 
             const request = new Request(Mapping.getEndpoint("USER_DATA_ADD_ROLE_TO_ALL", {role: role}), {value: password});
                 request.processValidResponse = function(){
-                    notificationService.showSuccess(Localization.getAdditionalContent("role-added-to-all"));
+                    notificationService.showSuccess(localization.getAdditionalContent("role-added-to-all"));
                 }
             dao.sendRequestAsync(request);
         }
@@ -93,13 +93,13 @@
     function removeFromAll(role){
         const passwordInput = document.createElement("INPUT");
             passwordInput.type = "password";
-            passwordInput.placeholder = Localization.getAdditionalContent("password");
+            passwordInput.placeholder = localization.getAdditionalContent("password");
 
         const localization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("confirm-remove-from-all-title"))
+            .withTitle(localization.getAdditionalContent("confirm-remove-from-all-title"))
             .withDetail(createDetail(passwordInput, role))
-            .withConfirmButton(Localization.getAdditionalContent("remove-from-all-button"))
-            .withDeclineButton(Localization.getAdditionalContent("cancel"));
+            .withConfirmButton(localization.getAdditionalContent("remove-from-all-button"))
+            .withDeclineButton(localization.getAdditionalContent("cancel"));
 
         confirmationService.openDialog("confirm-remove-from-all", localization, function(){sendAddToAllRequest(role, passwordInput.value)});
 
@@ -107,7 +107,7 @@
             const container = document.createElement("DIV");
 
                 const detail = document.createElement("DIV");
-                    detail.innerHTML = Localization.getAdditionalContent("confirm-remove-from-all-detail", {role: roleLocalization.get(role)});
+                    detail.innerHTML = localization.getAdditionalContent("confirm-remove-from-all-detail", {role: roleLocalization.get(role)});
             container.appendChild(detail);
 
                 const passwordContainer = document.createElement("DIV");
@@ -119,13 +119,13 @@
 
         function sendAddToAllRequest(role, password){
             if(password.length == 0){
-                notificationService.showError(Localization.getAdditionalContent("empty-password"));
+                notificationService.showError(localization.getAdditionalContent("empty-password"));
                 return;
             }
 
             const request = new Request(Mapping.getEndpoint("USER_DATA_REMOVE_ROLE_FROM_ALL", {role: role}), {value: password});
                 request.processValidResponse = function(){
-                    notificationService.showSuccess(Localization.getAdditionalContent("role-removed-from-all"));
+                    notificationService.showSuccess(localization.getAdditionalContent("role-removed-from-all"));
                 }
             dao.sendRequestAsync(request);
         }

@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.lib.security.access_token;
 
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,11 @@ public class AccessTokenProvider {
     private static final ThreadLocal<AccessTokenHeader> STORAGE = new ThreadLocal<>();
 
     private final AccessTokenHeaderConverter accessTokenHeaderConverter;
+    private final UuidConverter uuidConverter;
+
+    public String getUidAsString() {
+        return uuidConverter.convertDomain(get().getUserId());
+    }
 
     public void set(AccessTokenHeader accessTokenHeader) {
         STORAGE.set(accessTokenHeader);

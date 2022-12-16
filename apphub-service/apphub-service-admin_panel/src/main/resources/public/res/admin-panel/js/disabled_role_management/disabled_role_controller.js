@@ -1,5 +1,5 @@
 (function DisabledRoleController(){
-    const roleLocalization = new CustomLocalization("admin_panel", "roles");
+    const roleLocalization = localization.loadCustomLocalization("admin_panel", "roles");
 
     pageLoader.addLoader(loadRoles, "Load disabled roles");
 
@@ -48,31 +48,31 @@
     function enableRole(role){
         const passwordInput = createPasswordInput();
 
-        const localization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("confirm-enable-role"))
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(localization.getAdditionalContent("confirm-enable-role"))
             .withDetail(createDetail("enable-role-detail", passwordInput, role.name))
-            .withConfirmButton(Localization.getAdditionalContent("enable-role"))
-            .withDeclineButton(Localization.getAdditionalContent("cancel"));
+            .withConfirmButton(localization.getAdditionalContent("enable-role"))
+            .withDeclineButton(localization.getAdditionalContent("cancel"));
 
-        promptAndExecute(role, Mapping.getEndpoint("USER_DATA_ENABLE_ROLE", {role: role.role}), localization, passwordInput, "role-enabled");
+        promptAndExecute(role, Mapping.getEndpoint("USER_DATA_ENABLE_ROLE", {role: role.role}), confirmationDialogLocalization, passwordInput, "role-enabled");
     }
 
     function disableRole(role){
         const passwordInput = createPasswordInput();
 
-        const localization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("confirm-disable-role"))
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(localization.getAdditionalContent("confirm-disable-role"))
             .withDetail(createDetail("disable-role-detail", passwordInput, role.name))
-            .withConfirmButton(Localization.getAdditionalContent("disable-role"))
-            .withDeclineButton(Localization.getAdditionalContent("cancel"));
+            .withConfirmButton(localization.getAdditionalContent("disable-role"))
+            .withDeclineButton(localization.getAdditionalContent("cancel"));
 
-        promptAndExecute(role, Mapping.getEndpoint("USER_DATA_DISABLE_ROLE", {role: role.role}), localization, passwordInput, "role-disabled");
+        promptAndExecute(role, Mapping.getEndpoint("USER_DATA_DISABLE_ROLE", {role: role.role}), confirmationDialogLocalization, passwordInput, "role-disabled");
     }
 
     function createPasswordInput(){
         const input = document.createElement("INPUT");
             input.type = "password";
-            input.placeholder = Localization.getAdditionalContent("password");
+            input.placeholder = localization.getAdditionalContent("password");
             input.classList.add("confirm-password");
         return input;
     }
@@ -80,27 +80,27 @@
     function createDetail(textId, passwordInput, roleName){
         const container = document.createElement("DIV");
             const text = document.createElement("DIV");
-                text.innerHTML = Localization.getAdditionalContent(textId, {roleName: roleName});
+                text.innerHTML = localization.getAdditionalContent(textId, {roleName: roleName});
         container.appendChild(text);
         container.appendChild(passwordInput);
         return container;
     }
 
-    function promptAndExecute(role, endpoint, localization, passwordInput, successMessageId){
+    function promptAndExecute(role, endpoint, confirmationDialogLocalization, passwordInput, successMessageId){
         const options = new ConfirmationDialogOptions()
             .withCloseAfterChoice(false);
 
         const confirmCallback = function(){
             const password = passwordInput.value;
             if(password.length == 0){
-                notificationService.showError(Localization.getAdditionalContent("empty-password"));
+                notificationService.showError(localization.getAdditionalContent("empty-password"));
                 return;
             }
 
             const request = new Request(endpoint, {value: password});
                 request.processValidResponse = function(){
                     confirmationService.closeDialog(ids.confirmationDialogId);
-                    notificationService.showSuccess(Localization.getAdditionalContent(successMessageId));
+                    notificationService.showSuccess(localization.getAdditionalContent(successMessageId));
                     loadRoles();
                 }
             dao.sendRequestAsync(request);
@@ -113,6 +113,6 @@
             confirmationService.closeDialog(ids.confirmationDialogId);
         }
 
-        confirmationService.openDialog(ids.confirmationDialogId, localization, confirmCallback, declineCallback, options);
+        confirmationService.openDialog(ids.confirmationDialogId, confirmationDialogLocalization, confirmCallback, declineCallback, options);
     }
 })();

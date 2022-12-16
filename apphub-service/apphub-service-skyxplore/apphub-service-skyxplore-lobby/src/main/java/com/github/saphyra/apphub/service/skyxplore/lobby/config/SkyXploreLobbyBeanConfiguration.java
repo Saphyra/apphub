@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.config;
 
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -39,5 +40,10 @@ public class SkyXploreLobbyBeanConfiguration {
     @Bean
     IdGenerator idGenerator() {
         return new IdGenerator();
+    }
+
+    @Bean
+    UuidConverter uuidConverter() {
+        return new UuidConverter();
     }
 }

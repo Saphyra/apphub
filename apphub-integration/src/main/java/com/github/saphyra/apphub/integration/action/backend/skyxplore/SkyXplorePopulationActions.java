@@ -28,6 +28,14 @@ public class SkyXplorePopulationActions {
             .collect(Collectors.toList());
     }
 
+    public static CitizenResponse renameCitizen(Language language, UUID accessTokenId, UUID planetId, UUID citizenId, String newName) {
+        Response response = getRenameCitizenResponse(language, accessTokenId, planetId, citizenId, newName);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().as(CitizenResponse.class);
+    }
+
     public static Response getRenameCitizenResponse(Language language, UUID accessTokenId, UUID planetId, UUID citizenId, String newName) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(new OneParamRequest<>(newName))

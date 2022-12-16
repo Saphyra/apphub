@@ -4,7 +4,7 @@
 
     $(document).ready(function(){
         checkLogin();
-        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "user", fileName: "index"}));
+        localization.loadLocalization("user", "index");
     });
 
     function checkLogin(){

@@ -37,15 +37,7 @@ scriptLoader.loadScript("/res/skyxplore/js/main_menu/games_controller.js");
     }
 
     $(document).ready(function(){
-        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "skyxplore", fileName: "main_menu"}));
-
-        eventProcessor.registerProcessor(new EventProcessor(
-            (eventType) => {return eventType == events.PAGE_LOADERS_COMPLETED},
-            () => {
-                wsConnection.connect();
-            },
-            true,
-            "Connect to WebSocket"
-        ));
+        localization.loadLocalization("skyxplore", "main_menu")
+            .then(() => wsConnection.connect());
     });
 })();

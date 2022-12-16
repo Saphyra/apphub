@@ -51,7 +51,7 @@ public class UpgradeBuildingTest extends BackEndTest {
         WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
 
         //Building at max level
-        UUID maxLevelBuildingId = findBuilding(language, accessTokenId, planetId, Constants.DATA_ID_BATTERY);
+        UUID maxLevelBuildingId = findBuilding(language, accessTokenId, planetId, Constants.DATA_ID_WATER_PUMP);
 
         Response maxLevelResponse = SkyXploreBuildingActions.getUpgradeBuildingResponse(language, accessTokenId, planetId, maxLevelBuildingId);
 

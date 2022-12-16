@@ -71,7 +71,7 @@
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(blacklist){
                 blacklistController.addBlacklist(blacklist);
-                notificationService.showSuccess(Localization.getAdditionalContent("blacklist-created"));
+                notificationService.showSuccess(localization.getAdditionalContent("blacklist-created"));
                 pageController.displayMainPage();
             }
         dao.sendRequestAsync(request);

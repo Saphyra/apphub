@@ -1,0 +1,34 @@
+{
+  "id": "hospital",
+  "buildingType": "miscellaneous",
+  "placeableSurfaceTypes": [
+    "concrete"
+  ],
+  "data": {
+    "beds": 3,
+    "heal": {
+      "energyUsage": 50,
+      "regenerationPerSecond": 10
+    },
+    "birth": {
+      "maternityLeaveSeconds": 60,
+      "constructionRequirements": {
+        "requiredWorkPoints": 600,
+        "requiredResources": {
+          "energy": 100,
+          "food": 100
+        }
+      }
+    }
+  },
+  "constructionRequirements": {
+    "1": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1,
+        "stone": 1,
+        "wood": 1
+      }
+    }
+  }
+}

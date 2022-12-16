@@ -40,7 +40,6 @@ import org.springframework.http.HttpStatus;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -115,9 +114,6 @@ public class CancelTerraformationServiceTest {
     private SurfaceResponse surfaceResponse;
 
     @Mock
-    private Future<ExecutionResult<SurfaceResponse>> future;
-
-    @Mock
     private ExecutionResult<SurfaceResponse> executionResult;
 
     @Captor
@@ -155,15 +151,14 @@ public class CancelTerraformationServiceTest {
         given(planet.getOwner()).willReturn(USER_ID);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
         given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
-        given(eventLoop.processWithResponse(any(Callable.class), eq(syncCache))).willReturn(future);
-        given(future.get()).willReturn(executionResult);
+        given(eventLoop.processWithResponseAndWait(any(Callable.class), eq(syncCache))).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(surfaceResponse);
         given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(buildingOverviewResponse);
 
         underTest.cancelTerraformationQueueItem(USER_ID, PLANET_ID, CONSTRUCTION_ID);
 
         //Common
-        verify(eventLoop).processWithResponse(callableArgumentCaptor.capture(), eq(syncCache));
+        verify(eventLoop).processWithResponseAndWait(callableArgumentCaptor.capture(), eq(syncCache));
         SurfaceResponse surfaceResponseResult = callableArgumentCaptor.getValue()
             .call();
 
@@ -222,14 +217,13 @@ public class CancelTerraformationServiceTest {
         given(planet.getOwner()).willReturn(USER_ID);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
         given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
-        given(eventLoop.processWithResponse(any(Callable.class), eq(syncCache))).willReturn(future);
-        given(future.get()).willReturn(executionResult);
+        given(eventLoop.processWithResponseAndWait(any(Callable.class), eq(syncCache))).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(surfaceResponse);
         given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(buildingOverviewResponse);
 
         SurfaceResponse result = underTest.cancelTerraformationOfSurface(USER_ID, PLANET_ID, SURFACE_ID);
 
-        verify(eventLoop).processWithResponse(callableArgumentCaptor.capture(), eq(syncCache));
+        verify(eventLoop).processWithResponseAndWait(callableArgumentCaptor.capture(), eq(syncCache));
         SurfaceResponse surfaceResponseResult = callableArgumentCaptor.getValue()
             .call();
 

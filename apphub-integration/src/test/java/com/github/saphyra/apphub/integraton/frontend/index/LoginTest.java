@@ -57,11 +57,14 @@ public class LoginTest extends SeleniumTest {
         ModulesPageActions.logout(driver);
 
         Stream.generate(() -> "")
-            .limit(3)
+            .limit(2)
             .forEach(s -> {
                 IndexPageActions.submitLogin(driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
                 NotificationUtil.verifyErrorNotification(driver, BAD_CREDENTIALS_MESSAGE);
             });
+
+        IndexPageActions.submitLogin(driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
+        NotificationUtil.verifyErrorNotification(driver, "Fiók zárolva. Próbáld újra később!");
 
         IndexPageActions.submitLogin(driver, loginParameters);
         NotificationUtil.verifyErrorNotification(driver, "Fiók zárolva. Próbáld újra később!");

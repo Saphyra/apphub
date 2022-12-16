@@ -22,7 +22,9 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
@@ -36,6 +38,7 @@ public class CheckPasswordServiceTest {
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
     private static final Integer LOCKED_MINUTES = 36;
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
+    private static final String UPDATED_PASSWORD = "updated-password";
 
     @Mock
     private PasswordService passwordService;
@@ -73,7 +76,8 @@ public class CheckPasswordServiceTest {
 
     @Test
     public void incorrectPassword() {
-        given(passwordService.authenticate(PASSWORD, PASSWORD_HASH)).willReturn(false);
+        given(passwordService.authenticate(PASSWORD, USER_ID, PASSWORD_HASH)).willReturn(false);
+        given(passwordService.authenticateOld(PASSWORD, PASSWORD_HASH)).willReturn(false);
         given(user.getPasswordFailureCount()).willReturn(LOGIN_FAILURE_COUNT);
 
         Throwable ex = catchThrowable(() -> underTest.checkPassword(USER_ID, PASSWORD));
@@ -81,6 +85,7 @@ public class CheckPasswordServiceTest {
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.INCORRECT_PASSWORD);
 
         verify(user).setPasswordFailureCount(LOGIN_FAILURE_COUNT + 1);
+        verify(user, times(0)).setPassword(any());
         verify(userDao).save(user);
 
         verifyNoInteractions(logoutService);
@@ -88,7 +93,8 @@ public class CheckPasswordServiceTest {
 
     @Test
     public void incorrectPassword_lockUser() {
-        given(passwordService.authenticate(PASSWORD, PASSWORD_HASH)).willReturn(false);
+        given(passwordService.authenticateOld(PASSWORD, PASSWORD_HASH)).willReturn(false);
+        given(passwordService.authenticate(PASSWORD, USER_ID, PASSWORD_HASH)).willReturn(false);
         given(user.getPasswordFailureCount()).willReturn(LOCK_ACCOUNT_FAILURES);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(passwordProperties.getLockedMinutes()).willReturn(LOCKED_MINUTES);
@@ -101,6 +107,7 @@ public class CheckPasswordServiceTest {
 
         verify(user).setPasswordFailureCount(LOCK_ACCOUNT_FAILURES + 1);
         verify(user).setLockedUntil(CURRENT_TIME.plusMinutes(LOCKED_MINUTES));
+        verify(user, times(0)).setPassword(any());
         verify(userDao).save(user);
 
         verify(logoutService).logout(ACCESS_TOKEN_ID, USER_ID);
@@ -108,11 +115,27 @@ public class CheckPasswordServiceTest {
 
     @Test
     public void correctPassword() {
-        given(passwordService.authenticate(PASSWORD, PASSWORD_HASH)).willReturn(true);
+        given(passwordService.authenticate(PASSWORD, USER_ID, PASSWORD_HASH)).willReturn(true);
 
         User result = underTest.checkPassword(USER_ID, PASSWORD);
 
         verify(user).setPasswordFailureCount(0);
+        verify(user, times(0)).setPassword(any());
+        verify(userDao).save(user);
+
+        assertThat(result).isEqualTo(user);
+    }
+
+    @Test
+    public void updatePassword() {
+        given(passwordService.authenticate(PASSWORD, USER_ID, PASSWORD_HASH)).willReturn(false);
+        given(passwordService.authenticateOld(PASSWORD, PASSWORD_HASH)).willReturn(true);
+        given(passwordService.hashPassword(PASSWORD, USER_ID)).willReturn(UPDATED_PASSWORD);
+
+        User result = underTest.checkPassword(USER_ID, PASSWORD);
+
+        verify(user).setPasswordFailureCount(0);
+        verify(user).setPassword(UPDATED_PASSWORD);
         verify(userDao).save(user);
 
         assertThat(result).isEqualTo(user);

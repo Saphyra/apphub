@@ -70,7 +70,7 @@
             const inputContainer = document.createElement("DIV");
                 const amountLabel = document.createElement("LABEL");
                     const amountTitle = document.createElement("SPAN");
-                        amountTitle.innerHTML = Localization.getAdditionalContent("storage-setting-amount") + ": ";
+                        amountTitle.innerHTML = localization.getAdditionalContent("storage-setting-amount") + ": ";
                 amountLabel.appendChild(amountTitle);
                     const amountInput = document.createElement("INPUT");
                         amountInput.type = "number";
@@ -82,7 +82,7 @@
 
                 const batchSizeLabel = document.createElement("LABEL");
                     const batchSizeTitle = document.createElement("SPAN");
-                        batchSizeTitle.innerHTML = Localization.getAdditionalContent("storage-setting-batch-size") + ": ";
+                        batchSizeTitle.innerHTML = localization.getAdditionalContent("storage-setting-batch-size") + ": ";
                 batchSizeLabel.appendChild(batchSizeTitle);
                     const batchSizeInput = document.createElement("INPUT");
                         batchSizeInput.type = "number";
@@ -94,7 +94,7 @@
 
                 const priorityLabel = document.createElement("LABEL");
                     const priorityTitle = document.createElement("SPAN");
-                        priorityTitle.innerHTML = Localization.getAdditionalContent("storage-setting-priority") + ": ";
+                        priorityTitle.innerHTML = localization.getAdditionalContent("storage-setting-priority") + ": ";
                 priorityLabel.appendChild(priorityTitle);
                     const priorityInput = document.createElement("INPUT");
                         priorityInput.type = "range";
@@ -111,15 +111,15 @@
 
             const buttonContainer = document.createElement("DIV");
                 const saveButton = document.createElement("BUTTON");
-                    saveButton.innerHTML = Localization.getAdditionalContent("save-storage-setting");
+                    saveButton.innerHTML = localization.getAdditionalContent("save-storage-setting");
             buttonContainer.appendChild(saveButton);
 
                 const deleteButton = document.createElement("BUTTON");
-                    deleteButton.innerHTML = Localization.getAdditionalContent("delete-storage-setting");
+                    deleteButton.innerHTML = localization.getAdditionalContent("delete-storage-setting");
             buttonContainer.appendChild(deleteButton);
 
                 const resetButton = document.createElement("BUTTON");
-                    resetButton.innerText = Localization.getAdditionalContent("reset");
+                    resetButton.innerText = localization.getAdditionalContent("reset");
                     resetButton.onclick = function(){
                         storageSettingsSyncEngine.renderNode(storageSetting.storageSettingId);
                     }
@@ -138,7 +138,7 @@
 
     function updateStorageSetting(dataId, storageSettingId, targetAmount, batchSize, priority){
         if(targetAmount < 1){
-            notificationService.showError(Localization.getAdditionalContent("storage-setting-amount-too-low"));
+            notificationService.showError(localization.getAdditionalContent("storage-setting-amount-too-low"));
             return;
         }
 
@@ -153,7 +153,7 @@
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_EDIT_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId()}), payload);
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(storageSetting){
-                notificationService.showSuccess(Localization.getAdditionalContent("storage-setting-saved"));
+                notificationService.showSuccess(localization.getAdditionalContent("storage-setting-saved"));
                 storageSettingsSyncEngine.add(storageSetting);
                 resetPanels();
             }
@@ -162,10 +162,10 @@
 
     function deleteStorageSetting(storageSettingId, dataId){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("delete-storage-setting-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("delete-storage-setting-confirmation-dialog-detail", {resource: dataCaches.itemDataNames.get(dataId)}))
-            .withConfirmButton(Localization.getAdditionalContent("delete-storage-setting-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("delete-storage-setting-decline-button"))
+            .withTitle(localization.getAdditionalContent("delete-storage-setting-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("delete-storage-setting-confirmation-dialog-detail", {resource: dataCaches.itemDataNames.get(dataId)}))
+            .withConfirmButton(localization.getAdditionalContent("delete-storage-setting-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("delete-storage-setting-decline-button"))
 
         confirmationService.openDialog(
             "delete-storage-setting-confirmation-dialog",
@@ -173,7 +173,7 @@
             function(){
                 const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_DELETE_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId(), storageSettingId: storageSettingId}));
                     request.processValidResponse = function(){
-                        notificationService.showSuccess(Localization.getAdditionalContent("storage-setting-deleted"));
+                        notificationService.showSuccess(localization.getAdditionalContent("storage-setting-deleted"));
                         storageSettingsSyncEngine.remove(storageSettingId);
                         availableResourcesSyncEngine.add(dataId);
                         resetPanels();
@@ -197,14 +197,14 @@
         }
 
         if(amount < 0){
-            notificationService.showError(Localization.getAdditionalContent("storage-setting-amount-too-low"));
+            notificationService.showError(localization.getAdditionalContent("storage-setting-amount-too-low"));
             return;
         }
 
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_CREATE_STORAGE_SETTING", {planetId: planetController.getOpenedPlanetId()}), payload);
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(storageSetting){
-                notificationService.showSuccess(Localization.getAdditionalContent("storage-setting-created"));
+                notificationService.showSuccess(localization.getAdditionalContent("storage-setting-created"));
                 storageSettingsSyncEngine.add(storageSetting);
                 availableResourcesSyncEngine.remove(storageSetting.dataId);
                 resetPanels();

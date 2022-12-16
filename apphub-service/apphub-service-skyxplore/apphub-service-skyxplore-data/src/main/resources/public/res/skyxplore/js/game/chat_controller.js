@@ -93,7 +93,7 @@
         const messagesContainer = document.getElementById(createChatMessageContainerId(room));
             const joinMessageNode = document.createElement("DIV");
                 joinMessageNode.classList.add("system-message");
-                joinMessageNode.innerHTML = characterName + " " + Localization.getAdditionalContent("character-joined-to-game");
+                joinMessageNode.innerHTML = characterName + " " + localization.getAdditionalContent("character-joined-to-game");
         messagesContainer.appendChild(joinMessageNode);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
@@ -105,7 +105,7 @@
         const messagesContainer = document.getElementById(createChatMessageContainerId(room));
             const joinMessageNode = document.createElement("DIV");
                 joinMessageNode.classList.add("system-message");
-                joinMessageNode.innerHTML = characterName + " " + Localization.getAdditionalContent("character-left-the-game");
+                joinMessageNode.innerHTML = characterName + " " + localization.getAdditionalContent("character-left-the-game");
         messagesContainer.appendChild(joinMessageNode);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
@@ -158,12 +158,12 @@
     function createChatRoom(){
         const title = document.getElementById(ids.createChatRoomTitleInput).value;
         if(!title.length){
-            notificationService.showError(Localization.getAdditionalContent("chat-room-title-empty"));
+            notificationService.showError(localization.getAdditionalContent("chat-room-title-empty"));
             return
         }
 
         if(title.length > 20){
-            notificationService.showError(Localization.getAdditionalContent("chat-room-title-too-long"));
+            notificationService.showError(localization.getAdditionalContent("chat-room-title-too-long"));
             return
         }
 

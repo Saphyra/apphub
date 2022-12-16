@@ -78,15 +78,15 @@
 
                     const headRow = document.createElement("TR");
                         const buildingNameHead = document.createElement("TH");
-                            buildingNameHead.innerHTML = Localization.getAdditionalContent("planet-building-detail-name");
+                            buildingNameHead.innerHTML = localization.getAdditionalContent("planet-building-detail-name");
                     headRow.appendChild(buildingNameHead);
 
                         const levelSumHead = document.createElement("TH");
-                            levelSumHead.innerHTML = Localization.getAdditionalContent("planet-building-detail-level-sum");
+                            levelSumHead.innerHTML = localization.getAdditionalContent("planet-building-detail-level-sum");
                     headRow.appendChild(levelSumHead);
 
                         const usedSlotsHead = document.createElement("TH");
-                            usedSlotsHead.innerHTML = Localization.getAdditionalContent("planet-building-detail-used-slots");
+                            usedSlotsHead.innerHTML = localization.getAdditionalContent("planet-building-detail-used-slots");
                     headRow.appendChild(usedSlotsHead);
                 detailsTable.appendChild(headRow);
 

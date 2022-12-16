@@ -21,7 +21,7 @@ scriptLoader.loadScript("/res/common/js/animation/roll.js");
 
     function search(query){
         if(query.length < 3){
-            notificationService.showError(Localization.getAdditionalContent("search-text-too-short"));
+            notificationService.showError(localization.getAdditionalContent("search-text-too-short"));
             return;
         }
 
@@ -31,7 +31,7 @@ scriptLoader.loadScript("/res/common/js/animation/roll.js");
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(result){
                 if(result.length == 0){
-                    notificationService.showError(Localization.getAdditionalContent("search-result-empty"));
+                    notificationService.showError(localization.getAdditionalContent("search-result-empty"));
                     return;
                 }
 

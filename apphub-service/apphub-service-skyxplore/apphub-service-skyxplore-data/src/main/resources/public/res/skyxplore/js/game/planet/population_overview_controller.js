@@ -96,8 +96,8 @@
         node.appendChild(citizenName);
 
             const baseStatContainer = document.createElement("DIV");
-                baseStatContainer.appendChild(createProgressBar(citizen.morale / 1600 * 100, Localization.getAdditionalContent("morale") + ": " + citizen.morale)); //TODO query game settings (MaxMorale) from BE
-                baseStatContainer.appendChild(createProgressBar(citizen.satiety / 10000 * 100, Localization.getAdditionalContent("satiety") + ": " + citizen.satiety)); //TODO query game settings (MaxSatiety) from BE
+                baseStatContainer.appendChild(createProgressBar(citizen.morale / 1600 * 100, localization.getAdditionalContent("morale") + ": " + citizen.morale)); //TODO query game settings (MaxMorale) from BE
+                baseStatContainer.appendChild(createProgressBar(citizen.satiety / 10000 * 100, localization.getAdditionalContent("satiety") + ": " + citizen.satiety)); //TODO query game settings (MaxSatiety) from BE
         node.appendChild(baseStatContainer);
 
             const displayableSkills = [];
@@ -152,19 +152,18 @@
 
     function updateCitizenName(citizenId, newName){
         if(newName.length < 3){
-            notificationService.showError(Localization.getAdditionalContent("citizen-name-too-short"));
+            notificationService.showError(localization.getAdditionalContent("citizen-name-too-short"));
             return;
         }
         if(newName.length > 30){
-            notificationService.showError(Localization.getAdditionalContent("citizen-name-too-long"));
+            notificationService.showError(localization.getAdditionalContent("citizen-name-too-long"));
             return;
         }
         const planetId = planetController.getOpenedPlanetId();
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_PLANET_RENAME_CITIZEN", {planetId: planetId, citizenId: citizenId}), {value: newName});
-            request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("citizen-renamed"));
-                const citizen = syncEngine.get(citizenId);
-                citizen.name = newName;
+            request.convertResponse = jsonConverter;
+            request.processValidResponse = function(citizen){
+                notificationService.showSuccess(localization.getAdditionalContent("citizen-renamed"));
                 syncEngine.add(citizen);
             }
         dao.sendRequestAsync(request);

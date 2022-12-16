@@ -1,0 +1,22 @@
+{
+  "id": "restaurant",
+  "buildingType": "miscellaneous",
+  "placeableSurfaceTypes": [
+    "concrete"
+  ],
+  "data": {
+    "seats": 5,
+    "satietyRechargeMultiplier": 2,
+    "energyUsage": 10
+  },
+  "constructionRequirements": {
+    "1": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1,
+        "wood": 1,
+        "stone": 1
+      }
+    }
+  }
+}

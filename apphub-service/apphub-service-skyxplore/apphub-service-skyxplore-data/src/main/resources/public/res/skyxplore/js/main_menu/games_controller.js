@@ -40,7 +40,7 @@
                 if(games.length == 0){
                     const noGameNode = document.createElement("DIV");
                         noGameNode.classList.add("game-item");
-                        noGameNode.innerText = Localization.getAdditionalContent("no-game");
+                        noGameNode.innerText = localization.getAdditionalContent("no-game");
                     gamesWrapper.appendChild(noGameNode);
                 }
 
@@ -57,12 +57,12 @@
 
                     const lastPlayed = new Date(0);
                         lastPlayed.setUTCSeconds(game.lastPlayed);
-                    gameItem.title = Localization.getAdditionalContent("additional-players") + ": " + game.players + "\n" + Localization.getAdditionalContent("last-played") + ": " + formatDate(lastPlayed);
+                    gameItem.title = localization.getAdditionalContent("additional-players") + ": " + game.players + "\n" + localization.getAdditionalContent("last-played") + ": " + formatDate(lastPlayed);
 
                     gameItem.innerText = game.gameName;
 
                     const deleteButton = document.createElement("BUTTON");
-                        deleteButton.innerText = Localization.getAdditionalContent("delete");
+                        deleteButton.innerText = localization.getAdditionalContent("delete");
                         deleteButton.onclick = function(e){
                             e.stopPropagation();
                             deleteGame(game);
@@ -80,10 +80,10 @@
 
     function deleteGame(game){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("delete-game-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("delete-game-confirmation-dialog-detail", {gameName: game.gameName}))
-            .withConfirmButton(Localization.getAdditionalContent("delete-game-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("delete-game-confirmation-dialog-cancel-button"));
+            .withTitle(localization.getAdditionalContent("delete-game-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("delete-game-confirmation-dialog-detail", {gameName: game.gameName}))
+            .withConfirmButton(localization.getAdditionalContent("delete-game-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("delete-game-confirmation-dialog-cancel-button"));
 
         confirmationService.openDialog(
             "delete-game-confirmation-dialog",
@@ -91,7 +91,7 @@
             function(){
                 const request = new Request(Mapping.getEndpoint("SKYXPLORE_DELETE_GAME", {gameId: game.gameId}));
                     request.processValidResponse = function(){
-                        notificationService.showSuccess(Localization.getAdditionalContent("game-deleted"));
+                        notificationService.showSuccess(localization.getAdditionalContent("game-deleted"));
                         displaySavedGames();
                     }
                 dao.sendRequestAsync(request);

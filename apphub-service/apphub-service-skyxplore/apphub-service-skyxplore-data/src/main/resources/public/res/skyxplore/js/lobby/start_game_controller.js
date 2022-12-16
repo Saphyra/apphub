@@ -30,10 +30,10 @@
 
         if(lobbyType == "LOAD_GAME" && !membersController.allMembersConnected()){
             const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-                .withTitle(Localization.getAdditionalContent("start-game-confirmation-dialog-title"))
-                .withDetail(Localization.getAdditionalContent("start-game-confirmation-dialog-detail"))
-                .withConfirmButton(Localization.getAdditionalContent("start-game-confirmation-dialog-confirm-button"))
-                .withDeclineButton(Localization.getAdditionalContent("start-game-confirmation-dialog-cancel-button"));
+                .withTitle(localization.getAdditionalContent("start-game-confirmation-dialog-title"))
+                .withDetail(localization.getAdditionalContent("start-game-confirmation-dialog-detail"))
+                .withConfirmButton(localization.getAdditionalContent("start-game-confirmation-dialog-confirm-button"))
+                .withDeclineButton(localization.getAdditionalContent("start-game-confirmation-dialog-cancel-button"));
 
             confirmationService.openDialog(
                 "start-game-confirmation-dialog",
@@ -46,7 +46,7 @@
     }
 
     function gameCreationStarted(){
-        notificationService.showSuccess(Localization.getAdditionalContent("game-started"));
+        notificationService.showSuccess(localization.getAdditionalContent("game-started"));
         spinner.open();
     }
 })();

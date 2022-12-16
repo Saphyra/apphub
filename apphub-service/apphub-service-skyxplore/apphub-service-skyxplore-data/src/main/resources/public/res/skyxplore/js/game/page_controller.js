@@ -116,7 +116,6 @@ const webSocketEvents = {
 
 scriptLoader.loadScript("/res/common/js/web_socket.js");
 scriptLoader.loadScript("/res/common/js/cache.js");
-scriptLoader.loadScript("/res/common/js/localization/custom_localization.js");
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/common/js/animation/move_controller.js");
 scriptLoader.loadScript("/res/common/js/animation/zoom_controller.js");
@@ -157,10 +156,10 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/modify_surface_controller
 
     function exitGame(){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("exit-game-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("exit-game-confirmation-dialog-detail"))
-            .withConfirmButton(Localization.getAdditionalContent("exit-game-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("exit-game-decline-button"))
+            .withTitle(localization.getAdditionalContent("exit-game-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("exit-game-confirmation-dialog-detail"))
+            .withConfirmButton(localization.getAdditionalContent("exit-game-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("exit-game-decline-button"))
 
         confirmationService.openDialog(
             "exit-game-confirmation-dialog",
@@ -181,17 +180,11 @@ scriptLoader.loadScript("/res/skyxplore/js/game/planet/modify_surface_controller
     }
 
     $(document).ready(function(){
-        eventProcessor.registerProcessor(new EventProcessor(
-            (eventType) => {return eventType == events.PAGE_LOADERS_COMPLETED},
-            () => {
+        localization.loadLocalization("skyxplore", "game")
+            .then(() => {
                 wsConnection.connect();
                 wsConnection.waitForConnection(()=>{mapController.showMap()});
-            },
-            true,
-            "Connect to WebSocket"
-        ));
-
-        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "skyxplore", fileName: "game"}));
+            });
 
         errorHandler.addErrorResponseParameterTranslator(new ErrorResponseParameterTranslator(
             (key) => {return key == "storageType"},

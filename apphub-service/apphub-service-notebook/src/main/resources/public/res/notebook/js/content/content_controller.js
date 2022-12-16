@@ -12,19 +12,10 @@
     window.contentController = new function(){
         this.createListItemId = createListItemId;
         this.nodeFactories = nodeFactories;
+        this.removeListItem = function(listItemId){
+            document.getElementById("category-content-list").removeChild(document.getElementById(createListItemId(listItemId)));
+        }
     }
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){
-            return eventType == events.CATEGORY_DELETED
-                || eventType == events.ITEM_DELETED
-        },
-        function(event){
-            document.getElementById("category-content-list").removeChild(document.getElementById(createListItemId(event.getPayload())));
-        },
-        false,
-        "Remove item from categroy content"
-    ));
 
     function createListItemId(listItemId){
         return "list-item-" + listItemId;

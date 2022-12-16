@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.user.data.service.account;
 
 import com.github.saphyra.apphub.api.user.model.request.ChangePasswordRequest;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
+import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.service.user.data.service.validator.PasswordValidator;
@@ -13,7 +13,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.HttpStatus;
 
 import java.util.UUID;
 
@@ -38,6 +37,9 @@ public class ChangePasswordServiceTest {
     @Mock
     private UserDao userDao;
 
+    @Mock
+    private CheckPasswordService checkPasswordService;
+
     @InjectMocks
     private ChangePasswordService underTest;
 
@@ -58,22 +60,9 @@ public class ChangePasswordServiceTest {
     }
 
     @Test
-    public void invalidPassword() {
-        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
-        given(user.getPassword()).willReturn(PASSWORD_HASH);
-        given(passwordService.authenticate(PASSWORD, PASSWORD_HASH)).willReturn(false);
-
-        Throwable ex = catchThrowable(() -> underTest.changePassword(USER_ID, ChangePasswordRequest.builder().newPassword(NEW_PASSWORD).password(PASSWORD).build()));
-
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.BAD_REQUEST, ErrorCode.INCORRECT_PASSWORD);
-    }
-
-    @Test
     public void changePassword() {
-        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
-        given(user.getPassword()).willReturn(PASSWORD_HASH);
-        given(passwordService.authenticate(PASSWORD, PASSWORD_HASH)).willReturn(true);
-        given(passwordService.hashPassword(NEW_PASSWORD)).willReturn(NEW_PASSWORD_HASH);
+        given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
+        given(passwordService.hashPassword(NEW_PASSWORD, USER_ID)).willReturn(NEW_PASSWORD_HASH);
 
         underTest.changePassword(USER_ID, ChangePasswordRequest.builder().newPassword(NEW_PASSWORD).password(PASSWORD).build());
 

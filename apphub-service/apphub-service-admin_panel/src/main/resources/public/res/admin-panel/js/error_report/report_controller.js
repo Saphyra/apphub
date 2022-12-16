@@ -134,7 +134,7 @@
             operationsCell.innerHTML = "";
 
             const deleteButton = document.createElement("BUTTON");
-                deleteButton.innerText = Localization.getAdditionalContent("delete-error-report-button");
+                deleteButton.innerText = localization.getAdditionalContent("delete-error-report-button");
                 deleteButton.onclick = function(e){
                     e.stopPropagation();
                     deleteReports([errorReport.id]);
@@ -160,7 +160,7 @@
 
             function addButton(newStatus, localizationKey, errorReport, operationsCell, statusChanger){
                 const button = document.createElement("BUTTON");
-                    button.innerText = Localization.getAdditionalContent(localizationKey);
+                    button.innerText = localization.getAdditionalContent(localizationKey);
                     button.onclick = createChangeStatusFunction(newStatus, errorReport, operationsCell, statusChanger);
                 operationsCell.appendChild(button);
             }
@@ -253,10 +253,10 @@
 
     function deleteReports(ids){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("delete-error-reports-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("delete-error-reports-confirmation-dialog-detail", {ids: ids.join(", ")}))
-            .withConfirmButton(Localization.getAdditionalContent("delete-error-reports-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("delete-error-reports-confirmation-dialog-cancel-button"));
+            .withTitle(localization.getAdditionalContent("delete-error-reports-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("delete-error-reports-confirmation-dialog-detail", {ids: ids.join(", ")}))
+            .withConfirmButton(localization.getAdditionalContent("delete-error-reports-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("delete-error-reports-confirmation-dialog-cancel-button"));
 
         confirmationService.openDialog(
             "delete-error-reports-confirmation-dialog",

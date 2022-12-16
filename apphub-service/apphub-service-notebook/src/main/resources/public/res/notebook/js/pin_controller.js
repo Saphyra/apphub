@@ -6,33 +6,8 @@
         this.unpin = function(listItemId){
             setPinStatus(listItemId, false);
         }
+        this.loadPinnedItems = loadPinnedItems;
     }
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        (eventType) => {return eventType == events.SETTINGS_LOADED},
-        loadPinnedItems,
-        true,
-        "Load pinned items"
-    ));
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        (eventType) => {return eventType == events.SETTINGS_MODIFIED || eventType == events.ITEM_ARCHIVED},
-        loadPinnedItems,
-        false,
-        "Reload pinned items"
-    ));
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){
-            return eventType == events.CATEGORY_DELETED
-                || eventType == events.ITEM_DELETED
-        },
-        function(event){
-            loadPinnedItems();
-        },
-        false,
-        "Reload pinned items after deletion"
-    ));
 
     function loadPinnedItems(){
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_GET_PINNED_ITEMS"));
@@ -96,6 +71,10 @@
                                 checklistTableViewController.viewChecklistTable(item.id);
                             }
                         break;
+                        case "ONLY_TITLE":
+                            node.classList.add("only-title");
+                            node.classList.add("disabled");
+                        break;
                         default:
                             notificationService.showError("Unknown type: " + item.type);
                     }
@@ -105,7 +84,7 @@
 
                         const openParentButton = document.createElement("BUTTON");
                             openParentButton.innerText = "P";
-                            openParentButton.title = item.parentTitle || Localization.getAdditionalContent("root-title");
+                            openParentButton.title = item.parentTitle || localization.getAdditionalContent("root-title");
                             openParentButton.onclick = function(e){
                                 e.stopPropagation();
                                 categoryContentController.loadCategoryContent(item.parentId);

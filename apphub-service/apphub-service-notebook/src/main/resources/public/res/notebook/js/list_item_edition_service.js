@@ -48,7 +48,7 @@
                 }
             }
 
-        document.getElementById("edit-list-item-current-category-title").innerText = title || Localization.getAdditionalContent("root-title");
+        document.getElementById("edit-list-item-current-category-title").innerText = title || localization.getAdditionalContent("root-title");
 
         const container = document.getElementById("edit-list-item-parent-selection-category-list");
             container.innerHTML = "";
@@ -56,7 +56,7 @@
             if(!categories.length){
                 const noContentText = document.createElement("DIV");
                     noContentText.classList.add("no-content");
-                    noContentText.innerText = Localization.getAdditionalContent("category-empty");
+                    noContentText.innerText = localization.getAdditionalContent("category-empty");
                 container.appendChild(noContentText);
             }
 
@@ -85,13 +85,13 @@
         const title = document.getElementById("edit-list-item-title-input").value;
         const value = document.getElementById("edit-list-item-value-input").value;
         if(!title.length){
-            notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
+            notificationService.showError(localization.getAdditionalContent("new-item-title-empty"));
             return;
         }
         
         const isLink = editedItemDetails.type == "LINK";
         if(isLink && !value.length){
-            notificationService.showError(Localization.getAdditionalContent("link-url-empty"));
+            notificationService.showError(localization.getAdditionalContent("link-url-empty"));
             return;
         }
         
@@ -103,8 +103,11 @@
 
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_EDIT_LIST_ITEM", {listItemId: editedItemDetails.id}), body);
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("item-saved"));
-                eventProcessor.processEvent(new Event(events.CATEGORY_SAVED));
+                notificationService.showSuccess(localization.getAdditionalContent("item-saved"));
+                categoryTreeController.reloadCategories();
+                categoryContentController.reloadCategoryContent();
+                pinController.loadPinnedItems();
+                pageController.openMainPage();
             }
         dao.sendRequestAsync(request);
     }

@@ -41,7 +41,7 @@
 
             const contentRow = document.createElement("TR");
                 const availableMemoryCell = document.createElement("TD");
-                    availableMemoryCell.innerText = Localization.getAdditionalContent("available-memory", {memory: toMegaBytes(availableMemoryBytes)});
+                    availableMemoryCell.innerText = localization.getAdditionalContent("available-memory", {memory: toMegaBytes(availableMemoryBytes)});
             contentRow.appendChild(availableMemoryCell);
 
                 const svgCell = document.createElement("TD");
@@ -93,8 +93,8 @@
 
             removeExpiredIfNecessary();
 
-            labelCells.allocated.innerText = Localization.getAdditionalContent("allocated-memory", {memory: toMegaBytes(memoryReport.allocatedMemoryBytes)});
-            labelCells.used.innerText = Localization.getAdditionalContent("used-memory", {memory: toMegaBytes(memoryReport.usedMemoryBytes)});
+            labelCells.allocated.innerText = localization.getAdditionalContent("allocated-memory", {memory: toMegaBytes(memoryReport.allocatedMemoryBytes)});
+            labelCells.used.innerText = localization.getAdditionalContent("used-memory", {memory: toMegaBytes(memoryReport.usedMemoryBytes)});
 
             render(service, container, reports, nodes, labelCells);
         }

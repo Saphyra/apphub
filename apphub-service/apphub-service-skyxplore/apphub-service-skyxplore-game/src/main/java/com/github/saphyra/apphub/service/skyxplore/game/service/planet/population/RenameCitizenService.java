@@ -1,8 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.population;
 
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.game.common.converter.response.CitizenToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
@@ -24,8 +26,9 @@ class RenameCitizenService {
     private final GameDao gameDao;
     private final CitizenToModelConverter citizenToModelConverter;
     private final GameDataProxy gameDataProxy;
+    private final CitizenToResponseConverter citizenToResponseConverter;
 
-    void renameCitizen(UUID userId, UUID planetId, UUID citizenId, String newName) {
+    CitizenResponse renameCitizen(UUID userId, UUID planetId, UUID citizenId, String newName) {
         if (isBlank(newName)) {
             throw ExceptionFactory.invalidParam("value", "must not be null or blank");
         }
@@ -44,7 +47,12 @@ class RenameCitizenService {
             throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR, "Citizen not found with id " + citizenId);
         }
 
-        citizen.setName(newName);
-        gameDataProxy.saveItem(citizenToModelConverter.convert(citizen, game.getGameId()));
+        return game.getEventLoop()
+            .processWithResponseAndWait(() -> {
+                citizen.setName(newName);
+                gameDataProxy.saveItem(citizenToModelConverter.convert(citizen, game.getGameId()));
+                return citizenToResponseConverter.convert(citizen);
+            })
+            .getOrThrow();
     }
 }

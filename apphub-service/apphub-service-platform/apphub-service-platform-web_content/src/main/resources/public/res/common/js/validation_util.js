@@ -15,7 +15,7 @@ function createErrorProcess(id, code){
         }
 
         console.log("Running errorProcess for id " + id + " and code " + code);
-        $(id).prop("title", Localization.getAdditionalContent(code))
+        $(id).prop("title", localization.getAdditionalContent(code))
             .fadeIn();
     }
 }

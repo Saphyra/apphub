@@ -37,10 +37,10 @@
 
     function deleteAllRead(){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("delete-all-read-error-reports-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("delete-all-read-error-reports-confirmation-dialog-detail"))
-            .withConfirmButton(Localization.getAdditionalContent("delete-all-read-error-reports-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("delete-all-read-error-reports-confirmation-dialog-cancel-button"));
+            .withTitle(localization.getAdditionalContent("delete-all-read-error-reports-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("delete-all-read-error-reports-confirmation-dialog-detail"))
+            .withConfirmButton(localization.getAdditionalContent("delete-all-read-error-reports-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("delete-all-read-error-reports-confirmation-dialog-cancel-button"));
 
         confirmationService.openDialog(
             "delete-all-read-error-reports-confirmation-dialog",
@@ -48,7 +48,7 @@
             function(){
                 const request = new Request(Mapping.getEndpoint("ADMIN_PANEL_DELETE_READ_ERROR_REPORTS"));
                     request.processValidResponse = function(){
-                        notificationService.showSuccess(Localization.getAdditionalContent("all-read-deleted"));
+                        notificationService.showSuccess(localization.getAdditionalContent("all-read-deleted"));
                         reportController.search();
                     };
                 dao.sendRequestAsync(request);
@@ -70,10 +70,10 @@
 
     function deleteAll(){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("delete-all-error-reports-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("delete-all-error-reports-confirmation-dialog-detail"))
-            .withConfirmButton(Localization.getAdditionalContent("delete-all-error-reports-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("delete-all-error-reports-confirmation-dialog-cancel-button"));
+            .withTitle(localization.getAdditionalContent("delete-all-error-reports-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("delete-all-error-reports-confirmation-dialog-detail"))
+            .withConfirmButton(localization.getAdditionalContent("delete-all-error-reports-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("delete-all-error-reports-confirmation-dialog-cancel-button"));
 
         confirmationService.openDialog(
             "delete-all-error-reports-confirmation-dialog",
@@ -81,7 +81,7 @@
             function(){
                 const request = new Request(Mapping.getEndpoint("ADMIN_PANEL_ERROR_REPORT_DELETE_ALL"));
                     request.processValidResponse = function(){
-                        notificationService.showSuccess(Localization.getAdditionalContent("all-deleted"));
+                        notificationService.showSuccess(localization.getAdditionalContent("all-deleted"));
                         reportController.search();
                     };
                 dao.sendRequestAsync(request);

@@ -70,7 +70,7 @@
         const request = new Request(Mapping.getEndpoint("COMMUNITY_GROUP_CREATE_MEMBER", {groupId: groupDetailsController.getCurrentGroup().groupId}), {value: userId});
             request.convertResponse = jsonConverter;
             request.processValidResponse = function(groupMember){
-                notificationService.showSuccess(Localization.getAdditionalContent("group-member-added"));
+                notificationService.showSuccess(localization.getAdditionalContent("group-member-added"));
                 groupDetailsController.addMember(groupMember);
                 groupDetailsController.openWindow();
             }

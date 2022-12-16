@@ -45,6 +45,6 @@ scriptLoader.loadScript("/res/community/js/contacts/contacts_controller.js");
     }
 
     $(document).ready(function(){
-        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "community", fileName: "community"}));
+        localization.loadLocalization("community", "community");
     });
 })();

@@ -42,25 +42,25 @@
         const content = document.getElementById("view-text-content").value;
 
         if(!title.length){
-            notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
+            notificationService.showError(localization.getAdditionalContent("new-item-title-empty"));
             return;
         }
 
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_EDIT_TEXT", {listItemId: openedTextId}), {title: title, content: content});
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("text-saved"));
+                notificationService.showSuccess(localization.getAdditionalContent("text-saved"));
                 viewText(openedTextId);
-                eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
+                categoryContentController.reloadCategoryContent();
             }
         dao.sendRequestAsync(request);
     }
 
     function discardChanges(){
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("discard-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("discard-confirmation-dialog-detail"))
-            .withConfirmButton(Localization.getAdditionalContent("discard-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("discard-confirmation-dialog-decline-button"));
+            .withTitle(localization.getAdditionalContent("discard-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("discard-confirmation-dialog-detail"))
+            .withConfirmButton(localization.getAdditionalContent("discard-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("discard-confirmation-dialog-decline-button"));
 
         confirmationService.openDialog(
             "discard-confirmation-dialog",

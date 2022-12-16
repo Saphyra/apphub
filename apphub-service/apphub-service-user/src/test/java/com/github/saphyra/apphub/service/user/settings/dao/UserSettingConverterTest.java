@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.service.user.settings.dao;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
+import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -21,6 +23,7 @@ public class UserSettingConverterTest {
     private static final String VALUE = "value";
     private static final String USER_ID_STRING = "user-id";
     private static final String ENCRYPTED_VALUE = "encrypted-value";
+    private static final String ACCESS_TOKEN_USER_ID = "access-token-user-id";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -28,8 +31,16 @@ public class UserSettingConverterTest {
     @Mock
     private StringEncryptor stringEncryptor;
 
+    @Mock
+    private AccessTokenProvider accessTokenProvider;
+
     @InjectMocks
     private UserSettingConverter underTest;
+
+    @Before
+    public void setUp() {
+        given(accessTokenProvider.getUidAsString()).willReturn(ACCESS_TOKEN_USER_ID);
+    }
 
     @Test
     public void convertDomain() {
@@ -41,7 +52,7 @@ public class UserSettingConverterTest {
             .build();
 
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(stringEncryptor.encryptEntity(VALUE, USER_ID_STRING)).willReturn(ENCRYPTED_VALUE);
+        given(stringEncryptor.encryptEntity(VALUE, ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_VALUE);
 
         UserSettingEntity result = underTest.convertDomain(domain);
 
@@ -65,7 +76,7 @@ public class UserSettingConverterTest {
             .build();
 
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_VALUE, USER_ID_STRING)).willReturn(VALUE);
+        given(stringEncryptor.decryptEntity(ENCRYPTED_VALUE, ACCESS_TOKEN_USER_ID)).willReturn(VALUE);
 
         UserSetting result = underTest.convertEntity(entity);
 

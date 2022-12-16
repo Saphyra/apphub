@@ -66,7 +66,7 @@
         const note = document.getElementById(ids.viewEventNote).value;
 
         if(isBlank(title)){
-            notificationService.showError(Localization.getAdditionalContent("empty-title"));
+            notificationService.showError(localization.getAdditionalContent("empty-title"));
             return;
         }
 
@@ -151,10 +151,10 @@
         }
 
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("delete-event-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("delete-event-confirmation-dialog-detail", {title: currentEvent.title}))
-            .withConfirmButton(Localization.getAdditionalContent("delete-event-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("delete-event-confirmation-dialog-cancel-button"));
+            .withTitle(localization.getAdditionalContent("delete-event-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("delete-event-confirmation-dialog-detail", {title: currentEvent.title}))
+            .withConfirmButton(localization.getAdditionalContent("delete-event-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("delete-event-confirmation-dialog-cancel-button"));
 
         confirmationService.openDialog(
             "delete-event-confirmation-dialog",
@@ -163,7 +163,7 @@
                 const request = new Request(Mapping.getEndpoint("DIARY_EVENT_DELETE", {eventId: currentEvent.eventId}), payload);
                     request.convertResponse = jsonConverter;
                     request.processValidResponse = function(days){
-                        notificationService.showSuccess(Localization.getAdditionalContent("event-deleted"));
+                        notificationService.showSuccess(localization.getAdditionalContent("event-deleted"));
                         eventProcessor.processEvent(new Event(events.EVENT_CHANGED, days));
                         pageController.displayMainPage();
                     }

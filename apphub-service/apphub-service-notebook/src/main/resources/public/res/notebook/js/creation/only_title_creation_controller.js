@@ -19,7 +19,7 @@
                 return JSON.parse(response.body)
             }
             request.processValidResponse = function(categoryResponse){
-                const title = categoryResponse.title || Localization.getAdditionalContent("root-title");
+                const title = categoryResponse.title || localization.getAdditionalContent("root-title");
                 displayChildrenOfCategory(categoryId, categoryResponse.parent, categoryResponse.children, title);
             }
         dao.sendRequestAsync(request);
@@ -37,7 +37,7 @@
                    }
                }
 
-           document.getElementById("create-only-title-current-category-title").innerText = title || Localization.getAdditionalContent("root-title");
+           document.getElementById("create-only-title-current-category-title").innerText = title || localization.getAdditionalContent("root-title");
 
            const container = document.getElementById("create-only-title-parent-selection-category-list");
                container.innerHTML = "";
@@ -45,7 +45,7 @@
                if(!categories.length){
                    const noContentText = document.createElement("DIV");
                        noContentText.classList.add("no-content");
-                       noContentText.innerText = Localization.getAdditionalContent("category-empty");
+                       noContentText.innerText = localization.getAdditionalContent("category-empty");
                    container.appendChild(noContentText);
                }
 
@@ -74,14 +74,14 @@
         const value = document.getElementById("new-only-title-title").value;
 
         if(!value.length){
-            notificationService.showError(Localization.getAdditionalContent("new-item-title-empty"));
+            notificationService.showError(localization.getAdditionalContent("new-item-title-empty"));
             return;
         }
 
         const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_ONLY_TITLE"), {parent: currentCategoryId, title: value});
             request.processValidResponse = function(){
-                notificationService.showSuccess(Localization.getAdditionalContent("only-title-created"));
-                eventProcessor.processEvent(new Event(events.LIST_ITEM_SAVED));
+                notificationService.showSuccess(localization.getAdditionalContent("only-title-created"));
+                categoryContentController.reloadCategoryContent();
                 pageController.openMainPage();
             }
         dao.sendRequestAsync(request);

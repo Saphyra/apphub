@@ -40,10 +40,10 @@
         }
 
         const confirmationDialogLocalization = new ConfirmationDialogLocalization()
-            .withTitle(Localization.getAdditionalContent("account-deletion-confirmation-dialog-title"))
-            .withDetail(Localization.getAdditionalContent("account-deletion-confirmation-dialog-detail"))
-            .withConfirmButton(Localization.getAdditionalContent("account-deletion-confirmation-dialog-confirm-button"))
-            .withDeclineButton(Localization.getAdditionalContent("account-deletion-confirmation-dialog-decline-button"));
+            .withTitle(localization.getAdditionalContent("account-deletion-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("account-deletion-confirmation-dialog-detail"))
+            .withConfirmButton(localization.getAdditionalContent("account-deletion-confirmation-dialog-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("account-deletion-confirmation-dialog-decline-button"));
 
         confirmationService.openDialog(
             ACCOUNT_DELETION_CONFIRMATION_DIALOG_ID,

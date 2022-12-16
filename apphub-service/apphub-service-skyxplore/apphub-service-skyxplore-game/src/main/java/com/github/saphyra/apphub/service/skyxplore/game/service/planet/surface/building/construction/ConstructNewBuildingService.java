@@ -10,7 +10,6 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingDa
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
@@ -90,27 +89,29 @@ public class ConstructNewBuildingService {
         Construction construction = constructionFactory.create(building.getBuildingId(), constructionRequirements.getParallelWorkers(), constructionRequirements.getRequiredWorkPoints());
         building.setConstruction(construction);
 
-        resourceAllocationService.processResourceRequirements(game.getGameId(), planet, LocationType.PLANET, construction.getConstructionId(), constructionRequirements.getRequiredResources());
+        return game.getEventLoop()
+            .processWithResponseAndWait(() -> {
+                resourceAllocationService.processResourceRequirements(game.getGameId(), planet, LocationType.PLANET, construction.getConstructionId(), constructionRequirements.getRequiredResources());
 
-        surface.setBuilding(building);
+                surface.setBuilding(building);
 
-        QueueResponse queueResponse = queueItemToResponseConverter.convert(buildingConstructionToQueueItemConverter.convert(building), planet);
-        messageSender.planetQueueItemModified(userId, planetId, queueResponse);
-        messageSender.planetBuildingDetailsModified(userId, planetId, planetBuildingOverviewQueryService.getBuildingOverview(planet));
+                QueueResponse queueResponse = queueItemToResponseConverter.convert(buildingConstructionToQueueItemConverter.convert(building), planet);
+                messageSender.planetQueueItemModified(userId, planetId, queueResponse);
+                messageSender.planetBuildingDetailsModified(userId, planetId, planetBuildingOverviewQueryService.getBuildingOverview(planet));
 
-        ConstructionProcess constructionProcess = constructionProcessFactory.create(game, planet, building);
+                ConstructionProcess constructionProcess = constructionProcessFactory.create(game, planet, building);
 
-        Processes processes = game.getProcesses();
-        synchronized (processes) {
-            processes.add(constructionProcess);
-        }
+                game.getProcesses()
+                    .add(constructionProcess);
 
-        gameDataProxy.saveItem(
-            buildingToModelConverter.convert(building, game.getGameId()),
-            constructionToModelConverter.convert(construction, game.getGameId()),
-            constructionProcess.toModel()
-        );
+                gameDataProxy.saveItem(
+                    buildingToModelConverter.convert(building, game.getGameId()),
+                    constructionToModelConverter.convert(construction, game.getGameId()),
+                    constructionProcess.toModel()
+                );
 
-        return surfaceToResponseConverter.convert(surface);
+                return surfaceToResponseConverter.convert(surface);
+            })
+            .getOrThrow();
     }
 }

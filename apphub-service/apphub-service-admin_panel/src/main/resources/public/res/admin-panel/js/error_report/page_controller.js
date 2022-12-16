@@ -26,7 +26,7 @@ scriptLoader.loadScript("/res/admin-panel/js/error_report/bulk_operations_contro
     }
 
     $(document).ready(function(){
-        eventProcessor.processEvent(new Event(events.LOAD_LOCALIZATION, {module: "admin_panel", fileName: "error_report"}));
+        localization.loadLocalization("admin_panel", "error_report");
     });
 })();
 
@@ -37,7 +37,7 @@ function markErrorReports(ids, status, callback){
 
     const request = new Request(Mapping.getEndpoint("ADMIN_PANEL_MARK_ERROR_REPORTS", {status: status}), ids);
         request.processValidResponse = function(){
-            Localization.getAdditionalContent("error-reports-marked");
+            localization.getAdditionalContent("error-reports-marked");
 
             if(callback){
                 callback();

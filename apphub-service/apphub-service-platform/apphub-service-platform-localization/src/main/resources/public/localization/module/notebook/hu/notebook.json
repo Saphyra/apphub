@@ -515,6 +515,7 @@
     "open-parent": "Szülő megnyitása",
     "archive-button-title": "Archiválás",
     "pin-button-title": "Kitűzés",
-    "only-title-created": "Sikeresen létrehozva."
+    "only-title-created": "Sikeresen létrehozva.",
+    "list-item-title-copied": "Cím vágólapra másolva"
   }
 }

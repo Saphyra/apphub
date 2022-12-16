@@ -32,19 +32,24 @@ public class CheckPasswordService {
         String hash = user.getPassword();
 
         try {
-            if (!passwordService.authenticate(password, hash)) {
-                user.setPasswordFailureCount(user.getPasswordFailureCount() + 1);
+            if (!passwordService.authenticate(password, userId, hash)) {
+                if (passwordService.authenticateOld(password, user.getPassword())) {
+                    log.info("User has old password. Updating...");
+                    user.setPassword(passwordService.hashPassword(password, userId));
+                } else {
+                    user.setPasswordFailureCount(user.getPasswordFailureCount() + 1);
 
-                if (user.getPasswordFailureCount() % passwordProperties.getLockAccountFailures() == 0) {
-                    user.setLockedUntil(dateTimeUtil.getCurrentDateTime().plusMinutes(passwordProperties.getLockedMinutes()));
+                    if (user.getPasswordFailureCount() % passwordProperties.getLockAccountFailures() == 0) {
+                        user.setLockedUntil(dateTimeUtil.getCurrentDateTime().plusMinutes(passwordProperties.getLockedMinutes()));
 
-                    AccessTokenHeader accessTokenHeader = accessTokenProvider.get();
-                    logoutService.logout(accessTokenHeader.getAccessTokenId(), userId);
+                        AccessTokenHeader accessTokenHeader = accessTokenProvider.get();
+                        logoutService.logout(accessTokenHeader.getAccessTokenId(), userId);
 
-                    throw ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.ACCOUNT_LOCKED, "Incorrect password. Account locked.");
+                        throw ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.ACCOUNT_LOCKED, "Incorrect password. Account locked.");
+                    }
+
+                    throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.INCORRECT_PASSWORD, "Incorrect password");
                 }
-
-                throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.INCORRECT_PASSWORD, "Incorrect password");
             }
 
             user.setPasswordFailureCount(0);

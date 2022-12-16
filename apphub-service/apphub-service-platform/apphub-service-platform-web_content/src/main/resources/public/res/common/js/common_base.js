@@ -1,5 +1,7 @@
 const COOKIE_LOCALE = "language";
 const HEADER_BROWSER_LANGUAGE = "BrowserLanguage";
+const DEFAULT_LOCALE = "hu";
+const LINE_SEPARATOR = "\n";
 
 (function ScriptLoader(){
     const date = getDate();
@@ -8,7 +10,8 @@ const HEADER_BROWSER_LANGUAGE = "BrowserLanguage";
     window.scriptLoader = new function(){
         this.loadScript = loadScript;
     }
-    
+
+    //Platform
     scriptLoader.loadScript("/res/common/js/optional.js");
     scriptLoader.loadScript("/res/common/js/stream.js");
     scriptLoader.loadScript("/res/common/js/utils.js");
@@ -17,11 +20,12 @@ const HEADER_BROWSER_LANGUAGE = "BrowserLanguage";
     scriptLoader.loadScript("/res/common/js/dao/error_handler.js");
     scriptLoader.loadScript("/res/common/js/event_processor.js");
     scriptLoader.loadScript("/res/common/js/dom_builder.js");
-    initPageLoader();
+
+    //App
     scriptLoader.loadScript("/res/common/js/notification_service.js");
-    
-    scriptLoader.loadScript("/res/common/js/localization/localization_loader.js");
-    scriptLoader.loadScript("/res/common/js/localization/localization.js");
+
+    scriptLoader.loadScript("/res/common/js/page_loader.js");
+    scriptLoader.loadScript("/res/common/js/localization.js");
     scriptLoader.loadScript("/res/common/js/logout_service.js");
     scriptLoader.loadScript("/res/common/js/session_check.js");
 
@@ -38,7 +42,7 @@ const HEADER_BROWSER_LANGUAGE = "BrowserLanguage";
             throwException("IllegalArgument", "src must not be null or undefined.");
         }
 
-        //console.log("Loading script " + src);
+        console.log("Loading script " + src);
         if(loadedScripts.indexOf(src) > -1){
             //console.log(src + " is already loaded.");
             return;
@@ -61,64 +65,3 @@ const HEADER_BROWSER_LANGUAGE = "BrowserLanguage";
         return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + "/" + date.getHours() + ":" + date.getMinutes();
     }
 })();
-
-function initPageLoader(){
-    const loaders = [];
-
-    window.pageLoader = new function(){
-        this.addLoader = function(loader, description){
-            console.log("Adding loader " + description);
-            if(!hasValue(description)){
-                throwException("IllegalArgument", "Description must not be null or undefined.");
-            }
-
-            if(!isFunction(loader)){
-                throwException("IllegalArgument", "Loader is not a function.");
-            }
-
-            loaders.push({load: loader, description: description});
-        }
-    }
-
-    eventProcessor.registerProcessor(new EventProcessor(
-        function(eventType){return eventType == events.LOCALIZATION_LOADED},
-        function(){
-            let counter = 0;
-
-            const promises = new Stream(loaders)
-                .forEach(
-                    function(loader){
-                        new Promise((resolve, reject) => {
-                            setTimeout(
-                                function(){
-                                    console.log("Calling loader: " + loader.description);
-                                    try{
-                                        loader.load();
-                                    }catch(e){
-                                        reject();
-                                        throw e;
-                                    }
-                                    resolve();
-                                },
-                                0
-                            )
-                        })
-                        .then(()=>counter++, ()=>counter++);
-                    }
-                );
-
-            const interval = setInterval(
-                function(){
-                    console.log("Number of loaders: " + loaders.length + ", completed: " + counter);
-                    if(counter == loaders.length){
-                        clearInterval(interval);
-                        eventProcessor.processEvent(new Event(events.PAGE_LOADERS_COMPLETED));
-                    }
-                },
-                100
-            )
-        },
-        true,
-        "Page loaders"
-    ));
-}

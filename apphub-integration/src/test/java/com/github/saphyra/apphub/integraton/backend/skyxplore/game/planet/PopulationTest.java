@@ -65,14 +65,9 @@ public class PopulationTest extends BackEndTest {
         assertThat(notFoundResponse.getStatusCode()).isEqualTo(404);
 
         //Rename
-        Response renameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, planet.getPlanetId(), citizen.getCitizenId(), NEW_NAME);
-        assertThat(renameResponse.getStatusCode()).isEqualTo(200);
-        CitizenResponse modifiedCitizen = SkyXplorePopulationActions.getPopulation(language, accessTokenId1, planet.getPlanetId())
-            .stream()
-            .filter(citizenResponse -> citizenResponse.getCitizenId().equals(citizen.getCitizenId()))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Citizen not found with id " + citizen.getCitizenId()));
-        assertThat(modifiedCitizen.getName()).isEqualTo(NEW_NAME);
+        CitizenResponse citizenResponse = SkyXplorePopulationActions.renameCitizen(language, accessTokenId1, planet.getPlanetId(), citizen.getCitizenId(), NEW_NAME);
+
+        assertThat(citizenResponse.getName()).isEqualTo(NEW_NAME);
 
         ApphubWsClient.cleanUpConnections();
     }
