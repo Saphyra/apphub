@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
 import com.github.saphyra.apphub.service.notebook.service.text.ContentValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -58,6 +60,11 @@ public class ListItemEditionServiceTest {
     @Mock
     private ListItem child2;
 
+    @Before
+    public void setUp() {
+        given(listItem.getListItemId()).willReturn(LIST_ITEM_ID_1);
+    }
+
     @Test
     public void editLink() {
         given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(listItem);
@@ -79,7 +86,7 @@ public class ListItemEditionServiceTest {
         verify(listItem).setParent(NEW_PARENT);
         verify(content).setContent(NEW_VALUE);
         verify(contentDao).save(content);
-        verify(listItemDao).save(listItem);
+        verify(listItemDao, times(2)).save(listItem);
     }
 
     @Test
@@ -124,7 +131,7 @@ public class ListItemEditionServiceTest {
         verify(listItemRequestValidator).validate(NEW_TITLE, NEW_PARENT);
         verify(listItem).setTitle(NEW_TITLE);
         verify(listItem).setParent(NEW_PARENT);
-        verify(listItemDao).save(listItem);
+        verify(listItemDao, times(2)).save(listItem);
     }
 
     @Test
@@ -143,6 +150,6 @@ public class ListItemEditionServiceTest {
         verify(listItemRequestValidator).validate(NEW_TITLE, NEW_PARENT);
         verify(listItem).setTitle(NEW_TITLE);
         verify(listItem).setParent(NEW_PARENT);
-        verify(listItemDao).save(listItem);
+        verify(listItemDao, times(2)).save(listItem);
     }
 }

@@ -159,6 +159,7 @@ public class Endpoints {
     public static final String NOTEBOOK_SEARCH = "/api/notebook/item/search";
     public static final String NOTEBOOK_ARCHIVE_ITEM = "/api/notebook/item/{listItemId}/archive";
     public static final String NOTEBOOK_CREATE_ONLY_TITLE = "/api/notebook/only-title";
+    public static final String NOTEBOOK_MOVE_LIST_ITEM = "/api/notebook/{listItemId}/move";
 
     //UTILS
     public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";

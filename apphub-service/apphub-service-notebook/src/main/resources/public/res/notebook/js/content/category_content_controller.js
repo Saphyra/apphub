@@ -32,10 +32,22 @@
             if(categoryId == null){
                 parentButton.classList.add("disabled");
                 parentButton.onclick = null;
+
+                parentButton.ondragover = function(e){}
             }else{
                 parentButton.classList.remove("disabled");
                 parentButton.onclick = function(){
                     loadCategoryContent(categoryDetails.parent, false);
+                }
+                parentButton.ondragover = function(e){
+                    e.preventDefault();
+                }
+                parentButton.ondrop = function(e){
+                    e.preventDefault();
+                    const listItemId = e.dataTransfer.getData("listItemId");
+                    const parent = categoryDetails.parent;
+
+                    listItemEditionService.moveListItem(listItemId, parent);
                 }
             }
 

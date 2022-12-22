@@ -3,6 +3,22 @@ function categoryNodeFactory(parent, itemDetails, displayOpenParentCategoryButto
         node.classList.add("list-item-details-item");
         node.classList.add("button");
         node.classList.add("category");
+        node.ondragover = function(e){
+            e.preventDefault();
+        }
+
+        node.ondrop = function(e){
+            e.preventDefault();
+            const listItemId = e.dataTransfer.getData("listItemId");
+            const parent = itemDetails.id;
+
+            listItemEditionService.moveListItem(listItemId, parent);
+        }
+
+        node.ondragstart = function(e){
+            e.dataTransfer.setData("listItemId", itemDetails.id);
+        }
+        node.draggable = true;
 
         node.onclick = function(){
             categoryContentController.loadCategoryContent(itemDetails.id, false);

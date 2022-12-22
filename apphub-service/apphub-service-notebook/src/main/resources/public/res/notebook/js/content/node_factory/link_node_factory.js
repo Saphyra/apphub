@@ -8,6 +8,11 @@ function linkNodeFactory(parent, itemDetails, displayOpenParentCategoryButton){
             window.open(itemDetails.value);
         }
 
+        node.ondragstart = function(e){
+            e.dataTransfer.setData("listItemId", itemDetails.id);
+        }
+        node.draggable = true;
+
         const title = document.createElement("SPAN");
             title.innerText = itemDetails.title;
             title.title = itemDetails.value;

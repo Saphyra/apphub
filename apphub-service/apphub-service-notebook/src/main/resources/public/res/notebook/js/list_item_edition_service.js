@@ -5,6 +5,7 @@
     window.listItemEditionService = new function(){
         this.openEditListItemWindow = openEditListItemWindow;
         this.editListItem = editListItem;
+        this.moveListItem = moveListItem;
     }
 
     function openEditListItemWindow(parent, itemDetails){
@@ -108,6 +109,16 @@
                 categoryContentController.reloadCategoryContent();
                 pinController.loadPinnedItems();
                 pageController.openMainPage();
+            }
+        dao.sendRequestAsync(request);
+    }
+
+    function moveListItem(listItemId, parent){
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_MOVE_LIST_ITEM", {listItemId: listItemId}), {value: parent});
+            request.processValidResponse = function(){
+                categoryTreeController.reloadCategories();
+                categoryContentController.reloadCategoryContent();
+                pinController.loadPinnedItems();
             }
         dao.sendRequestAsync(request);
     }

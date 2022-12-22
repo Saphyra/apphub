@@ -30,6 +30,7 @@ public class ListItemControllerIImplTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String SEARCH_TEXT = "search-text";
+    private static final UUID PARENT = UUID.randomUUID();
 
     @Mock
     private ListItemDeletionService listItemDeletionService;
@@ -117,5 +118,12 @@ public class ListItemControllerIImplTest {
         underTest.archive(new OneParamRequest<>(true), LIST_ITEM_ID, accessTokenHeader);
 
         verify(archiveService).archive(LIST_ITEM_ID, true);
+    }
+
+    @Test
+    public void moveListItem() {
+        underTest.moveListItem(new OneParamRequest<>(PARENT), LIST_ITEM_ID);
+
+        verify(listItemEditionService).moveListItem(LIST_ITEM_ID, PARENT);
     }
 }
