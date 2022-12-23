@@ -1,5 +1,5 @@
 (function PlanetPriorityController(){
-    const priorityTypes = ["construction", "industry", "well_being"];
+    const priorityTypes = ["construction", "industry", "well_being", "education"];
 
     const idMasks = {
         planetPrioritiesInput: new IdMask("planet-priorities-*-input"),

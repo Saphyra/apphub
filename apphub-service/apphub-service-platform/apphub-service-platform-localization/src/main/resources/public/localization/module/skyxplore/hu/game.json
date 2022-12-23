@@ -103,6 +103,12 @@
         "message": "Életszínvonal"
       }
     ],
+    "planet-priorities-education-label": [
+      {
+        "key": "innerHTML",
+        "message": "Oktatás"
+      }
+    ],
     "planet-storage-settings-button": [
       {
         "key": "innerHTML",
@@ -281,6 +287,12 @@
       {
         "key": "title",
         "message": "Mikor menjenek a városlakók enni és pihenni"
+      }
+    ],
+    "planet-priorities-education-wrapper": [
+      {
+        "key": "title",
+        "message": "Tapasztalat szerzése az iskolában"
       }
     ],
     "terraformation-title": [
