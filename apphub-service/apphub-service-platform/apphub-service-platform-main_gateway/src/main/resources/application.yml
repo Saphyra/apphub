@@ -11,43 +11,11 @@ spring:
         - id: common-resorces
           uri: http://web-content:8080
           predicates:
-            - Path=/res/common/**
-        - id: user-resorces
-          uri: http://user:8080
-          predicates:
-            - Path=/res/user/**
-        - id: notebook-resorces
-          uri: http://notebook:8080
-          predicates:
-            - Path=/res/notebook/**
-        - id: modules-resorces
-          uri: http://modules:8080
-          predicates:
-            - Path=/res/modules/**
-        - id: admin-panel-resorces
-          uri: http://admin-panel:8080
-          predicates:
-            - Path=/res/admin-panel/**
-        - id: utils-resorces
-          uri: http://utils:8080
-          predicates:
-            - Path=/res/utils/**
-        - id: skyxplore-resorces
-          uri: http://skyxplore-data:8080
-          predicates:
-            - Path=/res/skyxplore/**
+            - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/diary/**, /res/modules/**, /res/notebook/**, /res/skyxplore/**, /res/utils/**, /res/user/**
         - id: training-resorces
           uri: http://training:8080
           predicates:
             - Path=/res/training/**
-        - id: community-resorces
-          uri: http://community:8080
-          predicates:
-            - Path=/res/community/**
-        - id: diary-resorces
-          uri: http://diary:8080
-          predicates:
-            - Path=/res/diary/**
 
         #PAGES
         - id: common-pages
