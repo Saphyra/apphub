@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.lib.monitoring;
 
 import com.github.saphyra.apphub.api.admin_panel.client.MonitoringClient;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.config.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

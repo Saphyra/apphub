@@ -50,50 +50,18 @@ spring:
             - Path=/res/diary/**
 
         #PAGES
+        - id: common-pages
+          uri: http://web-content:8080
+          predicates:
+            - Path=/web, /web/notebook, /web/user/account, /web/modules, /web/admin-panel/**, /web/utils/**, /web/skyxplore/**, /web/community, /web/diary
         - id: error-page
           uri: http://web-content:8080
           predicates:
             - Path=/web/error
-        - id: index-page
-          uri: http://user:8080
-          predicates:
-            - Path=/web
-        - id: notebook-page
-          uri: http://notebook:8080
-          predicates:
-            - Path=/web/notebook
-        - id: account-page
-          uri: http://user:8080
-          predicates:
-            - Path=/web/user/account
-        - id: modules-page
-          uri: http://modules:8080
-          predicates:
-            - Path=/web/modules
-        - id: admin-panel-pages
-          uri: http://admin-panel:8080
-          predicates:
-            - Path=/web/admin-panel/**
-        - id: utils-pages
-          uri: http://utils:8080
-          predicates:
-            - Path=/web/utils/**
-        - id: skyxplore-pages
-          uri: http://skyxplore-data:8080
-          predicates:
-            - Path=/web/skyxplore/**
         - id: training-pages
           uri: http://training:8080
           predicates:
             - Path=/web/training/**
-        - id: community-page
-          uri: http://community:8080
-          predicates:
-            - Path=/web/community
-        - id: diary-page
-          uri: http://diary:8080
-          predicates:
-            - Path=/web/diary
 
         #MODULES
         - id: user

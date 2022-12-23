@@ -106,6 +106,12 @@
             <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
             <version>${versions.spring-cloud}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-config-liquibase</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

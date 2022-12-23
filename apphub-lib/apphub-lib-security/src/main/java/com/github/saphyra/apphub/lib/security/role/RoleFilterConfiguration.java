@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.lib.security.role;
 
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.lib.config.FilterOrder;
+import com.github.saphyra.apphub.lib.config.common.FilterOrder;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

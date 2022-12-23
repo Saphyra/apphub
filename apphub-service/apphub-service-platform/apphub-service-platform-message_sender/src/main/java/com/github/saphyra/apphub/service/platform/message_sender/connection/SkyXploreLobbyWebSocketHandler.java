@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiCli
 import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyWsApiClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 

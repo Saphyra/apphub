@@ -3,10 +3,8 @@ package com.github.saphyra.apphub.service.notebook.config;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.config.access_token.AccessTokenConfiguration;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
-import com.github.saphyra.apphub.lib.config.thymeleaf.EnableThymeLeaf;
 import com.github.saphyra.apphub.lib.encryption.EnableEncryption;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
@@ -30,13 +28,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableLiquibase
 @EnableEventProcessor
 @EnableHealthCheck
-@EnableThymeLeaf
 @EnableErrorHandler
 @EnableLocaleMandatoryRequestValidation
 @EnableEncryption
 @Import({
     CommonConfigProperties.class,
-    AccessTokenConfiguration.class,
     AccessTokenFilterConfiguration.class,
     RoleFilterConfiguration.class
 })

@@ -95,6 +95,12 @@
             <artifactId>apphub-api-diary-server</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-config-liquibase</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

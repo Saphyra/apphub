@@ -1,0 +1,38 @@
+<HTML xmlns:th="http://www.w3.org/1999/xhtml">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/community/css/community.css">
+    <LINK rel="stylesheet" href="/res/community/css/chat.css">
+    <LINK rel="stylesheet" href="/res/community/css/flow.css">
+    <LINK rel="stylesheet" href="/res/community/css/contacts.css">
+    <LINK rel="stylesheet" href="/res/community/css/group_add_member.css">
+    <LINK rel="stylesheet" href="/res/community/css/group_details.css">
+    <LINK rel="stylesheet" href="/res/community/css/create_blacklist.css">
+    <LINK rel="stylesheet" href="/res/community/css/create_friend_request.css">
+    <LINK rel="stylesheet" href="/res/community/css/create_group.css">
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT src="/res/community/js/page_controller.js"></SCRIPT>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+            window.userId = /*[[${userId}]]*/;
+        /*]]>*/
+
+    </script>
+</HEAD>
+<BODY>
+
+<DIV th:replace="/community/fragment/main.html :: main"></DIV>
+<DIV th:replace="/community/fragment/create_friend_request.html :: create-friend-request"></DIV>
+<DIV th:replace="/community/fragment/create_blacklist.html :: create-blacklist"></DIV>
+<DIV th:replace="/community/fragment/create_group.html :: create-group"></DIV>
+<DIV th:replace="/community/fragment/group_details.html :: group-details"></DIV>
+<DIV th:replace="/community/fragment/group_add_member.html :: group-add-member"></DIV>
+
+</BODY>
+</HTML>

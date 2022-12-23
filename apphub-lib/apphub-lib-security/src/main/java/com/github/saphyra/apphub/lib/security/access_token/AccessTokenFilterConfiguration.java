@@ -1,18 +1,19 @@
 package com.github.saphyra.apphub.lib.security.access_token;
 
-import com.github.saphyra.apphub.lib.config.FilterOrder;
-import com.github.saphyra.apphub.lib.config.access_token.AccessTokenConfiguration;
+import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
+import com.github.saphyra.apphub.lib.config.common.FilterOrder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Slf4j
 @ComponentScan
-@Import(AccessTokenConfiguration.class)
 public class AccessTokenFilterConfiguration {
     @Bean
     public FilterRegistrationBean<AccessTokenFilter> accessTokenFilterFilterRegistrationBean(AccessTokenFilter contextFilter) {
@@ -26,5 +27,17 @@ public class AccessTokenFilterConfiguration {
             "/web/*"
         );
         return filterRegistrationBean;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(Base64Encoder.class)
+    Base64Encoder base64Encoder() {
+        return new Base64Encoder();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(AccessTokenHeaderConverter.class)
+    AccessTokenHeaderConverter accessTokenHeaderConverter(Base64Encoder base64Encoder, ObjectMapperWrapper objectMapperWrapper) {
+        return new AccessTokenHeaderConverter(base64Encoder, objectMapperWrapper);
     }
 }

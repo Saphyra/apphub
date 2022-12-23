@@ -54,12 +54,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.thymeleaf</groupId>
-            <artifactId>thymeleaf-spring5</artifactId>
-            <version>${versions.thymeleaf-spring}</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-request_validation</artifactId>
             <version>${project.version}</version>
@@ -107,6 +101,11 @@
             <artifactId>apphub-test-api</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-config-liquibase</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

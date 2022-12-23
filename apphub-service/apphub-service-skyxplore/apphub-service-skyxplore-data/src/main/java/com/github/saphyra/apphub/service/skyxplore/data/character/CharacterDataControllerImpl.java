@@ -40,4 +40,10 @@ public class CharacterDataControllerImpl implements SkyXploreCharacterDataContro
             .map(ResponseEntity::ok)
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @Override
+    public boolean exists(UUID userId) {
+        log.info("Checking if character exists for user {}", userId);
+        return characterDao.exists(userId);
+    }
 }

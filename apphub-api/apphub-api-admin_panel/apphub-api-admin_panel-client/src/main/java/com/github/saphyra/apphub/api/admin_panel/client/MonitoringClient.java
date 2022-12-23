@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.api.admin_panel.client;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.MemoryStatusModel;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;

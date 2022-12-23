@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication;
 
-import com.github.saphyra.apphub.lib.config.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

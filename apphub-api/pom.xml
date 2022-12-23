@@ -32,7 +32,7 @@
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-config</artifactId>
+            <artifactId>apphub-lib-config-common</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

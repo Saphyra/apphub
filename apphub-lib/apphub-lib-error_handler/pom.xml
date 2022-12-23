@@ -43,12 +43,6 @@
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-config</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-exception</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -69,6 +63,12 @@
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-core</artifactId>
             <version>${versions.openfeign}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-config-feign</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

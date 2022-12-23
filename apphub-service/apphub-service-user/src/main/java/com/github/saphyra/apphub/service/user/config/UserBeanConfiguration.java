@@ -5,10 +5,8 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
-import com.github.saphyra.apphub.lib.config.access_token.AccessTokenConfiguration;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
-import com.github.saphyra.apphub.lib.config.thymeleaf.EnableThymeLeaf;
 import com.github.saphyra.apphub.lib.encryption.EnableEncryption;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
@@ -39,11 +37,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableErrorHandler
 @Import({
     CommonConfigProperties.class,
-    AccessTokenConfiguration.class,
     AccessTokenFilterConfiguration.class,
     RoleFilterConfiguration.class
 })
-@EnableThymeLeaf
 @EnableEventProcessor
 @EnableHealthCheck
 @EnableLocaleMandatoryRequestValidation

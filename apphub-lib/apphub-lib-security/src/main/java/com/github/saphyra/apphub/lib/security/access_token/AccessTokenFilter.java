@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.lib.security.access_token;
 
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.access_token.AccessTokenHeaderConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
