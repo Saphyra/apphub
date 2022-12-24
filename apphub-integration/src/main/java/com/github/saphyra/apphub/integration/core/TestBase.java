@@ -115,7 +115,7 @@ public class TestBase {
         log.debug("Available permits before releasing: {}", SEMAPHORE.availablePermits());
         TESTS_FINISHED++;
         if (TESTS_FINISHED % INCREASE_PERMITS_AFTER_TESTS_FINISHED == 0 && SEMAPHORE.availablePermits() < 3) {
-            log.info("Increasing number of permits...");
+            log.debug("Increasing number of permits...");
             SEMAPHORE.release(1);
         }
         SEMAPHORE.release(1);

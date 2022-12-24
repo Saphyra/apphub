@@ -90,11 +90,7 @@
         }
 
         this.get = function(key){
-            return localization[key] || function(){
-                const message = "Localization not found with key " + key + " in file " + fileName;
-                console.error(message);
-                return message;
-            }()
+            return localization[key] || throwException("IllegalArgument", "Localization not found with key " + key + " in " + module + "/" + fileName);
         }
     }
 })();
