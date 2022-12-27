@@ -102,10 +102,29 @@
             <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
             <version>${versions.spring-cloud}</version>
         </dependency>
+
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>${versions.gson}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>Java-WebSocket</artifactId>
+            <version>${versions.java-websocket}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-skyxplore-ws</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>${versions.apache-commons-pool}</version>
         </dependency>
     </dependencies>
 

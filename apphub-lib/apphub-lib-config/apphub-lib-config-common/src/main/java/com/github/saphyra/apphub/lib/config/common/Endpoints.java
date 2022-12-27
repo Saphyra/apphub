@@ -61,6 +61,7 @@ public class Endpoints {
     public static final String WS_CONNECTION_SKYXPLORE_MAIN_MENU = "/api/message-sender/skyxplore/main-menu";
     public static final String WS_CONNECTION_SKYXPLORE_LOBBY = "/api/message-sender/skyxplore/lobby";
     public static final String WS_CONNECTION_SKYXPLORE_GAME = "/api/message-sender/skyxplore/game";
+    public static final String WS_CONNECTION_SKYXPLORE_INTERNAL = "/allowed-internal/skyxplore";
 
     //ADMIN-PANEL WEB-SOCKET MESSAGING
     public static final String ADMIN_PANEL_WEB_SOCKET_USER_CONNECTED = "/internal/api/admin-panel/ws/{userId}";

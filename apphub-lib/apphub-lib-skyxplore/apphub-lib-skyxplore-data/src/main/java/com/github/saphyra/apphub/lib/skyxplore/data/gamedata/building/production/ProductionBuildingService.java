@@ -18,7 +18,7 @@ public class ProductionBuildingService extends ValidationAbstractDataService<Str
     @PostConstruct
     public void init() {
         super.load(ProductionBuilding.class);
-        log.info("ProductionBuildingService: {}", this);
+        log.debug("ProductionBuildingService: {}", this);
     }
 
     @Override

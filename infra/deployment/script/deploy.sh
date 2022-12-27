@@ -45,10 +45,10 @@ echo ""
 
 ./infra/deployment/script/setup_namespace.sh "$NAMESPACE_NAME"
 
-scaleDownByDirectory "./infra/deployment/service/$SCRIPT_DIR_NAME/platform/*"
-scaleDownByDirectory "./infra/deployment/service/$SCRIPT_DIR_NAME/service/*"
+scaleDownByDirectory "./infra/deployment/service/$SCRIPT_DIR_NAME/01_platform/*"
+scaleDownByDirectory "./infra/deployment/service/$SCRIPT_DIR_NAME/02_service/*"
 
 ./infra/deployment/script/wait_for_pods_ready.sh "$NAMESPACE_NAME" "$MAX_WAIT_TIME" 2 5
 
-deployByDirectory "./infra/deployment/service/$SCRIPT_DIR_NAME/platform/*"
-deployByDirectory "./infra/deployment/service/$SCRIPT_DIR_NAME/service/*"
+deployByDirectory "./infra/deployment/service/$SCRIPT_DIR_NAME/01_platform/*"
+deployByDirectory "./infra/deployment/service/$SCRIPT_DIR_NAME/02_service/*"

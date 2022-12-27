@@ -14,6 +14,9 @@ import com.github.saphyra.apphub.lib.skyxplore.data.SkyXploreDataConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
 @Configuration
 @EnableHealthCheck
@@ -27,6 +30,7 @@ import org.springframework.context.annotation.Import;
 @EnableLiquibase
 @EnableEventProcessor
 @EnableMemoryMonitoring
+@EnableWebSocket
 public class SkyXploreDataBeanConfiguration {
     @Bean
     IdGenerator idGenerator() {
@@ -36,5 +40,10 @@ public class SkyXploreDataBeanConfiguration {
     @Bean
     UuidConverter uuidConverter() {
         return new UuidConverter();
+    }
+
+    @Bean
+    TaskScheduler taskScheduler() {
+        return new ThreadPoolTaskScheduler();
     }
 }
