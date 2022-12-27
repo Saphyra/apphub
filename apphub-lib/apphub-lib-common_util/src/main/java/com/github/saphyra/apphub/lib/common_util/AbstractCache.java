@@ -29,4 +29,8 @@ public abstract class AbstractCache<K, T> {
     public void clear() {
         cache.invalidateAll();
     }
+
+    public void put(K key, T value) {
+        cache.put(key, Optional.ofNullable(value));
+    }
 }

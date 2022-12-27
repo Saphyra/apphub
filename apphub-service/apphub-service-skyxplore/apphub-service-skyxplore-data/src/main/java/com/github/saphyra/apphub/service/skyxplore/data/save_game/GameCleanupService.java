@@ -13,6 +13,8 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -30,7 +32,7 @@ public class GameCleanupService {
 
         gameDao.getGamesMarkedForDeletion()
             .stream()
-            .filter(gameModel -> gameModel.getMarkedForDeletionAt().isBefore(expirationDate))
+            .filter(gameModel -> isNull(gameModel.getMarkedForDeletionAt()) || gameModel.getMarkedForDeletionAt().isBefore(expirationDate))
             .forEach(gameModel -> gameItemServices.forEach(gameItemService -> gameItemService.deleteByGameId(gameModel.getGameId())));
     }
 }

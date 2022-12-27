@@ -48,6 +48,8 @@
         <versions.guava>30.1-jre</versions.guava>
         <versions.openfeign>11.5</versions.openfeign>
         <versions.gson>2.8.9</versions.gson>
+        <versions.java-websocket>1.5.1</versions.java-websocket>
+        <versions.apache-commons-pool>2.9.0</versions.apache-commons-pool>
 
         <!-- Plugin Versions -->
         <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
