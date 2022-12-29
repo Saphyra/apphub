@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: encryption
+  labels:
+    app: encryption
+    type: spring-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: encryption
+  template:
+    metadata:
+      labels:
+        serviceType: spring-app
+        name: encryption
+    spec:
+      containers:
+        - name: encryption
+          image: saphyra/apphub-service-platform-encryption:latest
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Never
+          livenessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 1
+            failureThreshold: 15
+          resources:
+            limits:
+              memory: 250Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: encryption
+  labels:
+    app: encryption
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+  selector:
+    name: encryption

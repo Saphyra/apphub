@@ -100,3 +100,7 @@ community:
 diary:
   ribbon:
     listOfServers: localhost:8097
+
+encryption:
+  ribbon:
+    listOfServers: localhost:8098

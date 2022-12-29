@@ -289,4 +289,9 @@ public class Endpoints {
     public static final String DIARY_OCCURRENCE_SNOOZED = "/api/diary/occurrence/{occurrenceId}/snoozed";
     public static final String DIARY_EVENT_DELETE = "/api/diary/event/{eventId}";
     public static final String DIARY_SEARCH = "/api/diary/search";
+
+    //Encryption
+    public static final String ENCRYPTION_INTERNAL_CREATE_KEY = "/internal/encryption/key/{accessMode}";
+    public static final String ENCRYPTION_INTERNAL_DELETE_KEY = "/internal/encryption/key/{dataType}/{externalId}/{accessMode}";
+    public static final String ENCRYPTION_INTERNAL_GET_KEY = "/internal/encryption/key/{dataType}/{externalId}/{accessMode}";
 }
