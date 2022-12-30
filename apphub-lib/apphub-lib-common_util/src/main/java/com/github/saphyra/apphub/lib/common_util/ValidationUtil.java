@@ -2,8 +2,10 @@ package com.github.saphyra.apphub.lib.common_util;
 
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import static java.util.Objects.isNull;
@@ -79,6 +81,12 @@ public class ValidationUtil {
 
         if (!edit.contains(obj)) {
             throw ExceptionFactory.invalidParam(field, "must be one of " + edit);
+        }
+    }
+
+    public static void notAllNull(List<String> fields, Object... values) {
+        if (Arrays.stream(values).allMatch(Objects::isNull)) {
+            throw ExceptionFactory.invalidParam(String.join(", ", fields), "all values are null");
         }
     }
 }

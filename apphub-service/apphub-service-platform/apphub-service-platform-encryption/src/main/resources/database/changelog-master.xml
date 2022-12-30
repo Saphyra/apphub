@@ -11,4 +11,5 @@
     </changeSet>
 
     <include file="database/change_sets/encryption_key.xml"/>
+    <include file="database/change_sets/shared_data.xml"/>
 </databaseChangeLog>

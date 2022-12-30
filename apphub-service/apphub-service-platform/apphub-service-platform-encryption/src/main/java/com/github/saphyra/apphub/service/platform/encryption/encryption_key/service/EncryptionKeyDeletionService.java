@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.platform.encryption.model.DataType;
 import com.github.saphyra.apphub.api.platform.encryption.model.EncryptionKey;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.platform.encryption.encryption_key.dao.EncryptionKeyDao;
+import com.github.saphyra.apphub.service.platform.encryption.shared_data.service.SharedDataAccessService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import java.util.UUID;
 //TODO unit test
 public class EncryptionKeyDeletionService {
     private final EncryptionKeyDao encryptionKeyDao;
+    private final SharedDataAccessService sharedDataAccessService;
 
     public void deleteEncryptionKey(UUID userId, DataType dataType, UUID externalId, AccessMode accessMode) {
         Optional<EncryptionKey> maybeEncryptionKey = encryptionKeyDao.findById(externalId, dataType);
@@ -28,7 +30,7 @@ public class EncryptionKeyDeletionService {
         if (maybeEncryptionKey.isPresent()) {
             EncryptionKey encryptionKey = maybeEncryptionKey.get();
 
-            if (encryptionKey.getUserId().equals(userId) || hasReadAccess(userId, encryptionKey, accessMode)) {
+            if (encryptionKey.getUserId().equals(userId) || hasAccess(userId, encryptionKey, accessMode)) {
                 encryptionKeyDao.delete(encryptionKey);
             }
         } else {
@@ -36,8 +38,7 @@ public class EncryptionKeyDeletionService {
         }
     }
 
-    private boolean hasReadAccess(UUID userId, EncryptionKey encryptionKey, AccessMode accessMode) {
-        //TODO implement
-        return false;
+    private boolean hasAccess(UUID userId, EncryptionKey encryptionKey, AccessMode accessMode) {
+        return sharedDataAccessService.hasAccess(userId, accessMode, encryptionKey.getExternalId(), encryptionKey.getDataType());
     }
 }
