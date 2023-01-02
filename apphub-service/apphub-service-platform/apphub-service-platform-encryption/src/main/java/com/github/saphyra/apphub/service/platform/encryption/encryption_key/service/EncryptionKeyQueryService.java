@@ -16,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class EncryptionKeyQueryService {
     private final EncryptionKeyDao encryptionKeyDao;
     private final SharedDataAccessService sharedDataAccessService;
@@ -27,7 +26,7 @@ public class EncryptionKeyQueryService {
         if (maybeEncryptionKey.isPresent()) {
             EncryptionKey encryptionKey = maybeEncryptionKey.get();
 
-            if (encryptionKey.getUserId().equals(userId) || hasAccess(userId, encryptionKey, accessMode)) {
+            if (encryptionKey.getUserId().equals(userId) || hasAccess(userId, externalId, dataType, accessMode)) {
                 return Optional.of(encryptionKey.getEncryptionKey());
             } else {
                 throw ExceptionFactory.forbiddenOperation(userId + " has no access to " + encryptionKey);
@@ -38,7 +37,7 @@ public class EncryptionKeyQueryService {
         return Optional.empty();
     }
 
-    private boolean hasAccess(UUID userId, EncryptionKey encryptionKey, AccessMode accessMode) {
-        return sharedDataAccessService.hasAccess(userId, accessMode, encryptionKey.getExternalId(), encryptionKey.getDataType());
+    private boolean hasAccess(UUID userId, UUID externalId, DataType dataType, AccessMode accessMode) {
+        return sharedDataAccessService.hasAccess(userId, accessMode, externalId, dataType);
     }
 }

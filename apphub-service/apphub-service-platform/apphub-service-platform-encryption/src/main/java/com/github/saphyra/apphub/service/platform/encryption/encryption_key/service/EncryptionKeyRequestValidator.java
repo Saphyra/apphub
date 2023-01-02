@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EncryptionKeyRequestValidator {
     public void validate(EncryptionKey request) {
         ValidationUtil.notNull(request.getExternalId(), "externalId");

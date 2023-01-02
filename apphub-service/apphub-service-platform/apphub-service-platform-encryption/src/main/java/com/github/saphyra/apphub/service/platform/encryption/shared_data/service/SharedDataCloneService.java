@@ -13,7 +13,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SharedDataCloneService {
     private final IdGenerator idGenerator;
     private final SharedDataDao sharedDataDao;
@@ -24,11 +23,11 @@ public class SharedDataCloneService {
 
         sharedDataDao.getByExternalIdAndDataType(externalId, dataType)
             .stream()
-            .map(sharedData -> newSharedData.toBuilder()
+            .map(existingSharedData -> newSharedData.toBuilder()
                 .sharedDataId(idGenerator.randomUuid())
-                .sharedWith(sharedData.getSharedWith())
-                .publicData(sharedData.getPublicData())
-                .accessMode(sharedData.getAccessMode())
+                .sharedWith(existingSharedData.getSharedWith())
+                .publicData(existingSharedData.getPublicData())
+                .accessMode(existingSharedData.getAccessMode())
                 .build())
             .forEach(sharedDataDao::save);
     }

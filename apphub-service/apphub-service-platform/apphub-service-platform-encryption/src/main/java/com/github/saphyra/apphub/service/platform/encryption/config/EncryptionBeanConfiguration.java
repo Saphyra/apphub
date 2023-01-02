@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
+import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
 import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.service.platform.encryption.EncryptionApplication;
@@ -24,7 +25,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableHealthCheck
 @EnableLocaleMandatoryRequestValidation
 @EnableMemoryMonitoring
-public class EncryptionBeanConfiguration {
+@EnableEventProcessor
+class EncryptionBeanConfiguration {
     @Bean
     UuidConverter uuidConverter() {
         return new UuidConverter();

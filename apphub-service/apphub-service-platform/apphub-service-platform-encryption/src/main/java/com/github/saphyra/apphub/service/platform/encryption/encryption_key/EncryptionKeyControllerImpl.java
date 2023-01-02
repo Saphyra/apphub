@@ -17,7 +17,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class EncryptionKeyControllerImpl implements EncryptionKeyApiController {
     private final EncryptionKeyQueryService encryptionKeyQueryService;
     private final EncryptionKeyCreationService encryptionKeyCreationService;

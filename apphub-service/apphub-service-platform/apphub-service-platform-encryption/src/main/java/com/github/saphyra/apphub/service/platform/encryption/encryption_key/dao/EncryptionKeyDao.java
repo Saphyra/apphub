@@ -6,11 +6,11 @@ import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class EncryptionKeyDao extends AbstractDao<EncryptionKeyEntity, EncryptionKey, EncryptionKeyPk, EncryptionKeyRepository> {
     private final UuidConverter uuidConverter;
 
@@ -25,5 +25,9 @@ public class EncryptionKeyDao extends AbstractDao<EncryptionKeyEntity, Encryptio
             .dataType(dataType.name())
             .build();
         return findById(pk);
+    }
+
+    public List<EncryptionKey> getByUserId(UUID userId) {
+        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
 }

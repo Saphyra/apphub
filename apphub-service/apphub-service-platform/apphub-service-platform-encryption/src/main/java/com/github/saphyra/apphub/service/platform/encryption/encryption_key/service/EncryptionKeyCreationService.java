@@ -14,7 +14,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class EncryptionKeyCreationService {
     private final EncryptionKeyRequestValidator encryptionKeyRequestValidator;
     private final EncryptionKeyQueryService encryptionKeyQueryService;

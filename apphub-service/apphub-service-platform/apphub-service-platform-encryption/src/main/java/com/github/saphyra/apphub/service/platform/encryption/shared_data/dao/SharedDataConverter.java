@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class SharedDataConverter extends ConverterBase<SharedDataEntity, SharedData> {
     private final UuidConverter uuidConverter;
 

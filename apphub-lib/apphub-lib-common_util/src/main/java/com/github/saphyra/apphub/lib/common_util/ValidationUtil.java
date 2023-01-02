@@ -75,7 +75,6 @@ public class ValidationUtil {
         }
     }
 
-    //TODO unit test
     public static void contains(Object obj, List<Object> edit, String field) {
         notNull(obj, field);
 
