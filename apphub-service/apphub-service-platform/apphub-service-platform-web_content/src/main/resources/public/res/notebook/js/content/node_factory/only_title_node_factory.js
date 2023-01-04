@@ -5,6 +5,11 @@ function onlyTitleNodeFactory(parent, itemDetails, displayOpenParentCategoryButt
         node.classList.add("disabled");
         node.classList.add("only-title");
 
+        node.ondragstart = function(e){
+            e.dataTransfer.setData("listItemId", itemDetails.id);
+        }
+        node.draggable = true;
+
         const title = document.createElement("SPAN");
             title.innerText = itemDetails.title;
             title.title = itemDetails.value;

@@ -8,6 +8,11 @@ function checklistNodeFactory(parent, itemDetails, displayOpenParentCategoryButt
             checklistViewController.viewChecklist(itemDetails.id);
         }
 
+        node.ondragstart = function(e){
+            e.dataTransfer.setData("listItemId", itemDetails.id);
+        }
+        node.draggable = true;
+
         const title = document.createElement("SPAN");
             title.innerText = itemDetails.title;
     node.appendChild(title);
