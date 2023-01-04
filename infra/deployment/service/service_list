@@ -15,4 +15,4 @@ web-content apphub-service-platform-web_content service
 skyxplore-data apphub-service-skyxplore-data service
 skyxplore-game apphub-service-skyxplore-game service
 skyxplore-lobby apphub-service-skyxplore-lobby service
-encryption apphub-service-skyxplore-platform-encryption service
+encryption apphub-service-platform-encryption service
