@@ -8,6 +8,10 @@ function categoryNodeFactory(parent, itemDetails, displayOpenParentCategoryButto
         }
 
         node.ondrop = function(e){
+            if(e.dataTransfer.getData("listItemId") == itemDetails.id){
+                return;
+            }
+
             e.preventDefault();
             const listItemId = e.dataTransfer.getData("listItemId");
             const parent = itemDetails.id;
