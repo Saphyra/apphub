@@ -18,7 +18,7 @@ public class MiscellaneousBuildingService extends ValidationAbstractDataService<
     @PostConstruct
     public void init() {
         super.load(MiscellaneousBuilding.class);
-        log.info("MiscellaneousBuildingService: {}", this);
+        log.debug("MiscellaneousBuildingService: {}", this);
     }
 
     @Override

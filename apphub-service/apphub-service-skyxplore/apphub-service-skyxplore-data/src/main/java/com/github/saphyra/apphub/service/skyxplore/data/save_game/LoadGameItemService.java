@@ -18,7 +18,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 @Builder
-class LoadGameItemService {
+public class LoadGameItemService {
     private final List<GameItemService> gameItemServices;
     private final ErrorReporterService errorReporterService;
 

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.filters;
 
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.main_gateway.config.FilterOrder;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenCache;
@@ -69,7 +69,7 @@ public class LogoutFilter implements GlobalFilter, Ordered {
             .filter(entry -> method == entry.getValue())
             .anyMatch(entry -> {
                 String key = entry.getKey();
-                log.info("key: {}, path: {}", key, path);
+                log.debug("key: {}, path: {}", key, path);
                 return antPathMatcher.match(key, path);
             });
     }

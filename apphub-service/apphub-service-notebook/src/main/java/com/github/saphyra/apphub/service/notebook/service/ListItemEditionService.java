@@ -6,11 +6,13 @@ import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
 import com.github.saphyra.apphub.service.notebook.service.text.ContentValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,23 +25,32 @@ public class ListItemEditionService {
     private final ListItemDao listItemDao;
     private final ListItemRequestValidator listItemRequestValidator;
 
+    @Transactional
     public void edit(UUID listItemId, EditListItemRequest request) {
         listItemRequestValidator.validate(request.getTitle(), request.getParent());
 
         ListItem listItem = listItemDao.findByIdValidated(listItemId);
-        switch (listItem.getType()) {
-            case LINK:
-                contentValidator.validate(request.getValue(), "value");
-                Content content = contentDao.findByParentValidated(listItemId);
-                content.setContent(request.getValue());
-                contentDao.save(content);
-            case CATEGORY:
-                validateNotOwnChild(listItemId, request.getParent(), listItem.getUserId());
-            default:
-                listItem.setTitle(request.getTitle());
-                listItem.setParent(request.getParent());
-                listItemDao.save(listItem);
+        if (listItem.getType() == ListItemType.LINK) {
+            contentValidator.validate(request.getValue(), "value");
+            Content content = contentDao.findByParentValidated(listItemId);
+            content.setContent(request.getValue());
+            contentDao.save(content);
         }
+        listItem.setTitle(request.getTitle());
+        moveListItem(listItem, request.getParent());
+        listItemDao.save(listItem);
+    }
+
+    public void moveListItem(UUID listItemId, UUID parent) {
+        moveListItem(listItemDao.findByIdValidated(listItemId), parent);
+    }
+
+    private void moveListItem(ListItem listItem, UUID parent) {
+        validateNotOwnChild(listItem.getListItemId(), parent, listItem.getUserId());
+
+        listItem.setParent(parent);
+
+        listItemDao.save(listItem);
     }
 
     private void validateNotOwnChild(UUID listItemId, UUID newParent, UUID userId) {

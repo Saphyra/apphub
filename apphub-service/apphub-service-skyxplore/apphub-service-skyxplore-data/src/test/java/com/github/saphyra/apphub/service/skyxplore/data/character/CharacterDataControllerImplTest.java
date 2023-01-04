@@ -72,4 +72,13 @@ public class CharacterDataControllerImplTest {
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
+
+    @Test
+    public void exists() {
+        given(characterDao.exists(USER_ID)).willReturn(true);
+
+        boolean result = underTest.exists(USER_ID);
+
+        assertThat(result).isTrue();
+    }
 }

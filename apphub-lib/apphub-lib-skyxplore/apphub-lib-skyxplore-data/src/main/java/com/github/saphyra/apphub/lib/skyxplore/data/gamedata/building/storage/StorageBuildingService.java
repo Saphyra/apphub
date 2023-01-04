@@ -21,7 +21,7 @@ public class StorageBuildingService extends ValidationAbstractDataService<String
     @PostConstruct
     public void init() {
         super.load(StorageBuilding.class);
-        log.info("StorageBuildingService: {}", this);
+        log.debug("StorageBuildingService: {}", this);
     }
 
     @Override

@@ -263,7 +263,7 @@ public class EventCrudTest extends SeleniumTest {
             WebElement calendarEvent = DiaryActions.getEventsOfDay(driver, date)
                 .get(0);
             assertThat(calendarEvent.getText()).isEqualTo(NEW_TITLE);
-            assertThat(calendarEvent.getAttribute("title")).endsWith(NEW_CONTENT);
+            assertThat(calendarEvent.getAttribute("title")).contains(NEW_CONTENT);
         }
     }
 

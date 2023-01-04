@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.message_sender.config;
 
-import com.github.saphyra.apphub.lib.config.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.service.platform.message_sender.connection.AdminPanelErrorReportHandler;
 import com.github.saphyra.apphub.service.platform.message_sender.connection.AdminPanelMonitoringWebSocketHandler;
 import com.github.saphyra.apphub.service.platform.message_sender.connection.SkyXploreGameConnectionHandler;

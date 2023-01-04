@@ -1,11 +1,15 @@
+function joinIfPresent(separator, items){
+    return new Stream(items)
+        .filter((value) => {return hasValue(value)})
+        .join(separator);
+}
+
 function withLeadingZeros(num, length){
     let result = "" + num;
 
     while(result.length < length){
         result = "0" + result;
     }
-
-    console.log(result);
 
     return result;
 }

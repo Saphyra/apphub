@@ -53,7 +53,7 @@ The app's purpose is to provide an easy-to extend frame for multiple application
 * System Administrator access
 * Kubectl installed
 
-The system is configured to work with AMD Ryzen R7 5900X and 64GB RAM. The configurations can be changed to work with less resources.
+The system is configured to work with AMD Ryzen R9 5900X and 64GB RAM. The configurations can be changed to work with less resources.
 
 ### Script usage
 

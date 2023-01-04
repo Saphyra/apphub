@@ -20,6 +20,6 @@ public class AllBuildingService extends HashMap<String, BuildingData> implements
 
     @PostConstruct
     public void log() {
-        log.info("All buildings collected: {}", values().stream().map(GameDataItem::getId).collect(Collectors.joining(", ")));
+        log.debug("All buildings collected: {}", values().stream().map(GameDataItem::getId).collect(Collectors.joining(", ")));
     }
 }

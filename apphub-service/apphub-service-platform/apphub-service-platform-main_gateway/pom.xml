@@ -66,16 +66,16 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
-            <version>${versions.spring-cloud}</version>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-config-whitelist</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
+            <!-- Needed for Root redirection -->
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-test-rest_assured</artifactId>
+            <artifactId>apphub-lib-config-thymeleaf</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 

@@ -1,2 +1,7 @@
 {
+  "water_pump": "Produces water by using energy",
+  "camp": "Hideout for hunters who provide food and leather of wild animals.",
+  "excavator": "Produces raw minerals from the planet surface.",
+  "sawmill": "Produces logs, and cuts them to planks.",
+  "farm": "Produces leather and meat from livestock, and crops from agriculture."
 }

@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +17,9 @@ public interface ListItemController {
 
     @RequestMapping(method = RequestMethod.POST, path = Endpoints.NOTEBOOK_EDIT_LIST_ITEM)
     void editListItem(@RequestBody EditListItemRequest request, @PathVariable("listItemId") UUID listItemId);
+
+    @PostMapping(Endpoints.NOTEBOOK_MOVE_LIST_ITEM)
+    void moveListItem(@RequestBody OneParamRequest<UUID> parent, @PathVariable("listItemId") UUID listItemId);
 
     @RequestMapping(method = RequestMethod.POST, path = Endpoints.NOTEBOOK_CLONE_LIST_ITEM)
     void cloneListItem(@PathVariable("listItemId") UUID listItemId);

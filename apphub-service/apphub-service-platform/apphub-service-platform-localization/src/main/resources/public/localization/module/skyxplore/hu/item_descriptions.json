@@ -1,2 +1,7 @@
 {
+  "water_pump": "Vizet termel energia felhasználásával",
+  "camp": "Rejtekhely a vadászoknak, akik húst és bőrt biztosítanak a vadak elejtésével.",
+  "excavator": "Nyersanyagokat állít elő a bolygófelszínből",
+  "sawmill": "Fakitermelést folytat, és a kitermelt fát deszkává vágja.",
+  "farm": "Az állattenyésztés bőrt és húst, míg a mezőgazdaság gabonát biztosít."
 }

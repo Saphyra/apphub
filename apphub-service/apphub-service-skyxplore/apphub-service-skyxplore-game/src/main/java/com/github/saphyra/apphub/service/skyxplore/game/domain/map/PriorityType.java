@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 public enum PriorityType {
     CONSTRUCTION, //Building new buildings/terraformation
     INDUSTRY, //Producing ships, and equipment
-    WELL_BEING; //Eating, Morale, Hit Points
+    WELL_BEING, //Eating, Morale, Hit Points
+    EDUCATION, //Send citizens to school
+    ;
 
     @JsonCreator
     public static PriorityType fromValue(String value) {

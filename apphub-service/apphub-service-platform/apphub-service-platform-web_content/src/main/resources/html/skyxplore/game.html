@@ -1,0 +1,50 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META charset="UTF-8">
+
+    <LINK rel="stylesheet" href="/res/common/css/reset.css">
+    <LINK rel="stylesheet" href="/res/common/css/common.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/skyxplore_common.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/game/common.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/game/map.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/game/chat.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/game/solar_system.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/game/planet.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/game/storage_settings.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/game/population_overview.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/game/modify_surface.css">
+    <LINK rel="stylesheet" href="/res/skyxplore/css/game/queue.css">
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+            window.userId = /*[[${userId}]]*/;
+        /*]]>*/
+    </script>
+
+    <SCRIPT src="/res/common/js/jquery.js"></SCRIPT>
+    <SCRIPT src="/res/common/js/common_base.js"></SCRIPT>
+    <SCRIPT src="/res/skyxplore/js/game/page_controller.js"></SCRIPT>
+</HEAD>
+<BODY>
+<DIV class="main-page">
+    <DIV th:replace="/skyxplore/game_fragment/map.html :: map"></DIV>
+    <DIV th:replace="/skyxplore/game_fragment/solar_system.html :: solar-system"></DIV>
+    <DIV th:replace="/skyxplore/game_fragment/planet.html :: planet"></DIV>
+    <DIV th:replace="/skyxplore/game_fragment/storage_settings.html :: storage-settings"></DIV>
+    <DIV th:replace="/skyxplore/game_fragment/population_overview.html :: population-overview"></DIV>
+    <DIV th:replace="/skyxplore/game_fragment/modify_surface.html :: modify-surface"></DIV>
+    <DIV th:replace="/skyxplore/game_fragment/upgrade_building.html :: upgrade-building"></DIV>
+
+    <DIV th:replace="/skyxplore/game_fragment/chat.html :: chat"></DIV>
+
+    <FOOTER>
+        <BUTTON id="exit-button" onclick="pageController.exitGame()"></BUTTON>
+        <BUTTON id="pause-game-button" class="pause-button" onclick="pageController.pauseGame(true)"></BUTTON>
+        <BUTTON id="resume-game-button" class="pause-button" onclick="pageController.pauseGame(false)"></BUTTON>
+        <BUTTON id="chat-button"></BUTTON>
+    </FOOTER>
+</DIV>
+
+<DIV th:replace="/skyxplore/game_fragment/chat.html :: create-chat-room"></DIV>
+</BODY>
+</HTML>

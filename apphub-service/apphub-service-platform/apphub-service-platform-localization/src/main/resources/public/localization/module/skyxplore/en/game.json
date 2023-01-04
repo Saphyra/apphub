@@ -103,6 +103,12 @@
         "message": "Well being"
       }
     ],
+    "planet-priorities-education-label": [
+      {
+        "key": "innerHTML",
+        "message": "Education"
+      }
+    ],
     "planet-storage-settings-button": [
       {
         "key": "innerHTML",
@@ -281,6 +287,12 @@
       {
         "key": "title",
         "message": "When to send the citizens eating / resting"
+      }
+    ],
+    "planet-priorities-education-wrapper": [
+      {
+        "key": "title",
+        "message": "Gaining experience in school"
       }
     ],
     "terraformation-title": [

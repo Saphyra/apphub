@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.utils.model.request.SetLogParameterVisibili
 import com.github.saphyra.apphub.api.utils.model.response.LogParameterVisibilityResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;

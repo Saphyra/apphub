@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.training;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
-import com.github.saphyra.apphub.lib.config.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
 import org.junit.Test;
