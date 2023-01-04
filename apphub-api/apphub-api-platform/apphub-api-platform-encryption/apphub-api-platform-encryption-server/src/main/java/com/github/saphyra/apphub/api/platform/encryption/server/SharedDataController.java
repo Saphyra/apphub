@@ -13,23 +13,25 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SharedDataController {
-    //TODO integration test
     @GetMapping(Endpoints.ENCRYPTION_INTERNAL_GET_SHARED_DATA)
     List<SharedData> getSharedData(@PathVariable("dataType") DataType dataType, @PathVariable("externalId") UUID externalId);
 
-    //TODO integration test
     @PutMapping(Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA)
     void createSharedData(@RequestBody SharedData sharedData);
 
-    //TODO integration test
+    /**
+     * Copies all the settings from records of the given entity to a new entity
+     *
+     * @param newSharedData skeleton to store the cloned data
+     * @param dataType      dataType of the source
+     * @param externalId    externalId of the source
+     */
     @PutMapping(Endpoints.ENCRYPTION_INTERNAL_CLONE_SHARED_DATA)
     void cloneSharedData(@RequestBody SharedData newSharedData, @PathVariable("dataType") DataType dataType, @PathVariable("externalId") UUID externalId);
 
-    //TODO integration test
     @DeleteMapping(Endpoints.ENCRYPTION_INTERNAL_DELETE_SHARED_DATA_ENTITY)
     void deleteSharedDataEntity(@PathVariable("sharedDataId") UUID sharedDataId);
 
-    //TODO integration test
     @DeleteMapping(Endpoints.ENCRYPTION_INTERNAL_DELETE_SHARED_DATA)
     void deleteSharedData(@PathVariable("dataType") DataType dataType, @PathVariable("externalId") UUID externalId);
 }

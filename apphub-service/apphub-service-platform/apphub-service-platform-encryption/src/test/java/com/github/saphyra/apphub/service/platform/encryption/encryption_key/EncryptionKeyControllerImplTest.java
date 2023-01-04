@@ -52,9 +52,11 @@ public class EncryptionKeyControllerImplTest {
 
     @Test
     public void createEncryptionKey() {
-        underTest.createEncryptionKey(encryptionKey, AccessMode.EDIT, accessTokenHeader);
+        given(encryptionKeyCreationService.createEncryptionKey(USER_ID, encryptionKey, AccessMode.EDIT)).willReturn(ENCRYPTION_KEY);
 
-        verify(encryptionKeyCreationService).createEncryptionKey(USER_ID, encryptionKey, AccessMode.EDIT);
+        String result = underTest.createEncryptionKey(encryptionKey, AccessMode.EDIT, accessTokenHeader);
+
+        assertThat(result).isEqualTo(ENCRYPTION_KEY);
     }
 
     @Test

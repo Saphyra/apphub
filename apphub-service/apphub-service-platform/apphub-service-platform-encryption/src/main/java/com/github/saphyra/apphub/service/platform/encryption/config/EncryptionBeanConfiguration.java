@@ -1,7 +1,10 @@
 package com.github.saphyra.apphub.service.platform.encryption.config;
 
+import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
@@ -35,5 +38,15 @@ class EncryptionBeanConfiguration {
     @Bean
     IdGenerator idGenerator() {
         return new IdGenerator();
+    }
+
+    @Bean
+    AccessTokenHeaderConverter accessTokenHeaderConverter(Base64Encoder base64Encoder, ObjectMapperWrapper objectMapperWrapper) {
+        return new AccessTokenHeaderConverter(base64Encoder, objectMapperWrapper);
+    }
+
+    @Bean
+    Base64Encoder base64Encoder() {
+        return new Base64Encoder();
     }
 }

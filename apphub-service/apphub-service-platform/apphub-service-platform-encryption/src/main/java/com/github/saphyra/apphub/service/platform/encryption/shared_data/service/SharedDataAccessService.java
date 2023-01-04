@@ -18,7 +18,10 @@ public class SharedDataAccessService {
     private final SharedDataDao sharedDataDao;
 
     public boolean hasAccess(UUID userId, AccessMode accessMode, UUID externalId, DataType dataType) {
+        log.info("Checking if {} has access to {} - {} with accessMode {}", userId, dataType, externalId, accessMode);
         List<SharedData> sharedDataList = sharedDataDao.getByExternalIdAndDataTypeAndAccessMode(externalId, dataType, accessMode);
+
+        log.info("SharedData found: {}", sharedDataList);
 
         boolean isPublic = sharedDataList.stream()
             .anyMatch(SharedData::getPublicData);

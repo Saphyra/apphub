@@ -8,6 +8,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 public interface EncryptionEventController {
     @PostMapping(path = Endpoints.EVENT_DELETE_ACCOUNT)
-        //TODO integration test
     void deleteAccountEvent(@RequestBody SendEventRequest<DeleteAccountEvent> request);
 }

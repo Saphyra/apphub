@@ -36,6 +36,8 @@ public class EncryptionKeyCreationService {
 
         encryptionKeyDao.save(request);
 
+        log.info("{} is saved.", request);
+
         return encryptionKey;
     }
 }
