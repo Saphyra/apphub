@@ -170,6 +170,18 @@ public class ValidationUtilTest {
         ValidationUtil.notEmpty(List.of("asd"), FIELD);
     }
 
+    @Test
+    public void contains_error() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.contains("asd", List.of("dsa"), FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, String.format("must be one of %s", List.of("dsa")));
+    }
+
+    @Test
+    public void contains() {
+        ValidationUtil.contains("asd", List.of("asd"), FIELD);
+    }
+
     enum TestEnum {
         ELEMENT
     }

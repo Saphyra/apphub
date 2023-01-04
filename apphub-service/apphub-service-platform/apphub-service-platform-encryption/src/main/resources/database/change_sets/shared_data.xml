@@ -1,0 +1,23 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-table-shared_data" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="encryption" tableName="shared_data"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="encryption" tableName="shared_data">
+            <column name="shared_data_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="external_id" type="varchar(37)"/>
+            <column name="data_type" type="varchar(255)"/>
+            <column name="shared_with" type="varchar(37)"/>
+            <column name="public_data" type="boolean"/>
+            <column name="access_mode" type="varchar(255)"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="encryption" tableName="shared_data" columnNames="shared_data_id" constraintName="shared_data-pk"/>
+    </changeSet>
+</databaseChangeLog>

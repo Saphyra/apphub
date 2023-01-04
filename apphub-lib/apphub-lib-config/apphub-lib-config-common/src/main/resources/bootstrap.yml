@@ -151,6 +151,10 @@ diary:
   ribbon:
     listOfServers: diary:8080
 
+encryption:
+  ribbon:
+    listOfServers: encryption:8080
+
 event:
   processor:
     heartbeat:

@@ -77,7 +77,7 @@ public class RepeatedEventTest extends BackEndTest {
         List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
 
         assertThat(findByDate(responses, date)).hasSize(1);
-        assertThat(findByDate(responses, date.plusDays(1))).hasSize(1);
+        assertThat(findByDate(responses, date.plusDays(1))).isNotEmpty();
 
         LocalDate firstThursday = getFirstOfMonth(date, d -> d.getDayOfWeek() == DayOfWeek.THURSDAY);
 

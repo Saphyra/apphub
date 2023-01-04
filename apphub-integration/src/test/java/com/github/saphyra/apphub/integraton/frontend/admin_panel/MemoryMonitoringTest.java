@@ -38,7 +38,8 @@ public class MemoryMonitoringTest extends SeleniumTest {
         "utils",
         "web-content",
         "community",
-        "diary"
+        "diary",
+        "encryption"
     );
 
     @Test
