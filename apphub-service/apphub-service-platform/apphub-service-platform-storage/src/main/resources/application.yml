@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: storage
+liquibase:
+  schema: storage

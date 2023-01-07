@@ -155,6 +155,10 @@ encryption:
   ribbon:
     listOfServers: encryption:8080
 
+storage:
+  ribbon:
+    listOfServers: storage:8080
+
 event:
   processor:
     heartbeat:

@@ -30,5 +30,6 @@
         <module>apphub-service-platform-localization</module>
         <module>apphub-service-platform-message_sender</module>
         <module>apphub-service-platform-encryption</module>
+        <module>apphub-service-platform-storage</module>
     </modules>
 </project>
