@@ -18,7 +18,7 @@ class UserSettingConverter extends ConverterBase<UserSettingEntity, UserSetting>
 
     @Override
     protected UserSettingEntity processDomainConversion(UserSetting domain) {
-        String userId = accessTokenProvider.getUidAsString();
+        String userId = accessTokenProvider.getUserIdAsString();
         return UserSettingEntity.builder()
             .id(
                 UserSettingEntityId.builder()
@@ -33,7 +33,7 @@ class UserSettingConverter extends ConverterBase<UserSettingEntity, UserSetting>
 
     @Override
     protected UserSetting processEntityConversion(UserSettingEntity entity) {
-        String userId = accessTokenProvider.getUidAsString();
+        String userId = accessTokenProvider.getUserIdAsString();
         return UserSetting.builder()
             .userId(uuidConverter.convertEntity(entity.getId().getUserId()))
             .category(entity.getId().getCategory())

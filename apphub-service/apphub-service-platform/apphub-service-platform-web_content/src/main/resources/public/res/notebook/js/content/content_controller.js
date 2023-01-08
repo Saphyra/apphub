@@ -6,7 +6,8 @@
         CHECKLIST: checklistNodeFactory,
         TABLE: tableNodeFactory,
         CHECKLIST_TABLE: checklistTableNodeFactory,
-        ONLY_TITLE: onlyTitleNodeFactory
+        ONLY_TITLE: onlyTitleNodeFactory,
+        IMAGE: imageNodeFactory
     }
 
     window.contentController = new function(){

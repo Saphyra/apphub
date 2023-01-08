@@ -10,5 +10,5 @@
         </rollback>
     </changeSet>
 
-    <include file="database/change_sets/template.xml"/>
+    <include file="database/change_sets/stored_file.xml"/>
 </databaseChangeLog>

@@ -17,6 +17,10 @@ spring:
           lob:
             non_contextual_creation: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  servlet:
+    multipart:
+      max-request-size: 20GB
+      max-file-size: 20GB
 liquibase:
   changelog:
     location: classpath:database/changelog-master.xml

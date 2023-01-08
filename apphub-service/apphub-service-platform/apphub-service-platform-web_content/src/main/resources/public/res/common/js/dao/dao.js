@@ -29,7 +29,7 @@
         return new Promise(function(resolve, reject){
             const xhr = new XMLHttpRequest();
                 xhr.open(request.method, request.path, 1);
-                prepareRequest(xhr, request.method);
+                prepareRequest(xhr, request.method, request.contentType);
 
                 xhr.onload = function(){
                     const response = new Response(xhr);
@@ -51,7 +51,7 @@
         const xhr = new XMLHttpRequest();
 
             xhr.open(request.method, request.path, 0);
-            prepareRequest(xhr, request.method);
+            prepareRequest(xhr, request.method, request.contentType);
 
             try{
                 xhr.send(request.body);
@@ -77,13 +77,13 @@
         }
     }
     
-    function prepareRequest(request, method){
-        if(method !== HttpMethod.GET){
-            request.setRequestHeader("Content-Type", "application/json");
+    function prepareRequest(xhr, method, contentType){
+        if(method !== HttpMethod.GET && contentType){
+            xhr.setRequestHeader("Content-Type", contentType);
         }
         
-        request.setRequestHeader("Request-Type", "rest");
-        request.setRequestHeader("Cache-Control", "no-cache");
-        request.setRequestHeader(HEADER_BROWSER_LANGUAGE, getBrowserLanguage());
+        xhr.setRequestHeader("Request-Type", "rest");
+        xhr.setRequestHeader("Cache-Control", "no-cache");
+        xhr.setRequestHeader(HEADER_BROWSER_LANGUAGE, getBrowserLanguage());
     }
 })();

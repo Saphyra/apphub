@@ -76,6 +76,12 @@
             <artifactId>apphub-lib-config-liquibase</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-api-platform-storage-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

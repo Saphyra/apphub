@@ -64,6 +64,10 @@ body{
     border-color: purple;
 }
 
+.image{
+    border-color: brown;
+}
+
 .pin-button{
     background-image: url("/res/common/images/pin.png");
     background-size: cover;

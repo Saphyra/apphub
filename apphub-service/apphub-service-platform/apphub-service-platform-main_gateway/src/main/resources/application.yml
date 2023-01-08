@@ -67,23 +67,27 @@ spring:
         - id: training
           uri: http://training:8080
           predicates:
-            - Path=/api/training/**
+          - Path=/api/training/**
         - id: community
           uri: http://community:8080
           predicates:
-            - Path=/api/community/**
+          - Path=/api/community/**
         - id: diary
           uri: http://diary:8080
           predicates:
-            - Path=/api/diary/**
+          - Path=/api/diary/**
+        - id: storage
+          uri: http://storage:8080
+          predicates:
+          - Path=/api/storage/**
 
-        #PLATFORM
+      #PLATFORM
         - id: localization
           uri: http://localization:8080
           predicates:
-            - Path=/localization/**
+          - Path=/localization/**
 
-        #WS
+      #WS
         - id: ws
           uri: ws://message-sender:8080
           predicates:

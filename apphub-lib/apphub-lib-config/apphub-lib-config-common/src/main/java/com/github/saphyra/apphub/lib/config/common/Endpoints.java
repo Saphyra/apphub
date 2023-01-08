@@ -161,6 +161,7 @@ public class Endpoints {
     public static final String NOTEBOOK_ARCHIVE_ITEM = "/api/notebook/item/{listItemId}/archive";
     public static final String NOTEBOOK_CREATE_ONLY_TITLE = "/api/notebook/only-title";
     public static final String NOTEBOOK_MOVE_LIST_ITEM = "/api/notebook/{listItemId}/move";
+    public static final String NOTEBOOK_CREATE_IMAGE = "/api/notebook/image";
 
     //UTILS
     public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";
@@ -299,4 +300,11 @@ public class Endpoints {
     public static final String ENCRYPTION_INTERNAL_CLONE_SHARED_DATA = "/internal/encryption/shared-data/{dataType}/{externalId}";
     public static final String ENCRYPTION_INTERNAL_DELETE_SHARED_DATA_ENTITY = "/internal/encryption/shared-date/{sharedDataId}";
     public static final String ENCRYPTION_INTERNAL_DELETE_SHARED_DATA = "/internal/encryption/shared-data/{dataType}/{externalId}";
+
+    //Storage
+    public static final String STORAGE_UPLOAD_FILE = "/api/storage/{storedFileId}";
+    public static final String STORAGE_INTERNAL_DELETE_FILE = "/internal/storage/{storedFileId}";
+    public static final String STORAGE_DOWNLOAD_FILE = "/api/storage/{storedFileId}";
+    public static final String STORAGE_INTERNAL_DUPLICATE_FILE = "/internal/storage/{storedFileId}";
+    public static final String STORAGE_INTERNAL_CREATE_FILE = "/internal/storage";
 }

@@ -17,27 +17,30 @@ spec:
         name: storage
     spec:
       containers:
-        - name: storage
-          image: saphyra/apphub-service-platform-storage:latest
-          ports:
-            - containerPort: 8080
-          imagePullPolicy: Never
-          livenessProbe:
-            httpGet:
-              path: /platform/health
-              port: 8080
-            initialDelaySeconds: 20
-            periodSeconds: 5
-          readinessProbe:
-            httpGet:
-              path: /platform/health
-              port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 1
-            failureThreshold: 15
-          resources:
-            limits:
-              memory: 350Mi
+      - name: storage
+        image: saphyra/apphub-service-platform-storage:latest
+        env:
+        - name: FTP_CLIENT_USERNAME
+          value: ftp_dev
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Never
+        livenessProbe:
+          httpGet:
+            path: /platform/health
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /platform/health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 1
+          failureThreshold: 15
+        resources:
+          limits:
+            memory: 350Mi
 ---
 apiVersion: v1
 kind: Service
@@ -48,6 +51,6 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: 8080
+  - port: 8080
   selector:
     name: storage
