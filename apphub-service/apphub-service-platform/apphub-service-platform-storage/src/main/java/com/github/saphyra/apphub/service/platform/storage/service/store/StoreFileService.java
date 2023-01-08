@@ -28,7 +28,7 @@ public class StoreFileService {
     private final FtpClientFactory ftpClientFactory;
     private final UuidConverter uuidConverter;
 
-    public UUID createFile(UUID userId, String extension, Integer size) {
+    public UUID createFile(UUID userId, String extension, Long size) {
         ValidationUtil.notNull(extension, "extension");
         ValidationUtil.atLeast(size, 0, "size");
 

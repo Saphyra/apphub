@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.storage.dao;
 
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.encryption.impl.IntegerEncryptor;
+import com.github.saphyra.apphub.lib.encryption.impl.LongEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ class StoredFileConverter extends ConverterBase<StoredFileEntity, StoredFile> {
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;
     private final AccessTokenProvider accessTokenProvider;
-    private final IntegerEncryptor integerEncryptor;
+    private final LongEncryptor longEncryptor;
 
     @Override
     protected StoredFileEntity processDomainConversion(StoredFile domain) {
@@ -28,7 +28,7 @@ class StoredFileConverter extends ConverterBase<StoredFileEntity, StoredFile> {
             .createdAt(domain.getCreatedAt())
             .fileUploaded(domain.isFileUploaded())
             .extension(stringEncryptor.encryptEntity(domain.getExtension(), userId))
-            .size(integerEncryptor.encryptEntity(domain.getSize(), userId))
+            .size(longEncryptor.encryptEntity(domain.getSize(), userId))
             .build();
     }
 
@@ -41,7 +41,7 @@ class StoredFileConverter extends ConverterBase<StoredFileEntity, StoredFile> {
             .createdAt(entity.getCreatedAt())
             .fileUploaded(entity.isFileUploaded())
             .extension(stringEncryptor.decryptEntity(entity.getExtension(), userId))
-            .size(integerEncryptor.decryptEntity(entity.getSize(), userId))
+            .size(longEncryptor.decryptEntity(entity.getSize(), userId))
             .build();
     }
 }

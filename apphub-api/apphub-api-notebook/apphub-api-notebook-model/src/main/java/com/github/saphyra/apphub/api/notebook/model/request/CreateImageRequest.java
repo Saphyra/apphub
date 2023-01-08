@@ -15,5 +15,5 @@ public class CreateImageRequest {
     private String title;
     private UUID parent;
     private String fileName;
-    private Integer size;
+    private Long size;
 }

@@ -30,7 +30,9 @@ public class DownloadFileService {
             throw ExceptionFactory.forbiddenOperation(userId + " has no access to " + storedFileId);
         }
 
-        try (FtpClientWrapper ftpClient = ftpClientFactory.create()) {
+        FtpClientWrapper ftpClient = ftpClientFactory.create();
+
+        try {
             InputStream inputStream = ftpClient.downloadFile(uuidConverter.convertDomain(storedFile.getStoredFileId()));
             return new BiWrapper<>(inputStream, storedFile);
         } catch (Exception e) {

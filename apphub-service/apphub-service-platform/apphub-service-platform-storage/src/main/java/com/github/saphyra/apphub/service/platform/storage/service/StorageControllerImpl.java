@@ -12,10 +12,11 @@ import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -61,26 +62,25 @@ public class StorageControllerImpl implements StorageController {
     }
 
     @Override
-    public ResponseEntity<InputStreamResource> downloadFile(UUID storedFileId, AccessTokenHeader accessTokenHeader) {
+    public ResponseEntity<StreamingResponseBody> downloadFile(UUID storedFileId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to query file {}", accessTokenHeader.getUserId(), storedFileId);
         BiWrapper<InputStream, StoredFile> result = downloadFileService.downloadFile(accessTokenHeader.getUserId(), storedFileId);
 
-        return ResponseEntity.ok()
-            .contentLength(result.getEntity2().getSize())
-            .contentType(resolveContentType(result.getEntity2().getExtension()))
-            .body(new InputStreamResource(result.getEntity1()));
-    }
+        StreamingResponseBody responseBody = outputStream -> {
 
-    private MediaType resolveContentType(String extension) {
-        switch (extension) {
-            case "png":
-                return MediaType.IMAGE_PNG;
-            case "jpg":
-            case "jpeg":
-                return MediaType.IMAGE_JPEG;
-            default:
-                return MediaType.ALL;
-        }
+            int numberOfBytesToWrite;
+            byte[] data = new byte[4096];
+            while ((numberOfBytesToWrite = result.getEntity1().read(data, 0, data.length)) != -1) {
+                outputStream.write(data, 0, numberOfBytesToWrite);
+            }
+
+            result.getEntity1().close();
+        };
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=file.%s", result.getEntity2().getExtension()))
+            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+            .body(responseBody);
     }
 
     @Override

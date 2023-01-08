@@ -89,7 +89,7 @@ public class ValidationUtilTest {
 
     @Test
     public void atLeast_null() {
-        Throwable ex = catchThrowable(() -> ValidationUtil.atLeast(null, 10, FIELD));
+        Throwable ex = catchThrowable(() -> ValidationUtil.atLeast((Integer) null, 10, FIELD));
 
         ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
     }

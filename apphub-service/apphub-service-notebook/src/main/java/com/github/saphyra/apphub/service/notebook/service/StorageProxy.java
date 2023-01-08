@@ -19,7 +19,7 @@ public class StorageProxy {
     private final AccessTokenProvider accessTokenProvider;
     private final LocaleProvider localeProvider;
 
-    public UUID createFile(String extension, Integer size) {
+    public UUID createFile(String extension, Long size) {
         CreateFileRequest request = CreateFileRequest.builder()
             .extension(extension)
             .size(size)
