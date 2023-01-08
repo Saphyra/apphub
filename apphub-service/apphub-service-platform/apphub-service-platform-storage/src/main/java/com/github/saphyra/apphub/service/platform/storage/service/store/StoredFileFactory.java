@@ -17,12 +17,13 @@ class StoredFileFactory {
     private final IdGenerator idGenerator;
     private final DateTimeUtil dateTimeUtil;
 
-    public StoredFile create(UUID userId, String extension, Long size) {
+    public StoredFile create(UUID userId, String fileName, String extension, Long size) {
         return StoredFile.builder()
             .storedFileId(idGenerator.randomUuid())
             .userId(userId)
             .createdAt(dateTimeUtil.getCurrentDateTime())
             .fileUploaded(false)
+            .fileName(fileName)
             .extension(extension)
             .size(size)
             .build();

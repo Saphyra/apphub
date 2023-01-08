@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CreateFileRequest {
     private String extension;
+    private String fileName;
     private Long size;
 }

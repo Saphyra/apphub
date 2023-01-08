@@ -20,6 +20,7 @@ class StoredFileEntity {
     @Id
     private String storedFileId;
     private String userId;
+    private String fileName;
     private String extension;
     private String size;
     private LocalDateTime createdAt;

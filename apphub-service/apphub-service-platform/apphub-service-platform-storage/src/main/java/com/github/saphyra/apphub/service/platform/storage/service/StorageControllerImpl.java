@@ -3,8 +3,6 @@ package com.github.saphyra.apphub.service.platform.storage.service;
 import com.github.saphyra.apphub.api.platform.storage.model.CreateFileRequest;
 import com.github.saphyra.apphub.api.platform.storage.server.StorageController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
 import com.github.saphyra.apphub.service.platform.storage.service.store.StoreFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +34,7 @@ public class StorageControllerImpl implements StorageController {
     @Override
     public UUID createFile(CreateFileRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a file.", accessTokenHeader.getUserId());
-        return storeFileService.createFile(accessTokenHeader.getUserId(), request.getExtension(), request.getSize());
+        return storeFileService.createFile(accessTokenHeader.getUserId(), request.getFileName(), request.getExtension(), request.getSize());
     }
 
     @Override
@@ -64,21 +62,22 @@ public class StorageControllerImpl implements StorageController {
     @Override
     public ResponseEntity<StreamingResponseBody> downloadFile(UUID storedFileId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to query file {}", accessTokenHeader.getUserId(), storedFileId);
-        BiWrapper<InputStream, StoredFile> result = downloadFileService.downloadFile(accessTokenHeader.getUserId(), storedFileId);
+        DownloadResult result = downloadFileService.downloadFile(accessTokenHeader.getUserId(), storedFileId);
 
         StreamingResponseBody responseBody = outputStream -> {
 
             int numberOfBytesToWrite;
             byte[] data = new byte[4096];
-            while ((numberOfBytesToWrite = result.getEntity1().read(data, 0, data.length)) != -1) {
+            while ((numberOfBytesToWrite = result.getInputStream().read(data, 0, data.length)) != -1) {
                 outputStream.write(data, 0, numberOfBytesToWrite);
             }
 
-            result.getEntity1().close();
+            result.getInputStream().close();
+            result.getFtpClient().close();
         };
 
         return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=file.%s", result.getEntity2().getExtension()))
+            .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s", result.getStoredFile().getFileName()))
             .contentType(MediaType.APPLICATION_OCTET_STREAM)
             .body(responseBody);
     }

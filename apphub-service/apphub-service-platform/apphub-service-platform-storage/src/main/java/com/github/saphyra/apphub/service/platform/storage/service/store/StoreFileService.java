@@ -28,11 +28,12 @@ public class StoreFileService {
     private final FtpClientFactory ftpClientFactory;
     private final UuidConverter uuidConverter;
 
-    public UUID createFile(UUID userId, String extension, Long size) {
+    public UUID createFile(UUID userId, String fileName, String extension, Long size) {
         ValidationUtil.notNull(extension, "extension");
+        ValidationUtil.notNull(fileName, "fileName");
         ValidationUtil.atLeast(size, 0, "size");
 
-        StoredFile storedFile = storedFileFactory.create(userId, extension, size);
+        StoredFile storedFile = storedFileFactory.create(userId, fileName, extension, size);
 
         storedFileDao.save(storedFile);
 
