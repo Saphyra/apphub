@@ -7,6 +7,9 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,5 +30,14 @@ public class StoredFileDao extends AbstractDao<StoredFileEntity, StoredFile, Str
 
     private Optional<StoredFile> findById(UUID storedFileId) {
         return findById(uuidConverter.convertDomain(storedFileId));
+    }
+
+    public List<StoredFile> getByUserId(UUID userId) {
+        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
+    }
+
+    @Transactional
+    public void deleteExpired(LocalDateTime expirationTime) {
+        repository.deleteByFileUploadedAndCreatedAtBefore(false, expirationTime);
     }
 }

@@ -34,5 +34,11 @@
             <artifactId>spring-webmvc</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-event</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

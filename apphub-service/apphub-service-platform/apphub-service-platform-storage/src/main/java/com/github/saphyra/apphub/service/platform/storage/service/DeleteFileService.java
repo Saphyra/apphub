@@ -26,14 +26,18 @@ public class DeleteFileService {
     public void deleteFile(UUID userId, UUID storedFileId) {
         StoredFile storedFile = storedFileDao.findByIdValidated(storedFileId);
 
+        deleteFile(userId, storedFile);
+    }
+
+    public void deleteFile(UUID userId, StoredFile storedFile) {
         if (!storedFile.getUserId().equals(userId)) {
-            throw ExceptionFactory.forbiddenOperation(userId + " has no access to StoredFile " + storedFileId);
+            throw ExceptionFactory.forbiddenOperation(userId + " has no access to StoredFile " + storedFile.getStoredFileId());
         }
 
         try (FtpClientWrapper ftpClient = ftpClientFactory.create()) {
-            ftpClient.deleteFile(uuidConverter.convertDomain(storedFileId));
+            ftpClient.deleteFile(uuidConverter.convertDomain(storedFile.getStoredFileId()));
         } catch (Exception e) {
-            errorReporterService.report("Failed deleting FTP file " + storedFileId, e);
+            errorReporterService.report("Failed deleting FTP file " + storedFile.getStoredFileId(), e);
         }
 
         storedFileDao.delete(storedFile);
