@@ -24,12 +24,12 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StorageControllerImpl implements StorageController {
     private final StoreFileService storeFileService;
     private final DownloadFileService downloadFileService;
     private final DeleteFileService deleteFileService;
     private final DuplicateFileService duplicateFileService;
+    private final FileUploadHelper fileUploadHelper;
 
     @Override
     public UUID createFile(CreateFileRequest request, AccessTokenHeader accessTokenHeader) {
@@ -38,15 +38,18 @@ public class StorageControllerImpl implements StorageController {
     }
 
     @Override
-    public UUID uploadFile(UUID storedFileId, HttpServletRequest request, AccessTokenHeader accessTokenHeader) throws IOException, FileUploadException {
-        ServletFileUpload upload = new ServletFileUpload();
-        FileItemIterator iterator = upload.getItemIterator(request);
-        while (iterator.hasNext()) {
-            FileItemStream item = iterator.next();
+    public void uploadFile(UUID storedFileId, HttpServletRequest request, AccessTokenHeader accessTokenHeader) throws IOException, FileUploadException {
+        ServletFileUpload servletFileUpload = fileUploadHelper.servletFileUpload();
+        FileItemIterator fileItemIterator = servletFileUpload.getItemIterator(request);
+
+        while (fileItemIterator.hasNext()) {
+            FileItemStream item = fileItemIterator.next();
 
             if (!item.isFormField()) {
-                InputStream inputStream = item.openStream();
-                return storeFileService.uploadFile(accessTokenHeader.getUserId(), storedFileId, inputStream);
+                try (InputStream inputStream = item.openStream()) {
+                    storeFileService.uploadFile(accessTokenHeader.getUserId(), storedFileId, inputStream);
+                    return;
+                }
             }
         }
 

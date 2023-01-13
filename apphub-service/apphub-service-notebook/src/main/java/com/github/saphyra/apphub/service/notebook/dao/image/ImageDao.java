@@ -14,7 +14,6 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO unit test
 public class ImageDao extends AbstractDao<ImageEntity, Image, String, ImageRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 

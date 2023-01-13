@@ -25,7 +25,7 @@ public interface StorageController {
     UUID createFile(@RequestBody CreateFileRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PutMapping(value = Endpoints.STORAGE_UPLOAD_FILE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    UUID uploadFile(@PathVariable("storedFileId") UUID storedFileId, HttpServletRequest file, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) throws IOException, FileUploadException;
+    void uploadFile(@PathVariable("storedFileId") UUID storedFileId, HttpServletRequest file, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) throws IOException, FileUploadException;
 
     @DeleteMapping(Endpoints.STORAGE_INTERNAL_DELETE_FILE)
     void deleteFile(@PathVariable("storedFileId") UUID storedFileId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

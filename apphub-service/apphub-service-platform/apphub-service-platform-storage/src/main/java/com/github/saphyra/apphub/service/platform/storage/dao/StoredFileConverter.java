@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StoredFileConverter extends ConverterBase<StoredFileEntity, StoredFile> {
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;

@@ -12,12 +12,11 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StoredFileFactory {
     private final IdGenerator idGenerator;
     private final DateTimeUtil dateTimeUtil;
 
-    public StoredFile create(UUID userId, String fileName, String extension, Long size) {
+    StoredFile create(UUID userId, String fileName, String extension, Long size) {
         return StoredFile.builder()
             .storedFileId(idGenerator.randomUuid())
             .userId(userId)

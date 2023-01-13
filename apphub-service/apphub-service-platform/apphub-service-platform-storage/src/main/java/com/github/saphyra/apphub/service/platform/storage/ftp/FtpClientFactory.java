@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class FtpClientFactory {
     private final FtpClientProperties properties;
 

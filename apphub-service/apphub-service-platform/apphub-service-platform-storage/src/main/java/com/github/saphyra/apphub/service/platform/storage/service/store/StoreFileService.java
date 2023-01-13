@@ -21,7 +21,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StoreFileService {
     private final StoredFileFactory storedFileFactory;
     private final StoredFileDao storedFileDao;
@@ -55,7 +54,7 @@ public class StoreFileService {
 
         try (FtpClientWrapper ftpClient = ftpClientFactory.create()) {
 
-            ftpClient.storeFile(uuidConverter.convertDomain(storedFile.getStoredFileId()), file);
+            ftpClient.storeFile(uuidConverter.convertDomain(storedFileId), file);
 
             storedFile.setFileUploaded(true);
 
@@ -64,6 +63,6 @@ public class StoreFileService {
             throw new RuntimeException(e);
         }
 
-        return storedFile.getStoredFileId();
+        return storedFileId;
     }
 }

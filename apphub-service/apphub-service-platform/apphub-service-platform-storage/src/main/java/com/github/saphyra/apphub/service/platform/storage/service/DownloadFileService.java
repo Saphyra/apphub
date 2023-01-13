@@ -16,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class DownloadFileService {
     private final StoredFileDao storedFileDao;
     private final FtpClientFactory ftpClientFactory;
@@ -32,7 +31,7 @@ public class DownloadFileService {
         FtpClientWrapper ftpClient = ftpClientFactory.create();
 
         try {
-            InputStream inputStream = ftpClient.downloadFile(uuidConverter.convertDomain(storedFile.getStoredFileId()));
+            InputStream inputStream = ftpClient.downloadFile(uuidConverter.convertDomain(storedFileId));
             return new DownloadResult(inputStream, storedFile, ftpClient);
         } catch (Exception e) {
             throw new RuntimeException(e);

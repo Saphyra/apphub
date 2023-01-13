@@ -1,3 +1,4 @@
+scriptLoader.loadScript("/res/common/js/animation/spinner.js");
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/common/js/settings.js");
 scriptLoader.loadScript("/res/notebook/js/category_tree_controller.js");

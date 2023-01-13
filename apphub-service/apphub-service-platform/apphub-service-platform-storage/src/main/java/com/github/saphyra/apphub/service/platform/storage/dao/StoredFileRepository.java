@@ -5,7 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-//TODO unit test
 interface StoredFileRepository extends CrudRepository<StoredFileEntity, String> {
     List<StoredFileEntity> getByUserId(String userid);
 

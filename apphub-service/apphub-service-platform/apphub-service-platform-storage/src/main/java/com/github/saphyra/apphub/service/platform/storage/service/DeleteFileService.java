@@ -16,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class DeleteFileService {
     private final StoredFileDao storedFileDao;
     private final FtpClientFactory ftpClientFactory;

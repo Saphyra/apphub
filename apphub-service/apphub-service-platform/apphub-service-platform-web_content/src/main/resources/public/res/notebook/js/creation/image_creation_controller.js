@@ -98,7 +98,7 @@
             size: input.files[0].size
         }
 
-        //TODO add spinner
+        spinner.open();
 
         const createRequest = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_IMAGE"), body);
             createRequest.convertResponse = jsonConverter;
@@ -116,6 +116,7 @@
                     notificationService.showSuccess(localization.getAdditionalContent("image-saved"));
                     categoryContentController.reloadCategoryContent();
                     pageController.openMainPage();
+                    spinner.close();
                 }
             dao.sendRequestAsync(uploadRequest);
         }

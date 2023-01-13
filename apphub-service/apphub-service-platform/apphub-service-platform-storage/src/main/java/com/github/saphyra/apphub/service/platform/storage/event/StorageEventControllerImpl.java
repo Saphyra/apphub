@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StorageEventControllerImpl implements StorageEventController {
     private final DeleteAccountEventProcessor deleteAccountEventProcessor;
     private final StoredFileCleanupEventProcessor storedFileCleanupEventProcessor;

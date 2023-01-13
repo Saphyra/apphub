@@ -11,7 +11,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class DeleteAccountEventProcessor {
     private final StoredFileDao storedFileDao;
     private final DeleteFileService deleteFileService;

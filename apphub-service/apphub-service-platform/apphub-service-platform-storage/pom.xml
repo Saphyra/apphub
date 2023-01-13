@@ -82,6 +82,12 @@
             <artifactId>apphub-lib-security</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-test-repository</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

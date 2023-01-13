@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StoredFileCleanupScheduler {
     private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;

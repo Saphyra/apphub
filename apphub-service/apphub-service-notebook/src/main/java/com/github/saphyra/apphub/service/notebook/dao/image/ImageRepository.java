@@ -4,7 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-//TODO unit test
 interface ImageRepository extends CrudRepository<ImageEntity, String> {
     Optional<ImageEntity> findByParent(String parent);
 
