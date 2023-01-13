@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.image.ImageDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,6 +19,8 @@ import java.util.UUID;
 public class NotebookViewFactory {
     private final ContentDao contentDao;
     private final ListItemDao listItemDao;
+    private final ImageDao imageDao;
+    private final UuidConverter uuidConverter;
 
     public NotebookView create(ListItem listItem) {
         String value = extractValue(listItem);
@@ -43,11 +45,17 @@ public class NotebookViewFactory {
     }
 
     private String extractValue(ListItem listItem) {
-        return Optional.of(listItem)
-            .filter(l -> l.getType() == ListItemType.LINK)
-            .map(ListItem::getListItemId)
-            .map(contentDao::findByParentValidated)
-            .map(Content::getContent)
-            .orElse(null);
+        switch (listItem.getType()) {
+            case LINK:
+                return contentDao.findByParentValidated(listItem.getListItemId())
+                    .getContent();
+            case IMAGE:
+                UUID fileId = imageDao.findByParentValidated(listItem.getListItemId())
+                    .getFileId();
+                return uuidConverter.convertDomain(fileId);
+            default:
+                log.debug("No value for listItemType {}", listItem.getType());
+                return null;
+        }
     }
 }

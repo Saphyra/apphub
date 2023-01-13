@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storage
+  labels:
+    app: storage
+    type: spring-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: storage
+  template:
+    metadata:
+      labels:
+        serviceType: spring-app
+        name: storage
+    spec:
+      containers:
+      - name: storage
+        image: saphyra/apphub-service-platform-storage:release
+        env:
+        - name: FTP_CLIENT_USERNAME
+          value: ftp_dev
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /platform/health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /platform/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          failureThreshold: 3
+        resources:
+          limits:
+            memory: 500Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: storage
+  labels:
+    app: storage
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+  selector:
+    name: storage

@@ -18,7 +18,7 @@ class ChecklistTableRowConverter extends ConverterBase<ChecklistTableRowEntity, 
 
     @Override
     protected ChecklistTableRow processEntityConversion(ChecklistTableRowEntity entity) {
-        String userId = accessTokenProvider.getUidAsString();
+        String userId = accessTokenProvider.getUserIdAsString();
         return ChecklistTableRow.builder()
             .rowId(uuidConverter.convertEntity(entity.getRowId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
@@ -30,7 +30,7 @@ class ChecklistTableRowConverter extends ConverterBase<ChecklistTableRowEntity, 
 
     @Override
     protected ChecklistTableRowEntity processDomainConversion(ChecklistTableRow domain) {
-        String userId = accessTokenProvider.getUidAsString();
+        String userId = accessTokenProvider.getUserIdAsString();
         return ChecklistTableRowEntity.builder()
             .rowId(uuidConverter.convertDomain(domain.getRowId()))
             .userId(uuidConverter.convertDomain(domain.getUserId()))

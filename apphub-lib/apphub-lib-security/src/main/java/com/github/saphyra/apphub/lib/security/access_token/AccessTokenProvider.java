@@ -16,7 +16,7 @@ public class AccessTokenProvider {
     private final AccessTokenHeaderConverter accessTokenHeaderConverter;
     private final UuidConverter uuidConverter;
 
-    public String getUidAsString() {
+    public String getUserIdAsString() {
         return uuidConverter.convertDomain(get().getUserId());
     }
 

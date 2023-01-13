@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.lib.encryption.configuration;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.IntegerEncryptor;
+import com.github.saphyra.apphub.lib.encryption.impl.LongEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,11 @@ public class EncryptionBeanConfig {
     @Bean
     public IntegerEncryptor integerEncryptor(StringEncryptor stringEncryptor) {
         return new IntegerEncryptor(stringEncryptor);
+    }
+
+    @Bean
+    public LongEncryptor longEncryptor(StringEncryptor stringEncryptor) {
+        return new LongEncryptor(stringEncryptor);
     }
 
     @Bean

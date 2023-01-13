@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: storage
+  servlet:
+    multipart:
+      resolve-lazily: true
+
+liquibase:
+  schema: storage
+
+ftp:
+  client:
+    server: host.docker.internal
+    port: 21
+    username: ${FTP_CLIENT_USERNAME}
+    password: ${FTP_CLIENT_PASSWORD:}}
+
+storedFile:
+  expirationSeconds: 1800

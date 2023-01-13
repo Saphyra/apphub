@@ -104,3 +104,7 @@ diary:
 encryption:
   ribbon:
     listOfServers: localhost:8098
+
+storage:
+  ribbon:
+    listOfServers: localhost:8099

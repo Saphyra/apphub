@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist_table.ChecklistTableDeletionService;
+import com.github.saphyra.apphub.service.notebook.service.image.deletion.ImageDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableDeletionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ public class ListItemDeletionService {
     private final ChecklistItemDao checklistItemDao;
     private final TableDeletionService tableDeletionService;
     private final ChecklistTableDeletionService checklistTableDeletionService;
+    private final ImageDeletionService imageDeletionService;
 
     @Transactional
     public void deleteListItem(UUID listItemId, UUID userId) {
@@ -54,6 +56,9 @@ public class ListItemDeletionService {
                 break;
             case ONLY_TITLE:
                 log.info("OnlyTitle is handled by default.");
+                break;
+            case IMAGE:
+                imageDeletionService.deleteImage(listItem.getListItemId());
                 break;
             default:
                 throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, "Unhandled listItemType: " + listItem.getType());

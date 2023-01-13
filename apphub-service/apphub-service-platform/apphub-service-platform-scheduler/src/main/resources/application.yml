@@ -23,3 +23,5 @@ interval:
     messageSender:
       pingRequest: 30000
       connectionCleanup: 600000
+  storage:
+    storedFileCleanup: 300000 #5 minutes

@@ -17,27 +17,27 @@ spec:
         name: event-gateway
     spec:
       containers:
-        - name: event-gateway
-          image: saphyra/apphub-service-platform-event_gateway:latest
-          ports:
-            - containerPort: 8080
-          imagePullPolicy: Never
-          livenessProbe:
-            httpGet:
-              path: /platform/health
-              port: 8080
-            initialDelaySeconds: 10
-            periodSeconds: 5
-          readinessProbe:
-            httpGet:
-              path: /platform/health
-              port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 1
-            failureThreshold: 10
-          resources:
-            limits:
-              memory: 400Mi
+      - name: event-gateway
+        image: saphyra/apphub-service-platform-event_gateway:latest
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Never
+        livenessProbe:
+          httpGet:
+            path: /platform/health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /platform/health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 1
+          failureThreshold: 10
+        resources:
+          limits:
+            memory: 400Mi
 ---
 apiVersion: v1
 kind: Service
@@ -48,6 +48,6 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: 8080
+  - port: 8080
   selector:
     name: event-gateway

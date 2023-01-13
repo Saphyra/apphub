@@ -89,7 +89,7 @@ public class ValidationUtilTest {
 
     @Test
     public void atLeast_null() {
-        Throwable ex = catchThrowable(() -> ValidationUtil.atLeast(null, 10, FIELD));
+        Throwable ex = catchThrowable(() -> ValidationUtil.atLeast((Integer) null, 10, FIELD));
 
         ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
     }
@@ -97,6 +97,25 @@ public class ValidationUtilTest {
     @Test
     public void atLeast_tooLow() {
         Throwable ex = catchThrowable(() -> ValidationUtil.atLeast(9, 10, FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "too low");
+    }
+
+    @Test
+    public void atLeast_long() {
+        ValidationUtil.atLeast(1L, 1, FIELD);
+    }
+
+    @Test
+    public void atLeast_long_null() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.atLeast((Long) null, 10, FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+    }
+
+    @Test
+    public void atLeast_long_tooLow() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.atLeast(9L, 10, FIELD));
 
         ExceptionValidator.validateInvalidParam(ex, FIELD, "too low");
     }

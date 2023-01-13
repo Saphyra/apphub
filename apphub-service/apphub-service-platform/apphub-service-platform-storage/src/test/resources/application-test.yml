@@ -1,0 +1,5 @@
+ftp:
+  client:
+    server: localhost
+    port: 21
+    username: ftp_dev

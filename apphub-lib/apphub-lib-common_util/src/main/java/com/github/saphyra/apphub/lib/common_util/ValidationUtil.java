@@ -55,6 +55,13 @@ public class ValidationUtil {
         }
     }
 
+    public static void atLeast(Long value, int minValue, String field) {
+        notNull(value, field);
+        if (value < minValue) {
+            throw ExceptionFactory.invalidParam(field, "too low");
+        }
+    }
+
     public static void maximum(Integer value, Integer max, String field) {
         notNull(value, field);
         if (value > max) {

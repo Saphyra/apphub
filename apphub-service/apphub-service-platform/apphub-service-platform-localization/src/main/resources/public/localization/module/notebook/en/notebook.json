@@ -1,6 +1,48 @@
 {
   "title": "Apphub - Notebook",
   "staticText": {
+    "new-image-input-label": [
+      {
+        "key": "innerHTML",
+        "message": "Select the image file"
+      }
+    ],
+    "create-image-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Up"
+      }
+    ],
+    "create-image-button": [
+      {
+        "key": "innerHTML",
+        "message": "Save"
+      }
+    ],
+    "create-image-selected-category": [
+      {
+        "key": "innerHTML",
+        "message": "Selected category"
+      }
+    ],
+    "new-image-title": [
+      {
+        "key": "placeholder",
+        "message": "Title"
+      }
+    ],
+    "create-image-title": [
+      {
+        "key": "innerHTML",
+        "message": "New image"
+      }
+    ],
+    "new-image-button": [
+      {
+        "key": "innerHTML",
+        "message": "Image"
+      }
+    ],
     "main-title": [
       {
         "key": "innerHTML",
@@ -522,6 +564,8 @@
     "archive-button-title": "Archive",
     "pin-button-title": "Pin",
     "only-title-created": "Successfully created.",
-    "list-item-title-copied": "Title copied to clipboard"
+    "list-item-title-copied": "Title copied to clipboard",
+    "no-file-selected": "No file selected.",
+    "image-saved": "Image saved."
   }
 }

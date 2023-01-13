@@ -1,0 +1,23 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-stored_file" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="storage" tableName="stored_file"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="storage" tableName="stored_file">
+            <column name="stored_file_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(37)"/>
+            <column name="created_at" type="datetime"/>
+            <column name="file_uploaded" type="boolean"/>
+            <column name="extension" type="text"/>
+            <column name="file_name" type="text"/>
+            <column name="size" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="storage" tableName="stored_file" columnNames="stored_file_id" constraintName="stored_file-pk"/>
+    </changeSet>
+</databaseChangeLog>

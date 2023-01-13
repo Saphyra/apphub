@@ -39,7 +39,7 @@ public class UserSettingConverterTest {
 
     @Before
     public void setUp() {
-        given(accessTokenProvider.getUidAsString()).willReturn(ACCESS_TOKEN_USER_ID);
+        given(accessTokenProvider.getUserIdAsString()).willReturn(ACCESS_TOKEN_USER_ID);
     }
 
     @Test
