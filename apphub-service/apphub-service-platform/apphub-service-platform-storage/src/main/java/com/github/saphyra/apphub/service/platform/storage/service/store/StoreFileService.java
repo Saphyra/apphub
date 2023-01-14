@@ -41,7 +41,7 @@ public class StoreFileService {
 
     @SneakyThrows
     @Transactional
-    public UUID uploadFile(UUID userId, UUID storedFileId, InputStream file) {
+    public void uploadFile(UUID userId, UUID storedFileId, InputStream file) {
         StoredFile storedFile = storedFileDao.findByIdValidated(storedFileId);
 
         if (!userId.equals(storedFile.getUserId())) {
@@ -62,7 +62,5 @@ public class StoreFileService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        return storedFileId;
     }
 }

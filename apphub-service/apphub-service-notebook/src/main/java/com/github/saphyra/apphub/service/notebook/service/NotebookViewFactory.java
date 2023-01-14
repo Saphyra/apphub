@@ -22,6 +22,7 @@ public class NotebookViewFactory {
     private final FileDao fileDao;
     private final UuidConverter uuidConverter;
 
+    //TODO make file and image disabled if no file uploaded
     public NotebookView create(ListItem listItem) {
         String value = extractValue(listItem);
 

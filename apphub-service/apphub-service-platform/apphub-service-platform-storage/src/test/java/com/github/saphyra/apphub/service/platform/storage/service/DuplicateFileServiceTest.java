@@ -58,7 +58,6 @@ public class DuplicateFileServiceTest {
         given(storedFile.getSize()).willReturn(SIZE);
 
         given(storeFileService.createFile(USER_ID, FILE_NAME, EXTENSION, SIZE)).willReturn(NEW_STORED_FILE_ID);
-        given(storeFileService.uploadFile(USER_ID, NEW_STORED_FILE_ID, inputStream)).willReturn(NEW_STORED_FILE_ID);
 
         UUID result = underTest.duplicateFile(USER_ID, STORED_FILE_ID);
 

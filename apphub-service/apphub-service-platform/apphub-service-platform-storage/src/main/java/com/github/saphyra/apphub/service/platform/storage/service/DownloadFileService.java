@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.platform.storage.service;
 
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
@@ -8,6 +9,7 @@ import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientFactory;
 import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -26,6 +28,10 @@ public class DownloadFileService {
 
         if (!storedFile.getUserId().equals(userId)) {
             throw ExceptionFactory.forbiddenOperation(userId + " has no access to " + storedFileId);
+        }
+
+        if (!storedFile.isFileUploaded()) {
+            throw ExceptionFactory.notLoggedException(HttpStatus.LOCKED, ErrorCode.FILE_NOT_UPLOADED, storedFileId + " has not file uploaded.");
         }
 
         FtpClientWrapper ftpClient = ftpClientFactory.create();

@@ -120,9 +120,7 @@ public class StoreFileServiceTest {
         given(ftpClientFactory.create()).willReturn(ftpClient);
         given(uuidConverter.convertDomain(STORED_FILE_ID)).willReturn(FILE_NAME);
 
-        UUID result = underTest.uploadFile(USER_ID, STORED_FILE_ID, inputStream);
-
-        assertThat(result).isEqualTo(STORED_FILE_ID);
+        underTest.uploadFile(USER_ID, STORED_FILE_ID, inputStream);
 
         verify(ftpClient).storeFile(FILE_NAME, inputStream);
         verify(storedFile).setFileUploaded(true);

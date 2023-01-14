@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.platform.storage.config;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.concurrency.DefaultExecutorServiceBeanConfig;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
 import com.github.saphyra.apphub.lib.encryption.EnableEncryption;
@@ -27,7 +28,8 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 @EnableErrorHandler
 @Import({
     CommonConfigProperties.class,
-    AccessTokenFilterConfiguration.class
+    AccessTokenFilterConfiguration.class,
+    DefaultExecutorServiceBeanConfig.class
 })
 @EnableHealthCheck
 @EnableLocaleMandatoryRequestValidation
