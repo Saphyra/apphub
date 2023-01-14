@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.notebook.model.request.CreateImageRequest;
 import com.github.saphyra.apphub.api.notebook.server.ImageController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.service.notebook.service.image.creation.ImageCreationService;
+import com.github.saphyra.apphub.service.notebook.service.image.ImageCreationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;

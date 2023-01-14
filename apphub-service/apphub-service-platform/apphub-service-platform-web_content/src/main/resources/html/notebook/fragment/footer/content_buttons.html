@@ -1,6 +1,10 @@
 <HTML xmlns:th="http://www.thymeleaf.org">
 <BODY>
 
+<SPAN id="create-file-buttons" class="button-wrapper" th:fragment="create-file-buttons">
+    <BUTTON id="create-file-button" onclick="fileCreationController.save()"></BUTTON>
+</SPAN>
+
 <SPAN id="create-image-buttons" class="button-wrapper" th:fragment="create-image-buttons">
     <BUTTON id="create-image-button" onclick="imageCreationController.save()"></BUTTON>
 </SPAN>

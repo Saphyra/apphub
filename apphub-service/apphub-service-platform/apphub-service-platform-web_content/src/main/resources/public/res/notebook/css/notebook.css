@@ -68,6 +68,10 @@ body{
     border-color: brown;
 }
 
+.file{
+    border-color: black;
+}
+
 .pin-button{
     background-image: url("/res/common/images/pin.png");
     background-size: cover;

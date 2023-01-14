@@ -96,6 +96,7 @@ window.Mapping = new function(){
         NOTEBOOK_CREATE_ONLY_TITLE: new Endpoint("/api/notebook/only-title", HttpMethod.PUT),
         NOTEBOOK_MOVE_LIST_ITEM: new Endpoint("/api/notebook/{listItemId}/move", HttpMethod.POST),
         NOTEBOOK_CREATE_IMAGE: new Endpoint("/api/notebook/image", HttpMethod.PUT),
+        NOTEBOOK_CREATE_FILE: new Endpoint("/api/notebook/file", HttpMethod.PUT),
 
         //Utils
         UTILS_LOG_FORMATTER_GET_VISIBILITY: new Endpoint("/api/utils/log-formatter/visibility", HttpMethod.PUT),

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.dao.image;
+package com.github.saphyra.apphub.service.notebook.dao.file;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,11 +14,11 @@ import javax.persistence.Table;
 @Data
 @Builder
 @Entity
-@Table(schema = "notebook", name = "image")
-class ImageEntity {
+@Table(schema = "notebook", name = "file")
+class FileEntity {
     @Id
-    private String imageId;
+    private String fileId;
     private String userId;
     private String parent;
-    private String fileId;
+    private String storedFileId;
 }

@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service;
 import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.image.ImageDao;
+import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.UUID;
 public class NotebookViewFactory {
     private final ContentDao contentDao;
     private final ListItemDao listItemDao;
-    private final ImageDao imageDao;
+    private final FileDao fileDao;
     private final UuidConverter uuidConverter;
 
     public NotebookView create(ListItem listItem) {
@@ -50,8 +50,9 @@ public class NotebookViewFactory {
                 return contentDao.findByParentValidated(listItem.getListItemId())
                     .getContent();
             case IMAGE:
-                UUID fileId = imageDao.findByParentValidated(listItem.getListItemId())
-                    .getFileId();
+            case FILE:
+                UUID fileId = fileDao.findByParentValidated(listItem.getListItemId())
+                    .getStoredFileId();
                 return uuidConverter.convertDomain(fileId);
             default:
                 log.debug("No value for listItemType {}", listItem.getType());

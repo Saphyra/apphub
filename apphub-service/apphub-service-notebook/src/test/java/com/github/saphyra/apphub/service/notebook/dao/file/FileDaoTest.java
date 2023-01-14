@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.dao.image;
+package com.github.saphyra.apphub.service.notebook.dao.file;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -19,7 +19,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ImageDaoTest {
+public class FileDaoTest {
     private static final UUID PARENT = UUID.randomUUID();
     private static final String PARENT_STRING = "parent";
     private static final UUID USER_ID = UUID.randomUUID();
@@ -29,29 +29,29 @@ public class ImageDaoTest {
     private UuidConverter uuidConverter;
 
     @Mock
-    private ImageConverter converter;
+    private FileConverter converter;
 
     @Mock
-    private ImageRepository repository;
+    private FileRepository repository;
 
     @InjectMocks
-    private ImageDao underTest;
+    private FileDao underTest;
 
     @Mock
-    private Image image;
+    private File file;
 
     @Mock
-    private ImageEntity entity;
+    private FileEntity entity;
 
     @Test
     public void findByParent() {
         given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
         given(repository.findByParent(PARENT_STRING)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(image));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(file));
 
-        Optional<Image> result = underTest.findByParent(PARENT);
+        Optional<File> result = underTest.findByParent(PARENT);
 
-        assertThat(result).contains(image);
+        assertThat(result).contains(file);
     }
 
     @Test
@@ -78,10 +78,10 @@ public class ImageDaoTest {
     public void findByParentValidated() {
         given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
         given(repository.findByParent(PARENT_STRING)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(image));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(file));
 
-        Image result = underTest.findByParentValidated(PARENT);
+        File result = underTest.findByParentValidated(PARENT);
 
-        assertThat(result).isEqualTo(image);
+        assertThat(result).isEqualTo(file);
     }
 }

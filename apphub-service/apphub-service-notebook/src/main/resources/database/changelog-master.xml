@@ -16,5 +16,5 @@
     <include file="database/change_sets/table_head.xml"/>
     <include file="database/change_sets/table_join.xml"/>
     <include file="database/change_sets/checklist_table_row.xml"/>
-    <include file="database/change_sets/image.xml"/>
+    <include file="database/change_sets/file.xml"/>
 </databaseChangeLog>

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.dao.image;
+package com.github.saphyra.apphub.service.notebook.dao.file;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Builder
-public class Image {
-    private final UUID imageId;
+public class File {
+    private final UUID fileId;
     private final UUID userId;
     private final UUID parent;
-    private UUID fileId;
+    private UUID storedFileId;
 }

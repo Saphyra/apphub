@@ -1,11 +1,12 @@
-package com.github.saphyra.apphub.service.notebook.service.image.creation;
+package com.github.saphyra.apphub.service.notebook.service.image;
 
 import com.github.saphyra.apphub.api.notebook.model.request.CreateImageRequest;
-import com.github.saphyra.apphub.service.notebook.dao.image.Image;
-import com.github.saphyra.apphub.service.notebook.dao.image.ImageDao;
+import com.github.saphyra.apphub.service.notebook.dao.file.File;
+import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
+import com.github.saphyra.apphub.service.notebook.service.FileFactory;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
 import com.github.saphyra.apphub.service.notebook.service.ListItemRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
@@ -42,13 +43,13 @@ public class ImageCreationServiceTest {
     private ListItemDao listItemDao;
 
     @Mock
-    private ImageFactory imageFactory;
+    private FileFactory fileFactory;
 
     @Mock
     private StorageProxy storageProxy;
 
     @Mock
-    private ImageDao imageDao;
+    private FileDao fileDao;
 
     @InjectMocks
     private ImageCreationService underTest;
@@ -60,7 +61,7 @@ public class ImageCreationServiceTest {
     private ListItem listItem;
 
     @Mock
-    private Image image;
+    private File file;
 
     @Test
     public void createImage() {
@@ -73,13 +74,13 @@ public class ImageCreationServiceTest {
 
         given(storageProxy.createFile(FILE_NAME, EXTENSION, SIZE)).willReturn(FILE_ID);
         given(listItemFactory.create(USER_ID, TITLE, PARENT, ListItemType.IMAGE)).willReturn(listItem);
-        given(imageFactory.create(USER_ID, LIST_ITEM_ID, FILE_ID)).willReturn(image);
+        given(fileFactory.create(USER_ID, LIST_ITEM_ID, FILE_ID)).willReturn(file);
 
         UUID result = underTest.createImage(USER_ID, request);
 
         verify(listItemRequestValidator).validate(TITLE, PARENT);
         verify(listItemDao).save(listItem);
-        verify(imageDao).save(image);
+        verify(fileDao).save(file);
 
         assertThat(result).isEqualTo(FILE_ID);
     }

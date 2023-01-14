@@ -1,6 +1,48 @@
 {
   "title": "Apphub - Jegyzetfüzet",
   "staticText": {
+    "create-file-selected-category": [
+      {
+        "key": "innerHTML",
+        "message": "Kiválasztott kategória"
+      }
+    ],
+    "new-file-title": [
+      {
+        "key": "placeholder",
+        "message": "Cím"
+      }
+    ],
+    "create-file-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
+    ],
+    "new-file-input-label": [
+      {
+        "key": "innerHTML",
+        "message": "Válaszd ki a fájlt"
+      }
+    ],
+    "create-file-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Fel"
+      }
+    ],
+    "create-file-title": [
+      {
+        "key": "innerHTML",
+        "message": "Új fájl"
+      }
+    ],
+    "new-file-button": [
+      {
+        "key": "innerHTML",
+        "message": "Fájl"
+      }
+    ],
     "new-image-input-label": [
       {
         "key": "innerHTML",
@@ -560,6 +602,7 @@
     "only-title-created": "Sikeresen létrehozva.",
     "list-item-title-copied": "Cím vágólapra másolva",
     "no-file-selected": "Nincs fájl kiválasztva.",
-    "image-saved": "Kép elmentve."
+    "image-saved": "Kép elmentve.",
+    "file-saved": "Fájl elmentve."
   }
 }

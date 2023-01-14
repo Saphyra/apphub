@@ -22,7 +22,7 @@ public class ListItemCloneService {
     private final TextAndLinkCloneService textAndLinkCloneService;
     private final ChecklistCloneService checklistCloneService;
     private final ChecklistTableCloneService checklistTableCloneService;
-    private final CloneImageService cloneImageService;
+    private final CloneFileService cloneFileService;
 
     @Transactional
     public void clone(UUID listItemId) {
@@ -56,7 +56,8 @@ public class ListItemCloneService {
                 log.info("OnlyTitle is cloned by default.");
                 break;
             case IMAGE:
-                cloneImageService.cloneImage(toClone, listItemClone);
+            case FILE:
+                cloneFileService.cloneFile(toClone, listItemClone);
                 break;
             default:
                 throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, toClone.getType() + "cannot be cloned.");

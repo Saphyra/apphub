@@ -8,5 +8,6 @@ public enum ListItemType {
     CHECKLIST_TABLE,
     LINK,
     ONLY_TITLE,
-    IMAGE
+    IMAGE,
+    FILE
 }

@@ -1,11 +1,12 @@
-package com.github.saphyra.apphub.service.notebook.service.image.creation;
+package com.github.saphyra.apphub.service.notebook.service.image;
 
 import com.github.saphyra.apphub.api.notebook.model.request.CreateImageRequest;
-import com.github.saphyra.apphub.service.notebook.dao.image.Image;
-import com.github.saphyra.apphub.service.notebook.dao.image.ImageDao;
+import com.github.saphyra.apphub.service.notebook.dao.file.File;
+import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
+import com.github.saphyra.apphub.service.notebook.service.FileFactory;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
 import com.github.saphyra.apphub.service.notebook.service.ListItemRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
@@ -23,9 +24,9 @@ public class ImageCreationService {
     private final ListItemRequestValidator listItemRequestValidator;
     private final ListItemFactory listItemFactory;
     private final ListItemDao listItemDao;
-    private final ImageFactory imageFactory;
+    private final FileFactory fileFactory;
     private final StorageProxy storageProxy;
-    private final ImageDao imageDao;
+    private final FileDao fileDao;
 
     public UUID createImage(UUID userId, CreateImageRequest request) {
         listItemRequestValidator.validate(request.getTitle(), request.getParent());
@@ -33,10 +34,10 @@ public class ImageCreationService {
         UUID fileId = storageProxy.createFile(request.getFileName(), FilenameUtils.getExtension(request.getFileName()), request.getSize());
 
         ListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), ListItemType.IMAGE);
-        Image image = imageFactory.create(userId, listItem.getListItemId(), fileId);
+        File file = fileFactory.create(userId, listItem.getListItemId(), fileId);
 
         listItemDao.save(listItem);
-        imageDao.save(image);
+        fileDao.save(file);
 
         return fileId;
     }

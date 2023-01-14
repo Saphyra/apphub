@@ -42,6 +42,9 @@ public class ListItemDeletionServiceTest {
     @Mock
     private ChecklistTableDeletionService checklistTableDeletionService;
 
+    @Mock
+    private FileDeletionService fileDeletionService;
+
     @InjectMocks
     private ListItemDeletionService underTest;
 
@@ -134,7 +137,7 @@ public class ListItemDeletionServiceTest {
     }
 
     @Test
-    public void deleteChecklistTable(){
+    public void deleteChecklistTable() {
         given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
         given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
         given(deleted.getType()).willReturn(ListItemType.CHECKLIST_TABLE);
@@ -143,5 +146,29 @@ public class ListItemDeletionServiceTest {
 
         verify(listItemDao).delete(deleted);
         verify(checklistTableDeletionService).deleteByListItemId(LIST_ITEM_ID_1);
+    }
+
+    @Test
+    public void deleteImage() {
+        given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
+        given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
+        given(deleted.getType()).willReturn(ListItemType.IMAGE);
+
+        underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
+
+        verify(listItemDao).delete(deleted);
+        verify(fileDeletionService).deleteImage(LIST_ITEM_ID_1);
+    }
+
+    @Test
+    public void deleteFile() {
+        given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
+        given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
+        given(deleted.getType()).willReturn(ListItemType.FILE);
+
+        underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
+
+        verify(listItemDao).delete(deleted);
+        verify(fileDeletionService).deleteImage(LIST_ITEM_ID_1);
     }
 }

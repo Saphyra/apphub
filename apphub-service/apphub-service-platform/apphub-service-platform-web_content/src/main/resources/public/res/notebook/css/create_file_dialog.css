@@ -1,0 +1,41 @@
+#create-file-parent-selection-wrapper{
+    background: var(--background-color);
+    position: absolute;
+    top: var(--create-item-input-height);
+    left: 10%;
+    right: 10%;
+    z-index: 1;
+    border: 3px ridge white;
+    border-top: none;
+}
+
+    #create-file-selected-category-wrapper{
+        text-align: center;
+        font-size: 1.5rem;
+        padding: 0.25rem;
+    }
+
+    #create-file-parent-selection-list-wrapper{
+        display: none;
+    }
+
+        #create-file-parent-selection-wrapper:hover #create-file-parent-selection-list-wrapper{
+            display: block;
+        }
+
+#new-file-content-wrapper{
+    position: absolute;
+    top: 5.5rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+}
+
+    #new-file-input-wrapper{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2.5rem;
+    }

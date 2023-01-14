@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.dao.image;
+package com.github.saphyra.apphub.service.notebook.dao.file;
 
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
@@ -14,15 +14,15 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-public class ImageDao extends AbstractDao<ImageEntity, Image, String, ImageRepository> implements DeleteByUserIdDao {
+public class FileDao extends AbstractDao<FileEntity, File, String, FileRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
-    public ImageDao(ImageConverter converter, ImageRepository repository, UuidConverter uuidConverter) {
+    public FileDao(FileConverter converter, FileRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
     }
 
-    public Optional<Image> findByParent(UUID parent) {
+    public Optional<File> findByParent(UUID parent) {
         return converter.convertEntity(repository.findByParent(uuidConverter.convertDomain(parent)));
     }
 
@@ -31,7 +31,7 @@ public class ImageDao extends AbstractDao<ImageEntity, Image, String, ImageRepos
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }
 
-    public Image findByParentValidated(UUID parent) {
+    public File findByParentValidated(UUID parent) {
         return findByParent(parent)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Image not found by parent " + parent));
     }

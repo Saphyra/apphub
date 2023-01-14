@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.dao.image;
+package com.github.saphyra.apphub.service.notebook.dao.file;
 
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -9,26 +9,26 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class ImageConverter extends ConverterBase<ImageEntity, Image> {
+class FileConverter extends ConverterBase<FileEntity, File> {
     private final UuidConverter uuidConverter;
 
     @Override
-    protected ImageEntity processDomainConversion(Image domain) {
-        return ImageEntity.builder()
-            .imageId(uuidConverter.convertDomain(domain.getImageId()))
+    protected FileEntity processDomainConversion(File domain) {
+        return FileEntity.builder()
+            .fileId(uuidConverter.convertDomain(domain.getFileId()))
             .userId(uuidConverter.convertDomain(domain.getUserId()))
             .parent(uuidConverter.convertDomain(domain.getParent()))
-            .fileId(uuidConverter.convertDomain(domain.getFileId()))
+            .storedFileId(uuidConverter.convertDomain(domain.getStoredFileId()))
             .build();
     }
 
     @Override
-    protected Image processEntityConversion(ImageEntity entity) {
-        return Image.builder()
-            .imageId(uuidConverter.convertEntity(entity.getImageId()))
+    protected File processEntityConversion(FileEntity entity) {
+        return File.builder()
+            .fileId(uuidConverter.convertEntity(entity.getFileId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
             .parent(uuidConverter.convertEntity(entity.getParent()))
-            .fileId(uuidConverter.convertEntity(entity.getFileId()))
+            .storedFileId(uuidConverter.convertEntity(entity.getStoredFileId()))
             .build();
     }
 }

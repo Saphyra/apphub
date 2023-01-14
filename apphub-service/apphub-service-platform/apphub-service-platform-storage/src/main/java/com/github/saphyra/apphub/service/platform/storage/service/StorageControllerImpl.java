@@ -32,6 +32,7 @@ public class StorageControllerImpl implements StorageController {
     private final FileUploadHelper fileUploadHelper;
 
     @Override
+    //TODO limit file size
     public UUID createFile(CreateFileRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a file.", accessTokenHeader.getUserId());
         return storeFileService.createFile(accessTokenHeader.getUserId(), request.getFileName(), request.getExtension(), request.getSize());

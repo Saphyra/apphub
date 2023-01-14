@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.dao.image;
+package com.github.saphyra.apphub.service.notebook.dao.file;
 
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
 import org.junit.After;
@@ -15,15 +15,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
-public class ImageRepositoryTest {
-    private static final String IMAGE_ID_1 = "image-id-1";
-    private static final String IMAGE_ID_2 = "image-id-2";
+public class FileRepositoryTest {
+    private static final String FILE_ID_1 = "file-id-1";
+    private static final String FILE_ID_2 = "file-id-2";
     private static final String PARENT_1 = "parent-1";
     private static final String USER_ID_1 = "user-1";
     private static final String USER_ID_2 = "user-2";
 
     @Autowired
-    private ImageRepository underTest;
+    private FileRepository underTest;
 
     @After
     public void clear() {
@@ -32,13 +32,13 @@ public class ImageRepositoryTest {
 
     @Test
     public void findByParent() {
-        ImageEntity entity = ImageEntity.builder()
-            .imageId(IMAGE_ID_1)
+        FileEntity entity = FileEntity.builder()
+            .fileId(FILE_ID_1)
             .parent(PARENT_1)
             .build();
         underTest.save(entity);
 
-        Optional<ImageEntity> result = underTest.findByParent(PARENT_1);
+        Optional<FileEntity> result = underTest.findByParent(PARENT_1);
 
         assertThat(result).contains(entity);
     }
@@ -46,14 +46,14 @@ public class ImageRepositoryTest {
     @Test
     @Transactional
     public void deleteByUserid() {
-        ImageEntity entity1 = ImageEntity.builder()
-            .imageId(IMAGE_ID_1)
+        FileEntity entity1 = FileEntity.builder()
+            .fileId(FILE_ID_1)
             .userId(USER_ID_1)
             .build();
         underTest.save(entity1);
 
-        ImageEntity entity2 = ImageEntity.builder()
-            .imageId(IMAGE_ID_2)
+        FileEntity entity2 = FileEntity.builder()
+            .fileId(FILE_ID_2)
             .userId(USER_ID_2)
             .build();
         underTest.save(entity2);

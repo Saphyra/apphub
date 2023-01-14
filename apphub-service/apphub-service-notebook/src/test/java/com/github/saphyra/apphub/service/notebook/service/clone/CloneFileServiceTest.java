@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.service.clone;
 
-import com.github.saphyra.apphub.service.notebook.dao.image.Image;
-import com.github.saphyra.apphub.service.notebook.dao.image.ImageDao;
+import com.github.saphyra.apphub.service.notebook.dao.file.File;
+import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
-import com.github.saphyra.apphub.service.notebook.service.image.creation.ImageFactory;
+import com.github.saphyra.apphub.service.notebook.service.FileFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -17,7 +17,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CloneImageServiceTest {
+public class CloneFileServiceTest {
     private static final UUID ORIGINAL_PARENT = UUID.randomUUID();
     private static final UUID ORIGINAL_FILE_ID = UUID.randomUUID();
     private static final UUID CLONED_FILE_ID = UUID.randomUUID();
@@ -25,16 +25,16 @@ public class CloneImageServiceTest {
     private static final UUID NEW_PARENT = UUID.randomUUID();
 
     @Mock
-    private ImageDao imageDao;
+    private FileDao fileDao;
 
     @Mock
     private StorageProxy storageProxy;
 
     @Mock
-    private ImageFactory imageFactory;
+    private FileFactory fileFactory;
 
     @InjectMocks
-    private CloneImageService underTest;
+    private CloneFileService underTest;
 
     @Mock
     private ListItem toClone;
@@ -43,10 +43,10 @@ public class CloneImageServiceTest {
     private ListItem listItemClone;
 
     @Mock
-    private Image image;
+    private File file;
 
     @Mock
-    private Image imageClone;
+    private File fileClone;
 
     @Test
     public void cloneImage() {
@@ -55,14 +55,14 @@ public class CloneImageServiceTest {
 
         given(listItemClone.getListItemId()).willReturn(NEW_PARENT);
 
-        given(image.getFileId()).willReturn(ORIGINAL_FILE_ID);
+        given(file.getStoredFileId()).willReturn(ORIGINAL_FILE_ID);
 
-        given(imageDao.findByParentValidated(ORIGINAL_PARENT)).willReturn(image);
+        given(fileDao.findByParentValidated(ORIGINAL_PARENT)).willReturn(file);
         given(storageProxy.duplicateFile(ORIGINAL_FILE_ID)).willReturn(CLONED_FILE_ID);
-        given(imageFactory.create(USER_ID, NEW_PARENT, CLONED_FILE_ID)).willReturn(imageClone);
+        given(fileFactory.create(USER_ID, NEW_PARENT, CLONED_FILE_ID)).willReturn(fileClone);
 
-        underTest.cloneImage(toClone, listItemClone);
+        underTest.cloneFile(toClone, listItemClone);
 
-        verify(imageDao).save(imageClone);
+        verify(fileDao).save(fileClone);
     }
 }

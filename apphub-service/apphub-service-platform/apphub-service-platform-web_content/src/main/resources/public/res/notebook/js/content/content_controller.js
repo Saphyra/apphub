@@ -7,7 +7,8 @@
         TABLE: tableNodeFactory,
         CHECKLIST_TABLE: checklistTableNodeFactory,
         ONLY_TITLE: onlyTitleNodeFactory,
-        IMAGE: imageNodeFactory
+        IMAGE: imageNodeFactory,
+        FILE: fileNodeFactory
     }
 
     window.contentController = new function(){

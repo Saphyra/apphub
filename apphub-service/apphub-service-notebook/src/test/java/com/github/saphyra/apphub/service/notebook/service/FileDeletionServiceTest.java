@@ -1,8 +1,7 @@
-package com.github.saphyra.apphub.service.notebook.service.image.deletion;
+package com.github.saphyra.apphub.service.notebook.service;
 
-import com.github.saphyra.apphub.service.notebook.dao.image.Image;
-import com.github.saphyra.apphub.service.notebook.dao.image.ImageDao;
-import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
+import com.github.saphyra.apphub.service.notebook.dao.file.File;
+import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -15,31 +14,31 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ImageDeletionServiceTest {
+public class FileDeletionServiceTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final UUID FILE_ID = UUID.randomUUID();
 
     @Mock
-    private ImageDao imageDao;
+    private FileDao fileDao;
 
     @Mock
     private StorageProxy storageProxy;
 
     @InjectMocks
-    private ImageDeletionService underTest;
+    private FileDeletionService underTest;
 
     @Mock
-    private Image image;
+    private File file;
 
     @Test
     public void deleteImage() {
-        given(imageDao.findByParentValidated(LIST_ITEM_ID)).willReturn(image);
+        given(fileDao.findByParentValidated(LIST_ITEM_ID)).willReturn(file);
 
-        given(image.getFileId()).willReturn(FILE_ID);
+        given(file.getStoredFileId()).willReturn(FILE_ID);
 
         underTest.deleteImage(LIST_ITEM_ID);
 
         verify(storageProxy).deleteFile(FILE_ID);
-        verify(imageDao).delete(image);
+        verify(fileDao).delete(file);
     }
 }

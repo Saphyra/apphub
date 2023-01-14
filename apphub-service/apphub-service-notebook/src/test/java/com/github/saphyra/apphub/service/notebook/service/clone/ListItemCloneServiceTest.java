@@ -38,6 +38,10 @@ public class ListItemCloneServiceTest {
     private static final String CHECKLIST_TABLE_ITEM_TITLE = "checklist-table-list-item-id";
     private static final UUID ONLY_TITLE_LIST_ITEM_ID = UUID.randomUUID();
     private static final String ONLY_TITLE_TITLE = "only-title-title";
+    private static final UUID IMAGE_LIST_ITEM_ID = UUID.randomUUID();
+    private static final String IMAGE_TITLE = "image-title";
+    private static final UUID FILE_LIST_ITEM_ID = UUID.randomUUID();
+    private static final String FILE_TITLE = "file-title";
 
     @Mock
     private ListItemDao listItemDao;
@@ -56,6 +60,9 @@ public class ListItemCloneServiceTest {
 
     @Mock
     private ChecklistTableCloneService checklistTableCloneService;
+
+    @Mock
+    private CloneFileService cloneFileService;
 
     @InjectMocks
     private ListItemCloneService underTest;
@@ -100,6 +107,16 @@ public class ListItemCloneServiceTest {
     @Mock
     private ListItem onlyTitleListItemClone;
 
+    private final ListItem imageListItem = createListItem(IMAGE_LIST_ITEM_ID, IMAGE_TITLE, ListItemType.IMAGE, PARENT_OF_PARENT);
+
+    @Mock
+    private ListItem imageListItemClone;
+
+    private final ListItem fileListItem = createListItem(FILE_LIST_ITEM_ID, FILE_TITLE, ListItemType.FILE, PARENT_OF_PARENT);
+
+    @Mock
+    private ListItem fileListItemClone;
+
     @Test
     public void cloneTest() {
         given(parentListItemClone.getListItemId()).willReturn(PARENT_LIST_ITEM_CLONE_ID);
@@ -107,7 +124,17 @@ public class ListItemCloneServiceTest {
         given(listItemDao.findByIdValidated(PARENT_LIST_ITEM_ID)).willReturn(parentListItem);
         given(listItemFactory.create(USER_ID, PARENT_LIST_ITEM_TITLE, PARENT_OF_PARENT, ListItemType.CATEGORY)).willReturn(parentListItemClone);
 
-        given(listItemDao.getByUserIdAndParent(USER_ID, PARENT_LIST_ITEM_ID)).willReturn(Arrays.asList(categoryListItem, linkListItem, textListItem, checklistListItem, tableListItem, checklistTableListItem, onlyTitleListItem));
+        given(listItemDao.getByUserIdAndParent(USER_ID, PARENT_LIST_ITEM_ID)).willReturn(Arrays.asList(
+            categoryListItem,
+            linkListItem,
+            textListItem,
+            checklistListItem,
+            tableListItem,
+            checklistTableListItem,
+            onlyTitleListItem,
+            imageListItem,
+            fileListItem
+        ));
 
         given(listItemFactory.create(USER_ID, CATEGORY_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.CATEGORY)).willReturn(categoryListItemClone);
         given(listItemDao.getByUserIdAndParent(USER_ID, CATEGORY_LIST_ITEM_ID)).willReturn(Collections.emptyList());
@@ -118,6 +145,8 @@ public class ListItemCloneServiceTest {
         given(listItemFactory.create(USER_ID, TABLE_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.TABLE)).willReturn(tableListItemClone);
         given(listItemFactory.create(USER_ID, CHECKLIST_TABLE_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.CHECKLIST_TABLE)).willReturn(checklistTableListItemClone);
         given(listItemFactory.create(USER_ID, ONLY_TITLE_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.ONLY_TITLE)).willReturn(onlyTitleListItemClone);
+        given(listItemFactory.create(USER_ID, IMAGE_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.IMAGE)).willReturn(imageListItemClone);
+        given(listItemFactory.create(USER_ID, FILE_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.FILE)).willReturn(fileListItemClone);
 
         underTest.clone(PARENT_LIST_ITEM_ID);
 
@@ -134,6 +163,10 @@ public class ListItemCloneServiceTest {
         verify(listItemDao).save(checklistTableListItemClone);
         verify(checklistTableCloneService).clone(checklistTableListItem, checklistTableListItemClone);
         verify(listItemDao).save(onlyTitleListItemClone);
+        verify(cloneFileService).cloneFile(imageListItem, imageListItemClone);
+        verify(listItemDao).save(imageListItemClone);
+        verify(cloneFileService).cloneFile(fileListItem, fileListItemClone);
+        verify(listItemDao).save(fileListItemClone);
     }
 
     private ListItem createListItem(UUID listItemId, String title, ListItemType type, UUID parent) {

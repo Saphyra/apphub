@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.notebook.controller;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateImageRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.service.notebook.service.image.creation.ImageCreationService;
+import com.github.saphyra.apphub.service.notebook.service.image.ImageCreationService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ImageControllerImplTest {
+public class FileControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID STORED_FILE_ID = UUID.randomUUID();
 

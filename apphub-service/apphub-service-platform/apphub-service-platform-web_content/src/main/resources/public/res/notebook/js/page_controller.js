@@ -10,6 +10,7 @@ scriptLoader.loadScript("/res/notebook/js/creation/table_creation_controller.js"
 scriptLoader.loadScript("/res/notebook/js/creation/checklist_table_creation_controller.js");
 scriptLoader.loadScript("/res/notebook/js/creation/only_title_creation_controller.js");
 scriptLoader.loadScript("/res/notebook/js/creation/image_creation_controller.js");
+scriptLoader.loadScript("/res/notebook/js/creation/file_creation_controller.js");
 scriptLoader.loadScript("/res/notebook/js/content/list_item_clone_service.js");
 scriptLoader.loadScript("/res/notebook/js/list_item_edition_service.js");
 scriptLoader.loadScript("/res/notebook/js/pin_controller.js");
@@ -20,6 +21,7 @@ scriptLoader.loadScript("/res/notebook/js/content/node_factory/checklist_node_fa
 scriptLoader.loadScript("/res/notebook/js/content/node_factory/table_node_factory.js")
 scriptLoader.loadScript("/res/notebook/js/content/node_factory/checklist_table_node_factory.js")
 scriptLoader.loadScript("/res/notebook/js/content/node_factory/image_node_factory.js")
+scriptLoader.loadScript("/res/notebook/js/content/node_factory/file_node_factory.js")
 scriptLoader.loadScript("/res/notebook/js/content/node_factory/only_title_node_factory.js")
 scriptLoader.loadScript("/res/notebook/js/content/action_button_factory.js")
 scriptLoader.loadScript("/res/notebook/js/view/text_view_controller.js");
@@ -37,8 +39,10 @@ scriptLoader.loadScript("/res/notebook/js/settings_controller.js");
         pinnedItems: "pinned-items",
         searchInput: "search-container-title",
         newImageInput: "new-image-input",
+        newFileInput: "new-file-input",
         newImagePreview: "new-image-preview",
         newImageTitle: "new-image-title",
+        newFileTitle: "new-file-title",
         viewImageImg: "view-image-img",
         viewImageTitle: "view-image-title",
     }
