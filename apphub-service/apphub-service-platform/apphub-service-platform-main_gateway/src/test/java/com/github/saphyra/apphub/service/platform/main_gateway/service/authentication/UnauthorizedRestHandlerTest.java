@@ -3,11 +3,11 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.authenti
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UnauthorizedRestHandlerTest {
     private static final String SERIALIZED_PAYLOAD = "serialized-payload";
 

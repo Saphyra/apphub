@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.community.common;
 
 import com.github.saphyra.apphub.api.community.model.response.SearchResultItem;
 import com.github.saphyra.apphub.api.user.model.response.AccountResponse;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 

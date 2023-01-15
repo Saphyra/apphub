@@ -3,11 +3,11 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.controller;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SkyXploreLobbyEventControllerImplTest {
     private static final int EXPIRATION_MINUTES = 314;
     private static final LocalDateTime ACTUAL_DATE = LocalDateTime.now();
@@ -31,7 +31,7 @@ public class SkyXploreLobbyEventControllerImplTest {
     @Mock
     private Lobby lobby;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         underTest = SkyXploreLobbyEventControllerImpl.builder()
             .lobbyDao(lobbyDao)

@@ -3,11 +3,11 @@ package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirementsValidator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ import java.util.Map;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class TerraformingPossibilitiesValidatorTest {
     @Mock
     private ConstructionRequirementsValidator constructionRequirementsValidator;

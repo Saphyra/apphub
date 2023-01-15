@@ -4,12 +4,12 @@ import com.github.saphyra.apphub.api.platform.encryption.model.AccessMode;
 import com.github.saphyra.apphub.api.platform.encryption.model.DataType;
 import com.github.saphyra.apphub.api.platform.encryption.model.SharedData;
 import com.github.saphyra.apphub.service.platform.encryption.shared_data.dao.SharedDataDao;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +17,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SharedDataAccessServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID EXTERNAL_ID = UUID.randomUUID();
@@ -31,7 +31,7 @@ public class SharedDataAccessServiceTest {
     @Mock
     private SharedData sharedData;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(sharedDataDao.getByExternalIdAndDataTypeAndAccessMode(EXTERNAL_ID, DataType.TEST, AccessMode.EDIT)).willReturn(List.of(sharedData));
     }

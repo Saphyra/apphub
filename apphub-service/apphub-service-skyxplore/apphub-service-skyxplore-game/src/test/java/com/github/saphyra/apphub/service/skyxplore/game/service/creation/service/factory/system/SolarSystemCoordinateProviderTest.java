@@ -10,18 +10,18 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.SolarSystemProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SolarSystemCoordinateProviderTest {
     private static final Integer MIN_SOLAR_SYSTEM_DISTANCE = 10;
     private static final Integer MAX_SOLAR_SYSTEM_DISTANCE = 435;

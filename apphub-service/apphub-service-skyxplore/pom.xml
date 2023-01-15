@@ -23,12 +23,6 @@
             <artifactId>apphub-lib-security</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-core</artifactId>
-            <version>${versions.openfeign}</version>
-        </dependency>
     </dependencies>
     <build>
     </build>

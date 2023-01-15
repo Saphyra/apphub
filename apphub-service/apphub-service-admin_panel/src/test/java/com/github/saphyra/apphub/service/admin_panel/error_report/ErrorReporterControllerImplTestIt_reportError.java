@@ -17,9 +17,9 @@ import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
 import io.restassured.response.Response;
 import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -71,7 +71,7 @@ public class ErrorReporterControllerImplTestIt_reportError {
     @Autowired
     private ErrorReportDao errorReportDao;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(localizationClient.translate(anyString(), eq(DEFAULT_LOCALE))).willReturn(LOCALIZED_MESSAGE);
     }

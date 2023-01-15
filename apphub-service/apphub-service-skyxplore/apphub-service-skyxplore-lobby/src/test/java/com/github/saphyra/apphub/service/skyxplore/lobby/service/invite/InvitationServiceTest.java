@@ -17,12 +17,12 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
@@ -34,7 +34,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class InvitationServiceTest {
     private static final int FLOODING_LIMIT_SECONDS = 3124;
     private static final UUID FRIEND_ID = UUID.randomUUID();
@@ -77,7 +77,7 @@ public class InvitationServiceTest {
     @Mock
     private Invitation newInvitation;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         underTest = InvitationService.builder()
             .lobbyDao(lobbyDao)

@@ -10,12 +10,12 @@ import com.github.saphyra.apphub.service.user.ban.service.BanService;
 import com.github.saphyra.apphub.service.user.ban.service.MarkUserForDeletionService;
 import com.github.saphyra.apphub.service.user.ban.service.RevokeBanService;
 import com.github.saphyra.apphub.service.user.ban.service.UnmarkUserForDeletionService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class BanControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String PASSWORD = "password";
@@ -64,7 +64,7 @@ public class BanControllerImplTest {
     @Mock
     private MarkUserForDeletionRequest markUserForDeletionRequest;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
     }

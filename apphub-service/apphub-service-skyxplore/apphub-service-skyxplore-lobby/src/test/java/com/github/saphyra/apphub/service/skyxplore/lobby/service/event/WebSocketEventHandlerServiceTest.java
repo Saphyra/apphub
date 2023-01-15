@@ -3,11 +3,11 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.event;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.event.handler.WebSocketEventHandler;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -17,7 +17,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class WebSocketEventHandlerServiceTest {
     private static final UUID FROM = UUID.randomUUID();
 
@@ -32,7 +32,7 @@ public class WebSocketEventHandlerServiceTest {
     @Mock
     private WebSocketEvent event;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         underTest = new WebSocketEventHandlerService(Arrays.asList(eventHandler1, eventHandler2));
     }

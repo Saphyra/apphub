@@ -3,12 +3,12 @@ package com.github.saphyra.apphub.service.admin_panel.error_report.service.overv
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportStatus;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class GetErrorReportsRequestValidatorTest {
     private static final String START_TIME = "1996-02-15 23:48:58.134";
     private static final String END_TIME = "2016-01-16";
@@ -29,7 +29,7 @@ public class GetErrorReportsRequestValidatorTest {
     @Mock
     private GetErrorReportsRequest request;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(request.getStatusCode()).willReturn(HttpStatus.BAD_GATEWAY.value());
         given(request.getStartTime()).willReturn(START_TIME);

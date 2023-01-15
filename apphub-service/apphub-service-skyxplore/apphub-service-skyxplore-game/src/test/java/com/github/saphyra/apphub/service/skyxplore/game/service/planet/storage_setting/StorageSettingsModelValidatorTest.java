@@ -10,12 +10,12 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class StorageSettingsModelValidatorTest {
     private static final Integer PRIORITY = 325;
     private static final String DATA_ID = "data-id";
@@ -55,7 +55,7 @@ public class StorageSettingsModelValidatorTest {
     @Mock
     private StorageSetting storageSetting;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(model.getPriority()).willReturn(PRIORITY);
         given(model.getDataId()).willReturn(DATA_ID);

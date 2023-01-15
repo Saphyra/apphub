@@ -4,11 +4,11 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityItemModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DurabilityItemValidatorTest {
     private static final UUID PARENT = UUID.randomUUID();
     private static final Integer MAX_DURABILITY = 435;

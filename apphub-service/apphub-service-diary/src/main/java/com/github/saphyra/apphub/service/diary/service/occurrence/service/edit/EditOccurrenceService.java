@@ -16,7 +16,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Component
 @RequiredArgsConstructor

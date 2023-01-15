@@ -16,11 +16,11 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.SystemMessag
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -34,7 +34,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SkyXploreGameWebSocketEventControllerImplTest {
     private static final UUID FROM = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
@@ -93,7 +93,7 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
     @Mock
     private WebSocketMessage chatMessage;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         underTest = SkyXploreGameWebSocketEventControllerImpl.builder()
             .gameDao(gameDao)

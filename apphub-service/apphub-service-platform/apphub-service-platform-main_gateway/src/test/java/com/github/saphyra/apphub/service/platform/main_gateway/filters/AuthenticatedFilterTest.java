@@ -7,12 +7,12 @@ import com.github.saphyra.apphub.service.platform.main_gateway.config.FilterOrde
 import com.github.saphyra.apphub.service.platform.main_gateway.service.authentication.AuthenticationService;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.UriUtils;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.AntPathMatcher;
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verifyNoInteractions;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AuthenticatedFilterTest {
     private static final String PATH = "/path";
     private static final String METHOD = "method";
@@ -58,7 +58,7 @@ public class AuthenticatedFilterTest {
     @Mock
     private Mono<Void> mono;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(exchange.getRequest()).willReturn(request);
         given(request.getURI()).willReturn(URI.create(UrlFactory.create(1000, PATH)));

@@ -20,4 +20,5 @@ public class NotebookView {
     private boolean archived;
     private UUID parentId;
     private String parentTitle;
+    private boolean enabled;
 }

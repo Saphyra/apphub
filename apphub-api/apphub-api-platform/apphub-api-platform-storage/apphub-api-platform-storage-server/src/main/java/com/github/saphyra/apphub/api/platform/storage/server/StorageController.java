@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.api.platform.storage.server;
 
 import com.github.saphyra.apphub.api.platform.storage.model.CreateFileRequest;
+import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
@@ -35,4 +36,7 @@ public interface StorageController {
 
     @PostMapping(Endpoints.STORAGE_INTERNAL_DUPLICATE_FILE)
     UUID duplicateFile(@PathVariable("storedFileId") UUID storedFileId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @GetMapping(Endpoints.STORAGE_GET_METADATA)
+    StoredFileResponse getFileMetadata(@PathVariable("storedFileId") UUID storedFileId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

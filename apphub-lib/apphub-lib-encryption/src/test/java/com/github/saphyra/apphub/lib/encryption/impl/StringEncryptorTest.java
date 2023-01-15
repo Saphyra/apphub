@@ -1,12 +1,10 @@
 package com.github.saphyra.apphub.lib.encryption.impl;
 
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StringEncryptorTest {
     private static final String TEST_ENTITY = "test_entity";
@@ -14,26 +12,29 @@ public class StringEncryptorTest {
 
     private StringEncryptor underTest;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         underTest = new StringEncryptor(new Base64Encoder());
     }
 
     @Test
     public void testEncryptEntityShouldReturnNullWhenNull() {
-        assertNull(underTest.encryptEntity(null, KEY));
+        assertThat(underTest.encryptEntity(null, KEY)).isNull();
     }
 
     @Test
     public void testDecryptEntityShouldReturnNullWhenNull() {
-        assertNull(underTest.decryptEntity(null, KEY));
+        assertThat(underTest.decryptEntity(null, KEY)).isNull();
     }
 
     @Test
     public void testShouldEncryptAndDecrypt() {
         String encrypted = underTest.encryptEntity(TEST_ENTITY, KEY);
-        assertNotEquals(TEST_ENTITY, encrypted);
+
+        assertThat(encrypted).isNotEqualTo(TEST_ENTITY);
+
         String decrypted = underTest.decrypt(encrypted, KEY);
-        assertEquals(TEST_ENTITY, decrypted);
+
+        assertThat(decrypted).isEqualTo(TEST_ENTITY);
     }
 }

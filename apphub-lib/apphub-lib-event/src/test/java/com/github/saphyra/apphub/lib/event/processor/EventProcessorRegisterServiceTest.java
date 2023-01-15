@@ -3,11 +3,11 @@ package com.github.saphyra.apphub.lib.event.processor;
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EventProcessorRegisterServiceTest {
     private static final int REGISTRATION_FAILURE_DELAY = 1;
 
@@ -40,7 +40,7 @@ public class EventProcessorRegisterServiceTest {
     @Mock
     private RegisterProcessorRequest request;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         underTest = EventProcessorRegisterService.builder()
             .eventGatewayApi(eventGatewayApi)

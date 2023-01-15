@@ -6,11 +6,11 @@ import com.github.saphyra.apphub.api.platform.encryption.model.EncryptionKey;
 import com.github.saphyra.apphub.service.platform.encryption.encryption_key.dao.EncryptionKeyDao;
 import com.github.saphyra.apphub.service.platform.encryption.shared_data.service.SharedDataAccessService;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verifyNoInteractions;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EncryptionKeyQueryServiceTest {
     private static final UUID EXTERNAL_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();

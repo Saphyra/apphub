@@ -4,12 +4,12 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class GameItemCacheTest {
     private static final UUID GAME_ITEM_ID = UUID.randomUUID();
 
@@ -30,7 +30,7 @@ public class GameItemCacheTest {
     @Mock
     private GameItem gameItem;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(gameItem.getId()).willReturn(GAME_ITEM_ID);
     }

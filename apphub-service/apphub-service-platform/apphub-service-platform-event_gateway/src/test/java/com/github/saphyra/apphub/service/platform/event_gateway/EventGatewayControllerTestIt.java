@@ -20,9 +20,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +85,7 @@ public class EventGatewayControllerTestIt {
     @Captor
     ArgumentCaptor<HttpEntity<SendEventRequest<?>>> argumentCaptor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(localizationClient.translate("INVALID_PARAM", "hu")).willReturn(INVALID_PARAM_LOCALIZED_MESSAGE);
     }

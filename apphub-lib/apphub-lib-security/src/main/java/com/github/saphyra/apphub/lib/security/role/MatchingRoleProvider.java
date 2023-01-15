@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.lib.security.role;
 
 import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 

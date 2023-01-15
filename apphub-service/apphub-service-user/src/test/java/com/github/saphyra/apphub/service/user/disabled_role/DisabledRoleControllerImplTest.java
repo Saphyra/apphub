@@ -7,12 +7,12 @@ import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleEntity;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleRepository;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DisabledRoleControllerImplTest {
     private static final String ROLE = "role";
     private static final String ANOTHER_ROLE = "another-role";
@@ -45,7 +45,7 @@ public class DisabledRoleControllerImplTest {
     @Mock
     private AccessTokenHeader accessTokenHeader;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(ROLE, ANOTHER_ROLE));
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);

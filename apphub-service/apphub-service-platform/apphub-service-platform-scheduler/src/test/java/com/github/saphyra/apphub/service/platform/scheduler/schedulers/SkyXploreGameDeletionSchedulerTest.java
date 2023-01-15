@@ -4,16 +4,16 @@ import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayA
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.event.EmptyEvent;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SkyXploreGameDeletionSchedulerTest {
     private static final String LOCALE = "locale";
 

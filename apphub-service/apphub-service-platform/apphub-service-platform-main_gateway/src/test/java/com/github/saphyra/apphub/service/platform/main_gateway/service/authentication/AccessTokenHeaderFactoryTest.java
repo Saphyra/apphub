@@ -2,17 +2,17 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.authenti
 
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AccessTokenHeaderFactoryTest {
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();

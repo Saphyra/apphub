@@ -4,12 +4,12 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class GameModelValidatorTest {
     private static final String NAME = "name";
     private static final UUID HOST = UUID.randomUUID();
@@ -33,7 +33,7 @@ public class GameModelValidatorTest {
     @Mock
     private GameModel model;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(model.getName()).willReturn(NAME);
         given(model.getHost()).willReturn(HOST);

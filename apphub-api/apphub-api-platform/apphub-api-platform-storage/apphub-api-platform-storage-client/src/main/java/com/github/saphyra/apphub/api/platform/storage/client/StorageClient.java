@@ -1,10 +1,12 @@
 package com.github.saphyra.apphub.api.platform.storage.client;
 
 import com.github.saphyra.apphub.api.platform.storage.model.CreateFileRequest;
+import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,4 +25,7 @@ public interface StorageClient {
 
     @PostMapping(Endpoints.STORAGE_INTERNAL_DUPLICATE_FILE)
     UUID duplicateFile(@PathVariable("storedFileId") UUID storedFileId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+
+    @GetMapping(Endpoints.STORAGE_GET_METADATA)
+    StoredFileResponse getFileMetadata(@PathVariable("storedFileId") UUID storedFileId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 }

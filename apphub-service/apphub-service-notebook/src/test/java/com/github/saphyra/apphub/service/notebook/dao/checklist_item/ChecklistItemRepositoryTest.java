@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.notebook.dao.checklist_item;
 
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;

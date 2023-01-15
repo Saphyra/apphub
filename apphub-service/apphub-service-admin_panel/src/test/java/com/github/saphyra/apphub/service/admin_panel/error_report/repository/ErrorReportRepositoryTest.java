@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.admin_panel.error_report.repository;
 
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
 import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;

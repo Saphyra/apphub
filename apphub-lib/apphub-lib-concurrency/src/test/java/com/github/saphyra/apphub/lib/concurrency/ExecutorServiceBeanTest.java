@@ -2,11 +2,11 @@ package com.github.saphyra.apphub.lib.concurrency;
 
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ExecutorServiceBeanTest {
     public static final String TEST_RESULT = "asd";
 
@@ -38,7 +38,7 @@ public class ExecutorServiceBeanTest {
     @Mock
     private Helper helper;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         underTest = ExecutorServiceBean.builder()
             .errorReporterService(errorReporterService)

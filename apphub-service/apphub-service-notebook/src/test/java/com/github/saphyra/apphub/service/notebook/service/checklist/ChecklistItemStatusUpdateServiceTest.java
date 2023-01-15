@@ -2,18 +2,18 @@ package com.github.saphyra.apphub.service.notebook.service.checklist;
 
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ChecklistItemStatusUpdateServiceTest {
     private static final UUID CHECKLIST_ITEM_ID = UUID.randomUUID();
 

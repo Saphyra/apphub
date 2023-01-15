@@ -8,12 +8,12 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -35,7 +35,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DefaultWebSocketHandlerTest {
     private static final int WEB_SOCKET_SESSION_EXPIRATION_SECONDS = 342;
     private static final String USER_ID_STRING = "user-id";
@@ -75,7 +75,7 @@ public class DefaultWebSocketHandlerTest {
     @Mock
     private SessionWrapper sessionWrapper;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         WebSocketHandlerContext context = WebSocketHandlerContext.builder()
             .objectMapperWrapper(objectMapperWrapper)

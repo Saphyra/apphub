@@ -3,12 +3,12 @@ package com.github.saphyra.apphub.service.community.friendship.service;
 import com.github.saphyra.apphub.api.community.model.response.friend_request.FriendRequestResponse;
 import com.github.saphyra.apphub.service.community.friendship.dao.request.FriendRequest;
 import com.github.saphyra.apphub.service.community.friendship.dao.request.FriendRequestDao;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +16,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class FriendRequestQueryServiceTest {
     private static final UUID ID_TO_CONVERT = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
@@ -36,7 +36,7 @@ public class FriendRequestQueryServiceTest {
     @Mock
     private FriendRequestResponse friendRequestResponse;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(friendRequestToResponseConverter.convert(friendRequest, ID_TO_CONVERT)).willReturn(friendRequestResponse);
     }

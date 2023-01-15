@@ -11,14 +11,14 @@ import com.github.saphyra.apphub.service.user.ban.service.RevokeBanService;
 import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -30,7 +30,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UserEventControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String LOCALE = "locale";
@@ -69,7 +69,7 @@ public class UserEventControllerImplTest {
     @Captor
     private ArgumentCaptor<SendEventRequest<DeleteAccountEvent>> argumentCaptor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
     }

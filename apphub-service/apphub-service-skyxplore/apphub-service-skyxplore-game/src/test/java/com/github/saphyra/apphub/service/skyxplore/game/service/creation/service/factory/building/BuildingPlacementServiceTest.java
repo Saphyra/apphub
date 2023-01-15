@@ -10,11 +10,11 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.BuildingFactory;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,7 +24,7 @@ import java.util.UUID;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class BuildingPlacementServiceTest {
     private static final String DATA_ID = "data-id";
     private static final UUID CONCRETE_SURFACE_ID = UUID.randomUUID();
@@ -60,7 +60,7 @@ public class BuildingPlacementServiceTest {
     @Mock
     private Building building;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(buildingData.isDefaultBuilding()).willReturn(true);
         given(dataService.values()).willReturn(Arrays.asList(buildingData));

@@ -21,8 +21,8 @@ public class NotebookViewFactory {
     private final ListItemDao listItemDao;
     private final FileDao fileDao;
     private final UuidConverter uuidConverter;
+    private final StorageProxy storageProxy;
 
-    //TODO make file and image disabled if no file uploaded
     public NotebookView create(ListItem listItem) {
         String value = extractValue(listItem);
 
@@ -42,7 +42,21 @@ public class NotebookViewFactory {
             .archived(listItem.isArchived())
             .parentId(parentId)
             .parentTitle(parentTitle)
+            .enabled(fetchEnabled(listItem))
             .build();
+    }
+
+    private boolean fetchEnabled(ListItem listItem) {
+        switch (listItem.getType()) {
+            case FILE:
+            case IMAGE:
+                UUID storedFileId = fileDao.findByParentValidated(listItem.getListItemId())
+                    .getStoredFileId();
+                return storageProxy.getFileMetadata(storedFileId)
+                    .getFileUploaded();
+            default:
+                return true;
+        }
     }
 
     private String extractValue(ListItem listItem) {

@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayA
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;

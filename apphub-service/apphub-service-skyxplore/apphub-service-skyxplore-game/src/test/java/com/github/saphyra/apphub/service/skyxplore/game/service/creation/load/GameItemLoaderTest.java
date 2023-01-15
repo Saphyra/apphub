@@ -11,14 +11,14 @@ import com.github.saphyra.apphub.lib.skyxplore.ws.SkyXploreWsEvent;
 import com.github.saphyra.apphub.lib.skyxplore.ws.SkyXploreWsEventName;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ws.SkyXploreWsClient;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.ws.WebSocketClientCache;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +30,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class GameItemLoaderTest {
     private static final UUID ID = UUID.randomUUID();
     private static final String DATA = "data";
@@ -63,7 +63,7 @@ public class GameItemLoaderTest {
     @Captor
     private ArgumentCaptor<Predicate<SkyXploreWsEvent>> responseArgumentCaptor;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         given(wsClientCache.borrowObject()).willReturn(wsClient);
         given(idGenerator.randomUuid()).willReturn(REQUEST_ID);

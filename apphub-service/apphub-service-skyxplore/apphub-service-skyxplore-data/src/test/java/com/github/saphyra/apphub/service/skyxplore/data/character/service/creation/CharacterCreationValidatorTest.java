@@ -5,11 +5,11 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreCharacter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CharacterCreationValidatorTest {
     private static final String CHARACTER_NAME = "character-name";
     private static final UUID USER_ID = UUID.randomUUID();

@@ -4,19 +4,19 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ConstructionModelValidatorTest {
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final Integer REQUIRED_WORK_POINTS = 356;
@@ -32,7 +32,7 @@ public class ConstructionModelValidatorTest {
     @Mock
     private ConstructionModel model;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(model.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);

@@ -4,18 +4,18 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.lib.exception.ReportedException;
 import com.github.saphyra.apphub.service.platform.message_sender.connection.WebSocketHandler;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class MessageSenderControllerImplTest {
     @Mock
     private WebSocketHandler webSocketHandler;
@@ -25,7 +25,7 @@ public class MessageSenderControllerImplTest {
     @Mock
     private WebSocketMessage message;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(webSocketHandler.getGroup()).willReturn(MessageGroup.SKYXPLORE_LOBBY);
 

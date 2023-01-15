@@ -9,12 +9,12 @@ import com.github.saphyra.apphub.service.user.authentication.service.LogoutServi
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CheckPasswordServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String PASSWORD_HASH = "password-hash";
@@ -67,7 +67,7 @@ public class CheckPasswordServiceTest {
     @Mock
     private AccessTokenHeader accessTokenHeader;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(userDao.findByIdValidated(USER_ID)).willReturn(user);
         given(user.getPassword()).willReturn(PASSWORD_HASH);

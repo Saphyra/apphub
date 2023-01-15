@@ -1,14 +1,14 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ConstructionRequirementsValidatorTest {
     private static final Integer REQUIRED_WORK_POINTS = 32;
     private static final String REQUIRED_RESOURCE = "required-resource";

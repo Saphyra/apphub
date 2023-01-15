@@ -10,14 +10,14 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
@@ -30,7 +30,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class GameDaoTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
@@ -53,7 +53,7 @@ public class GameDaoTest {
     @Mock
     private EventLoop eventLoop;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(game.getGameId()).willReturn(GAME_ID);
     }

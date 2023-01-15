@@ -24,16 +24,16 @@ public class DuplicateFileService {
 
     public UUID duplicateFile(UUID userId, UUID storedFileId) {
         StoredFile storedFile = storedFileDao.findByIdValidated(storedFileId);
-        UUID fileId = storeFileService.createFile(userId, storedFile.getFileName(), storedFile.getExtension(), storedFile.getSize());
-
-        DownloadResult existingFile = downloadFileService.downloadFile(userId, storedFileId);
+        UUID newStoredFileId = storeFileService.createFile(userId, storedFile.getFileName(), storedFile.getExtension(), storedFile.getSize());
 
         AccessTokenHeader accessTokenHeader = accessTokenProvider.get();
 
         executorServiceBean.execute(() -> {
+            accessTokenProvider.set(accessTokenHeader);
+
+            DownloadResult existingFile = downloadFileService.downloadFile(userId, storedFileId);
             try {
-                accessTokenProvider.set(accessTokenHeader);
-                storeFileService.uploadFile(userId, fileId, existingFile.getInputStream());
+                storeFileService.uploadFile(userId, newStoredFileId, existingFile.getInputStream());
             } finally {
                 existingFile.getFtpClient()
                     .close();
@@ -41,6 +41,6 @@ public class DuplicateFileService {
             }
         });
 
-        return fileId;
+        return newStoredFileId;
     }
 }

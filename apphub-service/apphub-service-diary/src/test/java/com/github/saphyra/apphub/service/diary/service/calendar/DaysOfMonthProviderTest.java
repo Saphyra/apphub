@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.diary.service.calendar;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.YearMonth;

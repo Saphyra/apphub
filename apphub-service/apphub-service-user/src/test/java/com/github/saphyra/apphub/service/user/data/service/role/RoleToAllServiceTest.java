@@ -9,14 +9,14 @@ import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +28,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class RoleToAllServiceTest {
     private static final String RESTRICTED_ROLE = "restricted-role";
     private static final UUID USER_ID = UUID.randomUUID();
@@ -62,7 +62,7 @@ public class RoleToAllServiceTest {
     @Mock
     private Role role;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(properties.getRestrictedRoles()).willReturn(List.of(RESTRICTED_ROLE));
         given(userDao.findAll()).willReturn(List.of(user));

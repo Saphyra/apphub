@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.platform.storage.service;
 
 import com.github.saphyra.apphub.api.platform.storage.model.CreateFileRequest;
+import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.api.platform.storage.server.StorageController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.platform.storage.service.store.StoreFileService;
@@ -30,9 +31,9 @@ public class StorageControllerImpl implements StorageController {
     private final DeleteFileService deleteFileService;
     private final DuplicateFileService duplicateFileService;
     private final FileUploadHelper fileUploadHelper;
+    private final StoredFileMetadataQueryService metadataQueryService;
 
     @Override
-    //TODO limit file size
     public UUID createFile(CreateFileRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a file.", accessTokenHeader.getUserId());
         return storeFileService.createFile(accessTokenHeader.getUserId(), request.getFileName(), request.getExtension(), request.getSize());
@@ -90,5 +91,11 @@ public class StorageControllerImpl implements StorageController {
     public UUID duplicateFile(UUID storedFileId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to duplicate file {}", accessTokenHeader.getUserId(), storedFileId);
         return duplicateFileService.duplicateFile(accessTokenHeader.getUserId(), storedFileId);
+    }
+
+    @Override
+    public StoredFileResponse getFileMetadata(UUID storedFileId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to know the metadata of file {}", accessTokenHeader.getUserId(), storedFileId);
+        return metadataQueryService.getMetadata(accessTokenHeader.getUserId(), storedFileId);
     }
 }

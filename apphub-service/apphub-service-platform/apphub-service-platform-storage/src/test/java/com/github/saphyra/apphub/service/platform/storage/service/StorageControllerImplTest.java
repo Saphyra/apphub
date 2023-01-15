@@ -1,18 +1,19 @@
 package com.github.saphyra.apphub.service.platform.storage.service;
 
 import com.github.saphyra.apphub.api.platform.storage.model.CreateFileRequest;
+import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.platform.storage.service.store.StoreFileService;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -24,7 +25,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class StorageControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String FILE_NAME = "file-name";
@@ -47,6 +48,9 @@ public class StorageControllerImplTest {
 
     @Mock
     private FileUploadHelper fileUploadHelper;
+
+    @Mock
+    private StoredFileMetadataQueryService metadataQueryService;
 
     @InjectMocks
     private StorageControllerImpl underTest;
@@ -72,7 +76,10 @@ public class StorageControllerImplTest {
     @Mock
     private InputStream inputStream;
 
-    @Before
+    @Mock
+    private StoredFileResponse storedFileResponse;
+
+    @BeforeEach
     public void setUp() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
     }
@@ -132,4 +139,14 @@ public class StorageControllerImplTest {
 
         assertThat(result).isEqualTo(NEW_STORED_FILE_ID);
     }
+
+    @Test
+    public void getFileMetadata() {
+        given(metadataQueryService.getMetadata(USER_ID, STORED_FILE_ID)).willReturn(storedFileResponse);
+
+        StoredFileResponse result = underTest.getFileMetadata(STORED_FILE_ID, accessTokenHeader);
+
+        assertThat(result).isEqualTo(storedFileResponse);
+    }
+
 }

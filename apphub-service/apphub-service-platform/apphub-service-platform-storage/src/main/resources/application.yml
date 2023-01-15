@@ -17,3 +17,4 @@ ftp:
 
 storedFile:
   expirationSeconds: 1800
+  maxSize: 2147483648 # 2GB

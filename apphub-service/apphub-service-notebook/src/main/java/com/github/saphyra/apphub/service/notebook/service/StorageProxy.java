@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.api.platform.storage.client.StorageClient;
 import com.github.saphyra.apphub.api.platform.storage.model.CreateFileRequest;
+import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +34,9 @@ public class StorageProxy {
 
     public UUID duplicateFile(UUID fileId) {
         return storageClient.duplicateFile(fileId, accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());
+    }
+
+    public StoredFileResponse getFileMetadata(UUID storedFileId) {
+        return storageClient.getFileMetadata(storedFileId, accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());
     }
 }

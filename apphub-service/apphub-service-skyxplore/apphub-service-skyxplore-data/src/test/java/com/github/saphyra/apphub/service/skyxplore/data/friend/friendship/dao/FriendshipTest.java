@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao;
 
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 

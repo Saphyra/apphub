@@ -5,14 +5,14 @@ import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEv
 import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.util.AntPathMatcher;
 
 import java.util.Arrays;
@@ -24,7 +24,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AccessTokenExpirationUpdateServiceTest {
     private static final String METHOD = "method";
     private static final String PATTERN = "pattern";
@@ -50,7 +50,7 @@ public class AccessTokenExpirationUpdateServiceTest {
     @Captor
     private ArgumentCaptor<SendEventRequest<RefreshAccessTokenExpirationEvent>> argumentCaptor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(nonSessionExtendingUriProperties.getNonSessionExtendingUris()).willReturn(Arrays.asList(new WhiteListedEndpoint(PATTERN, METHOD)));
     }

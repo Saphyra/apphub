@@ -6,17 +6,17 @@ import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.PlayerProperties;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AiCountCalculatorTest {
     private static final double PLAYER_COUNT = 2453d;
     private static final Double MIN_AI_SPAWN_CHANCE = 3124d;
@@ -34,7 +34,7 @@ public class AiCountCalculatorTest {
     @Mock
     private PlayerProperties playerCreationProperties;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(gameCreationProperties.getPlayer()).willReturn(playerCreationProperties);
         given(playerCreationProperties.getAiSpawnChance()).willReturn(CollectionUtils.singleValueMap(AiPresence.COMMON, new Range<>(MIN_AI_SPAWN_CHANCE, MAX_AI_SPAWN_CHANCE)));

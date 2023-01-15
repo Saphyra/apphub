@@ -2,15 +2,15 @@ package com.github.saphyra.apphub.api.platform.event_gateway.model.request;
 
 
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SendEventRequestTest {
     private SendEventRequest<Object> underTest;
 

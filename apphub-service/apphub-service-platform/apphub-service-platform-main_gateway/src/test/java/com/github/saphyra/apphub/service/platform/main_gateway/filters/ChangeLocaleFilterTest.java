@@ -3,13 +3,13 @@ package com.github.saphyra.apphub.service.platform.main_gateway.filters;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.locale.UserSettingLocaleResolver;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -27,7 +27,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ChangeLocaleFilterTest {
     @Mock
     private ErrorReporterService errorReporterService;
@@ -57,7 +57,7 @@ public class ChangeLocaleFilterTest {
     @Mock
     private Mono<Void> mono;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(chain.filter(exchange)).willReturn(mono);
         given(exchange.getRequest()).willReturn(request);

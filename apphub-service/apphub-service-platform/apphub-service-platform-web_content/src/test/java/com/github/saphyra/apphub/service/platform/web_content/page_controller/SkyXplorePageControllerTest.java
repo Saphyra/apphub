@@ -10,12 +10,12 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.UUID;
@@ -23,7 +23,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SkyXplorePageControllerTest {
     private static final String LOCALE = "locale";
     private static final String ACCESS_TOKEN_HEADER_STRING = "access-token-header";
@@ -64,7 +64,7 @@ public class SkyXplorePageControllerTest {
     @Mock
     private SkyXploreCharacterModel character;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(accessTokenHeaderConverter.convertDomain(accessTokenHeader)).willReturn(ACCESS_TOKEN_HEADER_STRING);
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);

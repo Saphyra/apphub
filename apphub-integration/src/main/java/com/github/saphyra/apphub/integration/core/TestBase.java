@@ -51,7 +51,7 @@ public class TestBase {
         return EMAIL_DOMAIN.get();
     }
 
-    @BeforeSuite(alwaysRun = true)
+    @BeforeEachSuite(alwaysRun = true)
     public void setUpSuite(ITestContext context) throws Exception {
         SERVER_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("serverPort"), "serverPort is null"));
         log.info("ServerPort: {}", SERVER_PORT);
@@ -91,7 +91,7 @@ public class TestBase {
         log.info("Available permits: {}", SEMAPHORE.availablePermits());
     }
 
-    @BeforeMethod(alwaysRun = true)
+    @BeforeEachMethod(alwaysRun = true)
     public void setUpMethod(Method method) throws InterruptedException {
         String testMethod = method.getDeclaringClass().getSimpleName() + "-" + method.getName();
 
