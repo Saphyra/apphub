@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.admin_panel.client.AdminPanelWsClient;
 import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,11 +37,6 @@ public class AdminPanelMonitoringWebSocketHandlerTest {
     @Mock
     private WebSocketEvent event;
 
-    @BeforeEach
-    public void setUp() {
-        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
-    }
-
     @Test
     public void getGroup() {
         assertThat(underTest.getGroup()).isEqualTo(MessageGroup.ADMIN_PANEL_MONITORING);
@@ -50,6 +44,8 @@ public class AdminPanelMonitoringWebSocketHandlerTest {
 
     @Test
     public void afterConnection() {
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
+
         underTest.afterConnection(USER_ID);
 
         verify(adminPanelWsClient).userConnected(USER_ID, LOCALE);
@@ -57,6 +53,8 @@ public class AdminPanelMonitoringWebSocketHandlerTest {
 
     @Test
     public void afterDisconnection() {
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
+
         underTest.afterDisconnection(USER_ID);
 
         verify(adminPanelWsClient).userDisconnected(USER_ID, LOCALE);
@@ -64,6 +62,8 @@ public class AdminPanelMonitoringWebSocketHandlerTest {
 
     @Test
     public void handleMessage() {
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
+
         underTest.handleMessage(USER_ID, event);
 
         verify(adminPanelWsClient).processWebSocketEvent(USER_ID, event, LOCALE);
@@ -71,6 +71,8 @@ public class AdminPanelMonitoringWebSocketHandlerTest {
 
     @Test
     public void handleExpiredConnections() {
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
+
         underTest.handleExpiredConnections(List.of(USER_ID));
 
         verify(adminPanelWsClient).userDisconnected(USER_ID, LOCALE);

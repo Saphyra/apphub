@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.lib.common_domain;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Data

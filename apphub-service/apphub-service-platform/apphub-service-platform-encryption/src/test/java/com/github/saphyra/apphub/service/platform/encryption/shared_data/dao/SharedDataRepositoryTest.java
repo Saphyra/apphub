@@ -1,19 +1,19 @@
 package com.github.saphyra.apphub.service.platform.encryption.shared_data.dao;
 
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
-import org.junit.After;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
 public class SharedDataRepositoryTest {
     private static final String SHARED_DATA_ID_1 = "shared-data-id-1";
@@ -30,7 +30,7 @@ public class SharedDataRepositoryTest {
     @Autowired
     private SharedDataRepository underTest;
 
-    @After
+    @AfterEach
     public void clear() {
         underTest.deleteAll();
     }

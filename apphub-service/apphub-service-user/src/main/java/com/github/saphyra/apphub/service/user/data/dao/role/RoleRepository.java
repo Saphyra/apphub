@@ -2,7 +2,8 @@ package com.github.saphyra.apphub.service.user.data.dao.role;
 
 import org.springframework.data.repository.CrudRepository;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 

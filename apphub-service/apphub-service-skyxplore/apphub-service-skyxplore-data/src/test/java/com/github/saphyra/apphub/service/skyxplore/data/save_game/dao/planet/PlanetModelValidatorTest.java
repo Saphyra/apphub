@@ -4,8 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,15 +34,7 @@ public class PlanetModelValidatorTest {
     @Mock
     private PlanetModel model;
 
-    @BeforeEach
-    public void setUp() {
-        given(model.getSolarSystemId()).willReturn(SOLAR_SYSTEM_ID);
-        given(model.getDefaultName()).willReturn(DEFAULT_NAME);
-        given(model.getCustomNames()).willReturn(CUSTOM_NAMES);
-        given(model.getSize()).willReturn(SIZE);
-    }
-
-    @After
+    @AfterEach
     public void validate() {
         verify(gameItemValidator).validate(model);
     }
@@ -59,6 +50,7 @@ public class PlanetModelValidatorTest {
 
     @Test
     public void nullDefaultName() {
+        given(model.getSolarSystemId()).willReturn(SOLAR_SYSTEM_ID);
         given(model.getDefaultName()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -68,6 +60,8 @@ public class PlanetModelValidatorTest {
 
     @Test
     public void nullCustomNames() {
+        given(model.getSolarSystemId()).willReturn(SOLAR_SYSTEM_ID);
+        given(model.getDefaultName()).willReturn(DEFAULT_NAME);
         given(model.getCustomNames()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -77,6 +71,8 @@ public class PlanetModelValidatorTest {
 
     @Test
     public void customNamesContainsNull() {
+        given(model.getSolarSystemId()).willReturn(SOLAR_SYSTEM_ID);
+        given(model.getDefaultName()).willReturn(DEFAULT_NAME);
         given(model.getCustomNames()).willReturn(CollectionUtils.singleValueMap(UUID.randomUUID(), null));
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -86,6 +82,9 @@ public class PlanetModelValidatorTest {
 
     @Test
     public void nullSize() {
+        given(model.getSolarSystemId()).willReturn(SOLAR_SYSTEM_ID);
+        given(model.getDefaultName()).willReturn(DEFAULT_NAME);
+        given(model.getCustomNames()).willReturn(CUSTOM_NAMES);
         given(model.getSize()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -95,6 +94,11 @@ public class PlanetModelValidatorTest {
 
     @Test
     public void valid() {
+        given(model.getSolarSystemId()).willReturn(SOLAR_SYSTEM_ID);
+        given(model.getDefaultName()).willReturn(DEFAULT_NAME);
+        given(model.getCustomNames()).willReturn(CUSTOM_NAMES);
+        given(model.getSize()).willReturn(SIZE);
+
         underTest.validate(model);
     }
 }

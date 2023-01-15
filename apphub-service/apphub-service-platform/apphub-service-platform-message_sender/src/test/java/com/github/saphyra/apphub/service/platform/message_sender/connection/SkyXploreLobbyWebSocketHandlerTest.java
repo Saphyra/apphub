@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyWsApiC
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -47,11 +46,6 @@ public class SkyXploreLobbyWebSocketHandlerTest {
     @Mock
     private WebSocketEvent event;
 
-    @BeforeEach
-    public void setUp() {
-        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
-    }
-
     @Test
     public void getGroup() {
         assertThat(underTest.getGroup()).isEqualTo(MessageGroup.SKYXPLORE_LOBBY);
@@ -59,6 +53,8 @@ public class SkyXploreLobbyWebSocketHandlerTest {
 
     @Test
     public void afterConnection() {
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
+
         underTest.afterConnection(USER_ID);
 
         verify(lobbyClient).userJoinedToLobby(USER_ID, LOCALE);
@@ -66,6 +62,8 @@ public class SkyXploreLobbyWebSocketHandlerTest {
 
     @Test
     public void afterDisconnection() {
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
+
         underTest.afterDisconnection(USER_ID);
 
         verify(lobbyClient).userLeftLobby(USER_ID, LOCALE);
@@ -73,6 +71,8 @@ public class SkyXploreLobbyWebSocketHandlerTest {
 
     @Test
     public void handleMessage() {
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
+
         underTest.handleMessage(USER_ID, event);
 
         verify(lobbyWsClient).processWebSocketEvent(USER_ID, event, LOCALE);
@@ -80,6 +80,7 @@ public class SkyXploreLobbyWebSocketHandlerTest {
 
     @Test
     public void handleExpiredConnections() {
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
         given(accessTokenHeaderConverter.convertDomain(any(AccessTokenHeader.class))).willReturn(ACCESS_TOKEN_STRING);
 
         underTest.handleExpiredConnections(Arrays.asList(USER_ID));

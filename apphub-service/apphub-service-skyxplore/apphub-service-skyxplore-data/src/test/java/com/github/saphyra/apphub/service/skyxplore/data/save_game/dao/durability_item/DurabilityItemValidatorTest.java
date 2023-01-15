@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.durabilit
 import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityItemModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,7 +31,7 @@ public class DurabilityItemValidatorTest {
     @Mock
     private DurabilityItemModel model;
 
-    @After
+    @AfterEach
     public void validate() {
         verify(gameItemValidator).validate(model);
     }

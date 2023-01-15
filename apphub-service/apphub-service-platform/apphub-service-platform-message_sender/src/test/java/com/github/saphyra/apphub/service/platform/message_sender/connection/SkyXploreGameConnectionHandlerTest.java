@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameWebSocketEventApiClient;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,11 +34,6 @@ public class SkyXploreGameConnectionHandlerTest {
     @Mock
     private WebSocketEvent event;
 
-    @BeforeEach
-    public void setUp() {
-        given(properties.getDefaultLocale()).willReturn(LOCALE);
-    }
-
     @Test
     public void getGroup() {
         assertThat(underTest.getGroup()).isEqualTo(MessageGroup.SKYXPLORE_GAME);
@@ -47,6 +41,8 @@ public class SkyXploreGameConnectionHandlerTest {
 
     @Test
     public void afterConnection() {
+        given(properties.getDefaultLocale()).willReturn(LOCALE);
+
         underTest.afterConnection(USER_ID);
 
         verify(gameClient).userJoinedToGame(USER_ID, LOCALE);
@@ -54,6 +50,8 @@ public class SkyXploreGameConnectionHandlerTest {
 
     @Test
     public void afterDisconnection() {
+        given(properties.getDefaultLocale()).willReturn(LOCALE);
+
         underTest.afterDisconnection(USER_ID);
 
         verify(gameClient).userLeftGame(USER_ID, LOCALE);
@@ -61,6 +59,8 @@ public class SkyXploreGameConnectionHandlerTest {
 
     @Test
     public void handleMessage() {
+        given(properties.getDefaultLocale()).willReturn(LOCALE);
+
         underTest.handleMessage(USER_ID, event);
 
         verify(gameClient).processWebSocketEvent(USER_ID, event, LOCALE);
@@ -68,6 +68,8 @@ public class SkyXploreGameConnectionHandlerTest {
 
     @Test
     public void handleExpiredConnections() {
+        given(properties.getDefaultLocale()).willReturn(LOCALE);
+
         underTest.handleExpiredConnections(Arrays.asList(USER_ID));
 
         verify(gameClient).userLeftGame(USER_ID, LOCALE);

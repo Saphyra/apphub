@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGa
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,7 +40,7 @@ public class GameCreationRequestValidatorTest {
     @Mock
     private SkyXploreGameCreationSettingsRequest settings;
 
-    @After
+    @AfterEach
     public void validate() {
         verify(gameCreationSettingsValidator).validate(settings);
     }

@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,13 +47,13 @@ public class AdjacentRandomEmptySurfaceProviderTest {
         assertThat(result).isEqualTo(surface2);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void surfaceNotFound() {
         given(surface1.getCoordinate()).willReturn(coordinateModel);
         given(coordinateModel.getCoordinate()).willReturn(coordinate);
 
         given(adjacentEmptySurfaceProvider.getEmptySurfaceNextTo(coordinate, Arrays.asList(surface2))).willReturn(Optional.empty());
 
-        underTest.getRandomEmptySurfaceNextTo(Arrays.asList(surface1), Arrays.asList(surface2));
+        assertThat(catchThrowable(() -> underTest.getRandomEmptySurfaceNextTo(Arrays.asList(surface1), Arrays.asList(surface2)))).isInstanceOf(IllegalStateException.class);
     }
 }

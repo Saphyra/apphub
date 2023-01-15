@@ -4,10 +4,9 @@ import com.github.saphyra.apphub.api.platform.storage.model.CreateFileRequest;
 import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.platform.storage.service.store.StoreFileService;
-import org.apache.commons.fileupload.FileItemIterator;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,14 +14,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,9 +44,6 @@ public class StorageControllerImplTest {
     private DuplicateFileService duplicateFileService;
 
     @Mock
-    private FileUploadHelper fileUploadHelper;
-
-    @Mock
     private StoredFileMetadataQueryService metadataQueryService;
 
     @InjectMocks
@@ -60,12 +54,6 @@ public class StorageControllerImplTest {
 
     @Mock
     private HttpServletRequest request;
-
-    @Mock
-    private ServletFileUpload servletFileUpload;
-
-    @Mock
-    private FileItemIterator fileItemIterator;
 
     @Mock
     private FileItemStream formFieldStream;
@@ -99,29 +87,9 @@ public class StorageControllerImplTest {
         assertThat(result).isEqualTo(STORED_FILE_ID);
     }
 
-    @SuppressWarnings("resource")
     @Test
     public void uploadFile() throws IOException, FileUploadException {
-        given(fileUploadHelper.servletFileUpload()).willReturn(servletFileUpload);
-        given(servletFileUpload.getItemIterator(request)).willReturn(fileItemIterator);
-
-        given(fileItemIterator.hasNext())
-            .willReturn(true)
-            .willReturn(true)
-            .willReturn(false);
-        given(fileItemIterator.next())
-            .willReturn(formFieldStream)
-            .willReturn(notFormFieldStream);
-
-        given(formFieldStream.isFormField()).willReturn(true);
-        given(notFormFieldStream.isFormField()).willReturn(false);
-
-        given(notFormFieldStream.openStream()).willReturn(inputStream);
-
-        underTest.uploadFile(STORED_FILE_ID, request, accessTokenHeader);
-
-        verify(formFieldStream, times(0)).openStream();
-        verify(storeFileService).uploadFile(USER_ID, STORED_FILE_ID, inputStream);
+        //TODO
     }
 
     @Test

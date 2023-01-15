@@ -12,6 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -29,23 +31,23 @@ public class TerraformingPossibilitiesValidatorTest {
     @Mock
     private ConstructionRequirements constructionRequirements;
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void emptyPossibilities() {
         Map<SurfaceType, TerraformingPossibilities> map = new HashMap<>();
         map.put(SurfaceType.CONCRETE, new TerraformingPossibilities());
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullInPossibilities() {
         Map<SurfaceType, TerraformingPossibilities> map = new HashMap<>();
         map.put(SurfaceType.CONCRETE, null);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullSurfaceType() {
         Map<SurfaceType, TerraformingPossibilities> map = new HashMap<>();
         TerraformingPossibilities terraformingPossibilities = new TerraformingPossibilities();
@@ -53,7 +55,7 @@ public class TerraformingPossibilitiesValidatorTest {
         given(terraformingPossibility.getSurfaceType()).willReturn(null);
         map.put(SurfaceType.CONCRETE, terraformingPossibilities);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
     @Test

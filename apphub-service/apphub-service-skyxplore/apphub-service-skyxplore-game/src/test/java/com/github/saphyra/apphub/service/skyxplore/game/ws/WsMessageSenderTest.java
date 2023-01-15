@@ -14,7 +14,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.OpenedPage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.OpenedPageType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -71,13 +70,6 @@ public class WsMessageSenderTest {
     @Mock
     private PlanetBuildingOverviewResponse planetBuildingOverviewResponse;
 
-    @BeforeEach
-    public void setUp() {
-        given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
-        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
-        given(player.getOpenedPage()).willReturn(openedPage);
-    }
-
     @Test
     public void planetQueueItemModified_nullQueueResponse() {
         underTest.planetQueueItemModified(USER_ID, PLANET_ID, null);
@@ -87,6 +79,9 @@ public class WsMessageSenderTest {
 
     @Test
     public void planetQueueItemModified() {
+        given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
+        given(player.getOpenedPage()).willReturn(openedPage);
         given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET);
         given(openedPage.getPageId()).willReturn(PLANET_ID);
 
@@ -99,6 +94,9 @@ public class WsMessageSenderTest {
 
     @Test
     public void planetQueueItemDeleted() {
+        given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
+        given(player.getOpenedPage()).willReturn(openedPage);
         given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET);
         given(openedPage.getPageId()).willReturn(PLANET_ID);
 
@@ -111,6 +109,9 @@ public class WsMessageSenderTest {
 
     @Test
     public void planetSurfaceModified() {
+        given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
+        given(player.getOpenedPage()).willReturn(openedPage);
         given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET);
         given(openedPage.getPageId()).willReturn(PLANET_ID);
 
@@ -123,6 +124,9 @@ public class WsMessageSenderTest {
 
     @Test
     public void planetStorageModified() {
+        given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
+        given(player.getOpenedPage()).willReturn(openedPage);
         given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET);
         given(openedPage.getPageId()).willReturn(PLANET_ID);
 
@@ -135,6 +139,9 @@ public class WsMessageSenderTest {
 
     @Test
     public void planetCitizenModified() {
+        given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
+        given(player.getOpenedPage()).willReturn(openedPage);
         given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET_POPULATION_OVERVIEW);
         given(openedPage.getPageId()).willReturn(PLANET_ID);
 
@@ -147,6 +154,9 @@ public class WsMessageSenderTest {
 
     @Test
     public void planetBuildingDetailsModified() {
+        given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
+        given(player.getOpenedPage()).willReturn(openedPage);
         given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET_POPULATION_OVERVIEW);
         given(openedPage.getPageId()).willReturn(PLANET_ID);
 

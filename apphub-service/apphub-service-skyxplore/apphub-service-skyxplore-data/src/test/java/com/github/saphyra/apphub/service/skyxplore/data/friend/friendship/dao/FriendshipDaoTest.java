@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -44,13 +43,9 @@ public class FriendshipDaoTest {
     @Mock
     private Friendship domain;
 
-    @BeforeEach
-    public void setUp() {
-        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-    }
-
     @Test
     public void getByFriendId() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(repository.getByFriendId(USER_ID_STRING)).willReturn(Arrays.asList(entity));
         given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(domain));
 
@@ -61,6 +56,7 @@ public class FriendshipDaoTest {
 
     @Test
     public void findById() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(repository.findById(USER_ID_STRING)).willReturn(Optional.of(entity));
         given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
 
@@ -71,6 +67,7 @@ public class FriendshipDaoTest {
 
     @Test
     public void deleteByUserId() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         underTest.deleteByUserId(USER_ID);
 
         verify(repository).deleteByFriendId(USER_ID_STRING);

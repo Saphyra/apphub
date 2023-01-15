@@ -14,7 +14,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.priority.PriorityUpdateService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.PriorityToModelConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -72,7 +72,7 @@ public class PriorityUpdateServiceTest {
     @Mock
     private ExecutionResult<Void> executionResult;
 
-    @After
+    @AfterEach
     public void validate() {
         verify(priorityValidator).validate(NEW_PRIORITY);
     }

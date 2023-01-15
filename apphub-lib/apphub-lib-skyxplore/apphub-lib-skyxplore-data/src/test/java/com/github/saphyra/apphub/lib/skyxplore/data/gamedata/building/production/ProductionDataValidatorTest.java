@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -34,62 +36,62 @@ public class ProductionDataValidatorTest {
     @Mock
     private ConstructionRequirements constructionRequirements;
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void nullMap() {
-        underTest.validate(null);
+        assertThat(catchThrowable(() -> underTest.validate(null))).isInstanceOf(NullPointerException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void emptyMap() {
-        underTest.validate(Collections.emptyMap());
+        assertThat(catchThrowable(() -> underTest.validate(Collections.emptyMap()))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullData() {
         Map<String, ProductionData> map = new HashMap<>();
         map.put(KEY, null);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullPlaced() {
         Map<String, ProductionData> map = new HashMap<>();
         map.put(KEY, productionData);
         given(productionData.getPlaced()).willReturn(null);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void emptyPlaced() {
         Map<String, ProductionData> map = new HashMap<>();
         map.put(KEY, productionData);
         given(productionData.getPlaced()).willReturn(Collections.emptyList());
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void placedContainsNull() {
         Map<String, ProductionData> map = new HashMap<>();
         map.put(KEY, productionData);
         given(productionData.getPlaced()).willReturn(Arrays.asList((SurfaceType) null));
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullRequiredSkill() {
         Map<String, ProductionData> map = new HashMap<>();
         map.put(KEY, productionData);
         given(productionData.getPlaced()).willReturn(Arrays.asList(SurfaceType.CONCRETE));
         given(productionData.getRequiredSkill()).willReturn(null);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullConstructionRequirements() {
         Map<String, ProductionData> map = new HashMap<>();
         map.put(KEY, productionData);
@@ -97,7 +99,7 @@ public class ProductionDataValidatorTest {
         given(productionData.getRequiredSkill()).willReturn(SkillType.AIMING);
         given(productionData.getConstructionRequirements()).willReturn(null);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
     @Test

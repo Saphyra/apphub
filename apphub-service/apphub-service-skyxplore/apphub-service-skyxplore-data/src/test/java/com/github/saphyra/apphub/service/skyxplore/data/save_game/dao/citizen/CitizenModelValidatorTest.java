@@ -3,8 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.citizen;
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,16 +33,8 @@ public class CitizenModelValidatorTest {
     @Mock
     private CitizenModel model;
 
-    @BeforeEach
-    public void setUp() {
-        given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(LOCATION_TYPE);
-        given(model.getName()).willReturn(NAME);
-        given(model.getMorale()).willReturn(MORALE);
-        given(model.getSatiety()).willReturn(SATIETY);
-    }
 
-    @After
+    @AfterEach
     public void validate() {
         verify(gameItemValidator).validate(model);
     }
@@ -59,6 +50,7 @@ public class CitizenModelValidatorTest {
 
     @Test
     public void nullLocationType() {
+        given(model.getLocation()).willReturn(LOCATION);
         given(model.getLocationType()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -68,6 +60,8 @@ public class CitizenModelValidatorTest {
 
     @Test
     public void nullName() {
+        given(model.getLocation()).willReturn(LOCATION);
+        given(model.getLocationType()).willReturn(LOCATION_TYPE);
         given(model.getName()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -77,6 +71,9 @@ public class CitizenModelValidatorTest {
 
     @Test
     public void nullMorale() {
+        given(model.getLocation()).willReturn(LOCATION);
+        given(model.getLocationType()).willReturn(LOCATION_TYPE);
+        given(model.getName()).willReturn(NAME);
         given(model.getMorale()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -86,6 +83,10 @@ public class CitizenModelValidatorTest {
 
     @Test
     public void nullSatiety() {
+        given(model.getLocation()).willReturn(LOCATION);
+        given(model.getLocationType()).willReturn(LOCATION_TYPE);
+        given(model.getName()).willReturn(NAME);
+        given(model.getMorale()).willReturn(MORALE);
         given(model.getSatiety()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -95,6 +96,12 @@ public class CitizenModelValidatorTest {
 
     @Test
     public void valid() {
+        given(model.getLocation()).willReturn(LOCATION);
+        given(model.getLocationType()).willReturn(LOCATION_TYPE);
+        given(model.getName()).willReturn(NAME);
+        given(model.getMorale()).willReturn(MORALE);
+        given(model.getSatiety()).willReturn(SATIETY);
+
         underTest.validate(model);
     }
 }

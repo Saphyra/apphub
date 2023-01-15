@@ -9,7 +9,6 @@ import com.github.saphyra.apphub.service.user.data.service.role.RoleAdditionServ
 import com.github.saphyra.apphub.service.user.data.service.role.RoleQueryService;
 import com.github.saphyra.apphub.service.user.data.service.role.RoleRemovalService;
 import com.github.saphyra.apphub.service.user.data.service.role.RoleToAllService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -58,11 +57,6 @@ public class RoleControllerImplTest {
     @Mock
     private AccessTokenHeader accessTokenHeader;
 
-    @BeforeEach
-    public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-    }
-
     @Test
     public void getRoles() {
         given(roleQueryService.getRoles(QUERY_STRING)).willReturn(Arrays.asList(userRoleResponse));
@@ -88,6 +82,8 @@ public class RoleControllerImplTest {
 
     @Test
     public void addToAll() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.addToAll(new OneParamRequest<>(PASSWORD), ROLE, accessTokenHeader);
 
         verify(roleToAllService).addToAll(USER_ID, PASSWORD, ROLE);
@@ -95,6 +91,8 @@ public class RoleControllerImplTest {
 
     @Test
     public void removeFromAll() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.removeFromAll(new OneParamRequest<>(PASSWORD), ROLE, accessTokenHeader);
 
         verify(roleToAllService).removeFromAll(USER_ID, PASSWORD, ROLE);

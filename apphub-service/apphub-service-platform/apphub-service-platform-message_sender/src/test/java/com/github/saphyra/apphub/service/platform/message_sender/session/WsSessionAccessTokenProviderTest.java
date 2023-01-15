@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,9 +28,11 @@ public class WsSessionAccessTokenProviderTest {
     @InjectMocks
     private WsSessionAccessTokenProvider underTest;
 
-    @Test(expected = LoggedException.class)
+    @Test
     public void getAccessTokenId_accessTokenCookieNotFound() {
-        underTest.getAccessTokenId(new HashMap<>());
+        Throwable ex = catchThrowable(() -> underTest.getAccessTokenId(new HashMap<>()));
+
+        assertThat(ex).isInstanceOf(LoggedException.class);
     }
 
     @Test

@@ -88,12 +88,11 @@ public class InvitationServiceTest {
             .dataProxy(dataProxy)
             .floodingLimitSeconds(FLOODING_LIMIT_SECONDS)
             .build();
-
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void notFriends() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(dataProxy.getFriends(accessTokenHeader)).willReturn(Arrays.asList(friendshipResponse));
         given(friendshipResponse.getFriendId()).willReturn(UUID.randomUUID());
 
@@ -105,6 +104,7 @@ public class InvitationServiceTest {
 
     @Test
     public void flooding() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(dataProxy.getFriends(accessTokenHeader)).willReturn(Arrays.asList(friendshipResponse));
         given(friendshipResponse.getFriendId()).willReturn(FRIEND_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
@@ -121,6 +121,7 @@ public class InvitationServiceTest {
 
     @Test
     public void sendInvitation_invitedByDifferentPlayer() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(dataProxy.getFriends(accessTokenHeader)).willReturn(Arrays.asList(friendshipResponse));
         given(friendshipResponse.getFriendId()).willReturn(FRIEND_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
@@ -149,6 +150,7 @@ public class InvitationServiceTest {
 
     @Test
     public void sendInvitation_lastInvitationNotTooRecent() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(dataProxy.getFriends(accessTokenHeader)).willReturn(Arrays.asList(friendshipResponse));
         given(friendshipResponse.getFriendId()).willReturn(FRIEND_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);

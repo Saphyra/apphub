@@ -9,7 +9,6 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -58,13 +57,9 @@ public class ActiveFriendsServiceTest {
     @Mock
     private Lobby lobby;
 
-    @BeforeEach
-    public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-    }
-
     @Test
     public void getActiveFriends_newGame() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getType()).willReturn(LobbyType.NEW_GAME);
 
@@ -83,6 +78,7 @@ public class ActiveFriendsServiceTest {
 
     @Test
     public void getActiveFriends_loadGame() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getType()).willReturn(LobbyType.LOAD_GAME);
         given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(FRIEND_ID_1, null));

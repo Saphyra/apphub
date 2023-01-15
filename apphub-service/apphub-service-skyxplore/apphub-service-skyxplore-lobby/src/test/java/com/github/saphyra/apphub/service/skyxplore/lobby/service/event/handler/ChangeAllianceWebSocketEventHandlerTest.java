@@ -13,7 +13,6 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -76,17 +75,6 @@ public class ChangeAllianceWebSocketEventHandlerTest {
     @Mock
     private Alliance alliance;
 
-    @BeforeEach
-    public void setUp() {
-        given(event.getPayload()).willReturn(PAYLOAD);
-        given(objectMapperWrapper.convertValue(PAYLOAD, ChangeAllianceWebSocketEventHandler.ChangeAllianceEvent.class)).willReturn(changeAllianceEvent);
-        given(lobbyDao.findByUserIdValidated(FROM)).willReturn(lobby);
-        given(lobby.getHost()).willReturn(HOST);
-        given(lobby.getAlliances()).willReturn(CollectionUtils.toList(alliance));
-        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
-        given(alliance.getAllianceId()).willReturn(ALLIANCE_ID);
-        given(alliance.getAllianceName()).willReturn(ALLIANCE_NAME);
-    }
 
     @Test
     public void canHandle_changeAllianceEvent() {
@@ -100,6 +88,13 @@ public class ChangeAllianceWebSocketEventHandlerTest {
 
     @Test
     public void allianceNotFoundForForbiddenOperation() {
+        given(event.getPayload()).willReturn(PAYLOAD);
+        given(objectMapperWrapper.convertValue(PAYLOAD, ChangeAllianceWebSocketEventHandler.ChangeAllianceEvent.class)).willReturn(changeAllianceEvent);
+        given(lobbyDao.findByUserIdValidated(FROM)).willReturn(lobby);
+        given(lobby.getHost()).willReturn(HOST);
+        given(lobby.getAlliances()).willReturn(CollectionUtils.toList(alliance));
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
+        given(alliance.getAllianceId()).willReturn(ALLIANCE_ID);
         given(changeAllianceEvent.getUserId()).willReturn(DIFFERENT_MEMBER_ID);
         given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(DIFFERENT_MEMBER_ID, member));
         given(member.getAlliance()).willReturn(UUID.randomUUID());
@@ -113,6 +108,14 @@ public class ChangeAllianceWebSocketEventHandlerTest {
 
     @Test
     public void forbiddenOperation_hasAlliance() {
+        given(event.getPayload()).willReturn(PAYLOAD);
+        given(objectMapperWrapper.convertValue(PAYLOAD, ChangeAllianceWebSocketEventHandler.ChangeAllianceEvent.class)).willReturn(changeAllianceEvent);
+        given(lobbyDao.findByUserIdValidated(FROM)).willReturn(lobby);
+        given(lobby.getHost()).willReturn(HOST);
+        given(lobby.getAlliances()).willReturn(CollectionUtils.toList(alliance));
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
+        given(alliance.getAllianceId()).willReturn(ALLIANCE_ID);
+        given(alliance.getAllianceName()).willReturn(ALLIANCE_NAME);
         given(changeAllianceEvent.getUserId()).willReturn(DIFFERENT_MEMBER_ID);
         given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(DIFFERENT_MEMBER_ID, member));
         given(member.getAlliance()).willReturn(ALLIANCE_ID);
@@ -125,6 +128,11 @@ public class ChangeAllianceWebSocketEventHandlerTest {
 
     @Test
     public void forbiddenOperation_noAlliance() {
+        given(event.getPayload()).willReturn(PAYLOAD);
+        given(objectMapperWrapper.convertValue(PAYLOAD, ChangeAllianceWebSocketEventHandler.ChangeAllianceEvent.class)).willReturn(changeAllianceEvent);
+        given(lobbyDao.findByUserIdValidated(FROM)).willReturn(lobby);
+        given(lobby.getHost()).willReturn(HOST);
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
         given(changeAllianceEvent.getUserId()).willReturn(DIFFERENT_MEMBER_ID);
         given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(DIFFERENT_MEMBER_ID, member));
         given(member.getAlliance()).willReturn(null);
@@ -138,6 +146,11 @@ public class ChangeAllianceWebSocketEventHandlerTest {
 
     @Test
     public void noAlliance() {
+        given(event.getPayload()).willReturn(PAYLOAD);
+        given(objectMapperWrapper.convertValue(PAYLOAD, ChangeAllianceWebSocketEventHandler.ChangeAllianceEvent.class)).willReturn(changeAllianceEvent);
+        given(lobbyDao.findByUserIdValidated(FROM)).willReturn(lobby);
+        given(lobby.getHost()).willReturn(HOST);
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
         given(changeAllianceEvent.getUserId()).willReturn(FROM);
         given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(FROM, member));
         given(changeAllianceEvent.getAlliance()).willReturn(NO_ALLIANCE);
@@ -151,6 +164,12 @@ public class ChangeAllianceWebSocketEventHandlerTest {
 
     @Test
     public void newAlliance() {
+        given(event.getPayload()).willReturn(PAYLOAD);
+        given(objectMapperWrapper.convertValue(PAYLOAD, ChangeAllianceWebSocketEventHandler.ChangeAllianceEvent.class)).willReturn(changeAllianceEvent);
+        given(lobbyDao.findByUserIdValidated(FROM)).willReturn(lobby);
+        given(lobby.getHost()).willReturn(HOST);
+        given(lobby.getAlliances()).willReturn(CollectionUtils.toList(alliance));
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
         given(changeAllianceEvent.getUserId()).willReturn(FROM);
         given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(FROM, member));
         given(changeAllianceEvent.getAlliance()).willReturn(NEW_ALLIANCE);
@@ -166,6 +185,13 @@ public class ChangeAllianceWebSocketEventHandlerTest {
 
     @Test
     public void switchAlliance_notFound() {
+        given(event.getPayload()).willReturn(PAYLOAD);
+        given(objectMapperWrapper.convertValue(PAYLOAD, ChangeAllianceWebSocketEventHandler.ChangeAllianceEvent.class)).willReturn(changeAllianceEvent);
+        given(lobbyDao.findByUserIdValidated(FROM)).willReturn(lobby);
+        given(lobby.getHost()).willReturn(HOST);
+        given(lobby.getAlliances()).willReturn(CollectionUtils.toList(alliance));
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
+        given(alliance.getAllianceName()).willReturn(ALLIANCE_NAME);
         given(changeAllianceEvent.getUserId()).willReturn(FROM);
         given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(FROM, member));
         given(changeAllianceEvent.getAlliance()).willReturn("2");
@@ -177,6 +203,14 @@ public class ChangeAllianceWebSocketEventHandlerTest {
 
     @Test
     public void switchAlliance() {
+        given(event.getPayload()).willReturn(PAYLOAD);
+        given(objectMapperWrapper.convertValue(PAYLOAD, ChangeAllianceWebSocketEventHandler.ChangeAllianceEvent.class)).willReturn(changeAllianceEvent);
+        given(lobbyDao.findByUserIdValidated(FROM)).willReturn(lobby);
+        given(lobby.getHost()).willReturn(HOST);
+        given(lobby.getAlliances()).willReturn(CollectionUtils.toList(alliance));
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
+        given(alliance.getAllianceId()).willReturn(ALLIANCE_ID);
+        given(alliance.getAllianceName()).willReturn(ALLIANCE_NAME);
         given(changeAllianceEvent.getUserId()).willReturn(FROM);
         given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(FROM, member));
         given(changeAllianceEvent.getAlliance()).willReturn(ALLIANCE_NAME);

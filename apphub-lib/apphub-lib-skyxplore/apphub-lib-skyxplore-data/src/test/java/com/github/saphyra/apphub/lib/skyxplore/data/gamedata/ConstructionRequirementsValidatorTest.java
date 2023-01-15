@@ -8,6 +8,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
 @ExtendWith(MockitoExtension.class)
 public class ConstructionRequirementsValidatorTest {
     private static final Integer REQUIRED_WORK_POINTS = 32;
@@ -16,47 +19,47 @@ public class ConstructionRequirementsValidatorTest {
     @InjectMocks
     private ConstructionRequirementsValidator underTest;
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void nullParallelWorkers() {
         ConstructionRequirements constructionRequirements = validConstructionRequirements()
             .toBuilder()
             .parallelWorkers(null)
             .build();
 
-        underTest.validate(constructionRequirements);
+        assertThat(catchThrowable(() -> underTest.validate(constructionRequirements))).isInstanceOf(NullPointerException.class);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void nullRequiredWorkPoints() {
         ConstructionRequirements constructionRequirements = validConstructionRequirements()
             .toBuilder()
             .requiredWorkPoints(null)
             .build();
 
-        underTest.validate(constructionRequirements);
+        assertThat(catchThrowable(() -> underTest.validate(constructionRequirements))).isInstanceOf(NullPointerException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void tooLowRequiredWorkPoints() {
         ConstructionRequirements constructionRequirements = validConstructionRequirements()
             .toBuilder()
             .requiredWorkPoints(0)
             .build();
 
-        underTest.validate(constructionRequirements);
+        assertThat(catchThrowable(() -> underTest.validate(constructionRequirements))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void nullRequiredResources() {
         ConstructionRequirements constructionRequirements = validConstructionRequirements()
             .toBuilder()
             .requiredResources(null)
             .build();
 
-        underTest.validate(constructionRequirements);
+        assertThat(catchThrowable(() -> underTest.validate(constructionRequirements))).isInstanceOf(NullPointerException.class);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void requiredResourcesContainsNull() {
         Map<String, Integer> requiredResources = new HashMap<>() {{
             put(REQUIRED_RESOURCE, null);
@@ -66,7 +69,7 @@ public class ConstructionRequirementsValidatorTest {
             .requiredResources(requiredResources)
             .build();
 
-        underTest.validate(constructionRequirements);
+        assertThat(catchThrowable(() -> underTest.validate(constructionRequirements))).isInstanceOf(NullPointerException.class);
     }
 
     @Test

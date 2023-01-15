@@ -3,8 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.game;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,15 +32,7 @@ public class GameModelValidatorTest {
     @Mock
     private GameModel model;
 
-    @BeforeEach
-    public void setUp() {
-        given(model.getName()).willReturn(NAME);
-        given(model.getHost()).willReturn(HOST);
-        given(model.getLastPlayed()).willReturn(LAST_PLAYED);
-        given(model.getMarkedForDeletion()).willReturn(false);
-    }
-
-    @After
+    @AfterEach
     public void validate() {
         verify(gameItemValidator).validate(model);
     }
@@ -57,6 +48,7 @@ public class GameModelValidatorTest {
 
     @Test
     public void nullName() {
+        given(model.getHost()).willReturn(HOST);
         given(model.getName()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -66,6 +58,8 @@ public class GameModelValidatorTest {
 
     @Test
     public void nullLastPlayed() {
+        given(model.getName()).willReturn(NAME);
+        given(model.getHost()).willReturn(HOST);
         given(model.getLastPlayed()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -75,6 +69,9 @@ public class GameModelValidatorTest {
 
     @Test
     public void nullMarkedForDeletion() {
+        given(model.getName()).willReturn(NAME);
+        given(model.getHost()).willReturn(HOST);
+        given(model.getLastPlayed()).willReturn(LAST_PLAYED);
         given(model.getMarkedForDeletion()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -84,6 +81,11 @@ public class GameModelValidatorTest {
 
     @Test
     public void valid() {
+        given(model.getName()).willReturn(NAME);
+        given(model.getHost()).willReturn(HOST);
+        given(model.getLastPlayed()).willReturn(LAST_PLAYED);
+        given(model.getMarkedForDeletion()).willReturn(false);
+
         underTest.validate(model);
     }
 

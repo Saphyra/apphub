@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.platform.message_sender.connection;
 import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyWsApiClient;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,11 +29,6 @@ public class SkyXploreMainMenuWebSocketHandlerTest {
     @InjectMocks
     private SkyXploreMainMenuWebSocketHandler underTest;
 
-    @BeforeEach
-    public void setUp() {
-        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
-    }
-
     @Test
     public void getGroup() {
         assertThat(underTest.getGroup()).isEqualTo(MessageGroup.SKYXPLORE_MAIN_MENU);
@@ -42,6 +36,8 @@ public class SkyXploreMainMenuWebSocketHandlerTest {
 
     @Test
     public void afterConnection() {
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
+
         underTest.afterConnection(USER_ID);
 
         verify(lobbyWsClient).playerOnline(USER_ID, LOCALE);
@@ -49,6 +45,8 @@ public class SkyXploreMainMenuWebSocketHandlerTest {
 
     @Test
     public void afterDisconnection() {
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
+
         underTest.afterDisconnection(USER_ID);
 
         verify(lobbyWsClient).playerOffline(USER_ID, LOCALE);

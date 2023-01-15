@@ -9,7 +9,6 @@ import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -62,15 +61,11 @@ public class RoleToAllServiceTest {
     @Mock
     private Role role;
 
-    @BeforeEach
-    public void setUp() {
-        given(properties.getRestrictedRoles()).willReturn(List.of(RESTRICTED_ROLE));
-        given(userDao.findAll()).willReturn(List.of(user));
-        given(user.getUserId()).willReturn(USER_ID);
-    }
 
     @Test
     public void addToAll_restricted() {
+        given(properties.getRestrictedRoles()).willReturn(List.of(RESTRICTED_ROLE));
+
         Throwable ex = catchThrowable(() -> underTest.addToAll(USER_ID, PASSWORD, RESTRICTED_ROLE));
 
         ExceptionValidator.validateForbiddenOperation(ex);
@@ -78,6 +73,8 @@ public class RoleToAllServiceTest {
 
     @Test
     public void nullPassword() {
+        given(properties.getRestrictedRoles()).willReturn(List.of(RESTRICTED_ROLE));
+
         Throwable ex = catchThrowable(() -> underTest.addToAll(USER_ID, null, ROLE));
 
         ExceptionValidator.validateInvalidParam(ex, "password", "must not be null");
@@ -85,6 +82,9 @@ public class RoleToAllServiceTest {
 
     @Test
     public void addToAll_alreadyHave() {
+        given(properties.getRestrictedRoles()).willReturn(List.of(RESTRICTED_ROLE));
+        given(userDao.findAll()).willReturn(List.of(user));
+        given(user.getUserId()).willReturn(USER_ID);
         given(roleDao.findByUserIdAndRole(USER_ID, ROLE)).willReturn(Optional.of(role));
 
         underTest.addToAll(USER_ID, PASSWORD, ROLE);
@@ -95,6 +95,9 @@ public class RoleToAllServiceTest {
 
     @Test
     public void addToAll() {
+        given(properties.getRestrictedRoles()).willReturn(List.of(RESTRICTED_ROLE));
+        given(userDao.findAll()).willReturn(List.of(user));
+        given(user.getUserId()).willReturn(USER_ID);
         given(roleDao.findByUserIdAndRole(USER_ID, ROLE)).willReturn(Optional.empty());
         given(roleFactory.create(USER_ID, ROLE)).willReturn(role);
 
@@ -106,6 +109,8 @@ public class RoleToAllServiceTest {
 
     @Test
     public void removeFromAll_restricted() {
+        given(properties.getRestrictedRoles()).willReturn(List.of(RESTRICTED_ROLE));
+
         Throwable ex = catchThrowable(() -> underTest.removeFromAll(USER_ID, PASSWORD, RESTRICTED_ROLE));
 
         ExceptionValidator.validateForbiddenOperation(ex);
@@ -113,6 +118,8 @@ public class RoleToAllServiceTest {
 
     @Test
     public void removeFromAll_nullPassword() {
+        given(properties.getRestrictedRoles()).willReturn(List.of(RESTRICTED_ROLE));
+
         Throwable ex = catchThrowable(() -> underTest.removeFromAll(USER_ID, null, ROLE));
 
         ExceptionValidator.validateInvalidParam(ex, "password", "must not be null");
@@ -120,6 +127,8 @@ public class RoleToAllServiceTest {
 
     @Test
     public void removeFromAll() {
+        given(properties.getRestrictedRoles()).willReturn(List.of(RESTRICTED_ROLE));
+
         underTest.removeFromAll(USER_ID, PASSWORD, ROLE);
 
         verify(roleDao, timeout(1000)).deleteByRole(ROLE);

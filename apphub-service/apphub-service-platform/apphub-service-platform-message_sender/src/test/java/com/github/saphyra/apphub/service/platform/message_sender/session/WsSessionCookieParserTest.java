@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,18 +35,22 @@ public class WsSessionCookieParserTest {
         given(request.getHeaders()).willReturn(httpHeaders);
     }
 
-    @Test(expected = LoggedException.class)
+    @Test
     public void cookieListNotFound() {
         given(httpHeaders.get(Constants.COOKIE_HEADER)).willReturn(null);
 
-        underTest.getCookies(request);
+        Throwable ex = catchThrowable(() -> underTest.getCookies(request));
+
+        assertThat(ex).isInstanceOf(LoggedException.class);
     }
 
-    @Test(expected = LoggedException.class)
+    @Test
     public void cookieListEmpty() {
         given(httpHeaders.get(Constants.COOKIE_HEADER)).willReturn(Collections.emptyList());
 
-        underTest.getCookies(request);
+        Throwable ex = catchThrowable(() -> underTest.getCookies(request));
+
+        assertThat(ex).isInstanceOf(LoggedException.class);
     }
 
     @Test

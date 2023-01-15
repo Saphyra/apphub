@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.service.notebook.service.TitleValidator;
 import com.github.saphyra.apphub.service.notebook.service.table.ColumnNameValidator;
 import com.github.saphyra.apphub.service.notebook.service.table.RowValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -50,7 +50,7 @@ public class EditTableRequestValidatorTest {
     @InjectMocks
     private EditTableRequestValidator underTest;
 
-    @After
+    @AfterEach
     public void v() {
         verify(columnNameValidator).validate(NEW_TABLE_HEAD);
         verify(rowValidator).validate(Arrays.asList(NEW_VALUE), 1);

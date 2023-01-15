@@ -75,14 +75,7 @@ public class LocaleFilterTest {
 
     @BeforeEach
     public void setUp() {
-        given(exchange.getRequest()).willReturn(request);
-        given(request.getURI()).willReturn(URI.create(UrlFactory.create(1000, PATH)));
-
-        given(filterChain.filter(exchange)).willReturn(mono);
         cookies.put("asd", Arrays.asList(cookie));
-
-        given(request.getHeaders()).willReturn(httpHeaders);
-        given(request.getCookies()).willReturn(cookies);
     }
 
     @Test
@@ -92,6 +85,9 @@ public class LocaleFilterTest {
 
     @Test
     public void filter_resourcePath() {
+        given(exchange.getRequest()).willReturn(request);
+        given(request.getURI()).willReturn(URI.create(UrlFactory.create(1000, PATH)));
+        given(filterChain.filter(exchange)).willReturn(mono);
         given(uriUtils.isResourcePath(PATH)).willReturn(true);
         given(filterChain.filter(exchange)).willReturn(mono);
 
@@ -104,6 +100,10 @@ public class LocaleFilterTest {
 
     @Test
     public void filter() {
+        given(exchange.getRequest()).willReturn(request);
+        given(request.getURI()).willReturn(URI.create(UrlFactory.create(1000, PATH)));
+        given(request.getHeaders()).willReturn(httpHeaders);
+        given(request.getCookies()).willReturn(cookies);
         given(uriUtils.isResourcePath(PATH)).willReturn(false);
         given(apphubLocaleResolver.getLocale(httpHeaders, cookies)).willReturn(LOCALE);
         given(exchange.mutate()).willReturn(exchangeBuilder);

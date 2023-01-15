@@ -7,6 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -17,11 +19,12 @@ public class GameDataItemValidatorTest {
     @Mock
     private GameDataItem gameDataItem;
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void nullId() {
         given(gameDataItem.getId()).willReturn(null);
 
         underTest.validate(gameDataItem);
+        assertThat(catchThrowable(() -> underTest.validate(gameDataItem))).isInstanceOf(NullPointerException.class);
     }
 
     @Test

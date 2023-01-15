@@ -3,8 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.storage_s
 import com.github.saphyra.apphub.api.skyxplore.model.game.StorageSettingModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,17 +34,7 @@ public class StorageSettingModelValidatorTest {
     @Mock
     private StorageSettingModel model;
 
-    @BeforeEach
-    public void setUp() {
-        given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(LOCATION_TYPE);
-        given(model.getDataId()).willReturn(DATA_ID);
-        given(model.getTargetAmount()).willReturn(TARGET_AMOUNT);
-        given(model.getPriority()).willReturn(PRIORITY);
-        given(model.getBatchSize()).willReturn(BATCH_SIZE);
-    }
-
-    @After
+    @AfterEach
     public void validate() {
         verify(gameItemValidator).validate(model);
     }
@@ -61,6 +50,7 @@ public class StorageSettingModelValidatorTest {
 
     @Test
     public void nullLocationType() {
+        given(model.getLocation()).willReturn(LOCATION);
         given(model.getLocationType()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -70,6 +60,8 @@ public class StorageSettingModelValidatorTest {
 
     @Test
     public void nullDataId() {
+        given(model.getLocation()).willReturn(LOCATION);
+        given(model.getLocationType()).willReturn(LOCATION_TYPE);
         given(model.getDataId()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -79,6 +71,9 @@ public class StorageSettingModelValidatorTest {
 
     @Test
     public void nullTargetAmount() {
+        given(model.getLocation()).willReturn(LOCATION);
+        given(model.getLocationType()).willReturn(LOCATION_TYPE);
+        given(model.getDataId()).willReturn(DATA_ID);
         given(model.getTargetAmount()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -88,6 +83,10 @@ public class StorageSettingModelValidatorTest {
 
     @Test
     public void nullPriority() {
+        given(model.getLocation()).willReturn(LOCATION);
+        given(model.getLocationType()).willReturn(LOCATION_TYPE);
+        given(model.getDataId()).willReturn(DATA_ID);
+        given(model.getTargetAmount()).willReturn(TARGET_AMOUNT);
         given(model.getPriority()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -97,6 +96,11 @@ public class StorageSettingModelValidatorTest {
 
     @Test
     public void nullBatchSize() {
+        given(model.getLocation()).willReturn(LOCATION);
+        given(model.getLocationType()).willReturn(LOCATION_TYPE);
+        given(model.getDataId()).willReturn(DATA_ID);
+        given(model.getTargetAmount()).willReturn(TARGET_AMOUNT);
+        given(model.getPriority()).willReturn(PRIORITY);
         given(model.getBatchSize()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -106,6 +110,13 @@ public class StorageSettingModelValidatorTest {
 
     @Test
     public void valid() {
+        given(model.getLocation()).willReturn(LOCATION);
+        given(model.getLocationType()).willReturn(LOCATION_TYPE);
+        given(model.getDataId()).willReturn(DATA_ID);
+        given(model.getTargetAmount()).willReturn(TARGET_AMOUNT);
+        given(model.getPriority()).willReturn(PRIORITY);
+        given(model.getBatchSize()).willReturn(BATCH_SIZE);
+
         underTest.validate(model);
     }
 }

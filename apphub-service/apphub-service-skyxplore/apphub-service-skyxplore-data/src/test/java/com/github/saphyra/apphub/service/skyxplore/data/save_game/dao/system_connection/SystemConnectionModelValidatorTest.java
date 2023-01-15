@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.system_co
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.SystemConnectionModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemValidator;
-import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,7 +22,7 @@ public class SystemConnectionModelValidatorTest {
     @Mock
     private SystemConnectionModel model;
 
-    @After
+    @AfterEach
     public void validate() {
         verify(gameItemValidator).validate(model);
     }

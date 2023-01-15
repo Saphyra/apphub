@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.service.user.data.service.validator.PasswordValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -46,7 +46,7 @@ public class ChangePasswordServiceTest {
     @Mock
     private User user;
 
-    @After
+    @AfterEach
     public void check() {
         verify(passwordValidator).validatePassword(NEW_PASSWORD, "newPassword");
     }

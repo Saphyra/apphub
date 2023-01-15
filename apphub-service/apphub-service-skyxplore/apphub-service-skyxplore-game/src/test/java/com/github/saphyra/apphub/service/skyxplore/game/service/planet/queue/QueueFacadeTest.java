@@ -64,8 +64,6 @@ public class QueueFacadeTest {
             .services(List.of(queueService))
             .converter(converter)
             .build();
-
-        given(queueService.getType()).willReturn(QueueItemType.TERRAFORMATION);
     }
 
     @Test
@@ -90,6 +88,8 @@ public class QueueFacadeTest {
 
     @Test
     public void setPriority_serviceNotFound() {
+        given(queueService.getType()).willReturn(QueueItemType.TERRAFORMATION);
+
         Throwable ex = catchThrowable(() -> underTest.setPriority(USER_ID, PLANET_ID, QueueItemType.CONSTRUCTION.name(), ITEM_ID, PRIORITY));
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR);
@@ -97,6 +97,8 @@ public class QueueFacadeTest {
 
     @Test
     public void setPriority() {
+        given(queueService.getType()).willReturn(QueueItemType.TERRAFORMATION);
+
         underTest.setPriority(USER_ID, PLANET_ID, QueueItemType.TERRAFORMATION.name(), ITEM_ID, PRIORITY);
 
         verify(queueService).setPriority(USER_ID, PLANET_ID, ITEM_ID, PRIORITY);
@@ -111,6 +113,8 @@ public class QueueFacadeTest {
 
     @Test
     public void cancelItem_serviceNotFound() {
+        given(queueService.getType()).willReturn(QueueItemType.TERRAFORMATION);
+
         Throwable ex = catchThrowable(() -> underTest.cancelItem(USER_ID, PLANET_ID, QueueItemType.CONSTRUCTION.name(), ITEM_ID));
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR);
@@ -118,6 +122,8 @@ public class QueueFacadeTest {
 
     @Test
     public void cancelItem() {
+        given(queueService.getType()).willReturn(QueueItemType.TERRAFORMATION);
+
         underTest.cancelItem(USER_ID, PLANET_ID, QueueItemType.TERRAFORMATION.name(), ITEM_ID);
 
         verify(queueService).cancel(USER_ID, PLANET_ID, ITEM_ID);

@@ -2,19 +2,19 @@ package com.github.saphyra.apphub.service.skyxplore.data.character.dao;
 
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
 @Slf4j
 public class SkyXploreCharacterRepositoryTest {
@@ -25,7 +25,7 @@ public class SkyXploreCharacterRepositoryTest {
     @Autowired
     private SkyXploreCharacterRepository underTest;
 
-    @After
+    @AfterEach
     public void clear() {
         underTest.deleteAll();
     }

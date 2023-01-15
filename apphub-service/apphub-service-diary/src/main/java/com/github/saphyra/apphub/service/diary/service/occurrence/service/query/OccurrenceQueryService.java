@@ -5,11 +5,11 @@ import com.github.saphyra.apphub.service.diary.dao.event.EventDao;
 import com.github.saphyra.apphub.service.diary.dao.occurance.Occurrence;
 import com.github.saphyra.apphub.service.diary.dao.occurance.OccurrenceDao;
 import com.github.saphyra.apphub.service.diary.dao.occurance.OccurrenceStatus;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;

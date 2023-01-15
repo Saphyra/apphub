@@ -5,21 +5,16 @@ import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.api.platform.storage.server.StorageController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.platform.storage.service.store.StoreFileService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.UUID;
 
 @RestController
@@ -30,7 +25,6 @@ public class StorageControllerImpl implements StorageController {
     private final DownloadFileService downloadFileService;
     private final DeleteFileService deleteFileService;
     private final DuplicateFileService duplicateFileService;
-    private final FileUploadHelper fileUploadHelper;
     private final StoredFileMetadataQueryService metadataQueryService;
 
     @Override
@@ -40,22 +34,8 @@ public class StorageControllerImpl implements StorageController {
     }
 
     @Override
-    public void uploadFile(UUID storedFileId, HttpServletRequest request, AccessTokenHeader accessTokenHeader) throws IOException, FileUploadException {
-        ServletFileUpload servletFileUpload = fileUploadHelper.servletFileUpload();
-        FileItemIterator fileItemIterator = servletFileUpload.getItemIterator(request);
-
-        while (fileItemIterator.hasNext()) {
-            FileItemStream item = fileItemIterator.next();
-
-            if (!item.isFormField()) {
-                try (InputStream inputStream = item.openStream()) {
-                    storeFileService.uploadFile(accessTokenHeader.getUserId(), storedFileId, inputStream);
-                    return;
-                }
-            }
-        }
-
-        throw new RuntimeException("Failed processing request");
+    public void uploadFile(UUID storedFileId, HttpServletRequest request, AccessTokenHeader accessTokenHeader) throws IOException {
+        storeFileService.uploadFile(accessTokenHeader.getUserId(), storedFileId, request.getInputStream()); //TODO fix upload
     }
 
     @Override

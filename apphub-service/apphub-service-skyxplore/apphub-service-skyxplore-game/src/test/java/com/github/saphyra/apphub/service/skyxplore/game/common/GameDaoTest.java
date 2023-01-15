@@ -10,7 +10,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -53,13 +52,10 @@ public class GameDaoTest {
     @Mock
     private EventLoop eventLoop;
 
-    @BeforeEach
-    public void setUp() {
-        given(game.getGameId()).willReturn(GAME_ID);
-    }
-
     @Test
     public void save() {
+        given(game.getGameId()).willReturn(GAME_ID);
+
         underTest.save(game);
 
         assertThat(underTest.getRepository()).containsEntry(GAME_ID, game);
@@ -74,6 +70,8 @@ public class GameDaoTest {
 
     @Test
     public void findByUserId() {
+        given(game.getGameId()).willReturn(GAME_ID);
+
         underTest.save(game);
 
         given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
@@ -85,6 +83,8 @@ public class GameDaoTest {
 
     @Test
     public void delete() {
+        given(game.getGameId()).willReturn(GAME_ID);
+
         underTest.save(game);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.getQueueSize()).willReturn(1)
@@ -101,6 +101,8 @@ public class GameDaoTest {
 
     @Test
     public void getAll() {
+        given(game.getGameId()).willReturn(GAME_ID);
+
         underTest.save(game);
 
         List<Game> result = underTest.getAll();

@@ -104,14 +104,6 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
             .configuration(configuration)
             .webSocketMessageFactory(webSocketMessageFactory)
             .build();
-
-        given(characterProxy.getCharacterByUserId(USER_ID)).willReturn(SkyXploreCharacterModel.builder().name(USERNAME).build());
-        given(game.getChat()).willReturn(chat);
-        given(chat.getRooms()).willReturn(Arrays.asList(chatRoom, otherChatRoom));
-        given(chatRoom.getMembers()).willReturn(Arrays.asList(USER_ID, FROM));
-        given(chatRoom.getId()).willReturn(ROOM_ID);
-        given(otherChatRoom.getMembers()).willReturn(Collections.emptyList());
-        given(game.filterConnectedPlayersFrom(any())).willReturn(Arrays.asList(USER_ID));
     }
 
     @Test
@@ -126,6 +118,13 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
 
     @Test
     public void userJoinedToGame() {
+        given(characterProxy.getCharacterByUserId(USER_ID)).willReturn(SkyXploreCharacterModel.builder().name(USERNAME).build());
+        given(game.getChat()).willReturn(chat);
+        given(chat.getRooms()).willReturn(Arrays.asList(chatRoom, otherChatRoom));
+        given(chatRoom.getMembers()).willReturn(Arrays.asList(USER_ID, FROM));
+        given(chatRoom.getId()).willReturn(ROOM_ID);
+        given(otherChatRoom.getMembers()).willReturn(Collections.emptyList());
+        given(game.filterConnectedPlayersFrom(any())).willReturn(Arrays.asList(USER_ID));
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player1));
         given(game.isGamePaused()).willReturn(true);
@@ -144,6 +143,13 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
 
     @Test
     public void userLeftGame_connectedMemberLeft() {
+        given(characterProxy.getCharacterByUserId(USER_ID)).willReturn(SkyXploreCharacterModel.builder().name(USERNAME).build());
+        given(game.getChat()).willReturn(chat);
+        given(chat.getRooms()).willReturn(Arrays.asList(chatRoom, otherChatRoom));
+        given(chatRoom.getMembers()).willReturn(Arrays.asList(USER_ID, FROM));
+        given(chatRoom.getId()).willReturn(ROOM_ID);
+        given(otherChatRoom.getMembers()).willReturn(Collections.emptyList());
+        given(game.filterConnectedPlayersFrom(any())).willReturn(Arrays.asList(USER_ID));
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
         given(game.getPlayers()).willReturn(CollectionUtils.toMap(new BiWrapper<>(USER_ID, player1), new BiWrapper<>(FROM, player2)));
         given(game.getConnectedPlayers()).willReturn(Arrays.asList(UUID.randomUUID()));
@@ -163,6 +169,7 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
 
     @Test
     public void userLeftGame_noMoreConnectedMembers() {
+        given(characterProxy.getCharacterByUserId(USER_ID)).willReturn(SkyXploreCharacterModel.builder().name(USERNAME).build());
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
         given(game.getPlayers()).willReturn(CollectionUtils.toMap(new BiWrapper<>(USER_ID, player1)));
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);

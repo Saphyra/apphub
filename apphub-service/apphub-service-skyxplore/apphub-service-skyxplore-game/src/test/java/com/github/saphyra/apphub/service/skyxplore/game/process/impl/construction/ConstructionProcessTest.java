@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -219,9 +220,9 @@ public class ConstructionProcessTest {
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void cleanup() {
-        underTest.cleanup(syncCache);
+        assertThat(catchThrowable(() -> underTest.cleanup(syncCache))).isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test

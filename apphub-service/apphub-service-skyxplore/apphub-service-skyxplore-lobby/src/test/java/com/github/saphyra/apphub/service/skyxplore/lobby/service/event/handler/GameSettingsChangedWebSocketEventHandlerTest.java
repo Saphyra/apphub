@@ -16,7 +16,6 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -63,21 +62,6 @@ public class GameSettingsChangedWebSocketEventHandlerTest {
     @Mock
     private GameSettingsChangedWebSocketEventHandler.GameSettingsChangedEvent payload;
 
-    @BeforeEach
-    public void setUp() {
-        given(lobbyDao.findByUserIdValidated(any())).willReturn(lobby);
-        given(lobby.getHost()).willReturn(FROM);
-        given(lobby.getSettings()).willReturn(gameSettings);
-        given(event.getPayload()).willReturn(PAYLOAD);
-        given(objectMapperWrapper.convertValue(PAYLOAD, GameSettingsChangedWebSocketEventHandler.GameSettingsChangedEvent.class)).willReturn(payload);
-        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(MEMBER_ID, null));
-
-        given(gameSettings.getUniverseSize()).willReturn(UniverseSize.LARGE);
-        given(gameSettings.getSystemAmount()).willReturn(SystemAmount.COMMON);
-        given(gameSettings.getSystemSize()).willReturn(SystemSize.LARGE);
-        given(gameSettings.getPlanetSize()).willReturn(PlanetSize.LARGE);
-        given(gameSettings.getAiPresence()).willReturn(AiPresence.COMMON);
-    }
 
     @Test
     public void canHandle_settingsChangedEvent() {
@@ -91,6 +75,19 @@ public class GameSettingsChangedWebSocketEventHandlerTest {
 
     @Test
     public void forbiddenOperation() {
+        given(lobbyDao.findByUserIdValidated(any())).willReturn(lobby);
+        given(lobby.getHost()).willReturn(FROM);
+        given(lobby.getSettings()).willReturn(gameSettings);
+        given(event.getPayload()).willReturn(PAYLOAD);
+        given(objectMapperWrapper.convertValue(PAYLOAD, GameSettingsChangedWebSocketEventHandler.GameSettingsChangedEvent.class)).willReturn(payload);
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(MEMBER_ID, null));
+
+        given(gameSettings.getUniverseSize()).willReturn(UniverseSize.LARGE);
+        given(gameSettings.getSystemAmount()).willReturn(SystemAmount.COMMON);
+        given(gameSettings.getSystemSize()).willReturn(SystemSize.LARGE);
+        given(gameSettings.getPlanetSize()).willReturn(PlanetSize.LARGE);
+        given(gameSettings.getAiPresence()).willReturn(AiPresence.COMMON);
+
         Throwable ex = catchThrowable(() -> underTest.handle(UUID.randomUUID(), event));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
@@ -107,6 +104,18 @@ public class GameSettingsChangedWebSocketEventHandlerTest {
 
     @Test
     public void notFilled() {
+        given(lobbyDao.findByUserIdValidated(any())).willReturn(lobby);
+        given(lobby.getHost()).willReturn(FROM);
+        given(lobby.getSettings()).willReturn(gameSettings);
+        given(event.getPayload()).willReturn(PAYLOAD);
+        given(objectMapperWrapper.convertValue(PAYLOAD, GameSettingsChangedWebSocketEventHandler.GameSettingsChangedEvent.class)).willReturn(payload);
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(MEMBER_ID, null));
+
+        given(gameSettings.getUniverseSize()).willReturn(UniverseSize.LARGE);
+        given(gameSettings.getSystemAmount()).willReturn(SystemAmount.COMMON);
+        given(gameSettings.getSystemSize()).willReturn(SystemSize.LARGE);
+        given(gameSettings.getPlanetSize()).willReturn(PlanetSize.LARGE);
+        given(gameSettings.getAiPresence()).willReturn(AiPresence.COMMON);
         given(payload.isFilled()).willReturn(false);
 
         Throwable ex = catchThrowable(() -> underTest.handle(FROM, event));
@@ -125,6 +134,13 @@ public class GameSettingsChangedWebSocketEventHandlerTest {
 
     @Test
     public void changeGameSettings() {
+        given(lobbyDao.findByUserIdValidated(any())).willReturn(lobby);
+        given(lobby.getHost()).willReturn(FROM);
+        given(lobby.getSettings()).willReturn(gameSettings);
+        given(event.getPayload()).willReturn(PAYLOAD);
+        given(objectMapperWrapper.convertValue(PAYLOAD, GameSettingsChangedWebSocketEventHandler.GameSettingsChangedEvent.class)).willReturn(payload);
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(MEMBER_ID, null));
+
         given(payload.isFilled()).willReturn(true);
 
         underTest.handle(FROM, event);

@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -44,13 +43,10 @@ public class SkyXploreGameControllerImplTest {
     @Mock
     private AccessTokenHeader accessTokenHeader;
 
-    @BeforeEach
-    public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-    }
 
     @Test
     public void userIsInGame() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
 
         assertThat(underTest.isUserInGame(accessTokenHeader)).isTrue();
@@ -58,6 +54,7 @@ public class SkyXploreGameControllerImplTest {
 
     @Test
     public void userIsNotInGame() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.empty());
 
         assertThat(underTest.isUserInGame(accessTokenHeader)).isFalse();
@@ -72,6 +69,8 @@ public class SkyXploreGameControllerImplTest {
 
     @Test
     public void exitGame() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.exitGame(accessTokenHeader);
 
         verify(exitFromGameService).exitFromGame(USER_ID);
@@ -79,6 +78,8 @@ public class SkyXploreGameControllerImplTest {
 
     @Test
     public void pauseGame() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.pauseGame(new OneParamRequest<>(true), accessTokenHeader);
 
         verify(pauseGameService).setPausedStatus(USER_ID, true);

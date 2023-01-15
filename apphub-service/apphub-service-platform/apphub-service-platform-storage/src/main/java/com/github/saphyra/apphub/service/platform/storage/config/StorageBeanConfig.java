@@ -18,8 +18,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 @Configuration
 @EnableJpaRepositories(basePackageClasses = StorageApplication.class)
@@ -45,12 +43,5 @@ public class StorageBeanConfig {
     @Bean
     IdGenerator idGenerator() {
         return new IdGenerator();
-    }
-
-    @Bean
-    MultipartResolver customMultipartResolver() {
-        final CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setResolveLazily(true);
-        return multipartResolver;
     }
 }

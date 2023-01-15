@@ -4,8 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,13 +28,8 @@ public class CoordinateModelValidatorTest {
     @Mock
     private CoordinateModel model;
 
-    @BeforeEach
-    public void setUp() {
-        given(model.getReferenceId()).willReturn(UUID.randomUUID());
-        given(model.getCoordinate()).willReturn(new Coordinate(0d, 0d));
-    }
 
-    @After
+    @AfterEach
     public void validate() {
         verify(gameItemValidator).validate(model);
     }
@@ -51,6 +45,7 @@ public class CoordinateModelValidatorTest {
 
     @Test
     public void nullCoordinate() {
+        given(model.getReferenceId()).willReturn(UUID.randomUUID());
         given(model.getCoordinate()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -60,6 +55,7 @@ public class CoordinateModelValidatorTest {
 
     @Test
     public void nullX() {
+        given(model.getReferenceId()).willReturn(UUID.randomUUID());
         given(model.getCoordinate()).willReturn(new Coordinate(null, 0d));
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -69,6 +65,7 @@ public class CoordinateModelValidatorTest {
 
     @Test
     public void nullY() {
+        given(model.getReferenceId()).willReturn(UUID.randomUUID());
         given(model.getCoordinate()).willReturn(new Coordinate(0d, null));
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -78,6 +75,9 @@ public class CoordinateModelValidatorTest {
 
     @Test
     public void valid() {
+        given(model.getReferenceId()).willReturn(UUID.randomUUID());
+        given(model.getCoordinate()).willReturn(new Coordinate(0d, 0d));
+
         underTest.validate(model);
     }
 }

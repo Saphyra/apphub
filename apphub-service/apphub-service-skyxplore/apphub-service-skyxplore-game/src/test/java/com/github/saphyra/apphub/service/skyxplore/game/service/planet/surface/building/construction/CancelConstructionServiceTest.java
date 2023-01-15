@@ -28,7 +28,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.b
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -130,25 +129,20 @@ public class CancelConstructionServiceTest {
     @Captor
     private ArgumentCaptor<Callable<SurfaceResponse>> argumentCaptor;
 
-    @BeforeEach
-    public void setUp() {
+    @Test
+    public void cancelConstructionOfConstruction() throws Exception {
         given(planet.getPlanetId()).willReturn(PLANET_ID);
         given(planet.getOwner()).willReturn(USER_ID);
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
         given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
         given(planet.getSurfaces()).willReturn(surfaceMap);
-        given(surfaceMap.findByBuildingIdValidated(BUILDING_ID)).willReturn(surface);
         given(surface.getBuilding()).willReturn(building);
         given(building.getBuildingId()).willReturn(BUILDING_ID);
         given(syncCacheFactory.create()).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(game.getGameId()).willReturn(GAME_ID);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
-    }
-
-    @Test
-    public void cancelConstructionOfConstruction() throws Exception {
         given(surface.getBuilding()).willReturn(building);
         given(building.getConstruction()).willReturn(construction);
         given(building.getLevel()).willReturn(0);
@@ -193,6 +187,14 @@ public class CancelConstructionServiceTest {
 
     @Test
     public void cancelConstructionOfBuilding_constructionNotFound() {
+        given(planet.getPlanetId()).willReturn(PLANET_ID);
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getUniverse()).willReturn(universe);
+        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(planet.getSurfaces()).willReturn(surfaceMap);
+        given(surfaceMap.findByBuildingIdValidated(BUILDING_ID)).willReturn(surface);
+        given(surface.getBuilding()).willReturn(building);
+        given(building.getBuildingId()).willReturn(BUILDING_ID);
         given(building.getConstruction()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.cancelConstructionOfBuilding(USER_ID, PLANET_ID, BUILDING_ID));
@@ -202,6 +204,19 @@ public class CancelConstructionServiceTest {
 
     @Test
     public void cancelConstructionOfUpgrade() throws Exception {
+        given(planet.getPlanetId()).willReturn(PLANET_ID);
+        given(planet.getOwner()).willReturn(USER_ID);
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getUniverse()).willReturn(universe);
+        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(planet.getSurfaces()).willReturn(surfaceMap);
+        given(surfaceMap.findByBuildingIdValidated(BUILDING_ID)).willReturn(surface);
+        given(surface.getBuilding()).willReturn(building);
+        given(building.getBuildingId()).willReturn(BUILDING_ID);
+        given(syncCacheFactory.create()).willReturn(syncCache);
+        given(game.getEventLoop()).willReturn(eventLoop);
+        given(game.getGameId()).willReturn(GAME_ID);
+        given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(building.getConstruction()).willReturn(construction);
         given(building.getLevel()).willReturn(0);
         given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);

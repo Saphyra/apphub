@@ -3,8 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.line;
 import com.github.saphyra.apphub.api.skyxplore.model.game.LineModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,14 +27,8 @@ public class LineModelValidatorTest {
     @Mock
     private LineModel model;
 
-    @BeforeEach
-    public void setUp() {
-        given(model.getReferenceId()).willReturn(UUID.randomUUID());
-        given(model.getA()).willReturn(UUID.randomUUID());
-        given(model.getB()).willReturn(UUID.randomUUID());
-    }
 
-    @After
+    @AfterEach
     public void validate() {
         verify(gameItemValidator).validate(model);
     }
@@ -51,6 +44,7 @@ public class LineModelValidatorTest {
 
     @Test
     public void nullA() {
+        given(model.getReferenceId()).willReturn(UUID.randomUUID());
         given(model.getA()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -60,6 +54,8 @@ public class LineModelValidatorTest {
 
     @Test
     public void nullB() {
+        given(model.getReferenceId()).willReturn(UUID.randomUUID());
+        given(model.getA()).willReturn(UUID.randomUUID());
         given(model.getB()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -69,6 +65,10 @@ public class LineModelValidatorTest {
 
     @Test
     public void valid() {
+        given(model.getReferenceId()).willReturn(UUID.randomUUID());
+        given(model.getA()).willReturn(UUID.randomUUID());
+        given(model.getB()).willReturn(UUID.randomUUID());
+
         underTest.validate(model);
     }
 }

@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
 
@@ -46,8 +47,8 @@ public class RandomEmptySurfaceProviderTest {
         assertThat(result).isEqualTo(surface3);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void surfaceNotFound() {
-        underTest.getRandomEmptySurface(Collections.emptyList());
+        assertThat(catchThrowable(() -> underTest.getRandomEmptySurface(Collections.emptyList()))).isInstanceOf(IllegalStateException.class);
     }
 }

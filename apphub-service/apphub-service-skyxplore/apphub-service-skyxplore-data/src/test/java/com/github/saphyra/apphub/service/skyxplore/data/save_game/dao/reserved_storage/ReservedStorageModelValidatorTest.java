@@ -3,8 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.reserved_
 import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,16 +31,8 @@ public class ReservedStorageModelValidatorTest {
     @Mock
     private ReservedStorageModel model;
 
-    @BeforeEach
-    public void setUp() {
-        given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
-        given(model.getDataId()).willReturn(DATA_ID);
-        given(model.getAmount()).willReturn(AMOUNT);
-        given(model.getLocation()).willReturn(UUID.randomUUID());
-        given(model.getLocationType()).willReturn("asd");
-    }
 
-    @After
+    @AfterEach
     public void validate() {
         verify(gameItemValidator).validate(model);
     }
@@ -57,6 +48,7 @@ public class ReservedStorageModelValidatorTest {
 
     @Test
     public void nullLocation() {
+        given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(model.getLocation()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -66,6 +58,8 @@ public class ReservedStorageModelValidatorTest {
 
     @Test
     public void nullLocationType() {
+        given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
+        given(model.getLocation()).willReturn(UUID.randomUUID());
         given(model.getLocationType()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -75,6 +69,9 @@ public class ReservedStorageModelValidatorTest {
 
     @Test
     public void nullDataId() {
+        given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
+        given(model.getLocation()).willReturn(UUID.randomUUID());
+        given(model.getLocationType()).willReturn("asd");
         given(model.getDataId()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -84,6 +81,10 @@ public class ReservedStorageModelValidatorTest {
 
     @Test
     public void nullAmount() {
+        given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
+        given(model.getDataId()).willReturn(DATA_ID);
+        given(model.getLocation()).willReturn(UUID.randomUUID());
+        given(model.getLocationType()).willReturn("asd");
         given(model.getAmount()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -93,6 +94,12 @@ public class ReservedStorageModelValidatorTest {
 
     @Test
     public void valid() {
+        given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
+        given(model.getDataId()).willReturn(DATA_ID);
+        given(model.getAmount()).willReturn(AMOUNT);
+        given(model.getLocation()).willReturn(UUID.randomUUID());
+        given(model.getLocationType()).willReturn("asd");
+
         underTest.validate(model);
     }
 }

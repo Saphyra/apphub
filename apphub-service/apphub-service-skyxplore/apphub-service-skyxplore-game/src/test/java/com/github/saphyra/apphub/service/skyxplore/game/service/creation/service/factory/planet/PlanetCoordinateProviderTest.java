@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,10 +50,10 @@ public class PlanetCoordinateProviderTest {
         assertThat(result).containsExactly(coordinate2, coordinate1);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void placementFailed() {
         given(planetListPlaceService.placePlanets(EXPECTED_PLANET_AMOUNT, SYSTEM_RADIUS)).willReturn(Collections.emptyList());
 
-        underTest.getCoordinates(EXPECTED_PLANET_AMOUNT, SYSTEM_RADIUS);
+        assertThat(catchThrowable(() -> underTest.getCoordinates(EXPECTED_PLANET_AMOUNT, SYSTEM_RADIUS))).isInstanceOf(RuntimeException.class);
     }
 }

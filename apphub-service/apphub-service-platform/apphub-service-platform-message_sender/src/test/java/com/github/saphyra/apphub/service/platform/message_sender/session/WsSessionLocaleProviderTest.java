@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 @ExtendWith(MockitoExtension.class)
 public class WsSessionLocaleProviderTest {
@@ -19,9 +20,11 @@ public class WsSessionLocaleProviderTest {
     @InjectMocks
     private WsSessionLocaleProvider underTest;
 
-    @Test(expected = LoggedException.class)
+    @Test
     public void localeCookieNotFound() {
-        underTest.getLocale(new HashMap<>());
+        Throwable ex = catchThrowable(() -> underTest.getLocale(new HashMap<>()));
+
+        assertThat(ex).isInstanceOf(LoggedException.class);
     }
 
     @Test

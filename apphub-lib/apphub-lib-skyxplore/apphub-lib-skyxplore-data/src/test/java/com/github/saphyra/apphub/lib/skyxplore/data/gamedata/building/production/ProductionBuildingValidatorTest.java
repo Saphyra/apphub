@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.productio
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingDataValidator;
-import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -36,40 +38,40 @@ public class ProductionBuildingValidatorTest {
     @Mock
     private ProductionData productionData;
 
-    @After
+    @AfterEach
     public void validate() {
         verify(buildingDataValidator).validate(productionBuilding);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullWorkers() {
         given(productionBuilding.getWorkers()).willReturn(null);
         Map<String, ProductionBuilding> map = new HashMap<>();
         map.put(KEY, productionBuilding);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void tooLowWorkers() {
         given(productionBuilding.getWorkers()).willReturn(0);
         Map<String, ProductionBuilding> map = new HashMap<>();
         map.put(KEY, productionBuilding);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullPrimarySurfaceType() {
         given(productionBuilding.getWorkers()).willReturn(1);
         given(productionBuilding.getPrimarySurfaceType()).willReturn(null);
         Map<String, ProductionBuilding> map = new HashMap<>();
         map.put(KEY, productionBuilding);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullPlaceableSurfaceTypes() {
         given(productionBuilding.getWorkers()).willReturn(1);
         given(productionBuilding.getPrimarySurfaceType()).willReturn(SurfaceType.DESERT);
@@ -77,7 +79,7 @@ public class ProductionBuildingValidatorTest {
         Map<String, ProductionBuilding> map = new HashMap<>();
         map.put(KEY, productionBuilding);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
     @Test

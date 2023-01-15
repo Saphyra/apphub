@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.user.model.request.BanRequest;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,14 +35,10 @@ public class BanFactoryTest {
     @InjectMocks
     private BanFactory underTest;
 
-    @BeforeEach
-    public void setUp() {
-        given(idGenerator.randomUuid()).willReturn(BAN_ID);
-        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
-    }
-
     @Test
     public void permanent() {
+        given(idGenerator.randomUuid()).willReturn(BAN_ID);
+
         BanRequest request = BanRequest.builder()
             .bannedUserId(BANNED_USER_ID)
             .bannedRole(BANNED_ROLE)
@@ -64,6 +59,9 @@ public class BanFactoryTest {
 
     @Test
     public void temporary() {
+        given(idGenerator.randomUuid()).willReturn(BAN_ID);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
+
         BanRequest request = BanRequest.builder()
             .bannedUserId(BANNED_USER_ID)
             .bannedRole(BANNED_ROLE)

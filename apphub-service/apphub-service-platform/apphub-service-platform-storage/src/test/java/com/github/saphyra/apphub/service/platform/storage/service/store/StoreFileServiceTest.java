@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
 import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientFactory;
 import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientWrapper;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -58,11 +57,6 @@ public class StoreFileServiceTest {
     @Mock
     private FtpClientWrapper ftpClient;
 
-    @BeforeEach
-    public void setUp() {
-        given(storeFileProperties.getMaxFileSize()).willReturn(SIZE + 1);
-    }
-
     @Test
     public void createFile_nullExtension() {
         Throwable ex = catchThrowable(() -> underTest.createFile(USER_ID, FILE_NAME, null, SIZE));
@@ -86,6 +80,8 @@ public class StoreFileServiceTest {
 
     @Test
     public void createFile_tooHighSize() {
+        given(storeFileProperties.getMaxFileSize()).willReturn(SIZE + 1);
+
         Throwable ex = catchThrowable(() -> underTest.createFile(USER_ID, FILE_NAME, EXTENSION, SIZE + 2));
 
         ExceptionValidator.validateInvalidParam(ex, "size", "too high");
@@ -93,6 +89,8 @@ public class StoreFileServiceTest {
 
     @Test
     public void createFile() {
+        given(storeFileProperties.getMaxFileSize()).willReturn(SIZE + 1);
+
         given(storedFileFactory.create(USER_ID, FILE_NAME, EXTENSION, SIZE)).willReturn(storedFile);
         given(storedFile.getStoredFileId()).willReturn(STORED_FILE_ID);
 

@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -55,11 +54,6 @@ public class MarkUserForDeletionServiceTest {
     @Mock
     private BanResponse banResponse;
 
-    @BeforeEach
-    public void setUp() {
-        given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
-    }
-
     @Test
     public void nullPassword() {
         MarkUserForDeletionRequest request = MarkUserForDeletionRequest.builder()
@@ -75,6 +69,7 @@ public class MarkUserForDeletionServiceTest {
 
     @Test
     public void nullDate() {
+        given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
         MarkUserForDeletionRequest request = MarkUserForDeletionRequest.builder()
             .date(null)
             .time(TIME)
@@ -88,6 +83,7 @@ public class MarkUserForDeletionServiceTest {
 
     @Test
     public void nullTime() {
+        given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
         MarkUserForDeletionRequest request = MarkUserForDeletionRequest.builder()
             .date(DATE)
             .time(null)
@@ -101,6 +97,7 @@ public class MarkUserForDeletionServiceTest {
 
     @Test
     public void incorrectTime() {
+        given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
         MarkUserForDeletionRequest request = MarkUserForDeletionRequest.builder()
             .date(DATE)
             .time("adf")
@@ -114,6 +111,7 @@ public class MarkUserForDeletionServiceTest {
 
     @Test
     public void markUserForDeletion() {
+        given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
         MarkUserForDeletionRequest request = MarkUserForDeletionRequest.builder()
             .date(DATE)
             .time(TIME)

@@ -73,8 +73,8 @@ public class PriorityServiceTest {
         assertThat(result).containsExactly(model);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void deleteById() {
-        underTest.deleteById(UUID.randomUUID());
+        assertThat(catchThrowable(() -> underTest.deleteById(UUID.randomUUID()))).isInstanceOf(UnsupportedOperationException.class);
     }
 }

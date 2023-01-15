@@ -36,7 +36,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.B
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -165,8 +164,26 @@ public class UpgradeBuildingServiceTest {
     @Captor
     private ArgumentCaptor<Callable<SurfaceResponse>> argumentCaptor;
 
-    @BeforeEach
-    public void setUp() {
+
+    @Test
+    public void constructionAlreadyInProgress() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getUniverse()).willReturn(universe);
+        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(surface.getBuilding()).willReturn(building);
+
+        given(building.getBuildingId()).willReturn(BUILDING_ID);
+
+        given(building.getConstruction()).willReturn(construction);
+
+        Throwable ex = catchThrowable(() -> underTest.upgradeBuilding(USER_ID, PLANET_ID, BUILDING_ID));
+
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS);
+    }
+
+    @Test
+    public void buildingAtMaxLevel() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
         given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
@@ -178,19 +195,6 @@ public class UpgradeBuildingServiceTest {
         given(building.getLevel()).willReturn(LEVEL);
 
         given(allBuildingService.get(DATA_ID)).willReturn(buildingData);
-    }
-
-    @Test
-    public void constructionAlreadyInProgress() {
-        given(building.getConstruction()).willReturn(construction);
-
-        Throwable ex = catchThrowable(() -> underTest.upgradeBuilding(USER_ID, PLANET_ID, BUILDING_ID));
-
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS);
-    }
-
-    @Test
-    public void buildingAtMaxLevel() {
         given(buildingData.getConstructionRequirements()).willReturn(new HashMap<>());
 
         Throwable ex = catchThrowable(() -> underTest.upgradeBuilding(USER_ID, PLANET_ID, BUILDING_ID));
@@ -200,6 +204,17 @@ public class UpgradeBuildingServiceTest {
 
     @Test
     public void upgradeBuilding() throws Exception {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getUniverse()).willReturn(universe);
+        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(surface.getBuilding()).willReturn(building);
+
+        given(building.getBuildingId()).willReturn(BUILDING_ID);
+        given(building.getDataId()).willReturn(DATA_ID);
+        given(building.getLevel()).willReturn(LEVEL);
+
+        given(allBuildingService.get(DATA_ID)).willReturn(buildingData);
         given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.singleValueMap(LEVEL + 1, constructionRequirements));
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());

@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.GameDataIt
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuilding;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
-import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -51,46 +53,46 @@ public class ResourceValidatorTest {
         given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
     }
 
-    @After
+    @AfterEach
     public void validate() {
         verify(gameDataItemValidator).validate(resourceData);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullStorageType() {
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
         given(resourceData.getStorageType()).willReturn(null);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullMaxBatchSize() {
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
         given(resourceData.getMaxProductionBatchSize()).willReturn(null);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullMass() {
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
         given(resourceData.getMass()).willReturn(null);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void noProducer() {
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
         given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
         given(productionBuildingService.values()).willReturn(Collections.emptyList());
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
     @Test

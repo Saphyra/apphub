@@ -22,7 +22,7 @@
 
         <!-- Platform Versions -->
         <versions.spring-boot>3.0.1</versions.spring-boot>
-        <versions.spring-cloud-gateway>2.2.10.RELEASE</versions.spring-cloud-gateway>
+        <versions.spring-cloud-gateway>4.0.0</versions.spring-cloud-gateway>
         <versions.spring-cloud-openfeign>4.0.0</versions.spring-cloud-openfeign>
         <versions.liquibase-core>4.18.0</versions.liquibase-core>
         <versions.postgresql-connector>42.5.1</versions.postgresql-connector>

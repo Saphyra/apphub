@@ -17,7 +17,7 @@ public class EmptySurfaceMapFactoryTest {
     public void createEmptySurfaceMap() {
         SurfaceType[][] result = underTest.createEmptySurfaceMap(2);
 
-        assertThat(result).hasSize(2);
+        assertThat(result).hasNumberOfRows(2);
         assertThat(result[0]).hasSize(2);
         assertThat(result[1]).hasSize(2);
     }

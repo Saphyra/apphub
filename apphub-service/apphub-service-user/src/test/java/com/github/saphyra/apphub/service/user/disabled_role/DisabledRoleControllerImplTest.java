@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleEntity;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleRepository;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,14 +44,10 @@ public class DisabledRoleControllerImplTest {
     @Mock
     private AccessTokenHeader accessTokenHeader;
 
-    @BeforeEach
-    public void setUp() {
-        given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(ROLE, ANOTHER_ROLE));
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-    }
-
     @Test
     public void disableRole_unknownRole() {
+        given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(ROLE, ANOTHER_ROLE));
+
         Throwable ex = catchThrowable(() -> underTest.disableRole(new OneParamRequest<>(PASSWORD), "asd", accessTokenHeader));
 
         verifyException(ex, "unknown or cannot be disabled");
@@ -61,6 +56,9 @@ public class DisabledRoleControllerImplTest {
 
     @Test
     public void disableRole() {
+        given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(ROLE, ANOTHER_ROLE));
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.disableRole(new OneParamRequest<>(PASSWORD), ROLE, accessTokenHeader);
 
         verify(repository).save(new DisabledRoleEntity(ROLE));
@@ -76,6 +74,7 @@ public class DisabledRoleControllerImplTest {
 
     @Test
     public void enableRole() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(repository.existsById(ROLE)).willReturn(true);
 
         underTest.enableRole(new OneParamRequest<>(PASSWORD), ROLE, accessTokenHeader);
@@ -86,6 +85,7 @@ public class DisabledRoleControllerImplTest {
 
     @Test
     public void getDisabledRoles() {
+        given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(ROLE, ANOTHER_ROLE));
         given(repository.findAll()).willReturn(Arrays.asList(new DisabledRoleEntity(ROLE)));
 
         List<DisabledRoleResponse> result = underTest.getDisabledRoles();

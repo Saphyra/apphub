@@ -59,7 +59,7 @@ public class AuthenticationService {
         String encodedAccessToken = accessTokenHeaderConverter.convertDomain(accessToken);
         log.debug("Enriching request with auth header: {}", encodedAccessToken);
 
-        accessTokenExpirationUpdateService.updateExpiration(request.getMethodValue(), request.getURI().getPath(), accessTokenResponse.getAccessTokenId());
+        accessTokenExpirationUpdateService.updateExpiration(request.getMethod(), request.getURI().getPath(), accessTokenResponse.getAccessTokenId());
 
         return authenticationResultHandlerFactory.authorized(encodedAccessToken);
     }

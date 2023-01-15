@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.user.authentication.AuthenticationProperties;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -44,15 +43,9 @@ public class ValidAccessTokenQueryServiceTest {
     @Mock
     private AccessToken accessToken;
 
-    @BeforeEach
-    public void setUp() {
-        given(uuidConverter.convertDomain(ACCESS_TOKEN_ID)).willReturn(ACCESS_TOKEN_ID_STRING);
-        given(authenticationProperties.getAccessTokenExpirationMinutes()).willReturn(EXPIRATION_MINUTES);
-        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
-    }
-
     @Test
     public void notFound() {
+        given(uuidConverter.convertDomain(ACCESS_TOKEN_ID)).willReturn(ACCESS_TOKEN_ID_STRING);
         given(accessTokenDao.findById(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.empty());
 
         Optional<AccessToken> result = underTest.findByAccessTokenId(ACCESS_TOKEN_ID);
@@ -62,6 +55,9 @@ public class ValidAccessTokenQueryServiceTest {
 
     @Test
     public void expired() {
+        given(uuidConverter.convertDomain(ACCESS_TOKEN_ID)).willReturn(ACCESS_TOKEN_ID_STRING);
+        given(authenticationProperties.getAccessTokenExpirationMinutes()).willReturn(EXPIRATION_MINUTES);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         given(accessTokenDao.findById(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.of(accessToken));
         given(accessToken.getLastAccess()).willReturn(CURRENT_DATE.minusMinutes(EXPIRATION_MINUTES).minusMinutes(1));
 
@@ -72,6 +68,9 @@ public class ValidAccessTokenQueryServiceTest {
 
     @Test
     public void persistent() {
+        given(uuidConverter.convertDomain(ACCESS_TOKEN_ID)).willReturn(ACCESS_TOKEN_ID_STRING);
+        given(authenticationProperties.getAccessTokenExpirationMinutes()).willReturn(EXPIRATION_MINUTES);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         given(accessTokenDao.findById(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.of(accessToken));
         given(accessToken.isPersistent()).willReturn(true);
         given(accessToken.getLastAccess()).willReturn(CURRENT_DATE.minusMinutes(EXPIRATION_MINUTES).minusMinutes(1));
@@ -83,6 +82,9 @@ public class ValidAccessTokenQueryServiceTest {
 
     @Test
     public void findByAccessTokenId() {
+        given(uuidConverter.convertDomain(ACCESS_TOKEN_ID)).willReturn(ACCESS_TOKEN_ID_STRING);
+        given(authenticationProperties.getAccessTokenExpirationMinutes()).willReturn(EXPIRATION_MINUTES);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         given(accessTokenDao.findById(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.of(accessToken));
         given(accessToken.getLastAccess()).willReturn(CURRENT_DATE.minusMinutes(EXPIRATION_MINUTES).plusMinutes(1));
 

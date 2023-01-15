@@ -15,7 +15,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.SystemMessag
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -61,13 +60,6 @@ public class LeaveChatRoomServiceTest {
     @Mock
     private ChatRoom chatRoom;
 
-    @BeforeEach
-    public void setUp() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getChat()).willReturn(chat);
-        given(chat.getRooms()).willReturn(CollectionUtils.toList(chatRoom));
-        given(chatRoom.getId()).willReturn(ROOM_ID);
-    }
 
     @Test
     public void leave_allianceRoom() {
@@ -85,6 +77,9 @@ public class LeaveChatRoomServiceTest {
 
     @Test
     public void leave_chatRoomNotFound() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getChat()).willReturn(chat);
+        given(chat.getRooms()).willReturn(CollectionUtils.toList(chatRoom));
         given(chatRoom.getId()).willReturn("asd");
 
         Throwable ex = catchThrowable(() -> underTest.leave(USER_ID, ROOM_ID));
@@ -94,6 +89,10 @@ public class LeaveChatRoomServiceTest {
 
     @Test
     public void leave_notMemberOfRoom() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getChat()).willReturn(chat);
+        given(chat.getRooms()).willReturn(CollectionUtils.toList(chatRoom));
+        given(chatRoom.getId()).willReturn(ROOM_ID);
         given(chatRoom.getMembers()).willReturn(Collections.emptyList());
 
         underTest.leave(USER_ID, ROOM_ID);
@@ -104,6 +103,10 @@ public class LeaveChatRoomServiceTest {
 
     @Test
     public void leave_noMoreMembers() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getChat()).willReturn(chat);
+        given(chat.getRooms()).willReturn(CollectionUtils.toList(chatRoom));
+        given(chatRoom.getId()).willReturn(ROOM_ID);
         given(chatRoom.getMembers()).willReturn(CollectionUtils.toList(USER_ID));
 
         underTest.leave(USER_ID, ROOM_ID);
@@ -114,6 +117,10 @@ public class LeaveChatRoomServiceTest {
 
     @Test
     public void leave() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getChat()).willReturn(chat);
+        given(chat.getRooms()).willReturn(CollectionUtils.toList(chatRoom));
+        given(chatRoom.getId()).willReturn(ROOM_ID);
         given(chatRoom.getMembers()).willReturn(CollectionUtils.toList(USER_ID, ANOTHER_MEMBER));
         given(characterProxy.getCharacterByUserId(USER_ID)).willReturn(SkyXploreCharacterModel.builder().name(CHARACTER_NAME).build());
 

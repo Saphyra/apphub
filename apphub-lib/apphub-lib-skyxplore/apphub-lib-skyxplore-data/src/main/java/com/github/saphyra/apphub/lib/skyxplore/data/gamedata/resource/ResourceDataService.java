@@ -5,7 +5,8 @@ import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

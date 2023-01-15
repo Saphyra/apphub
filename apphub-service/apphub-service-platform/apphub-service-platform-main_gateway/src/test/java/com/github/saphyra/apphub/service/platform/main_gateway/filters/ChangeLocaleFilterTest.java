@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.platform.main_gateway.filters;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.locale.UserSettingLocaleResolver;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -57,15 +56,11 @@ public class ChangeLocaleFilterTest {
     @Mock
     private Mono<Void> mono;
 
-    @BeforeEach
-    public void setUp() {
+    @Test
+    public void filter_changeLocaleEndpoint() {
         given(chain.filter(exchange)).willReturn(mono);
         given(exchange.getRequest()).willReturn(request);
         given(request.getCookies()).willReturn(cookies);
-    }
-
-    @Test
-    public void filter_changeLocaleEndpoint() {
         given(request.getURI()).willReturn(URI.create(Endpoints.ACCOUNT_CHANGE_LANGUAGE));
 
         Mono<Void> result = underTest.filter(exchange, chain);
@@ -77,6 +72,8 @@ public class ChangeLocaleFilterTest {
 
     @Test
     public void filter_notChangeLocaleEndpoint() {
+        given(chain.filter(exchange)).willReturn(mono);
+        given(exchange.getRequest()).willReturn(request);
         given(request.getURI()).willReturn(URI.create(Endpoints.SKYXPLORE_CREATE_OR_UPDATE_CHARACTER));
 
         Mono<Void> result = underTest.filter(exchange, chain);
@@ -88,6 +85,8 @@ public class ChangeLocaleFilterTest {
 
     @Test
     public void filter_error() {
+        given(chain.filter(exchange)).willReturn(mono);
+        given(exchange.getRequest()).willReturn(request);
         RuntimeException exception = new RuntimeException("asd");
         given(request.getURI()).willThrow(exception);
 

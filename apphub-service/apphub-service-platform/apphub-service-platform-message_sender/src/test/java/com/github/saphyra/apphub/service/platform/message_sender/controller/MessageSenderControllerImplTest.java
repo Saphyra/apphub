@@ -12,6 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -32,9 +34,11 @@ public class MessageSenderControllerImplTest {
         underTest = new MessageSenderControllerImpl(Arrays.asList(webSocketHandler));
     }
 
-    @Test(expected = ReportedException.class)
+    @Test
     public void unknownMessageGroup() {
-        underTest.sendMessage(MessageGroup.SKYXPLORE_GAME, message);
+        Throwable ex = catchThrowable(() -> underTest.sendMessage(MessageGroup.SKYXPLORE_GAME, message));
+
+        assertThat(ex).isInstanceOf(ReportedException.class);
     }
 
     @Test

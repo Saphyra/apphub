@@ -3,9 +3,7 @@ package com.github.saphyra.apphub.service.user.data;
 import com.github.saphyra.apphub.api.user.model.response.LanguageResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.service.user.data.LanguageControllerImpl;
 import com.github.saphyra.apphub.service.user.data.service.account.LanguageService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,13 +35,10 @@ public class LanguageControllerImplTest {
     @Mock
     private LanguageResponse languageResponse;
 
-    @BeforeEach
-    public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-    }
-
     @Test
     public void changeLanguage() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.changeLanguage(accessTokenHeader, new OneParamRequest<>(LOCALE));
 
         verify(languageService).changeLanguage(USER_ID, LOCALE);
@@ -60,6 +55,7 @@ public class LanguageControllerImplTest {
 
     @Test
     public void getLanguages() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(languageService.getLanguages(USER_ID)).willReturn(Arrays.asList(languageResponse));
 
         List<LanguageResponse> result = underTest.getLanguages(accessTokenHeader);

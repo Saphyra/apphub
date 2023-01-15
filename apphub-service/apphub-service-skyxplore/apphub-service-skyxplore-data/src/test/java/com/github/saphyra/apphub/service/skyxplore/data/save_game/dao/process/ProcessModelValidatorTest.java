@@ -5,8 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,23 +33,20 @@ public class ProcessModelValidatorTest {
     @Mock
     private ProcessModel model;
 
-    @BeforeEach
-    public void setUp() {
-        given(model.getProcessType()).willReturn(ProcessType.PRODUCTION_ORDER);
-        given(model.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
-        given(model.getLocation()).willReturn(ID);
-        given(model.getLocationType()).willReturn(STRING);
-        given(model.getExternalReference()).willReturn(ID);
-        given(model.getData()).willReturn(Collections.emptyMap());
-    }
-
-    @After
+    @AfterEach
     public void verifyGameItemValidatorCalled() {
         verify(gameItemValidator).validate(model);
     }
 
     @Test
     public void valid() {
+        given(model.getProcessType()).willReturn(ProcessType.PRODUCTION_ORDER);
+        given(model.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
+        given(model.getLocation()).willReturn(ID);
+        given(model.getLocationType()).willReturn(STRING);
+        given(model.getExternalReference()).willReturn(ID);
+        given(model.getData()).willReturn(Collections.emptyMap());
+
         underTest.validate(model);
     }
 
@@ -65,6 +61,7 @@ public class ProcessModelValidatorTest {
 
     @Test
     public void nullStatus() {
+        given(model.getProcessType()).willReturn(ProcessType.PRODUCTION_ORDER);
         given(model.getStatus()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -74,6 +71,8 @@ public class ProcessModelValidatorTest {
 
     @Test
     public void nullLocation() {
+        given(model.getProcessType()).willReturn(ProcessType.PRODUCTION_ORDER);
+        given(model.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
         given(model.getLocation()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -83,6 +82,9 @@ public class ProcessModelValidatorTest {
 
     @Test
     public void nullLocationType() {
+        given(model.getProcessType()).willReturn(ProcessType.PRODUCTION_ORDER);
+        given(model.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
+        given(model.getLocation()).willReturn(ID);
         given(model.getLocationType()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -92,6 +94,10 @@ public class ProcessModelValidatorTest {
 
     @Test
     public void nullExternalReference() {
+        given(model.getProcessType()).willReturn(ProcessType.PRODUCTION_ORDER);
+        given(model.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
+        given(model.getLocation()).willReturn(ID);
+        given(model.getLocationType()).willReturn(STRING);
         given(model.getExternalReference()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -101,6 +107,11 @@ public class ProcessModelValidatorTest {
 
     @Test
     public void nullData() {
+        given(model.getProcessType()).willReturn(ProcessType.PRODUCTION_ORDER);
+        given(model.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
+        given(model.getLocation()).willReturn(ID);
+        given(model.getLocationType()).willReturn(STRING);
+        given(model.getExternalReference()).willReturn(ID);
         given(model.getData()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));

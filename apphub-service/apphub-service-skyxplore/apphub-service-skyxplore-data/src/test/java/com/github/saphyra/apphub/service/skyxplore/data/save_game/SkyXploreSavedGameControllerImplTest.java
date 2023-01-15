@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCre
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameDeletionService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -62,11 +61,6 @@ public class SkyXploreSavedGameControllerImplTest {
     @Mock
     private SavedGameResponse savedGameResponse;
 
-    @BeforeEach
-    public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-    }
-
     @Test
     public void deleteGame() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
@@ -78,6 +72,7 @@ public class SkyXploreSavedGameControllerImplTest {
 
     @Test
     public void getGameViewForLobbyCreation() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(gameViewForLobbyCreationQueryService.getView(USER_ID, GAME_ID)).willReturn(gameViewForLobbyCreation);
 
         GameViewForLobbyCreation result = underTest.getGameForLobbyCreation(GAME_ID, accessTokenHeader);
@@ -121,6 +116,7 @@ public class SkyXploreSavedGameControllerImplTest {
 
     @Test
     public void getSavedGames() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(savedGameQueryService.getSavedGames(USER_ID)).willReturn(Arrays.asList(savedGameResponse));
 
         List<SavedGameResponse> result = underTest.getSavedGames(accessTokenHeader);

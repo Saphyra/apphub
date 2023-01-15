@@ -11,7 +11,6 @@ import com.github.saphyra.apphub.service.user.ban.service.RevokeBanService;
 import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -69,11 +68,6 @@ public class UserEventControllerImplTest {
     @Captor
     private ArgumentCaptor<SendEventRequest<DeleteAccountEvent>> argumentCaptor;
 
-    @BeforeEach
-    public void setUp() {
-        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
-    }
-
     @Test
     public void deleteAccountEvent() {
         DeleteAccountEvent event = new DeleteAccountEvent(USER_ID);
@@ -91,6 +85,7 @@ public class UserEventControllerImplTest {
 
     @Test
     public void triggerAccountDeletion_futureMarkedForDeletionAt() {
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(userDao.getUsersMarkedToDelete()).willReturn(Arrays.asList(user));
         given(user.getMarkedForDeletionAt()).willReturn(CURRENT_TIME.plusSeconds(1));
 
@@ -117,6 +112,7 @@ public class UserEventControllerImplTest {
 
     @Test
     public void triggerAccountDeletion_pastMarkedForDeletionAt() {
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(userDao.getUsersMarkedToDelete()).willReturn(Arrays.asList(user));
         given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
         given(user.getUserId()).willReturn(USER_ID);
