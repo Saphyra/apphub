@@ -4,9 +4,6 @@ import com.github.saphyra.apphub.api.platform.storage.model.CreateFileRequest;
 import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.platform.storage.service.store.StoreFileService;
-import jakarta.servlet.http.HttpServletRequest;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileUploadException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -14,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,13 +52,7 @@ public class StorageControllerImplTest {
     private AccessTokenHeader accessTokenHeader;
 
     @Mock
-    private HttpServletRequest request;
-
-    @Mock
-    private FileItemStream formFieldStream;
-
-    @Mock
-    private FileItemStream notFormFieldStream;
+    private MultipartFile multipartFile;
 
     @Mock
     private InputStream inputStream;
@@ -90,8 +82,13 @@ public class StorageControllerImplTest {
 
     @Test
     @Disabled
-    public void uploadFile() throws IOException, FileUploadException {
-        //TODO
+    public void uploadFile() throws IOException {
+        given(multipartFile.getSize()).willReturn(SIZE);
+        given(multipartFile.getInputStream()).willReturn(inputStream);
+
+        underTest.uploadFile(STORED_FILE_ID, multipartFile, accessTokenHeader);
+
+        verify(storeFileService).uploadFile(USER_ID, STORED_FILE_ID, inputStream, SIZE);
     }
 
     @Test

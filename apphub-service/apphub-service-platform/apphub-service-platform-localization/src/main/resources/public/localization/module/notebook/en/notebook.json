@@ -609,6 +609,7 @@
     "list-item-title-copied": "Title copied to clipboard",
     "no-file-selected": "No file selected.",
     "image-saved": "Image saved.",
-    "file-saved": "File saved."
+    "file-saved": "File saved.",
+    "file-too-big": "File size is too big. Maximum 2GB."
   }
 }

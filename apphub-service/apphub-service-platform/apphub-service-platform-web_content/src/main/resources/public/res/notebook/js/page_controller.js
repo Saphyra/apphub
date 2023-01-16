@@ -1,3 +1,5 @@
+const FILE_SIZE_LIMIT = 2147483648;
+
 scriptLoader.loadScript("/res/common/js/animation/spinner.js");
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/common/js/settings.js");

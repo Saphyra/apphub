@@ -44,8 +44,9 @@ public class StoreFileService {
 
     @SneakyThrows
     @Transactional
-    public void uploadFile(UUID userId, UUID storedFileId, InputStream file) {
-        log.info("File size: {}", file.available());
+    public void uploadFile(UUID userId, UUID storedFileId, InputStream file, Long size) {
+        ValidationUtil.maximum(size, storeFileProperties.getMaxFileSize(), "size");
+
         StoredFile storedFile = storedFileDao.findByIdValidated(storedFileId);
 
         if (!userId.equals(storedFile.getUserId())) {

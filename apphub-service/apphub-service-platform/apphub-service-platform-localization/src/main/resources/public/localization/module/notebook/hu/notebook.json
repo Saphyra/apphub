@@ -603,6 +603,7 @@
     "list-item-title-copied": "Cím vágólapra másolva",
     "no-file-selected": "Nincs fájl kiválasztva.",
     "image-saved": "Kép elmentve.",
-    "file-saved": "Fájl elmentve."
+    "file-saved": "Fájl elmentve.",
+    "file-too-big": "Fájlméret túl nagy. Maximum 2GB."
   }
 }

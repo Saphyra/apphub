@@ -88,6 +88,11 @@
             return;
         }
 
+        if(input.files[0].size > FILE_SIZE_LIMIT){
+            notificationService.showError(localization.getAdditionalContent("file-too-big"));
+            return;
+        }
+
         const body = {
             title: title,
             parent: currentCategoryId,

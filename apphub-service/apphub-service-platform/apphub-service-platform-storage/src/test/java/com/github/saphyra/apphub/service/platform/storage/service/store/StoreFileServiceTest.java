@@ -102,12 +102,19 @@ public class StoreFileServiceTest {
     }
 
     @Test
+    public void uploadFile_tooBig() {
+        Throwable ex = catchThrowable(() -> underTest.uploadFile(USER_ID, STORED_FILE_ID, inputStream, SIZE + 2));
+
+        ExceptionValidator.validateInvalidParam(ex, "size", "too high");
+    }
+
+    @Test
     public void uploadFile_forbiddenOperation() {
         given(storedFileDao.findByIdValidated(STORED_FILE_ID)).willReturn(storedFile);
 
         given(storedFile.getUserId()).willReturn(UUID.randomUUID());
 
-        Throwable ex = catchThrowable(() -> underTest.uploadFile(USER_ID, STORED_FILE_ID, inputStream));
+        Throwable ex = catchThrowable(() -> underTest.uploadFile(USER_ID, STORED_FILE_ID, inputStream, 0L));
 
         ExceptionValidator.validateForbiddenOperation(ex);
     }
@@ -119,7 +126,7 @@ public class StoreFileServiceTest {
         given(storedFile.getUserId()).willReturn(USER_ID);
         given(storedFile.isFileUploaded()).willReturn(true);
 
-        Throwable ex = catchThrowable(() -> underTest.uploadFile(USER_ID, STORED_FILE_ID, inputStream));
+        Throwable ex = catchThrowable(() -> underTest.uploadFile(USER_ID, STORED_FILE_ID, inputStream, 0L));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS);
     }
@@ -134,7 +141,7 @@ public class StoreFileServiceTest {
         given(ftpClientFactory.create()).willReturn(ftpClient);
         given(uuidConverter.convertDomain(STORED_FILE_ID)).willReturn(FILE_NAME);
 
-        underTest.uploadFile(USER_ID, STORED_FILE_ID, inputStream);
+        underTest.uploadFile(USER_ID, STORED_FILE_ID, inputStream, 0L);
 
         verify(ftpClient).storeFile(FILE_NAME, inputStream);
         verify(storedFile).setFileUploaded(true);

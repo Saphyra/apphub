@@ -5,13 +5,13 @@ import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.api.platform.storage.server.StorageController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.platform.storage.service.store.StoreFileService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.io.IOException;
@@ -34,8 +34,8 @@ public class StorageControllerImpl implements StorageController {
     }
 
     @Override
-    public void uploadFile(UUID storedFileId, HttpServletRequest request, AccessTokenHeader accessTokenHeader) throws IOException {
-        storeFileService.uploadFile(accessTokenHeader.getUserId(), storedFileId, request.getInputStream()); //TODO fix upload
+    public void uploadFile(UUID storedFileId, MultipartFile file, AccessTokenHeader accessTokenHeader) throws IOException {
+        storeFileService.uploadFile(accessTokenHeader.getUserId(), storedFileId, file.getInputStream(), file.getSize());
     }
 
     @Override

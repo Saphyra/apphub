@@ -87,7 +87,7 @@ public class DuplicateFileServiceTest {
             .run();
 
         verify(accessTokenProvider).set(accessTokenHeader);
-        verify(storeFileService).uploadFile(USER_ID, NEW_STORED_FILE_ID, inputStream);
+        verify(storeFileService).uploadFile(USER_ID, NEW_STORED_FILE_ID, inputStream, 0L);
         verify(ftpClient).close();
         verify(accessTokenProvider).clear();
     }

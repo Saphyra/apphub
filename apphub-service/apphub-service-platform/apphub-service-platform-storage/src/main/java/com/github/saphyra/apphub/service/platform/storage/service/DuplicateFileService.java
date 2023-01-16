@@ -33,7 +33,7 @@ public class DuplicateFileService {
 
             DownloadResult existingFile = downloadFileService.downloadFile(userId, storedFileId);
             try {
-                storeFileService.uploadFile(userId, newStoredFileId, existingFile.getInputStream());
+                storeFileService.uploadFile(userId, newStoredFileId, existingFile.getInputStream(), 0L);
             } finally {
                 existingFile.getFtpClient()
                     .close();

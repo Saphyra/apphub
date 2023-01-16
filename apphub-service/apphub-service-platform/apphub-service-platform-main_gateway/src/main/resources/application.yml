@@ -6,6 +6,9 @@ spring:
     - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   cloud:
     gateway:
+      predicate:
+        weight:
+          enabled: false
       globalcors:
         enabled: false
       routes:
