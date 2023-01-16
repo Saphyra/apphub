@@ -1,18 +1,18 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.repository;
 
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
 public class ErrorReportRepositoryTest {
     private static final String ERROR_REPORT_ID_1 = "error-report-id-1";
@@ -23,7 +23,7 @@ public class ErrorReportRepositoryTest {
     @Autowired
     private ErrorReportRepository underTest;
 
-    @After
+    @AfterEach
     public void clear() {
         underTest.deleteAll();
     }

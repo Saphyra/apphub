@@ -8,12 +8,12 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -28,6 +28,7 @@ import java.util.UUID;
 import java.util.Vector;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -35,7 +36,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DefaultWebSocketHandlerTest {
     private static final int WEB_SOCKET_SESSION_EXPIRATION_SECONDS = 342;
     private static final String USER_ID_STRING = "user-id";
@@ -75,7 +76,7 @@ public class DefaultWebSocketHandlerTest {
     @Mock
     private SessionWrapper sessionWrapper;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         WebSocketHandlerContext context = WebSocketHandlerContext.builder()
             .objectMapperWrapper(objectMapperWrapper)
@@ -86,22 +87,23 @@ public class DefaultWebSocketHandlerTest {
             .build();
 
         underTest = new DefaultWebSocketHandlerImpl(context, templateMethods);
-
-        given(session.getPrincipal()).willReturn(principal);
-        given(principal.getName()).willReturn(USER_ID_STRING);
-        given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
-        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void afterConnectionEstablished_emptyPrincipal() {
         given(session.getPrincipal()).willReturn(null);
 
-        underTest.afterConnectionEstablished(session);
+        Throwable ex = catchThrowable(() -> underTest.afterConnectionEstablished(session));
+
+        assertThat(ex).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     public void afterConnectionEstablished() throws IOException {
+        given(session.getPrincipal()).willReturn(principal);
+        given(principal.getName()).willReturn(USER_ID_STRING);
+        given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         underTest.getRetryEvents().put(USER_ID, new Vector<>(Arrays.asList(webSocketEvent)));
         given(objectMapperWrapper.writeValueAsString(any())).willReturn(MESSAGE_PAYLOAD);
 
@@ -115,6 +117,9 @@ public class DefaultWebSocketHandlerTest {
 
     @Test
     public void afterConnectionClosed() {
+        given(session.getPrincipal()).willReturn(principal);
+        given(principal.getName()).willReturn(USER_ID_STRING);
+        given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
         underTest.getSessionMap().put(USER_ID, SessionWrapper.builder().build());
 
         underTest.afterConnectionClosed(session, CloseStatus.NORMAL);
@@ -125,6 +130,10 @@ public class DefaultWebSocketHandlerTest {
 
     @Test
     public void handleTextMessage() {
+        given(session.getPrincipal()).willReturn(principal);
+        given(principal.getName()).willReturn(USER_ID_STRING);
+        given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         underTest.getSessionMap()
             .put(USER_ID, sessionWrapper);
 
@@ -139,6 +148,7 @@ public class DefaultWebSocketHandlerTest {
 
     @Test
     public void sendPingRequest() throws IOException {
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         Map<UUID, SessionWrapper> sessionMap = underTest.getSessionMap();
         sessionMap.put(USER_ID, sessionWrapper);
         UUID userId = UUID.randomUUID();
@@ -162,6 +172,7 @@ public class DefaultWebSocketHandlerTest {
 
     @Test
     public void cleanUp() {
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         Map<UUID, SessionWrapper> sessionMap = underTest.getSessionMap();
         sessionMap.put(USER_ID, sessionWrapper);
         UUID userId = UUID.randomUUID();
@@ -179,6 +190,7 @@ public class DefaultWebSocketHandlerTest {
 
     @Test
     public void sendEvent() throws IOException {
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         Map<UUID, SessionWrapper> sessionMap = underTest.getSessionMap();
         sessionMap.put(USER_ID, sessionWrapper);
         UUID userId = UUID.randomUUID();
@@ -202,6 +214,7 @@ public class DefaultWebSocketHandlerTest {
 
     @Test
     public void sendEvent_nullRecipients() throws IOException {
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         Map<UUID, SessionWrapper> sessionMap = underTest.getSessionMap();
         sessionMap.put(USER_ID, sessionWrapper);
         UUID userId = UUID.randomUUID();

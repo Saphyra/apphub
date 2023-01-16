@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -13,7 +13,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AccessTokenIdConverterTest {
     private static final String ACCESS_TOKEN_ID_STRING = "access-token-id";
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();

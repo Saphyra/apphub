@@ -4,11 +4,11 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DeleteGameItemServiceTest {
     private static final UUID ID = UUID.randomUUID();
 
@@ -27,7 +27,7 @@ public class DeleteGameItemServiceTest {
 
     private DeleteGameItemService underTest;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         underTest = new DeleteGameItemService(Arrays.asList(gameItemService));
     }

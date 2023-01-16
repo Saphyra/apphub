@@ -6,12 +6,12 @@ import com.github.saphyra.apphub.lib.geometry.RandomCoordinateProvider;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.SolarSystemProperties;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PlanetPlaceServiceTest {
     private static final int SYSTEM_RADIUS = 234;
     private static final int MIN_DISTANCE = 2355;
@@ -47,7 +47,7 @@ public class PlanetPlaceServiceTest {
     @Mock
     private Coordinate existingCoordinate;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(properties.getSolarSystem()).willReturn(solarSystemProperties);
         given(solarSystemProperties.getMinPlanetDistance()).willReturn(MIN_DISTANCE);

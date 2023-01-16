@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.platform.localization.client.LocalizationClient;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
@@ -19,21 +19,21 @@ import io.restassured.response.Response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
@@ -46,7 +46,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
@@ -85,12 +85,12 @@ public class EventGatewayControllerTestIt {
     @Captor
     ArgumentCaptor<HttpEntity<SendEventRequest<?>>> argumentCaptor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(localizationClient.translate("INVALID_PARAM", "hu")).willReturn(INVALID_PARAM_LOCALIZED_MESSAGE);
     }
 
-    @After
+    @AfterEach
     public void clear() {
         eventProcessorDao.deleteAll();
     }

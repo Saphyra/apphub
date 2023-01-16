@@ -3,11 +3,11 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EmptySurfaceProviderTest {
     @Mock
     private MatchingSurfaceTypeFilter matchingSurfaceTypeFilter;

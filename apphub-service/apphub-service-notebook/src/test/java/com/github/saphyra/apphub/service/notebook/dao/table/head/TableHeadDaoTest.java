@@ -2,11 +2,11 @@ package com.github.saphyra.apphub.service.notebook.dao.table.head;
 
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class TableHeadDaoTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String USER_ID_STRING = "user-id";
@@ -42,7 +42,7 @@ public class TableHeadDaoTest {
     @Mock
     private TableHead domain;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         underTest = new TableHeadDao(converter, repository, uuidConverter);
     }

@@ -6,12 +6,12 @@ import com.github.saphyra.apphub.api.diary.model.RepetitionType;
 import com.github.saphyra.apphub.service.diary.service.ReferenceDateValidator;
 import com.github.saphyra.apphub.service.diary.service.event.service.EventTitleValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -21,7 +21,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CreateEventRequestValidatorTest {
     private static final String TITLE = "title";
     private static final Integer REPETITION_DAYS = 435;
@@ -41,7 +41,7 @@ public class CreateEventRequestValidatorTest {
     @Mock
     private ReferenceDate referenceDate;
 
-    @After
+    @AfterEach
     public void validate() {
         verify(eventTitleValidator).validate(TITLE);
         verify(referenceDateValidator).validate(referenceDate);

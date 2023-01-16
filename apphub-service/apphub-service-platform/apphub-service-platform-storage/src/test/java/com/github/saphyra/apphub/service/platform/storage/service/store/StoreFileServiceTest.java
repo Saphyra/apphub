@@ -7,11 +7,11 @@ import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
 import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientFactory;
 import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientWrapper;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.io.InputStream;
@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class StoreFileServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String FILE_NAME = "file-name";
@@ -41,6 +41,9 @@ public class StoreFileServiceTest {
 
     @Mock
     private UuidConverter uuidConverter;
+
+    @Mock
+    private StoreFileProperties storeFileProperties;
 
     @InjectMocks
     private StoreFileService underTest;
@@ -76,7 +79,18 @@ public class StoreFileServiceTest {
     }
 
     @Test
+    public void createFile_tooHighSize() {
+        given(storeFileProperties.getMaxFileSize()).willReturn(SIZE + 1);
+
+        Throwable ex = catchThrowable(() -> underTest.createFile(USER_ID, FILE_NAME, EXTENSION, SIZE + 2));
+
+        ExceptionValidator.validateInvalidParam(ex, "size", "too high");
+    }
+
+    @Test
     public void createFile() {
+        given(storeFileProperties.getMaxFileSize()).willReturn(SIZE + 1);
+
         given(storedFileFactory.create(USER_ID, FILE_NAME, EXTENSION, SIZE)).willReturn(storedFile);
         given(storedFile.getStoredFileId()).willReturn(STORED_FILE_ID);
 

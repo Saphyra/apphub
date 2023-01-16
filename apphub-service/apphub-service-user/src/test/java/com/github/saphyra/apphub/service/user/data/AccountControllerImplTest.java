@@ -16,12 +16,11 @@ import com.github.saphyra.apphub.service.user.data.service.account.ChangeUsernam
 import com.github.saphyra.apphub.service.user.data.service.account.DeleteAccountService;
 import com.github.saphyra.apphub.service.user.data.service.register.RegistrationService;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
@@ -33,7 +32,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AccountControllerImplTest {
     private static final UUID USER_ID_1 = UUID.randomUUID();
     private static final String LOCALE = "locale";
@@ -82,13 +81,10 @@ public class AccountControllerImplTest {
     @Mock
     private User user;
 
-    @Before
-    public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
-    }
-
     @Test
     public void changeEmail() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+
         underTest.changeEmail(accessTokenHeader, changeEmailRequest);
 
         verify(changeEmailService).changeEmail(USER_ID_1, changeEmailRequest);
@@ -96,6 +92,8 @@ public class AccountControllerImplTest {
 
     @Test
     public void changeUsername() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+
         underTest.changeUsername(accessTokenHeader, changeUsernameRequest);
 
         verify(changeUsernameService).changeUsername(USER_ID_1, changeUsernameRequest);
@@ -103,6 +101,8 @@ public class AccountControllerImplTest {
 
     @Test
     public void changePassword() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+
         underTest.changePassword(accessTokenHeader, changePasswordRequest);
 
         verify(changePasswordService).changePassword(USER_ID_1, changePasswordRequest);
@@ -110,6 +110,8 @@ public class AccountControllerImplTest {
 
     @Test
     public void deleteAccount() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+
         underTest.deleteAccount(accessTokenHeader, new OneParamRequest<>(PASSWORD));
 
         verify(deleteAccountService).deleteAccount(USER_ID_1, PASSWORD);
@@ -134,6 +136,8 @@ public class AccountControllerImplTest {
 
     @Test
     public void searchAccounts_tooShort() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+
         Throwable ex = catchThrowable(() -> underTest.searchAccount(new OneParamRequest<>("as"), false, accessTokenHeader));
 
         ExceptionValidator.validateInvalidParam(ex, "value", "too short");
@@ -141,6 +145,8 @@ public class AccountControllerImplTest {
 
     @Test
     public void searchAccounts_filterOwnAccount() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+
         given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user));
         given(user.getUserId()).willReturn(USER_ID_1);
 
@@ -151,6 +157,7 @@ public class AccountControllerImplTest {
 
     @Test
     public void searchAccounts_filterMarkedForDeletion() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
         given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user, user));
         given(user.isMarkedForDeletion())
             .willReturn(true)
@@ -170,6 +177,7 @@ public class AccountControllerImplTest {
 
     @Test
     public void searchAccounts_includeMarkedForDeletion() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
         given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user, user));
         given(user.getUserId()).willReturn(USER_ID_2);
         given(user.getEmail()).willReturn(EMAIL);

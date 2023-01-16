@@ -10,12 +10,11 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.UUID;
@@ -23,7 +22,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SkyXplorePageControllerTest {
     private static final String LOCALE = "locale";
     private static final String ACCESS_TOKEN_HEADER_STRING = "access-token-header";
@@ -64,15 +63,10 @@ public class SkyXplorePageControllerTest {
     @Mock
     private SkyXploreCharacterModel character;
 
-    @Before
-    public void setUp() {
-        given(accessTokenHeaderConverter.convertDomain(accessTokenHeader)).willReturn(ACCESS_TOKEN_HEADER_STRING);
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
-    }
-
     @Test
     public void mainMenu_characterDoesNotExist() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
         given(characterClient.exists(USER_ID, LOCALE)).willReturn(false);
 
         ModelAndView result = underTest.mainMenu(accessTokenHeader);
@@ -82,6 +76,8 @@ public class SkyXplorePageControllerTest {
 
     @Test
     public void mainMenu() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
         given(characterClient.exists(USER_ID, LOCALE)).willReturn(true);
 
         ModelAndView result = underTest.mainMenu(accessTokenHeader);
@@ -91,6 +87,8 @@ public class SkyXplorePageControllerTest {
 
     @Test
     public void character_notFound() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
         given(characterClient.exists(USER_ID, LOCALE)).willReturn(false);
         given(userDataClient.getUsernameByUserId(USER_ID, LOCALE)).willReturn(USERNAME);
 
@@ -103,6 +101,8 @@ public class SkyXplorePageControllerTest {
 
     @Test
     public void character() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
         given(characterClient.exists(USER_ID, LOCALE)).willReturn(true);
         given(characterClient.internalGetCharacterByUserId(USER_ID, LOCALE)).willReturn(character);
         given(character.getName()).willReturn(CHARACTER_NAME);
@@ -116,6 +116,7 @@ public class SkyXplorePageControllerTest {
 
     @Test
     public void lobby_userInGame() {
+        given(accessTokenHeaderConverter.convertDomain(accessTokenHeader)).willReturn(ACCESS_TOKEN_HEADER_STRING);
         given(lobbyClient.lobbyForPage(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(lobbyViewForPage);
         given(lobbyViewForPage.isInLobby()).willReturn(false);
         given(gameClient.isUserInGame(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(true);
@@ -127,6 +128,7 @@ public class SkyXplorePageControllerTest {
 
     @Test
     public void lobby_userNotInLobby() {
+        given(accessTokenHeaderConverter.convertDomain(accessTokenHeader)).willReturn(ACCESS_TOKEN_HEADER_STRING);
         given(lobbyClient.lobbyForPage(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(lobbyViewForPage);
         given(lobbyViewForPage.isInLobby()).willReturn(false);
         given(gameClient.isUserInGame(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(false);
@@ -138,6 +140,8 @@ public class SkyXplorePageControllerTest {
 
     @Test
     public void lobby() {
+        given(accessTokenHeaderConverter.convertDomain(accessTokenHeader)).willReturn(ACCESS_TOKEN_HEADER_STRING);
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(lobbyClient.lobbyForPage(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(lobbyViewForPage);
         given(lobbyViewForPage.isInLobby()).willReturn(true);
         given(lobbyViewForPage.getHost()).willReturn(HOST);
@@ -157,6 +161,7 @@ public class SkyXplorePageControllerTest {
 
     @Test
     public void game_notInGame() {
+        given(accessTokenHeaderConverter.convertDomain(accessTokenHeader)).willReturn(ACCESS_TOKEN_HEADER_STRING);
         given(gameClient.isUserInGame(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(false);
 
         ModelAndView result = underTest.game(accessTokenHeader, LOCALE);
@@ -166,6 +171,8 @@ public class SkyXplorePageControllerTest {
 
     @Test
     public void game() {
+        given(accessTokenHeaderConverter.convertDomain(accessTokenHeader)).willReturn(ACCESS_TOKEN_HEADER_STRING);
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(gameClient.isUserInGame(ACCESS_TOKEN_HEADER_STRING, LOCALE)).willReturn(true);
 
         ModelAndView result = underTest.game(accessTokenHeader, LOCALE);

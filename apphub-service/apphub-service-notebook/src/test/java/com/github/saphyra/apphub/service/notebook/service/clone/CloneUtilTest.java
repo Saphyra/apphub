@@ -5,19 +5,19 @@ import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistIt
 import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHead;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoin;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CloneUtilTest {
     private static final UUID ORIGINAL_PARENT = UUID.randomUUID();
     private static final UUID ORIGINAL_ID = UUID.randomUUID();
@@ -34,7 +34,7 @@ public class CloneUtilTest {
     @InjectMocks
     private CloneUtil underTest;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(idGenerator.randomUuid()).willReturn(NEW_ID);
     }

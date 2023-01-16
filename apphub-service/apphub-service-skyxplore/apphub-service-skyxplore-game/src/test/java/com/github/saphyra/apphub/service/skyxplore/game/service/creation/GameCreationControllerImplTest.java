@@ -3,17 +3,17 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreLoadGameRequest;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.LoadGameService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.concurrent.BlockingQueue;
 
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class GameCreationControllerImplTest {
     @Mock
     private BlockingQueue<SkyXploreGameCreationRequest> requests;

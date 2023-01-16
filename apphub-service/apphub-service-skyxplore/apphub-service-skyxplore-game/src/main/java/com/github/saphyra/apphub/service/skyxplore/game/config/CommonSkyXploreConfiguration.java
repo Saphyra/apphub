@@ -1,12 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.config;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
 @Configuration
 @Validated

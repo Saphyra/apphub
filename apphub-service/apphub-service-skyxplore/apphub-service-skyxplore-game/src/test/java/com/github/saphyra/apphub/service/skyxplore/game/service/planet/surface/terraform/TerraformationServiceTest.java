@@ -38,14 +38,13 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.b
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
@@ -60,7 +59,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class TerraformationServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
@@ -166,17 +165,6 @@ public class TerraformationServiceTest {
     @Captor
     private ArgumentCaptor<Callable<SurfaceResponse>> argumentCaptor;
 
-    @Before
-    public void setUp() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(game.getGameId()).willReturn(GAME_ID);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
-        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
-        given(surface.getSurfaceType()).willReturn(SurfaceType.DESERT);
-    }
-
     @Test
     public void invalidSurfaceType() {
         Throwable ex = catchThrowable(() -> underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, "afe"));
@@ -186,6 +174,11 @@ public class TerraformationServiceTest {
 
     @Test
     public void terraformationAlreadyInProgress() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getUniverse()).willReturn(universe);
+        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surface.getTerraformation()).willReturn(construction);
 
         Throwable ex = catchThrowable(() -> underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name()));
@@ -195,6 +188,11 @@ public class TerraformationServiceTest {
 
     @Test
     public void surfaceNotEmpty() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getUniverse()).willReturn(universe);
+        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surface.getBuilding()).willReturn(building);
 
         Throwable ex = catchThrowable(() -> underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name()));
@@ -204,6 +202,12 @@ public class TerraformationServiceTest {
 
     @Test
     public void surfaceTypeCannotBeTerraformed() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getUniverse()).willReturn(universe);
+        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
+        given(surface.getSurfaceType()).willReturn(SurfaceType.DESERT);
         given(terraformingPossibilitiesService.getOptional(SurfaceType.DESERT)).willReturn(Optional.empty());
 
         Throwable ex = catchThrowable(() -> underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name()));
@@ -213,6 +217,12 @@ public class TerraformationServiceTest {
 
     @Test
     public void surfaceCannotBeTerraformedToGivenType() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getUniverse()).willReturn(universe);
+        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
+        given(surface.getSurfaceType()).willReturn(SurfaceType.DESERT);
         given(terraformingPossibilitiesService.getOptional(SurfaceType.DESERT)).willReturn(Optional.of(new TerraformingPossibilities()));
 
         Throwable ex = catchThrowable(() -> underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name()));
@@ -222,6 +232,13 @@ public class TerraformationServiceTest {
 
     @Test
     public void terraform() throws Exception {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getUniverse()).willReturn(universe);
+        given(game.getGameId()).willReturn(GAME_ID);
+        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
+        given(surface.getSurfaceType()).willReturn(SurfaceType.DESERT);
         given(terraformingPossibilitiesService.getOptional(SurfaceType.DESERT)).willReturn(Optional.of(new TerraformingPossibilities(List.of(terraformingPossibility))));
         given(terraformingPossibility.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(terraformingPossibility.getConstructionRequirements()).willReturn(constructionRequirements);

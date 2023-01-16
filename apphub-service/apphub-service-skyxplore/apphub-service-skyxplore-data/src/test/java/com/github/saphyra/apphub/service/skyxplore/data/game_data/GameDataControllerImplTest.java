@@ -12,11 +12,11 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.Terraf
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilitiesService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibility;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class GameDataControllerImplTest {
     private static final String DATA_ID = "data-id";
     private static final String BUILDING_DATA_ID = "building-data-id";
@@ -46,7 +46,7 @@ public class GameDataControllerImplTest {
     @Mock
     private TerraformingPossibility terraformingPossibility;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(gameDataItem.getId()).willReturn(DATA_ID);
         dataService.put(DATA_ID, gameDataItem);

@@ -2,17 +2,17 @@ package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.user.model.request.BanRequest;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class BanRequestValidatorTest {
     private static final UUID BANNED_USER_ID = UUID.randomUUID();
     private static final String BANNED_ROLE = "banned-role";

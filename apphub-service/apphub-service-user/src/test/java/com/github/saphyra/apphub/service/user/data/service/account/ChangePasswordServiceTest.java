@@ -7,12 +7,12 @@ import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.service.user.data.service.validator.PasswordValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ChangePasswordServiceTest {
     private static final String NEW_PASSWORD = "new-password";
     private static final UUID USER_ID = UUID.randomUUID();
@@ -46,7 +46,7 @@ public class ChangePasswordServiceTest {
     @Mock
     private User user;
 
-    @After
+    @AfterEach
     public void check() {
         verify(passwordValidator).validatePassword(NEW_PASSWORD, "newPassword");
     }

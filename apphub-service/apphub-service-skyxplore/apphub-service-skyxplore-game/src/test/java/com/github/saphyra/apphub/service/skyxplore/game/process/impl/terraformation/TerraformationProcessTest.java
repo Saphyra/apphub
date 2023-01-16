@@ -19,23 +19,24 @@ import com.github.saphyra.apphub.service.skyxplore.game.process.impl.ProductionO
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.UseAllocatedResourceService;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order.ProductionOrderProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcess;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class TerraformationProcessTest {
     private static final UUID PROCESS_ID = UUID.randomUUID();
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
@@ -88,7 +89,7 @@ public class TerraformationProcessTest {
     @Mock
     private FinishTerraformationService finishTerraformationService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         setUp(ProcessStatus.CREATED);
     }
@@ -219,9 +220,9 @@ public class TerraformationProcessTest {
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void cleanup() {
-        underTest.cleanup(syncCache);
+        assertThat(catchThrowable(() -> underTest.cleanup(syncCache))).isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test

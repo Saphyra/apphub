@@ -2,12 +2,11 @@ package com.github.saphyra.apphub.service.skyxplore.data.character.dao;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.NotLoggedException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,10 +14,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CharacterDaoTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String USER_ID_STRING = "user-id";
@@ -42,13 +42,9 @@ public class CharacterDaoTest {
     @Mock
     private SkyXploreCharacterEntity entity;
 
-    @Before
-    public void setUp() {
-        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-    }
-
     @Test
     public void deleteByUserId() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(repository.existsById(USER_ID_STRING)).willReturn(true);
 
         underTest.deleteByUserId(USER_ID);
@@ -58,6 +54,8 @@ public class CharacterDaoTest {
 
     @Test
     public void exists() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+
         underTest.exists(USER_ID);
 
         verify(repository).existsById(USER_ID_STRING);
@@ -75,6 +73,7 @@ public class CharacterDaoTest {
 
     @Test
     public void findById() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(repository.findById(USER_ID_STRING)).willReturn(Optional.of(entity));
         given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
 
@@ -83,15 +82,19 @@ public class CharacterDaoTest {
         assertThat(result).contains(domain);
     }
 
-    @Test(expected = NotLoggedException.class)
+    @Test
     public void findByIdValidated_notFound() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(repository.findById(USER_ID_STRING)).willReturn(Optional.empty());
 
-        underTest.findByIdValidated(USER_ID);
+        Throwable ex = catchThrowable(() -> underTest.findByIdValidated(USER_ID));
+
+        assertThat(ex).isInstanceOf(NotLoggedException.class);
     }
 
     @Test
     public void findByIdValidated_found() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(repository.findById(USER_ID_STRING)).willReturn(Optional.of(entity));
         given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
 

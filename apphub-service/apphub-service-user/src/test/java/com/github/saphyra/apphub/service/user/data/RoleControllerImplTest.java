@@ -9,12 +9,11 @@ import com.github.saphyra.apphub.service.user.data.service.role.RoleAdditionServ
 import com.github.saphyra.apphub.service.user.data.service.role.RoleQueryService;
 import com.github.saphyra.apphub.service.user.data.service.role.RoleRemovalService;
 import com.github.saphyra.apphub.service.user.data.service.role.RoleToAllService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class RoleControllerImplTest {
     private static final String QUERY_STRING = "query-string";
     private static final String ROLE = "role";
@@ -58,11 +57,6 @@ public class RoleControllerImplTest {
     @Mock
     private AccessTokenHeader accessTokenHeader;
 
-    @Before
-    public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-    }
-
     @Test
     public void getRoles() {
         given(roleQueryService.getRoles(QUERY_STRING)).willReturn(Arrays.asList(userRoleResponse));
@@ -88,6 +82,8 @@ public class RoleControllerImplTest {
 
     @Test
     public void addToAll() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.addToAll(new OneParamRequest<>(PASSWORD), ROLE, accessTokenHeader);
 
         verify(roleToAllService).addToAll(USER_ID, PASSWORD, ROLE);
@@ -95,6 +91,8 @@ public class RoleControllerImplTest {
 
     @Test
     public void removeFromAll() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.removeFromAll(new OneParamRequest<>(PASSWORD), ROLE, accessTokenHeader);
 
         verify(roleToAllService).removeFromAll(USER_ID, PASSWORD, ROLE);

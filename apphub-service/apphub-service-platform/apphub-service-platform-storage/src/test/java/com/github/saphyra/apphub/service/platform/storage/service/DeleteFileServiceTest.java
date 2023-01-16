@@ -7,11 +7,11 @@ import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
 import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientFactory;
 import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientWrapper;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DeleteFileServiceTest {
     private static final UUID STORED_FILE_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();

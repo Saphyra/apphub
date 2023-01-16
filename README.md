@@ -52,6 +52,8 @@ The app's purpose is to provide an easy-to extend frame for multiple application
   To use both namespace in parallel the recommended RAM amount is 18 GB.)
 * System Administrator access
 * Kubectl installed
+* maven installed
+* JDK17 installed
 
 The system is configured to work with AMD Ryzen R9 5900X and 64GB RAM. The configurations can be changed to work with less resources.
 

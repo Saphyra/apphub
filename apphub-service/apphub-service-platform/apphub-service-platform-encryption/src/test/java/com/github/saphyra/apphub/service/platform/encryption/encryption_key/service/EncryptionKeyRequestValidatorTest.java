@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.platform.encryption.encryption_key.ser
 import com.github.saphyra.apphub.api.platform.encryption.model.DataType;
 import com.github.saphyra.apphub.api.platform.encryption.model.EncryptionKey;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 

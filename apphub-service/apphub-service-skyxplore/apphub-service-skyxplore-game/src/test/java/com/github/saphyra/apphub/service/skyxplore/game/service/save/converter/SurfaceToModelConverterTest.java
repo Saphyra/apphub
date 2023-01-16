@@ -11,11 +11,11 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +24,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SurfaceToModelConverterTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID SURFACE_ID = UUID.randomUUID();

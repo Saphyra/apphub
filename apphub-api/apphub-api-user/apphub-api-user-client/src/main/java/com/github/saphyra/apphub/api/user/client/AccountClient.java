@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "user-account")
+@FeignClient(name = "user-account", url = "${serviceUrls.user}")
 public interface AccountClient {
     @RequestMapping(method = RequestMethod.GET, value = Endpoints.USER_DATA_INTERNAL_GET_USER_LANGUAGE)
     String getLanguage(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);

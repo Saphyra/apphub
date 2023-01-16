@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.map;
 
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;

@@ -5,12 +5,12 @@ import com.github.saphyra.apphub.api.platform.encryption.model.DataType;
 import com.github.saphyra.apphub.api.platform.encryption.model.EncryptionKey;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.platform.encryption.encryption_key.dao.EncryptionKeyDao;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EncryptionKeyCreationServiceTest {
     private static final String ENCRYPTION_KEY = "encryption-key";
     private static final UUID USER_ID = UUID.randomUUID();
@@ -43,7 +43,7 @@ public class EncryptionKeyCreationServiceTest {
     @Mock
     private EncryptionKey request;
 
-    @After
+    @AfterEach
     public void validate() {
         verify(encryptionKeyRequestValidator).validate(request);
     }

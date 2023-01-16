@@ -9,12 +9,11 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ActiveFriendsServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID FRIEND_ID_1 = UUID.randomUUID();
@@ -58,13 +57,9 @@ public class ActiveFriendsServiceTest {
     @Mock
     private Lobby lobby;
 
-    @Before
-    public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-    }
-
     @Test
     public void getActiveFriends_newGame() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getType()).willReturn(LobbyType.NEW_GAME);
 
@@ -83,6 +78,7 @@ public class ActiveFriendsServiceTest {
 
     @Test
     public void getActiveFriends_loadGame() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getType()).willReturn(LobbyType.LOAD_GAME);
         given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(FRIEND_ID_1, null));

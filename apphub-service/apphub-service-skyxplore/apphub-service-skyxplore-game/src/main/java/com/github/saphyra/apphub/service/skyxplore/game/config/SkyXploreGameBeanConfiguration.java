@@ -5,8 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
+import com.github.saphyra.apphub.lib.concurrency.DefaultExecutorServiceBeanConfig;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
@@ -21,7 +20,6 @@ import com.github.saphyra.apphub.lib.skyxplore.data.SkyXploreDataConfig;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -33,19 +31,14 @@ import java.util.concurrent.BlockingQueue;
 @Import({
     AccessTokenFilterConfiguration.class,
     RoleFilterConfiguration.class,
-    SkyXploreDataConfig.class
+    SkyXploreDataConfig.class,
+    DefaultExecutorServiceBeanConfig.class
 })
 @EnableLocaleMandatoryRequestValidation
 @EnableErrorHandler
 @EnableEventProcessor
-@ComponentScan(basePackageClasses = ExecutorServiceBeanFactory.class)
 @EnableMemoryMonitoring
 public class SkyXploreGameBeanConfiguration {
-    @Bean
-    ExecutorServiceBean executorServiceBean(ExecutorServiceBeanFactory executorServiceBeanFactory) {
-        return executorServiceBeanFactory.create();
-    }
-
     @Bean
     IdGenerator idGenerator() {
         return new IdGenerator();

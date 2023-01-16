@@ -9,13 +9,12 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
@@ -24,7 +23,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class StorageSettingsModelValidatorTest {
     private static final Integer PRIORITY = 325;
     private static final String DATA_ID = "data-id";
@@ -55,25 +54,15 @@ public class StorageSettingsModelValidatorTest {
     @Mock
     private StorageSetting storageSetting;
 
-    @Before
-    public void setUp() {
-        given(model.getPriority()).willReturn(PRIORITY);
-        given(model.getDataId()).willReturn(DATA_ID);
-        given(resourceDataService.containsKey(DATA_ID)).willReturn(true);
-        given(model.getTargetAmount()).willReturn(TARGET_AMOUNT);
-        given(model.getBatchSize()).willReturn(BATCH_SIZE);
-
-        given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getStorageSettings()).willReturn(storageSettings);
-    }
-
-    @After
+    @AfterEach
     public void validate() {
         verify(priorityValidator).validate(PRIORITY);
     }
 
     @Test
     public void blankDataId() {
+        given(model.getPriority()).willReturn(PRIORITY);
+
         given(model.getDataId()).willReturn(" ");
 
         Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
@@ -83,6 +72,9 @@ public class StorageSettingsModelValidatorTest {
 
     @Test
     public void unknownDataId() {
+        given(model.getPriority()).willReturn(PRIORITY);
+        given(model.getDataId()).willReturn(DATA_ID);
+
         given(resourceDataService.containsKey(DATA_ID)).willReturn(false);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
@@ -92,6 +84,10 @@ public class StorageSettingsModelValidatorTest {
 
     @Test
     public void nullTargetAmount() {
+        given(model.getPriority()).willReturn(PRIORITY);
+        given(model.getDataId()).willReturn(DATA_ID);
+        given(resourceDataService.containsKey(DATA_ID)).willReturn(true);
+
         given(model.getTargetAmount()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
@@ -101,6 +97,10 @@ public class StorageSettingsModelValidatorTest {
 
     @Test
     public void tooLowTargetAmount() {
+        given(model.getPriority()).willReturn(PRIORITY);
+        given(model.getDataId()).willReturn(DATA_ID);
+        given(resourceDataService.containsKey(DATA_ID)).willReturn(true);
+
         given(model.getTargetAmount()).willReturn(-1);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
@@ -110,6 +110,11 @@ public class StorageSettingsModelValidatorTest {
 
     @Test
     public void nullBatchSize() {
+        given(model.getPriority()).willReturn(PRIORITY);
+        given(model.getDataId()).willReturn(DATA_ID);
+        given(resourceDataService.containsKey(DATA_ID)).willReturn(true);
+        given(model.getTargetAmount()).willReturn(TARGET_AMOUNT);
+
         given(model.getBatchSize()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
@@ -119,6 +124,11 @@ public class StorageSettingsModelValidatorTest {
 
     @Test
     public void tooLowBatchSize() {
+        given(model.getPriority()).willReturn(PRIORITY);
+        given(model.getDataId()).willReturn(DATA_ID);
+        given(resourceDataService.containsKey(DATA_ID)).willReturn(true);
+        given(model.getTargetAmount()).willReturn(TARGET_AMOUNT);
+
         given(model.getBatchSize()).willReturn(0);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
@@ -128,6 +138,14 @@ public class StorageSettingsModelValidatorTest {
 
     @Test
     public void settingAlreadyExists() {
+        given(model.getPriority()).willReturn(PRIORITY);
+        given(model.getDataId()).willReturn(DATA_ID);
+        given(resourceDataService.containsKey(DATA_ID)).willReturn(true);
+        given(model.getTargetAmount()).willReturn(TARGET_AMOUNT);
+        given(model.getBatchSize()).willReturn(BATCH_SIZE);
+
+        given(planet.getStorageDetails()).willReturn(storageDetails);
+        given(storageDetails.getStorageSettings()).willReturn(storageSettings);
         given(storageSettings.findByDataId(DATA_ID)).willReturn(Optional.of(storageSetting));
 
         Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
@@ -137,6 +155,15 @@ public class StorageSettingsModelValidatorTest {
 
     @Test
     public void valid() {
+        given(model.getPriority()).willReturn(PRIORITY);
+        given(model.getDataId()).willReturn(DATA_ID);
+        given(resourceDataService.containsKey(DATA_ID)).willReturn(true);
+        given(model.getTargetAmount()).willReturn(TARGET_AMOUNT);
+        given(model.getBatchSize()).willReturn(BATCH_SIZE);
+
+        given(planet.getStorageDetails()).willReturn(storageDetails);
+        given(storageDetails.getStorageSettings()).willReturn(storageSettings);
+
         underTest.validate(model, planet);
     }
 }

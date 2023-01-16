@@ -5,15 +5,15 @@ import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEv
 import com.github.saphyra.apphub.service.platform.event_gateway.service.heartbeat.ProcessHeartbeatService;
 import com.github.saphyra.apphub.service.platform.event_gateway.service.register.RegisterProcessorService;
 import com.github.saphyra.apphub.service.platform.event_gateway.service.send_event.EventSendingService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EventGatewayControllerTest {
     private static final String SERVICE_NAME = "service-name";
 

@@ -7,19 +7,19 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResources;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AllocatedResourceAmountQueryServiceTest {
     private static final String DATA_ID_1 = "data-id-1";
     private static final String DATA_ID_2 = "data-id-2";
@@ -46,7 +46,7 @@ public class AllocatedResourceAmountQueryServiceTest {
     @Mock
     private ResourceData resourceData;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(planet.getStorageDetails()).willReturn(storageDetails);
     }

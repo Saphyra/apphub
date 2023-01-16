@@ -7,11 +7,11 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.UniverseModel;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 
@@ -19,7 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SaveGameItemServiceTest {
     @Mock
     private ObjectMapperWrapper objectMapperWrapper;
@@ -35,7 +35,7 @@ public class SaveGameItemServiceTest {
     @Mock
     private UniverseModel universeModel;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(gameItemService.getType()).willReturn(GameItemType.UNIVERSE);
 

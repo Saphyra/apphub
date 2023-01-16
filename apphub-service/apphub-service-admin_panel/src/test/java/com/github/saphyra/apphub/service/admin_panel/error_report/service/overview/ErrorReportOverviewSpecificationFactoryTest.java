@@ -2,18 +2,18 @@ package com.github.saphyra.apphub.service.admin_panel.error_report.service.overv
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportStatus;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ErrorReportOverviewSpecificationFactoryTest {
     private static final String MESSAGE = "message";
     private static final Integer STATUS_CODE = 467;

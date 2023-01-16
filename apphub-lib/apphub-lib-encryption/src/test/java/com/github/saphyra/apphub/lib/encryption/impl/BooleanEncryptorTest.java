@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.lib.encryption.impl;
 
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,7 +11,7 @@ public class BooleanEncryptorTest {
 
     private final StringEncryptor stringEncryptor = new StringEncryptor(new Base64Encoder());
 
-    @Before
+    @BeforeEach
     public void setUp() {
         underTest = new BooleanEncryptor(stringEncryptor);
     }

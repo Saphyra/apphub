@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
+import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
@@ -9,18 +10,19 @@ import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verifyNoInteractions;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class NotebookViewFactoryTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
@@ -43,6 +45,9 @@ public class NotebookViewFactoryTest {
     @Mock
     private UuidConverter uuidConverter;
 
+    @Mock
+    private StorageProxy storageProxy;
+
     @InjectMocks
     private NotebookViewFactory underTest;
 
@@ -54,6 +59,9 @@ public class NotebookViewFactoryTest {
 
     @Mock
     private File file;
+
+    @Mock
+    private StoredFileResponse storedFileResponse;
 
     @Test
     public void create_hasParent() {
@@ -80,6 +88,8 @@ public class NotebookViewFactoryTest {
         assertThat(result.isArchived()).isTrue();
         assertThat(result.getParentId()).isEqualTo(PARENT);
         assertThat(result.getParentTitle()).isEqualTo(PARENT_TITLE);
+
+        verifyNoInteractions(storageProxy);
     }
 
     @Test
@@ -104,6 +114,8 @@ public class NotebookViewFactoryTest {
         assertThat(result.isArchived()).isTrue();
         assertThat(result.getParentId()).isNull();
         assertThat(result.getParentTitle()).isNull();
+
+        verifyNoInteractions(storageProxy);
     }
 
     @Test
@@ -127,10 +139,12 @@ public class NotebookViewFactoryTest {
         assertThat(result.getType()).isEqualTo(ListItemType.LINK.name());
         assertThat(result.getValue()).isEqualTo(VALUE);
         assertThat(result.isPinned()).isTrue();
+
+        verifyNoInteractions(storageProxy);
     }
 
     @Test
-    public void fillValueForImage() {
+    public void fillFieldsForImage() {
         ListItem listItem = ListItem.builder()
             .listItemId(LIST_ITEM_ID)
             .userId(USER_ID)
@@ -143,6 +157,8 @@ public class NotebookViewFactoryTest {
         given(fileDao.findByParentValidated(LIST_ITEM_ID)).willReturn(file);
         given(file.getStoredFileId()).willReturn(STORED_FILE_ID);
         given(uuidConverter.convertDomain(STORED_FILE_ID)).willReturn(STORED_FILE_ID_STRING);
+        given(storageProxy.getFileMetadata(STORED_FILE_ID)).willReturn(storedFileResponse);
+        given(storedFileResponse.getFileUploaded()).willReturn(true);
 
         NotebookView result = underTest.create(listItem);
 
@@ -151,10 +167,11 @@ public class NotebookViewFactoryTest {
         assertThat(result.getType()).isEqualTo(ListItemType.IMAGE.name());
         assertThat(result.getValue()).isEqualTo(STORED_FILE_ID_STRING);
         assertThat(result.isPinned()).isTrue();
+        assertThat(result.isEnabled()).isTrue();
     }
 
     @Test
-    public void fillValueForFile() {
+    public void fillFieldsForFile() {
         ListItem listItem = ListItem.builder()
             .listItemId(LIST_ITEM_ID)
             .userId(USER_ID)
@@ -167,6 +184,8 @@ public class NotebookViewFactoryTest {
         given(fileDao.findByParentValidated(LIST_ITEM_ID)).willReturn(file);
         given(file.getStoredFileId()).willReturn(STORED_FILE_ID);
         given(uuidConverter.convertDomain(STORED_FILE_ID)).willReturn(STORED_FILE_ID_STRING);
+        given(storageProxy.getFileMetadata(STORED_FILE_ID)).willReturn(storedFileResponse);
+        given(storedFileResponse.getFileUploaded()).willReturn(true);
 
         NotebookView result = underTest.create(listItem);
 
@@ -175,5 +194,6 @@ public class NotebookViewFactoryTest {
         assertThat(result.getType()).isEqualTo(ListItemType.FILE.name());
         assertThat(result.getValue()).isEqualTo(STORED_FILE_ID_STRING);
         assertThat(result.isPinned()).isTrue();
+        assertThat(result.isEnabled()).isTrue();
     }
 }

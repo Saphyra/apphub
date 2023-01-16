@@ -10,13 +10,13 @@ import com.github.saphyra.apphub.service.admin_panel.proxy.EventGatewayProxy;
 import com.github.saphyra.apphub.service.admin_panel.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.admin_panel.ws.ConnectedWsClients;
 import com.github.saphyra.apphub.service.admin_panel.ws.WebSocketMessageFactory;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
@@ -25,7 +25,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class MonitoringControllerImplTest {
     private static final String SERVICE_NAME = "service-name";
     private static final UUID USER_ID = UUID.randomUUID();
@@ -55,7 +55,7 @@ public class MonitoringControllerImplTest {
     @Captor
     private ArgumentCaptor<SendEventRequest<Void>> argumentCaptor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         underTest = MonitoringControllerImpl.builder()
             .messageSenderProxy(messageSenderProxy)

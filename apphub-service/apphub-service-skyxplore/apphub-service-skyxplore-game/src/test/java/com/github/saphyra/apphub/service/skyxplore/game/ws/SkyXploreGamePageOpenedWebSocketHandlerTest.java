@@ -9,11 +9,11 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.OpenedPage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.OpenedPageType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SkyXploreGamePageOpenedWebSocketHandlerTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final Object PAYLOAD = "payload";

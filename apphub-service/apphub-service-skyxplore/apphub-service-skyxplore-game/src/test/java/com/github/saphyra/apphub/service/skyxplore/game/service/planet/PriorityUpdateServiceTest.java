@@ -14,13 +14,13 @@ import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.priority.PriorityUpdateService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.PriorityToModelConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +32,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PriorityUpdateServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
@@ -72,7 +72,7 @@ public class PriorityUpdateServiceTest {
     @Mock
     private ExecutionResult<Void> executionResult;
 
-    @After
+    @AfterEach
     public void validate() {
         verify(priorityValidator).validate(NEW_PRIORITY);
     }

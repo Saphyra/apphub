@@ -3,11 +3,11 @@ package com.github.saphyra.apphub.service.user.data.dao.user;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UserDaoTest {
     private static final String EMAIL = "email";
     private static final String USERNAME = "username";
@@ -46,7 +46,7 @@ public class UserDaoTest {
     @Mock
     private User user;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         underTest = UserDao.builder()
             .converter(converter)

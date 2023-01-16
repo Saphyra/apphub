@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
@@ -20,10 +21,10 @@ class AccessTokenExpirationUpdateService {
     private final EventGatewayApiClient eventGatewayApi;
     private final NonSessionExtendingUriProperties nonSessionExtendingUriProperties;
 
-    void updateExpiration(String requestMethod, String requestUri, UUID accessTokenId) {
+    void updateExpiration(HttpMethod requestMethod, String requestUri, UUID accessTokenId) {
         boolean isNonSessionExtendingEndpoint = nonSessionExtendingUriProperties.getNonSessionExtendingUris()
             .stream()
-            .filter(nonSessionExtendingUri -> nonSessionExtendingUri.getMethod().equalsIgnoreCase(requestMethod))
+            .filter(nonSessionExtendingUri -> nonSessionExtendingUri.getMethod().equalsIgnoreCase(requestMethod.name()))
             .anyMatch(nonSessionExtendingUri -> antPathMatcher.match(nonSessionExtendingUri.getPattern(), requestUri));
 
         if (isNonSessionExtendingEndpoint) {

@@ -3,13 +3,12 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.allocated
 import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
@@ -17,7 +16,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AllocatedResourceModelValidatorTest {
     private static final UUID LOCATION = UUID.randomUUID();
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
@@ -34,16 +33,7 @@ public class AllocatedResourceModelValidatorTest {
     @Mock
     private AllocatedResourceModel model;
 
-    @Before
-    public void setUp() {
-        given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(LOCATION_TYPE);
-        given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
-        given(model.getDataId()).willReturn(DATA_ID);
-        given(model.getAmount()).willReturn(AMOUNT);
-    }
-
-    @After
+    @AfterEach
     public void validate() {
         verify(gameItemValidator).validate(model);
     }
@@ -59,6 +49,7 @@ public class AllocatedResourceModelValidatorTest {
 
     @Test
     public void nullLocationType() {
+        given(model.getLocation()).willReturn(LOCATION);
         given(model.getLocationType()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -68,6 +59,8 @@ public class AllocatedResourceModelValidatorTest {
 
     @Test
     public void nullExternalReference() {
+        given(model.getLocation()).willReturn(LOCATION);
+        given(model.getLocationType()).willReturn(LOCATION_TYPE);
         given(model.getExternalReference()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -77,6 +70,9 @@ public class AllocatedResourceModelValidatorTest {
 
     @Test
     public void nullDataId() {
+        given(model.getLocation()).willReturn(LOCATION);
+        given(model.getLocationType()).willReturn(LOCATION_TYPE);
+        given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(model.getDataId()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -86,6 +82,11 @@ public class AllocatedResourceModelValidatorTest {
 
     @Test
     public void nullAmount() {
+        given(model.getLocation()).willReturn(LOCATION);
+        given(model.getLocationType()).willReturn(LOCATION_TYPE);
+        given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
+        given(model.getDataId()).willReturn(DATA_ID);
+        given(model.getAmount()).willReturn(AMOUNT);
         given(model.getAmount()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -95,6 +96,12 @@ public class AllocatedResourceModelValidatorTest {
 
     @Test
     public void valid() {
+        given(model.getLocation()).willReturn(LOCATION);
+        given(model.getLocationType()).willReturn(LOCATION_TYPE);
+        given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
+        given(model.getDataId()).willReturn(DATA_ID);
+        given(model.getAmount()).willReturn(AMOUNT);
+
         underTest.validate(model);
     }
 }

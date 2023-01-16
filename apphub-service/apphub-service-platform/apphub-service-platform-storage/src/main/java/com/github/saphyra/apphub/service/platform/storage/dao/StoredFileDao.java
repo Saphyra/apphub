@@ -7,7 +7,8 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

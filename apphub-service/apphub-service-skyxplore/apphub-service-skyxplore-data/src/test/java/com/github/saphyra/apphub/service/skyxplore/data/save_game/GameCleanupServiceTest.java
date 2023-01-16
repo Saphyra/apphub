@@ -5,11 +5,11 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.data.config.GameDataProperties;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.game.GameDao;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,7 +19,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class GameCleanupServiceTest {
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
     private static final Integer EXPIRATION_MINUTES = 43;
@@ -45,7 +45,7 @@ public class GameCleanupServiceTest {
     @Mock
     private GameModel game;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         underTest = GameCleanupService.builder()
             .dateTimeUtil(dateTimeUtil)

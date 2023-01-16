@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.admin_panel.error_report.repository;
 
 
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;

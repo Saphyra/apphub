@@ -9,11 +9,11 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.QueueService;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class QueueFacadeTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
@@ -57,15 +57,13 @@ public class QueueFacadeTest {
     @Mock
     private QueueResponse queueResponse;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         underTest = QueueFacade.builder()
             .gameDao(gameDao)
             .services(List.of(queueService))
             .converter(converter)
             .build();
-
-        given(queueService.getType()).willReturn(QueueItemType.TERRAFORMATION);
     }
 
     @Test
@@ -90,6 +88,8 @@ public class QueueFacadeTest {
 
     @Test
     public void setPriority_serviceNotFound() {
+        given(queueService.getType()).willReturn(QueueItemType.TERRAFORMATION);
+
         Throwable ex = catchThrowable(() -> underTest.setPriority(USER_ID, PLANET_ID, QueueItemType.CONSTRUCTION.name(), ITEM_ID, PRIORITY));
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR);
@@ -97,6 +97,8 @@ public class QueueFacadeTest {
 
     @Test
     public void setPriority() {
+        given(queueService.getType()).willReturn(QueueItemType.TERRAFORMATION);
+
         underTest.setPriority(USER_ID, PLANET_ID, QueueItemType.TERRAFORMATION.name(), ITEM_ID, PRIORITY);
 
         verify(queueService).setPriority(USER_ID, PLANET_ID, ITEM_ID, PRIORITY);
@@ -111,6 +113,8 @@ public class QueueFacadeTest {
 
     @Test
     public void cancelItem_serviceNotFound() {
+        given(queueService.getType()).willReturn(QueueItemType.TERRAFORMATION);
+
         Throwable ex = catchThrowable(() -> underTest.cancelItem(USER_ID, PLANET_ID, QueueItemType.CONSTRUCTION.name(), ITEM_ID));
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR);
@@ -118,6 +122,8 @@ public class QueueFacadeTest {
 
     @Test
     public void cancelItem() {
+        given(queueService.getType()).willReturn(QueueItemType.TERRAFORMATION);
+
         underTest.cancelItem(USER_ID, PLANET_ID, QueueItemType.TERRAFORMATION.name(), ITEM_ID);
 
         verify(queueService).cancel(USER_ID, PLANET_ID, ITEM_ID);

@@ -2,11 +2,11 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storag
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.StoredResourceFactory;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verifyNoInteractions;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class StoredResourcesTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
@@ -28,7 +28,7 @@ public class StoredResourcesTest {
     @Mock
     private StoredResource storedResource;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         underTest = StoredResources.builder()
             .storedResourceFactory(storedResourceFactory)

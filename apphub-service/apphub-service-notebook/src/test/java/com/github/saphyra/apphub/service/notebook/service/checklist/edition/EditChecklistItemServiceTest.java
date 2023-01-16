@@ -12,13 +12,13 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.TitleValidator;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemNodeRequestValidator;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -29,7 +29,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EditChecklistItemServiceTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final UUID CHECKLIST_ITEM_ID = UUID.randomUUID();

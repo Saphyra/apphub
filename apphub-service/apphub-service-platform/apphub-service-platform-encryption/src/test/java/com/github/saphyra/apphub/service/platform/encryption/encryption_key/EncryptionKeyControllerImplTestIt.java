@@ -19,19 +19,19 @@ import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 import java.util.Map;
@@ -41,7 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
@@ -73,12 +73,12 @@ public class EncryptionKeyControllerImplTestIt {
     @Autowired
     private EncryptionKeyDao encryptionKeyDao;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(localizationClient.translate(any(), any())).willReturn(LOCALIZED_MESSAGE);
     }
 
-    @After
+    @AfterEach
     public void clear() {
         repositories.forEach(CrudRepository::deleteAll);
     }

@@ -5,12 +5,12 @@ import com.github.saphyra.apphub.api.diary.model.EventSearchResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.diary.service.calendar.search.CalendarSearchService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CalendarControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final LocalDate DATE = LocalDate.now();
@@ -43,7 +43,7 @@ public class CalendarControllerImplTest {
     @Mock
     private EventSearchResponse eventSearchResponse;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
     }

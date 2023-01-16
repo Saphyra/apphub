@@ -56,7 +56,7 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
-            <version>${versions.spring-cloud}</version>
+            <version>${versions.spring-cloud-gateway}</version>
         </dependency>
 
         <dependency>
@@ -92,15 +92,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${version.maven-compiler-plugin}</version>
+                <version>${versions.maven-compiler-plugin}</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>17</source>
+                    <target>17</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
+                            <version>${versions.lombok}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>

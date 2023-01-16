@@ -4,11 +4,11 @@ import com.github.saphyra.apphub.api.diary.model.CalendarResponse;
 import com.github.saphyra.apphub.api.diary.model.OccurrenceResponse;
 import com.github.saphyra.apphub.service.diary.dao.occurance.Occurrence;
 import com.github.saphyra.apphub.service.diary.service.occurrence.service.OccurrenceToResponseConverter;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CalendarResponseFactoryTest {
     private static final LocalDate DATE = LocalDate.now();
     @Mock

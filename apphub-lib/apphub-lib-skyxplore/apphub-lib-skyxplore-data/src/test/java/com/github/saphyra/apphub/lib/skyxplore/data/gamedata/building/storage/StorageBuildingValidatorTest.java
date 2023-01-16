@@ -2,20 +2,22 @@ package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingDataValidator;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class StorageBuildingValidatorTest {
     private static final String KEY = "key";
 
@@ -28,38 +30,38 @@ public class StorageBuildingValidatorTest {
     @Mock
     private StorageBuilding storageBuilding;
 
-    @After
+    @AfterEach
     public void validate() {
         verify(buildingDataValidator).validate(storageBuilding);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullStores() {
         Map<String, StorageBuilding> map = new HashMap<>();
         map.put(KEY, storageBuilding);
         given(storageBuilding.getStores()).willReturn(null);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullCapacity() {
         Map<String, StorageBuilding> map = new HashMap<>();
         map.put(KEY, storageBuilding);
         given(storageBuilding.getStores()).willReturn(StorageType.BULK);
         given(storageBuilding.getCapacity()).willReturn(null);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void tooLowCapacity() {
         Map<String, StorageBuilding> map = new HashMap<>();
         map.put(KEY, storageBuilding);
         given(storageBuilding.getStores()).willReturn(StorageType.BULK);
         given(storageBuilding.getCapacity()).willReturn(0);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
     @Test

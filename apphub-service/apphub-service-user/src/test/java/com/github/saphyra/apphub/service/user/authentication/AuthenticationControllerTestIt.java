@@ -8,10 +8,10 @@ import com.github.saphyra.apphub.api.user.model.request.LoginRequest;
 import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.api.user.model.response.LoginResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
+import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
@@ -27,17 +27,17 @@ import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
 import io.restassured.response.Response;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -49,7 +49,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
@@ -94,7 +94,7 @@ public class AuthenticationControllerTestIt {
 
     private final ObjectMapperWrapper objectMapperWrapper = new ObjectMapperWrapper(new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS));
 
-    @After
+    @AfterEach
     public void clear() {
         accessTokenDao.deleteAll();
         roleDao.deleteAll();

@@ -1,4 +1,3 @@
-defaultLocale: hu
 event:
   processor:
     enabled: true
@@ -19,92 +18,13 @@ eureka:
   client:
     enabled: false
 
-main-gateway:
-  ribbon:
-    listOfServers: localhost:8080
-
-event-gateway:
-  ribbon:
-    listOfServers: localhost:8081
-
-scheduler:
-  ribbon:
-    listOfServers: localhost:8082
-
-web-content:
-  ribbon:
-    listOfServers: localhost:8083
-
-localization:
-  ribbon:
-    listOfServers: localhost:8084
-
-user-authentication:
-  ribbon:
-    listOfServers: localhost:8085
-user-data:
-  ribbon:
-    listOfServers: localhost:8085
-user:
-  ribbon:
-    listOfServers: localhost:8085
-
-modules:
-  ribbon:
-    listOfServers: localhost:8088
-
-admin-panel:
-  ribbon:
-    listOfServers: localhost:8089
-
-notebook:
-  ribbon:
-    listOfServers: localhost:8090
-
-utils:
-  ribbon:
-    listOfServers: localhost:8095
-
-skyxplore-data-character:
-  ribbon:
-    listOfServers: localhost:8091
-
-skyxplore-data-friend:
-  ribbon:
-    listOfServers: localhost:8091
-
-skyxplore-lobby:
-  ribbon:
-    listOfServers: localhost:8093
-
-skyxplore-game:
-  ribbon:
-    listOfServers: localhost:8095
-
-skyxplore-game-creation:
-  ribbon:
-    listOfServers: localhost:8095
-
-message-sender:
-  ribbon:
-    listOfServers: localhost:8094
-
-training:
-  ribbon:
-    listOfServers: localhost:8095
-
-community:
-  ribbon:
-    listOfServers: localhost:8096
-
-diary:
-  ribbon:
-    listOfServers: localhost:8097
-
-encryption:
-  ribbon:
-    listOfServers: localhost:8098
-
-storage:
-  ribbon:
-    listOfServers: localhost:8099
+serviceUrls:
+  adminPanel: localhost:8089
+  eventGateway: localhost:8081
+  localization: localhost:8084
+  messageSender: localhost:8094
+  skyxploreData: localhost:8091
+  skyxploreGame: localhost:8095
+  skyxploreLobby: localhost:8093
+  storage: localhost:8099
+  user: localhost:8085

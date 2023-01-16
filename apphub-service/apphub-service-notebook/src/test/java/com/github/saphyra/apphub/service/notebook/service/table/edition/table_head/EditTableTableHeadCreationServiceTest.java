@@ -8,11 +8,11 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHead;
 import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.service.table.TableHeadFactory;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -20,7 +20,7 @@ import java.util.UUID;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EditTableTableHeadCreationServiceTest {
     private static final String VALUE_1 = "value-1";
     private static final String VALUE_2 = "value-2";

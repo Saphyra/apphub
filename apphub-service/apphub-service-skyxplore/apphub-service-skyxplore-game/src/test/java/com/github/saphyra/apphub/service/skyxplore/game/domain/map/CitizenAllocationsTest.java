@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 import java.util.UUID;

@@ -5,12 +5,12 @@ import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenCache;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenIdConverter;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -30,7 +30,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class LogoutFilterTest {
     private static final String ACCESS_TOKEN_ID_STRING = "access-token-id";
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();

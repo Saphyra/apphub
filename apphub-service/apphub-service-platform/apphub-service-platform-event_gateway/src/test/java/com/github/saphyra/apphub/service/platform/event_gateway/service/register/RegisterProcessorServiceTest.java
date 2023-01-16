@@ -4,11 +4,11 @@ import com.github.saphyra.apphub.api.platform.event_gateway.model.request.Regist
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -16,7 +16,7 @@ import java.util.Optional;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class RegisterProcessorServiceTest {
     private static final String EVENT_NAME = "event-name";
     private static final String SERVICE_NAME = "service-name";

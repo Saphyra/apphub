@@ -10,14 +10,13 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
@@ -30,7 +29,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class GameDaoTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
@@ -53,13 +52,10 @@ public class GameDaoTest {
     @Mock
     private EventLoop eventLoop;
 
-    @Before
-    public void setUp() {
-        given(game.getGameId()).willReturn(GAME_ID);
-    }
-
     @Test
     public void save() {
+        given(game.getGameId()).willReturn(GAME_ID);
+
         underTest.save(game);
 
         assertThat(underTest.getRepository()).containsEntry(GAME_ID, game);
@@ -74,6 +70,8 @@ public class GameDaoTest {
 
     @Test
     public void findByUserId() {
+        given(game.getGameId()).willReturn(GAME_ID);
+
         underTest.save(game);
 
         given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
@@ -85,6 +83,8 @@ public class GameDaoTest {
 
     @Test
     public void delete() {
+        given(game.getGameId()).willReturn(GAME_ID);
+
         underTest.save(game);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.getQueueSize()).willReturn(1)
@@ -101,6 +101,8 @@ public class GameDaoTest {
 
     @Test
     public void getAll() {
+        given(game.getGameId()).willReturn(GAME_ID);
+
         underTest.save(game);
 
         List<Game> result = underTest.getAll();

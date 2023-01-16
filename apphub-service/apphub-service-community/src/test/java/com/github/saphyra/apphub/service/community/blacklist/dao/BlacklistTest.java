@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.community.blacklist.dao;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
 import java.util.UUID;

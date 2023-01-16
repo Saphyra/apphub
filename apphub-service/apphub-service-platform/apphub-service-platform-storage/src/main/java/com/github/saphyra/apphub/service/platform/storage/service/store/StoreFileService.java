@@ -14,7 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
+
 import java.io.InputStream;
 import java.util.UUID;
 
@@ -26,11 +27,13 @@ public class StoreFileService {
     private final StoredFileDao storedFileDao;
     private final FtpClientFactory ftpClientFactory;
     private final UuidConverter uuidConverter;
+    private final StoreFileProperties storeFileProperties;
 
     public UUID createFile(UUID userId, String fileName, String extension, Long size) {
         ValidationUtil.notNull(extension, "extension");
         ValidationUtil.notNull(fileName, "fileName");
         ValidationUtil.atLeast(size, 0, "size");
+        ValidationUtil.maximum(size, storeFileProperties.getMaxFileSize(), "size");
 
         StoredFile storedFile = storedFileFactory.create(userId, fileName, extension, size);
 
@@ -42,6 +45,7 @@ public class StoreFileService {
     @SneakyThrows
     @Transactional
     public void uploadFile(UUID userId, UUID storedFileId, InputStream file) {
+        log.info("File size: {}", file.available());
         StoredFile storedFile = storedFileDao.findByIdValidated(storedFileId);
 
         if (!userId.equals(storedFile.getUserId())) {

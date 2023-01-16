@@ -32,12 +32,14 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.F
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ReservedStorageToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.List;
 import java.util.UUID;
@@ -48,7 +50,8 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class StorageSettingProcessTest {
     private static final UUID STORAGE_SETTING_ID = UUID.randomUUID();
     private static final UUID PROCESS_ID = UUID.randomUUID();
@@ -140,7 +143,7 @@ public class StorageSettingProcessTest {
     @Mock
     private ProcessModel processModel;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(storageSetting.getStorageSettingId()).willReturn(STORAGE_SETTING_ID);
         given(storageSetting.getDataId()).willReturn(DATA_ID);

@@ -309,4 +309,5 @@ public class Endpoints {
     public static final String STORAGE_DOWNLOAD_FILE = "/api/storage/{storedFileId}";
     public static final String STORAGE_INTERNAL_DUPLICATE_FILE = "/internal/storage/{storedFileId}";
     public static final String STORAGE_INTERNAL_CREATE_FILE = "/internal/storage";
+    public static final String STORAGE_GET_METADATA = "/api/storage/{storedFileId}/metadata";
 }

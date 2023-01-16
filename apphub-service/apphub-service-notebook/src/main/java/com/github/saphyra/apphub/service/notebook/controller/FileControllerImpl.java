@@ -14,7 +14,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class FileControllerImpl implements FileController {
     private final FileCreationService fileCreationService;
 

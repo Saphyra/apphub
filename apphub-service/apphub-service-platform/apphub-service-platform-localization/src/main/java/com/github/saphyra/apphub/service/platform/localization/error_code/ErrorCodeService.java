@@ -3,10 +3,10 @@ package com.github.saphyra.apphub.service.platform.localization.error_code;
 import com.github.saphyra.apphub.lib.data.AbstractDataService;
 import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import jakarta.annotation.PostConstruct;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 
 @Component
 public class ErrorCodeService extends AbstractDataService<String, Localization> {

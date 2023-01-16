@@ -5,19 +5,19 @@ import com.github.saphyra.apphub.api.skyxplore.response.SentFriendRequestRespons
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreCharacter;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequest;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class FriendRequestToResponseConverterTest {
     private static final UUID FRIEND_REQUEST_ID = UUID.randomUUID();
     private static final UUID FRIEND_ID = UUID.randomUUID();
@@ -33,7 +33,7 @@ public class FriendRequestToResponseConverterTest {
     @Mock
     private SkyXploreCharacter character;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(character.getName()).willReturn(CHARACTER_NAME);
     }

@@ -5,11 +5,11 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CategoryCreationServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String TITLE = "title";
