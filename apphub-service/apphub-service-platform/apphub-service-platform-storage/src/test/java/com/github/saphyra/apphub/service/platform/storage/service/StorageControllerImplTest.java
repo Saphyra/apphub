@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -88,6 +89,7 @@ public class StorageControllerImplTest {
     }
 
     @Test
+    @Disabled
     public void uploadFile() throws IOException, FileUploadException {
         //TODO
     }

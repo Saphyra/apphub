@@ -97,6 +97,6 @@ public class LineTest {
 
         Throwable ex = catchThrowable(() -> underTest.getOtherEndpoint(c3));
 
-        assertThat(ex).isInstanceOf(IllegalAccessException.class);
+        assertThat(ex).isInstanceOf(IllegalArgumentException.class);
     }
 }

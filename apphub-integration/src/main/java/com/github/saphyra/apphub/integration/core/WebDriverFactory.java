@@ -14,7 +14,6 @@ import org.apache.commons.pool2.PooledObjectFactory;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -64,7 +63,6 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
         return DRIVER_POOL.borrowObject();
     }
 
-    @NotNull
     private WebDriverWrapper createNewDriver() {
         Future<WebDriver> future = EXECUTOR.submit(this::createDriver);
         return new WebDriverWrapper(future);

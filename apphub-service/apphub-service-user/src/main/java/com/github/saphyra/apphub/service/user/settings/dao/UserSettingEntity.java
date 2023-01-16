@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.settings.dao;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -17,5 +18,6 @@ import lombok.NoArgsConstructor;
 class UserSettingEntity {
     @EmbeddedId
     private UserSettingEntityId id;
+    @Column(name = "setting_value")
     private String value;
 }

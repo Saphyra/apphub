@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
-@FeignClient("skyxplore-lobby")
+@FeignClient(name = "skyxplore-lobby", url = "${serviceUrls.skyxploreLobby}")
 public interface SkyXploreLobbyApiClient {
     @GetMapping(Endpoints.SKYXPLORE_INTERNAL_LOBBY_VIEW_FOR_PAGE)
     LobbyViewForPage lobbyForPage(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);

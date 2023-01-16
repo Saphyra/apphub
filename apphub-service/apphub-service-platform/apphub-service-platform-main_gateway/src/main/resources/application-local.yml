@@ -1,2 +1,92 @@
 server:
   port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+      #RESOURCES
+      - id: common-resorces
+        uri: http://localhost:8083
+        predicates:
+        - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/diary/**, /res/modules/**, /res/notebook/**, /res/skyxplore/**, /res/utils/**, /res/user/**
+      - id: training-resorces
+        uri: http://localhost:8086
+        predicates:
+        - Path=/res/training/**
+
+      #PAGES
+      - id: common-pages
+        uri: http://localhost:8083
+        predicates:
+        - Path=/web, /web/notebook, /web/user/account, /web/modules, /web/admin-panel/**, /web/utils/**, /web/skyxplore/**, /web/community, /web/diary
+      - id: error-page
+        uri: http://localhost:8083
+        predicates:
+        - Path=/web/error
+      - id: training-pages
+        uri: http://localhost:8086
+        predicates:
+        - Path=/web/training/**
+
+      #MODULES
+      - id: user
+        uri: http://localhost:8085
+        predicates:
+        - Path=/api/user/**
+      - id: notebook
+        uri: http://localhost:8090
+        predicates:
+        - Path=/api/notebook/**
+      - id: admin-panel
+        uri: http://localhost:8089
+        predicates:
+        - Path=/api/admin-panel/**
+      - id: modules
+        uri: http://localhost:8088
+        predicates:
+        - Path=/api/modules/**
+      - id: utils
+        uri: http://localhost:8095
+        predicates:
+        - Path=/api/utils/**
+      - id: skyxplore-data
+        uri: http://localhost:8091
+        predicates:
+        - Path=/api/skyxplore/data/**
+      - id: skyxplore-lobby
+        uri: http://localhost:8093
+        predicates:
+        - Path=/api/skyxplore/lobby/**
+      - id: skyxplore-game
+        uri: http://localhost:8095
+        predicates:
+        - Path=/api/skyxplore/game/**
+      - id: training
+        uri: http://localhost:8086
+        predicates:
+        - Path=/api/training/**
+      - id: community
+        uri: http://localhost:8096
+        predicates:
+        - Path=/api/community/**
+      - id: diary
+        uri: http://localhost:8097
+        predicates:
+        - Path=/api/diary/**
+      - id: storage
+        uri: http://localhost:8099
+        predicates:
+        - Path=/api/storage/**
+
+      #PLATFORM
+      - id: localization
+        uri: http://localhost:8084
+        predicates:
+        - Path=/localization/**
+
+      #WS
+      - id: ws
+        uri: ws://localhost:8094
+        predicates:
+        - Path=/api/message-sender/**

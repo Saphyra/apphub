@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -47,11 +46,6 @@ public class ResourceValidatorTest {
     @Mock
     private ProductionBuilding productionBuilding;
 
-    @BeforeEach
-    public void setUp() {
-        given(resourceData.getMass()).willReturn(32);
-        given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
-    }
 
     @AfterEach
     public void validate() {
@@ -60,6 +54,7 @@ public class ResourceValidatorTest {
 
     @Test
     public void nullStorageType() {
+        given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
         given(resourceData.getStorageType()).willReturn(null);
@@ -69,6 +64,8 @@ public class ResourceValidatorTest {
 
     @Test
     public void nullMaxBatchSize() {
+        given(resourceData.getMass()).willReturn(32);
+        given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
         given(resourceData.getMaxProductionBatchSize()).willReturn(null);
@@ -78,6 +75,8 @@ public class ResourceValidatorTest {
 
     @Test
     public void nullMass() {
+        given(resourceData.getMass()).willReturn(32);
+        given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
         given(resourceData.getMass()).willReturn(null);
@@ -87,6 +86,8 @@ public class ResourceValidatorTest {
 
     @Test
     public void noProducer() {
+        given(resourceData.getMass()).willReturn(32);
+        given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
         given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
@@ -97,6 +98,8 @@ public class ResourceValidatorTest {
 
     @Test
     public void valid() {
+        given(resourceData.getMass()).willReturn(32);
+        given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
         given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);

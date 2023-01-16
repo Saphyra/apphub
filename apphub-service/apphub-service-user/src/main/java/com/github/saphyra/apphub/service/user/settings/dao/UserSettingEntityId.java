@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.settings.dao;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,5 +17,6 @@ import java.io.Serializable;
 class UserSettingEntityId implements Serializable {
     private String userId;
     private String category;
+    @Column(name = "setting_key")
     private String key;
 }

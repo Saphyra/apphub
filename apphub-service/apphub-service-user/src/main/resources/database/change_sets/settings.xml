@@ -26,4 +26,32 @@
 
         <addPrimaryKey schemaName="apphub_user" tableName="settings" columnNames="user_id,category,key" constraintName="settings-pk"/>
     </changeSet>
+
+    <changeSet id="rename-column-key-to-setting_key" author="saphyra">
+        <preConditions>
+            <and>
+                <columnExists schemaName="apphub_user" tableName="settings" columnName="key"/>
+
+                <not>
+                    <columnExists schemaName="apphub_user" tableName="settings" columnName="setting_key"/>
+                </not>
+            </and>
+        </preConditions>
+
+        <renameColumn schemaName="apphub_user" tableName="settings" oldColumnName="key" newColumnName="setting_key"/>
+    </changeSet>
+
+    <changeSet id="rename-column-value-to-setting_value" author="saphyra">
+        <preConditions>
+            <and>
+                <columnExists schemaName="apphub_user" tableName="settings" columnName="value"/>
+
+                <not>
+                    <columnExists schemaName="apphub_user" tableName="settings" columnName="setting_value"/>
+                </not>
+            </and>
+        </preConditions>
+
+        <renameColumn schemaName="apphub_user" tableName="settings" oldColumnName="value" newColumnName="setting_value"/>
+    </changeSet>
 </databaseChangeLog>

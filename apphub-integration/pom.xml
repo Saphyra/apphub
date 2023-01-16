@@ -14,30 +14,26 @@
         <maven.compiler.source>17</maven.compiler.source>
 
         <!-- Platform Versions -->
-        <versions.maven-surefire-plugin>3.0.0-M4</versions.maven-surefire-plugin>
-        <versions.postgresql-connector>42.3.3</versions.postgresql-connector>
-
-        <!-- Saphyra Versions -->
-        <versions.saphyra.util>1.5.1</versions.saphyra.util>
+        <versions.maven-surefire-plugin>3.0.0-M8</versions.maven-surefire-plugin>
+        <versions.postgresql-connector>42.5.1</versions.postgresql-connector>
 
         <!-- Lib Versions -->
-        <versions.apache-commons.commons-io>2.6</versions.apache-commons.commons-io>
-        <versions.apache-commons.commons-lang3>3.9</versions.apache-commons.commons-lang3>
-        <versions.apache-commons.commons-net>3.6</versions.apache-commons.commons-net>
-        <versions.assertj-core>3.15.0</versions.assertj-core>
-        <versions.jackson-core>2.10.2</versions.jackson-core>
-        <versions.jackson-datatype>2.10.3</versions.jackson-datatype>
-        <versions.rest-assured>4.4.0</versions.rest-assured>
-        <versions.selenium>4.0.0-alpha-4</versions.selenium>
-        <versions.testng>7.1.0</versions.testng>
+        <versions.assertj-core>3.24.1</versions.assertj-core>
+        <versions.jackson-core>2.14.1</versions.jackson-core>
+        <versions.jackson-datatype>2.14.1</versions.jackson-datatype>
+        <versions.rest-assured>5.3.0</versions.rest-assured>
+        <versions.selenium>4.7.2</versions.selenium>
+        <versions.webDriverManager>5.3.1</versions.webDriverManager>
+        <versions.testng>7.7.1</versions.testng>
         <versions.logback>1.2.3</versions.logback>
-        <versions.awaitility>4.0.2</versions.awaitility>
-        <versions.java-websocket>1.5.1</versions.java-websocket>
+        <versions.awaitility>4.2.0</versions.awaitility>
+        <versions.java-websocket>1.5.3</versions.java-websocket>
+        <versions.guava>31.1-jre</versions.guava>
 
         <!-- Plugin Versions -->
         <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
-        <version.lombok>1.18.12</version.lombok>
-        <version.lombok-maven>1.18.12.0</version.lombok-maven>
+        <versions.lombok>1.18.24</versions.lombok>
+        <versions.lombok-maven>1.18.20.0</versions.lombok-maven>
     </properties>
 
     <dependencies>
@@ -50,13 +46,13 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${version.lombok}</version>
+            <version>${versions.lombok}</version>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok-maven</artifactId>
-            <version>${version.lombok-maven}</version>
+            <version>${versions.lombok-maven}</version>
             <type>pom</type>
         </dependency>
 
@@ -64,12 +60,6 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${versions.logback}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>util</artifactId>
-            <version>${versions.saphyra.util}</version>
         </dependency>
 
         <dependency>
@@ -111,13 +101,13 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>29.0-jre</version>
+            <version>${versions.guava}</version>
         </dependency>
 
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
-            <version>5.2.1</version>
+            <version>${versions.webDriverManager}</version>
         </dependency>
 
         <dependency>

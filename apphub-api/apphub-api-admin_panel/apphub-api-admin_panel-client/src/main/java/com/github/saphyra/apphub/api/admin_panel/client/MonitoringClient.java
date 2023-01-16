@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient("admin-panel-monitoring")
+@FeignClient(name = "admin-panel-monitoring", url = "${serviceUrls.adminPanel}")
 public interface MonitoringClient {
     @PutMapping(Endpoints.ADMIN_PANEL_REPORT_MEMORY_STATUS)
     void reportMemoryStatus(@RequestBody MemoryStatusModel memoryStatus, @RequestHeader(Constants.LOCALE_HEADER) String locale);

@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.text.EditTextService;
 import com.github.saphyra.apphub.service.notebook.service.text.TextQueryService;
 import com.github.saphyra.apphub.service.notebook.service.text.creation.TextCreationService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -50,13 +49,9 @@ public class ContentControllerImplTest {
     @Mock
     private EditTextRequest editTextRequest;
 
-    @BeforeEach
-    public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-    }
-
     @Test
     public void createText() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(textCreationService.create(createTextRequest, USER_ID)).willReturn(LIST_ITEM_ID);
 
         OneParamResponse<UUID> result = underTest.createText(createTextRequest, accessTokenHeader);

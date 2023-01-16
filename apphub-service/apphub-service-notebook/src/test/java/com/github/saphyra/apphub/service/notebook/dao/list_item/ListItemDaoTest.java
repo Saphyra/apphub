@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.notebook.dao.list_item;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -48,15 +47,10 @@ public class ListItemDaoTest {
     @Mock
     private ListItemEntity entity;
 
-    @BeforeEach
-    public void setUp() {
-        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(uuidConverter.convertDomain(LIST_ITEM_ID)).willReturn(LIST_ITEM_ID_STRING);
-        given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
-    }
 
     @Test
     public void getByUserIdAndType() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(repository.getByUserIdAndType(USER_ID_STRING, ListItemType.CHECKLIST)).willReturn(Arrays.asList(entity));
         given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(domain));
 
@@ -67,6 +61,7 @@ public class ListItemDaoTest {
 
     @Test
     public void findById() {
+        given(uuidConverter.convertDomain(LIST_ITEM_ID)).willReturn(LIST_ITEM_ID_STRING);
         given(repository.findById(LIST_ITEM_ID_STRING)).willReturn(Optional.of(entity));
         given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
 
@@ -77,6 +72,7 @@ public class ListItemDaoTest {
 
     @Test
     public void findByIdValidated_notFound() {
+        given(uuidConverter.convertDomain(LIST_ITEM_ID)).willReturn(LIST_ITEM_ID_STRING);
         given(repository.findById(LIST_ITEM_ID_STRING)).willReturn(Optional.empty());
 
         Throwable ex = catchThrowable(() -> underTest.findByIdValidated(LIST_ITEM_ID));
@@ -86,6 +82,8 @@ public class ListItemDaoTest {
 
     @Test
     public void getByUserIdAndParent() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
         given(repository.getByUserIdAndParent(USER_ID_STRING, PARENT_STRING)).willReturn(Arrays.asList(entity));
         given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(domain));
 
@@ -97,6 +95,7 @@ public class ListItemDaoTest {
     @Test
     public void deleteByUserId() {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
 
         underTest.deleteByUserId(USER_ID);
 
@@ -105,6 +104,7 @@ public class ListItemDaoTest {
 
     @Test
     public void getByUserId() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(repository.getByUserId(USER_ID_STRING)).willReturn(Arrays.asList(entity));
         given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(domain));

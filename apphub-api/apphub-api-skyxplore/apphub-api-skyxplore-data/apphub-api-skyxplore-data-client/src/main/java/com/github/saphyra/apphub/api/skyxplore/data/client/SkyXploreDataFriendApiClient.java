@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
-@FeignClient("skyxplore-data-friend")
+@FeignClient(name = "skyxplore-data-friend", url = "${serviceUrls.skyxploreData}")
 public interface SkyXploreDataFriendApiClient {
     @GetMapping(Endpoints.SKYXPLORE_GET_FRIENDS)
     List<FriendshipResponse> getFriends(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.UUID;
 
-@FeignClient("user-authentication")
+@FeignClient(name = "user-authentication", url = "${serviceUrls.user}")
 public interface UserAuthenticationClient {
     @RequestMapping(method = RequestMethod.GET, value = Endpoints.USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID)
     InternalAccessTokenResponse getAccessTokenById(@PathVariable("accessTokenId") UUID accessTokenId, @RequestHeader(Constants.LOCALE_HEADER) String locale);

@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
+import com.github.saphyra.apphub.integration.structure.StringStringMap;
 import com.github.saphyra.apphub.integration.structure.user.SetUserSettingsRequest;
-import com.github.saphyra.util.StringStringMap;
 import io.restassured.response.Response;
 
 import java.util.Map;

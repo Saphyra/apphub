@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
-@FeignClient("skyxplore-game-ws")
+@FeignClient(name = "skyxplore-game-ws", url = "${serviceUrls.skyxploreGame}")
 public interface SkyXploreGameWebSocketEventApiClient {
     @PostMapping(Endpoints.SKYXPLORE_INTERNAL_GAME_PROCESS_WEB_SOCKET_EVENTS)
     void processWebSocketEvent(@PathVariable("userId") UUID from, @RequestBody WebSocketEvent event, @RequestHeader(Constants.LOCALE_HEADER) String locale);

@@ -19,6 +19,18 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+            <version>${versions.spring-cloud-gateway}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+            <version>${versions.spring-cloud-gateway}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-monitoring</artifactId>
             <version>${project.version}</version>
@@ -55,7 +67,6 @@
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
             <version>${versions.byte-buddy}</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>

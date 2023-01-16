@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 
-@FeignClient("admin-panel-error-reporter")
+@FeignClient(name = "admin-panel-error-reporter", url = "${serviceUrls.adminPanel}")
 public interface ErrorReporterClient {
     @PutMapping(Endpoints.ADMIN_PANEL_INTERNAL_REPORT_ERROR)
     void reportError(@RequestBody ErrorReportModel model, @RequestHeader(Constants.LOCALE_HEADER) String locale);

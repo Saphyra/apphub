@@ -35,7 +35,7 @@ public class ApphubWsClient extends WebSocketClient {
 
     private ApphubWsClient(Language language, String endpoint, UUID accessTokenId) throws URISyntaxException {
         super(
-            new URI(String.format("http://localhost:%s%s", TestBase.SERVER_PORT, endpoint)),
+            new URI(String.format("ws://localhost:%s%s", TestBase.SERVER_PORT, endpoint)),
             new Draft_6455(),
             CollectionUtils.toMap(
                 new BiWrapper<>("Cookie", Constants.ACCESS_TOKEN_COOKIE + "=" + accessTokenId + "; " + Constants.LOCALE_COOKIE + "=" + language.getLocale()),

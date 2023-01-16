@@ -23,7 +23,6 @@ public class GameDataItemValidatorTest {
     public void nullId() {
         given(gameDataItem.getId()).willReturn(null);
 
-        underTest.validate(gameDataItem);
         assertThat(catchThrowable(() -> underTest.validate(gameDataItem))).isInstanceOf(NullPointerException.class);
     }
 

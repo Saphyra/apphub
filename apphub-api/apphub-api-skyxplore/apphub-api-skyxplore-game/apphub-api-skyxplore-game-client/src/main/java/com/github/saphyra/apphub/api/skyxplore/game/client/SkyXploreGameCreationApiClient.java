@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient("skyxplore-game-creation")
+@FeignClient(name = "skyxplore-game-creation", url = "${serviceUrls.skyxploreGame}")
 public interface SkyXploreGameCreationApiClient {
     @PutMapping(Endpoints.SKYXPLORE_INTERNAL_CREATE_GAME)
     void createGame(@RequestBody SkyXploreGameCreationRequest request, @RequestHeader(Constants.LOCALE_HEADER) String locale);

@@ -1,23 +1,24 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication;
 
 import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
-
-import jakarta.annotation.PostConstruct;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
-@Component
-@ConfigurationProperties()
+@Configuration
+@EnableConfigurationProperties
+@ConfigurationProperties
 @Data
 @Slf4j
 public class NonSessionExtendingUriProperties {
-    private final List<WhiteListedEndpoint> nonSessionExtendingUris;
+    private List<WhiteListedEndpoint> nonSessionExtendingUris;
 
     @PostConstruct
     public void validate() {

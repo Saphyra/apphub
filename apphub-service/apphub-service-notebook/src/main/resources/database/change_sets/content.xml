@@ -36,7 +36,7 @@
 
     <changeSet id="rename-constraint-text_pk-to-content_pk" author="saphyra">
         <preConditions onFail="MARK_RAN">
-            <primaryKeyExists schemaName="notebook" primaryKeyName="text_pk"/>
+            <primaryKeyExists schemaName="notebook" tableName="content" primaryKeyName="text_pk"/>
         </preConditions>
 
         <dropPrimaryKey schemaName="notebook" tableName="content"/>

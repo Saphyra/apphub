@@ -8,9 +8,8 @@ import com.github.saphyra.apphub.service.notebook.service.ArchiveService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemEditionService;
 import com.github.saphyra.apphub.service.notebook.service.PinService;
-import com.github.saphyra.apphub.service.notebook.service.clone.ListItemCloneService;
 import com.github.saphyra.apphub.service.notebook.service.SearchService;
-import org.junit.jupiter.api.BeforeEach;
+import com.github.saphyra.apphub.service.notebook.service.clone.ListItemCloneService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -62,13 +61,10 @@ public class ListItemControllerIImplTest {
     @Mock
     private NotebookView notebookView;
 
-    @BeforeEach
-    public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-    }
-
     @Test
     public void deleteListItem() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.deleteListItem(LIST_ITEM_ID, accessTokenHeader);
 
         verify(listItemDeletionService).deleteListItem(LIST_ITEM_ID, USER_ID);
@@ -90,6 +86,8 @@ public class ListItemControllerIImplTest {
 
     @Test
     public void pinListItem() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.pinListItem(LIST_ITEM_ID, new OneParamRequest<>(true), accessTokenHeader);
 
         verify(pinService).pinListItem(LIST_ITEM_ID, true);
@@ -97,6 +95,7 @@ public class ListItemControllerIImplTest {
 
     @Test
     public void getPinnedItems() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(pinService.getPinnedItems(USER_ID)).willReturn(Arrays.asList(notebookView));
 
         List<NotebookView> result = underTest.getPinnedItems(accessTokenHeader);
@@ -106,6 +105,7 @@ public class ListItemControllerIImplTest {
 
     @Test
     public void search() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(searchService.search(USER_ID, SEARCH_TEXT)).willReturn(Arrays.asList(notebookView));
 
         List<NotebookView> result = underTest.search(new OneParamRequest<>(SEARCH_TEXT), accessTokenHeader);
@@ -115,6 +115,8 @@ public class ListItemControllerIImplTest {
 
     @Test
     public void archive() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.archive(new OneParamRequest<>(true), LIST_ITEM_ID, accessTokenHeader);
 
         verify(archiveService).archive(LIST_ITEM_ID, true);
