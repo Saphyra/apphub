@@ -4,10 +4,14 @@ import com.github.saphyra.apphub.api.notebook.model.request.CreateCategoryReques
 import com.github.saphyra.apphub.api.notebook.model.response.CategoryTreeView;
 import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.UUID;

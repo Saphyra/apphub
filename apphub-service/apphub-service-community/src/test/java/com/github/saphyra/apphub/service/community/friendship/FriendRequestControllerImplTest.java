@@ -5,7 +5,11 @@ import com.github.saphyra.apphub.api.community.model.response.friend_request.Fri
 import com.github.saphyra.apphub.api.community.model.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.service.community.friendship.service.*;
+import com.github.saphyra.apphub.service.community.friendship.service.AcceptFriendRequestService;
+import com.github.saphyra.apphub.service.community.friendship.service.FriendCandidateSearchService;
+import com.github.saphyra.apphub.service.community.friendship.service.FriendRequestCreationService;
+import com.github.saphyra.apphub.service.community.friendship.service.FriendRequestDeletionService;
+import com.github.saphyra.apphub.service.community.friendship.service.FriendRequestQueryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
