@@ -5,8 +5,7 @@ function fileNodeFactory(parent, itemDetails, displayOpenParentCategoryButton){
         node.classList.add("file");
 
         node.onclick = function(){
-            //TODO open a page with the details of the file (file name, size, etc)
-            window.open(Mapping.getEndpoint("STORAGE_DOWNLOAD_FILE", {storedFileId: itemDetails.value}).getUrl())
+            fileViewController.viewFile(itemDetails.id, itemDetails.title, itemDetails.value);
         }
 
         node.ondragstart = function(e){

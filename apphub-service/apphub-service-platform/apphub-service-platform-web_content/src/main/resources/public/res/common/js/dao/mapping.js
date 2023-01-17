@@ -204,6 +204,7 @@ window.Mapping = new function(){
         //STORAGE
         STORAGE_UPLOAD_FILE: new Endpoint("/api/storage/{storedFileId}", HttpMethod.PUT, null),
         STORAGE_DOWNLOAD_FILE: new Endpoint("/api/storage/{storedFileId}", HttpMethod.GET, null),
+        STORAGE_GET_METADATA: new Endpoint("/api/storage/{storedFileId}/metadata", HttpMethod.GET, null),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){

@@ -1,6 +1,36 @@
 {
   "title": "Apphub - Jegyzetfüzet",
   "staticText": {
+    "view-file-name-label": [
+      {
+        "key": "innerHTML",
+        "message": "Fájlnév"
+      }
+    ],
+    "view-file-size-label": [
+      {
+        "key": "innerHTML",
+        "message": "Méret"
+      }
+    ],
+    "view-file-created-at-label": [
+      {
+        "key": "innerHTML",
+        "message": "Létrehozva"
+      }
+    ],
+    "download-image-button": [
+      {
+        "key": "innerHTML",
+        "message": "Download"
+      }
+    ],
+    "download-file-button": [
+      {
+        "key": "innerHTML",
+        "message": "Download"
+      }
+    ],
     "create-file-selected-category": [
       {
         "key": "innerHTML",
@@ -604,6 +634,6 @@
     "no-file-selected": "Nincs fájl kiválasztva.",
     "image-saved": "Kép elmentve.",
     "file-saved": "Fájl elmentve.",
-    "file-too-big": "Fájlméret túl nagy. Maximum 2GB."
+    "file-too-big": "Fájlméret túl nagy. Maximum 2 GB."
   }
 }

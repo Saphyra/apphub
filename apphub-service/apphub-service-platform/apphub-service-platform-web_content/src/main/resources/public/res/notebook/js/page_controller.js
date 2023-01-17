@@ -3,6 +3,7 @@ const FILE_SIZE_LIMIT = 2147483648;
 scriptLoader.loadScript("/res/common/js/animation/spinner.js");
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/common/js/settings.js");
+scriptLoader.loadScript("/res/common/js/date.js");
 scriptLoader.loadScript("/res/notebook/js/category_tree_controller.js");
 scriptLoader.loadScript("/res/notebook/js/creation/category_creation_controller.js");
 scriptLoader.loadScript("/res/notebook/js/creation/text_creation_controller.js");
@@ -33,6 +34,7 @@ scriptLoader.loadScript("/res/notebook/js/content/node_factory/text_node_factory
 scriptLoader.loadScript("/res/notebook/js/view/checklist_table_view_controller.js");
 scriptLoader.loadScript("/res/notebook/js/view/checklist_view_controller.js");
 scriptLoader.loadScript("/res/notebook/js/view/image_view_controller.js");
+scriptLoader.loadScript("/res/notebook/js/view/file_view_controller.js");
 scriptLoader.loadScript("/res/notebook/js/content/content_controller.js");
 scriptLoader.loadScript("/res/notebook/js/settings_controller.js");
 
@@ -47,6 +49,10 @@ scriptLoader.loadScript("/res/notebook/js/settings_controller.js");
         newFileTitle: "new-file-title",
         viewImageImg: "view-image-img",
         viewImageTitle: "view-image-title",
+        viewFileTitle: "view-file-title",
+        viewFileName: "view-file-name",
+        viewFileSize: "view-file-size",
+        viewFileCreatedAt: "view-file-created-at",
     }
 
     window.settings = new Settings("notebook");

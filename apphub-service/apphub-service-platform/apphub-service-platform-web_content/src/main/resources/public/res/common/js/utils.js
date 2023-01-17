@@ -1,3 +1,32 @@
+const KILOBYTES = 1024;
+const MEGABYTES = KILOBYTES * 1024;
+const GIGABYTES = MEGABYTES * 1024;
+
+function formatFileSize(bytes){
+    if(bytes > GIGABYTES){
+        return limitDecimals(bytes / GIGABYTES, 1) + " GB";
+    }
+
+    if(bytes > MEGABYTES){
+        return limitDecimals(bytes / MEGABYTES, 1) + " MB";
+    }
+
+    if(bytes > KILOBYTES){
+        return limitDecimals(bytes / KILOBYTES, 1) + " KB";
+    }
+
+    return bytes + " B";
+
+    function limitDecimals(value, limit){
+        if(value % 1 == 0){
+            return value;
+        }
+
+        return parseFloat(value)
+            .toFixed(limit);
+    }
+}
+
 function joinIfPresent(separator, items){
     return new Stream(items)
         .filter((value) => {return hasValue(value)})

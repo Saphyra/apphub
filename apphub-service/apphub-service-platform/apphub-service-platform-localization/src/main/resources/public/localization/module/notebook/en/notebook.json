@@ -1,6 +1,36 @@
 {
   "title": "Apphub - Notebook",
   "staticText": {
+    "view-file-name-label": [
+      {
+        "key": "innerHTML",
+        "message": "File name"
+      }
+    ],
+    "view-file-size-label": [
+      {
+        "key": "innerHTML",
+        "message": "Size"
+      }
+    ],
+    "view-file-created-at-label": [
+      {
+        "key": "innerHTML",
+        "message": "Created At"
+      }
+    ],
+    "download-image-button": [
+      {
+        "key": "innerHTML",
+        "message": "Download"
+      }
+    ],
+    "download-file-button": [
+      {
+        "key": "innerHTML",
+        "message": "Download"
+      }
+    ],
     "create-file-selected-category": [
       {
         "key": "innerHTML",
@@ -610,6 +640,6 @@
     "no-file-selected": "No file selected.",
     "image-saved": "Image saved.",
     "file-saved": "File saved.",
-    "file-too-big": "File size is too big. Maximum 2GB."
+    "file-too-big": "File size is too big. Maximum 2 GB."
   }
 }

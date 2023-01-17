@@ -1,0 +1,29 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<DIV id="view-file" class="main-page" th:fragment="view-file">
+    <HEADER>
+        <H1><SPAN id="view-file-title"></SPAN></H1>
+        <BUTTON id="view-file-close-button" class="dialog-close-button" onclick="pageController.openMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN id="view-file-content">
+        <TABLE id="view-file-content-table" class="formatted-table">
+            <TR>
+                <TD id="view-file-name-label"></TD>
+                <TD id="view-file-name"></TD>
+            </TR>
+            <TR>
+                <TD id="view-file-size-label"></TD>
+                <TD id="view-file-size"></TD>
+            </TR>
+            <TR>
+                <TD id="view-file-created-at-label"></TD>
+                <TD id="view-file-created-at"></TD>
+            </TR>
+        </TABLE>
+    </MAIN>
+</DIV>
+
+</BODY>
+</HTML>
