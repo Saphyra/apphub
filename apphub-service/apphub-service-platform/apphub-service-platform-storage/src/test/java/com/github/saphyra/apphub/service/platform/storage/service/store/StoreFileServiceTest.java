@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.platform.storage.service.store;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
@@ -43,7 +44,7 @@ public class StoreFileServiceTest {
     private UuidConverter uuidConverter;
 
     @Mock
-    private StoreFileProperties storeFileProperties;
+    private CommonConfigProperties properties;
 
     @InjectMocks
     private StoreFileService underTest;
@@ -80,7 +81,7 @@ public class StoreFileServiceTest {
 
     @Test
     public void createFile_tooHighSize() {
-        given(storeFileProperties.getMaxFileSize()).willReturn(SIZE + 1);
+        given(properties.getMaxUploadedFileSize()).willReturn(SIZE + 1);
 
         Throwable ex = catchThrowable(() -> underTest.createFile(USER_ID, FILE_NAME, EXTENSION, SIZE + 2));
 
@@ -89,7 +90,7 @@ public class StoreFileServiceTest {
 
     @Test
     public void createFile() {
-        given(storeFileProperties.getMaxFileSize()).willReturn(SIZE + 1);
+        given(properties.getMaxUploadedFileSize()).willReturn(SIZE + 1);
 
         given(storedFileFactory.create(USER_ID, FILE_NAME, EXTENSION, SIZE)).willReturn(storedFile);
         given(storedFile.getStoredFileId()).willReturn(STORED_FILE_ID);

@@ -109,6 +109,8 @@ supportedLocales:
 - hu
 - en
 defaultLocale: hu
+fileUpload:
+  maxFileSize: 2147483648 #2 GB
 
 endpoint:
   whitelisting:

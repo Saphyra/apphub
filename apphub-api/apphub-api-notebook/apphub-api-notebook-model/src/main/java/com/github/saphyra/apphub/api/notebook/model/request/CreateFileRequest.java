@@ -14,6 +14,5 @@ import java.util.UUID;
 public class CreateFileRequest {
     private String title;
     private UUID parent;
-    private String fileName;
-    private Long size;
+    private FileMetadata metadata;
 }

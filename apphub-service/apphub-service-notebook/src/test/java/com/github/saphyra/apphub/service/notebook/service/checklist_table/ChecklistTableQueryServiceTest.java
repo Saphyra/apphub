@@ -6,7 +6,8 @@ import com.github.saphyra.apphub.api.notebook.model.response.TableHeadResponse;
 import com.github.saphyra.apphub.api.notebook.model.response.TableResponse;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRowDao;
-import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
+import com.github.saphyra.apphub.service.notebook.service.table.query.ContentTableColumnResponseProvider;
+import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,6 +32,9 @@ public class ChecklistTableQueryServiceTest {
     @Mock
     private ChecklistTableRowDao checklistTableRowDao;
 
+    @Mock
+    private ContentTableColumnResponseProvider contentTableColumnResponseProvider;
+
     @InjectMocks
     private ChecklistTableQueryService underTest;
 
@@ -38,19 +42,19 @@ public class ChecklistTableQueryServiceTest {
     private TableHeadResponse tableHeadResponse;
 
     @Mock
-    private TableColumnResponse tableColumnResponse;
+    private TableColumnResponse<String> tableColumnResponse;
 
     @Mock
     private ChecklistTableRow checklistTableRow;
 
     @Test
     public void getChecklistTable() {
-        TableResponse tableResponse = TableResponse.builder()
+        TableResponse<String> tableResponse = TableResponse.<String>builder()
             .title(TITLE)
             .tableHeads(Arrays.asList(tableHeadResponse))
             .tableColumns(Arrays.asList(tableColumnResponse))
             .build();
-        given(tableQueryService.getTable(LIST_ITEM_ID)).willReturn(tableResponse);
+        given(tableQueryService.getTable(LIST_ITEM_ID, contentTableColumnResponseProvider)).willReturn(tableResponse);
 
         given(checklistTableRowDao.getByParent(LIST_ITEM_ID)).willReturn(Arrays.asList(checklistTableRow));
         given(checklistTableRow.getRowIndex()).willReturn(ROW_INDEX);

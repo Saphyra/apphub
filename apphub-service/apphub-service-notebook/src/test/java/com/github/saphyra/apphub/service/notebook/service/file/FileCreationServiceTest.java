@@ -1,14 +1,15 @@
 package com.github.saphyra.apphub.service.notebook.service.file;
 
 import com.github.saphyra.apphub.api.notebook.model.request.CreateFileRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.service.notebook.dao.file.File;
 import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
+import com.github.saphyra.apphub.service.notebook.service.validator.CreateFileRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.FileFactory;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
-import com.github.saphyra.apphub.service.notebook.service.ListItemRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +35,7 @@ public class FileCreationServiceTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
 
     @Mock
-    private ListItemRequestValidator listItemRequestValidator;
+    private CreateFileRequestValidator createFileRequestValidator;
 
     @Mock
     private ListItemFactory listItemFactory;
@@ -63,12 +64,16 @@ public class FileCreationServiceTest {
     @Mock
     private File file;
 
+    @Mock
+    private FileMetadata metadata;
+
     @Test
     public void createImage() {
         given(request.getTitle()).willReturn(TITLE);
         given(request.getParent()).willReturn(PARENT);
-        given(request.getFileName()).willReturn(FILE_NAME);
-        given(request.getSize()).willReturn(SIZE);
+        given(request.getMetadata()).willReturn(metadata);
+        given(metadata.getFileName()).willReturn(FILE_NAME);
+        given(metadata.getSize()).willReturn(SIZE);
 
         given(listItem.getListItemId()).willReturn(LIST_ITEM_ID);
 
@@ -78,7 +83,7 @@ public class FileCreationServiceTest {
 
         UUID result = underTest.createFile(USER_ID, request);
 
-        verify(listItemRequestValidator).validate(TITLE, PARENT);
+        verify(createFileRequestValidator).validate(request);
         verify(listItemDao).save(listItem);
         verify(fileDao).save(file);
 

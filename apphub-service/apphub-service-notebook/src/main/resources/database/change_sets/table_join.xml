@@ -18,4 +18,16 @@
 
         <addPrimaryKey schemaName="notebook" tableName="table_join" columnNames="table_join_id" constraintName="table_join_pk"/>
     </changeSet>
+
+    <changeSet id="add-column-column_type-to-table_join" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="notebook" tableName="table_join" columnName="column_type"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="notebook" tableName="table_join">
+            <column name="column_type" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

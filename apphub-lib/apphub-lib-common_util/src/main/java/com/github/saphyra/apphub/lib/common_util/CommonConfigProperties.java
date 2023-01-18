@@ -27,4 +27,7 @@ public class CommonConfigProperties {
 
     @NotNull
     private List<String> supportedLocales;
+
+    @Value("${fileUpload.maxFileSize}")
+    private Long maxUploadedFileSize;
 }

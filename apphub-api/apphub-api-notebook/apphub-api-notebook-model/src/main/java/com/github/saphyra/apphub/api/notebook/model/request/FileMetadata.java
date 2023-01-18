@@ -11,9 +11,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Data
-public class CreateImageRequest {
-    private String title;
-    private UUID parent;
+public class FileMetadata {
+    private UUID storedFileId;
     private String fileName;
     private Long size;
 }

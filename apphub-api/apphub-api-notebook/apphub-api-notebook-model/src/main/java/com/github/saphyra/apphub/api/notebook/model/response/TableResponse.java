@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class TableResponse {
+public class TableResponse<T> {
     @NonNull
     private final String title;
 
@@ -16,5 +16,5 @@ public class TableResponse {
     private final List<TableHeadResponse> tableHeads;
 
     @NonNull
-    private final List<TableColumnResponse> tableColumns;
+    private final List<TableColumnResponse<T>> tableColumns;
 }

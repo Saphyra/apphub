@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service.table;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.table.join.ColumnType;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoin;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
 import lombok.RequiredArgsConstructor;
@@ -30,15 +31,22 @@ public class TableJoinFactory {
         return result;
     }
 
+    //TODO unit test - ColumnType added
     public BiWrapper<TableJoin, Content> create(UUID listItemId, String columnContent, int rowIndex, int columnIndex, UUID userId) {
-        TableJoin tableJoin = TableJoin.builder()
+        TableJoin tableJoin = create(listItemId, rowIndex, columnIndex, userId, ColumnType.EMPTY);
+        Content content = contentFactory.create(listItemId, tableJoin.getTableJoinId(), userId, columnContent);
+        return new BiWrapper<>(tableJoin, content);
+    }
+
+    //TODO unit test
+    public TableJoin create(UUID listItemId, int rowIndex, int columnIndex, UUID userId, ColumnType columnType) {
+        return TableJoin.builder()
             .tableJoinId(idGenerator.randomUuid())
             .userId(userId)
             .parent(listItemId)
             .rowIndex(rowIndex)
             .columnIndex(columnIndex)
+            .columnType(columnType)
             .build();
-        Content content = contentFactory.create(listItemId, tableJoin.getTableJoinId(), userId, columnContent);
-        return new BiWrapper<>(tableJoin, content);
     }
 }

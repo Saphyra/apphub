@@ -62,7 +62,7 @@ public class ListItemCloneServiceTest {
     private ChecklistTableCloneService checklistTableCloneService;
 
     @Mock
-    private CloneFileService cloneFileService;
+    private FileCloneService cloneFileService;
 
     @InjectMocks
     private ListItemCloneService underTest;

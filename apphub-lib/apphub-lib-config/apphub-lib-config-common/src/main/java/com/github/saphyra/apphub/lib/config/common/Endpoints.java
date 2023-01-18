@@ -164,6 +164,11 @@ public class Endpoints {
     public static final String NOTEBOOK_MOVE_LIST_ITEM = "/api/notebook/{listItemId}/move";
     public static final String NOTEBOOK_CREATE_IMAGE = "/api/notebook/image";
     public static final String NOTEBOOK_CREATE_FILE = "/api/notebook/file";
+    public static final String NOTEBOOK_CREATE_CUSTOM_TABLE = "/api/notebook/custom-table";
+    public static final String NOTEBOOK_EDIT_CUSTOM_TABLE = "/api/notebook/custom-table/{listItemId}";
+    public static final String NOTEBOOK_GET_CUSTOM_TABLE = "/api/notebook/custom-table/{listItemId}";
+    public static final String NOTEBOOK_UPDATE_CUSTOM_TABLE_ROW_STATUS = "/api/notebook/custom-table/{listItemId}/{rowIndex}";
+    public static final String NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CUSTOM_TABLE = "/api/notebook/custom-table/{listItemId}/checked";
 
     //UTILS
     public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";

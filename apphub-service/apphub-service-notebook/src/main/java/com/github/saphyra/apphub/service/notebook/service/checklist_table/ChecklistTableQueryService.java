@@ -4,7 +4,8 @@ import com.github.saphyra.apphub.api.notebook.model.response.ChecklistTableRespo
 import com.github.saphyra.apphub.api.notebook.model.response.TableResponse;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRowDao;
-import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
+import com.github.saphyra.apphub.service.notebook.service.table.query.ContentTableColumnResponseProvider;
+import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,9 +20,10 @@ import java.util.stream.Collectors;
 public class ChecklistTableQueryService {
     private final TableQueryService tableQueryService;
     private final ChecklistTableRowDao checklistTableRowDao;
+    private final ContentTableColumnResponseProvider contentTableColumnResponseProvider;
 
     public ChecklistTableResponse getChecklistTable(UUID listItemId) {
-        TableResponse tableResponse = tableQueryService.getTable(listItemId);
+        TableResponse<String> tableResponse = tableQueryService.getTable(listItemId, contentTableColumnResponseProvider);
         Map<Integer, Boolean> rowStatus = checklistTableRowDao.getByParent(listItemId)
             .stream()
             .collect(Collectors.toMap(ChecklistTableRow::getRowIndex, ChecklistTableRow::isChecked));

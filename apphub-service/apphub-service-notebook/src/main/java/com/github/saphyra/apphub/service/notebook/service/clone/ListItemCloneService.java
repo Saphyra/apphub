@@ -23,7 +23,8 @@ public class ListItemCloneService {
     private final TextAndLinkCloneService textAndLinkCloneService;
     private final ChecklistCloneService checklistCloneService;
     private final ChecklistTableCloneService checklistTableCloneService;
-    private final CloneFileService cloneFileService;
+    private final FileCloneService cloneFileService;
+    private final CustomTableCloneService customTableCloneService;
 
     @Transactional
     public void clone(UUID listItemId) {
@@ -60,6 +61,8 @@ public class ListItemCloneService {
             case FILE:
                 cloneFileService.cloneFile(toClone, listItemClone);
                 break;
+            case CUSTOM_TABLE: //TODO unit test
+                customTableCloneService.clone(toClone, listItemClone);
             default:
                 throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, toClone.getType() + "cannot be cloned.");
         }

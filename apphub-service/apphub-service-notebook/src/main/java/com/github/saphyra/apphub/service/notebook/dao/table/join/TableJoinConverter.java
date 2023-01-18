@@ -18,6 +18,7 @@ public class TableJoinConverter extends ConverterBase<TableJoinEntity, TableJoin
             .parent(uuidConverter.convertEntity(entity.getParent()))
             .rowIndex(entity.getRowIndex())
             .columnIndex(entity.getColumnIndex())
+            .columnType(entity.getColumnType())
             .build();
     }
 
@@ -29,6 +30,7 @@ public class TableJoinConverter extends ConverterBase<TableJoinEntity, TableJoin
             .parent(uuidConverter.convertDomain(domain.getParent()))
             .rowIndex(domain.getRowIndex())
             .columnIndex(domain.getColumnIndex())
+            .columnType(domain.getColumnType())
             .build();
     }
 }

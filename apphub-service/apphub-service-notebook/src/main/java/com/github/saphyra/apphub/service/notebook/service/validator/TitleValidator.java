@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.service;
+package com.github.saphyra.apphub.service.notebook.service.validator;
 
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import org.springframework.stereotype.Component;

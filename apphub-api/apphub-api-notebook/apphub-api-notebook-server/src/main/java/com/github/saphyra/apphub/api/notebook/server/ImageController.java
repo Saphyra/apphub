@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.api.notebook.server;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateImageRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CreateFileRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
@@ -13,5 +13,5 @@ import java.util.UUID;
 
 public interface ImageController {
     @PutMapping(Endpoints.NOTEBOOK_CREATE_IMAGE)
-    OneParamResponse<UUID> createImage(@RequestBody CreateImageRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OneParamResponse<UUID> createImage(@RequestBody CreateFileRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

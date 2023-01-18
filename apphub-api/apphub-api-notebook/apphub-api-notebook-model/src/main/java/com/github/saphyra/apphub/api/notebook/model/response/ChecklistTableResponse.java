@@ -17,7 +17,7 @@ public class ChecklistTableResponse {
     private final List<TableHeadResponse> tableHeads;
 
     @NonNull
-    private final List<TableColumnResponse> tableColumns;
+    private final List<TableColumnResponse<String>> tableColumns;
 
     @NonNull
     private final Map<Integer, Boolean> rowStatus;

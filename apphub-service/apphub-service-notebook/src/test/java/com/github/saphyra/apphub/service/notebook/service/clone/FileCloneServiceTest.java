@@ -17,7 +17,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class CloneFileServiceTest {
+public class FileCloneServiceTest {
     private static final UUID ORIGINAL_PARENT = UUID.randomUUID();
     private static final UUID ORIGINAL_FILE_ID = UUID.randomUUID();
     private static final UUID CLONED_FILE_ID = UUID.randomUUID();
@@ -34,7 +34,7 @@ public class CloneFileServiceTest {
     private FileFactory fileFactory;
 
     @InjectMocks
-    private CloneFileService underTest;
+    private FileCloneService underTest;
 
     @Mock
     private ListItem toClone;
