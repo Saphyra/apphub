@@ -1,0 +1,38 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<BODY>
+
+<DIV id="create-custom-table" class="main-page" th:fragment="create-custom-table">
+    <HEADER>
+        <H1 id="create-custom-table-title"></H1>
+        <BUTTON id="create-custom-table-close-button" class="dialog-close-button" onclick="pageController.openMainPage()">X</BUTTON>
+    </HEADER>
+
+    <MAIN>
+        <DIV class="create-item-input-wrapper">
+            <INPUT type="text" id="new-custom-table-title" class="new-item-title">
+        </DIV>
+
+        <DIV id="create-custom-table-parent-selection-wrapper">
+            <DIV id="create-custom-table-selected-category-wrapper">
+                <SPAN id="create-custom-table-selected-category"></SPAN>: <SPAN id="create-custom-table-selected-category-title"></SPAN>
+            </DIV>
+            <DIV id="create-custom-table-parent-selection-list-wrapper">
+                <DIV id="create-custom-table-parent-selection-parent-button" class="button create-item-category"></DIV>
+                <DIV id="create-custom-table-parent-selection-category-list"></DIV>
+            </DIV>
+        </DIV>
+
+        <DIV id="new-custom-table-content-wrapper">
+            <TABLE id="new-custom-table-content-table" class="formatted-table">
+                <THEAD>
+                <TR id="new-custom-table-head-row"></TR>
+                </THEAD>
+
+                <TBODY id="new-custom-table-content"></TBODY>
+            </TABLE>
+        </DIV>
+    </MAIN>
+</DIV>
+
+</BODY>
+</HTML>

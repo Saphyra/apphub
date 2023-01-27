@@ -1,0 +1,15 @@
+{
+  "EMPTY": "Üres",
+  "NUMBER": "Szám",
+  "TEXT": "Szöveg",
+  "IMAGE": "Kép",
+  "FILE": "Fájl",
+  "CHECKBOX": "Jelölőnégyzet",
+  "COLOR": "Szín",
+  "DATE": "Dátum",
+  "TIME": "Idő",
+  "DATE_TIME": "Dátum és idő",
+  "MONTH": "Hónap",
+  "RANGE": "Intervallum",
+  "LINK": "Link"
+}

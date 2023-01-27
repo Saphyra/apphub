@@ -4,6 +4,7 @@ scriptLoader.loadScript("/res/common/js/animation/spinner.js");
 scriptLoader.loadScript("/res/common/js/confirmation_service.js");
 scriptLoader.loadScript("/res/common/js/settings.js");
 scriptLoader.loadScript("/res/common/js/date.js");
+scriptLoader.loadScript("/res/common/js/sync_engine.js");
 scriptLoader.loadScript("/res/notebook/js/category_tree_controller.js");
 scriptLoader.loadScript("/res/notebook/js/creation/category_creation_controller.js");
 scriptLoader.loadScript("/res/notebook/js/creation/text_creation_controller.js");
@@ -11,6 +12,7 @@ scriptLoader.loadScript("/res/notebook/js/creation/link_creation_controller.js")
 scriptLoader.loadScript("/res/notebook/js/creation/checklist_creation_controller.js");
 scriptLoader.loadScript("/res/notebook/js/creation/table_creation_controller.js");
 scriptLoader.loadScript("/res/notebook/js/creation/checklist_table_creation_controller.js");
+scriptLoader.loadScript("/res/notebook/js/creation/custom_table_creation_controller.js");
 scriptLoader.loadScript("/res/notebook/js/creation/only_title_creation_controller.js");
 scriptLoader.loadScript("/res/notebook/js/creation/image_creation_controller.js");
 scriptLoader.loadScript("/res/notebook/js/creation/file_creation_controller.js");
@@ -53,6 +55,8 @@ scriptLoader.loadScript("/res/notebook/js/settings_controller.js");
         viewFileName: "view-file-name",
         viewFileSize: "view-file-size",
         viewFileCreatedAt: "view-file-created-at",
+        newCustomTableHeadRow: "new-custom-table-head-row",
+        newCustomTableContent: "new-custom-table-content",
     }
 
     window.settings = new Settings("notebook");

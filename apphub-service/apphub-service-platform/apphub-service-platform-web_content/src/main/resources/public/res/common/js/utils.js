@@ -2,6 +2,11 @@ const KILOBYTES = 1024;
 const MEGABYTES = KILOBYTES * 1024;
 const GIGABYTES = MEGABYTES * 1024;
 
+function toEnum(values){
+    return new Stream(values)
+        .toMap((value) => {return value}, (value) => {return value});
+}
+
 function formatFileSize(bytes){
     if(bytes > GIGABYTES){
         return limitDecimals(bytes / GIGABYTES, 1) + " GB";

@@ -1,6 +1,54 @@
 {
   "title": "Apphub - Jegyzetfüzet",
   "staticText": {
+    "create-custom-table-title": [
+      {
+        "key": "innerHTML",
+        "message": "Új egyéni táblázat"
+      }
+    ],
+    "create-custom-table-parent-selection-parent-button": [
+      {
+        "key": "innerHTML",
+        "message": "Fel"
+      }
+    ],
+    "create-custom-table-selected-category": [
+      {
+        "key": "innerHTML",
+        "message": "Kiválasztott kategória"
+      }
+    ],
+    "new-custom-table-title": [
+      {
+        "key": "placeholder",
+        "message": "Új egyéni táblázat címe"
+      }
+    ],
+    "new-custom-table-button": [
+      {
+        "key": "innerHTML",
+        "message": "Egyéni táblázat"
+      }
+    ],
+    "create-custom-table-new-column-button": [
+      {
+        "key": "innerHTML",
+        "message": "Új oszlop"
+      }
+    ],
+    "create-custom-table-new-row-button": [
+      {
+        "key": "innerHTML",
+        "message": "Új sor"
+      }
+    ],
+    "create-custom-table-button": [
+      {
+        "key": "innerHTML",
+        "message": "Mentés"
+      }
+    ],
     "view-file-name-label": [
       {
         "key": "innerHTML",
@@ -634,6 +682,13 @@
     "no-file-selected": "Nincs fájl kiválasztva.",
     "image-saved": "Kép elmentve.",
     "file-saved": "Fájl elmentve.",
-    "file-too-big": "Fájlméret túl nagy. Maximum 2 GB."
+    "file-too-big": "Fájlméret túl nagy. Maximum 2 GB.",
+    "select-column-type-title": "Cella típusának kiválasztása",
+    "select-column-type-button": "Kiválaszt",
+    "select-column-type-cancel-button": "Mégse",
+    "value": "Érték",
+    "step": "Lépés",
+    "minimum": "Minimum",
+    "maximum": "Maximum"
   }
 }

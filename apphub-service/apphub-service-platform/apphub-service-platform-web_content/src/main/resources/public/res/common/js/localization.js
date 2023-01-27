@@ -15,7 +15,7 @@
             return new CustomLocalization(module, fileName);
         }
         this.getAdditionalContent = function(contentId, variables){
-            let result = additionalContent[contentId] || "No additionalContent found with id " + contentId;
+            let result = additionalContent[contentId] || throwException("IllegalArgument", "No additionalContent found with id " + contentId);
 
             new MapStream(variables)
                 .forEach(function(search, value){

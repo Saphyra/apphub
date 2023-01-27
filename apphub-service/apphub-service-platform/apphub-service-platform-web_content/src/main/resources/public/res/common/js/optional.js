@@ -1,6 +1,10 @@
 function Optional(obj){
     const value = obj;
 
+    this.get = function(){
+        return this.orElseThrow("NullPointer", "value is null");
+    }
+
     this.ifPresent = function(consumer, fallBack){
         if(this.isPresent()){
             consumer(value);

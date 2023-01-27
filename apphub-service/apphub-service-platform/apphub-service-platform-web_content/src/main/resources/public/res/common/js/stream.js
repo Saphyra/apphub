@@ -253,6 +253,26 @@ function MapStream(i){
     }
 }
 
+function Sequence(numberOfItems, startNumber, step){
+    startNumber = startNumber || 0;
+    step = step || 1;
+
+    const array = [];
+    for(let i = 0; i < numberOfItems; i++){
+        array.push(startNumber + i * step);
+    }
+
+    this.map = function(mapper){
+        return new Stream(array)
+            .map(mapper);
+    }
+
+    this.peek = function(consumer){
+        return new Stream(array)
+            .peek(consumer);
+    }
+}
+
 function entryList(map){
     const result = [];
     for(let key in map){

@@ -1,6 +1,12 @@
 <HTML xmlns:th="http://www.thymeleaf.org">
 <BODY>
 
+<SPAN id="create-custom-table-buttons" class="button-wrapper" th:fragment="create-custom-table-buttons">
+    <SPAN id="create-custom-table-new-column-button" class="button dialog-button" onclick="customTableCreationController.newColumn()"></SPAN>
+    <SPAN id="create-custom-table-new-row-button" class="button dialog-button" onclick="customTableCreationController.newRow()"></SPAN>
+    <SPAN id="create-custom-table-button" class="button dialog-button" onclick="customTableCreationController.save()"></SPAN>
+</SPAN>
+
 <SPAN id="create-file-buttons" class="button-wrapper" th:fragment="create-file-buttons">
     <BUTTON id="create-file-button" onclick="fileCreationController.save()"></BUTTON>
 </SPAN>
