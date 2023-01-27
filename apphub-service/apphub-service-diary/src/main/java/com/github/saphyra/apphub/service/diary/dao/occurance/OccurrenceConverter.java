@@ -23,7 +23,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
 
     @Override
     protected OccurrenceEntity processDomainConversion(Occurrence domain) {
-        String userId = accessTokenProvider.getUidAsString();
+        String userId = accessTokenProvider.getUserIdAsString();
         return OccurrenceEntity.builder()
             .occurrenceId(uuidConverter.convertDomain(domain.getOccurrenceId()))
             .eventId(uuidConverter.convertDomain(domain.getEventId()))
@@ -38,7 +38,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
 
     @Override
     protected Occurrence processEntityConversion(OccurrenceEntity entity) {
-        String userId = accessTokenProvider.getUidAsString();
+        String userId = accessTokenProvider.getUserIdAsString();
         return Occurrence.builder()
             .occurrenceId(uuidConverter.convertEntity(entity.getOccurrenceId()))
             .eventId(uuidConverter.convertEntity(entity.getEventId()))

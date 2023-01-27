@@ -2,16 +2,16 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ConstructionResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ConstructionToResponseConverterTest {
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final int REQUIRED_WORK_POINTS = 235;

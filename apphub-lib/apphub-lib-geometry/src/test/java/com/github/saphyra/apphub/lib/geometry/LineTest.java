@@ -1,17 +1,18 @@
 package com.github.saphyra.apphub.lib.geometry;
 
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class LineTest {
     private static final double DISTANCE = 34;
 
@@ -86,7 +87,7 @@ public class LineTest {
         assertThat(underTest.getOtherEndpoint(c2)).isEqualTo(c1);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void getOtherEndpoint_notEndpoint() {
         Coordinate c1 = new Coordinate(0, 1);
         Coordinate c2 = new Coordinate(2, 3);
@@ -94,6 +95,8 @@ public class LineTest {
 
         Line underTest = new Line(c1, c2);
 
-        underTest.getOtherEndpoint(c3);
+        Throwable ex = catchThrowable(() -> underTest.getOtherEndpoint(c3));
+
+        assertThat(ex).isInstanceOf(IllegalArgumentException.class);
     }
 }

@@ -7,6 +7,7 @@
   "CHARACTER_NAME_ALREADY_EXISTS": "Ez a karakternév már foglalt.",
   "DATA_NOT_FOUND": "Az adat nem található.",
   "EMAIL_ALREADY_EXISTS": "Az email foglalt.",
+  "FILE_NOT_UPLOADED": "Nincs fájl feltöltve. Lehet, hogy az átvitel még folyamatban van, próbáld újra később!",
   "FRIEND_REQUEST_ALREADY_EXISTS": "Már van ilyen barátkérelem.",
   "FRIEND_REQUEST_NOT_FOUND": "A barátkérelem nem található.",
   "FRIENDSHIP_ALREADY_EXISTS": "Ez a barátság már létrejött.",

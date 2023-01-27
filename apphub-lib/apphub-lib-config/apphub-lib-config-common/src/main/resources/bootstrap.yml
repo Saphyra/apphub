@@ -2,6 +2,48 @@ spring:
   cloud:
     kubernetes:
       enabled: false
+    discovery:
+      client:
+        simple:
+          instances:
+            admin-panel[0]:
+              uri: http://admin-panel:8080
+            community[0]:
+              uri: http://community:8080
+            diary[0]:
+              uri: http://diary:8080
+            modules[0]:
+              uri: http://modules:8080
+            notebook[0]:
+              uri: http://notebook:8080
+            encryption[0]:
+              uri: http://encryption:8080
+            event-gateway[0]:
+              uri: http://event-gateway:8080
+            localization[0]:
+              uri: http://localization:8080
+            main-gateway[0]:
+              uri: http://main-gateway:8080
+            message-sender[0]:
+              uri: http://message-sender:8080
+            scheduler[0]:
+              uri: http://scheduler:8080
+            storage[0]:
+              uri: http://storage:8080
+            web-content[0]:
+              uri: http://web-content:8080
+            skyxplore-data[0]:
+              uri: http://skyxplore-data:8080
+            skyxplore-game[0]:
+              uri: http://skyxplore-game:8080
+            skyxplore-lobby[0]:
+              uri: http://skyxplore-lobby:8080
+            training[0]:
+              uri: http://training:8080
+            user[0]:
+              uri: http://user:8080
+            utils[0]:
+              uri: http://utils:8080
   datasource:
     username: postgres
     password: postgres
@@ -17,6 +59,10 @@ spring:
           lob:
             non_contextual_creation: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  servlet:
+    multipart:
+      max-request-size: 20GB
+      max-file-size: 20GB
 liquibase:
   changelog:
     location: classpath:database/changelog-master.xml
@@ -32,10 +78,6 @@ hystryx:
       isolation:
         thread:
           timeoutInMilliseconds: 10000
-ribbon:
-  ConnectTimeout: 10000
-  ReadTimeout: 10000
-
 feign:
   client:
     config:
@@ -43,117 +85,16 @@ feign:
         connectTimeout: 30000
         readTimeout: 30000
 
-main-gateway:
-  ribbon:
-    listOfServers: main-gateway:8080
-scheduler:
-  ribbon:
-    listOfServers: scheduler:8080
-web-content:
-  ribbon:
-    listOfServers: web-content:8080
-event-gateway:
-  ribbon:
-    listOfServers: event-gateway:8080
-localization:
-  ribbon:
-    listOfServers: localization:8080
-message-sender:
-  ribbon:
-    listOfServers: message-sender:8080
-
-user-authentication:
-  ribbon:
-    listOfServers: user:8080
-user-account:
-  ribbon:
-    listOfServers: user:8080
-user-ban:
-  ribbon:
-    listOfServers: user:8080
-notebook:
-  ribbon:
-    listOfServers: notebook:8080
-user:
-  ribbon:
-    listOfServers: user:8080
-
-modules:
-  ribbon:
-    listOfServers: modules:8080
-
-admin-panel:
-  ribbon:
-    listOfServers: admin-panel:8080
-admin-panel-error-reporter:
-  ribbon:
-    listOfServers: admin-panel:8080
-admin-panel-monitoring:
-  ribbon:
-    listOfServers: admin-panel:8080
-admin-panel-ws-client:
-  ribbon:
-    listOfServers: admin-panel:8080
-
-utils:
-  ribbon:
-    listOfServers: utils:8080
-
-skyxplore-data:
-  ribbon:
-    listOfServers: skyxplore-data:8080
-
-skyxplore-data-character:
-  ribbon:
-    listOfServers: skyxplore-data:8080
-
-skyxplore-data-friend:
-  ribbon:
-    listOfServers: skyxplore-data:8080
-
-skyxplore-data-saved-game:
-  ribbon:
-    listOfServers: skyxplore-data:8080
-
-skyxplore-data-game:
-  ribbon:
-    listOfServers: skyxplore-data:8080
-
-skyxplore-lobby:
-  ribbon:
-    listOfServers: skyxplore-lobby:8080
-
-skyxplore-lobby-ws:
-  ribbon:
-    listOfServers: skyxplore-lobby:8080
-
-skyxplore-game:
-  ribbon:
-    listOfServers: skyxplore-game:8080
-
-skyxplore-game-creation:
-  ribbon:
-    listOfServers: skyxplore-game:8080
-
-skyxplore-game-ws:
-  ribbon:
-    listOfServers: skyxplore-game:8080
-
-training:
-  ribbon:
-    listOfServers: training:8080
-
-community:
-  ribbon:
-    listOfServers: community:8080
-
-diary:
-  ribbon:
-    listOfServers: diary:8080
-
-encryption:
-  ribbon:
-    listOfServers: encryption:8080
+serviceUrls:
+  adminPanel: admin-panel:8080
+  eventGateway: event-gateway:8080
+  localization: localization:8080
+  messageSender: message-sender:8080
+  skyxploreData: skyxplore-data:8080
+  skyxploreGame: skyxplore-game:8080
+  skyxploreLobby: skyxplore-lobby:8080
+  storage: storage:8080
+  user: user:8080
 
 event:
   processor:
@@ -165,8 +106,8 @@ event:
         delay:
           milliseconds: 5000
 supportedLocales:
-  - hu
-  - en
+- hu
+- en
 defaultLocale: hu
 
 endpoint:
@@ -195,6 +136,7 @@ endpoint:
         method: GET
 logging:
   level:
+    root: info
     com:
       github:
         saphyra:
@@ -205,154 +147,154 @@ logging:
 
 role:
   settings:
-    #Global
-    - pattern: /web/**
-      methods:
-        - GET
-      requiredRoles:
-        - ACCESS
-      whitelistedEndpoints:
-        - pattern: /web/error
-          method: GET
-        - pattern: /web
-          method: GET
-    - pattern: /api/**
-      methods:
-        - GET
-        - POST
-        - PUT
-        - DELETE
-      requiredRoles:
-        - ACCESS
-      whitelistedEndpoints:
-        - pattern: /api/user/authentication/login
-          method: POST
-        - pattern: /api/user/authentication/logout
-          method: POST
-        - pattern: /api/user/authentication/session
-          method: GET
-        - pattern: /api/user
-          method: POST
-    #Training
-    - pattern: /web/training/**
-      methods:
-        - GET
-      requiredRoles:
-        - TRAINING
-    #Notebook
-    - pattern: /web/notebook
-      methods:
-        - GET
-      requiredRoles:
-        - NOTEBOOK
-    - pattern: /api/notebook/**
-      methods:
-        - GET
-        - DELETE
-        - POST
-        - PUT
-      requiredRoles:
-        - NOTEBOOK
-    #User
-    - pattern: /api/user/data/roles
-      methods:
-        - POST
-        - PUT
-        - DELETE
-      requiredRoles:
-        - ADMIN
-    - pattern: /api/user/data/roles/*
-      methods:
-        - PUT
-        - DELETE
-      requiredRoles:
-        - ADMIN
-    - pattern: /api/user/data/roles/disabled
-      methods:
-        - GET
-      requiredRoles:
-        - ADMIN
-    - pattern: /api/user/data/roles/all
-      methods:
-        - POST
-        - DELETE
-      requiredRoles:
-        - ADMIN
-    - pattern: /api/user/data/ban/*
-      methods:
-        - POST
-      requiredRoles:
-        - ADMIN
-    #Admin-panel
-    - pattern: /web/admin-panel/**
-      methods:
-        - GET
-        - POST
-        - DELETE
-        - PUT
-      requiredRoles:
-        - ADMIN
-    - pattern: /api/admin-panel/**
-      methods:
-        - GET
-        - POST
-        - DELETE
-        - PUT
-      requiredRoles:
-        - ADMIN
-    #SkyXplore
-    - pattern: /web/skyxplore/**
-      methods:
-        - GET
-      requiredRoles:
-        - SKYXPLORE
-    - pattern: /api/skyxplore/**
-      methods:
-        - GET
-        - DELETE
-        - POST
-        - PUT
-      requiredRoles:
-        - SKYXPLORE
-    #Utils
-    - pattern: /web/utils/**
-      methods:
-        - GET
-      requiredRoles:
-        - UTILS
-    - pattern: /api/utils/**
-      methods:
-        - GET
-        - DELETE
-        - POST
-        - PUT
-      requiredRoles:
-        - UTILS
-    #Community
-    - pattern: /web/community
-      methods:
-        - GET
-      requiredRoles:
-        - COMMUNITY
-    - pattern: /api/community/**
-      methods:
-        - GET
-        - DELETE
-        - POST
-        - PUT
-      requiredRoles:
-        - COMMUNITY
-    #Diary
-    - pattern: /web/diary
-      methods:
-        - GET
-      requiredRoles:
-        - DIARY
-    - pattern: /api/diary/**
-      methods:
-        - GET
-        - DELETE
-        - POST
-        - PUT
-      requiredRoles:
-        - DIARY
+  #Global
+  - pattern: /web/**
+    methods:
+    - GET
+    requiredRoles:
+    - ACCESS
+    whitelistedEndpoints:
+    - pattern: /web/error
+      method: GET
+    - pattern: /web
+      method: GET
+  - pattern: /api/**
+    methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    requiredRoles:
+    - ACCESS
+    whitelistedEndpoints:
+    - pattern: /api/user/authentication/login
+      method: POST
+    - pattern: /api/user/authentication/logout
+      method: POST
+    - pattern: /api/user/authentication/session
+      method: GET
+    - pattern: /api/user
+      method: POST
+  #Training
+  - pattern: /web/training/**
+    methods:
+    - GET
+    requiredRoles:
+    - TRAINING
+  #Notebook
+  - pattern: /web/notebook
+    methods:
+    - GET
+    requiredRoles:
+    - NOTEBOOK
+  - pattern: /api/notebook/**
+    methods:
+    - GET
+    - DELETE
+    - POST
+    - PUT
+    requiredRoles:
+    - NOTEBOOK
+  #User
+  - pattern: /api/user/data/roles
+    methods:
+    - POST
+    - PUT
+    - DELETE
+    requiredRoles:
+    - ADMIN
+  - pattern: /api/user/data/roles/*
+    methods:
+    - PUT
+    - DELETE
+    requiredRoles:
+    - ADMIN
+  - pattern: /api/user/data/roles/disabled
+    methods:
+    - GET
+    requiredRoles:
+    - ADMIN
+  - pattern: /api/user/data/roles/all
+    methods:
+    - POST
+    - DELETE
+    requiredRoles:
+    - ADMIN
+  - pattern: /api/user/data/ban/*
+    methods:
+    - POST
+    requiredRoles:
+    - ADMIN
+  #Admin-panel
+  - pattern: /web/admin-panel/**
+    methods:
+    - GET
+    - POST
+    - DELETE
+    - PUT
+    requiredRoles:
+    - ADMIN
+  - pattern: /api/admin-panel/**
+    methods:
+    - GET
+    - POST
+    - DELETE
+    - PUT
+    requiredRoles:
+    - ADMIN
+  #SkyXplore
+  - pattern: /web/skyxplore/**
+    methods:
+    - GET
+    requiredRoles:
+    - SKYXPLORE
+  - pattern: /api/skyxplore/**
+    methods:
+    - GET
+    - DELETE
+    - POST
+    - PUT
+    requiredRoles:
+    - SKYXPLORE
+  #Utils
+  - pattern: /web/utils/**
+    methods:
+    - GET
+    requiredRoles:
+    - UTILS
+  - pattern: /api/utils/**
+    methods:
+    - GET
+    - DELETE
+    - POST
+    - PUT
+    requiredRoles:
+    - UTILS
+  #Community
+  - pattern: /web/community
+    methods:
+    - GET
+    requiredRoles:
+    - COMMUNITY
+  - pattern: /api/community/**
+    methods:
+    - GET
+    - DELETE
+    - POST
+    - PUT
+    requiredRoles:
+    - COMMUNITY
+  #Diary
+  - pattern: /web/diary
+    methods:
+    - GET
+    requiredRoles:
+    - DIARY
+  - pattern: /api/diary/**
+    methods:
+    - GET
+    - DELETE
+    - POST
+    - PUT
+    requiredRoles:
+    - DIARY

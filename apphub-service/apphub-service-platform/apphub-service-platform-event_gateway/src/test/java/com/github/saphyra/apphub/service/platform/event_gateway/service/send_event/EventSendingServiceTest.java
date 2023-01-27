@@ -4,17 +4,17 @@ import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEv
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.test.common.TestConstants;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EventSendingServiceTest {
     @Mock
     private ExecutorServiceBean executorServiceBean;
@@ -36,7 +36,7 @@ public class EventSendingServiceTest {
     @Mock
     private SendEventTask task;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(localeProvider.getLocaleValidated()).willReturn(TestConstants.DEFAULT_LOCALE);
         given(sendEventTaskFactory.create(sendEventRequest, TestConstants.DEFAULT_LOCALE)).willReturn(task);

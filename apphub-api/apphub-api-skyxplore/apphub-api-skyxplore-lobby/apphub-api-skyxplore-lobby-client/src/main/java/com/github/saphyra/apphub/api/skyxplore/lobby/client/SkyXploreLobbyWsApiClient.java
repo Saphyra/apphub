@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
-@FeignClient("skyxplore-lobby-ws")
+@FeignClient(name = "skyxplore-lobby-ws", url = "${serviceUrls.skyxploreLobby}")
 public interface SkyXploreLobbyWsApiClient {
     @PostMapping(Endpoints.SKYXPLORE_INTERNAL_LOBBY_PROCESS_WEB_SOCKET_EVENTS)
     void processWebSocketEvent(@PathVariable("userId") UUID from, @RequestBody WebSocketEvent event, @RequestHeader(Constants.LOCALE_HEADER) String locale);

@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.integration.core;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.time.StopWatch;
-import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -59,7 +58,6 @@ public class SeleniumTest extends TestBase {
             .get(0);
     }
 
-    @NotNull
     protected static List<WebDriver> extractDrivers(int driverCount) {
         StopWatch stopWatch = StopWatch.createStarted();
         List<WebDriverWrapper> webDriverWrappers;

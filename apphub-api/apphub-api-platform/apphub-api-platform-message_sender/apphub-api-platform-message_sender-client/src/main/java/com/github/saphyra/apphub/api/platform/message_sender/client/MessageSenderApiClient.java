@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 
-@FeignClient("message-sender")
+@FeignClient(name = "message-sender", url = "${serviceUrls.messageSender}")
 public interface MessageSenderApiClient {
     @PostMapping(Endpoints.WEB_SOCKET_SEND_MESSAGE)
     void sendMessage(@PathVariable("group") MessageGroup group, @RequestBody WebSocketMessage message, @RequestHeader(Constants.LOCALE_HEADER) String locale);

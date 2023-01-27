@@ -36,6 +36,64 @@ function formatDate(date){
     return date.getFullYear() + "-" + withLeadingZeros((date.getMonth() + 1), 2) + "-" + withLeadingZeros(date.getDate(), 2) + " " + date.toLocaleTimeString(getLocale());
 }
 
+window.LocalDateTime = new function(){
+    this.fromEpochSeconds = function(epoch){
+        const d = new Date(0);
+        d.setUTCSeconds(epoch);
+        return new LocalDateTimeObj(d);
+    }
+
+    function LocalDateTimeObj(date){
+        if(!hasValue(date)){
+            throwException("IllegalArgument", "date must not be null");
+        }
+
+        if(!(date instanceof Date)){
+            throwException("IllegalArgument", "Date is not a Date");
+        }
+
+        this.getMonth = function(){
+            return String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+        }
+
+        this.getYear = function(){
+            return date.getFullYear();
+        }
+
+        this.getDay = function(){
+            return String(date.getDate()).padStart(2, '0');
+        }
+
+        this.getHours = function(){
+            return String(date.getHours()).padStart(2, '0');
+        }
+
+        this.getMinutes = function(){
+            return String(date.getMinutes()).padStart(2, '0');
+        }
+
+        this.getSeconds = function(){
+            return String(date.getSeconds()).padStart(2, '0');
+        }
+
+        this.toString = function(){
+            return this.getYear() + "-" + this.getMonth() + "-" + this.getDay() + " " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
+        }
+
+        this.equals = function(obj){
+            if(!hasValue(obj)){
+                return false;
+            }
+
+            if(!obj instanceof LocalDateTimeObj){
+                return false;
+            }
+
+            return obj.toString() == this.toString();
+        }
+    }
+}
+
 window.LocalDate = new function(){
     this.parse = function(dateString){
         return new LocalDateObj(new Date(extractYear(dateString), extractMonth(dateString) - 1, extractDay(dateString)));
@@ -67,7 +125,6 @@ window.LocalDate = new function(){
         }
 
         if(!(date instanceof Date)){
-            console.log(date);
             throwException("IllegalArgument", "Date is not a Date");
         }
 

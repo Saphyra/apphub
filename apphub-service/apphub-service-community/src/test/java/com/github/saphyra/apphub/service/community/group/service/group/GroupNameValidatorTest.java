@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.community.group.service.group;
 
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

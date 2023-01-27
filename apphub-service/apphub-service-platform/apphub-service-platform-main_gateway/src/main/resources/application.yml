@@ -3,92 +3,101 @@ spring:
     name: main-gateway
   autoconfigure:
     exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+    - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   cloud:
     gateway:
+      predicate:
+        weight:
+          enabled: false
+      globalcors:
+        enabled: false
       routes:
-        #RESOURCES
-        - id: common-resorces
-          uri: http://web-content:8080
-          predicates:
-            - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/diary/**, /res/modules/**, /res/notebook/**, /res/skyxplore/**, /res/utils/**, /res/user/**
-        - id: training-resorces
-          uri: http://training:8080
-          predicates:
-            - Path=/res/training/**
+      #RESOURCES
+      - id: common-resorces
+        uri: http://web-content:8080
+        predicates:
+        - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/diary/**, /res/modules/**, /res/notebook/**, /res/skyxplore/**, /res/utils/**, /res/user/**
+      - id: training-resorces
+        uri: http://training:8080
+        predicates:
+        - Path=/res/training/**
 
-        #PAGES
-        - id: common-pages
-          uri: http://web-content:8080
-          predicates:
-            - Path=/web, /web/notebook, /web/user/account, /web/modules, /web/admin-panel/**, /web/utils/**, /web/skyxplore/**, /web/community, /web/diary
-        - id: error-page
-          uri: http://web-content:8080
-          predicates:
-            - Path=/web/error
-        - id: training-pages
-          uri: http://training:8080
-          predicates:
-            - Path=/web/training/**
+      #PAGES
+      - id: common-pages
+        uri: http://web-content:8080
+        predicates:
+        - Path=/web, /web/notebook, /web/user/account, /web/modules, /web/admin-panel/**, /web/utils/**, /web/skyxplore/**, /web/community, /web/diary
+      - id: error-page
+        uri: http://web-content:8080
+        predicates:
+        - Path=/web/error
+      - id: training-pages
+        uri: http://training:8080
+        predicates:
+        - Path=/web/training/**
 
-        #MODULES
-        - id: user
-          uri: http://user:8080
-          predicates:
-            - Path=/api/user/**
-        - id: notebook
-          uri: http://notebook:8080
-          predicates:
-            - Path=/api/notebook/**
-        - id: admin-panel
-          uri: http://admin-panel:8080
-          predicates:
-            - Path=/api/admin-panel/**
-        - id: modules
-          uri: http://modules:8080
-          predicates:
-            - Path=/api/modules/**
-        - id: utils
-          uri: http://utils:8080
-          predicates:
-            - Path=/api/utils/**
-        - id: skyxplore-data
-          uri: http://skyxplore-data:8080
-          predicates:
-            - Path=/api/skyxplore/data/**
-        - id: skyxplore-lobby
-          uri: http://skyxplore-lobby:8080
-          predicates:
-            - Path=/api/skyxplore/lobby/**
-        - id: skyxplore-game
-          uri: http://skyxplore-game:8080
-          predicates:
-            - Path=/api/skyxplore/game/**
-        - id: training
-          uri: http://training:8080
-          predicates:
-            - Path=/api/training/**
-        - id: community
-          uri: http://community:8080
-          predicates:
-            - Path=/api/community/**
-        - id: diary
-          uri: http://diary:8080
-          predicates:
-            - Path=/api/diary/**
+      #MODULES
+      - id: user
+        uri: http://user:8080
+        predicates:
+        - Path=/api/user/**
+      - id: notebook
+        uri: http://notebook:8080
+        predicates:
+        - Path=/api/notebook/**
+      - id: admin-panel
+        uri: http://admin-panel:8080
+        predicates:
+        - Path=/api/admin-panel/**
+      - id: modules
+        uri: http://modules:8080
+        predicates:
+        - Path=/api/modules/**
+      - id: utils
+        uri: http://utils:8080
+        predicates:
+        - Path=/api/utils/**
+      - id: skyxplore-data
+        uri: http://skyxplore-data:8080
+        predicates:
+        - Path=/api/skyxplore/data/**
+      - id: skyxplore-lobby
+        uri: http://skyxplore-lobby:8080
+        predicates:
+        - Path=/api/skyxplore/lobby/**
+      - id: skyxplore-game
+        uri: http://skyxplore-game:8080
+        predicates:
+        - Path=/api/skyxplore/game/**
+      - id: training
+        uri: http://training:8080
+        predicates:
+        - Path=/api/training/**
+      - id: community
+        uri: http://community:8080
+        predicates:
+        - Path=/api/community/**
+      - id: diary
+        uri: http://diary:8080
+        predicates:
+        - Path=/api/diary/**
+      - id: storage
+        uri: http://storage:8080
+        predicates:
+        - Path=/api/storage/**
 
-        #PLATFORM
-        - id: localization
-          uri: http://localization:8080
-          predicates:
-            - Path=/localization/**
+      #PLATFORM
+      - id: localization
+        uri: http://localization:8080
+        predicates:
+        - Path=/localization/**
 
-        #WS
-        - id: ws
-          uri: ws://message-sender:8080
-          predicates:
-            - Path=/api/message-sender/**
+      #WS
+      - id: ws
+        uri: ws://message-sender:8080
+        predicates:
+        - Path=/api/message-sender/**
 
 nonSessionExtendingUris:
-  - pattern: /api/user/authentication/session
-    method: GET
+- pattern: /api/user/authentication/session
+  method: GET

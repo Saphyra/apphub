@@ -1,23 +1,23 @@
 package com.github.saphyra.apphub.lib.security.role;
 
 import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import jakarta.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class MatchingRoleProviderTest {
     private static final String REQUEST_METHOD = RequestMethod.POST.name();
     private static final String REQUEST_URI = "request-uri";
@@ -38,7 +38,7 @@ public class MatchingRoleProviderTest {
     @Mock
     private RoleSetting roleSetting;
 
-    @Before
+    @BeforeEach
     public void setup() {
         given(request.getMethod()).willReturn(REQUEST_METHOD);
         given(request.getRequestURI()).willReturn(REQUEST_URI);

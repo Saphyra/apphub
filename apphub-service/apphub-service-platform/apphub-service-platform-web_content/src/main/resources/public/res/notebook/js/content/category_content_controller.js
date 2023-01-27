@@ -80,6 +80,10 @@
 
             const node = factory(categoryId, itemDetails, displayOpenParentCategoryButton);
                 node.id = contentController.createListItemId(itemDetails.id);
+                if(!itemDetails.enabled){
+                    node.onclick = null;
+                    node.classList.add("disabled");
+                }
             return node;
         }
     }

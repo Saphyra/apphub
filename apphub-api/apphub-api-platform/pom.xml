@@ -27,5 +27,6 @@
         <module>apphub-api-platform-localization</module>
         <module>apphub-api-platform-message_sender</module>
         <module>apphub-api-platform-encryption</module>
+        <module>apphub-api-platform-storage</module>
     </modules>
 </project>

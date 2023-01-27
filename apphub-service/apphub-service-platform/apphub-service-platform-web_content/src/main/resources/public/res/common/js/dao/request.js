@@ -1,15 +1,17 @@
 function Request(endpoint, body){
     this.method = endpoint.getMethod();
     this.path = endpoint.getUrl();
-    this.body = processBody(body);
+    this.contentType = endpoint.getContentType();
+    this.body = processBody(body, endpoint.getContentType(), endpoint.getUrl());
     const errorHandler = new ErrorHandlerRegistry();
     this.state = {};
-    
-    function processBody(body){
+
+    function processBody(body, contentType, url){
         if(!hasValue(body)){
             return "";
         }
-        if(typeof body == "object"){
+
+        if(typeof body == "object" && contentType == "application/json"){
             return JSON.stringify(body);
         }
         return body;

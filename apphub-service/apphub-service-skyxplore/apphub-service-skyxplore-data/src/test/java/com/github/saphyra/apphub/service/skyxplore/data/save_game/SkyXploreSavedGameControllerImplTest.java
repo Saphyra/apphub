@@ -8,12 +8,11 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCre
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameDeletionService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SkyXploreSavedGameControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
@@ -62,11 +61,6 @@ public class SkyXploreSavedGameControllerImplTest {
     @Mock
     private SavedGameResponse savedGameResponse;
 
-    @Before
-    public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-    }
-
     @Test
     public void deleteGame() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
@@ -78,6 +72,7 @@ public class SkyXploreSavedGameControllerImplTest {
 
     @Test
     public void getGameViewForLobbyCreation() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(gameViewForLobbyCreationQueryService.getView(USER_ID, GAME_ID)).willReturn(gameViewForLobbyCreation);
 
         GameViewForLobbyCreation result = underTest.getGameForLobbyCreation(GAME_ID, accessTokenHeader);
@@ -121,6 +116,7 @@ public class SkyXploreSavedGameControllerImplTest {
 
     @Test
     public void getSavedGames() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(savedGameQueryService.getSavedGames(USER_ID)).willReturn(Arrays.asList(savedGameResponse));
 
         List<SavedGameResponse> result = underTest.getSavedGames(accessTokenHeader);

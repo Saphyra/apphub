@@ -1,25 +1,23 @@
 package com.github.saphyra.apphub.lib.web_utils;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class CookieUtilTest {
+@ExtendWith(MockitoExtension.class)
+class CookieUtilTest {
     private static final String COOKIE_NAME = "cookie_name";
     private static final String COOKIE_VALUE = "cookie_value";
 
@@ -30,53 +28,53 @@ public class CookieUtilTest {
     private HttpServletResponse response;
 
     @InjectMocks
-    private CookieUtil cookieUtil;
+    private CookieUtil underTest;
 
     @Test
-    public void testGetCookieShouldReturnEmptyWhenNoCookies() {
+    void testGetCookieShouldReturnEmptyWhenNoCookies() {
         //GIVEN
-        when(request.getCookies()).thenReturn(null);
+        given(request.getCookies()).willReturn(null);
         //WHEN
-        Optional<String> result = cookieUtil.getCookie(request, COOKIE_NAME);
+        Optional<String> result = underTest.getCookie(request, COOKIE_NAME);
         //THEN
         verify(request).getCookies();
-        assertFalse(result.isPresent());
+
+        assertThat(result).isEmpty();
     }
 
     @Test
-    public void testGetCookieShouldReturnEmptyWhenNotFound() {
+    void testGetCookieShouldReturnEmptyWhenNotFound() {
         //GIVEN
-        when(request.getCookies()).thenReturn(new Cookie[0]);
+        given(request.getCookies()).willReturn(new Cookie[0]);
         //WHEN
-        Optional<String> result = cookieUtil.getCookie(request, COOKIE_NAME);
+        Optional<String> result = underTest.getCookie(request, COOKIE_NAME);
         //THEN
         verify(request).getCookies();
-        assertFalse(result.isPresent());
+        assertThat(result).isEmpty();
     }
 
     @Test
-    public void testGetCookieShouldReturnCookie() {
+    void testGetCookieShouldReturnCookie() {
         //GIVEN
         Cookie cookie = new Cookie(COOKIE_NAME, COOKIE_VALUE);
         Cookie cookie2 = new Cookie("asd", "das");
-        when(request.getCookies()).thenReturn(new Cookie[]{cookie, cookie2});
+        given(request.getCookies()).willReturn(new Cookie[]{cookie, cookie2});
         //WHEN
-        Optional<String> result = cookieUtil.getCookie(request, COOKIE_NAME);
+        Optional<String> result = underTest.getCookie(request, COOKIE_NAME);
         //THEN
-        assertTrue(result.isPresent());
+        assertThat(result).contains(COOKIE_VALUE);
         verify(request).getCookies();
-        assertEquals(COOKIE_VALUE, result.get());
     }
 
     @Test
-    public void testSetCookie() {
+    void testSetCookie() {
         //WHEN
-        cookieUtil.setCookie(response, COOKIE_NAME, COOKIE_VALUE);
+        underTest.setCookie(response, COOKIE_NAME, COOKIE_VALUE);
         //THEN
         ArgumentCaptor<Cookie> argumentCaptor = ArgumentCaptor.forClass(Cookie.class);
         verify(response).addCookie(argumentCaptor.capture());
-        assertEquals(COOKIE_VALUE, argumentCaptor.getValue().getValue());
-        assertEquals(COOKIE_NAME, argumentCaptor.getValue().getName());
-    }
 
+        assertThat(argumentCaptor.getValue().getValue()).isEqualTo(COOKIE_VALUE);
+        assertThat(argumentCaptor.getValue().getName()).isEqualTo(COOKIE_NAME);
+    }
 }

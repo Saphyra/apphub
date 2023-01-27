@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
-@FeignClient("admin-panel-ws-client")
+@FeignClient(name = "admin-panel-ws-client", url = "${serviceUrls.adminPanel}")
 public interface AdminPanelWsClient {
     @PutMapping(Endpoints.ADMIN_PANEL_WEB_SOCKET_USER_CONNECTED)
     void userConnected(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);

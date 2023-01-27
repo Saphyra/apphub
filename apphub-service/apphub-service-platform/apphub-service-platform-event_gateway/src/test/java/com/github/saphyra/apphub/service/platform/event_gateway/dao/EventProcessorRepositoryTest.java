@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.dao;
 
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
 public class EventProcessorRepositoryTest {
     private static final String EVENT_PROCESSOR_ID_1 = "event-processor-id-1";
@@ -31,7 +31,7 @@ public class EventProcessorRepositoryTest {
     @Autowired
     private EventProcessorRepository underTest;
 
-    @After
+    @AfterEach
     public void clear() {
         underTest.deleteAll();
     }

@@ -21,13 +21,12 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.Que
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.UUID;
@@ -37,7 +36,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ConstructionQueueItemPriorityUpdateServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
@@ -99,17 +98,10 @@ public class ConstructionQueueItemPriorityUpdateServiceTest {
     @Mock
     private ExecutionResult<Void> executionResult;
 
-    @Before
-    public void setUp() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getGameId()).willReturn(GAME_ID);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
-    }
 
     @Test
     public void priorityTooLow() {
+
         Throwable ex = catchThrowable(() -> underTest.updatePriority(USER_ID, PLANET_ID, CONSTRUCTION_ID, 0));
 
         ExceptionValidator.validateInvalidParam(ex, "priority", "too low");
@@ -124,6 +116,10 @@ public class ConstructionQueueItemPriorityUpdateServiceTest {
 
     @Test
     public void notFound() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getUniverse()).willReturn(universe);
+        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
         given(surface.getBuilding()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.updatePriority(USER_ID, PLANET_ID, CONSTRUCTION_ID, PRIORITY));
@@ -133,6 +129,11 @@ public class ConstructionQueueItemPriorityUpdateServiceTest {
 
     @Test
     public void updatePriority() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getGameId()).willReturn(GAME_ID);
+        given(game.getUniverse()).willReturn(universe);
+        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
         given(surface.getBuilding()).willReturn(building);
         given(building.getConstruction()).willReturn(construction);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);

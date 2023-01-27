@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -31,7 +32,7 @@ public class AuthenticatedFilter implements GlobalFilter, Ordered {
         ServerHttpRequest request = exchange.getRequest();
         URI uri = request.getURI();
         String requestUri = uri.getPath();
-        String requestMethod = request.getMethodValue();
+        HttpMethod requestMethod = request.getMethod();
 
         if (uriUtils.isResourcePath(requestUri)) {
             log.debug("Resource path");
@@ -47,12 +48,12 @@ public class AuthenticatedFilter implements GlobalFilter, Ordered {
             .handle(exchange, chain);
     }
 
-    private boolean isWhiteListedEndpoint(String requestMethod, String requestUri) {
+    private boolean isWhiteListedEndpoint(HttpMethod requestMethod, String requestUri) {
         return endpointProperties.getWhiteListedEndpoints()
             .values()
             .stream()
             .filter(whiteListedEndpoint -> antPathMatcher.match(whiteListedEndpoint.getPattern(), requestUri))
-            .anyMatch(whiteListedEndpoint -> whiteListedEndpoint.getMethod().equalsIgnoreCase(requestMethod));
+            .anyMatch(whiteListedEndpoint -> whiteListedEndpoint.getMethod().equalsIgnoreCase(requestMethod.name()));
     }
 
     @Override

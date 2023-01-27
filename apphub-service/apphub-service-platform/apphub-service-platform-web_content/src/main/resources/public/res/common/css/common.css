@@ -294,6 +294,7 @@ textarea{
     background-size: 10vw 10vw;
     background-color: rgba(0,0,0,0.5);
     background-repeat: no-repeat;
+    z-index: 100
 }
 
 /*=======CONFIRMATION_DIALOG=======*/

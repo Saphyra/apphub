@@ -8,11 +8,11 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist_table.ChecklistTableDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableDeletionService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -20,7 +20,7 @@ import java.util.UUID;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ListItemDeletionServiceTest {
     private static final UUID LIST_ITEM_ID_1 = UUID.randomUUID();
     private static final UUID LIST_ITEM_ID_2 = UUID.randomUUID();
@@ -41,6 +41,9 @@ public class ListItemDeletionServiceTest {
 
     @Mock
     private ChecklistTableDeletionService checklistTableDeletionService;
+
+    @Mock
+    private FileDeletionService fileDeletionService;
 
     @InjectMocks
     private ListItemDeletionService underTest;
@@ -134,7 +137,7 @@ public class ListItemDeletionServiceTest {
     }
 
     @Test
-    public void deleteChecklistTable(){
+    public void deleteChecklistTable() {
         given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
         given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
         given(deleted.getType()).willReturn(ListItemType.CHECKLIST_TABLE);
@@ -143,5 +146,29 @@ public class ListItemDeletionServiceTest {
 
         verify(listItemDao).delete(deleted);
         verify(checklistTableDeletionService).deleteByListItemId(LIST_ITEM_ID_1);
+    }
+
+    @Test
+    public void deleteImage() {
+        given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
+        given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
+        given(deleted.getType()).willReturn(ListItemType.IMAGE);
+
+        underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
+
+        verify(listItemDao).delete(deleted);
+        verify(fileDeletionService).deleteImage(LIST_ITEM_ID_1);
+    }
+
+    @Test
+    public void deleteFile() {
+        given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
+        given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
+        given(deleted.getType()).willReturn(ListItemType.FILE);
+
+        underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
+
+        verify(listItemDao).delete(deleted);
+        verify(fileDeletionService).deleteImage(LIST_ITEM_ID_1);
     }
 }

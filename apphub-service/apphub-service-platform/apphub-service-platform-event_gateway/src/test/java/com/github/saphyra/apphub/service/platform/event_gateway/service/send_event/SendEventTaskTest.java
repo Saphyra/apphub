@@ -8,12 +8,12 @@ import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcess
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
 import com.github.saphyra.apphub.service.platform.event_gateway.service.local_event.LocalEventProcessor;
 import com.github.saphyra.apphub.test.common.TestConstants;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +24,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SendEventTaskTest {
     private static final String EVENT_NAME = "event-name";
 
@@ -47,7 +47,7 @@ public class SendEventTaskTest {
 
     private SendEventTask underTest;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         underTest = SendEventTask.builder()
             .eventProcessorDao(eventProcessorDao)

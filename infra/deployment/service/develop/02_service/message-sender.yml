@@ -17,27 +17,27 @@ spec:
         name: message-sender
     spec:
       containers:
-        - name: message-sender
-          image: saphyra/apphub-service-platform-message_sender:latest
-          ports:
-            - containerPort: 8080
-          imagePullPolicy: Never
-          livenessProbe:
-            httpGet:
-              path: /platform/health
-              port: 8080
-            initialDelaySeconds: 20
-            periodSeconds: 5
-          readinessProbe:
-            httpGet:
-              path: /platform/health
-              port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 1
-            failureThreshold: 15
-          resources:
-            limits:
-              memory: 250Mi
+      - name: message-sender
+        image: saphyra/apphub-service-platform-message_sender:latest
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Never
+        livenessProbe:
+          httpGet:
+            path: /platform/health
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /platform/health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 1
+          failureThreshold: 15
+        resources:
+          limits:
+            memory: 250Mi
 ---
 apiVersion: v1
 kind: Service
@@ -48,6 +48,6 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: 8080
+  - port: 8080
   selector:
     name: message-sender

@@ -17,27 +17,27 @@ spec:
         name: skyxplore-game
     spec:
       containers:
-        - name: skyxplore-game
-          image: saphyra/apphub-service-skyxplore-game:release
-          ports:
-            - containerPort: 8080
-          imagePullPolicy: Always
-          livenessProbe:
-            httpGet:
-              path: /platform/health
-              port: 8080
-            initialDelaySeconds: 60
-            periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /platform/health
-              port: 8080
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            failureThreshold: 3
-          resources:
-            limits:
-              memory: 500Mi
+      - name: skyxplore-game
+        image: saphyra/apphub-service-skyxplore-game:release
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /platform/health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /platform/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          failureThreshold: 3
+        resources:
+          limits:
+            memory: 500Mi
 ---
 apiVersion: v1
 kind: Service
@@ -48,6 +48,6 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: 8080
+  - port: 8080
   selector:
     name: skyxplore-game

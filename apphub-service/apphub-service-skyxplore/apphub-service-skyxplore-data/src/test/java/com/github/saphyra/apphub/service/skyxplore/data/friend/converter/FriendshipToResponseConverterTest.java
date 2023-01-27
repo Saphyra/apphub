@@ -2,18 +2,18 @@ package com.github.saphyra.apphub.service.skyxplore.data.friend.converter;
 
 import com.github.saphyra.apphub.api.skyxplore.response.FriendshipResponse;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.Friendship;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class FriendshipToResponseConverterTest {
     private static final UUID FRIENDSHIP_ID = UUID.randomUUID();
     private static final UUID FRIEND_ID_1 = UUID.randomUUID();

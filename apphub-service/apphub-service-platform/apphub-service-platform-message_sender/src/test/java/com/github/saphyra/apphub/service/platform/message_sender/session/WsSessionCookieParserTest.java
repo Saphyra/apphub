@@ -2,12 +2,12 @@ package com.github.saphyra.apphub.service.platform.message_sender.session;
 
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.exception.LoggedException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.ServerHttpRequest;
 
@@ -16,9 +16,10 @@ import java.util.Collections;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class WsSessionCookieParserTest {
     @InjectMocks
     private WsSessionCookieParser underTest;
@@ -29,23 +30,27 @@ public class WsSessionCookieParserTest {
     @Mock
     private HttpHeaders httpHeaders;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(request.getHeaders()).willReturn(httpHeaders);
     }
 
-    @Test(expected = LoggedException.class)
+    @Test
     public void cookieListNotFound() {
         given(httpHeaders.get(Constants.COOKIE_HEADER)).willReturn(null);
 
-        underTest.getCookies(request);
+        Throwable ex = catchThrowable(() -> underTest.getCookies(request));
+
+        assertThat(ex).isInstanceOf(LoggedException.class);
     }
 
-    @Test(expected = LoggedException.class)
+    @Test
     public void cookieListEmpty() {
         given(httpHeaders.get(Constants.COOKIE_HEADER)).willReturn(Collections.emptyList());
 
-        underTest.getCookies(request);
+        Throwable ex = catchThrowable(() -> underTest.getCookies(request));
+
+        assertThat(ex).isInstanceOf(LoggedException.class);
     }
 
     @Test

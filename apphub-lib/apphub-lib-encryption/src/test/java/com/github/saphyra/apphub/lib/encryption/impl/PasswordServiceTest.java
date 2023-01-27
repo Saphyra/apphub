@@ -1,16 +1,15 @@
 package com.github.saphyra.apphub.lib.encryption.impl;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PasswordServiceTest {
     private static final String PASSWORD = "password";
     private static final String FAKE_PASSWORD = "fake_password";
@@ -26,7 +25,7 @@ public class PasswordServiceTest {
         //WHEN
         boolean result = underTest.authenticate(PASSWORD, USER_ID, hashed);
         //THEN
-        assertTrue(result);
+        assertThat(result).isTrue();
     }
 
     @Test
@@ -36,6 +35,6 @@ public class PasswordServiceTest {
         //WHEN
         boolean result = underTest.authenticate(FAKE_PASSWORD, USER_ID, hashed);
         //THEN
-        assertFalse(result);
+        assertThat(result).isFalse();
     }
 }

@@ -25,7 +25,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
 
     @Override
     protected EventEntity processDomainConversion(Event domain) {
-        String userId = accessTokenProvider.getUidAsString();
+        String userId = accessTokenProvider.getUserIdAsString();
         return EventEntity.builder()
             .eventId(uuidConverter.convertDomain(domain.getEventId()))
             .userId(uuidConverter.convertDomain(domain.getUserId()))
@@ -41,7 +41,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
 
     @Override
     protected Event processEntityConversion(EventEntity entity) {
-        String userId = accessTokenProvider.getUidAsString();
+        String userId = accessTokenProvider.getUserIdAsString();
         return Event.builder()
             .eventId(uuidConverter.convertEntity(entity.getEventId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))

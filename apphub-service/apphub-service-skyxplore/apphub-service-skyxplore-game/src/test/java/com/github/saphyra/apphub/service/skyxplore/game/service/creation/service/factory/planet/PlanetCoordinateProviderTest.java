@@ -3,20 +3,21 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.servic
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PlanetCoordinateProviderTest {
     private static final int EXPECTED_PLANET_AMOUNT = 2;
     private static final int SYSTEM_RADIUS = 45231;
@@ -49,10 +50,10 @@ public class PlanetCoordinateProviderTest {
         assertThat(result).containsExactly(coordinate2, coordinate1);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void placementFailed() {
         given(planetListPlaceService.placePlanets(EXPECTED_PLANET_AMOUNT, SYSTEM_RADIUS)).willReturn(Collections.emptyList());
 
-        underTest.getCoordinates(EXPECTED_PLANET_AMOUNT, SYSTEM_RADIUS);
+        assertThat(catchThrowable(() -> underTest.getCoordinates(EXPECTED_PLANET_AMOUNT, SYSTEM_RADIUS))).isInstanceOf(RuntimeException.class);
     }
 }

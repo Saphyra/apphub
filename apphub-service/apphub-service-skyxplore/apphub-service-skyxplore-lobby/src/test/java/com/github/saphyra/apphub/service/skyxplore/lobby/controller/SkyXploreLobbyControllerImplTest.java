@@ -12,17 +12,16 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyService;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game.StartGameService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.active_friend.ActiveFriendsService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.creation.LobbyCreationService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.invite.InvitationService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberQueryService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game.StartGameService;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SkyXploreLobbyControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String LOBBY_NAME = "lobby-name";
@@ -80,13 +79,11 @@ public class SkyXploreLobbyControllerImplTest {
     @Mock
     private ActiveFriendResponse activeFriendResponse;
 
-    @Before
-    public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-    }
 
     @Test
     public void createLobby() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.createLobby(new OneParamRequest<>(LOBBY_NAME), accessTokenHeader);
 
         verify(lobbyCreationService).createNew(USER_ID, LOBBY_NAME);
@@ -94,6 +91,7 @@ public class SkyXploreLobbyControllerImplTest {
 
     @Test
     public void lobbyForPage_inLobby() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(lobbyDao.findByUserId(USER_ID)).willReturn(Optional.of(lobby));
         given(lobby.getHost()).willReturn(HOST);
         given(lobby.isGameCreationStarted()).willReturn(true);
@@ -111,6 +109,7 @@ public class SkyXploreLobbyControllerImplTest {
 
     @Test
     public void lobbyForPage_notInLobby() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(lobbyDao.findByUserId(USER_ID)).willReturn(Optional.empty());
 
         LobbyViewForPage result = underTest.lobbyForPage(accessTokenHeader);
@@ -120,6 +119,8 @@ public class SkyXploreLobbyControllerImplTest {
 
     @Test
     public void exitFromLobby() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.exitFromLobby(accessTokenHeader);
 
         verify(exitFromLobbyService).exit(USER_ID);
@@ -127,6 +128,8 @@ public class SkyXploreLobbyControllerImplTest {
 
     @Test
     public void inviteToLobby() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.inviteToLobby(FRIEND_ID, accessTokenHeader);
 
         verify(invitationService).invite(accessTokenHeader, FRIEND_ID);
@@ -134,6 +137,8 @@ public class SkyXploreLobbyControllerImplTest {
 
     @Test
     public void acceptInvitation() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.acceptInvitation(FRIEND_ID, accessTokenHeader);
 
         verify(joinToLobbyService).acceptInvitation(USER_ID, FRIEND_ID);
@@ -155,6 +160,7 @@ public class SkyXploreLobbyControllerImplTest {
 
     @Test
     public void getMembersOfLobby() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(lobbyMemberQueryService.getMembers(USER_ID)).willReturn(lobbyMembersResponse);
 
         LobbyMembersResponse result = underTest.getMembersOfLobby(accessTokenHeader);
@@ -164,6 +170,7 @@ public class SkyXploreLobbyControllerImplTest {
 
     @Test
     public void getGameSettings() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         GameSettings gameSettings = new GameSettings();
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getSettings()).willReturn(gameSettings);
@@ -179,6 +186,8 @@ public class SkyXploreLobbyControllerImplTest {
 
     @Test
     public void startGame() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.startGame(accessTokenHeader);
 
         verify(startGameService).startGame(USER_ID);
@@ -186,6 +195,7 @@ public class SkyXploreLobbyControllerImplTest {
 
     @Test
     public void getActiveFriends() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(activeFriendsService.getActiveFriends(accessTokenHeader)).willReturn(Arrays.asList(activeFriendResponse));
 
         List<ActiveFriendResponse> result = underTest.getActiveFriends(accessTokenHeader);
@@ -195,6 +205,8 @@ public class SkyXploreLobbyControllerImplTest {
 
     @Test
     public void loadGame() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
         underTest.loadGame(GAME_ID, accessTokenHeader);
 
         verify(lobbyCreationService).createForExistingGame(USER_ID, GAME_ID);

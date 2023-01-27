@@ -1,18 +1,18 @@
 package com.github.saphyra.apphub.service.user.settings.dao;
 
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
 public class UserSettingRepositoryTest {
     private static final String USER_ID_1 = "user-id-1";
@@ -23,7 +23,7 @@ public class UserSettingRepositoryTest {
     @Autowired
     private UserSettingRepository underTest;
 
-    @After
+    @AfterEach
     public void clear() {
         underTest.deleteAll();
     }
@@ -40,6 +40,7 @@ public class UserSettingRepositoryTest {
             )
             .value(VALUE)
             .build();
+
         underTest.save(entity);
 
         List<UserSettingEntity> result = underTest.getByUserIdAndCategory(USER_ID_1, CATEGORY_1);

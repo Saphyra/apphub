@@ -18,7 +18,7 @@ class LogParameterVisibilityConverter extends ConverterBase<LogParameterVisibili
 
     @Override
     protected LogParameterVisibility processEntityConversion(LogParameterVisibilityEntity entity) {
-        String userId = accessTokenProvider.getUidAsString();
+        String userId = accessTokenProvider.getUserIdAsString();
 
         return LogParameterVisibility.builder()
             .id(uuidConverter.convertEntity(entity.getId()))
@@ -30,7 +30,7 @@ class LogParameterVisibilityConverter extends ConverterBase<LogParameterVisibili
 
     @Override
     protected LogParameterVisibilityEntity processDomainConversion(LogParameterVisibility domain) {
-        String userId = accessTokenProvider.getUidAsString();
+        String userId = accessTokenProvider.getUserIdAsString();
         return LogParameterVisibilityEntity.builder()
             .id(uuidConverter.convertDomain(domain.getId()))
             .userId(uuidConverter.convertDomain(domain.getUserId()))

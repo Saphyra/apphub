@@ -3,17 +3,17 @@ package com.github.saphyra.apphub.service.notebook.service.checklist_table.creat
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistTableRowRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistTableRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateTableRequest;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CreateTableRequestConverterTest {
     private static final String TITLE = "title";
     private static final UUID PARENT = UUID.randomUUID();

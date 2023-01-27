@@ -9,12 +9,12 @@ import com.github.saphyra.apphub.service.community.group.dao.group.Group;
 import com.github.saphyra.apphub.service.community.group.dao.group.GroupDao;
 import com.github.saphyra.apphub.service.community.group.dao.member.GroupMember;
 import com.github.saphyra.apphub.service.community.group.dao.member.GroupMemberDao;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
 import java.util.UUID;
 
 @Component

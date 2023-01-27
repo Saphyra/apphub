@@ -38,7 +38,7 @@ window.Mapping = new function(){
 
         //Ban
         ACCOUNT_GET_BANS: new Endpoint("/api/user/ban/{userId}", HttpMethod.GET),
-        ACCOUNT_BAN_USER: new Endpoint("/api/user/ban/", HttpMethod.PUT),
+        ACCOUNT_BAN_USER: new Endpoint("/api/user/ban", HttpMethod.PUT),
         ACCOUNT_REMOVE_BAN: new Endpoint("/api/user/ban/{banId}", HttpMethod.DELETE),
         ACCOUNT_MARK_FOR_DELETION: new Endpoint("/api/user/{userId}/mark-for-deletion", HttpMethod.DELETE),
         ACCOUNT_UNMARK_FOR_DELETION: new Endpoint("/api/user/{userId}/mark-for-deletion", HttpMethod.POST),
@@ -95,6 +95,8 @@ window.Mapping = new function(){
         NOTEBOOK_ARCHIVE_ITEM: new Endpoint("/api/notebook/item/{listItemId}/archive", HttpMethod.POST),
         NOTEBOOK_CREATE_ONLY_TITLE: new Endpoint("/api/notebook/only-title", HttpMethod.PUT),
         NOTEBOOK_MOVE_LIST_ITEM: new Endpoint("/api/notebook/{listItemId}/move", HttpMethod.POST),
+        NOTEBOOK_CREATE_IMAGE: new Endpoint("/api/notebook/image", HttpMethod.PUT),
+        NOTEBOOK_CREATE_FILE: new Endpoint("/api/notebook/file", HttpMethod.PUT),
 
         //Utils
         UTILS_LOG_FORMATTER_GET_VISIBILITY: new Endpoint("/api/utils/log-formatter/visibility", HttpMethod.PUT),
@@ -198,13 +200,19 @@ window.Mapping = new function(){
         //SETTINGS
         GET_USER_SETTINGS: new Endpoint("/api/user/settings/{category}", HttpMethod.GET),
         SET_USER_SETTINGS: new Endpoint("/api/user/settings", HttpMethod.POST),
+
+        //STORAGE
+        STORAGE_UPLOAD_FILE: new Endpoint("/api/storage/{storedFileId}", HttpMethod.PUT, null),
+        STORAGE_DOWNLOAD_FILE: new Endpoint("/api/storage/{storedFileId}", HttpMethod.GET, null),
+        STORAGE_GET_METADATA: new Endpoint("/api/storage/{storedFileId}/metadata", HttpMethod.GET, null),
     }
 
     this.getEndpoint = function(endpointName, pathVariables, queryParams){
         const ep = endpoints[endpointName] || throwException("IllegalArgument", "Endpoint not found with endpointName " + endpointName);
         return new Endpoint(
             replace(ep.getUrl(), pathVariables, queryParams),
-            ep.getMethod()
+            ep.getMethod(),
+            ep.getContentType()
         )
     }
 
@@ -238,9 +246,10 @@ window.Mapping = new function(){
     }
 }
 
-function Endpoint(u, m){
+function Endpoint(u, m, c){
    const url = u;
    const method = m;
+   const contentType = c === undefined ? "application/json" : c;
 
     this.getUrl = function(){
         return url;
@@ -248,5 +257,15 @@ function Endpoint(u, m){
 
     this.getMethod = function(){
         return method;
+    }
+
+    this.getContentType = function(){
+        return contentType;
+    }
+
+    this.toString = toString;
+
+    function toString(){
+        return "Endpoint[" + method + " - " + url + " / " + contentType + "]";
     }
 }

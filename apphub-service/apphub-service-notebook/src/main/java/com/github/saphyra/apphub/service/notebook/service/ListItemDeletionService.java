@@ -12,7 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
+
 import java.util.UUID;
 
 @Component
@@ -24,6 +25,7 @@ public class ListItemDeletionService {
     private final ChecklistItemDao checklistItemDao;
     private final TableDeletionService tableDeletionService;
     private final ChecklistTableDeletionService checklistTableDeletionService;
+    private final FileDeletionService fileDeletionService;
 
     @Transactional
     public void deleteListItem(UUID listItemId, UUID userId) {
@@ -54,6 +56,10 @@ public class ListItemDeletionService {
                 break;
             case ONLY_TITLE:
                 log.info("OnlyTitle is handled by default.");
+                break;
+            case IMAGE:
+            case FILE:
+                fileDeletionService.deleteImage(listItem.getListItemId());
                 break;
             default:
                 throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, "Unhandled listItemType: " + listItem.getType());

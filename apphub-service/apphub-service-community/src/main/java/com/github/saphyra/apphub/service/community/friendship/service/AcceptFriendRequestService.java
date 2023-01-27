@@ -7,12 +7,12 @@ import com.github.saphyra.apphub.service.community.friendship.dao.friend.Friends
 import com.github.saphyra.apphub.service.community.friendship.dao.friend.FriendshipDao;
 import com.github.saphyra.apphub.service.community.friendship.dao.request.FriendRequest;
 import com.github.saphyra.apphub.service.community.friendship.dao.request.FriendRequestDao;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
 import java.util.UUID;
 
 @Component

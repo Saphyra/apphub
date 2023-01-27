@@ -6,23 +6,24 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.GameDataIt
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuilding;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ResourceValidatorTest {
     private static final String KEY = "key";
     private static final String ID = "id";
@@ -45,56 +46,60 @@ public class ResourceValidatorTest {
     @Mock
     private ProductionBuilding productionBuilding;
 
-    @Before
-    public void setUp() {
-        given(resourceData.getMass()).willReturn(32);
-        given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
-    }
 
-    @After
+    @AfterEach
     public void validate() {
         verify(gameDataItemValidator).validate(resourceData);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullStorageType() {
+        given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
         given(resourceData.getStorageType()).willReturn(null);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullMaxBatchSize() {
+        given(resourceData.getMass()).willReturn(32);
+        given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
         given(resourceData.getMaxProductionBatchSize()).willReturn(null);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nullMass() {
+        given(resourceData.getMass()).willReturn(32);
+        given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
         given(resourceData.getMass()).willReturn(null);
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void noProducer() {
+        given(resourceData.getMass()).willReturn(32);
+        given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
         given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
         given(productionBuildingService.values()).willReturn(Collections.emptyList());
 
-        underTest.validate(map);
+        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void valid() {
+        given(resourceData.getMass()).willReturn(32);
+        given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
         given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);

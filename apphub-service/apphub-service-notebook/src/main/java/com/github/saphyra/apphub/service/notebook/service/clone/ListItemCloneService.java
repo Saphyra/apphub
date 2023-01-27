@@ -9,7 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
+
 import java.util.UUID;
 
 @Component
@@ -22,6 +23,7 @@ public class ListItemCloneService {
     private final TextAndLinkCloneService textAndLinkCloneService;
     private final ChecklistCloneService checklistCloneService;
     private final ChecklistTableCloneService checklistTableCloneService;
+    private final CloneFileService cloneFileService;
 
     @Transactional
     public void clone(UUID listItemId) {
@@ -53,6 +55,10 @@ public class ListItemCloneService {
                 break;
             case ONLY_TITLE:
                 log.info("OnlyTitle is cloned by default.");
+                break;
+            case IMAGE:
+            case FILE:
+                cloneFileService.cloneFile(toClone, listItemClone);
                 break;
             default:
                 throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, toClone.getType() + "cannot be cloned.");

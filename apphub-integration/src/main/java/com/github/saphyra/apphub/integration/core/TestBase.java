@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.saphyra.apphub.integration.framework.CustomObjectMapper;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.ObjectMapperWrapper;
 import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.ITestContext;
@@ -32,7 +32,7 @@ import static java.util.Objects.nonNull;
 @Listeners(SkipDisabledTestsInterceptor.class)
 public class TestBase {
     public static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
-    public static final CustomObjectMapper OBJECT_MAPPER_WRAPPER = new CustomObjectMapper(new ObjectMapper());
+    public static final ObjectMapperWrapper OBJECT_MAPPER_WRAPPER = new ObjectMapperWrapper(new ObjectMapper());
 
     private static final int AVAILABLE_PERMITS = 20;
     private static final int INCREASE_PERMITS_AFTER_TESTS_FINISHED = 10;

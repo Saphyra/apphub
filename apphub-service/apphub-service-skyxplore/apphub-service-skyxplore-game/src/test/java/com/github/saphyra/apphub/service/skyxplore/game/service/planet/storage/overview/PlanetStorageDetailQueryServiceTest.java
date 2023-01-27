@@ -5,11 +5,11 @@ import static org.mockito.BDDMockito.given;
 
 import java.util.Arrays;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ResourceDetailsResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageDetailsResponse;
@@ -20,7 +20,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.A
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocatedResourceAmountQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.ReservedStorageQueryService;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PlanetStorageDetailQueryServiceTest {
     private static final Integer CAPACITY = 24;
     private static final Integer RESERVED_STORAGE_AMOUNT = 235;

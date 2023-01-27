@@ -40,14 +40,13 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.B
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
@@ -62,7 +61,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ConstructNewBuildingServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
@@ -179,17 +178,6 @@ public class ConstructNewBuildingServiceTest {
     @Captor
     private ArgumentCaptor<Callable<SurfaceResponse>> argumentCaptor;
 
-    @Before
-    public void setUp() {
-        given(allBuildingService.getOptional(DATA_ID)).willReturn(Optional.of(buildingData));
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
-        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
-        given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
-    }
-
     @Test
     public void invalidDataId() {
         given(allBuildingService.getOptional(DATA_ID)).willReturn(Optional.empty());
@@ -201,6 +189,12 @@ public class ConstructNewBuildingServiceTest {
 
     @Test
     public void terraformationInProgress() {
+        given(allBuildingService.getOptional(DATA_ID)).willReturn(Optional.of(buildingData));
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getUniverse()).willReturn(universe);
+        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surface.getTerraformation()).willReturn(construction);
 
         Throwable ex = catchThrowable(() -> underTest.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID));
@@ -210,6 +204,12 @@ public class ConstructNewBuildingServiceTest {
 
     @Test
     public void surfaceAlreadyOccupied() {
+        given(allBuildingService.getOptional(DATA_ID)).willReturn(Optional.of(buildingData));
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getUniverse()).willReturn(universe);
+        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surface.getBuilding()).willReturn(building);
 
         Throwable ex = catchThrowable(() -> underTest.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID));
@@ -219,6 +219,13 @@ public class ConstructNewBuildingServiceTest {
 
     @Test
     public void buildingCannotBeBuiltToGivenSurfaceType() {
+        given(allBuildingService.getOptional(DATA_ID)).willReturn(Optional.of(buildingData));
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getUniverse()).willReturn(universe);
+        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
+        given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(buildingData.getPlaceableSurfaceTypes()).willReturn(Collections.emptyList());
 
         Throwable ex = catchThrowable(() -> underTest.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID));
@@ -228,6 +235,13 @@ public class ConstructNewBuildingServiceTest {
 
     @Test
     public void constructNewBuilding() throws Exception {
+        given(allBuildingService.getOptional(DATA_ID)).willReturn(Optional.of(buildingData));
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getUniverse()).willReturn(universe);
+        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
+        given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(buildingData.getPlaceableSurfaceTypes()).willReturn(List.of(SurfaceType.CONCRETE));
         given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.singleValueMap(1, constructionRequirements));
         given(buildingFactory.create(DATA_ID, SURFACE_ID, 0)).willReturn(building);

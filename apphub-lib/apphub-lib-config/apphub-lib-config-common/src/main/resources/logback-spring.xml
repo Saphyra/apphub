@@ -18,6 +18,14 @@
         <root level="INFO">
             <appender-ref ref="STDOUT"/>
         </root>
+
+        <root level="DEBUG">
+            <appender-ref ref="STDOUT"/>
+        </root>
+
+        <root level="TRACE">
+            <appender-ref ref="STDOUT"/>
+        </root>
     </springProfile>
 
     <springProfile name="local">
@@ -28,6 +36,10 @@
         </appender>
 
         <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+        </root>
+
+        <root level="DEBUG">
             <appender-ref ref="STDOUT"/>
         </root>
     </springProfile>

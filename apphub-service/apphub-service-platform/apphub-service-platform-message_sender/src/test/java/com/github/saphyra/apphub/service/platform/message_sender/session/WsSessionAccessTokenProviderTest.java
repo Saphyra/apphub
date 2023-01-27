@@ -3,20 +3,21 @@ package com.github.saphyra.apphub.service.platform.message_sender.session;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.LoggedException;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class WsSessionAccessTokenProviderTest {
     private static final String ACCESS_TOKEN_ID_STRING = "access-token-id";
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
@@ -27,9 +28,11 @@ public class WsSessionAccessTokenProviderTest {
     @InjectMocks
     private WsSessionAccessTokenProvider underTest;
 
-    @Test(expected = LoggedException.class)
+    @Test
     public void getAccessTokenId_accessTokenCookieNotFound() {
-        underTest.getAccessTokenId(new HashMap<>());
+        Throwable ex = catchThrowable(() -> underTest.getAccessTokenId(new HashMap<>()));
+
+        assertThat(ex).isInstanceOf(LoggedException.class);
     }
 
     @Test

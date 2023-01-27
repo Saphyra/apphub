@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 @Component
 public class TerraformingPossibilitiesService extends ValidationAbstractDataService<SurfaceType, TerraformingPossibilities> implements OptionalMap<SurfaceType, TerraformingPossibilities> {
