@@ -118,8 +118,35 @@
             tableRows.add(row);
 
         new Sequence(tableHeads.size() - 2)
-            .map(() => new TableColumn(ColumnType.EMPTY, row)) //TODO use the previous row's column type
+            .map((index) => new TableColumn(getColumnType(index + 2), row))
             .forEach((column) => row.columns.add(column));
+
+        function getColumnType(columnIndex){
+            const cache = tableRows.getCache();
+            if(Object.keys(cache).length < 2){
+                return ColumnType.EMPTY;
+            }
+
+            const row = findRow(cache);
+
+            const columnsCache = row.columns.getCache();
+            const columns = Object.values(columnsCache);
+            console.log(columnIndex, columns);
+            const column = columns[columnIndex];
+
+            return column.getColumnType();
+
+            function findRow(cache){
+                const sorted = new MapStream(cache)
+                    .toListStream()
+                    .sorted((a, b) => {return b.rowIndex - a.rowIndex})
+                    .toList();
+
+                console.log(sorted);
+
+                return sorted[1];
+            }
+        }
     }
 
     function save(){
@@ -298,6 +325,7 @@
     }
 
     function TableColumn(ct, r){
+        console.log("Creating column with columnType " + ct);
         const id = generateRandomId();
         this.id = id;
         let columnType = ct || throwException("IllegalArgument", "columType must not be null");
