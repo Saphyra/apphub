@@ -1,19 +1,19 @@
 package com.github.saphyra.apphub.service.notebook.service.custom_table.creation;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CustomTableRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CustomTableColumnRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CustomTableRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CustomTableRowRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.service.validator.FileMetadataValidator;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.ColumnType;
-import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.custom_table.data_type.Number;
 import com.github.saphyra.apphub.service.notebook.service.custom_table.data_type.Range;
 import com.github.saphyra.apphub.service.notebook.service.table.ColumnNameValidator;
+import com.github.saphyra.apphub.service.notebook.service.validator.FileMetadataValidator;
+import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -49,12 +49,15 @@ class CustomTableRequestValidator {
         }
 
         ValidationUtil.notNull(row.getChecked(), "checked");
+        ValidationUtil.notNull(row.getRowIndex(), "rowIndex");
 
         row.getColumns()
             .forEach(this::validate);
     }
 
     private void validate(CustomTableColumnRequest column) {
+        ValidationUtil.notNull(column.getColumnIndex(), "columnIndex");
+
         ColumnType columnType = ValidationUtil.convertToEnumChecked(column.getType(), ColumnType::valueOf, "columnType");
 
         switch (columnType) {

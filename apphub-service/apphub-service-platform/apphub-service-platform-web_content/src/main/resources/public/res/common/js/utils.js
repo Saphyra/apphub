@@ -114,9 +114,10 @@ function hasValue(obj){
     return obj != undefined && obj != null;
 }
 
-function throwException(name, message){
+function throwException(name, message, content){
     name = name == undefined ? "" : name;
     message = message == undefined ? "" : message;
+    console.log("Exception content:", content);
     throw {name: name, message: message, stackTrace: (new Error()).stack};
 }
 

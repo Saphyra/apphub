@@ -34,9 +34,9 @@
         document.getElementById("new-custom-table-title").value = "";
         loadChildrenOfCategory(categoryContentController.getCurrentCategoryId());
 
-        tableHeads = createSyncEngine(ids.newCustomTableHeadRow, "table-head", createTableHeadNode);
-            tableHeads.add(new TableHead(ColumnType.NAVIGATION));
-            tableHeads.add(new TableHead(ColumnType.CHECKED));
+        tableHeads = createSyncEngine(ids.newCustomTableHeadRow, "table-head", createTableHeadNode, (a, b) => {return a.columnIndex - b.columnIndex});
+            tableHeads.add(new TableHead(ColumnType.NAVIGATION, -2));
+            tableHeads.add(new TableHead(ColumnType.CHECKED, -1));
 
         tableRows = createSyncEngine(ids.newCustomTableContent, "table-row", createTableRowNode, (r1, r2) => {return r1.rowIndex - r2.rowIndex}, (node, item) => {return node});
 
@@ -107,9 +107,9 @@
     }
 
     function newColumn(){
-        tableHeads.add(new TableHead(ColumnType.EMPTY));
+        tableHeads.add(new TableHead(ColumnType.EMPTY, tableHeads.size() - 2));
         tableRows.applyToAll((tableRow) => {
-            tableRow.columns.add(new TableColumn(ColumnType.EMPTY, tableRow));
+            tableRow.columns.add(new TableColumn(ColumnType.EMPTY, tableRow, tableRow.columns.size() - 2));
         });
     }
 
@@ -118,7 +118,7 @@
             tableRows.add(row);
 
         new Sequence(tableHeads.size() - 2)
-            .map((index) => new TableColumn(getColumnType(index + 2), row))
+            .map((columnIndex) => new TableColumn(getColumnType(columnIndex), row, columnIndex))
             .forEach((column) => row.columns.add(column));
 
         function getColumnType(columnIndex){
@@ -131,7 +131,6 @@
 
             const columnsCache = row.columns.getCache();
             const columns = Object.values(columnsCache);
-            console.log(columnIndex, columns);
             const column = columns[columnIndex];
 
             return column.getColumnType();
@@ -142,15 +141,75 @@
                     .sorted((a, b) => {return b.rowIndex - a.rowIndex})
                     .toList();
 
-                console.log(sorted);
-
                 return sorted[1];
             }
         }
     }
 
     function save(){
+        const title = document.getElementById("new-custom-table-title").value;
 
+        if(!title.length){
+            notificationService.showError(localization.getAdditionalContent("new-item-title-empty"));
+            return;
+        }
+
+        const columnNameValues = new MapStream(tableHeads.getCache())
+            .toListStream()
+            .filter((tableHead) => {return tableHead.columnType == ColumnType.EMPTY})
+            .sorted((a, b) => {return a.columnIndex - b.columnIndex})
+            .map(function(column){return column.inputField})
+            .map(function(inputField){return inputField.value})
+            .toList();
+
+        if(new Stream(columnNameValues).anyMatch(function(columnName){return columnName.length == 0})){
+            notificationService.showError(localization.getAdditionalContent("empty-column-name"));
+            return;
+        }
+
+        const payload = {
+            title: title,
+            parent: currentCategoryId,
+            columnNames: columnNameValues,
+            rows: fetchRows()
+        }
+
+        console.log(payload); //TODO send request
+
+        function fetchRows(){
+            return new MapStream(tableRows.getCache())
+                .toListStream()
+                .sorted((a, b) => {return a.rowIndex - b.rowIndex})
+                .map((tableRow) => {return createRowRequest(tableRow)})
+                .toList();
+
+            function createRowRequest(tableRow){
+                return {
+                    checked: isChecked(tableRow),
+                    rowIndex: tableRow.rowIndex,
+                    columns: fetchColumns(tableRow)
+                }
+
+                function isChecked(tableRow){
+                    return new MapStream(tableRow.columns.getCache())
+                        .toListStream()
+                        .filter((column) => {return column.getColumnType() == ColumnType.CHECKED})
+                        .findFirst()
+                        .orElseThrow("IllegalArgument", "Row has no checked column")
+                        .getData()
+                        .getNode()
+                        .checked;
+                }
+
+                function fetchColumns(tableRow){
+                    return new MapStream(tableRow.columns.getCache())
+                        .toListStream()
+                        .skip(2)
+                        .map((column) => {return column.assembleRequest()})
+                        .toList();
+                }
+            }
+        }
     }
 
     function createTableHeadNode(tableHead){
@@ -164,15 +223,19 @@
                     default:
                         return [
                             tableHead.inputField,
-                            domBuilder.create("BUTTON")
-                                .innerText("<")
-                                .onclick(() => moveColumnLeft(tableHead)),
-                            domBuilder.create("BUTTON")
-                                .innerText(">")
-                                .onclick(() => moveColumnRight(tableHead)),
-                            domBuilder.create("BUTTON")
-                                .innerText("X")
-                                .onclick(() => removeColumn(tableHead)),
+                            domBuilder.create("SPAN")
+                                .addClass("nowrap")
+                                .appendChildren([
+                                    domBuilder.create("BUTTON")
+                                        .innerText("<")
+                                        .onclick(() => moveColumnLeft(tableHead)),
+                                    domBuilder.create("BUTTON")
+                                        .innerText(">")
+                                        .onclick(() => moveColumnRight(tableHead)),
+                                    domBuilder.create("BUTTON")
+                                        .innerText("X")
+                                        .onclick(() => removeColumn(tableHead)),
+                                ])
                         ];
                 }
             })
@@ -186,9 +249,10 @@
 
     function createTableColumnNode(tableColumn){
         return domBuilder.create("TD")
-            .addClassIf(() => {return tableColumn.getColumnType() != ColumnType.CHECKED || tableColumn.getColumnType() != ColumnType.NAVIGATION}, "table-content-column")
+            .attr("column-type", tableColumn.getColumnType())
+            .addClassIf(() => {return tableColumn.getColumnType() != ColumnType.CHECKED && tableColumn.getColumnType() != ColumnType.NAVIGATION}, "table-content-column")
             .appendChild(domBuilder.create("DIV")
-                .addClass("table-column-content-wrapper")
+                .addClassIf(() => {return tableColumn.getColumnType() != ColumnType.CHECKED && tableColumn.getColumnType() != ColumnType.NAVIGATION}, "table-column-content-wrapper")
                 .appendChildren(tableColumn.assembleColumnContent()))
             .getNode();
     }
@@ -205,47 +269,53 @@
     }
 
     function moveColumnLeft(tableHead){
-        const values = Object.values(tableHeads.getCache());
-        const columnIndex = values.indexOf(tableHead);
-
-        if(columnIndex > 2){
+        if(tableHead.columnIndex > 0){
+            const columnIndex = tableHead.columnIndex;
             const newIndex = columnIndex - 1;
-            [values[columnIndex], values[newIndex]] = [values[newIndex], values[columnIndex]];
 
-            tableHeads.clear()
-                .addAll(values);
+            findTableHeadByColumnIndex(newIndex)
+                .columnIndex = columnIndex;
+
+            tableHead.columnIndex = newIndex;
+
+            tableHeads.render();
 
             tableRows.applyToAll(tableRow => {
-                const rowCache = tableRow.columns;
-                const columnValues = Object.values(rowCache.getCache());
+                const columns = tableRow.columns;
 
-                [columnValues[columnIndex], columnValues[newIndex]] = [columnValues[newIndex], columnValues[columnIndex]];
+                const oldColumn = findColumnByColumnIndex(columns, columnIndex);
+                const newColumn = findColumnByColumnIndex(columns, newIndex);
 
-                rowCache.clear()
-                    .addAll(columnValues);
+                oldColumn.setColumnIndex(newIndex);
+                newColumn.setColumnIndex(columnIndex);
+
+                columns.render();
             });
         }
     }
 
     function moveColumnRight(tableHead){
-        const values = Object.values(tableHeads.getCache());
-        const columnIndex = values.indexOf(tableHead);
-
-        if(columnIndex < values.length - 1){
+        if(tableHead.columnIndex < tableHeads.size() - 3){
+            const columnIndex = tableHead.columnIndex;
             const newIndex = columnIndex + 1;
-            [values[columnIndex], values[newIndex]] = [values[newIndex], values[columnIndex]];
 
-            tableHeads.clear()
-                .addAll(values);
+            findTableHeadByColumnIndex(newIndex)
+                .columnIndex = columnIndex;
+
+            tableHead.columnIndex = newIndex;
+
+            tableHeads.render();
 
             tableRows.applyToAll(tableRow => {
-                const rowCache = tableRow.columns;
-                const columnValues = Object.values(rowCache.getCache());
+                const columns = tableRow.columns;
 
-                [columnValues[columnIndex], columnValues[newIndex]] = [columnValues[newIndex], columnValues[columnIndex]];
+                const oldColumn = findColumnByColumnIndex(columns, columnIndex);
+                const newColumn = findColumnByColumnIndex(columns, newIndex);
 
-                rowCache.clear()
-                    .addAll(columnValues);
+                oldColumn.setColumnIndex(newIndex);
+                newColumn.setColumnIndex(columnIndex);
+
+                columns.render();
             });
         }
     }
@@ -306,9 +376,26 @@
         tableRows.remove(tableRow.id);
     }
 
-    function TableHead(columnType){
+    function findTableHeadByColumnIndex(columnIndex){
+        return new MapStream(tableHeads.getCache())
+            .toListStream()
+            .filter((tableHead) => {return tableHead.columnIndex == columnIndex})
+            .findFirst()
+            .orElseThrow("IllegalArgument", "TableHead not found with columnIndex " + columnIndex);
+    }
+
+    function findColumnByColumnIndex(se, columnIndex){
+        return new MapStream(se.getCache())
+            .toListStream()
+            .filter((column) => {return column.getColumnIndex() == columnIndex})
+            .findFirst()
+            .orElseThrow("IllegalArgument", "TableColumn not found with columnIndex " + columnIndex, se.getCache());
+    }
+
+    function TableHead(columnType, ci){
         this.columnType = columnType || throwException("IllegalArgument", "columType must not be null");
         this.id = generateRandomId();
+        this.columnIndex = hasValue(ci) ? ci : throwException("IllegalArgument", "columnIndex must not be null");
         this.inputField = domBuilder.create("INPUT")
             .type("text")
             .attr("placeholder", localization.getAdditionalContent("column-name-title"))
@@ -319,22 +406,27 @@
     function TableRow(rowIndex){
         this.id = generateRandomId();
         this.rowIndex = (hasValue(rowIndex) ? rowIndex : throwException("IllegalArgument", "rowIndex must not be null"));
-        this.columns = createSyncEngine("table-row-" + this.id, "table-column", createTableColumnNode)
-            .add(new TableColumn(ColumnType.NAVIGATION, this), true)
-            .add(new TableColumn(ColumnType.CHECKED, this), true);
+        this.columns = createSyncEngine("table-row-" + this.id, "table-column", createTableColumnNode, (a, b) => {return a.getColumnIndex() - b.getColumnIndex()})
+            .add(new TableColumn(ColumnType.NAVIGATION, this, -2), true)
+            .add(new TableColumn(ColumnType.CHECKED, this, -1), true);
     }
 
-    function TableColumn(ct, r){
-        console.log("Creating column with columnType " + ct);
+    function TableColumn(ct, r, ci){
+        console.log("Creating column with columnType " + ct + " and columnIndex " + ci);
         const id = generateRandomId();
         this.id = id;
         let columnType = ct || throwException("IllegalArgument", "columType must not be null");
         const row = r || throwException("IllegalArgument", "row must not be null");
         let data = createData(columnType);
+        let columnIndex = hasValue(ci) ? ci : throwException("IllegalArgument", "columnIndex must not be null");
 
         this.getColumnType = () => {return columnType};
         this.getRow = () => {return row};
         this.assembleColumnContent = assembleColumnContent;
+        this.getData = function(){return data};
+        this.getColumnIndex = function(){return columnIndex};
+        this.setColumnIndex = function(ci){columnIndex = ci};
+        this.assembleRequest = assembleRequest;
 
         function createData(columnType){
             switch (columnType){
@@ -639,6 +731,65 @@
                                 .appendChild(domBuilder.create("SPAN", columnTypeLocalization.get(radioButton.value)))
                         }))
                     .getNode();
+            }
+        }
+
+        function assembleRequest(){
+            return {
+                type: columnType,
+                columnIndex: columnIndex,
+                value: assembleValue()
+            }
+
+            function assembleValue(){
+                switch(columnType){
+                    case ColumnType.EMPTY:
+                        return null;
+                    case ColumnType.CHECKBOX:
+                        return data.getNode().checked;
+                    case ColumnType.NUMBER:
+                        return {
+                            number: data.numberInput.getValue(),
+                            step: data.stepInput.getValue()
+                        }
+                    case ColumnType.RANGE:
+                        return {
+                            min: data.minInput.getValue(),
+                            max: data.maxInput.getValue(),
+                            step: data.stepInput.getValue(),
+                            value: data.rangeInput.getValue()
+                        }
+                    case ColumnType.TEXT:
+                    case ColumnType.COLOR:
+                    case ColumnType.DATE:
+                    case ColumnType.DATE_TIME:
+                    case ColumnType.TIME:
+                    case ColumnType.MONTH:
+                    case ColumnType.LINK:
+                        return data.getValue();
+                    case ColumnType.IMAGE:
+                    case ColumnType.FILE:
+                        const input = data.getNode();
+
+                        if(!input.files || !input.files[0]){
+                            notificationService.showError(localization.getAdditionalContent("no-file-selected"));
+                            throwException("IllegalArgument", "File not selected");
+                        }
+
+                        const file = input.files[0];
+
+                        if(file.size > FILE_SIZE_LIMIT){
+                            notificationService.showError(localization.getAdditionalContent("file-too-big"));
+                            throwException("IllegalArgument", "File too large");
+                        }
+
+                        return {
+                            fileName: file.name,
+                            size: file.size
+                        }
+                    default:
+                        throwException("IllegalState", "Could not assemble value for columnType " + columnType);
+                }
             }
         }
     }

@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.service.custom_table.creation;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CustomTableRequest;
-import com.github.saphyra.apphub.api.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.api.notebook.model.request.CustomTableColumnRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CustomTableRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CustomTableRowRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.api.notebook.model.response.CustomTableCreatedResponse;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
@@ -46,6 +46,8 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO split
+//TODO unit test
 public class CustomTableCreationService {
     private final CustomTableRequestValidator customTableRequestValidator;
     private final ObjectMapperWrapper objectMapperWrapper;
@@ -74,51 +76,8 @@ public class CustomTableCreationService {
         ListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), ListItemType.CUSTOM_TABLE);
         List<BiWrapper<TableHead, Content>> tableHeads = tableHeadFactory.create(listItem.getListItemId(), request.getColumnNames(), userId);
 
-        List<CustomTableRowRequest> rows = request.getRows();
-        for (int rowIndex = 0; rowIndex < rows.size(); rowIndex++) {
-            CustomTableRowRequest row = rows.get(rowIndex);
-
-            ChecklistTableRow checklistTableRow = checklistTableRowFactory.create(userId, listItem.getListItemId(), rowIndex, row.getChecked());
-            checklistTableRowDao.save(checklistTableRow);
-
-            List<CustomTableColumnRequest> columns = row.getColumns();
-            for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
-                CustomTableColumnRequest column = columns.get(columnIndex);
-
-                ColumnType columnType = ColumnType.valueOf(column.getType());
-
-                TableJoin tableJoin = tableJoinFactory.create(listItem.getListItemId(), rowIndex, columnIndex, userId, columnType);
-                tableJoinDao.save(tableJoin);
-
-                switch (columnType) {
-                    case NUMBER, TEXT, CHECKBOX, COLOR, DATE, TIME, DATE_TIME, MONTH, RANGE, LINK -> {
-                        String contentValue = objectMapperWrapper.writeValueAsString(column.getValue());
-                        Content content = contentFactory.create(listItem.getListItemId(), tableJoin.getTableJoinId(), userId, contentValue);
-                        contentDao.save(content);
-                    }
-                    case IMAGE, FILE -> {
-                        FileMetadata createFileRequest = objectMapperWrapper.convertValue(column.getValue(), FileMetadata.class);
-                        UUID storedFileId;
-                        if (isNull(createFileRequest.getStoredFileId())) {
-                            storedFileId = storageProxy.createFile(createFileRequest.getFileName(), FilenameUtils.removeExtension(createFileRequest.getFileName()), createFileRequest.getSize());
-
-                            CustomTableCreatedResponse response = CustomTableCreatedResponse.builder()
-                                .rowIndex(rowIndex)
-                                .columnIndex(columnIndex)
-                                .storedFileId(storedFileId)
-                                .build();
-                            result.add(response);
-                        } else {
-                            storedFileId = createFileRequest.getStoredFileId();
-                        }
-                        File file = fileFactory.create(userId, tableJoin.getTableJoinId(), storedFileId);
-                        fileDao.save(file);
-                    }
-                    case EMPTY -> log.debug("No validation required");
-                    default -> throw ExceptionFactory.notLoggedException(HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR, "Unhandled columnType " + columnType);
-                }
-            }
-        }
+        request.getRows()
+            .forEach(row -> createRow(userId, result, listItem, row));
 
         listItemDao.save(listItem);
         tableHeads.forEach(biWrapper -> {
@@ -127,5 +86,48 @@ public class CustomTableCreationService {
         });
 
         return result;
+    }
+
+    private void createRow(UUID userId, List<CustomTableCreatedResponse> result, ListItem listItem, CustomTableRowRequest row) {
+        ChecklistTableRow checklistTableRow = checklistTableRowFactory.create(userId, listItem.getListItemId(), row.getRowIndex(), row.getChecked());
+        checklistTableRowDao.save(checklistTableRow);
+
+        row.getColumns()
+            .forEach(column -> createColumn(userId, result, listItem, row, column));
+    }
+
+    private void createColumn(UUID userId, List<CustomTableCreatedResponse> result, ListItem listItem, CustomTableRowRequest row, CustomTableColumnRequest column) {
+        ColumnType columnType = ColumnType.valueOf(column.getType());
+
+        TableJoin tableJoin = tableJoinFactory.create(listItem.getListItemId(), row.getRowIndex(), column.getColumnIndex(), userId, columnType);
+        tableJoinDao.save(tableJoin);
+
+        switch (columnType) {
+            case NUMBER, TEXT, CHECKBOX, COLOR, DATE, TIME, DATE_TIME, MONTH, RANGE, LINK -> {
+                String contentValue = objectMapperWrapper.writeValueAsString(column.getValue());
+                Content content = contentFactory.create(listItem.getListItemId(), tableJoin.getTableJoinId(), userId, contentValue);
+                contentDao.save(content);
+            }
+            case IMAGE, FILE -> {
+                FileMetadata createFileRequest = objectMapperWrapper.convertValue(column.getValue(), FileMetadata.class);
+                UUID storedFileId;
+                if (isNull(createFileRequest.getStoredFileId())) {
+                    storedFileId = storageProxy.createFile(createFileRequest.getFileName(), FilenameUtils.removeExtension(createFileRequest.getFileName()), createFileRequest.getSize());
+
+                    CustomTableCreatedResponse response = CustomTableCreatedResponse.builder()
+                        .rowIndex(row.getRowIndex())
+                        .columnIndex(column.getColumnIndex())
+                        .storedFileId(storedFileId)
+                        .build();
+                    result.add(response);
+                } else {
+                    storedFileId = createFileRequest.getStoredFileId();
+                }
+                File file = fileFactory.create(userId, tableJoin.getTableJoinId(), storedFileId);
+                fileDao.save(file);
+            }
+            case EMPTY -> log.debug("No validation required");
+            default -> throw ExceptionFactory.notLoggedException(HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR, "Unhandled columnType " + columnType);
+        }
     }
 }

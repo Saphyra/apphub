@@ -148,6 +148,11 @@ function Stream(a){
         return this;
     }
 
+    this.skip = function(shouldSkip){
+        array.splice(0, shouldSkip);
+        return this;
+    }
+
     this.sorted = function(comparator){
         array.sort(comparator);
         return this;

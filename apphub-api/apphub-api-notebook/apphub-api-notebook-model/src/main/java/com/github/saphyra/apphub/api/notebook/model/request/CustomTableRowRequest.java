@@ -13,5 +13,6 @@ import java.util.List;
 @Builder
 public class CustomTableRowRequest {
     private Boolean checked;
+    private Integer rowIndex;
     private List<CustomTableColumnRequest> columns;
 }

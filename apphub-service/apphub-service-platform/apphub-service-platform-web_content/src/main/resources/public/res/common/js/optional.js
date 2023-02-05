@@ -36,11 +36,11 @@ function Optional(obj){
         return this.isPresent() ? value : func();
     }
 
-    this.orElseThrow = function(errorType, errorMessage){
+    this.orElseThrow = function(errorType, errorMessage, content){
         if(this.isPresent()){
             return value;
         }
 
-        throwException(errorType, errorMessage);
+        throwException(errorType, errorMessage, content);
     }
 }

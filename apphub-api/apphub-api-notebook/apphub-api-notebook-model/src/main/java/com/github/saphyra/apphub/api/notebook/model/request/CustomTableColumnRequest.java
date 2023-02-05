@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CustomTableColumnRequest {
+    private Integer columnIndex;
     private String type;
     private Object value;
 }
