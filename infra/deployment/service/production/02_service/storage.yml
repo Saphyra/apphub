@@ -21,7 +21,7 @@ spec:
         image: saphyra/apphub-service-platform-storage:release
         env:
         - name: FTP_CLIENT_USERNAME
-          value: ftp_dev
+          value: ftp_prod
         ports:
         - containerPort: 8080
         imagePullPolicy: Always
