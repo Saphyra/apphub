@@ -118,31 +118,18 @@
             tableRows.add(row);
 
         new Sequence(tableHeads.size() - 2)
-            .map((columnIndex) => new TableColumn(getColumnType(columnIndex), row, columnIndex))
+            .map((columnIndex) => new TableColumn(getColumnType(row.rowIndex - 1, columnIndex), row, columnIndex))
             .forEach((column) => row.columns.add(column));
 
-        function getColumnType(columnIndex){
-            const cache = tableRows.getCache();
-            if(Object.keys(cache).length < 2){
+        function getColumnType(rowIndex, columnIndex){
+            if(rowIndex <= 0){
                 return ColumnType.EMPTY;
             }
 
-            const row = findRow(cache);
-
-            const columnsCache = row.columns.getCache();
-            const columns = Object.values(columnsCache);
-            const column = columns[columnIndex];
+            const row = findRowByRowIndex(rowIndex);
+            const column = findColumnByColumnIndex(row.columns, columnIndex);
 
             return column.getColumnType();
-
-            function findRow(cache){
-                const sorted = new MapStream(cache)
-                    .toListStream()
-                    .sorted((a, b) => {return b.rowIndex - a.rowIndex})
-                    .toList();
-
-                return sorted[1];
-            }
         }
     }
 
@@ -174,7 +161,16 @@
             rows: fetchRows()
         }
 
-        console.log(payload); //TODO send request
+        const request = new Request(Mapping.getEndpoint("NOTEBOOK_CREATE_CUSTOM_TABLE"), payload)
+            request.convertResponse = jsonConverter;
+            request.processValidResponse = function(response){
+                uploadFiles(response);
+
+                notificationService.showSuccess(localization.getAdditionalContent("custom-table-saved"));
+                categoryContentController.reloadCategoryContent();
+                pageController.openMainPage();
+            }
+            dao.sendRequestAsync(request);
 
         function fetchRows(){
             return new MapStream(tableRows.getCache())
@@ -208,6 +204,35 @@
                         .map((column) => {return column.assembleRequest()})
                         .toList();
                 }
+            }
+        }
+
+        function uploadFiles(response){
+            if(response.length == 0){
+                return;
+            }
+
+            spinner.open(response.length);
+
+            new Stream(response)
+                .forEach(uploadFile);
+
+            function uploadFile(fileUpload){
+                const row = findRowByRowIndex(fileUpload.rowIndex);
+                const column = findColumnByColumnIndex(row.columns, fileUpload.columnIndex);
+
+                const file = column.getData()
+                    .getNode()
+                    .files[0];
+
+                const formData = new FormData();
+                formData.append("file", file);
+
+                const uploadRequest = new Request(Mapping.getEndpoint("STORAGE_UPLOAD_FILE", {storedFileId: fileUpload.storedFileId}), formData);
+                    uploadRequest.processValidResponse = function(response){
+                        spinner.increment();
+                    }
+                dao.sendRequestAsync(uploadRequest);
             }
         }
     }
@@ -390,6 +415,14 @@
             .filter((column) => {return column.getColumnIndex() == columnIndex})
             .findFirst()
             .orElseThrow("IllegalArgument", "TableColumn not found with columnIndex " + columnIndex, se.getCache());
+    }
+
+    function findRowByRowIndex(rowIndex){
+        return new MapStream(tableRows.getCache())
+            .toListStream()
+            .filter((row) => {return row.rowIndex == rowIndex})
+            .findFirst()
+            .orElseThrow("IllegalArgument", "TableRow not found with rowIndex " + rowIndex, tableRows.getCache());
     }
 
     function TableHead(columnType, ci){

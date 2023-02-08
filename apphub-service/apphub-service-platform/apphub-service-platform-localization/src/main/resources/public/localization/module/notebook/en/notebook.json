@@ -695,6 +695,7 @@
     "value": "Value",
     "step": "Step",
     "minimum": "Minimum",
-    "maximum": "Maximum"
+    "maximum": "Maximum",
+    "custom-table-saved": "Custom table saved."
   }
 }

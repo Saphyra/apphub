@@ -689,6 +689,7 @@
     "value": "Érték",
     "step": "Lépés",
     "minimum": "Minimum",
-    "maximum": "Maximum"
+    "maximum": "Maximum",
+    "custom-table-saved": "Egyéni táblázat elmentve.."
   }
 }
