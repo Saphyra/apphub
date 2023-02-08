@@ -15,7 +15,7 @@ public class FileDeletionService {
     private final FileDao fileDao;
     private final StorageProxy storageProxy;
 
-    public void deleteImage(UUID parent) {
+    public void deleteFile(UUID parent) {
         File file = fileDao.findByParentValidated(parent);
         storageProxy.deleteFile(file.getStoredFileId());
         fileDao.delete(file);

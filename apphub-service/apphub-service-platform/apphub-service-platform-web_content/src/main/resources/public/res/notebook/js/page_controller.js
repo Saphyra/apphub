@@ -31,6 +31,7 @@ scriptLoader.loadScript("/res/notebook/js/content/node_factory/only_title_node_f
 scriptLoader.loadScript("/res/notebook/js/content/action_button_factory.js")
 scriptLoader.loadScript("/res/notebook/js/view/text_view_controller.js");
 scriptLoader.loadScript("/res/notebook/js/content/node_factory/link_node_factory.js");
+scriptLoader.loadScript("/res/notebook/js/content/node_factory/custom_table_node_factory.js");
 scriptLoader.loadScript("/res/notebook/js/view/table_view_controller.js");
 scriptLoader.loadScript("/res/notebook/js/content/node_factory/text_node_factory.js");
 scriptLoader.loadScript("/res/notebook/js/view/checklist_table_view_controller.js");

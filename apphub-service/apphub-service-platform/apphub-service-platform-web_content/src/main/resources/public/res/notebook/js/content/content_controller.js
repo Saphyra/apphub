@@ -8,7 +8,8 @@
         CHECKLIST_TABLE: checklistTableNodeFactory,
         ONLY_TITLE: onlyTitleNodeFactory,
         IMAGE: imageNodeFactory,
-        FILE: fileNodeFactory
+        FILE: fileNodeFactory,
+        CUSTOM_TABLE: customTableNodeFactory,
     }
 
     window.contentController = new function(){

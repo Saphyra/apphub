@@ -61,10 +61,11 @@ public class ListItemDeletionService {
                 break;
             case IMAGE:
             case FILE:
-                fileDeletionService.deleteImage(listItem.getListItemId());
+                fileDeletionService.deleteFile(listItem.getListItemId());
                 break;
             case CUSTOM_TABLE: //TODO unit test
                 customTableDeletionService.delete(listItem);
+                break;
             default:
                 throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, "Unhandled listItemType: " + listItem.getType());
         }

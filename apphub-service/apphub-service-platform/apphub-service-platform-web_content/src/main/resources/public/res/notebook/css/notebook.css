@@ -72,6 +72,10 @@ body{
     border-color: black;
 }
 
+.custom-table{
+    border-color: cyan;
+}
+
 .pin-button{
     background-image: url("/res/common/images/pin.png");
     background-size: cover;

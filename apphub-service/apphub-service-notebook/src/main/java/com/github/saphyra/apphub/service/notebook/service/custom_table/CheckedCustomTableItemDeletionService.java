@@ -42,7 +42,7 @@ public class CheckedCustomTableItemDeletionService {
 
     private void delete(TableJoin tableJoin) {
         if (tableJoin.getColumnType() == ColumnType.FILE || tableJoin.getColumnType() == ColumnType.IMAGE) {
-            fileDeletionService.deleteImage(tableJoin.getTableJoinId());
+            fileDeletionService.deleteFile(tableJoin.getTableJoinId());
         } else {
             contentDao.deleteByParent(tableJoin.getTableJoinId());
         }

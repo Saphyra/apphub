@@ -157,7 +157,7 @@ public class ListItemDeletionServiceTest {
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
         verify(listItemDao).delete(deleted);
-        verify(fileDeletionService).deleteImage(LIST_ITEM_ID_1);
+        verify(fileDeletionService).deleteFile(LIST_ITEM_ID_1);
     }
 
     @Test
@@ -169,6 +169,6 @@ public class ListItemDeletionServiceTest {
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
         verify(listItemDao).delete(deleted);
-        verify(fileDeletionService).deleteImage(LIST_ITEM_ID_1);
+        verify(fileDeletionService).deleteFile(LIST_ITEM_ID_1);
     }
 }
