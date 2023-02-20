@@ -398,6 +398,11 @@
     "maternityLeave": "Maternity leave",
     "satietyRechargeMultiplier": "Satiety multiplier",
     "desks": "Desks",
-    "experiencePerSecond": "Experience"
+    "experiencePerSecond": "Experience",
+    "deconstruct-building": "Deconstruct",
+    "deconstruct-building-confirmation-dialog-title": "Confirm deconstruction",
+    "deconstruct-building-confirmation-dialog-detail": "Are you sure you want to deconstruct <SPAN class='red'>{buildingName}</SPAN>?",
+    "deconstruct-building-confirm-button": "Deconstruct building",
+    "deconstruct-building-cancel-button": "Cancel"
   }
 }

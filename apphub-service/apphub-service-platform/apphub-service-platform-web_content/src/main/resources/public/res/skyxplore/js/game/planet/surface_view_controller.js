@@ -81,11 +81,15 @@
 
                     if(building.construction){
                         content.appendChild(createConstructionFooter(planetId, building.buildingId, building.construction, building.dataId));
-                    }else if(building.level < dataCaches.itemData.get(building.dataId).maxLevel){
-                        const footer = document.createElement("DIV");
-                            footer.classList.add("surface-footer");
-                            footer.appendChild(createUpgradeBuildingFooter(planetId, surfaceType, building));
-                        content.appendChild(footer);
+                    }else{
+                        content.appendChild(createDeconstructButton(planetId, building.buildingId, building.dataId));
+
+                        if(building.level < dataCaches.itemData.get(building.dataId).maxLevel){
+                            const footer = document.createElement("DIV");
+                                footer.classList.add("surface-footer");
+                                footer.appendChild(createUpgradeBuildingFooter(planetId, surfaceType, building));
+                            content.appendChild(footer);
+                        }
                     }
 
                 return content;
@@ -191,6 +195,15 @@
                         }
                     return upgradeButton;
                 }
+
+                function createDeconstructButton(planetId, buildingId, dataId){
+                    return domBuilder.create("BUTTON")
+                        .addClass("deconstruct-building-button")
+                        .innerText("X")
+                        .title(localization.getAdditionalContent("deconstruct-building"))
+                        .onclick(() => deconstructBuilding(planetId, buildingId, dataId))
+                        .getNode();
+                }
             }
 
             function createTerraformation(planetId, surfaceId, terraformation){
@@ -249,6 +262,29 @@
                 return content;
             }
         }
+    }
+
+    function deconstructBuilding(planetId, buildingId, dataId){
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(localization.getAdditionalContent("deconstruct-building-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("deconstruct-building-confirmation-dialog-detail", {buildingName: dataCaches.itemDataNames.get(dataId)}))
+            .withConfirmButton(localization.getAdditionalContent("deconstruct-building-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("deconstruct-building-cancel-button"));
+
+        return new Promise((resolve, reject) => {
+            confirmationService.openDialog(
+                "deconstruct-building-confirmation-dialog",
+                confirmationDialogLocalization,
+                function(){
+                    const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_DECONSTRUCT", {planetId: planetId, buildingId: buildingId}));
+                        request.convertResponse = jsonConverter;
+                        request.processValidResponse = function(surface){
+                            syncEngine.add(surface);
+                        }
+                    dao.sendRequestAsync(request);
+                }
+            );
+        });
     }
 
     function addHandlers(){

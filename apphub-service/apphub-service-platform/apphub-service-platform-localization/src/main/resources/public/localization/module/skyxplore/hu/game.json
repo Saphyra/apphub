@@ -398,6 +398,11 @@
     "maternityLeave": "Szülési szabadság",
     "satietyRechargeMultiplier": "Étel többszöröző",
     "desks": "Padok",
-    "experiencePerSecond": "Tapasztalat"
+    "experiencePerSecond": "Tapasztalat",
+    "deconstruct-building": "Lerombol",
+    "deconstruct-building-confirmation-dialog-title": "Épület lerombolásának megerősítése",
+    "deconstruct-building-confirmation-dialog-detail": "Biztosan le szeretnéd bontani a(z) <SPAN class='red'>{buildingName}</SPAN> épületet?",
+    "deconstruct-building-confirm-button": "Épület lerombolása",
+    "deconstruct-building-cancel-button": "Mégse"
   }
 }

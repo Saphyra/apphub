@@ -71,8 +71,8 @@ public class Planet {
     public Building findBuildingByConstructionIdValidated(UUID constructionId) {
         return surfaces.values()
             .stream()
-            .filter(surface -> !isNull(surface.getBuilding()))
             .map(Surface::getBuilding)
+            .filter(building -> !isNull(building))
             .filter(building -> !isNull(building.getConstruction()))
             .filter(building -> building.getConstruction().getConstructionId().equals(constructionId))
             .findFirst()

@@ -10,11 +10,9 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-public class Building {
-    private final UUID surfaceId;
-    private final UUID buildingId;
-    private final String dataId;
-    private volatile int level;
-    private volatile Construction construction;
-    private volatile Deconstruction deconstruction;
+public class Deconstruction {
+    private final UUID deconstructionId;
+    private final UUID externalReference;
+    private int currentWorkPoints;
+    private int priority;
 }
