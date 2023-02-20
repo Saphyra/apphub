@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class DeconstructionModelValidator {
     private final GameItemValidator gameItemValidator;
 
@@ -19,6 +18,6 @@ class DeconstructionModelValidator {
 
         ValidationUtil.notNull(model.getExternalReference(), "externalReference");
         ValidationUtil.notNull(model.getCurrentWorkPoints(), "currentWorkPoints");
-        ValidationUtil.notNull(model.getPriority(), "priority");
+        ValidationUtil.betweenInclusive(model.getPriority(), 1, 10, "priority");
     }
 }

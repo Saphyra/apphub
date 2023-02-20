@@ -67,7 +67,7 @@ public class DeconstructBuildingService {
                 messageSender.planetQueueItemModified(userId, planetId, queueResponse);
                 messageSender.planetBuildingDetailsModified(userId, planetId, planetBuildingOverviewQueryService.getBuildingOverview(planet));
 
-                DeconstructionProcess process = deconstructionProcessFactory.create();
+                DeconstructionProcess process = deconstructionProcessFactory.create(game, planet, deconstruction);
 
                 game.getProcesses()
                     .add(process);

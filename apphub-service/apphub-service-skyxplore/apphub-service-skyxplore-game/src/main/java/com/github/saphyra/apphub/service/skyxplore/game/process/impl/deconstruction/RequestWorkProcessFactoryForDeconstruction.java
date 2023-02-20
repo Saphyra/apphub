@@ -18,7 +18,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class RequestWorkProcessFactoryForDeconstruction {
     private final RequestWorkProcessFactory requestWorkProcessFactory;
     private final GameProperties gameProperties;

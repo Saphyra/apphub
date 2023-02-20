@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
@@ -27,6 +28,7 @@ import static java.util.Objects.isNull;
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
+@Slf4j
 public class Planet {
     private final UUID planetId;
     private final UUID solarSystemId;
@@ -86,5 +88,16 @@ public class Planet {
             .filter(surface -> surface.getBuilding().getBuildingId().equals(buildingId))
             .findFirst()
             .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Surface not found by buildingId " + buildingId));
+    }
+
+    public Building findBuildingByDeconstructionIdValidated(UUID deconstructionId) {
+        return surfaces.values()
+            .stream()
+            .map(Surface::getBuilding)
+            .filter(building -> !isNull(building))
+            .filter(building -> !isNull(building.getDeconstruction()))
+            .filter(building -> building.getDeconstruction().getDeconstructionId().equals(deconstructionId))
+            .findFirst()
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Building not found by deconstructionId " + deconstructionId));
     }
 }

@@ -13,12 +13,11 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class DeconstructionLoader {
     private final GameItemLoader gameItemLoader;
 
     Deconstruction load(UUID externalReference) {
-        return gameItemLoader.loadChildren(externalReference, GameItemType.CONSTRUCTION, DeconstructionModel[].class)
+        return gameItemLoader.loadChildren(externalReference, GameItemType.DECONSTRUCTION, DeconstructionModel[].class)
             .stream()
             .findFirst()
             .map(this::convert)

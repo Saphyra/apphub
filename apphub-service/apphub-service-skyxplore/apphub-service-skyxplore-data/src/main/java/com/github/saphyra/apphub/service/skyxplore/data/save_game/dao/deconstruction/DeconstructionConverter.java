@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class DeconstructionConverter extends ConverterBase<DeconstructionEntity, DeconstructionModel> {
     private final UuidConverter uuidConverter;
 

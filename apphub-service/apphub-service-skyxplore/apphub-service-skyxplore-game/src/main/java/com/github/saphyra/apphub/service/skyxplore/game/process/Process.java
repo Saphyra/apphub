@@ -8,6 +8,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import java.util.UUID;
 
 public interface Process extends Comparable<Process> {
+    ProcessType getType();
+
     UUID getProcessId();
 
     UUID getExternalReference();
@@ -15,8 +17,6 @@ public interface Process extends Comparable<Process> {
     int getPriority();
 
     ProcessStatus getStatus();
-
-    ProcessType getType();
 
     default void scheduleWork(SyncCache syncCache) {
         if (getStatus() == ProcessStatus.READY_TO_DELETE) {
@@ -32,7 +32,8 @@ public interface Process extends Comparable<Process> {
 
     void cancel(SyncCache syncCache);
 
-    void cleanup(SyncCache syncCache);
+    default void cleanup(SyncCache syncCache) {
+    }
 
     ProcessModel toModel();
 

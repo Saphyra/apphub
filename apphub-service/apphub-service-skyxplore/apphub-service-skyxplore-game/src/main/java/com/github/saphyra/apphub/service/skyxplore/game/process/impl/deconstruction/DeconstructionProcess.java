@@ -27,7 +27,6 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
-//TODO unit test
 public class DeconstructionProcess implements Process {
     @Getter
     @NonNull
@@ -35,7 +34,8 @@ public class DeconstructionProcess implements Process {
 
     @Getter
     @NonNull
-    private volatile ProcessStatus status;
+    @Builder.Default
+    private volatile ProcessStatus status = ProcessStatus.CREATED;
 
     @NonNull
     private final Deconstruction deconstruction;
@@ -48,7 +48,7 @@ public class DeconstructionProcess implements Process {
 
     @Override
     public UUID getExternalReference() {
-        return deconstruction.getExternalReference();
+        return deconstruction.getDeconstructionId();
     }
 
     @Override
@@ -108,11 +108,6 @@ public class DeconstructionProcess implements Process {
         status = ProcessStatus.READY_TO_DELETE;
 
         syncCache.saveGameItem(toModel());
-    }
-
-    @Override
-    public void cleanup(SyncCache syncCache) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

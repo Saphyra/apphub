@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class DeconstructionDao extends AbstractDao<DeconstructionEntity, DeconstructionModel, String, DeconstructionRepository> {
     private final UuidConverter uuidConverter;
 
@@ -23,8 +22,8 @@ public class DeconstructionDao extends AbstractDao<DeconstructionEntity, Deconst
         repository.deleteByGameId(uuidConverter.convertDomain(gameId));
     }
 
-    public Optional<DeconstructionModel> findById(UUID id) {
-        return findById(uuidConverter.convertDomain(id));
+    public Optional<DeconstructionModel> findById(UUID deconstructionId) {
+        return findById(uuidConverter.convertDomain(deconstructionId));
     }
 
     public List<DeconstructionModel> getByExternalReference(UUID externalReference) {

@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class DeconstructionService implements GameItemService {
     private final DeconstructionDao dao;
     private final DeconstructionModelValidator validator;
@@ -44,12 +43,12 @@ public class DeconstructionService implements GameItemService {
     }
 
     @Override
-    public Optional<? extends GameItem> findById(UUID id) {
+    public Optional<DeconstructionModel> findById(UUID id) {
         return dao.findById(id);
     }
 
     @Override
-    public List<? extends GameItem> getByParent(UUID parent) {
+    public List<DeconstructionModel> getByParent(UUID parent) {
         return dao.getByExternalReference(parent);
     }
 

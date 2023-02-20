@@ -14,7 +14,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class BuildingDeconstructionToQueueItemConverter {
     private final GameProperties gameProperties;
 
@@ -27,7 +26,7 @@ public class BuildingDeconstructionToQueueItemConverter {
 
         return QueueItem.builder()
             .itemId(deconstruction.getDeconstructionId())
-            .type(QueueItemType.CONSTRUCTION)
+            .type(QueueItemType.DECONSTRUCTION)
             .requiredWorkPoints(gameProperties.getDeconstruction().getRequiredWorkPoints())
             .currentWorkPoints(deconstruction.getCurrentWorkPoints())
             .priority(deconstruction.getPriority())

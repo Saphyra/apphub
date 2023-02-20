@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class FinishDeconstructionService {
     private final GameDataProxy gameDataProxy;
     private final WsMessageSender messageSender;
