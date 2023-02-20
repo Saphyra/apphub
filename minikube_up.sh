@@ -6,7 +6,7 @@ NAMESPACE_NAME=$(git rev-parse --abbrev-ref HEAD)
 ./scale.sh develop 0
 ./scale.sh "$NAMESPACE_NAME" 0
 
-./infra/deployment/script/deploy.sh production
+./infra/deployment/script/deploy.sh production production 180
 ./pp.sh
 
 ./infra/deployment/script/deploy.sh develop
