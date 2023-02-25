@@ -8,6 +8,7 @@
     window.constructionController = new function(){
         this.fillAvailableBuildings = fillAvailableBuildings;
         this.cancelConstruction = cancelConstruction;
+        this.cancelDeconstruction = cancelDeconstruction;
         this.openUpgradeBuildingWindow = openUpgradeBuildingWindow;
         this.upgradeBuilding = upgradeBuilding
     }
@@ -312,6 +313,29 @@
                 confirmationDialogLocalization,
                 function(){
                     const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION", {planetId: planetId, buildingId: buildingId}));
+                        request.convertResponse = jsonConverter;
+                        request.processValidResponse = function(surface){
+                            resolve(surface);
+                        }
+                    dao.sendRequestAsync(request);
+                }
+            );
+        });
+    }
+
+    function cancelDeconstruction(planetId, buildingId, dataId){
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(localization.getAdditionalContent("cancel-deconstruction-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("cancel-deconstruction-confirmation-dialog-detail", {buildingName: dataCaches.itemDataNames.get(dataId)}))
+            .withConfirmButton(localization.getAdditionalContent("cancel-deconstruction-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("cancel-deconstruction-cancel-button"));
+
+        return new Promise((resolve, reject) => {
+            confirmationService.openDialog(
+                "cancel-deconstruction-confirmation-dialog",
+                confirmationDialogLocalization,
+                function(){
+                    const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION", {planetId: planetId, buildingId: buildingId}));
                         request.convertResponse = jsonConverter;
                         request.processValidResponse = function(surface){
                             resolve(surface);

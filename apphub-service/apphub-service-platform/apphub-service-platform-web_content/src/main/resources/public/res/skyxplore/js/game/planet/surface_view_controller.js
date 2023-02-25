@@ -81,7 +81,7 @@
                     if(building.construction){
                         content.appendChild(createConstructionFooter(planetId, building.buildingId, building.construction, building.dataId));
                     }else if(building.deconstruction){
-                        //TODO implement
+                        content.appendChild(createDeconstructionFooter(planetId, building.buildingId, building.deconstruction, building.dataId));
                     }else{
                         content.appendChild(createDeconstructButton(planetId, building.buildingId, building.dataId));
 
@@ -182,6 +182,34 @@
                                             .then((surface)=>{syncEngine.add(surface)});
                                     }
                             progressBarContent.appendChild(cancelConstructionButton);
+                        progressBar.appendChild(progressBarContent);
+                    footer.appendChild(progressBar);
+                    return footer;
+                }
+
+                function createDeconstructionFooter(planetId, buildingId, deconstruction, dataId){
+                    const footer = document.createElement("DIV");
+                        footer.classList.add("surface-footer");
+
+                        const progressBar = document.createElement("DIV");
+                            progressBar.classList.add("progress-bar-container");
+
+                            const progressBarBackground = document.createElement("DIV");
+                                progressBarBackground.classList.add("progress-bar-background");
+                                progressBarBackground.style.width = (deconstruction.currentWorkPoints / deconstruction.requiredWorkPoints * 100) + "%";
+                        progressBar.appendChild(progressBarBackground);
+
+                            const progressBarContent = document.createElement("DIV");
+                                progressBarContent.classList.add("progress-bar-text");
+
+                                const cancelDeconstructionButton = document.createElement("BUTTON");
+                                    cancelDeconstructionButton.classList.add("cancel-deconstruction-button");
+                                    cancelDeconstructionButton.innerText = "-";
+                                    cancelDeconstructionButton.onclick = function(){
+                                        constructionController.cancelDeconstruction(planetId, buildingId, dataId)
+                                            .then((surface)=>{syncEngine.add(surface)});
+                                    }
+                            progressBarContent.appendChild(cancelDeconstructionButton);
                         progressBar.appendChild(progressBarContent);
                     footer.appendChild(progressBar);
                     return footer;

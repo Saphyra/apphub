@@ -23,6 +23,7 @@ class BuildingDeconstructionToQueueItemConverterTest {
     private static final Integer REQUIRED_WORK_POINTS = 467;
     private static final Integer PRIORITY = 43;
     private static final int CURRENT_WORK_POINTS = 2;
+    private static final String DATA_ID = "data-id";
 
     @Mock
     private GameProperties gameProperties;
@@ -49,6 +50,7 @@ class BuildingDeconstructionToQueueItemConverterTest {
     @Test
     void convert() {
         given(building.getDeconstruction()).willReturn(deconstruction);
+        given(building.getDataId()).willReturn(DATA_ID);
         given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
         given(gameProperties.getDeconstruction()).willReturn(deconstructionProperties);
         given(deconstructionProperties.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
@@ -62,5 +64,6 @@ class BuildingDeconstructionToQueueItemConverterTest {
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
         assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
+        assertThat(result.getData()).containsEntry("dataId", DATA_ID);
     }
 }

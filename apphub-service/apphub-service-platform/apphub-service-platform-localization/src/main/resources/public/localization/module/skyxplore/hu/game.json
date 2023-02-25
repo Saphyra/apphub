@@ -370,6 +370,10 @@
     "cancel-construction-confirmation-dialog-detail": "Biztosan vissza akarod vonni a(z) <SPAN class='red'>{buildingName}</SPAN> építését?",
     "cancel-construction-confirm-button": "Építkezés visszavonása",
     "cancel-construction-cancel-button": "Mégse",
+    "cancel-deconstruction-confirmation-dialog-title": "Rombolás visszavonásának megerősítése",
+    "cancel-deconstruction-confirmation-dialog-detail": "Biztosan vissza akarod vonni a(z) <SPAN class='red'>{buildingName}</SPAN> lerombolását?",
+    "cancel-deconstruction-confirm-button": "Lerombolás visszavonása",
+    "cancel-deconstruction-cancel-button": "Mégse",
     "start-terraformation": "Terraformálás megkezdése",
     "cancel-terraformation-confirmation-dialog-title": "Terraformálás visszavonásának megerősítése",
     "cancel-terraformation-confirmation-dialog-detail": "Biztosan vissza akarod vonni terraformálást?",
@@ -403,6 +407,7 @@
     "deconstruct-building-confirmation-dialog-title": "Épület lerombolásának megerősítése",
     "deconstruct-building-confirmation-dialog-detail": "Biztosan le szeretnéd bontani a(z) <SPAN class='red'>{buildingName}</SPAN> épületet?",
     "deconstruct-building-confirm-button": "Épület lerombolása",
-    "deconstruct-building-cancel-button": "Mégse"
+    "deconstruct-building-cancel-button": "Mégse",
+    "deconstruct": "Lerombol"
   }
 }

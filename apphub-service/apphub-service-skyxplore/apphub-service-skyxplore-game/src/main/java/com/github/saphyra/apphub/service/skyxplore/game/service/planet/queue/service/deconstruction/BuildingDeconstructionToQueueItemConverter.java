@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 import static java.util.Objects.isNull;
 
 @Component
@@ -30,6 +32,7 @@ public class BuildingDeconstructionToQueueItemConverter {
             .requiredWorkPoints(gameProperties.getDeconstruction().getRequiredWorkPoints())
             .currentWorkPoints(deconstruction.getCurrentWorkPoints())
             .priority(deconstruction.getPriority())
+            .data(Map.of("dataId", building.getDataId()))
             .build();
     }
 }
