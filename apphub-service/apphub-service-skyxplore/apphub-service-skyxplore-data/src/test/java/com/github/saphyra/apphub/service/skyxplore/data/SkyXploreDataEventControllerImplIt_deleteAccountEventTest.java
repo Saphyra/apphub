@@ -42,7 +42,7 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
-public class SkyXploreDataEventControllerImplTestIt_deleteAccountEvent {
+public class SkyXploreDataEventControllerImplIt_deleteAccountEventTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String LOCALIZED_MESSAGE = "localized-message";
     private static final String CHARACTER_NAME = "character-name";

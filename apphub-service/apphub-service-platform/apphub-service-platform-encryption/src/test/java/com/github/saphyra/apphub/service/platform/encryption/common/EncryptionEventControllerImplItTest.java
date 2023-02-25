@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
-public class EncryptionEventControllerImplTestIt {
+public class EncryptionEventControllerImplItTest {
     private static final UUID EXTERNAL_ID_1 = UUID.randomUUID();
     private static final UUID EXTERNAL_ID_2 = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();

@@ -46,7 +46,7 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
-public class ErrorReporterControllerImplTestIt_reportError {
+public class ErrorReporterControllerImplIt_reportErrorTest {
     private static final String MESSAGE = "message";
     private static final String LOCALIZED_MESSAGE = "localized-message";
     private static final Integer RESPONSE_STATUS = 32;

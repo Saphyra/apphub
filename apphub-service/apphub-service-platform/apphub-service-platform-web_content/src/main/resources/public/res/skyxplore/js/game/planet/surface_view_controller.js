@@ -67,7 +67,6 @@
                     .append(building.level);
                     addEffect(surfaceType, building, titleBuilder);
 
-
                 surfaceNode.title(titleBuilder.build());
 
                 const content = document.createElement("DIV");
@@ -81,6 +80,8 @@
 
                     if(building.construction){
                         content.appendChild(createConstructionFooter(planetId, building.buildingId, building.construction, building.dataId));
+                    }else if(building.deconstruction){
+                        //TODO implement
                     }else{
                         content.appendChild(createDeconstructButton(planetId, building.buildingId, building.dataId));
 

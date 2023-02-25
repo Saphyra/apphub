@@ -47,7 +47,7 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = {SkyxploreGameApplication.class})
-public class GameCreationControllerImplTestIt {
+public class GameCreationControllerImplItTest {
     private static final String CHARACTER_NAME = "character-name";
     private static final String ALLIANCE_NAME = "alliance-name";
     private static final UUID ALLIANCE_ID = UUID.randomUUID();

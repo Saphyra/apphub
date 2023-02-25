@@ -48,7 +48,7 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
-public class ModulesControllerImplTestIt {
+public class ModulesControllerImplItTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String MODULE = "module";
     private static final String ROLE = "role";

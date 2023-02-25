@@ -50,7 +50,7 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
-public class EventGatewayControllerTestIt {
+public class EventGatewayControllerItTest {
     private static final String SERVICE_NAME = "test-service";
     private static final String TEST_EVENT_URL_1 = "/event/test/1";
     private static final String TEST_EVENT_URL_2 = "/event/test/2";

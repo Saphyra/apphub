@@ -46,7 +46,7 @@ import static org.mockito.BDDMockito.given;
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
 @Slf4j
-public class EncryptionKeyControllerImplTestIt {
+public class EncryptionKeyControllerImplItTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String LOCALIZED_MESSAGE = "localized-message";
     private static final UUID EXTERNAL_ID = UUID.randomUUID();

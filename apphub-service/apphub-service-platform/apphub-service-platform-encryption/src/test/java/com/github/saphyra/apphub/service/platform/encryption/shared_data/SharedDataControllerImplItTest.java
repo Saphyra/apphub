@@ -45,7 +45,7 @@ import static org.mockito.BDDMockito.given;
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
 @Slf4j
-public class SharedDataControllerImplTestIt {
+public class SharedDataControllerImplItTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String LOCALIZED_MESSAGE = "localized-message";
     private static final UUID EXTERNAL_ID_1 = UUID.randomUUID();

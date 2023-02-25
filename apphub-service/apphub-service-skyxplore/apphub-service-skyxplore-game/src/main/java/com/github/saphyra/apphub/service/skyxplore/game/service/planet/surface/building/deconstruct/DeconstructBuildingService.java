@@ -31,7 +31,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class DeconstructBuildingService {
     private final GameDao gameDao;
     private final DeconstructionFactory deconstructionFactory;

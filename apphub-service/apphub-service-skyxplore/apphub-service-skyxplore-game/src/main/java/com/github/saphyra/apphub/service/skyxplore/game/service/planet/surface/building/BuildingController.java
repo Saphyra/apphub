@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction.CancelConstructionService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction.ConstructNewBuildingService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction.UpgradeBuildingService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.deconstruct.CancelDeconstructionService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.deconstruct.DeconstructBuildingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class BuildingController implements SkyXploreGameBuildingController {
     private final UpgradeBuildingService upgradeBuildingService;
     private final CancelConstructionService cancelConstructionService;
     private final DeconstructBuildingService deconstructBuildingService;
+    private final CancelDeconstructionService cancelDeconstructionService;
 
     @Override
     public SurfaceResponse constructNewBuilding(OneParamRequest<String> dataId, UUID planetId, UUID surfaceId, AccessTokenHeader accessTokenHeader) {
@@ -42,9 +44,14 @@ public class BuildingController implements SkyXploreGameBuildingController {
     }
 
     @Override
-    //TODO unit test
     public SurfaceResponse deconstructBuilding(UUID planetId, UUID buildingId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to deconstruct building {} on planet {}", accessTokenHeader.getUserId(), buildingId, planetId);
         return deconstructBuildingService.deconstructBuilding(accessTokenHeader.getUserId(), planetId, buildingId);
+    }
+
+    @Override
+    public SurfaceResponse cancelDeconstruction(UUID planetId, UUID buildingId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to cancel deconstruction of building {} on planet {}", accessTokenHeader.getUserId(), buildingId, planetId);
+        return cancelDeconstructionService.cancelDeconstructionOfBuilding(accessTokenHeader.getUserId(), planetId, buildingId);
     }
 }

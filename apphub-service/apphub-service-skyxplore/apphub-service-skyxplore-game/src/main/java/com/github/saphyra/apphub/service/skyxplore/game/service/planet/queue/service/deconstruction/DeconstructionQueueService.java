@@ -77,6 +77,6 @@ public class DeconstructionQueueService implements QueueService {
 
     @Override
     public void cancel(UUID userId, UUID planetId, UUID deconstructionId) {
-        cancelDeconstructionService.cancelDeconstruction(userId, planetId, deconstructionId);
+        cancelDeconstructionService.cancelDeconstructionOfDeconstruction(userId, planetId, deconstructionId);
     }
 }

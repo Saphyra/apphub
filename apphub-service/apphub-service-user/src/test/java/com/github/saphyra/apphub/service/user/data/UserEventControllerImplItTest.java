@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
-public class UserEventControllerImplTestIt {
+public class UserEventControllerImplItTest {
     private static final UUID USER_ID_1 = UUID.randomUUID();
     private static final UUID USER_ID_2 = UUID.randomUUID();
     private static final String EMAIL_1 = "email-1@asd.asd";

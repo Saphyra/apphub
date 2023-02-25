@@ -53,7 +53,7 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = ApiTestConfiguration.class)
-public class AuthenticationControllerTestIt {
+public class AuthenticationControllerItTest {
     private static final UUID ACCESS_TOKEN_ID_1 = UUID.randomUUID();
     private static final UUID ACCESS_TOKEN_ID_2 = UUID.randomUUID();
     private static final UUID ACCESS_TOKEN_ID_3 = UUID.randomUUID();

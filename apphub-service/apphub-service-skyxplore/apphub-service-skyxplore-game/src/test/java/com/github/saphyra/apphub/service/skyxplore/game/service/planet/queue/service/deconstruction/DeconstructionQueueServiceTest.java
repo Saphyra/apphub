@@ -156,6 +156,6 @@ class DeconstructionQueueServiceTest {
     void cancel() {
         underTest.cancel(USER_ID, PLANET_ID, DECONSTRUCTION_ID);
 
-        verify(cancelDeconstructionService).cancelDeconstruction(USER_ID, PLANET_ID, DECONSTRUCTION_ID);
+        verify(cancelDeconstructionService).cancelDeconstructionOfDeconstruction(USER_ID, PLANET_ID, DECONSTRUCTION_ID);
     }
 }

@@ -8,13 +8,11 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class SurfaceBuildingResponse {
-    private UUID buildingId;
-    private String dataId;
-    private int level;
-    private ConstructionResponse construction;
-    private DeconstructionResponse deconstruction;
+public class DeconstructionResponse {
+    private UUID deconstructionId;
+    private Integer requiredWorkPoints;
+    private Integer currentWorkPoints;
 }
