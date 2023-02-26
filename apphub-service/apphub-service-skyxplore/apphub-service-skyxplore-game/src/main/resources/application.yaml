@@ -48,6 +48,7 @@ game:
         min: 500
         max: 3000
   planet:
+    defaultRawFoodAmount: 100
     planetsPerSystem:
       SMALL:
         min: 1

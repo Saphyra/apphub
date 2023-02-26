@@ -39,4 +39,8 @@ public class StoredResources extends ConcurrentHashMap<String, StoredResource> {
         }
         return result;
     }
+
+    public void add(StoredResource storedResource) {
+        put(storedResource.getDataId(), storedResource);
+    }
 }

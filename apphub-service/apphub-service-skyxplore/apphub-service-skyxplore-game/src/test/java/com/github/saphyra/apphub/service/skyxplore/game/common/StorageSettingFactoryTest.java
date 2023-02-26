@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
+package com.github.saphyra.apphub.service.skyxplore.game.common;
 
 import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;

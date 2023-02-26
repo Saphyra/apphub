@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreS
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreStorageSettingActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.localization.Language;
@@ -69,7 +70,10 @@ public class StorageSettingTest extends BackEndTest {
 
         //Get
         List<StorageSettingModel> createModels = SkyXploreStorageSettingActions.getStorageSettings(language, accessTokenId1, planet.getPlanetId())
-            .getCurrentSettings();
+            .getCurrentSettings()
+            .stream()
+            .filter(storageSettingModel -> storageSettingModel.getDataId().equals(Constants.DATA_ID_ORE))
+            .toList();
 
         assertThat(createModels).hasSize(1);
         created = createModels.get(0);
@@ -85,7 +89,10 @@ public class StorageSettingTest extends BackEndTest {
         //Edit - Validation
         UUID storageSettingId = SkyXploreStorageSettingActions.getStorageSettings(language, accessTokenId1, planet.getPlanetId())
             .getCurrentSettings()
-            .get(0)
+            .stream()
+            .filter(storageSettingModel -> storageSettingModel.getDataId().equals(Constants.DATA_ID_ORE))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("StorageSetting not found."))
             .getStorageSettingId();
 
         edit_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().priority(null).build(), "priority", "must not be null");
@@ -114,7 +121,10 @@ public class StorageSettingTest extends BackEndTest {
         assertThat(edited.getStorageSettingId()).isEqualTo(editModel.getStorageSettingId());
 
         List<StorageSettingModel> editModels = SkyXploreStorageSettingActions.getStorageSettings(language, accessTokenId1, planet.getPlanetId())
-            .getCurrentSettings();
+            .getCurrentSettings()
+            .stream()
+            .filter(storageSettingModel -> storageSettingModel.getDataId().equals(Constants.DATA_ID_ORE))
+            .toList();
         assertThat(editModels).hasSize(1);
         edited = editModels.get(0);
         assertThat(edited.getDataId()).isEqualTo(editModel.getDataId());
@@ -126,7 +136,7 @@ public class StorageSettingTest extends BackEndTest {
         //Delete
         SkyXploreStorageSettingActions.deleteStorageSetting(language, accessTokenId1, planet.getPlanetId(), storageSettingId);
         StorageSettingsResponse storageSettingsResponse = SkyXploreStorageSettingActions.getStorageSettings(language, accessTokenId1, planet.getPlanetId());
-        assertThat(storageSettingsResponse.getCurrentSettings()).isEmpty();
+        assertThat(storageSettingsResponse.getCurrentSettings()).hasSize(1);
 
         ApphubWsClient.cleanUpConnections();
     }
@@ -163,7 +173,7 @@ public class StorageSettingTest extends BackEndTest {
 
         //Check resource produced
         AwaitilityWrapper.create(60, 10)
-            .until(() -> SkyXplorePlanetStorageActions.getStorageOverview(language, accessTokenId, planet.getPlanetId()).getBulk().getActualResourceAmount() == createModel.getTargetAmount())
+            .until(() -> SkyXplorePlanetStorageActions.getStorageOverview(language, accessTokenId, planet.getPlanetId()).getBulk().getActualResourceAmount() == createModel.getTargetAmount() + 100)
             .assertTrue("Resource not produced.");
     }
 

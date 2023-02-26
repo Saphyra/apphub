@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_
 
 import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.game.common.StorageSettingFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;

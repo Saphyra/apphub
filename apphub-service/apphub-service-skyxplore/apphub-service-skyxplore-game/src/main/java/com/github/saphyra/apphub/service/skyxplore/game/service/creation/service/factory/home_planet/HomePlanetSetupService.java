@@ -21,11 +21,13 @@ public class HomePlanetSetupService {
     private final HomePlanetSelector homePlanetSelector;
     private final BuildingPlacementService buildingPlacementService;
     private final PlanetPopulationService planetPopulationService;
+    private final DefaultFoodProvider defaultFoodProvider;
 
     public void setUpHomePlanet(Player player, Collection<Alliance> alliances, Map<Coordinate, SolarSystem> solarSystems) {
         Planet planet = homePlanetSelector.selectPlanet(player.getUserId(), alliances, solarSystems);
         planet.setOwner(player.getUserId());
         buildingPlacementService.placeDefaultBuildings(planet);
         planetPopulationService.addCitizens(planet);
+        defaultFoodProvider.setDefaultFoodSettings(planet);
     }
 }

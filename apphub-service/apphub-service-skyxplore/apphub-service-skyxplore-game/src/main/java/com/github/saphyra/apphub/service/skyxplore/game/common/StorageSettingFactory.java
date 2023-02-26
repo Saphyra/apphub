@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
+package com.github.saphyra.apphub.service.skyxplore.game.common;
 
 import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
@@ -13,18 +13,22 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class StorageSettingFactory {
+public class StorageSettingFactory {
     private final IdGenerator idGenerator;
 
-    StorageSetting create(StorageSettingApiModel request, UUID location, LocationType locationType) {
+    public StorageSetting create(StorageSettingApiModel request, UUID location, LocationType locationType) {
+        return create(request.getDataId(), location, locationType, request.getTargetAmount(), request.getPriority(), request.getBatchSize());
+    }
+
+    public StorageSetting create(String dataId, UUID location, LocationType locationType, int targetAmount, int priority, int batchSize) {
         return StorageSetting.builder()
             .storageSettingId(idGenerator.randomUuid())
-            .dataId(request.getDataId())
+            .dataId(dataId)
             .location(location)
             .locationType(locationType)
-            .targetAmount(request.getTargetAmount())
-            .priority(request.getPriority())
-            .batchSize(request.getBatchSize())
+            .targetAmount(targetAmount)
+            .priority(priority)
+            .batchSize(batchSize)
             .build();
     }
 }
