@@ -74,7 +74,11 @@
                     content.classList.add("surface-content");
 
                     const levelCell = document.createElement("DIV");
-                        levelCell.innerHTML = localization.getAdditionalContent("level") + ": " + building.level;
+                        if(building.deconstruction){
+                            levelCell.innerText = localization.getAdditionalContent("deconstruct");
+                        }else{
+                            levelCell.innerHTML = localization.getAdditionalContent("level") + ": " + building.level;
+                        }
                         levelCell.classList.add("surface-header");
                 content.appendChild(levelCell);
 
@@ -165,6 +169,7 @@
 
                         const progressBar = document.createElement("DIV");
                             progressBar.classList.add("progress-bar-container");
+                            progressBar.classList.add("construction-progress-bar");
 
                             const progressBarBackground = document.createElement("DIV");
                                 progressBarBackground.classList.add("progress-bar-background");
@@ -193,6 +198,7 @@
 
                         const progressBar = document.createElement("DIV");
                             progressBar.classList.add("progress-bar-container");
+                            progressBar.classList.add("deconstruction-progress-bar");
 
                             const progressBarBackground = document.createElement("DIV");
                                 progressBarBackground.classList.add("progress-bar-background");
@@ -249,6 +255,7 @@
 
                         const progressBar = document.createElement("DIV");
                             progressBar.classList.add("progress-bar-container");
+                            progressBar.classList.add("terraformation-progress-bar");
 
                             const progressBarBackground = document.createElement("DIV");
                                 progressBarBackground.classList.add("progress-bar-background");

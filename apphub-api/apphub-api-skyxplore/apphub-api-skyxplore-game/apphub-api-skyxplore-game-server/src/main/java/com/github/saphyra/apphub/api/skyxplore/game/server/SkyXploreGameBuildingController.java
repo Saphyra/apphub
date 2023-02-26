@@ -24,11 +24,9 @@ public interface SkyXploreGameBuildingController {
     @DeleteMapping(Endpoints.SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION)
     SurfaceResponse cancelConstruction(@PathVariable("planetId") UUID planetId, @PathVariable("buildingId") UUID buildingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @PostMapping(Endpoints.SKYXPLORE_BUILDING_DECONSTRUCT)
     SurfaceResponse deconstructBuilding(@PathVariable("planetId") UUID planetId, @PathVariable("buildingId") UUID buildingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @DeleteMapping(Endpoints.SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION)
     SurfaceResponse cancelDeconstruction(@PathVariable("planetId") UUID planetId, @PathVariable("buildingId") UUID buildingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

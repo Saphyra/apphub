@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integraton.frontend.skyxplore.game.planet;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
@@ -9,8 +8,8 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyX
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreMapActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSolarSystemActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Navigation;
@@ -22,11 +21,11 @@ import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TerraformationTest extends SeleniumTest {
+public class DeconstructionTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
     @Test(groups = "skyxplore")
-    public void terraformationCD() {
+    public void createAndCancelDeconstruction() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
         Navigation.toIndexPage(driver);
@@ -35,7 +34,7 @@ public class TerraformationTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
-        SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(Constants.DEFAULT_GAME_NAME, driver, registrationParameters.getUsername());
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
 
@@ -54,26 +53,24 @@ public class TerraformationTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not opened.");
 
-        //Start terraformation
-        Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_DESERT);
+        //Deconstruct
+        Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_SOLAR_PANEL);
         String surfaceId = surface.getSurfaceId();
-        surface.openModifySurfaceWindow(driver);
+        surface.deconstructBuilding(driver);
 
-        SkyXploreSurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_LAKE);
+        surface = AwaitilityWrapper.getWithWait(() -> SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId), Surface::isDeconstructionInProgress)
+            .orElseThrow(() -> new RuntimeException("Deconstruction not started"));
 
-        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
+        //Cancel deconstruction
+        surface.cancelDeconstruction(driver);
 
-        assertThat(surface.isTerraformationInProgress()).isTrue();
-
-        //Cancel terraformation
-        surface.cancelTerraformation(driver);
-
-        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
-        assertThat(surface.isTerraformationInProgress()).isFalse();
+        AwaitilityWrapper.createDefault()
+            .until(() -> !SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId).isDeconstructionInProgress())
+            .assertTrue("Deconstruction not cancelled");
     }
 
     @Test(groups = "skyxplore")
-    public void finishTerraformation() {
+    public void finishDeconstruction() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
         Navigation.toIndexPage(driver);
@@ -82,7 +79,7 @@ public class TerraformationTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
-        SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(Constants.DEFAULT_GAME_NAME, driver, registrationParameters.getUsername());
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
 
@@ -101,24 +98,21 @@ public class TerraformationTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not opened.");
 
-        Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_DESERT);
+        //Deconstruct
+        Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_SOLAR_PANEL);
         String surfaceId = surface.getSurfaceId();
-        surface.openModifySurfaceWindow(driver);
+        surface.deconstructBuilding(driver);
 
-        SkyXploreSurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_CONCRETE);
-
-        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
-        assertThat(surface.isTerraformationInProgress()).isTrue();
+        AwaitilityWrapper.getWithWait(() -> SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId), Surface::isDeconstructionInProgress)
+            .orElseThrow(() -> new RuntimeException("Deconstruction not started"));
 
         SkyXploreGameActions.resumeGame(driver);
 
         AwaitilityWrapper.create(120, 5)
             .until(() -> SkyXplorePlanetActions.getQueue(driver).isEmpty())
-            .assertTrue("Construction is not finished.");
+            .assertTrue("Deconstruction is not finished.");
 
         surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
-
-        assertThat(surface.isConstructionInProgress()).isFalse();
-        assertThat(surface.getSurfaceType()).isEqualTo(Constants.SURFACE_TYPE_CONCRETE);
+        assertThat(surface.isEmpty()).isTrue();
     }
 }

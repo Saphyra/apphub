@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integraton.backend.skyxplore.game.planet.construction;
+package com.github.saphyra.apphub.integraton.backend.skyxplore.game.planet.building;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreBuildingActions;
