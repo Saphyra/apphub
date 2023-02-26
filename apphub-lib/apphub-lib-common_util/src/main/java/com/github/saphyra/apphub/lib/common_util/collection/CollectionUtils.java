@@ -36,6 +36,7 @@ public class CollectionUtils {
         return list;
     }
 
+    @Deprecated
     public static <K, V> Map<K, V> singleValueMap(K key, V value) {
         return singleValueMap(key, value, new HashMap<>());
     }

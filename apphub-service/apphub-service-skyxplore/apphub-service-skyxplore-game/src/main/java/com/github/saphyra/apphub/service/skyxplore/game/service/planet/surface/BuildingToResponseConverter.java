@@ -13,6 +13,7 @@ import java.util.Optional;
 @Slf4j
 public class BuildingToResponseConverter {
     private final ConstructionToResponseConverter constructionToResponseConverter;
+    private final DeconstructionToResponseConverter deconstructionToResponseConverter;
 
     public SurfaceBuildingResponse convert(Building building) {
         return Optional.ofNullable(building)
@@ -21,6 +22,7 @@ public class BuildingToResponseConverter {
                 .dataId(b.getDataId())
                 .level(b.getLevel())
                 .construction(Optional.ofNullable(building.getConstruction()).map(constructionToResponseConverter::convert).orElse(null))
+                .deconstruction(Optional.ofNullable(building.getDeconstruction()).map(deconstructionToResponseConverter::convert).orElse(null))
                 .build())
             .orElse(null);
     }

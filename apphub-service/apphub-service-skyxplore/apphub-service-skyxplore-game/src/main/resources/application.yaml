@@ -5,6 +5,9 @@ spring:
 abandonedGameExpirationSeconds: 300
 
 game:
+  deconstruction:
+    requiredWorkPoints: 1000
+    parallelWorkers: 1
   eventQueueSize: 1000
   itemSaverMaxChunkSize: 500
   creationQueueSize: 100

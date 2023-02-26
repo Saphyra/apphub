@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.structure.skyxplore.PlanetBuildingO
 import com.github.saphyra.apphub.integration.structure.skyxplore.PlanetBuildingOverviewResponse;
 
 import java.util.Map;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,13 +19,20 @@ public class PlanetBuildingDetailsValidator {
 
         PlanetBuildingOverviewResponse response = buildingDetails.get(surfaceType);
 
-        PlanetBuildingOverviewDetailedResponse buildingDetail = response.getBuildingDetails()
+        Optional<PlanetBuildingOverviewDetailedResponse> maybeBuildingDetail = response.getBuildingDetails()
             .stream()
             .filter(building -> building.getDataId().equals(buildingDataId))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Building not found with id " + buildingDataId + " on surfaceType " + surfaceType));
+            .findFirst();
 
-        assertThat(buildingDetail.getLevelSum()).isEqualTo(levelOfBuildings);
-        assertThat(buildingDetail.getUsedSlots()).isEqualTo(numberOfBuildings);
+        if (numberOfBuildings == 0) {
+            assertThat(maybeBuildingDetail).isEmpty();
+        } else {
+            PlanetBuildingOverviewDetailedResponse buildingDetail = maybeBuildingDetail.orElseThrow(() -> new RuntimeException("Building not found with id " + buildingDataId + " on surfaceType " + surfaceType));
+
+            assertThat(buildingDetail.getLevelSum()).isEqualTo(levelOfBuildings);
+            assertThat(buildingDetail.getUsedSlots()).isEqualTo(numberOfBuildings);
+        }
+
+
     }
 }

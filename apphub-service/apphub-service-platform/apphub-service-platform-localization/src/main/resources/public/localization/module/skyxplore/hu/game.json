@@ -370,11 +370,15 @@
     "cancel-construction-confirmation-dialog-detail": "Biztosan vissza akarod vonni a(z) <SPAN class='red'>{buildingName}</SPAN> építését?",
     "cancel-construction-confirm-button": "Építkezés visszavonása",
     "cancel-construction-cancel-button": "Mégse",
+    "cancel-deconstruction-confirmation-dialog-title": "Rombolás visszavonásának megerősítése",
+    "cancel-deconstruction-confirmation-dialog-detail": "Biztosan vissza akarod vonni a(z) <SPAN class='red'>{buildingName}</SPAN> lerombolását?",
+    "cancel-deconstruction-confirm-button": "Lerombolás visszavonása",
+    "cancel-deconstruction-cancel-button": "Mégse",
     "start-terraformation": "Terraformálás megkezdése",
-    "cancel-terraform-confirmation-dialog-title": "Terraformálás visszavonásának megerősítése",
-    "cancel-terraform-confirmation-dialog-detail": "Biztosan vissza akarod vonni terraformálást?",
-    "cancel-terraform-confirm-button": "Terraformálás visszavonása",
-    "cancel-terraform-cancel-button": "Mégse",
+    "cancel-terraformation-confirmation-dialog-title": "Terraformálás visszavonásának megerősítése",
+    "cancel-terraformation-confirmation-dialog-detail": "Biztosan vissza akarod vonni terraformálást?",
+    "cancel-terraformation-confirm-button": "Terraformálás visszavonása",
+    "cancel-terraformation-cancel-button": "Mégse",
     "cancel-production": "Visszavon",
     "priority": "Prioritás",
     "cancel-queue-item-confirmation-dialog-title": "Feladat visszavonásának megerősítése",
@@ -398,6 +402,12 @@
     "maternityLeave": "Szülési szabadság",
     "satietyRechargeMultiplier": "Étel többszöröző",
     "desks": "Padok",
-    "experiencePerSecond": "Tapasztalat"
+    "experiencePerSecond": "Tapasztalat",
+    "deconstruct-building": "Lerombol",
+    "deconstruct-building-confirmation-dialog-title": "Épület lerombolásának megerősítése",
+    "deconstruct-building-confirmation-dialog-detail": "Biztosan le szeretnéd bontani a(z) <SPAN class='red'>{buildingName}</SPAN> épületet?",
+    "deconstruct-building-confirm-button": "Épület lerombolása",
+    "deconstruct-building-cancel-button": "Mégse",
+    "deconstruct": "Lerombol"
   }
 }

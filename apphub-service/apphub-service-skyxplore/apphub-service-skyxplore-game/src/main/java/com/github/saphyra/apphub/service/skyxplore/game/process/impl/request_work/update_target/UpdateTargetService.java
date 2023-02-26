@@ -17,20 +17,15 @@ import java.util.UUID;
 public class UpdateTargetService {
     private final ConstructionUpdateService constructionUpdateService;
     private final TerraformationUpdateService terraformationUpdateService;
+    private final DeconstructionUpdateService deconstructionUpdateService;
 
     public void updateTarget(SyncCache syncCache, RequestWorkProcessType processType, Game game, Planet planet, UUID targetId, int completedWorkPoints) {
         switch (processType) {
-            case CONSTRUCTION:
-                constructionUpdateService.updateConstruction(syncCache, game, planet, targetId, completedWorkPoints);
-                break;
-            case TERRAFORMATION:
-                terraformationUpdateService.updateTerraformation(syncCache, game, planet, targetId, completedWorkPoints);
-                break;
-            case OTHER:
-                log.info("No status update needed.");
-                break;
-            default:
-                throw ExceptionFactory.reportedException("No handler for requestWorkProcessType " + processType);
+            case CONSTRUCTION -> constructionUpdateService.updateConstruction(syncCache, game, planet, targetId, completedWorkPoints);
+            case DECONSTRUCTION -> deconstructionUpdateService.updateDeconstruction(syncCache, game, planet, targetId, completedWorkPoints);
+            case TERRAFORMATION -> terraformationUpdateService.updateTerraformation(syncCache, game, planet, targetId, completedWorkPoints);
+            case OTHER -> log.info("No status update needed.");
+            default -> throw ExceptionFactory.reportedException("No handler for requestWorkProcessType " + processType);
         }
     }
 }

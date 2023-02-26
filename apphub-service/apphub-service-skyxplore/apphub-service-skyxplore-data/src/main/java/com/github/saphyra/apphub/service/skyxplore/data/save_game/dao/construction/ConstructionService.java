@@ -49,7 +49,7 @@ class ConstructionService implements GameItemService {
 
     @Override
     public List<ConstructionModel> getByParent(UUID parent) {
-        return constructionDao.getByLocation(parent);
+        return constructionDao.getByExternalReference(parent);
     }
 
     @Override

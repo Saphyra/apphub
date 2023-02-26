@@ -66,7 +66,7 @@ public class ConstructionTest extends SeleniumTest {
 
         surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
         assertThat(surface.isEmpty()).isFalse();
-        assertThat(surface.getBuildingDataId()).isEqualTo(Constants.DATA_ID_WATER_PUMP);
+        assertThat(surface.getBuildingDataId()).contains(Constants.DATA_ID_WATER_PUMP);
         assertThat(surface.getBuildingLevel()).isZero();
         assertThat(surface.isConstructionInProgress()).isTrue();
 
@@ -130,7 +130,7 @@ public class ConstructionTest extends SeleniumTest {
 
         surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
         assertThat(surface.isEmpty()).isFalse();
-        assertThat(surface.getBuildingDataId()).isEqualTo(Constants.DATA_ID_CAMP);
+        assertThat(surface.getBuildingDataId()).contains(Constants.DATA_ID_CAMP);
         assertThat(surface.getBuildingLevel()).isZero();
         assertThat(surface.isConstructionInProgress()).isTrue();
 
@@ -145,7 +145,7 @@ public class ConstructionTest extends SeleniumTest {
 
         surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
         assertThat(surface.isEmpty()).isFalse();
-        assertThat(surface.getBuildingDataId()).isEqualTo(Constants.DATA_ID_CAMP);
+        assertThat(surface.getBuildingDataId()).contains(Constants.DATA_ID_CAMP);
         assertThat(surface.getBuildingLevel()).isEqualTo(1);
         assertThat(surface.isConstructionInProgress()).isFalse();
     }

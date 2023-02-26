@@ -1,9 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ConstructionResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.DeconstructionResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceBuildingResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Deconstruction;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,6 +26,9 @@ public class BuildingToResponseConverterTest {
     @Mock
     private ConstructionToResponseConverter constructionToResponseConverter;
 
+    @Mock
+    private DeconstructionToResponseConverter deconstructionToResponseConverter;
+
     @InjectMocks
     private BuildingToResponseConverter underTest;
 
@@ -32,6 +37,12 @@ public class BuildingToResponseConverterTest {
 
     @Mock
     private ConstructionResponse constructionResponse;
+
+    @Mock
+    private Deconstruction deconstruction;
+
+    @Mock
+    private DeconstructionResponse deconstructionResponse;
 
     @Test
     public void convertNull() {
@@ -45,8 +56,10 @@ public class BuildingToResponseConverterTest {
             .dataId(DATA_ID)
             .level(LEVEL)
             .construction(construction)
+            .deconstruction(deconstruction)
             .build();
         given(constructionToResponseConverter.convert(construction)).willReturn(constructionResponse);
+        given(deconstructionToResponseConverter.convert(deconstruction)).willReturn(deconstructionResponse);
 
         SurfaceBuildingResponse result = underTest.convert(building);
 
@@ -54,5 +67,6 @@ public class BuildingToResponseConverterTest {
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getLevel()).isEqualTo(LEVEL);
         assertThat(result.getConstruction()).isEqualTo(constructionResponse);
+        assertThat(result.getDeconstruction()).isEqualTo(deconstructionResponse);
     }
 }

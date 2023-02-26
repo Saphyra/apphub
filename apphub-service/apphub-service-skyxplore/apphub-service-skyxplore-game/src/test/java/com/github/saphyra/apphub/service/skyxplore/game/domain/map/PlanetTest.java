@@ -21,6 +21,7 @@ import static org.mockito.BDDMockito.given;
 public class PlanetTest {
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID BUILDING_ID = UUID.randomUUID();
+    private static final UUID DECONSTRUCTION_ID = UUID.randomUUID();
 
     @Mock
     private Surface surface;
@@ -33,6 +34,9 @@ public class PlanetTest {
 
     @Mock
     private Construction construction;
+
+    @Mock
+    private Deconstruction deconstruction;
 
     @Test
     public void getBuildings() {
@@ -95,5 +99,20 @@ public class PlanetTest {
         Surface result = underTest.findSurfaceByBuildingIdValidated(BUILDING_ID);
 
         assertThat(result).isEqualTo(surface);
+    }
+
+    @Test
+    public void findBuildingByDeconstructionIdValidated() {
+        Planet underTest = Planet.builder()
+            .surfaces(new SurfaceMap(CollectionUtils.singleValueMap(coordinate, surface)))
+            .build();
+
+        given(surface.getBuilding()).willReturn(building);
+        given(building.getDeconstruction()).willReturn(deconstruction);
+        given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
+
+        Building result = underTest.findBuildingByDeconstructionIdValidated(DECONSTRUCTION_ID);
+
+        assertThat(result).isEqualTo(building);
     }
 }

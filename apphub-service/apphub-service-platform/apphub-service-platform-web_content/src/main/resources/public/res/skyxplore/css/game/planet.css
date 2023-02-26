@@ -231,6 +231,7 @@
                 left: 0;
                 right: 0;
                 white-space: initial;
+                padding-right: 1rem;
             }
 
             .surface-footer{
@@ -256,6 +257,15 @@
 
                     .surface-footer-construction-in-progress{
                         background-color: green;
+                    }
+
+                    .deconstruct-building-button{
+                        border-width: 1px;
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        margin: 0.125rem;
+                        font-size: 0.5rem;
                     }
 
                 .empty-surface-modify-button{

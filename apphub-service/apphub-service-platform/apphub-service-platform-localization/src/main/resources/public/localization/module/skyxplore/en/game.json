@@ -370,6 +370,10 @@
     "cancel-construction-confirmation-dialog-detail": "Are you sure you want to cancel construction of building <SPAN class='red'>{buildingName}</SPAN>?",
     "cancel-construction-confirm-button": "Cancel construction",
     "cancel-construction-cancel-button": "Back",
+    "cancel-deconstruction-confirmation-dialog-title": "Confirm cancelling deconstruction",
+    "cancel-deconstruction-confirmation-dialog-detail": "Are you sure you want to cancel deconstruction of building <SPAN class='red'>{buildingName}</SPAN>?",
+    "cancel-deconstruction-confirm-button": "Cancel deconstruction",
+    "cancel-deconstruction-cancel-button": "Back",
     "start-terraformation": "Start terraformation",
     "cancel-terraformation-confirmation-dialog-title": "Confirm cancelling terraformation",
     "cancel-terraformation-confirmation-dialog-detail": "Are you sure you want to cancel terraformation?",
@@ -398,6 +402,12 @@
     "maternityLeave": "Maternity leave",
     "satietyRechargeMultiplier": "Satiety multiplier",
     "desks": "Desks",
-    "experiencePerSecond": "Experience"
+    "experiencePerSecond": "Experience",
+    "deconstruct-building": "Deconstruct",
+    "deconstruct-building-confirmation-dialog-title": "Confirm deconstruction",
+    "deconstruct-building-confirmation-dialog-detail": "Are you sure you want to deconstruct <SPAN class='red'>{buildingName}</SPAN>?",
+    "deconstruct-building-confirm-button": "Deconstruct building",
+    "deconstruct-building-cancel-button": "Cancel",
+    "deconstruct": "Deconstruct"
   }
 }

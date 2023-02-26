@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +31,9 @@ public class BuildingLoaderTest {
     @Mock
     private ConstructionLoader constructionLoader;
 
+    @Mock
+    private DeconstructionLoader deconstructionLoader;
+
     @InjectMocks
     private BuildingLoader underTest;
 
@@ -38,6 +42,9 @@ public class BuildingLoaderTest {
 
     @Mock
     private Construction construction;
+
+    @Mock
+    private Deconstruction deconstruction;
 
     @Test
     public void load_notFound() {
@@ -48,6 +55,7 @@ public class BuildingLoaderTest {
     public void load() {
         given(gameItemLoader.loadChildren(SURFACE_ID, GameItemType.BUILDING, BuildingModel[].class)).willReturn(Arrays.asList(buildingModel));
         given(constructionLoader.load(BUILDING_ID)).willReturn(construction);
+        given(deconstructionLoader.load(BUILDING_ID)).willReturn(deconstruction);
 
         given(buildingModel.getId()).willReturn(BUILDING_ID);
         given(buildingModel.getSurfaceId()).willReturn(SURFACE_ID);
@@ -61,5 +69,6 @@ public class BuildingLoaderTest {
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getLevel()).isEqualTo(LEVEL);
         assertThat(result.getConstruction()).isEqualTo(construction);
+        assertThat(result.getDeconstruction()).isEqualTo(deconstruction);
     }
 }

@@ -67,7 +67,7 @@ public class ConstructionDaoTest {
         given(repository.getByExternalReference(ID_STRING)).willReturn(List.of(entity));
         given(converter.convertEntity(List.of(entity))).willReturn(List.of(model));
 
-        List<ConstructionModel> result = underTest.getByLocation(ID);
+        List<ConstructionModel> result = underTest.getByExternalReference(ID);
 
         assertThat(result).containsExactly(model);
     }

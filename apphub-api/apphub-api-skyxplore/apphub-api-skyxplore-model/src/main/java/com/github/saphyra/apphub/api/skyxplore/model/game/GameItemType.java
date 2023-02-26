@@ -17,6 +17,7 @@ public enum GameItemType {
     SURFACE(SurfaceModel.class),
     BUILDING(BuildingModel.class),
     CONSTRUCTION(ConstructionModel.class),
+    DECONSTRUCTION(DeconstructionModel.class),
     SYSTEM_CONNECTION(SystemConnectionModel.class),
     ALLOCATED_RESOURCE(AllocatedResourceModel.class),
     RESERVED_STORAGE(ReservedStorageModel.class),

@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum QueueItemType {
     TERRAFORMATION(PriorityType.CONSTRUCTION),
-    CONSTRUCTION(PriorityType.CONSTRUCTION);
+    CONSTRUCTION(PriorityType.CONSTRUCTION),
+    DECONSTRUCTION(PriorityType.CONSTRUCTION),
+    ;
 
     private final PriorityType priorityType;
 }
