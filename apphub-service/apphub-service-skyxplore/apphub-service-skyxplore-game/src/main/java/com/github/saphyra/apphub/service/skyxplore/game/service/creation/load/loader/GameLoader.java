@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessStarterService;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
@@ -37,7 +37,7 @@ public class GameLoader {
     private final MessageSenderProxy messageSenderProxy;
     private final EventLoopFactory eventLoopFactory;
     private final ProcessLoader processLoader;
-    private final BackgroundProcessFactory backgroundProcessFactory;
+    private final BackgroundProcessStarterService backgroundProcessStarterService;
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -57,7 +57,7 @@ public class GameLoader {
             .markedForDeletionAt(gameModel.getMarkedForDeletionAt())
             .build();
 
-        game.setBackgroundProcesses(backgroundProcessFactory.create(game));
+        backgroundProcessStarterService.startBackgroundProcesses(game);
 
         game.getProcesses()
             .addAll(processLoader.load(game));

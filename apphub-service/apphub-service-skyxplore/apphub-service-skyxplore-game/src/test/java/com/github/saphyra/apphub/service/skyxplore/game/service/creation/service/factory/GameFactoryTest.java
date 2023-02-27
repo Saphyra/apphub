@@ -12,8 +12,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
-import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcesses;
+import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessStarterService;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.home_planet.HomePlanetSetupService;
@@ -32,7 +31,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -75,7 +73,7 @@ public class GameFactoryTest {
     private AiFactory aiFactory;
 
     @Mock
-    private BackgroundProcessFactory backgroundProcessFactory;
+    private BackgroundProcessStarterService backgroundProcessStarterService;
 
     @InjectMocks
     private GameFactory underTest;
@@ -104,15 +102,12 @@ public class GameFactoryTest {
     @Mock
     private EventLoop eventLoop;
 
-    @Mock
-    private BackgroundProcesses backgroundProcesses;
-
     @Test
     public void create() {
         SkyXploreGameCreationSettingsRequest settings = SkyXploreGameCreationSettingsRequest.builder()
             .build();
-        Map<UUID, UUID> members = CollectionUtils.singleValueMap(USER_ID, ALLIANCE_ID);
-        Map<UUID, String> alliances = CollectionUtils.singleValueMap(ALLIANCE_ID, ALLIANCE_NAME);
+        Map<UUID, UUID> members = Map.of(USER_ID, ALLIANCE_ID);
+        Map<UUID, String> alliances = Map.of(ALLIANCE_ID, ALLIANCE_NAME);
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
             .members(members)
             .alliances(alliances)
@@ -127,16 +122,15 @@ public class GameFactoryTest {
         Map<UUID, Player> players = CollectionUtils.singleValueMap(USER_ID, player);
         given(playerFactory.create(members)).willReturn(players);
         given(aiFactory.generateAis(request, players.values())).willReturn(Arrays.asList(aiPlayer));
-        Map<UUID, Alliance> allianceMap = CollectionUtils.singleValueMap(ALLIANCE_ID, alliance);
+        Map<UUID, Alliance> allianceMap = Map.of(ALLIANCE_ID, alliance);
         given(allianceFactory.create(alliances, members, players)).willReturn(allianceMap);
 
         given(universeFactory.create(GAME_ID, 2, settings)).willReturn(universe);
-        given(universe.getSystems()).willReturn(CollectionUtils.singleValueMap(coordinate, solarSystem));
+        given(universe.getSystems()).willReturn(Map.of(coordinate, solarSystem));
 
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         given(chatFactory.create(members)).willReturn(chat);
         given(eventLoopFactory.create()).willReturn(eventLoop);
-        given(backgroundProcessFactory.create(any(Game.class))).willReturn(backgroundProcesses);
 
         Game result = underTest.create(request);
 
@@ -150,9 +144,9 @@ public class GameFactoryTest {
         assertThat(result.getGameName()).isEqualTo(GAME_NAME);
         assertThat(result.getLastPlayed()).isEqualTo(CURRENT_DATE);
         assertThat(result.getEventLoop()).isEqualTo(eventLoop);
-        assertThat(result.getBackgroundProcesses()).isEqualTo(backgroundProcesses);
         assertThat(result.getMarkedForDeletion()).isFalse();
 
-        verify(homePlanetSetupService).setUpHomePlanet(player, allianceMap.values(), CollectionUtils.singleValueMap(coordinate, solarSystem));
+        verify(homePlanetSetupService).setUpHomePlanet(player, allianceMap.values(), Map.of(coordinate, solarSystem));
+        verify(backgroundProcessStarterService).startBackgroundProcesses(result);
     }
 }

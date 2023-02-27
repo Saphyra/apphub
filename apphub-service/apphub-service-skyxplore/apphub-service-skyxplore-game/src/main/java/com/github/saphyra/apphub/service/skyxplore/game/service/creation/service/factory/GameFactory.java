@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
-import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessStarterService;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.home_planet.HomePlanetSetupService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.player.AiFactory;
@@ -34,7 +34,7 @@ public class GameFactory {
     private final PlayerFactory playerFactory;
     private final AiFactory aiFactory;
     private final EventLoopFactory eventLoopFactory;
-    private final BackgroundProcessFactory backgroundProcessFactory;
+    private final BackgroundProcessStarterService backgroundProcessStarterService;
 
     public Game create(SkyXploreGameCreationRequest request) {
         UUID gameId = idGenerator.randomUuid();
@@ -66,7 +66,7 @@ public class GameFactory {
             .markedForDeletion(false)
             .build();
 
-        result.setBackgroundProcesses(backgroundProcessFactory.create(result));
+        backgroundProcessStarterService.startBackgroundProcesses(result);
 
         return result;
     }

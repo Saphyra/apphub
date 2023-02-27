@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
@@ -12,8 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcesses;
+import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessStarterService;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
@@ -75,7 +73,7 @@ public class GameLoaderTest {
     private EventLoopFactory eventLoopFactory;
 
     @Mock
-    private BackgroundProcessFactory backgroundProcessFactory;
+    private BackgroundProcessStarterService backgroundProcessStarterService;
 
     @Mock
     private ProcessLoader processLoader;
@@ -104,9 +102,6 @@ public class GameLoaderTest {
     @Mock
     private Process process;
 
-    @Mock
-    private BackgroundProcesses backgroundProcesses;
-
     @Test
     public void load() {
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
@@ -118,15 +113,14 @@ public class GameLoaderTest {
         given(gameModel.getMarkedForDeletion()).willReturn(true);
         given(gameModel.getMarkedForDeletionAt()).willReturn(CURRENT_DATE);
 
-        Map<UUID, Player> players = CollectionUtils.singleValueMap(USER_ID, player);
+        Map<UUID, Player> players = Map.of(USER_ID, player);
         given(playerLoader.load(GAME_ID, Arrays.asList(MEMBER_ID))).willReturn(players);
-        given(allianceLoader.load(GAME_ID, players)).willReturn(CollectionUtils.singleValueMap(ALLIANCE_ID, alliance));
+        given(allianceLoader.load(GAME_ID, players)).willReturn(Map.of(ALLIANCE_ID, alliance));
         given(universeLoader.load(GAME_ID)).willReturn(universe);
         given(chatFactory.create(players.values())).willReturn(chat);
 
         given(eventLoopFactory.create()).willReturn(eventLoop);
         given(processLoader.load(any(Game.class))).willReturn(List.of(process));
-        given(backgroundProcessFactory.create(any(Game.class))).willReturn(backgroundProcesses);
 
         underTest.loadGame(gameModel, Arrays.asList(MEMBER_ID));
 
@@ -145,7 +139,6 @@ public class GameLoaderTest {
         assertThat(game.getUniverse()).isEqualTo(universe);
         assertThat(game.getChat()).isEqualTo(chat);
         assertThat(game.getEventLoop()).isEqualTo(eventLoop);
-        assertThat(game.getBackgroundProcesses()).isEqualTo(backgroundProcesses);
         assertThat(game.getProcesses()).containsExactly(process);
         assertThat(game.getMarkedForDeletion()).isTrue();
         assertThat(game.getMarkedForDeletionAt()).isEqualTo(CURRENT_DATE);
@@ -156,5 +149,7 @@ public class GameLoaderTest {
         WebSocketMessage message = messageArgumentCaptor.getValue();
         assertThat(message.getRecipients()).containsExactly(MEMBER_ID);
         assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED);
+
+        verify(backgroundProcessStarterService).startBackgroundProcesses(game);
     }
 }
