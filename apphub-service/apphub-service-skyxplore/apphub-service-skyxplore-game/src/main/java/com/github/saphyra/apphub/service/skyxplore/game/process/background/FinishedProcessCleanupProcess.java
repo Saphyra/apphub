@@ -23,7 +23,7 @@ public class FinishedProcessCleanupProcess {
     public void startProcess() {
         processContext.getExecutorServiceBean()
             .execute(() -> {
-                log.info("Starting ProcessSchedulerProcess for game {}", game.getGameId());
+                log.info("Starting FinishedProcessCleanupProcess for game {}", game.getGameId());
 
                 while (!game.isTerminated()) {
                     SyncCache syncCache = processContext.getSyncCacheFactory()

@@ -24,7 +24,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class PassiveMoraleRechargeBackgroundProcessTest {
+class MoraleRechargeBackgroundProcessTest {
     @Mock
     private Game game;
 
@@ -32,7 +32,7 @@ class PassiveMoraleRechargeBackgroundProcessTest {
     private ProcessContext processContext;
 
     @InjectMocks
-    private PassiveMoraleRechargeBackgroundProcess underTest;
+    private MoraleRechargeBackgroundProcess underTest;
 
     @Mock
     private ExecutorServiceBean executorServiceBean;
@@ -58,6 +58,9 @@ class PassiveMoraleRechargeBackgroundProcessTest {
     @Mock
     private PassiveMoraleRechargeService passiveMoraleRechargeService;
 
+    @Mock
+    private ActiveMoraleRechargeService activeMoraleRechargeService;
+
     @Test
     void startProcess() {
         given(processContext.getExecutorServiceBean()).willReturn(executorServiceBean);
@@ -65,6 +68,7 @@ class PassiveMoraleRechargeBackgroundProcessTest {
         given(processContext.getSyncCacheFactory()).willReturn(syncCacheFactory);
         given(processContext.getSleepService()).willReturn(sleepService);
         given(processContext.getPassiveMoraleRechargeService()).willReturn(passiveMoraleRechargeService);
+        given(processContext.getActiveMoraleRechargeService()).willReturn(activeMoraleRechargeService);
 
         given(syncCacheFactory.create()).willReturn(syncCache);
 
@@ -92,5 +96,6 @@ class PassiveMoraleRechargeBackgroundProcessTest {
         verify(gameSleepService).sleepASecond(game);
         verify(sleepService).sleep(100);
         verify(passiveMoraleRechargeService).processGame(game, syncCache);
+        verify(activeMoraleRechargeService).processGame(game, syncCache);
     }
 }

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.background;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessContext;
-import com.github.saphyra.apphub.service.skyxplore.game.process.background.morale.PassiveMoraleRechargeBackgroundProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.process.background.morale.MoraleRechargeBackgroundProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.background.satiety.SatietyDecreaseProcess;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class BackgroundProcessStarterService {
             .startProcess();
         new FinishedProcessCleanupProcess(game, processContext)
             .startProcess();
-        new PassiveMoraleRechargeBackgroundProcess(game, processContext)
+        new MoraleRechargeBackgroundProcess(game, processContext)
             .startProcess();
     }
 }

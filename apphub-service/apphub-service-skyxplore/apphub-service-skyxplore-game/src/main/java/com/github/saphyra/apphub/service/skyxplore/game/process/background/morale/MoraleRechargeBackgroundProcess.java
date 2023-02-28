@@ -10,7 +10,7 @@ import java.util.concurrent.Future;
 
 @Slf4j
 @RequiredArgsConstructor
-public class PassiveMoraleRechargeBackgroundProcess {
+public class MoraleRechargeBackgroundProcess {
     private final Game game;
     private final ProcessContext processContext;
 
@@ -27,7 +27,12 @@ public class PassiveMoraleRechargeBackgroundProcess {
                         .create();
 
                     Future<?> future = game.getEventLoop()
-                        .process(() -> processContext.getPassiveMoraleRechargeService().processGame(game, syncCache), syncCache);
+                        .process(() -> {
+                                processContext.getPassiveMoraleRechargeService().processGame(game, syncCache);
+                                processContext.getActiveMoraleRechargeService().processGame(game, syncCache);
+                            },
+                            syncCache
+                        );
 
                     while (!future.isDone()) {
                         processContext.getSleepService()

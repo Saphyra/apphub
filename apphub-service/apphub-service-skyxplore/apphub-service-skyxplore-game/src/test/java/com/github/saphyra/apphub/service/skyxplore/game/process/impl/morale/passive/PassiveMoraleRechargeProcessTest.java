@@ -135,7 +135,7 @@ class PassiveMoraleRechargeProcessTest {
 
     @Test
     void getPriority() {
-        assertThat(underTest.getPriority()).isEqualTo(Integer.MAX_VALUE);
+        assertThat(underTest.getPriority()).isEqualTo(Integer.MIN_VALUE);
     }
 
     @Test
