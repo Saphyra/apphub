@@ -118,7 +118,7 @@ game:
       workEfficiencyDropUnder: 800
       minEfficiency: 0.25
       moralePerWorkPoints: 1
-      regenPerSecond: 20
+      regenPerSecond: 50
     skill:
       experiencePerLevel: 1000
       skillLevelMultiplier: 0.1

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integraton.backend.skyxplore.game.planet;
+package com.github.saphyra.apphub.integraton.backend.skyxplore.game.planet.citizen;
 
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;

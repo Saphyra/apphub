@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.process.background.satiety;
+package com.github.saphyra.apphub.service.skyxplore.game.process.background.morale;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessContext;
@@ -10,14 +10,14 @@ import java.util.concurrent.Future;
 
 @Slf4j
 @RequiredArgsConstructor
-public class SatietyDecreaseProcess {
+public class PassiveMoraleRechargeBackgroundProcess {
     private final Game game;
     private final ProcessContext processContext;
 
     public void startProcess() {
         processContext.getExecutorServiceBean()
             .execute(() -> {
-                log.info("Starting SatietyDecreaseProcess for game {}", game.getGameId());
+                log.info("Starting PassiveMoraleRechargeBackgroundProcess for game {}", game.getGameId());
 
                 while (!game.isTerminated()) {
                     processContext.getGameSleepService()
@@ -27,7 +27,7 @@ public class SatietyDecreaseProcess {
                         .create();
 
                     Future<?> future = game.getEventLoop()
-                        .process(() -> processContext.getSatietyDecreaseService().processGame(game, syncCache), syncCache);
+                        .process(() -> processContext.getPassiveMoraleRechargeService().processGame(game, syncCache), syncCache);
 
                     while (!future.isDone()) {
                         processContext.getSleepService()
@@ -35,7 +35,7 @@ public class SatietyDecreaseProcess {
                     }
                 }
 
-                log.info("Stopping SatietyDecreaseProcess for game {}", game.getGameId());
+                log.info("Stopping PassiveMoraleRechargeBackgroundProcess for game {}", game.getGameId());
             });
     }
 }

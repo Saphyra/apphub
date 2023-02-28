@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor
 public class CitizenAllocations extends HashMap<UUID, UUID> {
@@ -20,7 +19,7 @@ public class CitizenAllocations extends HashMap<UUID, UUID> {
             .stream()
             .filter(entry -> entry.getValue().equals(processId))
             .map(Entry::getKey)
-            .collect(Collectors.toList());
+            .toList();
 
         keys.forEach(this::remove);
     }
