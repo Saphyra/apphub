@@ -42,7 +42,6 @@ import static java.util.Objects.isNull;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
-//TODO unit test
 public class ActiveMoraleRechargeProcess implements Process {
     @Getter
     @NonNull
@@ -79,7 +78,10 @@ public class ActiveMoraleRechargeProcess implements Process {
 
     @Override
     public int getPriority() {
-        int maxMorale = applicationContextProxy.getBean(GameProperties.class).getCitizen().getMorale().getMax();
+        int maxMorale = applicationContextProxy.getBean(GameProperties.class)
+            .getCitizen()
+            .getMorale()
+            .getMax();
 
         double citizenMoraleRatio = Math.ceil((double) (maxMorale - citizen.getMorale()) / maxMorale * 10);
 
@@ -92,13 +94,10 @@ public class ActiveMoraleRechargeProcess implements Process {
 
     @Override
     public void work(SyncCache syncCache) {
-        log.info("Citizen {} has {} morale. ActiveMoraleRecharge process priority: {}", citizen.getCitizenId(), citizen.getMorale(), getPriority());
         if (status == ProcessStatus.CREATED) {
             if (planet.getCitizenAllocations().containsKey(citizen.getCitizenId())) {
-                log.info("Citizen is already allocated to {}", game.getProcesses().findByIdValidated(planet.getCitizenAllocations().get(citizen.getCitizenId())));
                 status = ProcessStatus.READY_TO_DELETE;
             } else {
-                log.info("Citizen is already allocated.");
                 status = ProcessStatus.IN_PROGRESS;
             }
         }
@@ -110,6 +109,10 @@ public class ActiveMoraleRechargeProcess implements Process {
                 startResting();
             }
 
+
+        }
+
+        if (status == ProcessStatus.IN_PROGRESS) {
             if (restFuture.isDone()) {
                 finishResting(syncCache);
             } else {
@@ -121,7 +124,7 @@ public class ActiveMoraleRechargeProcess implements Process {
     private void startResting() {
         StorageBuilding storageBuilding = applicationContextProxy.getBean(StorageBuildingService.class)
             .get(GameConstants.DATA_ID_HOUSE);
-        double houseMoraleMultiplier = Integer.parseInt(storageBuilding.getData().get(GameConstants.DATA_KEY_MORALE_RECHARGE_MULTIPLIER).toString());
+        double houseMoraleMultiplier = Double.parseDouble(storageBuilding.getData().get(GameConstants.DATA_KEY_MORALE_RECHARGE_MULTIPLIER).toString());
 
         CitizenMoraleProperties moraleProperties = applicationContextProxy.getBean(GameProperties.class)
             .getCitizen()

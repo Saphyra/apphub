@@ -18,10 +18,14 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ActiveMoraleRechargeProcessFactory implements ProcessFactory {
     private final ApplicationContextProxy applicationContextProxy;
     private final IdGenerator idGenerator;
+
+    @Override
+    public ProcessType getType() {
+        return ProcessType.ACTIVE_MORALE_RECHARGE;
+    }
 
     public ActiveMoraleRechargeProcess create(Game game, Planet planet, Citizen citizen) {
         return create(
@@ -57,10 +61,5 @@ public class ActiveMoraleRechargeProcessFactory implements ProcessFactory {
             .citizen(citizen)
             .applicationContextProxy(applicationContextProxy)
             .build();
-    }
-
-    @Override
-    public ProcessType getType() {
-        return ProcessType.ACTIVE_MORALE_RECHARGE;
     }
 }
