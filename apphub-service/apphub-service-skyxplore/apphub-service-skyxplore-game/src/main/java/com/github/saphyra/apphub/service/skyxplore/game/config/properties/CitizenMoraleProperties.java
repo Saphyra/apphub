@@ -9,4 +9,6 @@ public class CitizenMoraleProperties {
     private double minEfficiency;
     private double moralePerWorkPoints;
     private int regenPerSecond;
+    private int minRestSeconds;
+    private int maxRestSeconds;
 }

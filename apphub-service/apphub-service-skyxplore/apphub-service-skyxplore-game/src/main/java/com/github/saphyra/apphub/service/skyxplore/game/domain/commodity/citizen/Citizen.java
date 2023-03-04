@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.Map;
 import java.util.UUID;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
+@ToString(exclude = {"skills", "soldierData"})
 public class Citizen {
     private final UUID citizenId;
     private UUID location;

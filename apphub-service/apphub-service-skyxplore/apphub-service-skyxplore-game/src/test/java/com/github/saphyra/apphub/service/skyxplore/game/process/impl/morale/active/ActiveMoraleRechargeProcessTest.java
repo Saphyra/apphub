@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.passive;
+package com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.active;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
@@ -10,7 +10,10 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenRespo
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuilding;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.converter.response.CitizenToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenMoraleProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
@@ -20,6 +23,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.CitizenAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.map.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.rest.Rest;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.rest.RestFactory;
@@ -32,6 +36,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -40,20 +45,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
-class PassiveMoraleRechargeProcessTest {
+class ActiveMoraleRechargeProcessTest {
     private static final UUID PROCESS_ID = UUID.randomUUID();
     private static final UUID CITIZEN_ID = UUID.randomUUID();
-    private static final Integer REGEN_PER_SECOND = 50;
     private static final Integer MAX_MORALE = 1000;
-    private static final Integer RESTORED_MORALE = 42;
+    private static final Integer CITIZEN_MORALE = 500;
+    private static final Double HOUSE_MORALE_MULTIPLIER = 2d;
+    private static final Integer REGEN_PER_SECOND = 3;
+    private static final Integer MAX_REST_SECONDS = 10;
+    private static final Integer MIN_REST_SECONDS = 5;
+    private static final Integer RESTORED_MORALE = 25;
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
-
-    private PassiveMoraleRechargeProcess underTest;
 
     @Mock
     private Game game;
@@ -67,8 +73,7 @@ class PassiveMoraleRechargeProcessTest {
     @Mock
     private ApplicationContextProxy applicationContextProxy;
 
-    @Mock
-    private SyncCache syncCache;
+    private ActiveMoraleRechargeProcess underTest;
 
     @Mock
     private GameProperties gameProperties;
@@ -77,7 +82,16 @@ class PassiveMoraleRechargeProcessTest {
     private CitizenProperties citizenProperties;
 
     @Mock
-    private CitizenMoraleProperties moraleProperties;
+    private CitizenMoraleProperties citizenMoraleProperties;
+
+    @Mock
+    private SyncCache syncCache;
+
+    @Mock
+    private StorageBuildingService storageBuildingService;
+
+    @Mock
+    private StorageBuilding storageBuilding;
 
     @Mock
     private RestFactory restFactory;
@@ -86,10 +100,13 @@ class PassiveMoraleRechargeProcessTest {
     private Rest rest;
 
     @Mock
+    private ExecutionResult<Rest> executionResult;
+
+    @Mock
     private Future<ExecutionResult<Rest>> future;
 
     @Mock
-    private ExecutionResult<Rest> executionResult;
+    private ExecutorServiceBean executorServiceBean;
 
     @Mock
     private CitizenToModelConverter citizenToModelConverter;
@@ -106,12 +123,9 @@ class PassiveMoraleRechargeProcessTest {
     @Mock
     private CitizenResponse citizenResponse;
 
-    @Mock
-    private ExecutorServiceBean executorServiceBean;
-
     @BeforeEach
     void setUp() {
-        underTest = PassiveMoraleRechargeProcess.builder()
+        underTest = ActiveMoraleRechargeProcess.builder()
             .processId(PROCESS_ID)
             .status(ProcessStatus.CREATED)
             .game(game)
@@ -123,7 +137,7 @@ class PassiveMoraleRechargeProcessTest {
 
     @Test
     void getType() {
-        assertThat(underTest.getType()).isEqualTo(ProcessType.PASSIVE_MORALE_RECHARGE);
+        assertThat(underTest.getType()).isEqualTo(ProcessType.ACTIVE_MORALE_RECHARGE);
     }
 
     @Test
@@ -135,13 +149,42 @@ class PassiveMoraleRechargeProcessTest {
 
     @Test
     void getPriority() {
-        assertThat(underTest.getPriority()).isEqualTo(Integer.MIN_VALUE);
+        given(applicationContextProxy.getBean(GameProperties.class)).willReturn(gameProperties);
+        given(gameProperties.getCitizen()).willReturn(citizenProperties);
+        given(citizenProperties.getMorale()).willReturn(citizenMoraleProperties);
+        given(citizenMoraleProperties.getMax()).willReturn(MAX_MORALE);
+
+        given(citizen.getMorale()).willReturn(CITIZEN_MORALE);
+        given(planet.getPriorities()).willReturn(Map.of(PriorityType.WELL_BEING, 6));
+
+        int result = underTest.getPriority();
+
+        assertThat(result).isEqualTo(6 * 5 * GameConstants.PROCESS_PRIORITY_MULTIPLIER);
     }
 
     @Test
-    void work_citizenAllocated() {
-        given(citizen.getCitizenId()).willReturn(CITIZEN_ID);
+    void work_alreadyAssigned() {
         given(planet.getCitizenAllocations()).willReturn(CollectionUtils.singleValueMap(CITIZEN_ID, UUID.randomUUID(), new CitizenAllocations()));
+        given(citizen.getCitizenId()).willReturn(CITIZEN_ID);
+
+        underTest.work(syncCache);
+
+        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
+    }
+
+    @Test
+    void work_notTiredEnough() {
+        given(planet.getCitizenAllocations()).willReturn(new CitizenAllocations());
+        given(applicationContextProxy.getBean(StorageBuildingService.class)).willReturn(storageBuildingService);
+        given(storageBuildingService.get(GameConstants.DATA_ID_HOUSE)).willReturn(storageBuilding);
+        given(storageBuilding.getData()).willReturn(Map.of(GameConstants.DATA_KEY_MORALE_RECHARGE_MULTIPLIER, HOUSE_MORALE_MULTIPLIER));
+        given(applicationContextProxy.getBean(GameProperties.class)).willReturn(gameProperties);
+        given(gameProperties.getCitizen()).willReturn(citizenProperties);
+        given(citizenProperties.getMorale()).willReturn(citizenMoraleProperties);
+        given(citizenMoraleProperties.getRegenPerSecond()).willReturn(REGEN_PER_SECOND);
+        given(citizenMoraleProperties.getMaxRestSeconds()).willReturn(MAX_REST_SECONDS);
+        given(citizen.getMorale()).willReturn(MAX_MORALE - 1);
+        given(citizenMoraleProperties.getMinRestSeconds()).willReturn(MIN_REST_SECONDS);
 
         underTest.work(syncCache);
 
@@ -150,24 +193,26 @@ class PassiveMoraleRechargeProcessTest {
 
     @Test
     void work() throws ExecutionException, InterruptedException {
-        //Initialize rest
+        //Start resting
         CitizenAllocations citizenAllocations = new CitizenAllocations();
         given(planet.getCitizenAllocations()).willReturn(citizenAllocations);
-
+        given(applicationContextProxy.getBean(StorageBuildingService.class)).willReturn(storageBuildingService);
+        given(storageBuildingService.get(GameConstants.DATA_ID_HOUSE)).willReturn(storageBuilding);
+        given(storageBuilding.getData()).willReturn(Map.of(GameConstants.DATA_KEY_MORALE_RECHARGE_MULTIPLIER, HOUSE_MORALE_MULTIPLIER));
         given(applicationContextProxy.getBean(GameProperties.class)).willReturn(gameProperties);
         given(gameProperties.getCitizen()).willReturn(citizenProperties);
-        given(citizenProperties.getMorale()).willReturn(moraleProperties);
-        given(moraleProperties.getRegenPerSecond()).willReturn(REGEN_PER_SECOND);
-        given(moraleProperties.getMax()).willReturn(MAX_MORALE);
-        given(citizen.getMorale()).willReturn(MAX_MORALE - 20);
-        given(citizen.getCitizenId()).willReturn(CITIZEN_ID);
-
-        given(applicationContextProxy.getBean(RestFactory.class))
-            .willReturn(restFactory);
-        given(restFactory.create(20, (int) Math.round(1000d * 20 / REGEN_PER_SECOND), game)).willReturn(rest);
-
+        given(citizenProperties.getMorale()).willReturn(citizenMoraleProperties);
+        given(citizenMoraleProperties.getRegenPerSecond()).willReturn(REGEN_PER_SECOND);
+        given(citizenMoraleProperties.getMaxRestSeconds()).willReturn(MAX_REST_SECONDS);
+        given(citizen.getMorale()).willReturn(CITIZEN_MORALE);
+        given(citizenMoraleProperties.getMinRestSeconds()).willReturn(MIN_REST_SECONDS);
+        given(applicationContextProxy.getBean(RestFactory.class)).willReturn(restFactory);
+        given(restFactory.create(60, 10000, game)).willReturn(rest);
         given(applicationContextProxy.getBean(ExecutorServiceBean.class)).willReturn(executorServiceBean);
         given(executorServiceBean.asyncProcess(rest)).willReturn(future);
+        given(citizen.getCitizenId()).willReturn(CITIZEN_ID);
+        given(citizenMoraleProperties.getMax()).willReturn(MAX_MORALE);
+
         given(future.isDone())
             .willReturn(false)
             .willReturn(true);
@@ -177,34 +222,31 @@ class PassiveMoraleRechargeProcessTest {
         assertThat(citizenAllocations).containsEntry(CITIZEN_ID, PROCESS_ID);
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
 
-        verifyNoInteractions(syncCache);
-
-        //Finish rest
+        //Finish resting
         given(future.get()).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(rest);
         given(rest.getRestoredMorale()).willReturn(RESTORED_MORALE);
         given(applicationContextProxy.getBean(CitizenToModelConverter.class)).willReturn(citizenToModelConverter);
-        given(game.getGameId()).willReturn(GAME_ID);
         given(citizenToModelConverter.convert(citizen, GAME_ID)).willReturn(citizenModel);
-
+        given(game.getGameId()).willReturn(GAME_ID);
         given(planet.getOwner()).willReturn(USER_ID);
         given(applicationContextProxy.getBean(WsMessageSender.class)).willReturn(messageSender);
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
         given(applicationContextProxy.getBean(CitizenToResponseConverter.class)).willReturn(citizenToResponseConverter);
         given(citizenToResponseConverter.convert(citizen)).willReturn(citizenResponse);
+        given(planet.getPlanetId()).willReturn(PLANET_ID);
 
         underTest.work(syncCache);
 
-        verify(citizen).setMorale(MAX_MORALE - 20 + RESTORED_MORALE);
+        verify(citizen).setMorale(CITIZEN_MORALE + RESTORED_MORALE);
+        assertThat(citizenAllocations).isEmpty();
         verify(syncCache).saveGameItem(citizenModel);
+        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.DONE);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
         verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_CITIZEN_MODIFIED), eq(CITIZEN_ID), argumentCaptor.capture());
         argumentCaptor.getValue()
             .run();
         verify(messageSender).planetCitizenModified(USER_ID, PLANET_ID, citizenResponse);
-
-        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.DONE);
     }
 
     @Test
@@ -218,7 +260,7 @@ class PassiveMoraleRechargeProcessTest {
         assertThat(result.getId()).isEqualTo(PROCESS_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getType()).isEqualTo(GameItemType.PROCESS);
-        assertThat(result.getProcessType()).isEqualTo(ProcessType.PASSIVE_MORALE_RECHARGE);
+        assertThat(result.getProcessType()).isEqualTo(ProcessType.ACTIVE_MORALE_RECHARGE);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);
         assertThat(result.getLocation()).isEqualTo(PLANET_ID);
         assertThat(result.getLocationType()).isEqualTo(LocationType.PLANET.name());
