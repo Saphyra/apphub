@@ -78,7 +78,7 @@ public class StorageSettingTest extends SeleniumTest {
         storageSetting.setPriority(8);
         storageSetting.saveChanges(driver);
 
-        StorageSetting editedSetting = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver), storageSettings -> !storageSettings.isEmpty())
+        StorageSetting editedSetting = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver), storageSettings -> storageSettings.size() == 2)
             .stream()
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Storage Setting not found."));
@@ -91,7 +91,7 @@ public class StorageSettingTest extends SeleniumTest {
         editedSetting.delete(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver).isEmpty())
+            .until(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver).size() == 1)
             .assertTrue("StorageSetting not deleted.");
 
         assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).contains(Constants.DATA_ID_ORE);

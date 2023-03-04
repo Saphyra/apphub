@@ -1,0 +1,21 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-deconstruction" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="skyxplore_game" tableName="deconstruction"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="skyxplore_game" tableName="deconstruction">
+            <column name="deconstruction_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_id" type="varchar(37)"/>
+            <column name="external_reference" type="varchar(37)"/>
+            <column name="current_work_points" type="integer"/>
+            <column name="priority" type="integer"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="skyxplore_game" tableName="deconstruction" columnNames="deconstruction_id" constraintName="deconstruction_pk"/>
+    </changeSet>
+</databaseChangeLog>

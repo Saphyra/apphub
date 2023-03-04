@@ -25,6 +25,9 @@ public class UpdateTargetServiceTest {
     @Mock
     private TerraformationUpdateService terraformationUpdateService;
 
+    @Mock
+    private DeconstructionUpdateService deconstructionUpdateService;
+
     @InjectMocks
     private UpdateTargetService underTest;
 
@@ -42,6 +45,13 @@ public class UpdateTargetServiceTest {
         underTest.updateTarget(syncCache, RequestWorkProcessType.CONSTRUCTION, game, planet, TARGET_ID, COMPLETED_WORK_POINTS);
 
         verify(constructionUpdateService).updateConstruction(syncCache, game, planet, TARGET_ID, COMPLETED_WORK_POINTS);
+    }
+
+    @Test
+    public void updateDeconstruction() {
+        underTest.updateTarget(syncCache, RequestWorkProcessType.DECONSTRUCTION, game, planet, TARGET_ID, COMPLETED_WORK_POINTS);
+
+        verify(deconstructionUpdateService).updateDeconstruction(syncCache, game, planet, TARGET_ID, COMPLETED_WORK_POINTS);
     }
 
     @Test

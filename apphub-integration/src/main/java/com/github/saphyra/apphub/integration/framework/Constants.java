@@ -40,10 +40,13 @@ public class Constants {
 
     //QueueTypes
     public final String QUEUE_TYPE_CONSTRUCTION = "CONSTRUCTION";
+    public final String QUEUE_TYPE_DECONSTRUCTION = "DECONSTRUCTION";
     public final String QUEUE_TYPE_TERRAFORMATION = "TERRAFORMATION";
 
     //Etc
     public final int DEFAULT_PRIORITY = 5;
+    public static final String DEFAULT_GAME_NAME = "game-name";
+    public static final int MAX_CITIZEN_MORALE = 1600;
 
     //OpenedPageType
     public final String PAGE_TYPE_PLANET = "PLANET";

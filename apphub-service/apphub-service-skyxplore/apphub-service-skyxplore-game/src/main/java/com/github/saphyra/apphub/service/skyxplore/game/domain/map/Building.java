@@ -16,4 +16,5 @@ public class Building {
     private final String dataId;
     private volatile int level;
     private volatile Construction construction;
+    private volatile Deconstruction deconstruction;
 }

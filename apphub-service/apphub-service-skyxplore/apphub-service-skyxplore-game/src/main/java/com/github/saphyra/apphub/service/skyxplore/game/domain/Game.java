@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
-import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcesses;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -37,8 +36,6 @@ public class Game {
 
     private final Chat chat;
     private final EventLoop eventLoop;
-
-    private BackgroundProcesses backgroundProcesses;
 
     @Builder.Default
     private final Processes processes = new Processes();

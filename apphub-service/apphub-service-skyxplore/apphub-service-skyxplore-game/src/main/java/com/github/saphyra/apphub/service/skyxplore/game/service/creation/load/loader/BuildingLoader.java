@@ -17,6 +17,7 @@ import java.util.UUID;
 class BuildingLoader {
     private final GameItemLoader gameItemLoader;
     private final ConstructionLoader constructionLoader;
+    private final DeconstructionLoader deconstructionLoader;
 
     Building load(UUID surfaceId) {
         List<BuildingModel> models = gameItemLoader.loadChildren(surfaceId, GameItemType.BUILDING, BuildingModel[].class);
@@ -33,6 +34,7 @@ class BuildingLoader {
             .dataId(model.getDataId())
             .level(model.getLevel())
             .construction(constructionLoader.load(model.getId()))
+            .deconstruction(deconstructionLoader.load(model.getId()))
             .build();
     }
 }

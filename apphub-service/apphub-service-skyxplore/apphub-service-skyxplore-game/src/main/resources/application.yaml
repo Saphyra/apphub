@@ -5,6 +5,9 @@ spring:
 abandonedGameExpirationSeconds: 300
 
 game:
+  deconstruction:
+    requiredWorkPoints: 1000
+    parallelWorkers: 1
   eventQueueSize: 1000
   itemSaverMaxChunkSize: 500
   creationQueueSize: 100
@@ -45,6 +48,7 @@ game:
         min: 500
         max: 3000
   planet:
+    defaultRawFoodAmount: 100
     planetsPerSystem:
       SMALL:
         min: 1
@@ -114,7 +118,9 @@ game:
       workEfficiencyDropUnder: 800
       minEfficiency: 0.25
       moralePerWorkPoints: 1
-      regenPerSecond: 20
+      regenPerSecond: 10
+      minRestSeconds: 15
+      maxRestSeconds: 30
     skill:
       experiencePerLevel: 1000
       skillLevelMultiplier: 0.1

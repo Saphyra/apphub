@@ -13,5 +13,8 @@
         "wood": 1
       }
     }
+  },
+  "data": {
+    "moraleRechargeMultiplier": 3
   }
 }

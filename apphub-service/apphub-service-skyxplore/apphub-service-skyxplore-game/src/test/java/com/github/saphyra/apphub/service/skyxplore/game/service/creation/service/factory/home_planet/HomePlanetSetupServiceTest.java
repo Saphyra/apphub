@@ -31,6 +31,9 @@ public class HomePlanetSetupServiceTest {
     @Mock
     private PlanetPopulationService planetPopulationService;
 
+    @Mock
+    private DefaultFoodProvider defaultFoodProvider;
+
     @InjectMocks
     private HomePlanetSetupService underTest;
 
@@ -53,5 +56,6 @@ public class HomePlanetSetupServiceTest {
         verify(planet).setOwner(USER_ID);
         verify(buildingPlacementService).placeDefaultBuildings(planet);
         verify(planetPopulationService).addCitizens(planet);
+        verify(defaultFoodProvider).setDefaultFoodSettings(planet);
     }
 }

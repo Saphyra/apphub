@@ -67,7 +67,6 @@
                     .append(building.level);
                     addEffect(surfaceType, building, titleBuilder);
 
-
                 surfaceNode.title(titleBuilder.build());
 
                 const content = document.createElement("DIV");
@@ -75,17 +74,27 @@
                     content.classList.add("surface-content");
 
                     const levelCell = document.createElement("DIV");
-                        levelCell.innerHTML = localization.getAdditionalContent("level") + ": " + building.level;
+                        if(building.deconstruction){
+                            levelCell.innerText = localization.getAdditionalContent("deconstruct");
+                        }else{
+                            levelCell.innerHTML = localization.getAdditionalContent("level") + ": " + building.level;
+                        }
                         levelCell.classList.add("surface-header");
                 content.appendChild(levelCell);
 
                     if(building.construction){
                         content.appendChild(createConstructionFooter(planetId, building.buildingId, building.construction, building.dataId));
-                    }else if(building.level < dataCaches.itemData.get(building.dataId).maxLevel){
-                        const footer = document.createElement("DIV");
-                            footer.classList.add("surface-footer");
-                            footer.appendChild(createUpgradeBuildingFooter(planetId, surfaceType, building));
-                        content.appendChild(footer);
+                    }else if(building.deconstruction){
+                        content.appendChild(createDeconstructionFooter(planetId, building.buildingId, building.deconstruction, building.dataId));
+                    }else{
+                        content.appendChild(createDeconstructButton(planetId, building.buildingId, building.dataId));
+
+                        if(building.level < dataCaches.itemData.get(building.dataId).maxLevel){
+                            const footer = document.createElement("DIV");
+                                footer.classList.add("surface-footer");
+                                footer.appendChild(createUpgradeBuildingFooter(planetId, surfaceType, building));
+                            content.appendChild(footer);
+                        }
                     }
 
                 return content;
@@ -160,6 +169,7 @@
 
                         const progressBar = document.createElement("DIV");
                             progressBar.classList.add("progress-bar-container");
+                            progressBar.classList.add("construction-progress-bar");
 
                             const progressBarBackground = document.createElement("DIV");
                                 progressBarBackground.classList.add("progress-bar-background");
@@ -182,6 +192,35 @@
                     return footer;
                 }
 
+                function createDeconstructionFooter(planetId, buildingId, deconstruction, dataId){
+                    const footer = document.createElement("DIV");
+                        footer.classList.add("surface-footer");
+
+                        const progressBar = document.createElement("DIV");
+                            progressBar.classList.add("progress-bar-container");
+                            progressBar.classList.add("deconstruction-progress-bar");
+
+                            const progressBarBackground = document.createElement("DIV");
+                                progressBarBackground.classList.add("progress-bar-background");
+                                progressBarBackground.style.width = (deconstruction.currentWorkPoints / deconstruction.requiredWorkPoints * 100) + "%";
+                        progressBar.appendChild(progressBarBackground);
+
+                            const progressBarContent = document.createElement("DIV");
+                                progressBarContent.classList.add("progress-bar-text");
+
+                                const cancelDeconstructionButton = document.createElement("BUTTON");
+                                    cancelDeconstructionButton.classList.add("cancel-deconstruction-button");
+                                    cancelDeconstructionButton.innerText = "-";
+                                    cancelDeconstructionButton.onclick = function(){
+                                        constructionController.cancelDeconstruction(planetId, buildingId, dataId)
+                                            .then((surface)=>{syncEngine.add(surface)});
+                                    }
+                            progressBarContent.appendChild(cancelDeconstructionButton);
+                        progressBar.appendChild(progressBarContent);
+                    footer.appendChild(progressBar);
+                    return footer;
+                }
+
                 function createUpgradeBuildingFooter(planetId, surfaceType, building){
                     const upgradeButton = document.createElement("button");
                         upgradeButton.classList.add("upgrade-building-button");
@@ -190,6 +229,15 @@
                             constructionController.openUpgradeBuildingWindow(planetId, surfaceType, building.buildingId, building.dataId, building.level)
                         }
                     return upgradeButton;
+                }
+
+                function createDeconstructButton(planetId, buildingId, dataId){
+                    return domBuilder.create("BUTTON")
+                        .addClass("deconstruct-building-button")
+                        .innerText("X")
+                        .title(localization.getAdditionalContent("deconstruct-building"))
+                        .onclick(() => deconstructBuilding(planetId, buildingId, dataId))
+                        .getNode();
                 }
             }
 
@@ -207,6 +255,7 @@
 
                         const progressBar = document.createElement("DIV");
                             progressBar.classList.add("progress-bar-container");
+                            progressBar.classList.add("terraformation-progress-bar");
 
                             const progressBarBackground = document.createElement("DIV");
                                 progressBarBackground.classList.add("progress-bar-background");
@@ -249,6 +298,29 @@
                 return content;
             }
         }
+    }
+
+    function deconstructBuilding(planetId, buildingId, dataId){
+        const confirmationDialogLocalization = new ConfirmationDialogLocalization()
+            .withTitle(localization.getAdditionalContent("deconstruct-building-confirmation-dialog-title"))
+            .withDetail(localization.getAdditionalContent("deconstruct-building-confirmation-dialog-detail", {buildingName: dataCaches.itemDataNames.get(dataId)}))
+            .withConfirmButton(localization.getAdditionalContent("deconstruct-building-confirm-button"))
+            .withDeclineButton(localization.getAdditionalContent("deconstruct-building-cancel-button"));
+
+        return new Promise((resolve, reject) => {
+            confirmationService.openDialog(
+                "deconstruct-building-confirmation-dialog",
+                confirmationDialogLocalization,
+                function(){
+                    const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_DECONSTRUCT", {planetId: planetId, buildingId: buildingId}));
+                        request.convertResponse = jsonConverter;
+                        request.processValidResponse = function(surface){
+                            syncEngine.add(surface);
+                        }
+                    dao.sendRequestAsync(request);
+                }
+            );
+        });
     }
 
     function addHandlers(){

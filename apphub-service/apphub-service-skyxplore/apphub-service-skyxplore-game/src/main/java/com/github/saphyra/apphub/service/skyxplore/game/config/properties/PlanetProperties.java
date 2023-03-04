@@ -11,4 +11,5 @@ import java.util.Map;
 public class PlanetProperties {
     private Map<SystemSize, Range<Integer>> planetsPerSystem;
     private Map<PlanetSize, Range<Integer>> planetSize;
+    private Integer defaultRawFoodAmount;
 }

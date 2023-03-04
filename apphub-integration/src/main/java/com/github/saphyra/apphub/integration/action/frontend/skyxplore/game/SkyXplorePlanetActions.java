@@ -80,4 +80,13 @@ public class SkyXplorePlanetActions {
     public static PlanetStorageOverview getStorageOverview(WebDriver driver) {
         return new PlanetStorageOverview(driver);
     }
+
+    public static Surface findSurfaceWithBuilding(WebDriver driver, String dataId) {
+        return GamePage.surfacesOfPlanet(driver)
+            .stream()
+            .map(Surface::new)
+            .filter(surface -> surface.getBuildingDataId().filter(s -> s.equals(dataId)).isPresent())
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("No surface found with building " + dataId));
+    }
 }

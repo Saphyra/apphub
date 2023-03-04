@@ -36,6 +36,9 @@
             case "TERRAFORMATION":
                 fillForTerraformation(openedPlanetId, node, item);
             break;
+            case "DECONSTRUCTION":
+                fillForDeconstruction(openedPlanetId, node, item);
+            break;
             default:
                 throwException("IllegalArgument", "Not implemented type: " + item.type);
             break;
@@ -47,6 +50,17 @@
             const title = document.createElement("DIV");
                 title.classList.add("queue-item-title");
                 title.innerText = dataCaches.itemDataNames.get(item.data.dataId) + " lvl " + item.data.currentLevel + " => " + (item.data.currentLevel + 1);
+            node.appendChild(title);
+
+            node.appendChild(createProgressBarWrapper(item));
+            node.appendChild(createPrioritySlider(planetId, item));
+            node.appendChild(createCancelButton(planetId, item));
+        }
+
+        function fillForDeconstruction(planetId, node, item){
+            const title = document.createElement("DIV");
+                title.classList.add("queue-item-title");
+                title.innerText = localization.getAdditionalContent("deconstruct") + ": " + dataCaches.itemDataNames.get(item.data.dataId);
             node.appendChild(title);
 
             node.appendChild(createProgressBarWrapper(item));

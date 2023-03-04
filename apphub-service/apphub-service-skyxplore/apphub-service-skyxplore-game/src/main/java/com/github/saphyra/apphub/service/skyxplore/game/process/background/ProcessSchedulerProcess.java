@@ -18,7 +18,7 @@ public class ProcessSchedulerProcess {
     private final Game game;
     private final ProcessContext processContext;
 
-    public ProcessSchedulerProcess startProcess() {
+    public void startProcess() {
         processContext.getExecutorServiceBean()
             .execute(() -> {
                 log.info("Starting ProcessSchedulerProcess for game {}", game.getGameId());
@@ -39,7 +39,6 @@ public class ProcessSchedulerProcess {
                 log.info("Stopping ProcessSchedulerProcess for game {}", game.getGameId());
             });
 
-        return this;
     }
 
     private void processGame(Game game) {

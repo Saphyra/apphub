@@ -92,5 +92,22 @@ public class PlanetQueueTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetActions.getQueue(driver).isEmpty())
             .assertTrue("Queue is not empty.");
+
+        //Deconstruction item
+        surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_SOLAR_PANEL);
+        surface.deconstructBuilding(driver);
+
+        queueItem = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetActions.getQueue(driver), planetQueueItems -> !planetQueueItems.isEmpty())
+            .stream()
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Planet Queue is empty."));
+
+        assertThat(queueItem.getTitle()).isEqualTo("Lerombol: Napelem");
+
+        queueItem.cancelItem(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXplorePlanetActions.getQueue(driver).isEmpty())
+            .assertTrue("Queue is not empty.");
     }
 }

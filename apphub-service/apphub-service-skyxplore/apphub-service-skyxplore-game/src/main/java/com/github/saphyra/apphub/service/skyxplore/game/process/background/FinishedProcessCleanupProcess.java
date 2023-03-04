@@ -20,10 +20,10 @@ public class FinishedProcessCleanupProcess {
     private final Game game;
     private final ProcessContext processContext;
 
-    public FinishedProcessCleanupProcess startProcess() {
+    public void startProcess() {
         processContext.getExecutorServiceBean()
             .execute(() -> {
-                log.info("Starting ProcessSchedulerProcess for game {}", game.getGameId());
+                log.info("Starting FinishedProcessCleanupProcess for game {}", game.getGameId());
 
                 while (!game.isTerminated()) {
                     SyncCache syncCache = processContext.getSyncCacheFactory()
@@ -43,24 +43,22 @@ public class FinishedProcessCleanupProcess {
                 log.info("Stopping ProcessSchedulerProcess for game {}", game.getGameId());
             });
 
-        return this;
     }
 
     private void processGame(SyncCache syncCache, Game game) {
         log.debug("Cleaning up finished processes...");
 
         Processes processes = game.getProcesses();
-        synchronized (processes) {
-            List<Process> finishedProcesses = processes.stream()
-                .filter(process -> process.getStatus() == ProcessStatus.READY_TO_DELETE)
-                .collect(Collectors.toList());
+        List<Process> finishedProcesses = game.getProcesses()
+            .stream()
+            .filter(process -> process.getStatus() == ProcessStatus.READY_TO_DELETE)
+            .collect(Collectors.toList());
 
-            log.debug("Deleting processes {}", finishedProcesses);
+        log.debug("Deleting processes {}", finishedProcesses);
 
-            finishedProcesses.forEach(process -> syncCache.deleteGameItem(process.getProcessId(), GameItemType.PROCESS));
-            syncCache.process();
+        finishedProcesses.forEach(process -> syncCache.deleteGameItem(process.getProcessId(), GameItemType.PROCESS));
+        syncCache.process();
 
-            processes.removeAll(finishedProcesses);
-        }
+        processes.removeAll(finishedProcesses);
     }
 }

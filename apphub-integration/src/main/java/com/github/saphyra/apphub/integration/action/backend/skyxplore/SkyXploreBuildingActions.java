@@ -50,4 +50,26 @@ public class SkyXploreBuildingActions {
 
         return response.getBody().as(SurfaceResponse.class);
     }
+
+    public static SurfaceResponse deconstructBuilding(Language language, UUID accessTokenId, UUID planetId, UUID buildingId) {
+        Response response = getDeconstructBuildingResponse(language, accessTokenId, planetId, buildingId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().as(SurfaceResponse.class);
+    }
+
+    public static Response getDeconstructBuildingResponse(Language language, UUID accessTokenId, UUID planetId, UUID buildingId) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .post(UrlFactory.create(Endpoints.SKYXPLORE_BUILDING_DECONSTRUCT, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("buildingId", buildingId))));
+    }
+
+    public static SurfaceResponse cancelDeconstruction(Language language, UUID accessTokenId, UUID planetId, UUID buildingId) {
+        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .delete(UrlFactory.create(Endpoints.SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("buildingId", buildingId))));
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().as(SurfaceResponse.class);
+    }
 }

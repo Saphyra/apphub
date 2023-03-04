@@ -145,7 +145,7 @@ public class RequestWorkProcess implements Process {
 
         UUID worker = maybeWorker.get();
         planet.getCitizenAllocations()
-            .put(worker, processId);
+            .put(worker, processId); //TODO save planet to sync the processes with database
         log.info("CitizenAllocations after allocating worker: {}", planet.getCitizenAllocations());
 
         int workPointsLeft = requiredWorkPoints - completedWorkPoints;
@@ -158,7 +158,7 @@ public class RequestWorkProcess implements Process {
             .citizenId(worker)
             .skillType(skillType)
             .applicationContextProxy(applicationContextProxy)
-            .build();
+            .build(); //TODO save work to database
         log.info("{} created", work);
         workFuture = applicationContextProxy.getBean(ExecutorServiceBean.class)
             .asyncProcess(work);

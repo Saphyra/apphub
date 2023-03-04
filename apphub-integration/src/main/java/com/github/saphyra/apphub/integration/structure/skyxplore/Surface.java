@@ -54,13 +54,12 @@ public class Surface {
         return webElement.getAttribute("id");
     }
 
-    public String getBuildingDataId() {
+    public Optional<String> getBuildingDataId() {
         return WebElementUtils.getClasses(getContent())
             .stream()
             .filter(s -> s.startsWith(BUILDING_PREFIX))
             .findFirst()
-            .orElseThrow(() -> new RuntimeException("Building type not recognizable"))
-            .replace(BUILDING_PREFIX, "");
+            .map(s -> s.replace(BUILDING_PREFIX, ""));
     }
 
     public int getBuildingLevel() {
@@ -73,8 +72,7 @@ public class Surface {
 
     public boolean isConstructionInProgress() {
         return getFooter()
-            .map(footerElement -> footerElement.findElements(By.cssSelector(":scope .progress-bar-container")))
-            .filter(webElements -> webElements.size() == 1)
+            .filter(footerElement -> !footerElement.findElements(By.cssSelector(":scope .progress-bar-container.construction-progress-bar")).isEmpty())
             .isPresent();
     }
 
@@ -126,9 +124,8 @@ public class Surface {
 
     public boolean isTerraformationInProgress() {
         return getFooter()
-            .orElseThrow(() -> new RuntimeException("Surface footer not present."))
-            .findElements(By.cssSelector(":scope .cancel-terraformation-button"))
-            .size() == 1;
+            .filter(footerElement -> !footerElement.findElements(By.cssSelector(":scope .progress-bar-container.terraformation-progress-bar")).isEmpty())
+            .isPresent();
     }
 
     public void cancelTerraformation(WebDriver driver) {
@@ -140,6 +137,34 @@ public class Surface {
             .click();
 
         CommonPageActions.confirmConfirmationDialog(driver, "cancel-terraformation-confirmation-dialog");
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> WebElementUtils.isStale(webElement))
+            .assertTrue("Planet surface was not reloaded.");
+    }
+
+    public void deconstructBuilding(WebDriver driver) {
+        webElement.findElement(By.cssSelector(":scope .deconstruct-building-button"))
+            .click();
+
+        CommonPageActions.confirmConfirmationDialog(driver, "deconstruct-building-confirmation-dialog");
+    }
+
+    public boolean isDeconstructionInProgress() {
+        return getFooter()
+            .filter(footerElement -> !footerElement.findElements(By.cssSelector(":scope .progress-bar-container.deconstruction-progress-bar")).isEmpty())
+            .isPresent();
+    }
+
+    public void cancelDeconstruction(WebDriver driver) {
+        assertThat(isDeconstructionInProgress()).isTrue();
+
+        getFooter()
+            .orElseThrow(() -> new RuntimeException("Surface footer not present."))
+            .findElement(By.cssSelector(":scope .cancel-deconstruction-button"))
+            .click();
+
+        CommonPageActions.confirmConfirmationDialog(driver, "cancel-deconstruction-confirmation-dialog");
 
         AwaitilityWrapper.createDefault()
             .until(() -> WebElementUtils.isStale(webElement))

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_wo
 
 public enum RequestWorkProcessType {
     CONSTRUCTION,
+    DECONSTRUCTION,
     TERRAFORMATION,
     OTHER
 }

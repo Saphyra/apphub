@@ -65,7 +65,7 @@ public class ConstructionServiceTest {
 
     @Test
     public void getByParent() {
-        given(constructionDao.getByLocation(ID)).willReturn(Arrays.asList(model));
+        given(constructionDao.getByExternalReference(ID)).willReturn(Arrays.asList(model));
 
         List<ConstructionModel> result = underTest.getByParent(ID);
 

@@ -16,4 +16,5 @@ public class SurfaceBuildingResponse {
     private String dataId;
     private int level;
     private ConstructionResponse construction;
+    private DeconstructionResponse deconstruction;
 }

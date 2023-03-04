@@ -7,10 +7,11 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.Que
 import java.util.List;
 import java.util.UUID;
 
-public interface QueueService {
-    List<QueueItem> getQueue(Planet planet);
 
+public interface QueueService {
     QueueItemType getType();
+
+    List<QueueItem> getQueue(Planet planet);
 
     void setPriority(UUID userId, UUID planetId, UUID itemId, Integer priority);
 

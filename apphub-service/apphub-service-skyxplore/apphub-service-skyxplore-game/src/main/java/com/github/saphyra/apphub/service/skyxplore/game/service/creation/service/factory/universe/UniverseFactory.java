@@ -29,8 +29,7 @@ public class UniverseFactory {
         int universeSize = universeSizeCalculator.calculateUniverseSize(solarSystems);
         log.info("UniverseSize: {}", universeSize);
 
-        Map<Coordinate, SolarSystem> solarSystemMapping = solarSystems
-            .stream()
+        Map<Coordinate, SolarSystem> solarSystemMapping = solarSystems.stream()
             .collect(Collectors.toMap(solarSystem -> solarSystem.getCoordinate().getCoordinate(), Function.identity()));
 
         log.info("Universe created.");

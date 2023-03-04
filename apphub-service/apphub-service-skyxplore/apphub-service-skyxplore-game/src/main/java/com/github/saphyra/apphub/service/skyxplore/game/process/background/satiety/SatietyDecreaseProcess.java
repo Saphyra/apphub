@@ -14,7 +14,7 @@ public class SatietyDecreaseProcess {
     private final Game game;
     private final ProcessContext processContext;
 
-    public SatietyDecreaseProcess startProcess() {
+    public void startProcess() {
         processContext.getExecutorServiceBean()
             .execute(() -> {
                 log.info("Starting SatietyDecreaseProcess for game {}", game.getGameId());
@@ -37,7 +37,5 @@ public class SatietyDecreaseProcess {
 
                 log.info("Stopping SatietyDecreaseProcess for game {}", game.getGameId());
             });
-
-        return this;
     }
 }
