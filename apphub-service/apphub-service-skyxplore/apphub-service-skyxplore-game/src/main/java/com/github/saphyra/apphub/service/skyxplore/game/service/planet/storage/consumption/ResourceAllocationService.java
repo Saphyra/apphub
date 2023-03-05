@@ -42,37 +42,35 @@ public class ResourceAllocationService {
 
     public void processResourceRequirements(UUID gameId, Planet planet, LocationType locationType, UUID externalReference, Map<String, Integer> requiredResources) {
         StorageDetails storageDetails = planet.getStorageDetails();
-        synchronized (storageDetails) {
-            Map<String, ConsumptionResult> consumptions = requiredResources.entrySet()
-                .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, entry -> consumptionCalculator.calculate(planet, locationType, externalReference, entry.getKey(), entry.getValue())));
+        Map<String, ConsumptionResult> consumptions = requiredResources.entrySet()
+            .stream()
+            .collect(Collectors.toMap(Map.Entry::getKey, entry -> consumptionCalculator.calculate(planet, locationType, externalReference, entry.getKey(), entry.getValue())));
 
-            Map<StorageType, Integer> requiredStorageAmount = Arrays.stream(StorageType.values())
-                .collect(Collectors.toMap(Function.identity(), storageType -> requiredEmptyStorageCalculator.getRequiredStorageAmount(storageType, consumptions)));
+        Map<StorageType, Integer> requiredStorageAmount = Arrays.stream(StorageType.values())
+            .collect(Collectors.toMap(Function.identity(), storageType -> requiredEmptyStorageCalculator.getRequiredStorageAmount(storageType, consumptions)));
 
-            requiredStorageAmount.forEach((storageType, totalAmount) -> {
-                int freeStorage = freeStorageQueryService.getFreeStorage(planet, storageType);
-                if (freeStorage < totalAmount) {
-                    Map<String, String> params = CollectionUtils.singleValueMap("storageType", storageType.name());
-                    throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_ENOUGH_STORAGE, params, "Not enough free " + storageType + " storage to store " + totalAmount + " of resources.");
-                }
-            });
+        requiredStorageAmount.forEach((storageType, totalAmount) -> {
+            int freeStorage = freeStorageQueryService.getFreeStorage(planet, storageType);
+            if (freeStorage < totalAmount) {
+                Map<String, String> params = CollectionUtils.singleValueMap("storageType", storageType.name());
+                throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_ENOUGH_STORAGE, params, "Not enough free " + storageType + " storage to store " + totalAmount + " of resources.");
+            }
+        });
 
-            List<GameItem> items = consumptions.values()
-                .stream()
-                .peek(consumptionResult -> {
-                    storageDetails.getAllocatedResources().add(consumptionResult.getAllocation());
-                    storageDetails.getReservedStorages().add(consumptionResult.getReservation());
+        List<GameItem> items = consumptions.values()
+            .stream()
+            .peek(consumptionResult -> {
+                storageDetails.getAllocatedResources().add(consumptionResult.getAllocation());
+                storageDetails.getReservedStorages().add(consumptionResult.getReservation());
 
-                })
-                .flatMap(consumptionResult -> Stream.of(
-                    allocatedResourceToModelConverter.convert(consumptionResult.getAllocation(), gameId),
-                    reservedStorageToModelConverter.convert(consumptionResult.getReservation(), gameId)
-                ))
-                .collect(Collectors.toList());
-            gameDataProxy.saveItems(items);
+            })
+            .flatMap(consumptionResult -> Stream.of(
+                allocatedResourceToModelConverter.convert(consumptionResult.getAllocation(), gameId),
+                reservedStorageToModelConverter.convert(consumptionResult.getReservation(), gameId)
+            ))
+            .collect(Collectors.toList());
+        gameDataProxy.saveItems(items);
 
-            messageSender.planetStorageModified(planet.getOwner(), planet.getPlanetId(), planetStorageOverviewQueryService.getStorage(planet));
-        }
+        messageSender.planetStorageModified(planet.getOwner(), planet.getPlanetId(), planetStorageOverviewQueryService.getStorage(planet));
     }
 }
