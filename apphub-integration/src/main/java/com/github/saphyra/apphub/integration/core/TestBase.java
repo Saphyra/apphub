@@ -34,9 +34,7 @@ public class TestBase {
     public static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
     public static final ObjectMapperWrapper OBJECT_MAPPER_WRAPPER = new ObjectMapperWrapper(new ObjectMapper());
 
-    private static final int AVAILABLE_PERMITS = 20;
-    private static final int INCREASE_PERMITS_AFTER_TESTS_FINISHED = 10;
-    private static volatile int TESTS_FINISHED = 0;
+    private static final int AVAILABLE_PERMITS = 30;
     private static final Semaphore SEMAPHORE = new Semaphore(AVAILABLE_PERMITS);
 
     public static int SERVER_PORT;
@@ -113,11 +111,6 @@ public class TestBase {
         String methodName = method.getName();
 
         log.debug("Available permits before releasing: {}", SEMAPHORE.availablePermits());
-        TESTS_FINISHED++;
-        if (TESTS_FINISHED % INCREASE_PERMITS_AFTER_TESTS_FINISHED == 0 && SEMAPHORE.availablePermits() < 3) {
-            log.debug("Increasing number of permits...");
-            SEMAPHORE.release(1);
-        }
         SEMAPHORE.release(1);
         log.debug("Available permits after releasing {}: {}", methodName, SEMAPHORE.availablePermits());
 
