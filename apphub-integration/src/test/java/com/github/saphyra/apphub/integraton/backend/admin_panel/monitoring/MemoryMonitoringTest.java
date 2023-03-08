@@ -41,7 +41,6 @@ public class MemoryMonitoringTest extends BackEndTest {
         assertThat(services).containsExactlyInAnyOrder(
             "event-gateway",
             "admin-panel",
-            "localization",
             "main-gateway",
             "message-sender",
             "modules",

@@ -21,7 +21,6 @@ eureka:
 serviceUrls:
   adminPanel: localhost:8089
   eventGateway: localhost:8081
-  localization: localhost:8084
   messageSender: localhost:8094
   skyxploreData: localhost:8091
   skyxploreGame: localhost:8095

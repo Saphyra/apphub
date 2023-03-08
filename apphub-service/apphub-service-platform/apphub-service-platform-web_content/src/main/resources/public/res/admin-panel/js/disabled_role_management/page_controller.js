@@ -8,6 +8,6 @@ scriptLoader.loadScript("/res/admin-panel/js/disabled_role_management/disabled_r
     }
 
     $(document).ready(function(){
-        localization.loadLocalization("admin_panel", "disabled_role_management");
+        localization.loadLocalization("admin-panel", "disabled_role_management");
     });
 })();

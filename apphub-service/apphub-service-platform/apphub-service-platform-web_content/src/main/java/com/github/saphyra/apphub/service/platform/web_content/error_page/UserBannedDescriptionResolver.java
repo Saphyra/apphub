@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.web_content.error_page;
 
-import com.github.saphyra.apphub.api.platform.localization.client.LocalizationClient;
+import com.github.saphyra.apphub.api.platform.web_content.client.LocalizationClient;
 import com.github.saphyra.apphub.api.user.client.BanClient;
 import com.github.saphyra.apphub.api.user.model.response.BanDetailsResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;

@@ -79,12 +79,6 @@ spring:
         predicates:
         - Path=/api/storage/**
 
-      #PLATFORM
-      - id: localization
-        uri: http://localhost:8084
-        predicates:
-        - Path=/localization/**
-
       #WS
       - id: ws
         uri: ws://localhost:8094

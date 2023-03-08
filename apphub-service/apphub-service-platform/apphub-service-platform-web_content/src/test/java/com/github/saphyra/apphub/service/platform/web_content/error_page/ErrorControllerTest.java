@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.platform.web_content.error_page;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.error_handler.service.translation.LocalizedMessageProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
+import com.github.saphyra.apphub.service.platform.web_content.error_code.ErrorCodeService;
 import com.github.saphyra.apphub.test.common.TestConstants;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +28,7 @@ public class ErrorControllerTest {
     private LocaleProvider localeProvider;
 
     @Mock
-    private LocalizedMessageProvider localizedMessageProvider;
+    private ErrorCodeService errorCodeService;
 
     @Mock
     private UserBannedDescriptionResolver userBannedDescriptionResolver;
@@ -42,7 +42,7 @@ public class ErrorControllerTest {
     @Test
     public void errorPage() {
         given(localeProvider.getLocaleValidated()).willReturn(TestConstants.DEFAULT_LOCALE);
-        given(localizedMessageProvider.getLocalizedMessage(TestConstants.DEFAULT_LOCALE, ErrorCode.MISSING_ROLE)).willReturn(LOCALIZED_MESSAGE);
+        given(errorCodeService.getByLocaleAndErrorCode(ErrorCode.MISSING_ROLE, TestConstants.DEFAULT_LOCALE)).willReturn(LOCALIZED_MESSAGE);
         given(userBannedDescriptionResolver.resolve(USER_ID, REQUIRED_ROLES)).willReturn(DESCRIPTION);
         given(userLoggedInQueryService.isUserLoggedIn(ACCESS_TOKEN_ID)).willReturn(true);
 
@@ -58,7 +58,7 @@ public class ErrorControllerTest {
     @Test
     public void errorPage_noErrorCode() {
         given(localeProvider.getLocaleValidated()).willReturn(TestConstants.DEFAULT_LOCALE);
-        given(localizedMessageProvider.getLocalizedMessage(TestConstants.DEFAULT_LOCALE, ErrorCode.UNKNOWN_ERROR)).willReturn(LOCALIZED_MESSAGE);
+        given(errorCodeService.getByLocaleAndErrorCode(ErrorCode.UNKNOWN_ERROR, TestConstants.DEFAULT_LOCALE)).willReturn(LOCALIZED_MESSAGE);
         given(userLoggedInQueryService.isUserLoggedIn(ACCESS_TOKEN_ID)).willReturn(false);
 
         ModelAndView result = underTest.errorPage(null, null, null, ACCESS_TOKEN_ID);

@@ -24,7 +24,6 @@ public class MemoryMonitoringTest extends SeleniumTest {
     private static final List<String> SERVICES = ImmutableList.of(
         "event-gateway",
         "admin-panel",
-        "localization",
         "main-gateway",
         "message-sender",
         "modules",

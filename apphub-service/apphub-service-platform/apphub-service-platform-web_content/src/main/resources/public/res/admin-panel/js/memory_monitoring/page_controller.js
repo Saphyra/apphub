@@ -9,6 +9,6 @@ scriptLoader.loadScript("/res/admin-panel/js/memory_monitoring/memory_monitoring
 
 (function PageController(){
     $(document).ready(function(){
-        localization.loadLocalization("admin_panel", "memory_monitoring");
+        localization.loadLocalization("admin-panel", "memory_monitoring");
     });
 })();
