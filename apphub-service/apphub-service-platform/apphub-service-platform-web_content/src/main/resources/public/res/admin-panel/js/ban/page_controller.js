@@ -34,6 +34,6 @@ scriptLoader.loadScript("/res/admin-panel/js/ban/ban_controller.js");
     }
 
     $(document).ready(function(){
-        localization.loadLocalization("admin_panel", "ban");
+        localization.loadLocalization("admin-panel", "ban");
     });
 })();

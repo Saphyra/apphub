@@ -24,7 +24,7 @@
     </build>
     <modules>
         <module>apphub-api-platform-event_gateway</module>
-        <module>apphub-api-platform-localization</module>
+        <module>apphub-api-platform-web_content</module>
         <module>apphub-api-platform-message_sender</module>
         <module>apphub-api-platform-encryption</module>
         <module>apphub-api-platform-storage</module>

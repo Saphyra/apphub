@@ -1,5 +1,5 @@
 (function BanController(){
-    const roleLocalization = localization.loadCustomLocalization("admin_panel", "roles");
+    const roleLocalization = localization.loadCustomLocalization("admin-panel", "roles");
     const availableRoles = [];
 
     let openedUserId = null;

@@ -32,6 +32,8 @@ spring:
               uri: http://storage:8080
             web-content[0]:
               uri: http://web-content:8080
+            web-content-localization[0]:
+              uri: http://web-content:8080
             skyxplore-data[0]:
               uri: http://skyxplore-data:8080
             skyxplore-game[0]:
@@ -88,7 +90,7 @@ feign:
 serviceUrls:
   adminPanel: admin-panel:8080
   eventGateway: event-gateway:8080
-  localization: localization:8080
+  web-content-localization: web-content:8080
   messageSender: message-sender:8080
   skyxploreData: skyxplore-data:8080
   skyxploreGame: skyxplore-game:8080

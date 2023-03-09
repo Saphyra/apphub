@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.admin_panel.error_report;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
 import com.github.saphyra.apphub.api.admin_panel.model.model.StackTraceModel;
-import com.github.saphyra.apphub.api.platform.localization.client.LocalizationClient;
+import com.github.saphyra.apphub.api.platform.web_content.client.LocalizationClient;
 import com.github.saphyra.apphub.api.platform.message_sender.client.MessageSenderApiClient;
 import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;

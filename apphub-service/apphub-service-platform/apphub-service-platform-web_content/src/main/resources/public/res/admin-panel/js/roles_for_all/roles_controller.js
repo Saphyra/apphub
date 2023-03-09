@@ -1,5 +1,5 @@
 (function RolesController(){
-    const roleLocalization = localization.loadCustomLocalization("admin_panel", "roles");
+    const roleLocalization = localization.loadCustomLocalization("admin-panel", "roles");
 
     pageLoader.addLoader(initRoles, "Initializing roles");
 

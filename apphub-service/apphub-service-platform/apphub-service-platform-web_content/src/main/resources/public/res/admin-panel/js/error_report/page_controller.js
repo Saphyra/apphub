@@ -26,7 +26,7 @@ scriptLoader.loadScript("/res/admin-panel/js/error_report/bulk_operations_contro
     }
 
     $(document).ready(function(){
-        localization.loadLocalization("admin_panel", "error_report");
+        localization.loadLocalization("admin-panel", "error_report");
     });
 })();
 
