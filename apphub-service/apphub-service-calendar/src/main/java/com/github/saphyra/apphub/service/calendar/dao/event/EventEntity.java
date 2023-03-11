@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @Entity
-@Table(schema = "diary", name = "event")
+@Table(schema = "calendar", name = "event")
 class EventEntity {
     @Id
     private String eventId;

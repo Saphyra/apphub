@@ -3,4 +3,4 @@ spring:
     name: calendar
 
 liquibase:
-  schema: diary
+  schema: calendar

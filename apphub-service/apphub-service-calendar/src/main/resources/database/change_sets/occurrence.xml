@@ -7,11 +7,11 @@
     <changeSet id="create-table-occurrence" author="saphyra">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists schemaName="diary" tableName="occurrence"/>
+                <tableExists schemaName="calendar" tableName="occurrence"/>
             </not>
         </preConditions>
 
-        <createTable schemaName="diary" tableName="occurrence">
+        <createTable schemaName="calendar" tableName="occurrence">
             <column name="occurrence_id" type="varchar(37)">
                 <constraints nullable="false"/>
             </column>
@@ -22,17 +22,17 @@
             <column name="note" type="text"/>
         </createTable>
 
-        <addPrimaryKey schemaName="diary" tableName="occurrence" columnNames="occurrence_id" constraintName="occurrence_pk"/>
+        <addPrimaryKey schemaName="calendar" tableName="occurrence" columnNames="occurrence_id" constraintName="occurrence_pk"/>
     </changeSet>
 
     <changeSet id="add-column-time-to-occurrence" author="saphyra">
         <preConditions onFail="MARK_RAN">
             <not>
-                <columnExists schemaName="diary" tableName="occurrence" columnName="time"/>
+                <columnExists schemaName="calendar" tableName="occurrence" columnName="time"/>
             </not>
         </preConditions>
 
-        <addColumn schemaName="diary" tableName="occurrence">
+        <addColumn schemaName="calendar" tableName="occurrence">
             <column name="time" type="text"/>
         </addColumn>
     </changeSet>
@@ -40,11 +40,11 @@
     <changeSet id="add-column-type-to-occurrence" author="saphyra">
         <preConditions onFail="MARK_RAN">
             <not>
-                <columnExists schemaName="diary" tableName="occurrence" columnName="type"/>
+                <columnExists schemaName="calendar" tableName="occurrence" columnName="type"/>
             </not>
         </preConditions>
 
-        <addColumn schemaName="diary" tableName="occurrence">
+        <addColumn schemaName="calendar" tableName="occurrence">
             <column name="type" type="text"/>
         </addColumn>
     </changeSet>

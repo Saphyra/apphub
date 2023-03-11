@@ -7,11 +7,11 @@
     <changeSet id="create-table-event" author="saphyra">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists schemaName="diary" tableName="event"/>
+                <tableExists schemaName="calendar" tableName="event"/>
             </not>
         </preConditions>
 
-        <createTable schemaName="diary" tableName="event">
+        <createTable schemaName="calendar" tableName="event">
             <column name="event_id" type="varchar(37)">
                 <constraints nullable="false"/>
             </column>
@@ -23,17 +23,17 @@
             <column name="content" type="text"/>
         </createTable>
 
-        <addPrimaryKey schemaName="diary" tableName="event" columnNames="event_id" constraintName="event_pk"/>
+        <addPrimaryKey schemaName="calendar" tableName="event" columnNames="event_id" constraintName="event_pk"/>
     </changeSet>
 
     <changeSet id="add-column-time-to-event" author="saphyra">
         <preConditions onFail="MARK_RAN">
             <not>
-                <columnExists schemaName="diary" tableName="event" columnName="time"/>
+                <columnExists schemaName="calendar" tableName="event" columnName="time"/>
             </not>
         </preConditions>
 
-        <addColumn schemaName="diary" tableName="event">
+        <addColumn schemaName="calendar" tableName="event">
             <column name="time" type="text"/>
         </addColumn>
     </changeSet>
@@ -41,11 +41,11 @@
     <changeSet id="add-column-repeat-to-event" author="saphyra">
         <preConditions onFail="MARK_RAN">
             <not>
-                <columnExists schemaName="diary" tableName="event" columnName="repeat"/>
+                <columnExists schemaName="calendar" tableName="event" columnName="repeat"/>
             </not>
         </preConditions>
 
-        <addColumn schemaName="diary" tableName="event">
+        <addColumn schemaName="calendar" tableName="event">
             <column name="repeat" type="text"/>
         </addColumn>
     </changeSet>
