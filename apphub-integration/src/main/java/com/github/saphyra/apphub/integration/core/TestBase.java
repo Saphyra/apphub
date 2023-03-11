@@ -20,7 +20,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
@@ -43,6 +45,9 @@ public class TestBase {
     public static List<String> DISABLED_TEST_GROUPS;
     public static Connection CONNECTION;
 
+    private static int TOTAL_TEST_COUNT;
+    private static final Set<String> FINISHED_TESTS = ConcurrentHashMap.newKeySet();
+
     private static final ThreadLocal<String> EMAIL_DOMAIN = new ThreadLocal<>();
 
     public static String getEmailDomain() {
@@ -51,6 +56,11 @@ public class TestBase {
 
     @BeforeSuite(alwaysRun = true)
     public void setUpSuite(ITestContext context) throws Exception {
+        TOTAL_TEST_COUNT = context.getSuite()
+            .getAllMethods()
+            .size();
+        log.info("Total test count: {}", TOTAL_TEST_COUNT);
+
         SERVER_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("serverPort"), "serverPort is null"));
         log.info("ServerPort: {}", SERVER_PORT);
 
@@ -114,11 +124,31 @@ public class TestBase {
         SEMAPHORE.release(1);
         log.debug("Available permits after releasing {}: {}", methodName, SEMAPHORE.availablePermits());
 
+        incrementFinishedTestCount(method);
         deleteTestUsers(methodName);
 
         EMAIL_DOMAIN.remove();
 
         log.debug("Test {} completed", methodName);
+    }
+
+    private synchronized void incrementFinishedTestCount(Method method) {
+        String methodIdentifier = method.getDeclaringClass().getName() + method.getName();
+        FINISHED_TESTS.add(methodIdentifier);
+
+        int finishedPercentage = (int) Math.floor((double) FINISHED_TESTS.size() / TOTAL_TEST_COUNT * 100);
+
+        StringBuilder progressBar = new StringBuilder();
+
+        for (int i = 0; i < 100; i += 2) {
+            if (i < finishedPercentage) {
+                progressBar.append("=");
+            } else {
+                progressBar.append("_");
+            }
+        }
+
+        log.info("{} {}% {}/{}", progressBar, finishedPercentage, FINISHED_TESTS.size(), TOTAL_TEST_COUNT);
     }
 
     private synchronized static void deleteTestUsers(String method) {
