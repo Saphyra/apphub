@@ -16,22 +16,22 @@ password:
 
 registration:
   defaultRoles:
-    - NOTEBOOK
+  - NOTEBOOK
     - SKYXPLORE
     - ACCESS
     - TRAINING
     - UTILS
     - COMMUNITY
-    - DIARY
+    - CALENDAR
 
 rolesCanBeDisabled:
-  - NOTEBOOK
+- NOTEBOOK
   - SKYXPLORE
   - TRAINING
   - TEST
   - UTILS
   - COMMUNITY
-  - DIARY
+- CALENDAR
 
 add-role-to-all:
   restrictedRoles:

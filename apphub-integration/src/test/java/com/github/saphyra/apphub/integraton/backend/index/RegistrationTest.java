@@ -85,7 +85,7 @@ public class RegistrationTest extends BackEndTest {
             Constants.ROLE_TRAINING,
             Constants.ROLE_UTILS,
             Constants.ROLE_COMMUNITY,
-            Constants.ROLE_DIARY
+            Constants.ROLE_CALENDAR
         );
     }
 }

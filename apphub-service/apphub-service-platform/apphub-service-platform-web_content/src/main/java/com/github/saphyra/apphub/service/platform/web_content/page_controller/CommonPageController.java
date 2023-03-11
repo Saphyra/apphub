@@ -10,9 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class CommonPageController {
-    @GetMapping(Endpoints.DIARY_PAGE)
-    String diaryPage() {
-        return "diary";
+    @GetMapping(Endpoints.CALENDAR_PAGE)
+    String calendarPage() {
+        return "calendar";
     }
 
     @GetMapping(Endpoints.MODULES_PAGE)

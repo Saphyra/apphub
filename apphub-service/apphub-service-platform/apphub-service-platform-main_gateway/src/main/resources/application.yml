@@ -16,7 +16,7 @@ spring:
       - id: common-resorces
         uri: http://web-content:8080
         predicates:
-        - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/diary/**, /res/modules/**, /res/notebook/**, /res/skyxplore/**, /res/utils/**, /res/user/**
+        - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/calendar/**, /res/modules/**, /res/notebook/**, /res/skyxplore/**, /res/utils/**, /res/user/**
       - id: training-resorces
         uri: http://training:8080
         predicates:
@@ -26,7 +26,7 @@ spring:
       - id: common-pages
         uri: http://web-content:8080
         predicates:
-        - Path=/web, /web/notebook, /web/user/account, /web/modules, /web/admin-panel/**, /web/utils/**, /web/skyxplore/**, /web/community, /web/diary
+        - Path=/web, /web/notebook, /web/user/account, /web/modules, /web/admin-panel/**, /web/utils/**, /web/skyxplore/**, /web/community, /web/calendar
       - id: error-page
         uri: http://web-content:8080
         predicates:
@@ -77,10 +77,10 @@ spring:
         uri: http://community:8080
         predicates:
         - Path=/api/community/**
-      - id: diary
-        uri: http://diary:8080
+      - id: calendar
+        uri: http://calendar:8080
         predicates:
-        - Path=/api/diary/**
+        - Path=/api/calendar/**
       - id: storage
         uri: http://storage:8080
         predicates:
