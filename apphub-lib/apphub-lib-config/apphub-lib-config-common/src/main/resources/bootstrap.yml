@@ -10,8 +10,8 @@ spring:
               uri: http://admin-panel:8080
             community[0]:
               uri: http://community:8080
-            diary[0]:
-              uri: http://diary:8080
+            calendar[0]:
+              uri: http://calendar:8080
             modules[0]:
               uri: http://modules:8080
             notebook[0]:
@@ -286,17 +286,17 @@ role:
     - PUT
     requiredRoles:
     - COMMUNITY
-  #Diary
-  - pattern: /web/diary
+  #Calendar
+  - pattern: /web/calendar
     methods:
     - GET
     requiredRoles:
-    - DIARY
-  - pattern: /api/diary/**
+    - CALENDAR
+  - pattern: /api/calendar/**
     methods:
     - GET
     - DELETE
     - POST
     - PUT
     requiredRoles:
-    - DIARY
+    - CALENDAR

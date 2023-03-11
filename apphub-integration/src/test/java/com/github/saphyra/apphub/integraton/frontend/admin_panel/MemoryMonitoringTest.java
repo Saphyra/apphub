@@ -37,7 +37,7 @@ public class MemoryMonitoringTest extends SeleniumTest {
         "utils",
         "web-content",
         "community",
-        "diary",
+        "calendar",
         "encryption",
         "storage"
     );

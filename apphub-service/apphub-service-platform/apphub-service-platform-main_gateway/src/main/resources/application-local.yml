@@ -9,7 +9,7 @@ spring:
       - id: common-resorces
         uri: http://localhost:8083
         predicates:
-        - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/diary/**, /res/modules/**, /res/notebook/**, /res/skyxplore/**, /res/utils/**, /res/user/**
+        - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/calendar/**, /res/modules/**, /res/notebook/**, /res/skyxplore/**, /res/utils/**, /res/user/**
       - id: training-resorces
         uri: http://localhost:8086
         predicates:
@@ -19,7 +19,7 @@ spring:
       - id: common-pages
         uri: http://localhost:8083
         predicates:
-        - Path=/web, /web/notebook, /web/user/account, /web/modules, /web/admin-panel/**, /web/utils/**, /web/skyxplore/**, /web/community, /web/diary
+        - Path=/web, /web/notebook, /web/user/account, /web/modules, /web/admin-panel/**, /web/utils/**, /web/skyxplore/**, /web/community, /web/calendar
       - id: error-page
         uri: http://localhost:8083
         predicates:
@@ -70,10 +70,10 @@ spring:
         uri: http://localhost:8096
         predicates:
         - Path=/api/community/**
-      - id: diary
+      - id: calendar
         uri: http://localhost:8097
         predicates:
-        - Path=/api/diary/**
+        - Path=/api/calendar/**
       - id: storage
         uri: http://localhost:8099
         predicates:
