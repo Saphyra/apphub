@@ -54,13 +54,13 @@
             passwordInput.type = "password";
             passwordInput.placeholder = localization.getAdditionalContent("password");
 
-        const localization = new ConfirmationDialogLocalization()
+        const dialogLocalization = new ConfirmationDialogLocalization()
             .withTitle(localization.getAdditionalContent("confirm-add-to-all-title"))
             .withDetail(createDetail(passwordInput, role))
             .withConfirmButton(localization.getAdditionalContent("add-to-all-button"))
             .withDeclineButton(localization.getAdditionalContent("cancel"));
 
-        confirmationService.openDialog("confirm-add-to-all", localization, function(){sendAddToAllRequest(role, passwordInput.value)});
+        confirmationService.openDialog("confirm-add-to-all", dialogLocalization, function(){sendAddToAllRequest(role, passwordInput.value)});
 
         function createDetail(passwordInput, role){
             const container = document.createElement("DIV");
@@ -95,13 +95,13 @@
             passwordInput.type = "password";
             passwordInput.placeholder = localization.getAdditionalContent("password");
 
-        const localization = new ConfirmationDialogLocalization()
+        const dialogLocalization = new ConfirmationDialogLocalization()
             .withTitle(localization.getAdditionalContent("confirm-remove-from-all-title"))
             .withDetail(createDetail(passwordInput, role))
             .withConfirmButton(localization.getAdditionalContent("remove-from-all-button"))
             .withDeclineButton(localization.getAdditionalContent("cancel"));
 
-        confirmationService.openDialog("confirm-remove-from-all", localization, function(){sendAddToAllRequest(role, passwordInput.value)});
+        confirmationService.openDialog("confirm-remove-from-all", dialogLocalization, function(){sendAddToAllRequest(role, passwordInput.value)});
 
         function createDetail(passwordInput, role){
             const container = document.createElement("DIV");
