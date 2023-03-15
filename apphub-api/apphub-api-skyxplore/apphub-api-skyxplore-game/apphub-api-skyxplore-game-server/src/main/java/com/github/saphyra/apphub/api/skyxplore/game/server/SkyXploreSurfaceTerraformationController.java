@@ -13,10 +13,23 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
-public interface SkyXploreSurfaceTerraformationConstoller {
+public interface SkyXploreSurfaceTerraformationController {
+    /**
+     * Starting terraformation of a given surface
+     *
+     * @param surfaceType The new type of the surface
+     * @param planetId    Location of the surface
+     * @param surfaceId   ID of the surface
+     * @return the modified surface
+     */
     @PostMapping(Endpoints.SKYXPLORE_GAME_TERRAFORM_SURFACE)
     SurfaceResponse terraformSurface(@RequestBody OneParamRequest<String> surfaceType, @PathVariable("planetId") UUID planetId, @PathVariable("surfaceId") UUID surfaceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    /**
+     * Cancelling terraformation of the given surface
+     *
+     * @return the modified surface
+     */
     @DeleteMapping(Endpoints.SKYXPLORE_GAME_CANCEL_TERRAFORMATION)
     SurfaceResponse cancelTerraformation(@PathVariable("planetId") UUID planetId, @PathVariable("surfaceId") UUID surfaceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

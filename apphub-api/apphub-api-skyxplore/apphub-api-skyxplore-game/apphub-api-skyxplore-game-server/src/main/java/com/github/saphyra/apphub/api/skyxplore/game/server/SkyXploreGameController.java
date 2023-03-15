@@ -14,9 +14,15 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.UUID;
 
 public interface SkyXploreGameController {
+    /**
+     * Used by page controllers to redirect the user to the proper page
+     */
     @GetMapping(Endpoints.SKYXPLORE_INTERNAL_IS_USER_IN_GAME)
     boolean isUserInGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    /**
+     * If the game is abandoned by the users, it will be shut down and removed from the memory eventually
+     */
     @PostMapping(Endpoints.EVENT_SKYXPLORE_GAME_CLEANUP)
     void cleanUpExpiredGames();
 
@@ -26,6 +32,9 @@ public interface SkyXploreGameController {
     @PostMapping(Endpoints.SKYXPLORE_GAME_PAUSE)
     void pauseGame(@RequestBody OneParamRequest<Boolean> paused, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    /**
+     * Saved game is marked for deletion. Triggering the game removal process.
+     */
     @DeleteMapping(Endpoints.SKYXPLORE_INTERNAL_DELETE_GAME)
     void deleteGame(@PathVariable("gameId") UUID gameId);
 }

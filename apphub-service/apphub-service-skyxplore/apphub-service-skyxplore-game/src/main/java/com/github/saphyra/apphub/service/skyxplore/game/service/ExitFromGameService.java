@@ -18,6 +18,6 @@ class ExitFromGameService {
     public void exitFromGame(UUID userId) {
         wsEventController.userLeftGame(userId);
         gameDao.findByUserId(userId)
-            .ifPresent(gameDao::delete);
+            .ifPresent(gameDao::delete); //TODO check if game deletion is necessary here, since abandoned games are cleaned up automatically
     }
 }

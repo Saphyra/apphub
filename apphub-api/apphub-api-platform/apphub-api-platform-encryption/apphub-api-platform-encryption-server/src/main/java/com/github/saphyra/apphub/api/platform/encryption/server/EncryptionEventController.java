@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 public interface EncryptionEventController {
+    /**
+     * User account was deleted. Removing all the encryption keys and shared data entities owned by that users
+     */
     @PostMapping(path = Endpoints.EVENT_DELETE_ACCOUNT)
     void deleteAccountEvent(@RequestBody SendEventRequest<DeleteAccountEvent> request);
 }

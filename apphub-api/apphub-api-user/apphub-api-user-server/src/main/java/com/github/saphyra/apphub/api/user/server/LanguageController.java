@@ -15,12 +15,22 @@ import java.util.List;
 import java.util.UUID;
 
 public interface LanguageController {
+    /**
+     * Changing the preferred language of the given user
+     */
     @RequestMapping(method = RequestMethod.POST, value = Endpoints.ACCOUNT_CHANGE_LANGUAGE)
     void changeLanguage(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestBody OneParamRequest<String> language);
 
+    /**
+     * Fecthing the preferred language of the given user.
+     * Called by main-gateway's LocaleFilter
+     */
     @RequestMapping(method = RequestMethod.GET, value = Endpoints.USER_DATA_INTERNAL_GET_USER_LANGUAGE)
     String getLanguage(@PathVariable("userId") UUID userId);
 
+    /**
+     * Fetching the languages supported by the system, highlighting the one already set by the user
+     */
     @RequestMapping(method = RequestMethod.GET, value = Endpoints.ACCOUNT_GET_LANGUAGES)
     List<LanguageResponse> getLanguages(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

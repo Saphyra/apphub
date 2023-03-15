@@ -5,16 +5,26 @@ import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 public interface UserEventController {
-    @RequestMapping(method = RequestMethod.POST, path = Endpoints.EVENT_DELETE_ACCOUNT)
+    /**
+     * Removing all the user data from all the database tables
+     * Triggered by user-service
+     */
+    @PostMapping(Endpoints.EVENT_DELETE_ACCOUNT)
     void deleteAccountEvent(@RequestBody SendEventRequest<DeleteAccountEvent> request);
 
+    /**
+     * Delete users marked for deletion, and if they can be deleted, triggers the user removal by firing a DeleteAccountEvent
+     * Triggered by scheduler-service
+     */
     @PostMapping(Endpoints.EVENT_TRIGGER_ACCOUNT_DELETION)
     void triggerAccountDeletion();
 
+    /**
+     * Removing the bans, when they are expired.
+     * Triggered by scheduler-service
+     */
     @PostMapping(Endpoints.EVENT_TRIGGER_REVOKE_EXPIRED_BANS)
     void triggerRevokeExpiredBans();
 }
