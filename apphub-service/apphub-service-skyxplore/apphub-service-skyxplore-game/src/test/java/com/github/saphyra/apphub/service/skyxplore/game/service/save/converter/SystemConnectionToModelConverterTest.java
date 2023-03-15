@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.LineModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SystemConnectionModel;
 import com.github.saphyra.apphub.service.skyxplore.game.common.LineModelWrapper;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SystemConnection;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

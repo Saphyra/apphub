@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.l
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SystemConnectionModel;
 import com.github.saphyra.apphub.service.skyxplore.game.common.LineModelWrapper;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SystemConnection;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

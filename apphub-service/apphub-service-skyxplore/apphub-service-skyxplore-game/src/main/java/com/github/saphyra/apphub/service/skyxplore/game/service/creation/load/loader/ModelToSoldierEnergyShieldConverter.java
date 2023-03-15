@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityItemModel;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierEnergyShield;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_energy_shield.SoldierEnergyShield;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 class ModelToSoldierEnergyShieldConverter {
     SoldierEnergyShield convert(DurabilityItemModel model) {
         return SoldierEnergyShield.builder()
-            .entityId(model.getId())
+            .soldierEnergyShieldId(model.getId())
             .dataId(model.getDataId())
             .maxDurability(model.getMaxDurability())
             .currentDurability(model.getCurrentDurability())

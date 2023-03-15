@@ -4,8 +4,6 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.map.SolarSystemConn
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.Line;
 import com.github.saphyra.apphub.service.skyxplore.game.common.LineModelWrapper;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SystemConnection;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

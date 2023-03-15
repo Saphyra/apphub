@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.visibility.VisibilityFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -3,10 +3,10 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.l
 import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityItemModel;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.BodyPart;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierArmorPiece;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierEnergyShield;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_armor_piece.BodyPart;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_armor_piece.SoldierArmorPiece;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_data.SoldierWeapon;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_energy_shield.SoldierEnergyShield;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -54,7 +54,7 @@ public class SoldierDataLoaderTest {
 
     @Test
     public void load_energyShield() {
-        given(hitPointsModel.getMetadata()).willReturn(SoldierData.CITIZEN_HIT_POINTS);
+        given(hitPointsModel.getMetadata()).willReturn(SoldierWeapon.CITIZEN_HIT_POINTS);
         given(energyShieldModel.getMetadata()).willReturn(SoldierEnergyShield.CITIZEN_ENERGY_SHIELD);
         given(durabilityItemLoader.load(CITIZEN_ID)).willReturn(Arrays.asList(hitPointsModel, energyShieldModel));
 
@@ -65,13 +65,13 @@ public class SoldierDataLoaderTest {
 
         ConcurrentHashMap<BodyPart, SoldierArmorPiece> armor = new ConcurrentHashMap<>(CollectionUtils.singleValueMap(BodyPart.HEAD, armorPiece));
         given(soldierArmorConverter.convert(CollectionUtils.toMap(
-            new BiWrapper<>(SoldierData.CITIZEN_HIT_POINTS, hitPointsModel),
+            new BiWrapper<>(SoldierWeapon.CITIZEN_HIT_POINTS, hitPointsModel),
             new BiWrapper<>(SoldierEnergyShield.CITIZEN_ENERGY_SHIELD, energyShieldModel)
         ))).willReturn(armor);
 
-        SoldierData result = underTest.load(CITIZEN_ID, WEAPON_DATA_ID, MELEE_WEAPON_DATA_ID);
+        SoldierWeapon result = underTest.load(CITIZEN_ID, WEAPON_DATA_ID, MELEE_WEAPON_DATA_ID);
 
-        assertThat(result.getWeaponDataId()).isEqualTo(WEAPON_DATA_ID);
+        assertThat(result.getRangedWeaponDataId()).isEqualTo(WEAPON_DATA_ID);
         assertThat(result.getMeleeWeaponDataId()).isEqualTo(MELEE_WEAPON_DATA_ID);
         assertThat(result.getMaxHitPoints()).isEqualTo(MAX_HIT_POINTS);
         assertThat(result.getCurrentHitPoints()).isEqualTo(CURRENT_HIT_POINTS);
@@ -81,18 +81,18 @@ public class SoldierDataLoaderTest {
 
     @Test
     public void load_noEnergyShield() {
-        given(hitPointsModel.getMetadata()).willReturn(SoldierData.CITIZEN_HIT_POINTS);
+        given(hitPointsModel.getMetadata()).willReturn(SoldierWeapon.CITIZEN_HIT_POINTS);
         given(durabilityItemLoader.load(CITIZEN_ID)).willReturn(Arrays.asList(hitPointsModel));
 
         given(hitPointsModel.getMaxDurability()).willReturn(MAX_HIT_POINTS);
         given(hitPointsModel.getCurrentDurability()).willReturn(CURRENT_HIT_POINTS);
 
         ConcurrentHashMap<BodyPart, SoldierArmorPiece> armor = new ConcurrentHashMap<>(CollectionUtils.singleValueMap(BodyPart.HEAD, armorPiece));
-        given(soldierArmorConverter.convert(CollectionUtils.singleValueMap(SoldierData.CITIZEN_HIT_POINTS, hitPointsModel))).willReturn(armor);
+        given(soldierArmorConverter.convert(CollectionUtils.singleValueMap(SoldierWeapon.CITIZEN_HIT_POINTS, hitPointsModel))).willReturn(armor);
 
-        SoldierData result = underTest.load(CITIZEN_ID, WEAPON_DATA_ID, MELEE_WEAPON_DATA_ID);
+        SoldierWeapon result = underTest.load(CITIZEN_ID, WEAPON_DATA_ID, MELEE_WEAPON_DATA_ID);
 
-        assertThat(result.getWeaponDataId()).isEqualTo(WEAPON_DATA_ID);
+        assertThat(result.getRangedWeaponDataId()).isEqualTo(WEAPON_DATA_ID);
         assertThat(result.getMeleeWeaponDataId()).isEqualTo(MELEE_WEAPON_DATA_ID);
         assertThat(result.getMaxHitPoints()).isEqualTo(MAX_HIT_POINTS);
         assertThat(result.getCurrentHitPoints()).isEqualTo(CURRENT_HIT_POINTS);

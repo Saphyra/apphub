@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -28,7 +26,7 @@ public class Game {
     private final UUID host;
     private final Map<UUID, Player> players; //<UserId, Player>
     private final Map<UUID, Alliance> alliances;
-    private final Universe universe;
+    private final GameData data;
     private final LocalDateTime lastPlayed;
     private final Boolean markedForDeletion;
     private final LocalDateTime markedForDeletionAt;
@@ -36,9 +34,6 @@ public class Game {
 
     private final Chat chat;
     private final EventLoop eventLoop;
-
-    @Builder.Default
-    private final Processes processes = new Processes();
 
     @Builder.Default
     private volatile boolean gamePaused = true;

@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityItemModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.BodyPart;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierArmorPiece;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_armor_piece.BodyPart;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_armor_piece.SoldierArmorPiece;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ class SoldierArmorPieceToModelConverter {
 
     private DurabilityItemModel convert(UUID citizenId, UUID gameId, BodyPart bodyPart, SoldierArmorPiece armorPiece) {
         DurabilityItemModel model = new DurabilityItemModel();
-        model.setId(armorPiece.getEntityId());
+        model.setId(armorPiece.getSoldierArmorPieceId());
         model.setGameId(gameId);
         model.setType(GameItemType.DURABILITY_ITEM_MODEL);
         model.setMaxDurability(armorPiece.getMaxDurability());

@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.l
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityItemModel;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.BodyPart;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierArmorPiece;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_armor_piece.BodyPart;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_armor_piece.SoldierArmorPiece;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,7 +38,7 @@ public class ModelToSoldierArmorConverterTest {
 
         assertThat(result).hasSize(1);
         SoldierArmorPiece armorPiece = result.get(BodyPart.HEAD);
-        assertThat(armorPiece.getEntityId()).isEqualTo(ENTITY_ID);
+        assertThat(armorPiece.getSoldierArmorPieceId()).isEqualTo(ENTITY_ID);
         assertThat(armorPiece.getDataId()).isEqualTo(DATA_ID);
         assertThat(armorPiece.getMaxDurability()).isEqualTo(MAX_DURABILITY);
         assertThat(armorPiece.getCurrentDurability()).isEqualTo(CURRENT_DURABILITY);

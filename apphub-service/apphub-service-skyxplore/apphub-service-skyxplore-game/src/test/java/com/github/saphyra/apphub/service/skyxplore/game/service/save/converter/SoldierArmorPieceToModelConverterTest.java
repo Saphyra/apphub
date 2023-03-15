@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityItemModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.BodyPart;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierArmorPiece;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_armor_piece.BodyPart;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_armor_piece.SoldierArmorPiece;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,7 +30,7 @@ public class SoldierArmorPieceToModelConverterTest {
     @Test
     public void convert() {
         SoldierArmorPiece armorPiece = SoldierArmorPiece.builder()
-            .entityId(ENTITY_ID)
+            .soldierArmorPieceId(ENTITY_ID)
             .dataId(DATA_ID)
             .maxDurability(MAX_DURABILITY)
             .currentDurability(CURRENT_DURABILITY)

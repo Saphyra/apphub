@@ -16,8 +16,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageDetai
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 
 @ExtendWith(MockitoExtension.class)
 public class PlanetStorageOverviewQueryServiceTest {

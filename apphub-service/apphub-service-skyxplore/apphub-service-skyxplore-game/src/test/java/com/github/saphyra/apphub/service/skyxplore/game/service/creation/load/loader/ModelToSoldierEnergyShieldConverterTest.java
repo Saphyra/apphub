@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityItemModel;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierEnergyShield;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_energy_shield.SoldierEnergyShield;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,7 +31,7 @@ public class ModelToSoldierEnergyShieldConverterTest {
 
         SoldierEnergyShield result = underTest.convert(model);
 
-        assertThat(result.getEntityId()).isEqualTo(ENTITY_ID);
+        assertThat(result.getSoldierEnergyShieldId()).isEqualTo(ENTITY_ID);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getMaxDurability()).isEqualTo(MAX_DURABILITY);
         assertThat(result.getCurrentDurability()).isEqualTo(CURRENT_DURABILITY);

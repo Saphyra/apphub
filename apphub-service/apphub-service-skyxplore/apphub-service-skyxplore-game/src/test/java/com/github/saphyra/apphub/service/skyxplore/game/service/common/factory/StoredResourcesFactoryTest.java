@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.common.factory;
 
-import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

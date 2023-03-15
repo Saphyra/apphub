@@ -2,14 +2,14 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityItemModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierEnergyShield;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_energy_shield.SoldierEnergyShield;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierEnergyShield.CITIZEN_ENERGY_SHIELD;
+import static com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_energy_shield.SoldierEnergyShield.CITIZEN_ENERGY_SHIELD;
 
 
 @Component
@@ -18,7 +18,7 @@ import static com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.
 class SoldierEnergyShieldToModelConverter {
     DurabilityItemModel convert(UUID citizenId, UUID gameId, SoldierEnergyShield energyShield) {
         DurabilityItemModel model = new DurabilityItemModel();
-        model.setId(energyShield.getEntityId());
+        model.setId(energyShield.getSoldierEnergyShieldId());
         model.setType(GameItemType.DURABILITY_ITEM_MODEL);
         model.setGameId(gameId);
         model.setMaxDurability(energyShield.getMaxDurability());

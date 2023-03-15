@@ -8,13 +8,12 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.SkillModel;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.BodyPart;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Skill;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierArmorPiece;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierEnergyShield;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_armor_piece.BodyPart;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skill;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_armor_piece.SoldierArmorPiece;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_data.SoldierWeapon;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_energy_shield.SoldierEnergyShield;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -88,7 +87,7 @@ public class CitizenToModelConverterTest {
             .satiety(SATIETY)
             .skills(CollectionUtils.singleValueMap(SkillType.AIMING, skill))
             .soldierData(
-                SoldierData.builder()
+                SoldierWeapon.builder()
                     .maxHitPoints(MAX_HIT_POINTS)
                     .currentHitPoints(CURRENT_HIT_POINTS)
                     .armor(armor)
@@ -123,7 +122,7 @@ public class CitizenToModelConverterTest {
         soldierModel.setMaxDurability(MAX_HIT_POINTS);
         soldierModel.setCurrentDurability(CURRENT_HIT_POINTS);
         soldierModel.setParent(CITIZEN_ID);
-        soldierModel.setMetadata(SoldierData.CITIZEN_HIT_POINTS);
+        soldierModel.setMetadata(SoldierWeapon.CITIZEN_HIT_POINTS);
 
         assertThat(result).containsExactlyInAnyOrder(skillModel, citizenModel, energyShieldModel, armorModel, soldierModel);
     }

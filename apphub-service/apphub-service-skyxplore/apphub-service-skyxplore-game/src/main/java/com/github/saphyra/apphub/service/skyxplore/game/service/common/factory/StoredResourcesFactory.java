@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.common.factory;
 
-import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResources;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

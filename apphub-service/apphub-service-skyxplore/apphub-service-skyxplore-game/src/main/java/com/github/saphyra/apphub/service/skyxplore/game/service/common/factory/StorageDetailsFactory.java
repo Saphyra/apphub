@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.common.factory;
 
-import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

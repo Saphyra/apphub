@@ -5,8 +5,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityItemModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierEnergyShield;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_energy_shield.SoldierEnergyShield;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.SoldierData.CITIZEN_HIT_POINTS;
+import static com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_data.SoldierWeapon.CITIZEN_HIT_POINTS;
 import static java.util.Objects.nonNull;
 
 @Component
@@ -58,7 +58,7 @@ public class CitizenToModelConverter {
         model.setName(citizen.getName());
         model.setMorale(citizen.getMorale());
         model.setSatiety(citizen.getSatiety());
-        model.setWeaponDataId(citizen.getSoldierData().getWeaponDataId());
+        model.setWeaponDataId(citizen.getSoldierData().getRangedWeaponDataId());
 
         return model;
     }

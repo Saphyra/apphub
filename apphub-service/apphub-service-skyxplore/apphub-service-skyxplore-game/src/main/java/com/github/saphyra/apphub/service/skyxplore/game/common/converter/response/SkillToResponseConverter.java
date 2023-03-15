@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.common.converter.respon
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SkillResponse;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Skill;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skill;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

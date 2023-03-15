@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.map.query;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.map.MapSolarSystemResponse;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
 import com.github.saphyra.apphub.service.skyxplore.game.service.visibility.VisibilityFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

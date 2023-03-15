@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.common.converter.respon
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SkillResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Skill;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skill;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
