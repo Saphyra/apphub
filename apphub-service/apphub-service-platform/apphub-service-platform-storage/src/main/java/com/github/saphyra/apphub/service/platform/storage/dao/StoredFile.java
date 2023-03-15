@@ -14,7 +14,6 @@ public class StoredFile {
     private final UUID storedFileId;
     private final UUID userId;
     private final LocalDateTime createdAt;
-    private final String extension;
     private final String fileName;
     private final long size;
     private boolean fileUploaded;

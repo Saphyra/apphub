@@ -24,7 +24,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class StorageProxyTest {
     private static final String FILE_NAME = "file-name";
-    private static final String EXTENSION = "extension";
     private static final Long SIZE = 2345L;
     private static final String LOCALE = "locale";
     private static final String ACCESS_TOKEN = "access-token";
@@ -56,7 +55,7 @@ public class StorageProxyTest {
     public void createFile() {
         given(storageClient.createFile(any(), eq(ACCESS_TOKEN), eq(LOCALE))).willReturn(STORED_FILE_ID);
 
-        UUID result = underTest.createFile(FILE_NAME, EXTENSION, SIZE);
+        UUID result = underTest.createFile(FILE_NAME, SIZE);
 
         assertThat(result).isEqualTo(STORED_FILE_ID);
 
@@ -65,7 +64,6 @@ public class StorageProxyTest {
 
         CreateFileRequest request = argumentCaptor.getValue();
         assertThat(request.getFileName()).isEqualTo(FILE_NAME);
-        assertThat(request.getExtension()).isEqualTo(EXTENSION);
         assertThat(request.getSize()).isEqualTo(SIZE);
     }
 

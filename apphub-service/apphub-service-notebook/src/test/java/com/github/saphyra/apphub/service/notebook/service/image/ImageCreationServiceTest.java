@@ -27,8 +27,7 @@ public class ImageCreationServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String TITLE = "title";
     private static final UUID PARENT = UUID.randomUUID();
-    private static final String EXTENSION = "extension";
-    private static final String FILE_NAME = String.format("file-name.%s", EXTENSION);
+    private static final String FILE_NAME = "file-name";
     private static final Long SIZE = 2345L;
     private static final UUID FILE_ID = UUID.randomUUID();
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
@@ -72,7 +71,7 @@ public class ImageCreationServiceTest {
 
         given(listItem.getListItemId()).willReturn(LIST_ITEM_ID);
 
-        given(storageProxy.createFile(FILE_NAME, EXTENSION, SIZE)).willReturn(FILE_ID);
+        given(storageProxy.createFile(FILE_NAME, SIZE)).willReturn(FILE_ID);
         given(listItemFactory.create(USER_ID, TITLE, PARENT, ListItemType.IMAGE)).willReturn(listItem);
         given(fileFactory.create(USER_ID, LIST_ITEM_ID, FILE_ID)).willReturn(file);
 

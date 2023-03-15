@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -28,7 +29,7 @@ public interface RoleController {
     /**
      * Adding a specific role to the given user
      */
-    @PostMapping(Endpoints.USER_DATA_ADD_ROLE)
+    @PutMapping(Endpoints.USER_DATA_ADD_ROLE)
     void addRole(@RequestBody RoleRequest roleRequest);
 
     /**

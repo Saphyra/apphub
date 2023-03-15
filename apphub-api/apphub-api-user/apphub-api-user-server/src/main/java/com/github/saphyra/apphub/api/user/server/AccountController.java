@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +30,7 @@ public interface AccountController {
     @PostMapping(Endpoints.ACCOUNT_CHANGE_PASSWORD)
     void changePassword(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestBody ChangePasswordRequest request);
 
-    @PostMapping(Endpoints.ACCOUNT_DELETE_ACCOUNT)
+    @DeleteMapping(Endpoints.ACCOUNT_DELETE_ACCOUNT)
     void deleteAccount(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestBody OneParamRequest<String> password);
 
     @PostMapping(Endpoints.ACCOUNT_REGISTER)

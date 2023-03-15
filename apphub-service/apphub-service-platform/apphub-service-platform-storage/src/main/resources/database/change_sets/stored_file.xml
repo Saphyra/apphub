@@ -20,4 +20,14 @@
 
         <addPrimaryKey schemaName="storage" tableName="stored_file" columnNames="stored_file_id" constraintName="stored_file-pk"/>
     </changeSet>
+
+    <changeSet id="remove-column-extension-from-stored_file" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="storage" tableName="stored_file" columnName="extension"/>
+        </preConditions>
+
+        <dropColumn schemaName="storage" tableName="stored_file">
+            <column name="extension"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>

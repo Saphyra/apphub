@@ -101,6 +101,7 @@ public class TestBase {
 
     @BeforeMethod(alwaysRun = true)
     public void setUpMethod(Method method) throws InterruptedException {
+        FINISHED_TESTS.remove(getMethodIdentifier(method));
         String testMethod = method.getDeclaringClass().getSimpleName() + "-" + method.getName();
 
         log.debug("Available permits before acquiring: {}", SEMAPHORE.availablePermits());
@@ -133,7 +134,7 @@ public class TestBase {
     }
 
     private synchronized void incrementFinishedTestCount(Method method) {
-        String methodIdentifier = method.getDeclaringClass().getName() + method.getName();
+        String methodIdentifier = getMethodIdentifier(method);
         FINISHED_TESTS.add(methodIdentifier);
 
         int finishedPercentage = (int) Math.floor((double) FINISHED_TESTS.size() / TOTAL_TEST_COUNT * 100);
@@ -149,6 +150,10 @@ public class TestBase {
         }
 
         log.info("{} {}% {}/{}", progressBar, finishedPercentage, FINISHED_TESTS.size(), TOTAL_TEST_COUNT);
+    }
+
+    private static String getMethodIdentifier(Method method) {
+        return method.getDeclaringClass().getName() + method.getName();
     }
 
     private synchronized static void deleteTestUsers(String method) {
