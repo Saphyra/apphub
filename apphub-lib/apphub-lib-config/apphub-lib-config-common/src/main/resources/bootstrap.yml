@@ -6,6 +6,8 @@ spring:
       client:
         simple:
           instances:
+            frontend[0]:
+              uri: http://frontend:3000
             admin-panel[0]:
               uri: http://admin-panel:8080
             community[0]:
@@ -116,7 +118,7 @@ endpoint:
   whitelisting:
     whiteListedEndpoints:
       resources:
-        pattern: /res/**
+        pattern: /web/static/**
         method: GET
       localization:
         pattern: /localization/**
