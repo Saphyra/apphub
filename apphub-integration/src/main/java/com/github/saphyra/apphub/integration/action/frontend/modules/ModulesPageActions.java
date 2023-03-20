@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.integration.action.frontend.modules;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.structure.modules.Category;
 import com.github.saphyra.apphub.integration.structure.modules.Favorite;
@@ -31,7 +31,7 @@ public class ModulesPageActions {
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE)))
             .assertTrue();
 
-        NotificationUtil.verifySuccessNotification(driver, "Sikeres kijelentkezés.");
+        ToastMessageUtil.verifySuccessToast(driver, "Sikeres kijelentkezés.");
     }
 
     public static List<Module> getModules(WebDriver driver) {

@@ -24,7 +24,7 @@ spec:
         imagePullPolicy: Always
         resources:
           limits:
-            memory: 400Mi #TODO check RAM requirement
+            memory: 100Mi
 ---
 apiVersion: v1
 kind: Service

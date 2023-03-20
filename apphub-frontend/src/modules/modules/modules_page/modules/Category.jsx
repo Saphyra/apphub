@@ -17,7 +17,10 @@ const Category = ({ categoryLocalizationHandler, moduleLocalizationHandler, cate
         .toList();
 
     return (
-        <div className="category">
+        <div
+            id={categoryId}
+            className="category"
+        >
             <h3>{categoryLocalizationHandler.get(categoryId)}</h3>
 
             {displayedModules}

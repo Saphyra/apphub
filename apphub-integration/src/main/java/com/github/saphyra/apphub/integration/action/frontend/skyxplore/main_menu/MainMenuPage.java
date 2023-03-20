@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.Optional;
 
 class MainMenuPage {
     private static final By BACK_BUTTON = By.id("back-button");
@@ -35,8 +36,10 @@ class MainMenuPage {
         return driver.findElement(GAME_NAME_INPUT);
     }
 
-    static WebElement invalidGameName(WebDriver driver) {
-        return driver.findElement(INVALID_GAME_NAME);
+    static Optional<WebElement> invalidGameName(WebDriver driver) {
+        return driver.findElements(INVALID_GAME_NAME)
+            .stream()
+            .findFirst();
     }
 
     static WebElement submitGameCreationFormButton(WebDriver driver) {

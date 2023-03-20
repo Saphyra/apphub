@@ -45,7 +45,10 @@ const Modules = ({ pageLocalizationHandler, modules, updateModules }) => {
     }
 
     return (
-        <div className="bar">
+        <div
+            id="all-modules"
+            className="bar"
+        >
             <div className="bar-header">
                 <h2 className="bar-title">{pageLocalizationHandler.get("all-modules")}</h2>
                 <InputField

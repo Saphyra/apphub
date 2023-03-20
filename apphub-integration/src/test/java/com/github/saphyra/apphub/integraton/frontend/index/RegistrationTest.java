@@ -1,11 +1,10 @@
 package com.github.saphyra.apphub.integraton.frontend.index;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.user.registration.EmailValidationResult;
 import com.github.saphyra.apphub.integration.structure.user.registration.PasswordValidationResult;
@@ -40,7 +39,7 @@ public class RegistrationTest extends SeleniumTest {
         IndexPageActions.fillRegistrationForm(driver, usernameAlreadyExists);
         IndexPageActions.submitRegistration(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "A felhasználónév foglalt.");
+        ToastMessageUtil.verifyErrorToast(driver, "A felhasználónév foglalt.");
 
         //Email already exists
         RegistrationParameters emailAlreadyExists = RegistrationParameters.validParameters().toBuilder()
@@ -48,12 +47,11 @@ public class RegistrationTest extends SeleniumTest {
             .build();
         IndexPageActions.fillRegistrationForm(driver, emailAlreadyExists);
         IndexPageActions.submitRegistration(driver);
-        NotificationUtil.verifyErrorNotification(driver, "Az email foglalt.");
+        ToastMessageUtil.verifyErrorToast(driver, "Az email foglalt.");
     }
 
     private void executeValidationTest(WebDriver driver, RegistrationParameters parameters, RegistrationValidationResult validationResult) {
         IndexPageActions.fillRegistrationForm(driver, parameters);
-        SleepUtil.sleep(2000);
         IndexPageActions.verifyRegistrationForm(driver, validationResult);
     }
 

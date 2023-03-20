@@ -9,28 +9,16 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
 @RequiredArgsConstructor
 class IndexPage {
-    private static final By USER_NAME_INPUT = By.id("reg-username");
-    private static final By PASSWORD_INPUT = By.id("reg-password");
-    private static final By CONFIRM_PASSWORD_INPUT = By.id("reg-confirm-password");
-    private static final By USER_NAME_VALID = By.id("invalid-username");
-    private static final By PASSWORD_VALID = By.id("invalid-password");
-    private static final By CONFIRM_PASSWORD_VALID = By.id("invalid-confirm-password");
-    private static final By REGISTRATION_SUBMIT_BUTTON = By.id("registration-button");
-    private static final By EMAIL_INPUT = By.id("reg-email");
-    private static final By EMAIL_VALID = By.id("invalid-email");
-    private static final By LOGIN_EMAIL = By.id("login-email");
-    private static final By LOGIN_PASSWORD = By.id("login-password");
-    private static final By LOGIN_BUTTON = By.id("login-button");
-
     static WebElement emailInput(WebDriver driver) {
         return AwaitilityWrapper.getWithWait(() -> {
                 try {
-                    return driver.findElement(EMAIL_INPUT);
+                    return driver.findElement(By.id("registration-email"));
                 } catch (Exception e) {
                     return null;
                 }
@@ -39,48 +27,56 @@ class IndexPage {
         ).orElseThrow(() -> new RuntimeException("Email input not present on url " + driver.getCurrentUrl()));
     }
 
-    static WebElement emailValid(WebDriver driver) {
-        return driver.findElement(EMAIL_VALID);
+    static Optional<WebElement> emailValid(WebDriver driver) {
+        return driver.findElements(By.id("registration-email-validation"))
+            .stream()
+            .findFirst();
     }
 
     static WebElement usernameInput(WebDriver driver) {
         return new WebDriverWait(driver, Duration.ofSeconds(10))
-            .until(ExpectedConditions.presenceOfElementLocated(USER_NAME_INPUT));
+            .until(ExpectedConditions.presenceOfElementLocated(By.id("registration-username")));
     }
 
     static WebElement passwordInput(WebDriver driver) {
-        return driver.findElement(PASSWORD_INPUT);
+        return driver.findElement(By.id("registration-password"));
     }
 
     static WebElement confirmPasswordInput(WebDriver driver) {
-        return driver.findElement(CONFIRM_PASSWORD_INPUT);
+        return driver.findElement(By.id("registration-confirm-password"));
     }
 
-    static WebElement usernameValid(WebDriver driver) {
-        return driver.findElement(USER_NAME_VALID);
+    static Optional<WebElement> usernameValid(WebDriver driver) {
+        return driver.findElements(By.id("registration-username-validation"))
+            .stream()
+            .findFirst();
     }
 
-    static WebElement passwordValid(WebDriver driver) {
-        return driver.findElement(PASSWORD_VALID);
+    static Optional<WebElement> passwordValid(WebDriver driver) {
+        return driver.findElements(By.id("registration-password-validation"))
+            .stream()
+            .findFirst();
     }
 
-    static WebElement confirmPasswordValid(WebDriver driver) {
-        return driver.findElement(CONFIRM_PASSWORD_VALID);
+    static Optional<WebElement> confirmPasswordValid(WebDriver driver) {
+        return driver.findElements(By.id("registration-confirm-password-validation"))
+            .stream()
+            .findFirst();
     }
 
     static WebElement registrationSubmitButton(WebDriver driver) {
-        return driver.findElement(REGISTRATION_SUBMIT_BUTTON);
+        return driver.findElement(By.id("registration-button"));
     }
 
     static WebElement loginEmail(WebDriver driver) {
-        return driver.findElement(LOGIN_EMAIL);
+        return driver.findElement(By.id("login-email"));
     }
 
     static WebElement loginPassword(WebDriver driver) {
-        return driver.findElement(LOGIN_PASSWORD);
+        return driver.findElement(By.id("login-password"));
     }
 
     static WebElement loginButton(WebDriver driver) {
-        return driver.findElement(LOGIN_BUTTON);
+        return driver.findElement(By.id("login-button"));
     }
 }

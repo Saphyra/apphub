@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Component
 @Slf4j
+//TODO move logic to main-gateway
 class RoleFilter extends OncePerRequestFilter {
     private final ErrorResponseFactory errorResponseFactory;
     private final MatchingRoleProvider matchingRoleProvider;

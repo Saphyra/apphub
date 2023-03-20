@@ -28,32 +28,32 @@
         "hu": "Felhasználónév"
     },
     "username-too-short": {
-        "en": "Username too short (Minimum 3 characters)",
-        "hu": "felhasználónév túl rövid (Minimum 3 karakter)"
+        "en": "Username too short (Minimum 3 characters).",
+        "hu": "Felhasználónév túl rövid (Minimum 3 karakter)."
     },
     "username-too-long": {
-        "en": "Username too long (Maximum 30 characters)",
-        "hu": "felhasználónév túl hosszú (Maximum 30 karakter)"
+        "en": "Username too long (Maximum 30 characters).",
+        "hu": "Felhasználónév túl hosszú (Maximum 30 karakter)."
     },
     "invalid-email": {
-        "en": "Invalid format",
-        "hu": "Érvénytelen formátum"
+        "en": "Invalid e-mail.",
+        "hu": "Érvénytelen e-mail."
     },
     "password-too-short": {
-        "en": "Password too short (Minimum 6 characters)",
-        "hu": "Jelszó túl rövid (Minimum 6 karakter)"
+        "en": "Password too short (Minimum 6 characters).",
+        "hu": "Jelszó túl rövid (Minimum 6 karakter)."
     },
     "password-too-long": {
-        "en": "Passwrod too long (Maximum 30 characters)",
-        "hu": "Jelszó túl hosszú (Maximum 30 karakter)"
+        "en": "Passwrod too long (Maximum 30 characters).",
+        "hu": "Jelszó túl hosszú (Maximum 30 karakter)."
     },
     "confirm-password": {
         "en": "Confirm password",
         "hu": "Jelszó megerősítése"
     },
     "incorrect-confirm-password": {
-        "en": "Incorrect confirm password",
-        "hu": "A jelszavak nem egyeznek "
+        "en": "Incorrect confirm password.",
+        "hu": "A jelszavak nem egyeznek."
     },
     "register": {
         "en": "Registration",

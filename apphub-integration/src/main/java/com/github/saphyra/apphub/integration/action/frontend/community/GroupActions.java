@@ -64,7 +64,7 @@ public class GroupActions {
     }
 
     public static void verifyCreateGroupNameCorrect(WebDriver driver) {
-        WebElementUtils.verifyInvalidFieldState(CommunityPage.createGroupInvalidName(driver), false, null);
+        WebElementUtils.verifyInvalidFieldStateLegacy(CommunityPage.createGroupInvalidName(driver), false, null);
     }
 
     public static void submitCreateGroupForm(WebDriver driver) {

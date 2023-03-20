@@ -26,7 +26,7 @@ public class FilterTest extends SeleniumTest {
             .until(() -> ModulesPageActions.getCategories(driver).isEmpty());
 
         //Search category
-        ModulesPageActions.search(driver, "kok");
+        ModulesPageActions.search(driver, "fiók");
         Category categoryResult = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getCategories(driver), categories -> categories.size() == 1)
             .stream()
             .findFirst()

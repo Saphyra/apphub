@@ -23,7 +23,10 @@ const Module = ({ moduleLocalizationHandler, module, updateModules }) => {
 
     //TODO replace a with Link when all the pages were migrated
     return (
-        <div className="module">
+        <div
+            id={"module-" + module.name}
+            className="module"
+        >
             <Button
                 className={"favorite-button " + favoriteClassName}
                 onclick={setFavorite}

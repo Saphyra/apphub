@@ -10,6 +10,7 @@ const LoginForm = ({ localizationHandler }) => {
     const [rememberMe, setRememberMe] = useState(false);
 
     const rememberMeInput = <InputField
+        id="login-remember-me"
         type="checkbox"
         onchangeCallback={setRememberMe}
     />
@@ -17,12 +18,14 @@ const LoginForm = ({ localizationHandler }) => {
     return (
         <div className="login-form">
             <InputField
+                id="login-email"
                 type="text"
                 placeholder={localizationHandler.get("email-address")}
                 onchangeCallback={setEmail}
             />
 
             <InputField
+                id="login-password"
                 type="password"
                 placeholder={localizationHandler.get("password")}
                 onchangeCallback={setPassword}
@@ -35,6 +38,7 @@ const LoginForm = ({ localizationHandler }) => {
             />
 
             <Button
+                id="login-button"
                 label={localizationHandler.get("login-button")}
                 onclick={() => login(email, password, rememberMe)}
             />

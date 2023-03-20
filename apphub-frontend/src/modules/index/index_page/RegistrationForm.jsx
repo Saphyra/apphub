@@ -40,6 +40,8 @@ const RegistrationForm = ({ localizationHandler }) => {
                         label={localizationHandler.get("username") + ":"}
                         input={
                             <ValidatedInputField
+                                id="registration-username-validation"
+                                inputId="registration-username"
                                 validationResult={validationResult[ValidatedField.USERNAME]}
                                 type="text"
                                 placeholder={localizationHandler.get("username")}
@@ -52,6 +54,8 @@ const RegistrationForm = ({ localizationHandler }) => {
                         label={localizationHandler.get("email-address") + ":"}
                         input={
                             <ValidatedInputField
+                                id="registration-email-validation"
+                                inputId="registration-email"
                                 validationResult={validationResult[ValidatedField.EMAIL]}
                                 type="text"
                                 placeholder={localizationHandler.get("email-address")}
@@ -64,6 +68,8 @@ const RegistrationForm = ({ localizationHandler }) => {
                         label={localizationHandler.get("password") + ":"}
                         input={
                             <ValidatedInputField
+                                id="registration-password-validation"
+                                inputId="registration-password"
                                 validationResult={validationResult[ValidatedField.PASSWORD]}
                                 type="password"
                                 placeholder={localizationHandler.get("password")}
@@ -76,6 +82,8 @@ const RegistrationForm = ({ localizationHandler }) => {
                         label={localizationHandler.get("confirm-password") + ":"}
                         input={
                             <ValidatedInputField
+                                id="registration-confirm-password-validation"
+                                inputId="registration-confirm-password"
                                 validationResult={validationResult[ValidatedField.CONFIRM_PASSWORD]}
                                 type="password"
                                 placeholder={localizationHandler.get("confirm-password")}
@@ -86,6 +94,7 @@ const RegistrationForm = ({ localizationHandler }) => {
                 </div>
 
                 <Button
+                    id="registration-button"
                     label={localizationHandler.get("register")}
                     onclick={() => register(username, email, password)}
                     disabled={!isFormValid()}

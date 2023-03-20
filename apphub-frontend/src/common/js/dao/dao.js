@@ -5,6 +5,7 @@ import Utils from "../Utils";
 import ErrorHandler from "./ErrorHandler";
 import NotificationService from "../notification/NotificationService";
 import Stream from "../collection/Stream";
+import NotificationKey from "../notification/NotificationKey";
 
 const Endpoint = class {
     constructor(requestMethod, url) {
@@ -95,6 +96,7 @@ const Request = class {
 
         xhr.setRequestHeader("Cache-Control", "no-cache");
         xhr.setRequestHeader(Constants.HEADER_BROWSER_LANGUAGE, Utils.getBrowserLanguage());
+        xhr.setRequestHeader(Constants.HEADER_REQUEST_TYPE_NAME, Constants.HEADER_REQUEST_TYPE_VALUE);
 
         return new Promise((resolve, reject) => {
             xhr.onload = () => {
@@ -139,6 +141,10 @@ const Response = class {
             .findAny()
             .orElse("Unknown response status code: " + status);
     }
+
+    toString = function(){
+        return this.status + ": " + this.statusKey + " - " + this.body;
+    }
 }
 
 const defaultErrorHandler = () => {
@@ -150,8 +156,9 @@ const defaultErrorHandler = () => {
 
                 switch (errorResponse.errorCode) {
                     case "SESSION_EXPIRED":
-                        sessionStorage.errorMessage = "session-expired";
-                        //TODO
+                    case "NO_SESSION_AVAILABLE":
+                        sessionStorage.errorCode = NotificationKey.NO_VALID_SESSION;
+                        window.location.href = Constants.INDEX_PAGE;
                         break;
                     default:
                         NotificationService.showErrorCode(errorResponse.errorCode, errorResponse.params);
@@ -181,7 +188,7 @@ const defaultErrorHandler = () => {
     );
 }
 
-const ResponseStatus = {
+export const ResponseStatus = {
     OK: 200,
     BAD_REQUEST: 400,
     UNAUTHORIZED: 401,
@@ -200,9 +207,13 @@ const ResponseStatus = {
 }
 
 const Endpoints = {
+    //Platform
+    CHECK_SESSION: new Endpoint(RequestMethod.GET, "/api/user/authentication/session"),
+
     //Index
     ACCOUNT_REGISTER: new Endpoint(RequestMethod.POST, "/api/user"),
     LOGIN: new Endpoint(RequestMethod.POST, "/api/user/authentication/login"),
+    LOGOUT: new Endpoint(RequestMethod.POST, "/api/user/authentication/logout"),
 
     //Modules
     MODULES_GET: new Endpoint(RequestMethod.GET, "/api/modules"),

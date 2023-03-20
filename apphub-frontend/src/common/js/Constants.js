@@ -1,8 +1,10 @@
 const Constants = {
-    //LOCALE
+    //REQUEST
     COOKIE_LOCALE: "language",
     DEFAULT_LOCALE: "hu",
     HEADER_BROWSER_LANGUAGE: "BrowserLanguage",
+    HEADER_REQUEST_TYPE_NAME: "Request-Type",
+    HEADER_REQUEST_TYPE_VALUE: "rest",
 
     //VALIDATION
     MIN_USERNAME_LENGTH: 3,
@@ -12,6 +14,7 @@ const Constants = {
     
     //PAGES
     MODULES_PAGE: "/web/modules",
+    INDEX_PAGE: "/web",
 }
 
 export default Constants;

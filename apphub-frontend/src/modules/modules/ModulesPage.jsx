@@ -9,7 +9,10 @@ import Modules from "./modules_page/Modules";
 import Footer from "../../common/component/Footer";
 import Button from "../../common/component/input/Button";
 import logout from "./controller/LogoutController";
-import modulesList from "./modules.json"; //TODO delete file
+import sessionChecker from "../../common/js/SessionChecker";
+import NotificationService from "../../common/js/notification/NotificationService";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const ModulesPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -17,6 +20,8 @@ const ModulesPage = () => {
     const [modules, setModules] = useState([]);
 
     useEffect(() => fetchModules(), []);
+    useEffect(sessionChecker, []);
+    useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const fetchModules = () => {
         const fetch = async () => {
@@ -25,7 +30,6 @@ const ModulesPage = () => {
 
             setModules(response);
         };
-        //setModules(modulesList); //TODO use fetch
         fetch();
     }
 
@@ -33,6 +37,7 @@ const ModulesPage = () => {
 
     const logoutButton = <Button
         key={"logout-button"}
+        id="logout-button"
         label={localizationHandler.get("logout")}
         onclick={() => logout()}
     />
@@ -55,6 +60,8 @@ const ModulesPage = () => {
             </main>
 
             <Footer rightButtons={[logoutButton]} />
+
+            <ToastContainer />
         </div>
     );
 }
