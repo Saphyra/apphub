@@ -200,8 +200,13 @@ const ResponseStatus = {
 }
 
 const Endpoints = {
+    //Index
     ACCOUNT_REGISTER: new Endpoint(RequestMethod.POST, "/api/user"),
     LOGIN: new Endpoint(RequestMethod.POST, "/api/user/authentication/login"),
+
+    //Modules
+    MODULES_GET: new Endpoint(RequestMethod.GET, "/api/modules"),
+    MODULES_SET_FAVORITE: new Endpoint(RequestMethod.POST, "/api/modules/{module}/favorite"),
 }
 
 export default Endpoints;

@@ -1,11 +1,9 @@
 {
   "account": "Fiók kezelése",
-  "admin-panel": "Adminisztráció",
   "notebook": "Jegyzetfüzet",
   "json-formatter": "JSON formázó",
   "log-formatter": "Log formázó",
   "base64": "Base64 kódoló",
-  "mobile-messages": "Mobile Messages",
   "skyxplore": "SkyXplore",
   "error-report": "Hibajelentések",
   "role-management": "Jobosultságok kezelése",

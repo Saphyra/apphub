@@ -7,11 +7,16 @@ import {
 import IndexPage from './modules/index/IndexPage';
 import "./common/style/reset.css";
 import "./common/style/common.css";
+import ModulesPage from './modules/modules/ModulesPage';
 
 const router = createBrowserRouter([
   {
     path: "/web",
     element: <IndexPage />,
+  },
+  {
+    path: "/web/modules",
+    element: <ModulesPage />,
   }
 ]);
 

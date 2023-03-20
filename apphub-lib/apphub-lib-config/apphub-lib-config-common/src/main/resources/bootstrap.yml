@@ -120,6 +120,9 @@ endpoint:
       resources:
         pattern: /web/static/**
         method: GET
+      deprecated-resources:
+        pattern: /res/**
+        method: GET
       localization:
         pattern: /localization/**
         method: GET

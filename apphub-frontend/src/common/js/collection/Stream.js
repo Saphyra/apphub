@@ -5,6 +5,10 @@ const Stream = class {
         this.items = items || [];
     }
 
+    anyMatch(predicate) {
+        return this.items.some(predicate);
+    }
+
     filter(predicate) {
         const result = [];
 
@@ -18,11 +22,37 @@ const Stream = class {
     }
 
     findFirst() {
-        if (this.items.length == 0) {
+        if (this.items.length === 0) {
             return new Optional();
         }
 
         return new Optional(this.items[0]);
+    }
+
+    forEach(consumer) {
+        this.items.forEach(consumer);
+    }
+
+    map(mapper) {
+        return new Stream(this.items.map(mapper));
+    }
+
+    peek(consumer) {
+        this.forEach(consumer);
+
+        return this;
+    }
+
+    sorted(comparator) {
+        const arr = this.items.slice();
+
+        arr.sort(comparator);
+
+        return new Stream(arr);
+    }
+
+    toList() {
+        return this.items;
     }
 }
 

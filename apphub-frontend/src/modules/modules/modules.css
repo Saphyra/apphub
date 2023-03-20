@@ -1,0 +1,79 @@
+#modules main {
+    display: grid;
+    grid-template-columns: 33% auto;
+    padding: 0;
+}
+
+#modules #favorites{
+    border-right: 3px ridge white;
+}
+
+#modules .bar{
+    overflow: auto;
+}
+
+#modules .bar-header{
+    position: sticky;
+    top: 0;
+    border-bottom: 1px ridge white;
+    background: black;
+}
+
+#modules .bar-title{
+    text-align: center;
+    padding: 3px;
+}
+
+#modules-search-bar{
+    display: block;
+    width: 95%;
+    margin: 5px auto;
+}
+
+#modules .no-result{
+    text-align: center;
+    margin: 20px;
+}
+
+#modules .category{
+    margin: 16px;
+    border: 1px solid white;
+    border-radius: 10px;
+    padding: 8px;
+}
+
+#modules .category h3{
+    padding: 4px;
+    border-bottom: 1px solid white;
+}
+
+#modules .module{
+    display: flex;
+}
+
+#modules .module .favorite-button{
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 80%;
+    border-width: 2px;
+    vertical-align: middle;
+}
+
+#modules .module .module-link{
+    border-width: 2px;
+    border-radius: 0;
+    display: inline-block;
+    width: calc(100% - 48px);
+    text-align: left;
+}
+
+#modules .favorite{
+    background-image: url("./favorite.png");
+}
+
+#modules .non-favorite{
+    background-image: url("./non_favorite.png");
+}

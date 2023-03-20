@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Button from "../../common/component/input/Button";
-import InputField from "../../common/component/input/InputField";
-import PostLabeledInputField from "../../common/component/input/PostLabeledInputField";
-import login from "./controller/LoginController";
+import Button from "../../../common/component/input/Button";
+import InputField from "../../../common/component/input/InputField";
+import PostLabeledInputField from "../../../common/component/input/PostLabeledInputField";
+import login from "../controller/LoginController";
 
 const LoginForm = ({ localizationHandler }) => {
     const [email, setEmail] = useState("");

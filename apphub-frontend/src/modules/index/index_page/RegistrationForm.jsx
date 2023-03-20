@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import PreLabeledInputField from "../../common/component/input/PreLabeledInputField";
-import validate from "../../common/js/validation/Validator";
-import ValidatedField from "../../common/js/validation/ValidatedField";
-import ValidatedInputField from "../../common/component/input/ValidatedInputField";
-import Button from "../../common/component/input/Button";
-import register from "./controller/RegistrationController";
+import PreLabeledInputField from "../../../common/component/input/PreLabeledInputField";
+import validate from "../../../common/js/validation/Validator";
+import ValidatedField from "../../../common/js/validation/ValidatedField";
+import ValidatedInputField from "../../../common/component/input/ValidatedInputField";
+import Button from "../../../common/component/input/Button";
+import register from "../controller/RegistrationController";
 
 const RegistrationForm = ({ localizationHandler }) => {
     const [username, setUsername] = useState("");

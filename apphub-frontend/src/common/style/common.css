@@ -68,6 +68,7 @@ footer {
     border-top: 5px ridge white;
     white-space: nowrap;
     height: var(--footer-height);
+    text-align: center;
 }
 
 footer button,
@@ -93,13 +94,13 @@ h3 {
 }
 
 /*================INPUT/NAVIGATION ELEMENTS==================*/
-.validated-input-field-wrapper{
+.validated-input-field-wrapper {
     display: inline-block;
     padding-right: 36px;
     position: relative;
 }
 
-.validation-result-field{
+.validation-result-field {
     position: absolute;
     top: 4px;
     right: 4px;
@@ -130,7 +131,8 @@ footer label {
     background: var(--background-color);
     border: 3px outset white;
     border-radius: 5px;
-    padding: 3px;;
+    padding: 3px;
+    ;
     cursor: pointer;
     color: white;
     white-space: nowrap;
@@ -174,8 +176,10 @@ textarea,
     background: var(--background-color);
     border: 3px outset white;
     border-radius: 5px;
-    padding: 3px;;
-    margin: 3px;;
+    padding: 3px;
+    ;
+    margin: 3px;
+    ;
     color: white;
 }
 
@@ -281,39 +285,6 @@ textarea {
     background: red;
 }
 
-/*=======ADDITIONAL=======*/
-.notification-container {
-    color: red;
-}
-
-.centered {
-    text-align: center;
-}
-
-.left {
-    text-align: left;
-}
-
-.relative {
-    position: relative;
-}
-
-.invisible {
-    visibility: hidden;
-}
-
-.red {
-    color: red;
-}
-
-.nowrap {
-    white-space: nowrap;
-}
-
-.hidden {
-    display: none;
-}
-
 .selectable,
 .selectable * {
     -webkit-user-select: text;
@@ -409,4 +380,45 @@ textarea {
 ::-webkit-scrollbar-thumb {
     background: darkblue;
     border-radius: 10px;
+}
+
+/*=======ADDITIONAL=======*/
+.notification-container {
+    color: red;
+}
+
+.centered {
+    text-align: center;
+}
+
+.left {
+    text-align: left;
+}
+
+.relative {
+    position: relative;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.red {
+    color: red;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.hidden {
+    display: none;
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
 }

@@ -12,19 +12,34 @@ spring:
       globalcors:
         enabled: false
       routes:
+      #FRONTEND
       - id: frontend
         uri: http://frontend:3000
         predicates:
-        - Path=/web, /web/static/**, /web/notebook, /web/user/account, /web/modules, /web/admin-panel/**, /web/utils/**, /web/skyxplore/**, /web/community, /web/calendar
+        - Path=/web, /web/modules
+        filters:
+        - StripPrefix=10
+      - id: frontend-resources
+        uri: http://frontend:3000
+        predicates:
+        - Path=/web/static/**
         filters:
         - StripPrefix=1
       #RESOURCES
-      - id: training-resorces
+      - id: common-resources
+        uri: http://web-content:8080
+        predicates:
+        - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/calendar/**, /res/notebook/**, /res/skyxplore/**, /res/utils/**, /res/user/**
+      - id: training-resources
         uri: http://training:8080
         predicates:
         - Path=/res/training/**
 
       #PAGES
+      - id: common-pages
+        uri: http://web-content:8080
+        predicates:
+        - Path=/web/notebook, /web/user/account, /web/admin-panel/**, /web/utils/**, /web/skyxplore/**, /web/community, /web/calendar
       - id: error-page
         uri: http://web-content:8080
         predicates:
