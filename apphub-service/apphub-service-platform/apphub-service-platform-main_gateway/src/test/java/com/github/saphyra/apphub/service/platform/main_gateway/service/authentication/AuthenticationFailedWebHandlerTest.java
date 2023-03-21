@@ -20,9 +20,9 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class UnauthorizedWebHandlerTest {
+public class AuthenticationFailedWebHandlerTest {
     @InjectMocks
-    private UnauthorizedWebHandler unauthorizedWebHandler;
+    private AuthenticationFailedWebHandler authenticationFailedWebHandler;
 
     @Mock
     private ServerWebExchange exchange;
@@ -50,7 +50,7 @@ public class UnauthorizedWebHandlerTest {
 
         given(response.getHeaders()).willReturn(httpHeaders);
 
-        Mono<Void> result = unauthorizedWebHandler.handle(exchange, filterChain);
+        Mono<Void> result = authenticationFailedWebHandler.handle(exchange, filterChain);
 
         assertThat(result).isEqualTo(Mono.empty());
 

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.security.role;
+package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication.authorization;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.util.List;
 @EnableConfigurationProperties
 @Data
 @Validated
-public class RoleFilterSettingRegistry {
+class RoleProperties {
     @NotEmpty
     private List<RoleSetting> settings;
 }

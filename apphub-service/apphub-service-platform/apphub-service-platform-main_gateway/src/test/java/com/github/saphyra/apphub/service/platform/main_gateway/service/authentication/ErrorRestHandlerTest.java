@@ -24,7 +24,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class UnauthorizedRestHandlerTest {
+public class ErrorRestHandlerTest {
     private static final String SERIALIZED_PAYLOAD = "serialized-payload";
 
     @Mock
@@ -34,7 +34,7 @@ public class UnauthorizedRestHandlerTest {
     private ObjectMapperWrapper objectMapperWrapper;
 
     @InjectMocks
-    private UnauthorizedRestHandler underTest;
+    private ErrorRestHandler underTest;
 
     @Mock
     private ServerWebExchange exchange;

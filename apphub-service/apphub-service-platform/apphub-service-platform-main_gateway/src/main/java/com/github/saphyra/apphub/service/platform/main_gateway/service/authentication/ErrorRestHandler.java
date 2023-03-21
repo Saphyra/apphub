@@ -12,7 +12,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Data
-public class UnauthorizedRestHandler implements AuthenticationResultHandler {
+public class ErrorRestHandler implements AuthResultHandler {
     private final ErrorResponseWrapper errorResponse;
     private final ObjectMapperWrapper objectMapperWrapper;
 

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.security.role;
+package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication.authorization;
 
 import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
 import jakarta.validation.constraints.NotEmpty;
@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Validated
-public class RoleSetting {
+class RoleSetting {
     @NotNull
     private String pattern;
 

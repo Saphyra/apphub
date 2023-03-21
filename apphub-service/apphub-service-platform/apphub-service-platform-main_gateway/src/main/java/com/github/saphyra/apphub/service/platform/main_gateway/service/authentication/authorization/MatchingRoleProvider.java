@@ -1,9 +1,10 @@
-package com.github.saphyra.apphub.lib.security.role;
+package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication.authorization;
 
 import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
@@ -15,16 +16,18 @@ import static java.util.Objects.isNull;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+//TODO unit test
 class MatchingRoleProvider {
     private final AntPathMatcher antPathMatcher;
-    private final RoleFilterSettingRegistry roleFilterSettingRegistry;
+    private final RoleProperties roleProperties;
 
-    List<RoleSetting> getMatchingSettings(HttpServletRequest request) {
-        String requestUri = request.getRequestURI();
-        String requestMethod = request.getMethod();
-        List<RoleSetting> matchingRoles = roleFilterSettingRegistry.getSettings()
+    List<RoleSetting> getMatchingSettings(ServerHttpRequest request) {
+        String requestUri = request.getURI()
+            .getPath();
+        HttpMethod requestMethod = request.getMethod();
+        List<RoleSetting> matchingRoles = roleProperties.getSettings()
             .stream()
-            .filter(roleSetting -> roleSetting.getMethods().stream().anyMatch(method -> method.equalsIgnoreCase(requestMethod)))
+            .filter(roleSetting -> roleSetting.getMethods().stream().anyMatch(method -> method.equalsIgnoreCase(requestMethod.name())))
             .filter(roleSetting -> antPathMatcher.match(roleSetting.getPattern(), requestUri))
             .filter(roleSetting -> !isWhiteListed(roleSetting.getWhitelistedEndpoints(), requestMethod, requestUri))
             .collect(Collectors.toList());
@@ -32,13 +35,13 @@ class MatchingRoleProvider {
         return matchingRoles;
     }
 
-    private boolean isWhiteListed(List<WhiteListedEndpoint> whitelistedEndpoints, String requestMethod, String requestUri) {
+    private boolean isWhiteListed(List<WhiteListedEndpoint> whitelistedEndpoints, HttpMethod requestMethod, String requestUri) {
         if (isNull(whitelistedEndpoints)) {
             return false;
         }
 
         return whitelistedEndpoints.stream()
-            .filter(whiteListedEndpoint -> whiteListedEndpoint.getMethod().equals(requestMethod))
+            .filter(whiteListedEndpoint -> whiteListedEndpoint.getMethod().equalsIgnoreCase(requestMethod.name()))
             .anyMatch(whiteListedEndpoint -> antPathMatcher.match(whiteListedEndpoint.getPattern(), requestUri));
     }
 }
