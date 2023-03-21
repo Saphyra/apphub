@@ -95,8 +95,6 @@ public class TestBase {
         if (nonNull(CONNECTION)) {
             CONNECTION.close();
         }
-
-        log.info("Available permits: {}", SEMAPHORE.availablePermits());
     }
 
     @BeforeMethod(alwaysRun = true)

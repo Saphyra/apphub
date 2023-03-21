@@ -13,7 +13,6 @@ import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
 import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
-import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.lib.web_utils.RequestContextProvider;
 import com.github.saphyra.apphub.service.user.UserApplication;
@@ -37,8 +36,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableErrorHandler
 @Import({
     CommonConfigProperties.class,
-    AccessTokenFilterConfiguration.class,
-    RoleFilterConfiguration.class
+    AccessTokenFilterConfiguration.class
 })
 @EnableEventProcessor
 @EnableHealthCheck

@@ -5,6 +5,15 @@ spring:
   cloud:
     gateway:
       routes:
+      #FRONTEND
+      - id: frontend
+        uri: http://localhost:3000
+        predicates:
+        - Path=/web, /web/modules
+      - id: frontend-resources
+        uri: http://localhost:3000
+        predicates:
+        - Path=/web/static/**
       #RESOURCES
       - id: common-resorces
         uri: http://localhost:8083
@@ -19,7 +28,7 @@ spring:
       - id: common-pages
         uri: http://localhost:8083
         predicates:
-        - Path=/web, /web/notebook, /web/user/account, /web/modules, /web/admin-panel/**, /web/utils/**, /web/skyxplore/**, /web/community, /web/calendar
+        - Path=/web/notebook, /web/user/account, /web/admin-panel/**, /web/utils/**, /web/skyxplore/**, /web/community, /web/calendar
       - id: error-page
         uri: http://localhost:8083
         predicates:
@@ -47,7 +56,7 @@ spring:
         predicates:
         - Path=/api/modules/**
       - id: utils
-        uri: http://localhost:8095
+        uri: http://localhost:8100
         predicates:
         - Path=/api/utils/**
       - id: skyxplore-data

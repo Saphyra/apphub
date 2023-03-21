@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.Optional;
 
 class CommunityPage {
     public static WebElement addFriendButton(WebDriver driver) {
@@ -111,8 +112,10 @@ class CommunityPage {
         return driver.findElement(By.id("create-group-name-input"));
     }
 
-    public static WebElement createGroupInvalidName(WebDriver driver) {
-        return driver.findElement(By.id("create-group-invalid-name"));
+    public static Optional<WebElement> createGroupInvalidName(WebDriver driver) {
+        return driver.findElements(By.id("create-group-invalid-name"))
+            .stream()
+            .findFirst();
     }
 
     public static WebElement createGroupButton(WebDriver driver) {

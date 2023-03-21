@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.integraton.frontend.admin_panel.ban;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
-import com.github.saphyra.apphub.integration.core.TestBase;
 import com.github.saphyra.apphub.integration.action.frontend.admin_panel.ban.BanActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
+import com.github.saphyra.apphub.integration.core.TestBase;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
@@ -17,10 +17,14 @@ import com.github.saphyra.apphub.integration.structure.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.admin_panel.CurrentBan;
 import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.concurrent.Future;
@@ -79,6 +83,9 @@ public class BanCrudTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> testDriver.getCurrentUrl().contains(Endpoints.ERROR_PAGE))
             .assertTrue("TestUser is not banned.");
+
+        new WebDriverWait(testDriver, Duration.ofSeconds(5))
+            .until(ExpectedConditions.presenceOfElementLocated(By.id("message-content")));
 
         revokeBan_runValidation(adminDriver, "", "A jelszó nem lehet üres.");
         revokeBan_runValidation(adminDriver, "asd", "Hibás jelszó.");

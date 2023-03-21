@@ -8,7 +8,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Data
-public class AuthorizedResultHandler implements AuthenticationResultHandler {
+public class AuthorizedResultHandler implements AuthResultHandler {
     private final String accessTokenHeader;
 
     @Override

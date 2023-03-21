@@ -11,7 +11,6 @@ import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
 import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
-import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
 import com.github.saphyra.apphub.service.notebook.NotebookApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -33,8 +32,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableEncryption
 @Import({
     CommonConfigProperties.class,
-    AccessTokenFilterConfiguration.class,
-    RoleFilterConfiguration.class
+    AccessTokenFilterConfiguration.class
 })
 @EnableMemoryMonitoring
 class NotebookBeanConfiguration {

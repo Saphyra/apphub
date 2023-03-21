@@ -26,7 +26,7 @@ class UserLoggedInQueryService {
             authenticationClient.getAccessTokenById(accessTokenId, localeProvider.getLocaleValidated());
             return true;
         } catch (Exception e) {
-            log.info("Failed querying accessToken", e);
+            log.debug("Failed querying accessToken", e);
             return false;
         }
     }

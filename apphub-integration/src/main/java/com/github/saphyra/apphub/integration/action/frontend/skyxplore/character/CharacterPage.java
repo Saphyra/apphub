@@ -4,6 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.Optional;
+
 class CharacterPage {
     private static final By CHARACTER_NAME_INPUT = By.id("character-name");
     private static final By BOX_TITLE = By.id("character-tab-title");
@@ -22,7 +24,9 @@ class CharacterPage {
         return driver.findElement(SUBMIT_BUTTON);
     }
 
-    public static WebElement invalidCharacterName(WebDriver driver) {
-        return driver.findElement(INVALID_CHARACTER_NAME);
+    public static Optional<WebElement> invalidCharacterName(WebDriver driver) {
+        return driver.findElements(INVALID_CHARACTER_NAME)
+            .stream()
+            .findFirst();
     }
 }

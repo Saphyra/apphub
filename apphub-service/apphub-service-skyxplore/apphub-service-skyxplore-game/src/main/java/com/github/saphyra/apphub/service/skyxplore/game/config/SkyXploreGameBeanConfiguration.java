@@ -15,7 +15,6 @@ import com.github.saphyra.apphub.lib.geometry.RandomCoordinateProvider;
 import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
-import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
 import com.github.saphyra.apphub.lib.skyxplore.data.SkyXploreDataConfig;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -30,7 +29,6 @@ import java.util.concurrent.BlockingQueue;
 @EnableHealthCheck
 @Import({
     AccessTokenFilterConfiguration.class,
-    RoleFilterConfiguration.class,
     SkyXploreDataConfig.class,
     DefaultExecutorServiceBeanConfig.class
 })

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
+@Deprecated
 public class NotificationUtil {
     private static final By NOTIFICATIONS_LOCATOR = By.cssSelector("#notification-container > DIV");
     private static final By NOTIFICATION_TEXT_LOCATOR = By.cssSelector(":first-child");

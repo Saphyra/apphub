@@ -10,7 +10,6 @@ import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.monitoring.MemoryStatusModelFactory;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
-import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -18,8 +17,7 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({
     AccessTokenFilterConfiguration.class,
-    CommonConfigProperties.class,
-    RoleFilterConfiguration.class
+    CommonConfigProperties.class
 })
 @EnableErrorHandler
 @EnableLocaleMandatoryRequestValidation
