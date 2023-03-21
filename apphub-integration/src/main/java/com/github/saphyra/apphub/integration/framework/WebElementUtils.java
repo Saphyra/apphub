@@ -61,12 +61,24 @@ public class WebElementUtils {
         }
     }
 
-    public static void verifyInvalidFieldState(WebElement inputValid, boolean shouldBeVisible, String errorMessage) {
+    public static void verifyInvalidFieldState(Optional<WebElement> inputValid, boolean shouldBeVisible, String errorMessage) {
         if (shouldBeVisible) {
-            assertThat(inputValid.isDisplayed()).isTrue();
-            assertThat(inputValid.getAttribute("title")).isEqualTo(errorMessage);
+            assertThat(inputValid).isNotEmpty();
+            assertThat(inputValid.get().getAttribute("title")).isEqualTo(errorMessage);
         } else {
-            assertThat(inputValid.isDisplayed()).isFalse();
+            assertThat(inputValid).isEmpty();
+        }
+    }
+
+    @Deprecated
+    public static void verifyInvalidFieldStateLegacy(Optional<WebElement> inputValid, boolean shouldBeVisible, String errorMessage) {
+        assertThat(inputValid).isNotNull();
+
+        if (shouldBeVisible) {
+            assertThat(inputValid.get().isDisplayed()).isTrue();
+            assertThat(inputValid.get().getAttribute("title")).isEqualTo(errorMessage);
+        } else {
+            assertThat(inputValid.get().isDisplayed()).isFalse();
         }
     }
 

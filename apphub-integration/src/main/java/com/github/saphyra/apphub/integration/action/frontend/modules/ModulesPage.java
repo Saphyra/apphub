@@ -7,14 +7,13 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 class ModulesPage {
-    private static final By LOGOUT_BUTTON = By.id("logout-button");
-    private static final By GET_MODULES = By.cssSelector("#all-modules-list .module");
-    private static final By GET_FAVORITES = By.cssSelector("#favorites-list .module");
-    static final By SEARCH_INPUT = By.id("search-field");
-    private static final By CATEGORIES = By.cssSelector("#all-modules-list .category");
+    private static final By GET_MODULES = By.cssSelector("#all-modules .module");
+    private static final By GET_FAVORITES = By.cssSelector("#favorites .module");
+    static final By SEARCH_INPUT = By.id("modules-search-bar");
+    private static final By CATEGORIES = By.cssSelector("#all-modules .category");
 
     static WebElement logoutButton(WebDriver driver) {
-        return driver.findElement(LOGOUT_BUTTON);
+        return driver.findElement(By.id("logout-button"));
     }
 
     static List<WebElement> getModules(WebDriver driver) {

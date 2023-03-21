@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.platform.web_content.error_page;
 
-import com.github.saphyra.apphub.api.platform.web_content.client.LocalizationClient;
 import com.github.saphyra.apphub.api.user.client.BanClient;
 import com.github.saphyra.apphub.api.user.model.response.BanDetailsResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
@@ -8,6 +7,7 @@ import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.LocalizationKey;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
+import com.github.saphyra.apphub.service.platform.web_content.error_code.TranslationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,11 +22,12 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class UserBannedDescriptionResolver {
     private final BanClient banClient;
     private final AccessTokenHeaderConverter accessTokenHeaderConverter;
     private final LocaleProvider localeProvider;
-    private final LocalizationClient localizationClient;
+    private final TranslationService translationService;
 
     public String resolve(UUID userId, String requiredRoles) {
         List<String> requiredRolesAsList = Arrays.asList(requiredRoles.split(","));
@@ -38,9 +39,9 @@ public class UserBannedDescriptionResolver {
         List<BanDetailsResponse> relevantBans = getRelevantBans(userId, requiredRolesAsList, accessTokenHeader);
 
         if (hasPermanentBan(relevantBans)) {
-            return localizationClient.translateKey(LocalizationKey.USER_PERMANENTLY_BANNED, localeProvider.getLocaleValidated());
+            return translationService.translate(LocalizationKey.USER_PERMANENTLY_BANNED, localeProvider.getLocaleValidated());
         } else if (!relevantBans.isEmpty()) {
-            return localizationClient.translateKey(LocalizationKey.USER_BANNED, localeProvider.getLocaleValidated())
+            return translationService.translate(LocalizationKey.USER_BANNED, localeProvider.getLocaleValidated())
                 .replace("{expiration}", getLatestBanExpiration(relevantBans));
         } else {
             return null;

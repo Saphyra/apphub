@@ -9,7 +9,6 @@ import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
 import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
-import com.github.saphyra.apphub.lib.security.role.RoleFilterConfiguration;
 import com.github.saphyra.apphub.lib.skyxplore.data.SkyXploreDataConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +21,6 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 @EnableHealthCheck
 @Import({
     AccessTokenFilterConfiguration.class,
-    RoleFilterConfiguration.class,
     SkyXploreDataConfig.class
 })
 @EnableLocaleMandatoryRequestValidation

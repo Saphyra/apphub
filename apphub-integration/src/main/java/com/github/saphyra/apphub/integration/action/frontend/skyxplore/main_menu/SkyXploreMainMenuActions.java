@@ -66,7 +66,7 @@ public class SkyXploreMainMenuActions {
     }
 
     public static void verifyValidGameName(WebDriver driver) {
-        WebElementUtils.verifyInvalidFieldState(MainMenuPage.invalidGameName(driver), false, null);
+        WebElementUtils.verifyInvalidFieldStateLegacy(MainMenuPage.invalidGameName(driver), false, null);
         assertThat(MainMenuPage.submitGameCreationFormButton(driver).isEnabled()).isTrue();
     }
 

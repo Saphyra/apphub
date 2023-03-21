@@ -13,6 +13,50 @@ spring:
     driverClassName: org.postgresql.Driver
     hikari:
       maximumPoolSize: 5
+    discovery:
+      client:
+        simple:
+          instances:
+            frontend[0]:
+              uri: http://localhost:3000
+            admin-panel[0]:
+              uri: http://admin-panel:8089
+            community[0]:
+              uri: http://community:8096
+            calendar[0]:
+              uri: http://calendar:8097
+            modules[0]:
+              uri: http://modules:8088
+            notebook[0]:
+              uri: http://notebook:8090
+            encryption[0]:
+              uri: http://encryption:8098
+            event-gateway[0]:
+              uri: http://event-gateway:8081
+            main-gateway[0]:
+              uri: http://main-gateway:8080
+            message-sender[0]:
+              uri: http://message-sender:8094
+            scheduler[0]:
+              uri: http://scheduler:8082
+            storage[0]:
+              uri: http://storage:8099
+            web-content[0]:
+              uri: http://web-content:8083
+            web-content-localization[0]:
+              uri: http://web-content:8083
+            skyxplore-data[0]:
+              uri: http://skyxplore-data:8091
+            skyxplore-game[0]:
+              uri: http://skyxplore-game:8095
+            skyxplore-lobby[0]:
+              uri: http://skyxplore-lobby:8093
+            training[0]:
+              uri: http://training:8086
+            user[0]:
+              uri: http://user:8085
+            utils[0]:
+              uri: http://utils:8100
 
 eureka:
   client:
@@ -27,3 +71,5 @@ serviceUrls:
   skyxploreLobby: localhost:8093
   storage: localhost:8099
   user: localhost:8085
+  web-content: localhost:8083
+  web-content-localization: localhost:8083

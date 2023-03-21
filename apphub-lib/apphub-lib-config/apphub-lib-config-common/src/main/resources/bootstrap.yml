@@ -6,6 +6,8 @@ spring:
       client:
         simple:
           instances:
+            frontend[0]:
+              uri: http://frontend:3000
             admin-panel[0]:
               uri: http://admin-panel:8080
             community[0]:
@@ -116,6 +118,9 @@ endpoint:
   whitelisting:
     whiteListedEndpoints:
       resources:
+        pattern: /web/static/**
+        method: GET
+      deprecated-resources:
         pattern: /res/**
         method: GET
       localization:
@@ -146,157 +151,3 @@ logging:
             lib:
               security:
                 role: warn
-
-role:
-  settings:
-  #Global
-  - pattern: /web/**
-    methods:
-    - GET
-    requiredRoles:
-    - ACCESS
-    whitelistedEndpoints:
-    - pattern: /web/error
-      method: GET
-    - pattern: /web
-      method: GET
-  - pattern: /api/**
-    methods:
-    - GET
-    - POST
-    - PUT
-    - DELETE
-    requiredRoles:
-    - ACCESS
-    whitelistedEndpoints:
-    - pattern: /api/user/authentication/login
-      method: POST
-    - pattern: /api/user/authentication/logout
-      method: POST
-    - pattern: /api/user/authentication/session
-      method: GET
-    - pattern: /api/user
-      method: POST
-  #Training
-  - pattern: /web/training/**
-    methods:
-    - GET
-    requiredRoles:
-    - TRAINING
-  #Notebook
-  - pattern: /web/notebook
-    methods:
-    - GET
-    requiredRoles:
-    - NOTEBOOK
-  - pattern: /api/notebook/**
-    methods:
-    - GET
-    - DELETE
-    - POST
-    - PUT
-    requiredRoles:
-    - NOTEBOOK
-  #User
-  - pattern: /api/user/data/roles
-    methods:
-    - POST
-    - PUT
-    - DELETE
-    requiredRoles:
-    - ADMIN
-  - pattern: /api/user/data/roles/*
-    methods:
-    - PUT
-    - DELETE
-    requiredRoles:
-    - ADMIN
-  - pattern: /api/user/data/roles/disabled
-    methods:
-    - GET
-    requiredRoles:
-    - ADMIN
-  - pattern: /api/user/data/roles/all
-    methods:
-    - POST
-    - DELETE
-    requiredRoles:
-    - ADMIN
-  - pattern: /api/user/data/ban/*
-    methods:
-    - POST
-    requiredRoles:
-    - ADMIN
-  #Admin-panel
-  - pattern: /web/admin-panel/**
-    methods:
-    - GET
-    - POST
-    - DELETE
-    - PUT
-    requiredRoles:
-    - ADMIN
-  - pattern: /api/admin-panel/**
-    methods:
-    - GET
-    - POST
-    - DELETE
-    - PUT
-    requiredRoles:
-    - ADMIN
-  #SkyXplore
-  - pattern: /web/skyxplore/**
-    methods:
-    - GET
-    requiredRoles:
-    - SKYXPLORE
-  - pattern: /api/skyxplore/**
-    methods:
-    - GET
-    - DELETE
-    - POST
-    - PUT
-    requiredRoles:
-    - SKYXPLORE
-  #Utils
-  - pattern: /web/utils/**
-    methods:
-    - GET
-    requiredRoles:
-    - UTILS
-  - pattern: /api/utils/**
-    methods:
-    - GET
-    - DELETE
-    - POST
-    - PUT
-    requiredRoles:
-    - UTILS
-  #Community
-  - pattern: /web/community
-    methods:
-    - GET
-    requiredRoles:
-    - COMMUNITY
-  - pattern: /api/community/**
-    methods:
-    - GET
-    - DELETE
-    - POST
-    - PUT
-    requiredRoles:
-    - COMMUNITY
-  #Calendar
-  - pattern: /web/calendar
-    methods:
-    - GET
-    requiredRoles:
-    - CALENDAR
-  - pattern: /api/calendar/**
-    methods:
-    - GET
-    - DELETE
-    - POST
-    - PUT
-    requiredRoles:
-    - CALENDAR

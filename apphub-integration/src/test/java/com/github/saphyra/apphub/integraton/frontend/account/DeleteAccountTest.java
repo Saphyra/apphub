@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.structure.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
@@ -34,6 +35,7 @@ public class DeleteAccountTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
         //Empty password
+        AccountPageActions.fillDeleteAccountForm(driver, "asd");
         AccountPageActions.fillDeleteAccountForm(driver, "");
         SleepUtil.sleep(3000);
         AccountPageActions.verifyDeleteAccountForm(driver, DeleteAccountPasswordValidationResult.EMPTY_PASSWORD);
@@ -50,7 +52,7 @@ public class DeleteAccountTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE)))
             .assertTrue("User not logged out");
-        NotificationUtil.verifyErrorNotification(driver, "Fiók zárolva. Próbáld újra később!");
+        ToastMessageUtil.verifyErrorToast(driver, "Fiók zárolva. Próbáld újra később!");
 
         //Cancel deletion
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
@@ -66,9 +68,9 @@ public class DeleteAccountTest extends SeleniumTest {
         AccountPageActions.deleteAccount(driver, DataConstants.VALID_PASSWORD);
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE)));
-        NotificationUtil.verifySuccessNotification(driver, "Account törölve.");
+        //NotificationUtil.verifySuccessNotification(driver, "Account törölve."); TODO restore when account page is migrated to React
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE));
-        NotificationUtil.verifyErrorNotification(driver, "Az email cím és jelszó kombinációja ismeretlen.");
+        ToastMessageUtil.verifyErrorToast(driver, "Az email cím és jelszó kombinációja ismeretlen.");
     }
 }
