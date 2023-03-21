@@ -33,4 +33,14 @@
             <column name="parallel_workers" type="integer"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="remove-column-location_type-from-construction" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="skyxplore_game" tableName="construction" columnName="location_type"/>
+        </preConditions>
+
+        <dropColumn schemaName="skyxplore_game" tableName="construction">
+            <column name="location_type"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>

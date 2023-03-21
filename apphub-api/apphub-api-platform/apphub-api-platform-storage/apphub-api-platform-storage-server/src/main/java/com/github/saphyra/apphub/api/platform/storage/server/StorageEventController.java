@@ -10,6 +10,9 @@ public interface StorageEventController {
     @PostMapping(path = Endpoints.EVENT_DELETE_ACCOUNT)
     void deleteAccountEvent(@RequestBody SendEventRequest<DeleteAccountEvent> request);
 
+    /**
+     * Evicting records from the database what has no file uploaded for a long time
+     */
     @PostMapping(Endpoints.EVENT_CLEAN_UP_STORED_FILES)
     void cleanUpStoredFiles();
 }

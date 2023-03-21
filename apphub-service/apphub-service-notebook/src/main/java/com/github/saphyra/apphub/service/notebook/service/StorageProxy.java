@@ -19,10 +19,9 @@ public class StorageProxy {
     private final AccessTokenProvider accessTokenProvider;
     private final LocaleProvider localeProvider;
 
-    public UUID createFile(String fileName, String extension, Long size) {
+    public UUID createFile(String fileName, Long size) {
         CreateFileRequest request = CreateFileRequest.builder()
             .fileName(fileName)
-            .extension(extension)
             .size(size)
             .build();
         return storageClient.createFile(request, accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());

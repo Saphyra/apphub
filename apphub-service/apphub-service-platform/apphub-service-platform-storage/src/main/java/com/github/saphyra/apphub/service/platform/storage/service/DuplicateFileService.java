@@ -24,7 +24,7 @@ public class DuplicateFileService {
 
     public UUID duplicateFile(UUID userId, UUID storedFileId) {
         StoredFile storedFile = storedFileDao.findByIdValidated(storedFileId);
-        UUID newStoredFileId = storeFileService.createFile(userId, storedFile.getFileName(), storedFile.getExtension(), storedFile.getSize());
+        UUID newStoredFileId = storeFileService.createFile(userId, storedFile.getFileName(), storedFile.getSize());
 
         AccessTokenHeader accessTokenHeader = accessTokenProvider.get();
 

@@ -11,6 +11,6 @@
     }
 
     $(document).ready(function(){
-        localization.loadLocalization("utils", "base4");
+        localization.loadLocalization("utils", "base64");
     });
 })();

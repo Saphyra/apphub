@@ -21,9 +21,15 @@ import java.io.IOException;
 import java.util.UUID;
 
 public interface StorageController {
+    /**
+     * Creating a database record as a placeholder, what represents the new file to be uploaded
+     */
     @PutMapping(Endpoints.STORAGE_INTERNAL_CREATE_FILE)
     UUID createFile(@RequestBody CreateFileRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    /**
+     * Receiving the actual file data to the placeholder created before
+     */
     @PutMapping(value = Endpoints.STORAGE_UPLOAD_FILE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     void uploadFile(@PathVariable("storedFileId") UUID storedFileId, MultipartFile file, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) throws IOException;
 

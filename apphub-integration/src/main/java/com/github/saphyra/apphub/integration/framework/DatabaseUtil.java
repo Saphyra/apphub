@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.framework;
 
 import com.github.saphyra.apphub.integration.core.TestBase;
-import com.github.saphyra.apphub.integration.structure.diary.Occurrence;
+import com.github.saphyra.apphub.integration.structure.calendar.Occurrence;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
@@ -27,7 +27,7 @@ public class DatabaseUtil {
     private static final String FIND_SKYXPLORE_CHARACTER_NAME_BY_EMAIL = "SELECT name FROM skyxplore.character WHERE user_id = (SELECT user_id FROM apphub_user.apphub_user where email='%s')";
     private static final String SET_MARKED_FOR_DELETION_AT_BY_EMAIL = "UPDATE apphub_user.apphub_user SET marked_for_deletion_at='%s' WHERE email='%s'";
     private static final String SET_MARKED_FOR_DELETION_BY_EMAIL_LIKE = "UPDATE apphub_user.apphub_user SET marked_for_deletion=true WHERE email LIKE '%s'";
-    private static final String GET_DIARY_OCCURRENCES_BY_USER_ID = "SELECT * FROM diary.occurrence WHERE user_id='%s'";
+    private static final String GET_CALENDAR_OCCURRENCES_BY_USER_ID = "SELECT * FROM calendar.occurrence WHERE user_id='%s'";
     private static final String UNLOCK_USER_BY_EMAIL = "UPDATE apphub_user.apphub_user SET locked_until = null WHERE email='%s'";
 
     private static <T> T query(String sql, Mapper<T> mapper) throws Exception {
@@ -161,8 +161,8 @@ public class DatabaseUtil {
         }
     }
 
-    public static List<Occurrence> getDiaryOccurrencesByUserId(UUID userId) {
-        String sql = String.format(GET_DIARY_OCCURRENCES_BY_USER_ID, userId);
+    public static List<Occurrence> getCalendarOccurrencesByUserId(UUID userId) {
+        String sql = String.format(GET_CALENDAR_OCCURRENCES_BY_USER_ID, userId);
 
         try {
             return query(
@@ -184,7 +184,7 @@ public class DatabaseUtil {
                 }
             );
         } catch (Exception e) {
-            throw new RuntimeException("Failed querying Diary occurrences", e);
+            throw new RuntimeException("Failed querying Calendar occurrences", e);
         }
     }
 

@@ -1,0 +1,20 @@
+{
+  "account": "Fiók kezelése",
+  "notebook": "Jegyzetfüzet",
+  "json-formatter": "JSON formázó",
+  "log-formatter": "Log formázó",
+  "base64": "Base64 kódoló",
+  "skyxplore": "SkyXplore",
+  "error-report": "Hibajelentések",
+  "role-management": "Jobosultságok kezelése",
+  "disabled-role-management": "Jogosultságok letiltása / engedélyezése",
+  "html": "01 - HTML",
+  "css": "02 - CSS",
+  "basics-of-programming": "03 - A programozás alapja",
+  "javascript": "04 - JavaScript",
+  "ban": "Felhasználók tiltása",
+  "roles-for-all": "Jogosultságok mindenkinek",
+  "memory-monitoring": "Memória felügyelet",
+  "community": "Közösség",
+  "calendar": "Határidőnapló"
+}

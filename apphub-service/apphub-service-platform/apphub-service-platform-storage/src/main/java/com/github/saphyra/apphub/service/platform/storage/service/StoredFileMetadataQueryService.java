@@ -28,7 +28,6 @@ class StoredFileMetadataQueryService {
         return StoredFileResponse.builder()
             .storedFileId(storedFileId)
             .createdAt(dateTimeUtil.toEpochSecond(storedFile.getCreatedAt()))
-            .extension(storedFile.getExtension())
             .fileName(storedFile.getFileName())
             .size(storedFile.getSize())
             .fileUploaded(storedFile.isFileUploaded())

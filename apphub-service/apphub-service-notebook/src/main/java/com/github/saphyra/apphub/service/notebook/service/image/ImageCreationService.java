@@ -12,7 +12,6 @@ import com.github.saphyra.apphub.service.notebook.service.ListItemRequestValidat
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -31,7 +30,7 @@ public class ImageCreationService {
     public UUID createImage(UUID userId, CreateImageRequest request) {
         listItemRequestValidator.validate(request.getTitle(), request.getParent());
 
-        UUID fileId = storageProxy.createFile(request.getFileName(), FilenameUtils.getExtension(request.getFileName()), request.getSize());
+        UUID fileId = storageProxy.createFile(request.getFileName(), request.getSize());
 
         ListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), ListItemType.IMAGE);
         File file = fileFactory.create(userId, listItem.getListItemId(), fileId);

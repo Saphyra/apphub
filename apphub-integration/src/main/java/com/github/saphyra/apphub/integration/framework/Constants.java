@@ -17,7 +17,7 @@ public class Constants {
     public final String ROLE_TRAINING = "TRAINING";
     public final String ROLE_UTILS = "UTILS";
     public final String ROLE_COMMUNITY = "COMMUNITY";
-    public final String ROLE_DIARY = "DIARY";
+    public final String ROLE_CALENDAR = "CALENDAR";
 
     public final String TEST_ROLE_NAME = "Teszt";
     public final String GENERAL_CHAT_ROOM_NAME = "general";
@@ -54,12 +54,12 @@ public class Constants {
     //ModuleIds
     public final String MODULE_ID_TRAINING = "training";
 
-    //Diary
-    public final String DIARY_OCCURRENCE_STATUS_PENDING = "PENDING";
-    public final String DIARY_OCCURRENCE_STATUS_EXPIRED = "EXPIRED";
-    public final String DIARY_OCCURRENCE_STATUS_VIRTUAL = "VIRTUAL";
-    public final String DIARY_OCCURRENCE_STATUS_DONE = "DONE";
-    public final String DIARY_OCCURRENCE_STATUS_SNOOZED = "SNOOZED";
+    //Calendar
+    public final String CALENDAR_OCCURRENCE_STATUS_PENDING = "PENDING";
+    public final String CALENDAR_OCCURRENCE_STATUS_EXPIRED = "EXPIRED";
+    public final String CALENDAR_OCCURRENCE_STATUS_VIRTUAL = "VIRTUAL";
+    public final String CALENDAR_OCCURRENCE_STATUS_DONE = "DONE";
+    public final String CALENDAR_OCCURRENCE_STATUS_SNOOZED = "SNOOZED";
 
     //User settings
     public final String USER_SETTING_CATEGORY_NOTEBOOK = "notebook";

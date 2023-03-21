@@ -16,5 +16,5 @@ public class DataConstants {
         .limit(31)
         .collect(Collectors.joining());
     public static final String INVALID_CONFIRM_PASSWORD = "invalid-confirm-password";
-    public static final String INVALID_EMAIL = "a@a.a";
+    public static final String INVALID_EMAIL = "a@.a";
 }

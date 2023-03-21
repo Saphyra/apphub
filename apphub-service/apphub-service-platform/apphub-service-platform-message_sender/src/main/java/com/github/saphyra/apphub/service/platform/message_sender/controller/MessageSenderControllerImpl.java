@@ -26,9 +26,8 @@ public class MessageSenderControllerImpl implements MessageSenderController {
 
     @Override
     public void sendMessage(MessageGroup group, WebSocketMessage message) {
-        WebSocketHandler webSocketHandler = connectionGroups.getOptional(group)
-            .orElseThrow(() -> ExceptionFactory.reportedException("ConnectionGroup not found for MessageGroup " + group));
-
-        webSocketHandler.sendEvent(message);
+        connectionGroups.getOptional(group)
+            .orElseThrow(() -> ExceptionFactory.reportedException("ConnectionGroup not found for MessageGroup " + group))
+            .sendEvent(message);
     }
 }

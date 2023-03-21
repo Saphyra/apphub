@@ -26,7 +26,6 @@ public class DuplicateFileServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID STORED_FILE_ID = UUID.randomUUID();
     private static final String FILE_NAME = "file-name";
-    private static final String EXTENSION = "extension";
     private static final Long SIZE = 234L;
     private static final UUID NEW_STORED_FILE_ID = UUID.randomUUID();
 
@@ -67,10 +66,9 @@ public class DuplicateFileServiceTest {
     public void duplicateFile() {
         given(storedFileDao.findByIdValidated(STORED_FILE_ID)).willReturn(storedFile);
         given(storedFile.getFileName()).willReturn(FILE_NAME);
-        given(storedFile.getExtension()).willReturn(EXTENSION);
         given(storedFile.getSize()).willReturn(SIZE);
 
-        given(storeFileService.createFile(USER_ID, FILE_NAME, EXTENSION, SIZE)).willReturn(NEW_STORED_FILE_ID);
+        given(storeFileService.createFile(USER_ID, FILE_NAME, SIZE)).willReturn(NEW_STORED_FILE_ID);
         given(accessTokenProvider.get()).willReturn(accessTokenHeader);
 
         given(downloadFileService.downloadFile(USER_ID, STORED_FILE_ID)).willReturn(downloadResult);

@@ -71,7 +71,7 @@
         throwException("ResourceNotFound", "Localization not found for fileName " + fileName);
 
         function getPath(module, locale, fileName){
-            return "/localization/module/" + module + "/" + locale + "/" + fileName + ".json?date=" + getDate();
+            return "/res/" + module + "/localization/" + locale + "/" + fileName + ".json?date=" + getDate();
         }
 
         function getDate(){

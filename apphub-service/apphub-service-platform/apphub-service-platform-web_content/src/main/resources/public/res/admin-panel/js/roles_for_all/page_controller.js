@@ -7,6 +7,6 @@ scriptLoader.loadScript("/res/admin-panel/js/roles_for_all/roles_controller.js")
     }
 
     $(document).ready(function(){
-        localization.loadLocalization("admin_panel", "roles_for_all");
+        localization.loadLocalization("admin-panel", "roles_for_all");
     });
 })();

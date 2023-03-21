@@ -29,13 +29,12 @@ public class StoreFileService {
     private final UuidConverter uuidConverter;
     private final StoreFileProperties storeFileProperties;
 
-    public UUID createFile(UUID userId, String fileName, String extension, Long size) {
-        ValidationUtil.notNull(extension, "extension");
+    public UUID createFile(UUID userId, String fileName,  Long size) {
         ValidationUtil.notNull(fileName, "fileName");
         ValidationUtil.atLeast(size, 0, "size");
         ValidationUtil.maximum(size, storeFileProperties.getMaxFileSize(), "size");
 
-        StoredFile storedFile = storedFileFactory.create(userId, fileName, extension, size);
+        StoredFile storedFile = storedFileFactory.create(userId, fileName, size);
 
         storedFileDao.save(storedFile);
 

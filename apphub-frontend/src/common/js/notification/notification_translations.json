@@ -1,0 +1,38 @@
+{
+    "NO_VALID_SESSION": {
+        "en": "Session expired.",
+        "hu": "A bejelentkezés lejárt."
+    },
+    "REGISTRATION_SUCCESSFUL": {
+        "en": "Registration successful.",
+        "hu": "Sikeres regisztráció."
+    },
+    "BAD_CREDENTIALS": {
+        "en": "Unknown combination of e-mail address and password.",
+        "hu": "Az email cím és jelszó kombinációja ismeretlen."
+    },
+    "SUCCEESSFUL_LOGOUT": {
+        "en": "Successfully logged out.",
+        "hu": "Sikeres kijelentkezés."
+    },
+    "EMPTY_CREDENTIALS": {
+        "en": "Please fill e-mail address and password!",
+        "hu": "E-mail és jelszó megadása kötelező!"
+    },
+    "USERNAME_ALREADY_EXISTS": {
+        "en": "Username already in use.",
+        "hu": "A felhasználónév foglalt."
+    },
+    "EMAIL_ALREADY_EXISTS": {
+        "en": "E-mail address is already in use.",
+        "hu": "Az email foglalt."
+    },
+    "ACCOUNT_LOCKED": {
+        "en": "Account locked. Try again later.",
+        "hu": "Fiók zárolva. Próbáld újra később!"
+    },
+    "MISSING_ROLE": {
+        "en": "You are not allowed to perform this operation.",
+        "hu": "Ehhez a művelethez nincs jogosultságod."
+    }
+}

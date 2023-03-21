@@ -39,8 +39,7 @@ public class RequestFactory {
         }
 
         if (TestBase.REST_LOGGING_ENABLED) {
-            requestSpecification.filter(new ResponseLoggingFilter())
-                .log().all();
+            requestSpecification.filter(new ResponseLoggingFilter()) .log().all();
         }
         return requestSpecification;
     }

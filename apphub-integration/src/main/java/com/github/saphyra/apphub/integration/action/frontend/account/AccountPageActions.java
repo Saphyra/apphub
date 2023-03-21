@@ -21,7 +21,7 @@ import com.github.saphyra.apphub.integration.structure.user.delete_account.Delet
 import org.openqa.selenium.WebDriver;
 
 import static com.github.saphyra.apphub.integration.framework.WebElementUtils.clearAndFill;
-import static com.github.saphyra.apphub.integration.framework.WebElementUtils.verifyInvalidFieldState;
+import static com.github.saphyra.apphub.integration.framework.WebElementUtils.verifyInvalidFieldStateLegacy;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AccountPageActions {
@@ -41,13 +41,13 @@ public class AccountPageActions {
     }
 
     public static void verifyChangeEmailForm(WebDriver driver, ChangeEmailValidationResult validationResult) {
-        verifyInvalidFieldState(
+        verifyInvalidFieldStateLegacy(
             AccountPage.changeEmailInvalidNewEmail(driver),
             validationResult.getEmail() != EmailValidationResult.VALID,
             validationResult.getEmail().getErrorMessage()
         );
 
-        verifyInvalidFieldState(
+        verifyInvalidFieldStateLegacy(
             AccountPage.changeEmailInvalidPassword(driver),
             validationResult.getPassword() != ChEmailPasswordValidationResult.VALID,
             validationResult.getPassword().getErrorMessage()
@@ -79,13 +79,13 @@ public class AccountPageActions {
     }
 
     public static void verifyChangeUsernameForm(WebDriver driver, ChangeUsernameValidationResult validationResult) {
-        verifyInvalidFieldState(
+        verifyInvalidFieldStateLegacy(
             AccountPage.changeUsernameInvalidNewUsername(driver),
             validationResult.getUsername() != UsernameValidationResult.VALID,
             validationResult.getUsername().getErrorMessage()
         );
 
-        verifyInvalidFieldState(
+        verifyInvalidFieldStateLegacy(
             AccountPage.changeUsernameInvalidPassword(driver),
             validationResult.getPassword() != ChUsernamePasswordValidationResult.VALID,
             validationResult.getPassword().getErrorMessage()
@@ -111,19 +111,19 @@ public class AccountPageActions {
     }
 
     public static void verifyChangePasswordForm(WebDriver driver, ChangePasswordValidationResult validationResult) {
-        verifyInvalidFieldState(
+        verifyInvalidFieldStateLegacy(
             AccountPage.changePasswordInvalidNewPassword(driver),
             validationResult.getNewPassword() != NewPasswordValidationResult.VALID,
             validationResult.getNewPassword().getErrorMessage()
         );
 
-        verifyInvalidFieldState(
+        verifyInvalidFieldStateLegacy(
             AccountPage.changePasswordInvalidConfirmPassword(driver),
             validationResult.getConfirmPassword() != ConfirmPasswordValidationResult.VALID,
             validationResult.getConfirmPassword().getErrorMessage()
         );
 
-        verifyInvalidFieldState(
+        verifyInvalidFieldStateLegacy(
             AccountPage.changePasswordInvalidPassword(driver),
             validationResult.getPassword() != ChPasswordPasswordValidationResult.VALID,
             validationResult.getPassword().getErrorMessage()
@@ -156,7 +156,7 @@ public class AccountPageActions {
     }
 
     public static void verifyDeleteAccountForm(WebDriver driver, DeleteAccountPasswordValidationResult validationResult) {
-        verifyInvalidFieldState(
+        verifyInvalidFieldStateLegacy(
             AccountPage.deleteAccountInvalidPassword(driver),
             validationResult != DeleteAccountPasswordValidationResult.VALID,
             validationResult.getErrorMessage()

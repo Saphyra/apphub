@@ -16,12 +16,21 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.UUID;
 
 public interface EncryptionKeyApiController {
+    /**
+     * A new data was created. A corresponding encryption key needs to be created.
+     */
     @PutMapping(Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY)
     String createEncryptionKey(@RequestBody EncryptionKey request, @PathVariable("accessMode") AccessMode accessMode, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    /**
+     * Data was deleted. The corresponding encryption key needs to be deleted.
+     */
     @DeleteMapping(Endpoints.ENCRYPTION_INTERNAL_DELETE_KEY)
     void deleteEncryptionKey(@PathVariable("dataType") DataType dataType, @PathVariable("externalId") UUID externalId, @PathVariable("accessMode") AccessMode accessMode, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    /**
+     * Caller wants to decrypt some data. Returning the corresponding encryption key.
+     */
     @GetMapping(Endpoints.ENCRYPTION_INTERNAL_GET_KEY)
     String getEncryptionKey(@PathVariable("dataType") DataType dataType, @PathVariable("externalId") UUID externalId, @PathVariable("accessMode") AccessMode accessMode, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

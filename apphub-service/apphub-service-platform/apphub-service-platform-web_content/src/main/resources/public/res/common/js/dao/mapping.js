@@ -189,15 +189,15 @@ window.Mapping = new function(){
         COMMUNITY_GROUP_DELETE: new Endpoint("/api/community/group/{groupId}", HttpMethod.DELETE),
         COMMUNITY_GROUP_CHANGE_OWNER: new Endpoint("/api/community/group/{groupId}/owner", HttpMethod.POST),
 
-        //DIARY
-        DIARY_GET_CALENDAR: new Endpoint("/api/diary/calendar", HttpMethod.GET),
-        DIARY_CREATE_EVENT: new Endpoint("/api/diary/event", HttpMethod.PUT),
-        DIARY_OCCURRENCE_EDIT: new Endpoint("/api/diary/occurrence/{occurrenceId}/edit", HttpMethod.POST),
-        DIARY_EVENT_DELETE: new Endpoint("/api/diary/event/{eventId}", HttpMethod.DELETE),
-        DIARY_OCCURRENCE_DONE: new Endpoint("/api/diary/occurrence/{occurrenceId}/done", HttpMethod.POST),
-        DIARY_OCCURRENCE_DEFAULT: new Endpoint("/api/diary/occurrence/{occurrenceId}/default", HttpMethod.POST),
-        DIARY_OCCURRENCE_SNOOZED: new Endpoint("/api/diary/occurrence/{occurrenceId}/snoozed", HttpMethod.POST),
-        DIARY_SEARCH: new Endpoint("/api/diary/search", HttpMethod.POST),
+        //CALENDAR
+        CALENDAR_GET_CALENDAR: new Endpoint("/api/calendar/calendar", HttpMethod.GET),
+        CALENDAR_CREATE_EVENT: new Endpoint("/api/calendar/event", HttpMethod.PUT),
+        CALENDAR_OCCURRENCE_EDIT: new Endpoint("/api/calendar/occurrence/{occurrenceId}/edit", HttpMethod.POST),
+        CALENDAR_EVENT_DELETE: new Endpoint("/api/calendar/event/{eventId}", HttpMethod.DELETE),
+        CALENDAR_OCCURRENCE_DONE: new Endpoint("/api/calendar/occurrence/{occurrenceId}/done", HttpMethod.POST),
+        CALENDAR_OCCURRENCE_DEFAULT: new Endpoint("/api/calendar/occurrence/{occurrenceId}/default", HttpMethod.POST),
+        CALENDAR_OCCURRENCE_SNOOZED: new Endpoint("/api/calendar/occurrence/{occurrenceId}/snoozed", HttpMethod.POST),
+        CALENDAR_SEARCH: new Endpoint("/api/calendar/search", HttpMethod.POST),
 
         //SETTINGS
         GET_USER_SETTINGS: new Endpoint("/api/user/settings/{category}", HttpMethod.GET),

@@ -38,7 +38,6 @@ public class ProcessSchedulerProcess {
 
                 log.info("Stopping ProcessSchedulerProcess for game {}", game.getGameId());
             });
-
     }
 
     private void processGame(Game game) {

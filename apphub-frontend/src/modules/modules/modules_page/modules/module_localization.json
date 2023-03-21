@@ -1,0 +1,74 @@
+{
+    "account": {
+        "en": "Manage account",
+        "hu": "Fiók kezelése"
+    },
+    "notebook": {
+        "en": "Notebook",
+        "hu": "Jegyzetfüzet"
+    },
+    "json-formatter": {
+        "en": "JSON formatter",
+        "hu": "JSON formázó"
+    },
+    "log-formatter": {
+        "en": "Log formatter",
+        "hu": "Log formázó"
+    },
+    "base64": {
+        "en": "Base64 Encoder",
+        "hu": "Base64 kódoló"
+    },
+    "skyxplore": {
+        "en": "SkyXplore",
+        "hu": "SkyXplore"
+    },
+    "error-report": {
+        "en": "Error report",
+        "hu": "Hibajelentések"
+    },
+    "role-management": {
+        "en": "Role management",
+        "hu": "Jogosultságok kezelése"
+    },
+    "disabled-role-management": {
+        "en": "Disabled role management",
+        "hu": "Jogosultságok letiltása és engedélyezése"
+    },
+    "html": {
+        "en": "01 - HTML",
+        "hu": "01 - HTML"
+    },
+    "css": {
+        "en": "02 - CSS",
+        "hu": "02 - CSS"
+    },
+    "basics-of-programming": {
+        "en": "03 - Basics of Programming",
+        "hu": "03 - A programozás alapjai"
+    },
+    "javascript": {
+        "en": "04 - JavaScript",
+        "hu": "04 - JavaScript"
+    },
+    "ban": {
+        "en": "Ban users",
+        "hu": "Felhasználók tiltása"
+    },
+    "roles-for-all": {
+        "en": "Roles for all",
+        "hu": "Jogosultságok mindenkinek"
+    },
+    "memory-monitoring": {
+        "en": "Memory monitoring",
+        "hu": "Memória felhasználás"
+    },
+    "community": {
+        "en": "Community",
+        "hu": "Közösség"
+    },
+    "calendar": {
+        "en": "Calendar",
+        "hu": "Határidőnapló"
+    }
+}

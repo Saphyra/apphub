@@ -16,27 +16,27 @@ password:
 
 registration:
   defaultRoles:
-    - NOTEBOOK
-    - SKYXPLORE
-    - ACCESS
-    - TRAINING
-    - UTILS
-    - COMMUNITY
-    - DIARY
-
-rolesCanBeDisabled:
   - NOTEBOOK
   - SKYXPLORE
+  - ACCESS
   - TRAINING
-  - TEST
   - UTILS
   - COMMUNITY
-  - DIARY
+  - CALENDAR
+
+rolesCanBeDisabled:
+- NOTEBOOK
+- SKYXPLORE
+- TRAINING
+- TEST
+- UTILS
+- COMMUNITY
+- CALENDAR
 
 add-role-to-all:
   restrictedRoles:
-    - ACCESS
-    - ADMIN
+  - ACCESS
+  - ADMIN
 
 settings:
   notebook:

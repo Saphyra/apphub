@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.terraform;
 
-import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreSurfaceTerraformationConstoller;
+import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreSurfaceTerraformationController;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
@@ -13,7 +13,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class TerraformationController implements SkyXploreSurfaceTerraformationConstoller {
+public class TerraformationController implements SkyXploreSurfaceTerraformationController {
     private final TerraformationService terraformationService;
     private final CancelTerraformationService cancelTerraformationService;
 

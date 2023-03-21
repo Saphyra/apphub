@@ -14,18 +14,18 @@ The app's purpose is to provide an easy-to extend frame for multiple application
     * Role management (Allow / block specific roles (features) for all / specific users)
     * Error monitoring
     * Memory monitoring
-* Notebook 
-    * Store notes, links, checklists, tables grouped into categories
-    * Search
-    * Pin favorites
-* Diary
-    * Setting up events
-    * Search
-    * Setting statuses for occurrences
+* Notebook
+  * Store notes, links, checklists, tables grouped into categories
+  * Search
+  * Pin favorites
+* Calendar
+  * Setting up events
+  * Search
+  * Setting statuses for occurrences
 * Development utils
-    * Base64 Encoder
-    * JSON formatter 
-    * Log formatter
+  * Base64 Encoder
+  * JSON formatter
+  * Log formatter
 * Game
     * SkyXplore (In progress, not enabled on production)
 * Training

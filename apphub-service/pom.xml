@@ -127,6 +127,6 @@
         <module>apphub-service-admin_panel</module>
         <module>apphub-service-utils</module>
         <module>apphub-service-training</module>
-        <module>apphub-service-diary</module>
+        <module>apphub-service-calendar</module>
     </modules>
 </project>

@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.Optional;
 
 class AccountPage {
     private static final By CHANGE_EMAIL_NEW_EMAIL_INPUT = By.id("ch-email-new-email-input");
@@ -42,12 +43,16 @@ class AccountPage {
         return driver.findElement(CHANGE_EMAIL_PASSWORD_INPUT);
     }
 
-    public static WebElement changeEmailInvalidNewEmail(WebDriver driver) {
-        return driver.findElement(CHANGE_EMAIL_INVALID_NEW_EMAIL);
+    public static Optional<WebElement> changeEmailInvalidNewEmail(WebDriver driver) {
+        return driver.findElements(CHANGE_EMAIL_INVALID_NEW_EMAIL)
+            .stream()
+            .findFirst();
     }
 
-    public static WebElement changeEmailInvalidPassword(WebDriver driver) {
-        return driver.findElement(CHANGE_EMAIL_INVALID_PASSWORD);
+    public static Optional<WebElement> changeEmailInvalidPassword(WebDriver driver) {
+        return driver.findElements(CHANGE_EMAIL_INVALID_PASSWORD)
+            .stream()
+            .findFirst();
     }
 
     public static WebElement changeEmailSubmitButton(WebDriver driver) {
@@ -66,12 +71,16 @@ class AccountPage {
         return driver.findElement(CHANGE_USERNAME_PASSWORD_INPUT);
     }
 
-    public static WebElement changeUsernameInvalidNewUsername(WebDriver driver) {
-        return driver.findElement(CHANGE_USERNAME_INVALID_NEW_USERNAME);
+    public static Optional<WebElement> changeUsernameInvalidNewUsername(WebDriver driver) {
+        return driver.findElements(CHANGE_USERNAME_INVALID_NEW_USERNAME)
+            .stream()
+            .findFirst();
     }
 
-    public static WebElement changeUsernameInvalidPassword(WebDriver driver) {
-        return driver.findElement(CHANGE_USERNAME_INVALID_PASSWORD);
+    public static Optional<WebElement> changeUsernameInvalidPassword(WebDriver driver) {
+        return driver.findElements(CHANGE_USERNAME_INVALID_PASSWORD)
+            .stream()
+            .findFirst();
     }
 
     public static WebElement changeUsernameSubmitButton(WebDriver driver) {
@@ -90,16 +99,22 @@ class AccountPage {
         return driver.findElement(CHANGE_PASSWORD_PASSWORD_INPUT);
     }
 
-    public static WebElement changePasswordInvalidNewPassword(WebDriver driver) {
-        return driver.findElement(CHANGE_PASSWORD_INVALID_NEW_PASSWORD);
+    public static Optional<WebElement> changePasswordInvalidNewPassword(WebDriver driver) {
+        return driver.findElements(CHANGE_PASSWORD_INVALID_NEW_PASSWORD)
+            .stream()
+            .findFirst();
     }
 
-    public static WebElement changePasswordInvalidConfirmPassword(WebDriver driver) {
-        return driver.findElement(CHANGE_PASSWORD_INVALID_CONFIRM_PASSWORD);
+    public static Optional<WebElement> changePasswordInvalidConfirmPassword(WebDriver driver) {
+        return driver.findElements(CHANGE_PASSWORD_INVALID_CONFIRM_PASSWORD)
+            .stream()
+            .findFirst();
     }
 
-    public static WebElement changePasswordInvalidPassword(WebDriver driver) {
-        return driver.findElement(CHANGE_PASSWORD_INVALID_PASSWORD);
+    public static Optional<WebElement> changePasswordInvalidPassword(WebDriver driver) {
+        return driver.findElements(CHANGE_PASSWORD_INVALID_PASSWORD)
+            .stream()
+            .findFirst();
     }
 
     public static WebElement changePasswordSubmitButton(WebDriver driver) {
@@ -110,8 +125,10 @@ class AccountPage {
         return driver.findElement(DELETE_ACCOUNT_PASSWORD_INPUT);
     }
 
-    public static WebElement deleteAccountInvalidPassword(WebDriver driver) {
-        return driver.findElement(DELETE_ACCOUNT_INVALID_PASSWORD);
+    public static Optional<WebElement> deleteAccountInvalidPassword(WebDriver driver) {
+        return driver.findElements(DELETE_ACCOUNT_INVALID_PASSWORD)
+            .stream()
+            .findFirst();
     }
 
     public static WebElement deleteAccountSubmitButton(WebDriver driver) {
