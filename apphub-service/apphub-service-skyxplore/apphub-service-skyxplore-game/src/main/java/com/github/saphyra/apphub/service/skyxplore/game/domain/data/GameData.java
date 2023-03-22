@@ -24,9 +24,11 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surf
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
+@Data
 public class GameData {
     //MAP
     private final int universeSize;

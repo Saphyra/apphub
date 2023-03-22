@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.player;
 
+import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
@@ -8,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
@@ -29,13 +29,8 @@ public class PlayerFactory {
             .collect(Collectors.toMap(Player::getUserId, Function.identity()));
     }
 
-    public Player createAi(List<String> usedPlayerNames) {
-        UUID userId = idGenerator.randomUuid();
-        String username = randomNameProvider.getRandomName(usedPlayerNames);
-        log.debug("Username: {}", username);
-        usedPlayerNames.add(username);
-
-        return create(userId, true, null, username);
+    public Player createAi(AiPlayer aiPlayer) {
+        return create(aiPlayer.getUserId(), true, aiPlayer.getAllianceId(), aiPlayer.getName());
     }
 
     private Player create(UUID userId, boolean ai, UUID allianceId, String username) {

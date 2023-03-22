@@ -9,14 +9,12 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessStarterService;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.GameDataFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.home_planet.HomePlanetSetupService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.player.AiFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.player.PlayerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -28,7 +26,6 @@ public class GameFactory {
     private final IdGenerator idGenerator;
     private final GameDataFactory gameDataFactory;
     private final ChatFactory chatFactory;
-    private final HomePlanetSetupService homePlanetSetupService;
     private final DateTimeUtil dateTimeUtil;
     private final PlayerFactory playerFactory;
     private final AiFactory aiFactory;
@@ -39,17 +36,16 @@ public class GameFactory {
         UUID gameId = idGenerator.randomUuid();
 
         Map<UUID, Player> players = playerFactory.create(request.getMembers());
-        List<Player> ais = aiFactory.generateAis(request, players.values());
+        aiFactory.generateAis(request)
+            .forEach(player -> players.put(player.getUserId(), player));
         Map<UUID, Alliance> alliances = allianceFactory.create(request.getAlliances(), request.getMembers(), players);
-
-        ais.forEach(player -> players.put(player.getUserId(), player));
 
         Game result = Game.builder()
             .gameId(gameId)
             .host(request.getHost())
             .players(players)
             .alliances(alliances)
-            .data(gameDataFactory.create(players.values(), alliances.values(), request.getSettings()))
+            .data(gameDataFactory.create(players.values(), request.getSettings()))
             .chat(chatFactory.create(request.getMembers()))
             .gameName(request.getGameName())
             .lastPlayed(dateTimeUtil.getCurrentDateTime())

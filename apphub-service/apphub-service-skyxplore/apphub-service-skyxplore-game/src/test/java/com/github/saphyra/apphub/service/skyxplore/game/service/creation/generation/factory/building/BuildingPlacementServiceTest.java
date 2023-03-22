@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Bui
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.BuildingFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.filler.building.EmptySurfaceProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

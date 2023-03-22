@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.building.BuildingPlacementService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.citizen.PlanetPopulationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -15,16 +15,15 @@ import java.util.UUID;
 public class StorageSettingFactory {
     private final IdGenerator idGenerator;
 
-    public StorageSetting create(StorageSettingApiModel request, UUID location, LocationType locationType) {
-        return create(request.getDataId(), location, locationType, request.getTargetAmount(), request.getPriority(), request.getBatchSize());
+    public StorageSetting create(StorageSettingApiModel request, UUID location,) {
+        return create(request.getDataId(), location, request.getTargetAmount(), request.getPriority(), request.getBatchSize());
     }
 
-    public StorageSetting create(String dataId, UUID location, LocationType locationType, int targetAmount, int priority, int batchSize) {
+    public StorageSetting create(String dataId, UUID location, int targetAmount, int priority, int batchSize) {
         return StorageSetting.builder()
             .storageSettingId(idGenerator.randomUuid())
             .dataId(dataId)
             .location(location)
-            .locationType(locationType)
             .targetAmount(targetAmount)
             .priority(priority)
             .batchSize(batchSize)

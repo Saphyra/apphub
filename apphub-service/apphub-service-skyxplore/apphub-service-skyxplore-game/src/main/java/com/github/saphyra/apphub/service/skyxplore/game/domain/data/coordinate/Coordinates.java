@@ -1,12 +1,17 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.coordinate;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
+import com.github.saphyra.apphub.lib.geometry.Coordinate;
 
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Vector;
 
-/**
- * <ReferenceId, Coordinate>
- */
-public class Coordinates extends ConcurrentHashMap<UUID, CoordinateModel> {
+//TODO unit test
+public class Coordinates extends Vector<ReferredCoordinate> {
+    public Coordinate findByReferenceId(UUID surfaceId) {
+        return stream()
+            .filter(referredCoordinate -> referredCoordinate.getReferenceId().equals(surfaceId))
+            .findFirst()
+            .orElseThrow()
+            .getCoordinate();
+    }
 }

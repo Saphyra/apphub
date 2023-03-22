@@ -6,26 +6,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class AiFactory {
     private final PlayerFactory playerFactory;
-    private final AiCountCalculator aiCountCalculator;
-    private final AllianceCounter allianceCounter;
 
-    public List<Player> generateAis(SkyXploreGameCreationRequest request, Collection<Player> players) {
-        List<String> usedPlayerNames = players.stream()
-            .map(Player::getPlayerName)
-            .collect(Collectors.toList());
-        int allianceCount = allianceCounter.getAllianceCount(request.getMembers());
-        return Stream.generate(() -> playerFactory.createAi(usedPlayerNames))
-            .limit(aiCountCalculator.getAiCount(players.size(), request.getSettings().getAiPresence(), allianceCount))
-            .collect(Collectors.toList());
+    public List<Player> generateAis(SkyXploreGameCreationRequest request) {
+        return request.getAis()
+            .stream()
+            .map(playerFactory::createAi)
+            .toList();
     }
 }

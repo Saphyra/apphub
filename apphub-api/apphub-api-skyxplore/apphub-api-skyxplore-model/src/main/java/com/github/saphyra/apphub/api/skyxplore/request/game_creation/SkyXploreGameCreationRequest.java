@@ -1,12 +1,13 @@
 package com.github.saphyra.apphub.api.skyxplore.request.game_creation;
 
-import java.util.Map;
-import java.util.UUID;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,7 +16,8 @@ import lombok.NoArgsConstructor;
 public class SkyXploreGameCreationRequest {
     private UUID host;
     private Map<UUID, UUID> members; //<UserId, AllianceId>
-    private Map<UUID, String> alliances;
+    private List<AiPlayer> ais;
+    private Map<UUID, String> alliances; //<AllianceId, AllianceName>
     private SkyXploreGameCreationSettingsRequest settings;
     private String gameName;
 }

@@ -9,7 +9,6 @@ import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.common.CoordinateModelFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.StorageDetailsFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.surface.SurfaceFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import org.junit.jupiter.api.Test;

@@ -9,7 +9,10 @@ import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GamePr
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skill;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_data.SoldierWeapon;
+import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.citizen.CitizenFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.RandomNameProvider;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.filler.population.SkillFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.filler.population.SoldierDataFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
