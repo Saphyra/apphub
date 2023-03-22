@@ -24,11 +24,11 @@ public class Planet {
     @Builder.Default
     private final OptionalMap<UUID, String> customNames = new OptionalHashMap<>();
     private final int size;
-    private final double orbitRadius; //TODO add to model
-    private final double orbitSpeed; //TODO add to model
+    private final double orbitRadius;
+    private final double orbitSpeed;
     private UUID owner;
 
-    public boolean hasOwner(){
+    public boolean hasOwner() {
         return !isNull(owner);
     }
 }

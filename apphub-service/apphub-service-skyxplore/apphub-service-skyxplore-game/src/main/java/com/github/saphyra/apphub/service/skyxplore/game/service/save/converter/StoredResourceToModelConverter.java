@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -16,20 +16,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class StoredResourceToModelConverter {
-    public List<StoredResourceModel> convert(Map<String, StoredResource> storedResources, UUID gameId) {
-        return storedResources.values()
-            .stream()
-            .map(storedResource -> convert(storedResource, gameId))
+    public List<StoredResourceModel> convert(UUID gameId, Collection<StoredResource> storedResources) {
+        return storedResources.stream()
+            .map(storedResource -> convert(gameId, storedResource))
             .collect(Collectors.toList());
     }
 
-    public StoredResourceModel convert(StoredResource storedResource, UUID gameId) {
+    public StoredResourceModel convert(UUID gameId, StoredResource storedResource) {
         StoredResourceModel model = new StoredResourceModel();
         model.setId(storedResource.getStoredResourceId());
         model.setGameId(gameId);
         model.setType(GameItemType.STORED_RESOURCE);
         model.setLocation(storedResource.getLocation());
-        model.setLocationType(storedResource.getLocationType().name());
         model.setDataId(storedResource.getDataId());
         model.setAmount(storedResource.getAmount());
         return model;

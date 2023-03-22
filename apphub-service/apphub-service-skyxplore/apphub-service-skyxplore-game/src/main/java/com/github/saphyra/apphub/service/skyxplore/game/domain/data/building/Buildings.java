@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.building;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.Vector;
@@ -10,5 +11,12 @@ public class Buildings extends Vector<Building> {
         return stream()
             .filter(building -> building.getSurfaceId().equals(surfaceId))
             .findFirst();
+    }
+
+    public List<Building> getByLocationAndDataId(UUID location, String dataId) {
+        return stream()
+            .filter(building -> building.getLocation().equals(location))
+            .filter(building -> building.getDataId().equals(dataId))
+            .toList();
     }
 }

@@ -9,12 +9,12 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorages;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order.ProductionOrderProcess;
@@ -33,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Builder(access = AccessLevel.PACKAGE)
@@ -48,9 +47,10 @@ public class StorageSettingProcess implements Process {
     private volatile ProcessStatus status;
 
     @NonNull
-    private final Game game;
+    private final UUID location;
+
     @NonNull
-    private final Planet planet;
+    private final GameData gameData;
     @NonNull
     private final StorageSetting storageSetting;
 
@@ -64,7 +64,11 @@ public class StorageSettingProcess implements Process {
 
     @Override
     public int getPriority() {
-        return planet.getPriorities().get(PriorityType.INDUSTRY) * storageSetting.getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
+        return gameData.getPriorities()
+            .getByLocationAndType(location, PriorityType.INDUSTRY)
+            .getValue()
+            * storageSetting.getPriority()
+            * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
     @Override
@@ -91,11 +95,11 @@ public class StorageSettingProcess implements Process {
     private void handleInProgress(SyncCache syncCache) {
         int storedAmount = getStoredAmount();
         if (storedAmount < storageSetting.getTargetAmount()) {
-            List<ProductionOrderProcess> processes = game.getProcesses()
+            List<ProductionOrderProcess> processes = gameData.getProcesses()
                 .getByExternalReferenceAndType(processId, ProcessType.PRODUCTION_ORDER)
                 .stream()
                 .map(p -> (ProductionOrderProcess) p)
-                .collect(Collectors.toList());
+                .toList();
             int producedAmount = processes.stream()
                 .mapToInt(ProductionOrderProcess::getAmount)
                 .sum();
@@ -106,50 +110,50 @@ public class StorageSettingProcess implements Process {
             if (missingAmount > 0) {
                 int availableStorage = calculateAvailableStorage();
 
-                log.info("{} of {} is missing in planet {}. Initiating production... Available storage: {}", missingAmount, storageSetting.getDataId(), planet.getPlanetId(), availableStorage);
+                log.info("{} of {} is missing in planet {}. Initiating production... Available storage: {}", missingAmount, storageSetting.getDataId(), location, availableStorage);
 
                 if (availableStorage > 0) {
                     int reservedAmount = Math.min(missingAmount, availableStorage);
 
                     ReservedStorage reservedStorage = applicationContextProxy.getBean(ReservedStorageFactory.class)
-                        .create(planet.getPlanetId(), LocationType.PLANET, processId, storageSetting.getDataId(), reservedAmount);
-                    planet.getStorageDetails()
-                        .getReservedStorages()
+                        .create(location, processId, storageSetting.getDataId(), reservedAmount);
+                    gameData.getReservedStorages()
                         .add(reservedStorage);
                     syncCache.saveGameItem(applicationContextProxy.getBean(ReservedStorageToModelConverter.class)
-                        .convert(reservedStorage, game.getGameId()));
+                        .convert(gameData.getGameId(), reservedStorage));
 
+                    UUID ownerId = gameData.getPlanets().get(location).getPlanetId();
                     syncCache.addMessage(
-                        planet.getOwner(),
+                        ownerId,
                         WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED,
-                        planet.getPlanetId(),
+                        location,
                         () -> applicationContextProxy.getBean(WsMessageSender.class).planetStorageModified(
-                            planet.getOwner(),
-                            planet.getPlanetId(),
-                            applicationContextProxy.getBean(PlanetStorageOverviewQueryService.class).getStorage(planet)
+                            ownerId,
+                            location,
+                            applicationContextProxy.getBean(PlanetStorageOverviewQueryService.class).getStorage(gameData, location)
                         )
                     );
 
                     applicationContextProxy.getBean(ProductionOrderProcessFactory.class)
-                        .create(processId, game, planet, reservedStorage)
+                        .create(gameData, processId, location, reservedStorage)
                         .forEach(productionOrderProcess -> {
-                            game.getProcesses().add(productionOrderProcess);
+                            gameData.getProcesses().add(productionOrderProcess);
                             syncCache.saveGameItem(productionOrderProcess.toModel());
                         });
                 }
             } else {
-                log.info("All the missing {} is being produced in planet {}", storageSetting.getDataId(), planet.getPlanetId());
+                log.info("All the missing {} is being produced in planet {}", storageSetting.getDataId(), location);
             }
         } else {
-            log.info("There is enough {} in planet {}", storageSetting.getDataId(), planet.getPlanetId());
+            log.info("There is enough {} in planet {}", storageSetting.getDataId(), location);
         }
     }
 
     private int getStoredAmount() {
-        return planet.getStorageDetails()
-            .getStoredResources()
-            .get(storageSetting.getDataId())
-            .getAmount();
+        return gameData.getStoredResources()
+            .findByLocationAndDataId(location, storageSetting.getDataId())
+            .map(StoredResource::getAmount)
+            .orElse(0);
     }
 
     private int calculateAvailableStorage() {
@@ -158,26 +162,25 @@ public class StorageSettingProcess implements Process {
             .getStorageType();
 
         return applicationContextProxy.getBean(FreeStorageQueryService.class)
-            .getFreeStorage(planet, storageType);
+            .getFreeStorage(gameData, location, storageType);
     }
 
     private void cleanUpReservedStorages(SyncCache syncCache) {
-        List<ReservedStorage> reservedStorages = planet.getStorageDetails()
+        List<ReservedStorage> reservedStorages = gameData
             .getReservedStorages()
             .getByExternalReference(processId)
             .stream()
             .filter(reservedStorage -> reservedStorage.getAmount() == 0)
-            .collect(Collectors.toList());
+            .toList();
 
-        planet.getStorageDetails()
-            .getReservedStorages()
+        gameData.getReservedStorages()
             .removeIf(reservedStorages::contains);
 
         reservedStorages.forEach(reservedStorage -> syncCache.deleteGameItem(reservedStorage.getReservedStorageId(), GameItemType.RESERVED_STORAGE));
     }
 
     private void cleanUpFinishedProductionOrders(SyncCache syncCache) {
-        game.getProcesses()
+        gameData.getProcesses()
             .getByExternalReferenceAndType(processId, ProcessType.PRODUCTION_ORDER)
             .stream()
             .filter(process -> process.getStatus() == ProcessStatus.DONE)
@@ -193,7 +196,7 @@ public class StorageSettingProcess implements Process {
     public void cleanup(SyncCache syncCache) {
         log.info("Cleaning up {}", this);
 
-        game.getProcesses()
+        gameData.getProcesses()
             .getByExternalReference(processId)
             .forEach(process -> process.cleanup(syncCache));
 
@@ -201,26 +204,25 @@ public class StorageSettingProcess implements Process {
 
         syncCache.saveGameItem(toModel());
 
-        ReservedStorages reservedStorages = planet.getStorageDetails()
-            .getReservedStorages();
-        List<ReservedStorage> rs = reservedStorages
-            .getByExternalReference(processId);
+        ReservedStorages reservedStorages = gameData.getReservedStorages();
+        List<ReservedStorage> rs = reservedStorages.getByExternalReference(processId);
         reservedStorages.removeIf(rs::contains);
         rs.forEach(reservedStorage -> syncCache.deleteGameItem(reservedStorage.getReservedStorageId(), GameItemType.RESERVED_STORAGE));
 
-        planet.getStorageDetails()
-            .getStorageSettings()
+        gameData.getStorageSettings()
             .deleteByStorageSettingId(storageSetting.getStorageSettingId());
         syncCache.deleteGameItem(storageSetting.getStorageSettingId(), GameItemType.STORAGE_SETTING);
 
+        UUID ownerId = gameData.getPlanets().get(location).getPlanetId();
+
         syncCache.addMessage(
-            planet.getOwner(),
+            ownerId,
             WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED,
-            planet.getPlanetId(),
+            location,
             () -> applicationContextProxy.getBean(WsMessageSender.class).planetStorageModified(
-                planet.getOwner(),
-                planet.getPlanetId(),
-                applicationContextProxy.getBean(PlanetStorageOverviewQueryService.class).getStorage(planet)
+                ownerId,
+                location,
+                applicationContextProxy.getBean(PlanetStorageOverviewQueryService.class).getStorage(gameData, location)
             )
         );
     }
@@ -229,12 +231,11 @@ public class StorageSettingProcess implements Process {
     public ProcessModel toModel() {
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(game.getGameId());
+        model.setGameId(gameData.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);
-        model.setLocation(planet.getPlanetId());
-        model.setLocationType(LocationType.PLANET.name());
+        model.setLocation(location);
         model.setExternalReference(getExternalReference());
         return model;
     }

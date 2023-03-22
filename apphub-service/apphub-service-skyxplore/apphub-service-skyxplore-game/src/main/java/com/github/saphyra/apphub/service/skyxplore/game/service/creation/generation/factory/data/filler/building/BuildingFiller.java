@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -58,13 +59,13 @@ public class BuildingFiller {
     }
 
     private void placeDefaultBuildings(Planet planet, GameData gameData) {
-        defaultBuildings.forEach(buildingData -> placeBuilding(buildingData, gameData.getSurfaces().getByPlanetId(planet.getPlanetId()), gameData));
+        defaultBuildings.forEach(buildingData -> placeBuilding(planet.getPlanetId(), buildingData, gameData.getSurfaces().getByPlanetId(planet.getPlanetId()), gameData));
     }
 
-    private void placeBuilding(BuildingData buildingData, Collection<Surface> surfaces, GameData gameData) {
+    private void placeBuilding(UUID location, BuildingData buildingData, Collection<Surface> surfaces, GameData gameData) {
         Surface surface = emptySurfaceProvider.getEmptySurfaceForType(buildingData.getPrimarySurfaceType(), surfaces, gameData);
 
-        Building building = buildingFactory.create(buildingData.getId(), surface.getSurfaceId());
+        Building building = buildingFactory.create(buildingData.getId(), location, surface.getSurfaceId());
         gameData.getBuildings()
             .add(building);
     }

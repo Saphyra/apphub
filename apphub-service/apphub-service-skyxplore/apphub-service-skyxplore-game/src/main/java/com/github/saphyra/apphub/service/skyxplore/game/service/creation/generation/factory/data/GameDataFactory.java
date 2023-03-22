@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -32,10 +33,11 @@ public class GameDataFactory {
     private final PopulationFillerService populationFillerService;
     private final PriorityFillerService priorityFillerService;
 
-    public GameData create(Collection<Player> players, SkyXploreGameCreationSettingsRequest settings) {
+    public GameData create(UUID gameId, Collection<Player> players, SkyXploreGameCreationSettingsRequest settings) {
         List<NewbornSolarSystem> newbornSolarSystems = solarSystemGenerationService.generateSolarSystems(players, settings);
 
         GameData gameData = GameData.builder()
+            .gameId(gameId)
             .universeSize(universeSizeCalculator.calculate(newbornSolarSystems))
             .build();
 

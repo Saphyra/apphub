@@ -9,7 +9,7 @@ public enum GameItemType {
     GAME(GameModel.class),
     PLAYER(PlayerModel.class),
     ALLIANCE(AllianceModel.class),
-    UNIVERSE(UniverseModel.class),
+    UNIVERSE(UniverseModel.class), //TODO remove model
     SOLAR_SYSTEM(SolarSystemModel.class),
     PLANET(PlanetModel.class),
     CITIZEN(CitizenModel.class),
@@ -18,7 +18,7 @@ public enum GameItemType {
     BUILDING(BuildingModel.class),
     CONSTRUCTION(ConstructionModel.class),
     DECONSTRUCTION(DeconstructionModel.class),
-    SYSTEM_CONNECTION(SystemConnectionModel.class),
+    SYSTEM_CONNECTION(SystemConnectionModel.class), //TODO remove model
     ALLOCATED_RESOURCE(AllocatedResourceModel.class),
     RESERVED_STORAGE(ReservedStorageModel.class),
     STORED_RESOURCE(StoredResourceModel.class),

@@ -7,13 +7,22 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class DeconstructionToModelConverter {
-    public DeconstructionModel convert(Deconstruction deconstruction, UUID gameId) {
+    public List<DeconstructionModel> convert(UUID gameId, Collection<Deconstruction> deconstructions) {
+        return deconstructions.stream()
+            .map(deconstruction -> convert(gameId, deconstruction))
+            .collect(Collectors.toList());
+    }
+
+    public DeconstructionModel convert(UUID gameId, Deconstruction deconstruction) {
         DeconstructionModel model = new DeconstructionModel();
         model.setId(deconstruction.getDeconstructionId());
         model.setGameId(gameId);

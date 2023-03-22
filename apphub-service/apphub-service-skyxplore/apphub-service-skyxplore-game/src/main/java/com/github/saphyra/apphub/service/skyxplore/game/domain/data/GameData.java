@@ -26,10 +26,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.UUID;
+
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Data
 public class GameData {
+    private final UUID gameId;
     //MAP
     private final int universeSize;
     @Builder.Default
@@ -67,19 +70,19 @@ public class GameData {
     @Builder.Default
     private final Skills skills = new Skills();
     @Builder.Default
-    private final SoldierWeapons soldierWeapons = new SoldierWeapons();
+    private final SoldierWeapons soldierWeapons = new SoldierWeapons(); //Unused
     @Builder.Default
-    private final SoldierEnergyShields soldierEnergyShields = new SoldierEnergyShields();
+    private final SoldierEnergyShields soldierEnergyShields = new SoldierEnergyShields(); //Unused
     @Builder.Default
-    private final SoldierArmorPieces soldierArmorPieces = new SoldierArmorPieces();
+    private final SoldierArmorPieces soldierArmorPieces = new SoldierArmorPieces(); //Unused
     @Builder.Default
-    private final Durabilities durabilities = new Durabilities();
+    private final Durabilities durabilities = new Durabilities(); //Unused
 
     //PROCESS
     @Builder.Default
     private final Processes processes = new Processes();
     @Builder.Default
-    private final BuildingAllocations buildingAllocations = new BuildingAllocations();
+    private final BuildingAllocations buildingAllocations = new BuildingAllocations(); //TODO convert to model
     @Builder.Default
-    private final CitizenAllocations citizenAllocations = new CitizenAllocations();
+    private final CitizenAllocations citizenAllocations = new CitizenAllocations(); //TODO convert to model
 }

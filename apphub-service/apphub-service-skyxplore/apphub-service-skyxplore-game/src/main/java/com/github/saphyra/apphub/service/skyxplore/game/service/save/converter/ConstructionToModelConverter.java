@@ -7,13 +7,22 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class ConstructionToModelConverter {
-    public ConstructionModel convert(Construction construction, UUID gameId) {
+    public List<ConstructionModel> convert(UUID gameId, Collection<Construction> constructions) {
+        return constructions.stream()
+            .map(construction -> convert(gameId, construction))
+            .collect(Collectors.toList());
+    }
+
+    public ConstructionModel convert(UUID gameId, Construction construction) {
         ConstructionModel model = new ConstructionModel();
         model.setId(construction.getConstructionId());
         model.setGameId(gameId);

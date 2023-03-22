@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.map.query;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.map.SolarSystemConnectionResponse;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.Line;
 import com.github.saphyra.apphub.service.skyxplore.game.common.LineModelWrapper;

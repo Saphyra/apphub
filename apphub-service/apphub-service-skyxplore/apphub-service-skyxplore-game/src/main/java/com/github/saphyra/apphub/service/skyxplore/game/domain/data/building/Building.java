@@ -12,6 +12,7 @@ import java.util.UUID;
 @Builder
 public class Building {
     private final UUID buildingId;
+    private final UUID location;
     private final UUID surfaceId;
     private final String dataId;
     private volatile int level;

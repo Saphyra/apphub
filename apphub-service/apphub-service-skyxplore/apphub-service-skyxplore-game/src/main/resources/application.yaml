@@ -45,20 +45,6 @@ game:
       - surfaceName: VOLCANO
         spawnRate: 2
         optional: true
-  player:
-    aiSpawnChance: # x number of players
-      NONE:
-        min: 0
-        max: 0
-      RARE:
-        min: 0.25
-        max: 1.25
-      COMMON:
-        min: 0.5
-        max: 1.5
-      EVERYWHERE:
-        min: 1
-        max: 3
   citizen:
     workPointsPerSeconds: 100
     maxWorkPointsBatch: 1000

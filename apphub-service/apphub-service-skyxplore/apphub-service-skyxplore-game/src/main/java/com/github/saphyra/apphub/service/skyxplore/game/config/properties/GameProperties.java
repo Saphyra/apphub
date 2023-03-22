@@ -18,7 +18,6 @@ public class GameProperties {
     private SolarSystemProperties solarSystem;
     private PlanetProperties planet;
     private SurfaceProperties surface;
-    private PlayerProperties player;
     private CitizenProperties citizen;
     private DeconstructionProperties deconstruction;
 

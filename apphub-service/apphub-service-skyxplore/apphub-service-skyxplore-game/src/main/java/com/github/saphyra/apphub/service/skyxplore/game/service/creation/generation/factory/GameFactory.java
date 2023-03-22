@@ -45,7 +45,7 @@ public class GameFactory {
             .host(request.getHost())
             .players(players)
             .alliances(alliances)
-            .data(gameDataFactory.create(players.values(), request.getSettings()))
+            .data(gameDataFactory.create(gameId, players.values(), request.getSettings()))
             .chat(chatFactory.create(request.getMembers()))
             .gameName(request.getGameName())
             .lastPlayed(dateTimeUtil.getCurrentDateTime())

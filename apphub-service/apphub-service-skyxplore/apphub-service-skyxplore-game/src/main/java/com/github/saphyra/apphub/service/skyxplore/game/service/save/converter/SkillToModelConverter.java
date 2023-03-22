@@ -16,13 +16,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class SkillToModelConverter {
-    public List<SkillModel> convert(Collection<Skill> skills, UUID gameId) {
+    public List<SkillModel> convert(UUID gameId, Collection<Skill> skills) {
         return skills.stream()
-            .map(skill -> convert(skill, gameId))
+            .map(skill -> convert(gameId, skill))
             .collect(Collectors.toList());
     }
 
-    public SkillModel convert(Skill skill, UUID gameId) {
+    public SkillModel convert(UUID gameId, Skill skill) {
         SkillModel model = new SkillModel();
         model.setId(skill.getSkillId());
         model.setGameId(gameId);

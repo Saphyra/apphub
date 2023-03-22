@@ -14,16 +14,17 @@ import java.util.UUID;
 public class BuildingFactory {
     private final IdGenerator idGenerator;
 
-    public Building create(String dataId, UUID surfaceId, int level) {
+    public Building create(String dataId, UUID location, UUID surfaceId, int level) {
         return Building.builder()
             .buildingId(idGenerator.randomUuid())
+            .location(location)
             .surfaceId(surfaceId)
             .dataId(dataId)
             .level(level)
             .build();
     }
 
-    public Building create(String dataId, UUID surfaceId) {
-        return create(dataId, surfaceId, 1);
+    public Building create(String dataId, UUID location, UUID surfaceId) {
+        return create(dataId, location, surfaceId, 1);
     }
 }

@@ -7,13 +7,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class BuildingCapacityCalculator {
     private final ProductionBuildingService productionBuildingService;
 
-    public int calculateCapacity(Planet planet, Building building) {
+    public int calculateCapacity(UUID location, Building building) {
         int maxWorkers = building.getLevel() * productionBuildingService.get(building.getDataId())
             .getWorkers();
 

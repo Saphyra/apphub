@@ -15,7 +15,7 @@ import java.util.UUID;
 public class StorageSettingFactory {
     private final IdGenerator idGenerator;
 
-    public StorageSetting create(StorageSettingApiModel request, UUID location,) {
+    public StorageSetting create(StorageSettingApiModel request, UUID location) {
         return create(request.getDataId(), location, request.getTargetAmount(), request.getPriority(), request.getBatchSize());
     }
 

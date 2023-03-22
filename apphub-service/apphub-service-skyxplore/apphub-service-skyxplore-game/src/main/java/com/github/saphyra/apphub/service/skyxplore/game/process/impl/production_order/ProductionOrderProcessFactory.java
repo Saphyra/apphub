@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
@@ -33,18 +34,16 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
     private final UuidConverter uuidConverter;
     private final ApplicationContextProxy applicationContextProxy;
 
-    public List<ProductionOrderProcess> create(UUID externalReference, Game game, Planet planet, UUID reservedStorageId) {
-        ReservedStorage reservedStorage = planet.getStorageDetails()
-            .getReservedStorages()
+    public List<ProductionOrderProcess> create(GameData gameData, UUID externalReference, UUID location, UUID reservedStorageId) {
+        ReservedStorage reservedStorage = gameData.getReservedStorages()
             .findById(reservedStorageId)
             .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ReservedStorage not found with id " + reservedStorageId));
 
-        return create(externalReference, game, planet, reservedStorage);
+        return create(gameData, externalReference, location, reservedStorage);
     }
 
-    public List<ProductionOrderProcess> create(UUID externalReference, Game game, Planet planet, ReservedStorage reservedStorage) {
-        AllocatedResource allocatedResource = planet.getStorageDetails()
-            .getAllocatedResources()
+    public List<ProductionOrderProcess> create(GameData gameData, UUID externalReference, UUID location, ReservedStorage reservedStorage) {
+        AllocatedResource allocatedResource = gameData.getAllocatedResources()
             .findByExternalReferenceAndDataId(reservedStorage.getExternalReference(), reservedStorage.getDataId())
             .orElse(null);
         log.info("{} found for {}", allocatedResource, reservedStorage);

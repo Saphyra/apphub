@@ -1,10 +1,13 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -13,12 +16,14 @@ public class AvailableResourceCounter {
     /*
     Calculating the not-assigned resource present in the storage
      */
-    public int countAvailableAmount(StorageDetails storageDetails, String dataId) {
-        int storedAmount = storageDetails.getStoredResources().get(dataId)
-            .getAmount();
-        int allocatedAmount = storageDetails.getAllocatedResources()
+    public int countAvailableAmount(GameData gameData, UUID location, String dataId) {
+        int storedAmount = gameData.getStoredResources()
+            .findByLocationAndDataId(location, dataId)
+            .map(StoredResource::getAmount)
+            .orElse(0);
+        int allocatedAmount = gameData.getAllocatedResources()
+            .getByLocationAndDataId(location, dataId)
             .stream()
-            .filter(allocatedResource -> allocatedResource.getDataId().equals(dataId))
             .mapToInt(AllocatedResource::getAmount)
             .sum();
 
