@@ -5,8 +5,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
@@ -39,17 +38,16 @@ public class ResourceAllocationService {
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
     private final WsMessageSender messageSender;
 
-    public void processResourceRequirements(UUID gameId, Planet planet, LocationType locationType, UUID externalReference, Map<String, Integer> requiredResources) {
-        StorageDetails storageDetails = planet.getStorageDetails();
+    public void processResourceRequirements(GameData gameData, UUID gameId, UUID location, UUID ownerId, UUID externalReference, Map<String, Integer> requiredResources) {
         Map<String, ConsumptionResult> consumptions = requiredResources.entrySet()
             .stream()
-            .collect(Collectors.toMap(Map.Entry::getKey, entry -> consumptionCalculator.calculate(planet, locationType, externalReference, entry.getKey(), entry.getValue())));
+            .collect(Collectors.toMap(Map.Entry::getKey, entry -> consumptionCalculator.calculate(gameData, location, externalReference, entry.getKey(), entry.getValue())));
 
         Map<StorageType, Integer> requiredStorageAmount = Arrays.stream(StorageType.values())
             .collect(Collectors.toMap(Function.identity(), storageType -> requiredEmptyStorageCalculator.getRequiredStorageAmount(storageType, consumptions)));
 
         requiredStorageAmount.forEach((storageType, totalAmount) -> {
-            int freeStorage = freeStorageQueryService.getFreeStorage(planet, storageType);
+            int freeStorage = freeStorageQueryService.getFreeStorage(gameData, location, storageType);
             if (freeStorage < totalAmount) {
                 Map<String, String> params = CollectionUtils.singleValueMap("storageType", storageType.name());
                 throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_ENOUGH_STORAGE, params, "Not enough free " + storageType + " storage to store " + totalAmount + " of resources.");
@@ -59,17 +57,17 @@ public class ResourceAllocationService {
         List<GameItem> items = consumptions.values()
             .stream()
             .peek(consumptionResult -> {
-                storageDetails.getAllocatedResources().add(consumptionResult.getAllocation());
-                storageDetails.getReservedStorages().add(consumptionResult.getReservation());
+                gameData.getAllocatedResources().add(consumptionResult.getAllocation());
+                gameData.getReservedStorages().add(consumptionResult.getReservation());
 
             })
             .flatMap(consumptionResult -> Stream.of(
-                allocatedResourceToModelConverter.convert(consumptionResult.getAllocation(), gameId),
-                reservedStorageToModelConverter.convert(consumptionResult.getReservation(), gameId)
+                allocatedResourceToModelConverter.convert(gameId, consumptionResult.getAllocation()),
+                reservedStorageToModelConverter.convert(gameId, consumptionResult.getReservation())
             ))
             .collect(Collectors.toList());
         gameDataProxy.saveItems(items);
 
-        messageSender.planetStorageModified(planet.getOwner(), planet.getPlanetId(), planetStorageOverviewQueryService.getStorage(planet));
+        messageSender.planetStorageModified(ownerId, location, planetStorageOverviewQueryService.getStorage(gameData, location));
     }
 }

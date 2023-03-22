@@ -32,12 +32,11 @@ public class GameLoader {
     private final PlayerLoader playerLoader;
     private final AllianceLoader allianceLoader;
     private final ChatFactory chatFactory;
-    private final UniverseLoader universeLoader;
     private final GameDataProxy gameDataProxy;
     private final MessageSenderProxy messageSenderProxy;
     private final EventLoopFactory eventLoopFactory;
-    private final ProcessLoader processLoader;
     private final BackgroundProcessStarterService backgroundProcessStarterService;
+    private final GameDataLoader gameDataLoader;
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -50,7 +49,7 @@ public class GameLoader {
             .lastPlayed(gameModel.getLastPlayed())
             .players(players)
             .alliances(allianceLoader.load(gameModel.getId(), players))
-            .universe(universeLoader.load(gameModel.getId()))
+            .data(gameDataLoader.load(gameModel.getId(), gameModel.getUniverseSize()))
             .chat(chatFactory.create(players.values()))
             .eventLoop(eventLoopFactory.create())
             .markedForDeletion(gameModel.getMarkedForDeletion())
@@ -58,9 +57,6 @@ public class GameLoader {
             .build();
 
         backgroundProcessStarterService.startBackgroundProcesses(game);
-
-        game.getProcesses()
-            .addAll(processLoader.load(game));
 
         gameDataProxy.saveItem(gameModel);
         gameDao.save(game);

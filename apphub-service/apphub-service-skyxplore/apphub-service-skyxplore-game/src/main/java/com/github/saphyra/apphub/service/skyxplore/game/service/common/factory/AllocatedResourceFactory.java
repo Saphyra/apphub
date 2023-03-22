@@ -14,11 +14,10 @@ import java.util.UUID;
 public class AllocatedResourceFactory {
     private final IdGenerator idGenerator;
 
-    public AllocatedResource create(UUID location, LocationType locationType, UUID externalReference, String dataId, int amount) {
+    public AllocatedResource create(UUID location, UUID externalReference, String dataId, int amount) {
         AllocatedResource result = AllocatedResource.builder()
             .allocatedResourceId(idGenerator.randomUuid())
             .location(location)
-            .locationType(locationType)
             .externalReference(externalReference)
             .dataId(dataId)
             .amount(amount)

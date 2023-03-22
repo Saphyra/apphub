@@ -1,8 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import org.springframework.stereotype.Component;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
@@ -19,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AllocatedResourceAmountQueryService {
     private final ResourceDataService resourceDataService;
 
-    public int getAllocatedResourceAmount(String dataId, Planet planet) {
+    public int getAllocatedResourceAmount(String dataId, GameData gameData, UUID location) {
         return getAllocatedResourceAmount(dataId, planet.getStorageDetails().getAllocatedResources());
     }
 

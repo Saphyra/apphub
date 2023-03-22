@@ -1,10 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.AllocatedResourceFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ReservedStorageFactory;
@@ -34,37 +33,38 @@ class ProductionRequirementsAllocationService {
     /**
      * @return reservedStorageId
      */
-    UUID allocate(SyncCache syncCache, UUID gameId, Planet planet, UUID externalReference, String dataId, Integer amount) {
+    UUID allocate(SyncCache syncCache, UUID gameId, GameData gameData, UUID location, UUID ownerId, UUID externalReference, String dataId, Integer amount) {
         log.info("Allocating {} of {}", amount, dataId);
-        StorageDetails storageDetails = planet.getStorageDetails();
-        int availableAmount = availableResourceCounter.countAvailableAmount(storageDetails, dataId);
+        int availableAmount = availableResourceCounter.countAvailableAmount(gameData, location, dataId);
 
         int allocatedAmount = Math.min(amount, availableAmount);
         int reservedAmount = amount - allocatedAmount;
 
         log.info("Available: {}, Allocated: {}, Reserved: {}", availableAmount, allocatedAmount, reservedAmount);
 
-        AllocatedResource allocatedResource = allocatedResourceFactory.create(planet.getPlanetId(), LocationType.PRODUCTION, externalReference, dataId, allocatedAmount);
+        AllocatedResource allocatedResource = allocatedResourceFactory.create(location, externalReference, dataId, allocatedAmount);
         log.info("{} created.", allocatedResource);
-        ReservedStorage reservedStorage = reservedStorageFactory.create(planet.getPlanetId(), LocationType.PRODUCTION, externalReference, dataId, reservedAmount);
+        ReservedStorage reservedStorage = reservedStorageFactory.create(location, externalReference, dataId, reservedAmount);
         log.info("{} created.", reservedStorage);
 
-        storageDetails.getAllocatedResources()
+        gameData.getAllocatedResources()
             .add(allocatedResource);
-        storageDetails.getReservedStorages()
+
+        gameData.getReservedStorages()
             .add(reservedStorage);
 
-        syncCache.saveGameItem(allocatedResourceToModelConverter.convert(allocatedResource, gameId));
-        syncCache.saveGameItem(reservedStorageToModelConverter.convert(reservedStorage, gameId));
+
+        syncCache.saveGameItem(allocatedResourceToModelConverter.convert(gameId, allocatedResource));
+        syncCache.saveGameItem(reservedStorageToModelConverter.convert(gameId, reservedStorage));
 
         syncCache.addMessage(
-            planet.getOwner(),
+            ownerId,
             WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED,
-            planet.getPlanetId(),
+            location,
             () -> messageSender.planetStorageModified(
-                planet.getOwner(),
-                planet.getPlanetId(),
-                planetStorageOverviewQueryService.getStorage(planet)
+                ownerId,
+                location,
+                planetStorageOverviewQueryService.getStorage(gameData, location)
             )
         );
 

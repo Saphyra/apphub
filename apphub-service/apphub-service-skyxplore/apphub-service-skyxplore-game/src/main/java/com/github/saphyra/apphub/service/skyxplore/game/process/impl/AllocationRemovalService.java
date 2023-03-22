@@ -2,10 +2,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResources;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorages;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResources;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
@@ -22,18 +21,16 @@ public class AllocationRemovalService {
     private final WsMessageSender messageSender;
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
 
-    public void removeAllocationsAndReservations(SyncCache syncCache, Planet planet, UUID externalReference) {
+    public void removeAllocationsAndReservations(SyncCache syncCache, GameData gameData, UUID location, UUID ownerId, UUID externalReference) {
         log.info("Removing allocatedResources and ReservedStorages for externalReference {}", externalReference);
-        StorageDetails storageDetails = planet.getStorageDetails();
-
-        AllocatedResources allocatedResources = storageDetails.getAllocatedResources();
+        AllocatedResources allocatedResources = gameData.getAllocatedResources();
         allocatedResources.getByExternalReference(externalReference)
             .stream()
             .peek(allocatedResource -> log.info("Deleting {}", allocatedResource))
             .peek(ar -> syncCache.deleteGameItem(ar.getAllocatedResourceId(), GameItemType.ALLOCATED_RESOURCE))
             .forEach(allocatedResources::remove);
 
-        ReservedStorages reservedStorages = storageDetails.getReservedStorages();
+        ReservedStorages reservedStorages = gameData.getReservedStorages();
         reservedStorages.getByExternalReference(externalReference)
             .stream()
             .peek(reservedStorage -> log.info("Deleting {}", reservedStorage))
@@ -41,13 +38,13 @@ public class AllocationRemovalService {
             .forEach(reservedStorages::remove);
 
         syncCache.addMessage(
-            planet.getOwner(),
+            ownerId,
             WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED,
-            planet.getPlanetId(),
+            location,
             () -> messageSender.planetStorageModified(
-                planet.getOwner(),
-                planet.getPlanetId(),
-                planetStorageOverviewQueryService.getStorage(planet)
+                ownerId,
+                location,
+                planetStorageOverviewQueryService.getStorage(gameData, location)
             )
         );
     }

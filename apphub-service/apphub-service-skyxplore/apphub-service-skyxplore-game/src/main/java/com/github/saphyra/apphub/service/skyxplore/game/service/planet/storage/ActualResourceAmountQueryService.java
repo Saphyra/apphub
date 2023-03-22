@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
 public class ActualResourceAmountQueryService {
     private final ResourceDataService resourceDataService;
 
-    public int getActualAmount(String dataId, Planet planet) {
+    public int getActualAmount(String dataId, GameData gameData, UUID location) {
         return getActualAmount(dataId, planet.getStorageDetails().getStoredResources());
     }
 

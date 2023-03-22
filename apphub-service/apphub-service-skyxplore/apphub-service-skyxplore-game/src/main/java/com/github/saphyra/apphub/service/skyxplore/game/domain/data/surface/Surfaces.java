@@ -11,4 +11,11 @@ public class Surfaces extends Vector<Surface> {
             .filter(surface -> surface.getPlanetId().equals(planetId))
             .toList();
     }
+
+    public Surface findById(UUID surfaceId) {
+        return stream()
+            .filter(surface -> surface.getSurfaceId().equals(surfaceId))
+            .findFirst()
+            .orElseThrow();
+    }
 }

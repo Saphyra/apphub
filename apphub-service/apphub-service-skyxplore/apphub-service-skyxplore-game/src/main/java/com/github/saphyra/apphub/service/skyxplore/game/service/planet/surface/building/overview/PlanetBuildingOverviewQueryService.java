@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,17 +20,15 @@ public class PlanetBuildingOverviewQueryService {
     private final PlanetBuildingOverviewMapper overviewMapper;
 
     public Map<String, PlanetBuildingOverviewResponse> getBuildingOverview(UUID userId, UUID planetId) {
-        Planet planet = gameDao.findByUserIdValidated(userId)
-            .getUniverse()
-            .findPlanetByIdValidated(planetId);
-        return getBuildingOverview(planet);
+        GameData gameData = gameDao.findByUserIdValidated(userId)
+            .getData();
+        return getBuildingOverview(gameData, planetId);
     }
 
-    public Map<String, PlanetBuildingOverviewResponse> getBuildingOverview(Planet planet) {
-        return planet
-            .getSurfaces()
-            .values()
+    public Map<String, PlanetBuildingOverviewResponse> getBuildingOverview(GameData gameData, UUID planetId) {
+        return gameData.getSurfaces()
             .stream()
+            .filter(surface -> surface.getPlanetId().equals(planetId))
             .collect(Collectors.groupingBy(Surface::getSurfaceType))
             .entrySet()
             .stream()

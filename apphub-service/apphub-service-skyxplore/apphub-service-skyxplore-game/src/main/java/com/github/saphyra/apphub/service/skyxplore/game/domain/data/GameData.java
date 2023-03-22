@@ -36,39 +36,39 @@ public class GameData {
     //MAP
     private final int universeSize;
     @Builder.Default
-    private final Coordinates coordinates = new Coordinates();
+    private final Coordinates coordinates = new Coordinates(); //TODO create loader
     @Builder.Default
-    private final SolarSystems solarSystems = new SolarSystems();
+    private final SolarSystems solarSystems = new SolarSystems(); //TODO create loader
     @Builder.Default
-    private final Planets planets = new Planets();
+    private final Planets planets = new Planets(); //TODO create loader
 
     //PLANET
     @Builder.Default
-    private final Surfaces surfaces = new Surfaces();
+    private final Surfaces surfaces = new Surfaces(); //TODO create loader
     @Builder.Default
-    private final Buildings buildings = new Buildings();
+    private final Buildings buildings = new Buildings(); //TODO create loader
     @Builder.Default
-    private final Constructions constructions = new Constructions();
+    private final Constructions constructions = new Constructions(); //TODO create loader
     @Builder.Default
-    private final Priorities priorities = new Priorities();
+    private final Priorities priorities = new Priorities(); //TODO create loader
     @Builder.Default
-    private final Deconstructions deconstructions = new Deconstructions();
+    private final Deconstructions deconstructions = new Deconstructions(); //TODO create loader
 
     //STORAGE
     @Builder.Default
-    private final AllocatedResources allocatedResources = new AllocatedResources();
+    private final AllocatedResources allocatedResources = new AllocatedResources(); //TODO create loader
     @Builder.Default
-    private final ReservedStorages reservedStorages = new ReservedStorages();
+    private final ReservedStorages reservedStorages = new ReservedStorages(); //TODO create loader
     @Builder.Default
-    private final StorageSettings storageSettings = new StorageSettings();
+    private final StorageSettings storageSettings = new StorageSettings(); //TODO create loader
     @Builder.Default
-    private final StoredResources storedResources = new StoredResources();
+    private final StoredResources storedResources = new StoredResources(); //TODO create loader
 
     //CITIZEN
     @Builder.Default
-    private final Citizens citizens = new Citizens();
+    private final Citizens citizens = new Citizens(); //TODO create loader
     @Builder.Default
-    private final Skills skills = new Skills();
+    private final Skills skills = new Skills(); //TODO create loader
     @Builder.Default
     private final SoldierWeapons soldierWeapons = new SoldierWeapons(); //Unused
     @Builder.Default
@@ -80,9 +80,9 @@ public class GameData {
 
     //PROCESS
     @Builder.Default
-    private final Processes processes = new Processes();
+    private final Processes processes = new Processes(); //TODO create loader
     @Builder.Default
-    private final BuildingAllocations buildingAllocations = new BuildingAllocations(); //TODO convert to model
+    private final BuildingAllocations buildingAllocations = new BuildingAllocations(); //TODO convert to model //TODO create loader
     @Builder.Default
-    private final CitizenAllocations citizenAllocations = new CitizenAllocations(); //TODO convert to model
+    private final CitizenAllocations citizenAllocations = new CitizenAllocations(); //TODO convert to model //TODO create loader
 }

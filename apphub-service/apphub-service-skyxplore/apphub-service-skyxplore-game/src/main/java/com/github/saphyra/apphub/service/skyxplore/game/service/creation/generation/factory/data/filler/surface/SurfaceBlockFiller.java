@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.genera
 
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.surface.RandomEmptySlotProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

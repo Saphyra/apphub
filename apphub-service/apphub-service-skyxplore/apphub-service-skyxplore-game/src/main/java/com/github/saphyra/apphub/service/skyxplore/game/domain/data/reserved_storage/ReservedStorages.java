@@ -19,4 +19,10 @@ public class ReservedStorages extends Vector<ReservedStorage> {
             .filter(reservedStorage -> reservedStorage.getExternalReference().equals(externalReference))
             .collect(Collectors.toList());
     }
+
+    public List<ReservedStorage> getByLocation(UUID location) {
+        return stream()
+            .filter(reservedStorage -> reservedStorage.getLocation().equals(location))
+            .collect(Collectors.toList());
+    }
 }

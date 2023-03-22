@@ -9,9 +9,14 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @Builder
+//TODO unit test
 public class StoredResource {
     private final UUID storedResourceId;
     private final UUID location;
     private final String dataId;
     private int amount;
+
+    public void decreaseAmount(int amount) {
+        this.amount -= amount;
+    }
 }

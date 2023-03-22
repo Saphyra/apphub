@@ -15,10 +15,21 @@ public class AllocatedResources extends Vector<AllocatedResource> {
             .collect(Collectors.toList());
     }
 
+    public AllocatedResource findByExternalReferenceAndDataIdValidated(UUID externalReference, String dataId) {
+        return findByExternalReferenceAndDataId(externalReference, dataId)
+            .orElseThrow();
+    }
+
     public Optional<AllocatedResource> findByExternalReferenceAndDataId(UUID externalReference, String dataId) {
         return stream()
             .filter(allocatedResource -> allocatedResource.getExternalReference().equals(externalReference))
             .filter(allocatedResource -> allocatedResource.getDataId().equals(dataId))
             .findFirst();
+    }
+
+    public List<AllocatedResource> getByExternalReference(UUID externalReference) {
+        return stream()
+            .filter(allocatedResource -> allocatedResource.getExternalReference().equals(externalReference))
+            .collect(Collectors.toList());
     }
 }

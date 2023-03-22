@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -19,8 +21,8 @@ import java.util.stream.Collectors;
 public class ReservedStorageQueryService {
     private final ResourceDataService resourceDataService;
 
-    public int getReservedAmount(String dataId, Planet planet) {
-        return getReservedAmount(dataId, planet.getStorageDetails().getReservedStorages());
+    public int getReservedAmount(String dataId, GameData gameData, UUID location) {
+        return getReservedAmount(dataId, gameData.getReservedStorages().getByLocation(location));
     }
 
     public int getReservedAmount(String dataId, List<ReservedStorage> reservedStorages) {

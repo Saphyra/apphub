@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.skyxplore.ws.LoadChildrenOfGameItemRequest;
 import com.github.saphyra.apphub.lib.skyxplore.ws.LoadGameItemRequest;
+import com.github.saphyra.apphub.lib.skyxplore.ws.LoadPageForGameRequest;
 import com.github.saphyra.apphub.lib.skyxplore.ws.SkyXploreWsEvent;
 import com.github.saphyra.apphub.lib.skyxplore.ws.SkyXploreWsEventName;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ws.SkyXploreWsClient;
@@ -78,6 +79,35 @@ public class GameItemLoader {
             wsClient.send(event);
 
             SkyXploreWsEvent response = wsClient.awaitForEvent(ev -> ev.getEventName() == SkyXploreWsEventName.LOAD_CHILDREN_OF_GAME_ITEM && ev.getId().equals(requestId));
+
+            return Arrays.asList(objectMapperWrapper.convertValue(response.getPayload(), clazz));
+        } finally {
+            wsClientCache.returnObject(wsClient);
+        }
+    }
+
+    @SneakyThrows
+    //TODO unit test
+    public <T extends GameItem> List<T> loadPageForGame(UUID gameId, int page, GameItemType gameItemType, Class<T[]> clazz) {
+        SkyXploreWsClient wsClient = wsClientCache.borrowObject();
+
+        try {
+            LoadPageForGameRequest request = LoadPageForGameRequest.builder()
+                .gameId(gameId)
+                .page(page)
+                .type(gameItemType)
+                .build();
+
+            UUID requestId = idGenerator.randomUuid();
+            SkyXploreWsEvent event = SkyXploreWsEvent.builder()
+                .eventName(SkyXploreWsEventName.LOAD_PAGE_FOR_GAME) //TODO implement event handler in skyxplore-data
+                .id(requestId)
+                .payload(request)
+                .build();
+
+            wsClient.send(event);
+
+            SkyXploreWsEvent response = wsClient.awaitForEvent(ev -> ev.getEventName() == SkyXploreWsEventName.LOAD_PAGE_FOR_GAME && ev.getId().equals(requestId));
 
             return Arrays.asList(objectMapperWrapper.convertValue(response.getPayload(), clazz));
         } finally {
