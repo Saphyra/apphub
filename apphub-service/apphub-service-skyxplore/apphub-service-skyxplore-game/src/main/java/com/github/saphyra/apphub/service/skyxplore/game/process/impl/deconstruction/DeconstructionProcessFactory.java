@@ -5,12 +5,14 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -26,28 +28,26 @@ public class DeconstructionProcessFactory implements ProcessFactory {
 
     @Override
     public DeconstructionProcess createFromModel(Game game, ProcessModel model) {
-        Planet planet = game.getUniverse()
-            .findPlanetByIdValidated(model.getLocation());
-
-        Deconstruction deconstruction = planet.findBuildingByDeconstructionIdValidated(model.getExternalReference())
-            .getDeconstruction();
+        Deconstruction deconstruction = game.getData()
+            .getDeconstructions()
+            .findByDeconstructionId(model.getExternalReference());
 
         return DeconstructionProcess.builder()
             .processId(model.getId())
             .status(model.getStatus())
             .deconstruction(deconstruction)
-            .game(game)
-            .planet(planet)
+            .gameData(game.getData())
+            .location(model.getLocation())
             .applicationContextProxy(applicationContextProxy)
             .build();
     }
 
-    public DeconstructionProcess create(Game game, Planet planet, Deconstruction deconstruction) {
+    public DeconstructionProcess create(GameData gameData, UUID location, Deconstruction deconstruction) {
         return DeconstructionProcess.builder()
             .processId(idGenerator.randomUuid())
             .deconstruction(deconstruction)
-            .game(game)
-            .planet(planet)
+            .gameData(gameData)
+            .location(location)
             .applicationContextProxy(applicationContextProxy)
             .build();
     }

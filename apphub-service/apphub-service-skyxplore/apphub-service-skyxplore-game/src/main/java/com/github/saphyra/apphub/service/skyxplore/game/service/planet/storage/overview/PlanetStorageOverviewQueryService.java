@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorag
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,9 +26,9 @@ public class PlanetStorageOverviewQueryService {
 
     public PlanetStorageResponse getStorage(GameData gameData, UUID location) {
         return PlanetStorageResponse.builder()
-            .energy(planetStorageDetailQueryService.getStorageDetails(planet, StorageType.ENERGY))
-            .liquid(planetStorageDetailQueryService.getStorageDetails(planet, StorageType.LIQUID))
-            .bulk(planetStorageDetailQueryService.getStorageDetails(planet, StorageType.BULK))
+            .energy(planetStorageDetailQueryService.getStorageDetails(gameData, location, StorageType.ENERGY))
+            .liquid(planetStorageDetailQueryService.getStorageDetails(gameData, location, StorageType.LIQUID))
+            .bulk(planetStorageDetailQueryService.getStorageDetails(gameData, location, StorageType.BULK))
             .build();
     }
 }

@@ -5,8 +5,8 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequire
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilitiesService;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcessFactory;
@@ -25,9 +25,10 @@ class RequestWorkProcessFactoryForTerraformation {
     private final TerraformingPossibilitiesService terraformingPossibilitiesService;
     private final RequestWorkProcessFactory requestWorkProcessFactory;
 
-    List<RequestWorkProcess> createRequestWorkProcesses(UUID processId, Game game, Planet planet, Surface surface) {
+    List<RequestWorkProcess> createRequestWorkProcesses(GameData gameData, UUID location, UUID processId, Surface surface) {
         log.info("Creating RequestWorkProcesses...");
-        SurfaceType targetSurfaceType = SurfaceType.valueOf(surface.getTerraformation().getData());
+        Construction terraformation = gameData.getConstructions().findByExternalReferenceValidated(surface.getSurfaceId());
+        SurfaceType targetSurfaceType = SurfaceType.valueOf(terraformation.getData());
 
         ConstructionRequirements constructionRequirements = terraformingPossibilitiesService.getOptional(surface.getSurfaceType())
             .orElseThrow(() -> ExceptionFactory.forbiddenOperation(surface.getSurfaceType() + " cannot be terraformed."))
@@ -39,10 +40,10 @@ class RequestWorkProcessFactoryForTerraformation {
         log.info("{}", constructionRequirements);
 
         return requestWorkProcessFactory.create(
-            game,
+            gameData,
             processId,
-            planet,
-            surface.getTerraformation().getConstructionId(),
+            location,
+            terraformation.getConstructionId(),
             RequestWorkProcessType.TERRAFORMATION,
             SkillType.BUILDING,
             constructionRequirements.getRequiredWorkPoints(),

@@ -78,7 +78,7 @@ class DeconstructionProcessTest {
             .processId(PROCESS_ID)
             .status(status)
             .deconstruction(deconstruction)
-            .game(game)
+            .gameData(game)
             .planet(planet)
             .applicationContextProxy(applicationContextProxy)
             .build();

@@ -66,7 +66,14 @@ public class RequestWorkProcessFactory implements ProcessFactory {
         return result;
     }
 
-    public RequestWorkProcess create(UUID externalReference, GameData gameData, UUID location, String buildingDataId, SkillType skillType, int requiredWorkPoints) {
+    public RequestWorkProcess create(
+        UUID externalReference,
+        GameData gameData,
+        UUID location,
+        String buildingDataId,
+        SkillType skillType,
+        int requiredWorkPoints
+    ) {
         return create(externalReference, gameData, location, buildingDataId, skillType, requiredWorkPoints, RequestWorkProcessType.OTHER, null);
     }
 

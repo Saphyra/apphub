@@ -3,8 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl.deconstruc
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.DeconstructionProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcessType;
@@ -22,13 +21,13 @@ class RequestWorkProcessFactoryForDeconstruction {
     private final RequestWorkProcessFactory requestWorkProcessFactory;
     private final GameProperties gameProperties;
 
-    List<RequestWorkProcess> createRequestWorkProcesses(Game game, UUID processId, Planet planet, UUID deconstructionId) {
+    List<RequestWorkProcess> createRequestWorkProcesses(GameData gameData, UUID location ,UUID processId,  UUID deconstructionId) {
         DeconstructionProperties deconstructionProperties = gameProperties.getDeconstruction();
 
         return requestWorkProcessFactory.create(
-            game,
+            gameData,
             processId,
-            planet,
+            location,
             deconstructionId,
             RequestWorkProcessType.DECONSTRUCTION,
             SkillType.BUILDING,

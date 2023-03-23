@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl.deconstruc
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -24,21 +26,29 @@ public class FinishDeconstructionService {
     private final SurfaceToResponseConverter surfaceToResponseConverter;
     private final PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
 
-    public void finishDeconstruction(SyncCache syncCache, Planet planet, Deconstruction deconstruction) {
+    public void finishDeconstruction(GameData gameData, UUID location, SyncCache syncCache, Deconstruction deconstruction) {
         log.info("Finishing deconstruction...");
 
-        Surface surface = planet.findSurfaceByBuildingIdValidated(deconstruction.getExternalReference());
-        Building building = surface.getBuilding();
+        Surface surface = gameData.getSurfaces()
+            .findBySurfaceId(gameData.getBuildings().findByBuildingId(deconstruction.getExternalReference()).getSurfaceId());
 
-        surface.setBuilding(null);
+        gameData.getBuildings()
+            .deleteByBuildingId(deconstruction.getExternalReference());
+
         gameDataProxy.deleteItem(deconstruction.getDeconstructionId(), GameItemType.DECONSTRUCTION);
-        gameDataProxy.deleteItem(building.getBuildingId(), GameItemType.BUILDING);
+        gameDataProxy.deleteItem(deconstruction.getExternalReference(), GameItemType.BUILDING);
 
+        Planet planet = gameData.getPlanets()
+            .get(location);
         syncCache.addMessage(
             planet.getOwner(),
             WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED,
             deconstruction.getDeconstructionId(),
-            () -> messageSender.planetQueueItemDeleted(planet.getOwner(), planet.getPlanetId(), deconstruction.getDeconstructionId())
+            () -> messageSender.planetQueueItemDeleted(
+                planet.getOwner(),
+                location,
+                deconstruction.getDeconstructionId()
+            )
         );
 
         syncCache.addMessage(
@@ -47,19 +57,19 @@ public class FinishDeconstructionService {
             surface.getSurfaceId(),
             () -> messageSender.planetSurfaceModified(
                 planet.getOwner(),
-                planet.getPlanetId(),
-                surfaceToResponseConverter.convert(surface)
+                location,
+                surfaceToResponseConverter.convert(gameData, surface)
             )
         );
 
         syncCache.addMessage(
             planet.getOwner(),
             WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED,
-            planet.getPlanetId(),
+            location,
             () -> messageSender.planetBuildingDetailsModified(
                 planet.getOwner(),
-                planet.getPlanetId(),
-                planetBuildingOverviewQueryService.getBuildingOverview(planet)
+                location,
+                planetBuildingOverviewQueryService.getBuildingOverview(gameData, planet.getPlanetId())
             )
         );
     }

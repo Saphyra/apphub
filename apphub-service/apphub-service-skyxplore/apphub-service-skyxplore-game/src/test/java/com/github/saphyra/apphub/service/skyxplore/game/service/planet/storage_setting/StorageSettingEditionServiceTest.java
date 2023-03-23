@@ -124,7 +124,7 @@ public class StorageSettingEditionServiceTest {
         given(storageSettingToModelConverter.convert(storageSetting, GAME_ID)).willReturn(model);
         given(storageSettingToApiModelMapper.convert(storageSetting)).willReturn(response);
 
-        StorageSettingApiModel result = underTest.edit(USER_ID, PLANET_ID, request);
+        StorageSettingApiModel result = underTest.edit(USER_ID, request);
 
         verify(eventLoop).processWithResponse(argumentCaptor.capture(), eq(syncCache));
         argumentCaptor.getValue()

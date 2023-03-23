@@ -22,7 +22,7 @@ class ProductionBuildingFinder {
         return gameData.getBuildings()
             .getByLocationAndDataId(planetId, buildingDataId)
             .stream()
-            .filter(building -> buildingCapacityCalculator.calculateCapacity(planetId, building) > 0)
+            .filter(building -> buildingCapacityCalculator.calculateCapacity(gameData, building) > 0)
             .map(Building::getBuildingId)
             .findAny();
     }

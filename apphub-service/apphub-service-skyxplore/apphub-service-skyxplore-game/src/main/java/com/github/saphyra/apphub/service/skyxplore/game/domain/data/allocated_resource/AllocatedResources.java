@@ -32,4 +32,16 @@ public class AllocatedResources extends Vector<AllocatedResource> {
             .filter(allocatedResource -> allocatedResource.getExternalReference().equals(externalReference))
             .collect(Collectors.toList());
     }
+
+    public Optional<AllocatedResource> findByAllocatedResourceId(UUID allocatedResourceId) {
+        return stream()
+            .filter(allocatedResource -> allocatedResource.getAllocatedResourceId().equals(allocatedResourceId))
+            .findAny();
+    }
+
+    public List<AllocatedResource> getByLocation(UUID location) {
+        return stream()
+            .filter(allocatedResource -> allocatedResource.getLocation().equals(location))
+            .collect(Collectors.toList());
+    }
 }

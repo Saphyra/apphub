@@ -4,9 +4,8 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequire
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcessFactory;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ class RequestWorkProcessFactoryForProductionOrder {
     private final GameProperties gameProperties;
     private final RequestWorkProcessFactory requestWorkProcessFactory;
 
-    List<RequestWorkProcess> createWorkPointProcesses(UUID processId, Game game, Planet planet, String producerBuildingDataId, ReservedStorage reservedStorage) {
+    List<RequestWorkProcess> createWorkPointProcesses(UUID processId, GameData gameData, UUID location, String producerBuildingDataId, ReservedStorage reservedStorage) {
         log.info("Creating WorkPointProcesses...");
 
         ProductionData productionData = productionBuildingService.get(producerBuildingDataId)
@@ -44,8 +43,8 @@ class RequestWorkProcessFactoryForProductionOrder {
         for (int workPointsLeft = requiredWorkPoints; workPointsLeft > 0; workPointsLeft -= maxWorkPointsBatch) {
             RequestWorkProcess requestWorkProcess = requestWorkProcessFactory.create(
                 processId,
-                game,
-                planet,
+                gameData,
+                location,
                 producerBuildingDataId,
                 productionData.getRequiredSkill(),
                 Math.min(workPointsLeft, maxWorkPointsBatch)

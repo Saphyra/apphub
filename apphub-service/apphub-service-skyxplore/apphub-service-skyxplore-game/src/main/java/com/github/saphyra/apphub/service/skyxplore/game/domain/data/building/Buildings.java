@@ -32,4 +32,8 @@ public class Buildings extends Vector<Building> {
             .findAny()
             .orElseThrow();
     }
+
+    public void deleteByBuildingId(UUID buildingId) {
+        removeIf(building -> building.getBuildingId().equals(buildingId));
+    }
 }

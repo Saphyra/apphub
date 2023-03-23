@@ -30,7 +30,7 @@ class SolarSystemResponseQueryService {
             .getSolarSystems()
             .findByIdValidated(solarSystemId);
 
-        if (!visibilityFacade.isVisible(userId, solarSystem)) {
+        if (!visibilityFacade.isVisible(game.getData(), userId, solarSystemId)) {
             throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.ITEM_NOT_VISIBLE, "SolarSystem " + solarSystemId + " is not visible for user " + userId);
         }
 

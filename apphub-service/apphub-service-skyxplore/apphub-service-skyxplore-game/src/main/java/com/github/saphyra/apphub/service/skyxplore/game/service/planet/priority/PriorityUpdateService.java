@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.common.PriorityValidator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priority;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.PriorityToModelConverter;
@@ -12,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,15 +32,15 @@ public class PriorityUpdateService {
             .orElseThrow(() -> ExceptionFactory.invalidParam("priorityType", "unknown value"));
 
         Game game = gameDao.findByUserIdValidated(userId);
-        Map<PriorityType, Integer> priorities = game.getUniverse()
-            .findByOwnerAndPlanetIdValidated(userId, planetId)
-            .getPriorities();
+        Priority priority = game.getData()
+            .getPriorities()
+            .findByLocationAndType(planetId, priorityType);
 
         game.getEventLoop()
             .processWithWait(() -> {
-                priorities.put(priorityType, newPriority);
+                priority.setValue(newPriority);
 
-                PriorityModel model = priorityToModelConverter.convert(priorityType, newPriority, planetId, LocationType.PLANET, game.getGameId());
+                PriorityModel model = priorityToModelConverter.convert(game.getGameId(), priority);
                 gameDataProxy.saveItem(model);
             })
             .getOrThrow();

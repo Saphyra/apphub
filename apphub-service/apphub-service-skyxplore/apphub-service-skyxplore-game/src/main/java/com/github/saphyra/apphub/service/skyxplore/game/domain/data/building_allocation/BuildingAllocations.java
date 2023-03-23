@@ -1,8 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 //TODO unit test
 public class BuildingAllocations extends Vector<BuildingAllocation> {
@@ -14,5 +16,11 @@ public class BuildingAllocations extends Vector<BuildingAllocation> {
 
     public void deleteByProcessId(UUID processId) {
         removeIf(buildingAllocation -> buildingAllocation.getProcessId().equals(processId));
+    }
+
+    public List<BuildingAllocation> getByBuildingId(UUID buildingId) {
+        return stream()
+            .filter(buildingAllocation -> buildingAllocation.getBuildingId().equals(buildingId))
+            .collect(Collectors.toList());
     }
 }

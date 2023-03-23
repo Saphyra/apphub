@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.QueueService;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -28,18 +28,17 @@ public class QueueFacade {
     private final QueueItemToResponseConverter converter;
 
     public List<QueueResponse> getQueueOfPlanet(UUID userId, UUID planetId) {
-        Planet planet = gameDao.findByUserIdValidated(userId)
-            .getUniverse()
-            .findByOwnerAndPlanetIdValidated(userId, planetId);
-        return getQueueOfPlanet(planet)
+        GameData gameData = gameDao.findByUserIdValidated(userId)
+            .getData();
+        return getQueueOfPlanet(gameData, planetId)
             .stream()
-            .map(queueItem -> converter.convert(queueItem, planet))
+            .map(queueItem -> converter.convert(queueItem, gameData, planetId))
             .collect(Collectors.toList());
     }
 
-    public List<QueueItem> getQueueOfPlanet(Planet planet) {
+    public List<QueueItem> getQueueOfPlanet(GameData gameData, UUID location) {
         return services.stream()
-            .flatMap(queueService -> queueService.getQueue(planet).stream())
+            .flatMap(queueService -> queueService.getQueue(gameData, location).stream())
             .collect(Collectors.toList());
     }
 

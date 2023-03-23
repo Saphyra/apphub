@@ -117,7 +117,7 @@ public class ProductionOrderProcessTest {
             .processId(PROCESS_ID)
             .status(status)
             .externalReference(EXTERNAL_REFERENCE)
-            .game(game)
+            .gameData(game)
             .planet(planet)
             .producerBuildingDataId(producerBuildingId)
             .allocatedResource(allocatedResource)

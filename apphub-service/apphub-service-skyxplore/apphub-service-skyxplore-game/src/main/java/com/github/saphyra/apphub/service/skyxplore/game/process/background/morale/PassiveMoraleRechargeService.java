@@ -1,9 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.background.morale;
 
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.passive.PassiveMoraleRechargeProcessFactory;
@@ -18,27 +17,18 @@ public class PassiveMoraleRechargeService {
     private final GameProperties gameProperties;
     private final PassiveMoraleRechargeProcessFactory passiveMoraleRechargeProcessFactory;
 
-    public void processGame(Game game, SyncCache syncCache) {
-        game.getUniverse()
-            .getSystems()
-            .values()
-            .stream()
-            .flatMap(solarSystem -> solarSystem.getPlanets().values().stream())
-            .forEach(planet -> processPlanet(game, planet, syncCache));
+    public void processGame(GameData gameData, SyncCache syncCache) {
+        gameData.getCitizens()
+            .forEach(citizen -> processCitizen(gameData, citizen, syncCache));
     }
 
-    private void processPlanet(Game game, Planet planet, SyncCache syncCache) {
-        planet.getPopulation()
-            .values()
-            .forEach(citizen -> processCitizen(game, planet, citizen, syncCache));
-    }
-
-    private void processCitizen(Game game, Planet planet, Citizen citizen, SyncCache syncCache) {
+    private void processCitizen(GameData gameData, Citizen citizen, SyncCache syncCache) {
         log.debug("Decreasing satiety for citizen {}", citizen.getCitizenId());
-        if (citizen.getMorale() < gameProperties.getCitizen().getMorale().getMax() && !planet.getCitizenAllocations().containsKey(citizen.getCitizenId())) {
-            Process process = passiveMoraleRechargeProcessFactory.create(game, planet, citizen);
+        if (citizen.getMorale() < gameProperties.getCitizen().getMorale().getMax() && gameData.getCitizenAllocations().findByCitizenId(citizen.getCitizenId()).isEmpty()) {
+            Process process = passiveMoraleRechargeProcessFactory.create(gameData, citizen);
             syncCache.saveGameItem(process.toModel());
-            game.getProcesses()
+
+            gameData.getProcesses()
                 .add(process);
         }
     }

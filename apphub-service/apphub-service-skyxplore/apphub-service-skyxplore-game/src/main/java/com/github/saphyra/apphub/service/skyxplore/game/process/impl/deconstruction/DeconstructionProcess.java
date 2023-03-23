@@ -6,9 +6,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
@@ -39,9 +38,9 @@ public class DeconstructionProcess implements Process {
     @NonNull
     private final Deconstruction deconstruction;
     @NonNull
-    private final Game game;
+    private final GameData gameData;
     @NonNull
-    private final Planet planet;
+    private final UUID location;
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
 
@@ -52,7 +51,7 @@ public class DeconstructionProcess implements Process {
 
     @Override
     public int getPriority() {
-        return planet.getPriorities().get(PriorityType.CONSTRUCTION) * deconstruction.getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
+        return gameData.getPriorities().findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue() * deconstruction.getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
     @Override
@@ -70,10 +69,10 @@ public class DeconstructionProcess implements Process {
             status = ProcessStatus.IN_PROGRESS;
         }
 
-        List<Process> workProcesses = game.getProcesses().getByExternalReferenceAndType(processId, ProcessType.REQUEST_WORK);
+        List<Process> workProcesses = gameData.getProcesses().getByExternalReferenceAndType(processId, ProcessType.REQUEST_WORK);
         if (workProcesses.stream().allMatch(process -> process.getStatus() == ProcessStatus.DONE)) {
             applicationContextProxy.getBean(FinishDeconstructionService.class)
-                .finishDeconstruction(syncCache, planet, deconstruction);
+                .finishDeconstruction(gameData, location, syncCache, deconstruction);
 
             status = ProcessStatus.DONE;
         } else {
@@ -89,9 +88,9 @@ public class DeconstructionProcess implements Process {
 
     private void createRequestWorkProcesses(SyncCache syncCache) {
         List<RequestWorkProcess> requestWorkProcesses = applicationContextProxy.getBean(RequestWorkProcessFactoryForDeconstruction.class)
-            .createRequestWorkProcesses(game, processId, planet, deconstruction.getDeconstructionId());
+            .createRequestWorkProcesses(gameData, location, processId, deconstruction.getDeconstructionId());
 
-        game.getProcesses()
+        gameData.getProcesses()
             .addAll(requestWorkProcesses);
         requestWorkProcesses.stream()
             .map(RequestWorkProcess::toModel)
@@ -100,7 +99,7 @@ public class DeconstructionProcess implements Process {
 
     @Override
     public void cancel(SyncCache syncCache) {
-        game.getProcesses()
+        gameData.getProcesses()
             .getByExternalReference(processId)
             .forEach(process -> process.cancel(syncCache));
 
@@ -113,12 +112,11 @@ public class DeconstructionProcess implements Process {
     public ProcessModel toModel() {
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(game.getGameId());
+        model.setGameId(gameData.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);
-        model.setLocation(planet.getPlanetId());
-        model.setLocationType(LocationType.PLANET.name());
+        model.setLocation(location);
         model.setExternalReference(getExternalReference());
 
         return model;

@@ -3,9 +3,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.background.sati
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.service.skyxplore.game.common.converter.response.CitizenToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.CitizenToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
@@ -24,34 +23,32 @@ public class SatietyDecreaseService {
     private final WsMessageSender messageSender;
     private final CitizenToResponseConverter citizenToResponseConverter;
 
-    public void processGame(Game game, SyncCache syncCache) {
-        game.getUniverse()
-            .getSystems()
-            .values()
-            .stream()
-            .flatMap(solarSystem -> solarSystem.getPlanets().values().stream())
-            .forEach(planet -> processPlanet(game.getGameId(), planet, syncCache));
+    public void processGame(GameData gameData, SyncCache syncCache) {
+        gameData.getCitizens()
+            .forEach(citizen -> processCitizen(gameData, citizen, syncCache));
     }
 
-    private void processPlanet(UUID gameId, Planet planet, SyncCache syncCache) {
-        planet.getPopulation()
-            .values()
-            .forEach(citizen -> processCitizen(gameId, planet, citizen, syncCache));
-    }
-
-    private void processCitizen(UUID gameId, Planet planet, Citizen citizen, SyncCache syncCache) {
+    private void processCitizen(GameData gameData, Citizen citizen, SyncCache syncCache) {
         log.debug("Decreasing satiety for citizen {}", citizen.getCitizenId());
         int satietyDecreasedPerSecond = gameProperties.getCitizen()
             .getSatiety()
             .getSatietyDecreasedPerSecond();
         citizen.setSatiety(citizen.getSatiety() - satietyDecreasedPerSecond);
 
-        syncCache.saveGameItem(citizenToModelConverter.convert(citizen, gameId));
+        UUID ownerId = gameData.getPlanets()
+            .get(citizen.getLocation())
+            .getOwner();
+
+        syncCache.saveGameItem(citizenToModelConverter.convert(gameData.getGameId(), citizen));
         syncCache.addMessage(
-            planet.getOwner(),
+            ownerId,
             WebSocketEventName.SKYXPLORE_GAME_PLANET_CITIZEN_MODIFIED,
             citizen.getCitizenId(),
-            () -> messageSender.planetCitizenModified(planet.getOwner(), planet.getPlanetId(), citizenToResponseConverter.convert(citizen))
+            () -> messageSender.planetCitizenModified(
+                ownerId,
+                citizen.getLocation(),
+                citizenToResponseConverter.convert(gameData, citizen)
+            )
         );
     }
 }

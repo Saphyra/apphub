@@ -21,4 +21,8 @@ public class ReservedStorage {
     public String toString() {
         return String.format("ReservedStorage(%s)", new Gson().toJson(this));
     }
+
+    public void decreaseAmount(int amount) {
+        this.amount += amount;
+    }
 }

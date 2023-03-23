@@ -14,7 +14,11 @@ import java.util.UUID;
 public class StoredResourceFactory {
     private final IdGenerator idGenerator;
 
-    public StoredResource create(UUID location,  String dataId, int amount) {
+    public StoredResource create(UUID location, String dataId) {
+        return create(location, dataId, 0);
+    }
+
+    public StoredResource create(UUID location, String dataId, int amount) {
         return StoredResource.builder()
             .storedResourceId(idGenerator.randomUuid())
             .location(location)

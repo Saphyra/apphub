@@ -11,4 +11,11 @@ public class Deconstructions extends Vector<Deconstruction> {
             .filter(deconstruction -> deconstruction.getExternalReference().equals(externalReference))
             .findAny();
     }
+
+    public Deconstruction findByDeconstructionId(UUID deconstructionId) {
+        return stream()
+            .filter(deconstruction -> deconstruction.getDeconstructionId().equals(deconstructionId))
+            .findAny()
+            .orElseThrow();
+    }
 }

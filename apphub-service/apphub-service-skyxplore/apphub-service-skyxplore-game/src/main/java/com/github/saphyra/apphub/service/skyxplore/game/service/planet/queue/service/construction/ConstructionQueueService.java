@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.QueueService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction.CancelConstructionService;
@@ -21,8 +21,8 @@ class ConstructionQueueService implements QueueService {
     private final ConstructionQueueItemPriorityUpdateService constructionQueueItemPriorityUpdateService;
 
     @Override
-    public List<QueueItem> getQueue(Planet planet) {
-        return constructionQueueItemQueryService.getQueue(planet);
+    public List<QueueItem> getQueue(GameData gameData, UUID location) {
+        return constructionQueueItemQueryService.getQueue(gameData, location);
     }
 
     @Override

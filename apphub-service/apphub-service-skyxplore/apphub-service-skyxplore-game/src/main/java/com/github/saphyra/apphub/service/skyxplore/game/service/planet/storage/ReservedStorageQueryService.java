@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDa
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
 public class ReservedStorageQueryService {
     private final ResourceDataService resourceDataService;
 
-    public int getReservedAmount(String dataId, GameData gameData, UUID location) {
+    public int getReservedAmount(GameData gameData, UUID location, String dataId) {
         return getReservedAmount(dataId, gameData.getReservedStorages().getByLocation(location));
     }
 
@@ -32,14 +31,13 @@ public class ReservedStorageQueryService {
             .sum();
     }
 
-    public int getReservedAmount(Planet planet, StorageType storageType) {
+    public int getReservedAmount(GameData gameData, UUID location, StorageType storageType) {
         List<String> dataIdsByStorageType = fetchResourceIdsForStorageType(storageType);
 
-        return planet.getStorageDetails()
-            .getReservedStorages()
+        return gameData.getReservedStorages()
+            .getByLocation(location)
             .stream()
             .filter(reservedStorage -> dataIdsByStorageType.contains(reservedStorage.getDataId()))
-            .filter(reservedStorage -> reservedStorage.getLocationType() != LocationType.PRODUCTION)
             .mapToInt(ReservedStorage::getAmount)
             .sum();
     }

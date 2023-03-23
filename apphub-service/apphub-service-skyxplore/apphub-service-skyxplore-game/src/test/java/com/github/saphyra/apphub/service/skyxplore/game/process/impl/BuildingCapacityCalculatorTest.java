@@ -50,7 +50,7 @@ public class BuildingCapacityCalculatorTest {
         given(building.getBuildingId()).willReturn(BUILDING_ID);
         given(buildingAllocations.get(BUILDING_ID)).willReturn(List.of(UUID.randomUUID()));
 
-        int result = underTest.calculateCapacity(planet, building);
+        int result = underTest.calculateCapacity(planet);
 
         assertThat(result).isEqualTo(1);
     }

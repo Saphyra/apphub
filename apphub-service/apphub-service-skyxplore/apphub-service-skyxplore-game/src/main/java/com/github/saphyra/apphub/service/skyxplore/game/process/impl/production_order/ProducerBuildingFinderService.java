@@ -2,9 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl.production
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.BuildingCapacityCalculator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Optional;
-
-import static java.util.Objects.isNull;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -22,25 +20,22 @@ class ProducerBuildingFinderService {
     private final ProductionBuildingService productionBuildingService;
     private final BuildingCapacityCalculator buildingCapacityCalculator;
 
-    Optional<String> findProducerBuildingDataId(Planet planet, String dataId) {
-        return planet.getSurfaces()
-            .values()
+    Optional<String> findProducerBuildingDataId(GameData gameData, UUID location, String dataId) {
+        return gameData.getBuildings()
+            .getByLocation(location)
             .stream()
-            .filter(surface -> !isNull(surface.getBuilding()))
-            .filter(surface -> productionBuildingService.containsKey(surface.getBuilding().getDataId()))
-            .filter(surface -> canProduce(dataId, surface))
-            .map(Surface::getBuilding)
-            .filter(building -> buildingCapacityCalculator.calculateCapacity(planet, building) > 0)
+            .filter(building -> canProduce(gameData, dataId, building))
+            .filter(building -> buildingCapacityCalculator.calculateCapacity(location) > 0)
             .map(Building::getDataId)
             .findAny();
     }
 
-    private boolean canProduce(String dataId, Surface surface) {
-        Map<String, ProductionData> gives = productionBuildingService.get(surface.getBuilding().getDataId()).getGives();
+    private boolean canProduce(GameData gameData, String dataId, Building building) {
+        Map<String, ProductionData> gives = productionBuildingService.get(building.getDataId()).getGives();
         if (gives.containsKey(dataId)) {
             return gives.get(dataId)
                 .getPlaced()
-                .contains(surface.getSurfaceType());
+                .contains(gameData.getSurfaces().findBySurfaceId(building.getSurfaceId()).getSurfaceType());
         }
         return false;
     }

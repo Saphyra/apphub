@@ -13,7 +13,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessParamKeys;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +35,7 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
 
     public List<ProductionOrderProcess> create(GameData gameData, UUID externalReference, UUID location, UUID reservedStorageId) {
         ReservedStorage reservedStorage = gameData.getReservedStorages()
-            .findById(reservedStorageId)
+            .findByReservedStorageId(reservedStorageId)
             .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ReservedStorage not found with id " + reservedStorageId));
 
         return create(gameData, externalReference, location, reservedStorage);
@@ -61,8 +60,8 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
                 .processId(idGenerator.randomUuid())
                 .status(ProcessStatus.CREATED)
                 .externalReference(externalReference)
-                .game(game)
-                .planet(planet)
+                .gameData(gameData)
+                .location(location)
                 .allocatedResource(allocatedResource)
                 .reservedStorage(reservedStorage)
                 .applicationContextProxy(applicationContextProxy)
@@ -83,25 +82,22 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
 
     @Override
     public ProductionOrderProcess createFromModel(Game game, ProcessModel model) {
-        Planet planet = game.getUniverse()
-            .findPlanetByIdValidated(model.getLocation());
-
-        AllocatedResource allocatedResource = planet.getStorageDetails()
+        AllocatedResource allocatedResource = game.getData()
             .getAllocatedResources()
-            .findById(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.ALLOCATED_RESOURCE_ID)))
+            .findByAllocatedResourceId(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.ALLOCATED_RESOURCE_ID)))
             .orElse(null);
 
-        ReservedStorage reservedStorage = planet.getStorageDetails()
+        ReservedStorage reservedStorage = game.getData()
             .getReservedStorages()
-            .findByIdValidated(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.RESERVED_STORAGE_ID)));
+            .findByReservedStorageIdValidated(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.RESERVED_STORAGE_ID)));
 
         return ProductionOrderProcess.builder()
             .processId(model.getId())
             .status(model.getStatus())
             .producerBuildingDataId(model.getData().get(ProcessParamKeys.PRODUCER_BUILDING_DATA_ID))
             .externalReference(model.getExternalReference())
-            .game(game)
-            .planet(planet)
+            .gameData(game.getData())
+            .location(model.getLocation())
             .allocatedResource(allocatedResource)
             .reservedStorage(reservedStorage)
             .amount(Integer.parseInt(model.getData().get(ProcessParamKeys.AMOUNT)))

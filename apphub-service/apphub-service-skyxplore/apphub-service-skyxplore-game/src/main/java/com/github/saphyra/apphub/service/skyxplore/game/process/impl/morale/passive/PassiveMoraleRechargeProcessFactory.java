@@ -6,8 +6,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +22,11 @@ public class PassiveMoraleRechargeProcessFactory implements ProcessFactory {
     private final ApplicationContextProxy applicationContextProxy;
     private final IdGenerator idGenerator;
 
-    public PassiveMoraleRechargeProcess create(Game game, Planet planet, Citizen citizen) {
+    public PassiveMoraleRechargeProcess create(GameData gameData, Citizen citizen) {
         return create(
             idGenerator.randomUuid(),
             ProcessStatus.CREATED,
-            game,
-            planet,
+            gameData,
             citizen
         );
     }
@@ -39,25 +38,24 @@ public class PassiveMoraleRechargeProcessFactory implements ProcessFactory {
 
     @Override
     public PassiveMoraleRechargeProcess createFromModel(Game game, ProcessModel model) {
-        Planet planet = game.getUniverse()
-            .findPlanetByIdValidated(model.getLocation());
-        Citizen citizen = planet.getPopulation()
-            .get(model.getExternalReference());
+        Citizen citizen = game.getData()
+            .getCitizens()
+            .findByCitizenIdValidated(model.getExternalReference());
+
         return create(
             model.getId(),
             model.getStatus(),
-            game,
-            planet,
+            game.getData(),
             citizen
         );
     }
 
-    private PassiveMoraleRechargeProcess create(UUID processId, ProcessStatus status, Game game, Planet planet, Citizen citizen) {
+    private PassiveMoraleRechargeProcess create(UUID processId, ProcessStatus status, GameData gameData, Citizen citizen) {
         return PassiveMoraleRechargeProcess.builder()
             .processId(processId)
             .status(status)
-            .gameData(game)
-            .planet(planet)
+            .gameData(gameData)
+            .location(citizen.getLocation())
             .citizen(citizen)
             .applicationContextProxy(applicationContextProxy)
             .build();

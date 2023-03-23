@@ -1,13 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -15,13 +13,13 @@ import java.util.UUID;
 public class BuildingCapacityCalculator {
     private final ProductionBuildingService productionBuildingService;
 
-    public int calculateCapacity(UUID location, Building building) {
+    public int calculateCapacity(GameData gameData, Building building) {
         int maxWorkers = building.getLevel() * productionBuildingService.get(building.getDataId())
             .getWorkers();
 
-        int assignedWorkplaces = planet.getBuildingAllocations()
-            .get(building.getBuildingId())
-            .size();
+        int assignedWorkplaces = gameData.getBuildingAllocations()
+            .getByBuildingId(building.getBuildingId())
+            .size() * building.getLevel();
 
         int result = maxWorkers - assignedWorkplaces;
         log.info("Workplaces on level {} {}: {}. Already assigned: {}. Remaining: {}", building.getLevel(), building.getDataId(), maxWorkers, assignedWorkplaces, result);

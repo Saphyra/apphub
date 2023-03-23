@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDa
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,8 +22,11 @@ import java.util.stream.Collectors;
 public class ActualResourceAmountQueryService {
     private final ResourceDataService resourceDataService;
 
-    public int getActualAmount(String dataId, GameData gameData, UUID location) {
-        return getActualAmount(dataId, planet.getStorageDetails().getStoredResources());
+    public int getActualAmount(GameData gameData, UUID location, String dataId) {
+        return gameData.getStoredResources()
+            .findByLocationAndDataId(location, dataId)
+            .map(StoredResource::getAmount)
+            .orElse(0);
     }
 
     public int getActualAmount(String dataId, Map<String, StoredResource> storedResources) {
@@ -33,12 +35,11 @@ public class ActualResourceAmountQueryService {
             .orElse(0);
     }
 
-    public int getActualAmount(Planet planet, StorageType storageType) {
+    public int getActualAmount(GameData gameData, UUID location, StorageType storageType) {
         List<String> dataIdsByStorageType = fetchResourceIdsForStorageType(storageType);
 
-        return planet.getStorageDetails()
-            .getStoredResources()
-            .values()
+        return gameData.getStoredResources()
+            .getByLocation(location)
             .stream()
             .filter(storedResource -> dataIdsByStorageType.contains(storedResource.getDataId()))
             .mapToInt(StoredResource::getAmount)

@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageSettingsResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.StorageSettingToApiModelMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +20,10 @@ public class StorageSettingsResponseQueryService {
     private final StorageSettingToApiModelMapper storageSettingToApiModelMapper;
 
     public StorageSettingsResponse getStorageSettings(UUID userId, UUID planetId) {
-        Planet planet = gameDao.findByUserIdValidated(userId)
-            .getUniverse()
-            .findPlanetByIdValidated(planetId);
-
-        List<StorageSetting> storageSettings = planet.getStorageDetails()
-            .getStorageSettings();
+        List<StorageSetting> storageSettings =gameDao.findByUserIdValidated(userId)
+            .getData()
+            .getStorageSettings()
+            .getByLocation(planetId);
 
         return StorageSettingsResponse.builder()
             .currentSettings(storageSettingToApiModelMapper.convert(storageSettings))

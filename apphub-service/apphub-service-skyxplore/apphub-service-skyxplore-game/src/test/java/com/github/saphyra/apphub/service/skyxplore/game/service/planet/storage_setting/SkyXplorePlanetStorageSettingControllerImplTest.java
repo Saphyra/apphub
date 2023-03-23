@@ -79,7 +79,7 @@ public class SkyXplorePlanetStorageSettingControllerImplTest {
 
     @Test
     public void editStorageSetting() {
-        given(storageSettingEditionService.edit(USER_ID, PLANET_ID, storageSettingModel)).willReturn(storageSettingModel);
+        given(storageSettingEditionService.edit(USER_ID, storageSettingModel)).willReturn(storageSettingModel);
 
         StorageSettingApiModel result = underTest.editStorageSetting(storageSettingModel, PLANET_ID, accessTokenHeader);
 

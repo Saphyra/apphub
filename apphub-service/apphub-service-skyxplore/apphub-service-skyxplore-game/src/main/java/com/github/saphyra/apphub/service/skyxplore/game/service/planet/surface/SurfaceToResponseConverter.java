@@ -21,7 +21,7 @@ public class SurfaceToResponseConverter {
 
     public SurfaceResponse convert(GameData gameData, UUID surfaceId) {
         Surface surface = gameData.getSurfaces()
-            .findById(surfaceId);
+            .findBySurfaceId(surfaceId);
 
         return convert(gameData, surface);
     }

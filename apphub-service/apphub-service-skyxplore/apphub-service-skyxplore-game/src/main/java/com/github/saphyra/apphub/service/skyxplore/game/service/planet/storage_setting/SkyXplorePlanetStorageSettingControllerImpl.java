@@ -39,8 +39,8 @@ class SkyXplorePlanetStorageSettingControllerImpl implements SkyXplorePlanetStor
     }
 
     @Override
-    public StorageSettingApiModel editStorageSetting(StorageSettingApiModel request, UUID planetId, AccessTokenHeader accessTokenHeader) {
+    public StorageSettingApiModel editStorageSetting(StorageSettingApiModel request, UUID planetId, AccessTokenHeader accessTokenHeader) { //TODO Remove planetId param
         log.info("{} wants to edit storageSetting {} on planet {}", accessTokenHeader.getUserId(), request.getStorageSettingId(), planetId);
-        return storageSettingEditionService.edit(accessTokenHeader.getUserId(), planetId, request);
+        return storageSettingEditionService.edit(accessTokenHeader.getUserId(), request);
     }
 }

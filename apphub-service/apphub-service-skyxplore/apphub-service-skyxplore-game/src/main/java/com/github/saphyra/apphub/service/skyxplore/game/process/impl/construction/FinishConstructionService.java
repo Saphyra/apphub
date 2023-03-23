@@ -59,7 +59,7 @@ class FinishConstructionService {
         );
 
         Surface surface = gameData.getSurfaces()
-            .findById(building.getSurfaceId());
+            .findBySurfaceId(building.getSurfaceId());
         syncCache.addMessage(
             ownerId,
             WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED,

@@ -8,7 +8,12 @@ import java.util.stream.Collectors;
 
 //TODO unit test
 public class ReservedStorages extends Vector<ReservedStorage> {
-    public Optional<ReservedStorage> findById(UUID reservedStorageId) {
+
+    public ReservedStorage findByReservedStorageIdValidated(UUID reservedStorageId) {
+        return findByReservedStorageId(reservedStorageId)
+            .orElseThrow();
+    }
+    public Optional<ReservedStorage> findByReservedStorageId(UUID reservedStorageId) {
         return stream()
             .filter(reservedStorage -> reservedStorage.getReservedStorageId().equals(reservedStorageId))
             .findAny();

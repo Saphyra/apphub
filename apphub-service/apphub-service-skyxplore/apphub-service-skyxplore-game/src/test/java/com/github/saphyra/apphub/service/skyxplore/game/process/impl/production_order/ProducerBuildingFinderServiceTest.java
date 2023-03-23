@@ -61,7 +61,7 @@ public class ProducerBuildingFinderServiceTest {
         given(productionBuildingService.get(BUILDING_DATA_ID)).willReturn(productionBuilding);
         given(productionBuilding.getGives()).willReturn(CollectionUtils.singleValueMap(RESOURCE_DATA_ID, productionData));
         given(productionData.getPlaced()).willReturn(List.of(SurfaceType.LAKE));
-        given(buildingCapacityCalculator.calculateCapacity(planet, building)).willReturn(12);
+        given(buildingCapacityCalculator.calculateCapacity(planet)).willReturn(12);
 
         Optional<String> result = underTest.findProducerBuildingDataId(planet, RESOURCE_DATA_ID);
 

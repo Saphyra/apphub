@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.common.factory;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
@@ -15,14 +16,16 @@ import java.util.UUID;
 public class ConstructionFactory {
     private final IdGenerator idGenerator;
 
-    public Construction create(UUID externalReference, int parallelWorkers, int requiredWorkPoints) {
-        return create(externalReference, parallelWorkers, requiredWorkPoints, null);
+    public Construction create(UUID externalReference, ConstructionType type, UUID location, int parallelWorkers, int requiredWorkPoints) {
+        return create(externalReference, type, location, parallelWorkers, requiredWorkPoints, null);
     }
 
-    public Construction create(UUID externalReference, int parallelWorkers, int requiredWorkPoints, String data) {
+    public Construction create(UUID externalReference, ConstructionType type, UUID location, int parallelWorkers, int requiredWorkPoints, String data) {
         return Construction.builder()
             .constructionId(idGenerator.randomUuid())
             .externalReference(externalReference)
+            .type(type)
+            .location(location)
             .parallelWorkers(parallelWorkers)
             .requiredWorkPoints(requiredWorkPoints)
             .currentWorkPoints(0)
