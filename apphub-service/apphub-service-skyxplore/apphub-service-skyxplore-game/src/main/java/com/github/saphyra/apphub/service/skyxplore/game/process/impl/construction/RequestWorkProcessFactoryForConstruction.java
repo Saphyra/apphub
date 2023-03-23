@@ -3,9 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl.constructi
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingDataService;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcessType;
@@ -23,7 +23,7 @@ class RequestWorkProcessFactoryForConstruction {
     private final BuildingDataService buildingDataService;
     private final RequestWorkProcessFactory requestWorkProcessFactory;
 
-    List<RequestWorkProcess> createRequestWorkProcesses(UUID processId, Game game, Planet planet, Building building) {
+    List<RequestWorkProcess> createRequestWorkProcesses(UUID processId, GameData gameData, UUID location, Building building, Construction construction) {
         log.info("Creating RequestWorkProcesses...");
         ConstructionRequirements constructionRequirements = buildingDataService.get(building.getDataId())
             .getConstructionRequirements()
@@ -31,10 +31,10 @@ class RequestWorkProcessFactoryForConstruction {
         log.info("{}", constructionRequirements);
 
         return requestWorkProcessFactory.create(
-            game,
+            gameData,
             processId,
-            planet,
-            building.getConstruction().getConstructionId(),
+            location,
+            construction.getConstructionId(),
             RequestWorkProcessType.CONSTRUCTION,
             SkillType.BUILDING,
             constructionRequirements.getRequiredWorkPoints(),

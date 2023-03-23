@@ -11,4 +11,8 @@ public class Constructions extends Vector<Construction> {
             .filter(construction -> construction.getExternalReference().equals(externalReference))
             .findAny();
     }
+
+    public void deleteById(UUID constructionId) {
+        removeIf(construction -> construction.getConstructionId().equals(constructionId));
+    }
 }

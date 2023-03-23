@@ -25,4 +25,11 @@ public class Buildings extends Vector<Building> {
             .filter(building -> building.getLocation().equals(location))
             .toList();
     }
+
+    public Building findByBuildingId(UUID buildingId) {
+        return stream()
+            .filter(building -> building.getBuildingId().equals(buildingId))
+            .findAny()
+            .orElseThrow();
+    }
 }

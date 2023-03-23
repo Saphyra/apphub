@@ -51,14 +51,13 @@ public class ReservedStorageQueryService {
             .collect(Collectors.toList());
     }
 
-    public int getReservedStorageCapacity(Planet planet, StorageType storageType) {
+    public int getReservedStorageCapacity(GameData gameData, UUID location, StorageType storageType) {
         List<String> dataIdsByStorageType = fetchResourceIdsForStorageType(storageType);
 
-        return planet.getStorageDetails()
-            .getReservedStorages()
+        return gameData.getReservedStorages()
+            .getByLocation(location)
             .stream()
-            .filter(reservedStorage -> dataIdsByStorageType.contains(reservedStorage.getDataId()))
-            .filter(reservedStorage -> reservedStorage.getLocationType() != LocationType.PRODUCTION)
+            .filter(reservedStorage -> dataIdsByStorageType.contains(reservedStorage.getDataId())) //TODO filter reserved storage for production - if needed
             .map(this::getReservedStorageCapacity)
             .mapToInt(Integer::intValue)
             .sum();

@@ -108,4 +108,9 @@ public class GameDao {
     public List<Game> getAll() {
         return new ArrayList<>(repository.values());
     }
+
+    //TODO unit test
+    public Game findById(UUID gameId) {
+        return repository.get(gameId);
+    }
 }

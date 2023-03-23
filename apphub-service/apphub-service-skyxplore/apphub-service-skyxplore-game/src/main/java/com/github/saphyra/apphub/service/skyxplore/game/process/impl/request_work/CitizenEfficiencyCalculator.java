@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_wo
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenMoraleProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +15,10 @@ import org.springframework.stereotype.Component;
 public class CitizenEfficiencyCalculator {
     private final GameProperties properties;
 
-    public double calculateEfficiency(Citizen citizen, SkillType skillType) {
+    public double calculateEfficiency(GameData gameData, Citizen citizen, SkillType skillType) {
         double moraleMultiplier = calculateMoraleMultiplier(citizen.getMorale());
-        int skillLevel = citizen.getSkills()
-            .get(skillType)
+        int skillLevel = gameData.getSkills()
+            .findByCitizenIdAndSkillType(citizen.getCitizenId(), skillType)
             .getLevel();
         double skillMultiplier = 1 + (skillLevel - 1) * properties.getCitizen()
             .getSkill()

@@ -4,7 +4,7 @@ import java.util.UUID;
 import java.util.Vector;
 
 public class Priorities extends Vector<Priority> {
-    public Priority getByLocationAndType(UUID location, PriorityType type) {
+    public Priority findByLocationAndType(UUID location, PriorityType type) {
         return stream()
             .filter(priority -> priority.getLocation().equals(location))
             .filter(priority -> priority.getType() == type)

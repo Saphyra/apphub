@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_wo
 
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcessType;
@@ -19,11 +20,11 @@ public class UpdateTargetService {
     private final TerraformationUpdateService terraformationUpdateService;
     private final DeconstructionUpdateService deconstructionUpdateService;
 
-    public void updateTarget(SyncCache syncCache, RequestWorkProcessType processType, Game game, Planet planet, UUID targetId, int completedWorkPoints) {
+    public void updateTarget(SyncCache syncCache, RequestWorkProcessType processType, GameData gameData, UUID location, UUID targetId, int completedWorkPoints) {
         switch (processType) {
-            case CONSTRUCTION -> constructionUpdateService.updateConstruction(syncCache, game, planet, targetId, completedWorkPoints);
-            case DECONSTRUCTION -> deconstructionUpdateService.updateDeconstruction(syncCache, game, planet, targetId, completedWorkPoints);
-            case TERRAFORMATION -> terraformationUpdateService.updateTerraformation(syncCache, game, planet, targetId, completedWorkPoints);
+            case CONSTRUCTION -> constructionUpdateService.updateConstruction(syncCache, gameData, planet, targetId, completedWorkPoints);
+            case DECONSTRUCTION -> deconstructionUpdateService.updateDeconstruction(syncCache, gameData, planet, targetId, completedWorkPoints);
+            case TERRAFORMATION -> terraformationUpdateService.updateTerraformation(syncCache, gameData, planet, targetId, completedWorkPoints);
             case OTHER -> log.info("No status update needed.");
             default -> throw ExceptionFactory.reportedException("No handler for requestWorkProcessType " + processType);
         }

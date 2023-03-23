@@ -65,7 +65,7 @@ public class StorageSettingProcess implements Process {
     @Override
     public int getPriority() {
         return gameData.getPriorities()
-            .getByLocationAndType(location, PriorityType.INDUSTRY)
+            .findByLocationAndType(location, PriorityType.INDUSTRY)
             .getValue()
             * storageSetting.getPriority()
             * GameConstants.PROCESS_PRIORITY_MULTIPLIER;

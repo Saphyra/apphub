@@ -52,15 +52,14 @@ public class ActualResourceAmountQueryService {
             .collect(Collectors.toList());
     }
 
-    public int getActualStorageAmount(Planet planet, StorageType storageType) {
+    public int getActualStorageAmount(GameData gameData, UUID location, StorageType storageType) {
         List<String> dataIdsByStorageType = fetchResourceIdsForStorageType(storageType);
 
-        return planet.getStorageDetails()
-            .getStoredResources()
-            .entrySet()
+        return gameData.getStoredResources()
+            .getByLocation(location)
             .stream()
-            .filter(entry -> dataIdsByStorageType.contains(entry.getKey()))
-            .map(entry -> getActualStorageAmount(entry.getValue()))
+            .filter(storedResource -> dataIdsByStorageType.contains(storedResource.getDataId()))
+            .map(this::getActualStorageAmount)
             .mapToInt(Integer::intValue)
             .sum();
     }

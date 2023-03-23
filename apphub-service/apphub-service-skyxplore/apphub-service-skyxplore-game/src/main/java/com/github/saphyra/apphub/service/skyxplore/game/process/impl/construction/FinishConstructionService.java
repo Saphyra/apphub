@@ -2,10 +2,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl.constructi
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
@@ -17,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -27,48 +28,57 @@ class FinishConstructionService {
     private final SurfaceToResponseConverter surfaceToResponseConverter;
     private final PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
 
-    void finishConstruction(SyncCache syncCache, Game game, Planet planet, Building building) {
+    void finishConstruction(SyncCache syncCache, GameData gameData, UUID location, Building building, Construction construction) {
         log.info("Finishing construction...");
 
-        Construction construction = building.getConstruction();
+        UUID ownerId = gameData.getPlanets()
+            .get(location)
+            .getOwner();
 
-        allocationRemovalService.removeAllocationsAndReservations(syncCache, planet, construction.getConstructionId());
+        allocationRemovalService.removeAllocationsAndReservations(syncCache, gameData, location, ownerId, construction.getConstructionId());
 
         building.setLevel(building.getLevel() + 1);
-        building.setConstruction(null);
+
+        gameData.getConstructions()
+            .deleteById(construction.getConstructionId());
 
         log.info("Upgraded building: {}", building);
 
         syncCache.deleteGameItem(construction.getConstructionId(), GameItemType.CONSTRUCTION);
-        syncCache.saveGameItem(buildingToModelConverter.convert(building, game.getGameId()));
+        syncCache.saveGameItem(buildingToModelConverter.convert(gameData.getGameId(), building));
 
         syncCache.addMessage(
-            planet.getOwner(),
+            ownerId,
             WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED,
             construction.getConstructionId(),
-            () -> messageSender.planetQueueItemDeleted(planet.getOwner(), planet.getPlanetId(), construction.getConstructionId())
+            () -> messageSender.planetQueueItemDeleted(
+                ownerId,
+                location,
+                construction.getConstructionId()
+            )
         );
 
-        Surface surface = planet.findSurfaceByBuildingIdValidated(building.getBuildingId());
+        Surface surface = gameData.getSurfaces()
+            .findById(building.getSurfaceId());
         syncCache.addMessage(
-            planet.getOwner(),
+            ownerId,
             WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED,
             surface.getSurfaceId(),
             () -> messageSender.planetSurfaceModified(
-                planet.getOwner(),
-                planet.getPlanetId(),
-                surfaceToResponseConverter.convert(surface)
+                ownerId,
+                location,
+                surfaceToResponseConverter.convert(gameData, surface)
             )
         );
 
         syncCache.addMessage(
-            planet.getOwner(),
+            ownerId,
             WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED,
-            planet.getPlanetId(),
+            location,
             () -> messageSender.planetBuildingDetailsModified(
-                planet.getOwner(),
-                planet.getPlanetId(),
-                planetBuildingOverviewQueryService.getBuildingOverview(planet)
+                ownerId,
+                location,
+                planetBuildingOverviewQueryService.getBuildingOverview(gameData, location)
             )
         );
     }

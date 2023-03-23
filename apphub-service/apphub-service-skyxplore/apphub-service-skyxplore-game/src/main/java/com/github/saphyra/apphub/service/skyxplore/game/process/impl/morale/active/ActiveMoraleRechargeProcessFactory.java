@@ -6,8 +6,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,37 +27,36 @@ public class ActiveMoraleRechargeProcessFactory implements ProcessFactory {
         return ProcessType.ACTIVE_MORALE_RECHARGE;
     }
 
-    public ActiveMoraleRechargeProcess create(Game game, Planet planet, Citizen citizen) {
+    public ActiveMoraleRechargeProcess create(GameData gameData, UUID location, Citizen citizen) {
         return create(
             idGenerator.randomUuid(),
             ProcessStatus.CREATED,
-            game,
-            planet,
+            gameData,
+            location,
             citizen
         );
     }
 
     @Override
     public ActiveMoraleRechargeProcess createFromModel(Game game, ProcessModel model) {
-        Planet planet = game.getUniverse()
-            .findPlanetByIdValidated(model.getLocation());
-        Citizen citizen = planet.getPopulation()
-            .get(model.getExternalReference());
+        Citizen citizen = game.getData()
+            .getCitizens()
+            .findByCitizenIdValidated(model.getExternalReference());
         return create(
             model.getId(),
             model.getStatus(),
-            game,
-            planet,
+            game.getData(),
+            model.getLocation(),
             citizen
         );
     }
 
-    private ActiveMoraleRechargeProcess create(UUID processId, ProcessStatus status, Game game, Planet planet, Citizen citizen) {
+    private ActiveMoraleRechargeProcess create(UUID processId, ProcessStatus status, GameData gameData, UUID location, Citizen citizen) {
         return ActiveMoraleRechargeProcess.builder()
             .processId(processId)
             .status(status)
-            .game(game)
-            .planet(planet)
+            .gameData(gameData)
+            .location(location)
             .citizen(citizen)
             .applicationContextProxy(applicationContextProxy)
             .build();

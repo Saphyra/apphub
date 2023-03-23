@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_wo
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.CitizenEfficiencyCalculator;
@@ -18,7 +19,7 @@ class SleepTimeCalculator {
     private final CitizenEfficiencyCalculator citizenEfficiencyCalculator;
     private final GameProperties gameProperties;
 
-    long calculateSleepTime(Planet planet, UUID citizenId, SkillType skillType, int workPoints) {
+    long calculateSleepTime(GameData gameData, UUID location, UUID citizenId, SkillType skillType, int workPoints) {
         int workPointsPerSeconds = gameProperties.getCitizen()
             .getWorkPointsPerSeconds();
         Citizen citizen = planet.getPopulation()

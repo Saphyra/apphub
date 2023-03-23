@@ -12,17 +12,20 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.St
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.common.converter.response.CitizenToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenMoraleProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.rest.Rest;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.rest.RestFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.CitizenAllocationFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.CitizenToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.AccessLevel;
@@ -52,10 +55,10 @@ public class ActiveMoraleRechargeProcess implements Process {
     private volatile ProcessStatus status = ProcessStatus.CREATED;
 
     @NonNull
-    private final Game game;
+    private final GameData gameData;
 
     @NonNull
-    private final Planet planet;
+    private final UUID location;
 
     @NonNull
     private final Citizen citizen;
@@ -86,7 +89,7 @@ public class ActiveMoraleRechargeProcess implements Process {
 
         log.info("Citizen {} has {} morale, so priority multiplier is {}", citizen.getCitizenId(), citizen.getMorale(), citizenMoraleRatio);
 
-        int result = (int) (planet.getPriorities().get(PriorityType.WELL_BEING) * citizenMoraleRatio * GameConstants.PROCESS_PRIORITY_MULTIPLIER);
+        int result = (int) (gameData.getPriorities().findByLocationAndType(location, PriorityType.WELL_BEING).getValue() * citizenMoraleRatio * GameConstants.PROCESS_PRIORITY_MULTIPLIER);
         log.info("Priority {} calculated for Citizen {} active resting.", result, citizen.getCitizenId());
         return result;
     }
@@ -94,7 +97,7 @@ public class ActiveMoraleRechargeProcess implements Process {
     @Override
     public void work(SyncCache syncCache) {
         if (status == ProcessStatus.CREATED) {
-            if (planet.getCitizenAllocations().containsKey(citizen.getCitizenId())) {
+            if (gameData.getCitizenAllocations().findByCitizenId(citizen.getCitizenId()).isPresent()) {
                 status = ProcessStatus.READY_TO_DELETE;
             } else {
                 status = ProcessStatus.IN_PROGRESS;
@@ -144,14 +147,19 @@ public class ActiveMoraleRechargeProcess implements Process {
         log.info("Maximum {} morale can be restored at once, {} for {} seconds.", maxMoraleRecharge, moralePerSecond, moraleProperties.getMaxRestSeconds());
         log.info("Citizen {} can recharge {} morale now. It will take {} milliseconds.", citizen.getCitizenId(), moraleToRecharge, sleepTimeMilliseconds);
 
+        Game game = applicationContextProxy.getBean(GameDao.class)
+            .findById(gameData.getGameId());
+
         Rest rest = applicationContextProxy.getBean(RestFactory.class)
             .create(moraleToRecharge, sleepTimeMilliseconds, game);
 
         restFuture = applicationContextProxy.getBean(ExecutorServiceBean.class)
             .asyncProcess(rest);
 
-        planet.getCitizenAllocations()
-            .put(citizen.getCitizenId(), processId);
+        CitizenAllocation citizenAllocation = applicationContextProxy.getBean(CitizenAllocationFactory.class)
+            .create(citizen.getCitizenId(), processId);
+        gameData.getCitizenAllocations()
+            .add(citizenAllocation); //TODO save to database
     }
 
     @SneakyThrows
@@ -162,20 +170,25 @@ public class ActiveMoraleRechargeProcess implements Process {
 
         log.info("Citizen {} morale increased by {}, current morale: {}", citizen.getCitizenId(), rest.getRestoredMorale(), citizen.getMorale());
 
-        planet.getCitizenAllocations().remove(citizen.getCitizenId());
+        gameData.getCitizenAllocations()
+            .deleteByProcessId(processId);//TODO delete gameItem
 
         GameItem citizenModel = applicationContextProxy.getBean(CitizenToModelConverter.class)
-            .convert(citizen, game.getGameId());
+            .convert(gameData.getGameId(), citizen);
         syncCache.saveGameItem(citizenModel);
 
+        UUID ownerId = gameData.getPlanets()
+            .get(location)
+            .getOwner();
+
         syncCache.addMessage(
-            planet.getOwner(),
+            ownerId,
             WebSocketEventName.SKYXPLORE_GAME_PLANET_CITIZEN_MODIFIED,
             citizen.getCitizenId(),
             () -> applicationContextProxy.getBean(WsMessageSender.class).planetCitizenModified(
-                planet.getOwner(),
-                planet.getPlanetId(),
-                applicationContextProxy.getBean(CitizenToResponseConverter.class).convert(citizen)
+                ownerId,
+                location,
+                applicationContextProxy.getBean(CitizenToResponseConverter.class).convert(gameData, citizen)
             )
         );
 
@@ -191,12 +204,11 @@ public class ActiveMoraleRechargeProcess implements Process {
     public ProcessModel toModel() {
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(game.getGameId());
+        model.setGameId(gameData.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(getStatus());
-        model.setLocation(planet.getPlanetId());
-        model.setLocationType(LocationType.PLANET.name());
+        model.setLocation(location);
         model.setExternalReference(getExternalReference());
         return model;
     }

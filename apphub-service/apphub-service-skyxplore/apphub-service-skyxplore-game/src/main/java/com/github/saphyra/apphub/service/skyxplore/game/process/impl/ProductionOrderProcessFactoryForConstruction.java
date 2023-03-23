@@ -1,8 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl;
 
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order.ProductionOrderProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order.ProductionOrderProcessFactory;
 import lombok.RequiredArgsConstructor;
@@ -19,14 +18,13 @@ import java.util.stream.Collectors;
 public class ProductionOrderProcessFactoryForConstruction {
     private final ProductionOrderProcessFactory productionOrderProcessFactory;
 
-    public List<ProductionOrderProcess> createProductionOrderProcesses(UUID processId, Game game, Planet planet, Construction construction) {
+    public List<ProductionOrderProcess> createProductionOrderProcesses(UUID processId, GameData gameData, UUID location, Construction construction) {
         log.info("Creating ProductionOrderProcesses...");
 
-        return planet.getStorageDetails()
-            .getReservedStorages()
+        return gameData.getReservedStorages()
+            .getByExternalReference(construction.getConstructionId())
             .stream()
-            .filter(reservedStorage -> reservedStorage.getExternalReference().equals(construction.getConstructionId()))
-            .flatMap(reservedStorage -> productionOrderProcessFactory.create(processId, game, planet, reservedStorage.getReservedStorageId()).stream())
+            .flatMap(reservedStorage -> productionOrderProcessFactory.create(gameData, processId, location, reservedStorage.getReservedStorageId()).stream())
             .collect(Collectors.toList());
     }
 }

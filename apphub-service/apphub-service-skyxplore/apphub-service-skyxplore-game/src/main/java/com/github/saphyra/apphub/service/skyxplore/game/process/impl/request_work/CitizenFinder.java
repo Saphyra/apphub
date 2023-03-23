@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ import static java.util.Objects.isNull;
 class CitizenFinder {
     private final CitizenEfficiencyCalculator citizenEfficiencyCalculator;
 
-    public Optional<UUID> getSuitableCitizen(Planet planet, SkillType requiredSkill) {
+    public Optional<UUID> getSuitableCitizen(GameData gameData, UUID location, SkillType requiredSkill) {
         return planet.getPopulation()
             .values()
             .stream()

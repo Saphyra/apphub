@@ -23,16 +23,20 @@ public class SurfaceToResponseConverter {
         Surface surface = gameData.getSurfaces()
             .findById(surfaceId);
 
+        return convert(gameData, surface);
+    }
+
+    public SurfaceResponse convert(GameData gameData, Surface surface) {
         Coordinate coordinate = gameData.getCoordinates()
-            .findByReferenceId(surfaceId);
+            .findByReferenceId(surface.getSurfaceId());
 
         SurfaceBuildingResponse buildingResponse = gameData.getBuildings()
-            .findBySurfaceId(surfaceId)
-            .map(buildingToResponseConverter::convert)
+            .findBySurfaceId(surface.getSurfaceId())
+            .map(building -> buildingToResponseConverter.convert(gameData, building))
             .orElse(null);
 
         ConstructionResponse terraformation = gameData.getConstructions()
-            .findByExternalReference(surfaceId)
+            .findByExternalReference(surface.getSurfaceId())
             .map(constructionToResponseConverter::convert)
             .orElse(null);
 

@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.GameSleepService;
@@ -20,11 +20,12 @@ import java.util.concurrent.Future;
 @Data
 @Builder
 @Slf4j
-@ToString(exclude = {"game", "planet", "applicationContextProxy"})
+@ToString(exclude = {"game", "applicationContextProxy"})
 public class Work implements Callable<Work> {
     private final int workPoints;
     private final Game game;
-    private final Planet planet;
+    private final GameData gameData;
+    private final UUID location;
     private final UUID citizenId;
     private final SkillType skillType;
     private final ApplicationContextProxy applicationContextProxy;
@@ -32,7 +33,7 @@ public class Work implements Callable<Work> {
     @Override
     public Work call() {
         long processTime = applicationContextProxy.getBean(SleepTimeCalculator.class)
-            .calculateSleepTime(planet, citizenId, skillType, workPoints);
+            .calculateSleepTime(gameData, location, citizenId, skillType, workPoints);
         log.info("SleepTime for workPoints {}: {}", workPoints, processTime);
 
         applicationContextProxy.getBean(GameSleepService.class)
@@ -42,7 +43,7 @@ public class Work implements Callable<Work> {
             .create();
 
         Future<?> citizenUpdateProcess = game.getEventLoop()
-            .process(() -> applicationContextProxy.getBean(CitizenUpdateService.class).updateCitizen(syncCache, game.getGameId(), planet, citizenId, workPoints, skillType), syncCache);
+            .process(() -> applicationContextProxy.getBean(CitizenUpdateService.class).updateCitizen(syncCache, game.getGameId(), gameData, citizenId, workPoints, skillType), syncCache);
 
         while (!citizenUpdateProcess.isDone()) {
             applicationContextProxy.getBean(SleepService.class)

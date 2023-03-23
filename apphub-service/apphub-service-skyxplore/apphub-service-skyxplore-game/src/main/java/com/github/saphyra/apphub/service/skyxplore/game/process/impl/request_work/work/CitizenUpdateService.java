@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.converter.response.CitizenToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skill;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
@@ -27,7 +28,7 @@ class CitizenUpdateService {
     private final WsMessageSender messageSender;
     private final CitizenToResponseConverter citizenToResponseConverter;
 
-    void updateCitizen(SyncCache syncCache, UUID gameId, Planet planet, UUID citizenId, int workPoints, SkillType skillType) {
+    void updateCitizen(SyncCache syncCache, UUID gameId, GameData gameData, UUID citizenId, int workPoints, SkillType skillType) {
         Citizen citizen = planet.getPopulation()
             .get(citizenId);
         log.info("Citizen {} in game {} used {} workPoints of skill {}", citizen, gameId, workPoints, skillType);

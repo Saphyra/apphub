@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessParamKeys;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,16 @@ public class RequestWorkProcessFactory implements ProcessFactory {
         return ProcessType.REQUEST_WORK;
     }
 
-    public List<RequestWorkProcess> create(Game game, UUID externalReference, Planet planet, UUID targetId, RequestWorkProcessType processType, SkillType skillType, int requiredWorkPoints, int parallelWorkers) {
+    public List<RequestWorkProcess> create(
+        GameData gameData,
+        UUID externalReference,
+        UUID location,
+        UUID targetId,
+        RequestWorkProcessType processType,
+        SkillType skillType,
+        int requiredWorkPoints,
+        int parallelWorkers
+    ) {
         int workPointsPerWorker = requiredWorkPoints / parallelWorkers;
         log.info("WorkPointsPerWorker: {}", workPointsPerWorker);
 
@@ -41,8 +50,8 @@ public class RequestWorkProcessFactory implements ProcessFactory {
         for (int i = 0; i < parallelWorkers; i++) {
             RequestWorkProcess requestWorkProcess = create(
                 externalReference,
-                game,
-                planet,
+                gameData,
+                location,
                 null,
                 skillType,
                 workPointsPerWorker,
@@ -57,33 +66,30 @@ public class RequestWorkProcessFactory implements ProcessFactory {
         return result;
     }
 
-    public RequestWorkProcess create(UUID externalReference, Game game, Planet planet, String buildingDataId, SkillType skillType, int requiredWorkPoints) {
-        return create(externalReference, game, planet, buildingDataId, skillType, requiredWorkPoints, RequestWorkProcessType.OTHER, null);
+    public RequestWorkProcess create(UUID externalReference, GameData gameData, UUID location, String buildingDataId, SkillType skillType, int requiredWorkPoints) {
+        return create(externalReference, gameData, location, buildingDataId, skillType, requiredWorkPoints, RequestWorkProcessType.OTHER, null);
     }
 
     private RequestWorkProcess create(
         UUID externalReference,
-        Game game,
-        Planet planet,
+        GameData gameData,
+        UUID location,
         String buildingDataId,
         SkillType skillType,
         int requiredWorkPoints,
         RequestWorkProcessType requestWorkProcessType,
         UUID targetId
     ) {
-        return create(idGenerator.randomUuid(), externalReference, game, planet, ProcessStatus.CREATED, buildingDataId, skillType, requiredWorkPoints, requestWorkProcessType, targetId, 0, 0);
+        return create(idGenerator.randomUuid(), externalReference, gameData, location, ProcessStatus.CREATED, buildingDataId, skillType, requiredWorkPoints, requestWorkProcessType, targetId, 0, 0);
     }
 
     @Override
     public RequestWorkProcess createFromModel(Game game, ProcessModel model) {
-        Planet planet = game.getUniverse()
-            .findPlanetByIdValidated(model.getLocation());
-
         return create(
             model.getId(),
             model.getExternalReference(),
-            game,
-            planet,
+            game.getData(),
+            model.getLocation(),
             model.getStatus(),
             model.getData().get(ProcessParamKeys.BUILDING_DATA_ID),
             SkillType.valueOf(model.getData().get(ProcessParamKeys.SKILL_TYPE)),
@@ -98,8 +104,8 @@ public class RequestWorkProcessFactory implements ProcessFactory {
     private RequestWorkProcess create(
         UUID processId,
         UUID externalReference,
-        Game game,
-        Planet planet,
+        GameData gameData,
+        UUID location,
         ProcessStatus status,
         String buildingDataId,
         SkillType skillType,
@@ -113,8 +119,8 @@ public class RequestWorkProcessFactory implements ProcessFactory {
             .processId(processId)
             .status(status)
             .externalReference(externalReference)
-            .game(game)
-            .planet(planet)
+            .gameData(gameData)
+            .location(location)
             .buildingDataId(buildingDataId)
             .skillType(skillType)
             .requiredWorkPoints(requiredWorkPoints)

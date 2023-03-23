@@ -97,7 +97,7 @@ public class ConstructionProcessTest {
         underTest = ConstructionProcess.builder()
             .processId(PROCESS_ID)
             .status(status)
-            .game(game)
+            .gameData(game)
             .planet(planet)
             .building(building)
             .construction(construction)

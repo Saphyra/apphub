@@ -12,15 +12,18 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessParamKeys;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.update_target.UpdateTargetService;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.work.Work;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.PlanetToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.BuildingAllocationFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.CitizenAllocationFactory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -59,14 +62,14 @@ public class RequestWorkProcess implements Process {
     private volatile int completedWorkPoints;
     private volatile int cycle;
 
-    private final Game game;
-    private final Planet planet;
+    private final GameData gameData;
+    private final UUID location;
 
     private final ApplicationContextProxy applicationContextProxy;
 
     @Override
     public int getPriority() {
-        return game.getProcesses()
+        return gameData.getProcesses()
             .findByIdValidated(externalReference)
             .getPriority() + 1;
     }
@@ -85,7 +88,7 @@ public class RequestWorkProcess implements Process {
             status = ProcessStatus.IN_PROGRESS;
         }
 
-        if (!isNull(buildingDataId) && planet.getBuildingAllocations().findByProcessId(processId).isEmpty()) {
+        if (!isNull(buildingDataId) && gameData.getBuildingAllocations().findByProcessId(processId).isEmpty()) {
             if (allocateBuildingIfPossible(syncCache)) return;
         }
 
@@ -118,13 +121,14 @@ public class RequestWorkProcess implements Process {
     }
 
     private void startWorkIfPossible(SyncCache syncCache) {
-        Optional<UUID> maybeWorker = planet.getCitizenAllocations()
-            .findByProcessId(processId);
+        Optional<UUID> maybeWorker = gameData.getCitizenAllocations()
+            .findByProcessId(processId)
+            .map(CitizenAllocation::getCitizenId);
         log.info("Scheduling next cycle of work. Currently employed citizen: {}", maybeWorker);
 
         if (maybeWorker.isPresent()) {
             UUID worker = maybeWorker.get();
-            if (planet.getPopulation().get(worker).getMorale() < applicationContextProxy.getBean(GameProperties.class).getCitizen().getWorkPointsPerSeconds()) {
+            if (gameData.getCitizens().findByCitizenIdValidated(worker).getMorale() < applicationContextProxy.getBean(GameProperties.class).getCitizen().getWorkPointsPerSeconds()) {
                 log.info("Citizen {} has not enough morale for the next work cycle.", worker);
                 releaseCitizen(syncCache);
                 maybeWorker = Optional.empty();
@@ -133,7 +137,7 @@ public class RequestWorkProcess implements Process {
 
         if (maybeWorker.isEmpty()) {
             maybeWorker = applicationContextProxy.getBean(CitizenFinder.class)
-                .getSuitableCitizen(planet, skillType);
+                .getSuitableCitizen(gameData, location, skillType);
             log.info("Suitable citizen found for work: {}", maybeWorker);
         }
 
@@ -143,17 +147,20 @@ public class RequestWorkProcess implements Process {
         }
 
         UUID worker = maybeWorker.get();
-        planet.getCitizenAllocations()
-            .put(worker, processId); //TODO save planet to sync the processes with database
-        log.info("CitizenAllocations after allocating worker: {}", planet.getCitizenAllocations());
+
+        CitizenAllocation citizenAllocation = applicationContextProxy.getBean(CitizenAllocationFactory.class)
+            .create(worker, processId);
+        gameData.getCitizenAllocations()
+            .add(citizenAllocation); //TODO save planet to sync the processes with database
 
         int workPointsLeft = requiredWorkPoints - completedWorkPoints;
         int workPointsPerSeconds = applicationContextProxy.getBean(GameProperties.class).getCitizen().getWorkPointsPerSeconds();
         log.info("WorkPointsLeft: {}, workPointsPerSeconds: {}", workPointsLeft, workPointsPerSeconds);
         Work work = Work.builder()
             .workPoints(Math.min(workPointsLeft, workPointsPerSeconds))
-            .game(game)
-            .planet(planet)
+            .game(applicationContextProxy.getBean(GameDao.class).findById(gameData.getGameId()))
+            .gameData(gameData)
+            .location(location)
             .citizenId(worker)
             .skillType(skillType)
             .applicationContextProxy(applicationContextProxy)
@@ -172,12 +179,12 @@ public class RequestWorkProcess implements Process {
         log.info("Citizen completed {} workPoints. Total: {}. Required: {}", completedWorkPoints, this.completedWorkPoints, requiredWorkPoints);
 
         applicationContextProxy.getBean(UpdateTargetService.class)
-            .updateTarget(syncCache, requestWorkProcessType, game, planet, targetId, completedWorkPoints);
+            .updateTarget(syncCache, requestWorkProcessType, gameData, location, targetId, completedWorkPoints);
     }
 
     private boolean allocateBuildingIfPossible(SyncCache syncCache) {
         Optional<UUID> maybeSuitableBuilding = applicationContextProxy.getBean(ProductionBuildingFinder.class)
-            .findSuitableProductionBuilding(planet, buildingDataId);
+            .findSuitableProductionBuilding(gameData, location, buildingDataId);
         log.info("{} is required for work. Found: {}", buildingDataId, maybeSuitableBuilding);
 
         if (maybeSuitableBuilding.isEmpty()) {
@@ -186,11 +193,10 @@ public class RequestWorkProcess implements Process {
         }
 
         UUID buildingId = maybeSuitableBuilding.get();
-        planet.getBuildingAllocations()
-            .add(buildingId, processId);
-        log.info("Building {} assigned. BuildingAllocations: {}", buildingId, planet.getBuildingAllocations());
-
-        syncCache.saveGameItem(applicationContextProxy.getBean(PlanetToModelConverter.class).convert(planet, game));
+        BuildingAllocation buildingAllocation = applicationContextProxy.getBean(BuildingAllocationFactory.class)
+            .create(buildingId, processId);
+        gameData.getBuildingAllocations()
+            .add(buildingAllocation); //TODO save gameItem
         return false;
     }
 
@@ -213,30 +219,26 @@ public class RequestWorkProcess implements Process {
 
     private void releaseCitizen(SyncCache syncCache) {
         log.info("Releasing citizen and building allocations...");
-        planet.getCitizenAllocations().releaseByProcessId(processId);
-        log.info("CitizenAllocations after release: {}", planet.getCitizenAllocations());
-        syncCache.saveGameItem(applicationContextProxy.getBean(PlanetToModelConverter.class).convert(planet, game));
+        gameData.getCitizenAllocations()
+            .deleteByProcessId(processId); //TODO delete gameItem
     }
 
     private void releaseBuildingAndCitizen(SyncCache syncCache) {
         log.info("Releasing citizen and building allocations...");
-        planet.getBuildingAllocations().releaseByProcessId(processId);
-        planet.getCitizenAllocations().releaseByProcessId(processId);
-        log.info("BuildingAllocations after release: {}", planet.getBuildingAllocations());
-        log.info("CitizenAllocations after release: {}", planet.getCitizenAllocations());
-        syncCache.saveGameItem(applicationContextProxy.getBean(PlanetToModelConverter.class).convert(planet, game));
+        gameData.getBuildingAllocations()
+            .deleteByProcessId(processId); //TODO delete gameItem
+        releaseCitizen(syncCache);
     }
 
     @Override
     public ProcessModel toModel() {
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(game.getGameId());
+        model.setGameId(gameData.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);
-        model.setLocation(planet.getPlanetId());
-        model.setLocationType(LocationType.PLANET.name());
+        model.setLocation(location);
         model.setExternalReference(getExternalReference());
         model.setData(new StringStringMap(
             CollectionUtils.toMap(

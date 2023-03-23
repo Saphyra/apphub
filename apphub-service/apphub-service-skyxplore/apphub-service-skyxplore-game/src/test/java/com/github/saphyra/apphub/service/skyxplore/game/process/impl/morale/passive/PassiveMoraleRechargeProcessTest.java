@@ -112,7 +112,7 @@ class PassiveMoraleRechargeProcessTest {
         underTest = PassiveMoraleRechargeProcess.builder()
             .processId(PROCESS_ID)
             .status(ProcessStatus.CREATED)
-            .game(game)
+            .gameData(game)
             .planet(planet)
             .citizen(citizen)
             .applicationContextProxy(applicationContextProxy)

@@ -56,7 +56,7 @@ public class PassiveMoraleRechargeProcessFactory implements ProcessFactory {
         return PassiveMoraleRechargeProcess.builder()
             .processId(processId)
             .status(status)
-            .game(game)
+            .gameData(game)
             .planet(planet)
             .citizen(citizen)
             .applicationContextProxy(applicationContextProxy)

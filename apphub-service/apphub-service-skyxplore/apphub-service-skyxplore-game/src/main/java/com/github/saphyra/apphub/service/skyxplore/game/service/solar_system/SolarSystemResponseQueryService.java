@@ -26,19 +26,15 @@ class SolarSystemResponseQueryService {
 
     SolarSystemResponse getSolarSystem(UUID userId, UUID solarSystemId) {
         Game game = gameDao.findByUserIdValidated(userId);
-        SolarSystem solarSystem = game.getUniverse()
-            .getSystems()
-            .values()
-            .stream()
-            .filter(solarSystem1 -> solarSystem1.getSolarSystemId().equals(solarSystemId))
-            .findFirst()
-            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, "SolarSystem not found with id " + solarSystemId));
+        SolarSystem solarSystem = game.getData()
+            .getSolarSystems()
+            .findByIdValidated(solarSystemId);
 
         if (!visibilityFacade.isVisible(userId, solarSystem)) {
             throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.ITEM_NOT_VISIBLE, "SolarSystem " + solarSystemId + " is not visible for user " + userId);
         }
 
-        List<PlanetLocationResponse> planets = planetToLocationResponseConverter.mapPlanets(userId, solarSystem.getPlanets().values(), game);
+        List<PlanetLocationResponse> planets = planetToLocationResponseConverter.mapPlanets(game, solarSystemId, userId);
         return SolarSystemResponse.builder()
             .solarSystemId(solarSystemId)
             .systemName(solarSystem.getCustomNames().getOptional(userId).orElse(solarSystem.getDefaultName()))

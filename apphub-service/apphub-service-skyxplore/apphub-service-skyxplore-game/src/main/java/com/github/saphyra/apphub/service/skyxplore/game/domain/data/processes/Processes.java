@@ -23,4 +23,11 @@ public class Processes extends Vector<Process> {
             .filter(process -> process.getExternalReference().equals(externalReference))
             .collect(Collectors.toList());
     }
+
+    public Process findByIdValidated(UUID processId) {
+        return stream()
+            .filter(process -> process.getProcessId().equals(processId))
+            .findAny()
+            .orElseThrow();
+    }
 }
