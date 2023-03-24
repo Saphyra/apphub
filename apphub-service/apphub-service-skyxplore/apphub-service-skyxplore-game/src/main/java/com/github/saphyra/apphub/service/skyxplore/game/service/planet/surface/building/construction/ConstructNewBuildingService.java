@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
@@ -34,8 +35,6 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.util.Objects.nonNull;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -62,17 +61,20 @@ public class ConstructNewBuildingService {
         }
 
         Game game = gameDao.findByUserIdValidated(userId);
-        Planet planet = game
-            .getUniverse()
-            .findByOwnerAndPlanetIdValidated(userId, planetId);
-        Surface surface = planet.getSurfaces()
-            .findByIdValidated(surfaceId);
 
-        if (nonNull(surface.getTerraformation())) {
+        Planet planet = game.getData()
+            .getPlanets()
+            .get(planetId);
+
+        Surface surface = game.getData()
+            .getSurfaces()
+            .findBySurfaceId(surfaceId);
+
+        if (game.getData().getConstructions().findByExternalReference(surfaceId).isPresent()) {
             throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, "Cannot build on surface under terraformation on planet " + planet + " and surface " + surfaceId);
         }
 
-        if (nonNull(surface.getBuilding())) {
+        if (game.getData().getBuildings().findBySurfaceId(surfaceId).isPresent()) {
             throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, "Building already exists on planet " + planetId + " and surface " + surfaceId);
         }
 
@@ -84,32 +86,44 @@ public class ConstructNewBuildingService {
             throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, dataId + " cannot be built to surfaceType " + surface.getSurfaceType());
         }
 
-        Building building = buildingFactory.create(dataId, surfaceId, 0);
-        Construction construction = constructionFactory.create(building.getBuildingId(), constructionRequirements.getParallelWorkers(), constructionRequirements.getRequiredWorkPoints());
-        building.setConstruction(construction);
+        Building building = buildingFactory.create(dataId, planetId, surfaceId, 0);
+        Construction construction = constructionFactory.create(
+            building.getBuildingId(),
+            ConstructionType.CONSTRUCTION,
+            planetId,
+            constructionRequirements.getParallelWorkers(),
+            constructionRequirements.getRequiredWorkPoints()
+        );
+
+        game.getData()
+            .getConstructions()
+            .add(construction);
 
         return game.getEventLoop()
             .processWithResponseAndWait(() -> {
-                resourceAllocationService.processResourceRequirements(game.getGameId(), planet, LocationType.PLANET, construction.getConstructionId(), constructionRequirements.getRequiredResources());
+                resourceAllocationService.processResourceRequirements(game.getData(), planetId, planet.getOwner(), construction.getConstructionId(), constructionRequirements.getRequiredResources());
 
-                surface.setBuilding(building);
+                game.getData()
+                    .getBuildings()
+                    .add(building);
 
-                QueueResponse queueResponse = queueItemToResponseConverter.convert(buildingConstructionToQueueItemConverter.convert(building), planet);
+                QueueResponse queueResponse = queueItemToResponseConverter.convert(buildingConstructionToQueueItemConverter.convert(game.getData(), construction), game.getData(), planetId);
                 messageSender.planetQueueItemModified(userId, planetId, queueResponse);
-                messageSender.planetBuildingDetailsModified(userId, planetId, planetBuildingOverviewQueryService.getBuildingOverview(planet));
+                messageSender.planetBuildingDetailsModified(userId, planetId, planetBuildingOverviewQueryService.getBuildingOverview(game.getData(), planetId));
 
-                ConstructionProcess constructionProcess = constructionProcessFactory.create(game, planet, building);
+                ConstructionProcess constructionProcess = constructionProcessFactory.create(game.getData(), planetId, building, construction);
 
-                game.getProcesses()
+                game.getData()
+                    .getProcesses()
                     .add(constructionProcess);
 
                 gameDataProxy.saveItem(
-                    buildingToModelConverter.convert(building, game.getGameId()),
-                    constructionToModelConverter.convert(construction, game.getGameId()),
+                    buildingToModelConverter.convert(game.getGameId(), building),
+                    constructionToModelConverter.convert(game.getGameId(), construction),
                     constructionProcess.toModel()
                 );
 
-                return surfaceToResponseConverter.convert(surface);
+                return surfaceToResponseConverter.convert(game.getData(), surface);
             })
             .getOrThrow();
     }

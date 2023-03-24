@@ -20,17 +20,15 @@ public class StorageSettingDeletionService {
     private final SyncCacheFactory syncCacheFactory;
 
     @SneakyThrows
-    public void deleteStorageSetting(UUID userId, UUID planetId, UUID storageSettingId) {
+    public void deleteStorageSetting(UUID userId, UUID storageSettingId) {
         Game game = gameDao.findByUserIdValidated(userId);
-
-        game.getUniverse()
-            .findByOwnerAndPlanetIdValidated(userId, planetId);
 
         SyncCache syncCache = syncCacheFactory.create();
 
         game.getEventLoop()
             .process(
-                () -> game.getProcesses()
+                () -> game.getData()
+                    .getProcesses()
                     .findByExternalReferenceAndTypeValidated(storageSettingId, ProcessType.STORAGE_SETTING)
                     .cancel(syncCache),
                 syncCache

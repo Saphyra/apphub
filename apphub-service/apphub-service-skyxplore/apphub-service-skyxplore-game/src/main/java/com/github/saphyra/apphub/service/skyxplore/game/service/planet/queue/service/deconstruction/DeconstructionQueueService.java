@@ -5,10 +5,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.common.PriorityValidator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
@@ -22,8 +20,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
-
-import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
@@ -39,14 +35,11 @@ public class DeconstructionQueueService implements QueueService {
     private final PriorityValidator priorityValidator;
 
     @Override
-    public List<QueueItem> getQueue(Planet planet) {
-        return planet.getSurfaces()
-            .values()
+    public List<QueueItem> getQueue(GameData gameData, UUID location) {
+        return gameData.getDeconstructions()
+            .getByLocation(location)
             .stream()
-            .map(Surface::getBuilding)
-            .filter(building -> !isNull(building))
-            .filter(building -> !isNull(building.getDeconstruction()))
-            .map(buildingDeconstructionToQueueItemConverter::convert)
+            .map(deconstruction -> buildingDeconstructionToQueueItemConverter.convert(gameData, deconstruction))
             .toList();
     }
 
@@ -60,16 +53,15 @@ public class DeconstructionQueueService implements QueueService {
         priorityValidator.validate(priority);
 
         Game game = gameDao.findByUserIdValidated(userId);
-        Planet planet = game.getUniverse()
-            .findPlanetByIdValidated(planetId);
-        Building building = planet.findBuildingByDeconstructionIdValidated(deconstructionId);
-        Deconstruction deconstruction = building.getDeconstruction();
+        Deconstruction deconstruction = game.getData()
+            .getDeconstructions()
+            .findByDeconstructionId(deconstructionId);
 
         game.getEventLoop()
             .processWithWait(() -> {
                 deconstruction.setPriority(priority);
-                gameDataProxy.saveItem(deconstructionToModelConverter.convert(deconstruction, game.getGameId()));
-                QueueResponse queueResponse = queueItemToResponseConverter.convert(buildingDeconstructionToQueueItemConverter.convert(building), planet);
+                gameDataProxy.saveItem(deconstructionToModelConverter.convert(game.getGameId(), deconstruction));
+                QueueResponse queueResponse = queueItemToResponseConverter.convert(buildingDeconstructionToQueueItemConverter.convert(game.getData(), deconstruction), game.getData(), planetId);
                 messageSender.planetQueueItemModified(userId, planetId, queueResponse);
             })
             .getOrThrow();

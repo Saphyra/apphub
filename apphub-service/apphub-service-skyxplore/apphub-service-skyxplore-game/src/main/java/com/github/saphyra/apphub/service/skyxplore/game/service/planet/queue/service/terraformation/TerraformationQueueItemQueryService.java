@@ -1,15 +1,15 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.terraformation;
 
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
-
-import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
@@ -17,12 +17,11 @@ import static java.util.Objects.nonNull;
 class TerraformationQueueItemQueryService {
     private final SurfaceToQueueItemConverter converter;
 
-    List<QueueItem> getQueue(Planet planet) {
-        return planet.getSurfaces()
-            .values()
+    List<QueueItem> getQueue(GameData gameData, UUID location) {
+        return gameData.getConstructions()
+            .getByLocationAndType(location, ConstructionType.TERRAFORMATION)
             .stream()
-            .filter(surface -> nonNull(surface.getTerraformation()))
-            .map(converter::convert)
+            .map(construction -> converter.convert(construction, gameData.getSurfaces().findBySurfaceId(construction.getConstructionId())))
             .collect(Collectors.toList());
     }
 }

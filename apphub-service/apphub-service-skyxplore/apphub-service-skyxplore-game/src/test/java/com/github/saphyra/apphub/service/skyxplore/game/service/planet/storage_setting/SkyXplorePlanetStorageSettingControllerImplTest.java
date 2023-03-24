@@ -74,7 +74,7 @@ public class SkyXplorePlanetStorageSettingControllerImplTest {
     public void deleteStorageSetting() {
         underTest.deleteStorageSetting(PLANET_ID, STORAGE_SETTING_ID, accessTokenHeader);
 
-        verify(storageSettingDeletionService).deleteStorageSetting(USER_ID, PLANET_ID, STORAGE_SETTING_ID);
+        verify(storageSettingDeletionService).deleteStorageSetting(USER_ID, STORAGE_SETTING_ID);
     }
 
     @Test

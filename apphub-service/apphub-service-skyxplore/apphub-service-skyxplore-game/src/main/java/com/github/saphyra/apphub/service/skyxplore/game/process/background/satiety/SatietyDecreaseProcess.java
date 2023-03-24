@@ -27,7 +27,7 @@ public class SatietyDecreaseProcess {
                         .create();
 
                     Future<?> future = game.getEventLoop()
-                        .process(() -> processContext.getSatietyDecreaseService().processGame(game, syncCache), syncCache);
+                        .process(() -> processContext.getSatietyDecreaseService().processGame(game.getData(), syncCache), syncCache);
 
                     while (!future.isDone()) {
                         processContext.getSleepService()

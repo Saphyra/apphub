@@ -6,9 +6,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
@@ -39,9 +38,9 @@ public class TerraformationProcess implements Process {
     private volatile ProcessStatus status;
 
     @NonNull
-    private final Game game;
+    private final GameData gameData;
     @NonNull
-    private final Planet planet;
+    private final UUID location;
     @NonNull
     private final Surface surface;
     @NonNull
@@ -56,7 +55,7 @@ public class TerraformationProcess implements Process {
 
     @Override
     public int getPriority() {
-        return planet.getPriorities().get(PriorityType.CONSTRUCTION) * terraformation.getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
+        return gameData.getPriorities().findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue() * terraformation.getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
     @Override
@@ -74,19 +73,19 @@ public class TerraformationProcess implements Process {
             status = ProcessStatus.IN_PROGRESS;
         }
 
-        List<Process> productionOrderProcesses = game.getProcesses()
+        List<Process> productionOrderProcesses = gameData.getProcesses()
             .getByExternalReferenceAndType(processId, ProcessType.PRODUCTION_ORDER);
         if (productionOrderProcesses.stream().anyMatch(process -> process.getStatus() != ProcessStatus.DONE)) {
             log.info("Waiting for ProductionOrderProcesses to finish...");
             return;
         }
 
-        List<Process> workProcesses = game.getProcesses().getByExternalReferenceAndType(processId, ProcessType.REQUEST_WORK);
+        List<Process> workProcesses = gameData.getProcesses().getByExternalReferenceAndType(processId, ProcessType.REQUEST_WORK);
         if (workProcesses.isEmpty()) {
             createRequestWorkProcesses(syncCache);
         } else if (workProcesses.stream().allMatch(process -> process.getStatus() == ProcessStatus.DONE)) {
             applicationContextProxy.getBean(FinishTerraformationService.class)
-                .finishTerraformation(syncCache, game, planet, surface);
+                .finishTerraformation(syncCache, gameData, location, terraformation);
 
             status = ProcessStatus.DONE;
         } else {
@@ -102,12 +101,16 @@ public class TerraformationProcess implements Process {
     }
 
     private void createRequestWorkProcesses(SyncCache syncCache) {
-        applicationContextProxy.getBean(UseAllocatedResourceService.class)
-            .resolveAllocations(syncCache, game.getGameId(), planet, terraformation.getConstructionId());
-        List<RequestWorkProcess> requestWorkProcesses = applicationContextProxy.getBean(RequestWorkProcessFactoryForTerraformation.class)
-            .createRequestWorkProcesses(processId, game, planet, surface);
+        UUID ownerId = gameData.getPlanets()
+            .get(location)
+            .getOwner();
 
-        game.getProcesses()
+        applicationContextProxy.getBean(UseAllocatedResourceService.class)
+            .resolveAllocations(syncCache, gameData.getGameId(), gameData, location, ownerId, terraformation.getConstructionId());
+        List<RequestWorkProcess> requestWorkProcesses = applicationContextProxy.getBean(RequestWorkProcessFactoryForTerraformation.class)
+            .createRequestWorkProcesses(gameData, location, processId, surface);
+
+        gameData.getProcesses()
             .addAll(requestWorkProcesses);
         requestWorkProcesses.stream()
             .map(RequestWorkProcess::toModel)
@@ -119,9 +122,9 @@ public class TerraformationProcess implements Process {
         log.info("Creating ProductionOrderProcesses...");
 
         applicationContextProxy.getBean(ProductionOrderProcessFactoryForConstruction.class)
-            .createProductionOrderProcesses(processId, game, planet, terraformation)
+            .createProductionOrderProcesses(processId, gameData, location, terraformation)
             .forEach(productionOrderProcess -> {
-                game.getProcesses().add(productionOrderProcess);
+                gameData.getProcesses().add(productionOrderProcess);
                 syncCache.saveGameItem(productionOrderProcess.toModel());
             });
         log.info("ProductionOrderProcesses created.");
@@ -129,7 +132,7 @@ public class TerraformationProcess implements Process {
 
     @Override
     public void cancel(SyncCache syncCache) {
-        game.getProcesses()
+        gameData.getProcesses()
             .getByExternalReference(processId)
             .forEach(process -> process.cancel(syncCache));
 
@@ -147,12 +150,11 @@ public class TerraformationProcess implements Process {
     public ProcessModel toModel() {
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(game.getGameId());
+        model.setGameId(gameData.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);
-        model.setLocation(planet.getPlanetId());
-        model.setLocationType(LocationType.PLANET.name());
+        model.setLocation(location);
         model.setExternalReference(getExternalReference());
 
         return model;

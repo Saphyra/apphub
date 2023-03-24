@@ -97,7 +97,7 @@ public class TerraformationProcessTest {
         underTest = TerraformationProcess.builder()
             .processId(PROCESS_ID)
             .status(status)
-            .game(game)
+            .gameData(game)
             .planet(planet)
             .surface(surface)
             .terraformation(terraformation)

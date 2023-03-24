@@ -33,14 +33,14 @@ class RenamePlanetService {
         }
 
         Game game = gameDao.findByUserIdValidated(userId);
-        Planet planet = game
-            .getUniverse()
-            .findPlanetByIdValidated(planetId);
+        Planet planet = game.getData()
+            .getPlanets()
+            .get(planetId);
 
         planet.getCustomNames()
             .put(userId, newName);
 
-        PlanetModel model = planetToModelConverter.convert(planet, game);
+        PlanetModel model = planetToModelConverter.convert(game.getGameId(), planet);
         gameDataProxy.saveItem(model);
     }
 }

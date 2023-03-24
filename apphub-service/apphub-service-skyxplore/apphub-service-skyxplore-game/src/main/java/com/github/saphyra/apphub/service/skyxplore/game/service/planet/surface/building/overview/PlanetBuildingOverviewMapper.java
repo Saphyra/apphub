@@ -1,14 +1,13 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
-import static java.util.Objects.isNull;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -16,14 +15,18 @@ import static java.util.Objects.isNull;
 class PlanetBuildingOverviewMapper {
     private final BuildingDetailsMapper buildingDetailsMapper;
 
-    PlanetBuildingOverviewResponse createOverview(List<Surface> surfaces) {
-        int usedSlots = (int) surfaces.stream()
-            .filter(surface -> !isNull(surface.getBuilding()))
-            .count();
+    PlanetBuildingOverviewResponse createOverview(GameData gameData, UUID location, SurfaceType surfaceType) {
+        int usedSlots = gameData.getBuildings()
+            .getByLocation(location)
+            .size();
+
+        int planetSize = gameData.getPlanets()
+            .get(location)
+            .getSize();
 
         return PlanetBuildingOverviewResponse.builder()
-            .buildingDetails(buildingDetailsMapper.createBuildingDetails(surfaces))
-            .slots(surfaces.size())
+            .buildingDetails(buildingDetailsMapper.createBuildingDetails(gameData, location, surfaceType))
+            .slots(planetSize)
             .usedSlots(usedSlots)
             .build();
     }

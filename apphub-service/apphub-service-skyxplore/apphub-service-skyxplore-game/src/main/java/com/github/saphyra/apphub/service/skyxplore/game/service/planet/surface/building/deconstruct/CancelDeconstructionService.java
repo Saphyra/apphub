@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
@@ -39,36 +38,47 @@ public class CancelDeconstructionService {
 
     public void cancelDeconstructionOfDeconstruction(UUID userId, UUID planetId, UUID deconstructionId) {
         Game game = gameDao.findByUserIdValidated(userId);
-        Planet planet = game.getUniverse()
-            .findByOwnerAndPlanetIdValidated(userId, planetId);
-        Surface surface = planet.getSurfaces()
-            .values()
-            .stream()
-            .filter(s -> nonNull(s.getBuilding()))
-            .filter(s -> nonNull(s.getBuilding().getDeconstruction()))
-            .filter(s -> s.getBuilding().getDeconstruction().getDeconstructionId().equals(deconstructionId))
-            .findFirst()
-            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Deconstruction not found with id " + deconstructionId));
-        Building building = surface.getBuilding();
 
-        SurfaceResponse surfaceResponse = processCancellation(game, planet, surface, building);
+        Planet planet = game.getData()
+            .getPlanets()
+            .get(planetId);
+
+        Deconstruction deconstruction = game.getData()
+            .getDeconstructions()
+            .findByDeconstructionId(deconstructionId);
+
+        Building building = game.getData()
+            .getBuildings()
+            .findByBuildingId(deconstruction.getExternalReference());
+
+        SurfaceResponse surfaceResponse = processCancellation(game, planet, building, deconstruction);
 
         messageSender.planetSurfaceModified(userId, planet.getPlanetId(), surfaceResponse);
     }
 
     public SurfaceResponse cancelDeconstructionOfBuilding(UUID userId, UUID planetId, UUID buildingId) {
         Game game = gameDao.findByUserIdValidated(userId);
-        Planet planet = game.getUniverse()
-            .findByOwnerAndPlanetIdValidated(userId, planetId);
-        Surface surface = planet.getSurfaces()
-            .findByBuildingIdValidated(buildingId);
-        Building building = surface.getBuilding();
 
-        return processCancellation(game, planet, surface, building);
+        Planet planet = game.getData()
+            .getPlanets()
+            .get(planetId);
+
+        Building building = game.getData()
+            .getBuildings()
+            .findByBuildingId(buildingId);
+
+        Deconstruction deconstruction = game.getData()
+            .getDeconstructions()
+            .findByExternalReferenceValidated(building.getBuildingId());
+
+        return processCancellation(game, planet, building, deconstruction);
     }
 
-    private SurfaceResponse processCancellation(Game game, Planet planet, Surface surface, Building building) {
-        Deconstruction deconstruction = building.getDeconstruction();
+    private SurfaceResponse processCancellation(Game game, Planet planet, Building building, Deconstruction deconstruction) {
+        Surface surface = game.getData()
+            .getSurfaces()
+            .findBySurfaceId(building.getSurfaceId());
+
         if (isNull(deconstruction)) {
             throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Deconstruction not found on planet " + planet.getPlanetId() + " and building " + building.getBuildingId());
         }
@@ -76,11 +86,12 @@ public class CancelDeconstructionService {
         SyncCache syncCache = syncCacheFactory.create();
         return game.getEventLoop()
             .processWithResponseAndWait(() -> {
-                    game.getProcesses()
+
+                    game.getData()
+                        .getProcesses()
                         .findByExternalReferenceAndTypeValidated(deconstruction.getDeconstructionId(), ProcessType.DECONSTRUCTION)
                         .cancel(syncCache);
 
-                    building.setDeconstruction(null);
                     syncCache.deleteGameItem(deconstruction.getDeconstructionId(), GameItemType.DECONSTRUCTION);
 
                     syncCache.addMessage(
@@ -97,11 +108,11 @@ public class CancelDeconstructionService {
                         () -> messageSender.planetBuildingDetailsModified(
                             planet.getOwner(),
                             planet.getPlanetId(),
-                            planetBuildingOverviewQueryService.getBuildingOverview(planet)
+                            planetBuildingOverviewQueryService.getBuildingOverview(game.getData(), planet.getPlanetId())
                         )
                     );
 
-                    return surfaceToResponseConverter.convert(surface);
+                    return surfaceToResponseConverter.convert(game.getData(), surface);
                 },
                 syncCache
             )

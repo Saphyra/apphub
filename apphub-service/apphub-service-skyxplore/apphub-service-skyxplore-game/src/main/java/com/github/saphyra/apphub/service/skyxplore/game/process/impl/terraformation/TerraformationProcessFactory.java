@@ -3,20 +3,18 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl.terraforma
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import static java.util.Objects.isNull;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -25,14 +23,17 @@ public class TerraformationProcessFactory implements ProcessFactory {
     private final IdGenerator idGenerator;
     private final ApplicationContextProxy applicationContextProxy;
 
-    public TerraformationProcess create(Game game, Planet planet, Surface surface) {
+    public TerraformationProcess create(GameData gameData, UUID location, Surface surface) {
+        Construction terraformation = gameData.getConstructions()
+            .findByExternalReferenceValidated(surface.getSurfaceId());
+
         return TerraformationProcess.builder()
             .processId(idGenerator.randomUuid())
             .status(ProcessStatus.CREATED)
-            .game(game)
-            .planet(planet)
+            .gameData(gameData)
+            .location(location)
             .surface(surface)
-            .terraformation(surface.getTerraformation())
+            .terraformation(terraformation)
             .applicationContextProxy(applicationContextProxy)
             .build();
     }
@@ -44,24 +45,21 @@ public class TerraformationProcessFactory implements ProcessFactory {
 
     @Override
     public TerraformationProcess createFromModel(Game game, ProcessModel model) {
-        Planet planet = game.getUniverse()
-            .findPlanetByIdValidated(model.getLocation());
+        Construction terraformation = game.getData()
+            .getConstructions()
+            .findByIdValidated(model.getExternalReference());
 
-        Surface surface = planet.getSurfaces()
-            .values()
-            .stream()
-            .filter(s -> !isNull(s.getTerraformation()))
-            .filter(s -> s.getTerraformation().getConstructionId().equals(model.getExternalReference()))
-            .findFirst()
-            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Surface not found with terraformation constructionId " + model.getExternalReference()));
+        Surface surface = game.getData()
+            .getSurfaces()
+            .findBySurfaceId(terraformation.getExternalReference());
 
         return TerraformationProcess.builder()
             .processId(model.getId())
             .status(model.getStatus())
-            .game(game)
-            .planet(planet)
+            .gameData(game.getData())
+            .location(model.getLocation())
             .surface(surface)
-            .terraformation(surface.getTerraformation())
+            .terraformation(terraformation)
             .applicationContextProxy(applicationContextProxy)
             .build();
     }

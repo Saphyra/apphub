@@ -14,18 +14,17 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class SurfaceToQueueItemConverter {
-    public QueueItem convert(Surface surface) {
-        Construction construction = surface.getTerraformation();
+    public QueueItem convert(Construction terraformation, Surface surface) {
 
         return QueueItem.builder()
-            .itemId(construction.getConstructionId())
+            .itemId(terraformation.getConstructionId())
             .type(QueueItemType.TERRAFORMATION)
-            .requiredWorkPoints(construction.getRequiredWorkPoints())
-            .currentWorkPoints(construction.getCurrentWorkPoints())
-            .priority(construction.getPriority())
+            .requiredWorkPoints(terraformation.getRequiredWorkPoints())
+            .currentWorkPoints(terraformation.getCurrentWorkPoints())
+            .priority(terraformation.getPriority())
             .data(CollectionUtils.toMap(
                 new BiWrapper<>("currentSurfaceType", surface.getSurfaceType().name()),
-                new BiWrapper<>("targetSurfaceType", construction.getData())
+                new BiWrapper<>("targetSurfaceType", terraformation.getData())
             ))
             .build();
     }

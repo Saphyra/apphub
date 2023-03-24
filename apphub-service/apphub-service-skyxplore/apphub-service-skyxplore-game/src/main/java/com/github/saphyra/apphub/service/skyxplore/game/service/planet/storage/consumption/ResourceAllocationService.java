@@ -38,7 +38,7 @@ public class ResourceAllocationService {
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
     private final WsMessageSender messageSender;
 
-    public void processResourceRequirements(GameData gameData, UUID gameId, UUID location, UUID ownerId, UUID externalReference, Map<String, Integer> requiredResources) {
+    public void processResourceRequirements(GameData gameData, UUID location, UUID ownerId, UUID externalReference, Map<String, Integer> requiredResources) {
         Map<String, ConsumptionResult> consumptions = requiredResources.entrySet()
             .stream()
             .collect(Collectors.toMap(Map.Entry::getKey, entry -> consumptionCalculator.calculate(gameData, location, externalReference, entry.getKey(), entry.getValue())));
@@ -62,8 +62,8 @@ public class ResourceAllocationService {
 
             })
             .flatMap(consumptionResult -> Stream.of(
-                allocatedResourceToModelConverter.convert(gameId, consumptionResult.getAllocation()),
-                reservedStorageToModelConverter.convert(gameId, consumptionResult.getReservation())
+                allocatedResourceToModelConverter.convert(gameData.getGameId(), consumptionResult.getAllocation()),
+                reservedStorageToModelConverter.convert(gameData.getGameId(), consumptionResult.getReservation())
             ))
             .collect(Collectors.toList());
         gameDataProxy.saveItems(items);

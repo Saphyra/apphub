@@ -3,9 +3,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl.terraforma
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
@@ -17,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -27,47 +28,58 @@ class FinishTerraformationService {
     private final SurfaceToResponseConverter surfaceToResponseConverter;
     private final PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
 
-    void finishTerraformation(SyncCache syncCache, Game game, Planet planet, Surface surface) {
+    void finishTerraformation(SyncCache syncCache, GameData gameData, UUID location, Construction terraformation) {
         log.info("Finishing terraformation...");
 
-        Construction construction = surface.getTerraformation();
+        UUID ownerId = gameData.getPlanets()
+            .get(location)
+            .getOwner();
 
-        allocationRemovalService.removeAllocationsAndReservations(syncCache, planet, construction.getConstructionId());
+        allocationRemovalService.removeAllocationsAndReservations(syncCache, gameData, location, ownerId, terraformation.getConstructionId());
 
-        surface.setSurfaceType(SurfaceType.valueOf(construction.getData()));
-        surface.setTerraformation(null);
+        Surface surface = gameData.getSurfaces()
+            .findBySurfaceId(terraformation.getExternalReference());
+
+        surface.setSurfaceType(SurfaceType.valueOf(terraformation.getData()));
+
+        gameData.getConstructions()
+            .deleteById(terraformation.getConstructionId());
 
         log.info("Terraformed surface: {}", surface);
 
-        syncCache.deleteGameItem(construction.getConstructionId(), GameItemType.CONSTRUCTION);
-        syncCache.saveGameItem(surfaceToModelConverter.convert(surface, game.getGameId()));
+        syncCache.deleteGameItem(terraformation.getConstructionId(), GameItemType.CONSTRUCTION);
+        syncCache.saveGameItem(surfaceToModelConverter.convert(gameData.getGameId(), surface));
 
         syncCache.addMessage(
-            planet.getOwner(),
+            ownerId,
             WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED,
-            construction.getConstructionId(),
-            () -> messageSender.planetQueueItemDeleted(planet.getOwner(), planet.getPlanetId(), construction.getConstructionId())
-        );
-
-        syncCache.addMessage(
-            planet.getOwner(),
-            WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED,
-            surface.getSurfaceId(),
-            () -> messageSender.planetSurfaceModified(
-                planet.getOwner(),
-                planet.getPlanetId(),
-                surfaceToResponseConverter.convert(surface)
+            terraformation.getConstructionId(),
+            () -> messageSender.planetQueueItemDeleted(
+                ownerId,
+                location,
+                terraformation.getConstructionId()
             )
         );
 
         syncCache.addMessage(
-            planet.getOwner(),
+            ownerId,
+            WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED,
+            surface.getSurfaceId(),
+            () -> messageSender.planetSurfaceModified(
+                ownerId,
+                location,
+                surfaceToResponseConverter.convert(gameData, surface)
+            )
+        );
+
+        syncCache.addMessage(
+            ownerId,
             WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED,
-            planet.getPlanetId(),
+            location,
             () -> messageSender.planetBuildingDetailsModified(
-                planet.getOwner(),
-                planet.getPlanetId(),
-                planetBuildingOverviewQueryService.getBuildingOverview(planet)
+                ownerId,
+                location,
+                planetBuildingOverviewQueryService.getBuildingOverview(gameData, location)
             )
         );
     }

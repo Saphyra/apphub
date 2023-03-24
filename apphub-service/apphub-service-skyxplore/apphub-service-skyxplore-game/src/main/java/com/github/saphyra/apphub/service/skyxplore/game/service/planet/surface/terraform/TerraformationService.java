@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.terraform;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
@@ -10,6 +11,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilitiesService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
@@ -30,8 +32,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
-
-import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
@@ -54,16 +54,19 @@ class TerraformationService {
         SurfaceType surfaceType = ValidationUtil.convertToEnumChecked(surfaceTypeString, SurfaceType::valueOf, "surfaceType");
 
         Game game = gameDao.findByUserIdValidated(userId);
-        Planet planet = game.getUniverse()
-            .findByOwnerAndPlanetIdValidated(userId, planetId);
-        Surface surface = planet.getSurfaces()
-            .findByIdValidated(surfaceId);
+        GameData gameData = game.getData();
 
-        if (nonNull(surface.getTerraformation())) {
+        Planet planet = gameData.getPlanets()
+            .get(planetId);
+
+        Surface surface = gameData.getSurfaces()
+            .findBySurfaceId(surfaceId);
+
+        if (gameData.getConstructions().findByExternalReference(surfaceId).isPresent()) {
             throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, "Terraformation already in progress on surface " + surfaceId);
         }
 
-        if (nonNull(surface.getBuilding())) {
+        if (gameData.getBuildings().findBySurfaceId(surfaceId).isPresent()) {
             throw ExceptionFactory.forbiddenOperation("There is already a building on surface " + surfaceId);
         }
 
@@ -75,29 +78,37 @@ class TerraformationService {
             .orElseThrow(() -> ExceptionFactory.forbiddenOperation(surface.getSurfaceType() + " cannot be terraformed to " + surfaceType))
             .getConstructionRequirements();
 
-        Construction construction = constructionFactory.create(surfaceId, constructionRequirements.getParallelWorkers(), constructionRequirements.getRequiredWorkPoints(), surfaceTypeString);
+        Construction construction = constructionFactory.create(
+            surfaceId,
+            ConstructionType.TERRAFORMATION,
+            planetId,
+            constructionRequirements.getParallelWorkers(),
+            constructionRequirements.getRequiredWorkPoints(),
+            surfaceTypeString
+        );
 
         return game.getEventLoop()
             .processWithResponseAndWait(() -> {
-                resourceAllocationService.processResourceRequirements(game.getGameId(), planet, LocationType.PLANET, construction.getConstructionId(), constructionRequirements.getRequiredResources());
+                resourceAllocationService.processResourceRequirements(gameData, planetId, planet.getOwner(), construction.getConstructionId(), constructionRequirements.getRequiredResources());
 
-                surface.setTerraformation(construction);
+                gameData.getConstructions()
+                    .add(construction);
 
-                QueueResponse queueResponse = queueItemToResponseConverter.convert(surfaceToQueueItemConverter.convert(surface), planet);
+                QueueResponse queueResponse = queueItemToResponseConverter.convert(surfaceToQueueItemConverter.convert(construction, surface), gameData, planetId);
                 messageSender.planetQueueItemModified(userId, planetId, queueResponse);
-                messageSender.planetBuildingDetailsModified(userId, planetId, planetBuildingOverviewQueryService.getBuildingOverview(planet));
+                messageSender.planetBuildingDetailsModified(userId, planetId, planetBuildingOverviewQueryService.getBuildingOverview(gameData, planetId));
 
-                TerraformationProcess constructionProcess = terraformationProcessFactory.create(game, planet, surface);
+                TerraformationProcess constructionProcess = terraformationProcessFactory.create(gameData, planetId, surface);
 
-                game.getProcesses()
+                gameData.getProcesses()
                     .add(constructionProcess);
 
                 gameDataProxy.saveItem(
-                    constructionToModelConverter.convert(construction, game.getGameId()),
+                    constructionToModelConverter.convert(game.getGameId(), construction),
                     constructionProcess.toModel()
                 );
 
-                return surfaceToResponseConverter.convert(surface);
+                return surfaceToResponseConverter.convert(gameData, surface);
             })
             .getOrThrow();
     }

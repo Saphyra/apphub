@@ -18,4 +18,12 @@ public class Skill {
     private int level;
     private int experience;
     private int nextLevel;
+
+    public void increaseExperience(int experience) {
+        this.experience += experience;
+    }
+
+    public void increaseLevel() {
+        this.level += 1;
+    }
 }

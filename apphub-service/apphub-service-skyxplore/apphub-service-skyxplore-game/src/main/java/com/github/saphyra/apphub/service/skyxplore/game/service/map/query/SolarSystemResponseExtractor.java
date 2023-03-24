@@ -20,7 +20,7 @@ class SolarSystemResponseExtractor {
     List<MapSolarSystemResponse> getSolarSystems(UUID userId, GameData gameData) {
         return gameData.getSolarSystems()
             .stream()
-            .filter(solarSystem -> visibilityFacade.isVisible(userId, solarSystem))
+            .filter(solarSystem -> visibilityFacade.isVisible(gameData, userId, solarSystem.getSolarSystemId()))
             .map(solarSystem -> MapSolarSystemResponse.builder()
                 .solarSystemId(solarSystem.getSolarSystemId())
                 .coordinate(gameData.getCoordinates().findByReferenceId(solarSystem.getSolarSystemId()))

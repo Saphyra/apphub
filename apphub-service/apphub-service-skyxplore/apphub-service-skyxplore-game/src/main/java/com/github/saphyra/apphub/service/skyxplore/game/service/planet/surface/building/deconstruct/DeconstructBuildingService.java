@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.deconstruction.DeconstructionProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.deconstruction.DeconstructionProcessFactory;
@@ -25,8 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
-
-import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
@@ -46,38 +43,44 @@ public class DeconstructBuildingService {
 
     public SurfaceResponse deconstructBuilding(UUID userId, UUID planetId, UUID buildingId) {
         Game game = gameDao.findByUserIdValidated(userId);
-        Planet planet = game.getUniverse()
-            .findByOwnerAndPlanetIdValidated(userId, planetId);
-        Surface surface = planet.getSurfaces()
-            .findByBuildingIdValidated(buildingId);
-        Building building = surface.getBuilding();
 
-        if (!isNull(building.getConstruction())) {
+        Building building = game.getData()
+            .getBuildings()
+            .findByBuildingId(buildingId);
+
+        Surface surface = game.getData()
+            .getSurfaces()
+            .findBySurfaceId(building.getSurfaceId());
+
+        if (game.getData().getConstructions().findByExternalReference(buildingId).isPresent()) {
             throw ExceptionFactory.forbiddenOperation(buildingId + " is under construction");
         }
 
-        Deconstruction deconstruction = deconstructionFactory.create(buildingId);
+        Deconstruction deconstruction = deconstructionFactory.create(buildingId, planetId);
 
         return game.getEventLoop()
             .processWithResponseAndWait(() -> {
-                building.setDeconstruction(deconstruction);
+                game.getData()
+                    .getDeconstructions()
+                    .add(deconstruction);
 
-                QueueResponse queueResponse = queueItemToResponseConverter.convert(buildingDeconstructionToQueueItemConverter.convert(building), planet);
+                QueueResponse queueResponse = queueItemToResponseConverter.convert(buildingDeconstructionToQueueItemConverter.convert(game.getData(), deconstruction), game.getData(), planetId);
                 messageSender.planetQueueItemModified(userId, planetId, queueResponse);
-                messageSender.planetBuildingDetailsModified(userId, planetId, planetBuildingOverviewQueryService.getBuildingOverview(planet));
+                messageSender.planetBuildingDetailsModified(userId, planetId, planetBuildingOverviewQueryService.getBuildingOverview(game.getData(), planetId));
 
-                DeconstructionProcess process = deconstructionProcessFactory.create(game, planet, deconstruction);
+                DeconstructionProcess process = deconstructionProcessFactory.create(game.getData(), planetId, deconstruction);
 
-                game.getProcesses()
+                game.getData()
+                    .getProcesses()
                     .add(process);
 
                 gameDataProxy.saveItem(
-                    buildingToModelConverter.convert(building, game.getGameId()),
-                    deconstructionToModelConverter.convert(deconstruction, game.getGameId()),
+                    buildingToModelConverter.convert(game.getGameId(), building),
+                    deconstructionToModelConverter.convert(game.getGameId(), deconstruction),
                     process.toModel()
                 );
 
-                return surfaceToResponseConverter.convert(surface);
+                return surfaceToResponseConverter.convert(game.getData(), surface);
             })
             .getOrThrow();
     }

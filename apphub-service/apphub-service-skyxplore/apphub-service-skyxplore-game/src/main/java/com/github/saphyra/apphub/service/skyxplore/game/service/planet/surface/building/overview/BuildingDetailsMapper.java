@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewDetailedResponse;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +18,11 @@ import java.util.stream.Collectors;
 class BuildingDetailsMapper {
     private final BuildingDetailMapper buildingDetailMapper;
 
-    List<PlanetBuildingOverviewDetailedResponse> createBuildingDetails(GameData gameData, UUID planetId) {
+    List<PlanetBuildingOverviewDetailedResponse> createBuildingDetails(GameData gameData, UUID planetId, SurfaceType surfaceType) {
         return gameData.getBuildings()
             .getByLocation(planetId)
             .stream()
+            .filter(building -> gameData.getSurfaces().findBySurfaceId(building.getSurfaceId()).getSurfaceType() == surfaceType)
             .collect(Collectors.groupingBy(Building::getDataId))
             .entrySet()
             .stream()

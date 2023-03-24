@@ -4,10 +4,9 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
@@ -21,13 +20,9 @@ import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
-
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
@@ -43,49 +38,55 @@ public class CancelTerraformationService {
 
     public void cancelTerraformationQueueItem(UUID userId, UUID planetId, UUID constructionId) {
         Game game = gameDao.findByUserIdValidated(userId);
-        Planet planet = game.getUniverse()
-            .findByOwnerAndPlanetIdValidated(userId, planetId);
-        Surface surface = planet.getSurfaces()
-            .values()
-            .stream()
-            .filter(s -> nonNull(s.getTerraformation()))
-            .filter(s -> s.getTerraformation().getConstructionId().equals(constructionId))
-            .findFirst()
-            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Surface not found by terraformation constructionId " + constructionId));
+        GameData gameData = game.getData();
 
-        SurfaceResponse surfaceResponse = processCancellation(game, planet, surface);
+        Construction terraformation = gameData.getConstructions()
+            .findByIdValidated(constructionId);
+
+        Surface surface = gameData.getSurfaces()
+            .findBySurfaceId(terraformation.getExternalReference());
+
+        Planet planet = gameData.getPlanets()
+            .get(planetId);
+
+        SurfaceResponse surfaceResponse = processCancellation(game, planet, surface, terraformation);
 
         messageSender.planetSurfaceModified(userId, planetId, surfaceResponse);
     }
 
     SurfaceResponse cancelTerraformationOfSurface(UUID userId, UUID planetId, UUID surfaceId) {
         Game game = gameDao.findByUserIdValidated(userId);
-        Planet planet = game.getUniverse()
-            .findByOwnerAndPlanetIdValidated(userId, planetId);
-        Surface surface = planet.getSurfaces()
-            .findByIdValidated(surfaceId);
+        GameData gameData = game.getData();
 
-        return processCancellation(game, planet, surface);
+        Surface surface = gameData.getSurfaces()
+            .findBySurfaceId(surfaceId);
+
+        Construction terraformation = gameData.getConstructions()
+            .findByExternalReferenceValidated(surfaceId);
+
+        Planet planet = gameData.getPlanets()
+            .get(planetId);
+
+        return processCancellation(game, planet, surface, terraformation);
     }
 
     @SneakyThrows
-    private SurfaceResponse processCancellation(Game game, Planet planet, Surface surface) {
-        Construction terraformation = surface.getTerraformation();
-        if (isNull(terraformation)) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Terraformation not found on planet " + planet.getPlanetId() + " and surface " + surface.getSurfaceId());
-        }
-
+    private SurfaceResponse processCancellation(Game game, Planet planet, Surface surface, Construction terraformation) {
         SyncCache syncCache = syncCacheFactory.create();
         return game.getEventLoop()
             .processWithResponseAndWait(() -> {
-                    game.getProcesses()
+                    game.getData()
+                        .getProcesses()
                         .findByExternalReferenceAndTypeValidated(terraformation.getConstructionId(), ProcessType.TERRAFORMATION)
                         .cancel(syncCache);
 
-                    surface.setTerraformation(null);
+                    game.getData()
+                        .getConstructions()
+                        .deleteById(terraformation.getConstructionId());
+
                     gameDataProxy.deleteItem(terraformation.getConstructionId(), GameItemType.CONSTRUCTION);
 
-                    allocationRemovalService.removeAllocationsAndReservations(syncCache, planet, terraformation.getConstructionId());
+                    allocationRemovalService.removeAllocationsAndReservations(syncCache, game.getData(), planet.getPlanetId(), planet.getOwner(), terraformation.getConstructionId());
 
                     syncCache.addMessage(
                         planet.getOwner(),
@@ -101,11 +102,11 @@ public class CancelTerraformationService {
                         () -> messageSender.planetBuildingDetailsModified(
                             planet.getOwner(),
                             planet.getPlanetId(),
-                            planetBuildingOverviewQueryService.getBuildingOverview(planet)
+                            planetBuildingOverviewQueryService.getBuildingOverview(game.getData(), planet.getPlanetId())
                         )
                     );
 
-                    return surfaceToResponseConverter.convert(surface);
+                    return surfaceToResponseConverter.convert(game.getData(), surface);
                 },
                 syncCache
             )

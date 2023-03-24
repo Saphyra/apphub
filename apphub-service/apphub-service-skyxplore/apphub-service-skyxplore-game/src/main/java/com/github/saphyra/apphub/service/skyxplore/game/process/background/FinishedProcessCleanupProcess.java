@@ -48,8 +48,10 @@ public class FinishedProcessCleanupProcess {
     private void processGame(SyncCache syncCache, Game game) {
         log.debug("Cleaning up finished processes...");
 
-        Processes processes = game.getProcesses();
-        List<Process> finishedProcesses = game.getProcesses()
+        Processes processes = game.getData()
+            .getProcesses();
+        List<Process> finishedProcesses = game.getData()
+            .getProcesses()
             .stream()
             .filter(process -> process.getStatus() == ProcessStatus.READY_TO_DELETE)
             .collect(Collectors.toList());

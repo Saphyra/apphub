@@ -25,7 +25,7 @@ class ProducerBuildingFinderService {
             .getByLocation(location)
             .stream()
             .filter(building -> canProduce(gameData, dataId, building))
-            .filter(building -> buildingCapacityCalculator.calculateCapacity(location) > 0)
+            .filter(building -> buildingCapacityCalculator.calculateCapacity(gameData, building) > 0)
             .map(Building::getDataId)
             .findAny();
     }

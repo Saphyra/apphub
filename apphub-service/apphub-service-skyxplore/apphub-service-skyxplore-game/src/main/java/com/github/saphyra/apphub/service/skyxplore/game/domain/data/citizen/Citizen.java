@@ -10,10 +10,15 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
+//TODO unit test
 public class Citizen {
     private final UUID citizenId;
     private UUID location;
     private String name;
     private int morale;
     private int satiety;
+
+    public void reduceMorale(int morale) {
+        this.morale -= morale;
+    }
 }

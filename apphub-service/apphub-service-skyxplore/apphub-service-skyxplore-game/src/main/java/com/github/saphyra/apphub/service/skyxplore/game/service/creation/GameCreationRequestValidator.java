@@ -12,12 +12,9 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 class GameCreationRequestValidator {
-    private final GameCreationSettingsValidator gameCreationSettingsValidator;
     private final AllianceNameValidator allianceNameValidator;
 
     void validate(SkyXploreGameCreationRequest request) {
-        gameCreationSettingsValidator.validate(request.getSettings());
-
         if (isNull(request.getHost())) {
             throw ExceptionFactory.invalidParam("host", "must not be null");
         }

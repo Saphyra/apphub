@@ -15,10 +15,11 @@ import java.util.UUID;
 public class DeconstructionFactory {
     private final IdGenerator idGenerator;
 
-    public Deconstruction create(UUID externalReference) {
+    public Deconstruction create(UUID externalReference, UUID location) {
         return Deconstruction.builder()
             .deconstructionId(idGenerator.randomUuid())
             .externalReference(externalReference)
+            .location(location)
             .currentWorkPoints(0)
             .priority(GameConstants.DEFAULT_PRIORITY)
             .build();

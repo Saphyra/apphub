@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.terraformation;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.QueueService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.terraform.CancelTerraformationService;
@@ -21,8 +21,8 @@ class TerraformationQueueService implements QueueService {
     private final TerraformationQueueItemPriorityUpdateService priorityUpdateService;
 
     @Override
-    public List<QueueItem> getQueue(Planet planet) {
-        return terraformationQueueItemQueryService.getQueue(planet);
+    public List<QueueItem> getQueue(GameData gameData, UUID location) {
+        return terraformationQueueItemQueryService.getQueue(gameData, location);
     }
 
     @Override

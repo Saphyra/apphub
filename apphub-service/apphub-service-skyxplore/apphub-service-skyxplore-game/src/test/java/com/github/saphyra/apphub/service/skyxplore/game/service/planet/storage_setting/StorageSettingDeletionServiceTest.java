@@ -85,7 +85,7 @@ public class StorageSettingDeletionServiceTest {
         given(game.getProcesses()).willReturn(processes);
         given(processes.findByExternalReferenceAndTypeValidated(STORAGE_SETTING_ID, ProcessType.STORAGE_SETTING)).willReturn(process);
 
-        underTest.deleteStorageSetting(USER_ID, PLANET_ID, STORAGE_SETTING_ID);
+        underTest.deleteStorageSetting(USER_ID, STORAGE_SETTING_ID);
 
         verify(eventLoop).process(argumentCaptor.capture(), eq(syncCache));
         argumentCaptor.getValue()

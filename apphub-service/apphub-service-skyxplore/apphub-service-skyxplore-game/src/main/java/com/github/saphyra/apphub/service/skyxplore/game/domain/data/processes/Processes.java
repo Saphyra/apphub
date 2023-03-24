@@ -30,4 +30,12 @@ public class Processes extends Vector<Process> {
             .findAny()
             .orElseThrow();
     }
+
+    public Process findByExternalReferenceAndTypeValidated(UUID externalReference, ProcessType processType) {
+        return stream()
+            .filter(process -> process.getExternalReference().equals(externalReference))
+            .filter(process -> process.getType() == processType)
+            .findAny()
+            .orElseThrow();
+    }
 }

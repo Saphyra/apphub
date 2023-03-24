@@ -33,7 +33,7 @@ public class Work implements Callable<Work> {
     @Override
     public Work call() {
         long processTime = applicationContextProxy.getBean(SleepTimeCalculator.class)
-            .calculateSleepTime(gameData, location, citizenId, skillType, workPoints);
+            .calculateSleepTime(gameData, citizenId, skillType, workPoints);
         log.info("SleepTime for workPoints {}: {}", workPoints, processTime);
 
         applicationContextProxy.getBean(GameSleepService.class)
@@ -43,7 +43,7 @@ public class Work implements Callable<Work> {
             .create();
 
         Future<?> citizenUpdateProcess = game.getEventLoop()
-            .process(() -> applicationContextProxy.getBean(CitizenUpdateService.class).updateCitizen(syncCache, game.getGameId(), gameData, citizenId, workPoints, skillType), syncCache);
+            .process(() -> applicationContextProxy.getBean(CitizenUpdateService.class).updateCitizen(syncCache, gameData, location, citizenId, workPoints, skillType), syncCache);
 
         while (!citizenUpdateProcess.isDone()) {
             applicationContextProxy.getBean(SleepService.class)

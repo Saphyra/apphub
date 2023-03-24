@@ -31,4 +31,11 @@ public class Constructions extends Vector<Construction> {
             .filter(construction -> construction.getType() == type)
             .collect(Collectors.toList());
     }
+
+    public Construction findByIdValidated(UUID constructionId) {
+        return stream()
+            .filter(construction -> construction.getConstructionId().equals(constructionId))
+            .findAny()
+            .orElseThrow();
+    }
 }

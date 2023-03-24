@@ -27,11 +27,10 @@ public class PlanetBuildingOverviewQueryService {
 
     public Map<String, PlanetBuildingOverviewResponse> getBuildingOverview(GameData gameData, UUID planetId) {
         return gameData.getSurfaces()
+            .getByPlanetId((planetId))
             .stream()
-            .filter(surface -> surface.getPlanetId().equals(planetId))
-            .collect(Collectors.groupingBy(Surface::getSurfaceType))
-            .entrySet()
-            .stream()
-            .collect(Collectors.toMap(surfaceTypeListEntry -> surfaceTypeListEntry.getKey().name(), o -> overviewMapper.createOverview(o.getValue())));
+            .map(Surface::getSurfaceType)
+            .distinct()
+            .collect(Collectors.toMap(Enum::name, surfaceType -> overviewMapper.createOverview(gameData, planetId, surfaceType)));
     }
 }

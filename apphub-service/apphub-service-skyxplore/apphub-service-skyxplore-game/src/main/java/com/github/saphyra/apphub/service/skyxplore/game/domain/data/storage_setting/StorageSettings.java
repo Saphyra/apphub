@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.Vector;
 import java.util.stream.Collectors;
@@ -22,5 +23,12 @@ public class StorageSettings extends Vector<StorageSetting> {
         return stream()
             .filter(storageSetting -> storageSetting.getLocation().equals(location))
             .collect(Collectors.toList());
+    }
+
+    public Optional<StorageSetting> findByLocationAndDataId(UUID location, String dataId) {
+        return stream()
+            .filter(storageSetting -> storageSetting.getLocation().equals(location))
+            .filter(storageSetting -> storageSetting.getDataId().equals(dataId))
+            .findAny();
     }
 }

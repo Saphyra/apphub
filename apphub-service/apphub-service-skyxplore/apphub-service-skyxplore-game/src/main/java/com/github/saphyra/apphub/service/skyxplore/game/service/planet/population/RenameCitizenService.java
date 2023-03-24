@@ -28,7 +28,7 @@ class RenameCitizenService {
     private final GameDataProxy gameDataProxy;
     private final CitizenToResponseConverter citizenToResponseConverter;
 
-    CitizenResponse renameCitizen(UUID userId, UUID planetId, UUID citizenId, String newName) {
+    CitizenResponse renameCitizen(UUID userId, UUID citizenId, String newName) {
         if (isBlank(newName)) {
             throw ExceptionFactory.invalidParam("value", "must not be null or blank");
         }
@@ -38,10 +38,9 @@ class RenameCitizenService {
         }
 
         Game game = gameDao.findByUserIdValidated(userId);
-        Citizen citizen = game.getUniverse()
-            .findByOwnerAndPlanetIdValidated(userId, planetId)
-            .getPopulation()
-            .get(citizenId);
+        Citizen citizen = game.getData()
+            .getCitizens()
+            .findByCitizenIdValidated(citizenId);
 
         if (isNull(citizen)) {
             throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR, "Citizen not found with id " + citizenId);
@@ -50,8 +49,8 @@ class RenameCitizenService {
         return game.getEventLoop()
             .processWithResponseAndWait(() -> {
                 citizen.setName(newName);
-                gameDataProxy.saveItem(citizenToModelConverter.convert(citizen, game.getGameId()));
-                return citizenToResponseConverter.convert(citizen);
+                gameDataProxy.saveItem(citizenToModelConverter.convert(game.getGameId(), citizen));
+                return citizenToResponseConverter.convert(game.getData(), citizen);
             })
             .getOrThrow();
     }

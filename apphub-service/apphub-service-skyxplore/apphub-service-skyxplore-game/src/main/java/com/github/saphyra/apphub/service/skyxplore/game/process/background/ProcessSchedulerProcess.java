@@ -41,7 +41,8 @@ public class ProcessSchedulerProcess {
     }
 
     private void processGame(Game game) {
-        Processes processes = game.getProcesses();
+        Processes processes = game.getData()
+            .getProcesses();
         synchronized (processes) {
             processes.stream()
                 .filter(process -> process.getStatus() == ProcessStatus.IN_PROGRESS || process.getStatus() == ProcessStatus.CREATED)
